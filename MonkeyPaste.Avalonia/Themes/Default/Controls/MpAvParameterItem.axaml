@@ -19,12 +19,6 @@
                 Value="10,2" />
         <Setter Property="HorizontalAlignment"
                 Value="Stretch" />
-        <Setter Property="CornerRadius"
-                Value="2" />
-        <Setter Property="BorderThickness"
-                Value="1" />
-        <Setter Property="BorderBrush"
-                Value="Transparent" />
     </Style>
     <Style Selector="Border.paramBorder.sliderBorder">
         <Setter Property="BorderBrush"

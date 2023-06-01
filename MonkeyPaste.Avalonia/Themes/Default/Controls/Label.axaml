@@ -17,13 +17,9 @@
         <Setter Property="FontWeight"
                 Value="Medium" />
     </Style>
-    <Style Selector="Label.h1:not(.dark)">
+    <Style Selector="Label.h1">
         <Setter Property="Foreground"
-                Value="{DynamicResource ThemeInteractiveBgColor}" />
-    </Style>
-    <Style Selector="Label.h1.dark">
-        <Setter Property="Foreground"
-                Value="{DynamicResource ThemeInteractiveColor}" />
+                Value="{DynamicResource ThemeWhite}" />
     </Style>
     <Style Selector="Label.h2">
         <Setter Property="FontSize"

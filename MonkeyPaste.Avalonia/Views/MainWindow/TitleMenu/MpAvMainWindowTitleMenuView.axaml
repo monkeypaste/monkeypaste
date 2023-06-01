@@ -37,7 +37,7 @@
         </Style>
         <Style Selector=":is(Button):pointerover PathIcon">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveBgColor}" />
+                    Value="{DynamicResource ThemeGrayAccent2}" />
         </Style>
 
         <!--  DRAG HANDLE  -->
@@ -58,7 +58,7 @@
         </Style>
         <Style Selector="Button Border.zoomLine">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeInteractiveBgColor}" />
+                    Value="{DynamicResource ThemeGrayAccent2}" />
         </Style>
         <Style Selector="Grid#ZoomSliderContainerGrid:pointerover Border.zoomLine">
             <Setter Property="Background"
@@ -71,15 +71,6 @@
         <Style Selector="Button:pressed Border.zoomLine">
             <Setter Property="Background"
                     Value="{DynamicResource ThemeAccent2Color}" />
-        </Style>
-        <Style Selector="Button#CurZoomValueCanvas:pressed">
-            <Setter Property="ToolTip.Tip">
-                <Setter.Value>
-                    <Template>
-                        <local:MpAvToolTipView ToolTipText="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, StringFormat='Scale \{0:f\} x'}" />
-                    </Template>
-                </Setter.Value>
-            </Setter>
         </Style>
 
         <!--  RESIZER  -->
@@ -172,6 +163,7 @@
                 Classes="noBg noHoverBg outlineOver"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Stretch"
+                Padding="0"
                 Width="50">
             <Button.RenderTransform>
                 <RotateTransform />
@@ -189,11 +181,13 @@
                     HorizontalAlignment="Right">
             <!--  Zoom Factor Slider  -->
             <Grid x:Name="ZoomSliderContainerGrid"
-                  ToolTip.ShowDelay="0"
-                  ToolTip.Placement="Top"
-                  ToolTip.Tip="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay, StringFormat='Scale {0}x'}"
                   Background="{StaticResource HitTestableTransparent}"
                   Cursor="Hand">
+
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, StringFormat='Scale \{0:f\} x'}" />
+                    <!--<local:MpAvToolTipView ToolTipText="Test" />-->
+                </ToolTip.Tip>
                 <!--  TRACK LINE  -->
                 <Border x:Name="ZoomTrackLine"
                         Classes="zoomLine" />
@@ -213,9 +207,6 @@
                             VerticalAlignment="Top"
                             BorderThickness="0"
                             Classes="noBg noHoverBg">
-                        <!--<ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay, StringFormat='Scale {0}x'}"/>
-                      </ToolTip.Tip>-->
                         <Border Classes="zoomLine zoomValueLine"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch" />
@@ -224,7 +215,7 @@
             </Grid>
             <!--  Layout Toggle Button  -->
             <ToggleButton x:Name="GridLayoutToggleButton"
-                          Classes="noBg noHoverBg"
+                          Classes="noBg noHoverBg noBorder"
                           IsChecked="{Binding IsGridLayout, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           ToolTip.ShowDelay="0">
                 <Grid>
@@ -265,7 +256,7 @@
             <Button x:Name="MainWindowCycleOrientationCcwButton"
                     Command="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     CommandParameter="CCW"
-                    Classes="noBg noHoverBg"
+                    Classes="noBg noHoverBg noBorder"
                     local:MpAvPointerCommandExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">

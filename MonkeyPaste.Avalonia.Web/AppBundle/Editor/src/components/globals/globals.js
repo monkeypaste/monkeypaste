@@ -736,7 +736,7 @@ const globals = {
 
 	// #region PASTE TOOLBAR
 
-	MIN_TOOLBAR_HEIGHT:  45,
+	MIN_TOOLBAR_HEIGHT:  50,
 	// #endregion
 
 	// #endregion

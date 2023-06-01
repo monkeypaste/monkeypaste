@@ -3,7 +3,6 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <Thickness x:Key="ButtonPadding">0,0,0,0</Thickness>
     </Styles.Resources>
     <Style Selector="Button.link">
         <Setter Property="Foreground"

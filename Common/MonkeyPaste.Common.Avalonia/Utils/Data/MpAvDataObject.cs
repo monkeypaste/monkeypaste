@@ -134,13 +134,15 @@ namespace MonkeyPaste.Common.Avalonia {
                 //    //#endif
 
                 //}
-                if (ContainsData(MpPortableDataFormats.CefHtml) &&
-                    !ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
-                    GetData(MpPortableDataFormats.CefHtml) is string htmlStr) {
-                    // TODO should check if content is csv here (or in another if?) and create rtf table 
-                    string rtf = htmlStr.ToContentRichText();
-                    SetData(MpPortableDataFormats.AvRtf_bytes, rtf.ToBytesFromString());
-                }
+
+                // TODO should pass req formats into this and only create rtf if contianed
+                //if (ContainsData(MpPortableDataFormats.CefHtml) &&
+                //    !ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
+                //    GetData(MpPortableDataFormats.CefHtml) is string htmlStr) {
+                //    // TODO should check if content is csv here (or in another if?) and create rtf table 
+                //    string rtf = htmlStr.ToContentRichText();
+                //    SetData(MpPortableDataFormats.AvRtf_bytes, rtf.ToBytesFromString());
+                //}
             }
 
             if (TryGetData(MpPortableDataFormats.AvFileNames, out object fn_obj)) {

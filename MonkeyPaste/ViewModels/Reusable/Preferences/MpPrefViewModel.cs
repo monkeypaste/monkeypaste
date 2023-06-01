@@ -402,7 +402,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Shortcuts
-        public bool ShowExternalDropWidget { get; set; } = true;
+        public bool ShowExternalDropWidget { get; set; } = false;
 
         public int GlobalShortcutDelay { get; set; } = 250;
         public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
@@ -459,6 +459,7 @@ namespace MonkeyPaste {
         public int UniqueContentItemIdx { get; set; } = 0;
 
         public string ClipTrayLayoutTypeName { get; set; } = MpClipTrayLayoutType.Stack.ToString();
+
         #endregion
 
         #region Encrytion

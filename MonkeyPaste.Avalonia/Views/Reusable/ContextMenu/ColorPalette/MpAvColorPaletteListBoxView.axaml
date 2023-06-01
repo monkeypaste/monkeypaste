@@ -65,8 +65,7 @@
                         BorderThickness="0"
                         Command="{Binding Command}"
                         CommandParameter="{Binding CommandParameter}"
-                        x:DataType="pcl:MpMenuItemViewModel"
-                        >
+                        x:DataType="pcl:MpMenuItemViewModel">
                     <Border Width="15"
                             Height="15"
                             Padding="0"
@@ -80,7 +79,7 @@
                         </ToolTip.Tip>
                         <Image HorizontalAlignment="Stretch"
                                VerticalAlignment="Stretch"
-                               Source="{Binding ., Converter={x:Static local:MpAvStringResourceConverter.Instance}, Source={StaticResource PlusImage}}"
+                               Source="{Binding ConverterParameter=themefg, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, Source={StaticResource PlusImage}}"
                                Stretch="Fill"
                                IsVisible="{Binding IsVisible}" />
                     </Border>

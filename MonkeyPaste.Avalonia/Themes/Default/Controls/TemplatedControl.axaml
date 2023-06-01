@@ -7,15 +7,6 @@
 
     <!--  FONT THEME  -->
 
-    <Style Selector=":is(TextBox)[IsReadOnly=false]">
-        <Setter Property="FontFamily"
-                Value="{Binding Source={DynamicResource DefaultEditableFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
-    </Style>
-    <Style Selector=":is(TextBox)[IsReadOnly=true]">
-        <Setter Property="FontFamily"
-                Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
-    </Style>
-
 
     <Style Selector=":is(TemplatedControl):not(:is(TextBox)[IsReadOnly=false])">
         <Setter Property="FontFamily"
@@ -33,6 +24,29 @@
     <Style Selector=":is(TemplatedControl).square">
         <Setter Property="Width"
                 Value="{Binding $self.Bounds.Height}" />
+    </Style>
+
+    <Style Selector=":is(TemplatedControl).noBg">
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+    <Style Selector=":is(TemplatedControl).noBorder">
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+  
+  <Style Selector=":is(TemplatedControl).noBorder /template/ ContentPresenter">
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+    <Style Selector=":is(TemplatedControl):pointerover.noBorder /template/ ContentPresenter">
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+  
+    <Style Selector=":is(TemplatedControl)">
+        <Setter Property="ToolTip.Placement"
+                Value="Pointer" />
     </Style>
 
 </Styles>

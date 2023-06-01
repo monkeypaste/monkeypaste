@@ -43,11 +43,48 @@ namespace MonkeyPaste.Avalonia {
                 nameof(MpPrefViewModel.Instance.ThemeTypeName)
             };
 
+        private string[] _colorImageFileNames = new string[] {
+            "add.png",
+            "appstore.png",
+            "bitmap.png",
+            "bingicon.png",
+            "close.png",
+            "cogcolor.png",
+            "colors.png",
+            "delete.png",
+            "delete2.png",
+            "device.png",
+            "duckduckgoicon.png",
+            "error.png",
+            "folder.png",
+            "global.png",
+            "graph.png",
+            "html.png",
+            "info.png",
+            "joystickative.png",
+            "joystickative2.png",
+            "monkey.png",
+            "noentry.png",
+            "pindown.png",
+            "pindownover.png",
+            "pinover.png",
+            "preferences.png",
+            "remove.png",
+            "rtf.png",
+            "sheep.png",
+            "spellcheck.png",
+            "staryellow.png",
+            "text.png",
+            "warning.png",
+            "yandexicon.png"
+        };
+
         private string _curEditorPaletteBase64Str;
 
         #endregion
 
         #region Constants
+
         #endregion
 
         #region Statics
@@ -188,6 +225,20 @@ namespace MonkeyPaste.Avalonia {
             return _curEditorPaletteBase64Str;
         }
 
+        public bool IsColoredImageResource(object resource_key_uri) {
+            if (resource_key_uri is not string res_str) {
+                return true;
+            }
+
+            if (string.IsNullOrEmpty(res_str)) {
+                return false;
+            }
+            if (res_str.EndsWith("Image")) {
+                res_str = Mp.Services.PlatformResource.GetResource<string>(res_str);
+            }
+            return _colorImageFileNames.Any(x => res_str.ToLower().EndsWith(x));
+        }
+
         #endregion
 
         #region Protected Methods
@@ -270,32 +321,32 @@ namespace MonkeyPaste.Avalonia {
             // 7: pin tray bg h1_te(S -60) (theme compliment1)
             // 8: pin tray shadow bg h1_te(S -60, V - 45) (theme compliment1 dark)
 
-            // 9: light grays => h(S=5) (gray accent2)
-            // 10: dim grays => h(S=5,V-30) (gray accent1)
-            // 11: grays => h(S=10, V-10) (gray accent3)
-            // 12: bright grays => h(S=5, V-10) (gray accent4)
+            // 9: dim grays => h(S=5,V-30) (gray accent1)
+            // 10: grays => h(S=5, V-10) (gray accent2)
+            // 11: light grays => h(S=10, V-10) (gray accent3)
 
-            // 13: theme black h(S=5, V=15)
-            // 14: theme white h(S=5, V=95)
+            // 12: theme black h(S=5, V=15)
+            // 13: theme white h(S=5, V=95)
 
-            // 15: can resize h1_te (H-30) (accent4)
-            // 16: is resize h1_te (H-30, S=50,V=100) (accent4 bg)
+            // 14: can resize h1_te (H-30) (accent4)
+            // 15: is resize h1_te (H-30, S=50,V=100) (accent4 bg)
 
-            // 17: param bg h(H-15) (comp2)
-            // 18: sel/hover param bg h(H-15,V=100) (comp2bg)
+            // 16: param bg h(H-15) (comp2)
+            // 17: sel/hover param bg h(H-15,V=100) (comp2bg)
 
-            // 19: criteria row1 h(s=30,v=90) (comp3)
-            // 20: criteria row2 h(s=5,v=90) (comp3bg)
+            // 18: criteria row1 h(s=30,v=90) (comp3)
+            // 19: criteria row2 h(s=5,v=90) (comp3bg)
 
-            // 21: interactiveFg
-            // 22: interactiveBg
+            // 20: interactiveFg
+            // 21: interactiveBg
 
-            // 23: tooltip fg h1_tr (comp4)
-            // 24: tooltip bg h1_tr(S=50,V=100) (comp4bg)
+            // 22: tooltip fg h1_tr (comp4)
+            // 23: tooltip bg h1_tr(S=50,V=100) (comp4bg)
 
-            // 25: default button bg h(h-240, S=15, V=95) (comp5)
-            // 26: default button bg h(h-240, S=15, V=65) (comp5bg)
+            // 24: default button bg h(h-240, S=15, V=95) (comp5)
+            // 25: default button bg h(h-240, S=15, V=65) (comp5bg)
 
+            var tt = MpPrefViewModel.Instance.ThemeType;
             string hex = MpPrefViewModel.Instance.ThemeColor;
             // prepass selected color to get decent chroma
             // V >= 50, S >= 50
@@ -304,12 +355,12 @@ namespace MonkeyPaste.Avalonia {
             prev = Math.Max(0.5d, prev);
             hex = MpColorHelpers.ColorFromHsv(preh, pres, prev).ToHex(true);
 
-            if (MpPrefViewModel.Instance.ThemeType != MpThemeType.Default) {
+            if (tt != MpThemeType.Default) {
                 hex.ToPortableColor().ColorToHsl(out double th, out double ts, out double tl);
-                if (MpPrefViewModel.Instance.ThemeType == MpThemeType.Dark) {
+                if (tt == MpThemeType.Dark) {
                     tl = Math.Max(25d / 100d, tl - (15d / 100d));
                 } else {
-                    tl = Math.Min(95d / 100d, tl + (15d / 100d));
+                    tl = Math.Min(75d / 100d, tl + (10d / 100d));
                 }
                 hex = MpColorHelpers.ColorFromHsl(th, ts, tl).ToHex(true);
             }
@@ -344,52 +395,57 @@ namespace MonkeyPaste.Avalonia {
             palette.Add(MpColorHelpers.ColorFromHsv(h1_te, Math.Max(0, s - 0.6d), v).ToHex(true));
             // 8
             palette.Add(MpColorHelpers.ColorFromHsv(h1_te, Math.Max(0, s - 0.6d), Math.Max(0, v - 0.45d)).ToHex(true));
-            // 9
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, v).ToHex(true));
-            // 10
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true));
-            // 11
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, Math.Max(0, v - 0.1d)).ToHex(true));
-            // 12
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true));
-            // 13
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.25d).ToHex(true));
-            // 14
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.95d).ToHex(true));
-            // 15
-            palette.Add(MpColorHelpers.ColorFromHsv((h1_te - 30d).Wrap(0, 360), s, v).ToHex(true));
-            // 16
-            palette.Add(MpColorHelpers.ColorFromHsv((h1_te - 30d).Wrap(0, 360), 0.5d, 1d).ToHex(true));
-            // 17
-            palette.Add(MpColorHelpers.ColorFromHsv((h - 15d).Wrap(0, 360), s, v).ToHex(true));
-            // 18
-            palette.Add(MpColorHelpers.ColorFromHsv((h - 15d).Wrap(0, 360), s, 1d).ToHex(true));
-            // 19
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.3d, 0.9d).ToHex(true));
-            // 20
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, 0.9d).ToHex(true));
 
-            if (MpPrefViewModel.Instance.ThemeType == MpThemeType.Dark) {
-                // 21 (fg)
-                palette.Add(palette[14]);
-                // 22 (bg)
-                palette.Add(palette[13]);
+            // 9, 10, 11
+
+            // when theme CHANGED from default/light to dark or vice versa swap most/least darkest gray references
+            string dark_gray = MpSystemColors.dimgray; //MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true);
+            string med_gray = MpSystemColors.gray; //MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true);
+            string light_gray = MpSystemColors.lightgray; //MpColorHelpers.ColorFromHsv(h, 0.1d, Math.Max(0, v - 0.1d)).ToHex(true);
+            if (tt == MpThemeType.Default || tt == MpThemeType.Light) {
+                palette.AddRange(new[] { dark_gray, med_gray, light_gray });
             } else {
-                // 21 (fg)
-                palette.Add(palette[13]);
-                // 22 (bg)
-                palette.Add(palette[14]);
+                palette.AddRange(new[] { light_gray, med_gray, dark_gray });
             }
 
-            // 23
+            // 12
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.25d).ToHex(true));
+            // 13
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.95d).ToHex(true));
+            // 14
+            palette.Add(MpColorHelpers.ColorFromHsv((h1_te - 30d).Wrap(0, 360), s, v).ToHex(true));
+            // 15
+            palette.Add(MpColorHelpers.ColorFromHsv((h1_te - 30d).Wrap(0, 360), 0.5d, 1d).ToHex(true));
+            // 16
+            palette.Add(MpColorHelpers.ColorFromHsv((h - 15d).Wrap(0, 360), s, v).ToHex(true));
+            // 17
+            palette.Add(MpColorHelpers.ColorFromHsv((h - 15d).Wrap(0, 360), s, 1d).ToHex(true));
+            // 18
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.3d, 0.9d).ToHex(true));
+            // 19
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.05d, 0.9d).ToHex(true));
+
+            if (tt == MpThemeType.Dark) {
+                // 20 (fg)
+                palette.Add(palette[13]);
+                // 21 (bg)
+                palette.Add(palette[12]);
+            } else {
+                // 20 (fg)
+                palette.Add(palette[12]);
+                // 21 (bg)
+                palette.Add(palette[13]);
+            }
+
+            // 22
             palette.Add(MpColorHelpers.ColorFromHsv(h1_tr, s, v).ToHex(true));
-            // 24
+            // 23
             palette.Add(MpColorHelpers.ColorFromHsv(h1_tr, 0.5d, 1.0d).ToHex(true));
-            // 25
+            // 24
             palette.Add(MpColorHelpers.ColorFromHsv((h - 240.0d).Wrap(0, 360), 0.15d, 0.95d).ToHex(true));
-            // 26
+            // 25
             palette.Add(MpColorHelpers.ColorFromHsv((h - 240.0d).Wrap(0, 360), 0.15d, 0.65d).ToHex(true));
-            // 27
+            // 26
             palette.Add(MpColorHelpers.ColorFromHsv((h - 240.0d).Wrap(0, 360), 0.05d, 0.95d).ToHex(true));
 
 
@@ -407,29 +463,28 @@ namespace MonkeyPaste.Avalonia {
             SetThemeValue(MpThemeResourceKey.ThemeGrayAccent1, colors[9]);
             SetThemeValue(MpThemeResourceKey.ThemeGrayAccent2, colors[10]);
             SetThemeValue(MpThemeResourceKey.ThemeGrayAccent3, colors[11]);
-            SetThemeValue(MpThemeResourceKey.ThemeGrayAccent4, colors[12]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeBlack, colors[13]);
-            SetThemeValue(MpThemeResourceKey.ThemeWhite, colors[14]);
+            SetThemeValue(MpThemeResourceKey.ThemeBlack, colors[12]);
+            SetThemeValue(MpThemeResourceKey.ThemeWhite, colors[13]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeAccent4Color, colors[15]);
-            SetThemeValue(MpThemeResourceKey.ThemeAccent4BgColor, colors[16]);
+            SetThemeValue(MpThemeResourceKey.ThemeAccent4Color, colors[14]);
+            SetThemeValue(MpThemeResourceKey.ThemeAccent4BgColor, colors[15]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment2Color, colors[17]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment2DarkColor, colors[18]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment2Color, colors[16]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment2DarkColor, colors[17]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment3Color, colors[19]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment3DarkColor, colors[20]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment3Color, colors[18]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment3DarkColor, colors[19]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeInteractiveColor, colors[21]);
-            SetThemeValue(MpThemeResourceKey.ThemeInteractiveBgColor, colors[22]);
+            SetThemeValue(MpThemeResourceKey.ThemeInteractiveColor, colors[20]);
+            SetThemeValue(MpThemeResourceKey.ThemeInteractiveBgColor, colors[21]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment4Color, colors[23]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment4DarkColor, colors[24]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment4Color, colors[22]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment4DarkColor, colors[23]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment5Color, colors[25]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment5DarkColor, colors[26]);
-            SetThemeValue(MpThemeResourceKey.ThemeCompliment5LighterColor, colors[27]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment5Color, colors[24]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment5DarkColor, colors[25]);
+            SetThemeValue(MpThemeResourceKey.ThemeCompliment5LighterColor, colors[26]);
 
             //Mp.Services.PlatformResource.SetResource("ComboBoxForeground", colors[21].ToSolidColorBrush());
             //Mp.Services.PlatformResource.SetResource("ComboBoxBackground", colors[22].ToSolidColorBrush());

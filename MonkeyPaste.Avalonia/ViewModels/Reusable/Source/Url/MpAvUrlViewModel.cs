@@ -15,8 +15,6 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel
         //MpISourceItemViewModel
         {
-
-
         #region Interfaces
 
         #region MpIFilterMatch Implementation
@@ -44,6 +42,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #endregion
+
         #region Properties
 
         #region View Models

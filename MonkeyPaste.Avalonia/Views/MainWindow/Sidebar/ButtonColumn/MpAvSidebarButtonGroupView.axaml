@@ -82,7 +82,7 @@
         </Style>
         <Style Selector="RadioButton.sidebarRadio PathIcon">
             <Setter Property="Foreground"
-                    Value="{DynamicResource DefaultButtonBrush}" />
+                    Value="{DynamicResource DefaultBorderBrush}" />
         </Style>
         <Style Selector="RadioButton.sidebarRadio:pointerover PathIcon">
             <Setter Property="Foreground"
@@ -99,7 +99,7 @@
 
         <Style Selector="RadioButton#AppModeToggleButton, RadioButton#AppModeToggleButton:unchecked, RadioButton#AppModeToggleButton:not(.mouseMode)">
             <Setter Property="local:MpAvImageTintExtension.Tint"
-                    Value="{DynamicResource DefaultButtonBrush}" />
+                    Value="{DynamicResource DefaultBorderBrush}" />
         </Style>
         <Style Selector="RadioButton#AppModeToggleButton:pointerover">
             <Setter Property="local:MpAvImageTintExtension.Tint"

@@ -20,6 +20,9 @@ using KeyGesture = Avalonia.Input.KeyGesture;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMenuExtension {
+        //private static IBrush _hoverMenuItemBrush;
+        //private static IBrush _hoverMenuItemPresenterBrush;
+
         private static MpAvContextMenuView _cmInstance =>
             MpAvContextMenuView.Instance;
 
@@ -427,20 +430,25 @@ namespace MonkeyPaste.Avalonia {
 
         private static void MenuItem_PointerEnter(object sender, PointerEventArgs e) {
             if (e.Source is MenuItem mi && mi.DataContext is MpMenuItemViewModel mivm) {
+                var _hoverMenuItemBrush = Mp.Services.PlatformResource.GetResource("MenuFlyoutItemBackgroundPointerOver") as IBrush;
+                var _hoverMenuItemPresenterBrush = Mp.Services.PlatformResource.GetResource("MenuFlyoutPresenterBackground") as IBrush;
 
                 var openMenusToRemove = new List<MenuItem>();
                 foreach (var osmi in openSubMenuItems) {
+                    // loop through open sub-menu items and close ones not in entered item tree
                     var cmil = GetChildMenuItems(osmi);
                     var pmil = GetParentMenuItems(mi);
                     if (cmil.Select(x => x.DataContext).Cast<MpMenuItemViewModel>().All(x => x != mivm)) {
                         osmi.Close();
                         osmi.Background = Brushes.Transparent;
                         var ccl = osmi.GetVisualDescendants<Control>();
-                        var child_border = ccl.FirstOrDefault(x => x is Border b && (b.Background.ToString() == "#19000000" || b.Background.ToString() == Brushes.LightBlue.ToString()) && b.Tag == null);
-                        if (child_border != null) {
-                            (child_border as Border).Background = Brushes.Transparent;
+                        //var child_border = ccl.FirstOrDefault(x => x is Border b && (b.Background.ToString() == "#19000000" || b.Background.ToString() == Brushes.LightBlue.ToString()) && b.Tag == null);
+                        var child_border = ccl.FirstOrDefault(x => x is Border b && b.Background.Equals(_hoverMenuItemBrush) && b.Tag == null);
+                        if (child_border is Border cb) {
+                            cb.Background = Brushes.Transparent;
                         }
-                        mi.GetVisualAncestor<Panel>().Background = "#FFF2F2F2".ToAvBrush();
+                        //mi.GetVisualAncestor<Panel>().Background = "#FFF2F2F2".ToAvBrush();
+                        mi.GetVisualAncestor<Panel>().Background = _hoverMenuItemPresenterBrush;
                         openMenusToRemove.Add(osmi);
                     }
                 }
@@ -451,12 +459,14 @@ namespace MonkeyPaste.Avalonia {
                 if (mivm.SubItems != null && mivm.SubItems.Count > 0 && !mivm.IsColorPallete) {
                     mi.InvalidateVisual();
                     mi.IsSubMenuOpen = true;
-                    mi.Background = Brushes.LightBlue;
+                    //mi.Background = Brushes.LightBlue;
+                    mi.Background = _hoverMenuItemBrush;
                     var ccl = mi.GetVisualDescendants<Control>();
                     var child_border = ccl.FirstOrDefault(x => x is Border b && b.Tag == null);
 
-                    if (child_border != null) {
-                        (child_border as Border).Background = Brushes.LightBlue;
+                    if (child_border is Border cb) {
+                        //cb.Background = Brushes.LightBlue;
+                        cb.Background = _hoverMenuItemBrush;
                     }
                     openSubMenuItems.Add(mi);
                     mi.Open();
@@ -537,7 +547,15 @@ namespace MonkeyPaste.Avalonia {
                 VerticalAlignment = VerticalAlignment.Stretch
             };
             if (string.IsNullOrEmpty(mivm.IconTintHexStr)) {
-                iconImg.Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap;
+                //
+                if (MpPrefViewModel.Instance.ThemeType != MpThemeType.Dark ||
+                    MpAvThemeViewModel.Instance.IsColoredImageResource(mivm.IconSourceObj)) {
+                    iconImg.Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap;
+                } else {
+                    // for
+                    iconImg.Source = MpAvStringHexToBitmapTintConverter.Instance.Convert(mivm.IconSourceObj, null, Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveColor.ToString()), null) as Bitmap;
+                }
+
             } else {
                 iconImg.Source = MpAvStringHexToBitmapTintConverter.Instance.Convert(mivm.IconSourceObj, null, mivm.IconTintHexStr, null) as Bitmap;
             }
@@ -701,17 +719,6 @@ namespace MonkeyPaste.Avalonia {
             _cmInstance.PlacementTarget = control;
             _cmInstance.Placement = placement;
             _cmInstance.PlacementAnchor = anchor;
-            //if (_cmInstance.PlacementAnchor == PopupAnchor.None) {
-            //    switch (MpAvMainWindowViewModel.Instance.MainWindowOrientationType) {
-            //        case MpMainWindowOrientationType.Bottom:
-            //            _cmInstance.PlacementAnchor = PopupAnchor.BottomLeft;
-            //            break;
-            //        default:
-            //            _cmInstance.PlacementAnchor = PopupAnchor.TopLeft;
-            //            break;
-
-            //    }
-            //}
             _cmInstance.HorizontalOffset = 0;
             _cmInstance.VerticalOffset = 0;
             if (_cmInstance.Placement == PlacementMode.Pointer) {
@@ -741,6 +748,7 @@ namespace MonkeyPaste.Avalonia {
                 //_cmInstance.Open(control);
 
             }
+
             _cmInstance.Open(control);
         }
 

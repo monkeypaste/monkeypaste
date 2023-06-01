@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using Org.BouncyCastle.Crypto.Fpe;
 using PropertyChanged;
 using System.Diagnostics;
 using System.Linq;
@@ -217,9 +218,15 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
+            // NOTE need to use processed/output data object, avdo becomes disposed
+            // (or weird stuff happens..external drop made invalid copyitemTag w/ the ciid. it was a huge number, not sure why
+            // hard to step trace due dnd thread)
+            var mpdo = await
+                Mp.Services.DataObjectHelperAsync
+                .ReadDragDropDataObjectAsync(e.Data) as IDataObject;
             //
-            if (e.Data.Contains(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) &&
-                e.Data.Get(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) is MpAvTagTileViewModel drag_ttvm) {
+            if (mpdo.Contains(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) &&
+                mpdo.Get(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT) is MpAvTagTileViewModel drag_ttvm) {
                 // SORT
                 int this_sort_idx = IsPinTrayTagView() ?
                     BindingContext.PinSortIdx : BindingContext.TreeSortIdx;
@@ -242,13 +249,13 @@ namespace MonkeyPaste.Avalonia {
                 // CONTENT DROP
 
                 BindingContext.IsBusy = true;
-                bool is_internal = e.Data.ContainsContentRef();
+                bool is_internal = mpdo.ContainsContentRef();
                 if (is_internal) {
                     // Internal Drop
-                    await PerformTileDropAsync(e.Data, is_copy);
+                    await PerformTileDropAsync(mpdo, is_copy);
                 } else {
                     // External Drop
-                    await PerformExternalOrPartialDropAsync(e.Data, is_copy);
+                    await PerformExternalOrPartialDropAsync(mpdo, is_copy);
                 }
                 BindingContext.IsBusy = false;
             }
@@ -360,24 +367,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task PerformExternalOrPartialDropAsync(IDataObject avdo, bool is_copy) {
-            var drop_ci = avdo.ToCopyItemAsync(
-                addAsNewItem: true,
-                is_copy: is_copy);
+            await Dispatcher.UIThread.InvokeAsync(async () => {
+                var drop_ci = avdo.ToCopyItemAsync(
+                    addAsNewItem: true,
+                    is_copy: is_copy);
 
-            if (drop_ci == null) {
-                return;
-            }
+                if (drop_ci == null) {
+                    return;
+                }
 
-            BindingContext.LinkCopyItemCommand.Execute(drop_ci.Id);
+                BindingContext.LinkCopyItemCommand.Execute(drop_ci.Id);
 
-            // wait for all tags to update before notifiying clip tray
-            while (MpAvTagTrayViewModel.Instance.IsAnyBusy) { await Task.Delay(100); }
+                // wait for all tags to update before notifiying clip tray
+                while (MpAvTagTrayViewModel.Instance.IsAnyBusy) { await Task.Delay(100); }
 
-            //push new item onto new item list so it shows in pin regardless if tile is selected
-            // NOTE avoiding altering query tray without clicking the thing as consistent behavior.
-            // (scrolloffset or sort may not make it visible)          
 
-            MpAvClipTrayViewModel.Instance.AddNewItemsCommand.Execute(drop_ci);
+                MpAvClipTrayViewModel.Instance.AddNewItemsCommand.Execute(drop_ci);
+            });
         }
         private ItemsControl _itemsControl;
         private bool? _isPinView;

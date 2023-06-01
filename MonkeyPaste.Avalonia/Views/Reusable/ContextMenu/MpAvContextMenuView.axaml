@@ -12,11 +12,11 @@
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView">
-    <local:MpAvContextMenuView.Resources>
+    <!--<local:MpAvContextMenuView.Resources>
         <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver">LightBlue</SolidColorBrush>
     </local:MpAvContextMenuView.Resources>
     <local:MpAvContextMenuView.Styles>
-        <!--<Style Selector="MenuItem">
+        <Style Selector="MenuItem">
             <Setter Property="Background"
                     Value="Transparent" />
         </Style>
@@ -27,6 +27,6 @@
         <Style Selector="MenuItem:pointerover /template/ Border">
             <Setter Property="Background"
                     Value="LightBlue" />
-        </Style>-->
-    </local:MpAvContextMenuView.Styles>
+        </Style>
+    </local:MpAvContextMenuView.Styles>-->
 </local:MpAvContextMenuView>

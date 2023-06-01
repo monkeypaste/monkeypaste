@@ -7,6 +7,16 @@
         <Thickness x:Key="TextControlBorderThemeThicknessFocused">0,0,0,0</Thickness>
         <sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
     </Styles.Resources>
+
+
+    <Style Selector=":is(TextBox)[IsReadOnly=false]">
+        <Setter Property="FontFamily"
+                Value="{Binding Source={DynamicResource DefaultEditableFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+    </Style>
+    <Style Selector=":is(TextBox)[IsReadOnly=true]">
+        <Setter Property="FontFamily"
+                Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+    </Style>
     <Style Selector=":is(TextBox), :is(TextBox):focus">
         <Setter Property="Background"
                 Value="{DynamicResource ThemeInteractiveBgBrush}" />
@@ -19,4 +29,5 @@
         <Setter Property="Foreground"
                 Value="{DynamicResource ThemeInteractiveBrush}" />
     </Style>
+
 </Styles>

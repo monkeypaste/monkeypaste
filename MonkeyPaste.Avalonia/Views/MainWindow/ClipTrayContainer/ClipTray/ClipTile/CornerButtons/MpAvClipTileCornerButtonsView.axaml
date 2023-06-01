@@ -18,6 +18,12 @@
                     Value="True" />
             <Setter Property="local:MpAvPointerCommandExtension.RoutingStrategy"
                     Value="Tunnel" />
+            <Setter Property="Padding"
+                    Value="0" />
+        </Style>
+        <Style Selector=":is(Button) /template/ ContentPresenter">
+            <Setter Property="Padding"
+                    Value="0" />
         </Style>
 
 
@@ -79,7 +85,7 @@
         <!--  TL Pin Tile Button  -->
 
         <ToggleButton x:Name="PinTileButton"
-                      Classes="noBg noHoverBg"
+                      Classes="noBg noHoverBg noBorder"
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                       local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
                       IsChecked="{Binding IsPinned}"
@@ -94,7 +100,7 @@
         <!--  TR Pop Out Button  -->
 
         <Button x:Name="OpenWindowButton"
-                Classes="noBg noHoverBg"
+                Classes="noBg noHoverBg noBorder"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding PinToPopoutWindowCommand}"
                 IsVisible="{Binding !IsChildWindowOpen}"
                 CommandParameter="{Binding}"
@@ -107,7 +113,7 @@
 
         <!--  BL Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
-                Classes="noBg noHoverBg lower"
+                Classes="noBg noHoverBg lower noBorder"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
@@ -125,7 +131,7 @@
 
         <!--  BR Edit Toggle Button  -->
         <ToggleButton x:Name="ClipTileToggleEditButton"
-                      Classes="noBg noHoverBg lower"
+                      Classes="noBg noHoverBg lower noBorder"
                       IsVisible="{Binding CanEdit}"
                       HorizontalAlignment="Right"
                       VerticalAlignment="Bottom"

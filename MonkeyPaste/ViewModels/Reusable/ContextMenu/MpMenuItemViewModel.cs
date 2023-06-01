@@ -492,6 +492,7 @@ namespace MonkeyPaste {
                 ICommand command;
                 object commandArg;
                 string header = cc;
+
                 if (isCustom) {
                     if (!isAnySelected) {
                         isSelected = true;

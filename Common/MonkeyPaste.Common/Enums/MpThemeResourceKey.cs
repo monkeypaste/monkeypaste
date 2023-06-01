@@ -47,7 +47,6 @@
         ThemeGrayAccent1,
         ThemeGrayAccent2,
         ThemeGrayAccent3,
-        ThemeGrayAccent4,
 
         PostThemeIdx,
         #endregion

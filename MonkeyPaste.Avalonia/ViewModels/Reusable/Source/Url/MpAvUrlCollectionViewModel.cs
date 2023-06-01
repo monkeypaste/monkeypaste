@@ -151,6 +151,10 @@ namespace MonkeyPaste.Avalonia {
                         title: "Add url",
                         message: "Enter full url:",
                         iconResourceObj: "WebImage");
+                    if (urlPath == null) {
+                        // canceled, break
+                        break;
+                    }
                     if (!Uri.IsWellFormedUriString(urlPath, UriKind.Absolute)) {
                         var invalid_result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: "Error",

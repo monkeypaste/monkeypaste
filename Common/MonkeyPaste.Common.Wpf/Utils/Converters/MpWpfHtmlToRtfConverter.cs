@@ -62,7 +62,9 @@ namespace MonkeyPaste.Common.Wpf {
                     // and for code-block, i'm not sure but there maybe multiple blocks so process all 1st level children
                     docNode = htmlBlockNode.FirstChild;
                     while (docNode != null) {
-                        CurrentFd.Blocks.Add(ConvertHtmlNode(docNode) as Block);
+                        if (ConvertHtmlNode(docNode) is Block cur_block) {
+                            CurrentFd.Blocks.Add(cur_block);
+                        }
                         docNode = docNode.NextSibling;
                     }
                     continue;
@@ -112,7 +114,9 @@ namespace MonkeyPaste.Common.Wpf {
                 if (_ignoredHtmlTagNames.Contains(c.Name)) {
                     continue;
                 }
-                cel.Add(ConvertHtmlNode(c));
+                if (ConvertHtmlNode(c) is TextElement te) {
+                    cel.Add(te);
+                }
             }
             return CreateTextElement(n, cel.ToArray());
         }
@@ -120,7 +124,8 @@ namespace MonkeyPaste.Common.Wpf {
         private static TextElement CreateTextElement(HtmlNode n, TextElement[] cl) {
             var te = GetTextElement(n);
             if (te == null) {
-                Debugger.Break();
+                //Debugger.Break();
+                return null;
             }
             foreach (var c in cl) {
                 if (c == null) {
@@ -224,7 +229,8 @@ namespace MonkeyPaste.Common.Wpf {
                     }
                     break;
                 default:
-                    throw new Exception("Unhanlded html doc element: " + n.Name);
+                    MpDebug.Break("Unhanlded html doc element: " + n.Name);
+                    break;
             }
             return te;
         }

@@ -36,11 +36,14 @@
                 <local:MpAvSidebarButtonGroupView x:Name="SidebarButtonGroup"
                                                   Grid.Column="0"
                                                   Padding="3"
-                                                  Background="{DynamicResource SidebarButtonsBgBrush}"
                                                   HorizontalAlignment="Stretch"
                                                   VerticalAlignment="Stretch"
                                                   HorizontalContentAlignment="Stretch"
-                                                  VerticalContentAlignment="Stretch" />
+                                                  VerticalContentAlignment="Stretch">
+                    <local:MpAvSidebarButtonGroupView.Background>
+                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                    </local:MpAvSidebarButtonGroupView.Background>
+                </local:MpAvSidebarButtonGroupView>
 
                 <!--  SELECTED SIDEBAR ITEM  -->
                 <Border x:Name="SelectedSidebarContainerBorder"

@@ -91,6 +91,7 @@
 
         <Button x:Name="SortDirectionButton"
                 Margin="0,0,0,0"
+                Padding="0"
                 Classes="noBg noHoverBg outlineOver"
                 Classes.iconButton="True"
                 Classes.noHoverBg="True"
@@ -104,8 +105,7 @@
                 local:MpAvPointerCommandExtension.IsEnabled="True"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ClickCommand, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}"
                 local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding DoubleClickCommand, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}">
-            <Image Margin="5"
-                   HorizontalAlignment="Stretch"
+            <Image HorizontalAlignment="Stretch"
                    VerticalAlignment="Stretch" />
         </Button>
 

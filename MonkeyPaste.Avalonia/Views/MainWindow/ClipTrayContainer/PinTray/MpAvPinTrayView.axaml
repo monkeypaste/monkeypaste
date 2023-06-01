@@ -90,7 +90,6 @@
                            VerticalAlignment="Center"
                            TextAlignment="Center"
                            TextWrapping="Wrap"
-                           Foreground="DimGray"
                            FontSize="32"
                            Text="Pin or Drop any media here!"
                            Classes="disabled" />
@@ -106,10 +105,6 @@
                     Width="25"
                     Height="25"
                     Margin="0,5,20,0"
-                    CornerRadius="10"
-                    BorderThickness="1"
-                    BorderBrush="DimGray"
-                    Background="Silver"
                     Command="{Binding UnpinAllCommand}">
                 <Button.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.Or}">
@@ -121,7 +116,6 @@
                 </Button.IsVisible>
                 <Grid>
                     <Image IsVisible="{Binding !IsPinTrayBusy}"
-                           Margin="5,2"
                            Source="{Binding ., Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
                     <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"

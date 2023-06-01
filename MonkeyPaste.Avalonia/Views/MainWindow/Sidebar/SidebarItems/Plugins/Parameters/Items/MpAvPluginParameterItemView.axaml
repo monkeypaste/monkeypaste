@@ -13,7 +13,6 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterItemView">
     <local:MpAvUserControl.Resources>
-        <SolidColorBrush x:Key="TextControlBackground" Color="White" />
         <SolidColorBrush x:Key="CheckBoxBorderBrushUnchecked" Color="White" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="White" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="Yellow" />

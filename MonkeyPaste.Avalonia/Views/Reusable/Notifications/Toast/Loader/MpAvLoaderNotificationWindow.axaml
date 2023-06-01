@@ -125,7 +125,7 @@
                            FontSize="20"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Left"
-                           Foreground="{DynamicResource ThemeInteractiveBgColor}"
+                           Foreground="{Binding $self, Converter={x:Static local:MpAvTemplatedControlToContrastBrushConverter.Instance}}"
                            FontWeight="SemiBold"
                            Text="{Binding Title}" />
                 <Border Grid.Row="0"
@@ -146,7 +146,7 @@
                         Width="220"
                         ClipToBounds="True"
                         BorderThickness="1"
-                        BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
+                        BorderBrush="{DynamicResource ThemeWhite}"
                         Background="Transparent"
                         Margin="0"
                         Padding="0">
@@ -195,14 +195,26 @@
                                    RenderTransform="skewX(-45deg)" />
                     </Canvas>
                 </Border>
-                <TextBlock x:Name="ProgressInfoBlock"
-                           Grid.Row="2"
-                           Margin="0,0,7,7"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right"
-                           FontSize="10"
-                           Foreground="{DynamicResource ThemeInteractiveColor}"
-                           Text="{Binding Body}" />
+                <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
+                                             Grid.Row="2"
+                                             Margin="0,0,7,7"
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Right"
+                                             Content="{Binding Body}">
+                    <TransitioningContentControl.PageTransition>
+                        <CrossFade Duration="0:00:00.500" />
+                    </TransitioningContentControl.PageTransition>
+                    <TransitioningContentControl.ContentTemplate>
+                        <DataTemplate DataType="sys:String">
+                            <TextBlock x:Name="ProgressInfoBlock"
+                                       Width="200"
+                                       FontSize="12"
+                                       TextAlignment="Right"
+                                       Foreground="{Binding $self, Converter={x:Static local:MpAvTemplatedControlToContrastBrushConverter.Instance}}"
+                                       Text="{Binding}" />
+                        </DataTemplate>
+                    </TransitioningContentControl.ContentTemplate>
+                </TransitioningContentControl>
             </Grid>
 
             <local:MpAvOptionsButton Grid.Column="1"

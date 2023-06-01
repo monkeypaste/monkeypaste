@@ -10,6 +10,7 @@ using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -18,7 +19,8 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private MpPoint _lastMousePos;
-
+        private bool _isMoveAttached = false;
+        private bool _isDisableAttached = false;
         #endregion
 
         #region Statics
@@ -89,6 +91,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         public MpAvToolTipView() {
             AvaloniaXamlLoader.Load(this);
+            IsEnabled = false;
+            return;
+
             this.AttachedToVisualTree += MpAvTooltipView_AttachedToVisualTree;
             this.DetachedFromVisualTree += MpAvTooltipView_DetachedFromVisualTree;
             this.AttachedToLogicalTree += MpAvToolTipView_AttachedToLogicalTree;
@@ -128,18 +133,23 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void MpAvToolTipView_AttachedToLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
-            if (GetHostControl() is Control host_control) {
+            if (!_isMoveAttached &&
+                GetHostControl() is Control host_control) {
                 host_control.PointerMoved += Host_control_PointerMoved;
+                _isMoveAttached = true;
             }
-            if (GetPopupRoot() is PopupRoot pur) {
+            if (!_isDisableAttached &&
+                GetPopupRoot() is PopupRoot pur) {
                 pur.TransparencyLevelHint = WindowTransparencyLevel.Transparent;
                 pur.Background = Brushes.Transparent;
                 foreach (var elm in pur.GetSelfAndLogicalDescendants()) {
                     if (elm is Control c) {
                         c.IsHitTestVisible = false;
                         c.Focusable = false;
+                        c.IsEnabled = false;
                     }
                 }
+                _isDisableAttached = true;
             }
         }
         private void MpAvTooltipView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
@@ -162,30 +172,31 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvTooltipView_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            this.AttachedToVisualTree -= MpAvTooltipView_AttachedToVisualTree;
-            this.DetachedFromVisualTree -= MpAvTooltipView_DetachedFromVisualTree;
-            this.AttachedToLogicalTree -= MpAvToolTipView_AttachedToLogicalTree;
-            if (GetHostControl() is Control host_control) {
-                host_control.PointerMoved -= Host_control_PointerMoved;
-            }
+            //this.AttachedToVisualTree -= MpAvTooltipView_AttachedToVisualTree;
+            //this.DetachedFromVisualTree -= MpAvTooltipView_DetachedFromVisualTree;
+            //this.AttachedToLogicalTree -= MpAvToolTipView_AttachedToLogicalTree;
+            //if (GetHostControl() is Control host_control) {
+            //    host_control.PointerMoved -= Host_control_PointerMoved;
+            //}
         }
 
         #region Helpers
 
         private PopupRoot GetPopupRoot() {
-            //var tooltip = this.FindAncestorOfType<ToolTip>();
-            //if (tooltip == null) {
-            //    return null;
-            //}
-            //var tooltip_root = tooltip.GetVisualAncestor<PopupRoot>();
-            //if (tooltip_root != null) {
-            //    return tooltip_root;
-            //}
-            //return null;
-            if (TopLevel.GetTopLevel(this) is PopupRoot pur) {
-                return pur;
+            var tooltip = this.GetLogicalAncestors().FirstOrDefault(x => x is ToolTip);
+            if (tooltip == null) {
+                return null;
+            }
+            var tooltip_root = tooltip.GetLogicalAncestors().FirstOrDefault(x => x is PopupRoot);
+            if (tooltip_root is PopupRoot pr) {
+                return pr;
             }
             return null;
+
+            //if (TopLevel.GetTopLevel(this) is PopupRoot pur) {
+            //    return pur;
+            //}
+            //return null;
         }
         private Control GetHostControl() {
             if (GetPopupRoot() is PopupRoot pr &&
@@ -193,16 +204,6 @@ namespace MonkeyPaste.Avalonia {
                 return host_control;
             }
             return null;
-        }
-
-        private MpPoint GetToolTipOffset(Control hc) {
-            if (hc == null) {
-                return MpPoint.Zero;
-            }
-            return new MpPoint() {
-                X = ToolTip.GetHorizontalOffset(hc),
-                Y = ToolTip.GetVerticalOffset(hc)
-            };
         }
 
         private void SetToolTipOffset(Control hc, MpPoint mp) {

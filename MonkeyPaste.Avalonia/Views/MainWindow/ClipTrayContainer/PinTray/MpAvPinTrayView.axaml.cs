@@ -78,13 +78,19 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.IsPinTrayBusy = true;
 
                 e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
-                bool is_internal = e.Data.ContainsContentRef();
+
+                // NOTE need to use processed/output data object, avdo becomes disposed
+                var mpdo = await
+                    Mp.Services.DataObjectHelperAsync
+                    .ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
+
+                bool is_internal = mpdo.ContainsContentRef();
                 if (is_internal) {
                     // Internal Drop
-                    await PerformTileDropAsync(drop_idx, e.Data, is_copy);
+                    await PerformTileDropAsync(drop_idx, mpdo, is_copy);
                 } else {
                     // External Drop
-                    await PerformExternalOrPartialDropAsync(drop_idx, e.Data);
+                    await PerformExternalOrPartialDropAsync(drop_idx, mpdo, is_copy);
                 }
 
                 Dispatcher.UIThread.Post(async () => {
@@ -162,22 +168,14 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"Tile '{drop_ctvm}' dropped onto pintray idx: {drop_idx}");
         }
 
-        private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo) {
-            MpPortableDataObject mpdo = await
-                Mp.Services.DataObjectHelperAsync
-                .ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
+        private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo, bool is_copy) {
 
-            bool from_ext = !avdo.ContainsContentRef();
 
-            var avdo_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
-                pdo: mpdo,
-                force_ext_sources: from_ext,
-                transType: MpTransactionType.Created);
+            //var avdo_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
+            //    pdo: mpdo,
+            //    force_ext_sources: from_ext,
+            //    transType: MpTransactionType.Created);
 
-            var drop_ctvm = await BindingContext.CreateClipTileViewModelAsync(avdo_ci, -1);
-            BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
-
-            MpConsole.WriteLine($"PARTIAL Tile '{drop_ctvm}' dropped onto pintray idx: {drop_idx}");
         }
 
         #endregion

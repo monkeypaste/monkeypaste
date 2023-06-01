@@ -43,7 +43,7 @@
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
         <Setter Property="Background"
-                Value="{DynamicResource ThemeGrayAccent4}" />
+                Value="{DynamicResource ThemeGrayAccent2}" />
     </Style>
   
     <!--  NTF OUTER BORDER  -->

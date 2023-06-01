@@ -3,6 +3,8 @@ using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Globalization;
 using System.IO;

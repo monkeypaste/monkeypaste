@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvMainWindowTitleMenuView : MpAvUserControl<MpAvMainWindowTitleMenuViewModel> {
         private bool _wasZoomDragging = false;
         public MpAvMainWindowTitleMenuView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
 
             var czfb = this.FindControl<Control>("CurZoomFactorButton");
             czfb.PointerMoved += Czfb_PointerMoved;
@@ -22,9 +22,6 @@ namespace MonkeyPaste.Avalonia {
 
             var windowDragButton = this.FindControl<Control>("WindowOrientationHandleButton");
             windowDragButton.AddHandler(Control.PointerPressedEvent, WindowDragButton_PointerPressed, RoutingStrategies.Tunnel);
-        }
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
 
         #region Zoom Slider

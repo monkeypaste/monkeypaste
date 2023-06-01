@@ -77,34 +77,13 @@
         </Style>
         <!--  SEARCH ICON  -->
 
-        <Style Selector="Border#SearchTextBoxBorder.unexpanded Button#SearchDropDownButton:pointerover PathIcon">
-            <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeGrayAccent3}" />
-        </Style>
-        <Style Selector="Border#SearchTextBoxBorder.expanded Button#SearchDropDownButton:pointerover PathIcon">
-            <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeAccent1Color}" />
-        </Style>
-
-        <Style Selector="Border#SearchTextBoxBorder.expanded Button#SearchDropDownButton PathIcon">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <BrushTransition Property="Foreground"
-                                     Duration="{StaticResource FilterExpandTimeSpan}" />
-                </Transitions>
-            </Setter>
+        <Style Selector="Button#SearchDropDownButton PathIcon">
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
-        <Style Selector="Border#SearchTextBoxBorder.unexpanded Button#SearchDropDownButton PathIcon">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <BrushTransition Property="Foreground"
-                                     Duration="{StaticResource FilterExpandTimeSpan}" />
-                </Transitions>
-            </Setter>
+        <Style Selector="Border#SearchTextBoxBorder Button#SearchDropDownButton:pointerover PathIcon">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveBgColor}" />
+                    Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
         <!--  SEARCH BOX BORDER  -->
@@ -251,7 +230,7 @@
                             Command="{Binding HandleSearchFilterButtonClickCommand}"
                             CommandParameter="{Binding $self}"
                             local:MpAvMenuExtension.IsOpen="{Binding SearchFilterCollectionViewModel.IsPopupMenuOpen}"
-                            Classes="noBg noHoverBg">
+                            Classes="noBg noHoverBg noBorder">
                         <ToolTip.Tip>
                             <local:MpAvToolTipView ToolTipText="{Binding SearchIconToolTipText}" />
                         </ToolTip.Tip>
@@ -365,7 +344,7 @@
                                      ItemsSource="{Binding RecentSearchTexts}"
                                      BorderThickness="0"
                                      Padding="0"
-                                     Margin="5,0,0,0">
+                                     Margin="5,0">
                         <AutoCompleteBox.IsVisible>
                             <MultiBinding Converter="{x:Static BoolConverters.Or}">
                                 <Binding Path="IsExpandAnimating" />

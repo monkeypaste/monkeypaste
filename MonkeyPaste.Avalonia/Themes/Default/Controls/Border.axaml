@@ -8,7 +8,7 @@
                              StartPoint="0%,0%"
                              EndPoint="100%,0%">
             <GradientStop Offset="0"
-                          Color="{DynamicResource ThemeInteractiveBgColor}" />
+                          Color="{DynamicResource ThemeWhite}" />
             <GradientStop Offset="0.75"
                           Color="Transparent" />
         </LinearGradientBrush>
@@ -17,25 +17,7 @@
                              StartPoint="0%,0%"
                              EndPoint="100%,0%">
             <GradientStop Offset="0"
-                          Color="{DynamicResource ThemeInteractiveBgColor}" />
-            <GradientStop Offset="0.9"
-                          Color="Transparent" />
-        </LinearGradientBrush>
-
-        <LinearGradientBrush x:Key="UnderlineFadeOutBrush_dark"
-                             StartPoint="0%,0%"
-                             EndPoint="100%,0%">
-            <GradientStop Offset="0"
-                          Color="{DynamicResource ThemeInteractiveColor}" />
-            <GradientStop Offset="0.75"
-                          Color="Transparent" />
-        </LinearGradientBrush>
-
-        <LinearGradientBrush x:Key="UnderlineFadeOutBrush_long_dark"
-                             StartPoint="0%,0%"
-                             EndPoint="100%,0%">
-            <GradientStop Offset="0"
-                          Color="{DynamicResource ThemeInteractiveColor}" />
+                          Color="{DynamicResource ThemeWhite}" />
             <GradientStop Offset="0.9"
                           Color="Transparent" />
         </LinearGradientBrush>
@@ -43,14 +25,9 @@
 
 
 
-    <Style Selector="Border.labelUnderline:not(.dark)">
+    <Style Selector="Border.labelUnderline">
         <Setter Property="Background"
                 Value="{StaticResource UnderlineFadeOutBrush_light}" />
-    </Style>
-
-    <Style Selector="Border.labelUnderline.dark">
-        <Setter Property="Background"
-                Value="{StaticResource UnderlineFadeOutBrush_dark}" />
     </Style>
 
     <Style Selector="Border.labelUnderline">
@@ -75,14 +52,9 @@
                 Value="3" />
     </Style>
 
-    <Style Selector="Border.labelUnderline_long:not(.dark)">
+    <Style Selector="Border.labelUnderline_long">
         <Setter Property="Background"
                 Value="{StaticResource UnderlineFadeOutBrush_long_light}" />
-    </Style>
-
-    <Style Selector="Border.labelUnderline_long.dark">
-        <Setter Property="Background"
-                Value="{StaticResource UnderlineFadeOutBrush_long_dark}" />
     </Style>
 
     <Style Selector="Border.roundedTextBoxContainer:focus-within">

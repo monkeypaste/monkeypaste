@@ -52,6 +52,7 @@
                               ItemsSource="{Binding FilteredItems}"
                               SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                               Focusable="True"
+                              CanUserResizeColumns="True"
                               IsReadOnly="False">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="30">
@@ -67,7 +68,7 @@
                                                     CanUserSort="True"
                                                     SortMemberPath="AppName"
                                                     CanUserResize="True"
-                                                    Width="*">
+                                                    Width="0.5*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid Classes="marqueeContainer">
@@ -84,7 +85,7 @@
                                                     CanUserSort="True"
                                                     SortMemberPath="AppPath"
                                                     CanUserResize="True"
-                                                    Width="200">
+                                                    Width="0.5*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid Classes="marqueeContainer">
@@ -122,11 +123,14 @@
         <!--  WEBSITES  -->
         <Expander>
             <Expander.Header>
-                <StackPanel>
-                    <Label Classes="h1 dark"
-                           Content="Websites" />
-                    <Border Classes="labelUnderline_long dark" />
-                </StackPanel>
+                <!--<StackPanel>-->
+                <TextBlock Classes="h1"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Center"
+                           TextAlignment="Left"
+                           Text="Websites" />
+                <!--<Border Classes="labelUnderline_long" />-->
+                <!--</StackPanel>-->
             </Expander.Header>
             <DockPanel Classes="dataPanel"
                        VerticalAlignment="Top"
@@ -167,6 +171,7 @@
                                         <local:MpAvMarqueeTextBox EditOnFocus="False"
                                                                   DropShadowBrush="Transparent"
                                                                   ReadOnlyForeground="Black"
+                                                                  Text="{Binding UrlPath}"
                                                                   NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                                                                   NavigateUriCommandParameter="{Binding UrlPath}" />
                                     </Grid>

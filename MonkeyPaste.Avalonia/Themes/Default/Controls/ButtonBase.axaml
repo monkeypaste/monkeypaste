@@ -2,151 +2,69 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources>
+        <SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForeground" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBorderBrush" Color="{DynamicResource ThemeGrayAccent2}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+
+        <CornerRadius x:Key="ControlCornerRadius">5,5,5,5</CornerRadius>
+        <Thickness x:Key="ButtonBorderThemeThickness">1</Thickness>
+        <Thickness x:Key="ButtonPadding">10,3,10,3</Thickness>
+    </Styles.Resources>
 
     <Style Selector=":is(Button)">
         <Setter Property="Cursor"
                 Value="Hand" />
-    </Style>
-    <Style Selector="DropDownButton.defaultButton">
-        <Setter Property="CornerRadius"
-                Value="5" />
-        <Setter Property="BorderThickness"
-                Value="1" />
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeGrayAccent1}" />
-        <Setter Property="Padding"
-                Value="5,3" />
-        <Setter Property="Background"
-                Value="{DynamicResource ThemeCompliment5Color}" />
-    </Style>
-
-    <Style Selector="DropDownButton.defaultButton /template/ Border#RootBorder">
-        <Setter Property="Padding"
-                Value="1" />
-    </Style>
-
-    <Style Selector=":is(Button):not(DropDownButton).defaultButton /template/ ContentPresenter">
-        <Setter Property="CornerRadius"
-                Value="5" />
-        <Setter Property="BorderThickness"
-                Value="1" />
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeGrayAccent1}" />
-        <Setter Property="Padding"
-                Value="5,3" />
-    </Style>
-
-    <Style Selector=":is(Button).defaultButton">
         <Setter Property="FontWeight"
                 Value="SemiBold" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
     </Style>
-
-    <Style Selector=":is(Button).defaultButton">
-        <Setter Property="Foreground"
-                Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
-    </Style>
-
-    <Style Selector=":is(Button).defaultButton /template/ ContentPresenter">
-        <Setter Property="Foreground"
-                Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
-    </Style>
-
-    <Style Selector=":is(Button).defaultButton:not(.customColor) /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="{DynamicResource ThemeCompliment5Color}" />
-    </Style>
-
-    <!--<Style Selector=":is(Button).defaultButton.customColor /template/ ContentPresenter">
-    <Setter Property="Background"
-            Value="{Binding $parent[Button}.Background}" />
-  </Style>-->
-
-
-    <Style Selector=":is(Button).defaultButton:disabled /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="{DynamicResource ThemeGrayAccent4}" />
-        <Setter Property="Cursor"
-                Value="Arrow" />
-    </Style>
-
-    <Style Selector=":is(Button).textOnlyButton /template/ ContentPresenter">
+  
+  <Style Selector=":is(Button).noBg">
         <Setter Property="Padding"
-                Value="10,3" />
-    </Style>
-    <Style Selector="DropDownButton:pointerover.defaultButton">
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeAccent1Color}" />
-        <Setter Property="Background"
-                Value="{DynamicResource ThemeGrayAccent4}" />
-    </Style>
-    <Style Selector="DropDownButton:pointerover.defaultButton /template/ Border#RootBorder">
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeAccent1Color}" />
-        <Setter Property="Background"
-                Value="{DynamicResource ThemeGrayAccent4}" />
-    </Style>
-
-    <Style Selector="DropDownButton:pointerover /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="{DynamicResource ThemeGrayAccent4}" />
-    </Style>
-
-    <Style Selector=":is(Button):pointerover.defaultButton:not(DropDownButton) /template/ ContentPresenter">
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeAccent1Color}" />
-    </Style>
-
-    <Style Selector=":is(Button):pointerover.defaultButton:not(.customColor):not(.severe) /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="{DynamicResource ThemeCompliment5LighterColor}" />
-
-    </Style>
-    <Style Selector=":is(Button):pressed.defaultButton:not(.customColor):not(.severe) /template/ ContentPresenter">
-        <Setter Property="Background"
-                Value="{DynamicResource ThemeCompliment5DarkerColor}" />
-
+                Value="0" />
     </Style>
 
     <Style Selector=":is(Button).outline /template/ ContentPresenter">
-        <Setter Property="BorderThickness"
-                Value="1" />
         <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeGrayAccent4}" />
+                Value="{DynamicResource ThemeGrayAccent2}" />
     </Style>
-    <Style Selector=":is(Button).outlineOver /template/ ContentPresenter">
-        <Setter Property="BorderThickness"
-                Value="1" />
+    <Style Selector=":is(Button).outlineOver">
         <Setter Property="BorderBrush"
                 Value="Transparent" />
     </Style>
+    <Style Selector=":is(Button).outlineOver /template/ ContentPresenter">
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+
     <Style Selector=":is(Button):pointerover.outline /template/ ContentPresenter, :is(Button):pointerover.outlineOver /template/ ContentPresenter">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource ThemeAccent1Color}" />
     </Style>
-    <Style Selector=":is(Button).defaultButton TextBlock">
-        <Setter Property="Foreground"
-                Value="{Binding $parent[Button].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
-        <Setter Property="TextAlignment"
-                Value="Center" />
-        <Setter Property="VerticalAlignment"
-                Value="Center" />
-        <Setter Property="FontWeight"
-                Value="SemiBold" />
-    </Style>
-    <Style Selector=":is(Button).iconTextButton TextBlock, :is(Button).iconTextButton Image">
-        <Setter Property="Margin"
-                Value="5,0" />
-    </Style>
+
     <Style Selector=":is(Button).defaultButton Image">
-        <Setter Property="Width"
+        <Setter Property="Margin"
+                Value="0" />
+      <Setter Property="Width"
                 Value="15" />
         <Setter Property="Height"
                 Value="15" />
         <Setter Property="VerticalAlignment"
                 Value="Center" />
-    </Style>
-    <Style Selector=":is(Button).defaultButton.textOnlyButton TextBlock">
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
     </Style>
 </Styles>

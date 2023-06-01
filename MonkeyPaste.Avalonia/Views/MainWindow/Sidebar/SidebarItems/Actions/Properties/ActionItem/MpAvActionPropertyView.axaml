@@ -76,7 +76,7 @@
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeGrayAccent4}" />
+                    Value="{DynamicResource ThemeGrayAccent2}" />
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="BorderBrush"
