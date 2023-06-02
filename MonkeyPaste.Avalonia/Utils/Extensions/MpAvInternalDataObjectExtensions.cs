@@ -148,7 +148,10 @@ namespace MonkeyPaste.Avalonia {
             return ido.Contains(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT);
         }
 
-        public static async Task<MpCopyItem> ToCopyItemAsync(this IDataObject avdo, bool addAsNewItem = false, bool is_copy = false) {
+        public static async Task<MpCopyItem> ToCopyItemAsync(
+            this IDataObject avdo,
+            //bool addAsNewItem = false,
+            bool is_copy = false) {
             bool from_ext = !avdo.ContainsContentRef();
             MpPortableDataObject mpdo = await Mp.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
 
@@ -162,20 +165,23 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            MpCopyItem result_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
+            MpCopyItem result_ci = null;
+
+            result_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
                 mpdo,
                 transType: MpTransactionType.Created,
-                force_ext_sources: from_ext);
+                force_ext_sources: from_ext,
+                force_allow_dup: is_copy);
 
-            if (addAsNewItem) {
-                MpAvClipTrayViewModel.Instance.AddNewItemsCommand.Execute(result_ci);
-                // wait for busy
-                await Task.Delay(50);
-                while (MpAvClipTrayViewModel.Instance.IsPinTrayBusy) {
-                    await Task.Delay(100);
-                }
+            //if (addAsNewItem) {
+            //    MpAvClipTrayViewModel.Instance.AddNewItemsCommand.Execute(result_ci);
+            //    // wait for busy
+            //    await Task.Delay(50);
+            //    while (MpAvClipTrayViewModel.Instance.IsPinTrayBusy) {
+            //        await Task.Delay(100);
+            //    }
 
-            }
+            //}
             return result_ci;
         }
 

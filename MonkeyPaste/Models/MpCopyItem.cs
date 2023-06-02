@@ -167,8 +167,11 @@ namespace MonkeyPaste {
             MpCopyItemType itemType = MpCopyItemType.Text,
             string title = "",
             int dataObjectId = 0,
+            bool force_allow_dup = false,
             bool suppressWrite = false) {
-            if (MpPrefViewModel.Instance.IsDuplicateCheckEnabled && !suppressWrite) {
+            if (MpPrefViewModel.Instance.IsDuplicateCheckEnabled &&
+                !force_allow_dup &&
+                !suppressWrite) {
                 MpCopyItem dupCheck = null;
                 if (itemType == MpCopyItemType.Text && dataObjectId > 0) {
                     // TODO should not need to do this

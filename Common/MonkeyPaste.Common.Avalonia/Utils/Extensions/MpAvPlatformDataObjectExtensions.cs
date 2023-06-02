@@ -226,10 +226,10 @@ namespace MonkeyPaste.Common.Avalonia {
                             typed_data = dataStr.SplitNoEmpty(Environment.NewLine).AsEnumerable<string>() as T;
                         } else if (dataObj is IEnumerable<Uri> uril) {
                             //
-                            typed_data = uril.Select(x => x.LocalPath) as T;
+                            typed_data = uril.Select(x => x.ToFileSystemPath()) as T;
                         } else if (dataObj is IEnumerable<IStorageItem> sil) {
                             //
-                            typed_data = sil.Select(x => x.Path) as T;
+                            typed_data = sil.Select(x => x.TryGetLocalPath()) as T;
                         } else {
 
                         }

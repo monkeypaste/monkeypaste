@@ -1260,7 +1260,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPinTrayBusy { get; set; }
         #region Mouse Modes
 
-        public bool IsAnyMouseModeEnabled => IsAutoCopyMode || IsRightClickPasteMode;
+        public bool IsAnyMouseModeEnabled =>
+            IsAutoCopyMode ||
+            IsRightClickPasteMode ||
+            MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
 
 
         public bool IsAutoCopyMode { get; set; }
@@ -1326,6 +1329,7 @@ namespace MonkeyPaste.Avalonia {
 
         //public bool IsExternalDragOverClipTrayContainer { get; set; }
         public bool IsDragOverPinTray { get; set; }
+        public bool IsDragOverQueryTray { get; set; }
 
         #endregion
 
@@ -2334,7 +2338,10 @@ namespace MonkeyPaste.Avalonia {
                     AllItems.ForEach(x => x.UpdateQueryOffset());
                     break;
 
-                    // DND
+                // DND
+                case MpMessageType.DropWidgetEnabledChanged:
+                    OnPropertyChanged(nameof(IsAnyMouseModeEnabled));
+                    break;
                     //case MpMessageType.ItemDragBegin:
                     //    OnPropertyChanged(nameof(IsAnyTileDragging));
                     //    if(DragItem == null) {
@@ -2899,8 +2906,7 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(ObservedQueryTrayScreenHeight));
                  UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync(this);
              },
-            (args) =>
-            args != null);
+            (args) => args != null);
 
         public ICommand UnpinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
@@ -3778,6 +3784,24 @@ namespace MonkeyPaste.Avalonia {
                 SelectedItem = ctvm;
             });
 
+        public ICommand ResetTraySplitterCommand => new MpCommand<object>(
+            (args) => {
+                var gs = args as Control;
+                if (gs == null) {
+                    return;
+                }
+                var trg = gs.Parent as Grid;
+                if (trg == null) {
+                    return;
+                }
+                if (ListOrientation == Orientation.Vertical) {
+                    trg.RowDefinitions[0].Height = new GridLength(trg.Bounds.Height / 2, GridUnitType.Auto);
+                    trg.RowDefinitions[1].Height = new GridLength(trg.Bounds.Height / 2, GridUnitType.Star);
+                } else {
+                    trg.ColumnDefinitions[0].Width = new GridLength(trg.Bounds.Width / 2, GridUnitType.Auto);
+                    trg.ColumnDefinitions[1].Width = new GridLength(trg.Bounds.Width / 2, GridUnitType.Star);
+                }
+            });
 
         #region Append
         public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data) {

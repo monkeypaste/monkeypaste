@@ -216,7 +216,7 @@
                                                        Cursor="Wait">
                                 <local:MpAvBusySpinnerView.IsVisible>
                                     <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                        <Binding Path="IsSelected" />
+                                        <!--<Binding Path="IsSelected" />-->
                                         <Binding Path="IsBusy"
                                                  Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
                                         <Binding Path="!IsVisible"

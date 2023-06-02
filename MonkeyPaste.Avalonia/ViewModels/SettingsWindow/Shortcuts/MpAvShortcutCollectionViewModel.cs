@@ -173,9 +173,12 @@ namespace MonkeyPaste.Avalonia {
                             MpAvClipTrayViewModel.Instance.ToggleAutoCopyModeCommand
                         },
                         {
-                            MpShortcutType.ToggleRightClickPasteMode, 
-                            //right click paste mode
+                            MpShortcutType.ToggleRightClickPasteMode,
                             MpAvClipTrayViewModel.Instance.ToggleRightClickPasteCommand
+                        },
+                        {
+                            MpShortcutType.ToggleDropWidgetEnabled,
+                            MpAvExternalDropWindowViewModel.Instance.ToggleIsDropWidgetEnabledCommand
                         },
                         {
                             MpShortcutType.PasteSelectedItems,
@@ -390,6 +393,8 @@ namespace MonkeyPaste.Avalonia {
 
         public DateTime LastRightClickDateTime { get; set; }
         public DateTime LastLeftClickDateTime { get; set; }
+
+        public int SelectedShortcutRoutingProfileTypeIdx { get; set; }
         #endregion
 
         #endregion
@@ -538,6 +543,20 @@ namespace MonkeyPaste.Avalonia {
             return shortcutKeyString;
         }
 
+
+        public MpShortcutRoutingProfileType DetermineShortcutRoutingProfileType() {
+            var globalable_scvml = Items.Where(x => x.CanBeGlobalShortcut);
+            if (globalable_scvml.All(x => x.RoutingType == MpRoutingType.Internal)) {
+                return MpShortcutRoutingProfileType.Internal;
+            }
+            if (globalable_scvml.All(x => x.RoutingType == MpRoutingType.Passive)) {
+                return MpShortcutRoutingProfileType.Global;
+            }
+            if (globalable_scvml.Any(x => x.ShortcutType == MpShortcutType.ToggleMainWindow && x.RoutingType == MpRoutingType.Override)) {
+                return MpShortcutRoutingProfileType.Default;
+            }
+            return MpShortcutRoutingProfileType.Custom;
+        }
         public int GetViewModelCommandShortcutId(MpIShortcutCommandViewModel scvm) {
             if (GetViewModelCommandShortcut(scvm) is MpAvShortcutViewModel svm) {
                 return svm.ShortcutId;
@@ -1257,7 +1276,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             Items.Clear();
-            await MpDb.ResetShortcutsAsync();
+            await MpDb.ResetShortcutsAsync(MpPrefViewModel.Instance.InstallerShortcutProfileType);
             InitShortcutsAsync().FireAndForgetSafeAsync(this);
         });
 

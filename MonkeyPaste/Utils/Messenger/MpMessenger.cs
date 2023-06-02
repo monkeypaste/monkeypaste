@@ -54,6 +54,7 @@ namespace MonkeyPaste {
         DropOverTraysBegin,
         DropOverTraysEnd,
 
+        DropWidgetEnabledChanged,
         //ExternalDragBegin, 
         //ExternalDragEnd,
 

@@ -47,6 +47,7 @@ namespace MonkeyPaste.Avalonia {
             MpPortableDataObject mpdo,
             bool suppressWrite = false,
             MpTransactionType transType = MpTransactionType.None,
+            bool force_allow_dup = false,
             bool force_ext_sources = true) {
             if (mpdo == null || mpdo.DataFormatLookup.Count == 0) {
                 return null;
@@ -83,6 +84,7 @@ namespace MonkeyPaste.Avalonia {
                 title: default_title,
                 data: itemData,
                 itemType: itemType,
+                force_allow_dup: force_allow_dup,
                 suppressWrite: suppressWrite);
             if (ci == null) {
                 // probably null data, clean up pre-create
@@ -157,7 +159,7 @@ namespace MonkeyPaste.Avalonia {
                 } else if (mpdo.GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<string> paths) {
                     fl_str = string.Join(Environment.NewLine, paths);
                 } else if (mpdo.GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<IStorageItem> sil) {
-                    fl_str = string.Join(Environment.NewLine, sil.Select(x => x.Path));
+                    fl_str = string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath()).Where(x => !string.IsNullOrEmpty(x)));
                 } else {
                     var fl_data = mpdo.GetData(MpPortableDataFormats.AvFileNames);
                     // what type is it? string[]?

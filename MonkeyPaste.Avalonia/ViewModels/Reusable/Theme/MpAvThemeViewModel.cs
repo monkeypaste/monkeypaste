@@ -351,7 +351,7 @@ namespace MonkeyPaste.Avalonia {
             // prepass selected color to get decent chroma
             // V >= 50, S >= 50
             hex.ToPortableColor().ColorToHsv(out double preh, out double pres, out double prev);
-            pres = Math.Max(0.5d, pres);
+            pres = Math.Min(0.9d, Math.Max(0.5d, pres));
             prev = Math.Max(0.5d, prev);
             hex = MpColorHelpers.ColorFromHsv(preh, pres, prev).ToHex(true);
 

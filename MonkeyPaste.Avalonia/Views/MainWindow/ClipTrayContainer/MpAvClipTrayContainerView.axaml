@@ -24,9 +24,10 @@
             <Setter Property="BoxShadow"
                     Value="inset 0 0 10 10 #46000000" />
         </Style>
-        <Style Selector="local|MpAvPinTrayView.dragover Border#PinTrayContainerBorder">
+
+        <Style Selector="local|MpAvPinTrayView.dragover Border#PinTrayContainerBorder, local|MpAvQueryTrayView.dragover Border#QueryTrayContainerBorder">
             <Setter Property="Background"
-                    Value="{DynamicResource PinTrayDragOverBgBrush}" />
+                    Value="{DynamicResource ContentTrayDragOverBgBrush}" />
         </Style>
 
         <!--  TRAY CURSOR  -->
@@ -134,10 +135,14 @@
                       Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                       Classes.clipTraySplitter="True"
                       Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-                      Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
+                      Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                      local:MpAvPointerCommandExtension.IsEnabled="True"
+                      local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTraySplitterCommand}"
+                      local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="{Binding $self}" />
 
         <!--  QUERY TRAY  -->
         <local:MpAvQueryTrayView x:Name="ClipTrayView"
+                                 Classes.dragover="{Binding IsDragOverQueryTray}"
                                  Background="{DynamicResource ClipTrayBgColor}" />
     </Grid>
 </local:MpAvUserControl>

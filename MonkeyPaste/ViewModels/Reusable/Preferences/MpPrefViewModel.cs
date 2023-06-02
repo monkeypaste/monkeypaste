@@ -321,6 +321,16 @@ namespace MonkeyPaste {
 
         #region Dynamic Properties          
 
+        #region Installer Properties
+
+        // NOTE this intended for reset shortcuts/all and will be set during installer
+        public string InstallerShortcutProfileTypeName { get; set; } = MpShortcutRoutingProfileType.Internal.ToString();
+        [JsonIgnore]
+        public MpShortcutRoutingProfileType InstallerShortcutProfileType =>
+            InstallerShortcutProfileTypeName.ToEnum<MpShortcutRoutingProfileType>();
+
+        #endregion
+
         #region Account
 
         public string UserEmail { get; set; } = "tkefauver@gmail.com";

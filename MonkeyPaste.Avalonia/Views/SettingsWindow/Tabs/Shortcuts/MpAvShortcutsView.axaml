@@ -25,14 +25,9 @@
 
         <!--  APPLICATION SHORTCUTS  -->
 
-        <Expander IsExpanded="True">
-            <Expander.Header>
-                <StackPanel>
-                    <Label Classes="h1"
-                           Content="Application" />
-                </StackPanel>
-            </Expander.Header>
-            <Expander.Content>
+        <Expander IsExpanded="True"
+                  Header="Application">
+          <Expander.Content>
                 <local:MpAvShortcutDataGridView DataContext="{Binding FilteredItems}" />
             </Expander.Content>
         </Expander>
@@ -49,17 +44,8 @@
         <!--  PASTE INTEROP SHORTCUTS  -->
 
         <Expander DataContext="{x:Static local:MpAvAppCollectionViewModel.Instance}"
-                  x:DataType="local:MpAvAppCollectionViewModel">
-            <Expander.Header>
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Classes="h1"
-                               Content="Custom Paste Commands" />
-                        <local:MpAvToolTipInfoHintView ToolTipText="#warning# Source url recognition is dependant on the host applications clipboard support so rejection is not guaranteed :(" />
-                    </StackPanel>
-                    <Border Classes="labelUnderline_long dark" />
-                </StackPanel>
-            </Expander.Header>
+                  x:DataType="local:MpAvAppCollectionViewModel"
+                  Header="Custom Paste Commands">
             <Expander.Content>
                 <StackPanel>
 
@@ -161,7 +147,9 @@
                         </Grid>
                     </Border>
 
+
                     <!--  ADD PASTE SHORTCUT BUTTON  -->
+
                     <DropDownButton HorizontalAlignment="Right"
                                     Classes="dataGridAddButton defaultButton iconTextButton"
                                     Command="{Binding ShowAppSelectorFlyoutCommand}"

@@ -101,6 +101,10 @@
         <SolidColorBrush x:Key="SystemControlForegroundBaseMediumLowBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <SolidColorBrush x:Key="ExpanderHeaderBackground" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderForegroundPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
 
         <!--  BRUSHES  -->
@@ -206,6 +210,9 @@
         <SolidColorBrush x:Key="TagTileContextFocusBorderColor" Color="{DynamicResource ThemeAccent2Color}" />
 
 
+        <!--  CONTENT CONTAINER  -->
+
+        <SolidColorBrush x:Key="ContentTrayDragOverBgBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
         <!--  CLIP TRAY  -->
 
         <SolidColorBrush x:Key="ClipTrayBgColor" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
@@ -214,7 +221,6 @@
         <SolidColorBrush x:Key="PinTrayBgBrush" Color="{DynamicResource ThemeCompliment1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
         <SolidColorBrush x:Key="PinTrayShadowBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
-        <SolidColorBrush x:Key="PinTrayDragOverBgBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CLIP TILE  -->
 

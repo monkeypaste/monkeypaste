@@ -49,8 +49,8 @@ namespace MonkeyPaste.Avalonia {
             }
             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
 
-            if (result.FirstOrDefault() is IStorageItem si) {
-                string path = si.Path.LocalPath;
+            if (result.FirstOrDefault() is IStorageItem si &&
+                si.TryGetLocalPath() is string path) {
                 if (resolveShortcutPath &&
                     path.IsShortcutPath()) {
                     path = MpFileIo.GetLnkTargetPath(path);

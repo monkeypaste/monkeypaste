@@ -34,7 +34,6 @@ namespace MonkeyPaste {
         MpITransactionReporter TransactionBuilder { get; set; }
         MpICustomColorChooserMenuAsync CustomColorChooserMenuAsync { get; set; }
         MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
-        MpIPlatformResource PlatformResource { get; set; }
         MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
 
         MpIDragProcessWatcher DragProcessWatcher { get; set; }

@@ -98,7 +98,7 @@
                     </local:MpAvToolTipView.ToolTipText>
                 </local:MpAvToolTipView>
             </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource LeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            <Image Source="{Binding Source={StaticResource MouseLeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>
 
         <!--  RIGHT CLICK PASTE  -->
@@ -131,7 +131,20 @@
                     </local:MpAvToolTipView.ToolTipText>
                 </local:MpAvToolTipView>
             </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource RightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            <Image Source="{Binding Source={StaticResource MouseRightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </ToggleButton>
+
+        <!--  RIGHT CLICK PASTE  -->
+
+        <ToggleButton x:Name="DropWidgetEnabledRadioButton"
+                      Grid.Column="2"
+                      Classes="modeRadio"
+                      IsChecked="{Binding IsDropWidgetEnabled, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}, Mode=OneWay}"
+                      Command="{Binding ToggleIsDropWidgetEnabledCommand, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}}">
+            <ToolTip.Tip>
+                <local:MpAvToolTipView ToolTipText="Monkey Drop Wizard" />
+            </ToolTip.Tip>
+            <Image Source="{Binding Source={StaticResource MouseFilledBaseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>
         <!--</Grid>-->
     </StackPanel>

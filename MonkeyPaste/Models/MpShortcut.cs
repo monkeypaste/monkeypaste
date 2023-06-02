@@ -143,10 +143,6 @@ namespace MonkeyPaste {
             return newShortcut;
         }
 
-        public static bool IsUserDefinedShortcut(MpShortcutType stype) {
-            return (int)stype > (int)MpShortcutType.MAX_APP_SHORTCUT;
-        }
-
         #endregion
 
         #region Public Methods

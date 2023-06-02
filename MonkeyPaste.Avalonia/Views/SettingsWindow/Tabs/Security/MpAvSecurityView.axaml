@@ -24,14 +24,7 @@
                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
 
         <!--  APPS  -->
-        <Expander>
-            <Expander.Header>
-                <StackPanel>
-                    <Label Classes="h1 dark"
-                           Content="Applications" />
-                    <Border Classes="labelUnderline_long dark" />
-                </StackPanel>
-            </Expander.Header>
+        <Expander Header="Applications">
             <Expander.Content>
                 <DockPanel Classes="dataPanel"
                            VerticalAlignment="Top"
@@ -120,17 +113,17 @@
                 </DockPanel>
             </Expander.Content>
         </Expander>
+
         <!--  WEBSITES  -->
         <Expander>
             <Expander.Header>
-                <!--<StackPanel>-->
-                <TextBlock Classes="h1"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Center"
-                           TextAlignment="Left"
-                           Text="Websites" />
-                <!--<Border Classes="labelUnderline_long" />-->
-                <!--</StackPanel>-->
+                <StackPanel Orientation="Horizontal">
+                    <Label Classes="h1"
+                           Content="Websites" />
+                    <local:MpAvToolTipInfoHintView HorizontalAlignment="Right"
+                                                   Margin="0,0,0,0"
+                                                   ToolTipText="#warning# Source url recognition is dependant on the host applications clipboard support so rejection is not guaranteed :(" />
+                </StackPanel>
             </Expander.Header>
             <DockPanel Classes="dataPanel"
                        VerticalAlignment="Top"

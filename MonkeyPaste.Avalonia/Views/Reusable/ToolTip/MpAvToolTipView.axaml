@@ -26,7 +26,6 @@
             <TextBlock x:Name="ToolTipTextBlock"
                        FontWeight="Light"
                        TextWrapping="WrapWithOverflow"
-                       Foreground="{Binding $self, Converter={x:Static local:MpAvTemplatedControlToContrastBrushConverter.Instance}}"
                        Text="{Binding ToolTipText, ElementName=ToolTipView}" />
 
             <av:HtmlLabel x:Name="ToolTipHtmlPanel"

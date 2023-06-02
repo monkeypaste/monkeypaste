@@ -6,8 +6,8 @@ using MonkeyPaste.Common;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public static class MpAvTextControlDropExtension {
-        static MpAvTextControlDropExtension() {
+    public static class MpAvContentDropExtension {
+        static MpAvContentDropExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
         #region Properties

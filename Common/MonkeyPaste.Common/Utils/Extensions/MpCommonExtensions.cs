@@ -516,6 +516,14 @@ namespace MonkeyPaste.Common {
                     Array.Copy(b, oldn, nb, 0, n - oldn);
                     try {
                         string internalEnc = Encoding.ASCII.GetString(nb);
+                        if (internalEnc == "UTF8") {
+                            // BUG
+                            // System.ArgumentException: ''UTF8' is not a supported encoding name.
+                            // For information on defining a custom encoding,
+                            // see the documentation for the Encoding.RegisterProvider method. (Parameter 'name')'
+                            // workaround from https://stackoverflow.com/a/58174713/105028
+                            internalEnc = "UTF-8";
+                        }
                         text = Encoding.GetEncoding(internalEnc).GetString(b);
                         return Encoding.GetEncoding(internalEnc);
                     }
@@ -553,10 +561,6 @@ namespace MonkeyPaste.Common {
             dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
             return dateTime;
         }
-
-        #endregion
-
-        #region Reflection
 
         #endregion
 

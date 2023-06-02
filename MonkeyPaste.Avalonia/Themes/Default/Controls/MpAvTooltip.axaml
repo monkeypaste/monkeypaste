@@ -21,7 +21,7 @@
     </Style>
     <Style Selector="local|MpAvToolTipView TextBlock">
         <Setter Property="Foreground"
-                Value="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                Value="{Binding Source={DynamicResource ThemeCompliment4Color}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
         <Setter Property="TextDecorations"
                 Value="{x:Null}" />
     </Style>

@@ -93,7 +93,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvIWebViewBindingResponseHandler {
 
         #region Private Variables
-        private const int _APPEND_TIMEOUT_MS = 5000;
         private string _contentScreenShotBase64_ntf { get; set; }
 
         private string _lastLoadedContentHandle = null;
@@ -114,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
         public static string DefaultContentUrl =>
             MpAvClipTrayViewModel.EditorUri;
 
-        private static List<MpAvContentWebView> _AllWebViews = new List<MpAvContentWebView>();
+        private static List<MpAvContentWebView> _AllWebViews = new();
 
         public static MpAvContentWebView LocateModalWebView() {
             return _AllWebViews.FirstOrDefault(x => x.DataContext is MpAvClipTileViewModel ctvm && ctvm.IsAppendNotifier);
@@ -1021,7 +1020,7 @@ namespace MonkeyPaste.Avalonia {
             protected set { SetAndRaise(IsEditorInitializedProperty, ref _isEditorInitialized, value); }
         }
 
-        public static DirectProperty<MpAvContentWebView, bool> IsEditorInitializedProperty =
+        public static readonly DirectProperty<MpAvContentWebView, bool> IsEditorInitializedProperty =
             AvaloniaProperty.RegisterDirect<MpAvContentWebView, bool>(
                 nameof(IsEditorInitialized),
                 x => x.IsEditorInitialized,
@@ -1038,7 +1037,7 @@ namespace MonkeyPaste.Avalonia {
             set { SetAndRaise(IsDomLoadedProperty, ref _isDomLoaded, value); }
         }
 
-        public static DirectProperty<MpAvContentWebView, bool> IsDomLoadedProperty =
+        public static readonly DirectProperty<MpAvContentWebView, bool> IsDomLoadedProperty =
             AvaloniaProperty.RegisterDirect<MpAvContentWebView, bool>(
                 nameof(IsDomLoaded),
                 x => x.IsDomLoaded,
@@ -1115,7 +1114,7 @@ namespace MonkeyPaste.Avalonia {
             get { return _contentId; }
             set { SetAndRaise(ContentIdProperty, ref _contentId, value); }
         }
-        public static DirectProperty<MpAvContentWebView, int> ContentIdProperty =
+        public static readonly DirectProperty<MpAvContentWebView, int> ContentIdProperty =
             AvaloniaProperty.RegisterDirect<MpAvContentWebView, int>(
                 nameof(ContentId),
                 x => x.ContentId,
@@ -1132,7 +1131,7 @@ namespace MonkeyPaste.Avalonia {
             set { SetAndRaise(IsEditorLoadedProperty, ref _isEditorLoaded, value); }
         }
 
-        public static DirectProperty<MpAvContentWebView, bool> IsEditorLoadedProperty =
+        public static readonly DirectProperty<MpAvContentWebView, bool> IsEditorLoadedProperty =
             AvaloniaProperty.RegisterDirect<MpAvContentWebView, bool>(
                 nameof(IsEditorLoaded),
                 x => x.IsEditorLoaded,
@@ -1372,7 +1371,7 @@ namespace MonkeyPaste.Avalonia {
             set { SetAndRaise(IsContentSelectedProperty, ref _isContentSelected, value); }
         }
 
-        public static DirectProperty<MpAvContentWebView, bool> IsContentSelectedProperty =
+        public static readonly DirectProperty<MpAvContentWebView, bool> IsContentSelectedProperty =
             AvaloniaProperty.RegisterDirect<MpAvContentWebView, bool>(
                 nameof(IsContentSelected),
                 x => x.IsContentSelected,
@@ -1407,7 +1406,7 @@ namespace MonkeyPaste.Avalonia {
             set { SetAndRaise(IsContentResizingProperty, ref _isContentResizing, value); }
         }
 
-        public static DirectProperty<MpAvContentWebView, bool> IsContentResizingProperty =
+        public static readonly DirectProperty<MpAvContentWebView, bool> IsContentResizingProperty =
             AvaloniaProperty.RegisterDirect<MpAvContentWebView, bool>(
                 nameof(IsContentResizing),
                 x => x.IsContentResizing,
@@ -1433,7 +1432,7 @@ namespace MonkeyPaste.Avalonia {
             set { SetAndRaise(IsContentReadOnlyProperty, ref _isContentReadOnly, value); }
         }
 
-        public static DirectProperty<MpAvContentWebView, bool> IsContentReadOnlyProperty =
+        public static readonly DirectProperty<MpAvContentWebView, bool> IsContentReadOnlyProperty =
             AvaloniaProperty.RegisterDirect<MpAvContentWebView, bool>(
                 nameof(IsContentReadOnly),
                 x => x.IsContentReadOnly,
@@ -1480,7 +1479,7 @@ namespace MonkeyPaste.Avalonia {
             set { SetAndRaise(IsContentSubSelectableProperty, ref _isContentSubSelectable, value); }
         }
 
-        public static DirectProperty<MpAvContentWebView, bool> IsContentSubSelectableProperty =
+        public static readonly DirectProperty<MpAvContentWebView, bool> IsContentSubSelectableProperty =
             AvaloniaProperty.RegisterDirect<MpAvContentWebView, bool>(
                 nameof(IsContentSubSelectable),
                 x => x.IsContentSubSelectable,
@@ -1528,7 +1527,7 @@ namespace MonkeyPaste.Avalonia {
             set { SetAndRaise(IsContentFindAndReplaceVisibleProperty, ref _isContentFindAndReplaceVisible, value); }
         }
 
-        public static DirectProperty<MpAvContentWebView, bool> IsContentFindAndReplaceVisibleProperty =
+        public static readonly DirectProperty<MpAvContentWebView, bool> IsContentFindAndReplaceVisibleProperty =
             AvaloniaProperty.RegisterDirect<MpAvContentWebView, bool>(
                 nameof(IsContentFindAndReplaceVisible),
                 x => x.IsContentFindAndReplaceVisible,

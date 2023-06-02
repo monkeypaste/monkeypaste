@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
 
             // NOTE enabling immediate dnd start cause quick drops to be placeholders (from screen shot)
             // Peformance seems ok w/ async but leaving option here for later testing
-            bool use_immediate_mode = true;
+            bool use_immediate_mode = !MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
             if (use_immediate_mode) {
                 // notify drag is starting so drop widget is visible immediatly 
                 // so state info can be shown w/o interfering w/ drag cursor

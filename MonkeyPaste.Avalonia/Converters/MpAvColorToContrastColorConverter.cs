@@ -1,4 +1,5 @@
 ﻿using Avalonia.Data.Converters;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -20,7 +21,9 @@ namespace MonkeyPaste.Avalonia {
             }
             if (value is string valStr) {
                 hexStr = valStr;
-
+            }
+            if (value is DynamicResourceExtension dre) {
+                hexStr = Mp.Services.PlatformResource.GetResource<string>(dre.ResourceKey.ToString());
             }
             if (hexStr.IsStringHexColor()) {
                 bool flip = false;

@@ -27,12 +27,12 @@ namespace MonkeyPaste {
                 if (stype is MpShortcutType st) {
                     MpShortcutRef sref = new MpShortcutRef(st);
                     if (argParts.Length == 1) {
-                        if (MpShortcut.IsUserDefinedShortcut(st)) {
+                        if (st.IsUserDefinedShortcut()) {
                             throw new Exception("Shortcut Ref error, user-defined shortcuts need CommandId(modelId)");
                         }
                         return sref;
                     }
-                    if (MpShortcut.IsUserDefinedShortcut(st) &&
+                    if (st.IsUserDefinedShortcut() &&
                         argParts.First(x => x is int) is int commandId) {
                         sref.CommandId = commandId;
                     }

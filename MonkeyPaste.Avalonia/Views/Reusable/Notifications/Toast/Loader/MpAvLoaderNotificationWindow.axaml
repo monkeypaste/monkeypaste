@@ -125,7 +125,7 @@
                            FontSize="20"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Left"
-                           Foreground="{Binding $self, Converter={x:Static local:MpAvTemplatedControlToContrastBrushConverter.Instance}}"
+                           Foreground="{DynamicResource ThemeGrayAccent3}"
                            FontWeight="SemiBold"
                            Text="{Binding Title}" />
                 <Border Grid.Row="0"
@@ -210,7 +210,7 @@
                                        Width="200"
                                        FontSize="12"
                                        TextAlignment="Right"
-                                       Foreground="{Binding $self, Converter={x:Static local:MpAvTemplatedControlToContrastBrushConverter.Instance}}"
+                                       Foreground="{DynamicResource ThemeGrayAccent3}"
                                        Text="{Binding}" />
                         </DataTemplate>
                     </TransitioningContentControl.ContentTemplate>

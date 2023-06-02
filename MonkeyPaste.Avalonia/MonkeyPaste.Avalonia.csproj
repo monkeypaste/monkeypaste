@@ -20,6 +20,9 @@
     <NoWarn>CS8073</NoWarn>
     <NoWarn>$(NoWarn),IDE1006</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <WarningsAsErrors>CS4014;</WarningsAsErrors>
+  </PropertyGroup>
   
   <ItemGroup>
     <AndroidJavaSource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
@@ -252,7 +255,6 @@
     <None Remove="Assets\Images\binocularstilted.png" />
     <None Remove="Assets\Images\bitmap.png" />
     <None Remove="Assets\Images\bolt.png" />
-    <None Remove="Assets\Images\bothclick.png" />
     <None Remove="Assets\Images\boxcorners.png" />
     <None Remove="Assets\Images\brain.png" />
     <None Remove="Assets\Images\brainwhite.png" />
@@ -339,7 +341,6 @@
     <None Remove="Assets\Images\joystickactive.png" />
     <None Remove="Assets\Images\joystickactive2.png" />
     <None Remove="Assets\Images\keyboard.png" />
-    <None Remove="Assets\Images\leftclick.png" />
     <None Remove="Assets\Images\lines_x2_horiz %282%29.png" />
     <None Remove="Assets\Images\lines_x2_horiz.png" />
     <None Remove="Assets\Images\lines_x2_horiz_vert_arrows.png" />
@@ -350,9 +351,13 @@
     <None Remove="Assets\Images\minus2.png" />
     <None Remove="Assets\Images\missingfile.png" />
     <None Remove="Assets\Images\monkey.png" />
+    <None Remove="Assets\Images\mousebothclick.png" />
+    <None Remove="Assets\Images\mousefilledbase.png" />
+    <None Remove="Assets\Images\mouseleftclick.png" />
+    <None Remove="Assets\Images\mousenoneclick.png" />
+    <None Remove="Assets\Images\mouserightclick.png" />
     <None Remove="Assets\Images\newwindow.png" />
     <None Remove="Assets\Images\noentry.png" />
-    <None Remove="Assets\Images\noneclick.png" />
     <None Remove="Assets\Images\object.png" />
     <None Remove="Assets\Images\open.png" />
     <None Remove="Assets\Images\paste.png" />
@@ -374,7 +379,6 @@
     <None Remove="Assets\Images\replace.png" />
     <None Remove="Assets\Images\reset.png" />
     <None Remove="Assets\Images\resize_backup2\doubleSidedArrow.png" />
-    <None Remove="Assets\Images\rightclick.png" />
     <None Remove="Assets\Images\robotclaw.png" />
     <None Remove="Assets\Images\RoundedTexture.png" />
     <None Remove="Assets\Images\rtf.png" />
@@ -515,6 +519,9 @@
     <AvaloniaResource Include="Assets\Images\missingfile.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\mousefilledbase.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\object.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -613,7 +620,7 @@
     <AvaloniaResource Include="Assets\Images\bolt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\bothclick.png">
+    <AvaloniaResource Include="Assets\Images\mousebothclick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\brain.png">
@@ -844,7 +851,7 @@
     <AvaloniaResource Include="Assets\Images\keyboard.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\leftclick.png">
+    <AvaloniaResource Include="Assets\Images\mouseleftclick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\lines_x2_horiz.png">
@@ -877,7 +884,7 @@
     <AvaloniaResource Include="Assets\Images\noentry.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\noneclick.png">
+    <AvaloniaResource Include="Assets\Images\mousenoneclick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\paste.png">
@@ -928,7 +935,7 @@
     <AvaloniaResource Include="Assets\Images\reset.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\rightclick.png">
+    <AvaloniaResource Include="Assets\Images\mouserightclick.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\robotclaw.png">

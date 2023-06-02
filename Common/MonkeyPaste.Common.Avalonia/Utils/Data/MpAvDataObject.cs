@@ -69,7 +69,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public override bool TryGetData<T>(string format, out T data) {
             if (typeof(T) == typeof(IEnumerable<string>) &&
                 TryGetData(format, out IEnumerable<IStorageItem> sil)) {
-                data = sil.Select(x => x.Path.LocalPath) as T;
+                data = sil.Select(x => x.TryGetLocalPath()) as T;
                 return true;
             }
             return base.TryGetData(format, out data);

@@ -36,10 +36,11 @@
     <sys:String x:Key="BinocularsImage">avares://MonkeyPaste.Avalonia/Assets/Images/binoculars.png</sys:String>
     <sys:String x:Key="BinocularsTiltedImage">avares://MonkeyPaste.Avalonia/Assets/Images/binocularstilted.png</sys:String>
     <sys:String x:Key="BrainWhiteImage">avares://MonkeyPaste.Avalonia/Assets/Images/brainwhite.png</sys:String>
-    <sys:String x:Key="NoneClickImage">avares://MonkeyPaste.Avalonia/Assets/Images/noneclick.png</sys:String>
-    <sys:String x:Key="LeftClickImage">avares://MonkeyPaste.Avalonia/Assets/Images/leftclick.png</sys:String>
-    <sys:String x:Key="RightClickImage">avares://MonkeyPaste.Avalonia/Assets/Images/rightclick.png</sys:String>
-    <sys:String x:Key="BothClickImage">avares://MonkeyPaste.Avalonia/Assets/Images/bothclick.png</sys:String>
+    <sys:String x:Key="MouseNoneClickImage">avares://MonkeyPaste.Avalonia/Assets/Images/mousenoneclick.png</sys:String>
+    <sys:String x:Key="MouseLeftClickImage">avares://MonkeyPaste.Avalonia/Assets/Images/mouseleftclick.png</sys:String>
+    <sys:String x:Key="MouseRightClickImage">avares://MonkeyPaste.Avalonia/Assets/Images/mouserightclick.png</sys:String>
+    <sys:String x:Key="MouseFilledBaseImage">avares://MonkeyPaste.Avalonia/Assets/Images/mousefilledbase.png</sys:String>
+    <sys:String x:Key="BothClickImage">avares://MonkeyPaste.Avalonia/Assets/Images/mousebothclick.png</sys:String>
     <sys:String x:Key="AppendImage">avares://MonkeyPaste.Avalonia/Assets/Images/append.png</sys:String>
     <sys:String x:Key="AppendLineImage">avares://MonkeyPaste.Avalonia/Assets/Images/appendline.png</sys:String>
     <sys:String x:Key="AppendRunImage">avares://MonkeyPaste.Avalonia/Assets/Images/caret.png</sys:String>

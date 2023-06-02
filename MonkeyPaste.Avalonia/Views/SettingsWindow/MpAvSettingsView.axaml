@@ -14,6 +14,10 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsView">
+    <local:MpAvUserControl.Resources>
+        <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Left</HorizontalAlignment>
+    </local:MpAvUserControl.Resources>
+
     <local:MpAvUserControl.Styles>
         <!--  TABS  -->
         <Style Selector="RadioButton.tab">
@@ -137,8 +141,8 @@
                     Value="Center" />
             <Setter Property="FontStyle"
                     Value="Italic" />
-            <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveColor}" />
+            <!--<Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveColor}" />-->
             <Setter Property="FontSize"
                     Value="16" />
         </Style>
@@ -157,22 +161,18 @@
                     Value="10,0,20,0" />
         </Style>
 
-        <Style Selector="Expander Label.h1">
-            <Setter Property="HorizontalAlignment"
-                    Value="Left" />
-            <Setter Property="Foreground"
-                    Value="{Binding $self, Converter={x:Static local:MpAvTemplatedControlToContrastBrushConverter.Instance}}" />
-        </Style>
 
         <Style Selector="Expander Border.labelUnderline_long, Expander Border.labelUnderline">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
         <Style Selector="Expander Label.h1">
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
             <Setter Property="FontSize"
                     Value="20" />
-            <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveColor}" />
+            <!--<Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />-->
             <Setter Property="Margin"
                     Value="0" />
         </Style>

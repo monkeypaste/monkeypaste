@@ -791,11 +791,11 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             #endregion
         }
 
-        public static async Task ResetShortcutsAsync() {
+        public static async Task ResetShortcutsAsync(MpShortcutRoutingProfileType routingProfile) {
             var sl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();
             await Task.WhenAll(sl.Select(x => x.DeleteFromDatabaseAsync()));
 
-            await InitDefaultShortcutsAsync();
+            await InitDefaultShortcutsAsync(routingProfile);
         }
 
         private static async Task CreateTestContentAsync() {
@@ -821,7 +821,11 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             }
 
         }
-        private static async Task InitDefaultShortcutsAsync() {
+        private static async Task InitDefaultShortcutsAsync(MpShortcutRoutingProfileType routingProfile = MpShortcutRoutingProfileType.Internal) {
+            MpRoutingType mw_routing = routingProfile.GetProfileBasedRoutingType(MpShortcutType.ToggleMainWindow);
+            MpRoutingType globalRouting = routingProfile.GetProfileBasedRoutingType(MpShortcutType.ToggleListenToClipboard);
+
+
             var ps = Mp.Services.PlatformShorcuts;
             List<string[]> defaultShortcutDefinitions = new List<string[]>() {
                 // ORDER:
@@ -829,14 +833,15 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
                 // GLOBAL
                 
-                 new string[] {"5dff238e-770e-4665-93f5-419e48326f01","Caps Lock", MpShortcutType.ToggleMainWindow.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
-                 new string[] {"97e29b06-0ec4-4c55-a393-8442d7695038","Control+F1", MpShortcutType.ToggleListenToClipboard.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
-                 new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c", "Control+F2", MpShortcutType.ToggleAutoCopyMode.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
-                 new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c", "Control+F3", MpShortcutType.ToggleRightClickPasteMode.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
-                 new string[] {"777367e6-c161-4e93-93e0-9bf12221f7ff", "Control+F4", MpShortcutType.ToggleAppendLineMode.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
-                 new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103", "Control+F5", MpShortcutType.ToggleAppendInsertMode.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
-                 new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+F6", MpShortcutType.ToggleAppendPreMode.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
-                 new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+F7", MpShortcutType.ToggleAppendPaused.ToString(), MpRoutingType.Internal.ToString(),"False","False"},
+                 new string[] {"5dff238e-770e-4665-93f5-419e48326f01","Caps Lock", MpShortcutType.ToggleMainWindow.ToString(), mw_routing.ToString(),"False","False"},
+                 new string[] {"97e29b06-0ec4-4c55-a393-8442d7695038","Control+Shift+F1", MpShortcutType.ToggleListenToClipboard.ToString(), globalRouting.ToString(),"False","False"},
+                 new string[] {"892bf7d7-ba8e-4db1-b2ca-62b41ff6614c", "Control+Shift+F2", MpShortcutType.ToggleAutoCopyMode.ToString(), globalRouting.ToString(),"False","False"},
+                 new string[] {"a12c4211-ab1f-4b97-98ff-fbeb514e9a1c", "Control+Shift+F3", MpShortcutType.ToggleRightClickPasteMode.ToString(), globalRouting.ToString(),"False","False"},
+                 new string[] {"501b4f91-706a-4c9d-a536-f7f8871c0a54", "Control+Shift+F4", MpShortcutType.ToggleDropWidgetEnabled.ToString(), globalRouting.ToString(),"False","False"},
+                 new string[] {"777367e6-c161-4e93-93e0-9bf12221f7ff", "Control+Shift+F5", MpShortcutType.ToggleAppendLineMode.ToString(), globalRouting.ToString(),"False","False"},
+                 new string[] {"a41aeed8-d4f3-47de-86c5-f9ca296fb103", "Control+Shift+F6", MpShortcutType.ToggleAppendInsertMode.ToString(), globalRouting.ToString(),"False","False"},
+                 new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+Shift+F7", MpShortcutType.ToggleAppendPreMode.ToString(), globalRouting.ToString(),"False","False"},
+                 new string[] {"9fa72a1b-2286-4907-bf70-37686aad009a", "Control+Shift+F8", MpShortcutType.ToggleAppendPaused.ToString(), globalRouting.ToString(),"False","False"},
 
                  // APPLICATION
                  new string[] {"94e81589-fe2f-4e80-8940-ed066f0d9c27",ps.PasteKeys, MpShortcutType.PasteHere.ToString(), MpRoutingType.Internal.ToString(),"True"},

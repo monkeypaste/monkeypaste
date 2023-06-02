@@ -5,6 +5,7 @@
         ToggleMainWindow,
         ToggleAutoCopyMode,
         ToggleRightClickPasteMode,
+        ToggleDropWidgetEnabled,
         ToggleListenToClipboard,
         ToggleAppendInsertMode,
         ToggleAppendLineMode,

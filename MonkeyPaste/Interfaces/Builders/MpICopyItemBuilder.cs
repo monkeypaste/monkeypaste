@@ -10,6 +10,7 @@ namespace MonkeyPaste {
             MpPortableDataObject pdo,
             bool suppressWrite = false,
             MpTransactionType transType = MpTransactionType.None,
+            bool force_allow_dup = false,
             bool force_ext_sources = true);
     }
 }

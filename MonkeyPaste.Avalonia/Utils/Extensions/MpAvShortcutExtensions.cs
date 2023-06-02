@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvShortcutExtensions {
+
         public static IEnumerable<MpAvShortcutKeyGroupViewModel> ToKeyItems(this string keyString) {
             var keyItems = new List<MpAvShortcutKeyGroupViewModel>();
             if (string.IsNullOrEmpty(keyString)) {
@@ -117,35 +118,5 @@ namespace MonkeyPaste.Avalonia {
             return string.Format(template, title_arg);
         }
 
-        public static bool CanBeGlobal(this MpShortcutType st) {
-            switch (st) {
-                // APPLICATION
-                case MpShortcutType.ToggleMainWindow:
-                case MpShortcutType.ToggleAppendInsertMode:
-                case MpShortcutType.ToggleAppendLineMode:
-                case MpShortcutType.ToggleAutoCopyMode:
-                case MpShortcutType.ToggleRightClickPasteMode:
-                case MpShortcutType.ToggleListenToClipboard:
-                // USER
-                case MpShortcutType.PasteCopyItem:
-                case MpShortcutType.InvokeTrigger:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        public static bool IsEditorShortcut(this MpShortcutType st) {
-            switch (st) {
-                case MpShortcutType.ToggleAppendInsertMode:
-                case MpShortcutType.ToggleAppendLineMode:
-                case MpShortcutType.ToggleAppendPreMode:
-                case MpShortcutType.ToggleAppendPaused:
-                case MpShortcutType.ToggleAppendManualMode:
-                    return true;
-                default:
-                    return false;
-            }
-        }
     }
 }

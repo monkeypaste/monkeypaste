@@ -13,6 +13,14 @@ namespace MonkeyPaste.Common {
 
         public static ReaderWriterLock locker = new ReaderWriterLock();
 
+        public static string ToFileSystemPath(this Uri uri) {
+            if (uri == null ||
+                uri.Scheme != Uri.UriSchemeFile) {
+                return string.Empty;
+            }
+            return uri.AbsolutePath;
+        }
+
         public static async Task<string> ToFileAsync(
             this string fileData,
             string forcePath = "",

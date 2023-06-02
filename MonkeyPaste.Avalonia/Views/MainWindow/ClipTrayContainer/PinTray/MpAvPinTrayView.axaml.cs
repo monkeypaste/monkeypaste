@@ -74,32 +74,34 @@ namespace MonkeyPaste.Avalonia {
             // MpConsole.WriteLine("[Drop] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
 
             e.DragEffects = DragDropEffects.None;
-            if (is_drop_valid) {
-                BindingContext.IsPinTrayBusy = true;
-
-                e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
-
-                // NOTE need to use processed/output data object, avdo becomes disposed
-                var mpdo = await
-                    Mp.Services.DataObjectHelperAsync
-                    .ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
-
-                bool is_internal = mpdo.ContainsContentRef();
-                if (is_internal) {
-                    // Internal Drop
-                    await PerformTileDropAsync(drop_idx, mpdo, is_copy);
-                } else {
-                    // External Drop
-                    await PerformExternalOrPartialDropAsync(drop_idx, mpdo, is_copy);
-                }
-
-                Dispatcher.UIThread.Post(async () => {
-                    while (BindingContext.IsAnyBusy) {
-                        await Task.Delay(100);
-                    }
-                    BindingContext.IsPinTrayBusy = false;
-                });
+            if (!is_drop_valid) {
+                ResetDrop();
+                return;
             }
+            BindingContext.IsPinTrayBusy = true;
+
+            e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
+
+            // NOTE need to use processed/output data object, avdo becomes disposed
+            var mpdo = await
+                Mp.Services.DataObjectHelperAsync
+                .ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
+
+            bool is_internal = mpdo.ContainsContentRef();
+            if (is_internal) {
+                // Internal Drop
+                await PerformTileDropAsync(drop_idx, mpdo, is_copy);
+            } else {
+                // External Drop
+                await PerformExternalOrPartialDropAsync(drop_idx, mpdo);
+            }
+
+            Dispatcher.UIThread.Post(async () => {
+                while (BindingContext.IsAnyBusy) {
+                    await Task.Delay(100);
+                }
+                BindingContext.IsPinTrayBusy = false;
+            });
 
             ResetDrop();
         }
@@ -107,6 +109,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Drop Helpers
+
+        private void InitDnd() {
+            var ptrlb = PinTrayListBox;
+            DragDrop.SetAllowDrop(ptrlb, true);
+            ptrlb.AddHandler(DragDrop.DragEnterEvent, DragEnter);
+            ptrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
+            ptrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+            ptrlb.AddHandler(DragDrop.DropEvent, Drop);
+            InitAdorner(ptrlb);
+        }
 
         private bool IsDropValid(IDataObject avdo, int drop_idx, bool is_copy) {
             // called in DropExtension DragOver 
@@ -158,24 +170,27 @@ namespace MonkeyPaste.Avalonia {
             if (isCopy) {
                 //  duplicate
                 var dup_ci = await BindingContext.SelectedItem.CopyItem.CloneDbModelAsync(deepClone: true);
-
                 await dup_ci.WriteToDatabaseAsync();
-
-
                 drop_ctvm = await BindingContext.CreateClipTileViewModelAsync(dup_ci, -1);
             }
             BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
             MpConsole.WriteLine($"Tile '{drop_ctvm}' dropped onto pintray idx: {drop_idx}");
         }
 
-        private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo, bool is_copy) {
-
+        private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo) {
+            // NOTE external or partial drop never needs to copy since result is always new content
 
             //var avdo_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
             //    pdo: mpdo,
             //    force_ext_sources: from_ext,
             //    transType: MpTransactionType.Created);
+            //bool from_ext = !avdo.ContainsContentRef();
+            var avdo_ci = await avdo.ToCopyItemAsync();
 
+            var drop_ctvm = await BindingContext.CreateClipTileViewModelAsync(avdo_ci, -1);
+            BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
+
+            MpConsole.WriteLine($"PARTIAL Tile '{drop_ctvm}' dropped onto pintray idx: {drop_idx}");
         }
 
         #endregion
@@ -364,13 +379,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void PinTrayListBox_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            var ptrlb = sender as ListBox;
-            DragDrop.SetAllowDrop(ptrlb, true);
-            ptrlb.AddHandler(DragDrop.DragEnterEvent, DragEnter);
-            ptrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
-            ptrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
-            ptrlb.AddHandler(DragDrop.DropEvent, Drop);
-            InitAdorner(ptrlb);
+            InitDnd();
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }

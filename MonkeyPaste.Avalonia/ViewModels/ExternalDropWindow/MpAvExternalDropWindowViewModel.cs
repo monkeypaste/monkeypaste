@@ -70,8 +70,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool CanEnableDropWidget =>
+            Mp.Services.PlatformInfo.IsDesktop;
         public bool IsDropWidgetEnabled =>
-            Mp.Services.PlatformInfo.IsDesktop &&
+            CanEnableDropWidget &&
             MpPrefViewModel.Instance.ShowExternalDropWidget;
 
         public bool HasUserToggledAnyHandlers { get; set; } = false;
@@ -159,7 +161,6 @@ namespace MonkeyPaste.Avalonia {
             }
             switch (msg) {
                 case MpMessageType.ItemDragBegin:
-
                     ShowDropWindowCommand.Execute(null);
                     break;
                 case MpMessageType.ItemDragCanceled:
@@ -173,6 +174,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     // NOTE ItemDragEnd not sent if drag source is recycled (so listener checks for left mouse down)
                     ShowFinishDropMenuCommand.Execute(null);
+                    break;
+                case MpMessageType.DropWidgetEnabledChanged:
+
                     break;
             }
         }
@@ -487,6 +491,16 @@ namespace MonkeyPaste.Avalonia {
                 _wasHiddenOrCanceled = true;
                 MpConsole.WriteLine("Drop canceled");
                 IsChildWindowOpen = false;
+            });
+
+        public ICommand ToggleIsDropWidgetEnabledCommand => new MpCommand(
+            () => {
+                MpPrefViewModel.Instance.ShowExternalDropWidget = !MpPrefViewModel.Instance.ShowExternalDropWidget;
+                OnPropertyChanged(nameof(IsDropWidgetEnabled));
+                MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", $"Drop Wizard: {(IsDropWidgetEnabled ? "ON" : "OFF")}").FireAndForgetSafeAsync(this);
+                MpMessenger.SendGlobal(MpMessageType.DropWidgetEnabledChanged);
+            }, () => {
+                return CanEnableDropWidget;
             });
         #endregion
     }

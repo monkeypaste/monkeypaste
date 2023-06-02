@@ -23,6 +23,8 @@ namespace MonkeyPaste.Avalonia {
         private bool _isDisableAttached = false;
         #endregion
 
+
+
         #region Statics
 
         static MpAvToolTipView() {
@@ -38,6 +40,11 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
+        static bool IsTooltipFollowEnabled { get; set; } = false;
+
+        #endregion
+
+        #region Properties
         public string ToolTipContent =>
             string.IsNullOrEmpty(ToolTipText) ?
                 ToolTipHtml :
@@ -91,8 +98,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
         public MpAvToolTipView() {
             AvaloniaXamlLoader.Load(this);
-            IsEnabled = false;
-            return;
+
+            if (!IsTooltipFollowEnabled) {
+                IsEnabled = false;
+                return;
+            }
+
 
             this.AttachedToVisualTree += MpAvTooltipView_AttachedToVisualTree;
             this.DetachedFromVisualTree += MpAvTooltipView_DetachedFromVisualTree;
