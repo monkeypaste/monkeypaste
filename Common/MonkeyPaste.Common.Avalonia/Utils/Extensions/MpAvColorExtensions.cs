@@ -1,12 +1,27 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Markup.Xaml.MarkupExtensions;
+using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using System;
 using System.Diagnostics;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvColorExtensions {
-        public static string ToHex(this Color c, bool removeAlpha = false) {
-            return c.ToPortableColor().ToHex(removeAlpha);
+
+        public static string ToHex(this object colorBrushHexOrNamedColor, string fallback = default) {
+            if (colorBrushHexOrNamedColor is IBrush brush) {
+                return brush.ToHex();
+            }
+            if (colorBrushHexOrNamedColor is Color color) {
+                return color.ToPortableColor().ToHex();
+            }
+            if (colorBrushHexOrNamedColor is string valStr) {
+                return MpColorHelpers.ParseHexFromString(valStr);
+            }
+            if (colorBrushHexOrNamedColor is DynamicResourceExtension dre) {
+                return MpCommonTools.Services.PlatformResource.GetResource<string>(dre.ResourceKey.ToString());
+            }
+            //MpDebug.Break($"Could not convert '{colorBrushHexOrNamedColor.GetType()}' to hex");
+            return fallback;
         }
 
         public static Color GetColor(this IBrush b) {

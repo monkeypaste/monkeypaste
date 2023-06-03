@@ -6,25 +6,6 @@
         <Setter Property="MaxWidth"
                 Value="300" />
     </Style>
-    <!--  DEFAULT  -->
-    <Style Selector="local|MpAvToolTipView Border">
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeCompliment4DarkColor}" />
-        <Setter Property="Background"
-                Value="{DynamicResource ThemeCompliment4Color}" />
-        <Setter Property="CornerRadius"
-                Value="10" />
-        <Setter Property="BorderThickness"
-                Value="1.5" />
-        <Setter Property="Padding"
-                Value="10" />
-    </Style>
-    <Style Selector="local|MpAvToolTipView TextBlock">
-        <Setter Property="Foreground"
-                Value="{Binding Source={DynamicResource ThemeCompliment4Color}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
-        <Setter Property="TextDecorations"
-                Value="{x:Null}" />
-    </Style>
 
     <!--  ERROR  -->
 
@@ -33,6 +14,24 @@
                 Value="{DynamicResource ThemeAccent2BgColor}" />
         <Setter Property="Background"
                 Value="{DynamicResource ThemeAccent2Color}" />
+    </Style>
+    <!--  HINTS  -->
+    <!--  INFO  -->
+    <Style Selector="local|MpAvToolTipInfoHintView:not(.warning):not(.error) Grid :is(Control):not(.info)">
+        <Setter Property="IsVisible"
+                Value="False" />
+    </Style>
+
+    <!--  Warning  -->
+    <Style Selector="local|MpAvToolTipInfoHintView.warning Grid :is(Control):not(.warning)">
+        <Setter Property="IsVisible"
+                Value="False" />
+    </Style>
+
+    <!--  Error  -->
+    <Style Selector="local|MpAvToolTipInfoHintView.error Grid :is(Control):not(.error)">
+        <Setter Property="IsVisible"
+                Value="False" />
     </Style>
 
 </Styles>

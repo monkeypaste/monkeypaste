@@ -77,6 +77,9 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Effects
 
         public static unsafe Bitmap? Tint(this Bitmap bmp, string hexColor, bool retainAlpha = true, int quality = 100) {
+            if (bmp == null) {
+                return null;
+            }
             var tint = hexColor.ToAvColor();
             var tintPixelColor = new PixelColor { Alpha = tint.A, Red = tint.R, Green = tint.G, Blue = tint.B };
             if (tintPixelColor.Alpha == 0) {

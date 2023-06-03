@@ -7,7 +7,7 @@ function initMain(initObj) {
 		initDefaults(initObj.defaults);
 		//initExceptionHandler();
 
-		if (isPlainHtmlConverter()) {
+		if (initObj.isConverter) {
 			initPlainHtmlConverter();
 			log('Main Initialized.(Converter)');
 			return;

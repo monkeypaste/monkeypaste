@@ -16,8 +16,13 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameView">
     <Border Padding="5">
         <StackPanel>
-            <Label Classes="h1"
-                   Content="{Binding LabelText}" />
+            <StackPanel Orientation="Horizontal">
+                <Image Classes="frame header icon"
+                       IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+                <TextBlock Classes="frame header text"
+                           Text="{Binding LabelText}" />
+            </StackPanel>
             <Border Classes="labelUnderline" />
             <local:MpAvParameterCollectionView BorderThickness="1"
                                                CornerRadius="10"

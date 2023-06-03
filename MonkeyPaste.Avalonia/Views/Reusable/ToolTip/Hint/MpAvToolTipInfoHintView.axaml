@@ -10,17 +10,30 @@
              x:Class="MonkeyPaste.Avalonia.MpAvToolTipInfoHintView"
              Background="Transparent">
     <UserControl.Styles>
-        <Style Selector="Grid.info Ellipse">
-            <Setter Property="Fill"
-                    Value="Blue" />
+        <Style Selector="Ellipse">
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="StrokeThickness"
+                    Value="1" />
+            <Setter Property="Stroke"
+                    Value="White" />
         </Style>
-        <Style Selector="Grid.warning Ellipse">
-            <Setter Property="Fill"
-                    Value="Goldenrod" />
-        </Style>
-        <Style Selector="Grid.error Ellipse">
-            <Setter Property="Fill"
-                    Value="Red" />
+
+        <Style Selector="TextBlock">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="FontSize"
+                    Value="10" />
+            <Setter Property="Foreground"
+                    Value="White" />
         </Style>
     </UserControl.Styles>
     <ToolTip.Tip>
@@ -29,22 +42,24 @@
     </ToolTip.Tip>
     <Grid x:Name="HintContainerGrid"
           Cursor="Help"
-          Classes.info="{Binding IsInfo, ElementName=InfoHintView}"
-          Classes.warning="{Binding IsWarning, ElementName=InfoHintView}"
-          Classes.error="{Binding IsError, ElementName=InfoHintView}"
           Width="15"
           Height="15">
-        <Ellipse HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
-                 StrokeThickness="1"
-                 Stroke="White"
+        <!--  INFO  -->
+        <Ellipse Classes="info"
                  Fill="Blue" />
-        <TextBlock Foreground="White"
-                   FontSize="10"
-                   FontWeight="SemiBold"
-                   TextAlignment="Center"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="{Binding HintText, ElementName=InfoHintView}" />
+        <TextBlock Classes="info"
+                   Text="i" />
+        <!--  WARNING  -->
+        <Ellipse Classes="warning"
+                 Stroke="Black"
+                 Fill="Yellow" />
+        <TextBlock Classes="warning"
+                   Foreground="Black"
+                   Text="!" />
+        <!--  ERROR  -->
+        <Ellipse Classes="error"
+                 Fill="Red" />
+        <TextBlock Classes="error"
+                   Text="x" />
     </Grid>
 </UserControl>

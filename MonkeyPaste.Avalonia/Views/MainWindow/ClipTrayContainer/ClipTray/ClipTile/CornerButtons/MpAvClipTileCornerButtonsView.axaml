@@ -26,54 +26,72 @@
                     Value="0" />
         </Style>
 
-
-        <Style Selector="ToggleButton#HideTitleButton:not(:checked) PathIcon">
-            <Setter Property="Data"
-                    Value="{StaticResource HideSvg}" />
+        <!--  BUTTON PLACEMENT  -->
+        <Style Selector=":is(Button).top">
+            <Setter Property="VerticalAlignment"
+                    Value="Top" />
         </Style>
-        <Style Selector="ToggleButton#HideTitleButton:checked PathIcon">
-            <Setter Property="Data"
-                    Value="{StaticResource ShowSvg}" />
-        </Style>
-
-        <Style Selector="Button#OpenWindowButton Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+        <Style Selector=":is(Button).bottom">
+            <Setter Property="VerticalAlignment"
+                    Value="Bottom" />
         </Style>
 
-        <Style Selector="Button#OpenWindowButton:pointerover Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+        <Style Selector=":is(Button).left">
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+        </Style>
+        <Style Selector=":is(Button).right">
+            <Setter Property="HorizontalAlignment"
+                    Value="Right" />
         </Style>
 
-        <Style Selector=":is(Button):pointerover PathIcon">
-            <Setter Property="Foreground"
-                    Value="Gold" />
-        </Style>
+        <!--  BUTTON ICONS  -->
 
-        <Style Selector="PathIcon">
+        <Style Selector=":is(Button).cornerButton Image">
             <Setter Property="Width"
                     Value="10" />
             <Setter Property="Height"
                     Value="10" />
+            <Setter Property="local:MpAvImageTintExtension.IsEnabled"
+                    Value="True" />
         </Style>
 
-        <Style Selector=":is(Button):not(.lower) PathIcon">
-            <Setter Property="Foreground"
-                    Value="AntiqueWhite" />
-        </Style>
-        <Style Selector=":is(Button).lower PathIcon">
-            <Setter Property="Foreground"
-                    Value="Black" />
-        </Style>
-        <Style Selector="PathIcon.activeHotkey">
-            <Setter Property="Foreground"
-                    Value="Red" />
+        <!--  BUTTON ICONS TINT  -->
+
+        <Style Selector=":is(Button).cornerButton.top Image">
+            <Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
         </Style>
 
-        <Style Selector="ToggleButton:checked PathIcon">
-            <Setter Property="Foreground"
-                    Value="Cyan" />
+        <Style Selector=":is(Button).cornerButton.bottom Image">
+            <Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+
+        <Style Selector=":is(Button).cornerButton:pointerover Image">
+            <Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{DynamicResource ThemeAccent1Color}" />
+        </Style>
+
+        <Style Selector="ToggleButton.cornerButton:checked.cornerButton Image">
+            <Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{DynamicResource ThemeAccent5BgColor}" />
+        </Style>
+
+        <Style Selector="Image.activeHotkey">
+            <Setter Property="local:MpAvImageTintExtension.Tint"
+                    Value="{DynamicResource ThemeAccent2Color}" />
+        </Style>
+
+        <!--  TL PIN IMAGE  -->
+        <Style Selector="ToggleButton#PinTileButton Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource PinImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+        </Style>
+
+        <Style Selector="ToggleButton#PinTileButton:checked Image, ToggleButton#PinTileButton:pointerover Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource PinDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid Classes.tileHover="{Binding IsHovering}"
@@ -85,61 +103,53 @@
         <!--  TL Pin Tile Button  -->
 
         <ToggleButton x:Name="PinTileButton"
-                      Classes="noBg noHoverBg noBorder"
+                      Classes="noBg noHoverBg noBorder cornerButton top left"
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                       local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
                       IsChecked="{Binding IsPinned}"
-                      IsVisible="{Binding !IsChildWindowOpen}"
-                      HorizontalAlignment="Left"
-                      VerticalAlignment="Top">
-            <PathIcon HorizontalAlignment="Left"
-                      VerticalAlignment="Bottom"
-                      Data="{StaticResource PinSvg}" />
+                      IsVisible="{Binding !IsChildWindowOpen}">
+            <ToolTip.Tip>
+                <local:MpAvToolTipView ToolTipText="Toggle Pin" />
+            </ToolTip.Tip>
+            <Image />
         </ToggleButton>
 
         <!--  TR Pop Out Button  -->
 
         <Button x:Name="OpenWindowButton"
-                Classes="noBg noHoverBg noBorder"
+                Classes="noBg noHoverBg noBorder cornerButton top right"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding PinToPopoutWindowCommand}"
                 IsVisible="{Binding !IsChildWindowOpen}"
-                CommandParameter="{Binding}"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top">
-            <Image Width="10"
-                   Height="10" />
+                CommandParameter="{Binding}">
+            <ToolTip.Tip>
+                <local:MpAvToolTipView ToolTipText="Float" />
+            </ToolTip.Tip>
+            <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
         </Button>
 
         <!--  BL Hotkey Button  -->
         <Button x:Name="ClipTileHotkeyButton"
-                Classes="noBg noHoverBg lower noBorder"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
+                Classes="noBg noHoverBg noBorder cornerButton bottom left"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                 local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="{Binding ShortcutTooltipText}" />
-
             </ToolTip.Tip>
-
-            <PathIcon HorizontalAlignment="Right"
-                      VerticalAlignment="Top"
-                      Classes.activeHotkey="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                      Data="{StaticResource ControllerOutlineSvg}" />
+            <Image Classes.activeHotkey="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                   Source="{Binding Source={StaticResource HotkeyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Button>
 
         <!--  BR Edit Toggle Button  -->
         <ToggleButton x:Name="ClipTileToggleEditButton"
-                      Classes="noBg noHoverBg lower noBorder"
+                      Classes="noBg noHoverBg noBorder cornerButton bottom right"
                       IsVisible="{Binding CanEdit}"
-                      HorizontalAlignment="Right"
-                      VerticalAlignment="Bottom"
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsContentReadOnlyCommand}"
                       IsChecked="{Binding !IsContentReadOnly, Mode=OneWay}">
-            <PathIcon HorizontalAlignment="Left"
-                      VerticalAlignment="Top"
-                      Data="{StaticResource PencilOutlineSvg}" />
+            <ToolTip.Tip>
+                <local:MpAvToolTipView ToolTipText="Toggle Edit" />
+            </ToolTip.Tip>
+            <Image Source="{Binding Source={StaticResource EditImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>
     </Grid>
 </local:MpAvUserControl>

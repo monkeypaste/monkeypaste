@@ -14,7 +14,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        public static string HTML_CONVERTER_PARAMS => "converter=true";
 
         static MpAvPlainHtmlConverterWebView() {
 
@@ -33,7 +32,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        public override string ContentUrl => base.ContentUrl + $"?{HTML_CONVERTER_PARAMS}";
 
         public MpQuillConvertPlainHtmlToQuillHtmlResponseMessage LastPlainHtmlResp {
             get => _lastPlainHtmlConvertedResp;
@@ -75,6 +73,13 @@ namespace MonkeyPaste.Avalonia {
             base.OnIsEditorInitializedChanged();
             IsViewInitialized = IsEditorInitialized;
         }
+
+        protected override MpQuillInitMainRequestMessage GetInitMessage() {
+            var msg = base.GetInitMessage();
+            msg.isConverter = true;
+            return msg;
+        }
+
         #endregion
         #region Private Methods
         #endregion

@@ -20,11 +20,18 @@
     <UserControl.RenderTransform>
         <TranslateTransform />
     </UserControl.RenderTransform>
-    <Border Classes.text="{Binding ToolTipText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+    <Border Background="{DynamicResource ThemeInteractiveColor}"
+            BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
+            CornerRadius="10"
+            BorderThickness="1.5"
+            Padding="10"
+            Classes.text="{Binding ToolTipText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
             Classes.html="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
         <Grid>
             <TextBlock x:Name="ToolTipTextBlock"
                        FontWeight="Light"
+                       TextDecorations="{x:Null}"
+                       Foreground="{DynamicResource ThemeInteractiveBgColor}"
                        TextWrapping="WrapWithOverflow"
                        Text="{Binding ToolTipText, ElementName=ToolTipView}" />
 

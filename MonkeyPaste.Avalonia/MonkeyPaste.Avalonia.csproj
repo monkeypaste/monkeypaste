@@ -242,6 +242,7 @@
     <None Remove="Assets\Images\alarmClock.png" />
     <None Remove="Assets\Images\append.png" />
     <None Remove="Assets\Images\appendline.png" />
+    <None Remove="Assets\Images\appframe.png" />
     <None Remove="Assets\Images\appstore.png" />
     <None Remove="Assets\Images\asc.png" />
     <None Remove="Assets\Images\asc_black.png" />
@@ -501,6 +502,9 @@
     <None Remove="Settings.settings" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Include="Assets\Images\appframe.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\boxcorners.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>

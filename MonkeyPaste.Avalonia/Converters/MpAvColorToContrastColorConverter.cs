@@ -12,19 +12,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvColorToContrastColorConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            string hexStr = null;
-            if (value is IBrush brush) {
-                hexStr = brush.ToHex();
-            }
-            if (value is Color color) {
-                hexStr = color.ToPortableColor().ToHex();
-            }
-            if (value is string valStr) {
-                hexStr = valStr;
-            }
-            if (value is DynamicResourceExtension dre) {
-                hexStr = Mp.Services.PlatformResource.GetResource<string>(dre.ResourceKey.ToString());
-            }
+            string hexStr = value.ToHex();
             if (hexStr.IsStringHexColor()) {
                 bool flip = false;
                 string contrast_type = "fg";

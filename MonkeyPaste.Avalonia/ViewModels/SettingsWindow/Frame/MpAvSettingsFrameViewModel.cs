@@ -12,6 +12,7 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase,
         MpIFilterMatch,
         MpILabelTextViewModel,
+        MpIIconResource,
         MpIParameterHostViewModel,
         MpAvIParameterCollectionViewModel {
         #region Private Variables
@@ -24,6 +25,20 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIIconResource Implementation
+        public object IconResourceObj {
+            get {
+                switch (FrameType) {
+                    case MpSettingsFrameType.None:
+                    default:
+                        return null;
+                    case MpSettingsFrameType.LookAndFeel:
+                        return "EyeImage";
+                }
+            }
+        }
+        #endregion
 
         #region MpILabelTextViewModel Implementation
         public string LabelText { get; set; }
@@ -71,12 +86,13 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
         #region View Models
 
-
         public IList<MpAvParameterViewModelBase> Items { get; set; }
         #endregion
+
         #region State
 
         public MpSettingsTabType TabType { get; set; }
+        public MpSettingsFrameType FrameType { get; set; } = MpSettingsFrameType.None;
         public int SortOrderIdx { get; set; }
 
         public bool IsVisible { get; set; } = true;

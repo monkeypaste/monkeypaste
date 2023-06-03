@@ -6,25 +6,9 @@
     <title>Editor</title>
 
     <script defer type="text/javascript">
-
-        //loadEditorGlobals();
         const HTML_CONVERTER_PARAMS = "converter=true";
-        const APPEND_NOTIFIER_PARAMS = "append_notifier=true";
         const AUTO_TEST = "auto_test";
 
-        //var UseQuill2 = true;
-        //var UseBetterTable = true;
-
-        //if (window.location.search.toLowerCase().includes(HTML_CONVERTER_PARAMS.toLowerCase())) {
-        //    // this is the case for converter which uses 1.3.6
-        //    // because it doesn't have that whitespace exclusion bug between spans
-        //    // it doesn't need the quill tables because it converts plain html which doesn't rely on better table
-        //    UseBetterTable = true;
-        //    UseQuill2 = true;
-        //}
-
-
-        //
         if (window.location.search.toLowerCase().includes(AUTO_TEST.toLowerCase())) {
             document.write('<script defer src="src/components/tester/editor_tester.js"><\/script>');
             window.addEventListener('load', function () {

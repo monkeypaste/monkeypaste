@@ -11,9 +11,9 @@ namespace MonkeyPaste {
 
         // fragment 'MpQuillAppendStateChangedMessage'
         public string appendStateFragment { get; set; }
+        public bool isConverter { get; set; }
     }
     public class MpQuillDefaultsRequestMessage : MpJsonObject {
-
         public string defaultFontFamily { get; set; }
         public string defaultFontSize { get; set; }
         public bool isSpellCheckEnabled { get; set; }

@@ -193,6 +193,7 @@ namespace MonkeyPaste.Avalonia {
 
             LookAndFeelFrame = new MpAvSettingsFrameViewModel() {
                 TabType = MpSettingsTabType.Preferences,
+                FrameType = MpSettingsFrameType.LookAndFeel,
                 SortOrderIdx = 0,
                 LabelText = "Look & Feel",
                 PluginFormat = new MpPluginFormat() {
@@ -1052,7 +1053,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
                     var sw = new MpAvWindow() {
                         ShowInTaskbar = true,
-                        Width = 800,
+                        Width = 660,
                         Height = 500,
                         Topmost = true,
                         Title = "Settings".ToWindowTitleText(),
@@ -1180,5 +1181,12 @@ namespace MonkeyPaste.Avalonia {
         Security,
         Shortcuts,
         Help
+    }
+
+    public enum MpSettingsFrameType {
+        None = 0,
+        LookAndFeel,
+        Content,
+        History
     }
 }

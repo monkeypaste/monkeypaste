@@ -24,7 +24,15 @@
                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
 
         <!--  APPS  -->
-        <Expander Header="Applications">
+        <Expander>
+            <Expander.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Classes="expander header icon"
+                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+                    <TextBlock Classes="expander header text"
+                               Text="Applications" />
+                </StackPanel>
+            </Expander.Header>
             <Expander.Content>
                 <DockPanel Classes="dataPanel"
                            VerticalAlignment="Top"
@@ -118,11 +126,12 @@
         <Expander>
             <Expander.Header>
                 <StackPanel Orientation="Horizontal">
-                    <Label Classes="h1"
-                           Content="Websites" />
-                    <local:MpAvToolTipInfoHintView HorizontalAlignment="Right"
-                                                   Margin="0,0,0,0"
-                                                   ToolTipText="#warning# Source url recognition is dependant on the host applications clipboard support so rejection is not guaranteed :(" />
+                    <Image Classes="expander header icon"
+                           Source="{Binding Source={StaticResource WebImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+                    <TextBlock Classes="expander header text"
+                               Text="Websites" />
+                    <local:MpAvToolTipInfoHintView Classes="expander header warning"
+                                                   ToolTipText="Source url recognition is dependant on the host applications clipboard support so rejection is not guaranteed :(" />
                 </StackPanel>
             </Expander.Header>
             <DockPanel Classes="dataPanel"

@@ -934,6 +934,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
 #endif
+        protected virtual MpQuillInitMainRequestMessage GetInitMessage() {
+            return new MpQuillInitMainRequestMessage() {
+                envName = Mp.Services.PlatformInfo.OsType.ToString(),
+                defaults = GetDefaultsMessage()
+            };
+        }
 
         #endregion
 
@@ -955,6 +961,7 @@ namespace MonkeyPaste.Avalonia {
         }
 #endif
 
+
         private MpQuillDefaultsRequestMessage GetDefaultsMessage() {
             return new MpQuillDefaultsRequestMessage() {
                 defaultFontFamily = MpPrefViewModel.Instance.DefaultEditableFontFamily,
@@ -967,7 +974,6 @@ namespace MonkeyPaste.Avalonia {
                 themePaletteFragmentStr = MpAvThemeViewModel.Instance.GetEditorThemeLookup()
             };
         }
-
         #endregion
 
         #region Control Life Cycle
@@ -1094,10 +1100,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            var req = new MpQuillInitMainRequestMessage() {
-                envName = Mp.Services.PlatformInfo.OsType.ToString(),
-                defaults = GetDefaultsMessage()
-            };
+            var req = GetInitMessage();
             SendMessage($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
         }
 

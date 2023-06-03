@@ -23,10 +23,10 @@ namespace MonkeyPaste.Common {
 
         public static string ParseHexFromString(string hexChannelsOrNamedColorStr, string fallBack = "#00000000", bool includeAlpha = true) {
             if (string.IsNullOrWhiteSpace(hexChannelsOrNamedColorStr)) {
-                return fallBack;
+                return fallBack.IncludeOrRemoveHexAlpha(!includeAlpha);
             }
             if (hexChannelsOrNamedColorStr.IsStringHexColor()) {
-                return hexChannelsOrNamedColorStr;
+                return hexChannelsOrNamedColorStr.IncludeOrRemoveHexAlpha(!includeAlpha);
             }
             if (hexChannelsOrNamedColorStr.Contains(",") &&
                 hexChannelsOrNamedColorStr.Replace("(", string.Empty).Replace(")", string.Empty) is string cleanStr &&
@@ -44,7 +44,7 @@ namespace MonkeyPaste.Common {
                         // byte color
                         argb_channels = colorParts.Select(x => byte.Parse(x)).ToArray();
                     }
-                    return new MpColor(argb_channels).ToHex();
+                    return new MpColor(argb_channels).ToHex(!includeAlpha);
 
                 }
                 catch (Exception ex) {
@@ -66,7 +66,7 @@ namespace MonkeyPaste.Common {
                 MpConsole.WriteTraceLine($"Color named {hexChannelsOrNamedColorStr} not found, returning {fallBack}");
                 return fallBack;
             }
-            return hexColorPropInfo.GetValue(null, null) as string;
+            return (hexColorPropInfo.GetValue(null, null) as string).IncludeOrRemoveHexAlpha(!includeAlpha);
         }
         public static byte[] GetHexColorBytes(string hexString) {
             if (!hexString.IsStringHexColor()) {

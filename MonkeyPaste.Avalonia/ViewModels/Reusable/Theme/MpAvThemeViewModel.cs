@@ -486,22 +486,13 @@ namespace MonkeyPaste.Avalonia {
             SetThemeValue(MpThemeResourceKey.ThemeCompliment5DarkColor, colors[25]);
             SetThemeValue(MpThemeResourceKey.ThemeCompliment5LighterColor, colors[26]);
 
-            //Mp.Services.PlatformResource.SetResource("ComboBoxForeground", colors[21].ToSolidColorBrush());
-            //Mp.Services.PlatformResource.SetResource("ComboBoxBackground", colors[22].ToSolidColorBrush());
-            //Mp.Services.PlatformResource.SetResource("ComboBoxBorderBrush", colors[22].ToSolidColorBrush());
+            BoxShadows new_fg_shadows = new BoxShadows(
+                new BoxShadow() {
+                    Color = colors[21],
+                    Spread = 5
+                });
 
-            //Mp.Services.PlatformResource.SetResource("ComboBoxItemForeground", colors[21].ToSolidColorBrush());
-            //Mp.Services.PlatformResource.SetResource("ComboBoxItemBackground", colors[22].ToSolidColorBrush());
-
-            //Mp.Services.PlatformResource.SetResource("TextControlForeground", colors[21].ToSolidColorBrush());
-            //Mp.Services.PlatformResource.SetResource("TextControlBackground", colors[22].ToSolidColorBrush());
-            //Mp.Services.PlatformResource.SetResource("TextControlBorderBrush", colors[22].ToSolidColorBrush());
-            //Mp.Services.PlatformResource.SetResource("TextControlForegroundFocused", colors[21].ToSolidColorBrush());
-            //Mp.Services.PlatformResource.SetResource("TextControlBackgroundFocused", colors[22].ToSolidColorBrush());
-            //Mp.Services.PlatformResource.SetResource("TextControlBorderBrushFocused", colors[22].ToSolidColorBrush());
-
-            //Mp.Services.PlatformResource.SetResource("ButtonForeground", colors[21].ToSolidColorBrush());
-            //Mp.Services.PlatformResource.SetResource("SystemControlPageTextBaseMediumBrush", colors[21].ToSolidColorBrush());
+            Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.ThemeShadowFg.ToString(), new_fg_shadows);
         }
 
         #endregion

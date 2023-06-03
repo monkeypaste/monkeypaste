@@ -133,6 +133,26 @@
                     Value="0,10,0,0" />
         </Style>
 
+        <!--  HEADER ICON  -->
+        <Style Selector=":is(Control).header">
+            <Setter Property="Margin"
+                    Value="0,0,10,0" />
+        </Style>
+
+        <Style Selector="Image.expander.header.icon">
+            <Setter Property="Width"
+                    Value="30" />
+            <Setter Property="Height"
+                    Value="30" />
+        </Style>
+
+        <Style Selector="Image.frame.header.icon">
+            <Setter Property="Width"
+                    Value="20" />
+            <Setter Property="Height"
+                    Value="20" />
+        </Style>
+
         <!--  EMPTY GRID TEXTBLOCKS  -->
         <Style Selector="TextBlock.emptyTextBlock">
             <Setter Property="HorizontalAlignment"
@@ -166,15 +186,14 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Expander Label.h1">
-            <Setter Property="HorizontalAlignment"
+
+        <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
+            <Setter Property="HorizontalContentAlignment"
                     Value="Left" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
             <Setter Property="FontSize"
                     Value="20" />
-            <!--<Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveBgColor}" />-->
-            <Setter Property="Margin"
-                    Value="0" />
         </Style>
 
         <!--  DATAGRIDS  -->
@@ -375,7 +394,7 @@
             <Border Grid.Row="1"
                     Grid.ColumnSpan="6"
                     MinHeight="50"
-                    Margin="0,10,0,10"
+                    Margin="0,10,0,20"
                     Padding="10"
                     Background="Transparent">
                 <TextBox Grid.Row="1"
@@ -411,11 +430,7 @@
                                          Margin="10,5"
                                          Content="{Binding}">
                 <TransitioningContentControl.PageTransition>
-                    <CompositePageTransition>
-                        <CrossFade Duration="0:00:00.500" />
-                        <PageSlide Duration="0:00:00.500"
-                                   Orientation="Horizontal" />
-                    </CompositePageTransition>
+                    <CrossFade Duration="0:00:00.500" />
                 </TransitioningContentControl.PageTransition>
                 <TransitioningContentControl.DataTemplates>
 

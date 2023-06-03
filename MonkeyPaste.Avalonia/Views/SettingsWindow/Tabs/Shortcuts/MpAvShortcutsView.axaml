@@ -25,9 +25,16 @@
 
         <!--  APPLICATION SHORTCUTS  -->
 
-        <Expander IsExpanded="True"
-                  Header="Application">
-          <Expander.Content>
+        <Expander IsExpanded="True">
+            <Expander.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Classes="expander header icon"
+                           Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+                    <TextBlock Classes="expander header text"
+                               Text="Commands" />
+                </StackPanel>
+            </Expander.Header>
+            <Expander.Content>
                 <local:MpAvShortcutDataGridView DataContext="{Binding FilteredItems}" />
             </Expander.Content>
         </Expander>
@@ -44,8 +51,15 @@
         <!--  PASTE INTEROP SHORTCUTS  -->
 
         <Expander DataContext="{x:Static local:MpAvAppCollectionViewModel.Instance}"
-                  x:DataType="local:MpAvAppCollectionViewModel"
-                  Header="Custom Paste Commands">
+                  x:DataType="local:MpAvAppCollectionViewModel">
+            <Expander.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Classes="expander header icon"
+                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+                    <TextBlock Classes="expander header text"
+                               Text="Custom Paste Commands" />
+                </StackPanel>
+            </Expander.Header>
             <Expander.Content>
                 <StackPanel>
 

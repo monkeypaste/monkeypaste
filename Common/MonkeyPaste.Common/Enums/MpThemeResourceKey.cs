@@ -48,6 +48,8 @@
         ThemeGrayAccent2,
         ThemeGrayAccent3,
 
+        ThemeShadowFg,
+
         PostThemeIdx,
         #endregion
 

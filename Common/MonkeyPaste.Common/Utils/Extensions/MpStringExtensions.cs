@@ -799,6 +799,38 @@ namespace MonkeyPaste.Common {
             return stringCollection;
         }
 
+        public static string IncludeOrRemoveHexAlpha(this string hexStr, bool remove, string alpha_to_include = "FF", bool force_included = false) {
+            if (remove) {
+                return hexStr.RemoveHexAlpha();
+            }
+            if (!force_included && hexStr.Length == 9) {
+                return hexStr;
+            }
+            hexStr = hexStr.RemoveHexAlpha(out string removed_alpha);
+            if (!force_included && !string.IsNullOrEmpty(removed_alpha)) {
+                alpha_to_include = removed_alpha;
+            }
+
+            return $"#{alpha_to_include}{hexStr}";
+        }
+
+        public static string RemoveHexAlpha(this string hexStr) {
+            return hexStr.RemoveHexAlpha(out string _);
+        }
+
+        public static string RemoveHexAlpha(this string hexStr, out string removedAlpha) {
+            removedAlpha = string.Empty;
+
+            if (string.IsNullOrEmpty(hexStr) ||
+                !hexStr.StartsWith("#") ||
+                hexStr.Length < 9) {
+                return hexStr;
+            }
+            var hex_chars = hexStr.ToCharArray();
+            removedAlpha = string.Join(string.Empty, hex_chars.Skip(1).Take(2));
+            return string.Join(string.Empty, hexStr.ToCharArray().Take(1).Skip(2).Take(6));
+        }
+
         public static bool IsStringHexColor(this string str) {
             if (string.IsNullOrWhiteSpace(str)) {
                 return false;

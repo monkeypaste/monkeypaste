@@ -2,10 +2,12 @@
 // #region Life Cycle
 
 function initPlainHtmlConverter() {
+	getEditorContainerElement().classList.add('html-converter');
+
 	globals.quill = initQuill();
 	initClipboard();
-
 	getEditorElement().classList.add('ql-editor-converter');
+
 
 	globals.IsConverterLoaded = true;
 	globals.IsLoaded = true;
@@ -26,7 +28,7 @@ function initPlainHtmlConverter() {
 // #region State
 
 function isPlainHtmlConverter() {
-	return window.location.search.toLowerCase().includes(HTML_CONVERTER_PARAMS.toLowerCase());
+	return getEditorContainerElement().classList.contains('html-converter');
 }
 // #endregion State
 

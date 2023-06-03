@@ -548,13 +548,12 @@ namespace MonkeyPaste.Avalonia {
             this.TextWrapping = TextWrapping.NoWrap;
             this.ClipToBounds = true;
             this.BorderThickness = new Thickness(0);
+            this.Background = Brushes.Transparent;
             //this.MinHeight = 5;
             this.IsReadOnly = true;
             if (!this.FontSize.IsNumber() || this.FontSize < 1) {
                 this.FontSize = 1;
             }
-            //this.HorizontalAlignment = HorizontalAlignment.Stretch;
-            //this.VerticalAlignment = VerticalAlignment.Stretch;
 
             ScrollViewer.SetVerticalScrollBarVisibility(this, ScrollBarVisibility.Hidden);
             ScrollViewer.SetHorizontalScrollBarVisibility(this, ScrollBarVisibility.Hidden);
