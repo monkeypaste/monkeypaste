@@ -16,6 +16,7 @@ function getDelta(rangeObj) {
 
 	return delta;
 }
+
 // #endregion Getters
 
 // #region Setters
@@ -71,7 +72,7 @@ function convertDeltaToHtml(delta, encodeHtmlEntities) {
 	let cfg = {
 		//inlineStyles: true,
 		//allowBackgroundClasses: true,
-
+		customCssClasses: onCustomCssClasses,
 		customTagAttributes: onCustomTagAttributes,
 		encodeHtml: encodeHtmlEntities
 	};
@@ -241,52 +242,64 @@ function applyDelta(delta, source = 'api') {
 // #endregion Actions
 
 // #region Event Handlers
+function onCustomCssClasses(op) {
+	if (!op ||
+		op.attributes === undefined) {
+		return;
+	}
+
+	let custom_classes = [];
+	if (op.attributes.fontBgColorOverride == 'on') {
+		custom_classes.push('font-bg-color-override-on');
+	}
+	if (op.attributes.fontColorOverride == 'on') {
+		custom_classes.push('font-color-override-on');
+	}
+	return custom_classes;
+}
 function onCustomTagAttributes(op) {
-	if (op) {
-		//if (op.type == 'template') {
-		//	let temp_span = document.createElement('span');
-		//	return applyTemplateToDomNode(temp_span, getTemplateDefByGuid(op.template.templateGuid)).outerHTML;
-		//}
-		if (op.attributes !== undefined) {
-			var classes = [];
-			if (op.attributes.size !== undefined) {
-				// FONT SIZE (NOT UNIQUE)
-				let font_size_class = `ql-size-${op.attributes.size.split('px')[0]}`;
-				log('class added: ' + font_size_class);
-				//classes.push(font_size_class);
-			}
+	if (!op ||
+		op.attributes === undefined) {
+		return;
+	}
 
-			if (op.attributes.list !== undefined) {
-				// LIST TYPE
-				let li_type = op.attributes.list;
-				let li_val = '';
+	//if (op.type == 'template') {
+	//	let temp_span = document.createElement('span');
+	//	return applyTemplateToDomNode(temp_span, getTemplateDefByGuid(op.template.templateGuid)).outerHTML;
+	//}
+	var classes = [];
+	if (op.attributes.size !== undefined) {
+		// FONT SIZE (NOT UNIQUE)
+		let font_size_class = `ql-size-${op.attributes.size.split('px')[0]}`;
+		log('class added: ' + font_size_class);
+		//classes.push(font_size_class);
+	}
+	if (op.attributes.list !== undefined) {
+		// LIST TYPE
+		let li_type = op.attributes.list;
+		let li_val = '';
 
-				if (op.insert.type === 'text') {
-					li_val = op.insert.value;
+		if (op.insert.type === 'text') {
+			li_val = op.insert.value;
 
-					// TODO add font classes here if any (wrap in span)
-				}
-				//return `<li data-list="${li_type}">${li_val}</li>`;
-
-				return { 'data-list': li_type };
-			} else if (globals.TableDeltaAttrbs.some(x => op.attributes[x] !== undefined)) {
-				// TABLES
-
-				if (op.attributes['table-col'] !== undefined) {
-
-				}
-			} else if (!isNullOrUndefined(op.insert) && op.insert.type == 'text') {
-				if (classes.length > 0) {
-					//var formatted_result = `<span class="${classes.join(' ')}">${op.insert.value}</span>`;
-					//log(formatted_result);
-					//return formatted_result;
-					return { 'class': classes.join(' ') };
-				}
-			}
+			// TODO add font classes here if any (wrap in span)
 		}
-		// unhandled op
-		//debugger;
+		//return `<li data-list="${li_type}">${li_val}</li>`;
 
+		return { 'data-list': li_type };
+	} else if (globals.TableDeltaAttrbs.some(x => op.attributes[x] !== undefined)) {
+		// TABLES
+
+		if (op.attributes['table-col'] !== undefined) {
+
+		}
+	} else if (!isNullOrUndefined(op.insert) && op.insert.type == 'text') {
+		if (classes.length > 0) {
+			//var formatted_result = `<span class="${classes.join(' ')}">${op.insert.value}</span>`;
+			//log(formatted_result);
+			//return formatted_result;
+			return { 'class': classes.join(' ') };
+		}
 	}
 }
 // #endregion Event Handlers

@@ -323,63 +323,57 @@ function normalizeRgba(rgba) {
 }
 
 function rgb2hsl(rgb) {
-    const alpha = isNullOrUndefined(rgb.a) ? null : rgb.a;
-    let nrgb = normalizeRgba(rgb);
-    const r = rgb.r;
-    const g = rgb.g;
-    const b = rgb.b;
+    //// from https://www.30secondsofcode.org/js/s/rgb-to-hsl/
 
-    // from https://www.30secondsofcode.org/js/s/rgb-to-hsl/
-
-    // in: r,g,b in [0,1],
-    // out: The range of the resulting values is H: [0, 360], S: [0, 100], L: [0, 100].
-    const l = Math.max(r, g, b);
-    const s = l - Math.min(r, g, b);
-    const h = s
-        ? l === r
-            ? (g - b) / s
-            : l === g
-                ? 2 + (b - r) / s
-                : 4 + (r - g) / s
-        : 0;
-    let result = [
-        60 * h < 0 ? 60 * h + 360 : 60 * h,
-        100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0),
-        (100 * (2 * l - s)) / 2,
-    ];
+    const RGBToHSL = (r, g, b) => {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+        const l = Math.max(r, g, b);
+        const s = l - Math.min(r, g, b);
+        const h = s
+            ? l === r
+                ? (g - b) / s
+                : l === g
+                    ? 2 + (b - r) / s
+                    : 4 + (r - g) / s
+            : 0;
+        return [
+            60 * h < 0 ? 60 * h + 360 : 60 * h,
+            100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0),
+            (100 * (2 * l - s)) / 2,
+        ];
+    };
+    let result = RGBToHSL(rgb.r, rgb.g, rgb.b);
     let output = {
         h: result[0],
         s: result[1],
         l: result[2]
     };
-    if (alpha) {
-        output.a = alpha;
+    if (rgb.a !== undefined) {
+        output.a = rgb.a;
     }
     return output;
 }
 function hsl2Rgb(hsl) {
-    const alpha = isNullOrUndefined(hsl.a) ? null : hsl.a;
-    let h = hsl.h;
-    let s = hsl.s;
-    let l = hsl.l;
-    // from https://www.30secondsofcode.org/js/s/hsl-to-rgb/
-    // in: H: [0, 360], S: [0, 100], L: [0, 100].
-    // out: [0, 255].
+    const HSLToRGB = (h, s, l) => {
+        s /= 100;
+        l /= 100;
+        const k = n => (n + h / 30) % 12;
+        const a = s * Math.min(l, 1 - l);
+        const f = n =>
+            l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+        return [255 * f(0), 255 * f(8), 255 * f(4)];
+    };
 
-    s /= 100;
-    l /= 100;
-    const k = n => (n + h / 30) % 12;
-    const a = s * Math.min(l, 1 - l);
-    const f = n =>
-        l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-    let result = [255 * f(0), 255 * f(8), 255 * f(4)];
+    let result = HSLToRGB(hsl.h, hsl.s, hsl.l);
     let output = {
         r: result[0],
         g: result[1],
         b: result[2]
     };
-    if (alpha) {
-        output.a = alpha;
+    if (hsl.a !== undefined) {
+        output.a = hsl.a;
     }
     return output;
 }
@@ -446,6 +440,37 @@ function colorNameToHex(color) {
 
     return false;
 }
+
+function adjustBgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
+    let rgba = cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str);
+    let hsl = rgb2hsl(rgba);
+    if (globals.EditorTheme == 'light') {
+        hsl.l = Math.max(hsl.l, 85);
+    } else {
+        hsl.l = Math.min(hsl.l, 15);
+    }
+    let adj_rgb = hsl2Rgb(hsl);
+    adj_rgb.a = 0;// Math.min(rgba.a, 0.5);
+
+    let css_rgba = rgbaToCssColor(adj_rgb);
+    return css_rgba;
+}
+
+function adjustFgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
+    let rgba = cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str);
+    let hsl = rgb2hsl(rgba);
+    if (globals.EditorTheme == 'dark') {
+        hsl.l = Math.max(hsl.l == 0 ? 100 : hsl.l, 50);
+    } else {
+        hsl.l = Math.min(hsl.l == 100 ? 0 : hsl.l, 50);
+    }
+    let adj_rgb = hsl2Rgb(hsl);
+    adj_rgb.a = 1;
+
+    let css_rgba = rgbaToCssColor(adj_rgb);
+    return css_rgba;
+}
+
 // #endregion Actions
 
 // #region Event Handlers

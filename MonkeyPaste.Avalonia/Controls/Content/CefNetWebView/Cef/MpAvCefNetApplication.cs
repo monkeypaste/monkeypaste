@@ -204,7 +204,7 @@ namespace MonkeyPaste.Avalonia {
             //commandLine.AppendSwitchWithValue("enable-blink-features", "CSSPseudoHas");
 
             commandLine.AppendSwitch("disable-component-update");
-            commandLine.AppendSwitch("process-per-site");
+            //commandLine.AppendSwitch("process-per-site");
             if (OperatingSystem.IsLinux()) {
                 commandLine.AppendSwitch("no-zygote");
                 commandLine.AppendSwitch("no-sandbox");

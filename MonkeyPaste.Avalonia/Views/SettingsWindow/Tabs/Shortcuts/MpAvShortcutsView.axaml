@@ -58,14 +58,16 @@
                            Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
                     <TextBlock Classes="expander header text"
                                Text="Custom Paste Commands" />
+                    <local:MpAvToolTipInfoHintView ToolTipText="#p#Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.#p##p#Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
-                <StackPanel>
+                <Grid RowDefinitions="*,Auto">
 
                     <!--  PASTE SHORTCUT DATAGRID  -->
 
-                    <Border Classes="filterDataGridContainer">
+                    <Border Grid.Row="0"
+                            Classes="filterDataGridContainer">
                         <Grid>
                             <DataGrid x:Name="ShortcutDatagrid"
                                       local:MpAvDataGridRefreshExtension.IsEnabled="True"
@@ -110,16 +112,8 @@
 
 
                                     <!--  PASTE GESTURE VIEW  -->
-                                    <DataGridTemplateColumn Width="0.5*">
-                                        <DataGridTemplateColumn.HeaderTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal"
-                                                            Spacing="5">
-                                                    <TextBlock Text="Paste Shortcut" />
-                                                    <local:MpAvToolTipInfoHintView ToolTipText="#p#Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.#p##p#Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)" />
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.HeaderTemplate>
+                                    <DataGridTemplateColumn Width="0.5*"
+                                                            Header="Paste Shortcut">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <local:MpAvShortcutView Background="Transparent"
@@ -164,7 +158,8 @@
 
                     <!--  ADD PASTE SHORTCUT BUTTON  -->
 
-                    <DropDownButton HorizontalAlignment="Right"
+                    <DropDownButton Grid.Row="1"
+                                    HorizontalAlignment="Right"
                                     Classes="dataGridAddButton defaultButton iconTextButton"
                                     Command="{Binding ShowAppSelectorFlyoutCommand}"
                                     CommandParameter="{Binding $self}">
@@ -174,7 +169,7 @@
                             <TextBlock Text="Add" />
                         </DockPanel>
                     </DropDownButton>
-                </StackPanel>
+                </Grid>
             </Expander.Content>
         </Expander>
     </StackPanel>

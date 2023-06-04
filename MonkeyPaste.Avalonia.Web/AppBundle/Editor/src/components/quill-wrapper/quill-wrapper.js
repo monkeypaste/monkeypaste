@@ -263,6 +263,7 @@ function updateQuill() {
 	}
 	globals.quill.update();
 }
+
 // #endregion Actions
 
 // #region Event Handlers

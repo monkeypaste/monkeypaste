@@ -18,6 +18,7 @@ function initAllMatchers() {
     }
     initSpecialCharacterMatcher();
     initLinkMatcher();
+    initFontColorMatcher();
     initFontFamilyMatcher();
     initFontSizeMatcher();
     initCheckableListMatcher();
@@ -100,6 +101,44 @@ function initCheckableListMatcher() {
 
                 }
             }
+        }
+        return delta;
+    });
+}
+function initFontColorMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    globals.quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+        if (!delta || delta.ops === undefined || delta.ops.length == 0) {
+            return delta;
+        }
+        for (var i = 0; i < delta.ops.length; i++) {
+            if (delta.ops[i].attributes === undefined) {
+                if (delta.ops[i].insert !== undefined) {
+                    // don't exclude inserts to set default fg color
+                    delta.ops[i].attributes = {
+                        color: getElementComputedStyleProp(document.body,'--defcontentfgcolor')
+                    };
+                } else {
+                    continue;
+                }
+            }
+
+            if ((delta.ops[i].attributes.fontBgColorOverride === undefined ||
+                delta.ops[i].attributes.fontBgColorOverride == 'off') &&
+                delta.ops[i].attributes.background !== undefined) {
+                delta.ops[i].attributes.background = adjustBgToTheme(delta.ops[i].attributes.background);
+            }
+
+            if ((delta.ops[i].attributes.fontColorOverride === undefined ||
+                delta.ops[i].attributes.fontColorOverride == 'off') &&
+                delta.ops[i].attributes.color !== undefined) {
+                delta.ops[i].attributes.color = adjustFgToTheme(delta.ops[i].attributes.color);
+            } 
         }
         return delta;
     });
