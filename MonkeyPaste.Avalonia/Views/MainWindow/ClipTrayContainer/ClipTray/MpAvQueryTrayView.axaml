@@ -19,6 +19,8 @@
         </sys:TimeSpan>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+
+
         <!--  Requery tile opacity  -->
 
         <Style Selector="ListBox.queryListBox.notrequerying > ListBoxItem">
@@ -192,13 +194,8 @@
                              Source="{x:Static local:MpAvMainWindowViewModel.Instance}" />
                 </MultiBinding>
             </Border.IsVisible>
-            <TextBlock HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       TextAlignment="Center"
-                       TextWrapping="Wrap"
-                       FontSize="42"
-                       Text="{Binding EmptyQueryTrayText}"
-                       Classes="disabled" />
+            <TextBlock Text="{Binding EmptyQueryTrayText}"
+                       Classes="disabled emptyTrayText" />
         </Border>
 
 
@@ -208,6 +205,7 @@
                 Background="{DynamicResource SearchCriteriaRowBgBrush1}"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
+                MaxWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                 DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}">
             <Border.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">

@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
             if (copyItemId <= 0) {
                 throw new Exception("CopyItemId required to create transaction");
             }
-            if (source_ref_uris == null || source_ref_uris.Count() == 0) {
+            if (source_ref_uris == null || !source_ref_uris.Any()) {
                 throw new Exception("Must provide transaction references");
             }
             if (transactionType != MpTransactionType.Analyzed) {

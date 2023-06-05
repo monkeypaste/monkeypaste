@@ -73,7 +73,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static T AggregateOrDefault<T>(this IEnumerable<T> enumerable, Func<T, T, T> func) {
-            if (enumerable == null || enumerable.Count() == 0) {
+            if (enumerable == null || !enumerable.Any()) {
                 return default;
             }
             return enumerable.Aggregate(func);
@@ -197,7 +197,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> list) {
-            return list == null || list.Count() == 0;
+            return list == null || !list.Any();
         }
 
         public static bool IsNullOrEmpty<T>(this ICollection<T> list) {

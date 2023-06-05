@@ -104,10 +104,11 @@ namespace MonkeyPaste.Avalonia {
                 isDown ?
                 _eventSimulator.SimulateKeyPress(key) :
                 _eventSimulator.SimulateKeyRelease(key);
+
             MpDebug.Assert(
                 result == UioHookResult.Success,
                 $"Error {(isDown ? "pressing" : "releasing")} key: '{key}' in seq: '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' error: '{result}'",
-                true);
+                false);
         }
 
         private IEnumerable<KeyCode> ClearDownState() {

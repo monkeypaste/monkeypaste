@@ -85,6 +85,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
+        public const double PHI = 1.618033988749894d;
         #endregion
 
         #region Statics

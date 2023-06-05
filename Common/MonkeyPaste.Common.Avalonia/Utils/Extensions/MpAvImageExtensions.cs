@@ -50,6 +50,9 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static string ToBase64String(this Bitmap bmp, int quality = 100) {
+            if (bmp == null) {
+                return string.Empty;
+            }
             return Convert.ToBase64String(bmp.ToByteArray(quality));
         }
 
@@ -116,6 +119,9 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static Bitmap? Scale(this Bitmap bmpSrc, MpSize newScale) {
+            if (bmpSrc == null) {
+                return null;
+            }
             MpSize size = new MpSize(bmpSrc.PixelSize.Width * (int)newScale.Width, bmpSrc.PixelSize.Height * (int)newScale.Height);
             return Resize(bmpSrc, size);
         }

@@ -19,7 +19,7 @@
 
     <StackPanel Grid.Column="0"
                 Orientation="Vertical"
-                Spacing="10"
+                Spacing="25"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
 
@@ -48,76 +48,78 @@
                             <Label Content="Add Application" />
                         </DockPanel>
                     </Button>
-                    <DataGrid Grid.Row="1"
-                              x:Name="ExcludedAppDatagrid"
-                              ItemsSource="{Binding FilteredItems}"
-                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                              Focusable="True"
-                              CanUserResizeColumns="True"
-                              IsReadOnly="False">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Width="30">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Width="15"
-                                               Height="15"
-                                               Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Name"
-                                                    CanUserSort="True"
-                                                    SortMemberPath="AppName"
-                                                    CanUserResize="True"
-                                                    Width="0.5*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Grid Classes="marqueeContainer">
-                                            <local:MpAvMarqueeTextBox EditOnFocus="False"
-                                                                      DropShadowBrush="Transparent"
-                                                                      ReadOnlyForeground="Black"
-                                                                      SelectViewModelOnFocus="False"
-                                                                      Text="{Binding AppName}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Process Path"
-                                                    CanUserSort="True"
-                                                    SortMemberPath="AppPath"
-                                                    CanUserResize="True"
-                                                    Width="0.5*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Grid Classes="marqueeContainer">
-                                            <local:MpAvMarqueeTextBox EditOnFocus="False"
-                                                                      DropShadowBrush="Transparent"
-                                                                      ReadOnlyForeground="Black"
-                                                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                                                      NavigateUriCommandParameter="{Binding AppPath, Converter={x:Static local:MpAvFileToFolderPathConverter.Instance}}"
-                                                                      Text="{Binding AppPath}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="100"
-                                                    CanUserSort="True"
-                                                    SortMemberPath="IsRejected"
-                                                    Header="Exclude">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox local:MpAvPointerCommandExtension.IsEnabled="{Binding IsSelected}"
-                                                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
-                                                  local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding .}"
-                                                  IsChecked="{Binding IsRejected, Mode=OneWay}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                    <Border Classes="filterDataGridContainer">
+                        <DataGrid Grid.Row="1"
+                                  x:Name="ExcludedAppDatagrid"
+                                  HeadersVisibility="All"
+                                  CanUserResizeColumns="True"
+                                  ItemsSource="{Binding FilteredItems}"
+                                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                  Focusable="True"
+                                  IsReadOnly="False">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="30"
+                                                        CanUserResize="False">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Width="15"
+                                                   Height="15"
+                                                   Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Name"
+                                                        CanUserSort="True"
+                                                        SortMemberPath="AppName"
+                                                        Width="0.5*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid Classes="marqueeContainer">
+                                                <local:MpAvMarqueeTextBox EditOnFocus="False"
+                                                                          DropShadowBrush="Transparent"
+                                                                          ReadOnlyForeground="Black"
+                                                                          SelectViewModelOnFocus="False"
+                                                                          Text="{Binding AppName}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Process Path"
+                                                        CanUserSort="True"
+                                                        SortMemberPath="AppPath"
+                                                        Width="0.5*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid Classes="marqueeContainer">
+                                                <local:MpAvMarqueeTextBox EditOnFocus="False"
+                                                                          DropShadowBrush="Transparent"
+                                                                          ReadOnlyForeground="Black"
+                                                                          NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                                                          NavigateUriCommandParameter="{Binding AppPath, Converter={x:Static local:MpAvFileToFolderPathConverter.Instance}}"
+                                                                          Text="{Binding AppPath}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="100"
+                                                        CanUserSort="True"
+                                                        CanUserResize="False"
+                                                        SortMemberPath="IsRejected"
+                                                        Header="Exclude">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox local:MpAvPointerCommandExtension.IsEnabled="{Binding IsSelected}"
+                                                      local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
+                                                      local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding .}"
+                                                      IsChecked="{Binding IsRejected, Mode=OneWay}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
 
 
-                        </DataGrid.Columns>
-                    </DataGrid>
-
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
                 </DockPanel>
             </Expander.Content>
         </Expander>
@@ -148,88 +150,90 @@
                         <Label Content="Add Url" />
                     </DockPanel>
                 </Button>
-                <DataGrid Grid.Row="1"
-                          x:Name="ExcludedUrlDatagrid"
-                          ItemsSource="{Binding FilteredItems}"
-                          SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="30">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Image Width="15"
-                                           Height="15"
-                                           Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Url"
-                                                CanUserSort="True"
-                                                CanUserResize="True"
-                                                SortMemberPath="UrlPath"
-                                                Width="*">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid Classes="marqueeContainer">
-                                        <local:MpAvMarqueeTextBox EditOnFocus="False"
-                                                                  DropShadowBrush="Transparent"
-                                                                  ReadOnlyForeground="Black"
-                                                                  Text="{Binding UrlPath}"
-                                                                  NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                                                  NavigateUriCommandParameter="{Binding UrlPath}" />
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Domain"
-                                                CanUserResize="True"
-                                                CanUserSort="True"
-                                                SortMemberPath="UrlDomainPath"
-                                                Width="Auto">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid Classes="marqueeContainer">
-                                        <local:MpAvMarqueeTextBox EditOnFocus="False"
-                                                                  DropShadowBrush="Transparent"
-                                                                  ReadOnlyForeground="Black"
-                                                                  Text="{Binding UrlDomainPath}" />
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="120"
-                                                SortMemberPath="IsSubRejected">
 
-                            <DataGridTemplateColumn.HeaderTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal"
-                                                Spacing="5">
-                                        <TextBlock Text="Exclude Url?" />
+                <Border Classes="filterDataGridContainer">
+                    <DataGrid x:Name="ExcludedUrlDatagrid"
+                              ItemsSource="{Binding FilteredItems}"
+                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="30"
+                                                    CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Width="15"
+                                               Height="15"
+                                               Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Url"
+                                                    CanUserSort="True"
+                                                    SortMemberPath="UrlPath"
+                                                    Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid Classes="marqueeContainer">
+                                            <local:MpAvMarqueeTextBox EditOnFocus="False"
+                                                                      DropShadowBrush="Transparent"
+                                                                      ReadOnlyForeground="Black"
+                                                                      Text="{Binding UrlPath}"
+                                                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                                                      NavigateUriCommandParameter="{Binding UrlPath}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Domain"
+                                                    CanUserSort="True"
+                                                    SortMemberPath="UrlDomainPath"
+                                                    Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid Classes="marqueeContainer">
+                                            <local:MpAvMarqueeTextBox EditOnFocus="False"
+                                                                      DropShadowBrush="Transparent"
+                                                                      ReadOnlyForeground="Black"
+                                                                      Text="{Binding UrlDomainPath}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="120"
+                                                    CanUserResize="False"
+                                                    SortMemberPath="IsSubRejected">
 
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.HeaderTemplate>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox local:MpAvPointerCommandExtension.IsEnabled="True"
-                                              local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand}"
-                                              IsChecked="{Binding IsSubRejected, Mode=OneWay}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="120"
-                                                SortMemberPath="IsRejected"
-                                                Header="Exclude Domain?">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <CheckBox local:MpAvPointerCommandExtension.IsEnabled="True"
-                                              local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand}"
-                                              IsChecked="{Binding IsRejected, Mode=OneWay}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                                <DataGridTemplateColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal"
+                                                    Spacing="5">
+                                            <TextBlock Text="Exclude Url?" />
 
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.HeaderTemplate>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand}"
+                                                  IsChecked="{Binding IsSubRejected, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="120"
+                                                    CanUserResize="False"
+                                                    SortMemberPath="IsRejected"
+                                                    Header="Exclude Domain?">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand}"
+                                                  IsChecked="{Binding IsRejected, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
             </DockPanel>
         </Expander>
     </StackPanel>

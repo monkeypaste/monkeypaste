@@ -137,6 +137,8 @@ namespace MonkeyPaste.Avalonia {
         public string WarningString2 { get; set; }
 
         public bool IsValid { get; set; } = false;
+
+        public bool IsUserDefinedShortcut { get; set; }
         #endregion
 
         #region Appearance
@@ -144,6 +146,12 @@ namespace MonkeyPaste.Avalonia {
         public string ShortcutDisplayName { get; set; }
 
         public object IconResourceObj { get; set; }
+        public string ClearButtonLabel =>
+            IsUserDefinedShortcut ?
+                "Delete" :
+                _curShortcutId > 0 ?
+                    "Clear" :
+                    string.Empty;
         #endregion
 
         #region Model
@@ -190,6 +198,8 @@ namespace MonkeyPaste.Avalonia {
             ShortcutDisplayName = shortcutName;
             IconResourceObj = iconResourceObj;
             AssignmentType = assignmentType;
+
+            IsUserDefinedShortcut = MpAvShortcutCollectionViewModel.Instance.Items.Any(x => x.ShortcutId == _curShortcutId && x.IsCustom);
 
             if (AssignmentType == MpShortcutAssignmentType.CanBeGlobalCommand) {
                 CanBeGlobal = true;

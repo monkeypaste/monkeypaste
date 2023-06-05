@@ -176,7 +176,7 @@ namespace MonkeyPaste {
             // WHERE
 
             string whereClause = string.Empty;
-            if (!tagIds.Contains(MpTag.AllTagId)) {
+            if (tagIds != null && !tagIds.Contains(MpTag.AllTagId)) {
 
                 whereClause = AddWhereCondition(
                     whereClause,

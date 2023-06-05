@@ -281,8 +281,14 @@ namespace MonkeyPaste.Avalonia {
             IsBusy || Children.Any(x => x.IsAnyBusy);
 
         public ObservableCollection<int> CopyItemIdsNeedingView { get; set; } = new ObservableCollection<int>();
+        //public int BadgeCount =>
+        //    CopyItemIdsNeedingView.Count;
         public int BadgeCount =>
-            CopyItemIdsNeedingView.Count;
+            SelfAndAllDescendants
+            .Cast<MpAvTagTileViewModel>()
+            .SelectMany(x => x.CopyItemIdsNeedingView)
+            .Distinct()
+            .Count();
 
         public bool CanAddChild =>
             !IsQueryTag && !IsFormatGroupTag && !IsAllTag;
@@ -1047,10 +1053,10 @@ namespace MonkeyPaste.Avalonia {
             foreach (int ciid in CopyItemIdsNeedingView) {
                 var civm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
                 if (civm != null) {
-                    if (civm.IsPinned) {
-                        // only mark item as seen if viewed in its query tray
-                        continue;
-                    }
+                    //if (civm.IsPinned) {
+                    //    // only mark item as seen if viewed in its query tray
+                    //    continue;
+                    //}
                     if (civm.IsAnyQueryCornerVisible && IsSelected) {
                         idsSeen.Add(ciid);
                     }

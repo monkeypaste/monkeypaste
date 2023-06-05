@@ -49,6 +49,7 @@
                       local:MpAvDataGridRefreshExtension.IsEnabled="True"
                       IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                       CanUserSortColumns="True"
+                      CanUserResizeColumns="True"
                       ItemsSource="{Binding}"
                       IsReadOnly="False"
                       AutoGenerateColumns="False">
@@ -145,7 +146,7 @@
                                         Classes.canDelete="{Binding CanDelete}"
                                         Classes="defaultButton outline outlineOver"
                                         Classes.disabled="{Binding CanDeleteOrReset}"
-                                        IsEnabled="{Binding CanDeleteOrReset}"
+                                        IsVisible="{Binding CanDeleteOrReset}"
                                         HorizontalAlignment="Center"
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
                                         local:MpAvPointerCommandExtension.LeftPressCommand="{Binding DeleteOrResetThisShortcutCommand}"

@@ -7,7 +7,7 @@ namespace MonkeyPaste.Common {
             return ToCsv(strList, csvObj.CsvFormat);
         }
         public static string ToCsv(this IEnumerable<string> strList, MpCsvFormatProperties csvProps = null) {
-            if (strList == null || strList.Count() == 0) {
+            if (strList == null || !strList.Any()) {
                 return string.Empty;
             }
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;

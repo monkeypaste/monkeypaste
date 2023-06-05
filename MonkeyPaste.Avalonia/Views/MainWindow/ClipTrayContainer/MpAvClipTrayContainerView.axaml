@@ -16,6 +16,23 @@
 
     <local:MpAvUserControl.Styles>
 
+        <!--  EMPTY TEXT  -->
+        <Style Selector="TextBlock.emptyTrayText">
+            <Setter Property="FontSize"
+                    Value="42" />
+            <Setter Property="Margin"
+                    Value="20" />
+            <Setter Property="TextWrapping"
+                    Value="NoWrap" />
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+          <Setter Property="ClipToBounds"
+                    Value="False" />
+        </Style>
         <!--  PIN TRAY  -->
 
         <Style Selector="local|MpAvPinTrayView Border#PinTrayContainerBorder">
@@ -131,14 +148,15 @@
                                local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedPinTrayScreenWidth, Mode=TwoWay}"
                                local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedPinTrayScreenHeight, Mode=TwoWay}" />
         <!--  PIN/QUERY SPLITTER  -->
-        <GridSplitter x:Name="ClipTraySplitter"
-                      Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                      Classes.clipTraySplitter="True"
-                      Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-                      Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-                      local:MpAvPointerCommandExtension.IsEnabled="True"
-                      local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTraySplitterCommand}"
-                      local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="{Binding $self}" />
+        <local:MpAvMovableGridSplitter x:Name="ClipTraySplitter"
+                                       Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
+                                       Classes.clipTraySplitter="True"
+                                       Classes.vertical="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                                       Classes.horizontal="{Binding IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                                       local:MpAvPointerCommandExtension.IsEnabled="True"
+                                       local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                                       local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTraySplitterCommand}"
+                                       local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="{Binding $self}" />
 
         <!--  QUERY TRAY  -->
         <local:MpAvQueryTrayView x:Name="ClipTrayView"

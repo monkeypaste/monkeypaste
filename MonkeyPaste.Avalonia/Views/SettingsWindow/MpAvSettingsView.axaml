@@ -133,10 +133,18 @@
                     Value="0,10,0,0" />
         </Style>
 
+        <!--  HEADER TEXT  -->
+
         <!--  HEADER ICON  -->
         <Style Selector=":is(Control).header">
             <Setter Property="Margin"
                     Value="0,0,10,0" />
+        </Style>
+        <Style Selector="TextBlock.frame.header.text">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeWhite}" />
+            <Setter Property="FontSize"
+                    Value="18" />
         </Style>
 
         <Style Selector="Image.expander.header.icon">

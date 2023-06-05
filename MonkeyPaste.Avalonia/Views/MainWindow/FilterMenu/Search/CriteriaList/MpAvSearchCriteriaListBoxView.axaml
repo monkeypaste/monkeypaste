@@ -27,6 +27,7 @@
         <sys:Double x:Key="CriteriaOptionMinWidth">150</sys:Double>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+
         <!--  READONLY CRITERIA LBI  -->
         <Style Selector="ListBox.criteriaList:not(.alterable) > ListBoxItem">
             <Setter Property="IsEnabled"

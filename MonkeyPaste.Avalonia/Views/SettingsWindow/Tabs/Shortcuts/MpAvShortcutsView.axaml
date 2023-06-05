@@ -21,7 +21,7 @@
     </local:MpAvUserControl.Styles>
     <StackPanel Orientation="Vertical"
                 Margin="0,20,0,0"
-                Spacing="10">
+                Spacing="25">
 
         <!--  APPLICATION SHORTCUTS  -->
 
@@ -73,6 +73,7 @@
                                       local:MpAvDataGridRefreshExtension.IsEnabled="True"
                                       IsVisible="{Binding CustomPasteItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                       CanUserSortColumns="True"
+                                      CanUserResizeColumns="True"
                                       Focusable="True"
                                       ItemsSource="{Binding CustomPasteItems}"
                                       IsReadOnly="False"
@@ -81,7 +82,8 @@
 
                                     <!--  APP ICON  -->
 
-                                    <DataGridTemplateColumn Width="30">
+                                    <DataGridTemplateColumn Width="30"
+                                                            CanUserResize="False">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Image Width="15"
@@ -95,7 +97,6 @@
                                     <DataGridTemplateColumn Header="Name"
                                                             CanUserSort="True"
                                                             SortMemberPath="AppName"
-                                                            CanUserResize="True"
                                                             Width="0.5*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>

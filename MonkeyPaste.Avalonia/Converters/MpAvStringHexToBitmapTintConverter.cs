@@ -26,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
                 paramStr = paramStr.Replace("themebg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString()));
                 paramStr = paramStr.Replace("themefg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveColor.ToString()));
                 paramStr = paramStr.Replace("themeaccent1fg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1Color.ToString()));
+                paramStr = paramStr.Replace("themeaccent2fg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent2Color.ToString()));
                 paramStr = paramStr.Replace("themeaccent1bg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1BgColor.ToString()));
                 paramStr = paramStr.Replace("themeaccent5bg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent5BgColor.ToString()));
                 paramStr = paramStr.Replace("themegray1", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent1.ToString()));

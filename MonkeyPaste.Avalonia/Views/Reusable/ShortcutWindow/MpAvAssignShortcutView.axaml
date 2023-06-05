@@ -1,6 +1,7 @@
 <local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvAssignShortcutView"
                        xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
@@ -186,18 +187,18 @@
 
         <!--  DIALOG BUTTONS  -->
 
-        <StackPanel Grid.Row="6"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom">
-            <StackPanel.Styles>
+        <DockPanel Grid.Row="6"
+                   Margin="20,0,20,0"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Bottom">
+            <DockPanel.Styles>
                 <Style Selector="Button">
                     <Setter Property="Margin"
                             Value="10" />
                     <Setter Property="Padding"
                             Value="5,3" />
-                    <Setter Property="MinWidth"
-                            Value="30" />
+                    <Setter Property="Width"
+                            Value="100" />
                     <Setter Property="HorizontalAlignment"
                             Value="Stretch" />
                     <Setter Property="HorizontalContentAlignment"
@@ -205,19 +206,23 @@
                     <Setter Property="VerticalContentAlignment"
                             Value="Center" />
                 </Style>
-            </StackPanel.Styles>
-            <Button Classes="defaultButton textOnlyButton"
+            </DockPanel.Styles>
+            <Button DockPanel.Dock="Left"
+                    Classes="defaultButton textOnlyButton"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding $self}"
                     Content="Cancel" />
-            <Button Classes="defaultButton textOnlyButton"
-                    Command="{Binding ClearCommand}"
-                    Content="Clear" />
-            <Button Classes="defaultButton textOnlyButton"
+            <Button DockPanel.Dock="Right"
+                    Classes="defaultButton textOnlyButton"
                     Content="Ok"
                     Command="{Binding OkCommand}"
                     CommandParameter="{Binding $self}" />
-        </StackPanel>
+
+            <Button Classes="defaultButton textOnlyButton"
+                    Command="{Binding ClearCommand}"
+                    Content="{Binding ClearButtonLabel}"
+                    IsVisible="{Binding ClearButtonLabel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
+        </DockPanel>
     </Grid>
     <!--</StackPanel>-->
 </local:MpAvUserControl>

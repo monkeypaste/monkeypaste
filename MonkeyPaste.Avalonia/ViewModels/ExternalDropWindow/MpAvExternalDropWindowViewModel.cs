@@ -214,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var cur_preset_state = GetFormatPresetState();
-            bool is_default = _preShowPresetState.Difference(cur_preset_state).Count() == 0;
+            bool is_default = !_preShowPresetState.Difference(cur_preset_state).Any();
 
             if (avm.ClipboardFormatInfos.Items == null) {
                 return !is_default;

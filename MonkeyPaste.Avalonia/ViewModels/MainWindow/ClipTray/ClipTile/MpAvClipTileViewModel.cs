@@ -1256,10 +1256,16 @@ namespace MonkeyPaste.Avalonia {
             #region CLOSE
 
             EventHandler<WindowClosingEventArgs> closing_handler = (s, e) => {
-                MpConsole.WriteLine($"append closing called. reason '{e.CloseReason}' programmatic '{e.IsProgrammatic}'");
+                MpConsole.WriteLine($"tile popout closing called. reason '{e.CloseReason}' programmatic '{e.IsProgrammatic}'");
                 if (Parent == null ||
                     !IsAppendNotifier ||
                     WasCloseAppendWindowConfirmed) {
+                    if (!IsContentReadOnly) {
+                        // BUG closing tile while editable doesn't get to load content stage when pinned internally again
+                        // but works fine when read only, not sure whats preventing it, maybe highlight reset??
+                        IsContentReadOnly = true;
+                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId, -1);
+                    }
                     IsBusy = false;
                     return;
                 }

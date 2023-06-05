@@ -23,6 +23,7 @@ namespace MonkeyPaste {
         MainWindowOpened,
         MainWindowClosing,
         MainWindowClosed,
+        MainWindowInitialOpenComplete,
 
         AppWindowActivated,
         AppWindowDeactivated,

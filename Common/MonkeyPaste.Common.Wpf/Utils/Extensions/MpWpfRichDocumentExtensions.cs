@@ -294,7 +294,7 @@ namespace MonkeyPaste.Common.Wpf {
         }
 
         public static TextRange ToTextRange(this IEnumerable<TextElement> tel) {
-            if (tel.Count() == 0) {
+            if (!tel.Any()) {
                 return null;
             }
 

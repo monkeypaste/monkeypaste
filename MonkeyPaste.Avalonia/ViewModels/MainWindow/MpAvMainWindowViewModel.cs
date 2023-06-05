@@ -608,11 +608,11 @@ namespace MonkeyPaste.Avalonia {
 
             MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
 
-            while (IsMainWindowInitiallyOpening) {
-                await Task.Delay(100);
-            }
+            //while (IsMainWindowInitiallyOpening) {
+            //    await Task.Delay(100);
+            //}
 
-            Mp.Services.Query.RestoreProviderValues();
+            //Mp.Services.Query.RestoreProviderValues();
         }
 
 
@@ -704,6 +704,12 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsMainWindowOpen):
                     MpMessenger.SendGlobal(IsMainWindowOpen ? MpMessageType.MainWindowOpened : MpMessageType.MainWindowClosed);
+                    break;
+                case nameof(IsMainWindowInitiallyOpening):
+                    if (IsMainWindowInitiallyOpening) {
+                        break;
+                    }
+                    MpMessenger.SendGlobal(MpMessageType.MainWindowInitialOpenComplete);
                     break;
                 case nameof(IsMainWindowOpening):
                     MpMessenger.SendGlobal(MpMessageType.MainWindowOpening);

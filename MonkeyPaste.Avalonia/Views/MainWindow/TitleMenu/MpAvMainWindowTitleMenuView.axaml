@@ -205,11 +205,12 @@
                     <Button x:Name="CurZoomFactorButton"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            BorderThickness="0"
-                            Classes="noBg noHoverBg">
+                            Classes="noBg noHoverBg noBorder">
                         <Border Classes="zoomLine zoomValueLine"
                                 HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch" />
+                                VerticalAlignment="Stretch"
+                                Width="{Binding $parent.Bounds.Width}"
+                                Height="{Binding $parent.Bounds.Height}" />
                     </Button>
                 </Canvas>
             </Grid>

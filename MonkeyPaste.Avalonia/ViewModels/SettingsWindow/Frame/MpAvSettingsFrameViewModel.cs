@@ -102,6 +102,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvSettingsFrameViewModel() : base(null) {
             PropertyChanged += MpAvPreferenceFrameViewModel_PropertyChanged;
+            OnPropertyChanged(nameof(IconResourceObj));
         }
         #endregion
 

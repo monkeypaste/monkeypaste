@@ -23,6 +23,9 @@ namespace MonkeyPaste.Avalonia {
         public string CreateBorder(string iconBase64, double scale, string hexColor) {
             // return CreateBorder(iconBase64.ToBitmapSource(), scale, hexColor.ToWinMediaColor()).ToBase64String();
             var bmp = iconBase64.ToAvBitmap();
+            if (bmp == null) {
+                return string.Empty;
+            }
             var borderBmp = bmp.Tint(hexColor, true);
             //var borderSize = new Size(borderBmpSrc.Width * scale, bordherBmpSrc.Height * scale);
             borderBmp = borderBmp.Scale(new MpSize(scale, scale));

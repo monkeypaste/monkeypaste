@@ -202,7 +202,7 @@ namespace MonkeyPaste.Common {
 
         public static int GetDataFormatId(string format) {
             var kvpl = _formatLookup.Where(x => x.Value.Name.ToLower() == format.ToLower());
-            if (kvpl.Count() == 0) {
+            if (!kvpl.Any()) {
                 return -1;
             }
             if (kvpl.Count() > 1) {

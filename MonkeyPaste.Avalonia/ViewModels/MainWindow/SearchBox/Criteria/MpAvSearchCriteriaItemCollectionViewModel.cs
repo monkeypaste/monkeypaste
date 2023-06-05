@@ -160,7 +160,6 @@ namespace MonkeyPaste.Avalonia {
         public double HeaderHeight =>
             40;
 
-
         #endregion
 
         #region Model

@@ -154,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
             Items.FirstOrDefault(x => x.TagId == DEFAULT_SELECTED_TAG_ID);
         public MpAvTagTileViewModel LastSelectedActiveItem =>
             Items
-            .Where(x => x.IsNotGroupTag)
+            .Where(x => x.IsNotGroupTag && x.LastSelectedDateTime > MpPrefViewModel.Instance.StartupDateTime)
             .OrderByDescending(x => x.LastSelectedDateTime)
             .FirstOrDefault();
 
@@ -219,6 +219,9 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy) || PinnedItems.Any(x => x.IsBusy);
 
         public List<int> TrashedCopyItemIds { get; set; } = new List<int>();
+
+        public bool IsAnyTagSelected =>
+            LastSelectedActiveItem != null;
         #endregion
 
         #region Layout        

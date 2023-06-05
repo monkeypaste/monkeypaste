@@ -160,7 +160,7 @@ namespace MonkeyPaste.Avalonia {
         public IReadOnlyList<IReadOnlyList<Key>> KeyList { get; private set; }
 
         public IReadOnlyList<IReadOnlyList<KeyCode>> GlobalKeyList { get; private set; }
-        public bool IsEmpty => KeyItems.Count() == 0;
+        public bool IsEmpty => !KeyItems.Any();
 
         #endregion
 

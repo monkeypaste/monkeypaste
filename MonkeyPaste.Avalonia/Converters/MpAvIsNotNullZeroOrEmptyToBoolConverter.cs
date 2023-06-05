@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
                 return collection.Count == 0 ? flip : !flip;
             }
             if (value is IEnumerable<object> enumerable) {
-                return enumerable.Count() == 0 ? flip : !flip;
+                return !enumerable.Any() ? flip : !flip;
             }
             return value == null ? flip : !flip;
         }

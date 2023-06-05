@@ -75,6 +75,7 @@ namespace MonkeyPaste {
             } else {
                 await MpDefaultDataModelTools.InitializeAsync();
             }
+
             IsLoaded = true;
 
             sw.Stop();

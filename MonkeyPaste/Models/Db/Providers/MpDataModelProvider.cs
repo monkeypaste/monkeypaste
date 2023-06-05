@@ -322,7 +322,7 @@ namespace MonkeyPaste {
 
         public static async Task<List<MpTextTemplate>> GetTextTemplatesByType(IEnumerable<MpTextTemplateType> templateTypes) {
             string whereStr;
-            if (templateTypes == null || templateTypes.Count() == 0) {
+            if (templateTypes == null || !templateTypes.Any()) {
                 whereStr = string.Empty;
             } else {
                 string where_clause = string.Join(" or ", templateTypes.Select(x => string.Format(@"LOWER(TemplateTypeStr)=LOWER('{0}')", x)));
@@ -392,7 +392,7 @@ namespace MonkeyPaste {
         }
 
         public static async Task<List<MpCopyItemTransaction>> GetCopyItemTransactionsByTransactionTypeIdPairAsync(IEnumerable<KeyValuePair<MpTransactionSourceType, int>> trans_lookup) {
-            if (trans_lookup == null || trans_lookup.Count() == 0) {
+            if (trans_lookup == null || !trans_lookup.Any()) {
                 return new List<MpCopyItemTransaction>();
             }
             string whereStr = string.Join(" or ", trans_lookup.Select(x => $"(e_MpCopyItemTransactionType='{x.Key}' AND fk_TransactionObjId={x.Value})"));

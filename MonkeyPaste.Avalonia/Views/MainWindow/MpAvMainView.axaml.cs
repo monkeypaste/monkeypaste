@@ -179,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_ctrv = ctrcv.FindControl<MpAvQueryTrayView>("ClipTrayView");
             var ctrcv_ctrv_cg = ctrcv_ctrv.FindControl<Grid>("QueryTrayContainerGrid");
 
-
+            var pin_tray_ratio = MpAvClipTrayViewModel.Instance.GetCurrentDefaultPinTrayRatio();
             mwtg.RowDefinitions.Clear();
             mwtg.ColumnDefinitions.Clear();
             if (mwvm.IsHorizontalOrientation) {
@@ -244,7 +244,7 @@ namespace MonkeyPaste.Avalonia {
                 ctrcv_cg.RowDefinitions.Clear();
 
                 // pintray column definition
-                var ptrv_cd = new ColumnDefinition(new GridLength(0, GridUnitType.Auto));
+                var ptrv_cd = new ColumnDefinition(new GridLength(pin_tray_ratio.Width, GridUnitType.Star));
                 ptrv_cd.Bind(
                     ColumnDefinition.MinWidthProperty,
                     new Binding() {
@@ -259,7 +259,7 @@ namespace MonkeyPaste.Avalonia {
                     });
 
                 // cliptray column definition
-                var ctrv_cd = new ColumnDefinition(new GridLength(1, GridUnitType.Star));
+                var ctrv_cd = new ColumnDefinition(new GridLength(1 - pin_tray_ratio.Width, GridUnitType.Star));
                 ctrv_cd.Bind(
                     ColumnDefinition.MinWidthProperty,
                     new Binding() {
@@ -363,7 +363,7 @@ namespace MonkeyPaste.Avalonia {
                 ctrcv_cg.ColumnDefinitions.Clear();
 
                 // pintray row definitions
-                var ptrv_rd = new RowDefinition(new GridLength(0, GridUnitType.Auto));
+                var ptrv_rd = new RowDefinition(new GridLength(pin_tray_ratio.Height, GridUnitType.Star));
                 ptrv_rd.Bind(
                     RowDefinition.MinHeightProperty,
                     new Binding() {
@@ -378,7 +378,7 @@ namespace MonkeyPaste.Avalonia {
                     });
 
                 //cliptray row definitions
-                var ctrv_rd = new RowDefinition(new GridLength(1, GridUnitType.Star));
+                var ctrv_rd = new RowDefinition(new GridLength(1 - pin_tray_ratio.Height, GridUnitType.Star));
                 ctrv_rd.Bind(
                     RowDefinition.MinHeightProperty,
                     new Binding() {
@@ -612,46 +612,6 @@ namespace MonkeyPaste.Avalonia {
                 tmv_gltb.Margin = new Thickness(0, 10, 0, 0);
             }
             tmv.PositionZoomValueButton();
-        }
-        private void UpdateSidebarGridsplitter2() {
-            var mwvm = MpAvMainWindowViewModel.Instance;
-            var ctrvm = MpAvClipTrayViewModel.Instance;
-            var sbicvm = MpAvSidebarItemCollectionViewModel.Instance;
-            var mwtmvm = MpAvMainWindowTitleMenuViewModel.Instance;
-            var fmvm = MpAvFilterMenuViewModel.Instance;
-
-            var sbgs = this.FindControl<GridSplitter>("SidebarGridSplitter");
-            //var sbcv = this.FindControl<MpAvSidebarContainerView>("SidebarContainerView");
-            var ssbcb = this.FindControl<Border>("SelectedSidebarContainerBorder");
-            var sbbg = this.FindControl<MpAvSidebarButtonGroupView>("SidebarButtonGroup");
-            var ctrcb = this.FindControl<Border>("ClipTrayContainerBorder");
-            var ctrcv = this.FindControl<MpAvClipTrayContainerView>("ClipTrayContainerView");
-            var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
-
-            var ssbivm = MpAvSidebarItemCollectionViewModel.Instance.SelectedItem;
-            if (ssbivm == null) {
-                // closing
-                if (BindingContext.IsHorizontalOrientation) {
-                } else {
-                    mwtg.RowDefinitions[0].Height = new GridLength(mwtg.Bounds.Height - sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel);
-                    mwtg.RowDefinitions[1].Height = new GridLength(0, GridUnitType.Auto);
-                    mwtg.RowDefinitions[2].Height = new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel);
-                    return;
-
-                }
-                return;
-            } else {
-                // opening
-                if (BindingContext.IsHorizontalOrientation) {
-                } else {
-                    mwtg.RowDefinitions[0].Height = new GridLength(mwtg.Bounds.Height - ssbivm.DefaultSidebarHeight - sbbg.Bounds.Height, GridUnitType.Pixel);
-                    mwtg.RowDefinitions[1].Height = new GridLength(ssbivm.DefaultSidebarHeight, GridUnitType.Auto);
-                    mwtg.RowDefinitions[2].Height = new GridLength(sbicvm.ButtonGroupFixedDimensionLength, GridUnitType.Pixel);
-                    return;
-
-                }
-                return;
-            }
         }
         private void UpdateSidebarGridsplitter() {
             //UpdateSidebarGridsplitter2();
