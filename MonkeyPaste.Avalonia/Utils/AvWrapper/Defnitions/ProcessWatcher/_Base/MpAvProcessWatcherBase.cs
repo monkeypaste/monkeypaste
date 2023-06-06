@@ -15,8 +15,8 @@ namespace MonkeyPaste.Avalonia {
 
         //protected Tuple<string, string, IntPtr>? _lastProcessTuple = default;
         private DispatcherTimer _timer;
-
-        private List<IntPtr> _otherThisAppHandles = new List<IntPtr>();
+        private IntPtr _lastInternalHandle = IntPtr.Zero;
+        private IntPtr _activeInternalHandle = IntPtr.Zero;
         #endregion
 
         #region MpIActionComponent Implementation
@@ -72,7 +72,7 @@ namespace MonkeyPaste.Avalonia {
                 if (active_info == null) {
                     return false;
                 }
-                return active_info.Handle == ThisAppHandle;
+                return IsProcessPathEqual(ThisAppHandle, active_info.Handle);
             }
             set {
                 if (!IsProcessTreePolled) {
@@ -97,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
                 if (active_info == null) {
                     return _lastProcessInfo;
                 }
-                if (active_info.Handle == ThisAppHandle) {
+                if (IsProcessPathEqual(ThisAppHandle, active_info.Handle)) {
                     return _lastProcessInfo;
                 }
                 _lastProcessInfo = active_info;
@@ -107,6 +107,21 @@ namespace MonkeyPaste.Avalonia {
                 _lastProcessInfo = value;
             }
         }
+        private MpPortableProcessInfo _lastInternalProcessInfo;
+        public MpPortableProcessInfo LastInternalProcessInfo {
+            get {
+                if (_lastInternalProcessInfo == null ||
+                    _lastInternalProcessInfo.Handle != _lastInternalHandle) {
+                    _lastInternalProcessInfo = new MpPortableProcessInfo() {
+                        Handle = _lastInternalHandle,
+                        ProcessPath = GetProcessPath(_lastInternalHandle),
+                        MainWindowTitle = GetProcessApplicationName(_lastInternalHandle)
+                    };
+                }
+                return _lastInternalProcessInfo;
+            }
+        }
+
         private MpPortableProcessInfo _fileSystemProcessInfo;
         public MpPortableProcessInfo FileSystemProcessInfo {
             get {
@@ -160,16 +175,6 @@ namespace MonkeyPaste.Avalonia {
             _timer?.Stop();
         }
 
-        public void AddOtherThisAppHandle(IntPtr handle) {
-            if (_otherThisAppHandles.Contains(handle)) {
-                return;
-            }
-            _otherThisAppHandles.Add(handle);
-        }
-        public void RemoveOtherThisAppHandle(IntPtr handle) {
-            _otherThisAppHandles.Remove(handle);
-        }
-
         public string ParseTitleForApplicationName(string windowTitle) {
             string mwt = windowTitle;
             if (string.IsNullOrEmpty(mwt)) {
@@ -192,7 +197,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public abstract IntPtr GetParentHandleAtPoint(MpPoint poIntPtr);
-
         public abstract IntPtr SetActiveProcess(IntPtr handle);
         public abstract IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle);
 
@@ -272,14 +276,11 @@ namespace MonkeyPaste.Avalonia {
             bool didActiveChange = false;
             var activeProcessInfo = RefreshRunningProcessLookup();
 
+            //_lastInternalHandle = IntPtr.Zero;
+            bool was_this_app_active = IsThisAppActive;
             IsThisAppActive = false;
 
             if (activeProcessInfo == null) {
-                return;
-            }
-            if (activeProcessInfo.Handle == ThisAppHandle ||
-                _otherThisAppHandles.Contains(activeProcessInfo.Handle)) {
-                IsThisAppActive = true;
                 return;
             }
 
@@ -287,6 +288,27 @@ namespace MonkeyPaste.Avalonia {
                 didActiveChange = true;
             }
 
+            if (didActiveChange && was_this_app_active) {
+                // this app no longer active
+                _lastInternalHandle = _activeInternalHandle;
+            }
+
+            if (IsProcessPathEqual(ThisAppHandle, activeProcessInfo.Handle)) {
+                // this app active, may have already been
+                if (_activeInternalHandle != activeProcessInfo.Handle) {
+                    // interal handle changed
+                    _lastInternalHandle = _activeInternalHandle;
+                }
+                if (didActiveChange) {
+                    // this app freshly active, set last to current
+                    _lastInternalHandle = activeProcessInfo.Handle;
+                }
+                _activeInternalHandle = activeProcessInfo.Handle;
+
+                IsThisAppActive = true;
+
+                return;
+            }
             LastProcessInfo = activeProcessInfo;
             if (didActiveChange) {
                 MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", LastProcessInfo.MainWindowTitle, LastProcessInfo.ProcessPath, LastProcessInfo.Handle));
@@ -325,6 +347,9 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
+        private bool IsProcessPathEqual(IntPtr h1, IntPtr h2) {
+            return GetProcessPath(h1) == GetProcessPath(h2);
+        }
 
 
         #endregion

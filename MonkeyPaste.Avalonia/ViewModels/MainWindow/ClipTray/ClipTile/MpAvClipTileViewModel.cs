@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -1176,138 +1177,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(QueryOffsetIdx));
         }
 
-        private MpAvWindow CreatePopoutWindow() {
-            int orig_ciid = CopyItemId;
-
-            var pow = new MpAvWindow() {
-                DataContext = this,
-                ShowInTaskbar = true,
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
-                Content = new MpAvClipTileView(),
-                Topmost = true,
-            };
-
-
-            #region Window Bindings
-
-            pow.Bind(
-                Window.WindowStateProperty,
-                new Binding() {
-                    Source = this,
-                    Path = nameof(PopOutWindowState),
-                    Mode = BindingMode.TwoWay
-                });
-
-            pow.Bind(
-                Window.MinWidthProperty,
-                new Binding() {
-                    Source = this,
-                    Path = nameof(MinWidth)
-                });
-
-            pow.Bind(
-                Window.TitleProperty,
-                new Binding() {
-                    Source = this,
-                    Path = nameof(CopyItemTitle),
-                    Converter = MpAvStringToWindowTitleConverter.Instance
-                });
-
-            pow.Bind(
-                Window.BackgroundProperty,
-                new Binding() {
-                    Source = this,
-                    Path = nameof(CopyItemHexColor),
-                    Mode = BindingMode.OneWay,
-                    Converter = MpAvStringHexToBrushConverter.Instance,
-                    TargetNullValue = MpSystemColors.darkviolet,
-                    FallbackValue = MpSystemColors.darkviolet
-                });
-
-            if (pow.Content is Control c) {
-                // BUG hover doesn't work binding to window
-                c.Bind(
-                    MpAvIsHoveringExtension.IsHoveringProperty,
-                    new Binding() {
-                        Source = this,
-                        Path = nameof(IsHovering),
-                        Mode = BindingMode.TwoWay
-                    });
-                MpAvIsHoveringExtension.SetIsEnabled(c, true);
-            }
-            #endregion
-
-            #region Selection
-            EventHandler activate_handler = (s, e) => {
-                Parent.SelectClipTileCommand.Execute(orig_ciid); ;
-            };
-
-            #endregion
-
-            EventHandler open_handler = null;
-            open_handler = (s, e) => {
-                if (GetContentView() is MpAvContentWebView wv &&
-                    !IsContentReadOnly) {
-                    OnPropertyChanged(nameof(IsTitleVisible));
-                    wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync(this);
-                }
-                pow.Opened -= open_handler;
-            };
-            #region CLOSE
-
-            EventHandler<WindowClosingEventArgs> closing_handler = (s, e) => {
-                MpConsole.WriteLine($"tile popout closing called. reason '{e.CloseReason}' programmatic '{e.IsProgrammatic}'");
-                if (Parent == null ||
-                    !IsAppendNotifier ||
-                    WasCloseAppendWindowConfirmed) {
-                    if (!IsContentReadOnly) {
-                        // BUG closing tile while editable doesn't get to load content stage when pinned internally again
-                        // but works fine when read only, not sure whats preventing it, maybe highlight reset??
-                        IsContentReadOnly = true;
-                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId, -1);
-                    }
-                    IsBusy = false;
-                    return;
-                }
-                // reject close and show confirm ntf
-                IsBusy = true;
-                e.Cancel = true;
-                pow.IsHitTestVisible = false;
-                Dispatcher.UIThread.Post(async () => {
-
-                    var result = await
-                        Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                            title: "Confirm",
-                            message: "Are you sure you want to finish appending?",
-                            iconResourceObj: "QuestionMarkImage",
-                            owner: pow);
-                    if (result) {
-                        // allow close
-                        WasCloseAppendWindowConfirmed = true;
-                        await Parent.DeactivateAppendModeCommand.ExecuteAsync();
-                        IsChildWindowOpen = false;
-                        return;
-                    }
-                    pow.IsHitTestVisible = true;
-                    IsBusy = false;
-                });
-            };
-            EventHandler close_handler = null;
-            close_handler = (s, e) => {
-                pow.Activated -= activate_handler;
-                pow.Closed -= close_handler;
-                pow.Closing -= closing_handler;
-            };
-            #endregion
-
-            pow.Activated += activate_handler;
-            pow.Closed += close_handler;
-            pow.Opened += open_handler;
-            pow.Closing += closing_handler;
-
-            _contentView = null;
-            return pow;
-        }
         public void OpenPopOutWindow(MpAppendModeType amt) {
             IsAppendNotifier = amt != MpAppendModeType.None;
             if (!IsChildWindowOpen) {
@@ -1335,6 +1204,29 @@ namespace MonkeyPaste.Avalonia {
             if (this is MpIChildWindowViewModel cwvm) {
                 cwvm.OnPropertyChanged(nameof(cwvm.IsChildWindowOpen));
             }
+        }
+
+        public string[] GetOleFormats(bool isDnd) {
+            string[] req_formats = null;
+            if (isDnd && MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled) {
+                // initialize target with all possible formats set to null
+                req_formats = MpPortableDataFormats.RegisteredFormats.ToArray();
+
+            } else {
+                // initialize target with default format for type
+                switch (CopyItemType) {
+                    case MpCopyItemType.Text:
+                        req_formats = new[] { MpPortableDataFormats.Text };
+                        break;
+                    case MpCopyItemType.Image:
+                        req_formats = new[] { MpPortableDataFormats.AvPNG };
+                        break;
+                    case MpCopyItemType.FileList:
+                        req_formats = new[] { MpPortableDataFormats.AvFileNames };
+                        break;
+                }
+            }
+            return req_formats;
         }
 
         private MpIContentView _contentView;
@@ -1889,6 +1781,138 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private MpAvWindow CreatePopoutWindow() {
+            int orig_ciid = CopyItemId;
+
+            var pow = new MpAvWindow() {
+                DataContext = this,
+                ShowInTaskbar = true,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
+                Content = new MpAvClipTileView(),
+                Topmost = true,
+            };
+
+
+            #region Window Bindings
+
+            pow.Bind(
+                Window.WindowStateProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(PopOutWindowState),
+                    Mode = BindingMode.TwoWay
+                });
+
+            pow.Bind(
+                Window.MinWidthProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(MinWidth)
+                });
+
+            pow.Bind(
+                Window.TitleProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(CopyItemTitle),
+                    Converter = MpAvStringToWindowTitleConverter.Instance
+                });
+
+            pow.Bind(
+                Window.BackgroundProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(CopyItemHexColor),
+                    Mode = BindingMode.OneWay,
+                    Converter = MpAvStringHexToBrushConverter.Instance,
+                    TargetNullValue = MpSystemColors.darkviolet,
+                    FallbackValue = MpSystemColors.darkviolet
+                });
+
+            if (pow.Content is Control c) {
+                // BUG hover doesn't work binding to window
+                c.Bind(
+                    MpAvIsHoveringExtension.IsHoveringProperty,
+                    new Binding() {
+                        Source = this,
+                        Path = nameof(IsHovering),
+                        Mode = BindingMode.TwoWay
+                    });
+                MpAvIsHoveringExtension.SetIsEnabled(c, true);
+            }
+            #endregion
+
+            #region Selection
+            EventHandler activate_handler = (s, e) => {
+                Parent.SelectClipTileCommand.Execute(orig_ciid); ;
+            };
+
+            #endregion
+
+            EventHandler open_handler = null;
+            open_handler = (s, e) => {
+                if (GetContentView() is MpAvContentWebView wv &&
+                    !IsContentReadOnly) {
+                    OnPropertyChanged(nameof(IsTitleVisible));
+                    wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync(this);
+                }
+                pow.Opened -= open_handler;
+            };
+            #region CLOSE
+
+            EventHandler<WindowClosingEventArgs> closing_handler = (s, e) => {
+                MpConsole.WriteLine($"tile popout closing called. reason '{e.CloseReason}' programmatic '{e.IsProgrammatic}'");
+                if (Parent == null ||
+                    !IsAppendNotifier ||
+                    WasCloseAppendWindowConfirmed) {
+                    if (!IsContentReadOnly) {
+                        // BUG closing tile while editable doesn't get to load content stage when pinned internally again
+                        // but works fine when read only, not sure whats preventing it, maybe highlight reset??
+                        IsContentReadOnly = true;
+                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId, -1);
+                    }
+                    IsBusy = false;
+                    return;
+                }
+                // reject close and show confirm ntf
+                IsBusy = true;
+                e.Cancel = true;
+                pow.IsHitTestVisible = false;
+                Dispatcher.UIThread.Post(async () => {
+
+                    var result = await
+                        Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+                            title: "Confirm",
+                            message: "Are you sure you want to finish appending?",
+                            iconResourceObj: "QuestionMarkImage",
+                            owner: pow);
+                    if (result) {
+                        // allow close
+                        WasCloseAppendWindowConfirmed = true;
+                        await Parent.DeactivateAppendModeCommand.ExecuteAsync();
+                        IsChildWindowOpen = false;
+                        return;
+                    }
+                    pow.IsHitTestVisible = true;
+                    IsBusy = false;
+                });
+            };
+            EventHandler close_handler = null;
+            close_handler = (s, e) => {
+                pow.Activated -= activate_handler;
+                pow.Closed -= close_handler;
+                pow.Closing -= closing_handler;
+            };
+            #endregion
+
+            pow.Activated += activate_handler;
+            pow.Closed += close_handler;
+            pow.Opened += open_handler;
+            pow.Closing += closing_handler;
+
+            _contentView = null;
+            return pow;
+        }
         private async Task DisableReadOnlyInPlainTextHandlerAsync() {
             Dispatcher.UIThread.VerifyAccess();
 

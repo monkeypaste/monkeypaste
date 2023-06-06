@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public static class MpAvDocumentDragHelper {
+    public static class MpAvContentDragHelper {
         #region Private Variables
 
         private static MpAvIDragSource _dragSource;
@@ -41,49 +41,20 @@ namespace MonkeyPaste.Avalonia {
 
             _dragSource = dragSource;
 
-            var req_formats = MpPortableDataFormats.RegisteredFormats.ToArray();
-            // initialize target with all possible formats set to null
-            DragDataObject = new MpAvDataObject(req_formats.ToDictionary(x => x, x => MpAvPlatformDataObjectExtensions.GetFormatPlaceholderData(x)));
+            // wait for source data
+            bool use_placeholders = MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
+            SourceDataObject = await dragSource.GetDataObjectAsync(_dragSource.GetDragFormats(), use_placeholders);
 
-            // NOTE enabling immediate dnd start cause quick drops to be placeholders (from screen shot)
-            // Peformance seems ok w/ async but leaving option here for later testing
-            bool use_immediate_mode = !MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
-            if (use_immediate_mode) {
-                // notify drag is starting so drop widget is visible immediatly 
-                // so state info can be shown w/o interfering w/ drag cursor
-                MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
-
-                Dispatcher.UIThread.Post(async () => {
-
-                    // wait for source data
-                    SourceDataObject = await dragSource.GetDataObjectAsync(req_formats);
-
-                    if (SourceDataObject == null) {
-                        // is none selected?
-                        Debugger.Break();
-                        FinishDrag(null);
-                        return;
-                    }
-
-                    SourceDataObject.CopyTo(DragDataObject);
-                    ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
-
-                });
-            } else {
-                // wait for source data
-                SourceDataObject = await dragSource.GetDataObjectAsync(req_formats, false);
-
-                if (SourceDataObject == null) {
-                    // is none selected?
-                    Debugger.Break();
-                    FinishDrag(null);
-                    return;
-                }
-
-                SourceDataObject.CopyTo(DragDataObject);
-                await ApplyClipboardPresetOrSourceUpdateToDragDataAsync();
-                MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
+            if (SourceDataObject == null) {
+                // is none selected?
+                Debugger.Break();
+                FinishDrag(null);
+                return;
             }
+
+            await ApplyClipboardPresetOrSourceUpdateToDragDataAsync();
+
+            MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
 
             // signal drag start in sub-ui task
             var result = await DragDrop.DoDragDrop(pointerEventArgs, DragDataObject, allowedEffects);
@@ -138,15 +109,24 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static async Task ApplyClipboardPresetOrSourceUpdateToDragDataAsync() {
-            if (SourceDataObject == null || DragDataObject == null) {
+            if (SourceDataObject == null) {
                 // no drag in progress
                 return;
             }
+            if (DragDataObject == null) {
+                // initial case
+                DragDataObject = new MpAvDataObject();
+                SourceDataObject.CopyTo(DragDataObject);
+            }
+
+            // clone source or processing will overwrite original data (so drop widget changes have no affect)
             var source_clone = SourceDataObject.Clone();
             var temp = await Mp.Services.DataObjectHelperAsync.ProcessDragDropDataObjectAsync(source_clone);
-            if (temp is IDataObject temp_ido) {
+            if (temp is IDataObject temp_ido &&
+                DragDataObject is MpAvDataObject ddo) {
+                // update actual drag ido while retaining its ref (must be same as in StartDrag)
                 temp_ido.CopyTo(DragDataObject);
-                await (DragDataObject as MpAvDataObject).MapAllPseudoFormatsAsync();
+                await ddo.MapAllPseudoFormatsAsync();
                 MpConsole.WriteLine("DragDataObject updated");
 
                 //var phl = DragDataObject.GetPlaceholderFormats();

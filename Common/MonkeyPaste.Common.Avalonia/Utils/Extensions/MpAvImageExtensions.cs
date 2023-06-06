@@ -17,18 +17,24 @@ namespace MonkeyPaste.Common.Avalonia {
             if (!base64Str.IsStringBase64()) {
                 return null;
             }
-            var bytes = Convert.FromBase64String(base64Str);
-            var bmp = bytes.ToAvBitmap();
-            if (bmp == null) {
-                return null;
+            try {
+                var bytes = Convert.FromBase64String(base64Str);
+                var bmp = bytes.ToAvBitmap();
+                if (bmp == null) {
+                    return null;
+                }
+                if (!string.IsNullOrEmpty(tint_hex_color)) {
+                    bmp = bmp.Tint(tint_hex_color);
+                }
+                if (scale == 1.0) {
+                    return bmp;
+                }
+                return bmp.Scale(new MpSize(scale, scale));
             }
-            if (!string.IsNullOrEmpty(tint_hex_color)) {
-                bmp = bmp.Tint(tint_hex_color);
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error converting '{base64Str}' to bitmap.", ex);
             }
-            if (scale == 1.0) {
-                return bmp;
-            }
-            return bmp.Scale(new MpSize(scale, scale));
+            return null;
         }
 
         public static Bitmap ToAvBitmap(this byte[] bytes) {

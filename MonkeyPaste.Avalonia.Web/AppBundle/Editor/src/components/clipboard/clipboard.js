@@ -13,7 +13,6 @@ function initAllMatchers() {
     initWhitespaceMatcher();
 
     if (isPlainHtmlConverter()) {
-        initConverterMatchers();
         return;
     }
     initSpecialCharacterMatcher();
@@ -23,7 +22,9 @@ function initAllMatchers() {
     initFontSizeMatcher();
     initCheckableListMatcher();
     initTemplateMatcher();
+
 }
+
 
 
 function initTemplateMatcher() {
@@ -172,15 +173,6 @@ function initFontSizeMatcher() {
     });
 }
 
-function initConverterMatchers() {
-    let Delta = Quill.imports.delta;
-    globals.quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-        if (node.tagName == 'TABLE') {
-            //debugger;
-        }
-        return delta;
-    });
-}
 
 function initFontFamilyMatcher() {
     if (Quill === undefined) {

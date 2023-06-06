@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace MonkeyPaste {
     public interface MpIDownKeyHelper {
-        int DownCount { get; }
-        bool IsDown(object key);
-        IReadOnlyList<object> Downs { get; }
+        //int DownCount { get; }
+        //bool IsDown(object key);
+        List<object> Downs { get; }
     }
 }

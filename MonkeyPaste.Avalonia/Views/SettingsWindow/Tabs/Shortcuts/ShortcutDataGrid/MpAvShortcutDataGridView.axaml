@@ -88,7 +88,7 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Classes="marqueeContainer"
+                                <!--<Grid Classes="marqueeContainer"
                                       HorizontalAlignment="Center">
                                     <local:MpAvMarqueeTextBox EditOnFocus="False"
                                                               DropShadowBrush="Transparent"
@@ -103,6 +103,25 @@
                                                               NavigateUriRequiredKeyString=""
                                                               SelectViewModelOnFocus="False"
                                                               Text="{Binding RoutingType}" />
+                                </Grid>-->
+                                <Grid HorizontalAlignment="Center">
+                                    <Grid.Styles>
+                                        <Style Selector="ComboBox.routingBox > ComboBoxItem:nth-child(1)">
+                                            <Setter Property="IsVisible"
+                                                    Value="False" />
+                                        </Style>
+                                    </Grid.Styles>
+                                    <ComboBox Classes="routingBox"
+                                              HorizontalAlignment="Center"
+                                              IsEnabled="{Binding CanBeGlobalShortcut}"
+                                              IsVisible="{Binding CanBeGlobalShortcut}"
+                                              SelectedIndex="{Binding SelectedRoutingTypeIdx}"
+                                              ItemsSource="{Binding RoutingTypes}" />
+                                    <TextBlock Text="Internal"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontWeight="SemiBold"
+                                               IsVisible="{Binding !CanBeGlobalShortcut}" />
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

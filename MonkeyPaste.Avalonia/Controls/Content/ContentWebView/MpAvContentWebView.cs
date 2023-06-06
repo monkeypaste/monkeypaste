@@ -248,6 +248,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpAvIContentDragSource Implementation
+        public string[] GetDragFormats() {
+            if (BindingContext == null) {
+                return new string[] { };
+            }
+            return BindingContext.GetOleFormats(true);
+        }
+
         public PointerPressedEventArgs LastPointerPressedEventArgs { get; private set; }
 
         public bool WasDragCanceled { get; set; }
@@ -1494,7 +1501,7 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext == null ||
                 !IsEditorLoaded ||
                 !IsContentReadOnly ||
-                MpAvDocumentDragHelper.DragDataObject != null) {
+                MpAvContentDragHelper.DragDataObject != null) {
                 return;
             }
 

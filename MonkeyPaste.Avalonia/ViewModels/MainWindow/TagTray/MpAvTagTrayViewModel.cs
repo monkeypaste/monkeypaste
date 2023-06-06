@@ -668,8 +668,9 @@ namespace MonkeyPaste.Avalonia {
                     IsSelecting = false;
                     return;
                 }
-
+                bool has_active_established = LastSelectedActiveItem != null;
                 ClearTagSelection();
+
 
                 _selectedItemId = tagId;
                 Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
@@ -686,7 +687,10 @@ namespace MonkeyPaste.Avalonia {
 
                 if (!MpAvMainWindowViewModel.Instance.IsMainWindowLoading &&
                     SelectedItem != null && SelectedItem.IsNotGroupTag) {
-                    Mp.Services.Query.NotifyQueryChanged();
+                    // NOTE only force requery when its initial tag select
+                    // or requery is rejected when no filters have been changed (common case)
+                    bool is_initial_select = !has_active_established;
+                    Mp.Services.Query.NotifyQueryChanged(is_initial_select);
                     // wait for query to execute
                     await Task.Delay(300);
                     while (MpAvClipTrayViewModel.Instance.IsAnyBusy) {

@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Media.Imaging;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
@@ -82,7 +83,9 @@ namespace MonkeyPaste.Avalonia {
 
         public abstract string GetPathIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32);
 
-
+        public bool IsStringBase64Image(string base64Str) {
+            return base64Str.ToAvBitmap() != null;
+        }
 
     }
 }

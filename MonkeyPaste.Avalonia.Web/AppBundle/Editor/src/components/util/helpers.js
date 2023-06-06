@@ -647,6 +647,45 @@ async function readFileAsDataURL(file) {
     return result_base64;
 }
 
+function getBase64ImageSrc(img) {
+    // from https://stackoverflow.com/a/22172860/105028
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    var dataURL = canvas.toDataURL("image/png");
+    return dataURL;
+}
+
+const getBase64FromUrlAsync = async (url) => {
+    const data = await fetch(url);
+    const blob = await data.blob();
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+            const base64data = reader.result;
+            resolve(base64data);
+        }
+    });
+}
+
+function convertImgSrcToBase64(img) {
+    fetch(img.getAttribute('src'), { mode: "no-cors" })
+        .then(data => {
+            data.blob()
+                .then(blobbed_data => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(blobbed_data);
+                    reader.onloadend = () => {
+                        img.setAttribute('src', reader.result);
+                        debugger;
+                    }
+                });
+        });
+}
+
 function numToPaddedStr(num, padStr, padCount) {
     let numStr = '';
     if (typeof num === 'string' || num instanceof String) {

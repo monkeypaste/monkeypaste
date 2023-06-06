@@ -870,7 +870,6 @@ namespace MonkeyPaste.Common {
 
             return str.All(x => char.IsLetterOrDigit(x) || char.IsWhiteSpace(x));
         }
-
         public static bool IsStringBase64(this string str) {
             // Check that the length is a multiple of 4 characters
             //Check that every character is in the set A - Z, a - z, 0 - 9, +, / except for padding at the end which is 0, 1 or 2 '=' characters

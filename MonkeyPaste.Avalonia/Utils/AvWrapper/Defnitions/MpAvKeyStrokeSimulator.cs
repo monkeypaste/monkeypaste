@@ -5,6 +5,7 @@ using SharpHook.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 //using Avalonia.Win32;
 using System.Threading.Tasks;
 
@@ -23,19 +24,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        private static readonly object _GestureLock = new object();
+        private static readonly object _RestoreGestureLock = new object();
         #endregion
 
         #region Interfaces
 
         #region MpIKeyStrokeSimulator Implementation
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync(string keystr) {
+        public async Task<bool> SimulateKeyStrokeSequenceAsync(
+            string keystr, bool restoreDownState = true) {
             var seq = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keystr);
             bool success = await SimulateKeyStrokeSequenceAsync(seq);
             return success;
         }
 
-        public async Task<bool> SimulateKeyStrokeSequenceAsync<T>(IReadOnlyList<IReadOnlyList<T>> gesture) {
+        public async Task<bool> SimulateKeyStrokeSequenceAsync<T>(
+            IReadOnlyList<IReadOnlyList<T>> gesture,
+            bool restoreDownState = true) {
             if (typeof(T) != typeof(KeyCode)) {
                 throw new NotSupportedException("Must be sharphook keycode");
             }
@@ -45,7 +51,6 @@ namespace MonkeyPaste.Avalonia {
             // NOTE retain combo order and key priority order
             // NOTE2 remove keys that are physically down,
             // the simulate up will interfere w/ the keyboard state
-
 
             var filtered_gesture =
                 gesture
@@ -64,7 +69,20 @@ namespace MonkeyPaste.Avalonia {
             }
             string gesture_label = Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture);
             //await WaitAndStartSimulateAsync(gesture_label);
-            var to_restore = ClearDownState();
+            await MpFifoAsyncQueue.WaitByConditionAsync(
+                restoreDownState ? _RestoreGestureLock : _GestureLock,
+                () => {
+                    // when hotkey pasting (or some shortcut driven keyboard macro), state needs to be restored so only wait for a prev gesture then clear/restore downs
+
+                    // when just automating keys wait for no current downs to proceed
+                    return restoreDownState ? false : Mp.Services.KeyDownHelper.Downs.Any();
+                }, gesture_label);
+
+            IEnumerable<KeyCode> to_restore = null;
+
+            if (restoreDownState) {
+                to_restore = ClearDownState(filtered_gesture.SelectMany(x => x).Distinct());
+            }
 
             foreach (var combo in filtered_gesture) {
                 combo.ForEach(y => SimulateKey(y, true));
@@ -72,8 +90,9 @@ namespace MonkeyPaste.Avalonia {
                 combo.ForEach(y => SimulateKey(y, false));
                 await Task.Delay(_RELEASE_DELAY_MS);
             }
-
-            RestoreDownState(to_restore);
+            if (restoreDownState) {
+                RestoreDownState(to_restore);
+            }
             MpConsole.WriteLine($"Key Gesture '{gesture_label}' successfully simulated. ");
             return true;
 
@@ -98,44 +117,64 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private void SimulateKey(KeyCode key, bool isDown) {
-            //MpConsole.WriteLine($"SIM {(isDown ? "DOWN" : "UP")}: {key}");
+        private UioHookResult SimulateKey(KeyCode key, bool isDown) {
+            MpConsole.WriteLine($"SIM {(isDown ? "DOWN" : "UP")}: {key}");
+
             UioHookResult result =
                 isDown ?
                 _eventSimulator.SimulateKeyPress(key) :
                 _eventSimulator.SimulateKeyRelease(key);
 
-            MpDebug.Assert(
-                result == UioHookResult.Success,
-                $"Error {(isDown ? "pressing" : "releasing")} key: '{key}' in seq: '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' error: '{result}'",
-                false);
+            if (result != UioHookResult.Success) {
+                MpConsole.WriteLine($"Error {(isDown ? "pressing" : "releasing")} key: '{key}' in seq: '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' error: '{result}'");
+            }
+
+            return result;
         }
 
-        private IEnumerable<KeyCode> ClearDownState() {
-            List<KeyCode> downs = Mp.Services.KeyDownHelper.Downs.Cast<KeyCode>().ToList();
-            downs.ForEach(x => SimulateKey(x, false));
-            return downs;
+        private IEnumerable<KeyCode> ClearDownState(IEnumerable<KeyCode> ignoredKeys) {
+            // don't clear downs that are in gesture,
+            // ex: like 'Control+Enter' simulates 'Control+V'
+            // 'Control' will be returned to down when physical maybe upped, either way it shouldn't be simulated
+            // or phys/sim will create mismatch until its pressed again
+
+            List<KeyCode> downs_to_clear = Mp.Services.KeyDownHelper.Downs.Cast<KeyCode>().Where(x => !ignoredKeys.Contains(x)).ToList();
+            var false_downs = downs_to_clear.Where(x => SimulateKey(x, false) != UioHookResult.Success).ToList();
+            // when up can't be simulated (pretty sure) that means the keyboard doesn't think its down so:
+            // 1. Remove failures from downs since key hook is out of whack
+            // 2. omit failures from result to be restored after gesture
+
+            // 1
+            false_downs.ForEach(x => Mp.Services.KeyDownHelper.Downs.Remove(x));
+            // 2
+            false_downs.ForEach(x => downs_to_clear.Remove(x));
+            return downs_to_clear;
         }
 
         private void RestoreDownState(IEnumerable<KeyCode> downs) {
             downs.ForEach(x => SimulateKey(x, true));
         }
+
         private async Task WaitAndStartSimulateAsync(string gesture_label) {
-            if (Mp.Services.KeyDownHelper.DownCount > 0) {
-                int this_sim_id = ++_waitCount;
-                MpConsole.WriteLine($"Sim gesture '{gesture_label}' waiting at queue: {this_sim_id}...");
-                while (_waitCount >= this_sim_id) {
-                    if (Mp.Services.KeyDownHelper.DownCount > 0) {
-                        await Task.Delay(100);
-                    }
-                    if (_waitCount > this_sim_id) {
-                        // not next (wait extra 100 for next to start)
-                        await Task.Delay(200);
-                        continue;
-                    }
-                    _waitCount--;
-                    MpConsole.WriteLine($"Sim gesture '{gesture_label}' waiting DONE");
+            if (Mp.Services.KeyDownHelper.Downs.IsNullOrEmpty()) {
+                return;
+            }
+
+            int this_sim_id = ++_waitCount;
+            MpConsole.WriteLine($"Sim gesture '{gesture_label}' waiting at queue: {this_sim_id}...");
+            while (_waitCount >= this_sim_id) {
+                if (Mp.Services.KeyDownHelper.Downs.Any()) {
+                    await Task.Delay(100);
                 }
+                if (_waitCount > this_sim_id) {
+                    // not next (wait extra 100 for next to start)
+                    await Task.Delay(200);
+                    continue;
+                }
+                // add wait cause repetetive pasting is leaking last gesture for some reason
+                await Task.Delay(300);
+                _waitCount--;
+                MpConsole.WriteLine($"Sim gesture '{gesture_label}' waiting DONE");
             }
         }
 

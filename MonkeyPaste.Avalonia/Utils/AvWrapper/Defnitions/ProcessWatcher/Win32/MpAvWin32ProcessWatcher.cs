@@ -201,6 +201,7 @@ namespace MonkeyPaste.Avalonia {
             return fallback;
 
         }
+
         #endregion
 
         #region Protected Methods

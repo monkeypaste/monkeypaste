@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public static class MpAvDocumentDropHelper {
+    public static class MpAvContentDropHelper {
 
         public static MpQuillHostDataItemsMessage ToQuillDataItemsMessage(this IDataObject avdo, DragDropEffects dde = DragDropEffects.None) {
             if (avdo == null) {

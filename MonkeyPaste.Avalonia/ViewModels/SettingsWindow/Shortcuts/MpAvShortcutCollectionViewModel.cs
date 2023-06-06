@@ -57,18 +57,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIDownKeyHelper Implementation
 
-        IReadOnlyList<object> MpIDownKeyHelper.Downs =>
-            _downs.Cast<object>().ToList();
-
-        int MpIDownKeyHelper.DownCount =>
-            _downs.Count;
-
-        bool MpIDownKeyHelper.IsDown(object key) {
-            if (key is KeyCode kc) {
-                return _downs.Contains(kc.GetUnifiedKey());
-            }
-            return false;
-        }
+        List<object> MpIDownKeyHelper.Downs =>
+            _downs;
 
         #endregion
 
@@ -85,7 +75,6 @@ namespace MonkeyPaste.Avalonia {
 
             GetViewModelCommandShortcutKeyString(scvm);
         #endregion
-
 
         #region MpIGlobalInputListener
         public void StartInputListener() {
@@ -537,6 +526,10 @@ namespace MonkeyPaste.Avalonia {
                 //if shorcut updated
                 scvm.KeyString = shortcutKeyString;
                 scvm.RoutingType = result_routing_type;
+                await Task.Delay(15);
+                while (scvm.IsBusy) {
+                    await Task.Delay(100);
+                }
                 await scvm.InitializeAsync(scvm.Shortcut, scvm.ShortcutCommand);
             }
 
@@ -1153,11 +1146,23 @@ namespace MonkeyPaste.Avalonia {
         #region Gesture Handling
 
         private MpKeyGestureHelper _keyboardGestureHelper;
-        private List<KeyCode> _downs = new List<KeyCode>();
+        private List<object> _downs = new List<object>();
         private List<Tuple<KeyCode, DateTime>> _downTest = new List<Tuple<KeyCode, DateTime>>();
         private MpAvShortcutViewModel _exact_match;
 
         private void HandleGestureRouting_Down(string keyLiteral, object down_e) {
+
+            if (_downTest.Where(x => DateTime.Now - x.Item2 > TimeSpan.FromSeconds(30)) is IEnumerable<Tuple<KeyCode, DateTime>> dttl &&
+                dttl.Any()) {
+                //assumes won't be holding key down longer than 30 seconds
+                //this may give false positives if breakpoint hit & resumed with key down
+                dttl.ForEach(x => _downs.Remove(x.Item1));
+                dttl.ToList().ForEach(x => _downTest.Remove(x));
+            }
+            if (_downs.IsNullOrEmpty()) {
+                _keyboardGestureHelper.ClearCurrentGesture();
+            }
+
             var sharp_down = down_e as KeyboardHookEventArgs;
             KeyCode kc = sharp_down.Data.KeyCode;
 
@@ -1167,9 +1172,6 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 _downs.Add(kc.GetUnifiedKey());
                 _downTest.Add(new Tuple<KeyCode, DateTime>(kc, DateTime.Now));
-            }
-            if (_downTest.Any(x => DateTime.Now - x.Item2 > TimeSpan.FromSeconds(30))) {
-                // downs mismatch
             }
 
             _keyboardGestureHelper.AddKeyDown(keyLiteral);
@@ -1200,6 +1202,7 @@ namespace MonkeyPaste.Avalonia {
                 !MpAvClipTrayViewModel.Instance.IsPasting) {
                 OnGlobalPasteShortcutPerformed?.Invoke(this, null);
             }
+
             _keyboardGestureHelper.RemoveKeyDown(keyLiteral);
             if (_exact_match == null) {
                 return;

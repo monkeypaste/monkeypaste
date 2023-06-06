@@ -419,7 +419,7 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
                 //return MpAvClipTrayViewModel.Instance.IsAnyTileDragging;
-                return MpAvDocumentDragHelper.IsDragging;
+                return MpAvContentDragHelper.IsDragging;
             }
         }
         public bool IsMainWindowOrientationDragging { get; set; } = false;

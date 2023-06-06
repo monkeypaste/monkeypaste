@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FocusManager = Avalonia.Input.FocusManager;
 using Key = Avalonia.Input.Key;
 
 namespace MonkeyPaste.Avalonia {
@@ -140,20 +141,32 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (value < 0) {
+                    // BUG when DataGrid virtualizes it pre-sets idx to -1 which is impossible
                     int test = RoutingTypes.IndexOf(RoutingType.ToString());
                     MpConsole.WriteLine($"Ignoring negative combo box idx!! Set Value: {value} ItemsIdx: {test} RoutingType: '{RoutingType.ToString()}'");
                     return;
-
                 }
                 if (!CanBeGlobalShortcut) {
                     return;
                 }
-                if (SelectedRoutingTypeIdx != value) {
-                    value = Math.Max(0, value);
-                    //RoutingType = RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
-                    RoutingType = (MpRoutingType)value;//RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
-                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
+                if (FocusManager.Instance.Current is Control c) {
+                    bool reject = true;
+                    if (c.DataContext is MpAvAssignShortcutViewModel) {
+                        reject = false;
+                    } else if (c is DataGrid dg && dg.SelectedItem is MpAvShortcutViewModel svm && svm.ShortcutId == ShortcutId) {
+                        reject = false;
+                    }
+                    if (reject) {
+                        return;
+                    }
+                    if (SelectedRoutingTypeIdx != value) {
+                        value = Math.Max(0, value);
+                        //RoutingType = RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
+                        RoutingType = (MpRoutingType)value;//RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
+                        OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
+                    }
                 }
+
             }
         }
 
@@ -339,6 +352,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(KeyItems));
             OnPropertyChanged(nameof(IsEmpty));
             OnPropertyChanged(nameof(KeyString));
+            OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
         }
 
 

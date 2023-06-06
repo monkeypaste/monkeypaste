@@ -2680,27 +2680,39 @@ namespace MonkeyPaste.Avalonia {
             OnCopyItemAdd?.Invoke(this, arg_ci);
         }
 
-        private async Task PasteClipTileAsync(MpAvClipTileViewModel ctvm) {
+        private readonly object _pasteLockObj = new object();
+        private async Task PasteClipTileAsync(MpAvClipTileViewModel ctvm, bool fromKeyboard = false) {
+            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+            if (IsPasting) {
+                await MpFifoAsyncQueue.WaitByConditionAsync(_pasteLockObj, () => { return IsPasting; }, $"Paste {ctvm}");
+                // re-silent lock since last will unlock
+                MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+            }
+
             MpPortableDataObject mpdo = null;
             ctvm.IsPasting = true;
 
-            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
             var cv = ctvm.GetContentView();
             if (cv == null) {
                 if (ctvm.CopyItem != null) {
                     mpdo = ctvm.CopyItem.ToPortableDataObject();
                 }
             } else if (cv is MpAvIDragSource ds) {
-                mpdo = await ds.GetDataObjectAsync();
+                mpdo = await ds.GetDataObjectAsync(
+                    formats: ctvm.GetOleFormats(false),
+                    use_placeholders: false,
+                    ignore_selection: false);
             }
+
             MpPortableProcessInfo pi = null;
             if (mpdo == null) {
                 // is none selected?
                 Debugger.Break();
             } else {
                 pi = Mp.Services.ProcessWatcher.LastProcessInfo;
+
                 // NOTE paste success is very crude, false positive is likely
-                bool success = await Mp.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi);
+                bool success = await Mp.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi, fromKeyboard);
                 if (success) {
                     MpMessenger.SendGlobal(MpMessageType.ContentPasted);
                 } else {
@@ -3490,7 +3502,7 @@ namespace MonkeyPaste.Avalonia {
                 if (args is bool) {
                     fromEditorButton = (bool)args;
                 }
-                PasteClipTileAsync(SelectedItem).FireAndForgetSafeAsync();
+                PasteClipTileAsync(SelectedItem, true).FireAndForgetSafeAsync();
             },
             (args) => {
                 bool can_paste =
@@ -3505,7 +3517,10 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("PasteSelectedClipTileFromShortcutCommand CanExecute: " + can_paste);
                 if (!can_paste) {
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
-                    MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
+                    if (SelectedItem != null) {
+
+                        MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
+                    }
                 }
                 return can_paste;
 
@@ -3598,7 +3613,7 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                 }
-                PasteClipTileAsync(ctvm).FireAndForgetSafeAsync(this);
+                PasteClipTileAsync(ctvm, true).FireAndForgetSafeAsync(this);
             },
             (args) => {
                 return args is int || args is string;

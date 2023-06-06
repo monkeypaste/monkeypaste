@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
 
                     //var de = allowedOps.ToDragDropEffects();
                     var de = DragDropEffects.Move | DragDropEffects.Copy;
-                    await MpAvDocumentDragHelper.StartDragAsync(ds, ds.LastPointerPressedEventArgs, de);
+                    await MpAvContentDragHelper.StartDragAsync(ds, ds.LastPointerPressedEventArgs, de);
 
                     browser.Host.DragSourceEndedAt(0, 0, CefDragOperationsMask.None);
                     browser.Host.DragSourceSystemDragEnded();

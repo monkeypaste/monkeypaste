@@ -16,6 +16,8 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsView">
     <local:MpAvUserControl.Resources>
         <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Stretch</HorizontalAlignment>
+        <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush">Transparent</SolidColorBrush>
     </local:MpAvUserControl.Resources>
 
     <local:MpAvUserControl.Styles>

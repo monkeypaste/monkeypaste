@@ -1434,7 +1434,8 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
@@ -1442,6 +1443,7 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
@@ -1449,9 +1451,20 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'BROWSER'">
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(BuildOs)' == 'ANDROID'">
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />

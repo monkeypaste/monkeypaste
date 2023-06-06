@@ -53,7 +53,12 @@ namespace MonkeyPaste.Avalonia {
         public Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false) {
             throw new NotImplementedException();
         }
-
+        public string[] GetDragFormats() {
+            if (DataContext is MpAvClipTileViewModel ctvm) {
+                return ctvm.GetOleFormats(true);
+            }
+            return new string[] { };
+        }
         #endregion
         #endregion
 

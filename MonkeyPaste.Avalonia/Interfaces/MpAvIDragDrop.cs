@@ -14,5 +14,6 @@ namespace MonkeyPaste.Avalonia {
         //void NotifyDragComplete(DragDropEffects dropEffect);
         Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false);
 
+        string[] GetDragFormats();
     }
 }

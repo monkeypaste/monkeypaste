@@ -343,7 +343,8 @@ namespace MonkeyPaste {
 
         public string ThemeTypeName { get; set; } = MpThemeType.Light.ToString();
         public string ThemeColor { get; set; } = MpSystemColors.purple;
-        public int NotificationSoundGroupIdx { get; set; } = 1; // not shown
+        public int NotificationSoundGroupIdx { get; set; } = (int)MpSoundGroupType.Minimal;
+        public bool IsSoundEnabled { get; set; } = false;
         public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;
         public bool ShowInTaskSwitcher { get; set; } = true;

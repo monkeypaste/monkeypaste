@@ -7,6 +7,7 @@ using MonkeyPaste.Common.Wpf;
 #endif
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvStringExtensions {
+
         public static bool IsRichHtmlMixedMedia(this string qhtml) {
             string imgTagStartStr = @"<img src='";
             int img_tag_start_idx = qhtml.IndexOf(imgTagStartStr);

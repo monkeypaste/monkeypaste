@@ -37,7 +37,8 @@ namespace MonkeyPaste.Avalonia {
         #region MpIExternalPasteHandler Implementation
 
         async Task<bool> MpIExternalPasteHandler.PasteDataObjectAsync(
-            MpPortableDataObject mpdo, MpPortableProcessInfo processInfo) {
+            MpPortableDataObject mpdo,
+            MpPortableProcessInfo processInfo, bool fromKeyboard) {
             if (processInfo == null) {
                 // shouldn't happen
                 //Debugger.Break();
@@ -61,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                 pasteCmd = custom_paste_app_vm.PasteShortcutViewModel.PasteCmdKeyString;
             }
 
-            bool success = await PasteDataObjectAsync_internal_async(mpdo, pasteToHandle, pasteCmd);
+            bool success = await PasteDataObjectAsync_internal_async(mpdo, pasteToHandle, pasteCmd, fromKeyboard);
             return success;
         }
 
@@ -69,9 +70,10 @@ namespace MonkeyPaste.Avalonia {
         private async Task<bool> PasteDataObjectAsync_internal_async(
             MpPortableDataObject mpdo,
             IntPtr pasteToHandle,
-            string pasteCmdKeyString) {
+            string pasteCmdKeyString,
+            bool fromKeyboard) {
             if (pasteToHandle == IntPtr.Zero) {
-                // somethings terribly wrong
+                // somethings terribly wrong_lastInternalProcessInfo
                 Debugger.Break();
                 return false;
             }
@@ -97,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // SIMULATE PASTE CMD
-            await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(pasteCmdKeyString);
+            await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(pasteCmdKeyString, fromKeyboard);
 
             //await Task.Delay(300);
 

@@ -13,12 +13,6 @@ using System.Windows.Input;
 
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpSoundGroupType {
-        None = 0,
-        Minimal,
-        Spacey,
-        Jungle
-    }
 
     public enum MpSoundNotificationType {
         None = 0,
@@ -71,7 +65,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
         public MpSoundGroupType SelectedSoundGroup { get; set; }
+        public bool IsSoundEnabled =>
+            IsOsSupported &&
+            MpPrefViewModel.Instance.IsSoundEnabled;
 
         #endregion
 
@@ -105,10 +103,7 @@ namespace MonkeyPaste.Avalonia {
             SelectedSoundGroup = (MpSoundGroupType)MpPrefViewModel.Instance.NotificationSoundGroupIdx;
 
             _soundPathLookup.Clear();
-            if (SelectedSoundGroup == MpSoundGroupType.None) {
-                IsBusy = false;
-                return;
-            }
+
             string player_dir = Path.GetDirectoryName(Assembly.GetAssembly(typeof(Player)).Location).TrimEnd('\\').TrimEnd('/');
             string base_dir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\').TrimEnd('/');
             if (player_dir != base_dir) {
@@ -133,11 +128,16 @@ namespace MonkeyPaste.Avalonia {
                 //path_parts.AddRange(new Uri(resource_val).LocalPath.Split(@"/"));
                 //string sound_path = Path.Combine(path_parts.ToArray());
                 string sound_path = resource_val.ToPathFromAvResourceString();
-                if (sound_path.Length > MAX_PATH && OperatingSystem.IsWindows()) {
-                    MpNotificationBuilder.ShowMessageAsync(
-                        title: $"Error",
-                        body: $"Cannot load sound from path '{sound_path}' file path must be no more than '{MAX_PATH}' characters. You will need to move this apps folder to a higher directory to hear that sound.",
-                        msgType: MpNotificationType.FileIoError).FireAndForgetSafeAsync(this);
+                if (sound_path.Length > MAX_PATH &&
+                    OperatingSystem.IsWindows()) {
+                    if (IsSoundEnabled) {
+                        // don't notify file length error if disabled...
+
+                        MpNotificationBuilder.ShowMessageAsync(
+                            title: $"Error",
+                            body: $"Cannot load sound from path '{sound_path}' file path must be no more than '{MAX_PATH}' characters. You will need to move this apps folder to a higher directory to hear that sound.",
+                            msgType: MpNotificationType.FileIoError).FireAndForgetSafeAsync(this);
+                    }
                     continue;
                 }
 
@@ -212,7 +212,7 @@ namespace MonkeyPaste.Avalonia {
                 byte volume = (byte)((double)byte.MaxValue * new_norm_volue);
                 await _player.SetVolume(volume);
 
-            }, (args) => IsOsSupported);
+            }, (args) => IsSoundEnabled);
 
         public ICommand PlayCustomSoundCommand => new MpAsyncCommand<object>(
             async (args) => {
@@ -235,7 +235,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     await UpdateVolumeCommand.ExecuteAsync(null);
                 }
-            });
+            }, (args) => IsSoundEnabled);
         public ICommand PlaySoundNotificationCommand => new MpAsyncCommand<object>(
             async (args) => {
 
@@ -264,7 +264,7 @@ namespace MonkeyPaste.Avalonia {
 
             }, (args) => {
                 return
-                    IsOsSupported &&
+                    IsSoundEnabled &&
                     args is MpSoundNotificationType && SelectedSoundGroup != MpSoundGroupType.None;
             });
 
