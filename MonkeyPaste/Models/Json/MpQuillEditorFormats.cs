@@ -55,6 +55,9 @@ namespace MonkeyPaste {
         // TODO remove or isolate case for loading w/ annotations immediatly,
         // currently used in editor tester though
         public string annotationsJsonStr { get; set; }
+
+        // fragment 'MpQuillEditorSelectionStateMessage'
+        public string selectionFragment { get; set; }
     }
 
     public class MpQuillContentSearchesFragment : MpJsonObject {
@@ -332,5 +335,12 @@ namespace MonkeyPaste {
     public class MpQuillEditorShortcutKeystringItemFragment : MpJsonObject {
         public string shortcutType { get; set; }
         public string keys { get; set; }
+    }
+    public class MpQuillEditorSelectionStateMessage : MpJsonObject {
+        public int index { get; set; }
+        public int length { get; set; }
+
+        public int scrollLeft { get; set; }
+        public int scrollTop { get; set; }
     }
 }

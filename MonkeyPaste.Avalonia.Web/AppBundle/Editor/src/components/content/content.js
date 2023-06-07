@@ -22,7 +22,8 @@ function loadContent(
 	contentData,
 	searches,
 	append_state,
-	annotationsJsonStr) {
+	annotationsJsonStr,
+	sel_state) {
 	// NOTE only called fromHost (or tester which calls _ext)
 
 	let is_reload = contentHandle == globals.ContentHandle;
@@ -46,11 +47,14 @@ function loadContent(
 		// set editor content classes
 		initContentClassStyle();
 
-		let sel_to_restore = null;
-		if (is_reload) {
+		let sel_to_restore = sel_state;
+
+		if (is_reload && !sel_to_restore) {
 			// when content is reloaded, any selection will be lost so save to restore
+			// but rely on host req state cause content is reloading a couple times (shouldn't) during unpin
 			sel_to_restore = getDocSelection();
-		} else {
+		} 
+		if (!is_reload) {
 			clearTableSelectionStates();
 			loadPasteButton();
 			resetSelection();
@@ -59,6 +63,7 @@ function loadContent(
 			resetContent();
 			resetAnnotations();
 		}
+		 
 
 		if (!globals.IsFindReplaceInactive) {
 			log('activated findreplace detected during load, deactivating...');
@@ -97,13 +102,18 @@ function loadContent(
 
 		loadFindReplace(searches);
 
-		if (sel_to_restore != null) {
-			sel_to_restore = cleanDocRange(sel_to_restore);
-			setDocSelection(sel_to_restore)
-		}
 
 		updateAllElements();
 		updateQuill();
+
+		if (sel_to_restore != null) {
+			// only set sel before component updates do scroll after
+			sel_to_restore = cleanDocRange(sel_to_restore);
+			setDocSelection(sel_to_restore.index, sel_to_restore.length, 'silent');
+
+			scrollToSelState(sel_to_restore);
+		}
+
 	} catch (ex) {
 		onException_ntf('error loading item', ex);
 	}
@@ -116,17 +126,18 @@ function loadContent(
 	}
 
 	//retain focus state on reload
-	if (was_sub_sel_enabled != null && was_sub_sel_enabled) {
+	if (was_sub_sel_enabled != null &&
+		was_sub_sel_enabled) {
 		enableSubSelection();
 	}
 	if (was_editable != null && was_editable) {
 		disableReadOnly();
 	}
-	if (is_reload) {
 
+	
+	if (is_reload) {
 		log('Editor re-loaded');
 	} else {
-
 		log('Editor loaded');
 	}
 }

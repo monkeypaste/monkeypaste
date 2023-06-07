@@ -37,11 +37,6 @@ namespace MonkeyPaste {
             if (queryIdx >= cqt.Offset && queryIdx < cqt.Offset + cqt.Limit) {
                 return cqt.ContentIds.ElementAt(queryIdx - cqt.Offset);
             }
-
-            //if (queryIdx < 0 || queryIdx >= AllQueryIds.Count) {
-            //    return -1;
-            //}
-            //return AllQueryIds[queryIdx];
             return -1;
         }
 
@@ -49,7 +44,6 @@ namespace MonkeyPaste {
             if (_idsToOmit.Any(x => x == itemId)) {
                 return -1;
             }
-            //return AllQueryIds.IndexOf(itemId);
             var cqt = Mp.Services.ContentQueryTools;
             if (cqt.ContentIds.Any(x => x == itemId)) {
                 return cqt.Offset + cqt.ContentIds.IndexOf(itemId);
@@ -57,7 +51,7 @@ namespace MonkeyPaste {
             return -1;
         }
 
-        public bool RemoveItemId(int itemId) {
+        public bool AddIdToOmit(int itemId) {
             int offset_idx = GetItemOffsetIdx(itemId);
             if (offset_idx >= 0) {
                 SetTotalCount(Math.Max(0, _totalCount - 1));
@@ -67,6 +61,11 @@ namespace MonkeyPaste {
             }
             return offset_idx >= 0;
         }
+
+        public bool RemoveIdToOmit(int itemId) {
+            return _idsToOmit.Remove(itemId);
+        }
+
 
         //public void InsertId(int idx, int id) {
         //    if (idx < 0 || idx > AllQueryIds.Count) {

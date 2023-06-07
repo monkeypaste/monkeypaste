@@ -84,21 +84,24 @@ namespace MonkeyPaste.Avalonia {
         public static void ExecuteJavascript(this WebView wv, string script) {
             var frame = wv.GetMainFrame();
             if (frame == null) {
+                TimeSpan exec_timeout = TimeSpan.FromSeconds(5);
                 // give frame 5 seconds to init
-                Dispatcher.UIThread.InvokeAsync(async () => {
+                Dispatcher.UIThread.Invoke(async () => {
+                    var sw = Stopwatch.StartNew();
                     while (frame == null) {
+                        if (sw.Elapsed >= exec_timeout) {
+                            MpConsole.WriteLine($"frame must be initialized. initialization timed out on item '{wv.DataContext}' for script '{script}'");
+                            if (wv.DataContext is MpAvClipTileViewModel ctvm) {
+                                bool test = wv == ctvm.GetContentView();
+                            }
+                            return;
+                        }
                         await Task.Delay(100);
                         frame = wv.GetMainFrame();
                     }
                     wv.ExecuteJavascript(script);
                     return;
-                }).TimeoutAfter(
-                    TimeSpan.FromSeconds(5),
-                    () => {
-                        MpConsole.WriteLine("frame must be initialized. initialization timed out");
-                        return true;
-                    })
-                    .FireAndForgetSafeAsync();
+                });
                 return;
             }
             if (!Dispatcher.UIThread.CheckAccess()) {

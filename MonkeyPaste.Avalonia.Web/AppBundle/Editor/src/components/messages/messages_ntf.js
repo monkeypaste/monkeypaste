@@ -275,27 +275,3 @@ function onAppendStateChanged_ntf(appendDataStr = null) {
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyAppendStateChanged', msgStr);
 }
-
-//function onSelectionChanged_ntf(sel) {
-//	// output 'MpQuillSelectionChangedMessage'
-//	if (typeof notifySelectionChanged === 'function') {
-//		let msg = {
-//			index: sel.index,
-//			length: sel.length
-//		};
-//		let msgStr = toBase64FromJsonObj(msg);
-//		notifySelectionChanged(msgStr);
-//	}
-//}
-
-//function onScrollChanged_ntf(scrollObj) {
-//	// output 'MpQuillScrollChangedMessage'
-//	if (typeof notifyScrollChanged === 'function') {
-//		let msg = {
-//			left: scrollObj.left,
-//			top: scrollObj.top
-//		};
-//		let msgStr = toBase64FromJsonObj(msg);
-//		notifyScrollChanged(msgStr);
-//	}
-//}

@@ -60,7 +60,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public override void ClearHighlighting() {
-
             if (ContentRange != null &&
                 ContentRange.Document is MpAvContentWebView wv) {
 

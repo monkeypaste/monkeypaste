@@ -62,14 +62,15 @@ function initDefaults(defaultsObj) {
 		let edit_bg = `rgba(255,248,220,${bg_opacity})`;
 		let edit_op_bg = `white`;
 		let def_content_fg = 'black';
-		let sel_fg = 'black';
-		let caret_color = 'black';
 		let edit_tb_bg_color = 'white';
 		let edit_tb_sep_bg_color = 'silver';
 		let edit_tb_button_color = 'dimgray';
 		let paste_template_bg_color = 'teal';
 		let paste_toolbar_button_color = 'dodgerblue';
 		let edit_template_bg_color = 'palegreen';
+		let sel_fg = 'black';
+		let caret_color = 'black';
+		let copy_color = 'green';
 
 		if(defaultsObj.currentTheme.toLowerCase() == 'dark') {
 			no_sel_bg = `rgba(0,0,0,${bg_opacity})`;
@@ -77,15 +78,21 @@ function initDefaults(defaultsObj) {
 			edit_bg = `rgba(0,0,0,${bg_opacity})`;
 			edit_op_bg = `black`;
 			def_content_fg = 'white';
-			sel_fg = 'white';
-			caret_color = 'white';
 			edit_tb_bg_color = 'dimgray';
 			edit_tb_sep_bg_color = 'black';
 			edit_tb_button_color = 'white';
 			paste_template_bg_color = 'darkslategray';
 			paste_toolbar_button_color = 'darkblue';
 			edit_template_bg_color = 'darkolivegreen';
+			sel_fg = 'white';
+			caret_color = 'white';
+			copy_color = 'lime';
 		}
+
+		globals.DefaultSelectionFgColor = sel_fg; 
+		globals.DefaultCaretColor = caret_color;
+		globals.DropCopyLineColor = copy_color;
+		globals.DragCopySelBgColor = copy_color;
 
 		setElementComputedStyleProp(document.body,'--noselectbgcolor',cleanHexColor(no_sel_bg,null,false));
 		setElementComputedStyleProp(document.body, '--subselecteditorbgcolor', cleanHexColor(sub_sel_bg,null,false));

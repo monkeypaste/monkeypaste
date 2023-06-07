@@ -246,14 +246,21 @@ const globals = {
 
 	CurDropTargetElm:  null,
 
-	DropItemElms:  [],
+	DropItemElms: [],
+	DropMoveLineColor: 'red',
+	DropCopyLineColor: 'green',
 	// #endregion
 	// #endregion
 
 	// #region SELECTION
+
 	DefaultSelectionBgColor: 'lightblue',
 	DefaultSelectionFgColor: 'black',
 	DefaultCaretColor: 'black',
+	SubSelCaretColor: 'red',
+	DragSelBgColor: 'salmon',
+	DragFormatedSelFgColor: 'orange',
+	DragCopySelBgColor: 'green',
 	LastSelRange: null,
 	CurSelRange: { index: 0, length: 0 },
 	SelectionOnMouseDown: null,

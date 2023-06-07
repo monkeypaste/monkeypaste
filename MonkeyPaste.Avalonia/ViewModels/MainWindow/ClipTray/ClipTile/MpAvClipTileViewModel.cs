@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Threading;
+using CefNet.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -97,7 +98,8 @@ namespace MonkeyPaste.Avalonia {
         #region MpIWindowHandlesClosingViewModel Implementation
 
         public bool IsCloseHandled =>
-            IsAppendNotifier && !WasCloseAppendWindowConfirmed;
+            //(IsAppendNotifier && !WasCloseAppendWindowConfirmed) && 
+            !IsFinalClosingState;
 
         #endregion
 
@@ -483,6 +485,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public bool IsFinalClosingState { get; set; }
         //public string AnnotationsJsonStr { get; set; }
 
         public bool CanShowContextMenu { get; set; } = true;
@@ -1162,10 +1165,15 @@ namespace MonkeyPaste.Avalonia {
             //IsBusy = wasBusy;
         }
 
-        public void TriggerUnloadedNotification(bool removeQueryItem) {
-            MpAvPersistentClipTilePropertiesHelper.RemoveProps(CopyItemId);
+        public void TriggerUnloadedNotification(bool removeQueryItem, bool clearPersistentProps = true) {
+            if (clearPersistentProps) {
+                MpAvPersistentClipTilePropertiesHelper.RemoveProps(CopyItemId);
+            } else {
+                // don't clear, occurs when query tile is pinning
+            }
+
             if (removeQueryItem) {
-                bool in_page = Mp.Services.Query.PageTools.RemoveItemId(CopyItemId);
+                bool in_page = Mp.Services.Query.PageTools.AddIdToOmit(CopyItemId);
                 if (in_page) {
                     Parent.QueryItems.Where(x => x.QueryOffsetIdx > QueryOffsetIdx).ForEach(x => x.UpdateQueryOffset(x.QueryOffsetIdx - 1));
                 }
@@ -1243,11 +1251,7 @@ namespace MonkeyPaste.Avalonia {
                 //Debugger.Break();
                 return null;
             }
-            if (IsAppendNotifier) {
-                _contentView = Mp.Services.ContentViewLocator.LocateModalContentView();
-            } else {
-                _contentView = Mp.Services.ContentViewLocator.LocateContentView(CopyItemId);
-            }
+            _contentView = Mp.Services.ContentViewLocator.LocateContentView(CopyItemId);
 
             return _contentView;
         }
@@ -1758,13 +1762,13 @@ namespace MonkeyPaste.Avalonia {
                     //OnPropertyChanged(nameof(TrayX));
                     break;
                 case nameof(IsChildWindowOpen):
-                    if (Parent == null) {
-                        break;
-                    }
-                    Parent.OnPropertyChanged(nameof(Parent.InternalPinnedItems));
-                    if (!IsChildWindowOpen) {
-                        PopInTileCommand.Execute(null);
-                    }
+                    //if (Parent == null) {
+                    //    break;
+                    //}
+                    //Parent.OnPropertyChanged(nameof(Parent.InternalPinnedItems));
+                    //if (!IsChildWindowOpen) {
+                    //    PopInTileCommand.Execute(null);
+                    //}
                     break;
                 case nameof(CopyItemSize1):
                 case nameof(CopyItemSize2):
@@ -1860,18 +1864,27 @@ namespace MonkeyPaste.Avalonia {
             };
             #region CLOSE
 
-            EventHandler<WindowClosingEventArgs> closing_handler = (s, e) => {
-                MpConsole.WriteLine($"tile popout closing called. reason '{e.CloseReason}' programmatic '{e.IsProgrammatic}'");
+            EventHandler<WindowClosingEventArgs> closing_handler = null;
+            closing_handler = (s, e) => {
+                MpConsole.WriteLine($"tile popout closing called. reason '{e.CloseReason}' programmatic '{e.IsProgrammatic}' final: {IsFinalClosingState}");
+                if (IsFinalClosingState) {
+                    // handled in secondary closing
+                    return;
+                }
                 if (Parent == null ||
                     !IsAppendNotifier ||
                     WasCloseAppendWindowConfirmed) {
-                    if (!IsContentReadOnly) {
-                        // BUG closing tile while editable doesn't get to load content stage when pinned internally again
-                        // but works fine when read only, not sure whats preventing it, maybe highlight reset??
-                        IsContentReadOnly = true;
-                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId, -1);
-                    }
+                    // closing pop out confirmed but need to store state before view is disposed
+                    // which is async so store it, then retrigger close knowing its final
+                    IsFinalClosingState = true;
+                    pow.Closing -= closing_handler;
+                    e.Cancel = true;
                     IsBusy = false;
+
+                    Dispatcher.UIThread.Post(async () => {
+                        await PopInTileCommand.ExecuteAsync();
+                        pow.Close();
+                    });
                     return;
                 }
                 // reject close and show confirm ntf
@@ -1902,6 +1915,15 @@ namespace MonkeyPaste.Avalonia {
                 pow.Activated -= activate_handler;
                 pow.Closed -= close_handler;
                 pow.Closing -= closing_handler;
+                IsFinalClosingState = false;
+                WasCloseAppendWindowConfirmed = false;
+
+                // NOTE for some reason even canceling closing webview tries to dispose
+                // so it is ignored from final closing state. here is the only place it'll dispose
+                if (_contentView is MpAvContentWebView wv) {
+                    wv.FinishDisposal();
+                }
+                _contentView = null;
             };
             #endregion
 
@@ -2089,17 +2111,28 @@ namespace MonkeyPaste.Avalonia {
                 return CanShowContextMenu;
             });
 
-        public ICommand PopInTileCommand => new MpCommand(() => {
-            int ciid = CopyItemId;
-            TransactionCollectionViewModel.CloseTransactionPaneCommand.Execute(null);
-            IsChildWindowOpen = false;
+        public MpIAsyncCommand PersistSelectionStateCommand => new MpAsyncCommand(
+            async () => {
+                if (GetContentView() is MpAvContentWebView wv) {
+                    // store cur sel state
+                    var sel_state = await wv.GetSelectionStateAsync();
+                    MpAvPersistentClipTilePropertiesHelper.AddPersistentSubSelectionState(CopyItemId, QueryOffsetIdx, sel_state);
+                }
+            }, () => {
+                return !IsPlaceholder;
+            });
 
-            if (Parent != null) {
-                _contentView = null;
-                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(ciid, QueryOffsetIdx);
-                Parent.PinnedItems.Remove(this);
-                Parent.PinTileCommand.Execute(this);
-            }
+        public MpIAsyncCommand PopInTileCommand => new MpAsyncCommand(async () => {
+            // NOTE called from confirmed popout closing
+
+            int ciid = CopyItemId;
+            await PersistSelectionStateCommand.ExecuteAsync();
+
+            await TransactionCollectionViewModel.CloseTransactionPaneCommand.ExecuteAsync();
+            MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(ciid, QueryOffsetIdx);
+            Parent.UnpinTileCommand.Execute(this);
+        }, () => {
+            return Parent != null;
         });
         public ICommand PinToPopoutWindowCommand => new MpCommand<object>(
             (args) => {

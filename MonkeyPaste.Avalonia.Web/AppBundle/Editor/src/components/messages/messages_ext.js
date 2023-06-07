@@ -33,6 +33,11 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		append_state = toJsonObjFromBase64Str(req.appendStateFragment);
 	}
 
+	let sel_state = null;
+	if (!isNullOrEmpty(req.selectionFragment)) {
+		sel_state = toJsonObjFromBase64Str(req.selectionFragment);
+	}
+
 	loadContent(
 		req.isReadOnly,
 		req.isSubSelectionEnabled,
@@ -41,7 +46,8 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		req.itemData,
 		searches,
 		append_state,
-		req.annotationsJsonStr);
+		req.annotationsJsonStr,
+		sel_state);
 
 }
 
@@ -189,7 +195,6 @@ function enableWindowResizeUpdate_ext() {
 	onWindowResize();
 }
 
-
 function appendStateChanged_ext(reqMsgBase64Str) {
 	// input 'MpQuillAppendStateChangedMessage'
 	let req = toJsonObjFromBase64Str(reqMsgBase64Str);
@@ -273,6 +278,7 @@ function sharedTemplateChanged_ext(changedTemplateTypeMsgBase64Str) {
 	setAllTemplateData(t_to_update.templateGuid, changed_t);
 	log('shared template ' + req.deletedTemplateGuid + ' UPDATED by host');
 }
+
 //function setSelection_ext(selMsgBase64Str) {
 //	// input 'MpQuillSelectionChangedMessage'
 //	let req = toJsonObjFromBase64Str(selMsgBase64Str);

@@ -19,8 +19,6 @@ function getTextSelectionFgColor() {
 function getTextSelectionBgColor() {
 	return getElementComputedStyleProp(document.body, '--selbgcolor');
 }
-
-
 function getCaretColor() {
 	//return getEditorElement().style.caretColor;
 	return getElementComputedStyleProp(document.body, '--caretcolor');
@@ -132,12 +130,6 @@ function getDocRangeScrollOffset(doc_range) {
 // #region Setters
 
 function setDocSelection(doc_idx, len, source = 'user') {
-	//if (!quill.hasFocus()) {
-	//	//quill.focus();
-	//	setDomSelectionFromDocRange({ index: doc_idx, length: len });
-	//} else {
-	//	quill.setSelection(doc_idx, len, source);
-	//}
 	setDomSelectionFromDocRange({ index: doc_idx, length: len });
 	globals.CurSelRange = { index: doc_idx, length: len };
 	
@@ -268,15 +260,15 @@ function updateSelectionColors() {
 			let is_drop_valid = globals.DropIdx >= 0 || !isDropping();
 			if (is_drop_valid) {
 				if (isDragCopy()) {
-					sel_bg_color = 'lime';
+					sel_bg_color = globals.DragCopySelBgColor;
 					log('copy recognized in sel draw');
 				}
 
 				if (isDropHtml()) {
-					sel_fg_color = 'orange';
+					sel_fg_color = globals.DragFormatedSelFgColor;
 				}
 			} else {
-				sel_bg_color = 'salmon';
+				sel_bg_color = globals.DragSelBgColor;
 			}
 		}
 	} else if (isSubSelectionEnabled()) {
@@ -288,7 +280,7 @@ function updateSelectionColors() {
 		} else {
 			if (!isAnyAppendEnabled()) {
 				// only make caret red when not appending
-				caret_color = 'red';
+				caret_color = globals.SubSelCaretColor;
 
 			}
 			

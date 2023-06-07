@@ -133,9 +133,12 @@ function updateOverlayBounds() {
 
 // #region Draws
 
-function drawDropPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
+function drawDropPreview(ctx, color, thickness = 1.0, line_style = [5, 5]) {
     if (isDragCopy()) {
-        color = 'lime';
+        color = globals.DropCopyLineColor;
+    }
+    if (isNullOrUndefined(color)) {
+        color = globals.DropMoveLineColor;
     }
     let drop_block_state = getDropBlockState(globals.DropIdx, globals.WindowMouseLoc, globals.IsShiftDown);
     let render_lines = getPreviewLines(globals.DropIdx, drop_block_state);
@@ -228,9 +231,12 @@ function drawCaret(ctx, sel, caret_width = 1.0, caret_opacity = 1) {
     drawLine(ctx, caret_line, caret_color, caret_width);
 }
 
-function drawAppendNotifierPreview(ctx, color = 'red', thickness = 1.0, line_style = [5, 5]) {
+function drawAppendNotifierPreview(ctx, color, thickness = 1.0, line_style = [5, 5]) {
     if (globals.IsAppendManualMode) {
-        color = 'lime';
+        color = globals.DropCopyLineColor;
+    }
+    if (isNullOrUndefined(color)) {
+        color = globals.DropMoveLineColor;
     }
     let block_state = globals.IsAppendLineMode ? globals.IsAppendPreMode ? 'pre' : 'post' : 'inline';
     let render_lines = getPreviewLines(getAppendDocRange().index, block_state, false);

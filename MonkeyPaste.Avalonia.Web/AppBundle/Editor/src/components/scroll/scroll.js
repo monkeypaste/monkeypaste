@@ -55,6 +55,20 @@ function isScrollBarYVisible() {
 
 // #region Actions
 
+function scrollToSelState(selStateOrRangeObj) {
+    if (!selStateOrRangeObj) {
+        return;
+    }
+    if (isNullOrUndefined(selStateOrRangeObj.scrollLeft) ||
+        isNullOrUndefined(selStateOrRangeObj.scrollTop)) {
+        // presume param is a reload sel range
+        scrollDocRangeIntoView(selStateOrRangeObj);
+        return;
+    }
+    getEditorContainerElement().scrollLeft = parseFloat(selStateOrRangeObj.scrollLeft);
+    getEditorContainerElement().scrollTop = parseFloat(selStateOrRangeObj.scrollTop);
+
+}
 function scrollDocRangeIntoView(docRange, opts) {
     // opts as bool = alignToTop
     // opts as obj = behavior (smooth|instant|auto), block (*start*|center|end|nearest), inline (start|center|end|*nearest*)

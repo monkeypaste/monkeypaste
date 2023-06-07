@@ -31,12 +31,19 @@ using CefNet.Internal;
 namespace MonkeyPaste.Avalonia {
 
     public enum MpAvEditorBindingFunctionType {
-        // two-way *_get async requests
+        // two-way (editor as source) *_get async requests
         getAllSharedTemplatesFromDb,
         getClipboardDataTransferObject,
         getDragDataTransferObject,
         getContactsFromFetcher,
         getMessageBoxResult,
+
+        // two-way (host as source) *_ext_ntf requests
+        notifySelectionState,
+        notifyPlainHtmlConverted,
+        notifyReadOnlyEnabledFromHost,
+        notifyDataObjectResponse,
+
 
         // one-way *_ntf notifications
         notifyDocSelectionChanged,
@@ -62,18 +69,13 @@ namespace MonkeyPaste.Avalonia {
         notifyNavigateUriRequested,
         notifySetClipboardRequested,
         notifyDataTransferCompleted,
-        notifySelectionChanged,
-        notifyScrollChanged,
         notifyAppendStateChanged,
         notifyInternalContextMenuIsVisibleChanged,
         notifyInternalContextMenuCanBeShownChanged,
         notifyLastTransactionUndone,
         notifyAnnotationSelected,
         notifyShowDebugger,
-        notifyDataObjectResponse,
-        notifyReadOnlyEnabledFromHost,
-        notifyPlainHtmlConverted,
-        notifyScrollBarVisibilityChanged
+        notifyScrollBarVisibilityChanged,
     }
     [DoNotNotify]
     public class MpAvContentWebView :
@@ -101,6 +103,7 @@ namespace MonkeyPaste.Avalonia {
 
         private MpQuillContentDataObjectResponseMessage _lastDataObjectResp = null;
         private MpQuillEditorContentChangedMessage _lastReadOnlyEnabledFromHostResp = null;
+        private MpQuillEditorSelectionStateMessage _lastEditorSelectionStateMessage = null;
         #endregion
 
         #region Constants
@@ -115,17 +118,14 @@ namespace MonkeyPaste.Avalonia {
 
         private static List<MpAvContentWebView> _AllWebViews = new();
 
-        public static MpAvContentWebView LocateModalWebView() {
-            return _AllWebViews.FirstOrDefault(x => x.DataContext is MpAvClipTileViewModel ctvm && ctvm.IsAppendNotifier);
-        }
-        public static MpAvContentWebView LocateTrayTileWebView(int ciid) {
+        public static MpAvContentWebView LocateTileWebView(int ciid) {
             if (ciid < 1) {
                 return null;
             }
             var result = _AllWebViews
                 .Where(x =>
                     x.DataContext is MpAvClipTileViewModel ctvm &&
-                    !ctvm.IsAppendNotifier &&
+                    //!ctvm.IsAppendNotifier &&
                     ctvm.CopyItemId == ciid)
                 .OrderByDescending(x => x._locatedDateTime)
                 .ToList();
@@ -191,9 +191,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIContentViewLocator
 
         MpIContentView MpIContentViewLocator.LocateContentView(int contentId) =>
-            LocateTrayTileWebView(contentId);
-        MpIContentView MpIContentViewLocator.LocateModalContentView() =>
-            LocateModalWebView();
+            LocateTileWebView(contentId);
 
         #endregion
 
@@ -544,6 +542,13 @@ namespace MonkeyPaste.Avalonia {
 
                 #region SELECTION
 
+                case MpAvEditorBindingFunctionType.notifySelectionState:
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillEditorSelectionStateMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillEditorSelectionStateMessage selStateMsg) {
+                        _lastEditorSelectionStateMessage = selStateMsg;
+                    }
+                    break;
+
                 case MpAvEditorBindingFunctionType.notifySubSelectionEnabledChanged:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillSubSelectionChangedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillSubSelectionChangedNotification subSelChangedNtf) {
@@ -561,26 +566,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 #endregion
 
-                #region MODAL SYNC
-
-                //case MpAvEditorBindingFunctionType.notifySelectionChanged:
-                //    if(!ctvm.IsAppendNotifier && !ctvm.IsAppendTrayItem) {
-                //        break;
-                //    }
-                //    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillSelectionChangedMessage>(msgJsonBase64Str);
-                //    if (ntf is MpQuillSelectionChangedMessage selChangedMsg) {
-                //        RelayMsg($"setSelection_ext('{msgJsonBase64Str}')");
-                //    }
-                //    break;
-                //case MpAvEditorBindingFunctionType.notifyScrollChanged:
-                //    if (!ctvm.IsAppendNotifier && !ctvm.IsAppendTrayItem) {
-                //        break;
-                //    }
-                //    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillScrollChangedMessage>(msgJsonBase64Str);
-                //    if (ntf is MpQuillScrollChangedMessage scrollChangedMsg) {
-                //        //RelayMsg($"setScroll_ext('{msgJsonBase64Str}')");
-                //    }
-                //    break;
+                #region APPEND STATE
 
                 case MpAvEditorBindingFunctionType.notifyAppendStateChanged:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillAppendStateChangedMessage>(msgJsonBase64Str);
@@ -932,12 +918,41 @@ namespace MonkeyPaste.Avalonia {
             await PerformLoadContentRequestAsync();
         }
 
+        public async Task<MpQuillEditorSelectionStateMessage> GetSelectionStateAsync() {
+            // NOTE resetting sel state is lazy upon request
+            _lastEditorSelectionStateMessage = null;
+            this.ExecuteJavascript($"selectionStateRequest_ext_ntf()");
+            while (_lastEditorSelectionStateMessage == null) {
+                await Task.Delay(100);
+            }
+            return _lastEditorSelectionStateMessage;
+        }
+
+        public void FinishDisposal() {
+            this.Dispose(true);
+        }
         #endregion
 
         #region Protected Methods
 #if DESKTOP
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
+        }
+
+#endif
+
+#if DESKTOP
+        protected override void Dispose(bool disposing) {
+            if (disposing &&
+                BindingContext != null &&
+                BindingContext.IsFinalClosingState) {
+                // disposal handled in pop out closed handler after IsFinalClosingState reset
+                return;
+            }
+            base.Dispose(disposing);
+        }
+        protected override void OnLoadingStateChange(LoadingStateChangeEventArgs e) {
+            base.OnLoadingStateChange(e);
         }
 
 #endif
@@ -980,6 +995,59 @@ namespace MonkeyPaste.Avalonia {
                 shortcutFragmentStr = MpAvShortcutCollectionViewModel.Instance.EditorShortcutsMsgBase64,
                 themePaletteFragmentStr = MpAvThemeViewModel.Instance.GetEditorThemeLookup()
             };
+        }
+
+        private MpQuillLoadContentRequestMessage GetLoadContentMessage() {
+            if (BindingContext == null) {
+                return new MpQuillLoadContentRequestMessage() {
+                    contentHandle = "<EMPTY CONTENT HANDLE>",
+                    contentType = "Text",
+                    itemData = string.Empty,
+                    isReadOnly = true,
+                    isSubSelectionEnabled = false
+                };
+            }
+
+            var loadContentMsg = new MpQuillLoadContentRequestMessage() {
+                contentHandle = BindingContext.PublicHandle,
+                contentType = BindingContext.CopyItemType.ToString(),
+                itemData = BindingContext.EditorFormattedItemData,
+                isReadOnly = BindingContext.IsContentReadOnly,
+                isSubSelectionEnabled = BindingContext.IsSubSelectionEnabled
+            };
+
+            var searches =
+                Mp.Services.Query.Infos
+                .Where(x => !string.IsNullOrEmpty(x.MatchValue) && x.QueryFlags.HasStringMatchFilterFlag())
+                .Select(x => new MpQuillContentSearchRequestMessage() {
+                    searchText = x.MatchValue,
+                    isCaseSensitive = x.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive),
+                    isWholeWordMatch = x.QueryFlags.HasFlag(MpContentQueryBitFlags.WholeWord),
+                    useRegEx = x.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex),
+                    matchType = x.QueryFlags.GetStringMatchType().ToString()
+                });
+
+            loadContentMsg.searchesFragment =
+                searches.Any() ?
+                new MpQuillContentSearchesFragment() {
+                    searches = searches.ToList()
+                }.SerializeJsonObjectToBase64() : null;
+
+            loadContentMsg.appendStateFragment =
+                BindingContext.IsAppendNotifier ?
+                    MpAvClipTrayViewModel.Instance
+                    .GetAppendStateMessage(null)
+                    .SerializeJsonObjectToBase64() : null;
+
+            if (MpAvPersistentClipTilePropertiesHelper
+                .TryGetPersistentSubSelectionState(
+                    BindingContext.CopyItemId,
+                    BindingContext.QueryOffsetIdx,
+                    out var sel_state)) {
+                loadContentMsg.selectionFragment = sel_state.SerializeJsonObjectToBase64();
+            }
+
+            return loadContentMsg;
         }
         #endregion
 
@@ -1224,40 +1292,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            var loadContentMsg = new MpQuillLoadContentRequestMessage() {
-                contentHandle = BindingContext.PublicHandle,
-                contentType = BindingContext.CopyItemType.ToString(),
-                itemData = BindingContext.EditorFormattedItemData,
-                isReadOnly = BindingContext.IsContentReadOnly,
-                isSubSelectionEnabled = BindingContext.IsSubSelectionEnabled
-            };
-
-            var searches =
-                Mp.Services.Query.Infos
-                .Where(x => !string.IsNullOrEmpty(x.MatchValue) && x.QueryFlags.HasStringMatchFilterFlag())
-                .Select(x => new MpQuillContentSearchRequestMessage() {
-                    searchText = x.MatchValue,
-                    isCaseSensitive = x.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive),
-                    isWholeWordMatch = x.QueryFlags.HasFlag(MpContentQueryBitFlags.WholeWord),
-                    useRegEx = x.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex),
-                    matchType = x.QueryFlags.GetStringMatchType().ToString()
-                });
-            loadContentMsg.searchesFragment =
-                searches.Any() ?
-                new MpQuillContentSearchesFragment() {
-                    searches = searches.ToList()
-                }.SerializeJsonObjectToBase64() : null;
-
-            loadContentMsg.appendStateFragment =
-                BindingContext.IsAppendNotifier ?
-                    MpAvClipTrayViewModel.Instance
-                    .GetAppendStateMessage(null)
-                    .SerializeJsonObjectToBase64() : null;
-
-            if (BindingContext.IsAppendNotifier) {
-
-            }
-
+            var loadContentMsg = GetLoadContentMessage();
             string msgStr = loadContentMsg.SerializeJsonObjectToBase64();
 
             SendMessage($"loadContent_ext('{msgStr}')");

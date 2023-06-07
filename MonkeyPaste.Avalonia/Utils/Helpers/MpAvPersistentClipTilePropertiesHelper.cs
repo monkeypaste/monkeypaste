@@ -16,10 +16,13 @@ namespace MonkeyPaste.Avalonia {
         public double? UniqueWidth { get; set; }
         public double? UniqueHeight { get; set; }
 
+        public MpQuillEditorSelectionStateMessage SubSelectionState { get; set; }
+
         public bool HasAnyUniqueProps =>
             //CopyItemId <= 0 ?
             //false :
             //QueryOffsetIdx < 0 ||
+            SubSelectionState != null ||
             IsTileDragging ||
             IsSelected ||
             !IsTitleReadOnly ||
@@ -35,31 +38,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-        private static void _props_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-
-        }
-        private static void CleanupProps() {
-            var to_remove_ids = _props.Where(x => !x.Value.HasAnyUniqueProps).Select(x => x.Key).ToArray();
-            for (int i = 0; i < to_remove_ids.Length; i++) {
-                _props.Remove(to_remove_ids[i]);
-            }
-        }
-
-        private static MpAvPersistentClipTileProperties GetProps(int ciid, bool autoAdd = false, int idx = -1) {
-            if (_props.ContainsKey(ciid)) {
-                _props[ciid].QueryOffsetIdx = idx;
-                return _props[ciid];
-            }
-            if (!autoAdd) {
-                return null;
-            }
-            var new_props = new MpAvPersistentClipTileProperties() {
-                QueryOffsetIdx = idx
-            };
-            _props.Add(ciid, new_props);
-            return new_props;
-        }
+        #region Public Methods
 
         public static void RemoveProps(int ciid) {
             if (GetProps(ciid) is MpAvPersistentClipTileProperties pp) {
@@ -72,6 +51,35 @@ namespace MonkeyPaste.Avalonia {
                 pp.QueryOffsetIdx = idx;
             }
         }
+
+        #region SubSelection State
+        public static void AddPersistentSubSelectionState(int ciid, int idx, MpQuillEditorSelectionStateMessage selState) {
+            if (GetProps(ciid, true, idx) is MpAvPersistentClipTileProperties pp) {
+                pp.SubSelectionState = selState;
+            }
+        }
+
+        public static bool TryGetPersistentSubSelectionState(int ciid, int idx, out MpQuillEditorSelectionStateMessage selState) {
+            if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp &&
+                pp.SubSelectionState != null) {
+                selState = pp.SubSelectionState;
+                return true;
+            }
+            selState = null;
+            return false;
+        }
+        public static void RemovePersistentSubSelectionState(int ciid, int idx) {
+            if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
+                pp.SubSelectionState = null;
+                CleanupProps();
+            }
+        }
+        public static void ClearPersistentSubSelectionState() {
+            _props.ForEach(x => x.Value.SubSelectionState = null);
+            CleanupProps();
+        }
+
+        #endregion
 
         #region IsSelected
         public static void SetPersistentSelectedItem(int ciid, int idx) {
@@ -88,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return -1;
         }
-        public static bool HasPersistenSelection() {
+        public static bool HasPersistentSelection() {
             return GetPersistentSelectedItemId() >= 0;
         }
 
@@ -137,6 +145,7 @@ namespace MonkeyPaste.Avalonia {
         public static bool IsPersistentTileContentEditable_ById(int ciid, int idx) {
             return GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp && !pp.IsContentReadOnly;
         }
+
         #endregion
 
         #region IsTitleEditable
@@ -246,6 +255,33 @@ namespace MonkeyPaste.Avalonia {
         public static void ClearPersistentHeights() {
             _props.ForEach(x => x.Value.UniqueHeight = null);
             CleanupProps();
+        }
+        #endregion
+
+        #endregion
+
+        #region Private Methods
+
+        private static void CleanupProps() {
+            var to_remove_ids = _props.Where(x => !x.Value.HasAnyUniqueProps).Select(x => x.Key).ToArray();
+            for (int i = 0; i < to_remove_ids.Length; i++) {
+                _props.Remove(to_remove_ids[i]);
+            }
+        }
+
+        private static MpAvPersistentClipTileProperties GetProps(int ciid, bool autoAdd = false, int idx = -1) {
+            if (_props.ContainsKey(ciid)) {
+                _props[ciid].QueryOffsetIdx = idx;
+                return _props[ciid];
+            }
+            if (!autoAdd) {
+                return null;
+            }
+            var new_props = new MpAvPersistentClipTileProperties() {
+                QueryOffsetIdx = idx
+            };
+            _props.Add(ciid, new_props);
+            return new_props;
         }
         #endregion
     }

@@ -89,3 +89,18 @@ function convertPlainHtml_ext_ntf(convertPlainHtmlReqMsgBase64Str) {
 
 	sendMessage('notifyPlainHtmlConverted', resp);
 }
+function selectionStateRequest_ext_ntf() {
+	// output 'MpQuillEditorSelectionStateMessage'
+	let sel = cleanDocRange(getDocSelection());
+	let scroll = getEditorScroll();
+	let respObj = {
+		index: sel.index,
+		length: sel.length,
+		scrollLeft: scroll.left,
+		scrollTop: scroll.top
+	};
+
+	let resp = toBase64FromJsonObj(respObj);
+
+	sendMessage('notifySelectionState', resp);
+}

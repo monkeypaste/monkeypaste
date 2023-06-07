@@ -26,8 +26,11 @@
 .ql-editor {
     height: auto;
     padding: 2px 10px;
-    /*caret-color: var(--caretcolor);*/
-    /*caret-color: transparent !important;*/
+    caret-color: var(--caretcolor) !important;
+}
+.ql-editor::selection {    
+  color: var(--selfgcolor);
+  background: var(--selbgcolor);
 }
 
 .ql-editor-converter {

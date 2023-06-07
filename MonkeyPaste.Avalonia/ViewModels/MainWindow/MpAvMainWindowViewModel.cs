@@ -1068,13 +1068,14 @@ namespace MonkeyPaste.Avalonia {
         private void AnalyzeWindowState(string source) {
             //return;
             // this fixes:
-            // 1. mw is locked so show/hide won't execute but is NOT visible
+            // 1. mw is locked so show/hide won't execute but is either NOT visible
+            //    or NOT active (which will still report visible on windows)
             //    so only way to show is activate from task bar
 
-            if (IsMainWindowOpen && !IsMainWindowVisible) {
+            if (source == "show" && IsMainWindowOpen && IsMainWindowLocked) {
                 // CAse 1
-
-                if (IsMainWindowLocked) {
+                bool needs_activate = !IsMainWindowVisible || !IsMainWindowActive;
+                if (needs_activate) {
                     //if(source == "show") {
                     //MpConsole.WriteLine($"Fixing mw state, locked but not visible");
                     MpAvWindowManager.MainWindow.Activate();
