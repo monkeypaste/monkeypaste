@@ -8,7 +8,7 @@ namespace MonkeyPaste.Avalonia {
             Width = 0;
             Height = 0;
             Opacity = 0;
-            TransparencyLevelHint = WindowTransparencyLevel.Transparent;
+            TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
             ShowInTaskbar = false;
             ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
             SystemDecorations = SystemDecorations.None;

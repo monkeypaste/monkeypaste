@@ -10,7 +10,7 @@ using System;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvProgressSpinner :
-        UserControl, IStyleable, MpIOverrideRender {
+        UserControl, MpIOverrideRender {
 
         #region Statics
 
@@ -25,10 +25,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region IStyleable Implementation
-        Type IStyleable.StyleKey => typeof(UserControl);
-        #endregion
-
         #region MpIOverrideRender Implementation
         public bool IgnoreRender { get; set; }
         #endregion
@@ -36,6 +32,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        #region Overrides
+        protected override Type StyleKeyOverride => typeof(UserControl);
+        #endregion
 
         #region Percent AvaloniaProperty
         private double _percent = 0;

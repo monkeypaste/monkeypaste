@@ -10,7 +10,7 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvClipBorder : UserControl, MpIOverrideRender { //}, IStyleable {
+    public class MpAvClipBorder : UserControl, MpIOverrideRender {
 
         #region Private Variables
 
@@ -20,10 +20,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-        #region IStyleable Implementation
-        //Type IStyleable.StyleKey => typeof(MpAvClipBorder);
-        #endregion
 
         #region MpIOverrideRender Implementation
         public bool IgnoreRender { get; set; }

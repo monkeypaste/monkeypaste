@@ -7,10 +7,12 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvCheckableMenuItemView : MenuItem, IStyleable {
-        Type IStyleable.StyleKey => typeof(MenuItem);
+    public partial class MpAvCheckableMenuItemView : MenuItem {
+        #region Overrides
+        protected override Type StyleKeyOverride => typeof(MenuItem);
+        #endregion
         public MpAvCheckableMenuItemView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             this.PointerPressed += MpAvCheckableMenuItemView_PointerPressed;
             //var cb = this.FindControl<CheckBox>("MenuItemCheckBox");
             //cb.PointerPressed += Cb_PointerPressed;
@@ -34,10 +36,6 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMenuExtension.CloseMenu();
             }
 
-        }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
     }
 }

@@ -18,10 +18,10 @@
                     Value="{DynamicResource TagTileBgColor}" />
             <Setter Property="BorderBrush"
                     Value="{DynamicResource TagTileBorderColor}" />
-            <Setter Property="BorderDashArray"
+            <!--<Setter Property="BorderDashArray"
                     Value="{x:Null}" />
             <Setter Property="BorderDashOffset"
-                    Value="0" />
+                    Value="0" />-->
         </Style>
         <Style Selector="Border#TagCountContainer">
             <Setter Property="BoxShadow"
@@ -51,10 +51,10 @@
                     Value="{DynamicResource DragIntoBrush}" />
         </Style>
         <Style Selector="Border#TagNameBorder.dragover,Border#TagNameBorder.drag">
-            <Setter Property="BorderDashArray"
+            <!--<Setter Property="BorderDashArray"
                     Value="2,2" />
             <Setter Property="BorderDashOffset"
-                    Value="2" />
+                    Value="2" />-->
         </Style>
         <Style Selector="Border#TagNameBorder.dragover.dragover_invalid">
             <Setter Property="BorderBrush"
@@ -118,7 +118,6 @@
     <Grid x:Name="TagViewContainerGrid"
           local:MpAvIsHoveringExtension.IsEnabled="True"
           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-          local:MpAvIsHoveringExtension.HoverCursor="Hand"
           local:MpAvPointerCommandExtension.IsEnabled="True"
           local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
           local:MpAvPointerCommandExtension.LeftPressCommand="{Binding SelectThisTagCommand}"

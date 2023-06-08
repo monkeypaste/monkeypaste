@@ -80,11 +80,7 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
 
-                var cf = FocusManager.Instance.Current;
-                if (cf == null) {
-                    return false;
-                }
-                if (cf is Control c && (
+                if (Mp.Services.FocusMonitor.FocusElement is Control c && (
                     c.GetVisualAncestor<MpAvSearchBoxView>() != null ||
                    c.GetVisualAncestor<MpAvSearchCriteriaListBoxView>() != null)) {
                     return true;
@@ -295,7 +291,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!IsExpanded || HasText || IsMultipleMatches || SearchFilterCollectionViewModel.IsPopupMenuOpen) {
                     return;
                 }
-                if (FocusManager.Instance.Current == null) {
+                if (Mp.Services.FocusMonitor.FocusElement == null) {
                     // focus is null when inactive (or hidden at least)
                     await Task.Delay(1000);
                     continue;

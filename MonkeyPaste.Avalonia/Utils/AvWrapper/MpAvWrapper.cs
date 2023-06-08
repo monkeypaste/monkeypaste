@@ -43,7 +43,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIPlatformShorcuts PlatformShorcuts { get; set; }
         public MpINotificationManager NotificationManager { get; set; }
         public MpIProcessWatcher ProcessWatcher { get; set; }
-        public MpICursor Cursor { get; set; }
         public MpIDbInfo DbInfo { get; set; }
         public MpIFocusMonitor FocusMonitor { get; set; }
         public MpIDragProcessWatcher DragProcessWatcher { get; set; }
@@ -144,7 +143,6 @@ namespace MonkeyPaste.Avalonia {
 
             KeyStrokeSimulator = new MpAvKeyStrokeSimulator();
             PlatformResource = new MpAvPlatformResource();
-            Cursor = new MpAvCursor((MpAvPlatformResource)PlatformResource);
             ContextMenuCloser = new MpAvContextMenuCloser();
             MainThreadMarshal = new MpAvMainThreadMarshal();
             StringTools = new MpAvStringTools();

@@ -50,8 +50,12 @@ namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
     [TemplatePart("PART_Track", typeof(Track))]
-    public class MpAvPagingScrollBar : ScrollBar, IStyleable {
-        Type IStyleable.StyleKey => typeof(MpAvPagingScrollBar);
+    public class MpAvPagingScrollBar : ScrollBar {
+
+        #region Overrides
+        protected override Type StyleKeyOverride => typeof(MpAvPagingScrollBar);
+        #endregion
+
         public Track Track { get; private set; }
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
             base.OnApplyTemplate(e);

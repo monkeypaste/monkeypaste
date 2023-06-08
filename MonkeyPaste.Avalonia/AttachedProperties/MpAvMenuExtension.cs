@@ -222,8 +222,8 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal) {
                 if (isEnabledVal) {
-                    _cmInstance.MenuOpened += _cmInstance_MenuOpened;
-                    _cmInstance.MenuClosed += _cmInstance_MenuOpened;
+                    _cmInstance.Opened += _cmInstance_MenuOpened;
+                    _cmInstance.Closed += _cmInstance_MenuOpened;
                     if (element is Control control) {
                         control.AttachedToVisualTree += HostControl_AttachedToVisualHandler;
                         if (control.IsInitialized) {

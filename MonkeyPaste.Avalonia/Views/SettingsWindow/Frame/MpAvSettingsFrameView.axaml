@@ -19,7 +19,7 @@
             <StackPanel Orientation="Horizontal">
                 <Image Classes="frame header icon"
                        IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
                 <TextBlock Classes="frame header text"
                            Text="{Binding LabelText}" />
             </StackPanel>

@@ -133,7 +133,6 @@
                             Height="{Binding Height}"
                             local:MpAvIsHoveringExtension.IsEnabled="True"
                             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                            local:MpAvIsHoveringExtension.HoverCursor="ResizeAll"
                             local:MpAvMoveExtension.IsEnabled="True"
                             local:MpAvMoveExtension.CanMove="{Binding CanMove, Mode=TwoWay}"
                             local:MpAvMoveExtension.IsMoving="{Binding IsMoving, Mode=TwoWay}"

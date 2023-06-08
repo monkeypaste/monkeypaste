@@ -33,6 +33,16 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style Selector="Button#UnpinAllButton Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+        </Style>
+
+        <Style Selector="Button#UnpinAllButton:pointerover Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"
             HorizontalAlignment="Stretch"
@@ -121,8 +131,7 @@
                     </MultiBinding>
                 </Button.IsVisible>
                 <Grid>
-                    <Image IsVisible="{Binding !IsPinTrayBusy}"
-                           Source="{Binding ., Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    <Image IsVisible="{Binding !IsPinTrayBusy}" />
 
                     <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch"

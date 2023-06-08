@@ -763,23 +763,5 @@ namespace MonkeyPaste.Common.Avalonia {
 
 
         #endregion
-
-        #region Color
-
-
-        #endregion
-
-        #region Strings
-
-        public static bool IsAvResourceString(this string str) {
-            if (str.IsNullOrEmpty()) {
-                return false;
-            }
-            return str.ToLower().StartsWith("avares://");
-        }
-
-        #endregion
-
-
     }
 }

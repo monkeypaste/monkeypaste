@@ -8,8 +8,10 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvContextMenuView : ContextMenu, IStyleable {
-        Type IStyleable.StyleKey => typeof(ContextMenu);
+    public partial class MpAvContextMenuView : ContextMenu {
+        #region Overrides
+        protected override Type StyleKeyOverride => typeof(ContextMenu);
+        #endregion
 
         private static MpAvContextMenuView _instance;
         public static MpAvContextMenuView Instance => _instance ?? (_instance = new MpAvContextMenuView());

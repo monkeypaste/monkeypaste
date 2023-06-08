@@ -114,23 +114,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region HoverCursor AvaloniaProperty
-        public static MpCursorType? GetHoverCursor(AvaloniaObject obj) {
-            return obj.GetValue(HoverCursorProperty);
-        }
-
-        public static void SetHoverCursor(AvaloniaObject obj, MpCursorType? value) {
-            obj.SetValue(HoverCursorProperty, value);
-        }
-
-        public static readonly AttachedProperty<MpCursorType?> HoverCursorProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, MpCursorType?>(
-                "HoverCursor",
-                null,
-                false);
-
-        #endregion
-
         #region HoverImageSource AvaloniaProperty
         public static IImage GetHoverImageSource(AvaloniaObject obj) {
             return obj.GetValue(HoverImageSourceProperty);
@@ -228,10 +211,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 SetIsHovering(control, true);
-                if (GetHoverCursor(control) is MpCursorType ct) {
-                    Mp.Services.Cursor.SetCursor(control, ct);
-                }
-                var test = GetHoverBrush(control);
+
                 if (GetHoverBrush(control) is IBrush hoverBrush && control is Border border) {
                     if (GetDefaultBrush(control) == null) {
                         SetDefaultBrush(control, border.Background);
@@ -243,9 +223,6 @@ namespace MonkeyPaste.Avalonia {
         private static void PointerLeaveHandler(object s, PointerEventArgs e) {
             if (s is Control control) {
                 SetIsHovering(control, false);
-                if (GetHoverCursor(control) is MpCursorType ct) {
-                    Mp.Services.Cursor.UnsetCursor(control.DataContext);
-                }
                 if (GetDefaultBrush(control) is IBrush defaultBrush && control is Border border) {
                     border.Background = defaultBrush;
                 }

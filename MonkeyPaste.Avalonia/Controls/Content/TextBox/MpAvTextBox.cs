@@ -11,8 +11,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvTextBox :
         TextBox,
-        MpAvIDragSource,
-        IStyleable {
+        MpAvIDragSource {
         #region Private Variables
 
         #endregion
@@ -63,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Overrides
-        Type IStyleable.StyleKey => typeof(TextBox);
+        protected override Type StyleKeyOverride => typeof(TextBox);
 
         #endregion
 

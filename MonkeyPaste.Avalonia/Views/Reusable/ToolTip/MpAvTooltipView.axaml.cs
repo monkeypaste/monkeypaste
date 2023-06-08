@@ -4,6 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -11,8 +12,21 @@ using PropertyChanged;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
+    [DoNotNotify]
+    public class MpAvToolTip : ToolTip {
+        protected override Type StyleKeyOverride => typeof(ToolTip);
+
+        public static readonly AttachedProperty<object?> TipProperty =
+            AvaloniaProperty.RegisterAttached<MpAvToolTip, Control, object?>("Tip", inherits: true);
+        public MpAvToolTip() : base() {
+            Focusable = false;
+            IsEnabled = false;
+        }
+
+    }
 
     [DoNotNotify]
     public partial class MpAvToolTipView : UserControl {
@@ -21,9 +35,8 @@ namespace MonkeyPaste.Avalonia {
         private MpPoint _lastMousePos;
         private bool _isMoveAttached = false;
         private bool _isDisableAttached = false;
+
         #endregion
-
-
 
         #region Statics
 
@@ -40,8 +53,6 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-        static bool IsTooltipFollowEnabled { get; set; } = false;
-
         #endregion
 
         #region Properties
@@ -49,6 +60,20 @@ namespace MonkeyPaste.Avalonia {
             string.IsNullOrEmpty(ToolTipText) ?
                 ToolTipHtml :
                 ToolTipText;
+
+        #region IsTooltipFollowEnabled AvaloniaProperty
+
+        public bool IsTooltipFollowEnabled {
+            get { return GetValue(IsTooltipFollowEnabledProperty); }
+            set { SetValue(IsTooltipFollowEnabledProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> IsTooltipFollowEnabledProperty =
+            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(
+                name: nameof(IsTooltipFollowEnabled),
+                defaultValue: true);
+
+        #endregion
 
         #region ToolTipText Property
 
@@ -99,29 +124,25 @@ namespace MonkeyPaste.Avalonia {
         public MpAvToolTipView() {
             AvaloniaXamlLoader.Load(this);
 
-            if (!IsTooltipFollowEnabled) {
-                IsEnabled = false;
-                return;
-            }
-
+            //if (!IsTooltipFollowEnabled) {
+            //    IsEnabled = false;
+            //    return;
+            //}
 
             this.AttachedToVisualTree += MpAvTooltipView_AttachedToVisualTree;
-            this.DetachedFromVisualTree += MpAvTooltipView_DetachedFromVisualTree;
-            this.AttachedToLogicalTree += MpAvToolTipView_AttachedToLogicalTree;
             this.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
             if (MpAvWindowManager.MainWindow != null) {
                 MpAvWindowManager.MainWindow.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
             }
         }
 
-
         public void Init() {
             IsVisible = !string.IsNullOrEmpty(ToolTipContent);
             if (IsVisible) {
                 var tb = this.FindControl<Control>("ToolTipTextBlock");
                 tb.IsVisible = !string.IsNullOrEmpty(ToolTipText);
-                //var hl = this.FindControl<Control>("ToolTipHtmlPanel");
-                //hl.IsVisible = !string.IsNullOrEmpty(ToolTipHtml);
+                var hl = this.FindControl<Control>("ToolTipHtmlPanel");
+                hl.IsVisible = !string.IsNullOrEmpty(ToolTipHtml);
             }
         }
 
@@ -137,42 +158,46 @@ namespace MonkeyPaste.Avalonia {
                 IsVisible = false;
             }
             if (!IsVisible && GetPopupRoot() is PopupRoot pur) {
-                pur.Hide();
                 pur.IsVisible = false;
+                pur.Hide();
             }
         }
 
-
-        private void MpAvToolTipView_AttachedToLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
-            if (!_isMoveAttached &&
-                GetHostControl() is Control host_control) {
-                host_control.PointerMoved += Host_control_PointerMoved;
-                _isMoveAttached = true;
-            }
-            if (!_isDisableAttached &&
-                GetPopupRoot() is PopupRoot pur) {
-                pur.TransparencyLevelHint = WindowTransparencyLevel.Transparent;
-                pur.Background = Brushes.Transparent;
-                foreach (var elm in pur.GetSelfAndLogicalDescendants()) {
-                    if (elm is Control c) {
-                        c.IsHitTestVisible = false;
-                        c.Focusable = false;
-                        c.IsEnabled = false;
-                    }
-                }
-                _isDisableAttached = true;
-            }
-        }
         private void MpAvTooltipView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-
+            Init();
         }
 
         private void Host_control_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
             var hc = GetHostControl();
+
             if (hc == null) {
                 _lastMousePos = null;
                 return;
             }
+
+            if (!IsVisible) {
+                hc.PointerMoved -= Host_control_PointerMoved;
+                return;
+            }
+
+            if (!_isMoveAttached) {
+                hc.PointerMoved += Host_control_PointerMoved;
+                _isMoveAttached = true;
+            }
+            if (!_isDisableAttached &&
+                GetPopupRoot() is PopupRoot pur) {
+                pur.TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
+                pur.Background = Brushes.Transparent;
+                foreach (var elm in pur.GetSelfAndLogicalDescendants()) {
+                    if (elm is Control c) {
+                        //c.IsHitTestVisible = false;
+                        //c.Focusable = false;
+                        //c.IsEnabled = false;
+                    }
+                }
+                _isDisableAttached = true;
+            }
+
             if (_lastMousePos == null) {
                 _lastMousePos = e.GetScreenMousePoint(hc);
             }
@@ -180,15 +205,6 @@ namespace MonkeyPaste.Avalonia {
 
             SetToolTipOffset(hc, mp);
             _lastMousePos = mp;
-        }
-
-        private void MpAvTooltipView_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            //this.AttachedToVisualTree -= MpAvTooltipView_AttachedToVisualTree;
-            //this.DetachedFromVisualTree -= MpAvTooltipView_DetachedFromVisualTree;
-            //this.AttachedToLogicalTree -= MpAvToolTipView_AttachedToLogicalTree;
-            //if (GetHostControl() is Control host_control) {
-            //    host_control.PointerMoved -= Host_control_PointerMoved;
-            //}
         }
 
         #region Helpers
@@ -225,7 +241,6 @@ namespace MonkeyPaste.Avalonia {
             var diff = mp - _lastMousePos;
             var w = GetPopupRoot();
 
-            //var w = hc.GetVisualAncestor<Window>();
             if (w == null) {
                 // occuring in plugin preset icon popup menu (when window)
                 var test = hc.GetVisualAncestors();

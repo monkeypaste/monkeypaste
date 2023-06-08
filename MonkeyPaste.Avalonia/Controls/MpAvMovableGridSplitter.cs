@@ -11,7 +11,7 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvMovableGridSplitter : GridSplitter, IStyleable {
+    public class MpAvMovableGridSplitter : GridSplitter {
 
 
         #region Private Variables
@@ -24,14 +24,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-        #region IStyleable Implementation
-        Type IStyleable.StyleKey => typeof(GridSplitter);
-        #endregion
-
         #endregion
 
         #region Properties
+
+        #region Overrides
+        protected override Type StyleKeyOverride => typeof(GridSplitter);
+        #endregion
+
         #endregion
 
         #region Constructors

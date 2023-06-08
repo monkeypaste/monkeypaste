@@ -182,14 +182,23 @@ textarea:placeholder-shown {
 }
 
 /* override superCm so they aren't so tall */
+.context-menu {
+    background-color: var(--editortoolbarbgcolor);
+    border-color: var(--editortoolbarsepbgcolor);
+}
 .context-menu-separator {
     padding: 0 !important;
 }
 
 .context-menu-option {
+    color: var(--editortoolbarbuttoncolor);
     padding: 1px 30px 1px 15px !important;
     display: flex;
     align-items: center;
+}
+
+.option-text, .context-menu-submenu:after {
+    color: var(--editortoolbarbuttoncolor);
 }
 
 .context-menu-option:has(.option-keys) {

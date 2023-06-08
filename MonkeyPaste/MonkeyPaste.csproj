@@ -64,6 +64,7 @@
     <Compile Remove="App.xaml.cs" />
     <Compile Remove="AssemblyInfo.cs" />
     <Compile Remove="Enums\MpTextContentFormat.cs" />
+    <Compile Remove="Interfaces\MpICursor.cs" />
     <Compile Remove="Interfaces\MpINavigate.cs" />
     <Compile Remove="Interfaces\MpIUiLocationHelper.cs" />
     <Compile Remove="Models\MpAnalyticItemParameter.cs" />

@@ -1169,8 +1169,7 @@ namespace MonkeyPaste.Avalonia {
 
                 AnalyzeWindowState("hide");
                 bool isInputFocused =
-                    FocusManager.Instance.Current != null &&
-                    FocusManager.Instance.Current is Control c &&
+                    Mp.Services.FocusMonitor.FocusElement is Control c &&
                     (
                         c.GetVisualAncestor<ContextMenu>() != null ||
                         c.GetVisualAncestor<MenuItem>() != null ||

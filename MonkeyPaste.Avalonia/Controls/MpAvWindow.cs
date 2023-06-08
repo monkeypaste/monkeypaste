@@ -10,7 +10,7 @@ using static TheArtOfDev.HtmlRenderer.Adapters.RGraphicsPath;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvWindow : Window, IStyleable {
+    public class MpAvWindow : Window {
 
         #region Private Variables
         private const string NO_RESULT_OBJ = "sdoifjdsfjnlkwe2423";
@@ -23,14 +23,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-        #region IStyleable  Implementation
-        Type IStyleable.StyleKey => typeof(Window);
-
-        #endregion
         #endregion
 
         #region Properties
+
+        #region Overrides
+        protected override Type StyleKeyOverride => typeof(Window);
+        #endregion
 
         #region State
         public object DialogResult { get; set; }

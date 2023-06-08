@@ -43,18 +43,24 @@ namespace MonkeyPaste.Avalonia {
                 uri = new Uri(resource_val);
             }
 
-            var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-            var asset = assets.Open(uri);
-            asset.Seek(0, SeekOrigin.Begin);
+            try {
+                //var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+                using (var asset = AssetLoader.OpenAndGetAssembly(uri).stream) {
+                    asset.Seek(0, SeekOrigin.Begin);
 
-            if (targetType != null && (targetType == typeof(Geometry) ||
-                targetType.IsSubclassOf(typeof(Geometry)))) {
-                using (var sr = new StreamReader(asset)) {
-                    return StreamGeometry.Parse(sr.ReadToEnd());
+                    if (targetType != null && (targetType == typeof(Geometry) ||
+                        targetType.IsSubclassOf(typeof(Geometry)))) {
+                        using (var sr = new StreamReader(asset)) {
+                            return StreamGeometry.Parse(sr.ReadToEnd());
+                        }
+                    }
+                    if (targetType == null || typeof(IImage).IsAssignableFrom(targetType)) {
+                        return new Bitmap(asset);
+                    }
                 }
             }
-            if (targetType == null || typeof(IImage).IsAssignableFrom(targetType)) {
-                return new Bitmap(asset);
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error accessing resource from '{uri}'", ex);
             }
             return null;
         }

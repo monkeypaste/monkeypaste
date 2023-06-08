@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
         private MpAvFocusManager() { }
         public bool IsInputControlFocused {
             get {
-                IInputElement cur_focus = FocusManager.Instance.Current;
+                IInputElement cur_focus = FocusElement as IInputElement;
                 if (cur_focus == null) {
                     return false;
                 }
@@ -56,10 +56,20 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSelfManagedHistoryControlFocused {
             get {
-                if (FocusManager.Instance.Current is MpIContentView wv) {
+                if (FocusElement is MpIContentView wv) {
                     return wv.IsSubSelectable;
                 }
                 return false;
+            }
+        }
+
+        public object FocusElement {
+            get {
+                if (MpAvWindowManager.ActiveWindow is Window w &&
+                    TopLevel.GetTopLevel(w) is TopLevel tl) {
+                    return tl.FocusManager.GetFocusedElement();
+                }
+                return null;
             }
         }
     }

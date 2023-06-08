@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     [DoNotNotify]
-    public class MpAvMarqueeTextBox : TextBox, IStyleable, MpIOverrideRender {
+    public class MpAvMarqueeTextBox : TextBox, MpIOverrideRender {
 
         #region Private Variables
 
@@ -58,9 +58,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region IStyleable Implementation
-        Type IStyleable.StyleKey => typeof(TextBox);
-        #endregion
 
         #region MpIOverrideRender Implementation
         public bool IgnoreRender { get; set; }
@@ -69,6 +66,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        #region Overrides
+        protected override Type StyleKeyOverride => typeof(TextBox);
+        #endregion
 
         private MpTextRange _contentRange;
         public MpTextRange ContentRange {

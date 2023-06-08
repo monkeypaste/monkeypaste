@@ -2,9 +2,11 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common.Avalonia;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvSidebarButtonGroupView : MpAvUserControl<MpAvClipTrayViewModel> {
@@ -12,18 +14,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSidebarButtonGroupView() {
             AvaloniaXamlLoader.Load(this);
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
-
-            var amb = this.FindControl<Control>("AppModeToggleButton");
-            //amb.AddHandler(PointerPressedEvent, Amb_PointerPressed, RoutingStrategies.Tunnel);
-        }
-
-        private void Amb_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            if (sender is Control c) {
-                if (Flyout.GetAttachedFlyout(c) is Flyout fo) {
-                    fo.Opening += Fo_Opening;
-
-                }
-            }
         }
 
         private void Fo_Opening(object sender, System.EventArgs e) {

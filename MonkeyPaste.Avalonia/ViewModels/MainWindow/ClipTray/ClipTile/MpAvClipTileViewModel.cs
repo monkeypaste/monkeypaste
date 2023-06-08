@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
         public const int AUTO_CYCLE_DETAIL_DELAY_MS = 5000;
         public const string TABLE_WRAPPER_CLASS_NAME = "quill-better-table-wrapper";
 
-        public const double EDITOR_TOOLBAR_MIN_WIDTH = 830.0d;
+        public const double EDITOR_TOOLBAR_MIN_WIDTH = 870.0d;
         public const double PASTE_APPEND_TOOLBAR_MIN_WIDTH = 290.0d;
         public const double PASTE_TEMPLATE_TOOLBAR_MIN_WIDTH = 850.0d;
 
@@ -635,7 +635,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsFocusWithin {
             get {
-                if (FocusManager.Instance.Current is Control c) {
+                if (Mp.Services.FocusMonitor.FocusElement is Control c) {
                     //return
                     //   c.GetVisualAncestors<Control>()
                     //   .Any(x =>

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 using FocusManager = Avalonia.Input.FocusManager;
 using Key = Avalonia.Input.Key;
 
@@ -149,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!CanBeGlobalShortcut) {
                     return;
                 }
-                if (FocusManager.Instance.Current is Control c) {
+                if (Mp.Services.FocusMonitor.FocusElement is Control c) {
                     bool reject = true;
                     if (c.DataContext is MpAvAssignShortcutViewModel) {
                         reject = false;

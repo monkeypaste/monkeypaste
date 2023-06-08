@@ -337,7 +337,7 @@ namespace MonkeyPaste.Avalonia {
                 MaxHeight = 300,
                 SizeToContent = SizeToContent.Manual,
                 Background = Brushes.Transparent,
-                TransparencyLevelHint = WindowTransparencyLevel.Transparent,
+                TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent },
                 WindowState = WindowState.Normal,
                 SystemDecorations = SystemDecorations.None,
                 ShowInTaskbar = false,

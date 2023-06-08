@@ -3,10 +3,13 @@ using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+
 namespace MonkeyPaste.Avalonia {
 
     public partial class MpAvSliderParameterView : MpAvUserControl<MpISliderViewModel> {
@@ -59,10 +62,32 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region FlipTheme Property
+
+        private bool _FlipTheme = true;
+
+        public static readonly DirectProperty<MpAvSliderParameterView, bool> FlipThemeProperty =
+            AvaloniaProperty.RegisterDirect<MpAvSliderParameterView, bool>
+            (
+                nameof(FlipTheme),
+                o => o.FlipTheme,
+                (o, v) => o.FlipTheme = v,
+                true
+            );
+
+        public bool FlipTheme {
+            get => _FlipTheme;
+            set {
+                SetAndRaise(FlipThemeProperty, ref _FlipTheme, value);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         public MpAvSliderParameterView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
 
             var sb = this.FindControl<Border>("SliderBorder");
             sb.EffectiveViewportChanged += Sb_EffectiveViewportChanged;
@@ -72,7 +97,53 @@ namespace MonkeyPaste.Avalonia {
 
             this.GetObservable(MpAvSliderParameterView.HasTextInputProperty).Subscribe(value => OnHasTextInputChanged());
 
+            var tb = this.FindControl<TextBox>("SliderValueTextBox");
 
+            tb.PointerEntered += Tb_PointerEntered;
+            tb.PointerExited += Tb_PointerExited;
+            tb.GotFocus += Tb_GotFocus;
+            tb.LostFocus += Tb_LostFocus;
+
+            this.GetObservable(MpAvSliderParameterView.FlipThemeProperty).Subscribe(value => StyleTextBox());
+            StyleTextBox();
+        }
+
+        private void Tb_LostFocus(object sender, RoutedEventArgs e) {
+            StyleTextBox();
+        }
+
+        private void Tb_GotFocus(object sender, GotFocusEventArgs e) {
+            StyleTextBox();
+        }
+
+        private void Tb_PointerExited(object sender, PointerEventArgs e) {
+            StyleTextBox();
+        }
+
+        private void Tb_PointerEntered(object sender, PointerEventArgs e) {
+            StyleTextBox();
+        }
+
+        private void StyleTextBox() {
+            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
+            IBrush fg = FlipTheme ?
+                Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveBgColor") :
+                Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveColor");
+
+            IBrush bg = FlipTheme ?
+                Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveColor") :
+                Mp.Services.PlatformResource.GetResource<IBrush>("ThemeInteractiveBgColor");
+
+            if (svtb.IsFocused || svtb.IsKeyboardFocusWithin) {
+                svtb.Background = fg;
+                svtb.Foreground = bg;
+                return;
+            }
+            svtb.Background = Brushes.Transparent;
+            svtb.Foreground = fg;
+            if (svtb.IsPointerOver) {
+                svtb.Foreground = Mp.Services.PlatformResource.GetResource<IBrush>("ThemeAccent1Color");
+            }
         }
 
         private void OnHasTextInputChanged() {
@@ -239,6 +310,9 @@ namespace MonkeyPaste.Avalonia {
 
             double percentFilled = BindingContext.SliderValue / (BindingContext.MaxValue - BindingContext.MinValue);
             svr.Width = sb.Bounds.Width * percentFilled;
+
+            var svtb = this.FindControl<TextBox>("SliderValueTextBox");
+            FlipTheme = svr.Bounds.Right > svtb.Bounds.Left;
         }
     }
 }

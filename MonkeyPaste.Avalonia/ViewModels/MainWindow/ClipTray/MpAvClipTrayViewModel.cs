@@ -1362,7 +1362,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyTileHaveFocusWithin {
             get {
                 // NOTE for performance not selecting ctvm.IsFocusWithin
-                if (FocusManager.Instance.Current is Control c) {
+                if (Mp.Services.FocusMonitor.FocusElement is Control c) {
                     return
                         c.GetVisualAncestor<MpAvClipTileView>() != null;
                 }
@@ -2141,14 +2141,14 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(HasScrollVelocity):
                     //MpPlatformWrapper.Services.Cursor.IsCursorFrozen = HasScrollVelocity;
 
-                    if (HasScrollVelocity) {
-                        Mp.Services.Cursor.UnsetCursor(null);
-                    } else {
-                        var hctvm = Items.FirstOrDefault(x => x.IsHovering);
-                        if (IsAnyBusy) {
-                            OnPropertyChanged(nameof(IsBusy));
-                        }
-                    }
+                    //if (HasScrollVelocity) {
+                    //    Mp.Services.Cursor.UnsetCursor(null);
+                    //} else {
+                    //    var hctvm = Items.FirstOrDefault(x => x.IsHovering);
+                    //    if (IsAnyBusy) {
+                    //        OnPropertyChanged(nameof(IsBusy));
+                    //    }
+                    //}
                     break;
 
                 case nameof(ZoomFactor):
@@ -2555,7 +2555,7 @@ namespace MonkeyPaste.Avalonia {
                     canNavigate = false;
                 }
                 if (canNavigate) {
-                    var cf = FocusManager.Instance.Current;
+                    var cf = Mp.Services.FocusMonitor.FocusElement;
                     if (!IsAnyTileHaveFocusWithin && (cf != null && cf != App.MainView as IInputElement && cf is not MpAvContentWebView)) {
 
                         canNavigate = false;

@@ -8,6 +8,12 @@ using MonkeyPaste.Common.Wpf;
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvStringExtensions {
 
+        public static bool IsAvResourceString(this string str) {
+            if (str.IsNullOrEmpty()) {
+                return false;
+            }
+            return str.ToLower().StartsWith("avares://");
+        }
         public static bool IsRichHtmlMixedMedia(this string qhtml) {
             string imgTagStartStr = @"<img src='";
             int img_tag_start_idx = qhtml.IndexOf(imgTagStartStr);

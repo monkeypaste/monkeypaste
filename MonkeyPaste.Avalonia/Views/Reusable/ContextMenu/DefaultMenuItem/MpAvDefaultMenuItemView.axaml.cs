@@ -6,8 +6,10 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvDefaultMenuItemView : MpAvUserControl<MpMenuItemViewModel>, IStyleable {
-        Type IStyleable.StyleKey => typeof(MenuItem);
+    public partial class MpAvDefaultMenuItemView : MpAvUserControl<MpMenuItemViewModel> {
+        #region Overrides
+        protected override Type StyleKeyOverride => typeof(MenuItem);
+        #endregion
         public MpAvDefaultMenuItemView() {
             InitializeComponent();
             this.PointerPressed += MpAvDefaultMenuItemView_PointerPressed;

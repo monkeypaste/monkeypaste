@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -404,6 +405,47 @@ namespace MonkeyPaste.Common {
         public static int EnumToInt<TValue>(this TValue value)
             where TValue : Enum => Convert.ToInt32(value);
 
+
+        public static bool HasAllFlags<T>(this T value, T flags) where T : Enum {
+            if (Enum.GetUnderlyingType(typeof(T)) == typeof(byte)) {
+                var byteValue = Convert.ToByte(value);
+                var byteFlags = Convert.ToByte(flags);
+                return (byteValue & byteFlags) == byteFlags;
+            } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(short)) {
+                var shortValue = Convert.ToInt16(value);
+                var shortFlags = Convert.ToInt16(value);
+                return (shortValue & shortFlags) == shortFlags;
+            } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(int)) {
+                var intValue = Convert.ToInt32(value);
+                var intFlags = Convert.ToInt32(value);
+                return (intValue & intFlags) == intFlags;
+            } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(long)) {
+                var longValue = Convert.ToInt64(value);
+                var longFlags = Convert.ToInt64(value);
+                return (longValue & longFlags) == longFlags;
+            } else
+                throw new NotSupportedException("Enum with size of " + Unsafe.SizeOf<T>() + " are not supported");
+        }
+        public static bool HasAnyFlag<T>(this T value, T flags) where T : Enum {
+            if (Enum.GetUnderlyingType(typeof(T)) == typeof(byte)) {
+                var byteValue = Convert.ToByte(value);
+                var byteFlags = Convert.ToByte(flags);
+                return (byteValue & byteFlags) != 0;
+            } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(short)) {
+                var shortValue = Convert.ToInt16(value);
+                var shortFlags = Convert.ToInt16(value);
+                return (shortValue & shortFlags) != 0;
+            } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(int)) {
+                var intValue = Convert.ToInt32(value);
+                var intFlags = Convert.ToInt32(value);
+                return (intValue & intFlags) != 0;
+            } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(long)) {
+                var longValue = Convert.ToInt64(value);
+                var longFlags = Convert.ToInt64(value);
+                return (longValue & longFlags) != 0;
+            } else
+                throw new NotSupportedException("Enum with size of " + Unsafe.SizeOf<T>() + " are not supported");
+        }
         #endregion
 
         #region EventHandler

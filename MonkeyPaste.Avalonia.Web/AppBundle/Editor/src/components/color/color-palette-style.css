@@ -1,8 +1,8 @@
 ﻿#colorPaletteContainer {
     position: absolute;
     display: block;
-    background-color: whitesmoke;
-    border: 0.5px solid dimgray;
+    background-color: var(--editortoolbarbgcolor);
+    border: 0.5px solid var(--editortoolbarsepbgcolor);
     border-radius: var(--commonborderradius);
     transition: 0.5s;
 }
@@ -11,15 +11,15 @@
     height: 15px;
     width: 15px;
     border-radius: 1px;
-    border: solid 1px black;
+    border: solid 1px var(--editortoolbarsepbgcolor);
 }
 
     .color-palette-item:hover {
-        border: solid 1px yellow;
+        border: solid 1px var(--opthovercolor);
     }
 
 .color-palette-item-selected:not(:hover) {
-    border-color: black !important;
+    border-color: var(--optselectcolor) !important;
 }
 
 .custom-color-palette-item span {

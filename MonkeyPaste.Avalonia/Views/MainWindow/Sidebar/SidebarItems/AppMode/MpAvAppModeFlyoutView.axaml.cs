@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
                 // pur.AttachDevTools();
 #endif
 
-                pur.TransparencyLevelHint = WindowTransparencyLevel.Transparent;
+                pur.TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
                 pur.Background = Brushes.Transparent;
 
             }

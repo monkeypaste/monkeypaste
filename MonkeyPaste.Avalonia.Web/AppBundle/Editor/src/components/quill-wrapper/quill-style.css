@@ -89,6 +89,18 @@
     width: 180px;
 }
 
+ 
+.ql-picker-options {    
+    background-color: var(--editortoolbarbgcolor) !important;
+    border-color: var(--editortoolbarsepbgcolor) !important;
+    color: var(--editortoolbarbuttoncolor) !important;
+}
+.ql-picker-options .ql-picker-item:hover {
+    color: var(--opthovercolor) !important;
+}
+.ql-picker-options .ql-picker-item.ql-selected, .ql-picker-options .ql-picker-item.editor-selected {
+    color: var(--optselectcolor) !important;
+}
 
 .ql-container.ql-snow {
     border: 0px solid #ccc;

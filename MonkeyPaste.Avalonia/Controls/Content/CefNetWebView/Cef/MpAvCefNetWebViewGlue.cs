@@ -34,6 +34,10 @@ namespace MonkeyPaste.Avalonia {
             //return true;
         }
 
+        protected override bool OnCursorChange(CefBrowser browser, nint cursorHandle, CefCursorType type, CefCursorInfo customCursorInfo) {
+            return base.OnCursorChange(browser, cursorHandle, type, customCursorInfo);
+        }
+
         /// <summary>
         /// Called when the user starts dragging content in the web view. OS APIs that run a system message
         /// loop may be used within the StartDragging call. Don't call any of CefBrowserHost::DragSource*Ended*

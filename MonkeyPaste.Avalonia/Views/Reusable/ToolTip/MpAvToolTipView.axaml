@@ -29,6 +29,7 @@
             Classes.html="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
         <Grid>
             <TextBlock x:Name="ToolTipTextBlock"
+                       FontSize="14"
                        FontWeight="Light"
                        TextDecorations="{x:Null}"
                        Foreground="{DynamicResource ThemeInteractiveBgColor}"

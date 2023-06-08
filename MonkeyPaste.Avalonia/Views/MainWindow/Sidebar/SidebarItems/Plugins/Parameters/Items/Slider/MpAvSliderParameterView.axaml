@@ -1,4 +1,5 @@
 ﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvSliderParameterView"
+                       x:Name="SliderView"
                        xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,6 +12,9 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <local:MpAvUserControl.Resources>
+
+    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--<Style Selector="Border#SliderBorder">
         <Setter Property="BorderBrush"
@@ -20,30 +24,30 @@
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
     </Style>-->
-        <Style Selector="TextBox">
+        <!--<Style Selector="TextBox:not(:focus)">
             <Setter Property="Background"
                     Value="Transparent" />
             <Setter Property="Foreground"
-                    Value="White" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
-        <Style Selector="TextBox:pointerover">
+        <Style Selector="TextBox:not(:focus):pointerover">
             <Setter Property="Background"
-                    Value="White" />
-            <Setter Property="Foreground"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
+            --><!--<Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveColor}" />--><!--
         </Style>
         <Style Selector="TextBox:focus">
             <Setter Property="Background"
-                    Value="White" />
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
             <Setter Property="Foreground"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
         <Style Selector="TextBox:not(:focus)">
             <Setter Property="Background"
                     Value="Transparent" />
             <Setter Property="Foreground"
-                    Value="White" />
-        </Style>
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
+        </Style>-->
     </local:MpAvUserControl.Styles>
     <Border x:Name="SliderBorder"
             Classes.paramBorder="True"
@@ -56,6 +60,7 @@
             <Rectangle x:Name="SliderValueRectangle"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Stretch"
+                       Stroke="{DynamicResource ThemeInteractiveOpacity}"
                        MinWidth="0">
                 <Rectangle.MaxWidth>
                     <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
@@ -70,7 +75,7 @@
                     </MultiBinding>
                 </Rectangle.MaxWidth>
                 <Rectangle.Fill>
-                    <SolidColorBrush Color="Black" Opacity="0.6" />
+                    <SolidColorBrush Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource ThemeInteractiveOpacity}" />
                 </Rectangle.Fill>
                 <Rectangle.Width>
                     <MultiBinding Converter="{x:Static local:MpAvMultiSliderValueToLengthConverter.Instance}">
@@ -80,7 +85,7 @@
                         <Binding Path="MaxValue"
                                  FallbackValue="0"
                                  TargetNullValue="0" />
-                        <Binding Path="SliderValue"/>
+                        <Binding Path="SliderValue" />
                         <Binding ElementName="SliderValueRectangle"
                                  Path="MaxWidth"
                                  FallbackValue="0"

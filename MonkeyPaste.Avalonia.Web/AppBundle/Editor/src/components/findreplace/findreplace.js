@@ -25,8 +25,8 @@ function initFindReplaceToolbar() {
 }
 
 function initFindReplaceIcons() {
-	getFindReplacePreviousButton().innerHTML = getSvgHtml('arrow-left');
-	getFindReplaceNextButton().innerHTML = getSvgHtml('arrow-right');
+	getFindReplacePreviousButton().innerHTML = getSvgHtml('arrow-left',null,false);
+	getFindReplaceNextButton().innerHTML = getSvgHtml('arrow-right', null, false);
 }
 
 function loadFindReplace(searches) {

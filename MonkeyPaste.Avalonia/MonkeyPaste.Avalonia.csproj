@@ -477,6 +477,7 @@
     <Compile Remove="Behaviors\MpAvMoveBehavior.cs" />
     <Compile Remove="Controls\Content\CefNetWebView\Cef\WebView\MpAvCefNetWebView.cs" />
     <Compile Remove="Program.cs" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\MpAvCursor.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
     <Compile Remove="Utils\Input\MpAvKeyGestureHelper_old.cs" />
@@ -1411,14 +1412,14 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.0-preview8" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-preview8" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview8" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0-preview7" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview8" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview8" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-preview8" />
-    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-preview8" />
+    <PackageReference Include="Avalonia" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-rc1.1" />
     <PackageReference Include="Markdig" Version="0.31.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="System.Management" Version="7.0.1" />
@@ -1427,7 +1428,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(IsDesktop) == 'true'">
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview8" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc1.1" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">

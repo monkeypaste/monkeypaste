@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
                     default:
                         return null;
                     case MpSettingsFrameType.LookAndFeel:
-                        return "EyeImage";
+                        return "OpenEyeImage";
                 }
             }
         }

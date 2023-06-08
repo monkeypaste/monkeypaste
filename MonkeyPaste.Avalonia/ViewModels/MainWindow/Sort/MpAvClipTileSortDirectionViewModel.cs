@@ -41,11 +41,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSortDirOrFieldFocused {
             get {
-                var cf = FocusManager.Instance.Current;
-                if (cf == null) {
-                    return false;
-                }
-                if (cf is Control c &&
+                if (Mp.Services.FocusMonitor.FocusElement is Control c &&
                     c.GetVisualAncestor<MpAvClipTileSortView>() != null) {
                     return true;
                 }

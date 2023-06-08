@@ -68,6 +68,7 @@
                             Content="{Binding}">
                 <ToolTip.Tip>
                     <local:MpAvToolTipView Classes.error="True"
+                                           IsTooltipFollowEnabled="False"
                                            IsVisible="{Binding !IsValid}"
                                            ToolTipText="{Binding ValidationMessage}" />
                 </ToolTip.Tip>
@@ -169,7 +170,8 @@
                       IsChecked="{Binding IsRememberChecked, Mode=TwoWay}"
                       IsVisible="{Binding IsConfirmRemember}">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Remember?" />
+                    <local:MpAvToolTipView IsTooltipFollowEnabled="False"
+                                           ToolTipText="Remember?" />
                 </ToolTip.Tip>
             </CheckBox>
 

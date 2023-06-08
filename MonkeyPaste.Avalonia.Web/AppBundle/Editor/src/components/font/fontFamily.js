@@ -36,6 +36,8 @@ function initFontFamilyPicker() {
         debugger;
         return;
     }
+
+    addClickOrKeyClickEventListener(getFontFamilyToolbarPicker(), onFontFamilyToolbarButtonClick);
     let ff_picker_items = getFontFamilyToolbarPicker().getElementsByClassName('ql-picker-item');
 
     for (var i = 0; i < ff_picker_items.length; i++) {
@@ -98,11 +100,15 @@ function getDefaultFontFamily() {
     return getElementComputedStyleProp(document.body, "--defaultFontFamily");
 }
 
-
-function getElementFontFamily(elm) {
-    let elmStyles = window.getComputedStyle(elm);
-    let ff = elmStyles.getPropertyValue('font-family');
-    return ff;
+function getElementFontFamilyDataValue(elm) {
+    let ff = '';
+    if (elm.hasAttribute('data-value')) {
+        ff = elm.getAttribute('data-value');
+    } else if (elm.hasAttribute('data-label')) {
+        ff = elm.getAttribute('data-label');
+    }
+    
+    return getFontFamilyDataValue(ff);
 }
 
 function getFontFamilyDataValue(fontFamily) {
@@ -192,7 +198,32 @@ function updateFontFamilyPickerToSelection(force_ff_dv = null, sel = null) {
 
     let picker_label_elm = getFontFamilyToolbarPickerLabel();
     picker_label_elm.setAttribute('data-label', getFontFamilyDataValueFontFamily(cur_ff_dv));
-    //initFontFamilySelector(cur_ff_dv);
+
+    
+}
+
+function updateFontFamilyPickerItemsToSelection() {
+    const sel = getDocSelection();
+
+    let cur_ff_dv = findRangeFontFamilyDataValue(sel);
+    const pi_elms = Array.from(getFontFamilyToolbarPicker().querySelectorAll('.ql-picker-item'));
+
+    let sel_y_offset = 0;
+    for (var i = 0; i < pi_elms.length; i++) {
+        const pi_elm = pi_elms[i];
+        const pi_elm_ff_dv = getElementFontFamilyDataValue(pi_elm);
+        if (pi_elm.classList.contains('editor-selected') &&
+            pi_elm_ff_dv != cur_ff_dv) {
+            pi_elm.classList.remove('editor-selected');
+        } else if (pi_elm_ff_dv == cur_ff_dv) {
+            pi_elm.classList.add('editor-selected');
+        }
+        if (pi_elm.classList.contains('editor-selected')) {
+            sel_y_offset = pi_elm.getBoundingClientRect().height * i;
+        }
+    }
+
+    getFontFamilyToolbarPicker().firstChild.nextSibling.scrollTop = sel_y_offset;
 }
 
 function findRangeFontFamilyDataValue(range) {
@@ -230,12 +261,24 @@ function onFontPickerItemClick(e) {
 }
 
 function onFontFamilyToolbarButtonClick(e) {
-    getFontFamilyToolbarPicker().classList.remove('hidden');
+    getFontFamilyToolbarPicker().classList.remove('hidden');    
+    updateFontFamilyPickerItemsToSelection();
     window.addEventListener('mousedown', onTempFontFamilyWindowClick, true);
 }
 
 function onTempFontFamilyWindowClick(e) {
-    getFontFamilyToolbarPicker().classList.add('hidden');
-    window.removeEventListener(onTempFontFamilyWindowClick);
+    //if (isClassInElementPath(e.currentTarget, 'ql-font')) {
+    //    return;
+    //}
+    if (e.offsetX > e.target.clientWidth || e.offsetY > e.target.clientHeight) {
+        // mouse down over scroll element
+        return;
+    }
+    const picker_elm = getFontFamilyToolbarSelector();// getAncestorByClassName(e.target, 'ql-picker-options');
+    if (!picker_elm) {
+        return;
+    }
+    picker_elm.classList.add('hidden');
+    window.removeEventListener('mousedown', onTempFontFamilyWindowClick);
 }
 // #endregion Event Handlers
