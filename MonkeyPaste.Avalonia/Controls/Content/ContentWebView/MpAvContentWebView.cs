@@ -1550,8 +1550,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (IsContentSubSelectable) {
-
-                SendMessage("enableSubSelection_ext()");
+                SendMessage($"enableSubSelection_ext('{MpAvClipTrayViewModel.Instance.CurPasteInfoMessage.SerializeJsonObjectToBase64()}')");
                 if (BindingContext.HasTemplates && !BindingContext.IsDropOverTile) {
                     MpAvResizeExtension.ResizeAnimated(this, BindingContext.EditableWidth, BindingContext.EditableHeight);
                 }
@@ -1599,7 +1598,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Append
 
-        public void ProcessAppendStateChangedMessage(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
+        public async void ProcessAppendStateChangedMessage(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
             if (!Dispatcher.UIThread.CheckAccess()) {
                 Dispatcher.UIThread.Post(() => ProcessAppendStateChangedMessage(appendChangedMsg, source));
                 return;
@@ -1640,6 +1639,12 @@ namespace MonkeyPaste.Avalonia {
                     ctrvm.DeactivateAppendModeCommand.Execute(null);
                 }
             } else {
+                while (!IsEditorInitialized) {
+                    await Task.Delay(100);
+                }
+                while (!IsEditorLoaded) {
+                    await Task.Delay(100);
+                }
                 SendMessage($"appendStateChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')");
             }
             //while (ctrvm.IsAnyBusy) {

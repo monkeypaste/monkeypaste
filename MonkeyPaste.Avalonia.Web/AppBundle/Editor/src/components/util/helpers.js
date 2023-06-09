@@ -56,6 +56,7 @@ function isNullOrUndefined(obj) {
     return obj === undefined || obj == null;
 }
 
+
 function splitByNewLine(str) {
     if (isNullOrEmpty(str)) {
         return [];

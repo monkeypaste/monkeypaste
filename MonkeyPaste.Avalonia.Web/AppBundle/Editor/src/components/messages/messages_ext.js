@@ -38,6 +38,11 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		sel_state = toJsonObjFromBase64Str(req.selectionFragment);
 	}
 
+	let paste_button_info = null;
+	if (!isNullOrEmpty(req.pasteButtonInfoFragment)) {
+		paste_button_info = toJsonObjFromBase64Str(req.pasteButtonInfoFragment);
+	}
+
 	loadContent(
 		req.isReadOnly,
 		req.isSubSelectionEnabled,
@@ -47,7 +52,8 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		searches,
 		append_state,
 		req.annotationsJsonStr,
-		sel_state);
+		sel_state,
+		paste_button_info);
 
 }
 
@@ -109,8 +115,10 @@ function disableReadOnly_ext() {
 	return resp; 
 }
 
-function enableSubSelection_ext() {
-	enableSubSelection(true);
+function enableSubSelection_ext(enableSubSelMsgBase64Str) {
+	// input 'MpQuillPasteButtonInfoMessage'
+	const paste_info_req_obj = toJsonObjFromBase64Str(enableSubSelMsgBase64Str);
+	enableSubSelection(true, paste_info_req_obj);
 }
 
 function disableSubSelection_ext() {

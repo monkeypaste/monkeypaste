@@ -141,11 +141,8 @@ namespace MonkeyPaste.Avalonia {
                 return Items.FirstOrDefault(x => x.TagId == SelectedItemId);
             }
             set {
-                if (value == null) {
-                    // reject no selection
-                    return;
-                }
-                _selectedItemId = value.TagId;
+                // NOTE always set for requery
+                _selectedItemId = value == null ? 0 : value.TagId;
                 Items.ForEach(x => x.IsSelected = x.TagId == _selectedItemId);
             }
         }
@@ -197,6 +194,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsPinTrayDragOver { get; set; }
 
+        private int _tempSelectedItemId;
         private int _selectedItemId;
         public int SelectedItemId {
             // NOTE only used w/ QueryInfo
@@ -220,8 +218,13 @@ namespace MonkeyPaste.Avalonia {
 
         public List<int> TrashedCopyItemIds { get; set; } = new List<int>();
 
-        public bool IsAnyTagSelected =>
+
+        public bool IsAnyTagActive =>
             LastSelectedActiveItem != null;
+
+        public bool IsAnyTagSelected =>
+            SelectedItem != null;
+
         #endregion
 
         #region Layout        
@@ -269,6 +272,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public bool ShowAddTagButton {
+            get {
+                if (SelectedItem == null) {
+                    return false;
+                }
+                return SelectedItem.CanAddChild;
+            }
+        }
         #endregion
 
         #endregion
@@ -390,11 +401,8 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(RootItems));
                     break;
                 case nameof(SelectedItem):
-                    if (SelectedItem == null) {
-                        Debugger.Break();
-                        SelectedItem = Items.FirstOrDefault(x => x.TagId == DEFAULT_SELECTED_TAG_ID);
-                    }
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveTag)));
+                    OnPropertyChanged(nameof(ShowAddTagButton));
                     break;
             }
         }

@@ -143,6 +143,7 @@ window.superCm = (function (msie) {
 			var separator = opt.separator !== undefined;
 			var icon = opt.icon !== undefined && opt.icon;
 			var keys = opt.keys === undefined ? null : opt.keys == null ? '' : opt.keys;
+			var classes = opt.classes === undefined ? null : opt.classes;
 			//var keys = 'Control+Shift+F3';
 
 			var label = opt.label !== undefined && opt.label;
@@ -219,6 +220,9 @@ window.superCm = (function (msie) {
 				cmOptElement.append(
 					optKeysTemplate.clone().css("vertical-align", "center").html(keys)
 				);
+			}
+			if (classes) {
+				classes.split(' ').forEach(x => cmOptElement.addClass(x));
 			}
 
 			// TAK END

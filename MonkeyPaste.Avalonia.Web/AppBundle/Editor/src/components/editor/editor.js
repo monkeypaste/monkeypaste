@@ -280,7 +280,10 @@ function disableReadOnly(fromHost = false) {
 	log('ReadOnly: DISABLED fromHost: ' + fromHost);
 }
 
-function enableSubSelection(fromHost = false) {
+function enableSubSelection(fromHost = false, paste_button_info = null) {
+	if (fromHost) {
+		updatePasteButtonInfo(paste_button_info);
+	}
 	if (!canEnableSubSelection()) {
 		log('enableSubSelection ignored, content is an image. fromHost: ' + fromHost);
 		return;

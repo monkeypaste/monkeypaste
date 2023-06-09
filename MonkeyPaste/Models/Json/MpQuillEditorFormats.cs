@@ -39,8 +39,10 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillLoadContentRequestMessage : MpJsonObject {
-        public bool isReadOnly { get; set; }
         public bool isSubSelectionEnabled { get; set; }
+        // fragment 'MpQuillPasteButtonInfoMessage'
+        public string pasteButtonInfoFragment { get; set; }
+        public bool isReadOnly { get; set; }
         public string contentHandle { get; set; }
         public string contentType { get; set; }
 
@@ -58,6 +60,11 @@ namespace MonkeyPaste {
 
         // fragment 'MpQuillEditorSelectionStateMessage'
         public string selectionFragment { get; set; }
+    }
+
+    public class MpQuillPasteButtonInfoMessage : MpJsonObject {
+        public string pasteButtonIconBase64 { get; set; }
+        public string pasteButtonTooltipText { get; set; }
     }
 
     public class MpQuillContentSearchesFragment : MpJsonObject {

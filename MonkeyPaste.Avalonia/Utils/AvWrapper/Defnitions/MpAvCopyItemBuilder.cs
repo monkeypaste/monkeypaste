@@ -58,11 +58,6 @@ namespace MonkeyPaste.Avalonia {
 
             await NormalizePlatformFormatsAsync(mpdo);
 
-            var refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(mpdo, force_ext_sources);
-
-            if (Mp.Services.SourceRefTools.IsAnySourceRejected(refs)) {
-                return null;
-            }
             Tuple<MpCopyItemType, string, string> data_tuple = await DecodeContentDataAsync(mpdo);
 
             if (data_tuple == null ||
@@ -72,31 +67,35 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
-            var dobj = await MpDataObject.CreateAsync(pdo: mpdo);
+            MpCopyItem ci = await PerformDupCheckAsync(mpdo, data_tuple.Item1, force_allow_dup, suppressWrite);
 
-            MpCopyItemType itemType = data_tuple.Item1;
-            string itemData = data_tuple.Item2;
-            string itemDelta = data_tuple.Item3;
-            string default_title = GetDefaultItemTitle(itemType, mpdo);
-
-            var ci = await MpCopyItem.CreateAsync(
-                dataObjectId: dobj.Id,
-                title: default_title,
-                data: itemData,
-                itemType: itemType,
-                force_allow_dup: force_allow_dup,
-                suppressWrite: suppressWrite);
-            if (ci == null) {
-                // probably null data, clean up pre-create
-                await dobj.DeleteFromDatabaseAsync();
+            var refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(mpdo, force_ext_sources);
+            if (Mp.Services.SourceRefTools.IsAnySourceRejected(refs)) {
                 return null;
             }
+            if (ci == null) {
+                // new, non-duplicate or don't care
+                var dobj = await MpDataObject.CreateAsync(pdo: mpdo);
 
-            if (ci.WasDupOnCreate) {
-                // remove new data object
-                await dobj.DeleteFromDatabaseAsync();
-                MpConsole.WriteLine($"Duplicate (current) data object w/ id '{dobj.Id}' deleted. Using org instance w/ id '{ci.DataObjectId}'");
+                MpCopyItemType itemType = data_tuple.Item1;
+                string itemData = data_tuple.Item2;
+                string itemDelta = data_tuple.Item3;
+                string default_title = GetDefaultItemTitle(itemType, mpdo);
+
+                ci = await MpCopyItem.CreateAsync(
+                    dataObjectId: dobj.Id,
+                    title: default_title,
+                    data: itemData,
+                    itemType: itemType,
+                    suppressWrite: suppressWrite);
+                if (ci == null) {
+                    // probably null data, clean up pre-create
+                    await dobj.DeleteFromDatabaseAsync();
+                    return null;
+                }
+            } else {
                 if (transType == MpTransactionType.Created) {
+                    MpConsole.WriteLine($"Item '{ci}' duplication detected. Marking '{MpTransactionType.Created}' as '{MpTransactionType.Recreated}'");
                     // try to prevent multiple 'create' transactions, 'Recreate' will imply dup ref
                     transType = MpTransactionType.Recreated;
                 }
@@ -142,6 +141,43 @@ namespace MonkeyPaste.Avalonia {
 
         #region Content Helpers
 
+        private async Task<MpCopyItem> PerformDupCheckAsync(
+            MpPortableDataObject mpdo,
+            MpCopyItemType itemType,
+            bool force_allow_dup,
+            bool suppressWrite) {
+            if (MpPrefViewModel.Instance.IsDuplicateCheckEnabled &&
+                !force_allow_dup &&
+                !suppressWrite) {
+                MpCopyItem dupCheck = null;
+                string data = null;
+                if (!mpdo.TryGetData<string>(itemType.ToDefaultDataFormat(), out data)) {
+                    // only need to fallback to avdo for file item to get file names (when from ext data)
+                    if (mpdo is not MpAvDataObject avdo ||
+                        !avdo.TryGetData<string>(itemType.ToDefaultDataFormat(), out data)) {
+                        return null;
+                    }
+                }
+                if (itemType == MpCopyItemType.Text) {
+                    // TODO should not need to do this
+                    // but from bugs converting html and special entity encoding use plain text for dup check
+                    var matches = await MpDataModelProvider.GetDataObjectItemsForFormatByDataAsync(MpPortableDataFormats.Text, data);
+                    if (matches.FirstOrDefault() is MpDataObjectItem dup_text_doi) {
+                        dupCheck = await MpDataModelProvider.GetCopyItemByDataObjectIdAsync(dup_text_doi.DataObjectId);
+                    }
+
+                } else {
+                    dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
+                }
+
+                if (dupCheck != null) {
+                    MpConsole.WriteLine($"Duplicate item detected, returning original id:'{dupCheck.Id}'");
+                    dupCheck.WasDupOnCreate = true;
+                    return dupCheck;
+                }
+            }
+            return null;
+        }
         private async Task<Tuple<MpCopyItemType, string, string>> DecodeContentDataAsync(MpPortableDataObject mpdo) {
             string inputTextFormat = null;
             string itemData = null;

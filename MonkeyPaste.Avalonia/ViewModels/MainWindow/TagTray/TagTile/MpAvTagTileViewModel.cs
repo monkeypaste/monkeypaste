@@ -243,7 +243,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpMenuItemViewModel AddChildPopupMenuItemViewModel {
             get {
-                if (!IsGroupTag) {
+                if (!IsGroupTag ||
+                    IsCollectionsTag) {
                     return null;
                 }
                 return new MpMenuItemViewModel() {
@@ -291,16 +292,20 @@ namespace MonkeyPaste.Avalonia {
             .Count();
 
         public bool CanAddChild =>
-            !IsQueryTag && !IsFormatGroupTag && !IsAllTag;
+            !IsQueryTag &&
+            !IsFormatGroupTag &&
+            !IsAllTag &&
+            !IsTrashTag;
 
         public bool CanSelect =>
-            IsTagNameReadOnly;
+            // from marquee select, reje
+            IsTagNameReadOnly;// && IsSelected;
 
         public bool CanPin =>
             !IsGroupTag && !IsRootLevelTag;
 
         public bool CanTreeMove =>
-            !IsTagReadOnly;
+            !IsRootLevelTag;
 
         public bool CanHotkey =>
             !IsGroupTag &&
@@ -333,6 +338,75 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTagDragLeafChildDrop { get; set; }
         public bool IsPinTagDragging { get; set; }
 
+        public MpTagType[] ValidChildDropTagTypes {
+            get {
+                if (IsAllTag ||
+                    IsTrashTag ||
+                    IsQueryTag ||
+                    IsFormatGroupTag ||
+                    IsRecentTag) {
+                    return new[] { MpTagType.None };
+                }
+
+                if (IsCollectionsTag) {
+                    return new[] { MpTagType.Link };
+                }
+                if (IsGroupTag) {
+                    return new[] { MpTagType.Group, MpTagType.Query };
+                }
+                if (IsLinkTag) {
+                    return new[] { MpTagType.Link };
+                }
+                MpDebug.Break($"Unhandled valid child drop tag ");
+                return new[] { MpTagType.None };
+            }
+        }
+        public MpTagType[] ValidSiblingDropTagTypes {
+            get {
+                if (IsRootLevelTag) {
+                    return new[] { MpTagType.None };
+                }
+                if (IsTextFormatTag ||
+                    IsImageFormatTag ||
+                    IsFileFormatTag) {
+                    return new[] { MpTagType.None };
+                }
+                if (IsLinkTag) {
+                    return new[] { MpTagType.Link };
+                }
+                if (IsQueryTag || IsGroupTag) {
+                    return new[] { MpTagType.Query, MpTagType.Group };
+                }
+                MpDebug.Break($"Unhandled valid sibling drop tag ");
+                return new[] { MpTagType.None };
+            }
+        }
+        public MpTagType[] ValidParentDragTagTypes {
+            get {
+                if (IsRootLevelTag) {
+                    return new[] { MpTagType.None };
+                }
+                if (IsTextFormatTag ||
+                    IsImageFormatTag ||
+                    IsFileFormatTag) {
+                    return new[] { MpTagType.None };
+                }
+                if (IsAllTag ||
+                    IsFormatGroupTag) {
+                    return new[] { MpTagType.Group };
+                }
+                if (IsLinkTag) {
+                    return new[] { MpTagType.Link, MpTagType.Group };
+                }
+                if (IsQueryTag || IsGroupTag) {
+                    return new[] { MpTagType.Group };
+                }
+                MpDebug.Break($"Unhandled valid sibling drop tag ");
+                return new[] { MpTagType.None };
+            }
+        }
+
+
         public bool IsCollectionsTag =>
             TagId == MpTag.CollectionsTagId;
         public bool IsAllTag =>
@@ -346,6 +420,14 @@ namespace MonkeyPaste.Avalonia {
             TagId == MpTag.FiltersTagId;
         public bool IsFormatGroupTag =>
             TagId == MpTag.FormatsTagId;
+        public bool IsTextFormatTag =>
+            TagId == MpTag.TextFormatTagId;
+        public bool IsImageFormatTag =>
+            TagId == MpTag.ImageFormatTagId;
+        public bool IsFileFormatTag =>
+            TagId == MpTag.FileFormatTagId;
+        public bool IsRecentTag =>
+            TagId == MpTag.RecentTagId;
 
         public bool IsLinkTag =>
             !IsQueryTag && !IsGroupTag;
@@ -839,13 +921,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(HasModelChanged):
                     if (IsBusy) {
-                        return;
+                        break;
                     }
                     if (HasModelChanged) {
-                        //if(SuprressNextHasModelChangedHandling) {
-                        //    HasModelChanged = false;
-                        //    SuprressNextHasModelChangedHandling = false;
-                        //}
                         if (IgnoreHasModelChanged) {
                             break;
                         }
@@ -945,7 +1023,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             if (e.Action == NotifyCollectionChangedAction.Add ||
-                e.Action == NotifyCollectionChangedAction.Remove) {
+               e.Action == NotifyCollectionChangedAction.Remove) {
                 Task.WhenAll(
                     SelfAndAllAncestors
                     .Cast<MpAvTagTileViewModel>()
@@ -1209,6 +1287,9 @@ namespace MonkeyPaste.Avalonia {
                          t = await MpDataModelProvider.GetItemAsync<MpTag>(pendingTagId);
                          isNew = true;
                      }
+                 } else if (IsCollectionsTag) {
+                     // special case for collection tag from add btn view cmd..
+                     childTagType = MpTagType.Link;
                  } else if (TagType == MpTagType.Group) {
                      // need to make sure type is passed cause child type isn't clear
                      Debugger.Break();
@@ -1340,6 +1421,15 @@ namespace MonkeyPaste.Avalonia {
                 } else if (IsLinkedToSelectedClipTile.IsFalseOrNull()) {
                     LinkCopyItemCommand.Execute(ciid);
                 }
+
+                if (MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown) {
+                    // ignore close, allow multi tag linking when ctrl down
+                    return;
+                }
+                // BUG may have been intended but context menu doesn't close when toggling tag link
+                // and to avoid messing w/ context menu any more just manually closing since
+                // that menu is the only ref to this cmd
+                MpAvMenuExtension.CloseMenu();
             }, () => {
                 return !IsAllTag;
             });
@@ -1392,7 +1482,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> MoveOrCopyThisTagCommand => new MpAsyncCommand<object>(
             async (args) => {
-                // args = [new_parent_tag_id, sort_idx, is_pinning, is_copy]
                 var argParts = args as object[];
 
                 int old_parent_tag_id = ParentTagId;
@@ -1468,19 +1557,19 @@ namespace MonkeyPaste.Avalonia {
                 }
                 TreeSortIdx = new_sort_idx;
                 new_parent_vm.Items.Add(this);
+
                 // update sort order using tree sort idx as primary sort then by if its this item
                 new_parent_vm.Items
                     .OrderBy(x => x.TreeSortIdx)
                     .ThenBy(x => x.TagId != TagId)
                     .ToList()
                     .ForEach((x, idx) => x.TreeSortIdx = idx);
+
                 while (new_parent_vm.IsAnyBusy) {
                     // wait for new parent db stuff
                     await Task.Delay(100);
                 }
                 new_parent_vm.OnPropertyChanged(nameof(new_parent_vm.SortedItems));
-
-
                 // update old/new ancestor counts
                 List<MpAvTagTileViewModel> count_update_vml = new List<MpAvTagTileViewModel>();
 
@@ -1495,10 +1584,11 @@ namespace MonkeyPaste.Avalonia {
                         .Cast<MpAvTagTileViewModel>());
 
                 await Task.WhenAll(
-                count_update_vml
-                    .Distinct()
-                    .ToList()
-                    .Select(x => x.UpdateClipCountAsync()));
+                    count_update_vml
+                        .Distinct()
+                        .ToList()
+                        .Select(x => x.UpdateClipCountAsync()));
+
 
             },
             (args) => {

@@ -76,7 +76,7 @@ function onAlignToolbarItemClick(idx) {
         return;
     }
     globals.quill.focus();
-    formatSelection('align', align_val, 'silent');
+    formatSelection('align', align_val, 'user');
 }
 
 function onEditorAlignMenuTempWindowClick(e) {

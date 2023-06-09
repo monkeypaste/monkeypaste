@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
 
@@ -117,17 +118,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string SearchIconToolTipText {
-            get {
-                string tag_name =
-                    MpAvTagTrayViewModel.Instance.SelectedItem == null ? string.Empty : MpAvTagTrayViewModel.Instance.SelectedItem.TagName;
-
-                if (IsExpanded) {
-                    return $"Search Options for '{tag_name}'";
-                }
-                return $"Search '{tag_name}'...";
-            }
-        }
         #endregion
 
         #region Model

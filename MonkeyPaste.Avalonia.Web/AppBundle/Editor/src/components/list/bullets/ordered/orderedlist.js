@@ -11,7 +11,7 @@ function initOrderedList() {
 
 function initOrderedListToolbarButton() {
 	addClickOrKeyClickEventListener(getOrderedListToolbarButton(), onOrderedListToolbarButtonClick);
-	getOrderedListToolbarButton().innerHTML = getSvgHtml('orderedlist');
+	getOrderedListToolbarButton().innerHTML = getSvgHtml('list-ordered');
 }
 
 function initOrderListBlot() {
@@ -30,7 +30,7 @@ function initOrderListBlot() {
 	}
 
 	class OrderedListItem extends Parchment.BlockBlot {
-		static blotName = 'ordered-list-item';
+		static blotName = 'list-ordered-item';
 		static tagName = 'LI';
 		static requiredContainer = OrderedListContainer;
 

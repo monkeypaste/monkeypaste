@@ -287,12 +287,15 @@
         <div class="toolbar-separator"></div>
 
         <!-- CREATE TEMPLATE -->
-        <button id="createTemplateToolbarButton"></button>
+        <button id="createTemplateToolbarButton"                
+                hover-tooltip="New Template"></button>
         <div class="toolbar-separator"></div>
 
         <!-- FG/BG COLOR -->
-        <button id="fontColorToolbarButton"></button>
-        <button id="fontBackgroundToolbarButton"></button>
+        <button id="fontColorToolbarButton"                
+                hover-tooltip="Font Color"></button>
+        <button id="fontBackgroundToolbarButton"                
+                hover-tooltip="Background Color"></button>
 
         <div class="toolbar-separator"></div>
 
@@ -333,9 +336,10 @@
         <div class="toolbar-separator hidden"></div>
 
         <!-- LIST -->
-        <button id="orderedListToolbarButton" class="ql-list" value="ordered"></button>
-        <button id="discListToolbarButton" class="ql-list" value="bullet"></button>
-        <button id="checkListToolbarButton" class="ql-list" value="check"></button>
+        <button id="listToolbarPopupButton" class="svg-key-list-bullet"></button>
+        <button id="orderedListToolbarButton" class="ql-list hidden" value="ordered"></button>
+        <button id="discListToolbarButton" class="ql-list hidden" value="bullet"></button>
+        <button id="checkListToolbarButton" class="ql-list hidden" value="check"></button>
 
 
         <div class="toolbar-separator"></div>
@@ -353,12 +357,13 @@
         <div class="toolbar-separator"></div>
 
         <!-- LINK -->
-        <button id="linkEditorToolbarButton"></button>
-        <button class="ql-image"></button>
-        <button class="ql-video"></button>
+        <button id="linkEditorToolbarButton"
+                hover-tooltip="Insert Link"></button>
+        <button class="ql-image" 
+                hover-tooltip="Insert Image"></button>
+        <button class="ql-video"                
+                hover-tooltip="Insert Video"></button>
         <!--<button class="ql-formula"></button>-->
-
-
 
         <div class="toolbar-separator"></div>
         <!-- FIND/REPLACE -->
@@ -533,7 +538,8 @@
 
             <!-- PASTE BUTTON -->
             <button id="pasteButton"
-                    tabindex="6">
+                    tabindex="6"
+                    hover-tooltip="Paste">
                 <i></i><span>Paste</span>
             </button>
             <!--<div class="toolbar-separator"></div>-->

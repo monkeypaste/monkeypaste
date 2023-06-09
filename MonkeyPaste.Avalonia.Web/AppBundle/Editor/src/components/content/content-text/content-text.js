@@ -447,13 +447,19 @@ function getDocIdxFromPoint(p, fallbackIdx) {
 	return doc_idx;
 }
 
-function getBlotAtDocIdx(docIdx) {
+function getBlotAtDocIdx(docIdx, isSearching = false) {
 	if (!globals.quill) {
 		return null;
 	}
 	let leaf = globals.quill.getLeaf(docIdx);
-	if (leaf && leaf.length > 0) {
+	if (leaf &&
+		leaf.length > 0 &&
+		leaf[0] != null) {
 		return leaf[0];
+	}
+	if (docIdx <= getDocLength()) {
+		// known case is empty list item (recurse backwards)
+		return getBlotAtDocIdx(docIdx - 1, true);
 	}
 	return null;
 }

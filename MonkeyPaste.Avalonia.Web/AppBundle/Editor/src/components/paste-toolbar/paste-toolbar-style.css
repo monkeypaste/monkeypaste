@@ -38,6 +38,14 @@
     border-width: 1px !important;
     display: inline-flex;
 }    
+    #pasteButton img {        
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+    }
+    #pasteButton svg {
+        margin-right: 10px;
+    }
 
 
 #pasteButtonAndModeContainer.pasteButtonSpit #pasteButton {
@@ -63,5 +71,11 @@
 
 #pasteButtonAndModeContainer.appendLineOnly #pasteAppendIsManualToolbarLabel {
     display: none;
+}
+
+
+.paste-tooltip-suffix {
+    font-style: italic;
+    color: dimgray;
 }
 

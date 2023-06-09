@@ -221,17 +221,18 @@ namespace MonkeyPaste.Avalonia {
                     foreach (var handle in processStack.Value) {
                         //loop through all known handles to that process
                         if (WinApi.IsWindow(handle)) {
-                            var cur_info = new MpPortableProcessInfo() {
-                                Handle = handle,
-                                ProcessPath = GetProcessPath(handle),
-                                MainWindowTitle = GetProcessApplicationName(handle)
-                            };
 
                             if (handle == active_handle) {
                                 if (activeProcessInfo != null) {
                                     // should only be set once how come?
                                     Debugger.Break();
                                 }
+                                var cur_info = new MpPortableProcessInfo() {
+                                    Handle = handle,
+                                    ProcessPath = GetProcessPath(handle),
+                                    ProcessName = GetProcessApplicationName(handle),
+                                    MainWindowTitle = GetProcessTitle(handle),
+                                };
                                 activeProcessInfo = cur_info;
                             }
                         } else {

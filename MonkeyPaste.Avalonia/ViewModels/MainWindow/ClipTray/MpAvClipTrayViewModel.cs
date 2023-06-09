@@ -1322,6 +1322,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsRequerying { get; set; } = false;
         public bool IsQuerying { get; set; } = false;
 
+        public MpQuillPasteButtonInfoMessage CurPasteInfoMessage { get; private set; } = new MpQuillPasteButtonInfoMessage();
+
         #region Drag Drop
         public bool IsAnyDropOverTrays { get; private set; }
         //public bool IsAnyTileDragging => 
@@ -1410,6 +1412,7 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ContentQueryTools = this;
 
             Mp.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
+            Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
@@ -1430,6 +1433,7 @@ namespace MonkeyPaste.Avalonia {
             IsGridLayout = LayoutType == MpClipTrayLayoutType.Grid;
             IsBusy = false;
         }
+
 
         public async Task<MpAvClipTileViewModel> CreateClipTileViewModelAsync(MpCopyItem ci, int queryOffsetIdx = -1) {
             MpAvClipTileViewModel ctvm = new MpAvClipTileViewModel(this);
@@ -1976,8 +1980,11 @@ namespace MonkeyPaste.Avalonia {
                 QueryCommand.Execute(string.Empty);
 
                 OnPropertyChanged(nameof(IsQueryEmpty));
-            } else if (e is MpCopyItemTag cit) {
-                var sttvm = MpAvTagTrayViewModel.Instance.SelectedItem;
+            } else if (e is MpCopyItemTag cit &&
+                        MpAvTagTrayViewModel.Instance.LastSelectedActiveItem is MpAvTagTileViewModel sttvm &&
+                        sttvm.IsLinkTag &&
+                        !sttvm.IsAllTag) {
+
                 // check if unlink is part of current query
                 bool is_part_of_query =
                     sttvm
@@ -1986,7 +1993,7 @@ namespace MonkeyPaste.Avalonia {
                     .Select(x => x.TagId)
                     .Any(x => x == cit.TagId);
 
-                if (is_part_of_query && !sttvm.IsAllTag) {
+                if (is_part_of_query) {
                     // when unlinked item is part of current query remove its offset and do a reset query
 
                     if (Mp.Services.Query.PageTools.AddIdToOmit(cit.CopyItemId)) {
@@ -2061,7 +2068,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
 
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -2382,6 +2388,38 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+
+        private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
+            var to_notify_ctvml =
+                AllActiveItems
+                    .Where(x => x.IsSubSelectionEnabled)
+                    .Select(x => x.GetContentView() as MpAvContentWebView)
+                    .Where(x => x != null);
+            if (to_notify_ctvml.IsNullOrEmpty()) {
+                // no sub-selectable items to ntf
+                return;
+            }
+
+            Dispatcher.UIThread.Post(async () => {
+                while (MpAvAppCollectionViewModel.Instance.IsAnyBusy) {
+                    // wait if app new/db updating 
+                    await Task.Delay(100);
+                }
+                CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage();
+                var active_avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e);
+                if (active_avm != null) {
+                    CurPasteInfoMessage.pasteButtonTooltipText = string.IsNullOrEmpty(e.ProcessName) ? e.MainWindowTitle : e.ProcessName;
+                    CurPasteInfoMessage.pasteButtonIconBase64 = await MpDataModelProvider.GetDbImageBase64ByIconIdAsync(active_avm.IconId);
+                }
+
+                string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeJsonObjectToBase64()}')";
+
+                to_notify_ctvml
+                    .ForEach(x => x.SendMessage(msg));
+
+                MpConsole.WriteLine($"{to_notify_ctvml.Count()} items notified of active app change");
+            }, DispatcherPriority.Background);
+        }
         private async Task<MpAvClipTileViewModel> CreateOrRetrieveClipTileViewModelAsync(MpCopyItem ci) {
             MpAvClipTileViewModel nctvm = null;
             if (ci.WasDupOnCreate) {
@@ -2974,7 +3012,7 @@ namespace MonkeyPaste.Avalonia {
 
                  MpAvClipTileViewModel to_select_ctvm = null;
 
-                 if (MpAvTagTrayViewModel.Instance.IsAnyTagSelected &&
+                 if (MpAvTagTrayViewModel.Instance.IsAnyTagActive &&
                      needs_query_refresh) {
                      // perform inplace requery to potentially put unpinned tile back
                      while (!QueryCommand.CanExecute(string.Empty)) {
@@ -3174,7 +3212,7 @@ namespace MonkeyPaste.Avalonia {
                 MpPoint newScrollOffset = default;
 
                 bool is_empty_query =
-                    !MpAvTagTrayViewModel.Instance.IsAnyTagSelected &&
+                    !MpAvTagTrayViewModel.Instance.IsAnyTagActive &&
                     Mp.Services.Query.Infos.All(x => string.IsNullOrEmpty(x.MatchValue));
 
                 #endregion

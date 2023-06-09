@@ -131,6 +131,12 @@ namespace MonkeyPaste {
 
         #region DbImage
 
+        public static async Task<string> GetDbImageBase64ByIconIdAsync(int iconId) {
+            string query = $"select ImageBase64 from MpDbImage where pk_MpDbImageId=(select fk_IconDbImageId from MpIcon where pk_MpIconId=?)";
+            var result = await MpDb.QueryScalarAsync<string>(query, iconId);
+            return result;
+        }
+
         public static async Task<MpDbImage> GetDbImageByBase64StrAsync(string text64) {
             string query = $"select pk_MpDbImageId from MpDbImage where ImageBase64=?";
             var result = await MpDb.QueryAsync<MpDbImage>(query, text64);

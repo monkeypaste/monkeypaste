@@ -16,8 +16,7 @@ function initPasteToolbar() {
 function initPasteButton() {
     addClickOrKeyClickEventListener(getPasteButtonElement(), onPasteButtonClickOrKeyDown);
 
-    let paste_icon_elm = getPasteButtonElement().firstChild;
-    paste_icon_elm.replaceWith(createSvgElement('paste', 'svg-icon paste-toolbar-icon'));
+    updatePasteButtonInfo(null);    
 
     initPastePopup();
 }
@@ -112,8 +111,26 @@ function hidePasteToolbar() {
             getPasteToolbarContainerElement().classList.add('hidden');
             hidePasteTemplateToolbarItems();
             updateAllElements();
-        });
+        });    
+}
 
+function updatePasteButtonInfo(pasteButtonInfoObj) {
+    let paste_icon_elm = getPasteButtonElement().children[0];
+    let new_paste_icon_elm = null;
+    let new_paste_icon_base64 = pasteButtonInfoObj ? pasteButtonInfoObj.pasteButtonIconBase64 : null;
+    let new_paste_tooltip = pasteButtonInfoObj ? pasteButtonInfoObj.pasteButtonTooltipText : 'Unknown';
+
+    if (isNullOrEmpty(new_paste_icon_base64)) {
+        // TODO maybe use nice question mark icon for fallback instead
+        // fallback to default 
+        new_paste_icon_elm = createSvgElement('paste', 'svg-icon paste-toolbar-icon');
+    } else {
+        new_paste_icon_elm = document.createElement('img');
+        new_paste_icon_elm.src = `data:image/png;base64,${new_paste_icon_base64}`;
+    }
+    getPasteButtonElement().replaceChild(new_paste_icon_elm, paste_icon_elm);
+
+    getPasteButtonElement().setAttribute('hover-tooltip', `Paste to: <em><i class="paste-tooltip-suffix">${new_paste_tooltip}</i></em>`);
     
 }
 

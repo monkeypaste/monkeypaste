@@ -5,7 +5,7 @@
 // #region Life Cycle
 
 function initPasteAppendToolbarItems() {
-	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('pause', null, false);
+	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('pause');
 	hidePasteAppendToolbarLabelContainer();
 
 	addClickOrKeyClickEventListener(getPasteAppendPauseAppendButtonElement(), onPauseAppendButtonClickOrKey);

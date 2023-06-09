@@ -512,7 +512,10 @@ namespace MonkeyPaste.Avalonia {
         private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
 
             var control = ResolveEventControl(sender, e);
-            if (control != null &&
+            if (control == null) {
+                return;
+            }
+            if (e.IsLeftRelease(control) &&
                 GetLeftReleaseCommand(control) is ICommand cmd) {
                 cmd.Execute(GetLeftReleaseCommandParameter(control));
                 e.Handled = GetIsEventHandled(control);

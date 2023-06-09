@@ -77,10 +77,14 @@ namespace MonkeyPaste {
             if (TagType == MpTagType.Query) {
                 // clone query tag criteria
 
+                // NOTE write is suppressed to allow using clone but avoid temporarily usin
+                // source queryTagId
                 var scil = await MpDataModelProvider.GetCriteriaItemsByTagIdAsync(Id);
                 var cloned_scil = await Task.WhenAll(scil.Select(x => x.CloneDbModelAsync(
-                    deepClone: deepClone,
-                    suppressWrite: suppressWrite)));
+                    deepClone: true,
+                    suppressWrite: true)));
+
+                // use new cloned tag id for criteria's
                 cloned_scil.ForEach(x => x.QueryTagId = cloned_tag.Id);
                 await Task.WhenAll(cloned_scil.Select(x => x.WriteToDatabaseAsync()));
             } else if (TagType == MpTagType.Link) {

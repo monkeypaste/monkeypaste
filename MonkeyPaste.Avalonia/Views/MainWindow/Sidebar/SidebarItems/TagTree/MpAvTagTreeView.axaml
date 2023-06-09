@@ -16,6 +16,8 @@
         <SolidColorBrush x:Key="TreeViewItemForeground" Color="White" />
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+        <!--  TREE ITEM DEFAULT OVERRIDES  -->
+
         <Style Selector="TreeView#TagTreeView TreeViewItem"
                x:DataType="local:MpAvTagTileViewModel">
             <Setter Property="HorizontalAlignment"
@@ -40,10 +42,6 @@
                     Value="Transparent" />
         </Style>
 
-        <Style Selector="TreeView#TagTreeView TreeView#TagTreeViewTreeViewItem /template/ Border#SelectionBorder:pointerover">
-            <!--<Setter Property="Background"
-                    Value="Transparent" />-->
-        </Style>
         <Style Selector="TreeView#TagTreeView TreeViewItem /template/ Border#SelectionBorder">
             <Setter Property="Background"
                     Value="Transparent" />
@@ -70,19 +68,38 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
+
+        <!--  ADD TAG BUTTON  -->
+
+        <Style Selector="Button#AddTagButton PathIcon">
+            <Setter Property="Foreground"
+                    Value="Wheat" />
+            <Setter Property="Data"
+                    Value="{StaticResource PlusSvg}" />
+        </Style>
+        <Style Selector="Button#AddTagButton Button:pointerover PathIcon">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource HoverDefaultBorderBrush}" />
+            <Setter Property="Data"
+                    Value="{StaticResource PlusBoxSvg}" />
+        </Style>
+        <Style Selector="Button#AddTagButton PathIcon /template/ Path">
+            <Setter Property="Margin"
+                    Value="3" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <TreeView x:Name="TagTreeView"
-                  Classes.treeDrag="{Binding !IsPinTrayDragOver}"
+                  Classes.tagDrag="{Binding IsAnyDragging}"
                   Margin="5,10,20,0"
                   Padding="0,0,0,150"
+                  SelectionMode="Single"
                   AutoScrollToSelectedItem="True"
                   ItemsSource="{Binding RootItems}"
                   BorderThickness="0"
                   Background="Transparent"
                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                  SelectionMode="Single, AlwaysSelected"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   Width="{Binding $parent[Grid].Bounds.Width}">
@@ -90,8 +107,7 @@
                 <TreeDataTemplate DataType="{x:Type local:MpAvTagTileViewModel}"
                                   ItemsSource="{Binding SortedItems}">
                     <Grid>
-                        <local:MpAvTagView x:Name="TagView"
-                                            />
+                        <local:MpAvTagView x:Name="TagView" />
                         <Border x:Name="SortDropBorder_top"
                                 IsVisible="{Binding !IsPinTrayDragOver, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                                 Classes="dropLine top"
@@ -118,32 +134,14 @@
         </TreeView>
         <Button x:Name="AddTagButton"
                 Classes="noBg noHoverBg"
+                IsVisible="{Binding ShowAddTagButton}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                IsVisible="{Binding SelectedItem.CanAddChild}"
                 CornerRadius="7"
                 Margin="0,10,25,0"
                 BorderThickness="0"
                 Command="{Binding SelectedItem.AddNewChildTagCommand}"
                 CommandParameter="{Binding $self}">
-            <Button.Styles>
-                <Style Selector="PathIcon">
-                    <Setter Property="Foreground"
-                            Value="Wheat" />
-                    <Setter Property="Data"
-                            Value="{StaticResource PlusSvg}" />
-                </Style>
-                <Style Selector="Button:pointerover PathIcon">
-                    <Setter Property="Foreground"
-                            Value="{DynamicResource HoverDefaultBorderBrush}" />
-                    <Setter Property="Data"
-                            Value="{StaticResource PlusBoxSvg}" />
-                </Style>
-                <Style Selector="PathIcon /template/ Path">
-                    <Setter Property="Margin"
-                            Value="3" />
-                </Style>
-            </Button.Styles>
             <ToolTip.Tip>
                 <local:MpAvToolTipView>
                     <local:MpAvToolTipView.ToolTipText>

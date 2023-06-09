@@ -58,5 +58,16 @@ namespace MonkeyPaste {
             return new[] { MpFileIo.GetUniqueFileOrDirectoryName(dir, $"{ci.Title}{(isFragment ? "-Fragment" : string.Empty)}.{ext}") };
         }
 
+        public static string ToDefaultDataFormat(this MpCopyItemType itemType) {
+            switch (itemType) {
+                case MpCopyItemType.Text:
+                    return MpPortableDataFormats.Text;
+                case MpCopyItemType.Image:
+                    return MpPortableDataFormats.AvPNG;
+                case MpCopyItemType.FileList:
+                    return MpPortableDataFormats.AvFileNames;
+            }
+            return string.Empty;
+        }
     }
 }

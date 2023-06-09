@@ -4,6 +4,9 @@
 function initLists() {
 	initCheckableList();
 	//initOrderedList();
+	addClickOrKeyClickEventListener(getListToolbarContainerElement(), onListToolbarButtonClick);
+
+	//getAlignEditorToolbarItemElement().innerHTML = getSvgHtml('align-left');
 }
 
 function registerListBlot() {
@@ -73,7 +76,10 @@ function registerListBlot() {
 
 // #region Getters
 
-function getListItemToolbarElements() {
+function getListToolbarContainerElement() {
+	return document.getElementById('listToolbarPopupButton');
+}
+function getListToolbarPopupElements() {
 	return [
 		getOrderedListToolbarButton(),
 		getDiscListToolbarButton(),
@@ -210,7 +216,9 @@ function getDecodedListItemText(encoded_text) {
 // #endregion Setters
 
 // #region State
-
+function isEditorListToolbarMenuVisible() {
+	return getListToolbarContainerElement().classList.contains('expanded');
+}
 function isDocIdxInListItem(docIdx) {
 	let doc_idx_elm = getElementAtDocIdx(docIdx);
 	while (doc_idx_elm != null) {
@@ -246,12 +254,36 @@ function isAddListItemValid() {
 // #endregion State
 
 // #region Actions
+function showEditorListMenu() {
+	window.addEventListener('mousedown', onEditorListMenuTempWindowClick, true);
 
+	getListToolbarContainerElement().classList.add('expanded');
+	let cm = [];
+	for (var i = 0; i < globals.ListOptionItems.length; i++) {
+		let aomi = globals.ListOptionItems[i];
+		aomi.action = function (option, contextMenuIndex, optionIndex) {
+			onListToolbarItemClick(optionIndex);
+		};
+		cm.push(aomi);
+	}
+	superCm.destroyMenu();
+
+	let align_tb_elm_rect = getListToolbarContainerElement().getBoundingClientRect();
+	let x = align_tb_elm_rect.left;
+	let y = align_tb_elm_rect.bottom;
+	superCm.createMenu(cm, { pageX: x, pageY: y });
+}
+
+function hideEditorListMenu() {
+	getListToolbarContainerElement().classList.remove('expanded');
+	window.removeEventListener('mousedown', onEditorListMenuTempWindowClick, true);
+	superCm.destroyMenu();
+}
 function updateAddListItemToolbarButtonIsEnabled() {
 	// NOTE since ordered and disc use built in events
 	// have to manually disabled because they're not using addClick helper
 	const is_valid = isAddListItemValid();
-	getListItemToolbarElements().forEach(x => {
+	getListToolbarPopupElements().forEach(x => {
 		if (is_valid) {
 			x.classList.remove('disabled');
 			x.removeAttribute('disabled');
@@ -264,5 +296,45 @@ function updateAddListItemToolbarButtonIsEnabled() {
 // #endregion Actions
 
 // #region Event Handlers
+function onListToolbarItemClick(idx) {
+	let list_val = null;
+	if (idx == globals.ListOrderedOptIdx) {
+		// stupid quill ignores 'left' have to use false
+		list_val = 'ordered';
+	} else if (idx == globals.ListBulletOptIdx) {
+		list_val = 'bullet';
+	} else if (idx == globals.ListCheckableOptIdx) {
+		list_val = 'unchecked';
+	} 
+	if (list_val == null) {
+		log('list click error, unknown idx: ' + idx);
+		return;
+	}
+	globals.quill.focus();
+	let sel = getDocSelection();
+	let cur_list_elm = getListItemElementAtDocIdx(sel.index);
+	if (cur_list_elm && cur_list_elm.getAttribute('data-list') == list_val) {
+		// toggle list off
+		list_val = null;
+	}
+	formatSelection('list', list_val, 'user');
+}
 
+function onEditorListMenuTempWindowClick(e) {
+	if (isChildOfElement(e.target, getListToolbarContainerElement())) {
+		return;
+	}
+	if (isClassInElementPath(e.target, 'context-menu-option')) {
+		return;
+	}
+	hideEditorListMenu();
+}
+
+function onListToolbarButtonClick(e) {
+	if (isEditorListToolbarMenuVisible()) {
+		hideEditorListMenu();
+	} else {
+		showEditorListMenu();
+	}
+}
 // #endregion Event Handlers

@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -635,9 +636,15 @@ namespace MonkeyPaste.Avalonia {
                     // when analyzer is triggered from action not user selection 
                     if (argParts[1] is string) {
                         suppressWrite = true;
-                        sourceCopyItem = await MpCopyItem.CreateAsync(
-                                                            data: argParts[1] as string,
-                                                            suppressWrite: true);
+                        //sourceCopyItem = await MpCopyItem.CreateAsync(
+                        //                                    data: argParts[1] as string,
+                        //                                    suppressWrite: true);
+                        sourceCopyItem = await Mp.Services.CopyItemBuilder.BuildAsync(
+                            pdo: new MpAvDataObject(MpPortableDataFormats.Text, argParts[1] as string),
+                            suppressWrite: true,
+                            transType: MpTransactionType.Analyzed,
+                            force_allow_dup: true,
+                            force_ext_sources: false);
                     } else if (argParts[1] is MpCopyItem) {
                         sourceCopyItem = argParts[1] as MpCopyItem;
                     }

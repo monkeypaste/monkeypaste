@@ -250,11 +250,8 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Stretch"
                     Width="10"
-                    Background="Transparent">
-                <Border.RenderTransform>
-                    <TranslateTransform X="5" />
-                </Border.RenderTransform>
-            </Border>
+                    Background="Transparent"
+                    RenderTransform="translateX(5px)" />
 
             <!--  HEIGHT RESIZER  -->
 
@@ -286,11 +283,41 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom"
                     Height="10"
-                    Background="Transparent">
-                <Border.RenderTransform>
-                    <TranslateTransform Y="5" />
-                </Border.RenderTransform>
-            </Border>
+                    Background="Transparent"
+                    RenderTransform="translateY(5px)" />
+
+            <!--  MULTI RESIZER  -->
+
+            <Border x:Name="ClipTileMultiResizeBorder"
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="3"
+                    Cursor="BottomRightCorner"
+                    IsHitTestVisible="{Binding IsResizerEnabled}"
+                    local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
+                    local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
+                    local:MpAvResizeExtension.MinWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.MaxWidth="{Binding MaxWidth}"
+                    local:MpAvResizeExtension.BoundWidth="{Binding BoundWidth, Mode=TwoWay}"
+                    local:MpAvResizeExtension.BoundHeight="{Binding BoundHeight, Mode=TwoWay}"
+                    local:MpAvResizeExtension.DefaultWidth="{Binding MinWidth}"
+                    local:MpAvResizeExtension.DefaultHeight="{Binding MinHeight}"
+                    local:MpAvResizeExtension.IsResizable="{Binding IsResizable}"
+                    local:MpAvResizeExtension.CanResize="{Binding CanResize, Mode=TwoWay}"
+                    local:MpAvResizeExtension.IsResizing="{Binding IsResizing, Mode=TwoWay}"
+                    local:MpAvResizeExtension.XFactor="-1"
+                    local:MpAvResizeExtension.YFactor="-1"
+                    local:MpAvResizeExtension.GlobalResizeMessage="None"
+                    local:MpAvPointerCommandExtension.IsEnabled="True"
+                    local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding ResetTileSizeToDefaultCommand}"
+                    local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Width="10"
+                    Height="10"
+                    Background="Transparent"
+                    RenderTransform="translateX(5px) translateY(5px)" />
 
             <!--  TRANSACTION SPLITTER  -->
 

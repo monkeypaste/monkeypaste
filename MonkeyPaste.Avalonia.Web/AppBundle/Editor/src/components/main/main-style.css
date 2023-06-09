@@ -197,6 +197,10 @@ textarea:placeholder-shown {
     align-items: center;
 }
 
+.context-menu-option.icon-only {
+    padding: 1px 5px 1px 5px !important;
+}
+
 .option-text, .context-menu-submenu:after {
     color: var(--editortoolbarbuttoncolor);
 }
@@ -212,6 +216,7 @@ textarea:placeholder-shown {
     font-size: 10px;
     color: silver;
 }
+
 
 .left-text-align {
     text-align: left;

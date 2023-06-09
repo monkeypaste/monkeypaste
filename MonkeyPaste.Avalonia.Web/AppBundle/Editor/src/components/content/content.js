@@ -23,7 +23,8 @@ function loadContent(
 	searches,
 	append_state,
 	annotationsJsonStr,
-	sel_state) {
+	sel_state,
+	paste_button_info) {
 	// NOTE only called fromHost (or tester which calls _ext)
 
 	let is_reload = contentHandle == globals.ContentHandle;
@@ -78,7 +79,7 @@ function loadContent(
 			// or it won't scroll to end (only relevant for !pre state)
 			updateAppendModeState(append_state, true);
 			if (isContentSubSelectionEnabled) {
-				enableSubSelection(true);
+				enableSubSelection(true, paste_button_info);
 			} else {
 				disableSubSelection(true);
 			}
@@ -125,10 +126,10 @@ function loadContent(
 		onContentLoaded_ntf('');
 	}
 
-	//retain focus state on reload
 	if (was_sub_sel_enabled != null &&
 		was_sub_sel_enabled) {
-		enableSubSelection();
+		//retain focus state on reload (null when not reload)
+		enableSubSelection(false, paste_button_info);
 	}
 	if (was_editable != null && was_editable) {
 		disableReadOnly();

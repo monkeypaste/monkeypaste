@@ -459,9 +459,8 @@ namespace MonkeyPaste.Avalonia {
                 var dup_ttvm = qttvm.ParentTreeItem.SortedItems.Last();
                 await MpAvTagTrayViewModel.Instance.SelectTagAndBringIntoTreeViewCommand.ExecuteAsync(dup_ttvm);
 
-
-                await Task.Delay(300);
-                MpAvTagTrayViewModel.Instance.SelectedItem.RenameTagCommand.Execute(null);
+                //await Task.Delay(300);
+                //MpAvTagTrayViewModel.Instance.SelectedItem.RenameTagCommand.Execute(null);
             }, () => {
                 return IsSavedQuery;
             });

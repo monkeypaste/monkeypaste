@@ -46,15 +46,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region Fk Models
-
-        //[OneToOne(foreignKey:nameof(IconImageId), CascadeOperations = CascadeOperation.All)]
-        //public MpDbImage IconImage { get; set; }
-
-        //[OneToOne(foreignKey: nameof(IconBorderImageId), CascadeOperations = CascadeOperation.All)]
-        //public MpDbImage IconBorderImage { get; set; }
-        #endregion
-
         #region Properties
 
         [Ignore]

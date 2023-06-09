@@ -587,10 +587,10 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnGotFocus(GotFocusEventArgs e) {
             base.OnGotFocus(e);
-            if (DataContext is MpISelectableViewModel svm &&
-                SelectViewModelOnFocus) {
-                svm.IsSelected = true;
-            }
+            //if (DataContext is MpISelectableViewModel svm &&
+            //    SelectViewModelOnFocus) {
+            //    svm.IsSelected = true;
+            //}
             if (EditOnFocus) {
                 SetValue(IsReadOnlyProperty, false);
                 BeginEditCommand?.Execute(null);
@@ -637,12 +637,6 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
 
-            if (DataContext is MpISelectableViewModel svm) {
-                if (svm is MpIConditionalSelectableViewModel csvm && csvm.CanSelect ||
-                    svm is not MpIConditionalSelectableViewModel) {
-                    svm.IsSelected = true;
-                }
-            }
 
             if (NavigateUriCommand != null &&
                 IsReadOnly) {
@@ -654,6 +648,19 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"Cannot exec nav cmd w/ param '{NavigateUriCommandParameter}'. Mods '{NavigateUriRequiredKeyString}' not pressed.");
                 }
 
+            }
+        }
+        protected override void OnPointerReleased(PointerReleasedEventArgs e) {
+            base.OnPointerReleased(e);
+            if (e.Handled || !e.IsLeftRelease(this)) {
+                return;
+            }
+
+            if (DataContext is MpISelectableViewModel svm) {
+                if (svm is MpIConditionalSelectableViewModel csvm && csvm.CanSelect ||
+                    svm is not MpIConditionalSelectableViewModel) {
+                    svm.IsSelected = true;
+                }
             }
         }
         protected override void OnPointerExited(PointerEventArgs e) {

@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Platform;
@@ -1188,6 +1189,8 @@ namespace MonkeyPaste.Avalonia {
         public void OpenPopOutWindow(MpAppendModeType amt) {
             IsAppendNotifier = amt != MpAppendModeType.None;
             if (!IsChildWindowOpen) {
+                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, QueryOffsetIdx);
+
                 var pow = CreatePopoutWindow();
                 var ws = amt == MpAppendModeType.None ? new Size(500, 500) : new Size(350, 250);
                 pow.Width = ws.Width;

@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System.IO;
 using System.Linq;
@@ -106,34 +107,56 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => {
                 MpCopyItem ci = null;
                 switch (e.ChangeType) {
+                    // TODO this is barely tested, should use os file manager as source
                     case WatcherChangeTypes.Changed:
-                    case WatcherChangeTypes.Created:
-                        ci = await MpCopyItem.CreateAsync(
-                            //sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
-                            itemType: MpCopyItemType.FileList,
-                            data: e.FullPath,
-                            suppressWrite: true);
-                        if (!ci.WasDupOnCreate) {
-                            // new item, create source ref
-                            //await MpTransactionSource.CreateAsync(
-                            //    copyItemId: ci.Id,
-                            //    sourceObjId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
-                            //    sourceType: MpCopyItemSourceType.App);
+                    case WatcherChangeTypes.Created: {
+                            //ci = await MpCopyItem.CreateAsync(
+                            ////sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
+                            //itemType: MpCopyItemType.FileList,
+                            //data: e.FullPath,
+                            //suppressWrite: true);
+
+                            var si = await e.FullPath.ToFileOrFolderStorageItemAsync();
+                            ci = await Mp.Services.CopyItemBuilder.BuildAsync(
+                                pdo: new MpAvDataObject(MpPortableDataFormats.AvFileNames, new[] { si }),
+                                suppressWrite: true,
+                                transType: MpTransactionType.Analyzed,
+                                force_allow_dup: true,
+                                force_ext_sources: false);
+                            if (!ci.WasDupOnCreate) {
+                                // new item, create source ref
+                                //await MpTransactionSource.CreateAsync(
+                                //    copyItemId: ci.Id,
+                                //    sourceObjId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
+                                //    sourceType: MpCopyItemSourceType.App);
+                            }
+
+                            break;
                         }
-                        break;
-                    case WatcherChangeTypes.Renamed:
-                        RenamedEventArgs re = e as RenamedEventArgs;
-                        ci = await MpDataModelProvider.GetCopyItemByDataAsync(re.OldFullPath);
-                        if (ci == null) {
-                            ci = await MpCopyItem.CreateAsync(
-                                //sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
-                                itemType: MpCopyItemType.FileList,
-                                data: e.FullPath,
-                                suppressWrite: true);
+
+                    case WatcherChangeTypes.Renamed: {
+                            RenamedEventArgs re = e as RenamedEventArgs;
+                            ci = await MpDataModelProvider.GetCopyItemByDataAsync(re.OldFullPath);
+                            if (ci == null) {
+                                //ci = await MpCopyItem.CreateAsync(
+                                //    //sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
+                                //    itemType: MpCopyItemType.FileList,
+                                //    data: e.FullPath,
+                                //    suppressWrite: true);
+
+                                var si = await e.FullPath.ToFileOrFolderStorageItemAsync();
+                                ci = await Mp.Services.CopyItemBuilder.BuildAsync(
+                                    pdo: new MpAvDataObject(MpPortableDataFormats.AvFileNames, new[] { si }),
+                                    suppressWrite: true,
+                                    transType: MpTransactionType.Analyzed,
+                                    force_allow_dup: true,
+                                    force_ext_sources: false);
+                            } else {
+                                ci.ItemData = re.FullPath;
+                                await ci.WriteToDatabaseAsync();
+                            }
+                            break;
                         }
-                        ci.ItemData = re.FullPath;
-                        await ci.WriteToDatabaseAsync();
-                        break;
                     case WatcherChangeTypes.Deleted:
                         ci = await MpDataModelProvider.GetCopyItemByDataAsync(e.FullPath);
                         if (ci == null) {

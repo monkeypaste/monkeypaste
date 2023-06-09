@@ -236,7 +236,26 @@
                             local:MpAvMenuExtension.IsOpen="{Binding SearchFilterCollectionViewModel.IsPopupMenuOpen}"
                             Classes="noBg noHoverBg noBorder">
                         <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="{Binding SearchIconToolTipText}" />
+                            <local:MpAvToolTipView>
+                                <local:MpAvToolTipView.ToolTipText>
+                                    <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
+                                        <Binding>
+                                            <Binding.Source>
+                                                <sys:String>Search in '</sys:String>
+                                            </Binding.Source>
+                                        </Binding>
+                                        <Binding Path="LastSelectedActiveItem.TagName"
+                                                 Source="{x:Static local:MpAvTagTrayViewModel.Instance}"
+                                                 TargetNullValue="All"
+                                                 FallbackValue="All" />
+                                        <Binding>
+                                            <Binding.Source>
+                                                <sys:String>'</sys:String>
+                                            </Binding.Source>
+                                        </Binding>
+                                    </MultiBinding>
+                                </local:MpAvToolTipView.ToolTipText>
+                            </local:MpAvToolTipView>
                         </ToolTip.Tip>
                         <Button.RenderTransform>
                             <RotateTransform />
