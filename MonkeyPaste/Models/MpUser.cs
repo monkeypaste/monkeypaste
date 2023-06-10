@@ -5,7 +5,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-
+    public enum MpUserAccountType {
+        None = 0,
+        Free,
+        Basic,
+        Premium,
+        Trial,
+        Admin
+    }
 
     public class MpUser :
         MpDbModelBase {
@@ -62,6 +69,11 @@ namespace MonkeyPaste {
                 Guid = value.ToString();
             }
         }
+
+        [Ignore]
+
+        public MpUserAccountType AccountType =>
+            MpUserAccountType.Free;
 
         #endregion
 

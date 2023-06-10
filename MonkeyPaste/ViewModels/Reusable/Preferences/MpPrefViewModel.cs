@@ -137,8 +137,10 @@ namespace MonkeyPaste {
 
         #region Application Properties
 
-        #region User/Device Derived Models    
+        #region User/Device
         public string ThisDeviceGuid { get; set; } = System.Guid.NewGuid().ToString();
+
+        public int LastLoggedInUserId { get; set; } = 0;
         #endregion
 
         #region Editor
@@ -153,6 +155,7 @@ namespace MonkeyPaste {
         [JsonIgnore]
         public string SslCertSubject { get; set; } = "CN=127.0.01";
         #endregion
+
         [JsonIgnore]
         public string LocalStoragePath =>
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);

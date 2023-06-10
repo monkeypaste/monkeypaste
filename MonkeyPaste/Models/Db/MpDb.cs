@@ -512,6 +512,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpTextTemplate>();
             await _connectionAsync.CreateTableAsync<MpContentToken>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
+            await _connectionAsync.CreateTableAsync<MpUser>();
             await _connectionAsync.CreateTableAsync<MpUserDevice>();
         }
 
@@ -622,7 +623,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             await InitDefaultShortcutsAsync();
 #if DEBUG
             if (MpPrefViewModel.Instance.IsInitialLoad) {
-
+                await CreateTestUsersAsync();
                 await CreateTestContentAsync();
             }
 #endif
@@ -799,6 +800,13 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             await InitDefaultShortcutsAsync(routingProfile);
         }
 
+        private static async Task CreateTestUsersAsync() {
+            var free_user =
+                await MpUser.CreateAsync(
+                    email: "free_test@test.com");
+
+
+        }
         private static async Task CreateTestContentAsync() {
             var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
             string this_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(this_app);

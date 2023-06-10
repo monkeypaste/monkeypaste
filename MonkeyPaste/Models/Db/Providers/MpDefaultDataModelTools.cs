@@ -86,10 +86,15 @@ namespace MonkeyPaste {
 
         public static async Task CreateAsync(string thisDeviceGuid) {
             // NOTE on initial startup 
+
+            // User
+            var emptyUser = await MpUser.CreateAsync();
+
             // User Device
 
             var thisDevice = await MpUserDevice.CreateAsync(
                 guid: thisDeviceGuid,
+                userId: emptyUser.Id,
                 deviceType: Mp.Services.PlatformInfo.OsType,
                 machineName: Mp.Services.PlatformInfo.OsMachineName,
                 versionInfo: Mp.Services.PlatformInfo.OsVersionInfo);

@@ -150,6 +150,13 @@
                 Classes.contextfocus="{Binding IsContextMenuOpen}"
                 Classes.activeTag="{Binding IsActiveTag}"
                 BorderThickness="1.5">
+
+            <Border.Transitions>
+                <Transitions>
+                    <BrushTransition Property="Background"
+                                     Duration="0:0:0.7" />
+                </Transitions>
+            </Border.Transitions>
             <StackPanel Orientation="Horizontal">
                 <Grid VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>

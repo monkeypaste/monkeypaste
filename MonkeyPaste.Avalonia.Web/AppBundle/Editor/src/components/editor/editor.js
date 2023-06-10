@@ -20,6 +20,7 @@ function initEditor() {
 	initScroll();
 	initTooltip();
 	initTemplates();
+	initMacros();
 	initOverlay();
 	//initHistory();
 	//initExtContentSourceBlot();

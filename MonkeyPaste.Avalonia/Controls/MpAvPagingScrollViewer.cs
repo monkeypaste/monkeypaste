@@ -15,8 +15,8 @@ namespace MonkeyPaste.Avalonia {
 
     [TemplatePart("PART_HorizontalScrollBar", typeof(MpAvPagingScrollBar))]
     [TemplatePart("PART_VerticalScrollBar", typeof(MpAvPagingScrollBar))]
-    public class MpAvPagingScrollViewer : ScrollViewer, IStyleable {
-        Type IStyleable.StyleKey => typeof(MpAvPagingScrollViewer);
+    public class MpAvPagingScrollViewer : ScrollViewer {
+        //Type IStyleable.StyleKey => typeof(MpAvPagingScrollViewer);
 
         public IReadOnlyList<MpAvPagingScrollBar> ScrollBars { get; private set; }
 
@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvPagingScrollBar : ScrollBar {
 
         #region Overrides
-        protected override Type StyleKeyOverride => typeof(MpAvPagingScrollBar);
+        //protected override Type StyleKeyOverride => typeof(MpAvPagingScrollBar);
         #endregion
 
         public Track Track { get; private set; }

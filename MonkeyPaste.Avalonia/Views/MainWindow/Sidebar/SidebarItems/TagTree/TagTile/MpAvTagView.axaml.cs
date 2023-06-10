@@ -220,9 +220,8 @@ namespace MonkeyPaste.Avalonia {
                     ResetDrop();
                     return;
                 }
-
-
                 if (is_tag_drop && drag_ttvm != null) {
+
                     // SORT (NOTE! don't mark as busy, let db events handle)
                     int this_sort_idx = IsPinTrayTagView() ?
                         BindingContext.PinSortIdx : BindingContext.TreeSortIdx;
@@ -321,17 +320,18 @@ namespace MonkeyPaste.Avalonia {
             if (!is_drop_valid) {
                 return dde;
             }
-            if (is_copy) {
-                dde |= DragDropEffects.Copy;
-            } else if (!is_content) {
-                //dde |= DragDropEffects.Move;
-                dde |= DragDropEffects.Link;
-            }
-            if (is_content) {
-                dde |= DragDropEffects.Link;
-            }
+            //if (is_copy) {
+            //    dde |= DragDropEffects.Copy;
+            //} else if (!is_content) {
+            //    //dde |= DragDropEffects.Move;
+            //    dde |= DragDropEffects.Link;
+            //}
+            //if (is_content) {
+            //    dde |= DragDropEffects.Link;
+            //}
 
-            return dde;
+            //return dde;
+            return DragDropEffects.Copy;
         }
         private bool IsDropValid(IDataObject ido, bool is_copy, MpTreeLinkOpType linkType) {
 

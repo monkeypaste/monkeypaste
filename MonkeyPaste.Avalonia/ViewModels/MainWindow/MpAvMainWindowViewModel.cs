@@ -836,7 +836,7 @@ namespace MonkeyPaste.Avalonia {
                 // when mw is shown and not active it doesn't hide or receive input until activated
                 MpAvWindowManager.MainWindow.Activate();
             }
-
+            MpAvWindowManager.MainWindow.Topmost = true;
             //var sgrl =
             //    MpAvWindowManager
             //    .AllWindows

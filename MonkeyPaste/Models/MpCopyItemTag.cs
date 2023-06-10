@@ -145,27 +145,18 @@ namespace MonkeyPaste {
             }
         }
 
-        //[ForeignKey(typeof(MpTag))]
         [Column("fk_MpTagId")]
         [Indexed]
         public int TagId { get; set; }
 
-        //[ForeignKey(typeof(MpCopyItem))]
         [Column("fk_MpCopyItemId")]
         [Indexed]
         public int CopyItemId { get; set; }
 
         public int CopyItemSortIdx { get; set; } = 0;
 
-        #endregion
+        public DateTime CreatedDateTime { get; set; }
 
-        #region Fk Models
-
-        //[OneToOne]
-        //public MpCopyItem CopyItem { get; set; }
-
-        //[OneToOne]
-        //public MpTag Tag { get; set; }
         #endregion
 
         #region Statics
@@ -224,6 +215,9 @@ namespace MonkeyPaste {
                 // why is this happening? (have a hunch its when dragging tile onto pin tray or onto tag)
                 Debugger.Break();
                 CopyItemId *= -1;
+            }
+            if (Id == 0) {
+                CreatedDateTime = DateTime.Now;
             }
             await base.WriteToDatabaseAsync();
 

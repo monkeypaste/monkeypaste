@@ -585,12 +585,12 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static bool IsLeftRelease(this PointerReleasedEventArgs ppea, Visual? control) {
             return ppea.GetCurrentPoint(control)
-                            .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed;
+                            .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonReleased;
         }
 
         public static bool IsRightRelease(this PointerReleasedEventArgs ppea, Visual? control) {
             return ppea.GetCurrentPoint(control)
-                            .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
+                            .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonReleased;
         }
 
         public static bool IsLeftDown(this PointerEventArgs e, Visual? control) {

@@ -37,7 +37,8 @@
 
     <Grid x:Name="TagTrayContainerGrid"
           HorizontalAlignment="Center"
-          VerticalAlignment="Stretch">
+          VerticalAlignment="Stretch"
+          Cursor="{Binding IsBusy, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=Wait|Arrow}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <!--  NOTE MinWidth set for drag drop target  -->
@@ -70,9 +71,7 @@
                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                  ItemsSource="{Binding PinnedItems}">
             <ListBox.Resources>
-                <Thickness x:Key="ListBoxItemPadding">
-                    0,0,0,0
-                </Thickness>
+                <Thickness x:Key="ListBoxItemPadding">0,0,0,0</Thickness>
                 <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
                 <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
                 <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>

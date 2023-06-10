@@ -1482,6 +1482,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> MoveOrCopyThisTagCommand => new MpAsyncCommand<object>(
             async (args) => {
+                Parent.IsBusy = true;
+
                 var argParts = args as object[];
 
                 int old_parent_tag_id = ParentTagId;
@@ -1535,6 +1537,7 @@ namespace MonkeyPaste.Avalonia {
                         await Task.Delay(100);
                     }
                     Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
+                    Parent.IsBusy = false;
                     return;
                 }
 
@@ -1589,7 +1592,7 @@ namespace MonkeyPaste.Avalonia {
                         .ToList()
                         .Select(x => x.UpdateClipCountAsync()));
 
-
+                Parent.IsBusy = false;
             },
             (args) => {
                 return args is object[];

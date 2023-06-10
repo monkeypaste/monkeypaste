@@ -15,6 +15,7 @@ namespace MonkeyPaste {
 
         public static async Task<MpUserDevice> CreateAsync(
             string guid = "",
+            int userId = 0,
             MpUserDeviceType deviceType = MpUserDeviceType.None,
             string machineName = "",
             string versionInfo = "",
@@ -70,6 +71,9 @@ namespace MonkeyPaste {
 
         [Column("MpUserDeviceGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Column("fk_MpUserId")]
+        public int UserId { get; set; }
 
         public string MachineName { get; set; }
 

@@ -12,7 +12,6 @@ namespace MonkeyPaste.Common {
         bool IsThisAppActive { get; }
         MpPortableProcessInfo GetActiveProcessInfo();
         MpPortableProcessInfo LastProcessInfo { get; }
-        MpPortableProcessInfo LastInternalProcessInfo { get; }
         MpPortableProcessInfo FileSystemProcessInfo { get; }
 
         ConcurrentDictionary<string, ObservableCollection<IntPtr>> RunningProcessLookup { get; }

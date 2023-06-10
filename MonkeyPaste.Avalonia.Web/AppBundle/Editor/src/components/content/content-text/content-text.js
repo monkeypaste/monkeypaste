@@ -484,6 +484,22 @@ function getElementAtDocIdx(docIdx, ignoreTextNode = false, ignoreColGroup = tru
 	return doc_idx_blot.domNode;
 }
 
+function getElementsInDocRange(range, ignoreTextNode = false, ignoreColGroup = true) {
+	let elms = [];
+	for (var i = range.index; i <= range.index + range.length; i++) {
+		let cur_elm = getElementAtDocIdx(i, ignoreTextNode, ignoreColGroup);
+		if (!cur_elm) {
+			debugger;
+			continue;
+		}
+		if (elms.includes(cur_elm)) {
+			continue;
+		}
+		elms.push(cur_elm);
+	}
+	return elms;
+}
+
 function getBlockElementAtDocIdx(docIdx) {
 	let cur_blot = getBlotAtDocIdx(docIdx);
 	while (cur_blot != null) {

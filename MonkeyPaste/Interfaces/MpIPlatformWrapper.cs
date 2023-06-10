@@ -6,6 +6,7 @@ namespace MonkeyPaste {
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
 
+        MpIAccountTools AccountTools { get; set; }
         MpIDownKeyHelper KeyDownHelper { get; set; }
         MpIShortcutGestureLocator ShortcutGestureLocator { get; set; }
         MpIColorQueryTools ColorQueryTools { get; set; }

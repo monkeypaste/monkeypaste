@@ -71,25 +71,22 @@
 
         <!--  ADD TAG BUTTON  -->
 
-        <Style Selector="Button#AddTagButton PathIcon">
-            <Setter Property="Foreground"
-                    Value="Wheat" />
-            <Setter Property="Data"
-                    Value="{StaticResource PlusSvg}" />
+        <Style Selector="Button#AddTagButton Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themecomp5}" />
         </Style>
-        <Style Selector="Button#AddTagButton Button:pointerover PathIcon">
-            <Setter Property="Foreground"
-                    Value="{DynamicResource HoverDefaultBorderBrush}" />
-            <Setter Property="Data"
-                    Value="{StaticResource PlusBoxSvg}" />
+        <Style Selector="Button#AddTagButton:pointerover Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themecomp5light}" />
         </Style>
-        <Style Selector="Button#AddTagButton PathIcon /template/ Path">
-            <Setter Property="Margin"
-                    Value="3" />
+        <Style Selector="Button#AddTagButton:pressed Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themecomp5dark}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
+          VerticalAlignment="Stretch"
+          Cursor="{Binding IsBusy, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=Wait|Arrow}">
         <TreeView x:Name="TagTreeView"
                   Classes.tagDrag="{Binding IsAnyDragging}"
                   Margin="5,10,20,0"
@@ -133,11 +130,13 @@
             </TreeView.ItemTemplate>
         </TreeView>
         <Button x:Name="AddTagButton"
-                Classes="noBg noHoverBg"
+                Classes="noBg noHoverBg outlineOver"
                 IsVisible="{Binding ShowAddTagButton}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 CornerRadius="7"
+                Width="30"
+                Height="30"
                 Margin="0,10,25,0"
                 BorderThickness="0"
                 Command="{Binding SelectedItem.AddNewChildTagCommand}"
@@ -162,7 +161,8 @@
                     </local:MpAvToolTipView.ToolTipText>
                 </local:MpAvToolTipView>
             </ToolTip.Tip>
-            <PathIcon />
+            <!--<PathIcon />-->
+            <Image Margin="10" />
         </Button>
     </Grid>
 </local:MpAvUserControl>

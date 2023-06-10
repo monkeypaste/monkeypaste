@@ -970,6 +970,13 @@ namespace MonkeyPaste.Avalonia {
 
         public object IconResourceObj {
             get {
+
+                if (Mp.Services.AccountTools.LastCapInfo.NextToBeTrashed_ciid == CopyItemId) {
+                    return "TrashCanImage";
+                }
+                if (Mp.Services.AccountTools.LastCapInfo.NextToBeRemoved_ciid == CopyItemId) {
+                    return "WarningImage";
+                }
                 if (CopyItemType == MpCopyItemType.FileList &&
                     FileItemCollectionViewModel != null &&
                     FileItemCollectionViewModel.Items.Count > 0) {

@@ -32,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public MpIAccountTools AccountTools { get; set; }
         public MpIMainThreadMarshal MainThreadMarshal { get; set; }
         public MpIColorQueryTools ColorQueryTools { get; set; }
 
@@ -119,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
-
+            AccountTools = new MpAvAccountTools();
             ColorQueryTools = new MpAvColorQueryTools();
             NativePathDialog = new MpAvPathDialog();
             UserProvidedFileExts = MpPrefViewModel.Instance;

@@ -30,6 +30,9 @@ namespace MonkeyPaste.Avalonia {
                 paramStr = paramStr.Replace("themeaccent1bg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1BgColor.ToString()));
                 paramStr = paramStr.Replace("themeaccent5bg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent5BgColor.ToString()));
                 paramStr = paramStr.Replace("themegray1", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent1.ToString()));
+                paramStr = paramStr.Replace("themecomp5", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeCompliment5Color.ToString()));
+                paramStr = paramStr.Replace("themecomp5light", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeCompliment5LighterColor.ToString()));
+                paramStr = paramStr.Replace("themecomp5dark", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeCompliment5DarkColor.ToString()));
                 if (paramStr.Contains("|")) {
                     hex = MpColorHelpers.ParseHexFromString(paramStr.SplitNoEmpty("|")[0]);
                     imgResourceObj = MpColorHelpers.ParseHexFromString(paramStr.SplitNoEmpty("|")[1]);

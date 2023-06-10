@@ -28,7 +28,11 @@
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\experiments\**" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\font\font-toolbar-items-style.css" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\globals\globals.js" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\input\macros\duplicate\duplicate.js" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\input\macros\indent\indent.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\input\focus.js" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\input\macros\macros.js" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\input\macros\move\move.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\main\editor_tester.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\shortcuts\shortcuts.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\table\ops\tableops.js" />
@@ -66,6 +70,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="AppBundle\Editor\src\components\quill-wrapper\delta\" />
     <Folder Include="Util\Extensions\" />
     <Folder Include="Util\Helpers\" />
   </ItemGroup>
