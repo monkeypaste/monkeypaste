@@ -5,8 +5,6 @@
     <Styles.Resources>
         <ControlTheme x:Key="{x:Type local:MpAvPagingScrollViewer}"
                       TargetType="local:MpAvPagingScrollViewer">
-            <Setter Property="IsScrollInertiaEnabled"
-                    Value="False" />
             <Setter Property="Background"
                     Value="Transparent" />
             <Setter Property="Template">
@@ -20,15 +18,17 @@
                                                 Grid.ColumnSpan="2"
                                                 Background="{TemplateBinding Background}"
                                                 HorizontalSnapPointsType="{TemplateBinding HorizontalSnapPointsType}"
-                                                VerticalSnapPointsType="{TemplateBinding VerticalSnapPointsType}"
                                                 HorizontalSnapPointsAlignment="{TemplateBinding HorizontalSnapPointsAlignment}"
+                                                VerticalSnapPointsType="{TemplateBinding VerticalSnapPointsType}"
                                                 VerticalSnapPointsAlignment="{TemplateBinding VerticalSnapPointsAlignment}"
+                                                ScrollViewer.IsScrollInertiaEnabled="{TemplateBinding IsScrollInertiaEnabled}"
                                                 Padding="{TemplateBinding Padding}">
                             <ScrollContentPresenter.GestureRecognizers>
                                 <!--  IsScrollInertiaEnabled="{Binding IsScrollInertiaEnabled, RelativeSource={RelativeSource TemplatedParent}}"  -->
+                                <!--  IsScrollInertiaEnabled="False"  -->
                                 <ScrollGestureRecognizer CanHorizontallyScroll="{Binding CanHorizontallyScroll, ElementName=PART_ContentPresenter}"
                                                          CanVerticallyScroll="{Binding CanVerticallyScroll, ElementName=PART_ContentPresenter}"
-                                                         IsScrollInertiaEnabled="False" />
+                                                         IsScrollInertiaEnabled="{Binding (ScrollViewer.IsScrollInertiaEnabled), ElementName=PART_ContentPresenter}" />
                             </ScrollContentPresenter.GestureRecognizers>
                         </ScrollContentPresenter>
                         <local:MpAvPagingScrollBar Name="PART_HorizontalScrollBar"

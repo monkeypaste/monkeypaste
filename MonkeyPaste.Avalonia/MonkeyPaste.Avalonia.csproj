@@ -320,6 +320,7 @@
     <None Remove="Assets\Images\forward_black.png" />
     <None Remove="Assets\Images\frame_grip.png" />
     <None Remove="Assets\Images\frame_grip_org.png" />
+    <None Remove="Assets\Images\ghost.png" />
     <None Remove="Assets\Images\global.png" />
     <None Remove="Assets\Images\googleIcon.png" />
     <None Remove="Assets\Images\google_signin.png" />
@@ -393,6 +394,7 @@
     <None Remove="Assets\Images\sheep.png" />
     <None Remove="Assets\Images\shield.png" />
     <None Remove="Assets\Images\signout.png" />
+    <None Remove="Assets\Images\skull.png" />
     <None Remove="Assets\Images\sliders.png" />
     <None Remove="Assets\Images\slidersVertical.png" />
     <None Remove="Assets\Images\speak.png" />
@@ -518,6 +520,9 @@
     <AvaloniaResource Include="Assets\Images\folderoutline.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\ghost.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\graph.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -537,6 +542,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\resize_backup2\doubleSidedArrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\skull.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\staryellow.png">

@@ -597,6 +597,12 @@ namespace MonkeyPaste.Common.Avalonia {
             return e.GetCurrentPoint(control).Properties.IsLeftButtonPressed;
         }
 
+        public static bool IsRightDown(this PointerEventArgs e, Visual? control) {
+            return e.GetCurrentPoint(control).Properties.IsRightButtonPressed;
+        }
+        public static bool IsAnyButtonDown(this PointerEventArgs e, Visual? control) {
+            return e.IsLeftDown(control) || e.IsRightDown(control);
+        }
         public static MpPoint GetClientMousePoint(this PointerEventArgs e, Visual? control) {
             return e.GetPosition(control).ToPortablePoint();
         }

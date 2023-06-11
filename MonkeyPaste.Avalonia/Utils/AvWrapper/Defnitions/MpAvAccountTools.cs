@@ -24,8 +24,7 @@ namespace MonkeyPaste.Avalonia {
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {
                 case MpUserAccountType.Free:
-                    //return 5;
-                    return 727;
+                    return 5;
                 case MpUserAccountType.Basic:
                     return 100;
                 case MpUserAccountType.Trial:
@@ -65,9 +64,16 @@ namespace MonkeyPaste.Avalonia {
 
             -Premium ($5mo/$30yr) is unlimited everything
 
+            -trial is free premium for 2 weeks
+
             -following FIFO where favoriting excluded
             
             -if favorites is at content cap no new content add (silent add new pause in tray)
+
+            -if basic/premium/trial expires/downgrades then active/trash is retained 
+             but follows account type FIFO
+
+            -Account tab in settings should explain how caps work and favorite tag is used
 
             -When at max show yellow caution ⚠️ on count box that it 
              will be trashed next then ghost 👻 on trash item to be removed
@@ -85,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
 
             // ADD LOCK /////////////////////////////////////////////////////
 
-            int favorite_count = await MpDataModelProvider.GetCopyItemCountForTagAsync(MpTag.FavoritesTagId);
+            int favorite_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.FavoritesTagId);
             IsContentAddPausedByAccount = favorite_count >= content_cap;
 
             // TO TRASH /////////////////////////////////////////////////////

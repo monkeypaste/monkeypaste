@@ -397,6 +397,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsNextTrashedByAccount =>
+            Parent != null &&
+            CopyItemId != 0 &&
+            Mp.Services.AccountTools.LastCapInfo.NextToBeTrashed_ciid == CopyItemId;
+
+        public bool IsNextRemovedByAccount =>
+            Parent != null &&
+            CopyItemId != 0 &&
+            Mp.Services.AccountTools.LastCapInfo.NextToBeRemoved_ciid == CopyItemId;
         public bool IsTrashed =>
             MpAvTagTrayViewModel.Instance != null &&
             MpAvTagTrayViewModel.Instance.TrashedCopyItemIds.Contains(CopyItemId);
@@ -970,12 +979,11 @@ namespace MonkeyPaste.Avalonia {
 
         public object IconResourceObj {
             get {
-
-                if (Mp.Services.AccountTools.LastCapInfo.NextToBeTrashed_ciid == CopyItemId) {
-                    return "TrashCanImage";
+                if (IsNextTrashedByAccount) {
+                    return "GhostImage";
                 }
-                if (Mp.Services.AccountTools.LastCapInfo.NextToBeRemoved_ciid == CopyItemId) {
-                    return "WarningImage";
+                if (IsNextRemovedByAccount) {
+                    return "SkullImage";
                 }
                 if (CopyItemType == MpCopyItemType.FileList &&
                     FileItemCollectionViewModel != null &&

@@ -776,15 +776,16 @@ namespace MonkeyPaste.Avalonia {
                 if (IsAllTag) {
                     if (TagClipCount == null) {
                         // startup case
-                        TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountAsync(Parent.TrashedCopyItemIds);
+                        TagClipCount = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
                     } else {
                         // ignored, all updated handled in db callbacks
                     }
                 } else {
                     if (IsLinkTag) {
                         // NOTE omit trashed ids on all tags EXCEPT trashed which has empty omits
-                        var omitted_ciids = IsTrashTag ? null : Parent.TrashedCopyItemIds;
-                        TagClipCount = await MpDataModelProvider.GetTotalCopyItemCountForTagAndAllDescendantsAsync(TagId, omitted_ciids);
+                        TagClipCount = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(
+                            tid: TagId,
+                            ignore_descendants: false);
 
                     } else {
                         // query tag
@@ -1079,7 +1080,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (isLink) {
                 // try to create link, if it was created (and didn't already exist) notify any triggers
-                int linkCount = await MpDataModelProvider.GetCopyItemCountForTagAsync(TagId);
+                int linkCount = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(TagId);
                 var cit = await MpCopyItemTag.CreateAsync(
                     tagId: TagId,
                     copyItemId: ciid,
@@ -1532,7 +1533,7 @@ namespace MonkeyPaste.Avalonia {
                         pinned_vml.Insert(new_sort_idx, this);
                     }
                     pinned_vml.ForEach((x, idx) => x.PinSortIdx = idx);
-                    while (Parent.IsAnyBusy) {
+                    while (Parent.Items.Any(x => x.IsBusy)) {
                         // wait for pinned db stuff
                         await Task.Delay(100);
                     }

@@ -782,8 +782,9 @@ namespace MonkeyPaste.Avalonia {
                 _defaultPinItemHeight = pin_item_length;
             }
 
-            if (LayoutType == MpClipTrayLayoutType.Grid ||
-                (LayoutType == MpClipTrayLayoutType.Stack && !MpAvMainWindowViewModel.Instance.IsMainWindowOrientationChanging)) {
+            if (LayoutType == MpClipTrayLayoutType.Grid //||
+                                                        //(LayoutType == MpClipTrayLayoutType.Stack && !MpAvMainWindowViewModel.Instance.IsMainWindowOrientationChanging)
+                ) {
                 double default_ar = _defaultQueryItemWidth / DEFAULT_ITEM_SIZE;
                 if (LayoutType == MpClipTrayLayoutType.Grid ||
                     default_ar >= 2.0d) {
@@ -1878,22 +1879,37 @@ namespace MonkeyPaste.Avalonia {
         private bool _isProcessingCap = false;
         public async Task ProcessAccountCapsAsync(string source, object arg = null) {
             if (_isProcessingCap) {
+                MpConsole.WriteLine($"Account cap refreshed IGNORED (already processing). Source: '{source}' Args: '{arg.ToStringOrDefault()}'");
                 return;
             }
             _isProcessingCap = true;
             var cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync(MpUserAccountType.Free);
+            MpConsole.WriteLine($"Account cap refreshed. Source: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
+            MpConsole.WriteLine(cap_info.ToString(), false, true);
 
-            if (source == "add") {
-                await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);
-                await DeleteItemByCopyItemIdAsync(cap_info.ToBeRemoved_ciid);
+            await Dispatcher.UIThread.InvokeAsync(async () => {
+                if (source == "add") {
+                    // TODO should change these ntf to actions that open in-app purchase
 
-            }
-            if (AllActiveItems.FirstOrDefault(x => x.CopyItemId == cap_info.NextToBeTrashed_ciid) is MpAvClipTileViewModel next_trash_ctvm) {
-                next_trash_ctvm.OnPropertyChanged(nameof(next_trash_ctvm.IconResourceObj));
-            }
-            if (AllActiveItems.FirstOrDefault(x => x.CopyItemId == cap_info.NextToBeRemoved_ciid) is MpAvClipTileViewModel next_remove_ctvm) {
-                next_remove_ctvm.OnPropertyChanged(nameof(next_remove_ctvm.IconResourceObj));
-            }
+                    if (cap_info.ToBeTrashed_ciid > 0) {
+                        MpNotificationBuilder.ShowMessageAsync(
+                               title: $"Capacity Reached",
+                               body: $"Oldest item trashed",
+                               msgType: MpNotificationType.ContentCapReached,
+                               iconSourceObj: "GhostImage").FireAndForgetSafeAsync();
+                    }
+                    if (cap_info.ToBeRemoved_ciid > 0) {
+                        MpNotificationBuilder.ShowMessageAsync(
+                               title: $"Trash Capacity Reached",
+                               body: $"Oldest trashed item permenently deleted",
+                               msgType: MpNotificationType.TrashCapReached,
+                               iconSourceObj: "SkullImage").FireAndForgetSafeAsync();
+                    }
+                    await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);
+                    await DeleteItemByCopyItemIdAsync(cap_info.ToBeRemoved_ciid);
+                }
+                AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IconResourceObj)));
+            });
 
             _isProcessingCap = false;
         }
@@ -3083,13 +3099,13 @@ namespace MonkeyPaste.Avalonia {
              },
             (args) => args != null && args is MpAvClipTileViewModel ctvm && ctvm.IsPinned);
 
-        public ICommand ToggleSelectedTileIsPinnedCommand => new MpCommand(
-            () => {
-                ToggleTileIsPinnedCommand.Execute(SelectedItem);
+        public MpIAsyncCommand ToggleSelectedTileIsPinnedCommand => new MpAsyncCommand(
+            async () => {
+                await ToggleTileIsPinnedCommand.ExecuteAsync(SelectedItem);
             });
 
-        public ICommand ToggleTileIsPinnedCommand => new MpCommand<object>(
-            (args) => {
+        public MpIAsyncCommand<object> ToggleTileIsPinnedCommand => new MpAsyncCommand<object>(
+            async (args) => {
                 MpAvClipTileViewModel pctvm = null;
                 if (args is MpAvClipTileViewModel) {
                     pctvm = args as MpAvClipTileViewModel;
@@ -3098,25 +3114,26 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (pctvm.IsPinned) {
-                    UnpinTileCommand.Execute(args);
+                    await UnpinTileCommand.ExecuteAsync(args);
                 } else {
-                    PinTileCommand.Execute(args);
+                    await PinTileCommand.ExecuteAsync(args);
                 }
             },
             (args) => {
                 return args != null;
             });
-        public ICommand UnpinAllCommand => new MpCommand(() => {
-            int pin_count = PinnedItems.Count;
-            while (pin_count > 0) {
-                var to_unpin_ctvm = PinnedItems[--pin_count];
-                if (to_unpin_ctvm.IsChildWindowOpen ||
-                    to_unpin_ctvm.IsAppendNotifier) {
-                    continue;
+        public MpIAsyncCommand UnpinAllCommand => new MpAsyncCommand(
+            async () => {
+                int pin_count = PinnedItems.Count;
+                while (pin_count > 0) {
+                    var to_unpin_ctvm = PinnedItems[--pin_count];
+                    if (to_unpin_ctvm.IsChildWindowOpen ||
+                        to_unpin_ctvm.IsAppendNotifier) {
+                        continue;
+                    }
+                    await UnpinTileCommand.ExecuteAsync(to_unpin_ctvm);
                 }
-                UnpinTileCommand.Execute(to_unpin_ctvm);
-            }
-        });
+            });
 
         public ICommand OpenSelectedTileInWindowCommand => new MpCommand(
             () => {
@@ -3175,12 +3192,12 @@ namespace MonkeyPaste.Avalonia {
                         all_ttvm.CopyItemIdsNeedingView.AddRange(other_pending_ciids_neeeding_view);
                     }
                     MpAvClipTileViewModel nctvm = await CreateOrRetrieveClipTileViewModelAsync(most_recent_pending_ci);
-                    ToggleTileIsPinnedCommand.Execute(nctvm);
+                    await ToggleTileIsPinnedCommand.ExecuteAsync(nctvm);
 
                     PendingNewModels.Clear();
-                    while (IsAnyBusy) {
-                        await Task.Delay(100);
-                    }
+                    //while (IsAnyBusy) {
+                    //    await Task.Delay(100);
+                    //}
                     if (selectedId >= 0) {
                         var selectedVm = AllItems.FirstOrDefault(x => x.CopyItemId == selectedId);
                         if (selectedVm != null) {

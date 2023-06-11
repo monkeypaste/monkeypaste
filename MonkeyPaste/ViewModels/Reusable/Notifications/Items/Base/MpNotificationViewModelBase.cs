@@ -41,6 +41,8 @@ namespace MonkeyPaste {
                 case MpNotificationType.InvalidResponse:
                 case MpNotificationType.TrialExpired:
                 case MpNotificationType.PluginResponseWarning:
+                case MpNotificationType.ContentCapReached:
+                case MpNotificationType.TrashCapReached:
                     return MpNotificationLayoutType.Warning;
                 case MpNotificationType.BadHttpRequest:
                 case MpNotificationType.DbError:

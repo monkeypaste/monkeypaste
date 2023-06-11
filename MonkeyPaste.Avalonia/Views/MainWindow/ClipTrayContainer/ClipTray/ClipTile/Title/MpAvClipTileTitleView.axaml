@@ -68,7 +68,6 @@
         <Viewbox HorizontalAlignment="Left"
                  VerticalAlignment="Top"
                  IsVisible="{Binding IsTitleLayersVisible, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                 
                  Width="{Binding Bounds.Width, ElementName=TitleContainerGrid}"
                  Height="{Binding Bounds.Height, ElementName=TitleContainerGrid}"
                  Stretch="Fill">
@@ -286,6 +285,19 @@
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
                     </Image>
+                    <!--<Image x:Name="NextToTrashClipTileAppIconImage"
+                           IsHitTestVisible="False"
+                           Source="{Binding Parent.IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                           Stretch="UniformToFill"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch">
+                        <Image.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="Parent.IsHovering" />
+                                <Binding Path="Parent.IsNextTrashedByAccount" />
+                            </MultiBinding>
+                        </Image.IsVisible>
+                    </Image>-->
                 </Grid>
             </Button>
 

@@ -580,7 +580,6 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine("Exported types exception: ", ex);
                 throw new MpUserNotifiedException($"Plugin activation error for plugin '{pluginName}': {Environment.NewLine}{ex.Message}");
             }
-            return null;
         }
 
         private static string GetCachedPluginFileName(MpPluginFormat plugin) {

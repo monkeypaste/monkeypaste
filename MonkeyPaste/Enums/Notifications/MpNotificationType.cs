@@ -13,6 +13,8 @@
         UserTriggerDisabled,
         AppModeChange,
         TrialExpired,
+        ContentCapReached,
+        TrashCapReached,
 
         // User Action (System Tray)
         InvalidPlugin,

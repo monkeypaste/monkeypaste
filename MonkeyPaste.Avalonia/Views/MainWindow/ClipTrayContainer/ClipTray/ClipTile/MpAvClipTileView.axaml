@@ -332,24 +332,29 @@
                           HorizontalAlignment="Left"
                           VerticalAlignment="Stretch" />
 
-            <!--  Trial Expired Overlay  -->
-            <Border x:Name="TrialExpiredOverlay"
+            <!--  Account Cap Overlay  -->
+            <Border x:Name="AccountCapOverlay"
+                    Grid.ColumnSpan="2"
+                    Grid.RowSpan="3"
+                    IsVisible="{Binding !IsHovering}"
                     HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    IsVisible="{Binding IsTrialOverlayVisibile}">
+                    VerticalAlignment="Stretch">
                 <Border.Background>
                     <SolidColorBrush Color="Black" Opacity="0.2" />
                 </Border.Background>
+                <Image.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="IsNextRemovedByAccount" />
+                        <Binding Path="IsNextTrashedByAccount" />
+                    </MultiBinding>
+                </Image.IsVisible>
 
-                <Viewbox Stretch="Uniform"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Width="50"
-                         Height="50"
-                         IsVisible="{Binding IsPinned}">
-                    <Path Fill="Wheat"
-                          Data="{StaticResource LockSvg}" />
-                </Viewbox>
+                <Image Stretch="UniformToFill"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Width="50"
+                       Height="50"
+                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Border>
         </Grid>
     </local:MpAvClipBorder>

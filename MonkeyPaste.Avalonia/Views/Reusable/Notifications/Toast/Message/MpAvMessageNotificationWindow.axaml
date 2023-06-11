@@ -99,7 +99,7 @@
                            FontWeight="SemiBold"
                            Background="Transparent"
                            Focusable="True"
-                           Foreground="{DynamicResource ThemeInteractiveBgColor}"
+                           Foreground="{DynamicResource ThemeInteractiveColor}"
                            Text="{Binding Body}" />
             </Border>
         </Grid>

@@ -194,7 +194,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsPinTrayDragOver { get; set; }
 
-        private int _tempSelectedItemId;
         private int _selectedItemId;
         public int SelectedItemId {
             // NOTE only used w/ QueryInfo
@@ -214,7 +213,9 @@ namespace MonkeyPaste.Avalonia {
         //                                    TagTrayTotalWidth > MaxTagTrayScreenWidth;
         public bool IsNavButtonsVisible { get; private set; } = false;
 
-        public bool IsAnyBusy => IsBusy || Items.Any(x => x.IsBusy) || PinnedItems.Any(x => x.IsBusy);
+        public bool IsAnyBusy =>
+            IsBusy ||
+            Items.Any(x => x.IsBusy);
 
         public List<int> TrashedCopyItemIds { get; set; } = new List<int>();
 

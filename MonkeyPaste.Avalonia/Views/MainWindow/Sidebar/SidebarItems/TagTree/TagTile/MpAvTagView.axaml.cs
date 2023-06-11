@@ -95,13 +95,21 @@ namespace MonkeyPaste.Avalonia {
                 },
                 move: null,
                 end: (end_e) => {
+                    if (end_e == null) {
+                        // release was handled in pointer release
+                        if (BindingContext != null) {
+                            ResetDrop();
+                        }
+                        return;
+                    }
                     if (end_e.Source is Control c && c.DataContext is MpAvTagTileViewModel dc) {
                         if (dc.IsDragging) {
                             end_e.Handled = true;
                         }
                     }
                     //ended = true;
-                });
+                },
+                MIN_DISTANCE: 20);
         }
 
         private void MpAvTagView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {

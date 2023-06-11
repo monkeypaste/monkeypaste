@@ -139,6 +139,11 @@ namespace MonkeyPaste.Common {
             // MOVE
 
             dragControl_PointerMoved_Handler = (s, e1) => {
+                if (!e1.IsAnyButtonDown(control)) {
+                    // release was handled elsewhere (occurs for tag release command)
+                    dragControl_PointerReleased_Handler?.Invoke(s, null);
+                    return;
+                }
                 if (wpl is Window window) {
                     wpl.DragPointerPosition = e1.GetPosition(window).ToPortablePoint();
                 }
