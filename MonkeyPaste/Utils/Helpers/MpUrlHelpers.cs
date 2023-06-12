@@ -44,7 +44,8 @@ namespace MonkeyPaste {
                     if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.IconBase64)) {
                         // NOTE #3 uses html not url
                         var result_tuple = await GetDomainFavIcon3(url_props.Source);
-                        if (Mp.Services.IconBuilder.IsStringBase64Image(result_tuple.Item1)) {
+                        if (result_tuple != null &&
+                            Mp.Services.IconBuilder.IsStringBase64Image(result_tuple.Item1)) {
                             url_props.IconBase64 = result_tuple.Item1;
                             url_props.Title = result_tuple.Item2;
                         }

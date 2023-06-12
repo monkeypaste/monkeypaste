@@ -12,6 +12,7 @@
         Shutdown,
         DoNotShow,
         Loading,
-        Text
+        Text,
+        Dismiss
     }
 }

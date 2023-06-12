@@ -22,7 +22,6 @@ const globals = {
 	// #endregion 
 
 	// #region EDITOR
-	EditorPlaceHolderText: 'Empty Content...',
 	DefaultEditorWidth: 1200,
 	InlineTags: ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'],
 	BlockTags: ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote', 'pre'],

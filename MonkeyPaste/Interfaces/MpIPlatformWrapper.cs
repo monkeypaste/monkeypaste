@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
-
+        MpISettingsTools SettingsTools { get; set; }
         MpIAccountTools AccountTools { get; set; }
         MpIDownKeyHelper KeyDownHelper { get; set; }
         MpIShortcutGestureLocator ShortcutGestureLocator { get; set; }

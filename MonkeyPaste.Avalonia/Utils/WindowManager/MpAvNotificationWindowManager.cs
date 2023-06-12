@@ -94,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void ShowDesktopNotification(MpNotificationViewModelBase nvmb) {
             Dispatcher.UIThread.Post(() => {
-                Window nw = null;
+                MpAvWindow nw = null;
                 var layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
                 switch (layoutType) {
                     case MpNotificationLayoutType.Loader:
@@ -123,15 +123,17 @@ namespace MonkeyPaste.Avalonia {
                     Debugger.Break();
                 }
 
+#if WINDOWS
+                MpAvToolWindow_Win32.InitToolWindow(nw.TryGetPlatformHandle().Handle);
+#endif
                 nw.Closed += Nw_Closed;
-                nw.PointerReleased += Nw_PointerReleased;
 
                 nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnNotificationWindowIsVisibleChangedHandler(nw));
 
                 BeginOpen(nw);
             });
         }
-        private void BeginOpen(Window nw) {
+        private void BeginOpen(MpAvWindow nw) {
             var nvmb = nw.DataContext as MpNotificationViewModelBase;
             nvmb.IsClosing = false;
 
@@ -158,11 +160,18 @@ namespace MonkeyPaste.Avalonia {
                 // flag ntf activating to prevent mw hide 
                 MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
             }
+            //if (MpAvWindowManager.MainWindow == null) {
             if (nvmb.Owner is Window ow) {
                 nw.Show(ow);
             } else {
                 nw.Show();
             }
+            return;
+            //}
+
+            //nw.ShowChildDialogAsync(nvmb.Owner as Window).FireAndForgetSafeAsync();
+
+            //ForceTopmostAsync(nw).FireAndForgetSafeAsync();
         }
 
         private void FinishClose(Window w) {
@@ -183,6 +192,15 @@ namespace MonkeyPaste.Avalonia {
             _windows.Remove(w);
         }
 
+        //private async Task ForceTopmostAsync(MpAvWindow w) {
+        //    while(true) {
+        //        if(w == null) {
+        //            break;
+        //        }
+        //        if()
+        //    }
+        //} 
+
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.MainWindowOpening:
@@ -197,21 +215,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Window Events
 
-        private void Nw_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
-            //if (sender == MpAvAppendNotificationWindow.Instance ||
-            //    sender is Window w && w.DataContext is MpNotificationViewModelBase nvmb &&
-            //    nvmb.IsOverOptionsButton) {
-            //    return;
-            //}
-
-            if (MpAvMainView.Instance == null || !MpAvMainView.Instance.IsInitialized) {
-                return;
-            }
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                return;
-            }
-            MpAvMainWindowViewModel.Instance.ShowMainWindowCommand.Execute(null);
-        }
 
         private void Nw_Closed(object sender, EventArgs e) {
             //MpConsole.WriteLine($"fade out complete for: '{(sender as Control).DataContext}'");

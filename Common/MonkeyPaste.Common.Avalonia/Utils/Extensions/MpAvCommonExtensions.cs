@@ -269,6 +269,16 @@ namespace MonkeyPaste.Common.Avalonia {
             return new MpRect(relative_origin, observed_size);
         }
 
+        public static void BringSelfAndAllAncestorsIntoView(this Control control) {
+            if (control == null) {
+                return;
+            }
+            control
+                .GetVisualAncestors()
+                .OfType<Control>()
+                .Reverse()
+                .ForEach(x => x.BringIntoView());
+        }
         #endregion
 
         #region Text Box

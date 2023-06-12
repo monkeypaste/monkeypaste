@@ -14,7 +14,8 @@ namespace MonkeyPaste {
         #region State
 
         public override bool ShowOptionsButton =>
-            false;
+            NotificationType == MpNotificationType.ContentCapReached ||
+            NotificationType == MpNotificationType.TrashCapReached;
 
         public bool IsFixing { get; set; } = false;
 
@@ -31,6 +32,8 @@ namespace MonkeyPaste {
         public bool ShowNoButton { get; set; } = false;
         public bool ShowCancelButton { get; set; } = false;
         public bool ShowOkButton { get; set; } = false;
+        public bool ShowUpgradeButton { get; set; } = false;
+        public bool ShowLearnMoreButton { get; set; } = false;
         public bool ShowTextBox { get; set; } = false;
         public MpNotificationDialogResultType DialogResult { get; private set; }
         public string InputResult { get; private set; }
@@ -127,6 +130,10 @@ namespace MonkeyPaste {
                     ShowOkButton = true;
                     ShowCancelButton = true;
                     break;
+                case MpNotificationButtonsType.UpgradeLearnMore:
+                    ShowUpgradeButton = true;
+                    ShowLearnMoreButton = true;
+                    break;
                 case MpNotificationButtonsType.TextBoxOkCancel:
                     if (OtherArgs is string curText) {
                         BoundInputText = curText;
@@ -152,11 +159,30 @@ namespace MonkeyPaste {
             if (base_result == MpNotificationDialogResultType.DoNotShow) {
                 // NOTE pretty sure do not show isn't allowed for action notifications 
                 // so this shouldn't happen
-                Debugger.Break();
                 HideNotification();
                 return base_result;
             }
-            while (DialogResult == MpNotificationDialogResultType.None) {
+            DateTime startTime = DateTime.Now;
+            while (true) {
+                if (DialogResult != MpNotificationDialogResultType.None) {
+                    break;
+                }
+                if (MaxShowTimeMs > 0) {
+                    if (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(MaxShowTimeMs)) {
+                        // max show not reache yet
+                        while (IsFadeDelayFrozen) {
+                            // reset wait while over
+                            startTime = DateTime.Now;
+                            await Task.Delay(100);
+                            if (DoNotShowAgain) {
+                                // DoNotShow clicked
+                                return MpNotificationDialogResultType.DoNotShow;
+                            }
+                        }
+                    } else {
+                        DialogResult = MpNotificationDialogResultType.Dismiss;
+                    }
+                }
                 await Task.Delay(100);
             }
             if (DialogResult == MpNotificationDialogResultType.Fix) {
@@ -280,6 +306,26 @@ namespace MonkeyPaste {
             },
             () => {
                 return CanSubmit;
+            });
+
+        public ICommand UpgradeCommand => new MpCommand(
+            () => {
+                Mp.Services.SettingsTools
+                    .ShowSettingsWindowCommand.Execute(
+                    new object[] {
+                        MpSettingsTabType.Preferences,
+                        nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily) });
+                DialogResult = MpNotificationDialogResultType.Dismiss;
+            });
+
+        public ICommand LearnMoreCommand => new MpCommand(
+            () => {
+                Mp.Services.SettingsTools
+                    .ShowSettingsWindowCommand.Execute(
+                    new object[] {
+                        MpSettingsTabType.Preferences,
+                        nameof(MpPrefViewModel.Instance.LoadOnLogin) });
+                DialogResult = MpNotificationDialogResultType.Dismiss;
             });
 
         #endregion

@@ -54,34 +54,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         public async Task<MpContentCapInfo> RefreshCapInfoAsync(MpUserAccountType acctType) {
-            /*
-
-            ACCT NOTES
-
-            -Free has max of 5 content items and 20 trashed, 
-
-            -basic ($3mo/$20yr) has 100 content, unlimited trash and (maybe) syncing 
-
-            -Premium ($5mo/$30yr) is unlimited everything
-
-            -trial is free premium for 2 weeks
-
-            -following FIFO where favoriting excluded
-            
-            -if favorites is at content cap no new content add (silent add new pause in tray)
-
-            -if basic/premium/trial expires/downgrades then active/trash is retained 
-             but follows account type FIFO
-
-            -Account tab in settings should explain how caps work and favorite tag is used
-
-            -When at max show yellow caution ⚠️ on count box that it 
-             will be trashed next then ghost 👻 on trash item to be removed
-
-            -Trash restore acts like adding a new item, if content at 
-             max the ⚠️ item is trashed (but won't result in a permanent delete since its a swap) 
-
-            */
 
             int content_cap = GetContentCapacity(acctType);
             if (content_cap < 0) {

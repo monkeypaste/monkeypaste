@@ -379,7 +379,7 @@ function appendContentData(data) {
 
 function loadContentData(contentData) {
 	// enusre globals.IsLoaded is false so msg'ing doesn't get clogged up
-	globals.IsLoaded = false;
+	setEditorIsLoaded(false);
 
 	if (globals.ContentItemType == 'Image') {
 		loadImageContent(contentData);
@@ -389,7 +389,7 @@ function loadContentData(contentData) {
 		loadTextContent(contentData);
 	}
 
-	globals.IsLoaded = true;
+	setEditorIsLoaded(true);
 }
 
 function updateContentSizeAndPosition() {

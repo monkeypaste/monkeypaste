@@ -44,7 +44,7 @@ namespace MonkeyPaste {
                 while (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(MaxShowTimeMs)) {
                     await Task.Delay(100);
 
-                    while (IsHovering || IsPinned) {
+                    while (IsFadeDelayFrozen) {
                         startTime = DateTime.Now;
                         await Task.Delay(100);
                         if (DoNotShowAgain) {

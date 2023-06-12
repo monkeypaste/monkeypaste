@@ -24,8 +24,8 @@ function initMain(initObj) {
 		initDrag();
 
 		initEditor();
+		setEditorIsLoaded(true);
 
-		globals.IsLoaded = true;
 		if (isAppendNotifier()) {
 			log('Main Initialized.(Appender)');
 			enableSubSelection();

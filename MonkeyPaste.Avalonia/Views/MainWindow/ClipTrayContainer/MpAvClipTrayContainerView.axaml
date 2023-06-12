@@ -133,6 +133,7 @@
             <Setter Property="local:MpAvIsFocusedExtension.IsFocused"
                     Value="{Binding IsListBoxItemFocused, Mode=OneWay}" />
         </Style>
+
     </local:MpAvUserControl.Styles>
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"

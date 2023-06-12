@@ -76,10 +76,9 @@ namespace MonkeyPaste.Avalonia {
             "staryellow.png",
             "text.png",
             "warning.png",
-            "yandexicon.png"
+            "yandexicon.png",
+            "ghost.png"
         };
-
-        private string _curEditorPaletteBase64Str;
 
         #endregion
 
@@ -116,6 +115,9 @@ namespace MonkeyPaste.Avalonia {
 
         public int ShakeDurMs =>
             500;
+
+        public int FocusPulseDurMs =>
+            3_000;
 
         #endregion
 
@@ -216,14 +218,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsThemePref(string prefName) {
             return _themePrefPropNames.Contains(prefName);
-        }
-
-        public string GetEditorThemeLookup() {
-            if (_curEditorPaletteBase64Str == null) {
-                CreatePalette();
-            }
-
-            return _curEditorPaletteBase64Str;
         }
 
         public bool IsColoredImageResource(object resource_key_uri) {

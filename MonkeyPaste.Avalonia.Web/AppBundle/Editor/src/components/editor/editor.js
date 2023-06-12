@@ -89,6 +89,15 @@ function getEditorVisibleHeight() {
 
 // #region Setters
 
+function setEditorPlaceholderText(text) {
+	getEditorElement().setAttribute('data-placeholder', text);
+}
+
+function setEditorIsLoaded(isLoaded) {
+	globals.IsLoaded = isLoaded;
+	updateEditorPlaceholderText();
+}
+
 // #endregion Setters
 
 // #region State
@@ -153,7 +162,10 @@ function isEditorFocused() {
 
 // #region Actions
 
-
+function updateEditorPlaceholderText() {
+	let plt = globals.IsLoaded ? 'Empty content...' : 'Place wait...';
+	setEditorPlaceholderText(plt);
+}
 function hideEditorScrollbars() {
 	getEditorContainerElement().classList.remove('show-scrollbars');
 	getEditorContainerElement().classList.add('hide-scrollbars');

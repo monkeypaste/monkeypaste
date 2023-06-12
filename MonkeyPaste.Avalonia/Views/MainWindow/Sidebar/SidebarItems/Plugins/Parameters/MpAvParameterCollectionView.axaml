@@ -79,11 +79,7 @@
         </Style>
 
         <!--  PARAM LISTBOXITEM  -->
-        <!--<Style Selector="ListBox#PluginParameterListBox > ListBoxItem"
-               x:DataType="local:MpAvParameterViewModelBase">
-            <Setter Property="IsVisible"
-                    Value="{Binding !IsExecuteParameter}" />
-        </Style>-->
+      
         <Style Selector="ListBox#PluginParameterListBox ListBoxItem">
             <Setter Property="Margin"
                     Value="0,2.5" />

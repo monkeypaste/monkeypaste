@@ -26,7 +26,7 @@
             <Border Classes="labelUnderline" />
             <local:MpAvParameterCollectionView BorderThickness="1"
                                                CornerRadius="10"
-                                               BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
+                                               BorderBrush="{DynamicResource ThemeWhite}"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch" />
         </StackPanel>

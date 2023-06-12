@@ -23,6 +23,9 @@
         <SolidColorBrush x:Key="EnabledHighlightBrush">Lime</SolidColorBrush>
         <SolidColorBrush x:Key="DisabledHighlightBrush">Red</SolidColorBrush>
 
+        <SolidColorBrush x:Key="NextTrashOverlayBrush">Yellow</SolidColorBrush>
+        <SolidColorBrush x:Key="NextRemoveOverlayBrush">Red</SolidColorBrush>
+
         <!--  COLORS  -->
 
         <Color x:Key="ThemeBlack">Black</Color>

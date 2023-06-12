@@ -10,7 +10,7 @@ function initPlainHtmlConverter() {
 
 
 	globals.IsConverterLoaded = true;
-	globals.IsLoaded = true;
+	setEditorIsLoaded(true);
 
 	onInitComplete_ntf();
 }

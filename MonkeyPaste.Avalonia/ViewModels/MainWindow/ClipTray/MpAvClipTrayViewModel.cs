@@ -19,12 +19,6 @@ using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpPinType {
-        None = 0,
-        Internal,
-        Window,
-        Append
-    }
     public class MpAvClipTrayViewModel :
         MpAvSelectorViewModelBase<object, MpAvClipTileViewModel>,
         MpIPagingScrollViewerViewModel,
@@ -1896,14 +1890,16 @@ namespace MonkeyPaste.Avalonia {
                                title: $"Capacity Reached",
                                body: $"Oldest item trashed",
                                msgType: MpNotificationType.ContentCapReached,
-                               iconSourceObj: "GhostImage").FireAndForgetSafeAsync();
+                               maxShowTimeMs: MpContentCapInfo.MAX_CAP_NTF_SHOW_TIME_MS,
+                               iconSourceObj: MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY).FireAndForgetSafeAsync();
                     }
                     if (cap_info.ToBeRemoved_ciid > 0) {
                         MpNotificationBuilder.ShowMessageAsync(
                                title: $"Trash Capacity Reached",
                                body: $"Oldest trashed item permenently deleted",
                                msgType: MpNotificationType.TrashCapReached,
-                               iconSourceObj: "SkullImage").FireAndForgetSafeAsync();
+                               maxShowTimeMs: MpContentCapInfo.MAX_CAP_NTF_SHOW_TIME_MS,
+                               iconSourceObj: MpContentCapInfo.NEXT_REMOVE_IMG_RESOURCE_KEY).FireAndForgetSafeAsync();
                     }
                     await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);
                     await DeleteItemByCopyItemIdAsync(cap_info.ToBeRemoved_ciid);

@@ -42,6 +42,18 @@
                     Value="1" />
         </Style>
 
+
+        <!--  CAP OVERLAY  -->
+        <Style Selector="Border#AccountCapOverlay">
+            <Setter Property="Opacity"
+                    Value="1.0" />
+        </Style>
+        <Style Selector="Border#AccountCapOverlay.faded">
+            <Setter Property="Opacity"
+                    Value="0.2" />
+        </Style>
+
+
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
@@ -333,28 +345,37 @@
                           VerticalAlignment="Stretch" />
 
             <!--  Account Cap Overlay  -->
-            <Border x:Name="AccountCapOverlay"
+            <Border x:Name="AccountCapOverlayContainer"
                     Grid.ColumnSpan="2"
                     Grid.RowSpan="3"
-                    IsVisible="{Binding !IsHovering}"
+                    IsVisible="{Binding IsAnyNextCapByAccount}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                <Border.Background>
-                    <SolidColorBrush Color="Black" Opacity="0.2" />
-                </Border.Background>
-                <Image.IsVisible>
-                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                        <Binding Path="IsNextRemovedByAccount" />
-                        <Binding Path="IsNextTrashedByAccount" />
-                    </MultiBinding>
-                </Image.IsVisible>
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{Binding CapToolTipText}" />
+                </ToolTip.Tip>
+                <Border x:Name="AccountCapOverlay"
+                        Classes.faded="{Binding IsHovering}"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                    <Border.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Opacity"
+                                              Duration="0:0:0.3" />
+                        </Transitions>
+                    </Border.Transitions>
+                    <Border.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.2" />
+                    </Border.Background>
+                    <Image Stretch="UniformToFill"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Width="50"
+                           Height="50"
+                           Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
 
-                <Image Stretch="UniformToFill"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Width="50"
-                       Height="50"
-                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    </Image>
+                </Border>
             </Border>
         </Grid>
     </local:MpAvClipBorder>

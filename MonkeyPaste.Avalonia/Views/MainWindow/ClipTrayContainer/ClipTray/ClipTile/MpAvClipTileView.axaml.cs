@@ -5,6 +5,7 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using System.Windows.Media;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {

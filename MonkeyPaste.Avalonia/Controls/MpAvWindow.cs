@@ -145,6 +145,7 @@ namespace MonkeyPaste.Avalonia {
             this.Closed -= MpAvWindow_Closed;
         }
         private void SilentLockMainWindowCheck(Window owner) {
+            return;
             if (owner != null && owner is not MpAvMainWindow) {
                 return;
             }

@@ -35,14 +35,14 @@ namespace MonkeyPaste {
                 case MpNotificationType.InvalidClipboardFormatHandler:
                 case MpNotificationType.PluginResponseWarningWithOption:
                 case MpNotificationType.ExecuteParametersRequest:
+                case MpNotificationType.ContentCapReached:
+                case MpNotificationType.TrashCapReached:
                     return MpNotificationLayoutType.UserAction;
                 case MpNotificationType.AnalyzerTimeout:
                 case MpNotificationType.InvalidRequest:
                 case MpNotificationType.InvalidResponse:
                 case MpNotificationType.TrialExpired:
                 case MpNotificationType.PluginResponseWarning:
-                case MpNotificationType.ContentCapReached:
-                case MpNotificationType.TrashCapReached:
                     return MpNotificationLayoutType.Warning;
                 case MpNotificationType.BadHttpRequest:
                 case MpNotificationType.DbError:
@@ -69,6 +69,9 @@ namespace MonkeyPaste {
                     return MpNotificationButtonsType.SubmitCancel;
                 case MpNotificationType.ModalOkMessageBox:
                     return MpNotificationButtonsType.Ok;
+                case MpNotificationType.ContentCapReached:
+                case MpNotificationType.TrashCapReached:
+                    return MpNotificationButtonsType.UpgradeLearnMore;
                 default:
                     MpNotificationLayoutType layoutType = GetLayoutTypeFromNotificationType(ndt);
                     switch (layoutType) {
@@ -168,6 +171,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+
         #region Appearance
         public object IconSourceObj {
             get {
@@ -235,6 +239,9 @@ namespace MonkeyPaste {
 
         #region State
 
+        public bool IsFadeDelayFrozen =>
+            MaxShowTimeMs > 0 &&
+            (IsHovering || IsPinned || IsPopupMenuOpen);
         public virtual bool ShowOptionsButton => true;
         public virtual bool CanPin => false;
         public bool IsPinned { get; set; } = false;

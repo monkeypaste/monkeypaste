@@ -15,6 +15,11 @@
     fill: white !important;
 }
 
+.ql-editor.ql-blank::before {
+    /* empty placeholder*/
+    color: var(--defcontentfgcolor) !important;
+}
+
 
 .template-type-icon .ql-fill, .paste-toolbar-icon .ql-fill {
     fill: white !important;

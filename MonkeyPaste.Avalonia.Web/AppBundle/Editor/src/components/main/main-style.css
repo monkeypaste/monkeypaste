@@ -102,7 +102,7 @@ textarea {
     }
 
     textarea::placeholder {
-        color: silver;
+        color: var(--defcontentfgcolor);
         font-style: italic;
         font-family: var(--defaultFontFamily);
     }

@@ -13,11 +13,33 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterItemView">
     <local:MpAvUserControl.Resources>
-        <SolidColorBrush x:Key="CheckBoxBorderBrushUnchecked" Color="White" />
+        <!--<SolidColorBrush x:Key="CheckBoxBorderBrushUnchecked" Color="White" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="White" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="Yellow" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="Yellow" />-->
+        <SolidColorBrush x:Key="FocusPulseBgBrush1" Color="{DynamicResource ThemeAccent5Color}" Opacity="1" />
+        <SolidColorBrush x:Key="FocusPulseBgBrush2" Color="{DynamicResource ThemeAccent5Color}" Opacity="0" />
     </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Border#OuterParameterItemBorder.pulse">
+            <!--  NOTE total dur needs to match theme vm value (notice iteraction counts 4)  -->
+            <Style.Animations>
+                <Animation Duration="0:0:0.5"
+                           FillMode="Forward"
+                           IterationCount="6">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Background"
+                                Value="{DynamicResource FocusPulseBgBrush1}" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Background"
+                                Value="{DynamicResource FocusPulseBgBrush2}" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Border x:Name="OuterParameterItemBorder"
+            Classes.pulse="{Binding DoFocusPulse}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Grid>

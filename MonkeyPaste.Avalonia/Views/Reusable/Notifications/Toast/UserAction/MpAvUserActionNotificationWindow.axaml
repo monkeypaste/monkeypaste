@@ -15,7 +15,7 @@
         Classes="notificationWindow fadeIn fadeOut"
         Classes.userActionNotificationWindow="True"
         IsVisible="{Binding IsVisible}"
-        MinWidth="350"
+        Width="350"
         MinHeight="150"
         SizeToContent="WidthAndHeight"
         ShowInTaskbar="False"
@@ -94,7 +94,7 @@
                            HorizontalAlignment="Stretch"
                            TextAlignment="Left"
                            FontSize="24"
-                           Foreground="{DynamicResource ThemeInteractiveBgColor}"
+                           Foreground="{DynamicResource ThemeWhite}"
                            FontWeight="SemiBold"
                            TextWrapping="WrapWithOverflow"
                            Text="{Binding Title}" />
@@ -104,6 +104,7 @@
                 <Border VerticalAlignment="Top"
                         HorizontalAlignment="Stretch"
                         Classes="labelUnderline labelUnderline_long"
+                        Background="{DynamicResource ThemeWhite}"
                         BorderThickness="0" />
             </StackPanel>
 
@@ -195,38 +196,74 @@
             <StackPanel Grid.Row="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
+                        Margin="0,10,0,0"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
+                <!--  Upgrade, LearnMore  -->
+                <Button Padding="0"
+                        IsVisible="{Binding ShowUpgradeButton}"
+                        Command="{Binding UpgradeCommand}">
+                    <Border Background="Green"
+                            Padding="5,3">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="15"
+                                   Height="15"
+                                   Margin="5"
+                                   VerticalAlignment="Center"
+                                   Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow}" />
+                            <TextBlock Text="Upgrade"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Border>
+                </Button>
+                <Border x:Name="HiddenSeperator"
+                        IsVisible="{Binding ShowUpgradeButton}"
+                        Opacity="0"
+                        Width="100" />
+                <Button Padding="0"
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding ShowLearnMoreButton}"
+                        Command="{Binding LearnMoreCommand}">
+                    <Border Background="Blue"
+                            Padding="5,3">
+                        <TextBlock Text="Learn More..."
+                                   VerticalAlignment="Center"
+                                   Foreground="White"
+                                   FontWeight="SemiBold" />
+                    </Border>
+                </Button>
                 <!--  Ignore, Retry, Fix, Shutdown states  -->
-                <Button Content="IGNORE"
+                <Button Content="Ignore"
                         IsVisible="{Binding ShowIgnoreButton}"
                         Command="{Binding IgnoreCommand}" />
                 <Button x:Name="RetryButton"
-                        Content="RETRY"
+                        Content="Retry"
                         IsVisible="{Binding ShowRetryButton}"
                         Command="{Binding RetryCommand}" />
                 <Button x:Name="FixButton"
-                        Content="FIX"
+                        Content="Fix"
                         IsVisible="{Binding ShowFixButton}"
                         VerticalAlignment="Top"
                         Command="{Binding FixWrapperCommand}" />
-                <Button Content="SHUTDOWN"
+                <Button Content="Shutdown"
                         IsVisible="{Binding ShowShutdownButton}"
                         Command="{Binding ShutdownCommand}" />
                 <!--  Yes, No, Cancel or Ok, Cancel States  -->
-                <Button Content="YES"
+                <Button Content="Yes"
                         Command="{Binding YesCommand}"
                         IsVisible="{Binding ShowYesButton}" />
-                <Button Content="NO"
+                <Button Content="No"
                         Command="{Binding NoCommand}"
                         IsVisible="{Binding ShowNoButton}" />
-                <Button Content="OK"
+                <Button Content="Ok"
                         Command="{Binding OkCommand}"
                         IsVisible="{Binding ShowOkButton}" />
                 <Button Content="Submit"
                         Command="{Binding SubmitCommand}"
                         IsVisible="{Binding ShowSubmitButton}" />
-                <Button Content="CANCEL"
+                <Button Content="Cancel"
                         Command="{Binding CancelCommand}"
                         IsVisible="{Binding ShowCancelButton}" />
             </StackPanel>

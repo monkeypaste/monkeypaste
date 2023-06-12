@@ -3,6 +3,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -91,6 +92,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool DoFocusPulse { get; set; }
 
         public bool IsRememberChecked { get; set; }
         public override bool HasModelChanged =>
@@ -538,6 +540,18 @@ namespace MonkeyPaste.Avalonia {
                         SetLastValue(string.Empty);
                     }
                     OnPropertyChanged(nameof(HasModelChanged));
+                    break;
+                case nameof(DoFocusPulse):
+                    if (!DoFocusPulse) {
+                        break;
+                    }
+                    Dispatcher.UIThread.Post(async () => {
+                        var sw = Stopwatch.StartNew();
+                        while (sw.ElapsedMilliseconds < MpAvThemeViewModel.Instance.FocusPulseDurMs) {
+                            await Task.Delay(100);
+                        }
+                        DoFocusPulse = false;
+                    });
                     break;
             }
             //Validate();

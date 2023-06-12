@@ -24,7 +24,8 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase,
         MpIChildWindowViewModel,
         MpIWantsTopmostWindowViewModel,
-        MpIActiveWindowViewModel {
+        MpIActiveWindowViewModel,
+        MpISettingsTools {
         #region Private Variables
 
         private string[] _reinitContentParams = new string[] {
@@ -47,6 +48,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
         #region MpIWindowViewModel Implementatiosn
         public MpWindowType WindowType =>
             MpWindowType.Settings;
@@ -143,6 +145,9 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSettingsViewModel() : base() {
             MpPrefViewModel.Instance.PropertyChanged += MpPrefViewModel_Instance_PropertyChanged;
             PropertyChanged += MpAvSettingsWindowViewModel_PropertyChanged;
+
+            Mp.Services.SettingsTools = this;
+
             IsTabSelected = new ObservableCollection<bool>(Enumerable.Repeat(false, 6));
             IsTabSelected.CollectionChanged += IsTabSelected_CollectionChanged;
         }
@@ -992,6 +997,18 @@ namespace MonkeyPaste.Avalonia {
             }
             return default;
         }
+
+        private Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameByParamId(string paramId) {
+            if (Items.FirstOrDefault(
+                        x => x.Items.Any(
+                            y => y.ParamId.ToString().ToLower() == paramId.ToLower()))
+                        is MpAvSettingsFrameViewModel frame_vm &&
+                        frame_vm.Items.FirstOrDefault(x => x.ParamId.ToString().ToLower() == paramId.ToLower())
+                        is MpAvParameterViewModelBase param_vm) {
+                return new Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase>(frame_vm, param_vm);
+            }
+            return null;
+        }
         #endregion
 
         #region Commands
@@ -1023,7 +1040,13 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectTabCommand => new MpCommand<object>(
             (args) => {
                 int tab_idx = (int)MpSettingsTabType.Preferences;
-                if (args is int intArg) {
+                string focus_param_id = null;
+                if (args is object[] argParts) {
+                    tab_idx = (int)((MpSettingsTabType)argParts[0]);
+                    focus_param_id = argParts[1].ToString();
+                } else if (args is MpSettingsTabType tt) {
+                    tab_idx = (int)tt;
+                } else if (args is int intArg) {
                     tab_idx = intArg;
                 } else if (args is string strArg) {
                     try {
@@ -1032,7 +1055,32 @@ namespace MonkeyPaste.Avalonia {
                     catch { }
                 }
 
-                SelectedTabIdx = tab_idx;
+                if (focus_param_id != null &&
+                    GetParamAndFrameByParamId(focus_param_id) is Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> focus_tuple) {
+                    SelectedTabIdx = (int)focus_tuple.Item1.TabType;
+                    Dispatcher.UIThread.Post(async () => {
+                        // wait for param to be in view...
+                        var param_view = await GetParameterControlByParamIdAsync<MpAvPluginParameterItemView>(focus_param_id);
+                        while (true) {
+                            if (param_view != null && param_view.IsVisible) {
+                                break;
+                            }
+                            if (param_view == null) {
+                                param_view = await GetParameterControlByParamIdAsync<MpAvPluginParameterItemView>(focus_param_id);
+                            }
+                            await Task.Delay(100);
+                        }
+                        // wait a tid
+                        await Task.Delay(450);
+                        Dispatcher.UIThread.Post(param_view.BringIntoView, DispatcherPriority.Background);
+                        // select arg param and pulse
+                        focus_tuple.Item1.SelectedItem = focus_tuple.Item2;
+                        param_view.BindingContext.DoFocusPulse = true;
+                    });
+                } else {
+                    SelectedTabIdx = tab_idx;
+                }
+
             });
 
         public ICommand ToggleShowSettingsWindowCommand => new MpCommand<object>(
@@ -1161,32 +1209,5 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
         #endregion
-    }
-
-    public enum MpButtonCommandPrefType {
-        None = 0,
-        ResetNtf,
-        ResetPluginCache,
-        AccountRegister,
-        AccountSignIn,
-        AccountClick,
-        AccountSignOut,
-        ThemeHexColor
-    }
-
-    public enum MpSettingsTabType {
-        Account,
-        Preferences,
-        Interop,
-        Security,
-        Shortcuts,
-        Help
-    }
-
-    public enum MpSettingsFrameType {
-        None = 0,
-        LookAndFeel,
-        Content,
-        History
     }
 }

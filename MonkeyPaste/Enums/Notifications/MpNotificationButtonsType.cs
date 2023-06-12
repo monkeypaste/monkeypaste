@@ -9,6 +9,7 @@
         TextBoxOkCancel,
         IgnoreRetryFix,
         IgnoreRetryShutdown,
-        ProgressBar
+        ProgressBar,
+        UpgradeLearnMore
     }
 }

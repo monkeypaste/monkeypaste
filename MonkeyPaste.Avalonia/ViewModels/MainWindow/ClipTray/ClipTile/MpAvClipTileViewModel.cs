@@ -20,14 +20,6 @@ using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpIDisposableObject {
-        void Dispose();
-    }
-    public enum MpAppendModeType {
-        None,
-        Insert,
-        Line
-    }
 
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpISelectableViewModel,
@@ -230,6 +222,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string CapToolTipText =>
+            IsNextTrashedByAccount ?
+                "Next to trash! Upgrade to avoid 👍" :
+                IsNextRemovedByAccount ?
+                    "Next to remove! Upgrade to avoid 👍" :
+            string.Empty;
+
         public int[] TitleLayerZIndexes { get; private set; } = Enumerable.Range(1, 3).ToArray();
         public string[] TitleLayerHexColors { get; private set; } = Enumerable.Repeat(MpSystemColors.Transparent, 4).ToArray();
 
@@ -406,6 +405,10 @@ namespace MonkeyPaste.Avalonia {
             Parent != null &&
             CopyItemId != 0 &&
             Mp.Services.AccountTools.LastCapInfo.NextToBeRemoved_ciid == CopyItemId;
+
+        public bool IsAnyNextCapByAccount =>
+            IsNextTrashedByAccount || IsNextRemovedByAccount;
+
         public bool IsTrashed =>
             MpAvTagTrayViewModel.Instance != null &&
             MpAvTagTrayViewModel.Instance.TrashedCopyItemIds.Contains(CopyItemId);
@@ -980,10 +983,10 @@ namespace MonkeyPaste.Avalonia {
         public object IconResourceObj {
             get {
                 if (IsNextTrashedByAccount) {
-                    return "GhostImage";
+                    return MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY;
                 }
                 if (IsNextRemovedByAccount) {
-                    return "SkullImage";
+                    return MpContentCapInfo.NEXT_REMOVE_IMG_RESOURCE_KEY;
                 }
                 if (CopyItemType == MpCopyItemType.FileList &&
                     FileItemCollectionViewModel != null &&

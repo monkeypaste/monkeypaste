@@ -15,18 +15,6 @@ using System.Linq;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
-    [DoNotNotify]
-    public class MpAvToolTip : ToolTip {
-        protected override Type StyleKeyOverride => typeof(ToolTip);
-
-        public static readonly AttachedProperty<object?> TipProperty =
-            AvaloniaProperty.RegisterAttached<MpAvToolTip, Control, object?>("Tip", inherits: true);
-        public MpAvToolTip() : base() {
-            Focusable = false;
-            IsEnabled = false;
-        }
-
-    }
 
     [DoNotNotify]
     public partial class MpAvToolTipView : UserControl {

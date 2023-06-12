@@ -830,18 +830,17 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowLoading = false;
             IsMainWindowOpen = true;
             IsMainWindowOpening = false;
-            if (!IsMainWindowActive //&&
-                                    //!MpAvWindowManager.AllWindows.Any(x => x.DataContext != this && x.IsActive)
-                ) {
+
+            bool is_other_win_active = MpAvWindowManager.AllWindows.Any(x => x.DataContext != this && x.IsActive);
+
+            bool force_activate = !IsMainWindowActive && !is_other_win_active;
+            if (force_activate) {
                 // when mw is shown and not active it doesn't hide or receive input until activated
                 MpAvWindowManager.MainWindow.Activate();
+                MpAvWindowManager.MainWindow.Topmost = true;
             }
-            MpAvWindowManager.MainWindow.Topmost = true;
-            //var sgrl =
-            //    MpAvWindowManager
-            //    .AllWindows
-            //    .SelectMany(x => x.GetVisualDescendants<ScrollGestureRecognizer>())
-            MpConsole.WriteLine("SHOW WINDOW DONE");
+
+            MpConsole.WriteLine($"SHOW WINDOW DONE. Activate Forced: '{force_activate}' Other Active: '{is_other_win_active}'");
         }
 
         public void FinishMainWindowHide() {

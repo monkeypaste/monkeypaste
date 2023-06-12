@@ -12,7 +12,6 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 
 	let quillOptions = {
 		//debug: true,
-		placeholder: globals.EditorPlaceHolderText,
 		//allowReadOnlyEdits: true,
 		theme: "snow",
 		formula: true,
