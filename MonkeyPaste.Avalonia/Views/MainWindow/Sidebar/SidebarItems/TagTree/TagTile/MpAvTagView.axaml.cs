@@ -97,9 +97,7 @@ namespace MonkeyPaste.Avalonia {
                 end: (end_e) => {
                     if (end_e == null) {
                         // release was handled in pointer release
-                        if (BindingContext != null) {
-                            ResetDrop();
-                        }
+
                         return;
                     }
                     if (end_e.Source is Control c && c.DataContext is MpAvTagTileViewModel dc) {

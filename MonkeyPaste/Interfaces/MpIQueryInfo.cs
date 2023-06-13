@@ -16,7 +16,7 @@ namespace MonkeyPaste {
         public int TotalAvailableItemsInQuery { get; }
         //Task<List<MpCopyItem>> FetchItemsByQueryIdxListAsync(IEnumerable<int> copyItemQueryIdxList, IEnumerable<int> idsToOmit);
         Task<List<MpCopyItem>> FetchPageAsync(int offset, int limit);
-        Task QueryForTotalCountAsync();
+        Task QueryForTotalCountAsync(bool isRequery);
 
         void NotifyQueryChanged(bool forceRequery = false);
 

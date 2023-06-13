@@ -54,7 +54,7 @@
 
         <Style Selector="ListBox.criteriaList:not(.drag) > ListBoxItem:pointerover, ListBox.criteriaList:not(.drag) local|MpAvSearchCriteriaHeaderView:pointerover">
             <Setter Property="BorderBrush"
-                    Value="Yellow" />
+                    Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
         <Style Selector="ListBox.criteriaList.drag > ListBoxItem, local|MpAvSearchCriteriaHeaderView">
@@ -65,7 +65,7 @@
 
         <Style Selector="local|MpAvSearchCriteriaItemView">
             <Setter Property="BorderBrush"
-                    Value="DimGray" />
+                    Value="{DynamicResource ThemeGrayAccent1}" />
         </Style>
 
         <Style Selector="ListBox.criteriaList > ListBoxItem"
@@ -75,19 +75,23 @@
             <Setter Property="Height"
                     Value="{Binding CriteriaItemHeight, FallbackValue=0, TargetNullValue=0}" />
         </Style>
-        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(even)">
+        <!--<Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(even) /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush1}" />
         </Style>
-        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd)">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd) /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush2}" />
         </Style>
-        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover">
+          <Style Selector="local|MpAvSearchCriteriaHeaderView">
+            <Setter Property="Background"
+                    Value="{DynamicResource SearchCriteriaRowBgBrush2}" />
+        </Style>
+        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgHoverBrush}" />
-        </Style>
-        <Style Selector="ListBox.criteriaList > ListBoxItem:selected">
+        </Style>-->
+        <Style Selector="ListBox.criteriaList > ListBoxItem:selected /template/ ContentPresenter">
             <Setter Property="BorderBrush"
                     Value="Red" />
         </Style>
@@ -107,24 +111,24 @@
         <!--  COMBOX BOXES  -->
 
         <Style Selector="ComboBox:pointerover.criteriaComboBox">
-            <Setter Property="BorderBrush"
-                    Value="Yellow" />
+            <!--<Setter Property="BorderBrush"
+                    Value="Yellow" />-->
         </Style>
         <Style Selector="ComboBox.criteriaComboBox">
             <Setter Property="CornerRadius"
                     Value="10" />
             <Setter Property="BorderThickness"
                     Value="1" />
-            <Setter Property="BorderBrush"
-                    Value="Silver" />
+            <!--<Setter Property="BorderBrush"
+                    Value="Silver" />-->
             <Setter Property="HorizontalAlignment"
                     Value="Center" />
             <Setter Property="VerticalAlignment"
                     Value="Center" />
             <Setter Property="Margin"
                     Value="5" />
-            <Setter Property="Background"
-                    Value="White" />
+            <!--<Setter Property="Background"
+                    Value="White" />-->
             <Setter Property="HorizontalContentAlignment"
                     Value="Left" />
             <Setter Property="VerticalContentAlignment"
@@ -148,8 +152,8 @@
                     Value="5,0" />
             <Setter Property="VerticalAlignment"
                     Value="Center" />
-            <Setter Property="Foreground"
-                    Value="Black" />
+            <!--<Setter Property="Foreground"
+                    Value="Black" />-->
         </Style>
         <!--  TEXT BOXES  -->
 
@@ -166,14 +170,14 @@
         </Style>
 
         <Style Selector="TextBox:not(.colorTextBox)">
-            <Setter Property="Background"
-                    Value="White" />
+            <!--<Setter Property="Background"
+                    Value="White" />-->
         </Style>
         <Style Selector="TextBox">
             <Setter Property="BorderThickness"
                     Value="1" />
-            <Setter Property="BorderBrush"
-                    Value="White" />
+            <!--<Setter Property="BorderBrush"
+                    Value="White" />-->
             <Setter Property="Margin"
                     Value="10,5,5,5" />
             <Setter Property="Padding"
@@ -193,12 +197,12 @@
         </Style>
 
         <Style Selector="TextBox:pointerover">
-            <Setter Property="BorderBrush"
-                    Value="Black" />
+            <!--<Setter Property="BorderBrush"
+                    Value="Black" />-->
         </Style>
         <Style Selector="TextBox:not(.valid)">
-            <Setter Property="BorderBrush"
-                    Value="Red" />
+            <!--<Setter Property="BorderBrush"
+                    Value="Red" />-->
         </Style>
         <Style Selector="TextBox.valid /template/ local|MpAvToolTipView">
             <Setter Property="IsVisible"
@@ -212,8 +216,8 @@
         <!--  TEXT BLOCKS  -->
 
         <Style Selector="TextBlock">
-            <Setter Property="Foreground"
-                    Value="Black" />
+            <!--<Setter Property="Foreground"
+                    Value="Black" />-->
             <Setter Property="VerticalAlignment"
                     Value="Center" />
             <Setter Property="HorizontalAlignment"

@@ -348,9 +348,14 @@
             <Border x:Name="AccountCapOverlayContainer"
                     Grid.ColumnSpan="2"
                     Grid.RowSpan="3"
-                    IsVisible="{Binding IsAnyNextCapByAccount}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
+                <Border.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="!IsAnyBusy" />
+                        <Binding Path="IsAnyNextCapByAccount" />
+                    </MultiBinding>
+                </Border.IsVisible>
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="{Binding CapToolTipText}" />
                 </ToolTip.Tip>

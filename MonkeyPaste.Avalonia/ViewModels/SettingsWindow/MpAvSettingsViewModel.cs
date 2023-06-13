@@ -581,7 +581,7 @@ namespace MonkeyPaste.Avalonia {
                                 label = "Ignore New Duplicates",
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
-                                        isDefault = MpPrefViewModel.Instance.IsDuplicateCheckEnabled.ToString() == MpThemeType.Light.ToString(),
+                                        isDefault = true,
                                         value = MpPrefViewModel.Instance.IsDuplicateCheckEnabled.ToString()
                                     },
                                 }

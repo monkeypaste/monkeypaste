@@ -423,8 +423,10 @@ namespace MonkeyPaste.Avalonia {
                 while (Items.Any(x => x.IsAnyBusy)) {
                     await Task.Delay(100);
                 }
-                // manually write since was busy during init
-                await nscivm.SearchCriteriaItem.WriteToDatabaseAsync();
+                if (IsSavedQuery) {
+                    // manually write since was busy during init
+                    await nscivm.SearchCriteriaItem.WriteToDatabaseAsync();
+                }
 
                 IsBusy = false;
             });

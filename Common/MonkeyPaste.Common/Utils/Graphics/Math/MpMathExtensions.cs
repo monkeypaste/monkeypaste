@@ -8,6 +8,10 @@ namespace MonkeyPaste.Common {
                    !double.IsNegativeInfinity(val);
         }
 
+        public static bool IsFuzzyZero(this double val, double thresh = 0.001) {
+            return Math.Abs(val) <= thresh;
+        }
+
         public static double Clamp(double val, double min, double max) {
             return Math.Max(min, Math.Min(max, val));
         }

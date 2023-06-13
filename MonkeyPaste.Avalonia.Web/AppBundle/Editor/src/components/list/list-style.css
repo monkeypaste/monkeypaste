@@ -8,6 +8,7 @@
 
 .ql-editor li {
     position: relative;
+    color: var(--defcontentfgcolor);
 }
 
     .ql-editor li > .ql-ui:before {

@@ -223,7 +223,10 @@
                                 <local:MpAvBusySpinnerView.IsVisible>
                                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                                         <!--<Binding Path="IsSelected" />-->
+                                        <Binding Path="IsActiveTag" />
                                         <Binding Path="IsBusy"
+                                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                                        <Binding Path="!IsSubQuerying"
                                                  Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
                                         <Binding Path="!IsVisible"
                                                  ElementName="TagCountProgressSpinner" />

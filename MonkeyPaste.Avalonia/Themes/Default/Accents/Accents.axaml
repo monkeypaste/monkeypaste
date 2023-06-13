@@ -153,9 +153,9 @@
         <SolidColorBrush x:Key="SidebarButtonsBgBrush" Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ItemSource Item Bg  -->
-        <SolidColorBrush x:Key="SelectableItemDefaultBgBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SelectableItemPointerOverBgBrush" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SelectableItemSelectedBgBrush" Color="{DynamicResource ThemeAccent5BgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SelectableItemDefaultBgBrush" Color="{DynamicResource ThemeCompliment5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SelectableItemPointerOverBgBrush" Color="{DynamicResource ThemeCompliment5DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SelectableItemSelectedBgBrush" Color="{DynamicResource ThemeCompliment5LighterColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  Disabled  -->
         <SolidColorBrush x:Key="DisabledTextFgBrush" Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />

@@ -437,23 +437,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIEmbedHost EmbedHost =>
             GetContentView() as MpIEmbedHost;
 
-        public int RecyclePriority {
-            get {
-                if (Parent == null) {
-                    return 0;
-                }
-                if (IsPlaceholder) {
-                    return int.MaxValue;
-                }
-                if (QueryOffsetIdx < 0) {
-                    // should be caught by placeholder but they arent 
-                    // exclusively depenendant...
-                    return int.MaxValue - 1;
-                }
-                // farther from top-left, higher the priority
-                return (int)ScreenRect.Location.Length;
-            }
-        }
         private int SelectedDetailIdx { get; set; } = 0;
 
         public bool IsOverDetailGrid { get; set; }
@@ -586,6 +569,7 @@ namespace MonkeyPaste.Avalonia {
         //public int LineCount { get; set; }
         //public int CharCount { get; set; }
 
+        private DateTime? _timeoutCheck = null;
         public bool IsAnyBusy {
             get {
                 if (IsBusy) {
@@ -597,9 +581,27 @@ namespace MonkeyPaste.Avalonia {
                 //    return true;
                 //}
                 if (!IsPlaceholder && !IsEditorLoaded) {
-                    if (!IsChildWindowOpen) {
-
-                    }
+                    //if (_timeoutCheck == null &&
+                    //    GetContentView() is MpAvContentWebView wv) {
+                    //    var cur_wv = wv;
+                    //    _timeoutCheck = DateTime.Now;
+                    //    Dispatcher.UIThread.Post(async () => {
+                    //        while (true) {
+                    //            if (_timeoutCheck == null ||
+                    //                cur_wv != wv ||
+                    //                IsEditorLoaded) {
+                    //                _timeoutCheck = null;
+                    //                OnPropertyChanged(nameof(IsAnyBusy));
+                    //                return;
+                    //            }
+                    //            if (DateTime.Now - _timeoutCheck >= TimeSpan.FromSeconds(5)) {
+                    //                wv.ReloadAsync().FireAndForgetSafeAsync();
+                    //                _timeoutCheck = null;
+                    //                return;
+                    //            }
+                    //        }
+                    //    });
+                    //}
                     return true;
                 }
 
@@ -1059,7 +1061,7 @@ namespace MonkeyPaste.Avalonia {
             bool is_reload =
                 (CopyItemId == 0 && ci == null) ||
                 (ci != null && CopyItemId == ci.Id);
-
+            _timeoutCheck = null;
             _contentView = null;
             if (!is_reload) {
                 _curItemRandomHexColor = string.Empty;
@@ -1106,11 +1108,8 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(IconResourceObj));
             OnPropertyChanged(nameof(IsPlaceholder));
-            OnPropertyChanged(nameof(TrayX));
             OnPropertyChanged(nameof(IsTextItem));
             OnPropertyChanged(nameof(IsFileListItem));
-            OnPropertyChanged(nameof(Next));
-            OnPropertyChanged(nameof(Prev));
             OnPropertyChanged(nameof(CopyItemId));
             OnPropertyChanged(nameof(IsAnyBusy));
             OnPropertyChanged(nameof(KeyString));
@@ -1124,6 +1123,11 @@ namespace MonkeyPaste.Avalonia {
                 IsTitleReadOnly = false;
             }
             UpdateQueryOffset(queryOffset);
+
+            OnPropertyChanged(nameof(TrayX));
+            OnPropertyChanged(nameof(TrayY));
+            OnPropertyChanged(nameof(Next));
+            OnPropertyChanged(nameof(Prev));
             //if(Parent.IsAnyAppendMode && HasAppendModel) {
             //    OnPropertyChanged(nameof(HasAppendModel));
             //}
@@ -1470,6 +1474,22 @@ namespace MonkeyPaste.Avalonia {
             }
             MpAvPersistentClipTilePropertiesHelper.UpdateQueryOffsetIdx(CopyItemId, _queryOffsetIdx);
             OnPropertyChanged(nameof(QueryOffsetIdx));
+        }
+        public int GetRecyclePriority(bool? isLoadMoreTail) {
+            if (Parent == null) {
+                return 0;
+            }
+            if (IsPlaceholder ||
+                !isLoadMoreTail.HasValue ||
+                QueryOffsetIdx < 0) {
+                return int.MaxValue;
+            }
+            if (isLoadMoreTail.Value) {
+                // lowest idx has highest priority
+                return int.MaxValue - QueryOffsetIdx;
+            }
+            // highest idx has highest priority
+            return QueryOffsetIdx;
         }
         #region IDisposable
 

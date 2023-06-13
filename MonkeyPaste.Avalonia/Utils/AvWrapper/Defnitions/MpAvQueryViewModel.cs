@@ -83,10 +83,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task QueryForTotalCountAsync() {
+        public async Task QueryForTotalCountAsync(bool isRequery) {
             MpConsole.WriteLine("total count called");
             int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
-            _pageTools.Reset();
+            _pageTools.Reset(isRequery);
             _pageTools.SetTotalCount(total_count);
             //_pageTools.AllQueryIds.Clear();
             //_pageTools.AllQueryIds.AddRange(result);

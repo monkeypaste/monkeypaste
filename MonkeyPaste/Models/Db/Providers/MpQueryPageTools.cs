@@ -28,7 +28,10 @@ namespace MonkeyPaste {
             MpMessenger.SendGlobal(MpMessageType.TotalQueryCountChanged);
 
         }
-        public void Reset() {
+        public void Reset(bool isRequery) {
+            if (!isRequery) {
+                return;
+            }
             _idsToOmit.Clear();
         }
 

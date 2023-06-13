@@ -6,7 +6,7 @@ namespace MonkeyPaste {
         int GetItemOffsetIdx(int itemId);
         bool AddIdToOmit(int itemId);
         bool RemoveIdToOmit(int itemId);
-        void Reset();
+        void Reset(bool isRequery);
         void SetTotalCount(int count);
         int TotalCount { get; }
     }

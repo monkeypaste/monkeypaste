@@ -2,7 +2,8 @@
 .qlbt-operation-menu {
     width: 300px !important;
     height: auto;
-    overflow: auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
     /* position: absolute; */
     /* left: 0px; */
     /* top: 0px; */
@@ -23,13 +24,40 @@
 }
 
 .qlbt-operation-menu .qlbt-operation-color-picker {
-    margin: 7px -10px !important;
+    margin: 7px -2px !important;
     overflow: visible;
+}
+
+.qlbt-operation-menu, .qlbt-operation-menu-item, .qlbt-operation-menu .qlbt-operation-color-picker  {
+    background-color: var(--editortoolbarbgcolor) !important;
+    color: var(--defcontentfgcolor) !important;
+}
+
+div.qlbt-operation-menu-subtitle {
+    color: var(--defcontentfgcolor) !important;
+}
+
+.qlbt-operation-menu-item:hover {
+    background-color: var(--selbgcolor) !important;
+}
+
+.qlbt-operation-menu-icon path {
+    fill: var(--defcontentfgcolor) !important;
 }
 
 .qlbt-operation-menu .qlbt-operation-color-picker .qlbt-operation-color-picker-item {
     width: 12px !important;
     height: 12px !important;
+    border-color: var(--defcontentfgcolor) !important;
+}
+
+.qlbt-operation-menu .qlbt-operation-color-picker .qlbt-operation-color-picker-item:hover {
+    border-color: var(--hovercolor) !important;
+}
+
+.qlbt-col-tool .qlbt-col-tool-cell {
+    border: dotted 1px var(--defcontentfgcolor) !important;
+    background-color: var(--editableeditorbgcolor_opaque) !important;
 }
 
 .qlbt-col-tool:hover .qlbt-col-tool-cell {
@@ -51,7 +79,9 @@
 .quill-better-table {
     width: auto !important;
 }
-
+#editor table.quill-better-table td {
+    border-color: var(--defcontentfgcolor);
+}
 
 /* ops toolbar (unused) */
 #tableOpsToolbar {

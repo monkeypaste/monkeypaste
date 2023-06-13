@@ -23,7 +23,7 @@
                     Value="False" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Button Classes="noBg noHoverBg"
+    <Button Classes="noBg noHoverBg noBorder"
             Command="{Binding Command, ElementName=ClearTextButton}">
         <Grid x:Name="ClearTextContainerGrid"
               HorizontalAlignment="Stretch"
