@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
@@ -74,6 +75,33 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public ObservableCollection<MpAvSettingsFrameViewModel> Items { get; set; } = new ObservableCollection<MpAvSettingsFrameViewModel>();
+
+        public MpAvSettingsFrameViewModel SelectedItem {
+            get =>
+                Items
+                    .Where(x => x.IsSelected)
+                    .OrderByDescending(x => x.LastSelectedDateTime)
+                    .FirstOrDefault();
+            set {
+                if (SelectedItem != value) {
+                    Items.ForEach(x => x.IsSelected = x == value);
+                    OnPropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
+
+        public MpAvParameterViewModelBase SelectedSetting {
+            get => SelectedItem == null ? null : SelectedItem.SelectedItem;
+            set {
+                if (SelectedSetting != value) {
+                    SelectedItem = Items.FirstOrDefault(x => x.Items.Contains(value));
+                    if (SelectedItem != null) {
+                        SelectedItem.SelectedItem = value;
+                    }
+                    OnPropertyChanged(nameof(SelectedSetting));
+                }
+            }
+        }
         #region Account
 
         public IEnumerable<MpAvSettingsFrameViewModel> AccountItems =>
@@ -612,6 +640,18 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             },
                             new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.IsClipboardListeningOnStartup),
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Listen to clipboard on startup",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.IsClipboardListeningOnStartup.ToString()
+                                    }
+                                }
+                            },
+                            new MpParameterFormat() {
                                 paramId = nameof(MpPrefViewModel.Instance.AddClipboardOnStartup),
                                 controlType = MpParameterControlType.CheckBox,
                                 unitType = MpParameterValueUnitType.Bool,
@@ -819,6 +859,30 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private void MpAvSettingsWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+
+            switch (e.PropertyName) {
+                case nameof(FilterText):
+                    MpMessenger.SendGlobal(MpMessageType.SettingsFilterTextChanged);
+                    if (FilterText.StartsWith("#")) {
+                        var test = MpAvWindowManager.FindByHashCode(FilterText);
+                    }
+
+                    break;
+                case nameof(IsChildWindowOpen):
+                    MpConsole.WriteLine($"Settings window: {(IsChildWindowOpen ? "OPEN" : "CLOSED")}");
+                    break;
+
+                case nameof(IsActive):
+                    MpConsole.WriteLine($"Settings window: {(IsActive ? "ACTIVE" : "INACTIVE")}");
+                    break;
+            }
+        }
+
+        private void IsTabSelected_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(IsTabSelected));
+        }
+
         #region Pref Handling
         private void MpPrefViewModel_Instance_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -854,6 +918,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(MpPrefViewModel.Instance.TrashCleanupModeTypeStr):
                     MpAvTagTrayViewModel.Instance.SetNextTrashCleanupDate();
                     break;
+                case nameof(MpPrefViewModel.Instance.IsClipboardListeningOnStartup):
+                    ProcessListenOnStartupChanged();
+                    break;
             }
             if (MpAvThemeViewModel.Instance.IsThemePref(e.PropertyName)) {
                 MpAvThemeViewModel.Instance.SyncThemePrefs(true);
@@ -864,9 +931,6 @@ namespace MonkeyPaste.Avalonia {
                     .Where(x => x.GetContentView() != null)
                     .Select(x => x.GetContentView().ReloadAsync())).FireAndForgetSafeAsync();
             }
-        }
-        private void IsTabSelected_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            OnPropertyChanged(nameof(IsTabSelected));
         }
 
         private void SetLanguage(string cultureCode) {
@@ -896,46 +960,64 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"Load At Login: {(loadOnLogin ? "ON" : "OFF")}");
         }
 
-        #endregion
-        private void MpAvSettingsWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-
-            switch (e.PropertyName) {
-                case nameof(FilterText):
-                    MpMessenger.SendGlobal(MpMessageType.SettingsFilterTextChanged);
-                    if (FilterText.StartsWith("#")) {
-                        var test = MpAvWindowManager.FindByHashCode(FilterText);
-                    }
-
-                    break;
-                case nameof(IsChildWindowOpen):
-                    MpConsole.WriteLine($"Settings window: {(IsChildWindowOpen ? "OPEN" : "CLOSED")}");
-                    break;
-
-                case nameof(IsActive):
-                    MpConsole.WriteLine($"Settings window: {(IsActive ? "ACTIVE" : "INACTIVE")}");
-                    break;
-            }
-        }
-
-        private void Sw_Opened(object sender, EventArgs e) {
-            SetupFontFamilyComboBoxes();
-        }
-
-        private void SetThemeButtonColor() {
+        private void AttachThemeButtonColorUpdate() {
             Dispatcher.UIThread.Post(async () => {
                 var tb = await GetParameterControlByParamIdAsync<Button>(MpButtonCommandPrefType.ThemeHexColor.ToString());
-                //tb.Background = MpPrefViewModel.Instance.ThemeColor.ToAvBrush();
-                //tb.Classes.Add("customColor");
+                if (tb == null) {
+                    return;
+                }
+                tb.AttachedToVisualTree += Tb_AttachedToVisualTree;
+                SetThemeButtonColor(tb);
+            });
+        }
+        private void SetThemeButtonColor(Button tb) {
+            if (tb == null) {
+                return;
+            }
+            tb.Margin = new Thickness(0);
+            //tb.Padding = new Thickness(0);
+            tb.Content = new MpAvClipBorder() {
+                CornerRadius = tb.CornerRadius,
+                BorderBrush = Brushes.Transparent,
+                Background = MpPrefViewModel.Instance.ThemeColor.ToAvBrush(),
+                Content = new TextBlock() {
+                    Margin = new Thickness(5, 3),
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    TextAlignment = TextAlignment.Center,
+                    FontWeight = FontWeight.SemiBold,
+                    Foreground = MpPrefViewModel.Instance.ThemeColor.ToContrastForegoundColor().ToAvBrush(),
+                    Text = (tb.DataContext as MpAvParameterViewModelBase).Label
+                }
+            };
+        }
+
+        private void Tb_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            SetThemeButtonColor(sender as Button);
+        }
+
+        private void ProcessListenOnStartupChanged() {
+            Dispatcher.UIThread.Post(async () => {
+                var add_startup_item_cb = await GetParameterControlByParamIdAsync<CheckBox>(nameof(MpPrefViewModel.Instance.AddClipboardOnStartup));
+                if (add_startup_item_cb == null) {
+                    return;
+                }
+                add_startup_item_cb.IsEnabled = MpPrefViewModel.Instance.IsClipboardListeningOnStartup;
             });
         }
 
+        #region Font Helpers
         private void SetupFontFamilyComboBoxes() {
             Dispatcher.UIThread.Post(async () => {
-                ComboBox ro_cb = await GetParameterControlByParamIdAsync<ComboBox>(nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily));
-                SetupFontFamilyComboBox(ro_cb);
+                var ro_cb = await GetParameterControlByParamIdAsync<ComboBox>(nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily));
+                if (ro_cb != null) {
+                    SetupFontFamilyComboBox(ro_cb);
+                }
 
-                ComboBox e_cb = await GetParameterControlByParamIdAsync<ComboBox>(nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily));
-                SetupFontFamilyComboBox(e_cb);
+                var e_cb = await GetParameterControlByParamIdAsync<ComboBox>(nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily));
+                if (e_cb != null) {
+                    SetupFontFamilyComboBox(e_cb);
+                }
             });
         }
 
@@ -976,26 +1058,38 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
+        #endregion
 
+        #endregion
+
+
+        #region Helpers
         private async Task<T> GetParameterControlByParamIdAsync<T>(string paramId) where T : Visual {
-            Window w = MpAvWindowManager.LocateWindow(this);
-            if (w == null) {
+            if (!IsChildWindowOpen) {
+                return null;
+            }
+            var param_tuple = GetParamAndFrameByParamId(paramId);
+            if (param_tuple == null) {
                 return default;
             }
-            var param_vm = LookAndFeelFrame.Items.FirstOrDefault(x => x.ParamId.ToString().ToLower() == paramId.ToLower());
-            if (param_vm != null) {
-                T param_control_of_t = w.GetSelfAndLogicalDescendants().OfType<T>().FirstOrDefault(x => x.DataContext == param_vm);
-                while (param_control_of_t == null) {
-                    await Task.Delay(100);
-                    param_control_of_t = w.GetSelfAndLogicalDescendants().OfType<T>().FirstOrDefault(x => x.DataContext == param_vm);
-                    if (!w.IsInitialized) {
-                        // pref tab never selected and closed so stop it
-                        return default;
-                    }
-                }
-                return param_control_of_t;
+
+            Window w = MpAvWindowManager.LocateWindow(this);
+            while (w == null) {
+                await Task.Delay(100);
+                w = MpAvWindowManager.LocateWindow(this);
             }
-            return default;
+
+            var param_vm = param_tuple.Item2;
+            T param_control_of_t = w.GetSelfAndLogicalDescendants().OfType<T>().FirstOrDefault(x => x.DataContext == param_vm);
+            while (param_control_of_t == null) {
+                await Task.Delay(100);
+                if (!w.IsInitialized || !w.IsLoaded) {
+                    // pref tab never selected and closed so stop it
+                    return default;
+                }
+                param_control_of_t = w.GetSelfAndLogicalDescendants().OfType<T>().FirstOrDefault(x => x.DataContext == param_vm);
+            }
+            return param_control_of_t;
         }
 
         private Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameByParamId(string paramId) {
@@ -1009,6 +1103,8 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
+        #endregion
+
         #endregion
 
         #region Commands
@@ -1070,11 +1166,11 @@ namespace MonkeyPaste.Avalonia {
                             }
                             await Task.Delay(100);
                         }
+                        focus_tuple.Item1.SelectedItem = focus_tuple.Item2;
                         // wait a tid
                         await Task.Delay(450);
                         Dispatcher.UIThread.Post(param_view.BringIntoView, DispatcherPriority.Background);
                         // select arg param and pulse
-                        focus_tuple.Item1.SelectedItem = focus_tuple.Item2;
                         param_view.BindingContext.DoFocusPulse = true;
                     });
                 } else {
@@ -1112,13 +1208,25 @@ namespace MonkeyPaste.Avalonia {
                         Content = new MpAvSettingsView()
                     };
                     sw.Classes.Add("fadeIn");
+
+
+                    void Sw_Opened(object sender, EventArgs e) {
+                        SetupFontFamilyComboBoxes();
+                        ProcessListenOnStartupChanged();
+                        AttachThemeButtonColorUpdate();
+                    }
+                    void Sw_Closed(object sender, EventArgs e) {
+                        sw.Opened -= Sw_Opened;
+                        sw.Closed -= Sw_Closed;
+                    }
+
                     sw.Opened += Sw_Opened;
+                    sw.Closed += Sw_Closed;
                     sw.ShowChild();
 
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
             });
-
 
         public ICommand ButtonParameterClickCommand => new MpAsyncCommand<object>(
             async (args) => {
@@ -1203,7 +1311,14 @@ namespace MonkeyPaste.Avalonia {
                             }
 
                             MpPrefViewModel.Instance.ThemeColor = result;
-                            SetThemeButtonColor();
+                            Dispatcher.UIThread.Post(async () => {
+                                var tb = await GetParameterControlByParamIdAsync<Button>(MpButtonCommandPrefType.ThemeHexColor.ToString());
+                                if (tb == null) {
+                                    return;
+                                }
+                                SetThemeButtonColor(tb);
+                            });
+
                             break;
                         }
                 }

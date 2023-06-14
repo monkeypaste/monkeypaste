@@ -68,10 +68,13 @@ namespace MonkeyPaste {
             MpCopyItem ci, Func<string> lastOutputCallback = null) {
             switch (valueType) {
                 case MpParameterValueUnitType.PlainTextContentQuery:
-                    curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, false, lastOutputCallback);
+                    curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, false, false, lastOutputCallback);
+                    break;
+                case MpParameterValueUnitType.UriEscapedPlainTextContentQuery:
+                    curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, false, true, lastOutputCallback);
                     break;
                 case MpParameterValueUnitType.RawDataContentQuery:
-                    curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, true, lastOutputCallback);
+                    curVal = await GetParameterQueryResultAsync(controlType, curVal, ci, true, false, lastOutputCallback);
                     break;
                 case MpParameterValueUnitType.Base64Text:
                     curVal = curVal.ToBytesFromBase64String().ToBase64String();
@@ -133,6 +136,7 @@ namespace MonkeyPaste {
             string curVal,
             MpCopyItem ci,
             bool asRawData,
+            bool uriEscaped,
             Func<string> lastOutputCallback = null) {
             if (MpParameterFormat.IsControlCsvValue(controlType)) {
                 // for csv values, split decode actual text to get query result then return re-encoded csv
@@ -140,7 +144,7 @@ namespace MonkeyPaste {
                 var decoded_vals = curVal.ToListFromCsv(csvProps);
                 var decoded_val_results = new List<string>();
                 foreach (var decoded_val in decoded_vals) {
-                    string decoded_val_result = await GetParameterQueryResultAsync(MpParameterControlType.TextBox, decoded_val, ci, asRawData, lastOutputCallback);
+                    string decoded_val_result = await GetParameterQueryResultAsync(MpParameterControlType.TextBox, decoded_val, ci, asRawData, uriEscaped, lastOutputCallback);
                     decoded_val_results.Add(decoded_val_result);
                 }
                 return decoded_val_results.ToCsv(csvProps);
@@ -160,6 +164,16 @@ namespace MonkeyPaste {
 
                     if (!asRawData) {
                         contentValue = await GetParameterRequestValueAsync(controlType, MpParameterValueUnitType.PlainText, contentValue, ci, lastOutputCallback);
+                        if (uriEscaped) {
+                            try {
+
+                                contentValue = Uri.EscapeDataString(contentValue);
+                            }
+                            catch (Exception ex) {
+                                MpConsole.WriteTraceLine($"Error escaping data string: {contentValue}", ex);
+                                contentValue = string.Empty;
+                            }
+                        }
                     }
                     string pptTokenBackup = GetQueryBackupToken(ppt);
                     if (curVal.Contains(pptTokenBackup)) {

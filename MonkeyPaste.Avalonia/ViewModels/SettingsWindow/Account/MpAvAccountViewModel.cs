@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = true;
 
-            CapInfo = await Mp.Services.AccountTools.RefreshCapInfoAsync(MpUserAccountType.Free);
+            CapInfo = await Mp.Services.AccountTools.RefreshCapInfoAsync();
             IsBusy = false;
         }
         #endregion

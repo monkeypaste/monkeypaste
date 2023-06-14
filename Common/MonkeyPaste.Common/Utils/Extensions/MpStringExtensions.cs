@@ -137,7 +137,7 @@ namespace MonkeyPaste.Common {
             return d[n, m];
         }
 
-        public static IEnumerable<Tuple<int, int>> QueryText(
+        public static IEnumerable<(int, int)> QueryText(
             this string search_text,
             string match_value,
             bool case_sensitive,
@@ -159,7 +159,7 @@ namespace MonkeyPaste.Common {
             foreach (Match m in mc) {
                 foreach (Group mg in m.Groups) {
                     foreach (Capture c in mg.Captures) {
-                        yield return new Tuple<int, int>(c.Index, c.Length);
+                        yield return (c.Index, c.Length);
                     }
                 }
             }

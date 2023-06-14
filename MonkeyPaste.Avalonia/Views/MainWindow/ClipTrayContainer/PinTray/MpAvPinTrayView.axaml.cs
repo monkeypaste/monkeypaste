@@ -15,6 +15,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvPinTrayView : MpAvUserControl<MpAvClipTrayViewModel> {

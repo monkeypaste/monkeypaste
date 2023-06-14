@@ -34,6 +34,9 @@ namespace MonkeyPaste.Common {
         public static MpPoint operator -(MpPoint a, double val) {
             return new MpPoint(a.X - val, a.Y - val);
         }
+        public static MpPoint operator ^(MpPoint a, double val) {
+            return new MpPoint(Math.Pow(a.X, val), Math.Pow(a.Y, val));
+        }
         public static MpPoint operator *(MpPoint a, double val) {
             return new MpPoint(a.X * val, a.Y * val);
         }

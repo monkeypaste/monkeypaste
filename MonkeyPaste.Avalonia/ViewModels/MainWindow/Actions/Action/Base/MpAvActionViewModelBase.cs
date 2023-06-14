@@ -250,7 +250,9 @@ namespace MonkeyPaste.Avalonia {
 
         public MpParameterHostBaseFormat ComponentFormat => ActionComponentFormat;
         MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
-            PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.headless == null ?
+            PluginFormat == null ||
+            PluginFormat.backupCheckPluginFormat == null ||
+            PluginFormat.backupCheckPluginFormat.headless == null ?
                 null : PluginFormat.backupCheckPluginFormat.headless;
 
         public virtual MpHeadlessPluginFormat ActionComponentFormat { get; protected set; }
@@ -329,7 +331,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpISelectableViewModel Implementation
 
         public bool IsSelected {
-            get => Parent.FocusAction == null ? false : Parent.FocusAction.ActionId == ActionId;
+            get => Parent == null || Parent.FocusAction == null ? false : Parent.FocusAction.ActionId == ActionId;
             //set {
 
             //    if(IsSelected != value) {

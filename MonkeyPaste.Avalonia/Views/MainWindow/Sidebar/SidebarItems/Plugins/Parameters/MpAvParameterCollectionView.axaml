@@ -79,7 +79,7 @@
         </Style>
 
         <!--  PARAM LISTBOXITEM  -->
-      
+
         <Style Selector="ListBox#PluginParameterListBox ListBoxItem">
             <Setter Property="Margin"
                     Value="0,2.5" />
@@ -147,6 +147,7 @@
         <ListBox x:Name="PluginParameterListBox"
                  Grid.Row="1"
                  Padding="0"
+                 AutoScrollToSelectedItem="True"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top"
                  ScrollViewer.VerticalScrollBarVisibility="Disabled"

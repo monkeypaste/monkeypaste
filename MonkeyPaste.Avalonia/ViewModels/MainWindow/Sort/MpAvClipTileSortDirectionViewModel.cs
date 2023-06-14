@@ -36,8 +36,9 @@ namespace MonkeyPaste.Avalonia {
                 "DescendingSvg" :
                 "AscendingSvg";
         #endregion
+
         #region State
-        public bool IsSortDescending { get; set; }
+        public bool IsSortDescending { get; set; } = true;
 
         public bool IsSortDirOrFieldFocused {
             get {

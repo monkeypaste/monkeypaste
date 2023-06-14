@@ -4,7 +4,10 @@
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
     </Styles.Resources>
-
+    <Style Selector=":is(TemplatedControl)">
+        <Setter Property="UseLayoutRounding"
+                Value="True" />
+    </Style>
     <!--  FONT THEME  -->
 
 
@@ -34,8 +37,8 @@
         <Setter Property="BorderBrush"
                 Value="Transparent" />
     </Style>
-  
-  <Style Selector=":is(TemplatedControl).noBorder /template/ ContentPresenter">
+
+    <Style Selector=":is(TemplatedControl).noBorder /template/ ContentPresenter">
         <Setter Property="BorderBrush"
                 Value="Transparent" />
     </Style>
@@ -43,7 +46,7 @@
         <Setter Property="BorderBrush"
                 Value="Transparent" />
     </Style>
-  
+
     <Style Selector=":is(TemplatedControl)">
         <Setter Property="ToolTip.Placement"
                 Value="Pointer" />

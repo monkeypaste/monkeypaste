@@ -35,6 +35,7 @@ namespace MonkeyPaste.Common.Plugin {
         Base64Text,
         FileSystemPath,
         PlainTextContentQuery,
+        UriEscapedPlainTextContentQuery,
         RawDataContentQuery,
         DelimitedPlainText,
         DelimitedPlainTextContentQuery,

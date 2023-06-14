@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace MonkeyPaste.Avalonia {
         MpIFilterMatch,
         MpILabelTextViewModel,
         MpIIconResource,
+        MpISelectableViewModel,
         MpIParameterHostViewModel,
         MpAvIParameterCollectionViewModel {
         #region Private Variables
@@ -44,6 +46,27 @@ namespace MonkeyPaste.Avalonia {
         public string LabelText { get; set; }
         #endregion
 
+        #region MpISelectableViewModel Implementation
+
+        public bool IsSelected {
+            get => SelectedItem != null;
+            set {
+                if (IsSelected != value) {
+                    if (value && SelectedItem == null &&
+                        Items.Any()) {
+                        Items.FirstOrDefault().IsSelected = true;
+                    } else if (!value && SelectedItem != null) {
+                        SelectedItem = null;
+                    }
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+        }
+
+        public DateTime LastSelectedDateTime { get; set; }
+
+        #endregion
+
 
         #region MpIFilterMatch Implementation
 
@@ -71,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIParameterCollectionViewModel Implementation
         IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items =>
             Items;
-        public MpAvParameterViewModelBase SelectedItem { get; set; }
+        //public MpAvParameterViewModelBase SelectedItem { get; set; }
         public ICommand SaveCommand =>
             MpAvSettingsViewModel.Instance.SaveSettingsCommand;
         public ICommand CancelCommand =>
@@ -84,12 +107,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
         #region View Models
 
         public IList<MpAvParameterViewModelBase> Items { get; set; }
+
+        public MpAvParameterViewModelBase SelectedItem {
+            get => Items.FirstOrDefault(x => x.IsSelected);
+            set {
+                if (SelectedItem != value) {
+                    Items.ForEach(x => x.IsSelected = x == value);
+                    OnPropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
         #endregion
 
         #region State
+
 
         public MpSettingsTabType TabType { get; set; }
         public MpSettingsFrameType FrameType { get; set; } = MpSettingsFrameType.None;
@@ -115,6 +150,14 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void MpAvPreferenceFrameViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(IsSelected):
+                    if (IsSelected) {
+                        LastSelectedDateTime = DateTime.Now;
+                    }
+                    break;
+                case nameof(SelectedItem):
+
+                    break;
                 case nameof(CanSaveOrCancel):
                     if (!CanSaveOrCancel || IsBusy) {
                         break;
@@ -138,6 +181,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
         #endregion
 
         #region Commands

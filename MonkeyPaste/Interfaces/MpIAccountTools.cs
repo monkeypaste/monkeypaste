@@ -19,9 +19,12 @@ namespace MonkeyPaste {
         }
     }
     public interface MpIAccountTools {
-        Task<MpContentCapInfo> RefreshCapInfoAsync(MpUserAccountType acctType);
+        Task<MpContentCapInfo> RefreshCapInfoAsync();
         bool IsContentAddPausedByAccount { get; }
 
         MpContentCapInfo LastCapInfo { get; }
+        int GetContentCapacity(MpUserAccountType acctType);
+        int GetTrashCapacity(MpUserAccountType acctType);
+        MpUserAccountType CurrentAccountType { get; }
     }
 }

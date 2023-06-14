@@ -21,6 +21,8 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIAccountTools Implementation
+        public MpUserAccountType CurrentAccountType { get; private set; } = MpUserAccountType.Free;
+
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {
                 case MpUserAccountType.Free:
@@ -52,10 +54,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public async Task<MpContentCapInfo> RefreshCapInfoAsync() {
 
-        public async Task<MpContentCapInfo> RefreshCapInfoAsync(MpUserAccountType acctType) {
-
-            int content_cap = GetContentCapacity(acctType);
+            int content_cap = GetContentCapacity(CurrentAccountType);
             if (content_cap < 0) {
                 // unlimited, no need to check trash
                 return null;
@@ -99,7 +100,7 @@ select count(pk_MpCopyItemId) from MpCopyItem where pk_MpCopyItemId in (select f
             // trash cap 100 actual 99 (needs next)
             // trash cap 100 actual 100 (both)
             // trash cap 100, actual 4 (none)
-            int trash_cap = GetTrashCapacity(acctType);
+            int trash_cap = GetTrashCapacity(CurrentAccountType);
             int cur_trash_diff = trash_cap - totalTrash;
             bool needs_trash_cap_info = cur_trash_diff <= 1;
             bool is_1_before_trash_cap = cur_trash_diff == 1;
@@ -180,6 +181,8 @@ select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=? order by CreatedDat
             to_remove_result = await MpDb.QueryScalarsAsync<int>(to_remove_query, MpTag.TrashTagId);
             return to_remove_result;
         }
+
+
         #endregion
 
         #region Commands

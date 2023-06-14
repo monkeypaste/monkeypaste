@@ -49,8 +49,10 @@
                     Value="{Binding TrayX}" />
             <Setter Property="Canvas.Top"
                     Value="{Binding TrayY}" />
-            <Setter Property="IsVisible"
-                    Value="{Binding !IsPlaceholder}" />
+            <!--<Setter Property="IsVisible"
+                    Value="{Binding !IsPlaceholder}" />-->
+            <Setter Property="Opacity"
+                    Value="{Binding IsPlaceholder, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}" />
         </Style>
 
     </local:MpAvUserControl.Styles>
@@ -114,8 +116,6 @@
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
                          BorderThickness="0"
-                         TabIndex="2"
-                         IsTabStop="True"
                          AutoScrollToSelectedItem="False"
                          local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                          SelectedItem="{Binding SelectedClipTrayItem, Mode=TwoWay}"
@@ -143,6 +143,7 @@
                          local:MpAvPagingListBoxExtension.CanScrollY="{Binding CanScroll}"
                          local:MpAvPagingListBoxExtension.ListOrientation="{Binding ListOrientation}"
                          local:MpAvPagingListBoxExtension.LayoutType="{Binding LayoutType}"
+                         local:MpAvPagingListBoxExtension.IsTouchScrolling="{Binding IsTouchScrolling, Mode=TwoWay}"
                          Width="{Binding QueryTrayTotalWidth}"
                          Height="{Binding QueryTrayTotalHeight}"
                          ItemsSource="{Binding Items}">

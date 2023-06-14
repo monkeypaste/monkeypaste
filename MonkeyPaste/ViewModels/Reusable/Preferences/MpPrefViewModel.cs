@@ -404,6 +404,7 @@ namespace MonkeyPaste {
         public bool ResetClipboardAfterMonkeyPaste { get; set; }
 
         public bool AddClipboardOnStartup { get; set; } = true;
+        public bool IsClipboardListeningOnStartup { get; set; } = true;
 
         #endregion
 

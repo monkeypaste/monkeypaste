@@ -63,8 +63,6 @@
             <ListBox x:Name="PinTrayListBox"
                      Classes="clipTileListBox"
                      Background="Transparent"
-                     TabIndex="1"
-                     IsTabStop="True"
                      MaxWidth="{Binding MaxPinTrayScreenWidth}"
                      MaxHeight="{Binding MaxPinTrayScreenHeight}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"

@@ -7,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
+using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -21,6 +22,16 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvPagingListBoxExtension {
         #region Private Variables
 
+        private static MpPoint _touch_accel;
+        private static MpPoint _last_scroll_offset;
+
+        private static MpPoint _down_touch_loc;
+        private static MpPoint _downOffset;
+
+        private static MpPoint _last_touch_loc;
+        private static MpPoint _last_v;
+
+        private static DateTime? _last_touch_dt;
         #endregion
 
         #region Constants
@@ -38,73 +49,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region CanScrollX AvaloniaProperty
-        public static bool GetCanScrollX(AvaloniaObject obj) {
-            return obj.GetValue(CanScrollXProperty);
-        }
+        #region Properties
 
-        public static void SetCanScrollX(AvaloniaObject obj, bool value) {
-            obj.SetValue(CanScrollXProperty, value);
-        }
+        #region Kinetic Properties
 
-        public static readonly AttachedProperty<bool> CanScrollXProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
-                "CanScrollX",
-                true);
-
-        #endregion
-
-        #region CanScrollY AvaloniaProperty
-        public static bool GetCanScrollY(AvaloniaObject obj) {
-            return obj.GetValue(CanScrollYProperty);
-        }
-
-        public static void SetCanScrollY(AvaloniaObject obj, bool value) {
-            obj.SetValue(CanScrollYProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> CanScrollYProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
-                "CanScrollY",
-                true);
-
-        #endregion
-
-        #region IsHorizontalScrollBarVisibile AvaloniaProperty
-        public static bool? GetIsHorizontalScrollBarVisibile(AvaloniaObject obj) {
-            return obj.GetValue(IsHorizontalScrollBarVisibileProperty);
-        }
-
-        public static void SetIsHorizontalScrollBarVisibile(AvaloniaObject obj, bool? value) {
-            obj.SetValue(IsHorizontalScrollBarVisibileProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool?> IsHorizontalScrollBarVisibileProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool?>(
-                "IsHorizontalScrollBarVisibile",
-                true,
-                false);
-
-        #endregion
-
-        #region IsVerticalScrollBarVisibile AvaloniaProperty
-        public static bool? GetIsVerticalScrollBarVisibile(AvaloniaObject obj) {
-            return obj.GetValue(IsVerticalScrollBarVisibileProperty);
-        }
-
-        public static void SetIsVerticalScrollBarVisibile(AvaloniaObject obj, bool? value) {
-            obj.SetValue(IsVerticalScrollBarVisibileProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool?> IsVerticalScrollBarVisibileProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool?>(
-                "IsVerticalScrollBarVisibile",
-                true,
-                false);
-
-        #endregion
-
-        #region VelocityX AvaloniaProperty
+        #region VelocityX 
         public static double GetVelocityX(AvaloniaObject obj) {
             return obj.GetValue(VelocityXProperty);
         }
@@ -122,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region VelocityY AvaloniaProperty
+        #region VelocityY 
         public static double GetVelocityY(AvaloniaObject obj) {
             return obj.GetValue(VelocityYProperty);
         }
@@ -140,77 +89,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region ScrollOffsetX AvaloniaProperty
-        public static double GetScrollOffsetX(AvaloniaObject obj) {
-            return obj.GetValue(ScrollOffsetXProperty);
-        }
-
-        public static void SetScrollOffsetX(AvaloniaObject obj, double value) {
-            obj.SetValue(ScrollOffsetXProperty, value);
-        }
-
-        public static readonly AttachedProperty<double> ScrollOffsetXProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, double>(
-                "ScrollOffsetX",
-                0.0d,
-                false,
-                BindingMode.TwoWay);
-
-        #endregion
-
-        #region ScrollOffsetY AvaloniaProperty
-        public static double GetScrollOffsetY(AvaloniaObject obj) {
-            return obj.GetValue(ScrollOffsetYProperty);
-        }
-
-        public static void SetScrollOffsetY(AvaloniaObject obj, double value) {
-            obj.SetValue(ScrollOffsetYProperty, value);
-        }
-
-        public static readonly AttachedProperty<double> ScrollOffsetYProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, double>(
-                "ScrollOffsetY",
-                0.0d,
-                false,
-                BindingMode.TwoWay);
-
-        #endregion
-
-        #region MaxScrollOffsetX AvaloniaProperty
-        public static double GetMaxScrollOffsetX(AvaloniaObject obj) {
-            return obj.GetValue(MaxScrollOffsetXProperty);
-        }
-
-        public static void SetMaxScrollOffsetX(AvaloniaObject obj, double value) {
-            obj.SetValue(MaxScrollOffsetXProperty, value);
-        }
-
-        public static readonly AttachedProperty<double> MaxScrollOffsetXProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, double>(
-                "MaxScrollOffsetX",
-                0.0d,
-                false);
-
-        #endregion
-
-        #region MaxScrollOffsetY AvaloniaProperty
-        public static double GetMaxScrollOffsetY(AvaloniaObject obj) {
-            return obj.GetValue(MaxScrollOffsetYProperty);
-        }
-
-        public static void SetMaxScrollOffsetY(AvaloniaObject obj, double value) {
-            obj.SetValue(MaxScrollOffsetYProperty, value);
-        }
-
-        public static readonly AttachedProperty<double> MaxScrollOffsetYProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, double>(
-                "MaxScrollOffsetY",
-                0.0d,
-                false);
-
-        #endregion
-
-        #region FrictionX AvaloniaProperty
+        #region FrictionX 
         public static double GetFrictionX(AvaloniaObject obj) {
             return obj.GetValue(FrictionXProperty);
         }
@@ -227,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region FrictionY AvaloniaProperty
+        #region FrictionY 
         public static double GetFrictionY(AvaloniaObject obj) {
             return obj.GetValue(FrictionYProperty);
         }
@@ -244,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region WheelDampeningX AvaloniaProperty
+        #region WheelDampeningX 
         public static double GetWheelDampeningX(AvaloniaObject obj) {
             return obj.GetValue(WheelDampeningXProperty);
         }
@@ -261,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region WheelDampeningY AvaloniaProperty
+        #region WheelDampeningY 
         public static double GetWheelDampeningY(AvaloniaObject obj) {
             return obj.GetValue(WheelDampeningYProperty);
         }
@@ -277,113 +156,45 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         #endregion
+        #endregion
 
-        #region IsThumbDragging AvaloniaProperty
-        public static bool GetIsThumbDragging(AvaloniaObject obj) {
-            return obj.GetValue(IsThumbDraggingProperty);
+        #region Scrollbar Properties
+
+        #region IsHorizontalScrollBarVisibile 
+        public static bool? GetIsHorizontalScrollBarVisibile(AvaloniaObject obj) {
+            return obj.GetValue(IsHorizontalScrollBarVisibileProperty);
         }
-        public static void SetIsThumbDragging(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsThumbDraggingProperty, value);
+
+        public static void SetIsHorizontalScrollBarVisibile(AvaloniaObject obj, bool? value) {
+            obj.SetValue(IsHorizontalScrollBarVisibileProperty, value);
         }
-        public static readonly AttachedProperty<bool> IsThumbDraggingProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
-                "IsThumbDragging",
-                false,
+
+        public static readonly AttachedProperty<bool?> IsHorizontalScrollBarVisibileProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool?>(
+                "IsHorizontalScrollBarVisibile",
+                true,
                 false);
 
         #endregion
 
-        #region IsThumbDraggingX AvaloniaProperty
-        public static bool GetIsThumbDraggingX(AvaloniaObject obj) {
-            return obj.GetValue(IsThumbDraggingXProperty);
+        #region IsVerticalScrollBarVisibile 
+        public static bool? GetIsVerticalScrollBarVisibile(AvaloniaObject obj) {
+            return obj.GetValue(IsVerticalScrollBarVisibileProperty);
         }
 
-        public static void SetIsThumbDraggingX(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsThumbDraggingXProperty, value);
+        public static void SetIsVerticalScrollBarVisibile(AvaloniaObject obj, bool? value) {
+            obj.SetValue(IsVerticalScrollBarVisibileProperty, value);
         }
 
-        public static readonly AttachedProperty<bool> IsThumbDraggingXProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
-                "IsThumbDraggingX",
-                false,
-                false,
-                BindingMode.TwoWay);
+        public static readonly AttachedProperty<bool?> IsVerticalScrollBarVisibileProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool?>(
+                "IsVerticalScrollBarVisibile",
+                true,
+                false);
 
         #endregion
 
-        #region IsThumbDraggingY AvaloniaProperty
-        public static bool GetIsThumbDraggingY(AvaloniaObject obj) {
-            return obj.GetValue(IsThumbDraggingYProperty);
-        }
-
-        public static void SetIsThumbDraggingY(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsThumbDraggingYProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> IsThumbDraggingYProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
-                "IsThumbDraggingY",
-                false,
-                false,
-                BindingMode.TwoWay);
-
-        #endregion
-
-        #region CanThumbDrag AvaloniaProperty
-        public static bool GetCanThumbDrag(AvaloniaObject obj) {
-            return obj.GetValue(CanThumbDragProperty);
-        }
-
-        public static void SetCanThumbDrag(AvaloniaObject obj, bool value) {
-            obj.SetValue(CanThumbDragProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> CanThumbDragProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
-                "CanThumbDrag",
-                false,
-                false,
-                BindingMode.TwoWay);
-
-        #endregion
-
-        #region CanThumbDragX AvaloniaProperty
-        public static bool GetCanThumbDragX(AvaloniaObject obj) {
-            return obj.GetValue(CanThumbDragXProperty);
-        }
-
-        public static void SetCanThumbDragX(AvaloniaObject obj, bool value) {
-            obj.SetValue(CanThumbDragXProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> CanThumbDragXProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
-                "CanThumbDragX",
-                false,
-                false,
-                BindingMode.TwoWay);
-
-        #endregion
-
-        #region CanThumbDragY AvaloniaProperty
-        public static bool GetCanThumbDragY(AvaloniaObject obj) {
-            return obj.GetValue(CanThumbDragYProperty);
-        }
-
-        public static void SetCanThumbDragY(AvaloniaObject obj, bool value) {
-            obj.SetValue(CanThumbDragYProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> CanThumbDragYProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
-                "CanThumbDragY",
-                false,
-                false,
-                BindingMode.TwoWay);
-
-        #endregion
-
-        #region IsScrollJumping AvaloniaProperty
+        #region IsScrollJumping 
         public static bool GetIsScrollJumping(AvaloniaObject obj) {
             return obj.GetValue(IsScrollJumpingProperty);
         }
@@ -401,7 +212,240 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region ListOrientation AvaloniaProperty
+        #region Thumb Properties
+        #region IsThumbDragging 
+        public static bool GetIsThumbDragging(AvaloniaObject obj) {
+            return obj.GetValue(IsThumbDraggingProperty);
+        }
+        public static void SetIsThumbDragging(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsThumbDraggingProperty, value);
+        }
+        public static readonly AttachedProperty<bool> IsThumbDraggingProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "IsThumbDragging",
+                false,
+                false);
+
+        #endregion
+
+        #region IsThumbDraggingX 
+        public static bool GetIsThumbDraggingX(AvaloniaObject obj) {
+            return obj.GetValue(IsThumbDraggingXProperty);
+        }
+
+        public static void SetIsThumbDraggingX(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsThumbDraggingXProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsThumbDraggingXProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "IsThumbDraggingX",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #region IsThumbDraggingY 
+        public static bool GetIsThumbDraggingY(AvaloniaObject obj) {
+            return obj.GetValue(IsThumbDraggingYProperty);
+        }
+
+        public static void SetIsThumbDraggingY(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsThumbDraggingYProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsThumbDraggingYProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "IsThumbDraggingY",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #region CanThumbDrag 
+        public static bool GetCanThumbDrag(AvaloniaObject obj) {
+            return obj.GetValue(CanThumbDragProperty);
+        }
+
+        public static void SetCanThumbDrag(AvaloniaObject obj, bool value) {
+            obj.SetValue(CanThumbDragProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanThumbDragProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "CanThumbDrag",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #region CanThumbDragX 
+        public static bool GetCanThumbDragX(AvaloniaObject obj) {
+            return obj.GetValue(CanThumbDragXProperty);
+        }
+
+        public static void SetCanThumbDragX(AvaloniaObject obj, bool value) {
+            obj.SetValue(CanThumbDragXProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanThumbDragXProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "CanThumbDragX",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #region CanThumbDragY 
+        public static bool GetCanThumbDragY(AvaloniaObject obj) {
+            return obj.GetValue(CanThumbDragYProperty);
+        }
+
+        public static void SetCanThumbDragY(AvaloniaObject obj, bool value) {
+            obj.SetValue(CanThumbDragYProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanThumbDragYProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "CanThumbDragY",
+                false,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
+        #region ScrollViewer Properties
+
+        #region CanScrollX 
+        public static bool GetCanScrollX(AvaloniaObject obj) {
+            return obj.GetValue(CanScrollXProperty);
+        }
+
+        public static void SetCanScrollX(AvaloniaObject obj, bool value) {
+            obj.SetValue(CanScrollXProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanScrollXProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "CanScrollX",
+                true);
+
+        #endregion
+
+        #region CanScrollY 
+        public static bool GetCanScrollY(AvaloniaObject obj) {
+            return obj.GetValue(CanScrollYProperty);
+        }
+
+        public static void SetCanScrollY(AvaloniaObject obj, bool value) {
+            obj.SetValue(CanScrollYProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> CanScrollYProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "CanScrollY",
+                true);
+
+        #endregion
+
+        #region ScrollOffsetX 
+        public static double GetScrollOffsetX(AvaloniaObject obj) {
+            return obj.GetValue(ScrollOffsetXProperty);
+        }
+
+        public static void SetScrollOffsetX(AvaloniaObject obj, double value) {
+            obj.SetValue(ScrollOffsetXProperty, value);
+        }
+
+        public static readonly AttachedProperty<double> ScrollOffsetXProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, double>(
+                "ScrollOffsetX",
+                0.0d,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #region ScrollOffsetY 
+        public static double GetScrollOffsetY(AvaloniaObject obj) {
+            return obj.GetValue(ScrollOffsetYProperty);
+        }
+
+        public static void SetScrollOffsetY(AvaloniaObject obj, double value) {
+            obj.SetValue(ScrollOffsetYProperty, value);
+        }
+
+        public static readonly AttachedProperty<double> ScrollOffsetYProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, double>(
+                "ScrollOffsetY",
+                0.0d,
+                false,
+                BindingMode.TwoWay);
+
+        #endregion
+
+        #region MaxScrollOffsetX 
+        public static double GetMaxScrollOffsetX(AvaloniaObject obj) {
+            return obj.GetValue(MaxScrollOffsetXProperty);
+        }
+
+        public static void SetMaxScrollOffsetX(AvaloniaObject obj, double value) {
+            obj.SetValue(MaxScrollOffsetXProperty, value);
+        }
+
+        public static readonly AttachedProperty<double> MaxScrollOffsetXProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, double>(
+                "MaxScrollOffsetX",
+                0.0d,
+                false);
+
+        #endregion
+
+        #region MaxScrollOffsetY 
+        public static double GetMaxScrollOffsetY(AvaloniaObject obj) {
+            return obj.GetValue(MaxScrollOffsetYProperty);
+        }
+
+        public static void SetMaxScrollOffsetY(AvaloniaObject obj, double value) {
+            obj.SetValue(MaxScrollOffsetYProperty, value);
+        }
+
+        public static readonly AttachedProperty<double> MaxScrollOffsetYProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, double>(
+                "MaxScrollOffsetY",
+                0.0d,
+                false);
+
+        #endregion       
+        #region ScrollViewer Control
+        public static ScrollViewer GetScrollViewer(AvaloniaObject obj) {
+            return obj.GetValue(ScrollViewerProperty);
+        }
+
+        public static void SetScrollViewer(AvaloniaObject obj, ScrollViewer value) {
+            obj.SetValue(ScrollViewerProperty, value);
+        }
+
+        public static readonly AttachedProperty<ScrollViewer> ScrollViewerProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, ScrollViewer>(
+                "ScrollViewer",
+                null,
+                false);
+
+        #endregion
+        #endregion
+
+        #region List Properties
+
+        #region ListOrientation 
         public static Orientation GetListOrientation(AvaloniaObject obj) {
             return obj.GetValue(ListOrientationProperty);
         }
@@ -418,7 +462,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region LayoutType AvaloniaProperty
+        #region LayoutType 
         public static MpClipTrayLayoutType GetLayoutType(AvaloniaObject obj) {
             return obj.GetValue(LayoutTypeProperty);
         }
@@ -435,24 +479,46 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region ScrollViewer AvaloniaProperty
-        public static ScrollViewer GetScrollViewer(AvaloniaObject obj) {
-            return obj.GetValue(ScrollViewerProperty);
+        #endregion
+
+        #region Touch Properties
+
+        #region CanTouchScroll 
+        public static bool GetCanTouchScroll(AvaloniaObject obj) {
+            return obj.GetValue(CanTouchScrollProperty);
         }
 
-        public static void SetScrollViewer(AvaloniaObject obj, ScrollViewer value) {
-            obj.SetValue(ScrollViewerProperty, value);
+        public static void SetCanTouchScroll(AvaloniaObject obj, bool value) {
+            obj.SetValue(CanTouchScrollProperty, value);
         }
 
-        public static readonly AttachedProperty<ScrollViewer> ScrollViewerProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, ScrollViewer>(
-                "ScrollViewer",
-                null,
-                false);
+        public static readonly AttachedProperty<bool> CanTouchScrollProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "CanTouchScroll",
+                defaultValue: true,
+                defaultBindingMode: BindingMode.TwoWay);
 
         #endregion
 
-        #region IsEnabled AvaloniaProperty
+        #region IsTouchScrolling 
+        public static bool GetIsTouchScrolling(AvaloniaObject obj) {
+            return obj.GetValue(IsTouchScrollingProperty);
+        }
+
+        public static void SetIsTouchScrolling(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsTouchScrollingProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsTouchScrollingProperty =
+            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
+                "IsTouchScrolling",
+                defaultValue: false,
+                defaultBindingMode: BindingMode.TwoWay);
+
+        #endregion
+        #endregion
+
+        #region IsEnabled 
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
         }
@@ -468,8 +534,6 @@ namespace MonkeyPaste.Avalonia {
                 false);
 
         private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
-            //MpPoint lastMousePosition = null;
-
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is ListBox lb) {
                     if (lb.IsInitialized) {
@@ -489,6 +553,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
         #region Internal Event Handlers
 
         private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
@@ -504,9 +570,8 @@ namespace MonkeyPaste.Avalonia {
                        InputElement.PointerPressedEvent,
                        PreviewControlPointerPressedHandler,
                        RoutingStrategies.Tunnel);
-                if (Mp.Services.PlatformInfo.IsTouchInputEnabled) {
 
-
+                if (GetCanTouchScroll(lb)) {
                     lb.AddHandler(
                         InputElement.PointerMovedEvent,
                         PreviewControlPointerMovedHandler,
@@ -581,77 +646,104 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static MpPoint _downOffset;
-        private static MpPoint _down_touch_loc;
-        private static MpPoint _last_touch_loc;
-        private static MpPoint _last_v;
 
-        private static DateTime? _last_touch_dt;
         private static void PreviewControlPointerPressedHandler(object s, PointerPressedEventArgs e) {
             // when user clicks always halt any animated scrolling
-            if (s is ListBox lb) {
-                SetVelocityX(lb, 0);
-                SetVelocityY(lb, 0);
-                if (Mp.Services.PlatformInfo.IsTouchInputEnabled) {
-                    //e.Pointer.Capture(lb);
-                    _down_touch_loc = e.GetPosition(App.MainView as Control).ToPortablePoint();
-                    _downOffset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
-                }
+            var lb = s as ListBox;
+            if (lb == null) {
+                return;
+            }
 
+            SetVelocityX(lb, 0);
+            SetVelocityY(lb, 0);
+            if (GetCanTouchScroll(lb)) {
+                //e.Pointer.Capture(lb);
+                _down_touch_loc = e.GetPosition(lb).ToPortablePoint();
+                MpConsole.WriteLine($"Touch down loc: {_down_touch_loc}", true);
+                _downOffset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
+                _last_scroll_offset = _downOffset;
             }
             e.Handled = false;
         }
 
         private static void PreviewControlPointerMovedHandler(object s, PointerEventArgs e) {
-            if (!Mp.Services.PlatformInfo.IsTouchInputEnabled) {
+            var lb = s as ListBox;
+            if (lb == null) {
                 return;
             }
-            if (s is ListBox lb) {
-                var cur_touch_loc = e.GetPosition(App.MainView as Control).ToPortablePoint();
-                var cur_touch_dt = DateTime.Now;
-                if (_down_touch_loc == null) {
-                    _down_touch_loc = cur_touch_loc;
-                }
-
-                if (_last_touch_dt == null) {
-                    _last_touch_dt = DateTime.Now;
-                }
-                var new_offset = _downOffset - (cur_touch_loc - _down_touch_loc);
-                ApplyScrollOffset(lb, new_offset.X, new_offset.Y);
-                if (_last_v == null) {
-                    _last_v = MpPoint.Zero;
-                } else {
-                    _last_v = (cur_touch_loc - _last_v) / (cur_touch_dt - _last_touch_dt.Value).TotalMilliseconds;
-                }
-
-                _last_touch_loc = cur_touch_loc;
-                _last_touch_dt = cur_touch_dt;
+            if (!GetCanTouchScroll(lb) ||
+                !e.IsLeftDown(lb) ||
+                _last_scroll_offset == null) {
+                _last_scroll_offset = null;
+                SetIsTouchScrolling(lb, false);
+                return;
             }
 
+            SetIsTouchScrolling(lb, true);
+            var cur_touch_loc = e.GetPosition(lb).ToPortablePoint();
+            if (_down_touch_loc == null) {
+                _down_touch_loc = cur_touch_loc;
+            }
+            //if ((cur_touch_loc - _down_touch_loc).Length < 3) {
+            //    return;
+            //}
+
+            var cur_touch_dt = DateTime.Now;
+            if (_last_touch_dt == null) {
+                _last_touch_dt = DateTime.Now;
+            }
+            var cur_offset = new MpPoint(GetScrollOffsetX(lb), GetScrollOffsetY(lb));
+            var new_offset = cur_offset - (cur_touch_loc - _down_touch_loc);
+
+            MpConsole.WriteLine($"Cur Offset: {cur_offset} New Offset: {new_offset}", true);
+            MpConsole.WriteLine($"Cur Loc: {cur_touch_loc} Down Loc: {_down_touch_loc}", false, true);
+
+            ApplyScrollOffset(lb, new_offset.X, new_offset.Y);
+            if (_last_v == null) {
+                _last_v = MpPoint.Zero;
+            } else {
+                _last_v = (cur_touch_loc - _last_v) / (cur_touch_dt - _last_touch_dt.Value).TotalMilliseconds;
+            }
+
+            _last_touch_loc = cur_touch_loc;
+            _last_touch_dt = cur_touch_dt;
+            _last_scroll_offset = new_offset;
         }
 
         private static void PreviewControlPointerReleasedHandler(object s, PointerReleasedEventArgs e) {
-            if (!Mp.Services.PlatformInfo.IsTouchInputEnabled ||
+            var lb = s as ListBox;
+            if (lb == null) {
+                return;
+            }
+            if (!GetCanTouchScroll(lb) ||
                 _last_v == null) {
                 return;
             }
 
-            if (s is ListBox lb) {
-                //_last_v *= 100;
-                if (GetCanScrollY(lb)) {
-                    SetVelocityY(lb, _last_v.Y);
-                    MpConsole.WriteLine($"Y Vel: {_last_v.Y}");
-                }
-                if (GetCanScrollX(lb)) {
-                    SetVelocityX(lb, _last_v.X);
-                    MpConsole.WriteLine($"Y Vel: {_last_v.X}");
-                }
-
-                _last_v = null;
-                _last_touch_loc = null;
-                _down_touch_loc = null;
-                _last_touch_dt = null;
+            var cur_touch_loc = e.GetPosition(lb).ToPortablePoint();
+            var cur_touch_dt = DateTime.Now;
+            var final_v = (cur_touch_loc - _last_touch_loc) / (cur_touch_dt - _last_touch_dt.Value).TotalMilliseconds;
+            // x = v*t + 1/2*a*t^2.
+            // vf^2=vi^2 + 2*a*d
+            _touch_accel = ((final_v ^ 2) - (_last_v ^ 2)) / (2 * (cur_touch_loc - _last_touch_loc).Length);
+            //MpConsole.WriteLine($"Touch Move Accel: {_touch_accel}");
+            //_last_v *= 100;
+            if (GetCanScrollY(lb)) {
+                SetVelocityY(lb, _last_v.Y);
+                MpConsole.WriteLine($"Y Vel: {_last_v.Y}");
             }
+            if (GetCanScrollX(lb)) {
+                SetVelocityX(lb, _last_v.X);
+                MpConsole.WriteLine($"Y Vel: {_last_v.X}");
+            }
+            if (_touch_accel != null) {
+                MpConsole.WriteLine($"Touch UP Accel: {_touch_accel}");
+            }
+            SetIsTouchScrolling(lb, false);
+            _last_v = null;
+            _last_scroll_offset = null;
+            _last_touch_loc = null;
+            _last_touch_dt = null;
         }
 
         private static void PointerMouseWheelHandler(object s, global::Avalonia.Input.PointerWheelEventArgs e) {
@@ -694,6 +786,10 @@ namespace MonkeyPaste.Avalonia {
         private static void ScrollViewerPointerPressedHandler(object s, PointerPressedEventArgs e) {
             //BUG not sure why but track and thumb don't have tag set here after orientation changes
             var sv = s as ScrollViewer;
+            if (sv.Tag is ListBox lb &&
+                GetIsTouchScrolling(lb)) {
+                return;
+            }
             Track track = (e.Source as Control).GetVisualAncestor<Track>();
             if (track == null) {
                 return;
@@ -759,7 +855,7 @@ namespace MonkeyPaste.Avalonia {
                     vm.IsBusy) {
                     return;
                 }
-                if (_last_v != null) {
+                if (GetIsTouchScrolling(lb)) {
                     // touch in progress
                     return;
                 }
@@ -799,8 +895,21 @@ namespace MonkeyPaste.Avalonia {
                 scrollOffsetX += vx;
                 scrollOffsetY += vy;
 
+                //if (_touch_accel == null) {
                 vx *= GetFrictionX(lb);
                 vy *= GetFrictionY(lb);
+                //} else {
+                //    _touch_accel *= new MpPoint(GetFrictionX(lb), GetFrictionY(lb));
+                //    //vx *= GetFrictionX(lb);
+                //    //vy *= GetFrictionY(lb);
+                //    var new_v = new MpPoint(vx, vy) + (_touch_accel * (0.5d * (double)(SCROLL_TICK_INTERVAL_MS ^ 2)));
+                //    vx = new_v.X;
+                //    vy = new_v.Y;
+                //    if (_touch_accel.Length.IsFuzzyZero()) {
+                //        _touch_accel = null;
+                //    }
+                //}
+
 
                 ApplyScrollOffset(lb, scrollOffsetX, scrollOffsetY);
 

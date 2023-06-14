@@ -313,8 +313,8 @@ namespace MonkeyPaste {
                 Mp.Services.SettingsTools
                     .ShowSettingsWindowCommand.Execute(
                     new object[] {
-                        MpSettingsTabType.Preferences,
-                        nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily) });
+                        MpSettingsTabType.Account,
+                        nameof(MpPrefViewModel.Instance.UserEmail) });
                 DialogResult = MpNotificationDialogResultType.Dismiss;
             });
 
@@ -323,8 +323,8 @@ namespace MonkeyPaste {
                 Mp.Services.SettingsTools
                     .ShowSettingsWindowCommand.Execute(
                     new object[] {
-                        MpSettingsTabType.Preferences,
-                        nameof(MpPrefViewModel.Instance.LoadOnLogin) });
+                        MpSettingsTabType.Account,
+                        nameof(MpPrefViewModel.Instance.UserEmail) });
                 DialogResult = MpNotificationDialogResultType.Dismiss;
             });
 

@@ -31,6 +31,8 @@ namespace MonkeyPaste.Avalonia {
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
+                            .UsePlatformDetect()
+
                             //.With(new Win32PlatformOptions { UseWgl = true })
                             //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
                             //.With(new Win32PlatformOptions {
@@ -40,7 +42,6 @@ namespace MonkeyPaste.Avalonia {
                             //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
                             //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
                             //.With(new AvaloniaNativePlatformOptions { UseGpu = false })
-                            .UsePlatformDetect()
                             .LogToTrace();
     }
 }

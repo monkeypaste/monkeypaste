@@ -15,5 +15,7 @@ namespace MonkeyPaste.Avalonia {
         double ScrollOffsetY { get; set; }
         double ScrollVelocityX { get; set; }
         double ScrollVelocityY { get; set; }
+        bool IsTouchScrolling { get; set; }
+        bool CanTouchScroll { get; }
     }
 }

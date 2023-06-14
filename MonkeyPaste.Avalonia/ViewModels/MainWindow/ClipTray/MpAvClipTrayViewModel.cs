@@ -14,8 +14,10 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static System.Net.Mime.MediaTypeNames;
 using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
@@ -373,6 +375,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIPagingScrollViewer Implementation
+        public bool IsTouchScrolling { get; set; }
+        public bool CanTouchScroll =>
+            Mp.Services.PlatformInfo.IsTouchInputEnabled;
 
         public double ScrollWheelDampeningX {
             get {
@@ -1243,6 +1248,7 @@ namespace MonkeyPaste.Avalonia {
         public bool HasUserAlteredPinTrayWidthSinceWindowShow { get; set; } = false;
 
         public bool IsAddingClipboardItem { get; private set; } = false;
+        public bool IsAddingStartupClipboardItem { get; private set; } = false;
 
         private bool _isPasting = false;
         public bool IsPasting {
@@ -1280,7 +1286,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public bool IsAppPaused { get; set; } = false;
+        public bool IsAppPaused { get; set; }
 
         public bool IsRestoringSelection { get; private set; } = false;
 
@@ -1425,7 +1431,9 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(LayoutType));
 
-            //ModalClipTileViewModel = await CreateClipTileViewModel(null);
+            if (IsAppPaused == MpPrefViewModel.Instance.IsClipboardListeningOnStartup) {
+                ToggleIsAppPausedCommand.Execute(null);
+            }
 
             Items.Clear();
             for (int i = 0; i < DefaultLoadCount; i++) {
@@ -1737,13 +1745,13 @@ namespace MonkeyPaste.Avalonia {
 
 
         public void ClipboardChanged(object sender, MpPortableDataObject mpdo) {
-            bool is_startup_ido = MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening;
+            IsAddingStartupClipboardItem = MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening;
 
             bool is_change_ignored =
-                !is_startup_ido &&
+                !IsAddingStartupClipboardItem &&
                 (IsAppPaused ||
                  (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && Mp.Services.ProcessWatcher.IsThisAppActive));
-            if (is_startup_ido && !is_change_ignored && !MpPrefViewModel.Instance.AddClipboardOnStartup) {
+            if (IsAddingStartupClipboardItem && !is_change_ignored && !MpPrefViewModel.Instance.AddClipboardOnStartup) {
                 // ignore startup item
                 is_change_ignored = true;
             }
@@ -1761,13 +1769,14 @@ namespace MonkeyPaste.Avalonia {
                         MpAvPlainHtmlConverter.Instance.IsBusy) {
                     await Task.Delay(100);
                 }
-                if (is_startup_ido) {
+                if (IsAddingStartupClipboardItem) {
                     await Task.Delay(500);
                     while (IsAnyBusy) {
                         await Task.Delay(100);
                     }
                 }
                 await AddItemFromDataObjectAsync(mpdo);
+                IsAddingStartupClipboardItem = false;
             });
         }
 
@@ -1889,29 +1898,35 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             _isProcessingCap = true;
-            var cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync(MpUserAccountType.Free);
+            var cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync();
             MpConsole.WriteLine($"Account cap refreshed. Source: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
             MpConsole.WriteLine(cap_info.ToString(), false, true);
 
             await Dispatcher.UIThread.InvokeAsync(async () => {
                 if (source == "add") {
                     // TODO should change these ntf to actions that open in-app purchase
+                    var add_msg_sb = new StringBuilder();
+
 
                     if (cap_info.ToBeTrashed_ciid > 0) {
+                        add_msg_sb.AppendLine(
+                            $"Max storage is {Mp.Services.AccountTools.GetContentCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
+                    }
+                    if (cap_info.ToBeRemoved_ciid > 0) {
+                        add_msg_sb.AppendLine(
+                            $"Max archive is {Mp.Services.AccountTools.GetTrashCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
+                    }
+                    if (!string.IsNullOrEmpty(add_msg_sb.ToString())) {
+                        if (IsAddingStartupClipboardItem) {
+                            add_msg_sb.AppendLine($"* To prevent add on startup, uncheck '{nameof(MpPrefViewModel.Instance.AddClipboardOnStartup).ToLabel()}' or '{nameof(MpPrefViewModel.Instance.IsClipboardListeningOnStartup).ToLabel()}' ");
+                        }
+
                         MpNotificationBuilder.ShowMessageAsync(
-                               title: $"Capacity Reached",
-                               body: $"Oldest item trashed",
+                               title: $"'{Mp.Services.AccountTools.CurrentAccountType}' Capacity Reached",
+                               body: add_msg_sb.ToString(),
                                msgType: MpNotificationType.ContentCapReached,
                                maxShowTimeMs: MpContentCapInfo.MAX_CAP_NTF_SHOW_TIME_MS,
                                iconSourceObj: MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY).FireAndForgetSafeAsync();
-                    }
-                    if (cap_info.ToBeRemoved_ciid > 0) {
-                        MpNotificationBuilder.ShowMessageAsync(
-                               title: $"Trash Capacity Reached",
-                               body: $"Oldest trashed item permenently deleted",
-                               msgType: MpNotificationType.TrashCapReached,
-                               maxShowTimeMs: MpContentCapInfo.MAX_CAP_NTF_SHOW_TIME_MS,
-                               iconSourceObj: MpContentCapInfo.NEXT_REMOVE_IMG_RESOURCE_KEY).FireAndForgetSafeAsync();
                     }
                     await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);
                     await DeleteItemByCopyItemIdAsync(cap_info.ToBeRemoved_ciid);
@@ -3252,8 +3267,11 @@ namespace MonkeyPaste.Avalonia {
                 int head_remaining = vis_lbil.First().QueryOffsetIdx - HeadQueryIdx;
                 int head_to_load = RemainingItemsCountThreshold - head_remaining;
                 if (head_to_load > 0) {
+                    //int end_head_load_idx = HeadQueryIdx - 1;
+                    //int head_load_count = GetLoadCountFromOffset(end_head_load_idx, -1, LoadMorePageSize);
+                    //int start_head_load_idx = end_head_load_idx - head_load_count + 1;
+                    int head_load_count = GetLoadCountFromOffset(HeadQueryIdx, -1, LoadMorePageSize);
                     int end_head_load_idx = HeadQueryIdx - 1;
-                    int head_load_count = GetLoadCountFromOffset(end_head_load_idx, -1, LoadMorePageSize);
                     int start_head_load_idx = end_head_load_idx - head_load_count + 1;
                     if (start_head_load_idx >= 0 && head_load_count >= 0) {
                         offsets_to_load.AddRange(Enumerable.Range(start_head_load_idx, head_load_count));
@@ -3719,6 +3737,7 @@ namespace MonkeyPaste.Avalonia {
             //}
             //return idxs;
         }
+
         public ICommand SearchWebCommand => new MpCommand<object>(
             (args) => {
                 //string pt = string.Join(

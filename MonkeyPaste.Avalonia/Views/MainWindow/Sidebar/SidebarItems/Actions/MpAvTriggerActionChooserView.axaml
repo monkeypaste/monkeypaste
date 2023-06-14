@@ -92,7 +92,7 @@
                                                         IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                                                     <DockPanel LastChildFill="True">
                                                         <Image DockPanel.Dock="Left"
-                                                               Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                                               Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
                                                         <TextBlock Text="{Binding Label}" />
                                                     </DockPanel>
                                                 </Border>
@@ -133,28 +133,15 @@
 
 
                             <!--  SELECTED TRIGGER ACTION PROPERTY  -->
-
-                            <Label Grid.Row="3"
-                                   Grid.ColumnSpan="2"
-                                   Margin="0"
-                                   HorizontalAlignment="Left"
-                                   IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                   Classes="h1"
-                                   Content="Action" />
-                            <Border Grid.Row="4"
-                                    Grid.ColumnSpan="2"
-                                    IsVisible="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                    Classes="labelUnderline"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Bottom" />
-                            <Border DataContext="{Binding FocusAction}"
-                                    Grid.Row="5"
+                            <Border Grid.Row="3"
+                                    Grid.RowSpan="3"
                                     Grid.ColumnSpan="2"
                                     VerticalAlignment="Stretch"
-                                    HorizontalAlignment="Stretch">
-                                <local:MpAvActionPropertyView VerticalAlignment="Stretch"
-                                                              HorizontalAlignment="Stretch"
-                                                              IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}" />
+                                    HorizontalAlignment="Stretch"
+                                    Margin="0,0,20,0"
+                                    IsVisible="{Binding !IsDesignerWindowOpen, Source={x:Static local:MpAvTriggerCollectionViewModel.Instance}}"
+                                    DataContext="{Binding FocusAction}">
+                                <local:MpAvActionPropertyView IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}" />
                             </Border>
                         </Grid>
 

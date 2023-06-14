@@ -800,15 +800,16 @@ namespace MonkeyPaste.Avalonia {
         public ICommand OpenDesignerWindowCommand => new MpCommand(
             () => {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
+                    // WINDOW
+
                     var dw = new MpAvWindow() {
-                        Width = 500,
+                        Width = 800,
                         Height = 500,
                         ShowInTaskbar = true,
-                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
+                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BoltImage", typeof(WindowIcon), null, null) as WindowIcon,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                        Content = new MpAvActionDesignerView() {
-                            BorderThickness = new Thickness(1),
-                            BorderBrush = Brushes.Black
+                        Content = new Grid() {
+                            ColumnDefinitions = new ColumnDefinitions("350,*")
                         },
                         Topmost = true,
                         DataContext = this,
@@ -824,14 +825,41 @@ namespace MonkeyPaste.Avalonia {
                             Converter = MpAvStringToWindowTitleConverter.Instance
                         });
 
-                    dw.Bind(
-                        Window.BackgroundProperty,
+                    //dw.Bind(
+                    //    Window.BackgroundProperty,
+                    //    new Binding() {
+                    //        Source = FocusAction,
+                    //        Path = nameof(FocusAction.ActionBackgroundHexColor),
+                    //        Mode = BindingMode.OneWay,
+                    //        Converter = MpAvStringHexToBrushConverter.Instance
+                    //    });
+
+
+                    // CONTENT
+
+                    var apv = new MpAvActionPropertyView() {
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Stretch,
+                        VerticalContentAlignment = VerticalAlignment.Top,
+                        BorderThickness = new Thickness(0, 0, 5, 0),
+                        BorderBrush = Brushes.Black
+                    };
+                    apv.Bind(
+                        StyledElement.DataContextProperty,
                         new Binding() {
-                            Source = FocusAction,
-                            Path = nameof(FocusAction.ActionBackgroundHexColor),
-                            Mode = BindingMode.OneWay,
-                            Converter = MpAvStringHexToBrushConverter.Instance
+                            Source = this,
+                            Path = nameof(FocusAction)
                         });
+
+                    var adv = new MpAvActionDesignerView();
+
+                    var dwg = dw.Content as Grid;
+                    dwg.Children.Add(apv);
+                    dwg.Children.Add(adv);
+
+                    Grid.SetColumn(apv, 0);
+                    Grid.SetColumn(adv, 1);
+
 
                     dw.ShowChild();
                 } else {
