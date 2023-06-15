@@ -93,6 +93,7 @@ namespace MonkeyPaste.Avalonia {
                                     new MpMenuItemViewModel() {
                                         Header = x.EnumToLabel(),
                                         IconResourceKey = GetDefaultActionIconResourceKey(x),
+                                        IconTintHexStr = MpAvActionViewModelBase.GetActionHexColor(x),
                                         Command = AddChildActionCommand,
                                         CommandParameter = x
                                     }).ToList()
@@ -251,14 +252,14 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsTriggerEnabled));
                     break;
                 case nameof(IsAllValid):
-                    if (IsAllValid && IsEnabled.IsNull()) {
-                        // when trigger is all valid set to disabled state 
-                        // to allow enabling
-                        IsEnabled = false;
-                    } else if (!IsAllValid) {
-                        // IsEnabled null forces trigger to be valid before enabling
-                        IsEnabled = null;
-                    }
+                    //if (IsAllValid && IsEnabled.IsNull()) {
+                    //    // when trigger is all valid set to disabled state 
+                    //    // to allow enabling
+                    //    IsEnabled = false;
+                    //} else if (!IsAllValid) {
+                    //    // IsEnabled null forces trigger to be valid before enabling
+                    //    IsEnabled = null;
+                    //}
                     break;
                 case nameof(Children):
                     OnPropertyChanged(nameof(SelfAndAllDescendants));
@@ -297,7 +298,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 EnableOrDisableTrigger(true);
             }, () => {
-                return IsEnabled.IsFalse() || (Parent != null && Parent.IsRestoringEnabled && IsEnabled.IsTrue());
+                //return IsEnabled.IsFalse() || (Parent != null && Parent.IsRestoringEnabled && IsEnabled.IsTrue());
+                //return true;
+                return IsEnabled.IsFalseOrNull();
             });
 
         public ICommand DisableTriggerCommand => new MpAsyncCommand(
@@ -321,13 +324,14 @@ namespace MonkeyPaste.Avalonia {
                      return;
                  }
              }, () => {
-                 if (IsEnabled.IsTrue()) {
-                     return DisableTriggerCommand.CanExecute(null);
-                 }
-                 if (IsEnabled.IsFalse()) {
-                     return EnableTriggerCommand.CanExecute(null);
-                 }
-                 return false;
+                 //if (IsEnabled.IsTrue()) {
+                 //    return DisableTriggerCommand.CanExecute(null);
+                 //}
+                 //if (IsEnabled.IsFalse()) {
+                 //    return EnableTriggerCommand.CanExecute(null);
+                 //}
+                 //return false;
+                 return true;
              });
 
         public ICommand DeleteThisTriggerCommand => new MpAsyncCommand<object>(

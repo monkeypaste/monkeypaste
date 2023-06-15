@@ -17,13 +17,27 @@ using Key = Avalonia.Input.Key;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvShortcutViewModel : MpViewModelBase<MpAvShortcutCollectionViewModel>,
-        //MpIActionComponent,
+        MpIActionComponent,
         MpIFilterMatch,
         MpIShortcutCommandViewModel,
         MpAvIKeyGestureViewModel,
         MpISelectableViewModel {
 
         #region Interfaces
+
+        #region MpIActionComponent Implementation
+        public void RegisterActionComponent(MpIInvokableAction mvm) {
+            //by design this only can occur for shortcuts with a selected item as its context
+
+            OnShortcutExecuted += mvm.OnActionInvoked;
+            MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
+        }
+
+        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+            OnShortcutExecuted -= mvm.OnActionInvoked;
+            MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
+        }
+        #endregion
 
         #region MpIFilterMatch Implementation
         bool MpIFilterMatch.IsMatch(string filter) {
@@ -56,6 +70,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #endregion
+
         #region Properties        
 
         #region View Models
@@ -79,6 +94,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool HasInvoker =>
+            OnShortcutExecuted != null &&
+            OnShortcutExecuted.GetInvocationList().Length > 0;
         public bool IsEditorShortcut =>
             ShortcutType.IsEditorShortcut();
 

@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Controls.Shapes;
 using Avalonia.Data;
@@ -8,6 +9,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -457,9 +459,10 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (mivm.SubItems != null && mivm.SubItems.Count > 0 && !mivm.IsColorPallete) {
+                    // show hover mi subitems
+
                     mi.InvalidateVisual();
                     mi.IsSubMenuOpen = true;
-                    //mi.Background = Brushes.LightBlue;
                     mi.Background = _hoverMenuItemBrush;
                     var ccl = mi.GetVisualDescendants<Control>();
                     var child_border = ccl.FirstOrDefault(x => x is Border b && b.Tag == null);
@@ -470,10 +473,50 @@ namespace MonkeyPaste.Avalonia {
                     }
                     openSubMenuItems.Add(mi);
                     mi.Open();
+
                 }
             }
         }
 
+        private static void MenuItem_SubmenuOpened(object sender, RoutedEventArgs e) {
+            // NOTE when child menu opens to left of parent (on windows at least)
+            // child doesn't overlap parent and pointer leave is triggered and 
+            // in a lot of cases the menu can't be entered so this nudges right to 
+            // keep this hack friendly
+            if (sender is not MenuItem parent_mi) {
+                return;
+            }
+            if (parent_mi.Items == null || parent_mi.Items.FirstOrDefault() is not Visual first_child_v) {
+                return;
+            }
+
+            Dispatcher.UIThread.Post(async () => {
+                var parent_tl = TopLevel.GetTopLevel(parent_mi);
+                var first_child_tl = TopLevel.GetTopLevel(first_child_v);
+                while (first_child_tl == null) {
+                    await Task.Delay(100);
+                    first_child_tl = TopLevel.GetTopLevel(first_child_v);
+                }
+                double x_diff = parent_tl.PointToScreen(parent_tl.Bounds.TopLeft).X - first_child_v.PointToScreen(first_child_v.Bounds.TopRight).X;
+                if (x_diff < 0) {
+                    return;
+                }
+                // needs nudge
+                //var new_offset =
+                //    //first_child_v.PointToScreen(first_child_v.Bounds.TopLeft).ToPortablePoint(first_child_v.VisualPixelDensity()) + 
+                //    new MpPoint(x_diff + 5 - (first_child_v.Bounds.Width * first_child_v.VisualPixelDensity()), 0);
+                if (first_child_tl is PopupRoot pr) {
+                    //pr.ConfigurePosition(
+                    //    parent_tl,
+                    //    _cmInstance.Placement,
+                    //    new_offset.ToAvPoint());
+
+                    //pr.RenderTransform = new TranslateTransform(x_diff + 5, 0);
+                    pr.Width += x_diff + 5;
+                    pr.InvalidateVisual();
+                }
+            });
+        }
         #region Helpers
 
         private static Control CreateMenuItem(MpMenuItemViewModel mivm) {
@@ -507,6 +550,7 @@ namespace MonkeyPaste.Avalonia {
 
                     mi.PointerEntered += MenuItem_PointerEnter;
                     mi.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
+                    mi.SubmenuOpened += MenuItem_SubmenuOpened;
                     if (mi.Command != null && mivm.IsEnabled) {
                         mi.AddHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased, RoutingStrategies.Tunnel);
                     }
@@ -535,6 +579,8 @@ namespace MonkeyPaste.Avalonia {
             }
             return control;
         }
+
+
         public static object CreateIcon(MpMenuItemViewModel mivm) {
             if (mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
                 return CreateCheckableIcon(mivm);

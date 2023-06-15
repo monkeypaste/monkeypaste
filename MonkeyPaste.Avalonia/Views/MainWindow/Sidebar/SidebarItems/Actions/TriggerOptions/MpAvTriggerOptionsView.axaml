@@ -122,10 +122,9 @@
                       Grid.Column="0"
                       Classes="defaultButton"
                       Foreground="Black"
-                      IsThreeState="True"
+                      IsThreeState="False"
                       IsChecked="{Binding IsTriggerEnabled, Mode=OneWay}"
-                      Command="{Binding ToggleTriggerEnabledCommand}"
-                      IsEnabled="{Binding IsAllValid}" />
+                      Command="{Binding ToggleTriggerEnabledCommand}" />
 
         <Border Grid.Column="1"
                 Classes="splitter" />

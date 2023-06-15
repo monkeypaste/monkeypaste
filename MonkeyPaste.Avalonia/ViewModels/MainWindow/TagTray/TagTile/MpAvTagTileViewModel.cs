@@ -470,6 +470,13 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Layout
+
+        public int TagNameLength =>
+            TagName.Length;
+
+        #endregion
+
         #region Appearance
 
         public string TagTextHexColor {
@@ -1007,6 +1014,9 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteLine($"Current percent set to: {PercentLoaded}");
                     }
                     Dispatcher.UIThread.Post(() => { OnPropertyChanged(nameof(PercentLoaded)); });
+                    break;
+                case nameof(TagName):
+                    OnPropertyChanged(nameof(TagNameLength));
                     break;
             }
         }

@@ -1293,17 +1293,17 @@ namespace MonkeyPaste.Avalonia {
                                 Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
                                     title: "Theme Color",
                                     owner: MpAvWindowManager.LocateWindow(this),
-                                    selectedColor: MpPrefViewModel.Instance.ThemeColor
-                                //fixedPalette: new[] {
-                                //    MpSystemColors.Red,
-                                //    MpSystemColors.orange1,
-                                //    MpSystemColors.Yellow,
-                                //    MpSystemColors.green1,
-                                //    MpSystemColors.blue1,
-                                //    MpSystemColors.cyan1,
-                                //    MpSystemColors.magenta,
-                                //    MpSystemColors.purple
-                                //}
+                                    selectedColor: MpPrefViewModel.Instance.ThemeColor,
+                                    fixedPalette: new[] {
+                                        MpSystemColors.Red,
+                                        MpSystemColors.orange1,
+                                        MpSystemColors.Yellow,
+                                        MpSystemColors.green1,
+                                        MpSystemColors.blue1,
+                                        MpSystemColors.cyan1,
+                                        MpSystemColors.magenta,
+                                        MpSystemColors.purple
+                                    }
                                 );
                             if (string.IsNullOrEmpty(result)) {
                                 // color chooser canceled

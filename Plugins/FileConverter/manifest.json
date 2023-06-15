@@ -5,6 +5,7 @@
   "credits": "Thomas Kefauver",
   "guid": "04c4d099-530e-432d-b107-3b0696b980cf",
   "projectUrl": "https://www.monkeypaste.com",
+  "donateUrl": "https://www.monkeypaste.com",
   "iconUri": "icon.png",
   "tags": "Core,Text,Image,File,Converter,File to text,File to image",
   "bundleType": "Dll",

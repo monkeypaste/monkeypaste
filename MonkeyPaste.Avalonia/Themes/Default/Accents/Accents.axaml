@@ -104,8 +104,13 @@
         <SolidColorBrush x:Key="MenuFlyoutItemBackground" Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="MenuFlyoutItemForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="SystemControlForegroundBaseMediumLowBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutSubItemChevron" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutSubItemChevronPointerOver" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutSubItemChevronSubMenuOpened" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForegroundPointerOver" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <SolidColorBrush x:Key="ExpanderHeaderBackground" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
@@ -123,13 +128,20 @@
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="{DynamicResource ThemeAccent5BgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="TabItemHeaderForegroundUnselected" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundUnselectedPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundUnselectedPressed" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundSelected" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPressed" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
 
         <!--  SHADOWS  -->

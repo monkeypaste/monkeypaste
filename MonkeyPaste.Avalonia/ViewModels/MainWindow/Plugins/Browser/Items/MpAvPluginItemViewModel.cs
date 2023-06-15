@@ -104,7 +104,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Model
         public string PluginReadMeUri {
             get {
@@ -112,6 +111,15 @@ namespace MonkeyPaste.Avalonia {
                     return string.Empty;
                 }
                 return PluginFormat.readmeUrl;
+            }
+        }
+
+        public string PluginDonateUri {
+            get {
+                if (PluginFormat == null) {
+                    return string.Empty;
+                }
+                return PluginFormat.donateUrl;
             }
         }
 

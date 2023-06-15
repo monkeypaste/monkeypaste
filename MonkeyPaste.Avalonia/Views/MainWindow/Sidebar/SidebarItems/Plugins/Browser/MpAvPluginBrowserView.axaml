@@ -21,11 +21,19 @@
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="BorderBrush"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="HorizontalContentAlignment"
                     Value="Stretch" />
+        </Style>
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(even)">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeGrayAccent1}" />
+        </Style>
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(odd)">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeGrayAccent2}" />
         </Style>
         <Style Selector="TextBlock.detailLabel">
             <Setter Property="FontWeight"
@@ -48,6 +56,10 @@
                     Value="Top" />
             <Setter Property="Margin"
                     Value="0,10,0,0" />
+        </Style>
+        <Style Selector="TextBlock.detailInfo,TextBlock.detailLabel">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
 
         <Style Selector="local|MpAvMarqueeTextBox.detailInfo">
@@ -75,8 +87,6 @@
                     Value="80" />
             <Setter Property="HorizontalContentAlignment"
                     Value="Center" />
-            <Setter Property="Foreground"
-                    Value="Black" />
 
         </Style>
     </local:MpAvUserControl.Styles>
@@ -108,7 +118,7 @@
                 <!--  FILTER BOX  -->
 
                 <local:MpAvClipBorder x:Name="FilterContainer"
-                                      BorderBrush="Black"
+                                      BorderBrush="{DynamicResource ThemeInteractiveColor}"
                                       CornerRadius="5">
                     <AutoCompleteBox x:Name="FilterPluginBox"
                                      DragDrop.AllowDrop="True"
@@ -127,10 +137,10 @@
                                      MinimumPrefixLength="0"
                                      MinimumPopulateDelay="0.25"
                                      ItemsSource="{Binding RecentPluginSearches}">
-                        <AutoCompleteBox.Resources>
+                        <!--<AutoCompleteBox.Resources>
                             <SolidColorBrush x:Key="TextControlBorderBrush">Transparent</SolidColorBrush>
                             <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
-                        </AutoCompleteBox.Resources>
+                        </AutoCompleteBox.Resources>-->
                     </AutoCompleteBox>
                 </local:MpAvClipBorder>
 
@@ -146,7 +156,7 @@
                     </ToolTip.Tip>
                     <Grid>
                         <Image IsVisible="{Binding $parent.IsEnabled}"
-                               Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                               Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
                         <local:MpAvBusySpinnerView IsVisible="{Binding !$parent.IsEnabled}"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch" />
@@ -165,7 +175,7 @@
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Settings" />
                 </ToolTip.Tip>
-                <Image Source="{Binding ., Source={StaticResource CogImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Image Source="{Binding ., Source={StaticResource CogImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
 
             </Button>
         </DockPanel>
@@ -174,7 +184,8 @@
         <ListBox x:Name="PluginSelectorListBox"
                  Margin="5,5,0,5"
                  BorderThickness="1"
-                 BorderBrush="Black"
+                 Background="Transparent"
+                 BorderBrush="{DynamicResource ThemeInteractiveColor}"
                  Grid.Row="2"
                  Grid.Column="0"
                  ItemsSource="{Binding Items}"
@@ -290,6 +301,7 @@
                         <TextBlock x:Name="SelectedPluginTitleBlock"
                                    Grid.Row="0"
                                    Grid.Column="1"
+                                   Foreground="{DynamicResource ThemeInteractiveColor}"
                                    FontSize="24"
                                    Margin="5,0,0,0"
                                    FontWeight="SemiBold"
@@ -298,21 +310,33 @@
                     </DockPanel>
 
                     <!--  TOGGLE INSTALL BUTTON  -->
-                    <Button x:Name="ToggleInstallSelectedPluginButton"
-                            Grid.Row="1"
-                            Classes="defaultButton textOnlyButton manageButton"
-                            Command="{Binding ToggleIsPluginInstalledCommand}">
-                        <Grid>
+                    <StackPanel Orientation="Horizontal"
+                                Grid.Row="1"
+                                Spacing="20">
 
-                            <TextBlock IsVisible="{Binding !IsBusy}"
-                                       Text="{Binding ToggleInstallText}" />
-                            <local:MpAvBusySpinnerView Width="15"
-                                                       Height="15"
-                                                       IsVisible="{Binding IsBusy}"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center" />
-                        </Grid>
-                    </Button>
+                        <Button x:Name="ToggleInstallSelectedPluginButton"
+                                Classes="defaultButton textOnlyButton manageButton"
+                                Command="{Binding ToggleIsPluginInstalledCommand}">
+                            <Grid>
+
+                                <TextBlock IsVisible="{Binding !IsBusy}"
+                                           Text="{Binding ToggleInstallText}" />
+                                <local:MpAvBusySpinnerView Width="15"
+                                                           Height="15"
+                                                           IsVisible="{Binding IsBusy}"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center" />
+                            </Grid>
+                        </Button>
+
+                        <Button x:Name="DonateToPluginButton"
+                                Classes="defaultButton textOnlyButton manageButton"
+                                Command="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                CommandParameter="{Binding PluginDonateUri}"
+                                IsVisible="{Binding PluginDonateUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                            <TextBlock Text="Donate" />
+                        </Button>
+                    </StackPanel>
 
                     <!--  UPDATE BUTTON  -->
                     <Button x:Name="UpdateSelectedPluginButton"
@@ -428,7 +452,8 @@
                         <TreeView.ItemTemplate>
                             <TreeDataTemplate x:DataType="local:MpAvPluginDependencyViewModel"
                                               ItemsSource="{Binding Items}">
-                                <TextBlock Text="{Binding LabelText}" />
+                                <TextBlock Classes="detailLabel"
+                                           Text="{Binding LabelText}" />
                             </TreeDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>

@@ -598,6 +598,7 @@ namespace MonkeyPaste.Avalonia {
                 fillBrush.GradientStops.Add(new GradientStop(cur_color, 1.0d));
             } else {
                 fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0.5, 1, 7));
+                fillBrush.Transform = new RotateTransform(-90);
             }
 
             return fillBrush;
@@ -621,6 +622,10 @@ namespace MonkeyPaste.Avalonia {
             double dw,
             IBrush borderBrush,
             IBrush fillBrush) {
+            // compensate if actions are very close
+            //dw = Math.Min(dw, (startPoint - endPoint).Length);
+            double test1 = (startPoint - endPoint).Length;
+
             MpPoint direction = endPoint - startPoint;
 
             MpPoint normalizedDirection = direction;
@@ -628,6 +633,7 @@ namespace MonkeyPaste.Avalonia {
 
             startPoint += normalizedDirection * dw;
             endPoint -= normalizedDirection * dw;
+
 
             MpPoint normalizedlineWidenVector = new MpPoint(-normalizedDirection.Y, normalizedDirection.X); // Rotate by 90 degrees
             MpPoint lineWidenVector = normalizedlineWidenVector * TailWidth;
@@ -639,14 +645,42 @@ namespace MonkeyPaste.Avalonia {
 
             MpPoint endArrowCenterPosition = endPoint - (normalizedDirection * TipLength);
 
-            // Start with tip of the arrow
-            pc.Add(endArrowCenterPosition + arrowWidthVector);
-            pc.Add(endArrowCenterPosition + lineWidenVector);
-            pc.Add(startPoint + lineWidenVector);
-            pc.Add(startPoint - lineWidenVector);
-            pc.Add(endArrowCenterPosition - lineWidenVector);
-            pc.Add(endArrowCenterPosition - arrowWidthVector);
-            pc.Add(endPoint);
+            // tip right base
+            var p1 = endArrowCenterPosition + arrowWidthVector;
+            // tail right start
+            var p2 = endArrowCenterPosition + lineWidenVector;
+            // tail right end
+            var p3 = startPoint + lineWidenVector;
+            // tail left end
+            var p4 = startPoint - lineWidenVector;
+            // tail left start
+            var p5 = endArrowCenterPosition - lineWidenVector;
+            // tip left base
+            var p6 = endArrowCenterPosition - arrowWidthVector;
+            // tip
+            var p7 = endPoint;
+
+            // if tail end points are inside tip don't draw tail
+            var tip_tri = new MpTriangle(p7, p1, p6);
+            bool show_full_arrow =
+                new[] {
+                    p3,
+                    p4,
+                }.All(x => !tip_tri.Contains(x));
+
+            if (show_full_arrow) {
+                pc.Add(p1);
+                pc.Add(p2);
+                pc.Add(p3);
+                pc.Add(p4);
+                pc.Add(p5);
+                pc.Add(p6);
+                pc.Add(p7);
+            } else {
+                pc.Add(p7);
+                pc.Add(p1);
+                pc.Add(p6);
+            }
 
             StreamGeometry streamGeometry = new StreamGeometry();
             using (StreamGeometryContext geometryContext = streamGeometry.Open()) {
@@ -661,6 +695,7 @@ namespace MonkeyPaste.Avalonia {
                 ctx.DrawGeometry(
                     fillBrush,
                     new Pen(borderBrush, TransitionLineThickness),
+                    //new Pen(Brushes.White, 3),
                     GetPointGeometry(pc.Select(x => x.ToAvPoint()), new Point()));
             }
 

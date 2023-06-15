@@ -48,6 +48,7 @@ namespace MonkeyPaste.Common.Plugin {
         public string version { get; set; } = string.Empty;
         public string credits { get; set; } = string.Empty;
         public string licenseUrl { get; set; } = string.Empty;
+        public string donateUrl { get; set; } = string.Empty;
         public string readmeUrl { get; set; } = string.Empty;
 
         public string projectUrl { get; set; }

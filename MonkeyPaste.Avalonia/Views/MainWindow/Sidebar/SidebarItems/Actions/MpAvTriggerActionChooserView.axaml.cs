@@ -34,7 +34,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItem != BindingContext) {
+            if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItem != BindingContext &&
+                !BindingContext.IsDesignerWindowOpen) {
                 return;
             }
 
@@ -51,24 +52,27 @@ namespace MonkeyPaste.Avalonia {
                     }
                     g.RowDefinitions.Clear();
                     g.ColumnDefinitions.Clear();
+
                     if (BindingContext.SidebarOrientation == Orientation.Horizontal) {
                         var rd = new RowDefinition(GridLength.Star);
-                        if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                            rd.Bind(
-                                RowDefinition.MaxHeightProperty,
-                                new Binding() {
-                                    Source = MpAvClipTrayViewModel.Instance,
-                                    Path = nameof(MpAvClipTrayViewModel.Instance.ObservedContainerScreenHeight),
-                                    Mode = BindingMode.OneWay
-                                });
-                        } else {
-                            rd.Bind(
-                                RowDefinition.HeightProperty,
-                                new Binding() {
-                                    Source = this,
-                                    Path = nameof(Bounds.Height),
-                                    Mode = BindingMode.OneWay
-                                });
+                        if (!BindingContext.IsDesignerWindowOpen) {
+                            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
+                                rd.Bind(
+                                    RowDefinition.MaxHeightProperty,
+                                    new Binding() {
+                                        Source = MpAvClipTrayViewModel.Instance,
+                                        Path = nameof(MpAvClipTrayViewModel.Instance.ObservedContainerScreenHeight),
+                                        Mode = BindingMode.OneWay
+                                    });
+                            } else {
+                                rd.Bind(
+                                    RowDefinition.HeightProperty,
+                                    new Binding() {
+                                        Source = this,
+                                        Path = nameof(Bounds.Height),
+                                        Mode = BindingMode.OneWay
+                                    });
+                            }
                         }
 
                         g.RowDefinitions.Add(rd);
@@ -79,11 +83,18 @@ namespace MonkeyPaste.Avalonia {
                         Grid.SetRow(adc, 0);
                         Grid.SetColumn(adc, 1);
 
-                        vert_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                        vert_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                        if (BindingContext.IsDesignerWindowOpen) {
+                            vert_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                            vert_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                            horiz_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                            horiz_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                        } else {
+                            vert_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                            vert_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
 
-                        horiz_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
-                        horiz_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                            horiz_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+                            horiz_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                        }
 
 
                         adc.MinHeight = 0;

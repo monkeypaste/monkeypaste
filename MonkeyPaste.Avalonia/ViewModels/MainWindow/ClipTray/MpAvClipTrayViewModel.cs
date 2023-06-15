@@ -1402,8 +1402,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        private MpAvClipTrayViewModel() : base() {
-        }
+        private MpAvClipTrayViewModel() : base() { }
 
 
         #endregion
@@ -1424,7 +1423,7 @@ namespace MonkeyPaste.Avalonia {
 
             Mp.Services.ContentQueryTools = this;
 
-            Mp.Services.ClipboardMonitor.OnClipboardChanged += ClipboardChanged;
+            Mp.Services.ClipboardMonitor.OnClipboardChanged += ClipboardWatcher_OnClipboardChanged;
             Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
 
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
@@ -1744,41 +1743,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public void ClipboardChanged(object sender, MpPortableDataObject mpdo) {
-            IsAddingStartupClipboardItem = MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening;
-
-            bool is_change_ignored =
-                !IsAddingStartupClipboardItem &&
-                (IsAppPaused ||
-                 (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && Mp.Services.ProcessWatcher.IsThisAppActive));
-            if (IsAddingStartupClipboardItem && !is_change_ignored && !MpPrefViewModel.Instance.AddClipboardOnStartup) {
-                // ignore startup item
-                is_change_ignored = true;
-            }
-
-            if (is_change_ignored) {
-                MpConsole.WriteLine("Clipboard Change Ignored by tray");
-                MpConsole.WriteLine($"IsMainWindowLoading: {MpAvMainWindowViewModel.Instance.IsMainWindowLoading}");
-                MpConsole.WriteLine($"IsAppPaused: {IsAppPaused}");
-                MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpPrefViewModel.Instance.IgnoreInternalClipboardChanges} IsThisAppActive: {Mp.Services.ProcessWatcher.IsThisAppActive}");
-                return;
-            }
-
-            Dispatcher.UIThread.Post(async () => {
-                while (MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening ||
-                        MpAvPlainHtmlConverter.Instance.IsBusy) {
-                    await Task.Delay(100);
-                }
-                if (IsAddingStartupClipboardItem) {
-                    await Task.Delay(500);
-                    while (IsAnyBusy) {
-                        await Task.Delay(100);
-                    }
-                }
-                await AddItemFromDataObjectAsync(mpdo);
-                IsAddingStartupClipboardItem = false;
-            });
-        }
 
         public void InitIntroItems() {
             //var introItem1 = new MpCopyItem(
@@ -1919,6 +1883,8 @@ namespace MonkeyPaste.Avalonia {
                     if (!string.IsNullOrEmpty(add_msg_sb.ToString())) {
                         if (IsAddingStartupClipboardItem) {
                             add_msg_sb.AppendLine($"* To prevent add on startup, uncheck '{nameof(MpPrefViewModel.Instance.AddClipboardOnStartup).ToLabel()}' or '{nameof(MpPrefViewModel.Instance.IsClipboardListeningOnStartup).ToLabel()}' ");
+                        } else {
+                            add_msg_sb.AppendLine($"* You can hide these warnings by clicking 'hide all' from the options menu above 😉");
                         }
 
                         MpNotificationBuilder.ShowMessageAsync(
@@ -2449,8 +2415,6 @@ namespace MonkeyPaste.Avalonia {
                     //    break;
             }
         }
-
-
         private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
             var to_notify_ctvml =
                 AllActiveItems
@@ -2482,6 +2446,43 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"{to_notify_ctvml.Count()} items notified of active app change");
             }, DispatcherPriority.Background);
         }
+
+        private void ClipboardWatcher_OnClipboardChanged(object sender, MpPortableDataObject mpdo) {
+            bool is_startup_ido = MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening;
+
+            bool is_change_ignored =
+                !is_startup_ido &&
+                (IsAppPaused ||
+                 (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && Mp.Services.ProcessWatcher.IsThisAppActive));
+            if (is_startup_ido && !is_change_ignored && !MpPrefViewModel.Instance.AddClipboardOnStartup) {
+                // ignore startup item
+                is_change_ignored = true;
+            }
+
+            if (is_change_ignored) {
+                MpConsole.WriteLine("Clipboard Change Ignored by tray");
+                MpConsole.WriteLine($"IsMainWindowLoading: {MpAvMainWindowViewModel.Instance.IsMainWindowLoading}");
+                MpConsole.WriteLine($"IsAppPaused: {IsAppPaused}");
+                MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpPrefViewModel.Instance.IgnoreInternalClipboardChanges} IsThisAppActive: {Mp.Services.ProcessWatcher.IsThisAppActive}");
+                return;
+            }
+
+            Dispatcher.UIThread.Post(async () => {
+                while (MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening ||
+                        MpAvPlainHtmlConverter.Instance.IsBusy) {
+                    await Task.Delay(100);
+                }
+                if (is_startup_ido) {
+                    IsAddingStartupClipboardItem = true;
+                    //await Task.Delay(500);
+                    //while (IsAnyBusy) {
+                    //    await Task.Delay(100);
+                    //}
+                }
+                await AddItemFromDataObjectAsync(mpdo);
+                IsAddingStartupClipboardItem = false;
+            });
+        }
         private async Task<MpAvClipTileViewModel> CreateOrRetrieveClipTileViewModelAsync(MpCopyItem ci) {
             MpAvClipTileViewModel nctvm = null;
             if (ci.WasDupOnCreate) {
@@ -2496,8 +2497,17 @@ namespace MonkeyPaste.Avalonia {
             }
             return nctvm;
         }
+        private async Task InitDefaultPlaceholdersAsync() {
+            Items.Clear();
+            for (int i = 0; i < DefaultLoadCount; i++) {
+                var ctvm = await CreateClipTileViewModelAsync(null);
+                Items.Add(ctvm);
+            }
 
-
+            while (Items.Any(x => x.IsAnyBusy)) {
+                await Task.Delay(100);
+            }
+        }
 
         private void PerformLoadMore(bool isHi) {
             if (QueryCommand.CanExecute(isHi)) {
@@ -3141,22 +3151,12 @@ namespace MonkeyPaste.Avalonia {
             },
             (tagDropCopyItemOnlyArg) => {
                 if (tagDropCopyItemOnlyArg is MpCopyItem tag_drop_ci) {
-                    if (PendingNewModels.Any(x => x.Id == tag_drop_ci.Id)) {
-                        // should only happen once from drop in tag view
-                        Debugger.Break();
-                    } else {
-                        PendingNewModels.Add(tag_drop_ci);
-                    }
+                    MpDebug.Assert(PendingNewModels.All(x => x.Id != tag_drop_ci.Id), "AddNewItems cmd error. should only happen once from drop in tag view");
+                    PendingNewModels.Add(tag_drop_ci);
                 }
                 if (PendingNewModels.Count == 0) {
                     return false;
                 }
-                //if(!string.IsNullOrEmpty(MpAvSearchBoxViewModel.Instance.LastSearchText)) {
-                //    return false;
-                //}
-                //if (MpPlatform.Services.QueryInfo.SortType == MpContentSortType.Manual) {
-                //    return false;
-                //}
                 if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
                     return true;
                 }

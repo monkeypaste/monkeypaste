@@ -4,6 +4,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Globalization;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringHexToContrastBrushConverter : IValueConverter {
@@ -18,9 +19,18 @@ namespace MonkeyPaste.Avalonia {
                 return Convert(fparamStr, null, null, null) as IBrush;
             }
             if (value is string valStr) {
-                bool ignoreAlpha = parameter.ToStringOrDefault() == "true";
+                var paramParts = parameter.ToStringOrEmpty().Split("|");
+                bool ignoreAlpha = paramParts.Any(x => x == "true");
+                bool darker = paramParts.Any(x => x == "darker");
+                bool lighter = paramParts.Any(x => x == "lighter");
                 valStr = MpColorHelpers.ParseHexFromString(valStr, includeAlpha: !ignoreAlpha);
                 if (valStr.IsStringHexColor()) {
+                    if (darker) {
+                        return MpColorHelpers.GetDarkerHexColor(valStr).ToAvBrush();
+                    }
+                    if (lighter) {
+                        return MpColorHelpers.GetLighterHexColor(valStr).ToAvBrush();
+                    }
                     return valStr.ToContrastForegoundColor().ToAvBrush();
                 }
             }

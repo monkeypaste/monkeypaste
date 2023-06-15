@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase,
         MpIPopupMenuViewModel,
         MpIChildWindowViewModel,
+        MpIWindowStateViewModel,
         MpISidebarItemViewModel,
         MpIDesignerSettingsViewModel {
         #region Private Variables
@@ -41,6 +42,11 @@ namespace MonkeyPaste.Avalonia {
             get => IsDesignerWindowOpen;
             set => IsDesignerWindowOpen = value;
         }
+
+        #endregion
+
+        #region MpIWindowStateViewModel Implementation
+        MpWindowState MpIWindowStateViewModel.WindowState { get; set; }
 
         #endregion
 
@@ -263,6 +269,9 @@ namespace MonkeyPaste.Avalonia {
 
         public Orientation SidebarOrientation {
             get {
+                if (IsDesignerWindowOpen) {
+                    return Orientation.Horizontal;
+                }
                 if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItemWidth <= _defaultSelectorColumnVarDimLength * 2) {
                     return Orientation.Vertical;
                 }
@@ -808,19 +817,19 @@ namespace MonkeyPaste.Avalonia {
                         ShowInTaskbar = true,
                         Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BoltImage", typeof(WindowIcon), null, null) as WindowIcon,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                        Content = new Grid() {
-                            ColumnDefinitions = new ColumnDefinitions("350,*")
-                        },
+                        Content = new MpAvTriggerActionChooserView(),
                         Topmost = true,
                         DataContext = this,
-                        Padding = new Thickness(10)
+                        Padding = new Thickness(10),
+                        //Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment2Color.ToString())
+                        Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent1.ToString())
                     };
                     dw.Classes.Add("fadeIn");
                     dw.Bind(
                         Window.TitleProperty,
                         new Binding() {
                             Source = FocusAction,
-                            Path = nameof(FocusAction.Label),
+                            Path = nameof(MpAvActionViewModelBase.Label),
                             StringFormat = "Trigger Designer '{0}'",
                             Converter = MpAvStringToWindowTitleConverter.Instance
                         });
@@ -829,39 +838,18 @@ namespace MonkeyPaste.Avalonia {
                     //    Window.BackgroundProperty,
                     //    new Binding() {
                     //        Source = FocusAction,
-                    //        Path = nameof(FocusAction.ActionBackgroundHexColor),
+                    //        Path = nameof(MpAvActionViewModelBase.ActionBackgroundHexColor),
                     //        Mode = BindingMode.OneWay,
-                    //        Converter = MpAvStringHexToBrushConverter.Instance
+                    //        Converter = MpAvStringHexToContrastBrushConverter.Instance,
+                    //        ConverterParameter =
+                    //            MpPrefViewModel.Instance.ThemeType == MpThemeType.Dark ?
+                    //                "darker" :
+                    //                "lighter"
                     //    });
 
-
-                    // CONTENT
-
-                    var apv = new MpAvActionPropertyView() {
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        VerticalAlignment = VerticalAlignment.Stretch,
-                        VerticalContentAlignment = VerticalAlignment.Top,
-                        BorderThickness = new Thickness(0, 0, 5, 0),
-                        BorderBrush = Brushes.Black
-                    };
-                    apv.Bind(
-                        StyledElement.DataContextProperty,
-                        new Binding() {
-                            Source = this,
-                            Path = nameof(FocusAction)
-                        });
-
-                    var adv = new MpAvActionDesignerView();
-
-                    var dwg = dw.Content as Grid;
-                    dwg.Children.Add(apv);
-                    dwg.Children.Add(adv);
-
-                    Grid.SetColumn(apv, 0);
-                    Grid.SetColumn(adv, 1);
-
-
                     dw.ShowChild();
+
+                    OnPropertyChanged(nameof(SidebarOrientation));
                 } else {
                     // Some kinda view nav here
                     // see https://github.com/AvaloniaUI/Avalonia/discussions/9818

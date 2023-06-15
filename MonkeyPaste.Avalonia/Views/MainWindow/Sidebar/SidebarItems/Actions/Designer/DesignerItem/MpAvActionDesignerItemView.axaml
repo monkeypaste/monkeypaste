@@ -242,8 +242,7 @@
                             <Grid ClipToBounds="False">
                                 <Polygon Points="25,0 50,50 0,50" />
 
-                                <Border x:Name="DesignerIconContainer"
-                                        BorderBrush="Black">
+                                <Border x:Name="DesignerIconContainer">
                                     <Border.RenderTransform>
                                         <TranslateTransform X="0"
                                                             Y="10" />

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Selection;
 using Avalonia.Data;
+using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
@@ -201,6 +202,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent3.ToString()),
                 Content = new MpAvPluginBrowserView(),
                 Topmost = true
             };

@@ -26,6 +26,7 @@
     white-space: pre;
     font-family: var(--defaultFontFamily);
     font-size: var(--defaultFontSize);
+    color: var(--defcontentfgcolor);
 }
 
 .no-select {

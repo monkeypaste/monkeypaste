@@ -1449,7 +1449,7 @@ namespace MonkeyPaste.Avalonia {
             HasModelChanged = true;
         });
 
-        public ICommand InvokeThisActionCommand => new MpAsyncCommand<object>(
+        public virtual ICommand InvokeThisActionCommand => new MpAsyncCommand<object>(
             async (args) => {
                 //await Task.Delay(300);
                 MpCopyItem ci = null;

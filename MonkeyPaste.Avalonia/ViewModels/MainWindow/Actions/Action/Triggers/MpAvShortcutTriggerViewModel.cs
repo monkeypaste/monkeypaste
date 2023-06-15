@@ -179,20 +179,31 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void EnableTrigger() {
-            //if (ShortcutViewModel == null) {
-            //    return;
-            //}
-            //ShortcutViewModel.RegisterActionComponent(this);
+            if (ShortcutViewModel == null) {
+                return;
+            }
+            ShortcutViewModel.RegisterActionComponent(this);
 
             // NOTE nothing to enable
             // invoke is handled by shortcut listener and invokeCmd.CanExec
         }
 
         protected override void DisableTrigger() {
-            //if (ShortcutViewModel == null) {
-            //    return;
-            //}
-            //ShortcutViewModel.UnregisterActionComponent(this);
+            if (ShortcutViewModel == null) {
+                return;
+            }
+            ShortcutViewModel.UnregisterActionComponent(this);
+        }
+
+        protected override bool ValidateStartAction(object arg) {
+            if (!base.ValidateStartAction(arg)) {
+                return false;
+            }
+            if (ShortcutViewModel == null) {
+                return false;
+            }
+            // NOTE only perform action if trigger is attachd to shortcut if not its disabled
+            return ShortcutViewModel.HasInvoker;
         }
 
         #endregion
@@ -227,8 +238,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-
-
         #endregion
     }
 }

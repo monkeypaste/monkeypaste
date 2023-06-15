@@ -507,7 +507,7 @@ namespace MonkeyPaste.Common {
                 using (FileStream fs = File.Open(path, FileMode.Open)) {
                 }
             }
-            catch (Exception ex) {
+            catch {
                 return true;
             }
             return false;

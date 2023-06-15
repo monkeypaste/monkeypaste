@@ -46,15 +46,15 @@ namespace MonkeyPaste.Avalonia {
             var cp = this.FindControl<ColorView>("Picker");
             cp.PaletteColors = palette.Select(x => x.ToAvColor());
 
-            //cp.IsAccentColorsVisible = false;
-            //cp.IsColorComponentsVisible = false;
-            //cp.IsColorModelVisible = false;
-            //cp.IsColorSpectrumSliderVisible = false;
-            //cp.IsColorSpectrumVisible = false;
-            //cp.IsComponentSliderVisible = false;
-            //cp.IsComponentTextInputVisible = false;
-            //cp.IsHexInputVisible = false;
-            //cp.IsColorPaletteVisible = true;
+            cp.IsAccentColorsVisible = false;
+            cp.IsColorComponentsVisible = false;
+            cp.IsColorModelVisible = false;
+            cp.IsColorSpectrumSliderVisible = false;
+            cp.IsColorSpectrumVisible = false;
+            cp.IsComponentSliderVisible = false;
+            cp.IsComponentTextInputVisible = false;
+            cp.IsHexInputVisible = false;
+            cp.IsColorPaletteVisible = true;
         }
         private void Okbtn_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             if (this.GetVisualRoot() is MpAvWindow w) {

@@ -18,10 +18,18 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     ops = Enumerable.Repeat("+", values.Count - 1).ToArray();
                 }
+                double[] dblVals;
+                try {
+                    dblVals = values.Select(x => System.Convert.ToDouble(x)).ToArray();
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error converting dbl vals '{string.Join(",", values)}' for expression converter.", ex);
+                    return 0;
+                }
                 double outVal = 0;
-                for (int i = 1; i < values.Count; i++) {
-                    double a = i == 1 ? (double)values[i - 1] : outVal;
-                    double b = (double)values[i];
+                for (int i = 1; i < dblVals.Length; i++) {
+                    double a = i == 1 ? (double)dblVals[i - 1] : outVal;
+                    double b = (double)dblVals[i];
 
                     string op = ops[i - 1];
                     switch (op) {
@@ -44,6 +52,7 @@ namespace MonkeyPaste.Avalonia {
             return 0;
         }
     }
+
     public class MpAvMultiDoubleMathExpressionConverter : IMultiValueConverter {
         private static DataTable _DataTable;
         public static readonly MpAvMultiDoubleMathExpressionConverter Instance = new();

@@ -171,6 +171,13 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedItemIdx):
                     MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChanged);
                     break;
+                case nameof(SelectedItem):
+                    if (SelectedItem is MpIChildWindowViewModel cwvm &&
+                        cwvm.IsChildWindowOpen &&
+                        MpAvWindowManager.LocateWindow(SelectedItem) is MpAvWindow w) {
+                        w.Activate();
+                    }
+                    break;
             }
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {

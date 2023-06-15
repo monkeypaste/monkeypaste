@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
@@ -566,42 +567,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        //public int LineCount { get; set; }
-        //public int CharCount { get; set; }
-
-        private DateTime? _timeoutCheck = null;
         public bool IsAnyBusy {
             get {
                 if (IsBusy) {
                     return true;
                 }
-                //bool isplaceHolder = IsPlaceholder && !IsAppendNotifier;
-                //var cv = GetContentView();
-                //if(cv == null || !cv.IsEditorLoaded) {
-                //    return true;
-                //}
                 if (!IsPlaceholder && !IsEditorLoaded) {
-                    //if (_timeoutCheck == null &&
-                    //    GetContentView() is MpAvContentWebView wv) {
-                    //    var cur_wv = wv;
-                    //    _timeoutCheck = DateTime.Now;
-                    //    Dispatcher.UIThread.Post(async () => {
-                    //        while (true) {
-                    //            if (_timeoutCheck == null ||
-                    //                cur_wv != wv ||
-                    //                IsEditorLoaded) {
-                    //                _timeoutCheck = null;
-                    //                OnPropertyChanged(nameof(IsAnyBusy));
-                    //                return;
-                    //            }
-                    //            if (DateTime.Now - _timeoutCheck >= TimeSpan.FromSeconds(5)) {
-                    //                wv.ReloadAsync().FireAndForgetSafeAsync();
-                    //                _timeoutCheck = null;
-                    //                return;
-                    //            }
-                    //        }
-                    //    });
-                    //}
                     return true;
                 }
 
@@ -616,17 +587,6 @@ namespace MonkeyPaste.Avalonia {
                 if (IsAppendNotifier) {
                     return false;
                 }
-                //if (SourceViewModel != null) {
-                //    if (AppViewModel != null && AppViewModel.IsBusy) {
-                //        return true;
-                //    }
-                //    if (UrlViewModel != null && UrlViewModel.IsBusy) {
-                //        return true;
-                //    }
-                //    if (SourceViewModel != null && SourceViewModel.IsBusy) {
-                //        return true;
-                //    }
-                //}
                 return false;
             }
         }
@@ -1061,7 +1021,6 @@ namespace MonkeyPaste.Avalonia {
             bool is_reload =
                 (CopyItemId == 0 && ci == null) ||
                 (ci != null && CopyItemId == ci.Id);
-            _timeoutCheck = null;
             _contentView = null;
             if (!is_reload) {
                 _curItemRandomHexColor = string.Empty;

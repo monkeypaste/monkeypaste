@@ -44,9 +44,9 @@
                                         Classes="defaultButton noBg noHoverBg outline outlineOver square"
                                         Command="{Binding ShowPluginBrowserCommand}">
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="Settings" />
+                                        <local:MpAvToolTipView ToolTipText="Browse Plugins" />
                                     </ToolTip.Tip>
-                                    <Image Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                    <Image Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
 
                                 </Button>
                                 <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"

@@ -112,6 +112,7 @@
                          Classes="clipTileListBox queryListBox"
                          Classes.requerying="{Binding IsRequerying}"
                          Classes.notrequerying="{Binding !IsRequerying}"
+                         IsTextSearchEnabled="False"
                          Background="Transparent"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Top"
@@ -168,7 +169,8 @@
                         <ItemsPanelTemplate>
                             <Canvas x:Name="ClipTrayItemsPanelCanvas"
                                     Width="{Binding QueryTrayTotalWidth}"
-                                    Height="{Binding QueryTrayTotalHeight}" />
+                                    Height="{Binding QueryTrayTotalHeight}"
+                                    Margin="0,0,20,0" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>

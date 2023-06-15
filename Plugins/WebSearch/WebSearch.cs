@@ -11,16 +11,6 @@ namespace WebSearch {
             if (req != null &&
                 req.GetRequestParamStringValue(1) is string uri) {
                 try {
-                    //if (MpCommonTools.Services.PlatformInfo.OsType == MpUserDeviceType.Windows) {
-                    //    Process.Start("explorer.exe", uri);
-                    //} else {
-                    //    using (var myProcess = new Process()) {
-                    //        myProcess.StartInfo.UseShellExecute = true;
-                    //        myProcess.StartInfo.FileName = uri;
-                    //        myProcess.Start();
-                    //    }
-                    //}
-                    // Process.Start(uri);
                     using (var myProcess = new Process()) {
                         myProcess.StartInfo.UseShellExecute = true;
                         myProcess.StartInfo.FileName = uri;

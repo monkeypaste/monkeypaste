@@ -33,8 +33,8 @@
         <Setter Property="HorizontalContentAlignment"
                 Value="Center" />
     </Style>
-  
-  <Style Selector=":is(Button).noBg">
+
+    <Style Selector=":is(Button).noBg">
         <Setter Property="Padding"
                 Value="0" />
     </Style>
@@ -60,11 +60,16 @@
     <Style Selector=":is(Button).defaultButton Image">
         <Setter Property="Margin"
                 Value="0" />
-      <Setter Property="Width"
+        <Setter Property="Width"
                 Value="15" />
         <Setter Property="Height"
                 Value="15" />
         <Setter Property="VerticalAlignment"
                 Value="Center" />
+    </Style>
+
+    <Style Selector=":is(Button).defaultButton TextBlock">
+        <Setter Property="Margin"
+                Value="7,0,0,0" />
     </Style>
 </Styles>
