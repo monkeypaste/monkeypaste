@@ -87,6 +87,12 @@ namespace MonkeyPaste.Avalonia {
             if (lks == "backspace") {
                 return Key.Back;
             }
+            if (lks.Length == 1 && lks.ToCharArray()[0] is char lks_char &&
+                lks_char >= '0' && lks_char <= '9') {
+                // avalonia numbers are prefixed w/ 'D' and parsing as-is 
+                // returns the key with the number's keycode so prefix before parsing
+                lks = "d" + lks;
+            }
 
             if (Enum.TryParse(typeof(Key), lks, true, out object? keyObj) &&
                keyObj is Key key) {

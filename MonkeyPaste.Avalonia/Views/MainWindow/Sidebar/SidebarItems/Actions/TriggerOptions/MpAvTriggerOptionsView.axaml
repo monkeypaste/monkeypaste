@@ -41,23 +41,46 @@
                     Value="1,0" />
         </Style>
 
+        <Style Selector=":is(Button) /template/ ContentPresenter">
+            <Setter Property="Foreground"
+                    Value="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+        </Style>
+
         <!--  ENABLE  -->
         <Style Selector=":is(Button)#EnableTriggerToggleButton:checked /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="Lime" />
-            <Setter Property="Content"
-                    Value="ON" />
+                    Value="{DynamicResource ThemeAccent3Color}" />
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Template>
+                        <DockPanel>
+                            <Image DockPanel.Dock="Left"
+                                   Source="{Binding Source={StaticResource PauseImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                            <TextBlock Text="Pause" />
+                        </DockPanel>
+                    </Template>
+                </Setter.Value>
+            </Setter>
         </Style>
         <Style Selector=":is(Button)#EnableTriggerToggleButton:unchecked /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="Crimson" />
-            <Setter Property="Content"
-                    Value="OFF" />
+                    Value="{DynamicResource ThemeAccent2Color}" />
+            <Setter Property="Content">
+                <Setter.Value>
+                    <Template>
+                        <DockPanel>
+                            <Image DockPanel.Dock="Left"
+                                   Source="{Binding Source={StaticResource PlayImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                            <TextBlock Text="Play" />
+                        </DockPanel>
+                    </Template>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style Selector=":is(Button)#EnableTriggerToggleButton[IsEnabled=false] /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="Yellow" />
+                    Value="{DynamicResource ThemeAccent1Color}" />
             <Setter Property="Content"
                     Value="OOPSY" />
         </Style>
@@ -66,48 +89,40 @@
 
         <Style Selector="Button#DuplicateTriggerButton">
             <Setter Property="Background"
-                    Value="Blue" />
-            <Setter Property="Foreground"
-                    Value="White" />
+                    Value="{DynamicResource ThemeAccent5Color}" />
         </Style>
         <Style Selector="Button#DuplicateTriggerButton:pointerover">
             <Setter Property="Background"
-                    Value="LightBlue" />
-            <Setter Property="Foreground"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeAccent5BgColor}" />
         </Style>
 
         <Style Selector="Button#DuplicateTriggerButton /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="Blue" />
-            <Setter Property="Foreground"
-                    Value="White" />
+                    Value="{DynamicResource ThemeAccent5Color}" />
         </Style>
         <Style Selector="Button#DuplicateTriggerButton:pointerover /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="LightBlue" />
-            <Setter Property="Foreground"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeAccent5BgColor}" />
         </Style>
 
         <!--  DELETE  -->
 
         <Style Selector="Button#DeleteTriggerButton">
             <Setter Property="Background"
-                    Value="Crimson" />
+                    Value="{DynamicResource ThemeAccent2Color}" />
         </Style>
         <Style Selector="Button#DeleteTriggerButton:pointerover">
             <Setter Property="Background"
-                    Value="Salmon" />
+                    Value="{DynamicResource ThemeAccent2BgColor}" />
         </Style>
 
         <Style Selector="Button#DeleteTriggerButton /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="Crimson" />
+                    Value="{DynamicResource ThemeAccent2Color}" />
         </Style>
         <Style Selector="Button#DeleteTriggerButton:pointerover /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="Salmon" />
+                    Value="{DynamicResource ThemeAccent2BgColor}" />
         </Style>
 
     </local:MpAvUserControl.Styles>
@@ -135,7 +150,7 @@
                 Grid.Column="2"
                 Classes="defaultButton outline outlineOver"
                 Command="{Binding DuplicateTriggerCommand}"
-                Content="DUPLICATE" />
+                Content="Duplicate" />
 
         <Border Grid.Column="3"
                 Classes="splitter" />
@@ -147,7 +162,7 @@
                 Classes="defaultButton outline outlineOver"
                 Command="{Binding DeleteThisTriggerCommand}"
                 CommandParameter="{Binding $self}"
-                Content="DELETE" />
+                Content="Delete" />
     </Grid>
 
 </local:MpAvUserControl>

@@ -130,7 +130,7 @@
                                                  FontWeight="SemiBold"
                                                  Background="Transparent"
                                                  Focusable="True"
-                                                 Foreground="{Binding NotificationTextForegroundColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                                                 Foreground="{Binding ForegroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                                  Text="{Binding Body}" />
                         </DataTemplate>
                         <DataTemplate x:Key="ParameterCollectionTemplate"

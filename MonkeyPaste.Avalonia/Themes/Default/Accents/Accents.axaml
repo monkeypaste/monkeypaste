@@ -174,7 +174,7 @@
         <SolidColorBrush x:Key="SelectableItemSelectedBgBrush" Color="{DynamicResource ThemeCompliment5LighterColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  Disabled  -->
-        <SolidColorBrush x:Key="DisabledTextFgBrush" Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="DisabledTextFgBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <SolidColorBrush x:Key="DisabledBgBrush" Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalDisabledOverlayOpacity}" />
 

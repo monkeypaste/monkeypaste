@@ -7,7 +7,7 @@
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:dd="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
                        d:DataContext="{x:Static dd:MpAvDesignData.AssignShortcutViewModel}"
-                       Background="White"
+                       Background="{DynamicResource ThemeInteractiveBgColor}"
                        mc:Ignorable="d"
                        d:DesignWidth="400"
                        d:DesignHeight="300">
@@ -25,7 +25,7 @@
             <Setter Property="BorderThickness"
                     Value="1" />
             <Setter Property="BorderBrush"
-                    Value="AntiqueWhite" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
 
         <Style Selector="Border.msg Image">
@@ -41,15 +41,7 @@
                     Value="Center" />
         </Style>
 
-        <Style Selector="Border.msg.warning TextBlock">
-            <Setter Property="Foreground"
-                    Value="AntiqueWhite" />
-        </Style>
 
-        <Style Selector="Border.msg.info TextBlock">
-            <Setter Property="Foreground"
-                    Value="Black" />
-        </Style>
         <Style Selector="Border.msg TextBlock">
             <Setter Property="FontSize"
                     Value="14" />
@@ -64,15 +56,37 @@
             <Setter Property="VerticalAlignment"
                     Value="Center" />
         </Style>
+        <!--  EMPTY  -->
+        <Style Selector="Border.msg.empty">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeGrayAccent3}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeGrayAccent1}" />
+        </Style>
+        <Style Selector="Border.msg.empty TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+
         <!--  INFO  -->
+        <Style Selector="Border.msg.info TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+
         <Style Selector="Border.msg.info">
             <Setter Property="Background"
-                    Value="SkyBlue" />
+                    Value="{DynamicResource ThemeAccent5Color}" />
         </Style>
+
         <!--  WARNINGS  -->
         <Style Selector="Border.msg.warning">
             <Setter Property="Background"
-                    Value="IndianRed" />
+                    Value="{DynamicResource ThemeCompliment1DarkColor}" />
+        </Style>
+        <Style Selector="Border.msg.warning TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeWhite}" />
         </Style>
         <Style Selector="Border.msg.warning Image">
             <Setter Property="Source"
@@ -122,6 +136,7 @@
                        FontWeight="Bold"
                        Margin="15"
                        FontSize="24"
+                       Foreground="{DynamicResource ThemeInteractiveColor}"
                        TextWrapping="WrapWithOverflow"
                        Text="{Binding ShortcutDisplayName}" />
         </DockPanel>
@@ -134,6 +149,7 @@
             <StackPanel Orientation="Horizontal"
                         Spacing="5">
                 <TextBlock Text="Routing"
+                           Foreground="{DynamicResource ThemeInteractiveColor}"
                            VerticalAlignment="Center" />
                 <local:MpAvToolTipInfoHintView Classes="info"
                                                ToolTipHtml="{StaticResource RoutingInfoHtml}" />
@@ -153,6 +169,7 @@
                                            ToolTipText="This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications." />
             <TextBlock FontSize="16"
                        Margin="10,5"
+                       Foreground="{DynamicResource ThemeInteractiveColor}"
                        FontWeight="SemiBold"
                        Text="Global" />
 
@@ -164,10 +181,15 @@
                 BorderThickness="0"
                 HorizontalAlignment="Center"
                 Padding="10"
-                IsVisible="{Binding !IsEmpty}"
                 Margin="20,5"
                 MinHeight="65">
-            <local:MpAvShortcutView IsHitTestVisible="False" />
+            <Grid IsHitTestVisible="False">
+                <local:MpAvShortcutView IsVisible="{Binding !IsEmpty}" />
+                <Border Classes="msg empty"
+                        IsVisible="{Binding IsEmpty}">
+                    <TextBlock Text="Press any key to record..." />
+                </Border>
+            </Grid>
         </Border>
 
         <!--  WARNING 1 (CONFLICT)  -->

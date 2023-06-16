@@ -135,6 +135,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvContentAddTriggerViewModel(MpAvTriggerCollectionViewModel parent) : base(parent) {
 
         }
+
         #endregion
 
         #region Protected Methods

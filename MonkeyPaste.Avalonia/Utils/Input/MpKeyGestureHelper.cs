@@ -14,7 +14,6 @@ namespace MonkeyPaste.Common {
         private string _currentGesture = String.Empty;
 
         private string _finalGesture = string.Empty;
-
         #endregion
 
         #region Constructors
@@ -87,7 +86,7 @@ namespace MonkeyPaste.Common {
         #region Private Methods
 
         private void AddPressedKey(string key) {
-            var curDownParts = _curKeysDown.Split(new string[] { MpInputConstants.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var curDownParts = _curKeysDown.SplitNoEmpty(MpInputConstants.COMBO_SEPARATOR).ToList();
             if (curDownParts.Any(x => x.ToLower() == key.ToLower())) {
                 //shouldn't happen
                 //MpDebuggerHelper.Break();
@@ -99,7 +98,7 @@ namespace MonkeyPaste.Common {
         }
 
         private void RemovePressedKey(string key) {
-            var curDownParts = _curKeysDown.Split(new string[] { MpInputConstants.COMBO_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var curDownParts = _curKeysDown.SplitNoEmpty(MpInputConstants.COMBO_SEPARATOR).ToList();
             string down_toRemove = curDownParts.FirstOrDefault(x => x.ToLower() == key.ToLower());
             if (string.IsNullOrEmpty(down_toRemove)) {
                 //shouldn't happen
@@ -111,27 +110,33 @@ namespace MonkeyPaste.Common {
         }
 
         private int GetPriority(string key) {
-            switch (key.ToLower()) {
-                case "control":
-                    return 0;
-                case "alt":
-                    return 1;
-                case "shift":
-                    return 2;
-                default:
-                    return 3;
+            if (MpInputConstants.MOD_LITERALS.FirstOrDefault(x => x == key) is string mod) {
+                return MpInputConstants.MOD_LITERALS.IndexOf(mod);
             }
+            return MpInputConstants.MOD_LITERALS.Length;
+            //return Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(key)
+            //switch (key.ToLower()) {
+            //    case "control":
+            //        return 0;
+            //    case "alt":
+            //        return 1;
+            //    case "shift":
+            //        return 2;
+            //    default:
+            //        return 3;
+            //}
         }
 
         private bool IsModifierKey(string key) {
-            switch (key.ToLower()) {
-                case "control":
-                case "alt":
-                case "shift":
-                    return true;
-                default:
-                    return false;
-            }
+            return MpInputConstants.MOD_LITERALS.Contains(key);
+            //switch (key.ToLower()) {
+            //    case "control":
+            //    case "alt":
+            //    case "shift":
+            //        return true;
+            //    default:
+            //        return false;
+            //}
         }
 
         private void Reset() {

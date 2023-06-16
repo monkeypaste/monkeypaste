@@ -80,20 +80,18 @@
 
         <!--  PARAM LISTBOXITEM  -->
 
-        <Style Selector="ListBox#PluginParameterListBox ListBoxItem">
-            <Setter Property="Margin"
-                    Value="0,2.5" />
+        <Style Selector="ListBox#PluginParameterListBox > ListBoxItem">
             <Setter Property="Padding"
-                    Value="0" />
+                    Value="0,7" />
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="BorderBrush"
-                    Value="Silver" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
             <Setter Property="BorderThickness"
-                    Value="0,0,0,1" />
+                    Value="0,0,0,2" />
         </Style>
 
-        <Style Selector="ListBox#PluginParameterListBox ListBoxItem:nth-last-child()">
+        <Style Selector="ListBox#PluginParameterListBox > ListBoxItem:nth-last-child()">
             <Setter Property="BorderThickness"
                     Value="0,0,0,0" />
         </Style>
@@ -175,6 +173,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
+                                                       CornerRadius="10"
                                                        Classes.invalid="{Binding !IsValid}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>

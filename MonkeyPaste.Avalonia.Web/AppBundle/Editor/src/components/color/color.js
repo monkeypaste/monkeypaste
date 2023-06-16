@@ -463,6 +463,7 @@ function adjustFgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
         hsl.l = Math.max(hsl.l == 0 ? 100 : hsl.l, 75);
     } else {
        // hsl.l = Math.min(hsl.l == 100 ? 0 : hsl.l, 25);
+       hsl.l = hsl.l == 100 ? 0 : hsl.l;
     }
     let adj_rgb = hsl2Rgb(hsl);
     adj_rgb.a = 1;

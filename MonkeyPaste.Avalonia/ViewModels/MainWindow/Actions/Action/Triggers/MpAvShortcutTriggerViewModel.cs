@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Shortcut",
+                                label = "Shortcut Triggers",
                                 controlType = MpParameterControlType.ShortcutRecorder,
                                 unitType = MpParameterValueUnitType.Integer,
                                 isRequired = true,

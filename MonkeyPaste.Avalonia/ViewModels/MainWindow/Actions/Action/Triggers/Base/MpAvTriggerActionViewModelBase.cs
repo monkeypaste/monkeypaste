@@ -104,8 +104,10 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {
                             Header = ToggleEnableOrDisableLabel,
                             IconBorderHexColor = MpSystemColors.Transparent,
+                            //IconHexStr = IsAllValid ? ToggleEnableOrDisableResourceKey : null,
+                            //IconResourceKey = IsAllValid ? null : ToggleEnableOrDisableResourceKey,
                             IconHexStr = IsAllValid ? ToggleEnableOrDisableResourceKey : null,
-                            IconResourceKey = IsAllValid ? null : ToggleEnableOrDisableResourceKey,
+                            IconResourceKey = IsAllValid ? null : "WarningImage",
                             IconCornerRadius = IsAllValid ? 20 : 0,
                             Command = ToggleTriggerEnabledCommand,
                         },
@@ -124,13 +126,28 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
         public override string ActionBackgroundHexColor =>
             GetActionHexColor(ActionType, TriggerType);
-        public string EnabledHexColor => MpSystemColors.limegreen; //(MpPlatform.Services.PlatformResource.GetResource("EnabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
-        public string DisabledHexColor => MpSystemColors.Red; //(MpPlatform.Services.PlatformResource.GetResource("DisabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
+        public string EnabledHexColor =>
+            MpSystemColors.limegreen; //(MpPlatform.Services.PlatformResource.GetResource("EnabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
+        public string DisabledHexColor =>
+            MpSystemColors.Red; //(MpPlatform.Services.PlatformResource.GetResource("DisabledHighlightBrush") as SolidColorBrush).Color.ToPortableColor().ToHex();
 
-        public string CurEnableOrDisableHexColor => IsEnabled.HasValue ? IsEnabled.IsTrue() ? EnabledHexColor : DisabledHexColor : MpSystemColors.Transparent;
-        public string ToggleEnableOrDisableResourceKey => IsEnabled.HasValue ? IsEnabled.IsTrue() ? DisabledHexColor : EnabledHexColor : "WarningImage";
+        public string CurEnableOrDisableHexColor =>
+            //IsEnabled.HasValue ? IsEnabled.IsTrue() ? EnabledHexColor : DisabledHexColor : MpSystemColors.Transparent;
+            IsEnabled ? EnabledHexColor : DisabledHexColor;
+        public string ToggleEnableOrDisableResourceKey =>
+            //IsEnabled.HasValue ? IsEnabled.IsTrue() ? DisabledHexColor : EnabledHexColor : "WarningImage";
 
-        public string ToggleEnableOrDisableLabel => IsEnabled.HasValue ? IsEnabled.IsTrue() ? "Disable" : "Enable" : "Fix Errors";
+            IsEnabled ? DisabledHexColor : EnabledHexColor;
+
+        //public string ToggleEnableOrDisableLabel => 
+        //IsEnabled.HasValue ? IsEnabled.IsTrue() ? "Disable" : "Enable" : "Has Errors";
+        public string ToggleEnableOrDisableLabel {
+            get {
+                string label = IsEnabled ? "Disable" : "Enable";
+                label += IsAllValid ? string.Empty : " (Has Errors)";
+                return label;
+            }
+        }
 
         public override object IconResourceObj {
             get {
@@ -163,10 +180,10 @@ namespace MonkeyPaste.Avalonia {
         // Arg1 (DesignerProps in Parent)
 
         // Arg2 
-        public bool? IsEnabled {
-            get => string.IsNullOrEmpty(Arg2) ? null : bool.Parse(Arg2);
+        public bool IsEnabled {
+            get => Arg2.ParseOrConvertToBool(false); //string.IsNullOrEmpty(Arg2) ? null : bool.Parse(Arg2);
             set {
-                var newVal = value == null ? null : value.ToString();
+                var newVal = value.ToString(); //value == null ? null : value.ToString();
                 if (Arg2 != newVal) {
                     Arg2 = newVal;
                     HasModelChanged = true;
@@ -223,7 +240,7 @@ namespace MonkeyPaste.Avalonia {
 
                 _isShowEnabledChangedNotification = true;
 
-                string enabledText = IsEnabled.IsTrue() ? "ENABLED" : "DISABLED";
+                string enabledText = IsEnabled ? "ENABLED" : "DISABLED";
                 string typeStr = ParentActionId == 0 ? "Trigger" : "Action";
                 string notificationText = $"{typeStr} '{FullName}' is now  {enabledText}";
 
@@ -300,7 +317,7 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 //return IsEnabled.IsFalse() || (Parent != null && Parent.IsRestoringEnabled && IsEnabled.IsTrue());
                 //return true;
-                return IsEnabled.IsFalseOrNull();
+                return !IsEnabled;
             });
 
         public ICommand DisableTriggerCommand => new MpAsyncCommand(
@@ -310,19 +327,16 @@ namespace MonkeyPaste.Avalonia {
                 }
                 EnableOrDisableTrigger(false);
             }, () => {
-                return IsEnabled.IsTrue();
+                return IsEnabled;
             });
 
         public ICommand ToggleTriggerEnabledCommand => new MpCommand(
              () => {
-                 if (IsEnabled.IsTrue()) {
+                 if (IsEnabled) {
                      DisableTriggerCommand.Execute(null);
                      return;
                  }
-                 if (IsEnabled.IsFalse()) {
-                     EnableTriggerCommand.Execute(null);
-                     return;
-                 }
+                 EnableTriggerCommand.Execute(null);
              }, () => {
                  //if (IsEnabled.IsTrue()) {
                  //    return DisableTriggerCommand.CanExecute(null);

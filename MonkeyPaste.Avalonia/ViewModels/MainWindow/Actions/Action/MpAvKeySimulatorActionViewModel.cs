@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Keys",
+                                label = "Keys to simulate",
                                 controlType = MpParameterControlType.ShortcutRecorder,
                                 unitType = MpParameterValueUnitType.PlainText,
                                 isRequired = true,
@@ -134,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
                 foreach (MpAvParameterViewModelBase pvm in e.NewItems) {
                     if (pvm is MpAvShortcutRecorderParameterViewModel srpvm) {
                         srpvm.ShortcutType = MpShortcutType.None;
-
+                        srpvm.IsRawInput = true;
                     }
                 }
             }

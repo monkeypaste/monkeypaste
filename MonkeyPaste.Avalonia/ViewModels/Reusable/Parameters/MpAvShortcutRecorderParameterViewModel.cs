@@ -58,6 +58,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Model
+        public bool IsRawInput { get; set; } = false;
+        #endregion
+
+        #region Model
 
         #endregion
 

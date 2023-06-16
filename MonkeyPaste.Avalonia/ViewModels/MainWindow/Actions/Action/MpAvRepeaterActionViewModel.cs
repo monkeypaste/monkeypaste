@@ -229,7 +229,7 @@ namespace MonkeyPaste.Avalonia {
         private void RootTriggerActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(RootTriggerActionViewModel.IsEnabled):
-                    if (RootTriggerActionViewModel.IsEnabled.IsFalseOrNull()) {
+                    if (!RootTriggerActionViewModel.IsEnabled) {
                         if (_actionTickTimer != null && _actionTickTimer.IsEnabled) {
                             _actionTickTimer.Stop();
                         }

@@ -70,7 +70,8 @@ namespace MonkeyPaste.Avalonia {
 
         public string SidebarBgHexColor =>
             (Mp.Services.PlatformResource.GetResource("AnalyzerSidebarBgBrush") as IBrush).ToHex();
-
+        bool MpISidebarItemViewModel.CanResize =>
+            true;
         #endregion
 
         #region MpISelectableViewModel Implementation
@@ -268,6 +269,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(SelectedPresetViewModel));
+                    OnPropertyChanged(nameof(SelectedItemIdx));
                     break;
                 case nameof(IsAnalyticItemSelectorDropDownOpen):
                     MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen = IsAnalyticItemSelectorDropDownOpen;

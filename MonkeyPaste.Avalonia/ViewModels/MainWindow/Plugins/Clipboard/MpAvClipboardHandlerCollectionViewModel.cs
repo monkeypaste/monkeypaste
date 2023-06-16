@@ -84,7 +84,8 @@ namespace MonkeyPaste.Avalonia {
 
         public string SidebarBgHexColor =>
             (Mp.Services.PlatformResource.GetResource("ClipboardSidebarBgBrush") as IBrush).ToHex();
-
+        bool MpISidebarItemViewModel.CanResize =>
+            true;
         #endregion
 
         #region MpISelectableViewModel Implementation

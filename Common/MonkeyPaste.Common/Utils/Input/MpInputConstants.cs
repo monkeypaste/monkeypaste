@@ -20,11 +20,12 @@ namespace MonkeyPaste.Common {
         public const string ENTER_KEY_LITERAL = "Enter";
         public const string CAPS_LOCK_KEY_LITERAL = "Caps Lock";
 
+        // NOTE literals are ordered by priority (ie sharphook GesturePriority)
         public static string[] MOD_LITERALS =>
             new string[] {
                 CONTROL_KEY_LITERAL,
-                META_KEY_LITERAL,
                 ALT_KEY_LITERAL,
+                META_KEY_LITERAL,
                 SHIFT_KEY_LITERAL
             };
     }

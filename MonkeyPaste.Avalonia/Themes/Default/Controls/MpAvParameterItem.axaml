@@ -22,13 +22,13 @@
     </Style>
     <Style Selector="Border.paramBorder.sliderBorder">
         <Setter Property="BorderBrush"
-                Value="Black" />
+                Value="{DynamicResource ThemeInteractiveColor}" />
         <Setter Property="Background"
                 Value="{StaticResource HitTestableTransparent}" />
     </Style>
     <Style Selector="Border.paramBorder:not(.sliderBorder) TextBox">
         <Setter Property="BorderBrush"
-                Value="Black" />
+                Value="{DynamicResource ThemeInteractiveColor}" />
         <Setter Property="BorderThickness"
                 Value="1" />
         <Setter Property="Padding"

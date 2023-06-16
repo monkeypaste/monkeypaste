@@ -7,6 +7,7 @@ using DynamicData;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Avalonia.Utils.Extensions;
+using MonoMac.CoreVideo;
 using SharpHook;
 using SharpHook.Native;
 using System;
@@ -472,15 +473,16 @@ namespace MonkeyPaste.Avalonia {
             string title = await iscvm.ShortcutType.GetShortcutTitleAsync(iscvm);
 
             var result_tuple = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(
-                title,
-                keys,
-                scvm == null ? 0 : scvm.ShortcutId,
-                shortcutType == MpShortcutType.None ?
+                shortcutName: title,
+                keys: keys,
+                curShortcutId: scvm == null ? 0 : scvm.ShortcutId,
+                assignmentType: shortcutType == MpShortcutType.None ?
                     MpShortcutAssignmentType.None :
                     shortcutType.CanBeGlobal() ?
                         MpShortcutAssignmentType.CanBeGlobalCommand :
                         MpShortcutAssignmentType.InternalCommand,
-                iconResourceObj);
+                iconResourceObj: iconResourceObj,
+                owner: MpAvWindowManager.ActiveWindow);
 
             string shortcutKeyString = result_tuple == null ? null : result_tuple.Item1;
             MpRoutingType result_routing_type = result_tuple == null ? MpRoutingType.None : result_tuple.Item2;

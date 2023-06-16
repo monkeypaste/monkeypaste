@@ -481,7 +481,7 @@ namespace MonkeyPaste.Avalonia {
             if (tavm == null) {
                 return;
             }
-            foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants) {
+            foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants.OrderBy(x => x.DesignerZIndex)) {
                 DrawActionShadow(dc, avm);
 
                 var pavm = avm.ParentActionViewModel;
@@ -586,18 +586,20 @@ namespace MonkeyPaste.Avalonia {
                 EndPoint = new RelativePoint(p.ToAvPoint(), RelativeUnit.Absolute)
             };
 
+            int strip_count = (int)((double)(pp - p).Length / 15d);
+
             if (pavm.IsValid) {
                 fillBrush.GradientStops.Add(new GradientStop(parent_color, 0));
                 fillBrush.GradientStops.Add(new GradientStop(parent_color, 0.45d));
             } else {
-                fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0, 0.5, 7));
+                fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0, 0.5, strip_count));
             }
 
             if (avm.IsValid) {
                 fillBrush.GradientStops.Add(new GradientStop(cur_color, 0.55d));
                 fillBrush.GradientStops.Add(new GradientStop(cur_color, 1.0d));
             } else {
-                fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0.5, 1, 7));
+                fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0.5, 1, strip_count));
                 fillBrush.Transform = new RotateTransform(-90);
             }
 
@@ -667,6 +669,17 @@ namespace MonkeyPaste.Avalonia {
                     p3,
                     p4,
                 }.All(x => !tip_tri.Contains(x));
+            if (show_full_arrow) {
+                // if tip is tail don't draw tail
+                // since tail is not axis-aligned rect use 2 right triangles for test
+                var tail_tri1 = new MpTriangle(p4, p5, p3);
+                var tail_tri2 = new MpTriangle(p3, p5, p2);
+                show_full_arrow =
+                    new[] {
+                        tail_tri1,
+                        tail_tri2,
+                    }.All(x => !x.Contains(p7));
+            }
 
             if (show_full_arrow) {
                 pc.Add(p1);

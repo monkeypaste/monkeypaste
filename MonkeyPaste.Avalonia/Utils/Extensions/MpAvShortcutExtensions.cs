@@ -41,7 +41,19 @@ namespace MonkeyPaste.Avalonia {
             return sc.ShortcutType == scvm.ShortcutType && sc.CommandParameter == scvm.ShortcutCommandParameter.ToStringOrDefault();
         }
 
+        public static bool IsRawInputShortcut(this MpShortcutType st, object arg) {
+            if (arg is MpAvShortcutRecorderParameterViewModel srpvm) {
+                return srpvm.IsRawInput;
+            }
+            return false;
+
+        }
         public static async Task<string> GetShortcutTitleAsync(this MpShortcutType st, object arg) {
+            if (arg is MpAvParameterViewModelBase pvmb) {
+                // these will either be a shortcut trigger recorder or key sim action
+                return pvmb.Label;
+            }
+
             if ((int)st < (int)MpShortcutType.MAX_APP_SHORTCUT) {
                 return st.EnumToLabel();
             }

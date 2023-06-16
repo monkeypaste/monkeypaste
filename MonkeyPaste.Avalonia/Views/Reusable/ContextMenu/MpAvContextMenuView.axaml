@@ -11,6 +11,7 @@
                            x:CompileBindings="True"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
+                           Cursor="Arrow"
                            x:Class="MonkeyPaste.Avalonia.MpAvContextMenuView">
     <!--<local:MpAvContextMenuView.Resources>
         <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver">LightBlue</SolidColorBrush>

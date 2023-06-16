@@ -1207,6 +1207,7 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Input\Mouse\" />
+    <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
     <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
   </ItemGroup>

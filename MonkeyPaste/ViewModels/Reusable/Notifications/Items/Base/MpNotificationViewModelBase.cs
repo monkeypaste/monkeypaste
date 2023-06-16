@@ -181,7 +181,7 @@ namespace MonkeyPaste {
                 return NotificationFormat.IconSourceObj;
             }
         }
-        public string NotificationTextForegroundColor {
+        public virtual string ForegroundHexColor {
             get {
                 if (LayoutType == MpNotificationLayoutType.Warning ||
                     LayoutType == MpNotificationLayoutType.UserAction) {
@@ -199,7 +199,7 @@ namespace MonkeyPaste {
         }
 
         private string _borderHexColor;
-        public string BorderHexColor {
+        public virtual string BorderHexColor {
             get {
                 if (_borderHexColor == null) {
                     if (IsWarningNotification) {
@@ -212,15 +212,9 @@ namespace MonkeyPaste {
                 }
                 return _borderHexColor;
             }
-            set {
-                if (_borderHexColor != value) {
-                    _borderHexColor = value;
-                    OnPropertyChanged(nameof(BorderHexColor));
-                }
-            }
         }
 
-        public string BackgroundHexColor =>
+        public virtual string BackgroundHexColor =>
             Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeColor.ToString());
 
         #endregion

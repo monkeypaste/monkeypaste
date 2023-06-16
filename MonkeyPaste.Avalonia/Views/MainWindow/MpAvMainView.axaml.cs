@@ -667,7 +667,7 @@ namespace MonkeyPaste.Avalonia {
             nctrcb_h = Math.Max(0, nctrcb_h);
 
             ssbcb.IsVisible = true;
-            sbgs.IsVisible = is_opening;
+            sbgs.IsVisible = is_opening && ssbivm.CanResize;
 
             if (mwvm.IsMainWindowOrientationDragging) {
                 // skip animate on orientation change because current values maybe transitioning 

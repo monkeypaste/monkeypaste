@@ -1,5 +1,6 @@
 ﻿
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -292,7 +293,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITooltipInfoViewModel Implementation
 
-        public virtual object Tooltip {
+        public object Tooltip {
             get {
                 string toolTipStr = string.Empty;
 
@@ -311,9 +312,16 @@ namespace MonkeyPaste.Avalonia {
                 } else if (this is MpAvFolderWatcherTriggerViewModel) {
                     toolTipStr = "Folder Changed - Triggered when a file is added to the selected directory (or subdirectory if checked)";
                 } else if (this is MpAvShortcutTriggerViewModel) {
-                    toolTipStr = "Shortcut - Triggered when the recorded shortcut is pressed at anytime with the current clipboard";
+                    toolTipStr = "Shortcut Triggered - when the recorded shortcut is pressed at anytime with the current clipboard";
                 } else if (this is MpAvAddFromClipboardActionViewModel) {
                     toolTipStr = "Create from Clipboard - Creates a new content item from the current clipboard at the time of execution. Note that any incoming output to this action will be overwritten by the new clipboard content. ";
+                } else if (this is MpAvFileWriterActionViewModel) {
+                    toolTipStr = "Prefix is used for non-file clipboard items. If unset file will use the content's title.";
+                } else if (this is MpAvKeySimulatorActionViewModel) {
+                    toolTipStr = "Gesture Simulator - Simulates the recorded key combination into whatever is the current active application. Only 1 gesture is supported so if you need more you will need to chain multiple instances of this toggether (sorry).";
+                }
+                if (string.IsNullOrEmpty(toolTipStr)) {
+                    MpDebug.Break($"'{this.GetType()}' needs a tooltip descriptor");
                 }
 
                 return toolTipStr;
@@ -477,6 +485,26 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Layout
+
+        private int _designerZIndex = 0;
+        public int DesignerZIndex {
+            get {
+                if (IsSelected) {
+                    return int.MaxValue;
+                }
+                return _designerZIndex;
+            }
+            set {
+                if (_designerZIndex != value) {
+                    _designerZIndex = value;
+                    OnPropertyChanged(nameof(DesignerZIndex));
+                }
+            }
+        }
+
+        #endregion
+
         #region Appearance
         public virtual string ActionBackgroundHexColor =>
             GetActionHexColor(ActionType);
@@ -561,7 +589,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelfOrAnyDescendantPerformingAction =>
             SelfAndAllDescendants.Any(x => x.IsPerformingAction);
 
-        public bool IsTriggerEnabled => RootTriggerActionViewModel.IsEnabled.IsTrue();
+        public bool IsTriggerEnabled =>
+            RootTriggerActionViewModel.IsEnabled;
 
         #endregion
 
@@ -903,7 +932,6 @@ namespace MonkeyPaste.Avalonia {
         private void ActionArg_OnValidate(object sender, EventArgs e) {
             // trigger on enable
             var aipvm = sender as MpAvParameterViewModelBase;
-
             ValidationText = aipvm.GetValidationMessage(true);
         }
 
@@ -1039,29 +1067,31 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected void ShowValidationNotification(int focusArgNum = 0) {
-            Dispatcher.UIThread.Post(async () => {
-                if (_isShowingValidationMsg) {
-                    return;
-                }
-                _isShowingValidationMsg = true;
+            // NOTE omitting because it doesn't hide or retry right and trying to keeping 
+            // validation silent
+            //Dispatcher.UIThread.Post(async () => {
+            //    if (_isShowingValidationMsg) {
+            //        return;
+            //    }
+            //    _isShowingValidationMsg = true;
 
-                Func<object, object> retryFunc = (args) => {
-                    Dispatcher.UIThread.Post(async () => {
-                        await ValidateActionAsync();
-                    });
+            //    Func<object, object> retryFunc = (args) => {
+            //        Dispatcher.UIThread.Post(async () => {
+            //            await ValidateActionAsync();
+            //        });
 
-                    return null;
-                };
+            //        return null;
+            //    };
 
-                var result = await MpNotificationBuilder.ShowNotificationAsync(
-                    notificationType: MpNotificationType.InvalidAction,
-                    body: ValidationText,
-                    retryAction: retryFunc,
-                    fixCommand: Parent.SelectActionCommand,
-                    fixCommandArgs: new object[] { ActionId, focusArgNum, ValidationText });
+            //    var result = await MpNotificationBuilder.ShowNotificationAsync(
+            //        notificationType: MpNotificationType.InvalidAction,
+            //        body: ValidationText,
+            //        retryAction: retryFunc,
+            //        fixCommand: Parent.SelectActionCommand,
+            //        fixCommandArgs: new object[] { ActionId, focusArgNum, ValidationText });
 
-                _isShowingValidationMsg = false;
-            });
+            //    _isShowingValidationMsg = false;
+            //});
         }
 
 
@@ -1213,6 +1243,7 @@ namespace MonkeyPaste.Avalonia {
                         Parent.SelectActionCommand.Execute(this);
                         LastSelectedDateTime = DateTime.Now;
                     }
+                    OnPropertyChanged(nameof(DesignerZIndex));
                     OnPropertyChanged(nameof(IsTrigger));
 
                     //if (this is MpAvIParameterCollectionViewModel ppcvm) {
@@ -1405,15 +1436,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-
-
-        public ICommand ShowActionSelectorMenuCommand => new MpCommand<object>(
-             (args) => {
-                 var fe = args as Control;
-                 Parent.FocusAction = this;
-                 MpAvMenuExtension.ShowMenu(fe, PopupMenuViewModel);
-             }, (args) => args is Control);
-
         public ICommand AddChildActionCommand => new MpCommand<object>(
              async (args) => {
                  IsBusy = true;
@@ -1471,6 +1493,7 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 MpAvMenuExtension.ShowMenu(
                     control: args as Control,
+                    placement: PlacementMode.Center,
                     mivm: ContextMenuViewModel,
                     selectOnRightClick: true);
             });

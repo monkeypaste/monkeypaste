@@ -1223,7 +1223,7 @@ namespace MonkeyPaste.Avalonia {
                     sw.Opened += Sw_Opened;
                     sw.Closed += Sw_Closed;
                     sw.ShowChild();
-
+                    sw.Topmost = true;
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
             });

@@ -778,8 +778,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ManageAnalyticItemCommand => new MpCommand(
              () => {
-                 if (!IsSelected) {
+                 if (!IsSelected && Parent != null) {
                      Parent.SelectedItem = this;
+
                  }
                  if (SelectedItem == null && Items.Count > 0) {
                      SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);

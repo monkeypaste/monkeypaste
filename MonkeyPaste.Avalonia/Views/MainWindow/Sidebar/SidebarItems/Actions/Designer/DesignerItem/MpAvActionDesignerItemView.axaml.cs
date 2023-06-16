@@ -157,14 +157,18 @@ namespace MonkeyPaste.Avalonia {
         #region Drop Helpers
 
         private bool IsDropValid(IDataObject avdo) {
-            if (BindingContext == null ||
-                !BindingContext.RootTriggerActionViewModel.IsEnabled.IsTrue()) {
+            if (BindingContext == null //||
+                                       //!BindingContext.RootTriggerActionViewModel.IsEnabled.IsTrue()
+                ) {
                 return false;
             }
             return true;
         }
 
         private void ResetDrop() {
+            if (BindingContext == null) {
+                return;
+            }
             BindingContext.IsDragOver = false;
 
         }

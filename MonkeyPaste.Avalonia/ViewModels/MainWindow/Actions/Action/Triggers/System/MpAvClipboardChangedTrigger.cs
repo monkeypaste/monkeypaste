@@ -3,6 +3,10 @@ using MonkeyPaste.Common.Plugin;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+
+    // NOTE this is omitted from add menu 
+    // but a plan is this would be good if whole system is re-organized to be driven
+    // by triggers but holding off because its system level behavior which is too volatile still to approach
     public class MpAvClipboardChangedTrigger :
         MpAvTriggerActionViewModelBase {
         #region Constants

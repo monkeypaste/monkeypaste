@@ -81,6 +81,16 @@
                     Value="{DynamicResource HoverSelectedBorderBrush}" />
         </Style>
 
+        <!--  DESIGNER ITEM RECTANGE  -->
+        <Style Selector="Border#OuterContainer ContentControl#DesignerItemContentControl Rectangle">
+            <Setter Property="StrokeJoin"
+                    Value="Round" />
+            <Setter Property="StrokeLineCap"
+                    Value="Round" />
+            <Setter Property="Margin"
+                    Value="12.5" />
+        </Style>
+
         <!--  DESIGNER ITEM IMAGE  -->
 
         <Style Selector="ContentControl#DesignerItemContentControl Image"
@@ -102,7 +112,7 @@
         <Style Selector="ContentControl#DesignerItemContentControl.valid Image"
                x:DataType="local:MpAvActionViewModelBase">
             <Setter Property="Stretch"
-                    Value="Uniform" />
+                    Value="UniformToFill" />
             <Setter Property="Source">
                 <Setter.Value>
                     <MultiBinding Converter="{x:Static local:MpAvMultiObjToContrastTintedBitmapConverter.Instance}">
@@ -203,8 +213,7 @@
 
                         <DataTemplate x:Key="AnalyzeDesignerTemplate">
                             <Grid>
-                                <Rectangle StrokeJoin="Round"
-                                           StrokeLineCap="Round" />
+                                <Rectangle />
                                 <Border x:Name="DesignerIconContainer">
                                     <Image />
                                 </Border>
@@ -215,8 +224,7 @@
 
                         <DataTemplate x:Key="MacroDesignerTemplate">
                             <Grid>
-                                <Rectangle StrokeJoin="Round"
-                                           StrokeLineCap="Round" />
+                                <Rectangle />
                                 <Border x:Name="DesignerIconContainer">
                                     <Image />
                                 </Border>
@@ -227,8 +235,7 @@
 
                         <DataTemplate x:Key="FileWriterDesignerTemplate">
                             <Grid>
-                                <Rectangle StrokeJoin="Round"
-                                           StrokeLineCap="Round" />
+                                <Rectangle />
                                 <Border x:Name="DesignerIconContainer">
                                     <Image />
                                 </Border>
@@ -293,6 +300,7 @@
                        Padding="3"
                        FontSize="12"
                        FontWeight="SemiBold"
+                       Foreground="{DynamicResource ThemeInteractiveColor}"
                        Background="Transparent"
                        TextAlignment="Center"
                        TextWrapping="WrapWithOverflow"

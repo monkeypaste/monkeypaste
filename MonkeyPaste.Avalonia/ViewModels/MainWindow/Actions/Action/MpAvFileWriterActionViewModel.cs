@@ -59,8 +59,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-
-        public override object Tooltip => "Prefix is used for non-file clipboard items. If unset file will use the content's title.";
         #endregion
 
         #region State

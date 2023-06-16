@@ -2,6 +2,7 @@
 using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -153,6 +154,14 @@ namespace MonkeyPaste.Avalonia {
                     }
                     MpAvMainView.Instance.UpdateContentLayout();
                     OnPropertyChanged(nameof(SelectedItemIdx));
+
+                    if (SelectedItem is MpIChildWindowViewModel cwvm &&
+                        cwvm.IsChildWindowOpen &&
+                        MpAvWindowManager.LocateWindow(SelectedItem) is MpAvWindow w) {
+                        w.WindowState = WindowState.Normal;
+                        w.Activate();
+                        w.Topmost = true;
+                    }
                     break;
             }
         }
@@ -170,13 +179,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedItemIdx):
                     MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChanged);
-                    break;
-                case nameof(SelectedItem):
-                    if (SelectedItem is MpIChildWindowViewModel cwvm &&
-                        cwvm.IsChildWindowOpen &&
-                        MpAvWindowManager.LocateWindow(SelectedItem) is MpAvWindow w) {
-                        w.Activate();
-                    }
                     break;
             }
         }
@@ -223,6 +225,8 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         itemIdx = int.Parse(argStr);
                     }
+                } else if (Items.FirstOrDefault(x => x == args) is MpISidebarItemViewModel sbivm) {
+                    itemIdx = Items.IndexOf(sbivm);
                 }
 
                 if (SelectedItemIdx == itemIdx) {

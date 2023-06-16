@@ -49,9 +49,9 @@ namespace MonkeyPaste.Avalonia {
             await scavm.InitializeAsync(shortcutName, keys, curShortcutId, assignmentType, iconResourceObj);
             var ascw = new MpAvWindow() {
                 DataContext = scavm,
-                MinHeight = 300,
-                MinWidth = 400,
-                SizeToContent = SizeToContent.WidthAndHeight,
+                Height = 400,
+                Width = 400,
+                //SizeToContent = SizeToContent.WidthAndHeight,
                 ShowInTaskbar = false,
                 Topmost = true,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -61,11 +61,19 @@ namespace MonkeyPaste.Avalonia {
             };
             ascw.Classes.Add("assignWindow");
             ascw.Classes.Add("fadeIn");
-            MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
+
+            ascw.Opened += (s, e) => {
+                MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
+            };
+
+            ascw.Closed += (s, e) => {
+                MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
+            };
+
 
             var result = await ascw.ShowChildDialogWithResultAsync(owner);
 
-            MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
+
 
             if (owner is Window w) {
                 w.Activate();
@@ -146,12 +154,27 @@ namespace MonkeyPaste.Avalonia {
         public string ShortcutDisplayName { get; set; }
 
         public object IconResourceObj { get; set; }
-        public string ClearButtonLabel =>
-            IsUserDefinedShortcut ?
-                "Delete" :
-                _curShortcutId > 0 ?
-                    "Clear" :
-                    string.Empty;
+
+        private string _clearButtonLabel = "hidden";
+        public string ClearButtonLabel {
+            get {
+                if (_clearButtonLabel == "hidden") {
+                    return IsUserDefinedShortcut ?
+                            "Delete" :
+                            _curShortcutId > 0 ?
+                                "Clear" :
+                                string.Empty;
+                }
+                return _clearButtonLabel;
+            }
+            set {
+                if (_clearButtonLabel != value) {
+                    _clearButtonLabel = value;
+                    OnPropertyChanged(nameof(ClearButtonLabel));
+                }
+            }
+        }
+
         #endregion
 
         #region Model
@@ -264,6 +287,9 @@ namespace MonkeyPaste.Avalonia {
                     return ValidateCommandShortcut();
                 case MpShortcutAssignmentType.AppPaste:
                     return ValidateAppPasteShortcut();
+                case MpShortcutAssignmentType.None:
+                    ClearButtonLabel = IsEmpty ? "hidden" : "Clear";
+                    break;
             }
             return true;
         }
@@ -274,7 +300,9 @@ namespace MonkeyPaste.Avalonia {
             DuplicatedShortcutViewModel =
                 MpAvShortcutCollectionViewModel.Instance.Items
                 .FirstOrDefault(x =>
-                    x.ShortcutId != _curShortcutId && x.KeyList.Count > 0 && assign_keystr == x.KeyString);
+                    x.ShortcutId != _curShortcutId &&
+                    x.KeyList.Count > 0 &&
+                    assign_keystr == x.KeyString.ToLower());
             if (DuplicatedShortcutViewModel != null) {
                 WarningString = $"This combination conflicts with '{DuplicatedShortcutViewModel.ShortcutDisplayName}' which will be cleared if saved";
             }

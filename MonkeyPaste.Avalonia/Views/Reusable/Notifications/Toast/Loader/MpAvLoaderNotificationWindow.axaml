@@ -125,7 +125,7 @@
                            FontSize="20"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Left"
-                           Foreground="{DynamicResource ThemeGrayAccent2}"
+                           Foreground="{DynamicResource ThemeWhite}"
                            FontWeight="SemiBold"
                            Text="{Binding Title}" />
                 <Border Grid.Row="0"
@@ -146,7 +146,7 @@
                         Width="220"
                         ClipToBounds="True"
                         BorderThickness="1"
-                        BorderBrush="{DynamicResource ThemeGrayAccent2}"
+                        BorderBrush="{DynamicResource ThemeWhite}"
                         Background="Transparent"
                         Margin="0"
                         Padding="0">
@@ -182,7 +182,7 @@
                                 BorderBrush="Transparent"
                                 Width="{Binding $parent.Bounds.Width}"
                                 Height="{Binding $parent.Bounds.Height}"
-                                Background="{DynamicResource ThemeGrayAccent2}" />
+                                Background="{DynamicResource ThemeAccent3Color}" />
                         <Rectangle x:Name="ProgressShine1"
                                    Fill="{StaticResource ShineBrush}"
                                    Width="30"
@@ -210,7 +210,7 @@
                                        Width="200"
                                        FontSize="12"
                                        TextAlignment="Right"
-                                       Foreground="{DynamicResource ThemeGrayAccent2}"
+                                       Foreground="{DynamicResource ThemeWhite}"
                                        Text="{Binding}" />
                         </DataTemplate>
                     </TransitioningContentControl.ContentTemplate>

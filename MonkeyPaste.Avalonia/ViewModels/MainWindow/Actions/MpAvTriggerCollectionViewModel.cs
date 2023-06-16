@@ -211,6 +211,9 @@ namespace MonkeyPaste.Avalonia {
         //private double _defaultParameterColumnVarDimLength = 625;
         public double DefaultSidebarWidth {
             get {
+                if (IsDesignerWindowOpen) {
+                    return 0;
+                }
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
@@ -225,6 +228,9 @@ namespace MonkeyPaste.Avalonia {
         }
         public double DefaultSidebarHeight {
             get {
+                if (IsDesignerWindowOpen) {
+                    return 0;
+                }
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                     return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
                 }
@@ -240,6 +246,8 @@ namespace MonkeyPaste.Avalonia {
         public string SidebarBgHexColor =>
             (Mp.Services.PlatformResource.GetResource("ActionPropertyListBgBrush") as IBrush).ToHex();
 
+        bool MpISidebarItemViewModel.CanResize =>
+            !IsDesignerWindowOpen;
         #endregion
 
         #endregion
@@ -389,7 +397,7 @@ namespace MonkeyPaste.Avalonia {
             Items
             .Where(x => x is MpAvTriggerActionViewModelBase)
             .Cast<MpAvTriggerActionViewModelBase>()
-            .Where(x => x.IsEnabled.IsTrue());
+            .Where(x => x.IsEnabled);
 
             enabled_triggers
             .ForEach(x => x.EnableTriggerCommand.Execute(null));
@@ -630,7 +638,7 @@ namespace MonkeyPaste.Avalonia {
                          label: GetUniqueTriggerName($"{tt} Trigger"),
                          actionType: MpActionType.Trigger,
                          sortOrderIdx: Items.Count,
-                         arg2: "False",
+                         arg2: true.ToString(),
                          arg3: ((int)tt).ToString(),
                          location: DefaultDesignerItemLocationLocation);
 
@@ -822,7 +830,8 @@ namespace MonkeyPaste.Avalonia {
                         DataContext = this,
                         Padding = new Thickness(10),
                         //Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment2Color.ToString())
-                        Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent1.ToString())
+                        //Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
+                        Background = Brushes.DimGray
                     };
                     dw.Classes.Add("fadeIn");
                     dw.Bind(
@@ -847,6 +856,10 @@ namespace MonkeyPaste.Avalonia {
                     //                "lighter"
                     //    });
 
+                    dw.Opened += (s, e) => {
+                        ResetDesignerViewCommand.Execute(null);
+                        MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
+                    };
                     dw.ShowChild();
 
                     OnPropertyChanged(nameof(SidebarOrientation));

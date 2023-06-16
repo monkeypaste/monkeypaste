@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using MonkeyPaste.Common;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpLoaderNotificationViewModel : MpNotificationViewModelBase {
@@ -19,9 +20,6 @@ namespace MonkeyPaste {
                 return ProgressTotalBarWidth * ProgressLoader.PercentLoaded;
             }
         }
-
-
-
         #endregion
 
         #region State

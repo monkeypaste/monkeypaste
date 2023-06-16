@@ -772,28 +772,17 @@ namespace MonkeyPaste.Avalonia {
                     var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
                     offset = control.PointToClient(gmp.ToAvPixelPoint(control.VisualPixelDensity())).ToPortablePoint();
                 }
+            }
+            if (offset != null) {
                 _cmInstance.HorizontalOffset = offset.X;
                 _cmInstance.VerticalOffset = offset.Y;
+            } else {
+                _cmInstance.HorizontalOffset = 0;
+                _cmInstance.VerticalOffset = 0;
             }
 
             SetHideOnClick(control, hideOnClick);
             SetSelectOnRightClick(control, selectOnRightClick);
-
-            if (Mp.Services.PlatformInfo.IsDesktop) {
-                var w = control.GetVisualAncestor<Window>();
-                //_cmInstance.Open();
-            } else {
-                //_cmInstance.HorizontalOffset = 0;
-                //_cmInstance.VerticalOffset = 0;
-                //control.ContextMenu = _cmInstance;
-                //control.ContextMenu.Open();
-                //_cmInstance.Open(App.MainView as Control);
-
-                _cmInstance.HorizontalOffset = 0;
-                _cmInstance.VerticalOffset = 0;
-                //_cmInstance.Open(control);
-
-            }
 
             _cmInstance.Open(control);
         }
