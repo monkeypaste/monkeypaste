@@ -13,6 +13,7 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -784,7 +785,16 @@ namespace MonkeyPaste.Avalonia {
             SetHideOnClick(control, hideOnClick);
             SetSelectOnRightClick(control, selectOnRightClick);
 
-            _cmInstance.Open(control);
+            try {
+                _cmInstance.Open(control);
+            }
+            catch (Exception ex) {
+                // BUG intermittently get dc exception saying can't convert anchor dc to mi dc
+                // i think its a timing thing when right click is selecting item during cmd, 
+                // just click again i guess
+                MpConsole.WriteTraceLine($"Open menu exception: ", ex);
+
+            }
         }
 
         #region Helpers

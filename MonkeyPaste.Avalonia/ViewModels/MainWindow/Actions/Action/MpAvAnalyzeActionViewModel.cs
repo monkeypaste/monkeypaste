@@ -138,15 +138,19 @@ namespace MonkeyPaste.Avalonia {
 
                 if (aipvm.Parent.LastTransaction != null) {
                     if (output.CopyItem != null && aipvm.Parent.LastTransaction.ResponseContent != null &&
-                        output.CopyItem.Id != aipvm.Parent.LastTransaction.ResponseContent.Id) {
+                        output.CopyItem.Id != aipvm.Parent.LastTransaction.ResponseContent.Id &&
+                        aipvm.Parent.LastTransaction.RequestContent is MpCopyItem req_ci) {
                         // analyzer created NEW content
                         // TODO how should new content be handled?
+
+                        output.NewCopyItem = aipvm.Parent.LastTransaction.ResponseContent;
+                        output.CopyItem = req_ci;
                     } else if (aipvm.Parent.LastTransaction.ResponseContent != null) {
                         // use (possibly) updated item from analysis result
                         output.CopyItem = aipvm.Parent.LastTransaction.ResponseContent;
                     }
 
-                    output.TransactionResult = aipvm.Parent.LastTransaction.Response;
+                    //output.TransactionResult = aipvm.Parent.LastTransaction.Response;
                 } else {
                     MpConsole.WriteLine("");
                     MpConsole.WriteLine($"Analyzer '{aipvm.FullName}' returned null to Action({ActionId}) '{FullName}', so {RootTriggerActionViewModel.Label} will stop.");

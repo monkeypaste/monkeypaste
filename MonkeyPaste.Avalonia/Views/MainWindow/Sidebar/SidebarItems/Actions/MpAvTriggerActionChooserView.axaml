@@ -154,6 +154,7 @@
                             <Border Grid.Row="1"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Stretch"
+                                    MinWidth="350"
                                     Classes="headeredBorder"
                                     DataContext="{Binding FocusAction}">
                                 <local:MpAvActionPropertyView IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, FallbackValue=False, TargetNullValue=False}" />

@@ -72,6 +72,12 @@ namespace MonkeyPaste.Avalonia {
                     quillWindow.WindowState = WindowState.Minimized;
                 };
                 quillWindow.Show();
+
+                while (!ConverterWebView.IsEditorInitialized) {
+                    MpConsole.WriteLine("[loader] waiting for html converter init...");
+                    await Task.Delay(100);
+                }
+                MpConsole.WriteLine("Html converter initialized");
             } else if (App.MainView is MpAvMainView mv) {
                 ConverterWebView.AttachedToLogicalTree += (s, e) => {
 
@@ -79,7 +85,6 @@ namespace MonkeyPaste.Avalonia {
                 };
                 mv.RootGrid.Children.Add(ConverterWebView);
             }
-
 
             IsBusy = false;
         }
@@ -106,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
             if (!ConverterWebView.IsEditorInitialized) {
                 MpConsole.WriteLine("Cannot parse html. Waiting for Html converter to initialize...");
                 while (!ConverterWebView.IsEditorInitialized) {
-                    MpConsole.WriteLine("waiting...");
+                    MpConsole.WriteLine("[parser] waiting...");
                     await Task.Delay(100);
                 }
                 MpConsole.WriteLine("Html converter initialized");

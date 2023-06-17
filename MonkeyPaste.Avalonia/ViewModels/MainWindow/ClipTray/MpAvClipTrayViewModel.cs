@@ -262,46 +262,6 @@ namespace MonkeyPaste.Avalonia {
                                     IconResourceKey = "DuplicateImage",
                                     Command = DuplicateSelectedClipsCommand,
                                     ShortcutArgs = new object[] { MpShortcutType.Duplicate },
-                                },
-                                new MpMenuItemViewModel() {
-                                    Header = "To Web Search",
-                                    IconResourceKey = "WebImage",
-                                    SubItems = new List<MpMenuItemViewModel>() {
-                                        new MpMenuItemViewModel() {
-                                            Header = "Google",
-                                            AltNavIdx = 0,
-                                            IconResourceKey = "GoogleImage",
-                                            Command = SearchWebCommand,
-                                            CommandParameter=@"https://www.google.com/search?q="
-                                        },
-                                        new MpMenuItemViewModel() {
-                                            Header = "Bing",
-                                            AltNavIdx = 0,
-                                            IconResourceKey = "BingImage",
-                                            Command = SearchWebCommand,
-                                            CommandParameter=@"https://www.bing.com/search?q="
-                                        },
-                                        new MpMenuItemViewModel() {
-                                            Header = "DuckDuckGo",
-                                            AltNavIdx = 0,
-                                            IconResourceKey = "DuckImage",
-                                            Command = SearchWebCommand,
-                                            CommandParameter=@"https://duckduckgo.com/?q="
-                                        },
-                                        new MpMenuItemViewModel() {
-                                            Header = "Yandex",
-                                            AltNavIdx = 0,
-                                            IconResourceKey = "YandexImage",
-                                            Command = SearchWebCommand,
-                                            CommandParameter=@"https://yandex.com/search/?text="
-                                        },
-                                        new MpMenuItemViewModel() { IsSeparator = true},
-                                        new MpMenuItemViewModel() {
-                                            Header = "Manage...",
-                                            AltNavIdx = 0,
-                                            IconResourceKey = "CogImage"
-                                        },
-                                    }
                                 }
                             }
                         },
@@ -3738,15 +3698,6 @@ namespace MonkeyPaste.Avalonia {
             //return idxs;
         }
 
-        public ICommand SearchWebCommand => new MpCommand<object>(
-            (args) => {
-                //string pt = string.Join(
-                //            Environment.NewLine,
-                //            MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Select(x => Mp.Services.StringTools.ToPlainText(x.ItemData)));
-                string pt = Mp.Services.StringTools.ToPlainText(SelectedItem.CopyItemData);
-                //MpHelpers.OpenUrl(args.ToString() + Uri.EscapeDataString(pt));
-            }, (args) => args != null && args is string);
-
 
         public ICommand ChangeSelectedClipsColorCommand => new MpCommand<object>(
              (hexStrOrBrush) => {
@@ -3766,11 +3717,12 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 bool canCopy =
                     SelectedItem != null &&
+                    SelectedItem.IsListBoxItemFocused &&
                     SelectedItem.IsHostWindowActive;
                 MpConsole.WriteLine("CopySelectedClipFromShortcutCommand CanExecute: " + canCopy);
                 if (!canCopy) {
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
-                    MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
+                    MpConsole.WriteLine("IsHostWindowActive: " + (SelectedItem == null ? "NO" : SelectedItem.IsHostWindowActive.ToString()));
                 }
                 return canCopy;
             });

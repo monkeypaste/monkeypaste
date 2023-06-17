@@ -309,15 +309,15 @@ namespace MonkeyPaste.Avalonia {
         public ICommand EnableTriggerCommand => new MpAsyncCommand(
             async () => {
                 await ValidateActionAsync();
-                if (!IsAllValid) {
-                    OnPropertyChanged(nameof(IsTriggerEnabled));
-                    return;
-                }
+                //if (!IsAllValid) {
+                //    OnPropertyChanged(nameof(IsTriggerEnabled));
+                //    return;
+                //}
                 EnableOrDisableTrigger(true);
             }, () => {
                 //return IsEnabled.IsFalse() || (Parent != null && Parent.IsRestoringEnabled && IsEnabled.IsTrue());
                 //return true;
-                return !IsEnabled;
+                return !IsEnabled || (Parent != null && Parent.IsRestoringEnabled && IsEnabled);
             });
 
         public ICommand DisableTriggerCommand => new MpAsyncCommand(

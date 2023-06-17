@@ -57,7 +57,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_PARAMETER_REQUEST_FORMAT,
             INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT,
             INTERNAL_TAG_ITEM_FORMAT,
-            INTERNAL_CONTENT_TYPE_FORMAT
+            INTERNAL_CONTENT_TYPE_FORMAT,
+            INTERNAL_ACTION_ITEM_FORMAT
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup = new Dictionary<int, MpPortableDataFormat>();
@@ -117,6 +118,8 @@ namespace MonkeyPaste.Common {
         public const string INTERNAL_PARAMETER_REQUEST_FORMAT = "Mp Internal Parameter Request Format";
         public const string INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT = "Mp Internal Search Criteria Item";
         public const string INTERNAL_TAG_ITEM_FORMAT = "Mp Internal Tag Tile Item";
+        public const string INTERNAL_ACTION_ITEM_FORMAT = "Mp Internal Action Item";
+
 
         // NOTE data object is not registered and only used to merge data objects
         public const string INTERNAL_DATA_OBJECT_FORMAT = "Mp Internal Data Object Format";
@@ -137,7 +140,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT,
             INTERNAL_TAG_ITEM_FORMAT,
             INTERNAL_DATA_OBJECT_FORMAT,
-            INTERNAL_CONTENT_TYPE_FORMAT
+            INTERNAL_CONTENT_TYPE_FORMAT,
+            INTERNAL_ACTION_ITEM_FORMAT
         };
         #endregion
 

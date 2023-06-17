@@ -67,6 +67,15 @@
                     Value="SizeAll" />
             <Setter Property="ZIndex"
                     Value="{Binding DesignerZIndex, Mode=TwoWay}" />
+
+            <Setter Property="local:MpAvClipboardCommandExtension.IsEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvClipboardCommandExtension.CopyCommand"
+                    Value="{Binding CopyActionCommand}" />
+            <Setter Property="local:MpAvClipboardCommandExtension.CutCommand"
+                    Value="{Binding CutActionCommand}" />
+            <Setter Property="local:MpAvClipboardCommandExtension.PasteCommand"
+                    Value="{Binding PasteActionCommand}" />
         </Style>
 
         <!--  ZOOM THUMB  -->

@@ -12,6 +12,6 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <Border Classes="paramBorder">
-        <local:MpAvPopupMenuSelector MinWidth="150" />
+        <local:MpAvPopupMenuSelector MinWidth="100" />
     </Border>
 </local:MpAvUserControl>

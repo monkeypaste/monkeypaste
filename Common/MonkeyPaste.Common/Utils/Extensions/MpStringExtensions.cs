@@ -167,12 +167,6 @@ namespace MonkeyPaste.Common {
                 }
             }
         }
-        public static string ToPrettyPrintJsonString(this object obj) {
-            if (obj == null) {
-                return string.Empty;
-            }
-            return MpJsonConverter.SerializeObject(obj).ToPrettyPrintJson();
-        }
         public static bool IsEmptyRichHtmlString(this string htmlStr) {
             return
                 string.IsNullOrWhiteSpace(htmlStr) ||

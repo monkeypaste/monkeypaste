@@ -36,8 +36,13 @@ namespace MonkeyPaste.Avalonia {
 
         private bool _isShowingValidationMsg = false;
         private List<int> _currentInputItemIds = new List<int>();
+        private bool _isSettingChildRestorePoint = false;
         #endregion
+        #region Constants
 
+        public const string INPUT_TYPE_PARAM_ID = "InputType";
+
+        #endregion
         #region Statics
 
         public static string GetDefaultActionIconResourceKey(object actionOrTriggerType) {
@@ -379,8 +384,34 @@ namespace MonkeyPaste.Avalonia {
                 return new MpMenuItemViewModel() {
                     ParentObj = this,
                     SubItems = new List<MpMenuItemViewModel>() {
+                         new MpMenuItemViewModel() {
+                            Header = "Cut",
+                            IconResourceKey = "ScissorsImage",
+                            ShortcutArgs = new object[] { MpShortcutType.CutSelection },
+                            Command = CutActionCommand
+                        },
+                         new MpMenuItemViewModel() {
+                            Header = "Copy",
+                            IconResourceKey = "CopyImage",
+                            ShortcutArgs = new object[] { MpShortcutType.CopySelection },
+                            Command = CopyActionCommand
+                        },
+                         new MpMenuItemViewModel() {
+                            Header = "Paste",
+                            IconResourceKey = "PasteImage",
+                            ShortcutArgs = new object[] { MpShortcutType.PasteHere },
+                            Command = PasteActionCommand,
+                        },
+                        new MpMenuItemViewModel() {
+                            HasLeadingSeperator = true,
+                            Header = "Move",
+                            IconResourceKey = "ChainImage",
+                            IsVisible = move_items.Any(),
+                            SubItems = move_items.ToList()
+                        },
                         new MpMenuItemViewModel() {
                             Header = "Add",
+                            HasLeadingSeperator = true,
                             IconResourceKey = "AddImage",
                             SubItems =
                                 typeof(MpActionType)
@@ -396,19 +427,7 @@ namespace MonkeyPaste.Avalonia {
                                     }).ToList()
                         },
                         new MpMenuItemViewModel() {
-                            IsSeparator = true,
-                            IsVisible = move_items.Any(),
-                        },
-                        new MpMenuItemViewModel() {
-                            Header = "Move",
-                            IconResourceKey = "ChainImage",
-                            IsVisible = move_items.Any(),
-                            SubItems = move_items.ToList()
-                        },
-                        new MpMenuItemViewModel() {
-                            IsSeparator = true
-                        },
-                        new MpMenuItemViewModel() {
+                            HasLeadingSeperator = true,
                             Header = "Remove",
                             IconResourceKey = "DeleteImage",
                             Command = DeleteThisActionCommand
@@ -449,6 +468,7 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvActionViewModelBase> Children =>
             Parent.Items
             .Where(x => x.ParentActionId == ActionId).OrderBy(x => x.SortOrderIdx);
+
 
         public IEnumerable<MpAvActionViewModelBase> AllDescendants =>
             Parent.Items
@@ -591,6 +611,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsTriggerEnabled =>
             RootTriggerActionViewModel.IsEnabled;
+
 
         #endregion
 
@@ -736,6 +757,26 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #endregion
+
+        #region Undoables
+
+        private List<MpAction> _undoableChildren;
+        public List<MpAction> UndoableChildren {
+            get {
+                //if (_undoableChildren == null) {
+                //    _undoableChildren = Children.Select(x => x.Action).ToList();
+                //}
+                return _undoableChildren;
+            }
+            set {
+                if (UndoableChildren != value) {
+                    AddUndo(UndoableChildren, value, $"{MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT} '{FullName}' child changed");
+                    _undoableChildren = value;
+                    OnPropertyChanged(nameof(UndoableChildren));
+                }
+            }
+        }
         #endregion
 
         public bool IsReadOnly {
@@ -890,7 +931,42 @@ namespace MonkeyPaste.Avalonia {
 
             Action = a;
 
+            if (Parent.Items.All(x => x.ActionId != ActionId)) {
+                // only add if new
+                Parent.Items.Add(this);
+            }
+
             ActionArgs.Clear();
+
+            if (ParentActionViewModel is MpAvAnalyzeActionViewModel aavm) {
+                // TODO for any child of analyzer (and maybe conditional?)
+                // insert inputType parameter to args w/ options of 'Source' or 'LastOutput'
+                // then if lastoutput is input type
+                // update GetInput to set CopyItem to last output (may need to check at end of analyze perform)
+                if (ActionComponentFormat == null) {
+                    ActionComponentFormat = new MpHeadlessPluginFormat() {
+                        parameters = new List<MpParameterFormat>()
+                    };
+                }
+                ActionComponentFormat.parameters.Insert(
+                    0,
+                    new MpParameterFormat() {
+                        label = "Input Type",
+                        controlType = MpParameterControlType.ComboBox,
+                        unitType = MpParameterValueUnitType.PlainText,
+                        isRequired = true,
+                        paramId = INPUT_TYPE_PARAM_ID,
+                        values = new List<MpPluginParameterValueFormat>() {
+                            new MpPluginParameterValueFormat() {
+                                isDefault = true,
+                                value = "Source"
+                            },
+                            new MpPluginParameterValueFormat() {
+                                value = "Output"
+                            }
+                        }.ToList()
+                    });
+            }
             if (ComponentFormat != null &&
                 ComponentFormat.parameters != null) {
                 var param_values = await MpAvPluginParameterValueLocator.LocateValuesAsync(
@@ -900,14 +976,14 @@ namespace MonkeyPaste.Avalonia {
                         await CreateActionParameterViewModel(param_format);
                     ActionArgs.Add(param_vm);
                 }
+
+
                 OnPropertyChanged(nameof(ActionArgs));
             }
             ActionArgs.ForEach(x => x.OnValidate += ActionArg_OnValidate);
 
-            if (Parent.Items.All(x => x.ActionId != ActionId)) {
-                // only add if new
-                Parent.Items.Add(this);
-            }
+
+
 
             var cal = await MpDataModelProvider.GetChildActionsAsync(ActionId);
             foreach (var ca in cal.OrderBy(x => x.SortOrderIdx)) {
@@ -1050,6 +1126,20 @@ namespace MonkeyPaste.Avalonia {
             }
             return Children.Any(x => x.IsSelfOrDescendentProcessingItemById(ciid));
         }
+        public async Task SetChildRestoreStateAsync() {
+            _isSettingChildRestorePoint = true;
+            var action_clone = await Action.CloneDbModelAsync(true, true);
+            UndoableChildren = action_clone.Children.ToList();
+            if (UndoableChildren == null) {
+                MpConsole.WriteLine($"Child restore state for '{FullName}' SET to NULL", true, true);
+            } else {
+                MpConsole.WriteLine($"Child restore state for '{FullName}' SET to:", true);
+                UndoableChildren.ForEach(x => MpConsole.WriteLine(x.SerializeJsonObject().ToPrettyPrintJson()));
+                MpConsole.WriteLine("");
+            }
+
+            _isSettingChildRestorePoint = false;
+        }
 
         public override string ToString() {
             if (Action == null) {
@@ -1108,6 +1198,13 @@ namespace MonkeyPaste.Avalonia {
                     CopyItem = ci
                 };
             } else if (arg is MpAvActionOutput ao) {
+                if (ArgLookup.TryGetValue(INPUT_TYPE_PARAM_ID, out var input_type_pvm) &&
+                    input_type_pvm.CurrentValue == "Output" &&
+                    ao is MpAvAnalyzeOutput anao &&
+                    anao.NewCopyItem is MpCopyItem output_item) {
+                    anao.CopyItem = output_item;
+                    return anao;
+                }
                 return ao;
             }
             throw new Exception("Unknown action input: " + arg.ToString());
@@ -1218,24 +1315,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-
-        public string GetUniqueActionName(string prefix) {
-            int uniqueIdx = 1;
-            string testName = string.Format(
-                                        @"{0}{1}",
-                                        prefix.ToLower(),
-                                        uniqueIdx);
-
-            while (RootTriggerActionViewModel.SelfAndAllDescendants.Any(x => x.Label.ToLower() == testName)) {
-                uniqueIdx++;
-                testName = string.Format(
-                                        @"{0}{1}",
-                                        prefix.ToLower(),
-                                        uniqueIdx);
-            }
-            return prefix + uniqueIdx;
-        }
-
         private void MpAvActionViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
@@ -1311,6 +1390,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IconResourceObj):
                     OnPropertyChanged(nameof(IconBackgroundHexColor));
+                    break;
+                case nameof(UndoableChildren):
+                    RestoreChildrenAsync().FireAndForgetSafeAsync();
                     break;
             }
         }
@@ -1431,6 +1513,60 @@ namespace MonkeyPaste.Avalonia {
             return ci;
         }
 
+
+        public string GetUniqueActionName(string prefix) {
+            int uniqueIdx = 1;
+            string testName = string.Format(
+                                        @"{0}{1}",
+                                        prefix.ToLower(),
+                                        uniqueIdx);
+
+            while (RootTriggerActionViewModel.SelfAndAllDescendants.Any(x => x.Label.ToLower() == testName)) {
+                uniqueIdx++;
+                testName = string.Format(
+                                        @"{0}{1}",
+                                        prefix.ToLower(),
+                                        uniqueIdx);
+            }
+            return prefix + uniqueIdx;
+        }
+
+        private async Task RestoreChildrenAsync() {
+            if (_isSettingChildRestorePoint) {
+                return;
+            }
+            if (UndoableChildren == null) {
+                // initial case, ignore
+                MpConsole.WriteLine($"Child restore state for '{FullName}' RESTORING to NULL", true, true);
+                return;
+            }
+
+            MpConsole.WriteLine($"Child restore state for '{FullName}' RESTORING to:", true);
+            UndoableChildren.ForEach(x => MpConsole.WriteLine(x.SerializeJsonObject().ToPrettyPrintJson()));
+            MpConsole.WriteLine("");
+
+            // delete all descendants
+            await Task.WhenAll(AllDescendants.Select(x => x.Action.DeleteFromDatabaseAsync()));
+
+            // undoable children and params need key assignments
+            await Task.WhenAll(UndoableChildren.Select((x, idx) => AssignCloneAsChildAsync(x, ActionId, idx)));
+
+            await InitializeAsync(Action);
+
+        }
+
+        private async Task AssignCloneAsChildAsync(MpAction clone_action, int parent_id, int sort_idx) {
+            clone_action.ParentActionId = parent_id;
+            clone_action.SortOrderIdx = sort_idx;
+
+            // TODO need to translate designer loc to new parent here...
+            await clone_action.WriteToDatabaseAsync();
+
+            clone_action.ParameterValues.ForEach(x => x.ParameterHostId = clone_action.Id);
+            await Task.WhenAll(clone_action.ParameterValues.Select(x => x.WriteToDatabaseAsync()));
+
+            await Task.WhenAll(clone_action.Children.Select((x, idx) => AssignCloneAsChildAsync(x, clone_action.Id, idx)));
+        }
         #endregion
 
 
@@ -1439,6 +1575,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand AddChildActionCommand => new MpCommand<object>(
              async (args) => {
                  IsBusy = true;
+                 await SetChildRestoreStateAsync();
 
                  MpActionType at = (MpActionType)args;
                  MpAction na = await MpAction.CreateAsync(
@@ -1458,6 +1595,7 @@ namespace MonkeyPaste.Avalonia {
                  navm.OnPropertyChanged(nameof(navm.Y));
                  Parent.FocusAction = navm;
 
+                 await SetChildRestoreStateAsync();
                  IsBusy = false;
              }, (args) => ActionType != MpActionType.None);
 
@@ -1491,9 +1629,12 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowAddChildContextMenuCommand => new MpCommand<object>(
             (args) => {
+                if (Parent.FocusAction != this) {
+                    Parent.FocusAction = this;
+                }
                 MpAvMenuExtension.ShowMenu(
                     control: args as Control,
-                    placement: PlacementMode.Center,
+                    placement: PlacementMode.Right,
                     mivm: ContextMenuViewModel,
                     selectOnRightClick: true);
             });
@@ -1510,6 +1651,10 @@ namespace MonkeyPaste.Avalonia {
                     new_parent_id == ActionId) {
                     return;
                 }
+
+                // store trigger child state for move
+                await RootTriggerActionViewModel.SetChildRestoreStateAsync();
+
                 ParentActionId = new_parent_id;
 
                 await Task.Delay(50);
@@ -1523,6 +1668,73 @@ namespace MonkeyPaste.Avalonia {
                     this is MpAvTriggerActionViewModelBase) {
                     return false;
                 }
+                return true;
+            });
+
+        public ICommand CopyActionCommand => new MpAsyncCommand(
+            async () => {
+                var avdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT, ActionId);
+                await Mp.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(avdo, true);
+                MpConsole.WriteLine("Copied action avdo: ");
+                MpConsole.WriteLine(avdo.ToString());
+            });
+
+        public ICommand CutActionCommand => new MpAsyncCommand(
+            async () => {
+                // clone parent action to use children prop for undo which contains all children and params before cut
+                var unwritten_action_clone = await Action.CloneDbModelAsync(true, true);
+
+                await Parent.DeleteActionCommand.ExecuteAsync(new object[] { this, true });
+                var avdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT, unwritten_action_clone.SerializeJsonObject());
+                await Mp.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(avdo, true);
+                MpConsole.WriteLine("Cut action avdo: ");
+                MpConsole.WriteLine(avdo.ToString());
+
+                await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
+            },
+            () => {
+                return !IsTrigger;
+            });
+
+        public ICommand PasteActionCommand => new MpAsyncCommand(
+            async () => {
+                //var avdo = await Mp.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(true) as IDataObject;
+                //if (avdo == null) {
+                //    return;
+                //}
+                object action_data = await MpAvWindowManager.MainWindow.Clipboard.GetDataAsync(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT);
+                if (action_data == null) {
+                    return;
+                }
+
+                MpAction child_to_assign = null;
+                if (action_data is int copy_child_actionId) {
+                    // paste from copy
+                    var copy_child = await MpDataModelProvider.GetItemAsync<MpAction>(copy_child_actionId);
+                    if (copy_child == null) {
+                        return;
+                    }
+                    child_to_assign = await copy_child.CloneDbModelAsync(true, true);
+                } else if (action_data is byte[] action_bytes &&
+                            action_bytes.ToDecodedString() is string action_json &&
+                            MpJsonConverter.DeserializeObject<MpAction>(action_json) is MpAction cut_child) {
+                    // paste from cut
+                    child_to_assign = cut_child;
+                }
+                if (child_to_assign == null) {
+                    return;
+                }
+                await SetChildRestoreStateAsync();
+                await AssignCloneAsChildAsync(child_to_assign, ActionId, Children.Count());
+
+                await RootTriggerActionViewModel.InitializeAsync(RootTriggerActionViewModel.Action);
+            },
+            () => {
+                //if (MpAvUndoManagerViewModel.Instance.UndoList.FirstOrDefault() is MpIUndoRedo ur &&
+                //    ur.Name.StartsWith(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT)) {
+                //    return true;
+                //}
+                //return false;
                 return true;
             });
 

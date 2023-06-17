@@ -16,9 +16,9 @@ namespace MonkeyPaste {
         #region Properties
 
         #region View Models
-        public static ObservableCollection<MpIUndoRedo> UndoList { get; set; } = new ObservableCollection<MpIUndoRedo>();
+        public ObservableCollection<MpIUndoRedo> UndoList { get; set; } = new ObservableCollection<MpIUndoRedo>();
 
-        public static ObservableCollection<MpIUndoRedo> RedoList { get; set; } = new ObservableCollection<MpIUndoRedo>();
+        public ObservableCollection<MpIUndoRedo> RedoList { get; set; } = new ObservableCollection<MpIUndoRedo>();
 
         #endregion
 

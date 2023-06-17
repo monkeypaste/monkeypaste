@@ -756,17 +756,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             e.Handled = true;
-            //if (e.Key == Key.Space) {
-            //    string pre_str = Text.Substring(0, SelectionStart);
-            //    string post_str = Text.Substring(SelectionEnd);
-            //    string new_text = pre_str + " " + post_str;
-            //    int new_sel_start = SelectionStart + 1;
-            //    SetValue(TextProperty, new_text);
-            //    SelectionStart = new_sel_start;
-            //    SelectionEnd = new_sel_start;
-            //    e.Handled = true;
-            //    return;
-            //}
             if (e.Key == Key.Escape) {
                 SetValue(IsReadOnlyProperty, true);
                 CancelEditCommand?.Execute(null);

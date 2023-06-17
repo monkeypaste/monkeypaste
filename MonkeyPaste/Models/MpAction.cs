@@ -1,7 +1,9 @@
 ﻿using MonkeyPaste.Common;
 using SQLite;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -53,9 +55,35 @@ namespace MonkeyPaste {
         Alert
     }
 
-    public class MpAction : MpDbModelBase, MpIClonableDbModel<MpAction> {
+    public class MpAction :
+        MpDbModelBase,
+        MpIClonableDbModel<MpAction>,
+        MpITreeNode<MpAction>,
+        MpIParameterHostModel,
+        MpIJsonObject {
 
         #region Interfaces
+
+        #region MpIJsonObject Implementation
+        public string SerializeJsonObject() {
+            return MpJsonConverter.SerializeObject(this);
+        }
+
+        #endregion
+
+        #region MpITreeNode<MpAction> Implementation
+
+        [Ignore]
+        public List<MpAction> Children { get; set; }
+
+        #endregion
+
+        #region MpIParameterHostModel Implementation
+
+        [Ignore]
+        public List<MpParameterValue> ParameterValues { get; set; }
+
+        #endregion
 
         #region MpIClonableDbModel Implementation
 
@@ -82,6 +110,7 @@ namespace MonkeyPaste {
             }
 
             // CLONE CHILDREN & UPDATE PARENT
+            cloned_a.Children = new List<MpAction>();
 
             var child_al = await MpDataModelProvider.GetChildActionsAsync(Id);
             foreach (var (ca, caidx) in child_al.OrderBy(x => x.SortOrderIdx).WithIndex()) {
@@ -93,17 +122,22 @@ namespace MonkeyPaste {
                 if (!suppressWrite) {
                     await cloned_ca.WriteToDatabaseAsync();
                 }
+                cloned_a.Children.Add(cloned_ca);
             }
 
             // CLONE PARAMETERS & UPDATE HOST 
+            cloned_a.ParameterValues = new List<MpParameterValue>();
             var pvl = await MpDataModelProvider.GetAllParameterHostValuesAsync(MpParameterHostType.Action, Id);
 
             foreach (var pv in pvl) {
-                var cloned_pv = await pv.CloneDbModelAsync();
+                var cloned_pv = await pv.CloneDbModelAsync(
+                    deepClone: deepClone,
+                    suppressWrite: suppressWrite);
                 cloned_pv.ParameterHostId = cloned_a.Id;
                 if (!suppressWrite) {
                     await cloned_pv.WriteToDatabaseAsync();
                 }
+                cloned_a.ParameterValues.Add(cloned_pv);
             }
 
             return cloned_a;

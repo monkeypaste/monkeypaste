@@ -50,7 +50,7 @@
             local:MpAvMenuExtension.IsEnabled="True"
             local:MpAvMenuExtension.IsOpen="{Binding IsOpen, Mode=TwoWay}"
             local:MpAvMenuExtension.SuppressDefaultRightClick="True"
-            local:MpAvMenuExtension.PlacementMode="Right"
+            local:MpAvMenuExtension.PlacementMode="Center"
             local:MpAvMenuExtension.ForcedMenuItemViewModel="{Binding PopupMenu}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
@@ -91,7 +91,6 @@
                            Source="{Binding SelectedIconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     <local:MpAvMarqueeTextBox Padding="3"
                                               MinWidth="120"
-                                              
                                               Margin="7,3,0,0"
                                               EditOnFocus="False"
                                               IsReadOnly="True"
@@ -100,7 +99,7 @@
                                               VerticalAlignment="Stretch"
                                               HorizontalAlignment="Left"
                                               FontSize="14"
-                                              Text="{Binding SelectedLabel}"/>
+                                              Text="{Binding SelectedLabel}" />
                 </DockPanel>
             </Border>
         </DockPanel>

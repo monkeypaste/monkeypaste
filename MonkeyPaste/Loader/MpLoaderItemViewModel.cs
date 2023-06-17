@@ -7,45 +7,8 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpLoaderItemViewModel : MpViewModelBase<MpLoaderViewModelBase> {
-        private string[] _removedSubStrings = new string[] {
-            ".",
-            "Wpf",
-            "View",
-            "Model",
-            "Av",
-            "Mp",
-            "Item",
-            "Collection",
-            " "
-        };
-
         public object ItemArg { get; set; }
         public Type ItemType { get; set; }
-
-        //private string _label;
-        //public string Label {
-        //    get {
-        //        if (_label.IsNullOrEmpty()) {
-        //            //_label = ItemType.ToString();
-        //            //foreach (var rss in _removedSubStrings) {
-        //            //    _label = _label.Replace(rss, string.Empty);
-        //            //}
-        //            //_label = _label.ToLabel();
-        //            _label =
-        //                ItemType
-        //                .ToString()
-        //                .SplitNoEmpty(".")
-        //                .Last();
-        //        }
-        //        return _label;
-        //    }
-        //    set {
-        //        if (_label != value) {
-        //            _label = value;
-        //            OnPropertyChanged(nameof(Label));
-        //        }
-        //    }
-        //}
         public string Label { get; set; }
 
         public MpLoaderItemViewModel() : base(null) { }

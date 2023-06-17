@@ -7,6 +7,7 @@ using System;
 using Avalonia.Platform.Storage;
 using System.Collections.Generic;
 using System.Linq;
+using Avalonia.Threading;
 
 #if WINDOWS
 
@@ -25,6 +26,12 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static async Task<string[]> GetFormatsSafeAsync(this IClipboard cb, int retryCount = 0) {
             await WaitForClipboardAsync();
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                var result = await Dispatcher.UIThread.InvokeAsync(async () => {
+                    return await cb.GetFormatsSafeAsync(retryCount);
+                });
+                return result;
+            }
             try {
                 var result = await cb.GetFormatsAsync();
                 CloseClipboard();
@@ -42,7 +49,12 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static async Task<object> GetDataSafeAsync(this IClipboard cb, string format, int retryCount = 0) {
             await WaitForClipboardAsync();
-
+            //if (!Dispatcher.UIThread.CheckAccess()) {
+            //    var result = await Dispatcher.UIThread.InvokeAsync(async () => {
+            //        return await cb.GetDataSafeAsync(format, retryCount);
+            //    });
+            //    return result;
+            //}
             try {
                 object result = await cb.GetDataAsync(format);
                 CloseClipboard();
@@ -69,6 +81,12 @@ namespace MonkeyPaste.Common.Avalonia {
         public static async Task SetDataObjectSafeAsync(this IClipboard cb, IDataObject ido, int retryCount = 0) {
             await WaitForClipboardAsync();
 
+            //if (!Dispatcher.UIThread.CheckAccess()) {
+            //    await Dispatcher.UIThread.InvokeAsync(async () => {
+            //        await cb.SetDataObjectSafeAsync(ido, retryCount);
+            //    });
+            //    return;
+            //}
             try {
                 await cb.SetDataObjectAsync(ido);
                 CloseClipboard();

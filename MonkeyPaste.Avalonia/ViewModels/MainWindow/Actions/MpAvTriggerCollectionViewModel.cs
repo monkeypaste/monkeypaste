@@ -291,6 +291,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public string FocusActionName =>
+            FocusAction == null ? string.Empty : FocusAction.Label;
+
         public bool IsHorizontal =>
             SidebarOrientation == Orientation.Horizontal;
 
@@ -350,7 +353,8 @@ namespace MonkeyPaste.Avalonia {
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.ParentActionViewModel)));
             OnPropertyChanged(nameof(Items));
 
-            await RestoreAllEnabled();
+            // restore all blocks until core fully loaded (needs to wait to attach shortcuts or any other later loaded components)
+            RestoreAllEnabledAsync().FireAndForgetSafeAsync();
 
             if (Items.Count() > 0) {
                 // select most recent action
@@ -389,24 +393,6 @@ namespace MonkeyPaste.Avalonia {
             return tavm;
         }
 
-        public async Task RestoreAllEnabled() {
-            // NOTE this is only called on init and needs to wait for dependant vm's to load so wait here
-            IsRestoringEnabled = true;
-
-            var enabled_triggers =
-            Items
-            .Where(x => x is MpAvTriggerActionViewModelBase)
-            .Cast<MpAvTriggerActionViewModelBase>()
-            .Where(x => x.IsEnabled);
-
-            enabled_triggers
-            .ForEach(x => x.EnableTriggerCommand.Execute(null));
-
-            while (Items.Any(x => x.IsAnyBusy)) {
-                await Task.Delay(100);
-            }
-            IsRestoringEnabled = false;
-        }
 
         public string GetUniqueTriggerName(string given_name) {
             if (!Triggers.Any(x => x.Label.ToLower() == given_name)) {
@@ -476,13 +462,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
-
-        private async Task UpdateSortOrderAsync() {
-            Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
-            await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
-        }
-
         private void MpAvTriggerCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(FocusAction):
@@ -497,6 +476,7 @@ namespace MonkeyPaste.Avalonia {
                             pcvm.Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsVisible)));
                         }
                     }
+                    OnPropertyChanged(nameof(FocusActionName));
                     break;
                 case nameof(SelectedTrigger):
                     FocusAction = SelectedTrigger;
@@ -569,6 +549,34 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsHorizontal));
                     break;
             }
+        }
+
+
+        public async Task RestoreAllEnabledAsync() {
+            // NOTE this is only called on init and needs to wait for dependant vm's to load so wait here
+            while (!Mp.Services.StartupState.IsPlatformLoaded) {
+                await Task.Delay(100);
+            }
+
+            IsRestoringEnabled = true;
+
+            var enabled_triggers =
+            Items
+            .Where(x => x is MpAvTriggerActionViewModelBase)
+            .Cast<MpAvTriggerActionViewModelBase>()
+            .Where(x => x.IsEnabled);
+
+            enabled_triggers
+            .ForEach(x => x.EnableTriggerCommand.Execute(null));
+
+            while (Items.Any(x => x.IsAnyBusy)) {
+                await Task.Delay(100);
+            }
+            IsRestoringEnabled = false;
+        }
+        private async Task UpdateSortOrderAsync() {
+            Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
+            await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
         }
         #endregion
 
@@ -667,16 +675,23 @@ namespace MonkeyPaste.Avalonia {
                  IsBusy = false;
              });
 
-        public ICommand DeleteActionCommand => new MpCommand<object>(
+        public MpIAsyncCommand<object> DeleteActionCommand => new MpAsyncCommand<object>(
             async (args) => {
                 IsBusy = true;
 
+                bool is_cut = false;
                 var child_to_delete_avm = args as MpAvActionViewModelBase;
                 if (child_to_delete_avm == null) {
-                    // link error (this cmd is called from arg vm using parentacvm)
-                    Debugger.Break();
-                    IsBusy = false;
-                    return;
+                    if (args is object[] argParts) {
+                        child_to_delete_avm = argParts[0] as MpAvActionViewModelBase;
+                        is_cut = (bool)argParts[1];
+                    }
+                    if (child_to_delete_avm == null) {
+                        // link error (this cmd is called from arg vm using parentacvm)
+                        Debugger.Break();
+                        IsBusy = false;
+                        return;
+                    }
                 }
 
                 List<MpAvActionViewModelBase> to_remove_list = new List<MpAvActionViewModelBase>() {
@@ -684,12 +699,15 @@ namespace MonkeyPaste.Avalonia {
                 };
 
                 bool remove_descendants = false;
-                if (child_to_delete_avm.ParentActionId == 0) {
+                if (is_cut) {
+                    // cut only allowed for non-trigger actions
+                    remove_descendants = true;
+                } else if (child_to_delete_avm.ParentActionId == 0) {
                     // trigger deletes children by default
                     remove_descendants = true;
                 } else if (child_to_delete_avm.Children.Count() > 0) {
                     //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = true;
-                    var remove_descendants_result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
+                    bool? remove_descendants_result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
                         title: $"Remove Options",
                         message: $"Would you like to remove all the sub-actions for '{child_to_delete_avm.Label}'? (Otherwise they will be re-parented to '{child_to_delete_avm.ParentActionViewModel.Label}')",
                         iconResourceObj: "ChainImage",
@@ -711,20 +729,26 @@ namespace MonkeyPaste.Avalonia {
                     child_to_delete_avm.Children.ForEach(x => x.ParentActionId = child_to_delete_avm.ParentActionId);
                 }
 
+                if (FocusAction != null) {
+                    await FocusAction.SetChildRestoreStateAsync();
+                }
+
                 foreach (var to_remove_avm in to_remove_list.OrderByDescending(x => x.TreeLevel).ThenBy(x => x.SortOrderIdx)) {
                     while (to_remove_avm.IsBusy) {
                         await Task.Delay(100);
                     }
                     await to_remove_avm.Action.DeleteFromDatabaseAsync();
-                    //to_remove_avm.RootTriggerActionViewModel.Children.Remove(to_remove_avm);
                     Items.Remove(to_remove_avm);
                 }
                 if (child_to_delete_avm.ParentActionId == 0) {
                     await UpdateSortOrderAsync();
-                    SelectedTrigger = null;// Triggers.FirstOrDefault();
-                    //OnPropertyChanged(nameof(Triggers));
+                    SelectedTrigger = null;
                 } else {
                     await child_to_delete_avm.ParentActionViewModel.UpdateSortOrderAsync();
+                }
+
+                if (FocusAction != null) {
+                    await FocusAction.SetChildRestoreStateAsync();
                 }
                 IsBusy = false;
             });
@@ -837,8 +861,8 @@ namespace MonkeyPaste.Avalonia {
                     dw.Bind(
                         Window.TitleProperty,
                         new Binding() {
-                            Source = FocusAction,
-                            Path = nameof(MpAvActionViewModelBase.Label),
+                            Source = this,
+                            Path = nameof(FocusActionName),
                             StringFormat = "Trigger Designer '{0}'",
                             Converter = MpAvStringToWindowTitleConverter.Instance
                         });

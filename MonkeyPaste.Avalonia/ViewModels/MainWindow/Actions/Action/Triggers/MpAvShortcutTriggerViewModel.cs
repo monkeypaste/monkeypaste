@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const string CURRENT_SHORTCUT_PARAM_ID = "TriggerShortcutId";
+        public const string SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID = "ShortcutTriggerKeyString";
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
                 new MpApplicationCommand() {
                     Command = MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand,
                     CommandParameter = ActionId,
-                    Tag = CURRENT_SHORTCUT_PARAM_ID
+                    Tag = SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID
                 }
             };
 
@@ -67,11 +67,11 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Shortcut Triggers",
+                                label = "Shortcut Trigger",
                                 controlType = MpParameterControlType.ShortcutRecorder,
-                                unitType = MpParameterValueUnitType.Integer,
+                                unitType = MpParameterValueUnitType.PlainText,
                                 isRequired = true,
-                                paramId = CURRENT_SHORTCUT_PARAM_ID,
+                                paramId = SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID,
                                 description = "Triggered when the recorded shortcut is pressed at anytime with the current clipboard"
                             }
                         }
@@ -87,8 +87,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpAvShortcutViewModel ShortcutViewModel =>
-            MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+        //public MpAvShortcutViewModel ShortcutViewModel =>
+        //    MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == ShortcutId);
+
+        private MpAvShortcutViewModel _shortcutViewModel;
+        public MpAvShortcutViewModel ShortcutViewModel {
+            get {
+                if (_shortcutViewModel == null &&
+                    ArgLookup.TryGetValue(SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID, out var pvm) && pvm is MpAvShortcutRecorderParameterViewModel scrpvm) {
+                    _shortcutViewModel = MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcut(scrpvm);
+                }
+                return _shortcutViewModel;
+            }
+        }
         #endregion
 
         #region State
@@ -100,23 +111,41 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public int ShortcutId {
-            get {
-                if (ArgLookup.TryGetValue(CURRENT_SHORTCUT_PARAM_ID, out var param_vm) &&
-                    param_vm.IntValue is int curVal) {
-                    return curVal;
-                }
-                return 0;
-            }
-            set {
-                if (ShortcutId != value) {
-                    ArgLookup[CURRENT_SHORTCUT_PARAM_ID].IntValue = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(ShortcutId));
-                }
-            }
-        }
+        //public string KeyString {
+        //    get {
+        //        if (ArgLookup.TryGetValue(SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID, out var param_vm)) {
+        //            return param_vm.CurrentValue;
+        //        }
+        //        return string.Empty;
+        //    }
+        //    set {
+        //        if (KeyString != value) {
+        //            ArgLookup[SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID].CurrentValue = value;
+        //            HasModelChanged = true;
+        //            OnPropertyChanged(nameof(KeyString));
+        //        }
+        //    }
+        //}
 
+        //public int ShortcutId {
+        //    get {
+        //        if (ArgLookup.TryGetValue(SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID, out var param_vm) &&
+        //            param_vm.IntValue is int curVal) {
+        //            return curVal;
+        //        }
+        //        return 0;
+        //    }
+        //    set {
+        //        if (ShortcutId != value) {
+        //            ArgLookup[SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID].IntValue = value;
+        //            HasModelChanged = true;
+        //            OnPropertyChanged(nameof(ShortcutId));
+        //        }
+        //    }
+        //}
+        //public int ShortcutId { get; private set; }
+        public int ShortcutId =>
+            ShortcutViewModel == null ? 0 : ShortcutViewModel.ShortcutId;
         #endregion
 
         #endregion
@@ -137,9 +166,12 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut s &&
-                ShortcutId == 0 && s.ShortcutType == MpShortcutType.InvokeTrigger && s.CommandParameter == ActionId.ToString()) {
-                ShortcutId = s.Id;
-                if (ArgLookup[CURRENT_SHORTCUT_PARAM_ID] is MpAvShortcutRecorderParameterViewModel scrpvm) {
+                //ShortcutId == 0 && 
+                s.ShortcutType == MpShortcutType.InvokeTrigger && s.CommandParameter == ActionId.ToString()) {
+                //ShortcutId = s.Id;
+                OnPropertyChanged(nameof(ShortcutViewModel));
+
+                if (ArgLookup.TryGetValue(SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID, out var pvm) && pvm is MpAvShortcutRecorderParameterViewModel scrpvm) {
                     Dispatcher.UIThread.Post(async () => {
                         await scrpvm.InitializeAsync(scrpvm.PresetValueModel);
                     });
@@ -148,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut s && s.Id == ShortcutId) {
-                if (ArgLookup[CURRENT_SHORTCUT_PARAM_ID] is MpAvShortcutRecorderParameterViewModel scrpvm) {
+                if (ArgLookup.TryGetValue(SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID, out var pvm) && pvm is MpAvShortcutRecorderParameterViewModel scrpvm) {
                     Dispatcher.UIThread.Post(async () => {
                         await scrpvm.InitializeAsync(scrpvm.PresetValueModel);
                     });
@@ -158,7 +190,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpShortcut s && s.Id == ShortcutId) {
                 // should only be able to occur from settings menu? maybe shouldn't allow
-                ShortcutId = 0;
+                //ShortcutId = 0;
                 Task.Run(ValidateActionAsync);
             }
         }
@@ -214,10 +246,12 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvShortcutTriggerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(ActionArgs):
-                    OnPropertyChanged(nameof(ShortcutViewModel));
-                    if (ArgLookup[CURRENT_SHORTCUT_PARAM_ID] is MpAvShortcutRecorderParameterViewModel scrpvm) {
+                    if (ArgLookup.TryGetValue(SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID, out var pvm) && pvm is MpAvShortcutRecorderParameterViewModel scrpvm) {
+                        //ShortcutId = MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutId(scrpvm);
                         scrpvm.OnPropertyChanged(nameof(scrpvm.KeyGroups));
+                        scrpvm.OnPropertyChanged(nameof(scrpvm.KeyString));
                     }
+                    OnPropertyChanged(nameof(ShortcutViewModel));
                     break;
             }
         }
@@ -225,11 +259,13 @@ namespace MonkeyPaste.Avalonia {
         private void ActionArgs_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             if (e.NewItems != null) {
                 foreach (MpAvParameterViewModelBase pvm in e.NewItems) {
-                    if (pvm is MpAvShortcutRecorderParameterViewModel srpvm) {
-                        srpvm.ShortcutCommand = Parent.InvokeActionCommand;
-                        srpvm.ShortcutCommandParameter = ActionId;
-                        srpvm.ShortcutType = MpShortcutType.InvokeTrigger;
-                        srpvm.OnPropertyChanged(nameof(srpvm.KeyString));
+                    if (pvm is MpAvShortcutRecorderParameterViewModel scrpvm) {
+                        scrpvm.ShortcutCommand = Parent.InvokeActionCommand;
+                        scrpvm.ShortcutCommandParameter = ActionId;
+                        scrpvm.ShortcutType = MpShortcutType.InvokeTrigger;
+
+                        scrpvm.OnPropertyChanged(nameof(scrpvm.KeyString));
+                        scrpvm.OnPropertyChanged(nameof(scrpvm.KeyGroups));
                     }
                 }
             }

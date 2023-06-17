@@ -447,6 +447,8 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitAsync() {
+            IsBusy = true;
+
             _keyboardGestureHelper = new MpKeyGestureHelper();
             _simInputCts = new CancellationTokenSource();
 
@@ -455,6 +457,8 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             InitExternalPasteTracking();
+
+            IsBusy = false;
         }
 
         public async Task<string> CreateOrUpdateViewModelShortcutAsync(
@@ -631,21 +635,22 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private async Task InitShortcutsAsync() {
-            await Dispatcher.UIThread.InvokeAsync(async () => {
-                //using mainwindow, map all saved shortcuts to their commands
-                var scl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();
+            Dispatcher.UIThread.VerifyAccess();
+            //using mainwindow, map all saved shortcuts to their commands
+            var scl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();
 
-                //IsCustomRoutingEnabled = scl.All(x => x.RoutingType == MpRoutingType.Internal || x.RoutingType == MpRoutingType.Direct);
+            //IsCustomRoutingEnabled = scl.All(x => x.RoutingType == MpRoutingType.Internal || x.RoutingType == MpRoutingType.Direct);
 
-                foreach (var sc in scl) {
-                    AppCommandLookup.TryGetValue(sc.ShortcutType, out ICommand shortcutCommand);
-                    var scvm = await CreateShortcutViewModel(sc, shortcutCommand);
-                    Items.Add(scvm);
-                }
+            foreach (var sc in scl) {
+                AppCommandLookup.TryGetValue(sc.ShortcutType, out ICommand shortcutCommand);
+                var scvm = await CreateShortcutViewModel(sc, shortcutCommand);
+                Items.Add(scvm);
+            }
+            while (Items.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
 
-
-                UpdateEditorShortcutsMessageStr();
-            });
+            UpdateEditorShortcutsMessageStr();
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
