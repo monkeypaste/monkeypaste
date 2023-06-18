@@ -44,22 +44,26 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        public string ToolTipContent =>
-            string.IsNullOrEmpty(ToolTipText) ?
-                ToolTipHtml :
-                ToolTipText;
 
-        #region IsTooltipFollowEnabled AvaloniaProperty
+        #region InputGestureText Property
 
-        public bool IsTooltipFollowEnabled {
-            get { return GetValue(IsTooltipFollowEnabledProperty); }
-            set { SetValue(IsTooltipFollowEnabledProperty, value); }
+        private string _InputGestureText = string.Empty;
+
+        public static readonly DirectProperty<MpAvToolTipView, string> InputGestureTextProperty =
+            AvaloniaProperty.RegisterDirect<MpAvToolTipView, string>
+            (
+                nameof(InputGestureText),
+                o => o.InputGestureText,
+                (o, v) => o.InputGestureText = v,
+                string.Empty
+            );
+
+        public string InputGestureText {
+            get => _InputGestureText;
+            set {
+                SetAndRaise(InputGestureTextProperty, ref _InputGestureText, value);
+            }
         }
-
-        public static readonly StyledProperty<bool> IsTooltipFollowEnabledProperty =
-            AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(
-                name: nameof(IsTooltipFollowEnabled),
-                defaultValue: true);
 
         #endregion
 
@@ -112,11 +116,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvToolTipView() {
             AvaloniaXamlLoader.Load(this);
 
-            //if (!IsTooltipFollowEnabled) {
-            //    IsEnabled = false;
-            //    return;
-            //}
-
             this.AttachedToVisualTree += MpAvTooltipView_AttachedToVisualTree;
             this.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
             if (MpAvWindowManager.MainWindow != null) {
@@ -125,13 +124,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void Init() {
-            IsVisible = !string.IsNullOrEmpty(ToolTipContent);
-            if (IsVisible) {
-                var tb = this.FindControl<Control>("ToolTipTextBlock");
-                tb.IsVisible = !string.IsNullOrEmpty(ToolTipText);
-                var hl = this.FindControl<Control>("ToolTipHtmlPanel");
-                hl.IsVisible = !string.IsNullOrEmpty(ToolTipHtml);
-            }
+            IsVisible =
+                !string.IsNullOrEmpty(ToolTipText) ||
+                !string.IsNullOrEmpty(ToolTipHtml);
         }
 
         private void OnVisibleChanged() {

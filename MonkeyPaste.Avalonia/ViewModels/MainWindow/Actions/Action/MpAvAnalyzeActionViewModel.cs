@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls.Shapes;
+﻿using Avalonia.Controls.Documents;
+using Avalonia.Controls.Shapes;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;

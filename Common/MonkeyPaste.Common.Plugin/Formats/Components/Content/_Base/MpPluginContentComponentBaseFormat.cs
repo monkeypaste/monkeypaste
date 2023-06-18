@@ -3,6 +3,7 @@
         public bool text { get; set; } = false;
         public bool image { get; set; } = false;
         public bool file { get; set; } = false;
+        public string pattern { get; set; }
     }
 
     public class MpPluginOutputFormat : MpJsonObject {
@@ -20,6 +21,7 @@
             return imageAnnotation || textAnnotation;
         }
     }
+
     public abstract class MpPluginContentComponentBaseFormat : MpParameterHostBaseFormat {
         public MpHttpTransactionFormatBase http { get; set; }
         public MpPluginInputFormat inputType { get; set; } = null;

@@ -232,7 +232,8 @@ namespace MonkeyPaste.Avalonia {
         public string ShortcutTooltipText =>
             string.IsNullOrEmpty(KeyString) ?
                 $"Assign shortcut to '{Label}'" :
-                KeyString;
+                $"Paste '{Label}'";
+        //KeyString;
 
         public bool HasAnyParameterValueChange => Items.Any(x => x.HasModelChanged);
         public bool IsLabelTextBoxFocused { get; set; } = false;

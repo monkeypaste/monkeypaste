@@ -226,14 +226,14 @@ namespace MonkeyPaste.Avalonia {
                             AltNavIdx = 0,
                             IconResourceKey = "RenameImage",
                             Command = EditSelectedTitleCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.EditTitle },
+                            ShortcutArgs = new object[] { MpShortcutType.Rename },
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Edit",
                             AltNavIdx = 0,
                             IconResourceKey = "EditContentImage",
                             Command = EditSelectedContentCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.EditContent },
+                            ShortcutArgs = new object[] { MpShortcutType.ToggleContentReadOnly },
                         },
                         new MpMenuItemViewModel() {
                             Header = SelectedItem.IsPinned ? "Un-pin":"Pin",
@@ -1645,11 +1645,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 ctvm.ClearEditing();
             }
-        }
-
-        public void ClearAllEditing() {
-            ClearClipEditing();
-            ClearPinnedEditing();
         }
 
         public void ClearClipSelection(bool clearEditing = true) {
@@ -4049,9 +4044,19 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem != null;
             });
 
+        public ICommand ToggleIsSelectedContentReadOnlyCommand => new MpCommand(
+             () => {
+                 SelectedItem.ToggleIsContentReadOnlyCommand.Execute(null);
+             },
+            () => {
+                if (SelectedItem == null) {
+                    return false;
+                }
+                return SelectedItem.ToggleIsContentReadOnlyCommand.CanExecute(null);
+            });
+
         public ICommand EditSelectedContentCommand => new MpAsyncCommand(
             async () => {
-                ClearAllEditing();
                 if (SelectedItem.IsSubSelectionEnabled) {
                     // BUG FIX when spacebar is shortcut to edit and sub-selection is enabled
                     // the space is passed to the editor so pausing toggling for space to get out ur system
@@ -4059,7 +4064,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 SelectedItem.ToggleEditContentCommand.Execute(null);
             },
-            () => SelectedItem != null && SelectedItem.IsContentReadOnly);
+            () => {
+                if (SelectedItem == null) {
+                    return false;
+                }
+                return SelectedItem.DisableContentReadOnlyCommand.CanExecute(null);
+            });
 
 
         public ICommand AnalyzeSelectedItemCommand => new MpAsyncCommand<object>(

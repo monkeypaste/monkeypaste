@@ -109,7 +109,8 @@
                       IsChecked="{Binding IsPinned}"
                       IsVisible="{Binding !IsChildWindowOpen}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Toggle Pin" />
+                <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=TogglePinned, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                       ToolTipText="Toggle Pin" />
             </ToolTip.Tip>
             <Image />
         </ToggleButton>
@@ -122,7 +123,8 @@
                 IsVisible="{Binding !IsChildWindowOpen}"
                 CommandParameter="{Binding}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Float" />
+                <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                       ToolTipText="Float" />
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
@@ -134,7 +136,8 @@
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
                 local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="{Binding ShortcutTooltipText}" />
+                <local:MpAvToolTipView InputGestureText="{Binding ., Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                       ToolTipText="{Binding ShortcutTooltipText}" />
             </ToolTip.Tip>
             <Image Classes.activeHotkey="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                    Source="{Binding Source={StaticResource HotkeyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
@@ -147,7 +150,8 @@
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsContentReadOnlyCommand}"
                       IsChecked="{Binding !IsContentReadOnly, Mode=OneWay}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Toggle Edit" />
+                <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ToggleContentReadOnly, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                       ToolTipText="Toggle Edit" />
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource EditImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>

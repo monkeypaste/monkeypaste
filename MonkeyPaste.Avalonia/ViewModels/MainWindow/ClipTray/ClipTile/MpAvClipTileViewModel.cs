@@ -428,7 +428,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string ShortcutTooltipText =>
-            string.IsNullOrEmpty(KeyString) ? $"Assign Global Paste Shortcut for '{CopyItemTitle}'" : KeyString;
+            string.IsNullOrEmpty(KeyString) ?
+                $"Assign Global Paste Shortcut for '{CopyItemTitle}'" :
+                "Global Paste";
 
 
         public bool IsResizerEnabled =>
@@ -2030,14 +2032,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public ICommand ToggleEditContentCommand => new MpCommand(
-            () => {
-                if (!IsSelected && IsContentReadOnly) {
-                    Parent.SelectedItem = this;
-                }
-                IsContentReadOnly = !IsContentReadOnly;
-
-            }, () => IsTextItem);
 
         public ICommand ToggleHideTitleCommand => new MpCommand(
             () => {
@@ -2159,14 +2153,41 @@ namespace MonkeyPaste.Avalonia {
                 return CanDisableSubSelection;
             });
 
+        public ICommand EnableContentReadOnlyCommand => new MpCommand(
+            () => {
+                IsContentReadOnly = true;
+            },
+            () => {
+                return CanEdit && !IsContentReadOnly;
+            });
+
+        public ICommand DisableContentReadOnlyCommand => new MpCommand(
+            () => {
+                IsContentReadOnly = false;
+            },
+            () => {
+                return CanEdit && IsContentReadOnly;
+            });
+
         public ICommand ToggleIsContentReadOnlyCommand => new MpCommand(
             () => {
                 IsContentReadOnly = !IsContentReadOnly;
             },
             () => {
-                return CanEdit;
+                if (IsContentReadOnly) {
+                    return DisableContentReadOnlyCommand.CanExecute(null);
+                }
+                return EnableContentReadOnlyCommand.CanExecute(null);
             });
 
+        public ICommand ToggleEditContentCommand => new MpCommand(
+            () => {
+                if (!IsSelected && IsContentReadOnly) {
+                    Parent.SelectedItem = this;
+                }
+                IsContentReadOnly = !IsContentReadOnly;
+
+            }, () => IsTextItem);
 
         #endregion
     }

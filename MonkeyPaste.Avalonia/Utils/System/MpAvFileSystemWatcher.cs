@@ -57,9 +57,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public void AddWatcher(string path, MpIFileSystemEventHandler handler = null) {
-            if (!File.Exists(path) && !Directory.Exists(path)) {
-                throw new FileNotFoundException(path);
+        public bool AddWatcher(string path, MpIFileSystemEventHandler handler = null) {
+            if (!path.IsFileOrDirectory()) {
+                return false;
             }
             FileSystemWatcher watcher = _watchers.FirstOrDefault(x => x.Path.ToLower() == path.ToLower());
 
@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
                 watcher = new FileSystemWatcher(path);
                 _watchers.Add(watcher);
             } else {
-                throw new Exception("Watcher already exists");
+                return true;
             }
 
             watcher.NotifyFilter = watcher.NotifyFilter
@@ -99,6 +99,7 @@ namespace MonkeyPaste.Avalonia {
                 watcher.IncludeSubdirectories = watcher.IncludeSubdirectories;
                 watcher.EnableRaisingEvents = true;
             }
+            return true;
         }
 
         public bool RemoveWatcher(string path) {

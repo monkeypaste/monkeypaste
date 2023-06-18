@@ -652,9 +652,6 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Point
 
-        public static MpPoint ToPortablePoint(this MpSize size) {
-            return new MpPoint(size.Width, size.Height);
-        }
         public static MpPoint ToPortablePoint(this Point p) {
             return new MpPoint(p.X, p.Y);
         }

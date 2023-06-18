@@ -86,7 +86,7 @@
                                 </Binding.Source>
                             </Binding>
                             <Binding Path=""
-                                     Converter="{x:Static local:MpAvShortcutTypeToKeyStringConverter.Instance}"
+                                     Converter="{x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}"
                                      ConverterParameter="ToggleAutoCopyMode" />
                             <Binding>
                                 <Binding.Source>
@@ -119,7 +119,7 @@
                                 </Binding.Source>
                             </Binding>
                             <Binding Path=""
-                                     Converter="{x:Static local:MpAvShortcutTypeToKeyStringConverter.Instance}"
+                                     Converter="{x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}"
                                      ConverterParameter="ToggleRightClickPasteMode" />
                             <Binding>
                                 <Binding.Source>

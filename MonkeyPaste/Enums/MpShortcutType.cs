@@ -1,4 +1,11 @@
 ﻿namespace MonkeyPaste {
+    public enum MpShortcutGroupType {
+        None = 0,
+        Window,
+        Navigation,
+        Content,
+        Selection
+    }
     public enum MpShortcutType {
         None = 0,
         // GLOBALS
@@ -28,8 +35,8 @@
         ChangeColor,
         Undo,
         Redo,
-        EditContent,
-        EditTitle,
+        ToggleContentReadOnly,
+        Rename,
         Duplicate,
         ScrollToHome,
         ScrollToEnd,
@@ -44,7 +51,7 @@
         ToggleFilterMenuVisible,
         ShowSettings,
         TogglePinned,
-        OpenContentInWindow,
+        OpenInWindow,
         ToggleAppendManualMode,
         // CUT-OFF 
         MAX_APP_SHORTCUT,

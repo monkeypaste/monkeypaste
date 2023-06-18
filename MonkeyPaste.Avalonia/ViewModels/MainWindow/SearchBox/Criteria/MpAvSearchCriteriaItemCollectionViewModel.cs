@@ -546,6 +546,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand OpenCriteriaWindowCommand => new MpCommand<object>(
             (args) => {
+                if (!IsExpanded) {
+                    IsExpanded = true;
+                }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
                     Items.ForEach(x => x.LogPropertyChangedEvents = true);
                     var _criteriaWindow = new MpAvWindow() {

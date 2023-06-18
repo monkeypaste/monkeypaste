@@ -4,6 +4,9 @@ using System.Linq;
 namespace MonkeyPaste.Common {
     public static class MpRectExtensions {
 
+        public static MpPoint ToPortablePoint(this MpSize size) {
+            return new MpPoint(size.Width, size.Height);
+        }
         public static MpTriangle[] ToFaces(this MpRect rect) {
             // NOTE wrapping clock-wise
 
@@ -72,11 +75,22 @@ namespace MonkeyPaste.Common {
             return other.Points.Any(x => rect.Contains(x));
         }
 
-        public static void Union(this MpRect rect, MpRect b) {
-            rect.Left = Math.Min(rect.Left, b.Left);
-            rect.Top = Math.Min(rect.Top, b.Top);
-            rect.Right = Math.Max(rect.Right, b.Right);
-            rect.Bottom = Math.Max(rect.Bottom, b.Bottom);
+        public static MpRect Union(this MpRect rect, MpRect other) {
+            double l = Math.Min(rect.Left, other.Left);
+            double t = Math.Min(rect.Top, other.Top);
+            double r = Math.Max(rect.Right, other.Right);
+            double b = Math.Max(rect.Bottom, other.Bottom);
+            return new MpRect(l, t, r - l, b - t);
+        }
+
+        public static MpRect Inflate(this MpRect rect, double w, double h) {
+            double hw = w / 2;
+            double hh = h / 2;
+            double l = rect.Left - hw;
+            double t = rect.Top - hh;
+            double r = rect.Right + hw;
+            double b = rect.Bottom + hh;
+            return new MpRect(l, t, r - l, b - t);
         }
 
         public static MpRectSideHitTest GetClosestSideToPoint(this MpRect rect, MpPoint p, string excludedSideLabelsCsv = "") {

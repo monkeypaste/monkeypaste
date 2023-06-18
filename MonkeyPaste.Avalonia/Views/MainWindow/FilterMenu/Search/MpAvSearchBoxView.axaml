@@ -244,10 +244,10 @@
                                                 <sys:String>Search in '</sys:String>
                                             </Binding.Source>
                                         </Binding>
-                                        <Binding Path="LastSelectedActiveItem.TagName"
+                                        <Binding Path="LastSelectedTagName"
                                                  Source="{x:Static local:MpAvTagTrayViewModel.Instance}"
-                                                 TargetNullValue="All"
-                                                 FallbackValue="All" />
+                                                 FallbackValue="All"
+                                                 TargetNullValue="All" />
                                         <Binding>
                                             <Binding.Source>
                                                 <sys:String>'</sys:String>

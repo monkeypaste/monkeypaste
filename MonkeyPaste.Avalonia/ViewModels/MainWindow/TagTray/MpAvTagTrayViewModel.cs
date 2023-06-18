@@ -136,7 +136,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-
+        public override MpAvTagTileViewModel LastSelectedItem =>
+            base.LastSelectedItem != null &&
+            base.LastSelectedItem.LastSelectedDateTime >= Mp.Services.StartupState.LoadedDateTime ?
+                base.LastSelectedItem :
+                null;
         public override MpAvTagTileViewModel SelectedItem {
             get {
                 return Items.FirstOrDefault(x => x.TagId == SelectedItemId);
@@ -274,6 +278,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string LastSelectedTagName =>
+            LastSelectedActiveItem == null ? "All" : LastSelectedActiveItem.TagName;
         public bool ShowAddTagButton {
             get {
                 if (SelectedItem == null) {
@@ -405,6 +411,8 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveTag)));
                     OnPropertyChanged(nameof(ShowAddTagButton));
+                    OnPropertyChanged(nameof(ShowAddTagButton));
+                    OnPropertyChanged(nameof(LastSelectedTagName));
                     break;
             }
         }

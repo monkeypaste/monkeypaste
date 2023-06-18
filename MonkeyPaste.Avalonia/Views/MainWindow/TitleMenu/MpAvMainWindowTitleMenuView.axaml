@@ -140,7 +140,8 @@
                           IsChecked="{Binding IsChildWindowOpen, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=OneWay}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Settings" />
+                    <local:MpAvToolTipView ToolTipText="Settings"
+                                           InputGestureText="{Binding ., ConverterParameter=ShowSettings, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"/>
                 </ToolTip.Tip>
                 <PathIcon Data="{StaticResource CogSvg}" />
             </ToggleButton>

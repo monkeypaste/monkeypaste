@@ -5,15 +5,18 @@ using System.Globalization;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvShortcutTypeToKeyStringConverter : IValueConverter {
-        public static readonly MpAvShortcutTypeToKeyStringConverter Instance = new();
+    public class MpAvShortcutTypeOrCommandObjToKeyStringConverter : IValueConverter {
+        public static readonly MpAvShortcutTypeOrCommandObjToKeyStringConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            // NOTE only works for app shortcuts
             if (parameter is string paramStr &&
                 paramStr.ToEnum<MpShortcutType>() is MpShortcutType sct &&
-                MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutType == sct) is MpAvShortcutViewModel scvm) {
-                return scvm.KeyString;
+                MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutType == sct) is MpAvShortcutViewModel svm) {
+                return svm.KeyString;
+            }
+
+            if (value is MpIShortcutCommandViewModel scvm) {
+                return MpAvShortcutCollectionViewModel.Instance.GetViewModelCommandShortcutKeyString(scvm);
             }
             return string.Empty;
         }

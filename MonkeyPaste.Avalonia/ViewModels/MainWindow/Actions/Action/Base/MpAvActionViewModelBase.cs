@@ -324,6 +324,8 @@ namespace MonkeyPaste.Avalonia {
                     toolTipStr = "Prefix is used for non-file clipboard items. If unset file will use the content's title.";
                 } else if (this is MpAvKeySimulatorActionViewModel) {
                     toolTipStr = "Gesture Simulator - Simulates the recorded key combination into whatever is the current active application. Only 1 gesture is supported so if you need more you will need to chain multiple instances of this toggether (sorry).";
+                } else if (this is MpAvRepeaterActionViewModel) {
+                    toolTipStr = "Repeat - Repeater is intended to work in conjuncion with a conditinoal action.";
                 }
                 if (string.IsNullOrEmpty(toolTipStr)) {
                     MpDebug.Break($"'{this.GetType()}' needs a tooltip descriptor");

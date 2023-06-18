@@ -23,6 +23,30 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Controls
+
+        public static bool TryGetSelfOrAncestorDataContext<T>(this Control c, out T dc) where T : MpViewModelBase {
+            dc = c.GetSelfOrAncestorDataContext<T>();
+            return dc != default;
+        }
+        public static T GetSelfOrAncestorDataContext<T>(this Control c) where T : MpViewModelBase {
+            if (c == null || c.DataContext is not MpViewModelBase cur_vm) {
+                return default;
+            }
+            while (cur_vm != null) {
+                if (cur_vm.GetType() == typeof(T)) {
+                    return cur_vm as T;
+                }
+                if (cur_vm.ParentObj is MpViewModelBase par_vm) {
+                    cur_vm = par_vm;
+                } else {
+                    cur_vm = null;
+                }
+            }
+            return default;
+        }
+        #endregion
+
         #region Resources
 
         public static string ToPathFromAvResourceString(this string res_str) {

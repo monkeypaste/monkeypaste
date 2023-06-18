@@ -215,12 +215,13 @@ namespace MonkeyPaste.Avalonia {
                             MpAvUndoManagerViewModel.Instance.RedoCommand
                         },
                         {
-                            MpShortcutType.EditContent,
-                            MpAvClipTrayViewModel.Instance.EditSelectedContentCommand
+                            MpShortcutType.ToggleContentReadOnly,
+                            MpAvClipTrayViewModel.Instance.ToggleIsSelectedContentReadOnlyCommand
                         },
                         {
-                            MpShortcutType.EditTitle,
-                            MpAvClipTrayViewModel.Instance.EditSelectedTitleCommand
+                            MpShortcutType.Rename,
+                            //MpAvClipTrayViewModel.Instance.EditSelectedTitleCommand
+                            MpAvApplicationCommand.Instance.RenameCommand
                         },
                         {
                             MpShortcutType.Duplicate,
@@ -283,8 +284,9 @@ namespace MonkeyPaste.Avalonia {
                             MpAvClipTrayViewModel.Instance.ToggleSelectedTileIsPinnedCommand
                         },
                         {
-                            MpShortcutType.OpenContentInWindow,
-                            MpAvClipTrayViewModel.Instance.OpenSelectedTileInWindowCommand
+                            MpShortcutType.OpenInWindow,
+                            //MpAvClipTrayViewModel.Instance.OpenSelectedTileInWindowCommand
+                            MpAvApplicationCommand.Instance.OpenPopoutCommand
                         },
                         {
                             MpShortcutType.PasteCopyItem,
@@ -671,6 +673,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.ShortcutAssignmentStarted:
                     IsShortcutsEnabled = false;
+                    _downs.Clear();
+                    _downTest.Clear();
+                    _keyboardGestureHelper.ClearCurrentGesture();
+
                     break;
                 case MpMessageType.ShortcutAssignmentEnded:
                     IsShortcutsEnabled = true;

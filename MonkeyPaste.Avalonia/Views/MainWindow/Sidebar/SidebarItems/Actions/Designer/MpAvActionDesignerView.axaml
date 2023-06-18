@@ -141,7 +141,6 @@
                                   TipLength="20"
                                   TipWidth="10"
                                   TailWidth="3"
-                                  RenderTransformOrigin="0.5,0.5"
                                   WarningBrush1="{DynamicResource DefaultWarningBrush1}"
                                   WarningBrush2="{DynamicResource DefaultWarningBrush2}"
                                   TransitionLineDefaultBorderBrush="{DynamicResource ThemeWhite}"

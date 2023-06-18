@@ -17,26 +17,70 @@
             body{foreground: black; background: khaki;border: 1.5 outset darkkhaki;}
         </sys:String>
     </UserControl.Resources>
+    <UserControl.Styles>
+        <!--  TEXT/HTML VISIBILITY  -->
+        <Style Selector="Border#TooltipOuterContainer.text av|HtmlLabel#ToolTipHtmlPanel">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="Border#TooltipOuterContainer.html DockPanel#ToolTipTextContainer">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
+        <!--  TEXT HINT  -->
+        <Style Selector="Border#TooltipOuterContainer.text:not(.gesture)">
+            <Setter Property="MaxWidth"
+                    Value="300" />
+        </Style>
+        <Style Selector="Border#TooltipOuterContainer.text TextBlock#ToolTipTextBlock">
+            <Setter Property="TextWrapping"
+                    Value="WrapWithOverflow" />
+        </Style>
+
+        <!--  SHORTCUT TOOLTIP  -->
+        <Style Selector="Border#TooltipOuterContainer.text.gesture TextBlock#ToolTipTextBlock">
+            <Setter Property="TextWrapping"
+                    Value="NoWrap" />
+        </Style>
+
+        <Style Selector="Border#TooltipOuterContainer.text:not(.gesture) TextBlock#InputGestureTextBlock">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+    </UserControl.Styles>
     <UserControl.RenderTransform>
         <TranslateTransform />
     </UserControl.RenderTransform>
-    <Border Background="{DynamicResource ThemeInteractiveColor}"
+    <Border x:Name="TooltipOuterContainer"
+            Background="{DynamicResource ThemeInteractiveColor}"
             BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
             CornerRadius="10"
             BorderThickness="1.5"
             Padding="10"
+            Classes.gesture="{Binding InputGestureText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
             Classes.text="{Binding ToolTipText, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
             Classes.html="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
         <Grid>
-            <TextBlock x:Name="ToolTipTextBlock"
-                       FontSize="14"
-                       FontWeight="Light"
-                       TextDecorations="{x:Null}"
-                       Foreground="{DynamicResource ThemeInteractiveBgColor}"
-                       TextWrapping="WrapWithOverflow"
-                       Text="{Binding ToolTipText, ElementName=ToolTipView}" />
+            <DockPanel x:Name="ToolTipTextContainer">
+                <TextBlock x:Name="InputGestureTextBlock"
+                           DockPanel.Dock="Right"
+                           Margin="5,0,0,0"
+                           FontSize="14"
+                           FontStyle="Italic"
+                           Foreground="{DynamicResource ThemeGrayAccent3}"
+                           Text="{Binding InputGestureText, ElementName=ToolTipView, StringFormat='({0})'}">
+
+                </TextBlock>
+                <TextBlock x:Name="ToolTipTextBlock"
+                           FontSize="14"
+                           Foreground="{DynamicResource ThemeInteractiveBgColor}"
+                           Text="{Binding ToolTipText, ElementName=ToolTipView}" />
+            </DockPanel>
+
 
             <av:HtmlLabel x:Name="ToolTipHtmlPanel"
+                          IsVisible="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                           Text="{Binding ToolTipHtml, ElementName=ToolTipView}" />
         </Grid>
     </Border>

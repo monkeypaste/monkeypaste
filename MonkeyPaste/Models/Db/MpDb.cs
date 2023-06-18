@@ -866,8 +866,8 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                  new string[] {"837e0c20-04b8-4211-ada0-3b4236da0821","Control+M", MpShortcutType.ChangeColor.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"118a2ca6-7021-47a0-8458-7ebc31094329","Control+Z", MpShortcutType.Undo.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"3980efcc-933b-423f-9cad-09e455c6824a","Control+Y", MpShortcutType.Redo.ToString(), MpRoutingType.Internal.ToString()},
-                 new string[] {"7a7580d1-4129-432d-a623-2fff0dc21408","Control+E", MpShortcutType.EditContent.ToString(), MpRoutingType.Internal.ToString()},
-                 new string[] {"085338fb-f297-497a-abb7-eeb7310dc6f3","F2", MpShortcutType.EditTitle.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"7a7580d1-4129-432d-a623-2fff0dc21408","Control+E", MpShortcutType.ToggleContentReadOnly.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"085338fb-f297-497a-abb7-eeb7310dc6f3","F2", MpShortcutType.Rename.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"e22faafd-4313-441a-b361-16910fc7e9d3","Control+D", MpShortcutType.Duplicate.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"ac8abe92-82c3-46fb-9bd5-39d74b100b23","Home", MpShortcutType.ScrollToHome.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"ac8abe92-82c3-46fb-9bd5-39d74b100b23","End", MpShortcutType.ScrollToEnd.ToString(), MpRoutingType.Internal.ToString()},
@@ -883,7 +883,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                  new string[] {"49f44a89-e381-4d6a-bf8c-1090eb443f17","Control+Q", MpShortcutType.ExitApplication.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"31e0a078-e80b-4d31-b236-2a585d6352cf", "Control+,", MpShortcutType.ShowSettings.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"5143ed80-a50a-41b9-9979-5e00c084560d", "Control+P", MpShortcutType.TogglePinned.ToString(), MpRoutingType.Internal.ToString()},
-                 new string[] {"755a4d0e-d26a-42cf-89a3-6c5710bd2e4c", "Control+O", MpShortcutType.OpenContentInWindow.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"755a4d0e-d26a-42cf-89a3-6c5710bd2e4c", "Control+O", MpShortcutType.OpenInWindow.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"728bfb06-1d96-441c-b710-efee383138be", "Control+G", MpShortcutType.ToggleAppendManualMode.ToString(), MpRoutingType.Internal.ToString()},
             };
 

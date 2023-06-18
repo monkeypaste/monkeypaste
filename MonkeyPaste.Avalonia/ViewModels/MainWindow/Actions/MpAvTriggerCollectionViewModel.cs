@@ -124,9 +124,29 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ICommand ResetDesignerViewCommand => new MpCommand(() => {
+            //MpRect total_rect = MpRect.Empty;
+            //SelectedTrigger.SelfAndAllDescendants.ForEach(x =>
+            //    total_rect = total_rect.Union(
+            //        new MpRect(
+            //            new MpPoint(x.X, x.Y),
+            //            new MpSize(DesignerItemDiameter, DesignerItemDiameter))));
+            //total_rect = total_rect.Inflate(DesignerItemDiameter / 4, DesignerItemDiameter / 4);
+
+            //double x_scale = ObservedDesignerBounds.Width / total_rect.Width;
+            //double y_scale = ObservedDesignerBounds.Height / total_rect.Height;
+
+            //Scale = Math.Min(x_scale, y_scale);
+
+            //var total_screen_tl = total_rect.TopLeft * Scale;
+            //var center = total_rect.Centroid() * Scale;
+            //var trans = center + DesignerCenterLocation;
+            //TranslateOffsetX = center.X;
+            //TranslateOffsetY = center.Y;
+
             Scale = 1;
             TranslateOffsetX = FocusActionScreenX;
             TranslateOffsetY = FocusActionScreenY;
+
         }, () => FocusAction != null);
 
         #region Designer Measure Properties
@@ -138,8 +158,8 @@ namespace MonkeyPaste.Avalonia {
         public MpPoint DefaultDesignerItemLocationLocation => new MpPoint(-DesignerItemDiameter / 2, -DesignerItemDiameter / 2);
 
 
-        public double FocusActionScreenX => FocusAction == null ? 0 : DesignerCenterLocation.X - FocusAction.X;
-        public double FocusActionScreenY => FocusAction == null ? 0 : DesignerCenterLocation.Y - FocusAction.Y;
+        public double FocusActionScreenX => FocusAction == null ? 0 : (DesignerCenterLocation.X - FocusAction.X) + (DesignerItemDiameter / 2);
+        public double FocusActionScreenY => FocusAction == null ? 0 : (DesignerCenterLocation.Y - FocusAction.Y) + (DesignerItemDiameter / 2);
         #endregion
 
         #region Designer Model Parsing Helpers

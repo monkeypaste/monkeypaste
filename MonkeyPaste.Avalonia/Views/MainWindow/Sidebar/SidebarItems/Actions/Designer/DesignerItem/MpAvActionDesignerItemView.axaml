@@ -275,9 +275,9 @@
                             </Grid>
                         </DataTemplate>
 
-                        <!--  Timer Triangle  -->
+                        <!--  Repeater Triangle  -->
 
-                        <DataTemplate x:Key="TimerDesignerTemplate">
+                        <DataTemplate x:Key="RepeaterDesignerTemplate">
                             <Grid ClipToBounds="False">
                                 <Polygon Points="25,0 50,50 0,50" />
                                 <Border x:Name="DesignerIconContainer">
