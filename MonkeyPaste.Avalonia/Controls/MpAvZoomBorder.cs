@@ -23,6 +23,8 @@ namespace MonkeyPaste.Avalonia {
 
         private MpPoint mp_start;
 
+        private const int _RENDER_INTERVAL_MS = 50;
+
         #endregion
 
         #region Statics
@@ -239,11 +241,14 @@ namespace MonkeyPaste.Avalonia {
             double zoomCorrected = scaleDelta * scale;
             scale += zoomCorrected;
 
-            DesignerItem.Scale = Math.Min(MaxScale, Math.Max(MinScale, scale));
+            scale = Math.Min(MaxScale, Math.Max(MinScale, scale));
+            DesignerItem.Scale = scale;
 
             var t = new MpPoint(DesignerItem.TranslateOffsetX, DesignerItem.TranslateOffsetY) * scale;
-            //MpPoint abs = (relative_anchor * scale) + t;
-            //t = abs - relative_anchor * scale;
+            //relative_anchor += MpAvTriggerCollectionViewModel.Instance.DesignerCenterLocation;
+            //relative_anchor *= scale;
+            //MpPoint abs = (relative_anchor) + t;
+            //t = abs - relative_anchor;// * scale;
             DesignerItem.TranslateOffsetX = t.X;
             DesignerItem.TranslateOffsetY = t.Y;
 
@@ -284,7 +289,7 @@ namespace MonkeyPaste.Avalonia {
             base.OnAttachedToVisualTree(e);
             if (_render_timer == null) {
                 _render_timer = new DispatcherTimer();
-                _render_timer.Interval = TimeSpan.FromMilliseconds(50);
+                _render_timer.Interval = TimeSpan.FromMilliseconds(_RENDER_INTERVAL_MS);
                 _render_timer.Tick += (s, e) => {
                     Dispatcher.UIThread.Post(InvalidateVisual);
                 };
@@ -481,6 +486,7 @@ namespace MonkeyPaste.Avalonia {
             if (tavm == null) {
                 return;
             }
+
             foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants.OrderBy(x => x.DesignerZIndex)) {
                 DrawActionShadow(dc, avm);
 
@@ -496,12 +502,37 @@ namespace MonkeyPaste.Avalonia {
                 MpPoint tail = cur_rect.Centroid();
                 MpPoint head = parent_rect.Centroid();
 
-                var borderBrush = pavm.IsHovering ? TransitionLineHoverBorderBrush : TransitionLineDefaultBorderBrush;
                 var fillBrush = GetArrowFillBrush(pavm, avm, head, tail);
 
                 double end_adjust = Math.Sqrt(Math.Pow(avm.Width / 2, 2) + Math.Pow(avm.Height / 2, 2));
+                var borderBrush = pavm.IsHovering ? TransitionLineHoverBorderBrush : TransitionLineDefaultBorderBrush;
                 DrawArrow(dc, head, tail, end_adjust, borderBrush, fillBrush);
             }
+
+            var total_rect = MpRect.Empty;
+            MpRect total_rect2 = null;
+            foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants.OrderBy(x => x.DesignerZIndex)) {
+                if (GetActionShape(avm) is Shape s &&
+                    s.GetVisualAncestor<ListBoxItem>() is ListBoxItem lbi &&
+                    s.GetVisualAncestor<ListBox>() is ListBox lb) {
+                    MpRect cur_rect = s.Bounds.ToPortableRect();
+                    var new_origin = s.TranslatePoint(new Point(), lb).Value.ToPortablePoint();
+                    cur_rect.Move(new_origin);
+                    total_rect = total_rect.Union(cur_rect);
+                    //dc.DrawRectangle(new Pen(Brushes.Cyan), cur_rect.ToAvRect());
+
+                    MpRect cur_rect2 = s.Bounds.ToPortableRect();
+                    var new_origin2 = s.TranslatePoint(new Point(), this).Value.ToPortablePoint();
+                    cur_rect2.Move(new_origin2);
+                    total_rect2 = total_rect2.Union(cur_rect2);
+                    //dc.DrawRectangle(new Pen(Brushes.Orange), cur_rect2.ToAvRect());
+                }
+            }
+
+            var total_rect3 = MpAvTriggerCollectionViewModel.Instance.DesignerItemsRect;
+            // dc.DrawRectangle(new Pen(Brushes.White), total_rect.ToAvRect());
+            //dc.DrawRectangle(new Pen(Brushes.Yellow), total_rect2.ToAvRect());
+            //dc.DrawRectangle(new Pen(Brushes.Red), total_rect3.ToAvRect());
         }
 
         private Shape GetActionShape(MpAvActionViewModelBase avm) {
@@ -571,6 +602,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
+
         private IBrush GetArrowFillBrush(MpAvActionViewModelBase pavm, MpAvActionViewModelBase avm, MpPoint pp, MpPoint p) {
             Color enabled_color = TransitionLineEnabledFillBrush.GetColor();
             Color disabled_color = TransitionLineDisabledFillBrush.GetColor();
@@ -581,9 +613,14 @@ namespace MonkeyPaste.Avalonia {
             var cur_color = avm.IsTriggerEnabled ? enabled_color : disabled_color;
 
             var fillBrush = new LinearGradientBrush() {
+                TransformOrigin = new RelativePoint(pp.ToAvPoint(), RelativeUnit.Absolute),
                 GradientStops = new GradientStops(),
                 StartPoint = new RelativePoint(pp.ToAvPoint(), RelativeUnit.Absolute),
                 EndPoint = new RelativePoint(p.ToAvPoint(), RelativeUnit.Absolute)
+                //StartPoint = new RelativePoint(new Point(), RelativeUnit.Relative),
+                //EndPoint = new RelativePoint((p - pp).Normalized.ToAvPoint(), RelativeUnit.Relative)
+                //StartPoint = new RelativePoint(0, 0, RelativeUnit.Relative),
+                //EndPoint = new RelativePoint(1, 0, RelativeUnit.Relative)
             };
 
             int strip_count = (int)((double)(pp - p).Length / 15d);
@@ -593,6 +630,8 @@ namespace MonkeyPaste.Avalonia {
                 fillBrush.GradientStops.Add(new GradientStop(parent_color, 0.45d));
             } else {
                 fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0, 0.5, strip_count));
+
+                fillBrush.Transform = GetBrushTransform(fillBrush, false, pavm, p.AngleBetween(pp));
             }
 
             if (avm.IsValid) {
@@ -600,10 +639,39 @@ namespace MonkeyPaste.Avalonia {
                 fillBrush.GradientStops.Add(new GradientStop(cur_color, 1.0d));
             } else {
                 fillBrush.GradientStops.AddRange(GetGradientStripes(warning_color1, warning_color2, 0.5, 1, strip_count));
-                fillBrush.Transform = new RotateTransform(-90);
+                fillBrush.Transform = GetBrushTransform(fillBrush, true, avm, p.AngleBetween(pp));
             }
 
             return fillBrush;
+        }
+
+        private DateTime? _lastRenderDt = null;
+        private double _animOffset = 0;
+        private ITransform GetBrushTransform(LinearGradientBrush lgb, bool is_tail, MpAvActionViewModelBase avm, double angle) {
+
+            //_lastRenderDt = _lastRenderDt == null ? DateTime.Now : _lastRenderDt;
+            //var cur_dt = DateTime.Now;
+            //var dt = cur_dt - _lastRenderDt;
+            //_lastRenderDt = cur_dt;
+            if (avm.TagObj is not double animOffset) {
+                animOffset = 0;
+            } else {
+                animOffset += 0.001;
+            }
+            double max_anim_offset = Math.Abs(lgb.GradientStops[1].Offset - lgb.GradientStops[0].Offset);
+            if (animOffset > max_anim_offset) {
+                animOffset = 0;
+            }
+            avm.TagObj = animOffset;
+
+            //double angle = angle;//is_tail ? -90 : 0;
+            Point trans = is_tail ? new Point(animOffset, 0) : new Point(0, animOffset);
+            Point skew = new Point(45, -45);
+            var tg = new TransformGroup();
+            //tg.Children.Add(new RotateTransform(-angle));
+            //tg.Children.Add(new TranslateTransform(trans.X, trans.Y));
+            //tg.Children.Add(new SkewTransform(skew.X, skew.Y));
+            return tg;
         }
 
         private IEnumerable<GradientStop> GetGradientStripes(

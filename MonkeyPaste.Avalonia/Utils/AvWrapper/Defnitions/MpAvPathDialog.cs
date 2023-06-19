@@ -9,17 +9,28 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPathDialog : MpINativePathDialog {
-        public async Task<string> ShowFileDialogAsync(string title = "", string initDir = "", object filters = null, bool resolveShortcutPath = false) {
+        public async Task<string> ShowFileDialogAsync(
+            string title = "",
+            string initDir = "",
+            object filters = null,
+            bool resolveShortcutPath = false) {
             var result = await ShowFileOrFolderDialogAsync(false, title, initDir, filters, resolveShortcutPath);
             return result;
         }
 
-        public async Task<string> ShowFolderDialogAsync(string title = "", string initDir = "") {
-            var result = await ShowFileOrFolderDialogAsync(false, title, initDir, null);
+        public async Task<string> ShowFolderDialogAsync(
+            string title = "",
+            string initDir = "") {
+            var result = await ShowFileOrFolderDialogAsync(true, title, initDir, null);
             return result;
         }
 
-        private static async Task<string> ShowFileOrFolderDialogAsync(bool isFolder, string title, string initDir, object filtersObj, bool resolveShortcutPath = false) {
+        private static async Task<string> ShowFileOrFolderDialogAsync(
+            bool isFolder,
+            string title,
+            string initDir,
+            object filtersObj,
+            bool resolveShortcutPath = false) {
             title ??= $"Select {(isFolder ? "Folder" : "File")}";
             IReadOnlyList<FilePickerFileType> filters = filtersObj as IReadOnlyList<FilePickerFileType> ?? (new[] { FilePickerFileTypes.All });
             var storage_provider = GetStorageProvider();

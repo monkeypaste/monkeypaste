@@ -67,6 +67,8 @@ namespace MonkeyPaste {
         [JsonIgnore]
         public bool LogPropertyChangedEvents { get; set; } = false;
 
+        [JsonIgnore]
+        public object TagObj { get; set; }
         #endregion
 
         #region Events

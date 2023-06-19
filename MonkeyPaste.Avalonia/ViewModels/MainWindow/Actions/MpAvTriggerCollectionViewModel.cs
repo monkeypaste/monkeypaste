@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -124,33 +125,79 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public ICommand ResetDesignerViewCommand => new MpCommand(() => {
-            //MpRect total_rect = MpRect.Empty;
-            //SelectedTrigger.SelfAndAllDescendants.ForEach(x =>
-            //    total_rect = total_rect.Union(
-            //        new MpRect(
-            //            new MpPoint(x.X, x.Y),
-            //            new MpSize(DesignerItemDiameter, DesignerItemDiameter))));
-            //total_rect = total_rect.Inflate(DesignerItemDiameter / 4, DesignerItemDiameter / 4);
+
+            MpAvZoomBorder zb = null;
+            if (IsDesignerWindowOpen &&
+                MpAvWindowManager.LocateWindow(this) is Window dsw &&
+                dsw.GetVisualDescendant<MpAvZoomBorder>() is MpAvZoomBorder dsw_zb) {
+                zb = dsw_zb;
+            } else if (MpAvWindowManager.MainWindow.GetVisualDescendant<MpAvZoomBorder>() is MpAvZoomBorder mw_zb) {
+                zb = mw_zb;
+            }
+
+            //if (zb == null) {
+            Scale = 1;
+            var focus_loc = GetDesignerItemCenter(FocusAction);
+            TranslateOffsetX = focus_loc.X;
+            TranslateOffsetY = focus_loc.Y;
+            return;
+            // }
+
+            //MpRect total_rect = DesignerItemsRect;
+            ////var lb = zb.GetVisualDescendant<ListBox>();
+            ////for (int i = 0; i < lb.ItemCount; i++) {
+            ////    if (lb.ContainerFromIndex(i) is ListBoxItem lbi
+            ////        && lbi.GetVisualDescendant<Shape>() is Shape s) {
+            ////        MpRect cur_rect2 = s.Bounds.ToPortableRect();
+            ////        var new_origin2 = s.TranslatePoint(new Point(), zb).Value.ToPortablePoint();
+            ////        cur_rect2.Move(new_origin2);
+            ////        total_rect = total_rect.Union(cur_rect2);
+            ////    }
+            ////}
+            ////total_rect = total_rect.Inflate(20, 20);
 
             //double x_scale = ObservedDesignerBounds.Width / total_rect.Width;
             //double y_scale = ObservedDesignerBounds.Height / total_rect.Height;
-
+            //// 2.7
             //Scale = Math.Min(x_scale, y_scale);
 
-            //var total_screen_tl = total_rect.TopLeft * Scale;
-            //var center = total_rect.Centroid() * Scale;
-            //var trans = center + DesignerCenterLocation;
-            //TranslateOffsetX = center.X;
-            //TranslateOffsetY = center.Y;
+            ////var container_size = ObservedDesignerBounds.Size.ToPortablePoint();
+            ////var rect_size = total_rect.Size.ToPortablePoint();
+            ////var trans = container_size - rect_size - (rect_size * 0.5);
 
-            Scale = 1;
-            TranslateOffsetX = FocusActionScreenX;
-            TranslateOffsetY = FocusActionScreenY;
+            ////var total_screen_tl = total_rect.TopLeft * Scale;
+            //var trans = total_rect.TopLeft; //DesignerCenterLocation - total_rect.Centroid();
+
+            ////var trans = (centeroid * Scale) + (DesignerCenterLocation * Scale);
+
+            //TranslateOffsetX = -trans.X;
+            //TranslateOffsetY = -trans.Y;
 
         }, () => FocusAction != null);
 
+        private MpPoint GetDesignerItemCenter(MpAvActionViewModelBase avm) {
+            return new MpPoint(
+                            (DesignerCenterLocation.X - FocusAction.X - (DesignerItemDiameter / 2)),
+                            (DesignerCenterLocation.Y - FocusAction.Y - (DesignerItemDiameter / 2)));
+        }
+
+        private MpPoint GetDesignerItemOrigin(MpAvActionViewModelBase avm) {
+            return GetDesignerItemCenter(avm) - new MpPoint(DesignerItemDiameter / 2, DesignerItemDiameter / 2);
+        }
+
         #region Designer Measure Properties
 
+        public MpRect DesignerItemsRect {
+            get {
+                MpRect total_rect = null;
+                SelectedTrigger.SelfAndAllDescendants.ForEach(x =>
+                    total_rect = total_rect.Union(
+                        new MpRect(
+                            GetDesignerItemOrigin(x),
+                            new MpSize(DesignerItemDiameter, DesignerItemDiameter))));
+                return total_rect;
+            }
+        }
         public MpRect ObservedDesignerBounds { get; set; } = MpRect.Empty;
         public double DesignerItemDiameter => 50;
 

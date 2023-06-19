@@ -141,6 +141,7 @@
                             Classes.valid="{Binding IsValid}"
                             Width="{Binding Width}"
                             Height="{Binding Height}"
+                            Focusable="True"
                             local:MpAvIsHoveringExtension.IsEnabled="True"
                             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                             local:MpAvMoveExtension.IsEnabled="True"

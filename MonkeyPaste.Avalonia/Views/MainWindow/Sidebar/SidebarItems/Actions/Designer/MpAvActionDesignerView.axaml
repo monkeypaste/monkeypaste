@@ -84,7 +84,7 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Zoom {0:P}%'}" />
+                        <local:MpAvToolTipView ToolTipText="{Binding $parent[Slider].Value, Mode=OneWay, StringFormat='Zoom {0:P}'}" />
                     </Template>
                 </Setter.Value>
             </Setter>

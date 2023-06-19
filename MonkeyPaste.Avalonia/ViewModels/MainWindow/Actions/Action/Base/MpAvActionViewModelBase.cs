@@ -1335,11 +1335,15 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(HasArgsChanged):
                     if (HasArgsChanged) {
                         HasArgsChanged = false;
-                        if (IsTriggerEnabled || !IsValid) {
+
+                        if (!IsValid) {
                             // NOTE only when args change and trigger is active or invalid already, 
                             // invoke validation to avoid unnecessary warnings during create or while
                             // its disabled
                             ValidateActionAsync().FireAndForgetSafeAsync(this);
+                        }
+                        if (IsTriggerEnabled) {
+                            RootTriggerActionViewModel.ReenableTriggerCommand.Execute(null);
                         }
                     }
                     break;

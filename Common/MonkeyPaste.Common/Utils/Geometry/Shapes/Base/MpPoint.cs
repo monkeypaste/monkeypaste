@@ -120,6 +120,16 @@ namespace MonkeyPaste.Common {
             Y /= distance;
         }
 
+        public double AngleBetween(MpPoint other) {
+            // example :
+            // two points (namely x1, y1, and x2, y2), I would like to calculate the angle between these two points,
+            // presuming that when y1 == y2 and x1 > x2 the angle is 180 degrees
+            // from https://stackoverflow.com/a/12892493/105028
+
+            var diff = other - this;
+            return Math.Atan2(diff.Y, diff.X) * 180.0 / Math.PI;
+        }
+
         public void Clamp(MpRect rect) {
             Clamp(rect.Left, rect.Top, rect.Right, rect.Bottom);
         }

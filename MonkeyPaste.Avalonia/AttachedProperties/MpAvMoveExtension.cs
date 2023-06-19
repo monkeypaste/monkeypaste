@@ -8,6 +8,7 @@ using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Windows.Input;
+using Key = Avalonia.Input.Key;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -208,19 +209,15 @@ namespace MonkeyPaste.Avalonia {
             control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
             control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
             control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, RoutingStrategies.Tunnel);
+            control.AddHandler(Control.KeyDownEvent, Control_KeyDown, RoutingStrategies.Tunnel);
+            control.AddHandler(Control.KeyUpEvent, Control_KeyUp, RoutingStrategies.Tunnel);
+
             control.PointerMoved += Control_PointerMoved;
             control.PointerEntered += Control_PointerEnter;
             control.PointerExited += Control_PointerLeave;
-
-            //if (Control.DataContext is MpIMovableViewModel rvm) {
-            //    //var dupCheck = _allMovables.FirstOrDefault(x => x.MovableId == rvm.MovableId);
-            //    //if (dupCheck != null) {
-            //    //    MpConsole.WriteLine("Duplicate movable detected while loading, swapping for new...");
-            //    //    _allMovables.Remove(dupCheck);
-            //    //}
-            //    _allMovables.Add(rvm);
-            //}
         }
+
+
 
         private static void Control_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             var control = sender as Control;
@@ -229,6 +226,8 @@ namespace MonkeyPaste.Avalonia {
                 control.DetachedFromVisualTree -= Control_DetachedFromVisualTree;
                 control.RemoveHandler(Control.PointerPressedEvent, Control_PointerPressed);
                 control.RemoveHandler(Control.PointerReleasedEvent, Control_PointerReleased);
+                control.RemoveHandler(Control.KeyDownEvent, Control_KeyDown);
+                control.RemoveHandler(Control.KeyUpEvent, Control_KeyUp);
                 control.PointerMoved -= Control_PointerMoved;
                 control.PointerEntered -= Control_PointerEnter;
                 control.PointerExited -= Control_PointerLeave;
@@ -245,12 +244,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public static void Move(Control Control, double dx, double dy) {
+        public static void Move(Control control, double dx, double dy) {
             if (Math.Abs(dx + dy) < 0.1) {
                 return;
             }
-            var adivm = Control.DataContext as MpIBoxViewModel;
-            var newLoc = new MpPoint(adivm.X + dx, adivm.Y + dy);
+            if (control.DataContext is not MpIBoxViewModel adivm ||
+                control.DataContext is not MpViewModelBase vmb ||
+                vmb.ParentObj is not MpIDesignerSettingsViewModel dsvm) {
+                return;
+            }
+
+            // NOTE must transform mouse delta from designer canvas scaling
+            //delta.X *= 1 / avmb.Parent.Scale;
+            //delta.Y *= 1 / avmb.Parent.Scale;
+            var delta = new MpPoint(dx, dy);
+            delta /= dsvm.Scale;
+            var newLoc = new MpPoint(adivm.X, adivm.Y) + delta;
             adivm.X = newLoc.X;
             adivm.Y = newLoc.Y;
 
@@ -294,12 +303,6 @@ namespace MonkeyPaste.Avalonia {
                 var mwmp = e.GetPosition(relativeTo).ToPortablePoint();
 
                 MpPoint delta = mwmp - _lastMousePosition;
-
-                // NOTE must transform mouse delta from designer canvas scaling
-                //delta.X *= 1 / avmb.Parent.Scale;
-                //delta.Y *= 1 / avmb.Parent.Scale;
-                delta /= avmb.Parent.Scale;
-
                 Move(control, delta.X, delta.Y);
 
                 _lastMousePosition = mwmp;
@@ -333,13 +336,49 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private static void Control_KeyDown(object sender, global::Avalonia.Input.KeyEventArgs e) {
+            if (sender is not Control control) {
+                return;
+            }
+            double multiplier = 5.0d;
+            if (e.KeyModifiers == KeyModifiers.Shift || e.KeyModifiers == KeyModifiers.Control) {
+                multiplier = 1.0d;
+            } else if (e.KeyModifiers != KeyModifiers.None) {
+                // ignore if non-shift mod key
+                return;
+            }
+            MpPoint delta = null;
+            if (e.Key == Key.Left) {
+                delta = new MpPoint(-1, 0);
+            } else if (e.Key == Key.Right) {
+                delta = new MpPoint(1, 0);
+            } else if (e.Key == Key.Up) {
+                delta = new MpPoint(0, -1);
+            } else if (e.Key == Key.Down) {
+                delta = new MpPoint(0, 1);
+            }
+            if (delta == null) {
+                return;
+            }
+            delta *= multiplier;
+            SetIsMoving(control, true);
+            Move(control, delta.X, delta.Y);
+            e.Handled = true;
+        }
+        private static void Control_KeyUp(object sender, global::Avalonia.Input.KeyEventArgs e) {
+            if (sender is not Control control ||
+                !GetIsMoving(control)) {
+                return;
+            }
+            FinishMove(control);
+        }
 
         private static void FinishMove(Control control) {
             SetIsMoving(control, false);
 
             if (_lastMousePosition != null &&
                 _mouseDownPosition != null &&
-                (_lastMousePosition - _mouseDownPosition).Length < 5 &&
+                (_lastMousePosition - _mouseDownPosition).Length >= 5 &&
                 GetFinishMoveCommand(control) is ICommand finishMoveCmd) {
                 finishMoveCmd.Execute(GetFinishMoveCommandParameter(control));
             }

@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -53,6 +54,7 @@ namespace MonkeyPaste.Avalonia {
 
             Dispatcher.UIThread.Post(async () => {
                 MpCopyItem ci = null;
+
                 switch (e.ChangeType) {
                     // TODO this is barely tested, should use os file manager as source
                     case WatcherChangeTypes.Changed:
@@ -66,18 +68,10 @@ namespace MonkeyPaste.Avalonia {
                             var si = await e.FullPath.ToFileOrFolderStorageItemAsync();
                             ci = await Mp.Services.CopyItemBuilder.BuildAsync(
                                 pdo: new MpAvDataObject(MpPortableDataFormats.AvFileNames, new[] { si }),
-                                suppressWrite: true,
-                                transType: MpTransactionType.Analyzed,
+                                //suppressWrite: true,
+                                transType: MpTransactionType.Created,
                                 force_allow_dup: true,
                                 force_ext_sources: false);
-                            if (!ci.WasDupOnCreate) {
-                                // new item, create source ref
-                                //await MpTransactionSource.CreateAsync(
-                                //    copyItemId: ci.Id,
-                                //    sourceObjId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
-                                //    sourceType: MpCopyItemSourceType.App);
-                            }
-
                             break;
                         }
 
@@ -94,8 +88,8 @@ namespace MonkeyPaste.Avalonia {
                                 var si = await e.FullPath.ToFileOrFolderStorageItemAsync();
                                 ci = await Mp.Services.CopyItemBuilder.BuildAsync(
                                     pdo: new MpAvDataObject(MpPortableDataFormats.AvFileNames, new[] { si }),
-                                    suppressWrite: true,
-                                    transType: MpTransactionType.Analyzed,
+                                    //suppressWrite: true,
+                                    transType: MpTransactionType.Created,
                                     force_allow_dup: true,
                                     force_ext_sources: false);
                             } else {
@@ -292,6 +286,14 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(ActionArgs):
                     //OnPropertyChanged(nameof(SelectedPreset));
+                    break;
+                case nameof(HasArgsChanged):
+                    if (!HasArgsChanged ||
+                        !IsEnabled) {
+                        break;
+                    }
+                    DisableTrigger();
+                    EnableTrigger();
                     break;
             }
         }

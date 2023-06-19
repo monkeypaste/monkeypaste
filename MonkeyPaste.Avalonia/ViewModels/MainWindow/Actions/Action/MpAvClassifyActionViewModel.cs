@@ -1,4 +1,5 @@
 ﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,6 +89,21 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Overrides
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if (e is not MpTag t) {
+                return;
+            }
+            if (ArgLookup.TryGetValue(SELECTED_TAG_PARAM_ID, out var pvmb)) {
+                pvmb.InitializeAsync(pvmb.PresetValueModel).FireAndForgetSafeAsync();
+            }
+        }
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is not MpTag t) {
+            }
+            if (ArgLookup.TryGetValue(SELECTED_TAG_PARAM_ID, out var pvmb)) {
+                pvmb.InitializeAsync(pvmb.PresetValueModel).FireAndForgetSafeAsync();
+            }
+        }
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpTag t && t.Id == TagId) {
                 Dispatcher.UIThread.Post(async () => {

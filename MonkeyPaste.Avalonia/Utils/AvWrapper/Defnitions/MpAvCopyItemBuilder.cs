@@ -117,7 +117,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            await Mp.Services.TransactionBuilder.ReportTransactionAsync(
+            if (!suppressWrite) {
+                await Mp.Services.TransactionBuilder.ReportTransactionAsync(
                             copyItemId: ci.Id,
                             reqType: MpJsonMessageFormatType.DataObject,
                             //req: mpdo.SerializeData(),
@@ -125,6 +126,7 @@ namespace MonkeyPaste.Avalonia {
                             //resp: itemDelta,
                             ref_uris: ref_urls,
                             transType: transType);
+            }
 
             return ci;
         }

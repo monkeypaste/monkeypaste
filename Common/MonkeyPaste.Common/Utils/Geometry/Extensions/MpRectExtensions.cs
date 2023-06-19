@@ -75,22 +75,38 @@ namespace MonkeyPaste.Common {
             return other.Points.Any(x => rect.Contains(x));
         }
 
-        public static MpRect Union(this MpRect rect, MpRect other) {
-            double l = Math.Min(rect.Left, other.Left);
-            double t = Math.Min(rect.Top, other.Top);
-            double r = Math.Max(rect.Right, other.Right);
-            double b = Math.Max(rect.Bottom, other.Bottom);
-            return new MpRect(l, t, r - l, b - t);
+        public static MpRect Union(this MpRect a, MpRect b) {
+            if (a == null && b == null) {
+                return null;
+            }
+            if (a == null) {
+                // for rect summation sum rect (a) should initially be null
+                return b;
+            }
+            if (b == null) {
+                return a;
+            }
+
+            double x1 = Math.Min(a.X, b.X);
+            double x2 = Math.Max(a.X + a.Width, b.X + b.Width);
+            double y1 = Math.Min(a.Y, b.Y);
+            double y2 = Math.Max(a.Y + a.Height, b.Y + b.Height);
+
+            return new MpRect(x1, y1, x2 - x1, y2 - y1);
+
+            //double l = Math.Min(rect.Left, other.Left);
+            //double t = Math.Min(rect.Top, other.Top);
+            //double r = Math.Max(rect.Right, other.Right);
+            //double b = Math.Max(rect.Bottom, other.Bottom);
+            //return new MpRect(l, t, r - l, b - t);
         }
 
-        public static MpRect Inflate(this MpRect rect, double w, double h) {
-            double hw = w / 2;
-            double hh = h / 2;
-            double l = rect.Left - hw;
-            double t = rect.Top - hh;
-            double r = rect.Right + hw;
-            double b = rect.Bottom + hh;
-            return new MpRect(l, t, r - l, b - t);
+        public static MpRect Inflate(this MpRect rect, double dw, double dh) {
+            double x = rect.X - dw;
+            double y = rect.Y - dh;
+            double w = rect.Width + (2 * dw);
+            double h = rect.Height + (2 * dh);
+            return new MpRect(x, y, w, h);
         }
 
         public static MpRectSideHitTest GetClosestSideToPoint(this MpRect rect, MpPoint p, string excludedSideLabelsCsv = "") {

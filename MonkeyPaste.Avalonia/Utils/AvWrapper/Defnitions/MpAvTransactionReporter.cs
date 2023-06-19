@@ -16,12 +16,9 @@ namespace MonkeyPaste.Avalonia {
             IEnumerable<string> source_ref_uris = null,
             MpTransactionType transactionType = MpTransactionType.None) {
 
-            if (copyItemId <= 0) {
-                throw new Exception("CopyItemId required to create transaction");
-            }
-            if (source_ref_uris == null || !source_ref_uris.Any()) {
-                throw new Exception("Must provide transaction references");
-            }
+            MpDebug.Assert(copyItemId > 0, "CopyItemId required to create transaction");
+            MpDebug.Assert(source_ref_uris != null && source_ref_uris.Any(), "Must provide transaction references");
+
             if (transactionType != MpTransactionType.Analyzed) {
                 req = null;
                 resp = null;
