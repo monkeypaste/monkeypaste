@@ -10,7 +10,7 @@
              x:Class="MonkeyPaste.Avalonia.MpAvToolTipInfoHintView"
              Background="Transparent">
     <UserControl.Styles>
-        <Style Selector="Ellipse">
+        <Style Selector="Ellipse.hint">
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="VerticalAlignment"
@@ -21,7 +21,7 @@
                     Value="White" />
         </Style>
 
-        <Style Selector="TextBlock">
+        <Style Selector="TextBlock.hint">
             <Setter Property="HorizontalAlignment"
                     Value="Center" />
             <Setter Property="VerticalAlignment"
@@ -45,21 +45,21 @@
           Width="15"
           Height="15">
         <!--  INFO  -->
-        <Ellipse Classes="info"
+        <Ellipse Classes="info hint"
                  Fill="Blue" />
-        <TextBlock Classes="info"
+        <TextBlock Classes="info hint"
                    Text="i" />
         <!--  WARNING  -->
-        <Ellipse Classes="warning"
+        <Ellipse Classes="warning hint"
                  Stroke="Black"
                  Fill="Yellow" />
-        <TextBlock Classes="warning"
+        <TextBlock Classes="warning hint"
                    Foreground="Black"
                    Text="!" />
         <!--  ERROR  -->
-        <Ellipse Classes="error"
+        <Ellipse Classes="error hint"
                  Fill="Red" />
-        <TextBlock Classes="error"
+        <TextBlock Classes="error hint"
                    Text="x" />
     </Grid>
 </UserControl>

@@ -923,6 +923,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private double GetRenderWidth() {
+            if (Text == "All" &&
+                this.GetVisualAncestor<MpAvTagTrayView>() != null) {
+
+            }
             if (!this.IsVisible) {
                 return 0;
             }

@@ -422,8 +422,6 @@ namespace MonkeyPaste.Common {
         public static string ReadTextFromResource(string resourcePath, Assembly assembly = null) {
             try {
                 assembly = assembly == null ? Assembly.GetExecutingAssembly() : assembly;
-                //var resourceName = "MyCompany.MyProduct.MyFile.txt";
-
                 using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
                 using (StreamReader reader = new StreamReader(stream)) {
                     string result = reader.ReadToEnd();

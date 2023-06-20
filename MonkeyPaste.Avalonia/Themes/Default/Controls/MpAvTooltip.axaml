@@ -13,19 +13,19 @@
     </Style>
     <!--  HINTS  -->
     <!--  INFO  -->
-    <Style Selector="local|MpAvToolTipInfoHintView:not(.warning):not(.error) Grid :is(Control):not(.info)">
+    <Style Selector="local|MpAvToolTipInfoHintView:not(.warning):not(.error) Grid :is(Control).hint:not(.info)">
         <Setter Property="IsVisible"
                 Value="False" />
     </Style>
 
     <!--  Warning  -->
-    <Style Selector="local|MpAvToolTipInfoHintView.warning Grid :is(Control):not(.warning)">
+    <Style Selector="local|MpAvToolTipInfoHintView.warning Grid :is(Control).hint:not(.warning)">
         <Setter Property="IsVisible"
                 Value="False" />
     </Style>
 
     <!--  Error  -->
-    <Style Selector="local|MpAvToolTipInfoHintView.error Grid :is(Control):not(.error)">
+    <Style Selector="local|MpAvToolTipInfoHintView.error Grid :is(Control).hint:not(.error)">
         <Setter Property="IsVisible"
                 Value="False" />
     </Style>

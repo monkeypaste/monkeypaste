@@ -12,15 +12,26 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvTagTrayViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagTrayView">
+    <local:MpAvUserControl.Resources>
+        <x:Double x:Key="TextControlThemeMinWidth">10</x:Double>
+    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+
+        <Style Selector="RepeatButton PathIcon">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+
+        <Style Selector="RepeatButton:pointerover PathIcon">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeAccent1Color}" />
+        </Style>
 
         <Style Selector="PathIcon">
             <Setter Property="Width"
                     Value="{Binding NavButtonSize}" />
             <Setter Property="Height"
                     Value="{Binding NavButtonSize}" />
-            <Setter Property="Foreground"
-                    Value="Black" />
         </Style>
 
         <!--  DROP LINE  -->
@@ -43,15 +54,15 @@
             <ColumnDefinition Width="Auto" />
             <!--  NOTE MinWidth set for drag drop target  -->
             <ColumnDefinition Width="Auto"
-                              MinWidth="200"
-                              MaxWidth="{Binding MaxTagTrayScreenWidth}" />
+                              MinWidth="{Binding IsAnyDragging, ConverterParameter=50|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                              MaxWidth="{Binding MaxTagTrayScreenWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}}" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <RepeatButton x:Name="TagTrayNavLeftButton"
+                      Classes="noBg noHoverBg"
                       HorizontalAlignment="Left"
                       Grid.Column="0"
-                      Click="NavLeftRepeatButton_Click"
                       Margin="5"
                       Padding="5"
                       IsVisible="{Binding IsNavButtonsVisible}">
@@ -59,6 +70,8 @@
         </RepeatButton>
         <ListBox x:Name="TagTray"
                  Grid.Column="1"
+                 ClipToBounds="True"
+                 MaxWidth="{Binding MaxTagTrayScreenWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}}"
                  Classes.trayDrag="{Binding !IsPinTrayDragOver}"
                  Background="Transparent"
                  AutoScrollToSelectedItem="False"
@@ -109,7 +122,6 @@
         </ListBox>
         <RepeatButton x:Name="TagTrayNavRightButton"
                       Grid.Column="2"
-                      Click="NavRightRepeatButton_Click"
                       HorizontalAlignment="Right"
                       Margin="5"
                       Padding="5"

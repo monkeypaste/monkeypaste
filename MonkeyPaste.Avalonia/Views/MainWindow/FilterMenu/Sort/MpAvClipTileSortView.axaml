@@ -102,6 +102,8 @@
                 Height="30"
                 Width="30"
                 local:MpAvPointerCommandExtension.IsEnabled="True"
+                local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                local:MpAvPointerCommandExtension.IsEventHandled="True"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ClickCommand, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}"
                 local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding DoubleClickCommand, Source={x:Static local:MpAvClipTileSortDirectionViewModel.Instance}}">
             <Image HorizontalAlignment="Stretch"

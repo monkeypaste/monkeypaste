@@ -78,6 +78,15 @@
                     Value="10" />
         </Style>
 
+        <Style Selector="Button.saveOrCancelButton TextBlock">
+            <Setter Property="Margin"
+                    Value="0" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+        </Style>
+
         <!--  PARAM LISTBOXITEM  -->
 
         <Style Selector="ListBox#PluginParameterListBox > ListBoxItem">
@@ -117,8 +126,6 @@
                        VerticalAlignment="Center" />
                 <TextBlock Grid.Row="1"
                            ClipToBounds="False"
-                           HorizontalAlignment="Center"
-                           TextAlignment="Center"
                            Text="Cancel" />
             </Grid>
         </Button>
@@ -137,8 +144,6 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center" />
                 <TextBlock Grid.Row="1"
-                           HorizontalAlignment="Center"
-                           TextAlignment="Center"
                            Text="Save" />
             </Grid>
         </Button>

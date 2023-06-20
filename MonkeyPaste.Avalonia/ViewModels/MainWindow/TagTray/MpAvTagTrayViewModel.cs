@@ -86,13 +86,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpISidebarItemViewModel Implementation
-        public double SidebarWidth { get; set; } = 0;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
+        public double SidebarWidth { get; set; } = 0;
         public double SidebarHeight { get; set; }
 
         public double DefaultSidebarWidth {
             get {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    return 300;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
+                    return 200;// MpMeasurements.Instance.DefaultTagTreePanelWidth;
                 } else {
                     return MpAvMainWindowViewModel.Instance.MainWindowWidth;
                 }
@@ -112,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
             (Mp.Services.PlatformResource.GetResource("TagTreeBgBrush") as IBrush).ToHex();
 
         bool MpISidebarItemViewModel.CanResize =>
-            true;
+            MpAvMainWindowViewModel.Instance.IsVerticalOrientation;
         #endregion
 
         #region MpIHoverableViewModel Implementation
@@ -216,7 +216,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelecting { get; set; } = false;
         //public bool IsNavButtonsVisible => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation && 
         //                                    TagTrayTotalWidth > MaxTagTrayScreenWidth;
-        public bool IsNavButtonsVisible { get; private set; } = false;
+        public bool IsNavButtonsVisible { get; set; } = false;
 
         public bool IsAnyBusy =>
             IsBusy ||
@@ -235,41 +235,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout        
         public double NavButtonSize => 25;
-        public double MaxTagTrayScreenWidth {
-            get {
-                if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
-                    // NOTE for now, tag tray is hidden vertically
-                    return 0;
-                }
-                double mww = MpAvMainWindowViewModel.Instance.MainWindowWidth;
-
-                //MpRect ppbw = MpAvClipTrayViewModel.Instance.PlayPauseButtonBounds;
-                //MpRect ctsvw = MpAvClipTileSortViewModel.Instance.ClipTileSortViewBounds;
-                //MpRect sbvw = MpAvSearchBoxViewModel.Instance.SearchBoxViewBounds;
-
-                //double other_items_width = ppbw.Width + ctsvw.Width + sbvw.Width;
-                //double total_filter_width = other_items_width + TagTrayTotalWidth;
-                //if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ||
-                //    total_filter_width <= mww) {
-                //    return mww - other_items_width;
-                //}
-                //return double.NaN;
-                var fmvm = MpAvFilterMenuViewModel.Instance;
-                double ctsvw = fmvm.ObservedSortViewWidth;
-                double sbvw = fmvm.ObservedSearchBoxWidth;
-
-                double ttsw = mww - ctsvw - sbvw;
-
-                //IsNavButtonsVisible = TagTrayTotalWidth > ttsw;
-                //if(IsNavButtonsVisible) {
-                //    MpConsole.WriteLine("nav button visible");
-                //    ttsw -= (NavButtonSize * 2);
-                //} else {
-                //    MpConsole.WriteLine("nav button hidden");
-                //}
-                return ttsw;
-            }
-        }
         //public double TagTrayTotalWidth => PinnedItems.Sum(x => x.TagTileTrayWidth);
         public double TagTrayTotalWidth { get; set; }
 
@@ -319,7 +284,7 @@ namespace MonkeyPaste.Avalonia {
 
             Items.Clear();
             var root_tags = await MpDataModelProvider.GetChildTagsAsync(0);
-            foreach (var root_tag in root_tags) {
+            foreach (var root_tag in root_tags.OrderBy(x => x.TreeSortIdx)) {
                 _ = await CreateTagTileViewModelAsync(root_tag);
             }
 
@@ -341,11 +306,6 @@ namespace MonkeyPaste.Avalonia {
         private void TagTileViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
 
         }
-
-        private void PinnedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            OnPropertyChanged(nameof(MaxTagTrayScreenWidth));
-        }
-
 
         public void ClearTagEditing() {
             Items.ForEach(x => x.IsTagNameReadOnly = true);
@@ -421,7 +381,6 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.MainWindowSizeChanged:
                 case MpMessageType.MainWindowOrientationChangeEnd:
-                    OnPropertyChanged(nameof(MaxTagTrayScreenWidth));
                     OnPropertyChanged(nameof(TagTrayTotalWidth));
                     break;
                 //case MpMessageType.MainWindowOpened:
@@ -655,7 +614,7 @@ namespace MonkeyPaste.Avalonia {
 
                 OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(IsNavButtonsVisible));
-                OnPropertyChanged(nameof(MaxTagTrayScreenWidth));
+                MpMessenger.SendGlobal(MpMessageType.FilterItemSizeChanged);
 
                 PinnedItems.OrderBy(x => x.PinSortIdx).ForEach((x, idx) => x.PinSortIdx = idx);
             }, (args) => {

@@ -472,9 +472,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public int TagNameLength =>
-            TagName.Length;
-
+        public double TagNameWidth =>
+            TagName.Length * 16d;
         #endregion
 
         #region Appearance
@@ -958,7 +957,6 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsNavButtonsVisible));
-                    Parent.OnPropertyChanged(nameof(Parent.MaxTagTrayScreenWidth));
                     break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(SortedItems));
@@ -1016,7 +1014,7 @@ namespace MonkeyPaste.Avalonia {
                     Dispatcher.UIThread.Post(() => { OnPropertyChanged(nameof(PercentLoaded)); });
                     break;
                 case nameof(TagName):
-                    OnPropertyChanged(nameof(TagNameLength));
+                    OnPropertyChanged(nameof(TagNameWidth));
                     break;
             }
         }
@@ -1608,7 +1606,6 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 return args is object[];
             });
-
         #endregion
     }
 }

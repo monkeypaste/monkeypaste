@@ -79,11 +79,6 @@ namespace MonkeyPaste.Avalonia {
             Instance.Shutdown();
             MpConsole.WriteLine("CefNet Successfully shutdown");
         }
-        public static string GetEditorPath() {
-            // TODO need to alter this path in production
-            string solution_path = MpCommonHelpers.GetSolutionDir();
-            return Path.Combine(solution_path, "MonkeyPaste.Editor", "index.html");
-        }
 
         private MpAvCefNetApplication() : base() {
 

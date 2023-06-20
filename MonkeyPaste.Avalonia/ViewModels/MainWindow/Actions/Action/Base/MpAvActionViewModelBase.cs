@@ -1575,7 +1575,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-
         #region Commands
 
         public ICommand AddChildActionCommand => new MpCommand<object>(

@@ -106,7 +106,7 @@
         <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="SystemControlForegroundBaseMediumLowBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="MenuFlyoutSubItemChevron" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="MenuFlyoutSubItemChevronPointerOver" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutSubItemChevronPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="MenuFlyoutSubItemChevronSubMenuOpened" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />

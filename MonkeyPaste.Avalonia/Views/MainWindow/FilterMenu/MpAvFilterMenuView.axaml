@@ -12,37 +12,44 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvFilterMenuView">
-    <RelativePanel x:Name="FilterDockPanel"
-                   HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch"
-                   Background="{StaticResource MainWindowBgBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                  HorizontalScrollBarVisibility="Auto">
+        <Grid x:Name="FilterDockPanel"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              Background="{StaticResource MainWindowBgBrush}">
 
-        <!--  Content Sort View  -->
-        <local:MpAvClipTileSortView x:Name="SortView"
-                                    RelativePanel.AlignLeftWithPanel="True"
-                                    VerticalAlignment="Center"
-                                    Tag="Sort"
-                                    local:MpAvSizeObserverExtension.IsEnabled="True"
-                                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedSortViewWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}" />
-        <!--  SearchBox View  -->
+            <!--  Content Sort View  -->
+            <local:MpAvClipTileSortView x:Name="SortView"
+                                        DockPanel.Dock="Left"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Tag="Sort"
+                                        local:MpAvSizeObserverExtension.IsEnabled="True"
+                                        local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedSortViewWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}" />
 
-        <local:MpAvSearchBoxView x:Name="SearchBoxView"
-                                 RelativePanel.AlignRightWithPanel="True"
-                                 VerticalAlignment="Stretch"
-                                 HorizontalAlignment="Right"
-                                 local:MpAvSizeObserverExtension.IsEnabled="True"
-                                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedSearchBoxWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}"
-                                 Tag="Search" />
 
-        <!--  Tag Tray View  -->
-        <local:MpAvTagTrayView RelativePanel.AlignHorizontalCenterWithPanel="True"
-                               RelativePanel.AlignVerticalCenterWithPanel="True"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               local:MpAvSizeObserverExtension.IsEnabled="True"
-                               local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedTagTrayWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}"
-                               IsVisible="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}" />
+            <!--
+                Tag Tray View
+                
+                IsVisible="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+            -->
+            <local:MpAvTagTrayView x:Name="TagTrayView"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   local:MpAvSizeObserverExtension.IsEnabled="True"
+                                   local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedTagTrayWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}" />
 
-        <!--</mech:ToolBarTray>-->
-    </RelativePanel>
+            <!--</mech:ToolBarTray>-->
+            <!--  SearchBox View  -->
+
+            <local:MpAvSearchBoxView x:Name="SearchBoxView"
+                                     DockPanel.Dock="Right"
+                                     VerticalAlignment="Stretch"
+                                     HorizontalAlignment="Right"
+                                     local:MpAvSizeObserverExtension.IsEnabled="True"
+                                     local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedSearchBoxWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}"
+                                     Tag="Search" />
+        </Grid>
+    </ScrollViewer>
 </local:MpAvUserControl>

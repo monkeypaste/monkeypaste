@@ -432,6 +432,7 @@ namespace MonkeyPaste.Avalonia {
             var mwcg = this.FindControl<Grid>("MainWindowContainerGrid");
             var tmv = this.FindControl<MpAvMainWindowTitleMenuView>("MainWindowTitleView");
             var fmv = this.FindControl<MpAvFilterMenuView>("FilterMenuView");
+            var ttrv = fmv.FindControl<MpAvTagTrayView>("TagTrayView");
             var mwtg = this.FindControl<Grid>("MainWindowTrayGrid");
 
             var tmv_cg = tmv.FindControl<Grid>("TitlePanel");
@@ -456,7 +457,6 @@ namespace MonkeyPaste.Avalonia {
                 tmvm.TitleMenuHeight = tmvm.DefaultTitleMenuFixedLength;
                 var tmv_rd = new RowDefinition(Math.Max(0, tmvm.TitleMenuHeight), GridUnitType.Pixel);
 
-                fmvm.FilterMenuWidth = mwvm.MainWindowWidth;
                 fmvm.FilterMenuHeight = fmvm.DefaultFilterMenuFixedSize;
                 var fmv_rd = new RowDefinition(Math.Max(0, fmvm.FilterMenuHeight), GridUnitType.Pixel);
 
@@ -534,7 +534,6 @@ namespace MonkeyPaste.Avalonia {
                 tmvm.TitleMenuHeight = mwvm.MainWindowHeight;
                 var tv_cd = new ColumnDefinition(Math.Max(0, tmvm.TitleMenuWidth), GridUnitType.Pixel);
 
-                fmvm.FilterMenuWidth = mwvm.MainWindowWidth - tmvm.TitleMenuWidth;
                 fmvm.FilterMenuHeight = fmvm.DefaultFilterMenuFixedSize;
                 var fv_rd = new RowDefinition(Math.Max(0, fmvm.FilterMenuHeight), GridUnitType.Pixel);
 

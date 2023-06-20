@@ -112,6 +112,8 @@ namespace MonkeyPaste {
 
         AdvancedSearchExpandedChanged,
 
+        FilterItemSizeChanged,
+
         DropWidgetOpened,
 
         TagSelectionChanged,

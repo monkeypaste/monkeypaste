@@ -64,7 +64,9 @@ namespace MonkeyPaste.Avalonia {
 
             // ADD LOCK /////////////////////////////////////////////////////
 
-            int favorite_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.FavoritesTagId);
+            int favorite_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(
+                tid: MpTag.FavoritesTagId,
+                ignore_descendants: false);
             IsContentAddPausedByAccount = favorite_count >= content_cap;
 
             // TO TRASH /////////////////////////////////////////////////////

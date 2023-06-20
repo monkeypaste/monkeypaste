@@ -78,6 +78,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsSortDescending):
                     OnPropertyChanged(nameof(SortDirIconResourceKey));
                     MpMessenger.SendGlobal(MpMessageType.QuerySortChanged);
+                    if (IsExpanded) {
+                        // IsExpanded = false;
+                    }
                     Mp.Services.Query.NotifyQueryChanged();
                     break;
                 case nameof(IsSortDirOrFieldFocused):
@@ -95,6 +98,30 @@ namespace MonkeyPaste.Avalonia {
                         }
                         IsExpanded = false;
                     });
+                    break;
+                case nameof(IsExpanded):
+                    MpMessenger.SendGlobal(MpMessageType.FilterItemSizeChanged);
+                    if (IsExpanded) {
+                        if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation &&
+                            MpAvSearchBoxViewModel.Instance.IsExpanded) {
+                            MpAvSearchBoxViewModel.Instance.ToggleIsSearchBoxExpandedCommand.Execute(null);
+                        }
+                        Dispatcher.UIThread.Post(async () => {
+                            while (true) {
+                                if (!IsExpanded) {
+                                    break;
+                                }
+                                if (MpAvFocusManager.Instance.FocusElement is not Control cur_focus ||
+                                    (cur_focus.DataContext is not MpAvClipTileSortDirectionViewModel &&
+                                        cur_focus.DataContext is not MpAvFilterMenuViewModel &&
+                                     cur_focus.DataContext is not MpAvClipTileSortFieldViewModel)) {
+                                    IsExpanded = false;
+                                    break;
+                                }
+                                await Task.Delay(100);
+                            }
+                        });
+                    }
                     break;
             }
         }

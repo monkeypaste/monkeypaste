@@ -8,22 +8,24 @@ namespace MonkeyPaste.Avalonia {
         public MpAvTagTrayView() {
             AvaloniaXamlLoader.Load(this);
 
-            var tt_lb = this.FindControl<ListBox>("TagTray");
-            //tt_lb.EnableItemsControlAutoScroll();
+            var nav_left = this.FindControl<RepeatButton>("TagTrayNavLeftButton");
+            var nav_right = this.FindControl<RepeatButton>("TagTrayNavRightButton");
+            nav_left.Click += NavLeftRepeatButton_Click;
+            nav_right.Click += NavRightRepeatButton_Click;
         }
 
 
         private void NavRightRepeatButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if (sender is ListBox TagTray) {
-                var sv = TagTray.GetVisualDescendant<ScrollViewer>();
-                sv.ScrollToHorizontalOffset(sv.Offset.X - 20);
+            if (this.FindControl<ListBox>("TagTray") is ListBox ttrlb &&
+                ttrlb.GetVisualDescendant<ScrollViewer>() is ScrollViewer sv) {
+                sv.ScrollToHorizontalOffset(sv.Offset.X + 20);
             }
         }
 
         private void NavLeftRepeatButton_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
-            if (sender is ListBox TagTray) {
-                var sv = TagTray.GetVisualDescendant<ScrollViewer>();
-                sv.ScrollToHorizontalOffset(sv.Offset.X + 20);
+            if (this.FindControl<ListBox>("TagTray") is ListBox ttrlb &&
+                ttrlb.GetVisualDescendant<ScrollViewer>() is ScrollViewer sv) {
+                sv.ScrollToHorizontalOffset(sv.Offset.X - 20);
             }
         }
     }

@@ -864,10 +864,11 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(FilterText):
                     MpMessenger.SendGlobal(MpMessageType.SettingsFilterTextChanged);
+#if DEBUG
                     if (FilterText.StartsWith("#")) {
                         var test = MpAvWindowManager.FindByHashCode(FilterText);
                     }
-
+#endif
                     break;
                 case nameof(IsChildWindowOpen):
                     MpConsole.WriteLine($"Settings window: {(IsChildWindowOpen ? "OPEN" : "CLOSED")}");
@@ -977,7 +978,7 @@ namespace MonkeyPaste.Avalonia {
             tb.Margin = new Thickness(0);
             //tb.Padding = new Thickness(0);
             tb.Content = new MpAvClipBorder() {
-                CornerRadius = tb.CornerRadius,
+                //CornerRadius = tb.CornerRadius,
                 BorderBrush = Brushes.Transparent,
                 Background = MpPrefViewModel.Instance.ThemeColor.ToAvBrush(),
                 Content = new TextBlock() {

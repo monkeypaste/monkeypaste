@@ -289,12 +289,12 @@
                         <!--  Clear SearchText Button  -->
 
                         <local:MpAvClearTextButton x:Name="ClearSearchTextButton"
-                                                   Classes="TextBoxButton"
+                                                   Classes="TextBoxButton square"
+                                                   Height="20"
                                                    Grid.Column="0"
                                                    Margin="5"
                                                    Command="{Binding ClearTextCommand}"
-                                                   Width="{Binding $self.Bounds.Height}"
-                                                   VerticalAlignment="Stretch">
+                                                   VerticalAlignment="Center">
                             <local:MpAvClearTextButton.IsVisible>
                                 <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
                                               ConverterParameter="AND">

@@ -421,20 +421,23 @@ namespace MonkeyPaste.Avalonia {
                     cmd = GetDoubleLeftPressCommand(control);
                     param = GetDoubleLeftPressCommandParameter(control);
                 } else {
+                    bool can_left_press = GetLeftPressCommand(control) != null &&
+                         GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control));
+                    bool can_left_release = GetLeftReleaseCommand(control) != null &&
+                         GetLeftReleaseCommand(control).CanExecute(GetLeftReleaseCommandParameter(control));
+                    bool can_double_left_press = GetDoubleLeftPressCommand(control) != null &&
+                        GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control));
+                    bool can_hold = GetIsHoldingEnabled(control) &&
+                          GetHoldingCommand(control) != null &&
+                          GetHoldingCommand(control).CanExecute(GetHoldingCommandParameter(control));
+
                     bool needs_double_delay_check =
                         // press vs double press
-                        (GetLeftPressCommand(control) != null &&
-                        GetDoubleLeftPressCommand(control) != null &&
-                        GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) &&
-                        GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control)));
+                        (can_left_press || can_left_release) && can_double_left_press;
 
                     bool needs_hold_check =
                           // press vs hold
-                          (GetLeftPressCommand(control) != null &&
-                          GetHoldingCommand(control) != null &&
-                          GetIsHoldingEnabled(control) &&
-                          GetLeftPressCommand(control).CanExecute(GetLeftPressCommandParameter(control)) &&
-                          GetHoldingCommand(control).CanExecute(GetHoldingCommandParameter(control)));
+                          (can_left_press || can_left_release) && can_hold;
 
                     if (needs_double_delay_check ||
                         needs_hold_check) {

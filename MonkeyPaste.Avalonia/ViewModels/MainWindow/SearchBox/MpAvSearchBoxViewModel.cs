@@ -218,9 +218,11 @@ namespace MonkeyPaste.Avalonia {
                     if (HasText && !IsExpanded) {
                         IsExpanded = true;
                     }
+#if DEBUG
                     if (HasText && SearchText.StartsWith("#")) {
                         var test = MpAvWindowManager.FindByHashCode(SearchText);
                     }
+#endif
                     break;
                 case nameof(IsTextBoxFocused):
                     if (IsTextBoxFocused) {
@@ -238,8 +240,14 @@ namespace MonkeyPaste.Avalonia {
                     //OnPropertyChanged(nameof(TextBoxFontStyle));
                     break;
                 case nameof(IsExpanded):
+                    if (IsExpanded &&
+                        MpAvMainWindowViewModel.Instance.IsVerticalOrientation &&
+                           MpAvClipTileSortDirectionViewModel.Instance.IsExpanded) {
+                        MpAvClipTileSortDirectionViewModel.Instance.IsExpanded = false;
+                    }
                     IsExpandedChangedDateTime = DateTime.Now;
                     OnPropertyChanged(nameof(IsExpandAnimating));
+                    MpMessenger.SendGlobal(MpMessageType.FilterItemSizeChanged);
                     Dispatcher.UIThread.Post(async () => {
                         while (IsExpandAnimating) {
                             await Task.Delay(50);
