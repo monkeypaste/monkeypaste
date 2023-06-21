@@ -88,11 +88,12 @@
           VerticalAlignment="Stretch"
           Cursor="{Binding IsBusy, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=Wait|Arrow}">
         <TreeView x:Name="TagTreeView"
+                  Classes="tagTree"
                   Classes.tagDrag="{Binding IsAnyDragging}"
                   Margin="5,10,20,0"
                   Padding="0,0,0,150"
                   SelectionMode="Single"
-                  AutoScrollToSelectedItem="True"
+                  AutoScrollToSelectedItem="False"
                   ItemsSource="{Binding RootItems}"
                   BorderThickness="0"
                   Background="Transparent"

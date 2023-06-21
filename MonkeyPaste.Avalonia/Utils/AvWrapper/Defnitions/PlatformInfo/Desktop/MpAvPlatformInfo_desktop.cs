@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlatformInfo_desktop : MpAvPlatformInfoBase {
         public override bool IsTouchInputEnabled =>
-            true;// App.Args.Contains(App.MULTI_TOUCH_ARG);
+            false;// App.Args.Contains(App.MULTI_TOUCH_ARG);
     }
 }

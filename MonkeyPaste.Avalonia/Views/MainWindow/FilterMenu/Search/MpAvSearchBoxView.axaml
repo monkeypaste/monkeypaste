@@ -172,7 +172,7 @@
         </Style>
         <Style Selector="Button.navButton:pointerover PathIcon">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeGrayAccent1}" />
+                    Value="{DynamicResource ThemeAccent1BgColor}" />
         </Style>
 
         <!--  CONVERT SIMPLE/ TOGGLE EXPAND ADV BUTTON  -->
@@ -316,8 +316,7 @@
                                     Width="{Binding $self.Bounds.Height}"
                                     VerticalAlignment="Stretch"
                                     IsVisible="{Binding IsMultipleMatches}"
-                                    Command="{Binding PrevMatchCommand}"
-                                    TabIndex="2">
+                                    Command="{Binding PrevMatchCommand}">
                                 <PathIcon Data="{StaticResource MenuDownArrowSvg}">
                                     <PathIcon.RenderTransform>
                                         <RotateTransform Angle="90" />
@@ -333,8 +332,7 @@
                                     Width="{Binding $self.Bounds.Height}"
                                     VerticalAlignment="Stretch"
                                     IsVisible="{Binding IsMultipleMatches}"
-                                    Command="{Binding NextMatchCommand}"
-                                    TabIndex="3">
+                                    Command="{Binding NextMatchCommand}">
                                 <PathIcon Data="{StaticResource MenuDownArrowSvg}">
                                     <PathIcon.RenderTransform>
                                         <RotateTransform Angle="-90" />
@@ -352,8 +350,6 @@
                                      HorizontalAlignment="Stretch"
                                      Cursor="IBeam"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
-                                     local:MpAvIsFocusedExtension.IsEnabled="True"
-                                     local:MpAvIsFocusedExtension.IsFocused="{Binding IsTextBoxFocused, Mode=TwoWay}"
                                      local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                      local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                      local:MpAvDelayedTextChangedExtension.Text="{Binding SearchText, Mode=TwoWay}"

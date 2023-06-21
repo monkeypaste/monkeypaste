@@ -99,7 +99,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return false;
         }
 
-        public static async Task<bool> TrySetFocusAsync(this IInputElement ie, int time_out_ms = 1000) {
+        public static async Task<bool> TrySetFocusAsync(this IInputElement ie, NavigationMethod focusMethod = NavigationMethod.Unspecified, int time_out_ms = 1000) {
             if (ie == null) {
                 return false;
             }
@@ -111,7 +111,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (ie.IsFocused) {
                     return true;
                 }
-                ie.Focus();
+                ie.Focus(focusMethod);
                 await Task.Delay(100);
             }
             return false;

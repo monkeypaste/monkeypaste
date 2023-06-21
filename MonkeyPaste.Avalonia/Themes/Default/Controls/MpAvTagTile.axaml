@@ -12,4 +12,70 @@
         <Setter Property="IsHitTestVisible"
                 Value="{Binding !IsSelecting}" />
     </Style>
+
+    <Style Selector="TreeView.tagTree Grid#TagViewContainerGrid"
+           x:DataType="local:MpAvTagTrayViewModel">
+        <Setter Property="MinWidth"
+                Value="110" />
+    </Style>
+
+    <Style Selector="TreeView.tagTree :is(TextBox)#TagNameTextBox"
+           x:DataType="local:MpAvTagTrayViewModel">
+
+        <Style.Resources>
+            <sys:Double x:Key="TextControlThemeMinWidth">80</sys:Double>
+        </Style.Resources>
+        <Setter Property="MinWidth"
+                Value="80" />
+    </Style>
+
+    <Style Selector="ListBox.tagTray Grid#TagViewContainerGrid"
+           x:DataType="local:MpAvTagTrayViewModel">
+        <Setter Property="MinWidth"
+                Value="110" />
+        <!--<Setter Property="MaxWidth">
+            <Setter.Value>
+                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                              ConverterParameter="+">
+                    <Binding Path="TagNameWidth" />
+                    <Binding>
+                        <Binding.Source>
+                            <sys:Double>30</sys:Double>
+                        </Binding.Source>
+                    </Binding>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>-->
+    </Style>
+
+    <Style Selector="ListBox.tagTray :is(TextBox)#TagNameTextBox"
+           x:DataType="local:MpAvTagTrayViewModel">
+        <!--<Style.Resources>
+            <sys:Double x:Key="TextControlThemeMinWidth">20</sys:Double>
+        </Style.Resources>-->
+        <!--<Setter Property="Width"
+                Value="{Binding TagNameWidth}" />-->
+        <!--<Setter Property="MaxWidth">
+            <Setter.Value>
+                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                              ConverterParameter="*">
+                    <Binding Path="$self.Text.Length" />
+                    <Binding>
+                        <Binding.Source>
+                            <sys:Double>16</sys:Double>
+                        </Binding.Source>
+                    </Binding>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>-->
+        <!--<Style.Resources>
+            <sys:Double x:Key="TextControlThemeMinWidth">20</sys:Double>
+        </Style.Resources>-->
+
+        <!--<Setter Property="MaxWidth"
+                Value="130" />
+        -->
+        <Setter Property="MinWidth"
+                Value="80" />
+    </Style>
 </Styles>

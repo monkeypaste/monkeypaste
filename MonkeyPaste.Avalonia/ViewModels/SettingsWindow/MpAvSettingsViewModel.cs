@@ -773,6 +773,19 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             },
                             new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.IsAutoSearchEnabled),
+                                description = "Text typed will be automatically applied to a search when no text control is focused.",
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Auto Search Input",
+                                values =new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.IsAutoSearchEnabled.ToString()
+                                    },
+                                }
+                            },
+                            new MpParameterFormat() {
                                 paramId = nameof(MpPrefViewModel.Instance.ShowExternalDropWidget),
                                 description = "The drop widget is a floating menu showing while drag and dropping out of Monkey Paste that allows on-demand format conversion onto your drop target by hovering on or off of currently available formats. <b>Be aware conversion may not be an acceptable format for the target application so do not select 'YES' and remember the settings!</b>",
                                 controlType = MpParameterControlType.CheckBox,

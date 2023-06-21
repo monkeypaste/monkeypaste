@@ -648,7 +648,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDropOverTile { get; set; } = false;
 
-        //public bool IsTileDragging { get; set; } = false;
+        public bool IsTileDragging { get; set; } = false;
 
         #endregion
 
@@ -1498,6 +1498,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(KeyString));
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
+                    Parent.OnPropertyChanged(nameof(Parent.CanTouchScroll));
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     OnPropertyChanged(nameof(DetailHexColor));
                     break;
@@ -1560,11 +1561,13 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsSubSelectionEnabled):
                     Parent.OnPropertyChanged(nameof(Parent.CanScroll));
+                    Parent.OnPropertyChanged(nameof(Parent.CanTouchScroll));
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
                     if (!IsSubSelectionEnabled) {
                         MpAvMainWindowViewModel.Instance.LastDecreasedFocusLevelDateTime = DateTime.Now;
                     }
+
                     break;
                 case nameof(IsTitleReadOnly):
                     if (IsTitleReadOnly) {
@@ -1692,6 +1695,7 @@ namespace MonkeyPaste.Avalonia {
 
                 case nameof(CanResize):
                     Parent.OnPropertyChanged(nameof(Parent.CanAnyResize));
+                    Parent.OnPropertyChanged(nameof(Parent.CanTouchScroll));
                     break;
                 case nameof(IsResizing):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyResizing));
@@ -1783,6 +1787,10 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
 
+                    break;
+                case nameof(IsTileDragging):
+
+                    Parent.OnPropertyChanged(nameof(Parent.CanTouchScroll));
                     break;
             }
         }

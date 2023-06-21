@@ -132,7 +132,6 @@
           Cursor="Hand"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
-          MinWidth="110"
           MaxWidth="130"
           Height="30">
         <Border x:Name="TagNameBorder"
@@ -161,7 +160,7 @@
                 <Grid VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <!--  Tag Count Box  -->
                     <Border x:Name="TagCountContainer"
@@ -255,7 +254,6 @@
                                               Margin="5,0,0,0"
                                               FontSize="16"
                                               Padding="0"
-                                              MinWidth="80"
                                               MaxWidth="110"
                                               EditOnFocus="False"
                                               FocusOnDisableReadOnly="True"

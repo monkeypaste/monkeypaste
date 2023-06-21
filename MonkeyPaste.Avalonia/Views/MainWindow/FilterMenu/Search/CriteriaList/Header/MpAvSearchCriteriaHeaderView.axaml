@@ -34,7 +34,7 @@
                 </ToolTip.Tip>
                 <Grid>
                     <Image IsVisible="{Binding $parent.IsEnabled}"
-                           Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                           Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
                     <local:MpAvBusySpinnerView IsVisible="{Binding !$parent.IsEnabled}"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch" />
@@ -44,8 +44,9 @@
             <Button x:Name="DuplicateAdvSearchButton"
                     Classes="defaultButton textOnlyButton outline outlineOver"
                     IsVisible="{Binding IsSavedQuery}"
-                    Content="Duplicate"
-                    Command="{Binding DuplicateQueryCommand}" />
+                    Command="{Binding DuplicateQueryCommand}">
+                <TextBlock Text="New" />
+            </Button>
 
             <!--  SAVE BUTTON  -->
 
@@ -53,9 +54,9 @@
                     Classes="defaultButton textOnlyButton outline outlineOver"
                     IsEnabled="{Binding CanAlter}"
                     IsVisible="{Binding CanSave}"
-                    Content="Save"
-                    Command="{Binding SaveQueryCommand}" />
-
+                    Command="{Binding SaveQueryCommand}">
+                <TextBlock Text="Save" />
+            </Button>
             <!--  ADVANCED SEARCH TOGGLE BUTTON  -->
 
             <Button x:Name="DeleteAdvSearchButton"
@@ -67,7 +68,7 @@
                     Width="{Binding $self.Bounds.Height}"
                     Classes="noBg noHoverBg addRemoveBtn outline"
                     Command="{Binding RejectPendingCriteriaItemsCommand}">
-                <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
             </Button>
 
             <!--  POP OUT WINDOW BUTTON  -->
@@ -77,11 +78,12 @@
                     IsVisible="{Binding !IsCriteriaWindowOpen}"
                     Command="{Binding OpenCriteriaWindowCommand}">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Float" />
+                    <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
+                                           ToolTipText="Open In Window" />
                 </ToolTip.Tip>
                 <Image Width="25"
                        Height="25"
-                       Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                       Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
             </Button>
         </StackPanel>
     </DockPanel>

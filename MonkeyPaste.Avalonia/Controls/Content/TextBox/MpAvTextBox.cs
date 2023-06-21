@@ -36,7 +36,20 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region MpAvIDragSource Implementation
-
+        public bool IsDragging {
+            get {
+                if (BindingContext == null) {
+                    return false;
+                }
+                return BindingContext.IsTileDragging;
+            }
+            set {
+                if (IsDragging != value &&
+                    BindingContext != null) {
+                    BindingContext.IsTileDragging = value;
+                }
+            }
+        }
         public bool WasDragCanceled { get; set; } = false;
 
         public PointerPressedEventArgs LastPointerPressedEventArgs { get; }
@@ -68,7 +81,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-
+        public MpAvClipTileViewModel BindingContext {
+            get {
+                if (DataContext is MpAvClipTileViewModel) {
+                    return DataContext as MpAvClipTileViewModel;
+                }
+                if (DataContext is MpNotificationViewModelBase nvmb) {
+                    return nvmb.Body as MpAvClipTileViewModel;
+                }
+                return null;
+            }
+        }
         #endregion
 
         #region Constructors

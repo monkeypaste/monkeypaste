@@ -168,8 +168,8 @@ namespace MonkeyPaste.Avalonia {
                     if (IsPopupMenuOpen) {
                         break;
                     }
-                    MpPrefViewModel.Instance.LastQueryInfoJson =
-                        Mp.Services.Query.SerializeJsonObject();
+                    //MpPrefViewModel.Instance.LastQueryInfoJson =
+                    //    Mp.Services.Query.SerializeJsonObject();
                     break;
             }
         }

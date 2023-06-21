@@ -472,8 +472,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Layout
 
-        public double TagNameWidth =>
-            TagName.Length * 16d;
+        public double TagNameWidth { get; set; }
+        //public double TagNameWidth =>
+        //    TagName.Length * 16d;
+
+        public double TagNameLength =>
+            TagName.Length;
         #endregion
 
         #region Appearance
@@ -1015,6 +1019,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(TagName):
                     OnPropertyChanged(nameof(TagNameWidth));
+                    OnPropertyChanged(nameof(TagNameLength));
                     break;
             }
         }

@@ -28,31 +28,10 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvFocusManager Instance => _instance ?? (_instance = new MpAvFocusManager());
 
         private MpAvFocusManager() { }
-        public bool IsInputControlFocused {
-            get {
-                IInputElement cur_focus = FocusElement as IInputElement;
-                if (cur_focus == null) {
-                    return false;
-                }
-                if (cur_focus is Window) {
-                    return false;
-                }
-                if (cur_focus is MpIContentView wv) {
-                    if (wv.IsSubSelectable) {
-                        return true;
-                    }
-                }
-                bool is_input_control = cur_focus is Control c &&
-                    _inputControlTypes.Any(x =>
-                        c.GetVisualAncestors().Any(y =>
-                            y.GetType() == x ||
-                            y.GetType().IsSubclassOf(x)));
 
-                //MpConsole.WriteLine($"Current Focus Control Type: {cur_focus.GetType()} Is Input Control: {is_input_control.ToString().ToUpper()}");
-                return is_input_control || IsSelfManagedHistoryControlFocused;
-
-            }
-        }
+        public bool IsTextInputControlFocused =>
+            FocusElement is Control c &&
+            c.IsTextInputControl();
 
         public bool IsSelfManagedHistoryControlFocused {
             get {

@@ -424,6 +424,7 @@ namespace MonkeyPaste {
         public bool DoShowMainWindowWithMouseEdgeAndScrollDelta { get; set; } = true;
         public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();
 
+        public bool IsAutoSearchEnabled { get; set; } = true;
         #endregion
 
         #region Runtime/Dependant Properties
@@ -523,7 +524,7 @@ namespace MonkeyPaste {
 
         public bool SearchByRegex { get; set; }
 
-        public string LastQueryInfoJson { get; set; } = string.Empty;
+        //public string LastQueryInfoJson { get; set; } = string.Empty;
 
         #endregion
 
@@ -710,7 +711,7 @@ namespace MonkeyPaste {
             IsLoading = true;
 
             // init last queryinfo to default values
-            Instance.LastQueryInfoJson = Instance.SerializeJsonObject();
+            //Instance.LastQueryInfoJson = Instance.SerializeJsonObject();
 
             IsLoading = false;
 

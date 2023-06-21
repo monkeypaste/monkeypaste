@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void MpAvQueryTrayView_AttachedToVisualTree(object sender, global::Avalonia.VisualTreeAttachmentEventArgs e) {
-            InitDnd();
+            //InitDnd();
         }
 
         #region Drop

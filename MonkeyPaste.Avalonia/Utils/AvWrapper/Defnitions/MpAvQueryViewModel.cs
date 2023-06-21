@@ -39,10 +39,13 @@ namespace MonkeyPaste.Avalonia {
 
             //    }
             //}
-            var result = JsonConvert.DeserializeObject<MpAvQueryViewModel>(lastQueryInfoStr);
-
-            _instance = result;
-            return result;
+            if (string.IsNullOrWhiteSpace(lastQueryInfoStr)) {
+                _instance = new MpAvQueryViewModel();
+            } else {
+                var result = JsonConvert.DeserializeObject<MpAvQueryViewModel>(lastQueryInfoStr);
+                _instance = result;
+            }
+            return _instance;
         }
 
         private static MpAvQueryViewModel _instance;
@@ -131,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
                 bool has_query_changed = await RefreshQueryAsync();
 
                 if (has_query_changed || forceRequery) {
-                    MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
+                    //MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
                     MpConsole.WriteLine("Simp requery called");
                     //_pageTools.AllQueryIds.Clear();
                     MpMessenger.SendGlobal(MpMessageType.QueryChanged);

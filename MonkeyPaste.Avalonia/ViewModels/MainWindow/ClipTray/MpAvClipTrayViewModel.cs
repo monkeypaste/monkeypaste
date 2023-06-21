@@ -337,7 +337,13 @@ namespace MonkeyPaste.Avalonia {
         #region MpIPagingScrollViewer Implementation
         public bool IsTouchScrolling { get; set; }
         public bool CanTouchScroll =>
-            Mp.Services.PlatformInfo.IsTouchInputEnabled;
+            Mp.Services.PlatformInfo.IsTouchInputEnabled &&
+            QueryItems.All(x => !x.IsTileDragging) &&
+            QueryItems.All(x => !x.CanResize) &&
+            QueryItems.All(x => !x.CanResize) &&
+            (HoverItem == null ||
+             HoverItem.IsPinned ||
+             !HoverItem.IsSubSelectionEnabled);
 
         public double ScrollWheelDampeningX {
             get {
@@ -1801,6 +1807,9 @@ namespace MonkeyPaste.Avalonia {
                     pin_tray_var_dim_ratio = 0.5;
                 }
             }
+            if (!MpAvTagTrayViewModel.Instance.IsAnyTagActive) {
+                pin_tray_var_dim_ratio = 0.5d;
+            }
 
             if (ListOrientation == Orientation.Vertical) {
                 p_ratio.Height = pin_tray_var_dim_ratio;
@@ -2175,6 +2184,11 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(ObservedContainerScreenWidth):
                     OnPropertyChanged(nameof(MaxPinTrayScreenWidth));
                     break;
+                case nameof(CanTouchScroll):
+                    if (!CanTouchScroll) {
+                        IsTouchScrolling = false;
+                    }
+                    break;
             }
         }
 
@@ -2388,7 +2402,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage();
                 var active_avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e);
-                if (active_avm != null) {
+                if (active_avm == null) {
+                    // let editor use fallback
+                } else {
                     CurPasteInfoMessage.pasteButtonTooltipText = string.IsNullOrEmpty(e.ProcessName) ? e.MainWindowTitle : e.ProcessName;
                     CurPasteInfoMessage.pasteButtonIconBase64 = await MpDataModelProvider.GetDbImageBase64ByIconIdAsync(active_avm.IconId);
                 }
@@ -3614,9 +3630,12 @@ namespace MonkeyPaste.Avalonia {
         }
         public MpIAsyncCommand<object> QueryCommand => new MpAsyncCommand<object>(
             async (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) => {
-                if (!MpAvTagTrayViewModel.Instance.IsAnyTagActive) {
-                    return;
-                }
+                //if (!MpAvTagTrayViewModel.Instance.IsAnyTagActive &&
+                //    !MpAvSearchBoxViewModel.Instance.HasText &&
+                //    !MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
+                //    // reject startup query
+                //    return;
+                //}
                 if (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is IOrderedEnumerable<int> sparse_idxl) {
                     List<int> range1 = new List<int>();
                     List<int> range2 = null;

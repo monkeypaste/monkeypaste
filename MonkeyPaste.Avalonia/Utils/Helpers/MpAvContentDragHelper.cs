@@ -41,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
 
             _dragSource = dragSource;
 
+            dragSource.IsDragging = true;
             // wait for source data
             bool use_placeholders = MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
             SourceDataObject = await dragSource.GetDataObjectAsync(_dragSource.GetDragFormats(), use_placeholders);
@@ -187,6 +188,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void FinishDrag(DragDropEffects? dropEffect) {
+            if (_dragSource != null) {
+                _dragSource.IsDragging = false;
+            }
             ResetDragState();
             MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
 

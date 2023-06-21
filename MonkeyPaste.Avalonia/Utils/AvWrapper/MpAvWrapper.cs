@@ -126,7 +126,7 @@ namespace MonkeyPaste.Avalonia {
             ColorQueryTools = new MpAvColorQueryTools();
             NativePathDialog = new MpAvPathDialog();
             UserProvidedFileExts = MpPrefViewModel.Instance;
-            Query = MpAvQueryViewModel.Parse(MpPrefViewModel.Instance.LastQueryInfoJson);
+            Query = MpAvQueryViewModel.Parse(string.Empty);//MpPrefViewModel.Instance.LastQueryInfoJson);
             ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
             KeyConverter = new MpAvKeyConverter();
             IconBuilder = new MpAvIconBuilder().IconBuilder;

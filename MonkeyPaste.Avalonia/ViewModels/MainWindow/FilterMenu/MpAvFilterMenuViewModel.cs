@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region Layout
-
+        public int FilterAnimTimeMs => 300; // NOTE needs to match resource time
         public double DefaultFilterMenuFixedSize => 40;
 
         public double FilterMenuHeight { get; set; }

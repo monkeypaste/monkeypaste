@@ -255,6 +255,20 @@ namespace MonkeyPaste.Avalonia {
 
         public PointerPressedEventArgs LastPointerPressedEventArgs { get; private set; }
 
+        public bool IsDragging {
+            get {
+                if (BindingContext == null) {
+                    return false;
+                }
+                return BindingContext.IsTileDragging;
+            }
+            set {
+                if (IsDragging != value &&
+                    BindingContext != null) {
+                    BindingContext.IsTileDragging = value;
+                }
+            }
+        }
         public bool WasDragCanceled { get; set; }
         //public void NotifyDropComplete(DragDropEffects dropEffect) {
         //    var dragEndMsg = new MpQuillDragEndMessage() {
@@ -289,7 +303,8 @@ namespace MonkeyPaste.Avalonia {
             string[] formats = null,
             bool use_placeholders = true,
             bool ignore_selection = false) {
-            if (BindingContext == null) {
+            if (BindingContext == null ||
+                BindingContext.IsPlaceholder) {
                 MpDebug.Break();
                 return new MpAvDataObject();
             }
@@ -1490,8 +1505,6 @@ namespace MonkeyPaste.Avalonia {
             }
             Dispatcher.UIThread.Post(async () => {
                 if (IsContentReadOnly) {
-                    MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused = false;
-
                     if (!BindingContext.IsChildWindowOpen) {
                         MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
                     }

@@ -25,6 +25,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region Controls
 
+        public static bool IsTextInputControl(this Control control) {
+            // NOTE only returns true if control is in a state that would receive text
+
+            if (control == null) {
+                return false;
+            }
+
+            if (control is TextBox tb) {
+                return !tb.IsReadOnly;
+            }
+
+            if (control is MpAvContentWebView wv) {
+                return !wv.IsContentReadOnly;
+            }
+            if (control is AutoCompleteBox) {
+                return true;
+            }
+            return false;
+        }
         public static bool TryGetSelfOrAncestorDataContext<T>(this Control c, out T dc) where T : MpViewModelBase {
             dc = c.GetSelfOrAncestorDataContext<T>();
             return dc != default;

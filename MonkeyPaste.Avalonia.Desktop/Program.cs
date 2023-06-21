@@ -33,15 +33,16 @@ namespace MonkeyPaste.Avalonia {
             => AppBuilder.Configure<App>()
                             .UsePlatformDetect()
 
-                            //.With(new Win32PlatformOptions { UseWgl = true })
-                            //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
-                            //.With(new Win32PlatformOptions {
-                            //    UseWgl = true,
-                            //    AllowEglInitialization = true
-                            //})
-                            //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
-                            //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
-                            //.With(new AvaloniaNativePlatformOptions { UseGpu = false })
-                            .LogToTrace();
+            //.With(new Win32PlatformOptions { UseWgl = true })
+            //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
+            //.With(new Win32PlatformOptions {
+            //    UseWgl = true,
+            //    AllowEglInitialization = true
+            //})
+            //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
+            //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
+            //.With(new AvaloniaNativePlatformOptions { UseGpu = false })
+            //.LogToTrace()
+            ;
     }
 }

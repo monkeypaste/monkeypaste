@@ -88,6 +88,7 @@
         <SolidColorBrush x:Key="TextControlForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="TextControlBackground" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="TextControlBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="{DynamicResource ThemeGrayAccent2}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="TextControlForegroundFocused" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />

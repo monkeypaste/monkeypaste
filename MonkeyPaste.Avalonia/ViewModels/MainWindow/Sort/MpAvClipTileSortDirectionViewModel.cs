@@ -38,12 +38,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public int DoubleClickCount { get; set; } = 0;
         public bool IsSortDescending { get; set; } = true;
 
-        public bool IsSortDirOrFieldFocused {
+        public bool IsAnySortDirOrFieldFocused {
             get {
-                if (Mp.Services.FocusMonitor.FocusElement is Control c &&
-                    c.GetVisualAncestor<MpAvClipTileSortView>() != null) {
+                if (Mp.Services.FocusMonitor.FocusElement is Control c && (
+                    c.TryGetSelfOrAncestorDataContext<MpAvFilterMenuViewModel>(out _) ||
+                    c.TryGetSelfOrAncestorDataContext<MpAvClipTileSortDirectionViewModel>(out _) ||
+                    c.TryGetSelfOrAncestorDataContext<MpAvClipTileSortFieldViewModel>(out _))) {
                     return true;
                 }
                 return false;
@@ -78,79 +81,44 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsSortDescending):
                     OnPropertyChanged(nameof(SortDirIconResourceKey));
                     MpMessenger.SendGlobal(MpMessageType.QuerySortChanged);
-                    if (IsExpanded) {
-                        // IsExpanded = false;
-                    }
                     Mp.Services.Query.NotifyQueryChanged();
-                    break;
-                case nameof(IsSortDirOrFieldFocused):
-                    if (IsSortDirOrFieldFocused) {
-                        break;
-                    }
-                    if (!IsExpanded) {
-                        break;
-                    }
-                    Dispatcher.UIThread.Post(async () => {
-                        // when field or dir looses focus wait a little to see if returns 
-                        await Task.Delay(3000);
-                        if (IsSortDirOrFieldFocused) {
-                            return;
-                        }
-                        IsExpanded = false;
-                    });
                     break;
                 case nameof(IsExpanded):
                     MpMessenger.SendGlobal(MpMessageType.FilterItemSizeChanged);
-                    if (IsExpanded) {
-                        if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation &&
-                            MpAvSearchBoxViewModel.Instance.IsExpanded) {
-                            MpAvSearchBoxViewModel.Instance.ToggleIsSearchBoxExpandedCommand.Execute(null);
-                        }
-                        Dispatcher.UIThread.Post(async () => {
-                            while (true) {
-                                if (!IsExpanded) {
-                                    break;
-                                }
-                                if (MpAvFocusManager.Instance.FocusElement is not Control cur_focus ||
-                                    (cur_focus.DataContext is not MpAvClipTileSortDirectionViewModel &&
-                                        cur_focus.DataContext is not MpAvFilterMenuViewModel &&
-                                     cur_focus.DataContext is not MpAvClipTileSortFieldViewModel)) {
-                                    IsExpanded = false;
-                                    break;
-                                }
-                                await Task.Delay(100);
-                            }
-                        });
+                    if (IsExpanded &&
+                        MpAvMainWindowViewModel.Instance.IsVerticalOrientation &&
+                        MpAvSearchBoxViewModel.Instance.IsExpanded) {
+                        MpAvSearchBoxViewModel.Instance.ToggleIsSearchBoxExpandedCommand.Execute(null);
                     }
+                    Dispatcher.UIThread.Post(async () => {
+                        await Task.Delay(MpAvFilterMenuViewModel.Instance.FilterAnimTimeMs);
+                        MpMessenger.SendGlobal(MpMessageType.FilterItemSizeChanged);
+                        while (true) {
+                            if (!IsExpanded) {
+                                break;
+                            }
+                            if (!IsAnySortDirOrFieldFocused) {
+                                IsExpanded = false;
+                                break;
+                            }
+                            await Task.Delay(1000);
+                        }
+                    });
                     break;
             }
         }
         #endregion
 
         #region Commands
-        public ICommand ClickCommand => new MpCommand(() => {
-            if (IsExpanded) {
-                if (CanChangeDir) {
-                    // toggling while querying will get button out of sync w/ query
-                    // if query cannot execute
-                    IsSortDescending = !IsSortDescending;
-                }
 
-            } else {
-                IsExpanded = true;
-            }
-        });
-        public ICommand DoubleClickCommand => new MpCommand(() => {
-            if (IsExpanded) {
-                IsExpanded = false;
-            } else {
-                if (CanChangeDir) {
-                    // toggling while querying will get button out of sync w/ query
-                    // if query cannot execute
-                    IsSortDescending = !IsSortDescending;
-                }
-            }
-        });
+        public ICommand ToggleSortDirectionCommand => new MpCommand(
+            () => {
+                IsSortDescending = !IsSortDescending;
+            }, () => {
+                // toggling while querying will get button out of sync w/ query
+                // if query cannot execute
+                return CanChangeDir;
+            });
         #endregion
     }
 

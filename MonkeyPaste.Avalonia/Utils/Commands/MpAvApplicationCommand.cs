@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
+using System;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -102,6 +103,32 @@ namespace MonkeyPaste.Avalonia {
                     return MpAvTriggerCollectionViewModel.Instance.OpenDesignerWindowCommand.CanExecute(null);
                 }
                 return false;
+            });
+
+        public ICommand DecreaseFocusCommand => new MpCommand(
+            () => {
+                if (MpAvFocusManager.Instance.FocusElement is not Control fc) {
+                    MpAvMainWindowViewModel.Instance.HideMainWindowCommand.Execute(null);
+                    return;
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out var ctvm)) {
+                    if (fc is TextBox && !ctvm.IsTitleReadOnly) {
+                        ctvm.FinishEditTitleCommand.Execute(null);
+                        return;
+                    }
+                    if (ctvm.IsSubSelectionEnabled) {
+                        if (ctvm.IsContentReadOnly) {
+                            ctvm.DisableSubSelectionCommand.Execute(null);
+                            return;
+                        }
+                        ctvm.EnableContentReadOnlyCommand.Execute(null);
+                        return;
+                    }
+                }
+
+                MpAvMainWindowViewModel.Instance.HideMainWindowCommand.Execute(null);
+            }, () => {
+                return MpAvWindowManager.ActiveWindow != null;
             });
         #endregion
     }

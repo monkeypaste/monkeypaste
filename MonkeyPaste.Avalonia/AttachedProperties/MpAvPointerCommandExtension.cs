@@ -459,7 +459,7 @@ namespace MonkeyPaste.Avalonia {
                             if (needs_double_delay_check) {
                                 EventHandler<PointerPressedEventArgs> next_press_handler = null;
                                 next_press_handler = (s, e) => {
-                                    was_new_press = false;
+                                    was_new_press = true;
                                     control.PointerPressed -= next_press_handler;
                                 };
                                 control.PointerPressed += next_press_handler;

@@ -450,21 +450,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsResizing { get; set; } = false;
         public bool CanResize { get; set; } = false;
 
-        private bool _isAnyMainWindowTextBoxFocused;
-        public bool IsAnyMainWindowTextBoxFocused {
-            get {
-                if (MpAvFocusManager.Instance.IsInputControlFocused) {
-                    return true;
-                }
-                return _isAnyMainWindowTextBoxFocused;
-            }
-            set {
-                if (_isAnyMainWindowTextBoxFocused != value) {
-                    _isAnyMainWindowTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsAnyMainWindowTextBoxFocused));
-                }
-            }
-        }
         public bool IsAnyNotificationActivating { get; set; }
 
         public bool IsAnyDropDownOpen { get; set; }
@@ -579,7 +564,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(MainWindowScreen));
             OnPropertyChanged(nameof(IsDesktop));
 
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMousePressed += Instance_OnGlobalMousePressed;
+            //MpAvShortcutCollectionViewModel.Instance.OnGlobalMousePressed += Instance_OnGlobalMousePressed;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += Instance_OnGlobalMouseMove;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseClicked += Instance_OnGlobalMouseClicked;
@@ -1001,43 +986,18 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        private void Instance_OnGlobalMousePressed(object sender, bool isLeftButton) {
-            Dispatcher.UIThread.Post(() => {
-                if (MpAvMainView.Instance == null) {
-                    return;
-                }
-                if (!IsMainWindowOpen) {
-                    if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
-                        if (!isLeftButton && !App.MainView.IsActive) {
-                            // TODO this is hacky because mouse gestures are not formally handled
-                            // also app collection should be queried for custom paste cmd instead of this
-                            Mp.Services.KeyStrokeSimulator
-                            .SimulateKeyStrokeSequenceAsync(Mp.Services.PlatformShorcuts.PasteKeys)
-                            .FireAndForgetSafeAsync();
-                        }
-                    }
-                }
-            });
-        }
 
         private void Instance_OnGlobalMouseReleased(object sender, bool isLeftButton) {
+            if (!Mp.Services.StartupState.IsPlatformLoaded) {
+                return;
+            }
             Dispatcher.UIThread.Post(() => {
-                if (MpAvMainView.Instance == null) {
-                    return;
-                }
-                if (!IsMainWindowOpen) {
-                    if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
-                        if (isLeftButton && !App.MainView.IsActive) {
-                            Mp.Services.KeyStrokeSimulator
-                            .SimulateKeyStrokeSequenceAsync(Mp.Services.PlatformShorcuts.CopyKeys)
-                            .FireAndForgetSafeAsync();
-                        }
-                    }
-                } else if (!IsMainWindowClosing &&
+                if (IsMainWindowOpen &&
+                           !IsMainWindowClosing &&
                           !IsMainWindowLocked &&
                           //!MpExternalDropBehavior.Instance.IsPreExternalTemplateDrop &&
                           MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
-                          MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y < MainWindowTop) {
+                          !MainWindowScreenRect.Contains(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation)) {
                     HideMainWindowCommand.Execute(null);
                 }
             });
@@ -1207,32 +1167,7 @@ namespace MonkeyPaste.Avalonia {
                 return canHide;
             });
 
-        public ICommand DecreaseFocusCommand => new MpCommand(
-            () => {
-                HideMainWindowCommand.Execute(null);
-            }, () => {
-                if (!HideMainWindowCommand.CanExecute(null)) {
-                    return false;
-                }
-                bool wasFocusLevelJustDecreased =
-                    LastDecreasedFocusLevelDateTime.HasValue &&
-                        (DateTime.Now - LastDecreasedFocusLevelDateTime.Value).TotalMilliseconds < 1000;
 
-
-                bool canDecrease =
-                    !wasFocusLevelJustDecreased &&
-                          !IsAnyMainWindowTextBoxFocused;
-
-
-                if (!canDecrease) {
-                    MpConsole.WriteLine("");
-                    MpConsole.WriteLine($"Cannot decrease focus:");
-                    MpConsole.WriteLine($"IsAnyTextBoxFocused: {(IsAnyMainWindowTextBoxFocused)}");
-
-                    MpConsole.WriteLine($"wasFocusLevelJustDecreased: {(wasFocusLevelJustDecreased)}");
-                }
-                return canDecrease;
-            });
 
 
         public ICommand ToggleShowMainWindowCommand => new MpCommand(

@@ -679,14 +679,10 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            SetIsTouchScrolling(lb, true);
             var cur_touch_loc = e.GetPosition(lb).ToPortablePoint();
             if (_down_touch_loc == null) {
                 _down_touch_loc = cur_touch_loc;
             }
-            //if ((cur_touch_loc - _down_touch_loc).Length < 3) {
-            //    return;
-            //}
 
             var cur_touch_dt = DateTime.Now;
             if (_last_touch_dt == null) {

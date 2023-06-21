@@ -562,6 +562,7 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvMarqueeTextBox.TextProperty).Subscribe(value => OnTextChanged());
             this.GetObservable(MpAvMarqueeTextBox.EditOnFocusProperty).Subscribe(value => OnCanEditChanged());
 
+            this.GetObservable(MpAvMarqueeTextBox.MaxWidthProperty).Subscribe(value => Init());
             this.GetObservable(MpAvMarqueeTextBox.ReadOnlyBackgroundProperty).Subscribe(value => Init());
             this.GetObservable(MpAvMarqueeTextBox.ReadOnlyForegroundProperty).Subscribe(value => Init());
             this.GetObservable(MpAvMarqueeTextBox.DropShadowBrushProperty).Subscribe(value => Init());
@@ -781,6 +782,15 @@ namespace MonkeyPaste.Avalonia {
                 _offsetX2 = 0;
             }
             MinHeight = _ftSize.Height;
+            if (this.GetVisualAncestor<MpAvTagTrayView>() != null &&
+                this.GetVisualAncestor<MpAvTagView>() is MpAvTagView tv &&
+                tv.FindControl<Control>("TagCountContainer") is Control count_border &&
+                this.DataContext is MpAvTagTileViewModel ttvm) {
+                //tv.Width = count_border.Bounds.Width +
+                //    Math.Max(this.MinWidth, Math.Min(Math.Min(_ftSize.Width, _bmpSize.Width), this.MaxWidth));
+                ttvm.TagNameWidth = _ftSize.Width;
+
+            }
             Dispatcher.UIThread.Post(InvalidateVisual);
         }
         private void SetTextBoxIsVisible(bool isTextBoxVisible) {

@@ -27,6 +27,7 @@ namespace MonkeyPaste.Avalonia {
         //     Return false to allow the focus to be set or true to cancel setting the focus.
         protected override bool OnSetFocus(CefBrowser browser, CefFocusSource source) {
             return false;
+
             //if (source == CefFocusSource.Navigation) {
             //    return false;
             //}

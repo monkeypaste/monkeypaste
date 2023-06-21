@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         {
                             MpShortcutType.HideMainWindow,
-                            MpAvMainWindowViewModel.Instance.DecreaseFocusCommand
+                            MpAvApplicationCommand.Instance.DecreaseFocusCommand
                         },
                         {
                             MpShortcutType.ShowSettings,
@@ -658,8 +658,6 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.SettingsFilterTextChanged:
                     OnPropertyChanged(nameof(FilteredItems));
-                    //OnPropertyChanged(nameof(CustomShortcuts));
-                    //OnPropertyChanged(nameof(InternalApplicationShortcuts));
                     break;
                 case MpMessageType.MainWindowLoadComplete: {
                         StartInputListener();
@@ -674,7 +672,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.ShortcutAssignmentStarted:
                     IsShortcutsEnabled = false;
                     _downs.Clear();
-                    _downTest.Clear();
+                    _downChecker.Clear();
                     _keyboardGestureHelper.ClearCurrentGesture();
 
                     break;
@@ -883,15 +881,40 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Hook_MousePressed(object sender, MouseHookEventArgs e) {
+            if (!Mp.Services.StartupState.IsPlatformLoaded) {
+                return;
+            }
             MpPortablePointerButtonType button = e.Data.Button.ToPortableButton();
             if (button == MpPortablePointerButtonType.Left) {
                 HandlePointerPress(true);
-            } else if (button == MpPortablePointerButtonType.Right) {
-                HandlePointerPress(false);
-            } else {
-                MpConsole.WriteTraceLine("Unknown mouse button pressed: SharpButton: " + e.Data.Button + " PortableButton: " + button);
+                if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
+                    Dispatcher.UIThread.Post(() => {
+                        Mp.Services.KeyStrokeSimulator
+                            .SimulateKeyStrokeSequenceAsync(Mp.Services.PlatformShorcuts.CopyKeys)
+                            .FireAndForgetSafeAsync();
+                    });
+                }
+                return;
             }
 
+            if (button == MpPortablePointerButtonType.Right) {
+                HandlePointerPress(false);
+
+                if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
+                    e.SuppressEvent = true;
+                    Dispatcher.UIThread.Post(() => {
+                        // TODO this is hacky because mouse gestures are not formally handled
+                        // also app collection should be queried for custom paste cmd instead of this
+                        Mp.Services.KeyStrokeSimulator
+                            .SimulateKeyStrokeSequenceAsync(Mp.Services.PlatformShorcuts.PasteKeys)
+                            .FireAndForgetSafeAsync();
+                        //}
+                    });
+                }
+                return;
+            }
+
+            MpConsole.WriteTraceLine("Unknown mouse button pressed: SharpButton: " + e.Data.Button + " PortableButton: " + button);
         }
         private void Hook_MouseReleased(object sender, MouseHookEventArgs e) {
             // NOTE: SharpHook Release event shows Button released
@@ -901,6 +924,9 @@ namespace MonkeyPaste.Avalonia {
                 HandlePointerReleased(true);
             } else if (button == MpPortablePointerButtonType.Right) {
                 HandlePointerReleased(false);
+                if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
+                    e.SuppressEvent = true;
+                }
             } else {
                 MpConsole.WriteTraceLine("Unknown mouse button released: SharpButton: " + e.Data.Button + " PortableButton: " + button);
             }
@@ -912,6 +938,9 @@ namespace MonkeyPaste.Avalonia {
                 HandlePointerClick(true);
             } else if (button == MpPortablePointerButtonType.Right) {
                 HandlePointerClick(false);
+                if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
+                    e.SuppressEvent = true;
+                }
             } else {
                 MpConsole.WriteTraceLine("Unknown mouse button clicked: " + e.Data.Button);
             }
@@ -950,7 +979,6 @@ namespace MonkeyPaste.Avalonia {
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
             HandleKeyUp(keyStr, e);
         }
-
 
         #endregion
 
@@ -1160,18 +1188,29 @@ namespace MonkeyPaste.Avalonia {
 
         private MpKeyGestureHelper _keyboardGestureHelper;
         private List<object> _downs = new List<object>();
-        private List<Tuple<KeyCode, DateTime>> _downTest = new List<Tuple<KeyCode, DateTime>>();
+        private List<Tuple<KeyCode, DateTime>> _downChecker = new List<Tuple<KeyCode, DateTime>>();
         private MpAvShortcutViewModel _exact_match;
 
         private void HandleGestureRouting_Down(string keyLiteral, object down_e) {
+            MpConsole.WriteLine($"Global key DOWN: " + keyLiteral);
 
-            if (_downTest.Where(x => DateTime.Now - x.Item2 > TimeSpan.FromSeconds(30)) is IEnumerable<Tuple<KeyCode, DateTime>> dttl &&
+            if (_downChecker.Where(x => DateTime.Now - x.Item2 > TimeSpan.FromSeconds(15)) is IEnumerable<Tuple<KeyCode, DateTime>> dttl &&
                 dttl.Any()) {
                 //assumes won't be holding key down longer than 30 seconds
                 //this may give false positives if breakpoint hit & resumed with key down
-                dttl.ForEach(x => _downs.Remove(x.Item1));
-                dttl.ToList().ForEach(x => _downTest.Remove(x));
+                MpConsole.WriteLine($"Orphan downs detected by time delay. Removing: {string.Join(",", dttl.Select(x => x.Item1.GetKeyLiteral()))}");
+                dttl.ToList().ForEach(x => _downs.Remove(x.Item1));
+                dttl.ToList().ForEach(x => _downChecker.Remove(x));
             }
+            if (_downChecker.Count != _downs.Count &&
+                _downs.Cast<KeyCode>() is IEnumerable<KeyCode> dkcl &&
+                _downChecker.Select(x => x.Item1) is IEnumerable<KeyCode> dckcl) {
+                var diff = dkcl.Difference(dckcl);
+                MpConsole.WriteLine($"Orphan downs detected by count mismatch. Removing: {string.Join(",", diff.Select(x => x.GetKeyLiteral()))}");
+                diff.ToList().ForEach(x => _downs.Remove(x));
+                diff.ToList().ForEach(x => _downChecker.Remove(_downChecker.FirstOrDefault(y => y.Item1 == x)));
+            }
+
             if (_downs.IsNullOrEmpty()) {
                 _keyboardGestureHelper.ClearCurrentGesture();
             }
@@ -1184,7 +1223,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             } else {
                 _downs.Add(kc.GetUnifiedKey());
-                _downTest.Add(new Tuple<KeyCode, DateTime>(kc, DateTime.Now));
+                _downChecker.Add(new Tuple<KeyCode, DateTime>(kc, DateTime.Now));
             }
 
             _keyboardGestureHelper.AddKeyDown(keyLiteral);
@@ -1192,6 +1231,32 @@ namespace MonkeyPaste.Avalonia {
             _exact_match =
                 AvailableItems
                 .FirstOrDefault(x => x.KeyString == down_gesture);
+
+            if (MpPrefViewModel.Instance.IsAutoSearchEnabled) {
+                Dispatcher.UIThread.Post(() => {
+                    /*
+                        In global key DOWN, if auto search pref enabled and no other key 
+                        (besides shift) is down and is not exact match and mw is active/open 
+                        and the up key is alpha-numeric or (control+v) (compare last) and 
+                        focus is not textbox/ autocomplete/ editable wv (will only be valid on first typed key). 
+                        Then  set searchbox to focus (should auto trigger expand) so input passes to searchbox. 
+                        If not work would need to use keytyped event or keyup and figure out the char..
+                    */
+
+                    bool can_auto_search =
+                        MpAvWindowManager.MainWindow.IsActive &&
+                        MpAvWindowManager.MainWindow.IsVisible &&
+                        !MpAvFocusManager.Instance.IsTextInputControlFocused &&
+                        _exact_match == null &&
+                        _downs.Count == 1 &&
+                        _downs.Cast<KeyCode>().All(x => x.IsTextInputKey());
+
+                    if (can_auto_search) {
+                        string text_to_pass = ((KeyCode)_downs[0]).GetKeyLiteral().ToLower();
+                        MpAvSearchBoxViewModel.Instance.BeginAutoSearchCommand.Execute(text_to_pass);
+                    }
+                });
+            }
 
             if (_exact_match == null) {
                 return;
@@ -1202,11 +1267,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task HandleGestureRouting_Up(string keyLiteral, object up_e) {
+            MpConsole.WriteLine($"Global key UP: " + keyLiteral);
             var sharp_up = up_e as KeyboardHookEventArgs;
             KeyCode kc = sharp_up.Data.KeyCode;
             _downs.Remove(kc);
-            if (_downTest.FirstOrDefault(x => x.Item1 == kc) is Tuple<KeyCode, DateTime> dt) {
-                _downTest.Remove(dt);
+            if (_downChecker.FirstOrDefault(x => x.Item1 == kc) is Tuple<KeyCode, DateTime> dt) {
+                _downChecker.Remove(dt);
             }
 
             if (_activePasteKeystring != null &&

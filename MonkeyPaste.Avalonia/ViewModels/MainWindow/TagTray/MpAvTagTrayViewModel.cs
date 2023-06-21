@@ -112,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
             (Mp.Services.PlatformResource.GetResource("TagTreeBgBrush") as IBrush).ToHex();
 
         bool MpISidebarItemViewModel.CanResize =>
-            MpAvMainWindowViewModel.Instance.IsVerticalOrientation;
+            true;// MpAvMainWindowViewModel.Instance.IsVerticalOrientation;
         #endregion
 
         #region MpIHoverableViewModel Implementation
