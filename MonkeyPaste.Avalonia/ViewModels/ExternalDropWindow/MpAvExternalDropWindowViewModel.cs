@@ -497,7 +497,11 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 MpPrefViewModel.Instance.ShowExternalDropWidget = !MpPrefViewModel.Instance.ShowExternalDropWidget;
                 OnPropertyChanged(nameof(IsDropWidgetEnabled));
-                MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", $"Drop Wizard: {(IsDropWidgetEnabled ? "ON" : "OFF")}").FireAndForgetSafeAsync(this);
+                MpNotificationBuilder.ShowMessageAsync(
+                    title: "MODE CHANGED",
+                    body: $"Drop Wizard: {(IsDropWidgetEnabled ? "ON" : "OFF")}",
+                    msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
+
                 MpMessenger.SendGlobal(MpMessageType.DropWidgetEnabledChanged);
             }, () => {
                 return CanEnableDropWidget;

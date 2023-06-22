@@ -31,7 +31,6 @@ namespace MonkeyPaste {
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.InvalidPlugin:
                 case MpNotificationType.InvalidAction:
-                case MpNotificationType.FileIoError:
                 case MpNotificationType.InvalidClipboardFormatHandler:
                 case MpNotificationType.PluginResponseWarningWithOption:
                 case MpNotificationType.ExecuteParametersRequest:
@@ -43,6 +42,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.InvalidResponse:
                 case MpNotificationType.TrialExpired:
                 case MpNotificationType.PluginResponseWarning:
+                case MpNotificationType.FileIoWarning:
                     return MpNotificationLayoutType.Warning;
                 case MpNotificationType.BadHttpRequest:
                 case MpNotificationType.DbError:
@@ -71,6 +71,7 @@ namespace MonkeyPaste {
                     return MpNotificationButtonsType.Ok;
                 case MpNotificationType.ContentCapReached:
                 case MpNotificationType.TrashCapReached:
+                case MpNotificationType.ContentAddBlockedByAccount:
                     return MpNotificationButtonsType.UpgradeLearnMore;
                 default:
                     MpNotificationLayoutType layoutType = GetLayoutTypeFromNotificationType(ndt);
@@ -198,19 +199,15 @@ namespace MonkeyPaste {
             }
         }
 
-        private string _borderHexColor;
         public virtual string BorderHexColor {
             get {
-                if (_borderHexColor == null) {
-                    if (IsWarningNotification) {
-                        return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1Color.ToString());
-                    }
-                    if (IsErrorNotification) {
-                        return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent2Color.ToString());
-                    }
-                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString());
+                if (IsWarningNotification) {
+                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1Color.ToString());
                 }
-                return _borderHexColor;
+                if (IsErrorNotification) {
+                    return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent2Color.ToString());
+                }
+                return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString());
             }
         }
 

@@ -28,6 +28,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public override bool IsAnyBusy =>
+            Items.Any(x => x.IsBusy) || IsBusy;
         public bool IsParameterDropDownOpen { get; set; }
 
         public abstract MpCsvFormatProperties CsvProperties { get; }

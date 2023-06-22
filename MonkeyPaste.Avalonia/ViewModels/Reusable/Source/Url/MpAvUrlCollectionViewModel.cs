@@ -181,10 +181,10 @@ namespace MonkeyPaste.Avalonia {
                         await Task.Delay(300);
                     }
                 } else {
-                    MpNotificationBuilder.ShowMessageAsync(
+                    await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
                             title: "Duplicate",
-                            body: $"Url already exists '{urlPath}' already exists",
-                            msgType: MpNotificationType.Message).FireAndForgetSafeAsync(this);
+                            message: $"Url already exists: '{urlPath}'",
+                            iconResourceObj: "WarningImage");
                 }
 
                 SelectedItem = uvm;

@@ -645,8 +645,8 @@ namespace MonkeyPaste.Avalonia {
             return fillBrush;
         }
 
-        private DateTime? _lastRenderDt = null;
-        private double _animOffset = 0;
+        //private DateTime? _lastRenderDt = null;
+        //private double _animOffset = 0;
         private ITransform GetBrushTransform(LinearGradientBrush lgb, bool is_tail, MpAvActionViewModelBase avm, double angle) {
 
             //_lastRenderDt = _lastRenderDt == null ? DateTime.Now : _lastRenderDt;

@@ -18,7 +18,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-
         #region Statics        
         #endregion
 
@@ -34,8 +33,7 @@ namespace MonkeyPaste {
         public DateTime? LoadedDateTime { get; private set; } = null;
         public bool IsCoreLoaded { get; protected set; } = false;
         public bool IsPlatformLoaded { get; protected set; } = false;
-        public bool IsInitialStartup { get; protected set; } = false;
-
+        public MpStartupFlags StartupFlags { get; protected set; }
         #endregion
 
         #region MpIProgressLoaderViewModel Implementation
@@ -58,6 +56,7 @@ namespace MonkeyPaste {
         public MpNotificationType DialogType => MpNotificationType.Loader;
 
         #endregion
+
         #endregion
 
         #region Properties

@@ -145,6 +145,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSearchFilterCollectionViewModel() : this(null) { }
         public MpAvSearchFilterCollectionViewModel(MpAvSearchBoxViewModel parent) : base(parent) {
             PropertyChanged += MpAvSearchFilterCollectionViewModel_PropertyChanged;
+            ResetFiltersToDefaultCommand.Execute(null);
         }
 
         #endregion
@@ -160,6 +161,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         #endregion
+
         #region Private Methods
 
         private void MpAvSearchFilterCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

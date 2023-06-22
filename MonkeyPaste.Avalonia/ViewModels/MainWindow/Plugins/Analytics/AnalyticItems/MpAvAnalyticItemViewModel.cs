@@ -28,6 +28,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyticItemViewModel :
         MpAvTreeSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>,
         MpISelectableViewModel,
+        MpIAsyncCollectionObject,
         MpIHoverableViewModel,
         MpIAsyncComboBoxItemViewModel,
         MpIMenuItemViewModel,
@@ -120,6 +121,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsAnyBusy =>
+            Items.Any(x => x.IsAnyBusy) || IsBusy;
 
         public virtual bool IsLoaded => Items.Count > 0 && Items[0].Items.Count > 0;
 

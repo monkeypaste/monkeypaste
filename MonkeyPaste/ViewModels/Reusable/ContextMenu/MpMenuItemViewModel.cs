@@ -544,11 +544,13 @@ namespace MonkeyPaste {
                 if (args == null) {
                     throw new Exception("Args must be color and color interface");
                 }
-                var argParts = args as object[];
-                MpIUserColorViewModel ucvm = argParts[0] as MpIUserColorViewModel;
-                string hexColor = argParts[1] as string;
-                ucvm.UserHexColor = hexColor;
-                Mp.Services.ContextMenuCloser.CloseMenu();
+                Mp.Services.MainThreadMarshal.RunOnMainThread(() => {
+                    var argParts = args as object[];
+                    MpIUserColorViewModel ucvm = argParts[0] as MpIUserColorViewModel;
+                    string hexColor = argParts[1] as string;
+                    ucvm.UserHexColor = hexColor;
+                    Mp.Services.ContextMenuCloser.CloseMenu();
+                });
             });
 
         #endregion

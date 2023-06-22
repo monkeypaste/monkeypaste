@@ -101,10 +101,10 @@ namespace MonkeyPaste.Avalonia {
 
             string prefPath = Path.Combine(PlatformInfo.StorageDir, $"pref_{PlatformInfo.OsShortName}.json");
 
-            if (App.Args.Any(x => x.ToLower() == App.BACKUP_DATA_ARG)) {
+            if (App.HasStartupArg(App.BACKUP_DATA_ARG)) {
                 // TODO move reset stuff to that backup folder
             }
-            if (App.Args.Any(x => x.ToLower() == App.RESET_DATA_ARG)) {
+            if (App.HasStartupArg(App.RESET_DATA_ARG)) {
                 //Debugger.Break();
 
                 // delete db, plugin cache, pref and pref.backup
@@ -142,7 +142,7 @@ namespace MonkeyPaste.Avalonia {
 
             AppCommandManager = new MpAvApplicationCommandManager();
 
-            CustomColorChooserMenuAsync = new MpAvCustomColorChooser();
+            CustomColorChooserMenuAsync = new MpAvCustomColorChooserViewModel();
 
             KeyStrokeSimulator = new MpAvKeyStrokeSimulator();
             PlatformResource = new MpAvPlatformResource();

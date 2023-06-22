@@ -102,6 +102,12 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        #region Appearance
+        public override string ActionHintText =>
+            "Shortcut Triggered - when the recorded shortcut is pressed at anytime with the current clipboard";
+
+        #endregion
+
         #region State
 
         public override bool AllowNullArg =>

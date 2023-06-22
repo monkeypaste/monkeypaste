@@ -22,9 +22,9 @@ namespace MonkeyPaste.Avalonia {
         public MpAvColorPickerView(string selHexColor) : base() {
             AvaloniaXamlLoader.Load(this);
 
-            var cancelbtn = this.GetControl<Button>("CancelButton");
+            var cancelbtn = this.FindControl<Button>("CancelButton");
             cancelbtn.Click += Cancelbtn_Click;
-            var okbtn = this.GetControl<Button>("OkButton");
+            var okbtn = this.FindControl<Button>("OkButton");
             okbtn.Click += Okbtn_Click;
 
             var cp = this.FindControl<ColorView>("Picker");

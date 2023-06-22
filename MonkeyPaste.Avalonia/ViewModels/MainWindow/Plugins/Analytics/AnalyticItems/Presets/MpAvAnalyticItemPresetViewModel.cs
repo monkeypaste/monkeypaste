@@ -12,6 +12,7 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel,
         MpILabelTextViewModel,
         MpIHoverableViewModel,
+        MpIAsyncCollectionObject,
         MpIMenuItemViewModel,
         MpIActionComponent,
         MpIUserIconViewModel,
@@ -228,6 +229,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsAnyBusy =>
+            Items.Any(x => x.IsAnyBusy) || IsBusy;
+
         public bool IsExecuting { get; set; }
         public string ShortcutTooltipText =>
             string.IsNullOrEmpty(KeyString) ?

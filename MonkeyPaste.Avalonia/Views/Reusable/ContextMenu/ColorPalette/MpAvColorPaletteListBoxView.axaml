@@ -73,10 +73,10 @@
                             BorderBrush="{Binding IconBorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                             BorderThickness="1"
                             CornerRadius="2">
-                        <ToolTip.Tip>
+                        <!--<ToolTip.Tip>
                             <local:MpAvToolTipView IsVisible="{Binding IsCustomColorButton}"
                                                    ToolTipText="Custom" />
-                        </ToolTip.Tip>
+                        </ToolTip.Tip>-->
                         <Image HorizontalAlignment="Stretch"
                                VerticalAlignment="Stretch"
                                Source="{Binding ConverterParameter=themefg, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, Source={StaticResource PlusImage}}"

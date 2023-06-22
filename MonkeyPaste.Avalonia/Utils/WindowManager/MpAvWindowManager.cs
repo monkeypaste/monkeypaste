@@ -165,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private static void Nw_Opened(object sender, System.EventArgs e) {
             if (sender is Window w) {
-                MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
+                //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
 
                 if (w.DataContext is MpIChildWindowViewModel cwvm) {
                     cwvm.IsChildWindowOpen = true;

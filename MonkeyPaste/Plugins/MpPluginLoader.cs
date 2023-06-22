@@ -122,7 +122,7 @@ namespace MonkeyPaste {
                 }
                 catch (Exception ex) {
                     MpNotificationBuilder.ShowNotificationAsync(
-                        notificationType: MpNotificationType.FileIoError,
+                        notificationType: MpNotificationType.FileIoWarning,
                         body: $"Error backing up {dir_to_backup} to '{backup_path}. Details: '{ex.Message}'").FireAndForgetSafeAsync();
                     backup_path = null;
                 }
@@ -194,7 +194,7 @@ namespace MonkeyPaste {
                 }
                 catch (Exception ex) {
                     MpNotificationBuilder.ShowNotificationAsync(
-                        notificationType: MpNotificationType.FileIoError,
+                        notificationType: MpNotificationType.FileIoWarning,
                         body: $"Error installing plugin: {ex.Message}").FireAndForgetSafeAsync();
                     return null;
                 }
@@ -202,7 +202,7 @@ namespace MonkeyPaste {
                 string manifest_path = Path.Combine(PluginRootFolderPath, pluginName, "manifest.json");
                 if (!manifest_path.IsFile()) {
                     MpNotificationBuilder.ShowNotificationAsync(
-                        notificationType: MpNotificationType.FileIoError,
+                        notificationType: MpNotificationType.FileIoWarning,
                         body: $"Error installing plugin '{pluginName}' corrupt or improper directory structure. Manifest should exist at '{manifest_path}' but was not found.").FireAndForgetSafeAsync();
                     return null;
                 }
@@ -216,7 +216,7 @@ namespace MonkeyPaste {
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error installing plugin from uri '{packageUrl}'. ", ex);
                 MpNotificationBuilder.ShowNotificationAsync(
-                    notificationType: MpNotificationType.FileIoError,
+                    notificationType: MpNotificationType.FileIoWarning,
                     body: ex.Message).FireAndForgetSafeAsync();
 
                 return null;

@@ -102,7 +102,7 @@ function hideTooltipOverlay() {
 function showTooltipToolbar(htmlStr, showTimeMs = 0) {
 	let tt_elm = getTooltipToolbarElement();
 	tt_elm.innerHTML = htmlStr;
-	if (tt_elm.firstChild.nodeType === 3 ||
+	if (tt_elm && tt_elm.firstChild && tt_elm.firstChild.nodeType === 3 ||
 		!tt_elm.firstChild.classList.contains('tooltiptext')) {
 		// presume any html passed will be setup for tooltip
 		tt_elm.innerHTML = `<span class="tooltiptext">${htmlStr}</span>`;

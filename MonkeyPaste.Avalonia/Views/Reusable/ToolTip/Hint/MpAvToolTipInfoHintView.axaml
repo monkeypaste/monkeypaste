@@ -3,12 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="using:MonkeyPaste.Avalonia"
+             xmlns:pcl="using:MonkeyPaste"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"
              x:Name="InfoHintView"
              x:Class="MonkeyPaste.Avalonia.MpAvToolTipInfoHintView"
-             Background="Transparent">
+             Background="Transparent"
+             IsVisible="{Binding ShowHints, Source={x:Static pcl:MpPrefViewModel.Instance}}">
     <UserControl.Styles>
         <Style Selector="Ellipse.hint">
             <Setter Property="HorizontalAlignment"

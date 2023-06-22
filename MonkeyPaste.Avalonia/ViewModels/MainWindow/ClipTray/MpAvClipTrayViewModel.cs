@@ -23,6 +23,7 @@ using FocusManager = Avalonia.Input.FocusManager;
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTrayViewModel :
         MpAvSelectorViewModelBase<object, MpAvClipTileViewModel>,
+        MpIAsyncCollectionObject,
         MpIPagingScrollViewerViewModel,
         MpIActionComponent,
         MpIBoundSizeViewModel,
@@ -43,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
         public const double MAX_TILE_SIZE_CONTAINER_PAD = 50;
         public const double MIN_SIZE_ZOOM_FACTOR_COEFF = (double)1 / (double)7;
         public const double DEFAULT_ITEM_SIZE = 260;
-        public const double UNEXPANDED_HEIGHT_RATIO = 0.33d;
+        public const double UNEXPANDED_HEIGHT_RATIO = 0.5d;
         public const double DEFAULT_UNEXPANDED_HEIGHT = DEFAULT_ITEM_SIZE * UNEXPANDED_HEIGHT_RATIO;
 
         #endregion
@@ -1860,6 +1861,20 @@ namespace MonkeyPaste.Avalonia {
                     }
                     await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);
                     await DeleteItemByCopyItemIdAsync(cap_info.ToBeRemoved_ciid);
+                } else if (source == "block") {
+                    // block refresh called BEFORE an add would occur to check favorite count again
+                    // since tag linking doesn't refresh caps, this does it when last add set account to block state
+                    if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
+                        // no linking changes, add will be blocked
+                        MpNotificationBuilder.ShowMessageAsync(
+                               title: $"Add blocked!",
+                               body: $"Max storage is {Mp.Services.AccountTools.GetContentCapacity(Mp.Services.AccountTools.CurrentAccountType)}.",
+                               msgType: MpNotificationType.ContentAddBlockedByAccount,
+                               maxShowTimeMs: MpContentCapInfo.MAX_CAP_NTF_SHOW_TIME_MS,
+                               iconSourceObj: MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY).FireAndForgetSafeAsync();
+                    } else {
+
+                    }
                 }
                 AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IconResourceObj)));
             });
@@ -2224,6 +2239,8 @@ namespace MonkeyPaste.Avalonia {
                     ResetTraySplitterCommand.Execute(null);
                     break;
                 case MpMessageType.TrayLayoutChanged:
+                    ResetItemSizes(true, false);
+
                     RefreshQueryTrayLayout();
                     if (LayoutType == MpClipTrayLayoutType.Grid) {
                         SetScrollAnchor(true);
@@ -2259,6 +2276,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.MainWindowOrientationChangeEnd:
                     _isMainWindowOrientationChanging = false;
+
+                    ResetItemSizes(true, true);
                     OnPropertyChanged(nameof(ListOrientation));
                     AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsExpanded)));
                     AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.MaxTitleHeight)));
@@ -2468,6 +2487,16 @@ namespace MonkeyPaste.Avalonia {
             }
             return nctvm;
         }
+        private void ResetItemSizes(bool query, bool pin) {
+            if (query &&
+                QueryItems.Where(x => MpAvPersistentClipTilePropertiesHelper.HasUniqueSize(x.CopyItemId, x.QueryOffsetIdx)) is IEnumerable<MpAvClipTileViewModel> to_clear_query) {
+                to_clear_query.ForEach(x => x.ResetTileSizeToDefaultCommand.Execute(null));
+            }
+            if (pin &&
+                InternalPinnedItems.Where(x => MpAvPersistentClipTilePropertiesHelper.HasUniqueSize(x.CopyItemId, x.QueryOffsetIdx)) is IEnumerable<MpAvClipTileViewModel> to_clear_pinned) {
+                to_clear_pinned.ForEach(x => x.ResetTileSizeToDefaultCommand.Execute(null));
+            }
+        }
         private async Task InitDefaultPlaceholdersAsync() {
             Items.Clear();
             for (int i = 0; i < DefaultLoadCount; i++) {
@@ -2602,8 +2631,12 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("waiting to add item to cliptray...");
             }
             if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
-                MpConsole.WriteLine($"Add content blocked, acct capped");
-                return;
+                MpConsole.WriteLine($"Add content blocked, acct capped. Ensuring accuracy...");
+                await ProcessAccountCapsAsync("blocked", cd);
+                if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
+                    MpConsole.WriteLine($"Add content blocked confirmed.");
+                    return;
+                }
             }
 
             IsAddingClipboardItem = true;
@@ -3916,8 +3949,6 @@ namespace MonkeyPaste.Avalonia {
             await MpAvTagTrayViewModel.Instance.TrashTagViewModel
                 .LinkCopyItemCommand.ExecuteAsync(ciid);
 
-            await ProcessAccountCapsAsync("trash", ciid);
-
             MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
 
             var trashed_ctvm = AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid);
@@ -4132,14 +4163,21 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleRightClickPasteCommand => new MpCommand(
             () => {
                 IsRightClickPasteMode = !IsRightClickPasteMode;
-                MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("RIGHT CLICK PASTE MODE: {0}", IsRightClickPasteMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+                MpNotificationBuilder.ShowMessageAsync(
+                    title: "MODE CHANGED",
+                    body: $"RIGHT CLICK PASTE MODE: {(IsRightClickPasteMode ? "ON" : "OFF")}",
+                    msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
                 MpMessenger.SendGlobal(IsRightClickPasteMode ? MpMessageType.RightClickPasteEnabled : MpMessageType.RightClickPasteDisabled);
             }, () => !IsAppPaused);
 
         public ICommand ToggleAutoCopyModeCommand => new MpCommand(
             () => {
                 IsAutoCopyMode = !IsAutoCopyMode;
-                MpNotificationBuilder.ShowMessageAsync("MODE CHANGED", string.Format("AUTO-COPY SELECTION MODE: {0}", IsAutoCopyMode ? "ON" : "OFF")).FireAndForgetSafeAsync(this);
+
+                MpNotificationBuilder.ShowMessageAsync(
+                    title: "MODE CHANGED",
+                    body: $"AUTO-COPY SELECTION MODE: {(IsAutoCopyMode ? "ON" : "OFF")}",
+                    msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
                 MpMessenger.SendGlobal(IsAutoCopyMode ? MpMessageType.AutoCopyEnabled : MpMessageType.AutoCopyDisabled);
             }, () => !IsAppPaused);
 
@@ -4302,7 +4340,7 @@ namespace MonkeyPaste.Avalonia {
                 MpNotificationBuilder.ShowMessageAsync(
                        title: $"{manual_change_str} Append Mode Activated",
                        body: detail_str,
-                       msgType: MpNotificationType.AppModeChange,
+                       msgType: MpNotificationType.AppendModeChanged,
                        iconSourceObj: icon_key).FireAndForgetSafeAsync();
             }
 
@@ -4313,7 +4351,7 @@ namespace MonkeyPaste.Avalonia {
                 MpNotificationBuilder.ShowMessageAsync(
                        title: $"Append {pause_change_str}",
                        body: detail_str,
-                       msgType: MpNotificationType.AppModeChange,
+                       msgType: MpNotificationType.AppendModeChanged,
                        iconSourceObj: icon_key).FireAndForgetSafeAsync();
             }
 
@@ -4324,7 +4362,7 @@ namespace MonkeyPaste.Avalonia {
                 MpNotificationBuilder.ShowMessageAsync(
                        title: $"{manual_change_str} Append Mode Activated",
                        body: detail_str,
-                       msgType: MpNotificationType.AppModeChange,
+                       msgType: MpNotificationType.AppendModeChanged,
                        iconSourceObj: icon_key).FireAndForgetSafeAsync();
             }
         }
@@ -4379,7 +4417,7 @@ namespace MonkeyPaste.Avalonia {
             MpNotificationBuilder.ShowMessageAsync(
                    title: $"Append {type_str} {manual_str}Mode Activated",
                    body: "Copy text or file(s) to apply.",
-                   msgType: MpNotificationType.AppModeChange,
+                   msgType: MpNotificationType.AppendModeChanged,
                    iconSourceObj: icon_key).FireAndForgetSafeAsync();
         }
         private void DeactivateAppendMode() {
@@ -4393,7 +4431,7 @@ namespace MonkeyPaste.Avalonia {
                 MpNotificationBuilder.ShowMessageAsync(
                            title: $"Append Deactivated",
                            body: $"Normal clipboard behavior has been restored",
-                           msgType: MpNotificationType.AppModeChange,
+                           msgType: MpNotificationType.AppendModeChanged,
                            iconSourceObj: "ClipboardImage").FireAndForgetSafeAsync();
             } else {
                 var deactivate_append_ctvm = AppendClipTileViewModel;

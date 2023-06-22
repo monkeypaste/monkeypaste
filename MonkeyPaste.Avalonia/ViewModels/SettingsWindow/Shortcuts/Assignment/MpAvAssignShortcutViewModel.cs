@@ -74,11 +74,6 @@ namespace MonkeyPaste.Avalonia {
             var result = await ascw.ShowChildDialogWithResultAsync(owner);
 
 
-
-            if (owner is Window w) {
-                w.Activate();
-                w.Focus();
-            }
             if (result is bool assignResult && assignResult && ascw.DataContext is MpAvAssignShortcutViewModel ascwvm) {
                 MpRoutingType routing_type = MpRoutingType.None;
                 if (ascwvm.AssignmentType != MpShortcutAssignmentType.AppPaste) {

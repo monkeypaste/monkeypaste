@@ -90,6 +90,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region Appearance
+        public override string ActionHintText =>
+            "Content Added - Triggered when content of the selected type is added";
+
+        #endregion
         #region Model
 
         public MpCopyItemType AddedContentType {

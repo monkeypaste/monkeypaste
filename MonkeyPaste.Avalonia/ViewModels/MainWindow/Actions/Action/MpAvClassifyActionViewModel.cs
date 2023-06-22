@@ -55,7 +55,11 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
         public override object IconResourceObj => SelectedTag == null ?
             base.IconResourceObj : SelectedTag.TagHexColor;
+        public override string ActionHintText =>
+            "Classifier - Automatically adds triggered content to the selected collection.";
+
         #endregion
+
         #region Model
 
         public int TagId {

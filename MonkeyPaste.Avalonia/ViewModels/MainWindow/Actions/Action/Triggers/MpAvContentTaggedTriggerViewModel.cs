@@ -48,6 +48,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Appearance
+        public override string ActionHintText =>
+            "Content Classified - Triggered when content is added to the selected collection";
+
+        #endregion
+
         #region Model
 
         public int TagId {

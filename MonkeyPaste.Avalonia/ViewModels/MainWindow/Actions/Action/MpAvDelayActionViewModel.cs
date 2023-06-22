@@ -51,9 +51,13 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Properties
 
+        #region Appearance
+        public override string ActionHintText =>
+            "Delay - Priarily used in conjunction with the 'Repeat' Action for polling remote sources or aid with long running operations.";
+
+        #endregion
 
         #region State
         public override bool AllowNullArg =>

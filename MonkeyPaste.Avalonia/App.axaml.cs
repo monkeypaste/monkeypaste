@@ -25,6 +25,7 @@ namespace MonkeyPaste.Avalonia {
         public const string RESET_DATA_ARG = "resetdata";
         public const string BACKUP_DATA_ARG = "backupdata";
         public const string MULTI_TOUCH_ARG = "multitouch";
+        public const string LOGIN_LOAD_ARG = "autologin";
 
         #endregion
 
@@ -47,6 +48,10 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return null;
             }
+        }
+
+        public static bool HasStartupArg(string arg) {
+            return Args.Any(x => x.ToLower() == arg.ToLower());
         }
         #endregion
 
@@ -79,20 +84,20 @@ namespace MonkeyPaste.Avalonia {
             DateTime startup_datetime = DateTime.Now;
 
             ReportCommandLineArgs(Args);
-            //RequestedThemeVariant = ThemeVariant.Light;
+            bool is_login_load = true;// HasStartupArg(LOGIN_LOAD_ARG);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;
 
-                var bootstrapper = new MpAvLoaderViewModel();
+                var bootstrapper = new MpAvLoaderViewModel(is_login_load);
                 await bootstrapper.CreatePlatformAsync(startup_datetime);
                 await bootstrapper.InitAsync();
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                 if (MpDeviceWrapper.Instance != null) {
                     await MpDeviceWrapper.Instance.InitAsync(null);
                 }
-                var bootstrapper = new MpAvLoaderViewModel();
+                var bootstrapper = new MpAvLoaderViewModel(is_login_load);
                 await bootstrapper.CreatePlatformAsync(startup_datetime);
                 bootstrapper.InitAsync().FireAndForgetSafeAsync();
 

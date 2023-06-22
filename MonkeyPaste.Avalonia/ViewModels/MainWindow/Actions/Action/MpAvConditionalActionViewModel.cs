@@ -119,6 +119,9 @@ namespace MonkeyPaste.Avalonia {
 
         public double CompareDataTextBoxHeight { get; set; } = 30;
 
+        public override string ActionHintText =>
+            "Conditional - Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated.";
+
         #endregion
 
         #region Business Logic

@@ -20,12 +20,27 @@ namespace MonkeyPaste.Avalonia {
 
         public static void InitToolWindow(IntPtr handle) {
 #if WINDOWS
-            int exStyle = WinApi.GetWindowLong(handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
-            exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
-            WinApi.SetWindowLong(handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
+            int cur_style = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
+            cur_style |= (int)ExtendedWindowStyles.WS_EX_TOOLWINDOW;
+            SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)cur_style);
 #endif
 
         }
+
+        public static void SetAsNoHitTestWindow(IntPtr handle) {
+            // from https://github.com/AvaloniaUI/Avalonia/issues/4956
+            // see thread for other platforms
+            int cur_style = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
+            SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, cur_style | (int)ExtendedWindowStyles.WS_EX_LAYERED | (int)ExtendedWindowStyles.WS_EX_TRANSPARENT);
+            //SetLayeredWindowAttributes(handle, 0, 255, 0x2);
+        }
+
+        public static void RemoveNoHitTestWindow(IntPtr handle) {
+            int cur_style = GetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE);
+            int with_hit_test_style = cur_style & (~(int)ExtendedWindowStyles.WS_EX_LAYERED) & (~(int)ExtendedWindowStyles.WS_EX_TRANSPARENT);
+            SetWindowLong(handle, (int)GetWindowLongFields.GWL_EXSTYLE, with_hit_test_style);
+        }
+
     }
 
 }

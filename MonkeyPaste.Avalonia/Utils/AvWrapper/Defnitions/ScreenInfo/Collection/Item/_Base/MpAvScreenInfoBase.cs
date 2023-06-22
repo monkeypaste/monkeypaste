@@ -2,8 +2,8 @@
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvScreenInfoBase : MpIPlatformScreenInfo {
-        public MpRect Bounds { get; set; }
-        public MpRect WorkArea { get; set; }
+        public MpRect Bounds { get; set; } = MpRect.Empty;
+        public MpRect WorkArea { get; set; } = MpRect.Empty;
         public double Scaling { get; set; }
         public virtual bool IsPrimary { get; set; }
         public MpPoint PixelsPerInch =>

@@ -13,11 +13,10 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvAddFromClipboardActionViewModel :
-        MpAvActionViewModelBase, MpITooltipInfoViewModel {
+        MpAvActionViewModelBase {
         #region Constants
 
         #endregion
-
 
         #region Properties
 
@@ -26,6 +25,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+        public override string ActionHintText =>
+            "Create from Clipboard - Creates a new content item from the current clipboard at the time of execution. Note that any incoming output to this action will be overwritten by the new clipboard content.";
+
         #endregion
 
         #region State

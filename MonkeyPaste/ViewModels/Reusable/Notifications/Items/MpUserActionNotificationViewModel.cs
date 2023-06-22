@@ -15,7 +15,8 @@ namespace MonkeyPaste {
 
         public override bool ShowOptionsButton =>
             NotificationType == MpNotificationType.ContentCapReached ||
-            NotificationType == MpNotificationType.TrashCapReached;
+            NotificationType == MpNotificationType.TrashCapReached ||
+            NotificationType == MpNotificationType.ContentAddBlockedByAccount;
 
         public bool IsFixing { get; set; } = false;
 

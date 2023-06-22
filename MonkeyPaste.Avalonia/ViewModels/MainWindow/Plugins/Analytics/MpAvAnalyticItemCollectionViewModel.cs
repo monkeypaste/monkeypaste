@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyticItemCollectionViewModel :
         MpAvTreeSelectorViewModelBase<object, MpAvAnalyticItemViewModel>,
         MpIMenuItemViewModel,
+        MpIAsyncCollectionObject,
         MpIAsyncComboBoxViewModel,
         MpISidebarItemViewModel,
         MpIPopupMenuPicker {
@@ -150,6 +151,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsAnyBusy =>
+            Items.Any(x => x.IsAnyBusy) || IsBusy;
 
         public int SelectedItemIdx {
             get => SortedItems.IndexOf(SelectedItem);
@@ -434,7 +438,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     if (!revert_success) {
                         MpNotificationBuilder.ShowNotificationAsync(
-                            notificationType: MpNotificationType.FileIoError,
+                            notificationType: MpNotificationType.FileIoWarning,
                             body: $"Unknown error occured.").FireAndForgetSafeAsync();
                     }
                 }

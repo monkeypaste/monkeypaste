@@ -329,8 +329,6 @@ namespace MonkeyPaste.Avalonia {
         public string EditorShortcutsMsgBase64 =>
             _editorShortcutsMsgBase64;
 
-        public int GlobalShortcutDelay =>
-            MpPrefViewModel.Instance.GlobalShortcutDelay;
         public bool IsAnyBusy =>
             IsBusy || Items.Any(x => x.IsBusy);
         public MpKeyModifierFlags GlobalKeyModifierFlags {

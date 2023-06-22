@@ -11,7 +11,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvFileWriterActionViewModel :
-        MpAvActionViewModelBase, MpITooltipInfoViewModel {
+        MpAvActionViewModelBase {
         #region Constants
 
         public const string SELECTED_DIR_PARAM_ID = "SelectedDirectory";
@@ -59,6 +59,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+        public override string ActionHintText =>
+            "File Writer - Saves input to the selected folder.";
+
         #endregion
 
         #region State
@@ -228,7 +231,7 @@ namespace MonkeyPaste.Avalonia {
                 string error_msg = ex.Message;
 
                 var result = await MpNotificationBuilder.ShowNotificationAsync(
-                    notificationType: MpNotificationType.FileIoError,
+                    notificationType: MpNotificationType.InvalidAction,
                     title: $"{Label} Error",
                     body: error_msg,
                     retryAction: retryFunc,

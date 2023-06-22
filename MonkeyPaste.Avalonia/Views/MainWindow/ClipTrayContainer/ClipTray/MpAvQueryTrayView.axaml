@@ -144,6 +144,7 @@
                          local:MpAvPagingListBoxExtension.CanScrollY="{Binding CanScroll}"
                          local:MpAvPagingListBoxExtension.ListOrientation="{Binding ListOrientation}"
                          local:MpAvPagingListBoxExtension.LayoutType="{Binding LayoutType}"
+                         local:MpAvPagingListBoxExtension.CanTouchScroll="{Binding CanTouchScroll, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.IsTouchScrolling="{Binding IsTouchScrolling, Mode=TwoWay}"
                          Width="{Binding QueryTrayTotalWidth}"
                          Height="{Binding QueryTrayTotalHeight}"

@@ -1134,8 +1134,9 @@ namespace MonkeyPaste.Avalonia {
                 // trigger selection changed message to notify tag association change
                 MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
             }
-            MpAvClipTrayViewModel.Instance.UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
             IsBusy = false;
+            MpAvClipTrayViewModel.Instance.UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
+            MpAvClipTrayViewModel.Instance.ProcessAccountCapsAsync("link", ciid).FireAndForgetSafeAsync();
         }
 
         private void UpdateBadge() {

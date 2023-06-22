@@ -23,7 +23,6 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIPopupMenuViewModel,
         MpIContextMenuViewModel,
-        MpITooltipInfoViewModel,
         MpILabelText,
         MpIBoxViewModel,
         MpIMovableViewModel,
@@ -296,47 +295,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpITooltipInfoViewModel Implementation
-
-        public object Tooltip {
-            get {
-                string toolTipStr = string.Empty;
-
-                if (this is MpAvAnalyzeActionViewModel) {
-                    toolTipStr = "Analyzer - Processes triggered content or previous action output using a selected plugin.";
-                } else if (this is MpAvClassifyActionViewModel) {
-                    toolTipStr = "Classifier - Automatically adds triggered content to the selected collection.";
-                } else if (this is MpAvConditionalActionViewModel) {
-                    toolTipStr = "Comparer - Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated.";
-                } else if (this is MpAvFileWriterActionViewModel) {
-                    toolTipStr = "File Writer - Saves content to the selected folder.";
-                } else if (this is MpAvContentAddTriggerViewModel) {
-                    toolTipStr = "Content Added - Triggered when content of the selected type is added";
-                } else if (this is MpAvContentTaggedTriggerViewModel) {
-                    toolTipStr = "Content Classified - Triggered when content is added to the selected collection";
-                } else if (this is MpAvFolderWatcherTriggerViewModel) {
-                    toolTipStr = "Folder Changed - Triggered when a file is added to the selected directory (or subdirectory if checked)";
-                } else if (this is MpAvShortcutTriggerViewModel) {
-                    toolTipStr = "Shortcut Triggered - when the recorded shortcut is pressed at anytime with the current clipboard";
-                } else if (this is MpAvAddFromClipboardActionViewModel) {
-                    toolTipStr = "Create from Clipboard - Creates a new content item from the current clipboard at the time of execution. Note that any incoming output to this action will be overwritten by the new clipboard content. ";
-                } else if (this is MpAvFileWriterActionViewModel) {
-                    toolTipStr = "Prefix is used for non-file clipboard items. If unset file will use the content's title.";
-                } else if (this is MpAvKeySimulatorActionViewModel) {
-                    toolTipStr = "Gesture Simulator - Simulates the recorded key combination into whatever is the current active application. Only 1 gesture is supported so if you need more you will need to chain multiple instances of this toggether (sorry).";
-                } else if (this is MpAvRepeaterActionViewModel) {
-                    toolTipStr = "Repeat - Repeater is intended to work in conjuncion with a conditinoal action.";
-                }
-                if (string.IsNullOrEmpty(toolTipStr)) {
-                    MpDebug.Break($"'{this.GetType()}' needs a tooltip descriptor");
-                }
-
-                return toolTipStr;
-            }
-        }
-
-        #endregion
-
         #region MpIHoverableViewModel Implementation
 
         public bool IsHovering { get; set; }
@@ -553,7 +511,7 @@ namespace MonkeyPaste.Avalonia {
                 return resourceKey;
             }
         }
-
+        public abstract string ActionHintText { get; }
 
         #endregion
 
@@ -993,7 +951,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             OnPropertyChanged(nameof(Children));
-            OnPropertyChanged(nameof(Tooltip));
 
             OnPropertyChanged(nameof(ActionArgs));
 

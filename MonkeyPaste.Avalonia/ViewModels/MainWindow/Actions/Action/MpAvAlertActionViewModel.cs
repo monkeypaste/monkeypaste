@@ -147,8 +147,13 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Properties
+
+        #region Appearance
+        public override string ActionHintText =>
+            "Alert - Used for custom alerts to help keep you aware of long-running action chains. Also these can be handy to narrow down parent output data when configuring 'Conditional' actions. Alerts have no affect on their input.";
+
+        #endregion
 
         #region State
         public override bool AllowNullArg =>
@@ -292,6 +297,7 @@ namespace MonkeyPaste.Avalonia {
                 MpNotificationBuilder.ShowMessageAsync(
                     title: Label,
                     body: evald_msg,
+                    msgType: MpNotificationType.AlertAction,
                     iconSourceObj: IconResourceObj,
                     maxShowTimeMs: ToastDelayS * 1000).FireAndForgetSafeAsync(this);
             }

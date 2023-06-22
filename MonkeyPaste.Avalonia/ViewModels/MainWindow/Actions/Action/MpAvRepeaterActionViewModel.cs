@@ -92,6 +92,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region Appearance
+        public override string ActionHintText =>
+            "Repeater - Used for creating action loops or repetive tasks. When repeated, it will execute all children again with its original input. When using an interval without a repeat count, the trigger will need to be disabled and reenabled to halt the repeating. Can be useful for polling or web scraping automation.";
+
+        #endregion
 
         #region Model
 

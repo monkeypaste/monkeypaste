@@ -431,6 +431,14 @@ namespace MonkeyPaste.Avalonia {
         public bool IsMainWindowVisible { get; set; }
         public bool IsMainWindowLoading { get; set; } = true;
 
+        public bool HideInitialOpen =>
+            Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Login);
+
+        public bool ShowLoadCompleteNtf =>
+            HideInitialOpen;
+
+        public bool IsMainWindowInHiddenLoadState { get; private set; }
+
         private bool _isMainWindowLocked;
         public bool IsMainWindowLocked {
             get {
@@ -511,7 +519,7 @@ namespace MonkeyPaste.Avalonia {
                         && mobile.MainView != null) {
                         return new MpAvDesktopScreenInfo(mobile.MainView.GetVisualRoot().AsScreen());
                     }
-                    return new MpAvDesktopScreenInfo() { IsPrimary = true };
+                    return new MpAvDesktopScreenInfo() { IsPrimary = true, };
                 }
                 if (_mainWindowScreen == null) {
                     if (MainWindowMonitorIdx < 0 &&
@@ -592,12 +600,7 @@ namespace MonkeyPaste.Avalonia {
             CycleOrientationCommand.Execute(null);
 
             MpMessenger.SendGlobal(MpMessageType.MainWindowLoadComplete);
-
-            //while (IsMainWindowInitiallyOpening) {
-            //    await Task.Delay(100);
-            //}
-
-            //Mp.Services.Query.RestoreProviderValues();
+            FinishMainWindowLoadAsync().FireAndForgetSafeAsync();
         }
 
 
@@ -798,12 +801,21 @@ namespace MonkeyPaste.Avalonia {
                 MpPrefViewModel.Instance.ShowInTaskbar) {
                 w.WindowState = WindowState.Normal;
             }
+            if (HideInitialOpen) {
+                // app started from login, initial show is transparent/nohtt
+                // shows splash loader and loaded msg by default but user can hide
+                if (IsMainWindowInitiallyOpening) {
+                    MpAvToolWindow_Win32.SetAsNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
+                    MpAvWindowManager.MainWindow.Opacity = 0;
+                    IsMainWindowInHiddenLoadState = true;
+                } else if (IsMainWindowInHiddenLoadState) {
+                    MpAvToolWindow_Win32.RemoveNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
+                    MpAvWindowManager.MainWindow.Opacity = 1;
+                    IsMainWindowInHiddenLoadState = false;
+                }
+            }
             App.MainView.Show();
             IsMainWindowVisible = true;
-
-            if (!AnimateShowWindow) {
-                SetMainWindowRect(MainWindowOpenedScreenRect);
-            }
         }
         private void FinishMainWindowShow() {
             if (_isAnimationCanceled) {
@@ -1052,11 +1064,47 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        private async Task FinishMainWindowLoadAsync() {
+            if (!HideInitialOpen) {
+                return;
+            }
+
+            // wait for mw to come into view..
+            while (IsMainWindowInitiallyOpening) {
+                await Task.Delay(100);
+            }
+            await Task.Delay(300);
+            // wait for for any busys
+            var wait_vml = new MpIAsyncCollectionObject[] {
+                MpAvClipTrayViewModel.Instance,
+                MpAvTagTrayViewModel.Instance,
+                MpAvAnalyticItemCollectionViewModel.Instance,
+                MpAvTriggerCollectionViewModel.Instance,
+                MpAvClipboardHandlerCollectionViewModel.Instance,
+                MpAvPlainHtmlConverter.Instance
+            };
+            while (true) {
+                if (wait_vml.Any(x => x.IsAnyBusy)) {
+                    await Task.Delay(100);
+                    continue;
+                }
+                break;
+            }
+
+            await HideMainWindowCommand.ExecuteAsync();
+
+            MpNotificationBuilder.ShowMessageAsync(
+                title: "Loaded",
+                body: $"Monkey Paste is now loaded. \nClipboard listening is: {(MpAvClipTrayViewModel.Instance.IsAppPaused ? "Paused" : "Active")}",
+                msgType: MpNotificationType.StartupComplete,
+                iconSourceObj: "MonkeyWinkImage").FireAndForgetSafeAsync();
+        }
         #endregion
 
         #region Commands        
 
-        public ICommand ShowMainWindowCommand => new MpAsyncCommand(
+        public MpIAsyncCommand ShowMainWindowCommand => new MpAsyncCommand(
              async () => {
                  if (IsMainWindowOpening && IsMainWindowAnimating()) {
                      return;
@@ -1070,16 +1118,19 @@ namespace MonkeyPaste.Avalonia {
 
                  if (AnimateShowWindow) {
                      await AnimateMainWindowAsync(MainWindowOpenedScreenRect);
+                 } else {
+                     SetMainWindowRect(MainWindowOpenedScreenRect);
                  }
                  FinishMainWindowShow();
              },
             () => {
                 AnalyzeWindowState("show");
-                bool canShow = !IsMainWindowLoading &&
-                        //!IsAnyDialogOpen &&
-                        !IsMainWindowOpen &&
-                        //!IsMainWindowClosing &&
-                        !IsMainWindowOpening;
+                bool canShow =
+                    !IsMainWindowLoading &&
+                    //!IsAnyDialogOpen &&
+                    !IsMainWindowOpen &&
+                    //!IsMainWindowClosing &&
+                    !IsMainWindowOpening;
 
                 if (!canShow) {
 
@@ -1102,7 +1153,7 @@ namespace MonkeyPaste.Avalonia {
                 return canShow;
             });
 
-        public ICommand HideMainWindowCommand => new MpAsyncCommand(
+        public MpIAsyncCommand HideMainWindowCommand => new MpAsyncCommand(
             async () => {
                 Dispatcher.UIThread.VerifyAccess();
                 if (IsMainWindowClosing && IsMainWindowAnimating()) {

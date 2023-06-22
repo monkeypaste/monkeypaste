@@ -172,7 +172,7 @@ function disableAppendManualMode(fromHost = false) {
 function enablePauseAppend(fromHost = false) {
 	const did_pause_append_change = !globals.IsAppendPaused;
 	globals.IsAppendPaused = true;
-	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('play', null,false);
+	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('play');
 
 	if (!fromHost && did_pause_append_change) {
 		onAppendStateChanged_ntf();
@@ -182,7 +182,7 @@ function enablePauseAppend(fromHost = false) {
 function disablePauseAppend(fromHost = false) {
 	const did_pause_append_change = globals.IsAppendPaused;
 	globals.IsAppendPaused = false;
-	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('pause', null, false);
+	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('pause');
 
 	if (!fromHost && did_pause_append_change) {
 		onAppendStateChanged_ntf();

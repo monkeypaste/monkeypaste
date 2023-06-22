@@ -128,6 +128,9 @@ namespace MonkeyPaste.Common.Wpf {
 
             return result;
         }
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetLayeredWindowAttributes(IntPtr hwnd, uint crKey, byte bAlpha, uint dwFlags);
+
 
         public const int GWL_STYLE = -16;
         public const int WS_SYSMENU = 0x80000;
@@ -576,9 +579,12 @@ namespace MonkeyPaste.Common.Wpf {
             TokenImpersonation
         }
         [Flags]
-        public enum ExtendedWindowStyles {
+        public enum ExtendedWindowStyles : long {
             // ...
             WS_EX_TOOLWINDOW = 0x00000080,
+            WS_EX_LAYERED = 0x00080000,
+            WS_EX_TOPMOST = 0x00000008L,
+            WS_EX_TRANSPARENT = 0x00000020L,
             // ...
         }
 

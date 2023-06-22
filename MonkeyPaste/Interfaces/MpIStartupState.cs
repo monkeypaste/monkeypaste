@@ -3,7 +3,7 @@
 namespace MonkeyPaste {
     public interface MpIStartupState {
         DateTime? LoadedDateTime { get; }
-        bool IsInitialStartup { get; }
+        MpStartupFlags StartupFlags { get; }
         bool IsCoreLoaded { get; }
         bool IsPlatformLoaded { get; }
     }

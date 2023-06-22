@@ -237,6 +237,10 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
+        public static bool HasUniqueSize(int ciid, int idx) {
+            return IsTileHaveUniqueHeight(ciid, idx) || IsTileHaveUniqueWidth(ciid, idx);
+        }
+
         public static bool IsTileHaveUniqueWidth(int ciid, int idx) {
             return
                 GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp &&
@@ -247,6 +251,7 @@ namespace MonkeyPaste.Avalonia {
                 GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp &&
                 pp.UniqueHeight.HasValue;
         }
+
         public static void ClearPersistentWidths() {
             _props.ForEach(x => x.Value.UniqueWidth = null);
             CleanupProps();

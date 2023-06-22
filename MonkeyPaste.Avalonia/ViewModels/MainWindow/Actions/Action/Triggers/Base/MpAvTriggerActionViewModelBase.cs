@@ -124,6 +124,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+
         public override string ActionBackgroundHexColor =>
             GetActionHexColor(ActionType, TriggerType);
         public string EnabledHexColor =>
@@ -248,7 +249,8 @@ namespace MonkeyPaste.Avalonia {
                 await MpNotificationBuilder.ShowMessageAsync(
                     iconSourceObj: IconResourceObj.ToString(),
                     title: $"{typeStr.ToUpper()} STATUS",
-                    body: notificationText);
+                    body: notificationText,
+                    msgType: MpNotificationType.TriggerEnabled);
 
                 _isShowEnabledChangedNotification = false;
 

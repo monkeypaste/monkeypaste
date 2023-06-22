@@ -357,6 +357,8 @@ namespace MonkeyPaste {
         public string DefaultReadOnlyFontFamily { get; set; } = "Segoe UI";
         public string DefaultEditableFontFamily { get; set; } = "Arial";
         public int DefaultFontSize { get; set; } = 12;
+
+        public bool ShowHints { get; set; } = true;
         public double GlobalBgOpacity { get; set; }
 #if DESKTOP
         = 0.7;
@@ -419,7 +421,6 @@ namespace MonkeyPaste {
         #region Shortcuts
         public bool ShowExternalDropWidget { get; set; } = false;
 
-        public int GlobalShortcutDelay { get; set; } = 250;
         public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
         public bool DoShowMainWindowWithMouseEdgeAndScrollDelta { get; set; } = true;
         public string MainWindowShowBehaviorType { get; set; } = MpMainWindowShowBehaviorType.Primary.ToString();

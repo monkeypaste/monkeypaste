@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.ComponentModel;
@@ -120,7 +122,12 @@ namespace MonkeyPaste.Avalonia {
             SilentLockMainWindowCheck(owner);
 
             var result = await ShowDialog<object>(owner ?? MpAvWindowManager.MainWindow);
-            return result;
+
+            if (owner is Window w) {
+                w.Activate();
+                w.Focus();
+            }
+            return DialogResult;
         }
 
         public override string ToString() {
@@ -137,6 +144,11 @@ namespace MonkeyPaste.Avalonia {
 #if DEBUG
             this.AttachDevTools();
 #endif
+            if (Mp.Services != null &&
+                Mp.Services.ScreenInfoCollection == null) {
+                Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(this);
+            }
+
             MpAvWindowManager.AllWindows.Add(this);
             this.Closed += MpAvWindow_Closed;
         }

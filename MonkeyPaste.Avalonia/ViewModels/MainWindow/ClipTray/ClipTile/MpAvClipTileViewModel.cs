@@ -36,8 +36,7 @@ namespace MonkeyPaste.Avalonia {
         MpIResizableViewModel,
         MpITextContentViewModel,
         MpIAppendTitleViewModel,
-        MpIContextMenuViewModel,
-        MpITooltipInfoViewModel {
+        MpIContextMenuViewModel {
 
         #region Private Variables
 
@@ -1555,6 +1554,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsPinned):
                     OnPropertyChanged(nameof(IsPlaceholder));
+                    ResetTileSizeToDefaultCommand.Execute(null);
                     break;
                 case nameof(IsTitleVisible):
                     OnPropertyChanged(nameof(BoundHeight));
@@ -1998,13 +1998,29 @@ namespace MonkeyPaste.Avalonia {
                 //MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemData.ToPlainText()));
             });
 
-        public ICommand ResetTileSizeToDefaultCommand => new MpCommand(
-            () => {
+        public ICommand ResetTileSizeToDefaultCommand => new MpCommand<object>(
+            (args) => {
+                bool do_width =
+                    MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueWidth(CopyItemId, QueryOffsetIdx) &&
+                    (args == null || args.ToString() == "width");
+
+                bool do_height =
+                    MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueHeight(CopyItemId, QueryOffsetIdx) &&
+                    (args == null || args.ToString() == "height");
+
+                if (!do_width && !do_height) {
+                    return;
+                }
                 IsResizing = true;
 
-                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, QueryOffsetIdx);
-                //BoundSize = Parent.DefaultQueryItemSize;
-                BoundWidth = MinWidth;
+                if (do_width) {
+                    MpAvPersistentClipTilePropertiesHelper.RemoveUniqueWidth_ById(CopyItemId, QueryOffsetIdx);
+                    BoundWidth = MinWidth;
+                }
+                if (do_height) {
+                    MpAvPersistentClipTilePropertiesHelper.RemoveUniqueHeight_ById(CopyItemId, QueryOffsetIdx);
+                    BoundHeight = MinHeight;
+                }
 
                 IsResizing = false;
             });

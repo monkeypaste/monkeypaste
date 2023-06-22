@@ -15,9 +15,9 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvParameterViewModelBase :
         MpViewModelBase<MpViewModelBase>,
         MpITreeItemViewModel,
+        MpIAsyncCollectionObject,
         MpISelectableViewModel,
-        MpIHoverableViewModel,
-        MpITooltipInfoViewModel {
+        MpIHoverableViewModel {
         #region Private Variables
         protected string _lastValue = string.Empty;
         #endregion
@@ -38,12 +38,6 @@ namespace MonkeyPaste.Avalonia {
         //object MpIParameterKeyValuePair.paramId => ParamId;
         //string MpIParameterKeyValuePair.value => CurrentValue;
 
-
-        #endregion
-
-        #region MpITooltipInfoViewModel Implementation
-
-        public object Tooltip => Description;
 
         #endregion
 
@@ -92,6 +86,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public virtual bool IsAnyBusy =>
+            IsBusy;
         public bool DoFocusPulse { get; set; }
 
         public bool IsRememberChecked { get; set; }

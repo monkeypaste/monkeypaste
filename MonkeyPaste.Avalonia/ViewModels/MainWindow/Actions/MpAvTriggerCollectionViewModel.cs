@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTriggerCollectionViewModel :
         MpViewModelBase,
         MpIPopupMenuViewModel,
+        MpIAsyncCollectionObject,
         MpIChildWindowViewModel,
         MpIWindowStateViewModel,
         MpISidebarItemViewModel,

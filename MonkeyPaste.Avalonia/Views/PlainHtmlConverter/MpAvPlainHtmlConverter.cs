@@ -12,7 +12,8 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlainHtmlConverter :
-        MpIAsyncObject {
+        MpIAsyncObject,
+        MpIAsyncCollectionObject {
         #region Private Variables
 
         #endregion
@@ -26,6 +27,10 @@ namespace MonkeyPaste.Avalonia {
         #region MpIAsyncObject Implementation
 
         public bool IsBusy { get; private set; } = false;
+        #endregion
+        #region MpIAsyncCollectionObject Implementation
+
+        bool MpIAsyncCollectionObject.IsAnyBusy => IsBusy;
         #endregion
 
         #region Properties

@@ -256,6 +256,7 @@ namespace MonkeyPaste.Avalonia {
                                 paramId = MpButtonCommandPrefType.ThemeHexColor.ToString(),
                                 controlType = MpParameterControlType.Button,
                                 label = "Theme Color",
+                                description = "Caution! Palette colors are decided by math not eyes! So please be careful as some color and style combinations may not have proper contrast for readability.",
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
@@ -334,6 +335,19 @@ namespace MonkeyPaste.Avalonia {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
                                         value = MpPrefViewModel.Instance.NotificationSoundVolume.ToString()
+                                    }
+                                }
+                            },
+
+                            new MpParameterFormat() {
+                                paramId = nameof(MpPrefViewModel.Instance.ShowHints),
+                                controlType = MpParameterControlType.CheckBox,
+                                unitType = MpParameterValueUnitType.Bool,
+                                label = "Show Hints",
+                                values = new List<MpPluginParameterValueFormat>() {
+                                    new MpPluginParameterValueFormat() {
+                                        isDefault = true,
+                                        value = MpPrefViewModel.Instance.ShowHints.ToString()
                                     }
                                 }
                             },
@@ -758,21 +772,6 @@ namespace MonkeyPaste.Avalonia {
                     headless = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                paramId = nameof(MpPrefViewModel.Instance.GlobalShortcutDelay),
-                                description = "To allow global overriding keyboard shortcuts the input system must be sure you are issuing one of your shortcuts. ",
-                                controlType = MpParameterControlType.Slider,
-                                unitType = MpParameterValueUnitType.Integer,
-                                minimum = 0,
-                                maximum = 3000,
-                                label = "Shortcut Delay Cut-off",
-                                values =new List<MpPluginParameterValueFormat>() {
-                                    new MpPluginParameterValueFormat() {
-                                        isDefault = true,
-                                        value = MpPrefViewModel.Instance.GlobalShortcutDelay.ToString()
-                                    },
-                                }
-                            },
-                            new MpParameterFormat() {
                                 paramId = nameof(MpPrefViewModel.Instance.IsAutoSearchEnabled),
                                 description = "Text typed will be automatically applied to a search when no text control is focused.",
                                 controlType = MpParameterControlType.CheckBox,
@@ -923,9 +922,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(MpPrefViewModel.Instance.MaxStagedClipCount):
                     MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.InternalPinnedItems));
                     break;
-                case nameof(MpPrefViewModel.Instance.GlobalShortcutDelay):
-                    MpAvShortcutCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAvShortcutCollectionViewModel.Instance.GlobalShortcutDelay));
-                    break;
                 case nameof(MpPrefViewModel.Instance.TrackExternalPasteHistory):
                     MpAvShortcutCollectionViewModel.Instance.InitExternalPasteTracking();
                     break;
@@ -957,10 +953,13 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 #if WINDOWS
+            // see https://stackoverflow.com/questions/674628/how-do-i-set-a-program-to-launch-at-startup
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string appName = Assembly.GetExecutingAssembly().GetName().Name;
             string appPath = Mp.Services.PlatformInfo.ExecutingPath;
             if (loadOnLogin) {
+                // NOTE adding login loaded flag arg for startup state logic
+                appPath += " " + App.LOGIN_LOAD_ARG;
                 rk.SetValue(appName, appPath);
             } else {
                 rk.DeleteValue(appName, false);
@@ -1297,7 +1296,7 @@ namespace MonkeyPaste.Avalonia {
                                 MpNotificationBuilder.ShowMessageAsync(
                                     title: "Error",
                                     body: $"Could not delete plugin cache from path: '{cache_dir}'",
-                                    msgType: MpNotificationType.FileIoError).FireAndForgetSafeAsync(this);
+                                    msgType: MpNotificationType.FileIoWarning).FireAndForgetSafeAsync(this);
                             }
 
                             break;

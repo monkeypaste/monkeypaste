@@ -70,6 +70,9 @@ namespace MonkeyPaste.Avalonia {
 
         public override object IconResourceObj =>
             SelectedPreset == null ? base.IconResourceObj : SelectedPreset.IconId;
+        public override string ActionHintText =>
+            "Analyzer - Processes triggered content or previous action output using a selected plugin.";
+
         #endregion
 
         #region State

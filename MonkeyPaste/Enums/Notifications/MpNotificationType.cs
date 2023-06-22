@@ -9,12 +9,18 @@
         Help,
         PluginUpdated,
         Message,
-        UserTriggerEnabled,
-        UserTriggerDisabled,
         AppModeChange,
         TrialExpired,
+
         ContentCapReached,
         TrashCapReached,
+        ContentAddBlockedByAccount,
+
+        AppendModeChanged,
+        TriggerEnabled,
+        AlertAction,
+        StartupComplete,
+        FileIoWarning,
 
         // User Action (System Tray)
         InvalidPlugin,
@@ -24,7 +30,6 @@
         AnalyzerTimeout,
         InvalidRequest,
         InvalidResponse,
-        FileIoError,
         ExecuteParametersRequest,
 
         // User Action (Modal) 

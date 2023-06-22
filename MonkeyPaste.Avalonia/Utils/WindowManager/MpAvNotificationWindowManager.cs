@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -72,12 +73,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Events
 
         public event EventHandler<Window> OnNotificationWindowIsVisibleChanged;
 
         #endregion
+
         #region Constructors
         private MpAvNotificationWindowManager() { }
         #endregion
@@ -114,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
                     //    break;
                     default:
                         nw = new MpAvMessageNotificationWindow() {
-                            DataContext = nvmb
+                            DataContext = nvmb,
                         };
                         break;
                 }
@@ -141,7 +142,6 @@ namespace MonkeyPaste.Avalonia {
                     desktop.MainWindow == null) {
                 // occurs on startup
                 desktop.MainWindow = nw;
-                Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(nw);
             }
 
             if (nvmb.Owner is Window w &&
@@ -160,18 +160,20 @@ namespace MonkeyPaste.Avalonia {
                 // flag ntf activating to prevent mw hide 
                 MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
             }
-            //if (MpAvWindowManager.MainWindow == null) {
+            if (nw is MpAvMessageNotificationWindow) {
+                MpIPlatformScreenInfo primaryScreen = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary);
+                if (primaryScreen != null) {
+                    // since msgs slide out and window positioning is handled after opening (to account for its size)
+                    // messages need to start off screen or it will blink when first shown
+                    nw.Position = primaryScreen.Bounds.BottomRight.ToAvPixelPoint(primaryScreen.Scaling);
+                }
+            }
             if (nvmb.Owner is Window ow) {
                 nw.Show(ow);
             } else {
                 nw.Show();
             }
             return;
-            //}
-
-            //nw.ShowChildDialogAsync(nvmb.Owner as Window).FireAndForgetSafeAsync();
-
-            //ForceTopmostAsync(nw).FireAndForgetSafeAsync();
         }
 
         private void FinishClose(Window w) {

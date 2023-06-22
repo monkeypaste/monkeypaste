@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvTreeSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
         MpIMenuItemViewModel,
         MpISidebarItemViewModel,
+        MpIAsyncCollectionObject,
         MpIAsyncComboBoxViewModel,
         MpIClipboardFormatDataHandlers,
         MpIPlatformDataObjectHelperAsync { //
@@ -239,6 +240,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsAnyBusy =>
+            Items.Any(x => x.IsBusy) || IsBusy;
 
         public int SelectedItemIdx {
             get => Items.IndexOf(SelectedItem);

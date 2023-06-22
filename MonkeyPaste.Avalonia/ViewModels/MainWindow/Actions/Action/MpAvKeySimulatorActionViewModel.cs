@@ -60,6 +60,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
+        public override string ActionHintText =>
+            "Gesture Simulator - Simulates the recorded key combination into whatever is the current active application. Only 1 gesture is supported so if you need more you will need to chain multiple instances of this toggether.";
+
         #endregion
 
         #region State

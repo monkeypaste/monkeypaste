@@ -353,6 +353,7 @@
     <None Remove="Assets\Images\minus2.png" />
     <None Remove="Assets\Images\missingfile.png" />
     <None Remove="Assets\Images\monkey.png" />
+    <None Remove="Assets\Images\monkeywink.png" />
     <None Remove="Assets\Images\mousebothclick.png" />
     <None Remove="Assets\Images\mousefilledbase.png" />
     <None Remove="Assets\Images\mouseleftclick.png" />
@@ -527,6 +528,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\missingfile.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\monkeywink.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\mousefilledbase.png">

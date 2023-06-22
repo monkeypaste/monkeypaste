@@ -69,7 +69,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+        #region Appearance
+        public override string ActionHintText =>
+            string.Empty;
 
+        #endregion
         #region Model
 
         public IEnumerable<string> IgnoredProcesses {

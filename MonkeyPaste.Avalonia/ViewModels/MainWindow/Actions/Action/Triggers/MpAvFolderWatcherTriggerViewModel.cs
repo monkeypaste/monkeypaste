@@ -177,6 +177,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region Appearance
+        public override string ActionHintText =>
+            "Folder Changed - Triggered when a file is added to the selected directory (or subdirectory if checked)";
+
+        #endregion
+
         #region State
         #endregion
 

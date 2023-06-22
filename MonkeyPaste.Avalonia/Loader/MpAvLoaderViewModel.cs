@@ -9,7 +9,30 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvLoaderViewModel : MpLoaderViewModelBase {
+        #region Private Variables
         private Stopwatch _sw;
+        #endregion
+
+        #region Constants
+        #endregion
+
+        #region Statics
+        #endregion
+
+        #region Interfaces
+        #endregion
+
+        #region Properties
+        #endregion
+
+        #region Constructors
+        public MpAvLoaderViewModel(bool wasStartedAtLogin) {
+            StartupFlags |= wasStartedAtLogin ? MpStartupFlags.Login : MpStartupFlags.UserInvoked;
+        }
+        #endregion
+
+        #region Public Methods
+
         public override async Task CreatePlatformAsync(DateTime startup_datetime) {
 #if LINUX
             
@@ -23,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (MpPrefViewModel.Instance != null) {
                 if (MpPrefViewModel.Instance.LastStartupDateTime == null) {
-                    IsInitialStartup = true;
+                    StartupFlags |= MpStartupFlags.Initial;
                 }
                 MpPrefViewModel.Instance.LastStartupDateTime = MpPrefViewModel.Instance.StartupDateTime;
                 MpPrefViewModel.Instance.StartupDateTime = startup_datetime;
@@ -55,6 +78,10 @@ namespace MonkeyPaste.Avalonia {
             IsPlatformLoaded = true;
             _sw.Stop();
         }
+        #endregion
+
+        #region Protected Methods
+
         protected override void CreateLoaderItems() {
 #if DESKTOP
             BaseItems.Add(new MpLoaderItemViewModel(this, typeof(MpAvCefNetApplication), "Rich Content Editor"));
@@ -137,5 +164,12 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
             MpConsole.WriteLine($"Loaded {item.Label} at idx: {index} Load Count: {LoadedCount} Load Percent: {PercentLoaded} Time(ms): {sw.ElapsedMilliseconds}");
         }
+        #endregion
+
+        #region Private Methods
+        #endregion
+
+        #region Commands
+        #endregion
     }
 }

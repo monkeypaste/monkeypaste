@@ -13,6 +13,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvTagTrayViewModel :
         MpAvSelectorViewModelBase<object, MpAvTagTileViewModel>,
+        MpIAsyncCollectionObject,
         MpIHasDragOverProperty,
         MpIHoverableViewModel,
         MpISelectableViewModel,

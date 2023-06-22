@@ -67,7 +67,7 @@
                     VerticalAlignment="Bottom"
                     BorderThickness="0"
                     Margin="0,0,5,0"
-                    Background="{DynamicResource ThemeInteractiveBgColor}"
+                    Background="{DynamicResource ThemeInteractiveColor}"
                     Height="1" />
 
 
