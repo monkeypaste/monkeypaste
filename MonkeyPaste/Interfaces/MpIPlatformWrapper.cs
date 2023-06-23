@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
+
+        MpIPlatformUserInfo PlatformUserInfo { get; set; }
+        MpIThisAppInfo ThisAppInfo { get; set; }
         MpISettingsTools SettingsTools { get; set; }
         MpIAccountTools AccountTools { get; set; }
         MpIDownKeyHelper KeyDownHelper { get; set; }

@@ -90,13 +90,14 @@ namespace MonkeyPaste {
             // NOTE on initial startup 
 
             // User
-            var emptyUser = await MpUser.CreateAsync();
+            var new_user = await MpUser.CreateAsync(
+                email: Mp.Services.PlatformUserInfo.UserEmail);
 
             // User Device
 
             var thisDevice = await MpUserDevice.CreateAsync(
                 guid: thisDeviceGuid,
-                userId: emptyUser.Id,
+                userId: new_user.Id,
                 deviceType: Mp.Services.PlatformInfo.OsType,
                 machineName: Mp.Services.PlatformInfo.OsMachineName,
                 versionInfo: Mp.Services.PlatformInfo.OsVersionInfo);
@@ -113,7 +114,7 @@ namespace MonkeyPaste {
 
             // This App
 
-            string thisAppName = MpPrefViewModel.Instance.ApplicationName;
+            string thisAppName = Mp.Services.ThisAppInfo.ThisAppProductName;
             var thisApp = await MpApp.CreateAsync(
                 appPath: Mp.Services.PlatformInfo.ExecutingPath,
                 appName: thisAppName,

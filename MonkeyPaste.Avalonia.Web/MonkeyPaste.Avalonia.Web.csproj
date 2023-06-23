@@ -44,6 +44,7 @@
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\tooltip\tooltip-style.css" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\tooltip\tooltip.js" />
     <WasmExtraFilesToDeploy Remove="AppBundle\Editor\src\components\util\graphics\screenshot.js" />
+    <WasmExtraFilesToDeploy Remove="AppBundle\test\app.css" />
     <WasmExtraFilesToDeploy Include="embed.js" />
   </ItemGroup>
 

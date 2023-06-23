@@ -1203,6 +1203,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Folder Include="Resources\Dictionaries\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />
@@ -1485,6 +1486,27 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <Content Include="Resources\Editor\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>-->
+  
+  <!--<ItemGroup>
+    <EditorSourceDir Include="Resources\Editor\**\*.*" />
+  </ItemGroup>
+  <Copy
+      SourceFiles="@(EditorSourceDir)"
+      DestinationFolder="$(MainTargetDir)\%(RecursiveDir)"
+      SkipUnchangedFiles="true"
+      OverwriteReadOnlyFiles="true"
+      Retries="3"
+      RetryDelayMilliseconds="300"/>-->
+
+  <ItemGroup>
+    <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

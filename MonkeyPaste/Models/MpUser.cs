@@ -16,15 +16,16 @@ namespace MonkeyPaste {
 
     public class MpUser :
         MpDbModelBase {
+        #region Constants
+        public const MpUserAccountType TEST_ACCOUNT_TYPE = MpUserAccountType.Free;
+        #endregion
+
         #region Statics
 
         public static async Task<MpUser> CreateAsync(
             string guid = "",
             string email = "",
             bool suppressWrite = false) {
-            if (string.IsNullOrEmpty(email)) {
-                throw new Exception("Must provide email");
-            }
             var ud = new MpUser() {
                 Guid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid().ToString() : guid,
                 Email = email,
@@ -73,7 +74,10 @@ namespace MonkeyPaste {
         [Ignore]
 
         public MpUserAccountType AccountType =>
-            MpUserAccountType.Free;
+            // TODO this property is a placeholder, need platform store/this app server workflow
+            // so this may not be stored in the client db
+            TEST_ACCOUNT_TYPE;
+        //MpUserAccountType.Free;
 
         #endregion
 

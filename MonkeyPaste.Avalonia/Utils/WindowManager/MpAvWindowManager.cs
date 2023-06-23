@@ -72,7 +72,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static string ToWindowTitleText(this string title) {
             string prefix = string.IsNullOrEmpty(title) ? string.Empty : $"{title} - ";
-            return $"{prefix}{MpPrefViewModel.Instance.ApplicationName}";
+            return $"{prefix}{Mp.Services.ThisAppInfo.ThisAppProductName}";
         }
 
         #endregion

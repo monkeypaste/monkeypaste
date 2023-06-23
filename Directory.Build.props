@@ -7,10 +7,11 @@
 
   <PropertyGroup>
     <BuildOs>WINDOWS</BuildOs>
+    <BuildMode>Debug</BuildMode>
   </PropertyGroup>
   
   <PropertyGroup>
-    <ApplicationName>Monkey Paste</ApplicationName>
+    <ApplicationName>MonkeyPaste</ApplicationName>
     <ApplicationAuthor>Tommy K</ApplicationAuthor>
     <ApplicationVersionMajor>0.1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0.1</ApplicationVersionMinor>
@@ -61,7 +62,7 @@
   
   <PropertyGroup>
     <MainProjectDir>$(SolutionDir)\$(MainProjectName)</MainProjectDir>
-    <MainTargetDir>$(MainProjectDir)\bin\Debug\$(MainTargetFramework)</MainTargetDir>
+    <MainTargetDir>$(MainProjectDir)\bin\$(BuildMode)\$(MainTargetFramework)</MainTargetDir>
     <PluginSourceDir>$(SolutionDir)\Plugins</PluginSourceDir>
     <DeclarativePluginBaseDir>$(PluginSourceDir)\DeclarativePlugins\DeclarativeBase</DeclarativePluginBaseDir>
     <PluginTargetDir>$(MainTargetDir)\Plugins</PluginTargetDir>

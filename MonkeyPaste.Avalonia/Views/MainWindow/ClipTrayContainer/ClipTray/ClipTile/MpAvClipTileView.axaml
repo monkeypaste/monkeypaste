@@ -68,6 +68,7 @@
                           VerticalAlignment="Stretch"
                           local:MpAvPointerCommandExtension.IsEnabled="True"
                           local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                          local:MpAvPointerCommandExtension.LeftPressCommand="{Binding SelectTileCommand}"
                           local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
                           local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
                           local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"

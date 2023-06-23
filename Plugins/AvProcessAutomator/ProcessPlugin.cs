@@ -1,13 +1,13 @@
-﻿using System;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MonkeyPaste.Common.Plugin;
-using MonkeyPaste.Common;
-using System.Diagnostics;
-using System.Collections.ObjectModel;
-using MonkeyPaste.Common.Avalonia;
 
 namespace ProcessAutomation {
     public class ProcessPlugin : MpIAnalyzeAsyncComponent {
@@ -36,7 +36,7 @@ namespace ProcessAutomation {
 
             var sb_out = new StringBuilder();
             var sb_err = new StringBuilder();
-            using(var p = new Process()) {
+            using (var p = new Process()) {
                 try {
                     p.StartInfo.FileName = processPath;
                     processArgs.ForEach(x => p.StartInfo.ArgumentList.Add(x));
@@ -54,7 +54,7 @@ namespace ProcessAutomation {
                         sb_out.AppendLine(e.Data);
                     };
                     p.ErrorDataReceived += (s, e) => {
-                        if(string.IsNullOrEmpty(e.Data)) {
+                        if (string.IsNullOrEmpty(e.Data)) {
                             return;
                         }
                         sb_err.AppendLine(e.Data);
@@ -76,11 +76,11 @@ namespace ProcessAutomation {
                         "Output from process: " + sb_out.ToString());
                     }
                 }
-                catch(Exception ex) {
+                catch (Exception ex) {
                     sb_err.AppendLine(ex.Message);
                 }
                 finally {
-                    if(closeOnComplete) {
+                    if (closeOnComplete) {
                         p.Close();
                     }
                 }
@@ -94,9 +94,9 @@ namespace ProcessAutomation {
 
             return resp;
         }
-        
+
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync_old(MpAnalyzerPluginRequestFormat req) {
-            
+
 
             string processPath = req.GetRequestParamStringValue(1);
             var processArgs = req.GetRequestParamStringValue(2).ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value);
@@ -174,7 +174,7 @@ namespace ProcessAutomation {
                 string pasteStr = string.Join(Environment.NewLine, processArgs);
 
                 pi.Handle = lastActiveInstanceHandle;
-                pi.Handle = MpCommonTools.Services.ProcessWatcher.SetActiveProcess(pi.Handle,pi.WindowState);
+                pi.Handle = MpCommonTools.Services.ProcessWatcher.SetActiveProcess(pi.Handle, pi.WindowState);
 
                 var p = MpCommonTools.Services.ProcessWatcher.GetProcess(pi.Handle);
 

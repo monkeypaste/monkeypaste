@@ -31,6 +31,11 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
 
+        public string LogFilePath =>
+            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "debug.log");
+
+        public string CefFrameworkPath =>
+            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "cef", $"cef_{Mp.Services.PlatformInfo.OsShortName}");
 
         #endregion
 
@@ -56,21 +61,13 @@ namespace MonkeyPaste.Avalonia {
         public Action<long> ScheduleMessagePumpWorkCallback { get; set; }
         #endregion
 
-
         #region Events
 
         #endregion
         public static void Init() {
-            ResetCefNetLogging();
             _ = new MpAvCefNetApplication();
         }
 
-        public static void ResetCefNetLogging() {
-            string debug_log_path = Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "debug.log");
-            if (!string.IsNullOrEmpty(debug_log_path)) {
-                MpFileIo.WriteTextToFile(debug_log_path, string.Empty, false);
-            }
-        }
 
         public static void ShutdownCefNet() {
             if (Instance == null) {
@@ -81,37 +78,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpAvCefNetApplication() : base() {
+            ResetCefNetLogging();
 
             string datFileName = "icudtl.dat";
-            //string cefRootDir = @"C:\Users\tkefauver\Source\Repos\MonkeyPaste\MonkeyPaste.Avalonia\cef";
-            string solution_dir = MpCommonHelpers.GetSolutionDir();
-            string cefRootDir = Path.Combine(solution_dir, "MonkeyPaste.Avalonia.Desktop", "cef");
+            string cefRootDir = CefFrameworkPath;
 
-            string localDirPath = string.Empty;
-            string resourceDirPath = string.Empty;
-            string releaseDir = string.Empty;
-            string datFileSourcePath = string.Empty;
-            string datFileTargetPath = string.Empty;
-
-            if (OperatingSystem.IsWindows()) {
-                cefRootDir = Path.Combine(cefRootDir, "win");
-                localDirPath = Path.Combine(cefRootDir, "Resources", "locales");
-                resourceDirPath = Path.Combine(cefRootDir, "Resources");
-                releaseDir = Path.Combine(cefRootDir, "Release");
-                datFileSourcePath = Path.Combine(resourceDirPath, datFileName);
-                datFileTargetPath = Path.Combine(releaseDir, datFileName);
-            } else if (OperatingSystem.IsLinux()) {
-                cefRootDir = Path.Combine(cefRootDir, "linux");
-                localDirPath = Path.Combine(cefRootDir, "Resources", "locales");
-                resourceDirPath = Path.Combine(cefRootDir, "Resources");
-                releaseDir = Path.Combine(cefRootDir, "Release");
-                datFileSourcePath = Path.Combine(resourceDirPath, datFileName);
-                datFileTargetPath = Path.Combine(releaseDir, datFileName);
-            } else if (OperatingSystem.IsMacOS()) {
-                cefRootDir = Path.Combine(cefRootDir, "mac");
-            } else {
-                throw new Exception("No cef implementation found for this architecture");
-            }
+            string localDirPath = Path.Combine(cefRootDir, "Resources", "locales");
+            string resourceDirPath = Path.Combine(cefRootDir, "Resources");
+            string releaseDir = Path.Combine(cefRootDir, "Release");
+            string datFileSourcePath = Path.Combine(resourceDirPath, datFileName);
+            string datFileTargetPath = Path.Combine(releaseDir, datFileName);
 
             if (!File.Exists(datFileTargetPath)) {
                 // NOTE this would/will occur when a new cef version is installed
@@ -216,6 +192,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+        public void ResetCefNetLogging() {
+            if (!string.IsNullOrEmpty(LogFilePath)) {
+                MpFileIo.WriteTextToFile(LogFilePath, string.Empty, false);
+            }
+        }
     }
 
 

@@ -60,10 +60,17 @@ namespace MonkeyPaste {
         #region Constants
 
         [JsonIgnore]
+        public const string PREF_FILE_NAME = "mp.pref";
+
+        [JsonIgnore]
         public const string STRING_ARRAY_SPLIT_TOKEN = "<&>SPLIT</&>";
 
         [JsonIgnore]
         public const string PREF_BACKUP_PATH_EXT = "backup";
+
+        [JsonIgnore]
+        public const bool ENCRYPT_DB = true;
+
         #endregion
 
         #region Statics
@@ -228,17 +235,8 @@ namespace MonkeyPaste {
             }
         }
 
-        public string SearchPlaceHolderText {
-            get {
-                return @"Search...";
-            }
-        }
-
-        public string ApplicationName {
-            get {
-                return @"Monkey Paste";
-            }
-        }
+        public string ApplicationName =>
+            "MonkeyPaste";
         #endregion
 
         #region REST
@@ -413,9 +411,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region Security
-        public bool IsSettingsEncrypted { get; set; } = false; // requires restart and only used to trigger convert on exit (may not be necessary to restart)
+        public bool IsSettingsEncrypted { get; set; } = true; // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 
-        public string DbPassword { get; set; } = MpPasswordGenerator.GetRandomPassword();
+        public string DbPassword { get; set; } = ENCRYPT_DB ? MpPasswordGenerator.GetRandomPassword() : null;
         #endregion
 
         #region Shortcuts
@@ -628,7 +626,7 @@ namespace MonkeyPaste {
         }
 
         private static string GetPrefPassword() {
-            string seed = $"{Environment.UserName}{Environment.MachineName}";
+            string seed = $"{Mp.Services.PlatformUserInfo.UserSid}";
             return seed.CheckSum();
         }
         private static async Task LoadPrefsAsync() {
@@ -741,8 +739,13 @@ namespace MonkeyPaste {
                     this.SetPropertyValue(pn, def_pref.GetPropertyValue(pn));
                 }
             });
-
-
+#if DEBUG
+        public ICommand LogDecryptedPrefsCommand => new MpCommand(
+            () => {
+                MpConsole.WriteLine($"Decrypted prefs at path '{PreferencesPath}':");
+                MpConsole.WriteLine(SerializeJsonObject());
+            });
+#endif
 
         #endregion
     }

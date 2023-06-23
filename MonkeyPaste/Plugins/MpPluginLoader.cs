@@ -29,9 +29,9 @@ namespace MonkeyPaste {
         public static Dictionary<string, MpPluginFormat> Plugins { get; set; } = new Dictionary<string, MpPluginFormat>();
 
         public static string PluginRootFolderPath =>
-            Path.Combine(Mp.Services.PlatformInfo.StorageDir, PLUG_FOLDER_NAME);
+            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, PLUG_FOLDER_NAME);
         public static string PluginManifestBackupFolderPath =>
-            Path.Combine(Mp.Services.PlatformInfo.StorageDir, MANIFEST_BACKUP_FOLDER_NAME);
+            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, MANIFEST_BACKUP_FOLDER_NAME);
         #endregion
 
         #region Public Methods

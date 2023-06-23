@@ -168,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
             if (Interop != null &&
                 PlatformHandle != null) {
                 Interop.Bind(this);
-                Navigate(MpAvClipTrayViewModel.EditorUri);
+                Navigate(Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath());
             }
 
             return PlatformHandle;

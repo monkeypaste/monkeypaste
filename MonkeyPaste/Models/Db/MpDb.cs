@@ -370,6 +370,7 @@ namespace MonkeyPaste {
 
         public static async Task<bool> InitDbConnectionAsync(MpIDbInfo dbInfo, bool allowCreate) {
             string dbPath = dbInfo.DbPath;
+            string dbPass = dbInfo.DbPassword;
             bool isNewDb = !File.Exists(dbPath);
 
             if (isNewDb && allowCreate) {
@@ -379,22 +380,34 @@ namespace MonkeyPaste {
             await CreateConnectionAsync(dbPath);
 
             MpConsole.WriteLine($"Db {(isNewDb ? "CREATED" : "CONNECTED")} at '{dbPath}'");
+#if DEBUG
+            MpConsole.WriteLine($"Db Password: '{dbPass}'");
+#endif
             return isNewDb;
         }
 
-        private static SQLiteConnectionString GetConnectionString(string dbPath = "") {
+        private static SQLiteConnectionString GetConnectionString(
+            string dbPath = "",
+            string dbPass = null) {
             if (string.IsNullOrEmpty(dbPath)) {
                 dbPath = Mp.Services.DbInfo.DbPath;
             }
+            if (!dbPath.IsFile()) {
+                MpConsole.WriteLine($"Db Error cannot create connection string. Db file does not exist at '{dbPath}'");
+                return null;
+            }
             SQLiteConnectionString connStr = null;
             try {
-                connStr = new SQLiteConnectionString(
-                                   databasePath: dbPath,
-                                   storeDateTimeAsTicks: IsDateTimeTicks,
-                                   openFlags: SQLiteOpenFlags.ReadWrite |
-                                              SQLiteOpenFlags.Create |
-                                              SQLiteOpenFlags.SharedCache |
-                                              SQLiteOpenFlags.FullMutex);
+                connStr =
+                    new SQLiteConnectionString(
+                        databasePath: dbPath,
+                        key: dbPass,
+                        storeDateTimeAsTicks: IsDateTimeTicks,
+                        openFlags: SQLiteOpenFlags.ReadWrite |
+                                    SQLiteOpenFlags.Create |
+                                    SQLiteOpenFlags.SharedCache |
+                                    SQLiteOpenFlags.FullMutex);
+
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Db Error creating connection str for db path '{dbPath}'.", ex);
@@ -402,7 +415,9 @@ namespace MonkeyPaste {
             }
             return connStr;
         }
-        private static async Task CreateConnectionAsync(string dbPath = "") {
+        private static async Task CreateConnectionAsync(
+            string dbPath = "",
+            string dbPass = null) {
             if (_connectionAsync != null) {
                 return;
             }
@@ -410,7 +425,7 @@ namespace MonkeyPaste {
             Batteries_V2.Init();
             if (_connectionAsync == null) {
                 try {
-                    _connectionAsync = new SQLiteAsyncConnection(GetConnectionString(dbPath)) { Trace = true };
+                    _connectionAsync = new SQLiteAsyncConnection(GetConnectionString(dbPath, dbPass));
                     MpCustomDbFunctions.AddCustomFunctions(_connectionAsync.GetConnection().Handle);
                     if (UseWAL) {
                         await _connectionAsync.EnableWriteAheadLoggingAsync();
@@ -422,7 +437,9 @@ namespace MonkeyPaste {
             }
             MpConsole.WriteLine($"Db Async WAL: {(UseWAL ? "ENABLED" : "DISABLED")}");
         }
-        private static void CreateConnection(string dbPath = "") {
+        private static void CreateConnection(
+            string dbPath = "",
+            string dbPass = null) {
             if (_connection != null) {
                 return;
             }
@@ -430,7 +447,7 @@ namespace MonkeyPaste {
             Batteries_V2.Init();
             if (_connection == null) {
                 try {
-                    _connection = new SQLiteConnection(GetConnectionString(dbPath)) { Trace = true };
+                    _connection = new SQLiteConnection(GetConnectionString(dbPath, dbPass));
                     MpCustomDbFunctions.AddCustomFunctions(_connection.Handle);
                     if (UseWAL) {
                         _connection.EnableWriteAheadLogging();
@@ -623,7 +640,6 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             await InitDefaultShortcutsAsync();
 #if DEBUG
             if (MpPrefViewModel.Instance.IsInitialLoad) {
-                await CreateTestUsersAsync();
                 await CreateTestContentAsync();
             }
 #endif
@@ -798,17 +814,14 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
             await InitDefaultShortcutsAsync(routingProfile);
         }
-
-        private static async Task CreateTestUsersAsync() {
-            var free_user =
-                await MpUser.CreateAsync(
-                    email: "free_test@test.com");
-
-
-        }
         private static async Task CreateTestContentAsync() {
+            return;
             var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
             string this_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(this_app);
+
+            int content_cap = Mp.Services.AccountTools.GetContentCapacity(MpUser.TEST_ACCOUNT_TYPE);
+            // NOTE subtracting 2 for 1 the loading item and 2 
+            int test_items = content_cap < 0 ? 300 : content_cap - 2;
             for (int i = 0; i < 300; i++) {
                 string data = $"<p>This is test {i + 1}.</p>";
                 var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, data);

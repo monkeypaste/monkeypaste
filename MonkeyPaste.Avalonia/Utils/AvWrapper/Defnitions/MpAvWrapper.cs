@@ -1,12 +1,14 @@
-﻿using MonkeyPaste.Common;
-using System.Diagnostics;
+﻿using Avalonia;
+using MonkeyPaste.Common;
+using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Security.Principal;
 //using Avalonia.Win32;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+
     public class MpAvWrapper : MpIPlatformWrapper {
 
         #region Interfaces
@@ -34,6 +36,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion Bootstrapped services
 
+        public MpIPlatformUserInfo PlatformUserInfo { get; set; }
+        public MpIThisAppInfo ThisAppInfo { get; set; }
         public MpIAccountTools AccountTools { get; set; }
         public MpIMainThreadMarshal MainThreadMarshal { get; set; }
         public MpIColorQueryTools ColorQueryTools { get; set; }
@@ -90,6 +94,9 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
+            ThisAppInfo = new MpAvThisAppInfo();
+            PlatformUserInfo = new MpAvPlatformUserInfo();
+
             if (MpDeviceWrapper.Instance != null) {
                 PlatformInfo = MpDeviceWrapper.Instance.PlatformInfo;
                 ScreenInfoCollection = MpDeviceWrapper.Instance.ScreenInfoCollection;
@@ -97,10 +104,11 @@ namespace MonkeyPaste.Avalonia {
                 PlatformInfo = new MpAvPlatformInfo_desktop();
             }
 
+            MpConsole.WriteLine($"Storage Dir: '{PlatformInfo.StorageDir}'");
+            MpConsole.WriteLine($"Executing Dir: '{PlatformInfo.ExecutingDir}'");
+            string prefPath = Path.Combine(PlatformInfo.StorageDir, MpPrefViewModel.PREF_FILE_NAME);
+
             DbInfo = new MpAvDbInfo();
-
-            string prefPath = Path.Combine(PlatformInfo.StorageDir, $"pref_{PlatformInfo.OsShortName}.json");
-
             if (App.HasStartupArg(App.BACKUP_DATA_ARG)) {
                 // TODO move reset stuff to that backup folder
             }
@@ -121,6 +129,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
+
 
             AccountTools = new MpAvAccountTools();
             ColorQueryTools = new MpAvColorQueryTools();

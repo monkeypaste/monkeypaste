@@ -54,40 +54,6 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvClipTrayViewModel _instance;
         public static MpAvClipTrayViewModel Instance => _instance ?? (_instance = new MpAvClipTrayViewModel());
 
-
-        public static string EditorUri {
-            get {
-                //file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html
-                //string editorPath = Path.Combine(Environment.CurrentDirectory, "Resources", "Html", "Editor", "index.html");
-                //string editorPath = @"file:///C:/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
-                //if (OperatingSystem.IsWindows()) {
-                //    return editorPath;
-                //}
-                //if (OperatingSystem.IsMacOS()) {
-                //    return @"file:///Volumes/BOOTCAMP/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste/Resources/Html/Editor/index.html";
-                //}
-                //if(OperatingSystem.IsLinux()) {
-
-                //}
-                //                string uri;
-
-                //#if DESKTOP
-
-                //uri = MpAvCefNetApplication.GetEditorPath().ToFileSystemUriFromPath();
-                //#else
-                //                uri = System.IO.Path.Combine(Mp.Services.PlatformInfo.StorageDir, "MonkeyPaste.Editor", "index.html").ToFileSystemUriFromPath();
-                //#endif
-                //                return uri;
-                string uri;
-                if (OperatingSystem.IsBrowser()) {
-                    uri = Mp.Services.PlatformInfo.EditorPath;
-                } else {
-                    uri = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
-                }
-                return uri;
-            }
-        }
-
         #endregion
 
         #region Interfaces
@@ -905,7 +871,10 @@ namespace MonkeyPaste.Avalonia {
                 //    return ModalClipTileViewModel;
                 //}
 
-                return AllItems.FirstOrDefault(x => x.IsSelected);
+                return AllItems
+                    .Where(x => x.IsSelected)
+                    .OrderByDescending(x => x.LastSelectedDateTime)
+                    .FirstOrDefault();
             }
             set {
                 if (!CanSelect) {
@@ -1412,6 +1381,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
             IsGridLayout = LayoutType == MpClipTrayLayoutType.Grid;
+
+            await ProcessAccountCapsAsync("init");
             IsBusy = false;
         }
 
@@ -1873,10 +1844,13 @@ namespace MonkeyPaste.Avalonia {
                                maxShowTimeMs: MpContentCapInfo.MAX_CAP_NTF_SHOW_TIME_MS,
                                iconSourceObj: MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY).FireAndForgetSafeAsync();
                     } else {
-
+                        // links were changed since last refresh, item will be added..
                     }
+                } else if (source == "link") {
+
                 }
                 AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IconResourceObj)));
+                AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyNextCapByAccount)));
             });
 
             _isProcessingCap = false;

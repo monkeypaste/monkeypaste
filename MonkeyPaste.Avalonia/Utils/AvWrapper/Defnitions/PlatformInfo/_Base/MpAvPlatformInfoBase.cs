@@ -14,12 +14,8 @@ namespace MonkeyPaste.Avalonia {
         public virtual string OsVersionInfo =>
             Environment.OSVersion.VersionString;
 
-        public virtual string ExecutingDir {
-            get {
-                return AppContext.BaseDirectory;
-                //return Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            }
-        }
+        public virtual string ExecutingDir =>
+            AppContext.BaseDirectory;
         public virtual string ExecutableName {
             get {
                 if (Environment.GetCommandLineArgs().Any()) {
@@ -37,15 +33,24 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private string _storageDir;
         public virtual string StorageDir {
             get {
-                if (OperatingSystem.IsAndroid()) {
-                    return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                if (_storageDir == null) {
+                    if (OperatingSystem.IsBrowser()) {
+                        _storageDir = @"/tmp";
+                    } else {
+                        _storageDir = Path.Combine(
+                            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                            Mp.Services.ThisAppInfo.ThisAppProductName);
+                        if (!_storageDir.IsDirectory()) {
+
+                            MpFileIo.CreateDirectory(_storageDir);
+                            MpConsole.WriteLine($"App Storage dir successfully created at: '{_storageDir}'");
+                        }
+                    }
                 }
-                if (OperatingSystem.IsBrowser()) {
-                    return @"/tmp";
-                }
-                return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                return _storageDir;
             }
         }
 
@@ -144,15 +149,10 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string EditorPath {
             get {
-                // TODO need to alter this path in production
-                if (IsDesktop) {
-                    string solution_path = MpCommonHelpers.GetSolutionDir();
-                    return Path.Combine(solution_path, "MonkeyPaste.Avalonia.Web", "AppBundle", "Editor", "index.html");
-                }
-                if (OsType == MpUserDeviceType.Browser) {
+                if (OperatingSystem.IsBrowser()) {
                     return Path.Combine("Editor", "index.html");
                 }
-                return Path.Combine(StorageDir, "Editor", "index.html");
+                return Path.Combine(ExecutingDir, "Resources", "Editor", "index.html");
             }
         }
 

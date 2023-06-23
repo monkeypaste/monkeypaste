@@ -113,8 +113,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        public static string DefaultContentUrl =>
-            MpAvClipTrayViewModel.EditorUri;
 
         private static List<MpAvContentWebView> _AllWebViews = new();
 
@@ -1140,21 +1138,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public virtual string ContentUrl {
-            get {
-                //if (this.GetVisualRoot() is MpAvAppendNotificationWindow) {
-                //    return $"{MpAvClipTrayViewModel.EditorUri}?{APPEND_NOTIFIER_URL_PARAMS}";
-                //}
-
-                return MpAvClipTrayViewModel.EditorUri;
-            }
-        }
-
 
 #if DESKTOP
         protected override void OnBrowserCreated(EventArgs e) {
             base.OnBrowserCreated(e);
-            Navigate(ContentUrl);
+            Navigate(Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath());
         }
 
         protected override void OnNavigated(NavigatedEventArgs e) {
