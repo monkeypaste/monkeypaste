@@ -25,6 +25,6 @@ namespace MonkeyPaste.Avalonia {
         public string DbPassword =>
             MpPrefViewModel.Instance == null ?
                 null :
-                MpPrefViewModel.Instance.DbPassword;
+                MpPrefViewModel.Instance.DbCreateDateTime.ToString();
     }
 }

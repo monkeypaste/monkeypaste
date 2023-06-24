@@ -25,6 +25,46 @@
         Background="Transparent"
         Title="">
     <Window.Resources>
+        <LinearGradientBrush x:Key="OuterGradientBrush"
+                             StartPoint="0%,0%"
+                             SpreadMethod="Repeat"
+                             EndPoint="100%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0"
+                              Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <GradientStop Offset="0.36"
+                              Color="{DynamicResource ThemeInteractiveColor}" />
+              <GradientStop Offset="0.77"
+                              Color="{DynamicResource ThemeInteractiveColor}" />
+                <GradientStop Offset="1"
+                              Color="{DynamicResource ThemeInteractiveBgColor}" />
+
+
+                <!--<GradientStop Offset="0"
+                              Color="Red" />
+                <GradientStop Offset="0.5"
+                              Color="Green" />
+                <GradientStop Offset="1"
+                              Color="Blue" />-->
+
+
+                <!--<GradientStop Offset="0"
+                              Color="{DynamicResource ThemeAccent1Color}" />
+                <GradientStop Offset="0.25"
+                              Color="{DynamicResource ThemeAccent2Color}" />
+                <GradientStop Offset="0.5"
+                              Color="{DynamicResource ThemeAccent3Color}" />
+                <GradientStop Offset="0.75"
+                              Color="{DynamicResource ThemeAccent4Color}" />
+                <GradientStop Offset="1.0"
+                              Color="{DynamicResource ThemeAccent5Color}" />-->
+            </LinearGradientBrush.GradientStops>
+            <LinearGradientBrush.Transform>
+                <RotateTransform />
+                <!--<TranslateTransform />-->
+            </LinearGradientBrush.Transform>
+        </LinearGradientBrush>
+
         <LinearGradientBrush x:Key="ShineBrush"
                              StartPoint="0%,0%"
                              EndPoint="100%,0%">
@@ -84,28 +124,36 @@
                 </Animation>
             </Style.Animations>
         </Style>
-
+        <Style Selector="Image#LogoImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
+        <Style Selector="Image#LogoImage:pointerover">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource MonkeyWinkImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
     </Window.Styles>
     <Border x:Name="OuterBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             BorderThickness="7"
-            BorderBrush="{Binding BorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+            BorderBrush="{DynamicResource OuterGradientBrush}"
             Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
             local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsBorderFollowEnabled="True"
             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="NotificationWindowContainerGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.35*" />
                 <ColumnDefinition Width="0.75*" />
             </Grid.ColumnDefinitions>
-            <Image Grid.Row="0"
+            <Image x:Name="LogoImage"
+                   Grid.Row="0"
                    Grid.Column="0"
                    Classes="shakeOnce shakeOnceOver"
                    Width="72"
                    Height="72"
                    IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                    Stretch="Fill"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
@@ -218,6 +266,7 @@
             </Grid>
 
             <local:MpAvOptionsButton Grid.Column="1"
+                                     Foreground="{DynamicResource ThemeWhite}"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
                                      local:MpAvMenuExtension.IsEnabled="True"

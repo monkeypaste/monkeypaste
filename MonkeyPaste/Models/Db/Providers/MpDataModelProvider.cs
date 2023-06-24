@@ -167,25 +167,13 @@ namespace MonkeyPaste {
 
         public static async Task<MpApp> GetAppByMembersAsync(string path, string args, int deviceId) {
             List<MpApp> result;
-            string query = $"select * from MpApp where LOWER(AppPath)=? and Arguments=? and fk_MpUserDeviceId=?";
+            string query = $"select * from MpApp where LOWER(AppPath)=? and Arguments{(args == null ? " is null" : "=?")} and fk_MpUserDeviceId=?";
             result = await MpDb.QueryAsync<MpApp>(query, path.ToLower(), args, deviceId);
             if (result == null || result.Count == 0) {
                 return null;
             }
             return result[0];
         }
-
-        public static async Task<bool> IsAppRejectedAsync(string path, int deviceId) {
-            string query = $"select count(*) from MpApp where LOWER(AppPath)=? and IsAppRejected=1 and fk_MpUserDeviceId=?";
-            var result = await MpDb.QueryScalarAsync<int>(query, path.ToLower(), deviceId);
-            return result > 0;
-        }
-
-        //public static bool IsAppRejected(string path) {
-        //    string query = $"select count(*) from MpApp where SourcePath=? and IsAppRejected=1";
-        //    var result = MpDb.QueryScalar<int>(query, path);
-        //    return result > 0;
-        //}
 
         #endregion MpApp
 

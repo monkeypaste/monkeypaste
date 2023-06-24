@@ -417,10 +417,17 @@ function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity, outputTy
 function findElementBackgroundColor(elm,fallback) {
     // NOTE iterates over elment ancestors until non-transparent bg is found
     let cur_elm = elm;
-    while (cur_elm != null && cur_elm != document) {
+    while (true) {
+        if (cur_elm == null || cur_elm == window) {
+            break;
+        }
         let cur_bg = cleanColor(getElementComputedStyleProp(cur_elm, 'background-color'), null, 'rgbaObj');
         if (cur_bg.a > 0) {
             return cleanColor(cur_bg,null, 'rgbaStyle');
+        }
+        if (cur_elm.tagName == document.body.tagName) {
+            // no bg found
+            break;
         }
         cur_elm = cur_elm.parentNode;
     }
@@ -441,7 +448,9 @@ function colorNameToHex(color) {
     return false;
 }
 
-function adjustBgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
+function adjustBgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str, elm) {
+    // NOTE l changes are just experimental atm, bg is uniformly set to transparent
+    // (but this function is skipped if bg is user specified in editor)
     let rgba = cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str);
     let hsl = rgb2hsl(rgba);
     if (globals.EditorTheme == 'light') {
@@ -456,14 +465,13 @@ function adjustBgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
     return css_rgba;
 }
 
-function adjustFgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
+function adjustFgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str, elm) {
     let rgba = cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str);
     let hsl = rgb2hsl(rgba);
     if (globals.EditorTheme == 'dark') {
         hsl.l = Math.max(hsl.l == 0 ? 100 : hsl.l, 75);
     } else {
-       // hsl.l = Math.min(hsl.l == 100 ? 0 : hsl.l, 25);
-       hsl.l = hsl.l == 100 ? 0 : hsl.l;
+       hsl.l = Math.min(hsl.l == 100 ? 0 : hsl.l, 25);
     }
     let adj_rgb = hsl2Rgb(hsl);
     adj_rgb.a = 1;

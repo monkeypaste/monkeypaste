@@ -8,6 +8,7 @@
              d:DesignHeight="450"
              ClipToBounds="False"
              x:Class="MonkeyPaste.Avalonia.MpAvBusySpinnerView"
+             Foreground="{DynamicResource ThemeInteractiveColor}"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
              Background="Transparent">
@@ -35,7 +36,7 @@
     </UserControl.Styles>
     <Image>
         <Image.Resources>
-            <SolidColorBrush x:Key="Brush0" Color="{DynamicResource ThemeInteractiveColor}" />
+            <SolidColorBrush x:Key="Brush0" Color="{Binding $parent[UserControl].Foreground}" />
         </Image.Resources>
         <DrawingImage>
             <DrawingGroup>

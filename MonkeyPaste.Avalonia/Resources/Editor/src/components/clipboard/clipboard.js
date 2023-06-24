@@ -132,13 +132,13 @@ function initFontColorMatcher() {
             if ((delta.ops[i].attributes.fontBgColorOverride === undefined ||
                 delta.ops[i].attributes.fontBgColorOverride == 'off') &&
                 delta.ops[i].attributes.background !== undefined) {
-                delta.ops[i].attributes.background = adjustBgToTheme(delta.ops[i].attributes.background);
+                delta.ops[i].attributes.background = adjustBgToTheme(delta.ops[i].attributes.background, node);
             }
 
             if ((delta.ops[i].attributes.fontColorOverride === undefined ||
                 delta.ops[i].attributes.fontColorOverride == 'off') &&
                 delta.ops[i].attributes.color !== undefined) {
-                delta.ops[i].attributes.color = adjustFgToTheme(delta.ops[i].attributes.color);
+                delta.ops[i].attributes.color = adjustFgToTheme(delta.ops[i].attributes.color, node);
             } 
         }
         return delta;

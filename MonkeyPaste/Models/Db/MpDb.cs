@@ -370,12 +370,13 @@ namespace MonkeyPaste {
 
         public static async Task<bool> InitDbConnectionAsync(MpIDbInfo dbInfo, bool allowCreate) {
             string dbPath = dbInfo.DbPath;
-            string dbPass = dbInfo.DbPassword;
             bool isNewDb = !File.Exists(dbPath);
 
             if (isNewDb && allowCreate) {
                 using (File.Create(dbPath)) { }
+                MpPrefViewModel.Instance.DbCreateDateTime = new FileInfo(dbPath).CreationTimeUtc;
             }
+            string dbPass = dbInfo.DbPassword;
 
             await CreateConnectionAsync(dbPath);
 
@@ -392,6 +393,9 @@ namespace MonkeyPaste {
             if (string.IsNullOrEmpty(dbPath)) {
                 dbPath = Mp.Services.DbInfo.DbPath;
             }
+            if (string.IsNullOrEmpty(dbPass)) {
+                dbPass = Mp.Services.DbInfo.DbPassword;
+            }
             if (!dbPath.IsFile()) {
                 MpConsole.WriteLine($"Db Error cannot create connection string. Db file does not exist at '{dbPath}'");
                 return null;
@@ -402,6 +406,10 @@ namespace MonkeyPaste {
                     new SQLiteConnectionString(
                         databasePath: dbPath,
                         key: dbPass,
+                        //preKeyAction: db => db.Execute("PRAGMA cipher_default_use_hmac = ON;"),
+                        //postKeyAction: db => db.Execute("PRAGMA kdf_iter = 128000;"),
+                        //preKeyAction: db => db.Execute("PRAGMA page_size = 8192;"),
+                        //postKeyAction: db => db.Execute("PRAGMA page_size = 512;"),
                         storeDateTimeAsTicks: IsDateTimeTicks,
                         openFlags: SQLiteOpenFlags.ReadWrite |
                                     SQLiteOpenFlags.Create |
@@ -421,8 +429,8 @@ namespace MonkeyPaste {
             if (_connectionAsync != null) {
                 return;
             }
-
             Batteries_V2.Init();
+            //SQLitePCL.Batteries.Init();
             if (_connectionAsync == null) {
                 try {
                     _connectionAsync = new SQLiteAsyncConnection(GetConnectionString(dbPath, dbPass));
@@ -501,7 +509,6 @@ namespace MonkeyPaste {
             if (!ignoreSyncing && item is MpISyncableDbObject) {
             }
         }
-
 
 
         private static async Task InitTablesAsync() {

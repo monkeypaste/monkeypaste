@@ -68,7 +68,7 @@
                 Value="Center" />
     </Style>
 
-    <Style Selector=":is(Button).defaultButton TextBlock">
+    <Style Selector=":is(Button).defaultButton:not(.textOnlyButton) TextBlock">
         <Setter Property="Margin"
                 Value="7,0,0,0" />
     </Style>

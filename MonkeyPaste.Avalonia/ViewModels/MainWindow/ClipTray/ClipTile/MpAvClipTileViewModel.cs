@@ -98,7 +98,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContextMenuViewModel Implementation
 
-        public MpMenuItemViewModel ContextMenuViewModel => IsSelected ? Parent.ContextMenuViewModel : null;
+        public MpMenuItemViewModel ContextMenuViewModel =>
+            IsSelected ? Parent.ContextMenuViewModel : null;
 
         #endregion
 
@@ -1986,7 +1987,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsSubSelectionEnabled = true;
             }, () => {
-                return !IsSubSelectionEnabled;
+                return !IsSubSelectionEnabled && !IsTrashed;
             });
 
         public ICommand ChangeColorCommand => new MpCommand<string>(
@@ -2114,18 +2115,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 OnPropertyChanged(nameof(DetailText));
             });
-        public ICommand SelectTileCommand => new MpCommand<object>(
-            (args) => {
-                // NOTE this is only used to update LastSelectedDateTime
-                // and actual selection is handled by container list
-                // but since tray manages 2 lists most recent selected
-                // needs to be known and if item is clicked and already selected
-                // its property change won't signal to update its LastSelectedDateTime so doing here
-                if (Parent.SelectedItem != this) {
-                    Parent.SelectedItem = this;
-                }
-                LastSelectedDateTime = DateTime.Now;
-            });
         public ICommand ShowContextMenuCommand => new MpCommand<object>(
             (args) => {
                 var control = args as Control;
@@ -2134,8 +2123,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (Parent.SelectedItem != this) {
                     // NOTE since theres 2 lists need to make sure this is most recent selected
-                    SelectTileCommand.Execute(null);
-                    MpDebug.Assert(IsSelected, $"Context menu selection for tile '{this}' failed.");
+                    //SelectTileCommand.Execute(null);
+                    LastSelectedDateTime = DateTime.Now;
+                    MpDebug.Assert(Parent.SelectedItem == this, $"Context menu selection for tile '{this}' failed.");
                 }
                 MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
             }, (args) => {

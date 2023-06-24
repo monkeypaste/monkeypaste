@@ -1381,6 +1381,9 @@
     <Compile Update="Views\SettingsWindow\Tabs\Shortcuts\ShortcutDataGrid\MpAvShortcutDataGridView.axaml.cs">
       <DependentUpon>MpAvShortcutDataGridView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Welcome\MpAvWelcomeView.axaml.cs">
+      <DependentUpon>MpAvWelcomeView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   
   <ItemGroup>

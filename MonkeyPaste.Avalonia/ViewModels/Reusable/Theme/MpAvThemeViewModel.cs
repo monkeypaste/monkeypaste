@@ -406,7 +406,7 @@ namespace MonkeyPaste.Avalonia {
             // 12
             palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.25d).ToHex(true));
             // 13
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.95d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.97d).ToHex(true));
             // 14
             palette.Add(MpColorHelpers.ColorFromHsv((h1_te - 30d).Wrap(0, 360), s, v).ToHex(true));
             // 15

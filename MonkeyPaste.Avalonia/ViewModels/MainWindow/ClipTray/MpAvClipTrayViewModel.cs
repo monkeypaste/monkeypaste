@@ -2977,8 +2977,10 @@ namespace MonkeyPaste.Avalonia {
 
                  MpAvClipTileViewModel to_select_ctvm = null;
 
-                 if (MpAvTagTrayViewModel.Instance.IsAnyTagActive &&
-                     needs_query_refresh) {
+                 if (MpAvTagTrayViewModel.Instance.IsAnyTagActive
+                    // NOTE always refreshing query
+                    //&& needs_query_refresh
+                    ) {
                      // perform inplace requery to potentially put unpinned tile back
                      while (!QueryCommand.CanExecute(string.Empty)) {
                          await Task.Delay(100);
@@ -3448,7 +3450,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (isRequery || isInPlaceRequery) {
-                await Mp.Services.Query.QueryForTotalCountAsync(isRequery);
+                await Mp.Services.Query.QueryForTotalCountAsync(true);
 
                 FindTotalTileSize();
 

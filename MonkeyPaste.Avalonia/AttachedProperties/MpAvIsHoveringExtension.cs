@@ -1,8 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Threading;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvIsHoveringExtension {
@@ -10,19 +14,19 @@ namespace MonkeyPaste.Avalonia {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
 
-        #region CanHover AvaloniaProperty
-        public static bool GetCanHover(AvaloniaObject obj) {
-            return obj.GetValue(CanHoverProperty);
+        #region IsBorderFollowEnabled AvaloniaProperty
+        public static bool GetIsBorderFollowEnabled(AvaloniaObject obj) {
+            return obj.GetValue(IsBorderFollowEnabledProperty);
         }
 
-        public static void SetCanHover(AvaloniaObject obj, bool value) {
-            obj.SetValue(CanHoverProperty, value);
+        public static void SetIsBorderFollowEnabled(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsBorderFollowEnabledProperty, value);
         }
 
-        public static readonly AttachedProperty<bool> CanHoverProperty =
+        public static readonly AttachedProperty<bool> IsBorderFollowEnabledProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "CanHover",
-                true,
+                "IsBorderFollowEnabled",
+                false,
                 false,
                 BindingMode.TwoWay);
 
@@ -43,108 +47,6 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false,
                 BindingMode.TwoWay);
-
-        #endregion
-
-        #region IsSelected AvaloniaProperty
-        public static bool GetIsSelected(AvaloniaObject obj) {
-            return obj.GetValue(IsSelectedProperty);
-        }
-
-        public static void SetIsSelected(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsSelectedProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> IsSelectedProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "IsSelected",
-                false,
-                false);
-
-        #endregion
-
-        #region HoverBrush AvaloniaProperty
-        public static IBrush GetHoverBrush(AvaloniaObject obj) {
-            return obj.GetValue(HoverBrushProperty);
-        }
-
-        public static void SetHoverBrush(AvaloniaObject obj, IBrush value) {
-            obj.SetValue(HoverBrushProperty, value);
-        }
-
-        public static readonly AttachedProperty<IBrush> HoverBrushProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "HoverBrush",
-                null,
-                false);
-
-        #endregion
-
-        #region SelectedBrush AvaloniaProperty
-        public static IBrush GetSelectedBrush(AvaloniaObject obj) {
-            return obj.GetValue(SelectedBrushProperty);
-        }
-
-        public static void SetSelectedBrush(AvaloniaObject obj, IBrush value) {
-            obj.SetValue(SelectedBrushProperty, value);
-        }
-
-        public static readonly AttachedProperty<IBrush> SelectedBrushProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "SelectedBrush",
-                null,
-                false);
-
-        #endregion
-
-        #region DefaultBrush AvaloniaProperty
-        public static IBrush GetDefaultBrush(AvaloniaObject obj) {
-            return obj.GetValue(DefaultBrushProperty);
-        }
-
-        public static void SetDefaultBrush(AvaloniaObject obj, IBrush value) {
-            obj.SetValue(DefaultBrushProperty, value);
-        }
-
-        public static readonly AttachedProperty<IBrush> DefaultBrushProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IBrush>(
-                "DefaultBrush",
-                null,
-                false);
-
-        #endregion
-
-        #region HoverImageSource AvaloniaProperty
-        public static IImage GetHoverImageSource(AvaloniaObject obj) {
-            return obj.GetValue(HoverImageSourceProperty);
-        }
-
-        public static void SetHoverImageSource(AvaloniaObject obj, IImage value) {
-            obj.SetValue(HoverImageSourceProperty, value);
-        }
-
-        public static readonly AttachedProperty<IImage> HoverImageSourceProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IImage>(
-                "HoverImageSource",
-                null,
-                false);
-
-        #endregion
-
-        #region DefaultImageSource AvaloniaProperty
-        public static IImage GetDefaultImageSource(AvaloniaObject obj) {
-            return obj.GetValue(DefaultImageSourceProperty);
-        }
-
-        public static void SetDefaultImageSource(AvaloniaObject obj, IImage value) {
-            obj.SetValue(DefaultImageSourceProperty, value);
-        }
-
-        public static readonly AttachedProperty<IImage> DefaultImageSourceProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, IImage>(
-                "DefaultImageSource",
-                null,
-                false);
 
         #endregion
 
@@ -189,7 +91,6 @@ namespace MonkeyPaste.Avalonia {
                 control.DetachedFromVisualTree += DetachedToVisualHandler;
                 control.PointerEntered += PointerEnterHandler;
                 control.PointerExited += PointerLeaveHandler;
-
                 if (e == null) {
                     control.AttachedToVisualTree += AttachedToVisualHandler;
                 }
@@ -206,27 +107,62 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void PointerEnterHandler(object s, PointerEventArgs e) {
-            if (s is Control control) {
-                if (!GetCanHover(control)) {
-                    return;
-                }
-                SetIsHovering(control, true);
-
-                if (GetHoverBrush(control) is IBrush hoverBrush && control is Border border) {
-                    if (GetDefaultBrush(control) == null) {
-                        SetDefaultBrush(control, border.Background);
-                    }
-                    border.Background = hoverBrush;
-                }
+            if (s is not Control control) {
+                return;
+            }
+            SetIsHovering(control, true);
+            if (GetIsBorderFollowEnabled(control)) {
+                control.PointerMoved += Tc_PointerMoved;
             }
         }
+
+
         private static void PointerLeaveHandler(object s, PointerEventArgs e) {
-            if (s is Control control) {
-                SetIsHovering(control, false);
-                if (GetDefaultBrush(control) is IBrush defaultBrush && control is Border border) {
-                    border.Background = defaultBrush;
-                }
+            if (s is not Control control) {
+                return;
             }
+            SetIsHovering(control, false);
+            if (GetIsBorderFollowEnabled(control)) {
+                control.PointerMoved -= Tc_PointerMoved;
+            }
+        }
+
+        private static void Tc_PointerMoved(object sender, PointerEventArgs e) {
+            if (sender is not Control c) {
+                return;
+            }
+            Brush bb = null;
+
+            if (sender is TemplatedControl tc &&
+                tc.BorderBrush is Brush tc_bb) {
+                bb = tc_bb;
+            } else if (sender is Border b &&
+                b.BorderBrush is Brush b_bb) {
+                bb = b_bb;
+            }
+            if (bb == null) {
+                return;
+            }
+            var mp = e.GetPosition(c).ToPortablePoint();
+            var rel_mp = mp / c.Bounds.Size.ToPortableSize().ToPortablePoint();
+
+            //if (bb is LinearGradientBrush lgb) {
+            //    var rel_mp = mp / c.Bounds.Size.ToPortableSize().ToPortablePoint();
+            //    lgb.StartPoint = new RelativePoint(rel_mp.ToAvPoint(), RelativeUnit.Relative);
+            //}
+
+
+            if (bb.Transform is RotateTransform rt) {
+                var center = c.Bounds.ToPortableRect().Centroid();
+                rt.Angle = mp.AngleBetween(c.Bounds.BottomRight.ToPortablePoint());//.Wrap(0, 120);
+                MpConsole.WriteLine($"new angle: {rt.Angle}");
+            }
+
+            //if (bb.Transform is TranslateTransform tt) {
+            //    tt.X = mp.X;
+            //    tt.Y = mp.Y;
+            //}
+            Dispatcher.UIThread.Post(c.InvalidateVisual);
         }
         #endregion
     }

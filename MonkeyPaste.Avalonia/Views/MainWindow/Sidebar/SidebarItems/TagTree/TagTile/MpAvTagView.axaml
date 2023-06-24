@@ -160,7 +160,7 @@
                 <Grid VerticalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <!--  Tag Count Box  -->
                     <Border x:Name="TagCountContainer"
@@ -218,6 +218,7 @@
                             <local:MpAvBusySpinnerView x:Name="TagCountBusySpinner"
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
+                                                       Foreground="{Binding Background, ElementName=TagCountContainer, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                                                        Cursor="Wait">
                                 <local:MpAvBusySpinnerView.IsVisible>
                                     <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -236,8 +237,8 @@
                                                        HorizontalAlignment="Stretch"
                                                        VerticalAlignment="Stretch"
                                                        ArcWidth="1"
-                                                       PercentBrush="Lime"
-                                                       RingBrush="Red"
+                                                       PercentBrush="{DynamicResource ThemeAccent3Color}"
+                                                       RingBrush="{DynamicResource ThemeAccent2Color}"
                                                        LabelBrush="Transparent"
                                                        IsVisible="{Binding TotalAnalysisCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                        Percent="{Binding PercentLoaded}" />

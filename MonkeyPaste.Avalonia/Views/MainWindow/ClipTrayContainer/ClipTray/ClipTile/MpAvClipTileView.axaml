@@ -68,7 +68,6 @@
                           VerticalAlignment="Stretch"
                           local:MpAvPointerCommandExtension.IsEnabled="True"
                           local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
-                          local:MpAvPointerCommandExtension.LeftPressCommand="{Binding SelectTileCommand}"
                           local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
                           local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
                           local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
@@ -351,6 +350,7 @@
             <Border x:Name="AccountCapOverlayContainer"
                     Grid.ColumnSpan="2"
                     Grid.RowSpan="3"
+                    IsHitTestVisible="False"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                 <Border.IsVisible>

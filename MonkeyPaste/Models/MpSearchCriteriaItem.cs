@@ -190,7 +190,8 @@ namespace MonkeyPaste {
             }
             MpDebug.Assert(QueryTagId > 0, $"Unlinked search criteria writing");
 
-            if (QueryTagId <= MpTag.MAX_READ_ONLY_TAG_ID) {
+            if (QueryTagId <= MpTag.MAX_READ_ONLY_TAG_ID &&
+                !Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
                 // prevent altering recent, and format type query criterias
                 MpConsole.WriteLine($"Ignored writing read-only search criteria for tag id: {QueryTagId}");
                 return;

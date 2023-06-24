@@ -45,7 +45,7 @@
                     Classes="defaultButton textOnlyButton outline outlineOver"
                     IsVisible="{Binding IsSavedQuery}"
                     Command="{Binding DuplicateQueryCommand}">
-                <TextBlock Text="New" />
+                <TextBlock Text="Duplicate..." />
             </Button>
 
             <!--  SAVE BUTTON  -->

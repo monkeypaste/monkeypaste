@@ -45,7 +45,7 @@ namespace MonkeyPaste {
             nameof(ThisDeviceGuid),
             nameof(DefaultPluginIconId),
             nameof(UserEmail),
-            nameof(DbPassword),
+            nameof(DbCreateDateTime),
             nameof(LastStartupDateTime),
             nameof(UniqueContentItemIdx),
             nameof(SslPrivateKey),
@@ -177,6 +177,7 @@ namespace MonkeyPaste {
         public MpTrashCleanupModeType TrashCleanupModeType =>
             TrashCleanupModeTypeStr.ToEnum<MpTrashCleanupModeType>();
 
+        public DateTime DbCreateDateTime { get; set; }
         #region Sync
         [JsonIgnore]
         public string SyncCertFolderPath => Path.Combine(LocalStoragePath, "SyncCerts");
@@ -342,7 +343,7 @@ namespace MonkeyPaste {
 
         #region Look & Feel
 
-        public string ThemeTypeName { get; set; } = MpThemeType.Light.ToString();
+        public string ThemeTypeName { get; set; } = MpThemeType.Dark.ToString();
         public string ThemeColor { get; set; } = MpSystemColors.purple;
         public int NotificationSoundGroupIdx { get; set; } = (int)MpSoundGroupType.Minimal;
         public bool IsSoundEnabled { get; set; } = false;
@@ -413,7 +414,7 @@ namespace MonkeyPaste {
         #region Security
         public bool IsSettingsEncrypted { get; set; } = true; // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 
-        public string DbPassword { get; set; } = ENCRYPT_DB ? MpPasswordGenerator.GetRandomPassword() : null;
+        //public string DbPassword { get; set; } = ENCRYPT_DB ? MpPasswordGenerator.GetRandomPassword() : null;
         #endregion
 
         #region Shortcuts
@@ -626,8 +627,10 @@ namespace MonkeyPaste {
         }
 
         private static string GetPrefPassword() {
-            string seed = $"{Mp.Services.PlatformUserInfo.UserSid}";
-            return seed.CheckSum();
+            if (!PreferencesPath.IsFile()) {
+                using (File.Create(PreferencesPath)) { }
+            }
+            return new FileInfo(PreferencesPath).CreationTimeUtc.ToString();
         }
         private static async Task LoadPrefsAsync() {
             IsLoading = true;

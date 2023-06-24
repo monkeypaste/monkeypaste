@@ -777,6 +777,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case MpAvEditorBindingFunctionType.notifyException:
+#if DEBUG
+                    ShowDevTools();
+#endif
                     MpDebug.Break($"{ctvm} editor exception");
                     //ntf = MpJsonConverter.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
                     //if (ntf is MpQuillExceptionMessage exceptionMsgObj) {

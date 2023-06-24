@@ -1098,7 +1098,7 @@ namespace MonkeyPaste.Avalonia {
                 title: "Loaded",
                 body: $"Monkey Paste is now loaded. \nClipboard listening is: {(MpAvClipTrayViewModel.Instance.IsAppPaused ? "Paused" : "Active")}",
                 msgType: MpNotificationType.StartupComplete,
-                iconSourceObj: "MonkeyWinkImage").FireAndForgetSafeAsync();
+                iconSourceObj: "AppImage").FireAndForgetSafeAsync();
         }
         #endregion
 

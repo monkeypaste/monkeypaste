@@ -584,18 +584,13 @@ namespace MonkeyPaste.Avalonia {
                 // wait for panel open
                 await Task.Delay(waitTimeMs);
 
-                if (ttrvm.SelectedItem.IsNotGroupTag) {
-                    // NOTE when non-group tag selected 
-                    // select root group automatically
-                    // this shouldn't affect the current query cause its a group tag
-                    while (!ttrvm.SelectTagCommand.CanExecute(ttvm_to_select)) {
-                        // wait to ensure selection occurs (is rejected when duplicating a tag for some reason)
-                        await Task.Delay(100);
-                    }
-                    ttrvm.SelectTagCommand.Execute(ttvm_to_select);
-                    while (ttrvm.IsSelecting) {
-                        await Task.Delay(100);
-                    }
+                while (!ttrvm.SelectTagCommand.CanExecute(ttvm_to_select)) {
+                    // wait to ensure selection occurs (is rejected when duplicating a tag for some reason)
+                    await Task.Delay(100);
+                }
+                ttrvm.SelectTagCommand.Execute(ttvm_to_select);
+                while (ttrvm.IsSelecting) {
+                    await Task.Delay(100);
                 }
             });
         public ICommand ToggleTileIsPinnedCommand => new MpCommand<object>(
