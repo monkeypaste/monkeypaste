@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             // whats params?
-            Debugger.Break();
+            MpDebug.Break();
             return "QuestiongMarkImage";
         }
 

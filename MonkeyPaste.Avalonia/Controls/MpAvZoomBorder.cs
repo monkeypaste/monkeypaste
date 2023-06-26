@@ -332,7 +332,7 @@ namespace MonkeyPaste.Avalonia {
                 e.Pointer.Capture(this);
                 if (e.Pointer.Captured != this) {
                     var capturer = e.Pointer.Captured;
-                    Debugger.Break();
+                    MpDebug.Break();
                 } else {
                     IsTranslating = true;
                     e.Handled = true;

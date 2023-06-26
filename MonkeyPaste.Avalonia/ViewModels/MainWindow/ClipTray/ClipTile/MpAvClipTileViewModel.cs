@@ -23,8 +23,7 @@ using FocusManager = Avalonia.Input.FocusManager;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
-        MpISelectableViewModel,
-        MpISelectorItemViewModel,
+        MpIConditionalSelectableViewModel,
         MpIChildWindowViewModel,
         MpIWindowHandlesClosingViewModel,
         MpIDisposableObject,
@@ -156,25 +155,30 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region MpISelectableViewModel Implementation
+        #region MpIConditionalSelectableViewModel Implementation
+
+        public bool CanSelect =>
+            !IsPinPlaceholder;
+
         private bool _isSelected;
         public bool IsSelected {
             get => _isSelected;
             set {
-                if (IsSelected != value ||
-                    value) {
+                if (_isSelected != value) {
                     // NOTE always triggering prop change when selecting
                     // to update LastSelectedDateTime to ensure
                     // tray's selected item is this one
                     _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
                 }
+                if (IsSelected && !CanSelect) {
+                    MpDebug.Break("PinPlaceholder error, shouldn't be selectable");
+                }
+                OnPropertyChanged(nameof(IsSelected));
             }
         }
 
         public DateTime LastSelectedDateTime { get; set; }
 
-        public MpISelectorViewModel Selector => Parent;
 
         #endregion
 
@@ -475,7 +479,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsResizerEnabled =>
             //MpAvThemeViewModel.Instance.IsDesktop &&
-            !IsChildWindowOpen;
+            !IsChildWindowOpen &&
+            !IsFrozen;
 
         public MpIEmbedHost EmbedHost =>
             GetContentView() as MpIEmbedHost;
@@ -995,7 +1000,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Events
 
-        public event EventHandler OnScrollToHomeRequest;
         public event EventHandler OnSyncModels;
         public event EventHandler<object> OnPastePortableDataObject;
         public event EventHandler<double> OnScrollWheelRequest;
@@ -1063,7 +1067,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (ci != null &&
                 queryOffset >= 0 &&
-                Mp.Services.ContentQueryTools.GetOmittedContentIds().Contains(ci.Id)) {
+                Mp.Services.ContentQueryTools.GetPlaceholderContentIds().Contains(ci.Id)) {
                 // pin placeholder item
                 PinPlaceholderCopyItemId = ci.Id;
                 // NOTE ensure model is null on pin placeholders
@@ -1109,6 +1113,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsFrozen));
             OnPropertyChanged(nameof(IsPinned));
             OnPropertyChanged(nameof(PinPlaceholderLabel));
+            OnPropertyChanged(nameof(IsResizable));
 
             IsBusy = false;
         }
@@ -1255,7 +1260,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (Mp.Services.ContentViewLocator == null) {
                 // may need to reorganize load or block in a task to get this guy
-                //Debugger.Break();
+                //MpDebug.Break();
                 return null;
             }
             _contentView = Mp.Services.ContentViewLocator.LocateContentView(CopyItemId);
@@ -1324,11 +1329,11 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (target_idx >= Parent.PinnedItems.Count) {
                     target_idx = target_idx - Parent.PinnedItems.Count;
-                    if (target_idx < Parent.VisibleItems.Count()) {
+                    if (target_idx < Parent.VisibleQueryItems.Count()) {
                         if (Parent.DefaultScrollOrientation == Orientation.Horizontal) {
-                            return Parent.VisibleItems.OrderBy(x => TrayX).ElementAt(target_idx);
+                            return Parent.VisibleQueryItems.OrderBy(x => TrayX).ElementAt(target_idx);
                         }
-                        return Parent.VisibleItems.OrderBy(x => TrayY).ElementAt(target_idx);
+                        return Parent.VisibleQueryItems.OrderBy(x => TrayY).ElementAt(target_idx);
                     }
                     return null;
                 }
@@ -1374,12 +1379,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region View Event Invokers
-
-
-        public void RequestScrollToHome() {
-            OnScrollToHomeRequest?.Invoke(this, null);
-        }
-
 
         public void RequestSyncModel() {
             OnSyncModels?.Invoke(this, null);
@@ -1428,10 +1427,6 @@ namespace MonkeyPaste.Avalonia {
                     File.Delete(f);
                 }
             }
-        }
-
-        public void ResetContentScroll() {
-            RequestScrollToHome();
         }
 
         public void RefreshAsyncCommands() {
@@ -1548,7 +1543,8 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
                         if (Parent.SelectedItem != this) {
-                            Parent.SelectedItem = this;
+                            //Parent.SelectedItem = this;
+                            Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                         }
 
                         Parent.ScrollIntoView(this);
@@ -1678,12 +1674,12 @@ namespace MonkeyPaste.Avalonia {
                         //return;
                         if (CopyItemData.IsEmptyRichHtmlString()) {
                             // what IS this nasty shit??
-                            Debugger.Break();
+                            MpDebug.Break();
 
                             return;
                         }
                         if (CopyItemType == MpCopyItemType.Image && CopyItemData.StartsWith("<p>")) {
-                            Debugger.Break();
+                            MpDebug.Break();
                         }
                         //if(!MpAvCefNetApplication.UseCefNet && HasContentDataChanged) {
                         //    if(IsInitializing) {
@@ -1792,8 +1788,10 @@ namespace MonkeyPaste.Avalonia {
 
                     break;
                 case nameof(IsTileDragging):
-
                     Parent.OnPropertyChanged(nameof(Parent.CanTouchScroll));
+                    break;
+                case nameof(IsFrozen):
+                    OnPropertyChanged(nameof(IsResizerEnabled));
                     break;
             }
         }
@@ -1985,6 +1983,20 @@ namespace MonkeyPaste.Avalonia {
                 //MpAvDragDropManager.StartDragCheck(this);
             });
 
+        public ICommand DoubleLeftClickHandlerCommand => new MpCommand(
+            () => {
+                if (IsPinPlaceholder) {
+                    Parent.UnpinTileCommand.Execute(this);
+                    return;
+                }
+                EnableSubSelectionCommand.Execute(null);
+            }, () => {
+                if (IsPinPlaceholder) {
+                    return true;
+                }
+                return EnableSubSelectionCommand.CanExecute(null);
+            });
+
         public ICommand EnableSubSelectionCommand => new MpCommand(
             () => {
                 IsSubSelectionEnabled = true;
@@ -2082,13 +2094,13 @@ namespace MonkeyPaste.Avalonia {
                 //IsBusy = true;
                 var ds = GetContentView() as MpAvIDragSource;
                 if (ds == null) {
-                    Debugger.Break();
+                    MpDebug.Break();
                     return;
                 }
                 var mpdo = await ds.GetDataObjectAsync();
                 if (mpdo == null) {
                     // is none selected?
-                    Debugger.Break();
+                    MpDebug.Break();
                     IsBusy = false;
                     return;
                 }
@@ -2208,7 +2220,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleEditContentCommand => new MpCommand(
             () => {
                 if (!IsSelected && IsContentReadOnly) {
-                    Parent.SelectedItem = this;
+                    IsSelected = true;
                 }
                 IsContentReadOnly = !IsContentReadOnly;
 

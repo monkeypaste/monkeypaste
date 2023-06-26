@@ -265,7 +265,7 @@ namespace MonkeyPaste.Avalonia {
             ClipboardHandlerGuid = handlerFormat.handlerGuid;
 
             if (IsReader && IsWriter) {
-                Debugger.Break();
+                MpDebug.Break();
             }
 
             if (ClipboardPluginComponent == null) {

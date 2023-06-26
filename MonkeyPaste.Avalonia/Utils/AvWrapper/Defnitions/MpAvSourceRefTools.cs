@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
 
                 // whats the url?
-                Debugger.Break();
+                MpDebug.Break();
                 return null;
             }
 
@@ -72,14 +72,14 @@ namespace MonkeyPaste.Avalonia {
             }
             if (!uri.Contains("?")) {
                 // internal url should have params, is it malformed?
-                Debugger.Break();
+                MpDebug.Break();
                 return no_match_result;
             }
             // convert internal source ref to ci,app or url
             string ref_param_str = uri.SplitNoEmpty("?")[1];
             if (string.IsNullOrWhiteSpace(ref_param_str)) {
                 // internal url should have params, is it malformed?
-                Debugger.Break();
+                MpDebug.Break();
                 return no_match_result;
             }
 
@@ -92,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (!param_lookup.ContainsKey("type")) {
                 // whats the parameters?
-                Debugger.Break();
+                MpDebug.Break();
                 return no_match_result;
             }
             MpTransactionSourceType source_type = param_lookup["type"].ToEnum<MpTransactionSourceType>();
@@ -191,7 +191,7 @@ namespace MonkeyPaste.Avalonia {
             if (last_pinfo == null) {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
 
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
                 return null;
             }

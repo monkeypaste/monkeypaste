@@ -386,7 +386,7 @@ namespace MonkeyPaste.Avalonia {
 
             Items.Clear();
             //if(Title == "Yolo") {
-            //    Debugger.Break();
+            //    MpDebug.Break();
             //}
 
             // NOTE ignoring plugin update msgs on initial load cause its a bunch and not relevant

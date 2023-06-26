@@ -413,7 +413,7 @@ namespace MonkeyPaste {
         private static string CaseFormat(this string fieldOrSearchText, bool isValue = false) {
             if (_cur_qi == null) {
                 // hows this called outside of sql gen?
-                Debugger.Break();
+                MpDebug.Break();
                 return fieldOrSearchText;
             }
             if (!_cur_qi.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive)) {

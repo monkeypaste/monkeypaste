@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.VerifyAccess();
             var al = await control.GetAdornerLayerAsync(timeout_ms);
             if (al == null) {
-                Debugger.Break();
+                MpDebug.Break();
                 return null;
             }
             return al.Children.Where(x => x is MpAvAdornerBase ab && ab.AdornedControl == control).Cast<MpAvAdornerBase>();

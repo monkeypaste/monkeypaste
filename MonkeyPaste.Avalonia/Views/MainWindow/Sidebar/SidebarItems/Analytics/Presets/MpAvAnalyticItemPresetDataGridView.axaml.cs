@@ -86,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
                 pdg.InvalidateMeasure();
                 var sv = pdg.GetVisualDescendant<ScrollViewer>();
                 if (sv == null) {
-                    //Debugger.Break();
+                    //MpDebug.Break();
                     return;
                 }
                 sv.ScrollByPointDelta(new MpPoint(0, 5));

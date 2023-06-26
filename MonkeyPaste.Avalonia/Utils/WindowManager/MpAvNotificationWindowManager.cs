@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
         public void ShowNotification(MpNotificationViewModelBase nvmb) {
             if (nvmb == null) {
                 // somethigns wrong
-                Debugger.Break();
+                MpDebug.Break();
             }
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 ShowDesktopNotification(nvmb);
@@ -121,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (nw == null) {
                     // somethings wrong
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
 
 #if WINDOWS

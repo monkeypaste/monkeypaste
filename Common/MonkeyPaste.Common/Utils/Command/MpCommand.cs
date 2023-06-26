@@ -11,7 +11,7 @@ namespace MonkeyPaste.Common {
         private static MpCommandErrorHandler _instance;
         public static MpCommandErrorHandler Instance => _instance ??= (_instance = new MpCommandErrorHandler());
         public void HandleError(Exception ex) {
-            Debugger.Break();
+            MpDebug.Break();
             MpConsole.WriteTraceLine("Command error: ", ex);
         }
     }

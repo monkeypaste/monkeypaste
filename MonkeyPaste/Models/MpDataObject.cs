@@ -86,7 +86,7 @@ namespace MonkeyPaste {
                             fp_icon_id = fp_icon.Id;
                         } else {
                             // what's wrong with the path string?
-                            Debugger.Break();
+                            MpDebug.Break();
                         }
                         // store each file item separately
                         _ = await MpDataObjectItem.CreateAsync(
@@ -116,7 +116,7 @@ namespace MonkeyPaste {
 
                     }
                     // what type is it?
-                    Debugger.Break();
+                    MpDebug.Break();
                     itemDataStr = kvp.Value.ToString();
                 }
                 _ = await MpDataObjectItem.CreateAsync(

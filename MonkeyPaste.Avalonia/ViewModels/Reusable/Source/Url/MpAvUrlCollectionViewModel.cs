@@ -133,7 +133,7 @@ namespace MonkeyPaste.Avalonia {
             var dups = Items.Where(x => Items.Any(y => y != x && x.IsValueEqual(y)));
             if (dups.Any()) {
                 // dup app view models, check db to see if dup app model
-                Debugger.Break();
+                MpDebug.Break();
             }
 
         }

@@ -56,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             // whats the key? (should it be added?
-            Debugger.Break();
+            MpDebug.Break();
             return;
         }
     }

@@ -135,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (string.IsNullOrWhiteSpace(htmlDataStr)) {
                 MpConsole.WriteTraceLine("Error parsing html data obj, no data found");
-                //Debugger.Break();
+                //MpDebug.Break();
                 return null;
             }
 

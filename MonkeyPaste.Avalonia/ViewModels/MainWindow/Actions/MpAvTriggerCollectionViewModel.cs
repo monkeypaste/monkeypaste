@@ -756,7 +756,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     if (child_to_delete_avm == null) {
                         // link error (this cmd is called from arg vm using parentacvm)
-                        Debugger.Break();
+                        MpDebug.Break();
                         IsBusy = false;
                         return;
                     }

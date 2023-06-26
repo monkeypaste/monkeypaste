@@ -117,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (key == KeyCode.VcNumPadSeparator) {
                 // what key is this?
-                Debugger.Break();
+                MpDebug.Break();
             }
             if (key == KeyCode.VcSemicolon) {
                 return ";";

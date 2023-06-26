@@ -12,7 +12,7 @@ namespace MonkeyPaste.Common {
                 if (silent) {
                     return;
                 }
-                Debugger.Break();
+                MpDebug.Break();
             }
             //else {
             //    throw new Exception(args?.ToString());

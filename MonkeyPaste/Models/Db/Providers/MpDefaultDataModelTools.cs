@@ -39,7 +39,7 @@ namespace MonkeyPaste {
             bool wouldBeNewDb = await MpDb.InitDbConnectionAsync(dbInfo, false);
             if (wouldBeNewDb) {
                 //this should be caught in pref init so somethings wrong
-                Debugger.Break();
+                MpDebug.Break();
                 return null;
             }
             await MpDb.CreateTableAsync<MpUserDevice>();
@@ -50,7 +50,7 @@ namespace MonkeyPaste {
                 this_device = await MpDataModelProvider.GetUserDeviceByMembersAsync(null, osInfo.OsType);
                 if (this_device == null) {
                     // reset error
-                    Debugger.Break();
+                    MpDebug.Break();
                     return null;
                 }
             }
@@ -63,7 +63,7 @@ namespace MonkeyPaste {
             var this_app = await MpDataModelProvider.GetAppByMembersAsync(thisAppPath, string.Empty, this_device.Id);
             if (this_app == null) {
                 // reset error
-                Debugger.Break();
+                MpDebug.Break();
             }
             ThisAppId = this_app.Id;
 
@@ -72,7 +72,7 @@ namespace MonkeyPaste {
                 var this_os_file_manager = await MpDataModelProvider.GetAppByMembersAsync(osInfo.OsFileManagerPath, string.Empty, this_device.Id);
                 if (this_os_file_manager == null) {
                     // reset error
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
                 ThisOsFileManagerAppId = this_os_file_manager.Id;
             }
@@ -138,7 +138,7 @@ namespace MonkeyPaste {
             if (thisUserDevice == null) {
                 // reset error
                 var test = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
-                Debugger.Break();
+                MpDebug.Break();
             }
             ThisUserDeviceId = thisUserDevice.Id;
             ThisUserDeviceGuid = thisUserDevice.Guid;
@@ -148,7 +148,7 @@ namespace MonkeyPaste {
             var this_app = await MpDataModelProvider.GetAppByMembersAsync(Mp.Services.PlatformInfo.ExecutingPath, string.Empty, ThisUserDeviceId);
             if (this_app == null) {
                 // reset error
-                Debugger.Break();
+                MpDebug.Break();
             }
             ThisAppId = this_app.Id;
 

@@ -73,7 +73,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 return scb.Color.ToPortableColor();
             }
             // what is it?
-            Debugger.Break();
+            MpDebug.Break();
             return MpSystemColors.Red.ToPortableColor();
         }
 
@@ -105,14 +105,14 @@ namespace MonkeyPaste.Common.Avalonia {
                 return iscb.Color.ToPortableColor().ToHex();
             }
             // what type is it?
-            Debugger.Break();
+            MpDebug.Break();
             return null;
         }
 
         public static Color AdjustOpacity(this Color color, double opacity) {
             if (color.A != 255 && opacity != 1.0d) {
                 // warning, color already has adjusted opacity
-                Debugger.Break();
+                MpDebug.Break();
             }
             var adjustedColor = new Color(
                 Math.Max((byte)255, (byte)((double)255 * opacity)),
@@ -127,7 +127,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 return scb;
             }
             // warning, not solid color brush
-            Debugger.Break();
+            MpDebug.Break();
             return brush;
         }
     }

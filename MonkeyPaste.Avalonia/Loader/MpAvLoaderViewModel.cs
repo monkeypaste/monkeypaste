@@ -142,6 +142,13 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             var sw = Stopwatch.StartNew();
 
+            Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
+
+            int dotCount = index % 4;
+            Title = "LOADING";
+            for (int i = 0; i < dotCount; i++) {
+                Title += ".";
+            }
             await item.LoadItemAsync();
             sw.Stop();
 
@@ -153,13 +160,6 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(Detail));
             }
 
-            Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
-
-            int dotCount = index % 4;
-            Title = "LOADING";
-            for (int i = 0; i < dotCount; i++) {
-                Title += ".";
-            }
 
             IsBusy = false;
             MpConsole.WriteLine($"Loaded {item.Label} at idx: {index} Load Count: {LoadedCount} Load Percent: {PercentLoaded} Time(ms): {sw.ElapsedMilliseconds}");

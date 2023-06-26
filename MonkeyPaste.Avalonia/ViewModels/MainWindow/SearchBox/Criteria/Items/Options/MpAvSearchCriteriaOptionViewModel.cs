@@ -166,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
                     // currently will occur on collection or device name
                 }
 
-                Debugger.Break();
+                MpDebug.Break();
                 return null;
 
             }

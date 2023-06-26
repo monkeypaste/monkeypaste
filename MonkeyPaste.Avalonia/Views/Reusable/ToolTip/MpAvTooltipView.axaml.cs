@@ -227,7 +227,7 @@ namespace MonkeyPaste.Avalonia {
             if (w == null) {
                 // occuring in plugin preset icon popup menu (when window)
                 var test = hc.GetVisualAncestors();
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
 

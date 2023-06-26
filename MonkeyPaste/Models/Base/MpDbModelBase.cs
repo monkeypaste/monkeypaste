@@ -79,7 +79,7 @@ namespace MonkeyPaste {
             catch (Exception ex) {
                 MpConsole.WriteTraceLine(ex);
 
-                Debugger.Break();
+                MpDebug.Break();
             }
 
 

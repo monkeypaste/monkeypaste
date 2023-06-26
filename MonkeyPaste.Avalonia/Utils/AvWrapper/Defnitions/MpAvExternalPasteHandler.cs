@@ -41,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
             MpPortableProcessInfo processInfo, bool fromKeyboard) {
             if (processInfo == null) {
                 // shouldn't happen
-                //Debugger.Break();
+                //MpDebug.Break();
                 MpConsole.WriteTraceLine("Can't paste, if not lost focus somethings wrong");
                 return false;
             }
@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
             bool fromKeyboard) {
             if (pasteToHandle == IntPtr.Zero) {
                 // somethings terribly wrong_lastInternalProcessInfo
-                Debugger.Break();
+                MpDebug.Break();
                 return false;
             }
             MpConsole.WriteLine("Pasting to process: " + pasteToHandle);

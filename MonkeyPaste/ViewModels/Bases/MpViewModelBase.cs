@@ -151,7 +151,7 @@ namespace MonkeyPaste {
             object oldVal = model.GetPropertyValue(changedPropName);
             if (oldVal == newVal) {
                 // probably an error, property didn't change
-                Debugger.Break();
+                MpDebug.Break();
             }
             model.SetPropertyValue(changedPropName, newVal);
             HasModelChanged = true;

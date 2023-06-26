@@ -124,7 +124,7 @@ namespace MonkeyPaste.Common.Wpf {
         private static TextElement CreateTextElement(HtmlNode n, TextElement[] cl) {
             var te = GetTextElement(n);
             if (te == null) {
-                //Debugger.Break();
+                //MpDebug.Break();
                 return null;
             }
             foreach (var c in cl) {
@@ -382,7 +382,7 @@ namespace MonkeyPaste.Common.Wpf {
             }
             if (li_node.ParentNode.Name != "ul") {
                 // what is it?
-                Debugger.Break();
+                MpDebug.Break();
                 return TextMarkerStyle.None;
             }
             string dataListValue = li_node.GetAttributeValue("data-checked", string.Empty);
@@ -397,7 +397,7 @@ namespace MonkeyPaste.Common.Wpf {
             }
 
             // what the hecks going on!?
-            Debugger.Break();
+            MpDebug.Break();
             return TextMarkerStyle.None;
         }
 

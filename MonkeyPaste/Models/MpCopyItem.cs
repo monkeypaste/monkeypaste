@@ -271,7 +271,7 @@ namespace MonkeyPaste {
                     }
                     if (doil.Count > 1) {
                         // (currently) there should only be 1 entry
-                        Debugger.Break();
+                        MpDebug.Break();
                     }
                     doil[0].ItemData = searchable_text;
                     await doil[0].WriteToDatabaseAsync();
@@ -287,7 +287,7 @@ namespace MonkeyPaste {
 
             if (ItemData.IsEmptyRichHtmlString()) {
                 // what IS this nasty shit??
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
             await base.WriteToDatabaseAsync();

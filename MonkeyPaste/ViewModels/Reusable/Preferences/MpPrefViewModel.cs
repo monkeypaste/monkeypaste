@@ -655,7 +655,7 @@ namespace MonkeyPaste {
                 await CreateDefaultPrefsAsync(true);
                 if (Instance == null) {
                     // shouldn't happen
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
             } else {
                 _instance = prefVm;
@@ -686,7 +686,7 @@ namespace MonkeyPaste {
                     string backup_str = MpFileIo.ReadTextFromFile(PreferencesPathBackup);
                     if (ValidatePrefData(backup_str)) {
                         // pref is corrupt, check it and backup etc.
-                        Debugger.Break();
+                        MpDebug.Break();
                         MpFileIo.WriteTextToFile(PreferencesPath, backup_str, false);
                         await InitAsync(_prefPath, _dbInfo, _osInfo);
                         return;
@@ -700,7 +700,7 @@ namespace MonkeyPaste {
                     // this means no machine name/os type or just os type match was found in db file
                     // which would be strange and will wait to handle but should probably
                     // create a device guid...
-                    Debugger.Break();
+                    MpDebug.Break();
                 } else {
                     IsLoading = true;
                     Instance.ThisDeviceGuid = discovered_device_guid;

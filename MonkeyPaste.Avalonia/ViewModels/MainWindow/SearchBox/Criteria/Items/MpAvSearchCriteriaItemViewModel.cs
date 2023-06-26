@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
                     var ttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.Tag.Guid == MatchValue);
                     if (ttvm == null) {
                         // should have found, is tagId a pending query id?
-                        Debugger.Break();
+                        MpDebug.Break();
                     } else {
                         return ttvm.TagId;
                     }
@@ -1161,7 +1161,7 @@ namespace MonkeyPaste.Avalonia {
             foreach (var sel_idx in sel_idxs) {
                 if (cur_opt == null) {
                     // is this expected behavior?
-                    Debugger.Break();
+                    MpDebug.Break();
                     break;
                 }
                 cur_opt.SelectedItemIdx = sel_idx;

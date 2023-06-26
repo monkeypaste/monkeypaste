@@ -786,13 +786,13 @@ namespace MonkeyPaste.Avalonia {
                             var avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(_activeProcessInfo);
                             if (avm == null) {
                                 // we're f'd
-                                Debugger.Break();
+                                MpDebug.Break();
                             } else {
                                 pasted_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(avm.App);
                             }
                             if (string.IsNullOrEmpty(pasted_app_url)) {
                                 // f'd
-                                Debugger.Break();
+                                MpDebug.Break();
                                 return;
                             }
 
@@ -1132,7 +1132,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (string.IsNullOrEmpty(keyStr)) {
                 // what key is this with no string val?
-                Debugger.Break();
+                MpDebug.Break();
                 keyStr = "???";
             }
 

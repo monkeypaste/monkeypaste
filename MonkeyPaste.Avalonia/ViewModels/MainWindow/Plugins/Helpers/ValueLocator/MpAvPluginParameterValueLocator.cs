@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
                         var host_format_preset = pluginHost.ComponentFormat.presets.FirstOrDefault(x => x.guid == host_db_preset.Guid);
                         if (host_format_preset == null) {
                             // manifest presets should hardset preset guid from manifest file, is this an old analyzer?
-                            //Debugger.Break();
+                            //MpDebug.Break();
                         } else if (host_format_preset.values != null) {
                             var host_format_preset_val = host_format_preset.values.FirstOrDefault(x => x.paramId.Equals(paramFormat.paramId));
                             if (host_format_preset_val != null) {

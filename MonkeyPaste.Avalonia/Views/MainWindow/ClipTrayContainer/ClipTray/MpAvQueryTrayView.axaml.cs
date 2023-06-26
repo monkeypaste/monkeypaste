@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvQueryTrayView() {
             if (Instance != null) {
                 // ensure singleton
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
             Instance = this;
@@ -160,7 +160,7 @@ namespace MonkeyPaste.Avalonia {
             string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
             var drop_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drop_ctvm_pub_handle);
             if (drop_ctvm == null) {
-                Debugger.Break();
+                MpDebug.Break();
             }
 
             if (isCopy) {

@@ -43,7 +43,7 @@ namespace MonkeyPaste.Common {
             get => _width;
             set {
                 if (value < 0) {
-                    Debugger.Break();
+                    MpDebug.Break();
                     value = 0;
                 }
                 _width = value;
@@ -55,7 +55,7 @@ namespace MonkeyPaste.Common {
             get => _height;
             set {
                 if (value < 0) {
-                    Debugger.Break();
+                    MpDebug.Break();
                     value = 0;
                 }
                 _height = value;

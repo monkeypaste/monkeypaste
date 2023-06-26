@@ -55,7 +55,7 @@ namespace MonkeyPaste {
             // add reference to plugin
 
             if (plugin_source_ref == null) {
-                Debugger.Break();
+                MpDebug.Break();
             }
 
             if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> mpdo_urls)) {

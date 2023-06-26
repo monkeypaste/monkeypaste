@@ -135,6 +135,39 @@ namespace MonkeyPaste.Common.Avalonia {
             return target;
         }
 
+        public static async Task<T> GetVisualDescendantAsync<T>(this Visual visual, bool includeSelf = true, int timeOutMs = 3_000) where T : Visual? {
+            T result = visual.GetVisualDescendant<T>(includeSelf);
+            if (result != null) {
+                return result;
+            }
+            var sw = Stopwatch.StartNew();
+            while (result == default) {
+                result = visual.GetVisualDescendant<T>(includeSelf);
+                await Task.Delay(100);
+                if (sw.ElapsedMilliseconds >= timeOutMs) {
+                    MpConsole.WriteLine($"GetVisualDescendantAsync from {visual.GetType()} to {typeof(T)} timeout {timeOutMs} reached.");
+                    return default;
+                }
+            }
+            return result;
+        }
+
+        public static async Task<T> GetVisualAncestorAsync<T>(this Visual visual, bool includeSelf = true, int timeOutMs = 3_000) where T : Visual? {
+            T result = visual.GetVisualAncestor<T>(includeSelf);
+            if (result != null) {
+                return result;
+            }
+            var sw = Stopwatch.StartNew();
+            while (result == default) {
+                result = visual.GetVisualAncestor<T>(includeSelf);
+                await Task.Delay(100);
+                if (sw.ElapsedMilliseconds >= timeOutMs) {
+                    MpConsole.WriteLine($"GetVisualAncestorAsync from {visual.GetType()} to {typeof(T)} timeout {timeOutMs} reached.");
+                    return default;
+                }
+            }
+            return result;
+        }
         public static T GetVisualAncestor<T>(this Visual visual, bool includeSelf = true) where T : Visual? {
             if (includeSelf && visual is T) {
                 return (T)visual;
@@ -347,7 +380,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (scr == null) {
                 scr = Application.Current.GetMainWindow().Screens.Primary;
                 if (scr == null) {
-                    Debugger.Break();
+                    MpDebug.Break();
                     return 1;
                 }
             }
@@ -478,7 +511,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     sw = Stopwatch.StartNew();
                 }
                 if (sw.ElapsedMilliseconds >= timeout_ms) {
-                    Debugger.Break();
+                    MpDebug.Break();
                     break;
                 }
                 await Task.Delay(100);
@@ -497,7 +530,7 @@ namespace MonkeyPaste.Common.Avalonia {
             var cur_adorner = adornerLayer.Children.FirstOrDefault(x => x == adorner);
             if (cur_adorner != null) {
                 // why twice?
-                Debugger.Break();
+                MpDebug.Break();
                 adornerLayer.Children.Remove(cur_adorner);
             }
             adornerLayer.Children.Add(adorner);

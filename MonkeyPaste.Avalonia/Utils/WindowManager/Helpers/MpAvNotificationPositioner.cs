@@ -143,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (anchor_rect == null) {
                 // anchor error
-                Debugger.Break();
+                MpDebug.Break();
                 return new PixelPoint();
             }
             MpPoint anchor_centroid = anchor_rect.Centroid();

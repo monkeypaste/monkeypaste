@@ -919,7 +919,7 @@ namespace MonkeyPaste.Avalonia {
             var valid = brush_tuples.Where(x => x.Value.StartIdx < 0 || x.Value.EndIdx >= Text.Length);
             if (valid.Any()) {
                 string test = Text;
-                Debugger.Break();
+                MpDebug.Break();
             }
             return brush_tuples.ToArray();
         }

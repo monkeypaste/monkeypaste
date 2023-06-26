@@ -1058,7 +1058,7 @@ namespace MonkeyPaste.Avalonia {
                 SetIsThumbDraggingY(lb, false);
             } else {
                 // shouldn't happen
-                Debugger.Break();
+                MpDebug.Break();
             }
             //tt.Bake();
         }

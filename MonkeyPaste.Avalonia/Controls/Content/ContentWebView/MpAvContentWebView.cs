@@ -632,7 +632,8 @@ namespace MonkeyPaste.Avalonia {
 
                 case MpAvEditorBindingFunctionType.notifyDropCompleted:
                     BindingContext.IsDropOverTile = false;
-                    MpAvClipTrayViewModel.Instance.SelectedItem = BindingContext;
+                    BindingContext.IsSelected = true;
+                    //MpAvClipTrayViewModel.Instance.SelectedItem = BindingContext;
                     break;
 
                 #endregion

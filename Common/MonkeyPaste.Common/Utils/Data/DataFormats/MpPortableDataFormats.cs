@@ -211,7 +211,7 @@ namespace MonkeyPaste.Common {
             }
             if (kvpl.Count() > 1) {
                 // multiple formats w/ same name but different case detected
-                Debugger.Break();
+                MpDebug.Break();
                 var match_kvp = kvpl.FirstOrDefault(x => x.Value.Name == format);
                 if (!match_kvp.Equals(default(KeyValuePair<int, MpPortableDataFormat>))) {
                     // when exact match found return that one...

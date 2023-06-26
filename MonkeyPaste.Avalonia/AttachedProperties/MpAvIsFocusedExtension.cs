@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                         bool success = await control.TrySetFocusAsync();
                         if (success != ie.IsKeyboardFocusWithin) {
                             // huh? result mismatch
-                            //Debugger.Break();
+                            //MpDebug.Break();
                         }
                         //MpConsole.WriteLine($"Focus {(ie.IsKeyboardFocusWithin ? "SUCCEEDED" : "FAILED")}  on '{ie}' from binding on '{control}'");
                     } else {
@@ -156,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
                     focusableControl.LostFocus += FocusableControl_LostFocus;
                 } else {
                     // what's wrong?
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
             }
         }
@@ -208,7 +208,7 @@ namespace MonkeyPaste.Avalonia {
                         });
                     } else if (focusableControl is AutoCompleteBox acb) {
                         // dunno how
-                        Debugger.Break();
+                        MpDebug.Break();
                     }
                 }
             }

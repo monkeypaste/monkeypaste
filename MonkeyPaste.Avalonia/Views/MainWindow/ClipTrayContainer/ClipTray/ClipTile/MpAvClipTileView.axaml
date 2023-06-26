@@ -69,7 +69,7 @@
                           VerticalAlignment="Stretch"
                           local:MpAvPointerCommandExtension.IsEnabled="True"
                           local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
-                          local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding EnableSubSelectionCommand}"
+                          local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding DoubleLeftClickHandlerCommand}"
                           local:MpAvPointerCommandExtension.RightPressCommand="{Binding ShowContextMenuCommand}"
                           local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
                           local:MpAvPointerCommandExtension.IsHoldingEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
@@ -158,7 +158,7 @@
                   Cursor="Hand"
                   Grid.ColumnSpan="2"
                   Grid.RowSpan="3"
-                  RowDefinitions="*,0.33*"
+                  RowDefinitions="0.5*,0.5*"
                   IsVisible="{Binding IsPinPlaceholder}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
@@ -187,11 +187,11 @@
                 <TextBlock Grid.Row="1"
                            TextAlignment="Center"
                            TextWrapping="WrapWithOverflow"
-                           Margin="30,15"
+                           Margin="30,15,30,0"
                            FontWeight="Bold"
                            Foreground="{DynamicResource ThemeInteractiveColor}"
                            HorizontalAlignment="Stretch"
-                           VerticalAlignment="Bottom">
+                           VerticalAlignment="Top">
                     <TextBlock.Text>
                         <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
                             <Binding>
@@ -314,7 +314,7 @@
                     Grid.Row="0"
                     Grid.RowSpan="3"
                     Grid.ColumnSpan="2"
-                    Cursor="SizeWestEast"
+                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=SizeWestEast|None}"
                     local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
                     local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
@@ -346,7 +346,7 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    Cursor="SizeNorthSouth"
+                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=SizeNorthSouth|None}"
                     IsHitTestVisible="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
@@ -379,7 +379,7 @@
             <Border x:Name="ClipTileMultiResizeBorder"
                     Grid.ColumnSpan="2"
                     Grid.RowSpan="3"
-                    Cursor="BottomRightCorner"
+                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=BottomRightCorner|None}"
                     IsHitTestVisible="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"

@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
             if (value is GridLength gl) {
                 if (!gl.Value.IsNumber()) {
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
                 return gl.Value;
             }

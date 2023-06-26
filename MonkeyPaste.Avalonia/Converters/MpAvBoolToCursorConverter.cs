@@ -11,7 +11,6 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             StandardCursorType cursor_type = StandardCursorType.Arrow;
-
             if (value is bool boolVal) {
                 if (parameter is string paramStr &&
                     paramStr.SplitNoEmpty("|") is string[] paramParts) {
@@ -21,6 +20,10 @@ namespace MonkeyPaste.Avalonia {
                         cursor_type = paramParts[1].ToEnum<StandardCursorType>();
                     }
                 }
+            }
+            if (cursor_type == StandardCursorType.None) {
+                // NOTE treating None as unset, not lack of cursor
+                return null;
             }
             return new Cursor(cursor_type);
         }

@@ -165,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
             string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
             var drop_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drop_ctvm_pub_handle);
             if (drop_ctvm == null) {
-                Debugger.Break();
+                MpDebug.Break();
             }
 
             if (isCopy) {
@@ -255,7 +255,7 @@ namespace MonkeyPaste.Avalonia {
         private void InitAdorner(Control adornedControl) {
             if (_dropAdorner != null) {
                 // should only happen once
-                Debugger.Break();
+                MpDebug.Break();
             }
 
             _dropAdorner = new MpAvDropHostAdorner(adornedControl);
@@ -272,7 +272,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvPinTrayView() {
             if (Instance != null) {
                 // ensure singleton
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
             Instance = this;
@@ -281,7 +281,7 @@ namespace MonkeyPaste.Avalonia {
 
             PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
             PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
-            //PinTrayListBox.GotFocus += PinTrayListBox_GotFocus;
+
             //this.EffectiveViewportChanged += MpAvPinTrayView_EffectiveViewportChanged;
             //this.DataContextChanged += MpAvPinTrayView_DataContextChanged;
             //if (DataContext != null) {
@@ -310,21 +310,6 @@ namespace MonkeyPaste.Avalonia {
                 OnItemAdded();
             }
         }
-
-        private void PinTrayListBox_GotFocus(object sender, GotFocusEventArgs e) {
-            if (BindingContext.IsPinTrayEmpty) {
-                return;
-            }
-            if (e.NavigationMethod == NavigationMethod.Tab) {
-                if (e.KeyModifiers.HasFlag(KeyModifiers.Shift)) {
-                    // shift tab from clip tray select last
-                    BindingContext.SelectedItem = BindingContext.PinnedItems.Last();
-                } else {
-                    BindingContext.SelectedItem = BindingContext.PinnedItems.First();
-                }
-            }
-        }
-
         private void OnItemRemoved() {
             var ctrcv = this.GetVisualAncestor<MpAvClipTrayContainerView>();
             if (BindingContext == null ||

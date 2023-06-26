@@ -283,7 +283,10 @@ namespace MonkeyPaste.Avalonia {
 
         private static void Control_PointerEnter(object sender, PointerEventArgs e) {
             if (sender is Control control &&
-                !IsAnyMoving && !MpAvMainWindowViewModel.Instance.IsAnyItemDragging) {
+                !IsAnyMoving &&
+                !e.IsLeftDown(control)
+                    //!MpAvMainWindowViewModel.Instance.IsAnyItemDragging
+                    ) {
                 //CanMove = true;
                 SetCanMove(control, true);
             }

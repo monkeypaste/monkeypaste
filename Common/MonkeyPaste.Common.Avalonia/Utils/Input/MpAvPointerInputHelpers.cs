@@ -47,7 +47,7 @@ namespace MonkeyPaste.Common.Avalonia {
             Control vroot = control.GetVisualRoot() as Control;
             if (vroot == null) {
                 // needs root
-                Debugger.Break();
+                MpDebug.Break();
                 return null;
             }
             var root_mp = mp.TranslatePoint(vroot, isLocalMp);

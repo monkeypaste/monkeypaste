@@ -213,7 +213,7 @@ namespace MonkeyPaste {
         public override async Task WriteToDatabaseAsync() {
             if (CopyItemId < 0) {
                 // why is this happening? (have a hunch its when dragging tile onto pin tray or onto tag)
-                Debugger.Break();
+                MpDebug.Break();
                 CopyItemId *= -1;
             }
             if (Id == 0) {

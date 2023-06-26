@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
                 // TODO move reset stuff to that backup folder
             }
             if (App.HasStartupArg(App.RESET_DATA_ARG)) {
-                //Debugger.Break();
+                //MpDebug.Break();
 
                 // delete db, plugin cache, pref and pref.backup
                 MpDebug.Assert(!MpFileIo.IsFileInUse(DbInfo.DbPath), "Db is open! Close it to reset");

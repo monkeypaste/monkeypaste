@@ -3,6 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Diagnostics;
@@ -29,20 +31,27 @@ namespace MonkeyPaste.Avalonia {
                 .Subscribe(value => OnPinPlaceholderOverlayIsVisibleChanged(value));
         }
         private void OnPinPlaceholderOverlayIsVisibleChanged(bool isVisible) {
-            if (this.GetLogicalAncestors().OfType<ListBoxItem>().FirstOrDefault() is not ListBoxItem pin_placeholder_lbi) {
+            if (MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening) {
                 return;
             }
-            BindingContext.OnPropertyChanged(nameof(BindingContext.PinPlaceholderLabel));
-            if (string.IsNullOrEmpty(BindingContext.PinPlaceholderLabel)) {
 
-            }
-            if (isVisible) {
-                pin_placeholder_lbi.PointerPressed += Pin_placeholder_lbi_PointerPressed;
-                pin_placeholder_lbi.PointerReleased += Pin_placeholder_lbi_PointerReleased;
-            } else {
-                pin_placeholder_lbi.PointerPressed -= Pin_placeholder_lbi_PointerPressed;
-                pin_placeholder_lbi.PointerReleased -= Pin_placeholder_lbi_PointerReleased;
-            }
+            Dispatcher.UIThread.Post(async () => {
+                ListBoxItem pin_placeholder_lbi = await this.GetVisualAncestorAsync<ListBoxItem>();
+                if (pin_placeholder_lbi == null) {
+                    return;
+                }
+                BindingContext.OnPropertyChanged(nameof(BindingContext.PinPlaceholderLabel));
+                if (string.IsNullOrEmpty(BindingContext.PinPlaceholderLabel)) {
+
+                }
+                if (isVisible) {
+                    pin_placeholder_lbi.PointerPressed += Pin_placeholder_lbi_PointerPressed;
+                    pin_placeholder_lbi.PointerReleased += Pin_placeholder_lbi_PointerReleased;
+                } else {
+                    pin_placeholder_lbi.PointerPressed -= Pin_placeholder_lbi_PointerPressed;
+                    pin_placeholder_lbi.PointerReleased -= Pin_placeholder_lbi_PointerReleased;
+                }
+            });
         }
 
         private void Pin_placeholder_lbi_PointerPressed(object sender, PointerPressedEventArgs e) {
@@ -73,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (!TestDcMismatchByHover()) {
                 // dc mismatch
-                Debugger.Break();
+                MpDebug.Break($"DC mismatch. DC: '{this.DataContext}' BC: {BindingContext}");
                 Fix();
             }
         }
@@ -95,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
             //                break;
             //            }
             //            // dc mismatch
-            //            Debugger.Break();
+            //            MpDebug.Break();
             //            Fix();
             //        }
             //        break;

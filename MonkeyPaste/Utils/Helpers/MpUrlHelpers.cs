@@ -226,7 +226,7 @@ namespace MonkeyPaste {
                 string favicon_uri_str = $"{domain}favicon.ico";
                 if (!Uri.IsWellFormedUriString(favicon_uri_str, UriKind.Absolute)) {
                     // whats the domain?
-                    Debugger.Break();
+                    MpDebug.Break();
                     return null;
                 }
                 Uri favicon = new Uri(favicon_uri_str, UriKind.Absolute);

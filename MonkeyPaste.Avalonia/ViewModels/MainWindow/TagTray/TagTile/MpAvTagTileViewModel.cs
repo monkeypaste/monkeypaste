@@ -803,7 +803,7 @@ namespace MonkeyPaste.Avalonia {
                             if (!MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive) {
                                 // keeping this here for debugging,
                                 // when this eval's update is called again when active though
-                                //Debugger.Break();
+                                //MpDebug.Break();
                                 TagClipCount = null;
                             } else {
                                 TagClipCount =
@@ -1159,7 +1159,7 @@ namespace MonkeyPaste.Avalonia {
             foreach (var idToRemove in idsSeen) {
                 if (!CopyItemIdsNeedingView.Remove(idToRemove)) {
                     // how?
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
             }
         }
@@ -1296,7 +1296,7 @@ namespace MonkeyPaste.Avalonia {
                      // coming from save SavePendingQueryCommand
                      if (pendingTagId <= 0) {
                          // should be already saved
-                         Debugger.Break();
+                         MpDebug.Break();
                      } else {
                          // added when pending query is confirmed
                          t = await MpDataModelProvider.GetItemAsync<MpTag>(pendingTagId);
@@ -1307,7 +1307,7 @@ namespace MonkeyPaste.Avalonia {
                      childTagType = MpTagType.Link;
                  } else if (TagType == MpTagType.Group) {
                      // need to make sure type is passed cause child type isn't clear
-                     Debugger.Break();
+                     MpDebug.Break();
                  }
 
                  if (t == null) {

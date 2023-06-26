@@ -333,7 +333,7 @@ namespace MonkeyPaste.Common {
             if (isTempPath) {
                 return true;
             }
-            Debugger.Break();
+            MpDebug.Break();
             return false;
         }
 

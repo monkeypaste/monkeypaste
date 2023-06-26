@@ -122,7 +122,7 @@ namespace MonkeyPaste {
             }
             if (result.Count > 1) {
                 // this should only be 1
-                Debugger.Break();
+                MpDebug.Break();
             }
             return result[0];
         }

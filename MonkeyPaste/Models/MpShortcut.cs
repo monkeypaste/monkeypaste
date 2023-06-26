@@ -156,7 +156,7 @@ namespace MonkeyPaste {
         public override async Task WriteToDatabaseAsync() {
             if (IsReadOnly && Id > 0) {
                 // Should be caught before here
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
             await base.WriteToDatabaseAsync();
@@ -165,7 +165,7 @@ namespace MonkeyPaste {
         public override async Task DeleteFromDatabaseAsync() {
             //if (IsReadOnly) {
             //    // Should be caught before here
-            //    Debugger.Break();
+            //    MpDebug.Break();
             //    return;
             //}
             await base.DeleteFromDatabaseAsync();

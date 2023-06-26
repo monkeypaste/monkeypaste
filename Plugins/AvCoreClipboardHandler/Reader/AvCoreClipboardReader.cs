@@ -96,7 +96,7 @@ namespace AvCoreClipboardHandler {
                     var detected_encoding = htmlBytes.DetectTextEncoding(out string detected_text);
                     format_data = Encoding.UTF8.GetBytes(detected_text);
                     if (detected_text.Contains("Â")) {
-                        Debugger.Break();
+                        MpDebug.Break();
                     }
                 }
                 //Util.CloseClipboard();

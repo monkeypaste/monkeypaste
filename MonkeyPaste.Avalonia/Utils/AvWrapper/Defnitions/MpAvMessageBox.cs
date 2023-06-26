@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (result != MpNotificationDialogResultType.Cancel) {
                 // result type mismatch
-                Debugger.Break();
+                MpDebug.Break();
             }
             return false;
         }
@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (result != MpNotificationDialogResultType.Cancel) {
                 // result type mismatch
-                Debugger.Break();
+                MpDebug.Break();
             }
             return null;
         }

@@ -77,7 +77,7 @@ namespace MonkeyPaste.Common {
             for (int r = 0; r < csvRows.Count; r++) {
                 string csvRowStr = csvRows[r];
                 if (r == csvRows.Count - 1) {
-                    Debugger.Break();
+                    MpDebug.Break();
                     if (string.IsNullOrEmpty(csvRowStr) || csvRowStr == MpCsvFormatProperties.EXCEL_EOF_MARKER) {
                         // ignoring trailing end line
                         continue;

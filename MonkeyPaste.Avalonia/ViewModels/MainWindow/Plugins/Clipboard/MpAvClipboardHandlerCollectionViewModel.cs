@@ -150,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
                 //return temp;
             } else {
                 // need to cast or whats goin on here?
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
 
@@ -539,7 +539,7 @@ namespace MonkeyPaste.Avalonia {
                     } else if (cfpvm.IsWriter) {
                         ToggleFormatPresetIsWriteEnabledCommand.Execute(cfpvm);
                     } else {
-                        Debugger.Break();
+                        MpDebug.Break();
                     }
                 }
             });

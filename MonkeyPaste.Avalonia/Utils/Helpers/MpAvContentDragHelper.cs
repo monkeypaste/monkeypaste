@@ -48,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (SourceDataObject == null) {
                 // is none selected?
-                Debugger.Break();
+                MpDebug.Break();
                 FinishDrag(null);
                 return;
             }
@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (string.IsNullOrEmpty(drop_app_url)) {
                     // maybe we should lax ref url req in report transaction...
-                    Debugger.Break();
+                    MpDebug.Break();
                 } else {
 
                     // report drop transaction

@@ -360,7 +360,7 @@ namespace MonkeyPaste.Common {
         public static int Length(this Type e) {
             if (e == null || !e.IsEnum) {
                 // should only pass enum
-                Debugger.Break();
+                MpDebug.Break();
                 return 0;
             }
             return Enum.GetNames(e).Length;

@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<MpApp> CreateAsync(MpPortableProcessInfo pi) {
             if (pi == null) {
                 // prob
-                Debugger.Break();
+                MpDebug.Break();
                 return null;
             }
 
@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrWhiteSpace(pi.ProcessPath)) {
                 if (pi.Handle == IntPtr.Zero) {
                     // when does this happen? likely a problem
-                    Debugger.Break();
+                    MpDebug.Break();
                     return null;
                 }
                 // likely running application when no process path, find the path from the handle and use handle to query for mw title (if not already set)

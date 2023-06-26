@@ -88,16 +88,16 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task QueryForTotalCountAsync(bool isRequery) {
             MpConsole.WriteLine("total count called");
-            //int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
-            int total_count = await MpContentQuery.QueryForTotalCountAsync(this, null);
+            int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            //int total_count = await MpContentQuery.QueryForTotalCountAsync(this, null);
             _pageTools.Reset(isRequery);
             _pageTools.SetTotalCount(total_count);
 
         }
 
         public async Task<List<MpCopyItem>> FetchPageAsync(int offset, int limit) {
-            //var items = await MpContentQuery.FetchItemsAsync(this, offset, limit, Mp.Services.ContentQueryTools.GetOmittedContentIds());
-            var items = await MpContentQuery.FetchItemsAsync(this, offset, limit, null);
+            var items = await MpContentQuery.FetchItemsAsync(this, offset, limit, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            //var items = await MpContentQuery.FetchItemsAsync(this, offset, limit, null);
 
             return items;
         }
@@ -202,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
             var query_tag = await MpDataModelProvider.GetItemAsync<MpTag>(simp_ci.QueryTagId);
             if (query_tag == null) {
                 // probably shouldn't happen
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
             _isRestoringAdvancedValues = true;

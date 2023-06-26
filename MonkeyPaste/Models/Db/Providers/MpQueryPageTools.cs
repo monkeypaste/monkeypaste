@@ -73,7 +73,7 @@ namespace MonkeyPaste {
         //public void InsertId(int idx, int id) {
         //    if (idx < 0 || idx > AllQueryIds.Count) {
         //        // bad idx
-        //        Debugger.Break();
+        //        MpDebug.Break();
         //        return;
         //    }
         //    if (idx == AllQueryIds.Count) {

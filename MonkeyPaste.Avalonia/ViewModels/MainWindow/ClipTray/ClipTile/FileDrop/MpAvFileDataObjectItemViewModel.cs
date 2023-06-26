@@ -98,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
                     var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == PathIconId);
                     if (ivm == null) {
                         // this shouldn't happen and maybe race condition issues with startup or copy item create
-                        Debugger.Break();
+                        MpDebug.Break();
                         _iconBase64 = MpBase64Images.Error;
                     } else {
                         _iconBase64 = ivm.IconBase64;

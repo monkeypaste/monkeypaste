@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
+using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Diagnostics;
 namespace MonkeyPaste.Avalonia {
@@ -31,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
                 keyStr = "TriggerActionChooserViewTemplate";
             } else {
                 // what's the param?
-                Debugger.Break();
+                MpDebug.Break($"unknown sidebar item type {param?.GetType()}");
                 return null;
             }
             return AvailableTemplates[keyStr].Build(param);

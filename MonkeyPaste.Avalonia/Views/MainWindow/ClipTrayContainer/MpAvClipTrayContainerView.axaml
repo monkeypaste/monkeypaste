@@ -105,21 +105,21 @@
         </Style>
 
         <!--  HOVER UNSELECTED  -->
-        <Style Selector="ListBox.clipTileListBox > ListBoxItem:pointerover:not(:selected) local|MpAvClipBorder#ClipTileContainerBorder"
+        <Style Selector="ListBox.clipTileListBox > ListBoxItem:pointerover:not(:selected) local|MpAvClipBorder#ClipTileContainerBorder:not(.frozen)"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
                     Value="{StaticResource IsHoveringBorderBrush_unselected}" />
         </Style>
 
         <!--  DEFAULT SELECTED  -->
-        <Style Selector="ListBox.clipTileListBox > ListBoxItem:selected local|MpAvClipBorder#ClipTileContainerBorder"
+        <Style Selector="ListBox.clipTileListBox > ListBoxItem:selected local|MpAvClipBorder#ClipTileContainerBorder:not(.frozen)"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
                     Value="{StaticResource DefaultBorderBrush_selected}" />
         </Style>
 
         <!--  HOVER SELECTED  -->
-        <Style Selector="ListBox.clipTileListBox > ListBoxItem:pointerover:selected local|MpAvClipBorder#ClipTileContainerBorder"
+        <Style Selector="ListBox.clipTileListBox > ListBoxItem:pointerover:selected local|MpAvClipBorder#ClipTileContainerBorder:not(.frozen)"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
                     Value="{StaticResource IsHoveringBorderBrush_selected}" />

@@ -207,7 +207,7 @@ namespace MonkeyPaste.Common.Wpf {
                 Console.WriteLine(valid_check);
                 Console.WriteLine($"Processed Text:");
                 Console.WriteLine(test_check, false, true);
-                Debugger.Break();
+                MpDebug.Break();
             }
 
             return span_node;
@@ -223,7 +223,7 @@ namespace MonkeyPaste.Common.Wpf {
                 if (tc.Width.GridUnitType == GridUnitType.Pixel) {
                     colWidth = tc.Width.Value;
                 } else {
-                    Debugger.Break();
+                    MpDebug.Break();
 
                 }
                 //colGroupInnerHtml += string.Format(@"<col width='{0}px'>", colWidth);
@@ -398,7 +398,7 @@ namespace MonkeyPaste.Common.Wpf {
         private static HtmlNode WrapWithImage(Image img, List<HtmlNode> children) {
             //if (!string.IsNullOrEmpty(content)) {
             //    // pretty sure images can't have child content but investigate here
-            //    Debugger.Break();
+            //    MpDebug.Break();
             //}
             var bmpSrc = img.Source as BitmapSource;
 

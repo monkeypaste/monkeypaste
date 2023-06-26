@@ -56,7 +56,7 @@ namespace MonkeyPaste.Common.Wpf {
             if (imgSrc is BitmapSource bmpSrc) {
                 return bmpSrc.PixelSize();
             }
-            Debugger.Break();
+            MpDebug.Break();
             return new Size();
         }
         //faster version but needs unsafe thing

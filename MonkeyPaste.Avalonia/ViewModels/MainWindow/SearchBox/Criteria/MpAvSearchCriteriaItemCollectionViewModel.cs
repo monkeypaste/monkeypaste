@@ -196,7 +196,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (isPending && tagId > 0) {
                 // shouldn't happen
-                Debugger.Break();
+                MpDebug.Break();
             }
             if (MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == tagId) is MpAvTagTileViewModel ttvm &&
                 !ttvm.IsQueryTag) {
@@ -378,7 +378,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task<int> ConvertPendingToQueryTagAsync() {
             if (QueryTagId > 0) {
                 // not a simple search, check call stack
-                Debugger.Break();
+                MpDebug.Break();
                 return 0;
             }
             var pending_tag = await MpTag.CreateAsync(

@@ -225,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
                             if (handle == active_handle) {
                                 if (activeProcessInfo != null) {
                                     // should only be set once how come?
-                                    Debugger.Break();
+                                    MpDebug.Break();
                                 }
                                 var cur_info = new MpPortableProcessInfo() {
                                     Handle = handle,

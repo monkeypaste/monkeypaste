@@ -367,7 +367,7 @@ namespace MonkeyPaste {
         public override async Task DeleteFromDatabaseAsync() {
             if (!CanDelete) {
                 // this should be caught in view model
-                Debugger.Break();
+                MpDebug.Break();
                 return;
             }
             List<Task> deleteTasks = new List<Task>();

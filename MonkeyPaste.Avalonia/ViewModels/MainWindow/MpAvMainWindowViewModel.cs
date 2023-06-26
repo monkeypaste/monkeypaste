@@ -413,13 +413,13 @@ namespace MonkeyPaste.Avalonia {
         public DateTime? LastDecreasedFocusLevelDateTime { get; set; }
         public bool IsAnyItemDragging {
             get {
-                // TODO this only contains clip tiles now but should be the central
-                // check for dnd state
-                if (IsMainWindowOrientationDragging) {
+                if (MpAvTagTrayViewModel.Instance.IsAnyDragging ||
+                    MpAvTagTrayViewModel.Instance.IsAnyPinTagDragging ||
+                    MpAvContentDragHelper.IsDragging ||
+                    IsMainWindowOrientationDragging) {
                     return true;
                 }
-                //return MpAvClipTrayViewModel.Instance.IsAnyTileDragging;
-                return MpAvContentDragHelper.IsDragging;
+                return false;
             }
         }
         public bool IsMainWindowOrientationDragging { get; set; } = false;

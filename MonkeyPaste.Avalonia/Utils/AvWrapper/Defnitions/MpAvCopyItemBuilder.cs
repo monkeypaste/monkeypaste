@@ -201,11 +201,11 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     var fl_data = mpdo.GetData(MpPortableDataFormats.AvFileNames);
                     // what type is it? string[]?
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
                 if (string.IsNullOrWhiteSpace(fl_str)) {
                     // conversion error
-                    Debugger.Break();
+                    MpDebug.Break();
                     return null;
                 }
                 itemType = MpCopyItemType.FileList;
@@ -303,7 +303,7 @@ namespace MonkeyPaste.Avalonia {
             if (itemType == MpCopyItemType.Text) {
                 if (string.IsNullOrEmpty(inputTextFormat)) {
                     // should be set
-                    Debugger.Break();
+                    MpDebug.Break();
                     inputTextFormat = "text";
                 }
 

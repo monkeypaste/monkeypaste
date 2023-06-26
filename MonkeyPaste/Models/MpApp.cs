@@ -166,7 +166,7 @@ namespace MonkeyPaste {
                     case "fk_MpUserDeviceId":
                         var userDevice = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", li.AffectedColumnValue) as MpUserDevice;
                         if (userDevice == null) {
-                            Debugger.Break();
+                            MpDebug.Break();
                             return appFromLog;
                         }
                         appFromLog.UserDeviceId = userDevice.Id;
@@ -200,14 +200,14 @@ namespace MonkeyPaste {
             };
             var userDevice = await MpDb.GetDbObjectByTableGuidAsync("MpUserDevice", objParts[1]) as MpUserDevice;
             if (userDevice == null) {
-                Debugger.Break();
+                MpDebug.Break();
             } else {
                 a.UserDeviceId = userDevice.Id;
             }
 
             var icon = await MpDb.GetDbObjectByTableGuidAsync("MpIcon", objParts[2]) as MpIcon;
             if (icon == null) {
-                Debugger.Break();
+                MpDebug.Break();
             } else {
                 a.IconId = icon.Id;
             }

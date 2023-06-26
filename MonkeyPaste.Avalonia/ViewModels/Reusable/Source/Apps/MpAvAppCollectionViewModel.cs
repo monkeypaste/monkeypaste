@@ -284,14 +284,14 @@ namespace MonkeyPaste.Avalonia {
                 la_pi = Mp.Services.ProcessWatcher.FileSystemProcessInfo;
                 if (la_pi == null) {
                     // need to get this set on init in process watcher
-                    //Debugger.Break();
+                    //MpDebug.Break();
                 }
             }
             if (la_pi != null) {
                 LastActiveAppViewModel = Items.FirstOrDefault(x => x.AppPath.ToLower() == la_pi.ProcessPath.ToLower());
                 if (LastActiveAppViewModel == null) {
                     // what's the deal?
-                    Debugger.Break();
+                    MpDebug.Break();
                     LastActiveAppViewModel = ThisAppViewModel;
                 }
             }

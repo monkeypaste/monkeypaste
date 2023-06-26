@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 catch {
                     // what does imgResource end with? what is value and param?
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
             }
 

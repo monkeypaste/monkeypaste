@@ -156,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
                 var center = c.Bounds.ToPortableRect().Centroid();
                 //rt.Angle = mp.AngleBetween(c.Bounds.BottomRight.ToPortablePoint());//.Wrap(0, 120);
                 rt.Angle = center.AngleBetween(mp);//.Wrap(0, 120);
-                MpConsole.WriteLine($"new angle: {rt.Angle}");
+                //MpConsole.WriteLine($"new angle: {rt.Angle}");
             }
 
             //if (bb.Transform is TranslateTransform tt) {

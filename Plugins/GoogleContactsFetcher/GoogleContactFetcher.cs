@@ -85,7 +85,7 @@ namespace GoogleContactsFetcher {
         private async Task<IEnumerable<MpIContact>> FetchContactsAsync_internal(object personFields) {
             List<MpIContact> fallback = new List<MpIContact>();
             if (!File.Exists(_clientSecretsPath)) {
-                Debugger.Break();
+                MpDebug.Break();
                 MpConsole.WriteTraceLine($"Google Cred file does not exists at path: '{_clientSecretsPath}'");
                 return fallback;
             }

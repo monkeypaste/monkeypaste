@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (valParts.Length > 1) {
                     // should only have parts for color resource
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
                 if (valStr.EndsWith("Icon") || targetType == typeof(WindowIcon)) {
                     return new WindowIcon(
@@ -78,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
                             return geometry;
                         }
                         if (data is string svgPath) {
-                            Debugger.Break();
+                            MpDebug.Break();
                         }
                     }
 

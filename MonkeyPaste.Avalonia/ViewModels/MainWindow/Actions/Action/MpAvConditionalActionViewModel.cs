@@ -429,7 +429,7 @@ namespace MonkeyPaste.Avalonia {
                     foreach (Match m in mc) {
                         var match = GetMatch(compareObj, m.Value, idx);
                         if (match == null) {
-                            Debugger.Break();
+                            MpDebug.Break();
                             break;
                         }
                         matches.Add(match);

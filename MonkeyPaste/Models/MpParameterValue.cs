@@ -81,7 +81,7 @@ namespace MonkeyPaste {
             if (dup_check != null) {
                 MpConsole.WriteLine($"Updating preset Id{hostId} for {paramId}");
                 // when does this happen?
-                //Debugger.Break();
+                //MpDebug.Break();
 
                 dup_check = await MpDataModelProvider.GetItemAsync<MpParameterValue>(dup_check.Id);
                 dup_check.ParameterHostId = hostId;

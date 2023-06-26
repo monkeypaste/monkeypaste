@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -81,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
             if (tsl.FirstOrDefault(x => x.CopyItemSourceType == MpTransactionSourceType.AnalyzerPreset) is MpTransactionSource ts) {
                 if (tsl.Where(x => x.CopyItemSourceType == MpTransactionSourceType.AnalyzerPreset).Count() > 1) {
                     // this would be a big problem, pretty sure only analyzer can be involved in a transaction at time..
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
                 PresetViewModel = MpAvAnalyticItemCollectionViewModel.Instance.AllPresets.FirstOrDefault(x => x.AnalyticItemPresetId == ts.SourceObjId);
             }

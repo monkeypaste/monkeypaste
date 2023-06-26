@@ -246,7 +246,7 @@ namespace MonkeyPaste.Avalonia {
         private static void OnIsOpenChanged() {
             var control = _cmInstance.PlacementTarget;
             if (control == null) {
-                Debugger.Break();
+                MpDebug.Break();
             }
             object dc = GetControlDataContext(control);
             bool is_open = _cmInstance.IsOpen;
@@ -336,12 +336,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (can_select) {
-                if (dc is MpISelectorItemViewModel sivm) {
-                    if (sivm.Selector.SelectedItem != dc) {
-                        wait_for_selection = true;
-                        sivm.Selector.SelectedItem = dc;
-                    }
-                } else if (dc is MpISelectableViewModel svm) {
+                if (dc is MpISelectableViewModel svm) {
                     if (!svm.IsSelected) {
                         wait_for_selection = true;
                     }
@@ -700,7 +695,7 @@ namespace MonkeyPaste.Avalonia {
                 //    icon.GetVisualDescendants<Border>()
                 //    .FirstOrDefault(x => x.Tag != null && x.Tag.ToString() == "IconBorder");
                 if (icon_border == null) {
-                    Debugger.Break();
+                    MpDebug.Break();
                 } else {
                     icon_border.Background = null;
                     icon_border.Bind(
@@ -721,7 +716,7 @@ namespace MonkeyPaste.Avalonia {
                                 Converter = MpAvIconSourceObjToBitmapConverter.Instance
                             });
                     } else {
-                        Debugger.Break();
+                        MpDebug.Break();
                     }
                 }
             }

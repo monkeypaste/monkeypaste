@@ -62,7 +62,7 @@ namespace MonkeyPaste {
             if (args.Length > 2) {
                 string test = raw.sqlite3_value_text(args[2]).utf8_to_string();
                 test = test == null ? string.Empty : test;
-                Debugger.Break();
+                MpDebug.Break();
             }
             bool isMatched = false;
             try {

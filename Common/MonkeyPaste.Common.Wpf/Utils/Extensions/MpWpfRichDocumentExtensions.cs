@@ -302,12 +302,12 @@ namespace MonkeyPaste.Common.Wpf {
             var docStart = tel.ElementAt(0).ContentStart.DocumentStart;
             var toRemove = tel.Where(x => !x.ContentStart.IsInSameDocument(docStart) || !x.ContentEnd.IsInSameDocument(docStart));
             if (toRemove.Count() > 0) {
-                Debugger.Break();
+                MpDebug.Break();
                 tel = tel.Where(x => !toRemove.Contains(x));
                 if (tel.Count() > 0) {
                     docStart = tel.ElementAt(0).ContentStart.DocumentStart;
                 } else {
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
             }
             var itemRangeStart = tel.Aggregate((a, b) =>
@@ -608,7 +608,7 @@ namespace MonkeyPaste.Common.Wpf {
             strFormat = strFormat == string.Empty ? DataFormats.Rtf : strFormat;
             if (strFormat != DataFormats.Text && strFormat != DataFormats.Rtf && strFormat != DataFormats.Xaml && strFormat != DataFormats.XamlPackage) {
                 // invalid format for tr.Load
-                Debugger.Break();
+                MpDebug.Break();
                 return new FlowDocument();
             }
             using (var stream = new MemoryStream(Encoding.Default.GetBytes(str))) {

@@ -125,7 +125,7 @@ namespace MonkeyPaste.Common.Wpf {
 
             var par = tr.Start.Paragraph;
             if (par == null || par.Parent is TextElement te) {
-                Debugger.Break();
+                MpDebug.Break();
             } else if (par.Parent is FlowDocument fd) {
                 fd.Blocks.InsertAfter(par, table);
                 fd.Blocks.Remove(par);
@@ -236,7 +236,7 @@ namespace MonkeyPaste.Common.Wpf {
             //if(start_rect.Width.IsNumber()) {
             //    return start_rect.Width;
             //}
-            //Debugger.Break();
+            //MpDebug.Break();
 
             fallback_ff = fallback_ff == null ? MpWpfHtmlToRtfConverter.CurrentDefaultFontFamily : fallback_ff;
             var p = textRange.Start.Paragraph;

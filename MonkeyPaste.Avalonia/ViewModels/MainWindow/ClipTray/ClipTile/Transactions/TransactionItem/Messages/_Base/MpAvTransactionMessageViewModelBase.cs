@@ -39,14 +39,14 @@ namespace MonkeyPaste.Avalonia {
         public MpITreeItemViewModel ParentTreeItem {
             get {
                 if (_parentTreeItem == this) {
-                    Debugger.Break();
+                    MpDebug.Break();
                 }
                 return _parentTreeItem ?? Parent;
             }
             protected set {
                 if (ParentTreeItem != value) {
                     if (value == this) {
-                        Debugger.Break();
+                        MpDebug.Break();
                     }
                     _parentTreeItem = value;
                     OnPropertyChanged(nameof(ParentTreeItem));

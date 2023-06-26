@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
             var param = host.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId);
             if (param == null) {
                 // must be a bug still with reset preset, check 
-                Debugger.Break();
+                MpDebug.Break($"Reset preset error for host {host}");
                 return null;
             }
             controlType = param.controlType;

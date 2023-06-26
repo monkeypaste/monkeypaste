@@ -36,10 +36,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
         public static bool IsAnyResizing { get; private set; }
 
-        #region Elements
-
-        #endregion
-
         #region Layout
 
         #region BoundWidth Property
@@ -239,7 +235,6 @@ namespace MonkeyPaste.Avalonia {
             false);
 
         #endregion
-
 
         #region CanResize Property
         public static bool GetCanResize(AvaloniaObject obj) {
@@ -543,7 +538,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!GetIsEnabled(control) ||
                     !GetIsResizable(control) ||
                     IsAnyResizing ||
-                    MpAvMainWindowViewModel.Instance.IsAnyItemDragging ||
+                    //MpAvMainWindowViewModel.Instance.IsAnyItemDragging ||
                     (e.IsLeftDown(control) && !GetIsResizing(control))) {
                     return;
                 }

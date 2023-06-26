@@ -633,7 +633,7 @@ namespace MonkeyPaste.Avalonia {
                     // from shortcut
                     tagId = cmdTagId;
                 } else {
-                    Debugger.Break();
+                    MpDebug.Break();
                     tagId = MpTag.AllTagId;
                 }
                 if (Items.FirstOrDefault(x => x.TagId == tagId) is MpAvTagTileViewModel sttvm &&
