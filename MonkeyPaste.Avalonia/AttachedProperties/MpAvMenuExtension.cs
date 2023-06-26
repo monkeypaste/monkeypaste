@@ -752,6 +752,9 @@ namespace MonkeyPaste.Avalonia {
             bool selectOnRightClick = false,
             PopupAnchor anchor = PopupAnchor.None) {
             _cmInstance.Close();
+            if (mivm == null) {
+                return;
+            }
 
             mivm = AddLeadingSeperators(mivm);
             if (mivm.SubItems == null || mivm.SubItems.Count == 0) {

@@ -84,15 +84,6 @@
         </Style>
 
         <!--  TL PIN IMAGE  -->
-        <Style Selector="ToggleButton#PinTileButton Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PinImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
-        </Style>
-
-        <Style Selector="ToggleButton#PinTileButton:checked Image, ToggleButton#PinTileButton:pointerover Image">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PinDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
-        </Style>
     </local:MpAvUserControl.Styles>
     <Grid Classes.tileHover="{Binding IsHovering}"
           Classes.subselect="{Binding IsSubSelectionEnabled}"
@@ -104,6 +95,8 @@
 
         <ToggleButton x:Name="PinTileButton"
                       Classes="noBg noHoverBg noBorder cornerButton top left"
+                      local:MpAvIsHoveringExtension.IsEnabled="True"
+                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsPinButtonHovering, Mode=TwoWay}"
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                       local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
                       IsChecked="{Binding IsPinned}"
@@ -112,7 +105,18 @@
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=TogglePinned, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                        ToolTipText="Toggle Pin" />
             </ToolTip.Tip>
-            <Image />
+            <Image Source="{Binding Source={StaticResource PinImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
+                <Image.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="RotateTransform.Angle"
+                                          Duration="0:0:0.5" />
+                    </Transitions>
+                </Image.Transitions>
+
+                <Image.RenderTransform>
+                    <RotateTransform Angle="{Binding PinButtonAngle}" />
+                </Image.RenderTransform>
+            </Image>
         </ToggleButton>
 
         <!--  TR Pop Out Button  -->

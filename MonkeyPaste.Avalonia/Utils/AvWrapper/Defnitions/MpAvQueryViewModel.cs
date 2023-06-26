@@ -88,26 +88,16 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task QueryForTotalCountAsync(bool isRequery) {
             MpConsole.WriteLine("total count called");
-            int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            //int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            int total_count = await MpContentQuery.QueryForTotalCountAsync(this, null);
             _pageTools.Reset(isRequery);
             _pageTools.SetTotalCount(total_count);
-            //_pageTools.AllQueryIds.Clear();
-            //_pageTools.AllQueryIds.AddRange(result);
 
         }
 
-        //public async Task<List<MpCopyItem>> FetchItemsByQueryIdxListAsync(IEnumerable<int> copyItemQueryIdxList, IEnumerable<int> idsToOmit) {
-        //var fetchRootIds = _pageTools.AllQueryIds
-        //                    .Select((val, idx) => (val, idx))
-        //                    .Where(x => copyItemQueryIdxList.Contains(x.idx) && !idsToOmit.Contains(x.val))
-        //                    .Select(x => x.val).ToList();
-        //var items = await MpDataModelProvider.GetCopyItemsByIdListAsync(fetchRootIds);
-
-        //return items;
-        //}
-
         public async Task<List<MpCopyItem>> FetchPageAsync(int offset, int limit) {
-            var items = await MpContentQuery.FetchItemsAsync(this, offset, limit, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            //var items = await MpContentQuery.FetchItemsAsync(this, offset, limit, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            var items = await MpContentQuery.FetchItemsAsync(this, offset, limit, null);
 
             return items;
         }

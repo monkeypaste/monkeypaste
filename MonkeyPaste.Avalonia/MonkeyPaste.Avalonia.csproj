@@ -366,10 +366,6 @@
     <None Remove="Assets\Images\paste.png" />
     <None Remove="Assets\Images\pause.png" />
     <None Remove="Assets\Images\pin.png" />
-    <None Remove="Assets\Images\pindown.png" />
-    <None Remove="Assets\Images\pindownover.png" />
-    <None Remove="Assets\Images\Pinned.png" />
-    <None Remove="Assets\Images\pinover.png" />
     <None Remove="Assets\Images\plaintext.png" />
     <None Remove="Assets\Images\play.png" />
     <None Remove="Assets\Images\Preferences.png" />
@@ -911,18 +907,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\pin.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\pindown.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\pindownover.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\Pinned.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\pinover.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\play.png">

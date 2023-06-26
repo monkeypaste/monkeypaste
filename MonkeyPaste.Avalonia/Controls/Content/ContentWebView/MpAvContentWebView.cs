@@ -302,7 +302,7 @@ namespace MonkeyPaste.Avalonia {
             bool use_placeholders = true,
             bool ignore_selection = false) {
             if (BindingContext == null ||
-                BindingContext.IsPlaceholder) {
+                BindingContext.IsAnyPlaceholder) {
                 MpDebug.Break();
                 return new MpAvDataObject();
             }
@@ -1239,7 +1239,7 @@ namespace MonkeyPaste.Avalonia {
             while (!IsEditorInitialized || !IsEditorLoaded) {
                 // likely to happen for new content that's been annotated
                 await Task.Delay(100);
-                if (BindingContext.IsPlaceholder) {
+                if (BindingContext.IsAnyPlaceholder) {
                     // content was recycled before editor could load
                     // not sure this will happen but it will mean the 
                     // annotation won't ever be applied 
@@ -1284,7 +1284,8 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (BindingContext.IsPlaceholder && !BindingContext.IsPinned) {
+            if (BindingContext.IsAnyPlaceholder) {
+                // no content
                 return;
             }
             while (!IsEditorInitialized) {
@@ -1310,8 +1311,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (BindingContext == null ||
-                (BindingContext.IsPlaceholder &&
-                !BindingContext.IsPinned)) {
+                BindingContext.IsAnyPlaceholder) {
                 return;
             }
             bool is_reload = BindingContext.PublicHandle == _lastLoadedContentHandle;
@@ -1363,7 +1363,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
-            if (BindingContext.IsPlaceholder) {
+            if (BindingContext.IsAnyPlaceholder) {
                 // occurs for edit
                 return;
             }

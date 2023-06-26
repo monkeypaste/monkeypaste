@@ -90,6 +90,20 @@
                     Value="{StaticResource DefaultBorderBrush_unselected}" />
         </Style>
 
+        <!--  HOVER FROZEN  -->
+        <Style Selector="ListBox.queryListBox > ListBoxItem:pointerover local|MpAvClipBorder#ClipTileContainerBorder.frozen"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource IsHoveringBorderBrush_frozen}" />
+        </Style>
+
+        <!--  DOWN FROZEN  -->
+        <Style Selector="ListBox.queryListBox > ListBoxItem:pressed local|MpAvClipBorder#ClipTileContainerBorder.frozen"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource IsDownBorderBrush_frozen}" />
+        </Style>
+
         <!--  HOVER UNSELECTED  -->
         <Style Selector="ListBox.clipTileListBox > ListBoxItem:pointerover:not(:selected) local|MpAvClipBorder#ClipTileContainerBorder"
                x:DataType="local:MpAvClipTileViewModel">

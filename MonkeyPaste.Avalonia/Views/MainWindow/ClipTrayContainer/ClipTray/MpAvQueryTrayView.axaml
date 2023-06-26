@@ -49,8 +49,6 @@
                     Value="{Binding TrayX}" />
             <Setter Property="Canvas.Top"
                     Value="{Binding TrayY}" />
-            <!--<Setter Property="IsVisible"
-                    Value="{Binding !IsPlaceholder}" />-->
             <Setter Property="Opacity"
                     Value="{Binding IsPlaceholder, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}" />
         </Style>

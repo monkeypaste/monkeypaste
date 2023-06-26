@@ -157,7 +157,21 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpISelectableViewModel Implementation
-        public bool IsSelected { get; set; }
+        private bool _isSelected;
+        public bool IsSelected {
+            get => _isSelected;
+            set {
+                if (IsSelected != value ||
+                    value) {
+                    // NOTE always triggering prop change when selecting
+                    // to update LastSelectedDateTime to ensure
+                    // tray's selected item is this one
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+        }
+
         public DateTime LastSelectedDateTime { get; set; }
 
         public MpISelectorViewModel Selector => Parent;
@@ -223,6 +237,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string PinPlaceholderLabel =>
+            IsPinPlaceholder &&
+            Parent != null &&
+            Parent.PinnedItems.FirstOrDefault(x => x.CopyItemId == PinPlaceholderCopyItemId)
+                is MpAvClipTileViewModel pin_ctvm ?
+                pin_ctvm.CopyItemTitle :
+                string.Empty;
         public string CapToolTipText =>
             IsNextTrashedByAccount ?
                 "Next to trash! Upgrade to avoid 👍" :
@@ -397,6 +418,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public double PinButtonAngle =>
+            IsPinButtonHovering ||
+            IsPinned ?
+                -45 : 0;
+        public bool IsPinButtonHovering { get; set; }
+        public int PinPlaceholderCopyItemId { get; set; }
+        public bool IsPinPlaceholder =>
+            PinPlaceholderCopyItemId > 0;
+        public bool IsPlaceholder =>
+           CopyItem == null &&
+           !IsPinPlaceholder;
+
+        public bool IsAnyPlaceholder =>
+            IsPlaceholder ||
+            IsPinPlaceholder;
+
+        public bool IsFrozen =>
+            IsPinPlaceholder || IsTrashed;
+
         public bool IsNextTrashedByAccount =>
             Parent != null &&
             CopyItemId != 0 &&
@@ -479,14 +519,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        //public bool HasAppendModel => IsAppendNotifier || IsAppendClipTile;
-
-
         #endregion
 
         public bool IsFinalClosingState { get; set; }
         //public string AnnotationsJsonStr { get; set; }
-
         public bool CanShowContextMenu { get; set; } = true;
 
         public bool HasTemplates { get; set; } = false;
@@ -574,7 +610,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsBusy) {
                     return true;
                 }
-                if (!IsPlaceholder && !IsEditorLoaded) {
+                if (!IsAnyPlaceholder && !IsEditorLoaded) {
                     return true;
                 }
 
@@ -642,7 +678,7 @@ namespace MonkeyPaste.Avalonia {
             Parent == null ?
             false :
             MpAvPersistentClipTilePropertiesHelper.IsTileHaveUniqueHeight(CopyItemId, QueryOffsetIdx);
-        public bool IsPlaceholder => CopyItem == null;
+
 
         #region Drag & Drop
 
@@ -656,7 +692,7 @@ namespace MonkeyPaste.Avalonia {
                                 Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
 
         public bool IsResizable =>
-            !IsAppendNotifier && !IsTrashed;
+            !IsAppendNotifier && !IsFrozen;
         public bool CanResize { get; set; } = false;
 
         public bool IsResizing { get; set; } = false;
@@ -670,7 +706,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTitleVisible {
             get {
                 if (IsAppendNotifier ||
-                    IsTrashed ||
+                    IsFrozen ||
                     !IsContentReadOnly ||
                     (TransactionCollectionViewModel != null && TransactionCollectionViewModel.IsTransactionPaneOpen)) {
                     return false;
@@ -688,7 +724,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsCornerButtonsVisible {
             get {
-                if (IsTrashed) {
+                if (IsFrozen) {
                     return false;
                 }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
@@ -700,41 +736,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return false;
 
-            }
-        }
-
-        private bool _isDetailVisible = true;
-        public bool IsDetailVisible {
-            get {
-                return _isDetailVisible;
-            }
-            set {
-                if (IsDetailVisible != value) {
-                    _isDetailVisible = value;
-                    OnPropertyChanged(nameof(IsDetailVisible));
-                }
-            }
-        }
-
-        private bool _isHeaderAndFooterVisible = true;
-        public bool IsHeaderAndFooterVisible {
-            get {
-                if (IsAppendNotifier) {
-                    return false;
-                }
-                return _isHeaderAndFooterVisible;
-            }
-            set {
-                if (IsAppendNotifier) {
-                    return;
-                }
-                if (IsHeaderAndFooterVisible != value) {
-                    _isHeaderAndFooterVisible = value;
-                    IsDetailVisible = value;
-                    IsTitleVisible = value;
-                    OnPropertyChanged(nameof(IsHeaderAndFooterVisible));
-                    OnPropertyChanged(nameof(IsCornerButtonsVisible));
-                }
             }
         }
 
@@ -751,7 +752,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int CopyCount {
             get {
-                if (IsPlaceholder) {
+                if (IsAnyPlaceholder) {
                     return 0;
                 }
                 return CopyItem.CopyCount;
@@ -768,7 +769,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int PasteCount {
             get {
-                if (IsPlaceholder) {
+                if (IsAnyPlaceholder) {
                     return 0;
                 }
                 return CopyItem.PasteCount;
@@ -785,7 +786,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string EditorFormattedItemData {
             get {
-                if (IsPlaceholder) {
+                if (IsAnyPlaceholder) {
                     return string.Empty;
                 }
                 switch (CopyItemType) {
@@ -1022,7 +1023,9 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             bool is_reload =
                 (CopyItemId == 0 && ci == null) ||
-                (ci != null && CopyItemId == ci.Id);
+                (ci != null && CopyItemId == ci.Id) ||
+                (ci != null && PinPlaceholderCopyItemId == ci.Id && queryOffset >= 0);
+
             _contentView = null;
             if (!is_reload) {
                 _curItemRandomHexColor = string.Empty;
@@ -1056,15 +1059,29 @@ namespace MonkeyPaste.Avalonia {
                 BoundWidth = w;
                 BoundHeight = h;
             }
-            // NOTE FileItems are init'd before ciid is set so Items are busy when WebView is loading content
-            FileItemCollectionViewModel.InitializeAsync(ci).FireAndForgetSafeAsync(this);
 
-            CopyItem = ci;
-            CycleDetailCommand.Execute(0);
-            await TransactionCollectionViewModel.InitializeAsync(CopyItemId);
 
-            if (isRestoringSelection) {
-                Parent.RestoreSelectionState(this);
+            if (ci != null &&
+                queryOffset >= 0 &&
+                Mp.Services.ContentQueryTools.GetOmittedContentIds().Contains(ci.Id)) {
+                // pin placeholder item
+                PinPlaceholderCopyItemId = ci.Id;
+                // NOTE ensure model is null on pin placeholders
+                CopyItem = null;
+            } else {
+                // normal tile (or placeholder)
+                PinPlaceholderCopyItemId = 0;
+
+                // NOTE FileItems are init'd before ciid is set so Items are busy when WebView is loading content
+                FileItemCollectionViewModel.InitializeAsync(ci).FireAndForgetSafeAsync(this);
+
+                CopyItem = ci;
+                CycleDetailCommand.Execute(0);
+                await TransactionCollectionViewModel.InitializeAsync(CopyItemId);
+
+                if (isRestoringSelection) {
+                    Parent.RestoreSelectionState(this);
+                }
             }
 
             OnPropertyChanged(nameof(IconResourceObj));
@@ -1075,7 +1092,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsAnyBusy));
             OnPropertyChanged(nameof(KeyString));
 
-            //MpMessenger.Send<MpMessageType>(MpMessageType.ContentItemsChanged, this);
 
             if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(CopyItemId, queryOffset)) {
                 IsContentReadOnly = false;
@@ -1089,20 +1105,25 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(TrayY));
             OnPropertyChanged(nameof(Next));
             OnPropertyChanged(nameof(Prev));
-            //if(Parent.IsAnyAppendMode && HasAppendModel) {
-            //    OnPropertyChanged(nameof(HasAppendModel));
-            //}
+            OnPropertyChanged(nameof(IsPinPlaceholder));
+            OnPropertyChanged(nameof(IsFrozen));
+            OnPropertyChanged(nameof(IsPinned));
+            OnPropertyChanged(nameof(PinPlaceholderLabel));
+
             IsBusy = false;
         }
 
         public async Task InitTitleLayersAsync() {
-            if (IsPlaceholder) {
+            TitleLayerZIndexes = Enumerable.Range(1, 3).ToArray();
+            TitleLayerHexColors = Enumerable.Repeat(MpSystemColors.Transparent, 4).ToArray();
+
+            if (IsAnyPlaceholder) {
                 return;
             }
             while (TransactionCollectionViewModel.IsAnyBusy) {
                 await Task.Delay(100);
             }
-            if (IsPlaceholder) {
+            if (IsAnyPlaceholder) {
                 return;
             }
 
@@ -1554,8 +1575,13 @@ namespace MonkeyPaste.Avalonia {
                     //UpdateDetails();
                     break;
                 case nameof(IsPinned):
+                    OnPropertyChanged(nameof(PinButtonAngle));
                     OnPropertyChanged(nameof(IsPlaceholder));
                     ResetTileSizeToDefaultCommand.Execute(null);
+                    break;
+
+                case nameof(IsPinButtonHovering):
+                    OnPropertyChanged(nameof(PinButtonAngle));
                     break;
                 case nameof(IsTitleVisible):
                     OnPropertyChanged(nameof(BoundHeight));
@@ -1741,41 +1767,17 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(TrayX):
                 case nameof(TrayY):
                     if (Next == null) {
-                        //if (Parent.IsAnyResizing) {
-                        //    // TrayX is only changed on layout change OR resize
-                        //    // only update list when next is null (tail)
-                        //    Parent.RefreshLayout();
-                        //}
                         break;
                     }
-
-                    //OnPropertyChanged(nameof(BoundWidth));
-                    //OnPropertyChanged(nameof(BoundHeight));
-                    //OnPropertyChanged(nameof(MaxWidth));
-                    //OnPropertyChanged(nameof(MaxHeight));
                     Parent.UpdateTileRectCommand.Execute(new object[] { Next, this });
-                    //Next.OnPropertyChanged(nameof(Next.TrayX));
                     break;
                 case nameof(QueryOffsetIdx):
                     if (IsPlaceholder) {
                         break;
                     }
-                    //if(Parent != null) {
-                    //    Parent.ValidateQueryTray();
-                    //}
-                    //MpRect prevRect = Prev == null ? null : Prev.TrayRect;
                     Parent.UpdateTileRectCommand.Execute(new object[] { this, Prev });
-                    //Parent.UpdateTileRectCommand.Execute(this);
-                    //OnPropertyChanged(nameof(TrayX));
                     break;
                 case nameof(IsChildWindowOpen):
-                    //if (Parent == null) {
-                    //    break;
-                    //}
-                    //Parent.OnPropertyChanged(nameof(Parent.InternalPinnedItems));
-                    //if (!IsChildWindowOpen) {
-                    //    PopInTileCommand.Execute(null);
-                    //}
                     break;
                 case nameof(CopyItemSize1):
                 case nameof(CopyItemSize2):
@@ -1987,12 +1989,12 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsSubSelectionEnabled = true;
             }, () => {
-                return !IsSubSelectionEnabled && !IsTrashed;
+                return !IsSubSelectionEnabled && !IsFrozen;
             });
 
         public ICommand ChangeColorCommand => new MpCommand<string>(
             (b) => {
-                CopyItemHexColor = b;// b.ToHex();
+                CopyItemHexColor = b;
             });
         public ICommand SendSubSelectedToEmailCommand => new MpCommand(
             () => {
@@ -2121,15 +2123,11 @@ namespace MonkeyPaste.Avalonia {
                 if (control == null) {
                     return;
                 }
-                if (Parent.SelectedItem != this) {
-                    // NOTE since theres 2 lists need to make sure this is most recent selected
-                    //SelectTileCommand.Execute(null);
-                    LastSelectedDateTime = DateTime.Now;
-                    MpDebug.Assert(Parent.SelectedItem == this, $"Context menu selection for tile '{this}' failed.");
-                }
+
+                IsSelected = true;
                 MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
             }, (args) => {
-                return CanShowContextMenu;
+                return CanShowContextMenu && !IsPinPlaceholder;
             });
 
         public MpIAsyncCommand PersistSelectionStateCommand => new MpAsyncCommand(
@@ -2140,7 +2138,7 @@ namespace MonkeyPaste.Avalonia {
                     MpAvPersistentClipTilePropertiesHelper.AddPersistentSubSelectionState(CopyItemId, QueryOffsetIdx, sel_state);
                 }
             }, () => {
-                return !IsPlaceholder;
+                return !IsAnyPlaceholder;
             });
 
         public MpIAsyncCommand PopInTileCommand => new MpAsyncCommand(async () => {

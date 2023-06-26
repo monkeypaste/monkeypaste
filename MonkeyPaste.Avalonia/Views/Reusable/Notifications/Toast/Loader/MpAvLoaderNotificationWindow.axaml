@@ -26,15 +26,16 @@
         Title="">
     <Window.Resources>
         <LinearGradientBrush x:Key="OuterGradientBrush"
-                             StartPoint="0%,0%"
                              SpreadMethod="Repeat"
+                             TransformOrigin="50%,50%"
+                             StartPoint="0%,0%"
                              EndPoint="100%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Offset="0"
                               Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <GradientStop Offset="0.36"
                               Color="{DynamicResource ThemeInteractiveColor}" />
-              <GradientStop Offset="0.77"
+                <GradientStop Offset="0.77"
                               Color="{DynamicResource ThemeInteractiveColor}" />
                 <GradientStop Offset="1"
                               Color="{DynamicResource ThemeInteractiveBgColor}" />

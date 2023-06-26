@@ -34,6 +34,7 @@ namespace MonkeyPaste.Avalonia {
             Instance = this;
 
             AvaloniaXamlLoader.Load(this);
+
             this.AttachedToVisualTree += MpAvQueryTrayView_AttachedToVisualTree;
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
@@ -41,6 +42,7 @@ namespace MonkeyPaste.Avalonia {
             //advSearchSplitter.DragDelta += AdvSearchSplitter_DragDelta;
             //advSearchSplitter.AddHandler(GridSplitter.DragDeltaEvent, AdvSearchSplitter_DragDelta, RoutingStrategies.Tunnel);
         }
+
 
         private void MpAvQueryTrayView_AttachedToVisualTree(object sender, global::Avalonia.VisualTreeAttachmentEventArgs e) {
             //InitDnd();

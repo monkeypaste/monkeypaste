@@ -598,8 +598,8 @@ namespace MonkeyPaste.Avalonia {
                 UpdateEditorShortcutsMessageStr();
                 Dispatcher.UIThread.Post(() => {
                     MpAvClipTrayViewModel.Instance
-                        .AllItems
-                        .Where(x => !x.IsPlaceholder)
+                        .AllActiveItems
+                        .Where(x => !x.IsAnyPlaceholder)
                         .Select(x => x.GetContentView())
                         .Cast<MpAvContentWebView>()
                         .Where(x => x != null)
