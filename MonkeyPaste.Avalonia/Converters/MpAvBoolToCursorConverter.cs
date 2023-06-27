@@ -10,22 +10,20 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvBoolToCursorConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            StandardCursorType cursor_type = StandardCursorType.Arrow;
+            StandardCursorType? cursor_type = StandardCursorType.Arrow;
             if (value is bool boolVal) {
                 if (parameter is string paramStr &&
                     paramStr.SplitNoEmpty("|") is string[] paramParts) {
-                    if (boolVal) {
-                        cursor_type = paramParts[0].ToEnum<StandardCursorType>();
+                    string result_part = boolVal ? paramParts[0] : paramParts[1];
+                    // for unset return null to not alter cursor
+                    if (result_part.ToLower() == "unset") {
+                        cursor_type = null;
                     } else {
-                        cursor_type = paramParts[1].ToEnum<StandardCursorType>();
+                        cursor_type = result_part.ToEnum<StandardCursorType>();
                     }
                 }
             }
-            if (cursor_type == StandardCursorType.None) {
-                // NOTE treating None as unset, not lack of cursor
-                return null;
-            }
-            return new Cursor(cursor_type);
+            return cursor_type.HasValue ? new Cursor(cursor_type.Value) : null;
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {

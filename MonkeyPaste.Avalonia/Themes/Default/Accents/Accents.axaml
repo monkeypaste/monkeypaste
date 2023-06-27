@@ -275,22 +275,6 @@
         <SolidColorBrush x:Key="ModalClipTileContentBackgroundBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="1" />
 
         <!--  BORDER  -->
-        <SolidColorBrush x:Key="DefaultBorderBrush_unselected" Color="{DynamicResource ThemeNoAccentColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
-
-        <SolidColorBrush x:Key="DefaultBorderBrush_selected" Color="{DynamicResource ThemeAccent2Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
-
-        <SolidColorBrush x:Key="IsHoveringBorderBrush_unselected" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
-
-        <SolidColorBrush x:Key="IsHoveringBorderBrush_frozen" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
-        <SolidColorBrush x:Key="IsDownBorderBrush_frozen" Color="{DynamicResource ThemeAccent5BgColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
-
-        <SolidColorBrush x:Key="IsHoveringBorderBrush_selected" Color="{DynamicResource ThemeAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
-       
-        <SolidColorBrush x:Key="CanResizeBorderBrush" Color="{DynamicResource ThemeAccent4Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
-
-        <SolidColorBrush x:Key="IsResizingBorderBrush" Color="{DynamicResource ThemeAccent4BgColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
-
-
         <!--  SETTINGS WINDOW  -->
         <SolidColorBrush x:Key="SettingsWindowBgBrush" Color="{DynamicResource ThemeColor}" />
 

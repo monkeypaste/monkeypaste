@@ -90,7 +90,6 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("total count called");
             int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
             //int total_count = await MpContentQuery.QueryForTotalCountAsync(this, null);
-            _pageTools.Reset(isRequery);
             _pageTools.SetTotalCount(total_count);
 
         }
@@ -101,7 +100,14 @@ namespace MonkeyPaste.Avalonia {
 
             return items;
         }
+        public async Task<int> FetchItemOffsetIdxAsync(int ciid) {
+            if (ciid <= 0) {
+                return -1;
+            }
+            int offset_idx = await MpContentQuery.FetchItemOffsetAsync(this, ciid, Mp.Services.ContentQueryTools.GetOmittedContentIds());
 
+            return offset_idx;
+        }
 
         public void RestoreProviderValues() {
             _isRestoringValues = true;

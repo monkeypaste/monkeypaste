@@ -1136,7 +1136,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = false;
             MpAvClipTrayViewModel.Instance.UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
-            MpAvClipTrayViewModel.Instance.ProcessAccountCapsAsync("link", ciid).FireAndForgetSafeAsync();
+            MpAvClipTrayViewModel.Instance.ProcessAccountCapsAsync("link", TagId).FireAndForgetSafeAsync();
         }
 
         private void UpdateBadge() {

@@ -87,56 +87,63 @@
                 </Transitions>
             </Setter>
             <Setter Property="BorderBrush"
-                    Value="{StaticResource DefaultBorderBrush_unselected}" />
+                    Value="{StaticResource ThemeNoAccentColor}" />
         </Style>
 
         <!--  HOVER FROZEN  -->
         <Style Selector="ListBox.queryListBox > ListBoxItem:pointerover local|MpAvClipBorder#ClipTileContainerBorder.frozen"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
-                    Value="{StaticResource IsHoveringBorderBrush_frozen}" />
+                    Value="{StaticResource ThemeAccent5Color}" />
         </Style>
 
-        <!--  DOWN FROZEN  -->
-        <Style Selector="ListBox.queryListBox > ListBoxItem:pressed local|MpAvClipBorder#ClipTileContainerBorder.frozen"
+        <!--  HOVER IMPLICIT  -->
+        <Style Selector="ListBox.clipTileListBox > ListBoxItem local|MpAvClipBorder#ClipTileContainerBorder.implicitHover"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
-                    Value="{StaticResource IsDownBorderBrush_frozen}" />
+                    Value="{StaticResource ThemeAccent5Color}" />
         </Style>
 
         <!--  HOVER UNSELECTED  -->
         <Style Selector="ListBox.clipTileListBox > ListBoxItem:pointerover:not(:selected) local|MpAvClipBorder#ClipTileContainerBorder:not(.frozen)"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
-                    Value="{StaticResource IsHoveringBorderBrush_unselected}" />
+                    Value="{StaticResource ThemeAccent1Color}" />
         </Style>
 
         <!--  DEFAULT SELECTED  -->
-        <Style Selector="ListBox.clipTileListBox > ListBoxItem:selected local|MpAvClipBorder#ClipTileContainerBorder:not(.frozen)"
+        <Style Selector="ListBox.clipTileListBox > ListBoxItem:selected local|MpAvClipBorder#ClipTileContainerBorder:not(.frozen):not(.implicitHover)"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
-                    Value="{StaticResource DefaultBorderBrush_selected}" />
+                    Value="{StaticResource ThemeAccent2Color}" />
+        </Style>
+
+        <!--  TRASHED SELECTED  -->
+        <Style Selector="ListBox.clipTileListBox > ListBoxItem:selected local|MpAvClipBorder#ClipTileContainerBorder.trashed"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource ThemeAccent5BgColor}" />
         </Style>
 
         <!--  HOVER SELECTED  -->
         <Style Selector="ListBox.clipTileListBox > ListBoxItem:pointerover:selected local|MpAvClipBorder#ClipTileContainerBorder:not(.frozen)"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
-                    Value="{StaticResource IsHoveringBorderBrush_selected}" />
+                    Value="{StaticResource ThemeAccent3Color}" />
         </Style>
 
         <!--  DEFAULT RESIZE  -->
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.IsResizing"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
-                    Value="{StaticResource IsResizingBorderBrush}" />
+                    Value="{StaticResource ThemeAccent4BgColor}" />
         </Style>
 
         <!--  HOVER RESIZE  -->
         <Style Selector="ListBox.clipTileListBox > ListBoxItem:selected:pointerover local|MpAvClipBorder#ClipTileContainerBorder.CanResize:not(.IsResizing)"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
-                    Value="{StaticResource CanResizeBorderBrush}" />
+                    Value="{StaticResource ThemeAccent4Color}" />
         </Style>
 
         <!--  TILE FOCUS  -->

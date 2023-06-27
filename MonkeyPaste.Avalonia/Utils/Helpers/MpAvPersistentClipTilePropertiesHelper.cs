@@ -10,6 +10,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTileDragging { get; set; }
         public bool IsSelected { get; set; }
 
+        public bool IsPinPlaceholder { get; set; }
+
         public bool IsTitleReadOnly { get; set; } = true;
         public bool IsContentReadOnly { get; set; } = true;
 
@@ -24,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
             //QueryOffsetIdx < 0 ||
             SubSelectionState != null ||
             IsTileDragging ||
+            IsPinPlaceholder ||
             IsSelected ||
             !IsTitleReadOnly ||
             !IsContentReadOnly ||
@@ -252,17 +255,37 @@ namespace MonkeyPaste.Avalonia {
                 pp.UniqueHeight.HasValue;
         }
 
-        public static void ClearPersistentWidths() {
-            _props.ForEach(x => x.Value.UniqueWidth = null);
+        public static void ClearPersistentQuerySizes() {
+            ClearPersistentQueryWidths();
+            ClearPersistentQueryHeights();
+        }
+
+        public static void ClearPersistentQueryWidths() {
+            _props
+                .Where(x => x.Value.QueryOffsetIdx >= 0)
+                .ForEach(x => x.Value.UniqueWidth = null);
             CleanupProps();
         }
 
-        public static void ClearPersistentHeights() {
-            _props.ForEach(x => x.Value.UniqueHeight = null);
+        public static void ClearPersistentQueryHeights() {
+            _props
+                .Where(x => x.Value.QueryOffsetIdx >= 0)
+                .ForEach(x => x.Value.UniqueHeight = null);
             CleanupProps();
         }
         #endregion
 
+        #region IsPinPlaceholder
+        public static void AddOrReplaceIsPinPlaceholder(int ciid, bool isPinPlaceholder, int idx) {
+            if (GetProps(ciid, false, idx) == null && !isPinPlaceholder) {
+                // no need to update
+                return;
+            }
+            GetProps(ciid, true, idx).IsPinPlaceholder = isPinPlaceholder;
+            GetProps(ciid, true, idx).QueryOffsetIdx = idx;
+        }
+
+        #endregion
         #endregion
 
         #region Private Methods

@@ -7,30 +7,4 @@
         <CornerRadius x:Key="TileCornerRadius">10,10,10,10</CornerRadius>
         <Thickness x:Key="TileInnerSpacing">5,5,5,5</Thickness>
     </Styles.Resources>
-    <!--  ListBoxItem Border .TileBorder  -->
-
-    <!--  Hover Unselected  -->
-
-    <!--  Hover Unselected (dnd)  -->
-    <!--<Style Selector="ListBoxItem:not(:selected) :is(Border).TileHover"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="BorderBrush"
-                    Value="{StaticResource IsHoveringBorderBrush_unselected}" />
-        </Style>-->
-
-
-    <!--  Default Selected  -->
-
-
-
-    <!--  Hover Selected  -->
-
-    <!--  Hover Selected (dnd)  -->
-    <!--<Style Selector="ListBoxItem:selected :is(Border).TileHover:not(.CanResize):not(.IsResizing)"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="BorderBrush"
-                    Value="{StaticResource IsHoveringBorderBrush_selected}" />
-        </Style>-->
-
-    <!--  Default Resize  -->
 </Styles>

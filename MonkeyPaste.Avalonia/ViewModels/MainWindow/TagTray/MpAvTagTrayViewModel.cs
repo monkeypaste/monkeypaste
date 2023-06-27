@@ -301,6 +301,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(PinnedItems));
             OnPropertyChanged(nameof(RootItems));
 
+            Items.FirstOrDefault(x => x.TagId == MpTag.FiltersTagId).IsExpanded = true;
+
             IsBusy = false;
         }
 

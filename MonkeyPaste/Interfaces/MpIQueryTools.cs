@@ -3,10 +3,8 @@
 namespace MonkeyPaste {
     public interface MpIContentQueryPage {
         IEnumerable<int> GetOmittedContentIds();
-        IEnumerable<int> GetPlaceholderContentIds();
         int Offset { get; }
         int Limit { get; }
-        IEnumerable<int> ContentIds { get; }
     }
 
     public interface MpITagQueryTools {

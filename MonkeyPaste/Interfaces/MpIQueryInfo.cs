@@ -18,6 +18,8 @@ namespace MonkeyPaste {
         Task<List<MpCopyItem>> FetchPageAsync(int offset, int limit);
         Task QueryForTotalCountAsync(bool isRequery);
 
+        Task<int> FetchItemOffsetIdxAsync(int ciid);
+
         void NotifyQueryChanged(bool forceRequery = false);
 
         void RestoreProviderValues();

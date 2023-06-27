@@ -76,9 +76,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentQueryTools Implementation
 
-        IEnumerable<int> MpIContentQueryPage.GetPlaceholderContentIds() =>
-            PinnedItems
-            .Select(x => x.CopyItemId);
         IEnumerable<int> MpIContentQueryPage.GetOmittedContentIds() =>
             MpAvTagTrayViewModel.Instance.TrashTagViewModel.IsSelected ?
                     new int[] { } :
@@ -90,10 +87,6 @@ namespace MonkeyPaste.Avalonia {
         int MpIContentQueryPage.Limit =>
             TailQueryIdx;
 
-        IEnumerable<int> MpIContentQueryPage.ContentIds =>
-            QueryItems
-            .OrderBy(x => x.QueryOffsetIdx)
-            .Select(x => x.CopyItemId);
 
         #endregion
 
@@ -822,7 +815,7 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvClipTileViewModel> Items { get; set; } = new ObservableCollection<MpAvClipTileViewModel>();
         public ObservableCollection<MpAvClipTileViewModel> PinnedItems { get; set; } = new ObservableCollection<MpAvClipTileViewModel>();
 
-        public IEnumerable<MpAvClipTileViewModel> InternalPinnedItems =>
+        public IList<MpAvClipTileViewModel> InternalPinnedItems =>
             PinnedItems
             .Where(x => !x.IsChildWindowOpen && !x.IsAppendNotifier)
             .Take(MpPrefViewModel.Instance.MaxStagedClipCount)
@@ -1527,20 +1520,22 @@ namespace MonkeyPaste.Avalonia {
             if (obj is MpAvClipTileViewModel) {
                 ctvm = obj as MpAvClipTileViewModel;
             } else if (obj is int ciid) {
+                if (ciid < 0) {
+                    // means nothing is selected
+                    ScrollIntoView(null);
+                    return;
+                }
                 ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
                 if (ctvm == null) {
-                    int ciid_query_idx = Mp.Services.Query.PageTools.GetItemOffsetIdx(ciid);
-                    if (ciid_query_idx < 0) {
-                        if (ciid < 0) {
-                            // means nothing is selected
-                            ScrollIntoView(null);
+
+                    Dispatcher.UIThread.Post(async () => {
+                        //int ciid_query_idx = Mp.Services.Query.PageTools.GetItemOffsetIdx(ciid);
+                        int ciid_query_idx = await Mp.Services.Query.FetchItemOffsetIdxAsync(ciid);
+                        if (ciid_query_idx < 0) {
+                            // ciid is neither pinned nor in query (maybe should reset query here to id but prolly not right place)
+                            MpDebug.Break();
                             return;
                         }
-                        // ciid is neither pinned nor in query (maybe should reset query here to id but prolly not right place)
-                        MpDebug.Break();
-                        return;
-                    }
-                    Dispatcher.UIThread.Post(async () => {
                         QueryCommand.Execute(ciid_query_idx);
                         while (IsAnyBusy) { await Task.Delay(100); }
                         ctvm = Items.FirstOrDefault(x => x.CopyItemId == ciid);
@@ -1817,6 +1812,8 @@ namespace MonkeyPaste.Avalonia {
                             $"Max archive is {Mp.Services.AccountTools.GetTrashCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
                     }
                     if (!string.IsNullOrEmpty(add_msg_sb.ToString())) {
+                        add_msg_sb.AppendLine(string.Empty);
+                        add_msg_sb.AppendLine(string.Empty);
                         if (IsAddingStartupClipboardItem) {
                             add_msg_sb.AppendLine($"* To prevent add on startup, uncheck '{nameof(MpPrefViewModel.Instance.AddClipboardOnStartup).ToLabel()}' or '{nameof(MpPrefViewModel.Instance.IsClipboardListeningOnStartup).ToLabel()}' ");
                         } else {
@@ -1920,7 +1917,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpAvPersistentClipTilePropertiesHelper.RemoveProps(ci.Id);
 
-                Mp.Services.Query.PageTools.AddIdToOmit(ci.Id);
+                //Mp.Services.Query.PageTools.AddIdToOmit(ci.Id);
                 //MpDataModelProvider.AvailableQueryCopyItemIds.Remove(ci.Id);
 
                 var removed_ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == ci.Id);
@@ -1976,13 +1973,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (is_part_of_query) {
                     // when unlinked item is part of current query remove its offset and do a reset query
-
-                    if (Mp.Services.Query.PageTools.AddIdToOmit(cit.CopyItemId)) {
-                        Mp.Services.Query.NotifyQueryChanged();
-                    } else {
-                        // where/when was item removed from query?
-                        MpDebug.Break();
-                    }
+                    Mp.Services.Query.NotifyQueryChanged();
                 }
             }
         }
@@ -2335,14 +2326,7 @@ namespace MonkeyPaste.Avalonia {
                             MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChangeEnd);
                         });
                     } else {
-                        Dispatcher.UIThread.Post(async () => {
-                            while (IsAnyBusy) {
-                                await Task.Delay(100);
-                            }
-                            // BUG this works around initial tile size being tiny and triggering resize fits
-                            // them right
-                            Items.ForEach(x => x.UpdateQueryOffset());
-                        });
+                        RefreshQueryPageOffsetsAsync().FireAndForgetSafeAsync();
                     }
 
                     break;
@@ -2354,7 +2338,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.TotalQueryCountChanged:
                     OnPropertyChanged(nameof(Mp.Services.Query.TotalAvailableItemsInQuery));
-                    AllItems.ForEach(x => x.UpdateQueryOffset());
+                    //AllItems.ForEach(x => x.UpdateQueryOffset());
+                    RefreshQueryPageOffsetsAsync().FireAndForgetSafeAsync();
                     break;
 
                 // DND
@@ -2446,6 +2431,28 @@ namespace MonkeyPaste.Avalonia {
                 await AddItemFromDataObjectAsync(mpdo);
                 IsAddingStartupClipboardItem = false;
             });
+        }
+
+        private async Task RefreshQueryPageOffsetsAsync() {
+            Dispatcher.UIThread.VerifyAccess();
+
+            while (IsAnyBusy) {
+                await Task.Delay(100);
+            }
+            int head_offset_idx = -1;
+            if (!IsQueryTrayEmpty) {
+                var ordered_query_item_ids = QueryItems.OrderBy(x => x.QueryOffsetIdx).Select(x => x.IsPinPlaceholder ? x.PinPlaceholderCopyItemId : x.CopyItemId).ToList();
+                head_offset_idx = await Mp.Services.Query.FetchItemOffsetIdxAsync(ordered_query_item_ids.First());
+                for (int i = 0; i < ordered_query_item_ids.Count; i++) {
+                    int new_offset_idx = head_offset_idx + i;
+                    var ctvm = QueryItems.FirstOrDefault(x => x.IsPinPlaceholder ? x.PinPlaceholderCopyItemId == ordered_query_item_ids[i] : x.CopyItemId == ordered_query_item_ids[i]);
+                    if (ctvm == null) {
+                        continue;
+                    }
+                    ctvm.UpdateQueryOffset(new_offset_idx);
+                }
+
+            }
         }
         private async Task<MpAvClipTileViewModel> CreateOrRetrieveClipTileViewModelAsync(MpCopyItem ci) {
             MpAvClipTileViewModel nctvm = null;
@@ -2918,12 +2925,11 @@ namespace MonkeyPaste.Avalonia {
                      // create temp tile w/ model ref
                      var temp_ctvm = await CreateClipTileViewModelAsync(ctvm_to_pin.CopyItem);
                      // unload query tile
-                     //query_ctvm_to_pin.TriggerUnloadedNotification(true, false);
-                     await query_ctvm_to_pin.InitializeAsync(null);
+                     query_ctvm_to_pin.TriggerUnloadedNotification(false, false);
+                     //await query_ctvm_to_pin.InitializeAsync(null, query_ctvm_to_pin.QueryOffsetIdx);
                      // use temp tile to pin
                      ctvm_to_pin = temp_ctvm;
                  }
-                 Mp.Services.Query.PageTools.AddIdToOmit(ctvm_to_pin.CopyItemId);
 
                  if (ctvm_to_pin.IsPinned) {
                      // cases:
@@ -3030,31 +3036,33 @@ namespace MonkeyPaste.Avalonia {
                  } else {
                      // unpinned tile is part of current query page, load into pin placeholder
                      int pin_placeholder_query_idx = pin_placeholder_ctvm.QueryOffsetIdx;
-                     await pin_placeholder_ctvm.InitializeAsync(null);
+                     await pin_placeholder_ctvm.InitializeAsync(null, pin_placeholder_query_idx);
 
                      await pin_placeholder_ctvm.InitializeAsync(
                          unpinned_ctvm.CopyItem,
                          pin_placeholder_query_idx);
 
-                     //to_select_ctvm = pin_placeholder_ctvm;
+                     to_select_ctvm = pin_placeholder_ctvm;
                  }
 
-                 // unpinned tile not in query page, try to select next pinned tile
-                 if (IsPinTrayEmpty) {
-                     while (IsAnyBusy) {
-                         // query returns before sub tasks complete and updated offsets are needed
-                         await Task.Delay(100);
+                 if (to_select_ctvm == null) {
+                     // unpinned tile not in query page, try to select next pinned tile
+                     if (IsPinTrayEmpty) {
+                         while (IsAnyBusy) {
+                             // query returns before sub tasks complete and updated offsets are needed
+                             await Task.Delay(100);
+                         }
+                         // select left most visible tile if pin tray empty
+                         to_select_ctvm =
+                            VisibleQueryItems
+                            .Where(x => !x.IsPinPlaceholder)
+                            .AggregateOrDefault((a, b) => a.QueryOffsetIdx < b.QueryOffsetIdx ? a : b);
+                     } else {
+                         // prefer select prev pinned neighbor tile
+                         to_select_ctvm =
+                            InternalPinnedItems
+                            .Aggregate((a, b) => unpinned_ctvm_idx - a.ItemIdx < unpinned_ctvm_idx - b.ItemIdx ? a : b);
                      }
-                     // select left most visible tile if pin tray empty
-                     to_select_ctvm =
-                        VisibleQueryItems
-                        .Where(x => !x.IsPinPlaceholder)
-                        .AggregateOrDefault((a, b) => a.QueryOffsetIdx < b.QueryOffsetIdx ? a : b);
-                 } else {
-                     // prefer select prev pinned neighbor tile
-                     to_select_ctvm =
-                        InternalPinnedItems
-                        .Aggregate((a, b) => unpinned_ctvm_idx - a.ItemIdx < unpinned_ctvm_idx - b.ItemIdx ? a : b);
                  }
 
                  if (to_select_ctvm == null) {
@@ -3499,7 +3507,7 @@ namespace MonkeyPaste.Avalonia {
                 // trigger unload event to wipe js eval's that maybe pending 
                 Items.Where(x => !x.IsAnyPlaceholder).ForEach(x => x.TriggerUnloadedNotification(false));
 
-                MpAvPersistentClipTilePropertiesHelper.ClearPersistentWidths();
+                MpAvPersistentClipTilePropertiesHelper.ClearPersistentQuerySizes();
             }
 
             if (isRequery || isInPlaceRequery) {
@@ -3982,14 +3990,26 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
 
+
             var trashed_ctvm = AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid);
             if (trashed_ctvm == null) {
                 return;
             }
 
+
             if (trashed_ctvm.IsPinned) {
+
+                bool needs_query_refresh =
+                    trashed_ctvm.HasPinPlaceholder;
                 UnpinTileCommand.Execute(trashed_ctvm);
-                return;
+                if (needs_query_refresh) {
+                    // needs requery to remove placeholder
+                    // or the frozen trash item (when query is not trash query)
+                    // is used
+                    while (IsAnyBusy) { await Task.Delay(100); }
+                } else {
+                    return;
+                }
             }
             // trigger in place requery to remove trashed item
             QueryCommand.Execute(string.Empty);

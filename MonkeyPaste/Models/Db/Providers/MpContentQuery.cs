@@ -26,14 +26,23 @@ namespace MonkeyPaste {
             object result = await PeformQueryAsync_internal(head_qi, offset, limit, idsToOmit, false);
             return result as List<MpCopyItem>;
         }
+        public static async Task<int> FetchItemOffsetAsync(
+            MpIQueryInfo head_qi,
+            int ciid,
+            IEnumerable<int> idsToOmit) {
+            object result = await PeformQueryAsync_internal(head_qi, -1, -1, idsToOmit, false, ciid);
+            return (int)result;
+        }
 
         private static async Task<object> PeformQueryAsync_internal(
             MpIQueryInfo head_qi,
             int offset,
             int limit,
             IEnumerable<int> ci_idsToOmit,
-            bool isCountQuery) {
-            if (!isCountQuery && (offset < 0 || limit < 0)) {
+            bool isCountQuery,
+            int offsetRootId = -1) {
+            bool isOffsetQuery = offsetRootId > 0;
+            if (!isCountQuery && !isOffsetQuery && (offset < 0 || limit < 0)) {
                 MpDebug.Break($"Warning, bad fetch request. Offset '{offset}' Limit '{limit}'");
             }
             // Item1 = Param Query
@@ -61,7 +70,7 @@ namespace MonkeyPaste {
                     qi_tag_ids = Mp.Services.TagQueryTools.GetSelfAndAllDescendantsTagIds(qi.TagId);
                 }
 
-                sub_queries.Add(GetContentQuery(qi, qi_tag_ids, ci_idsToOmit, idx++, isCountQuery));
+                sub_queries.Add(GetContentQuery(qi, qi_tag_ids, ci_idsToOmit, idx++, isCountQuery, offsetRootId));
             }
             _cur_qi = null;
 
@@ -77,6 +86,19 @@ namespace MonkeyPaste {
             string orderBy_clause = $"ORDER BY {head_qi.GetSortField()} {head_qi.GetSortDirection()}";
             sb.AppendLine(orderBy_clause);
 
+            if (isOffsetQuery) {
+                // item idx query
+
+                // NOTE since this is from a view w/ subqueries there's no rowid alias
+                // so need to temporarily return whole result and grab udex
+                string offset_query = $"SELECT rowid FROM(SELECT RootId, ROW_NUMBER() OVER (ORDER BY RootId) rowid FROM({sb}) WHERE RootId={offsetRootId}";
+                var offset_args = sub_queries.SelectMany(x => x.Item3).ToArray();
+                int offset_idx = await MpDb.QueryScalarAsync<int>(offset_query, offset_args);
+
+                MpConsole.WriteLine($"Offset Idx Query: ");
+                MpConsole.WriteLine(MpDb.GetParameterizedQueryString(offset_query, offset_args));
+                return offset_idx;
+            }
             if (isCountQuery) {
                 // total count query
                 string count_query = $"SELECT COUNT(RootId) FROM({sb})";
@@ -106,13 +128,14 @@ namespace MonkeyPaste {
             IEnumerable<int> tagIds,
             IEnumerable<int> ci_idsToOmit,
             int idx,
-            bool isCountQuery) {
+            bool isCountQuery,
+            int offsetRootId) {
 
             // Item1 = INTERSECT|UNION|EXCEPT
             // Item2 = Param Query
             // Item3 = Params
 
-            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, ci_idsToOmit, idx, isCountQuery, out var args);
+            string qi_root_id_query_str = ConvertQueryToSql(qi, tagIds, ci_idsToOmit, idx, isCountQuery, offsetRootId, out var args);
 
             string join =
                 qi.JoinType == MpLogicalQueryType.Or ?
@@ -135,6 +158,7 @@ namespace MonkeyPaste {
             IEnumerable<int> ci_idsToOmit,
             int idx,
             bool isCountQuery,
+            int offsetRootId,
             out object[] args) {
             MpContentQueryBitFlags qf = qi.QueryFlags;
             List<string> types = new List<string>();
@@ -201,9 +225,10 @@ namespace MonkeyPaste {
             // SELECT GEN
 
             string selectClause = $"RootId,{qi.GetSortField()}";
-            if (isCountQuery && idx == 0) {
+            if ((isCountQuery || offsetRootId > 0) && idx == 0) {
                 selectClause = "DISTINCT " + selectClause;
             }
+
             string query = @$"SELECT {selectClause} FROM MpContentQueryView WHERE {whereClause}";
             args = argList.ToArray();
             return query;

@@ -213,12 +213,12 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel Next {
             get {
-                if (IsPlaceholder || Parent == null) {
+                if (IsPlaceholder || Parent == null || IsChildWindowOpen) {
                     return null;
                 }
                 if (IsPinned) {
-                    int pinIdx = Parent.PinnedItems.IndexOf(this);
-                    return Parent.PinnedItems.FirstOrDefault(x => Parent.PinnedItems.IndexOf(x) == pinIdx + 1);
+                    int pinIdx = Parent.InternalPinnedItems.IndexOf(this);
+                    return Parent.InternalPinnedItems.FirstOrDefault(x => Parent.InternalPinnedItems.IndexOf(x) == pinIdx + 1);
                 }
                 return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx + 1);
             }
@@ -226,28 +226,38 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel Prev {
             get {
-                if (IsPlaceholder || Parent == null || QueryOffsetIdx == 0) {
+                if (IsPlaceholder || Parent == null || QueryOffsetIdx == 0 || IsChildWindowOpen) {
                     return null;
                 }
                 if (IsPinned) {
-                    int pinIdx = Parent.PinnedItems.IndexOf(this);
-                    return Parent.PinnedItems.FirstOrDefault(x => Parent.PinnedItems.IndexOf(x) == pinIdx - 1);
+                    int pinIdx = Parent.InternalPinnedItems.IndexOf(this);
+                    return Parent.InternalPinnedItems.FirstOrDefault(x => Parent.InternalPinnedItems.IndexOf(x) == pinIdx - 1);
                 }
                 return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx - 1);
             }
         }
 
-        #endregion        
-
-        #region Appearance
-
-        public string PinPlaceholderLabel =>
+        public MpAvClipTileViewModel PinnedItemForThisPlaceholder =>
             IsPinPlaceholder &&
             Parent != null &&
             Parent.PinnedItems.FirstOrDefault(x => x.CopyItemId == PinPlaceholderCopyItemId)
                 is MpAvClipTileViewModel pin_ctvm ?
-                pin_ctvm.CopyItemTitle :
-                string.Empty;
+                pin_ctvm : null;
+
+        public MpAvClipTileViewModel PlaceholderForThisPinnedItem =>
+            IsPinned &&
+            Parent.QueryItems.FirstOrDefault(x => x.PinPlaceholderCopyItemId == CopyItemId)
+                is MpAvClipTileViewModel pin_placeholder_ctvm ?
+                pin_placeholder_ctvm : null;
+
+        #endregion
+
+        #region Appearance
+
+        public string PinPlaceholderLabel =>
+            PinnedItemForThisPlaceholder == null ?
+                string.Empty :
+                PinnedItemForThisPlaceholder.CopyItemTitle;
         public string CapToolTipText =>
             IsNextTrashedByAccount ?
                 "Next to trash! Upgrade to avoid 👍" :
@@ -430,6 +440,10 @@ namespace MonkeyPaste.Avalonia {
         public int PinPlaceholderCopyItemId { get; set; }
         public bool IsPinPlaceholder =>
             PinPlaceholderCopyItemId > 0;
+
+        public bool HasPinPlaceholder =>
+            PlaceholderForThisPinnedItem != null;
+
         public bool IsPlaceholder =>
            CopyItem == null &&
            !IsPinPlaceholder;
@@ -489,6 +503,18 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsOverDetailGrid { get; set; }
         public bool IsHovering { get; set; }
+
+        public bool IsPlaceholderForThisPinnedItemHovering =>
+            PlaceholderForThisPinnedItem != null &&
+            PlaceholderForThisPinnedItem.IsHovering;
+
+        public bool IsPinnedItemForThisPlaceholderHovering =>
+            PinnedItemForThisPlaceholder != null &&
+            PinnedItemForThisPlaceholder.IsHovering;
+
+        public bool IsImplicitHover =>
+            IsPlaceholderForThisPinnedItemHovering ||
+            IsPinnedItemForThisPlaceholderHovering;
         public bool IsHoveringOverSourceIcon { get; set; } = false;
 
         public bool IsHostWindowActive {
@@ -1067,7 +1093,8 @@ namespace MonkeyPaste.Avalonia {
 
             if (ci != null &&
                 queryOffset >= 0 &&
-                Mp.Services.ContentQueryTools.GetPlaceholderContentIds().Contains(ci.Id)) {
+                Parent != null &&
+                Parent.PinnedItems.Any(x => x.CopyItemId == ci.Id)) {
                 // pin placeholder item
                 PinPlaceholderCopyItemId = ci.Id;
                 // NOTE ensure model is null on pin placeholders
@@ -1088,13 +1115,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            OnPropertyChanged(nameof(IconResourceObj));
-            OnPropertyChanged(nameof(IsPlaceholder));
-            OnPropertyChanged(nameof(IsTextItem));
-            OnPropertyChanged(nameof(IsFileListItem));
-            OnPropertyChanged(nameof(CopyItemId));
-            OnPropertyChanged(nameof(IsAnyBusy));
-            OnPropertyChanged(nameof(KeyString));
+            UpdateQueryOffset(queryOffset);
 
 
             if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(CopyItemId, queryOffset)) {
@@ -1103,7 +1124,14 @@ namespace MonkeyPaste.Avalonia {
             if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId, queryOffset)) {
                 IsTitleReadOnly = false;
             }
-            UpdateQueryOffset(queryOffset);
+
+            OnPropertyChanged(nameof(IconResourceObj));
+            OnPropertyChanged(nameof(IsPlaceholder));
+            OnPropertyChanged(nameof(IsTextItem));
+            OnPropertyChanged(nameof(IsFileListItem));
+            OnPropertyChanged(nameof(CopyItemId));
+            OnPropertyChanged(nameof(IsAnyBusy));
+            OnPropertyChanged(nameof(KeyString));
 
             OnPropertyChanged(nameof(TrayX));
             OnPropertyChanged(nameof(TrayY));
@@ -1176,23 +1204,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void TriggerUnloadedNotification(bool removeQueryItem, bool clearPersistentProps = true) {
-            if (clearPersistentProps) {
+            if (clearPersistentProps && !IsPinPlaceholder) {
                 MpAvPersistentClipTilePropertiesHelper.RemoveProps(CopyItemId);
             } else {
                 // don't clear, occurs when query tile is pinning
             }
 
-            if (removeQueryItem) {
-                bool in_page = Mp.Services.Query.PageTools.AddIdToOmit(CopyItemId);
-                if (in_page) {
-                    Parent.QueryItems.Where(x => x.QueryOffsetIdx > QueryOffsetIdx).ForEach(x => x.UpdateQueryOffset(x.QueryOffsetIdx - 1));
-                }
+            if (removeQueryItem && QueryOffsetIdx >= 0) {
+                // query item deleted
+                Parent.QueryItems.Where(x => x.QueryOffsetIdx > QueryOffsetIdx).ForEach(x => x.UpdateQueryOffset(x.QueryOffsetIdx - 1));
             }
+            PinPlaceholderCopyItemId = 0;
             CopyItem = null;
             UpdateQueryOffset(-1);
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(CopyItemId));
             OnPropertyChanged(nameof(QueryOffsetIdx));
+            OnPropertyChanged(nameof(IsPinPlaceholder));
         }
 
         public void OpenPopOutWindow(MpAppendModeType amt) {
@@ -1269,7 +1297,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpAvClipTileViewModel> GetNeighborByRowOffsetAsync(int row_offset) {
-            var items = IsPinned ? Parent.PinnedItems : Parent.Items;
+            var items = IsPinned ? Parent.InternalPinnedItems : Parent.Items;
             MpAvClipTileViewModel target_ctvm = null;
             if (row_offset < 0) {
                 var pre_items =
@@ -1323,12 +1351,15 @@ namespace MonkeyPaste.Avalonia {
         public async Task<MpAvClipTileViewModel> GetNeighborByColumnOffsetAsync(int col_offset) {
             int target_idx = -1;
             if (IsPinned) {
-                target_idx = Parent.PinnedItems.IndexOf(this) + col_offset;
+                // find col neighbor of pinned tile
+                target_idx = Parent.InternalPinnedItems.IndexOf(this) + col_offset;
                 if (target_idx < 0) {
+                    // target is before all pinned items
                     return null;
                 }
-                if (target_idx >= Parent.PinnedItems.Count) {
-                    target_idx = target_idx - Parent.PinnedItems.Count;
+                if (target_idx >= Parent.InternalPinnedItems.Count) {
+                    // neighbor is beyond pinned items
+                    target_idx = target_idx - Parent.InternalPinnedItems.Count;
                     if (target_idx < Parent.VisibleQueryItems.Count()) {
                         if (Parent.DefaultScrollOrientation == Orientation.Horizontal) {
                             return Parent.VisibleQueryItems.OrderBy(x => TrayX).ElementAt(target_idx);
@@ -1337,36 +1368,38 @@ namespace MonkeyPaste.Avalonia {
                     }
                     return null;
                 }
-                return Parent.PinnedItems[target_idx];
+                return Parent.InternalPinnedItems[target_idx];
             }
+            // find col neighbor of query tile
             target_idx = QueryOffsetIdx + col_offset;
             if (target_idx < 0) {
+                // target is before query tray
                 if (Parent.IsPinTrayEmpty) {
                     return null;
                 }
-                target_idx = Parent.PinnedItems.Count + target_idx;
+                target_idx = Parent.InternalPinnedItems.Count + target_idx;
                 if (target_idx < 0) {
                     return null;
                 }
-                return Parent.PinnedItems[target_idx];
-            } else if (target_idx >= Mp.Services.Query.TotalAvailableItemsInQuery) {
+                return Parent.InternalPinnedItems[target_idx];
+            }
+            if (target_idx >= Mp.Services.Query.TotalAvailableItemsInQuery) {
+                // target is after all query items
                 return null;
             }
             var neighbor_ctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
             if (neighbor_ctvm == null) {
-                int neighbor_ciid = Mp.Services.Query.PageTools.GetItemId(target_idx);
-                if (neighbor_ciid < 0) {
-                    while (neighbor_ciid < 0) {
-                        Parent.QueryCommand.Execute(col_offset > 0);
-                        while (Parent.IsAnyBusy) { await Task.Delay(100); }
-                        neighbor_ciid = Mp.Services.Query.PageTools.GetItemId(target_idx);
-                    }
+                // target is outside current query page
+                while (neighbor_ctvm == null) {
+                    // perform load more in target dir
+                    Parent.QueryCommand.Execute(col_offset > 0);
+                    while (Parent.IsQuerying) { await Task.Delay(100); }
+                    neighbor_ctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
                 }
-
-                Parent.ScrollIntoView(neighbor_ciid);
-                await Task.Delay(100);
-                while (Parent.IsAnyBusy) { await Task.Delay(100); }
-                return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
+                //Parent.ScrollIntoView(neighbor_ctvm);
+                //await Task.Delay(100);
+                //while (Parent.IsAnyBusy) { await Task.Delay(100); }
+                //return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
             }
             return neighbor_ctvm;
         }
@@ -1442,13 +1475,9 @@ namespace MonkeyPaste.Avalonia {
             //(Parent.CreateQrCodeFromSelectedClipsCommand as MpCommand).NotifyCanExecuteChanged();
         }
 
-        public void UpdateQueryOffset(int forceOffsetIdx = -2) {
+        public void UpdateQueryOffset(int forceOffsetIdx) {
             // NOTE can't signify default by -1 since pinned tiles have -1 so using -2
-            if (forceOffsetIdx == -2) {
-                _queryOffsetIdx = Mp.Services.Query.PageTools.GetItemOffsetIdx(CopyItemId);
-            } else {
-                _queryOffsetIdx = forceOffsetIdx;
-            }
+            _queryOffsetIdx = forceOffsetIdx;
             MpAvPersistentClipTilePropertiesHelper.UpdateQueryOffsetIdx(CopyItemId, _queryOffsetIdx);
             OnPropertyChanged(nameof(QueryOffsetIdx));
         }
@@ -1481,6 +1510,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         public override string ToString() {
+
+            if (IsPinPlaceholder) {
+                return $"[PIN HOLDER]Tile Idx: {QueryOffsetIdx} Id: {PinPlaceholderCopyItemId} Title: '{PinPlaceholderLabel}'";
+            }
             return $"Tile Idx: {QueryOffsetIdx} Id: {CopyItemId} Title: '{CopyItemTitle}'";
         }
         #endregion
@@ -1508,6 +1541,14 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsAnyBusy));
                     OnPropertyChanged(nameof(EmbedHost));
                     break;
+                case nameof(CopyItemTitle):
+                    if (Parent != null &&
+                       IsPinned &&
+                       Parent.QueryItems.FirstOrDefault(x => x.PinPlaceholderCopyItemId == CopyItemId)
+                            is MpAvClipTileViewModel pp_ctvm) {
+                        pp_ctvm.OnPropertyChanged(nameof(pp_ctvm.PinPlaceholderLabel));
+                    }
+                    break;
                 case nameof(IsHovering):
                     // refresh busy
                     OnPropertyChanged(nameof(IsAnyBusy));
@@ -1517,6 +1558,16 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.CanTouchScroll));
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     OnPropertyChanged(nameof(DetailHexColor));
+                    if (PinnedItemForThisPlaceholder != null) {
+                        PinnedItemForThisPlaceholder.OnPropertyChanged(nameof(PinnedItemForThisPlaceholder.IsPinnedItemForThisPlaceholderHovering));
+                    }
+                    if (PlaceholderForThisPinnedItem != null) {
+                        PlaceholderForThisPinnedItem.OnPropertyChanged(nameof(PlaceholderForThisPinnedItem.IsPlaceholderForThisPinnedItemHovering));
+                    }
+                    break;
+                case nameof(IsPinnedItemForThisPlaceholderHovering):
+                case nameof(IsPlaceholderForThisPinnedItemHovering):
+                    OnPropertyChanged(nameof(IsImplicitHover));
                     break;
                 case nameof(IsCornerButtonsVisible):
                     //if (IsCornerButtonsVisible) {
@@ -1743,6 +1794,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(BoundWidth):
                 case nameof(BoundHeight):
+                    if (CopyItemTitle == "Image 110") {
+
+                    }
                     if (IsResizing) {
                         //this occurs when mainwindow is resized or user gives tile unique width
                         if (e1.PropertyName == nameof(BoundWidth)) {

@@ -43,14 +43,26 @@
         </Style>
 
 
-        <!--  CAP OVERLAY  -->
-        <Style Selector="Border#AccountCapOverlay">
-            <Setter Property="Opacity"
-                    Value="1.0" />
+
+        <!--  PIN PLACEHOLDER OVERLAY  -->
+        <Style Selector="Grid#PinPlaceholderOverlay Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource PinImage}, ConverterParameter=themefg, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
-        <Style Selector="Border#AccountCapOverlay.faded">
-            <Setter Property="Opacity"
-                    Value="0.2" />
+
+        <Style Selector="Grid#PinPlaceholderOverlay TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.TileHover Grid#PinPlaceholderOverlay Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource PinImage}, ConverterParameter=themeaccent1fg, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+        </Style>
+
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.TileHover Grid#PinPlaceholderOverlay TextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
 
@@ -59,11 +71,13 @@
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
+                          Classes.implicitHover="{Binding IsImplicitHover}"
                           Classes.TileHover="{Binding IsHovering}"
                           Classes.CanResize="{Binding CanResize}"
                           Classes.IsResizing="{Binding IsResizing}"
                           Classes.IsAnyBusy="{Binding IsAnyBusy}"
                           Classes.frozen="{Binding IsFrozen}"
+                          Classes.trashed="{Binding IsTrashed}"
                           local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           local:MpAvReceivesEventsExtension.SenderFilter="{Binding EmbedHost}"
                           VerticalAlignment="Stretch"
@@ -129,7 +143,7 @@
                     <local:MpAvToolTipView ToolTipText="{Binding CapToolTipText}" />
                 </ToolTip.Tip>
                 <Border x:Name="AccountCapOverlay"
-                        Classes.faded="{Binding IsHovering}"
+                        Opacity="{Binding IsHovering, ConverterParameter=0.2|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                     <Border.Transitions>
@@ -155,6 +169,7 @@
             <!--  PIN PLACEHOLDER OVERLAY  -->
 
             <Grid x:Name="PinPlaceholderOverlay"
+                  Opacity="{Binding IsHovering, ConverterParameter=1|0.2, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                   Cursor="Hand"
                   Grid.ColumnSpan="2"
                   Grid.RowSpan="3"
@@ -165,6 +180,12 @@
                 <Grid.Background>
                     <SolidColorBrush Color="{DynamicResource ClipTileContentBackgroundBrush}" Opacity="0.6" />
                 </Grid.Background>
+                <Grid.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity"
+                                          Duration="0:0:0.3" />
+                    </Transitions>
+                </Grid.Transitions>
                 <Image Grid.Row="0"
                        Classes="square"
                        Stretch="Uniform"
@@ -189,7 +210,6 @@
                            TextWrapping="WrapWithOverflow"
                            Margin="30,15,30,0"
                            FontWeight="Bold"
-                           Foreground="{DynamicResource ThemeInteractiveColor}"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Top">
                     <TextBlock.Text>
@@ -314,7 +334,7 @@
                     Grid.Row="0"
                     Grid.RowSpan="3"
                     Grid.ColumnSpan="2"
-                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=SizeWestEast|None}"
+                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=SizeWestEast|unset}"
                     local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
                     local:MpAvResizeExtension.MaxHeight="{Binding MaxHeight}"
@@ -346,7 +366,7 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=SizeNorthSouth|None}"
+                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=SizeNorthSouth|unset}"
                     IsHitTestVisible="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"
@@ -379,7 +399,7 @@
             <Border x:Name="ClipTileMultiResizeBorder"
                     Grid.ColumnSpan="2"
                     Grid.RowSpan="3"
-                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=BottomRightCorner|None}"
+                    Cursor="{Binding IsResizerEnabled, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=BottomRightCorner|unset}"
                     IsHitTestVisible="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.IsEnabled="{Binding IsResizerEnabled}"
                     local:MpAvResizeExtension.MinHeight="{Binding MinHeight}"

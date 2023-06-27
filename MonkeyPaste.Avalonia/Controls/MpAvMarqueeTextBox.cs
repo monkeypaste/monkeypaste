@@ -666,7 +666,7 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnPointerExited(PointerEventArgs e) {
             base.OnPointerExited(e);
-            this.Cursor = Cursor.Default;
+            this.Cursor = new Cursor(StandardCursorType.Arrow);
             if (NavigateUriCommand != null && IsReadOnly) {
                 Dispatcher.UIThread.Post(this.InvalidateVisual);
             }
