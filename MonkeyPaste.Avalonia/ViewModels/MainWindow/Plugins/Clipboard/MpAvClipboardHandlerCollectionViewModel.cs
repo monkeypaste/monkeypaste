@@ -401,6 +401,7 @@ namespace MonkeyPaste.Avalonia {
                         EnabledReaders
                         .Where(x => x.Parent.ClipboardPluginComponent == read_component)
                         .Select(x => x.Parent.HandledFormat)
+                        .Union(MpPortableDataFormats.InternalFormats)
                         .Distinct()
                         .ToList(),
                     items =

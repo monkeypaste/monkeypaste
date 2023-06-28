@@ -286,6 +286,7 @@
             </StackPanel>
         </Border>
 
+      <!--BADGE COUNT -->
         <Border Background="Red"
                 ClipToBounds="False"
                 MinWidth="15"

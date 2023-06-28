@@ -105,7 +105,7 @@ namespace MonkeyPaste {
 
         #region MpISourceRef Implementation
         [Ignore]
-        int MpISourceRef.Priority => 1;
+        int MpISourceRef.Priority => (int)MpTransactionSourceType.CopyItem;
         [Ignore]
         int MpISourceRef.SourceObjId => Id;
 
@@ -118,7 +118,7 @@ namespace MonkeyPaste {
         public string Uri => Mp.Services.SourceRefTools.ConvertToInternalUrl(this);
         #endregion
 
-        #region  Implementation
+        #region MpIClonableDbModel Implementation
 
         public async Task<MpCopyItem> CloneDbModelAsync(
             bool deepClone = true,
@@ -167,6 +167,7 @@ namespace MonkeyPaste {
             MpCopyItemType itemType = MpCopyItemType.Text,
             string title = "",
             int dataObjectId = 0,
+            int iconId = 0,
             bool suppressWrite = false) {
 
             if (dataObjectId <= 0 && !suppressWrite) {
@@ -180,7 +181,8 @@ namespace MonkeyPaste {
                 ItemData = data,
                 ItemType = itemType,
                 CopyCount = 1,
-                DataObjectId = dataObjectId
+                DataObjectId = dataObjectId,
+                IconId = iconId
             };
             if (!suppressWrite) {
                 await newCopyItem.WriteToDatabaseAsync();

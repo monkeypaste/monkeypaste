@@ -51,7 +51,7 @@ namespace MonkeyPaste {
 
         #region MpISourceRef Implementation
 
-        public int Priority => 1;
+        public int Priority => (int)MpTransactionSourceType.UserDevice;
         public int SourceObjId => Id;
         public MpTransactionSourceType SourceType => MpTransactionSourceType.UserDevice;
         public object IconResourceObj => "BrainImage";

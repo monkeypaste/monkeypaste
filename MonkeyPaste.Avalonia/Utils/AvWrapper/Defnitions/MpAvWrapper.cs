@@ -21,7 +21,9 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Bootstrapped Services 
+        #region Startup Set Services 
+
+        public MpIContentBuilder ContentBuilder { get; set; }
 
         public MpISettingsTools SettingsTools { get; set; }
 
@@ -34,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIGlobalInputListener GlobalInputListener { get; set; }
         public MpIShortcutGestureLocator ShortcutGestureLocator { get; set; }
 
-        #endregion Bootstrapped services
+        #endregion 
 
         public MpIPlatformUserInfo PlatformUserInfo { get; set; }
         public MpIThisAppInfo ThisAppInfo { get; set; }

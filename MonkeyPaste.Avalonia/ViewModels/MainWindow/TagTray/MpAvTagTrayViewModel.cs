@@ -14,6 +14,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTagTrayViewModel :
         MpAvSelectorViewModelBase<object, MpAvTagTileViewModel>,
         MpIAsyncCollectionObject,
+        MpIBadgeCountViewModel,
         MpIHasDragOverProperty,
         MpIHoverableViewModel,
         MpISelectableViewModel,
@@ -40,6 +41,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIBadgeCountViewModel Implementation
+
+        // NOTE since badges
+        public int BadgeCount =>
+            Items.Any(x => x.BadgeCount > 0) ? 1 : 0;
+
+        #endregion
 
         #region MpIPopupMenuPicker Implementation
 
@@ -214,6 +223,8 @@ namespace MonkeyPaste.Avalonia {
         public int LastActiveId =>
             LastSelectedActiveItem == null ? 0 : LastSelectedActiveItem.TagId;
 
+        public bool CanSelect =>
+            !MpAvMainWindowViewModel.Instance.IsAnyItemDragging;
         public bool IsSelecting { get; set; } = false;
         //public bool IsNavButtonsVisible => MpAvMainWindowViewModel.Instance.IsHorizontalOrientation && 
         //                                    TagTrayTotalWidth > MaxTagTrayScreenWidth;
@@ -676,7 +687,10 @@ namespace MonkeyPaste.Avalonia {
                 IsSelecting = false;
             },
             (args) => {
-                return args != null && !IsSelecting;
+                return
+                    args != null &&
+                    !IsSelecting &&
+                    CanSelect; // rejects select during dnd (only condition)
             });
 
 

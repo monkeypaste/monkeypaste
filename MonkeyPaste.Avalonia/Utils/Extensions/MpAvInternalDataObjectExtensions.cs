@@ -112,6 +112,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region Content
 
+        public static void FinalizeContentOleTitle(this IDataObject ido, bool isFullContentReference, bool isCopy) {
+            // title should be unaltered ci.title
+            if (isFullContentReference && !isCopy) {
+                // no changes to full non-copy item
+                return;
+            }
+            string title = ido.Get(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT) as string;
+            if (title == null) {
+                return;
+            }
+            if (isCopy) {
+                title += " (Copy)";
+            }
+            if (!isFullContentReference) {
+                // give priority to fragment 
+                // since c
+                title += " [Part]";
+            }
+            ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, title);
+        }
         public static void AddContentReferences(this IDataObject ido, MpCopyItem ci, bool isFullContentReference) {
             if (ci == null || ci.Id == 0) {
                 return;
@@ -152,37 +172,8 @@ namespace MonkeyPaste.Avalonia {
             this IDataObject avdo,
             //bool addAsNewItem = false,
             bool is_copy = false) {
-            bool from_ext = !avdo.ContainsContentRef();
-            MpPortableDataObject mpdo = await Mp.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avdo) as MpPortableDataObject;
-
-            string drag_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
-            if (!string.IsNullOrEmpty(drag_ctvm_pub_handle)) {
-                var drag_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drag_ctvm_pub_handle);
-                if (drag_ctvm != null) {
-                    // tile sub-selection drop
-
-                    mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { Mp.Services.SourceRefTools.ConvertToInternalUrl(drag_ctvm.CopyItem) });
-                }
-            }
-
-            MpCopyItem result_ci = null;
-
-            result_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
-                mpdo,
-                transType: MpTransactionType.Created,
-                force_ext_sources: from_ext,
-                force_allow_dup: is_copy);
-
-            //if (addAsNewItem) {
-            //    MpAvClipTrayViewModel.Instance.AddNewItemsCommand.Execute(result_ci);
-            //    // wait for busy
-            //    await Task.Delay(50);
-            //    while (MpAvClipTrayViewModel.Instance.IsPinTrayBusy) {
-            //        await Task.Delay(100);
-            //    }
-
-            //}
-            return result_ci;
+            var result = await Mp.Services.ContentBuilder.BuildFromDataObject(avdo, is_copy);
+            return result;
         }
 
         #endregion

@@ -129,7 +129,37 @@
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Collection Tree" />
             </ToolTip.Tip>
-            <PathIcon Data="{StaticResource BooksSvg}" />
+            <Grid>
+                <PathIcon Data="{StaticResource BooksSvg}" />
+
+                <!--  BADGE  -->
+                <Border Background="Red"
+                        ClipToBounds="False"
+                        Width="10"
+                        Height="10"
+                        CornerRadius="7.5"
+                        BorderThickness="1"
+                        BorderBrush="White"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
+                        RenderTransform="translateX(-30px) translateY(-15px)"
+                        IsVisible="{Binding BadgeCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}, Source={x:Static local:MpAvTagTrayViewModel.Instance}}">
+                    <!--<Grid>
+                    -->
+                    <!--  NOTE Text won't horizontally align unless in grid  -->
+                    <!--
+                        <TextBlock Foreground="White"
+                                   FontSize="10"
+                                   MinWidth="15"
+                                   Height="15"
+                                   TextAlignment="Center"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   Text="{Binding BadgeCount}" />
+                    </Grid>-->
+                </Border>
+            </Grid>
+
         </RadioButton>
         <RadioButton x:Name="ClipboardHandlerToggleButton"
                      Grid.Row="1"

@@ -107,7 +107,7 @@ function resetDrop(fromHost, wasLeave, wasCancel) {
     if (wasLeave && !isDragging() && globals.WasNoSelectBeforeDragStart) {
         disableSubSelection();
     } else {
-        if (wasLeave && isDragging()) {
+        if (!wasLeave && isDragging()) {
             // NOTE dragend isn't called on drag cancel (from escape key)
             onDragEnd();
         }

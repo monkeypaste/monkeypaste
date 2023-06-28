@@ -21,8 +21,10 @@ using static System.Net.Mime.MediaTypeNames;
 using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
+
     public class MpAvClipTrayViewModel :
         MpViewModelBase<MpAvClipTileViewModel>,
+        MpIContentBuilder,
         MpIAsyncCollectionObject,
         MpIPagingScrollViewerViewModel,
         MpIActionComponent,
@@ -34,6 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         private int _anchor_query_idx { get; set; } = -1;
         private bool _isMainWindowOrientationChanging = false;
+        private object _addDataObjectContentLock = new object();
 
         #endregion
 
@@ -57,6 +60,35 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIContentBuilder Implementation
+
+        async Task<MpCopyItem> MpIContentBuilder.BuildFromDataObject(object avOrPortableDataObject, bool is_copy) {
+            MpAvDataObject mpdo = await Mp.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avOrPortableDataObject) as MpAvDataObject;
+
+            if (mpdo == null) {
+                return null;
+            }
+
+            if (mpdo.ContainsContentRef()) {
+                // internal source, finalize title 
+                bool is_partial_internal = mpdo.ContainsPartialContentRef();
+                mpdo.FinalizeContentOleTitle(!is_partial_internal, is_copy);
+            }
+            //string source_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
+            //if (!string.IsNullOrEmpty(source_ctvm_pub_handle)) {
+            //    // ido from internal content source
+            //    var source_ctvm = AllItems.FirstOrDefault(x => x.PublicHandle == source_ctvm_pub_handle);
+            //    if (source_ctvm != null) {
+            //        // sub-selection ido
+            //        mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { Mp.Services.SourceRefTools.ConvertToInternalUrl(source_ctvm.CopyItem) });
+            //    }
+            //}
+            MpCopyItem content = await AddItemFromDataObjectAsync(mpdo, is_copy);
+            return content;
+        }
+
+        #endregion
 
         #region MpIProgressIndicatorViewModel Implementation
 
@@ -1355,6 +1387,7 @@ namespace MonkeyPaste.Avalonia {
             MpDb.SyncDelete += MpDbObject_SyncDelete;
 
             Mp.Services.ContentQueryTools = this;
+            Mp.Services.ContentBuilder = this;
 
             Mp.Services.ClipboardMonitor.OnClipboardChanged += ClipboardWatcher_OnClipboardChanged;
             Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
@@ -2632,36 +2665,48 @@ namespace MonkeyPaste.Avalonia {
             IsArrowSelecting = false;
         }
 
-        private async Task AddItemFromDataObjectAsync(MpPortableDataObject cd) {
-            while (IsAddingClipboardItem) {
-                await Task.Delay(100);
-                MpConsole.WriteLine("waiting to add item to cliptray...");
-            }
+        private async Task<MpCopyItem> AddItemFromDataObjectAsync(MpPortableDataObject mpdo, bool is_copy = false) {
+            await MpFifoAsyncQueue.WaitByConditionAsync(
+                lockObj: _addDataObjectContentLock,
+                waitWhenTrueFunc: () => {
+                    MpConsole.WriteLine("waiting to add item to cliptray...");
+                    return IsAddingClipboardItem;
+                });
+
             if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                 MpConsole.WriteLine($"Add content blocked, acct capped. Ensuring accuracy...");
-                await ProcessAccountCapsAsync("blocked", cd);
+                await ProcessAccountCapsAsync("blocked", mpdo);
                 if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                     MpConsole.WriteLine($"Add content blocked confirmed.");
-                    return;
+                    return null;
                 }
+            }
+            bool from_ext = false;
+            if (mpdo is IDataObject ido) {
+                // should always be avdo but trying to keep portable interfaces...
+                from_ext = !ido.ContainsContentRef();
             }
 
             IsAddingClipboardItem = true;
 
             MpCopyItem newCopyItem = await Mp.Services.CopyItemBuilder.BuildAsync(
-                pdo: cd,
-                transType: MpTransactionType.Created);
+                pdo: mpdo,
+                transType: MpTransactionType.Created,
+                force_ext_sources: from_ext,
+                force_allow_dup: is_copy);
 
-            await AddUpdateOrAppendCopyItemAsync(newCopyItem);
+            MpCopyItem processed_result = await AddUpdateOrAppendCopyItemAsync(newCopyItem);
 
             IsAddingClipboardItem = false;
+
+            return processed_result;
         }
 
-        public async Task AddUpdateOrAppendCopyItemAsync(MpCopyItem ci) {
+        public async Task<MpCopyItem> AddUpdateOrAppendCopyItemAsync(MpCopyItem ci) {
             if (ci == null) {
                 MpConsole.WriteLine("Could not build copyitem, cannot add");
                 OnCopyItemAdd?.Invoke(this, null);
-                return;
+                return null;
             }
 
             if (ci.WasDupOnCreate) {
@@ -2695,23 +2740,46 @@ namespace MonkeyPaste.Avalonia {
                 PendingNewModels.Add(ci);
             }
 
-            MpCopyItem arg_ci = ci;
+            MpCopyItem result_ci = ci;
             if (wasAppended) {
                 MpMessenger.SendGlobal(MpMessageType.AppendBufferChanged);
-                arg_ci = null;
+                if (MpPrefViewModel.Instance.IgnoreAppendedItems) {
+                    // when item was appended and append items are ignored
+                    // the appended item is deleted after data and sources
+                    // are transferred to append host item so creating 
+                    // a new ref to append host model and flagging 
+                    // WasDupOnCreate since it alraedy existed and don't
+                    // want to alter the view model's copyitem instance 
+
+                    result_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(AppendClipTileViewModel.CopyItemId);
+                    result_ci.WasDupOnCreate = true;
+                }
+
             } else {
                 MpPrefViewModel.Instance.UniqueContentItemIdx++;
                 MpMessenger.SendGlobal(MpMessageType.ContentAdded);
                 AddNewItemsCommand.Execute(null);
             }
-            OnCopyItemAdd?.Invoke(this, arg_ci);
+            OnCopyItemAdd?.Invoke(this, result_ci);
+            return result_ci;
         }
 
         private readonly object _pasteLockObj = new object();
         private async Task PasteClipTileAsync(MpAvClipTileViewModel ctvm, bool fromKeyboard = false) {
             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
             if (IsPasting) {
-                await MpFifoAsyncQueue.WaitByConditionAsync(_pasteLockObj, () => { return IsPasting; }, $"Paste {ctvm}");
+                try {
+                    await MpFifoAsyncQueue.WaitByConditionAsync(
+                        lockObj: _pasteLockObj,
+                        waitWhenTrueFunc: () => {
+                            return IsPasting;
+                        },
+                        debug_label: $"Paste {ctvm}");
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Paste for item '{ctvm}' FAILED.", ex);
+                    return;
+                }
                 // re-silent lock since last will unlock
                 MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
             }
@@ -4493,6 +4561,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private async Task<bool> UpdateAppendModeAsync(MpCopyItem aci, bool isNew = true) {
+            // returns true if item was appended
+
             Dispatcher.UIThread.VerifyAccess();
             if (IsAppendPaused) {
                 // treat as new item

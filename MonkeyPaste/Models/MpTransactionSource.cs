@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public enum MpTransactionSourceType {
+        // NOTE these are ordered by ascending priority
         None = 0,
+        CopyItem,
+        UserDevice,
+        AnalyzerPreset,
         App,
         Url,
-        CopyItem,
-        AnalyzerPreset,
-        UserDevice
     };
 
     public class MpTransactionSource : MpDbModelBase {

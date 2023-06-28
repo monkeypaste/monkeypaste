@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 //using Avalonia.Win32;
 using System.Threading.Tasks;
 
@@ -13,48 +14,76 @@ namespace MonkeyPaste.Common {
             object lockObj,
             Func<bool> waitWhenTrueFunc,
             string debug_label = "",
+            int time_out_ms = 10_000,
             int wait_step = 100,
-            int locked_step = 200,
-            int enter_step = 300) {
+            int locked_step = 100,
+            int enter_step = 0) {
             if (lockObj == null) {
                 throw new NullReferenceException("must have lockObj");
             }
             if (!waitWhenTrueFunc.Invoke()) {
+                // effectively waited 0 ms
                 return;
             }
+            Stopwatch time_out_sw =
+                time_out_ms >= 0 ?
+                    Stopwatch.StartNew() :
+                    null;
 
-
-            int this_sim_id = GetOrCreateWaitCountByLock(lockObj, debug_label);
+            // initial id will be 1 
+            int this_sim_id = AddWaiterByLock(lockObj, debug_label);
             debug_label = string.IsNullOrEmpty(debug_label) ? "Unknown" + this_sim_id : debug_label;
 
             MpConsole.WriteLine($"Item '{debug_label}' waiting at queue: {this_sim_id}...");
 
-            while (GetOrCreateWaitCountByLock(lockObj, debug_label) >= this_sim_id) {
-                if (waitWhenTrueFunc()) {
-                    await Task.Delay(wait_step);
+            while (true) {
+                int wait_count = GetWaitCountByLock(lockObj);
+                if (time_out_sw != null &&
+                        time_out_sw.ElapsedMilliseconds >= time_out_ms) {
+                    // this waiter has timed out and will exit
+                    // remove its tick in the count
+
+                    DecrementWaitByLock(lockObj, debug_label);
+                    throw new TimeoutException($"Lock for Item '{debug_label}' timed out waiting. Wait count reduced to {wait_count}");
                 }
-                if (GetOrCreateWaitCountByLock(lockObj, debug_label) > this_sim_id) {
-                    // not next (wait extra 100 for next to start)
+
+                if (waitWhenTrueFunc()) {
+                    // can't execute so keep waiting
+                    await Task.Delay(wait_step);
+                    continue;
+                }
+                // can execute so check count
+                if (wait_count > this_sim_id) {
+                    // not first keep waiting
                     await Task.Delay(locked_step);
                     continue;
                 }
-                // add wait cause repetetive pasting is leaking last gesture for some reason
                 await Task.Delay(enter_step);
-                _lockCountLookup[lockObj]--;
+                DecrementWaitByLock(lockObj, debug_label);
+            }
+        }
 
-                MpConsole.WriteLine($"Item '{debug_label}' waiting DONE");
-                if (_lockCountLookup[lockObj] <= 0) {
-                    if (!_lockCountLookup.TryRemove(lockObj, out _)) {
+        private static void DecrementWaitByLock(object lockObj, string debug_label) {
+            _lockCountLookup[lockObj]--;
 
-                        MpConsole.WriteLine($"Lock for Item '{debug_label}' removal FAILED");
-                    } else {
-                        MpConsole.WriteLine($"Lock for Item '{debug_label}' removal SUCCEEDED");
-                    }
+            MpConsole.WriteLine($"Item '{debug_label}' waiting DONE");
+            if (_lockCountLookup[lockObj] <= 0) {
+                if (!_lockCountLookup.TryRemove(lockObj, out _)) {
+                    MpConsole.WriteLine($"Lock for Item '{debug_label}' removal FAILED");
+                } else {
+                    MpConsole.WriteLine($"Lock for Item '{debug_label}' removal SUCCEEDED");
                 }
             }
         }
 
-        private static int GetOrCreateWaitCountByLock(object lockObj, string debug_label) {
+        public static int GetWaitCountByLock(object lockObj) {
+            if (_lockCountLookup == null ||
+                !_lockCountLookup.ContainsKey(lockObj)) {
+                return 0;
+            }
+            return _lockCountLookup[lockObj];
+        }
+        private static int AddWaiterByLock(object lockObj, string debug_label) {
             if (_lockCountLookup == null) {
                 _lockCountLookup = new ConcurrentDictionary<object, int>();
             }

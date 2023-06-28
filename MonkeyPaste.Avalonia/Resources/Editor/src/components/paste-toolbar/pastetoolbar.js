@@ -131,7 +131,8 @@ function updatePasteButtonInfo(pasteButtonInfoObj) {
     getPasteButtonElement().replaceChild(new_paste_icon_elm, paste_icon_elm);
 
     getPasteButtonElement().setAttribute('hover-tooltip', `Paste to: <em><i class="paste-tooltip-suffix">${new_paste_tooltip}</i></em>`);
-    
+
+    log('paste button updated. tooltip set to: ' + new_paste_tooltip);
 }
 
 // #endregion Actions

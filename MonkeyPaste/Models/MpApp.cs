@@ -84,7 +84,7 @@ namespace MonkeyPaste {
         [Ignore]
         public object IconResourceObj => IconId;
         [Ignore]
-        int MpISourceRef.Priority => 2;
+        int MpISourceRef.Priority => (int)MpTransactionSourceType.App;
         [Ignore]
         int MpISourceRef.SourceObjId => Id;
 

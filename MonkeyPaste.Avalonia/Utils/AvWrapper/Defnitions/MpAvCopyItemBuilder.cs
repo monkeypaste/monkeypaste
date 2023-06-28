@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using CefNet;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -69,7 +70,8 @@ namespace MonkeyPaste.Avalonia {
 
             MpCopyItem ci = await PerformDupCheckAsync(mpdo, data_tuple.Item1, force_allow_dup, suppressWrite);
 
-            var refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(mpdo, force_ext_sources);
+            IEnumerable<MpISourceRef> refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(mpdo, force_ext_sources);
+
             if (Mp.Services.SourceRefTools.IsAnySourceRejected(refs)) {
                 return null;
             }
@@ -81,12 +83,14 @@ namespace MonkeyPaste.Avalonia {
                 string itemData = data_tuple.Item2;
                 string itemDelta = data_tuple.Item3;
                 string default_title = GetDefaultItemTitle(itemType, mpdo);
+                int itemIconId = PickIconIdFromSourceRefs(refs);
 
                 ci = await MpCopyItem.CreateAsync(
                     dataObjectId: dobj.Id,
                     title: default_title,
                     data: itemData,
                     itemType: itemType,
+                    iconId: itemIconId,
                     suppressWrite: suppressWrite);
                 if (ci == null) {
                     // probably null data, clean up pre-create
@@ -143,6 +147,24 @@ namespace MonkeyPaste.Avalonia {
 
         #region Content Helpers
 
+        private int PickIconIdFromSourceRefs(IEnumerable<MpISourceRef> refs) {
+            if (refs == null || !refs.Any()) {
+                return 0;
+            }
+            // find highest priority source with existing db icon
+            var primary_source =
+                refs
+                .Where(x => x.IconResourceObj is int && ((int)x.IconResourceObj) > 0)
+                .OrderByDescending(x => x.Priority)
+                .FirstOrDefault();
+            if (primary_source == null) {
+                return 0;
+            }
+            // TODO? when primary source is a copy item
+            // this will returns its primary icon id which is fine 
+            // but maybe it could be contextual, not sure
+            return (int)primary_source.IconResourceObj;
+        }
         private async Task<MpCopyItem> PerformDupCheckAsync(
             MpPortableDataObject mpdo,
             MpCopyItemType itemType,

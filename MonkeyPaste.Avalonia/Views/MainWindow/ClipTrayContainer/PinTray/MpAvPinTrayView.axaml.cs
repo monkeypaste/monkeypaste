@@ -31,6 +31,39 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public MpAvPinTrayView() {
+            if (Instance != null) {
+                // ensure singleton
+                MpDebug.Break();
+                return;
+            }
+            Instance = this;
+
+            AvaloniaXamlLoader.Load(this);
+            InitDnd();
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+        }
+
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.PinTrayEmptyOrHasTile:
+                    // NOTE these layout values need to match UpdateContentOrientation settings
+                    var ptrlb = this.FindControl<ListBox>("PinTrayListBox");
+                    if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
+                        // to avoid interfering w/ user-defined layout
+                    } else {
+                        ptrlb.Padding = new Thickness();
+                    }
+                    if (MpAvClipTrayViewModel.Instance.ListOrientation == Orientation.Horizontal) {
+                        ptrlb.Padding = new Thickness(10, 0, 10, 0);
+                    } else {
+                        ptrlb.Padding = new Thickness(10, 10, 10, 10);
+                    }
+                    break;
+            }
+        }
+
+
         #region Drop
 
         #region Drop Events
@@ -88,23 +121,34 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.DataObjectHelperAsync
                 .ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
 
-            bool is_internal = mpdo.ContainsContentRef();
-            if (is_internal) {
-                // Internal Drop
-                await PerformTileDropAsync(drop_idx, mpdo, is_copy);
-            } else {
-                // External Drop
-                await PerformExternalOrPartialDropAsync(drop_idx, mpdo);
-            }
-
             Dispatcher.UIThread.Post(async () => {
+                var avdo_ci = await mpdo.ToCopyItemAsync(is_copy);
+                if (avdo_ci == null) {
+                    // source rejected, add blocked or no content-enabled format
+                } else {
+                    var drop_ctvm = await BindingContext.CreateClipTileViewModelAsync(avdo_ci, -1);
+                    BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
+
+                    MpConsole.WriteLine($"PARTIAL Tile '{drop_ctvm}' dropped onto pintray idx: {drop_idx}");
+                }
+
+                //bool is_internal = mpdo.ContainsContentRef();
+                //bool is_partial_internal = mpdo.ContainsPartialContentRef();
+                //if (is_internal && !is_partial_internal) {
+                //    // Internal Drop
+                //    await PerformTileDropAsync(drop_idx, mpdo, is_copy);
+                //} else {
+                //    // External or partial Drop
+                //    await PerformExternalOrPartialDropAsync(drop_idx, mpdo);
+                //}
+
                 while (BindingContext.IsAnyBusy) {
                     await Task.Delay(100);
                 }
                 BindingContext.IsPinTrayBusy = false;
+                ResetDrop();
             });
 
-            ResetDrop();
         }
 
         #endregion
@@ -112,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
         #region Drop Helpers
 
         private void InitDnd() {
-            var ptrlb = PinTrayListBox;
+            var ptrlb = this.FindControl<ListBox>("PinTrayListBox");
             DragDrop.SetAllowDrop(ptrlb, true);
             ptrlb.AddHandler(DragDrop.DragEnterEvent, DragEnter);
             ptrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
@@ -142,7 +186,7 @@ namespace MonkeyPaste.Avalonia {
 
             bool is_drop_onto_same_idx = drop_idx == drag_pctvm_idx || drop_idx == drag_pctvm_idx + 1;
             bool is_internal = avdo.ContainsContentRef();
-            bool is_partial_drop = !is_internal;
+            bool is_partial_drop = avdo.ContainsPartialContentRef();
 
             if (!is_copy && !is_partial_drop && is_drop_onto_same_idx) {
                 // don't allow moving full item if it'll be at same position 
@@ -269,124 +313,5 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #endregion
-        public MpAvPinTrayView() {
-            if (Instance != null) {
-                // ensure singleton
-                MpDebug.Break();
-                return;
-            }
-            Instance = this;
-
-            AvaloniaXamlLoader.Load(this);
-
-            PinTrayListBox = this.FindControl<ListBox>("PinTrayListBox");
-            PinTrayListBox.AttachedToVisualTree += PinTrayListBox_AttachedToVisualTree;
-
-            //this.EffectiveViewportChanged += MpAvPinTrayView_EffectiveViewportChanged;
-            //this.DataContextChanged += MpAvPinTrayView_DataContextChanged;
-            //if (DataContext != null) {
-            //    MpAvPinTrayView_DataContextChanged(null, null);
-            //}
-
-
-        }
-
-        private void MpAvPinTrayView_EffectiveViewportChanged(object sender, EffectiveViewportChangedEventArgs e) {
-            this.FindControl<Control>("PinTrayEmptyContainer")?.InvalidateAll();
-        }
-
-        private void MpAvPinTrayView_DataContextChanged(object sender, EventArgs e) {
-            if (BindingContext == null) {
-                return;
-            }
-            BindingContext.PinnedItems.CollectionChanged += PinnedItems_CollectionChanged;
-        }
-
-        private void PinnedItems_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Reset) {
-                OnItemRemoved();
-            }
-            if (e.Action == NotifyCollectionChangedAction.Add) {
-                OnItemAdded();
-            }
-        }
-        private void OnItemRemoved() {
-            var ctrcv = this.GetVisualAncestor<MpAvClipTrayContainerView>();
-            if (BindingContext == null ||
-                BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow ||
-                ctrcv == null) {
-                // ignore collection changed if user in workflow
-                //MpConsole.WriteLine($"PinTray dematerialized {BindingContext.Items.Count} items was ignored. HasUserAlteredPinTrayWidthSinceWindowShow: {BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow} ");
-                return;
-            }
-            double new_length = 0;
-            if (!BindingContext.IsPinTrayEmpty) {
-                if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                    new_length = BindingContext.PinnedItems.Max(x => x.TrayRect.Right);
-                } else {
-                    new_length = BindingContext.PinnedItems.Max(x => x.TrayRect.Bottom);
-                }
-            }
-            ctrcv.UpdatePinTrayVarDimension(new GridLength(new_length, GridUnitType.Auto));
-        }
-
-        private void OnItemAdded() {
-            var ctrcv = this.GetVisualAncestor<MpAvClipTrayContainerView>();
-            if (BindingContext == null ||
-                BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow ||
-                BindingContext.Items.Count == 0 ||
-                ctrcv == null) {
-                // ignore collection changed if user in workflow
-                //MpConsole.WriteLine($"PinTray materialized {e.Containers.Count} items was ignored. HasUserAlteredPinTrayWidthSinceWindowShow: {BindingContext.HasUserAlteredPinTrayWidthSinceWindowShow} ");
-                return;
-            }
-            MpSize added_size = new MpSize();
-            var containers = BindingContext.PinnedItems.Select((x, idx) => PinTrayListBox.ContainerFromIndex(idx));
-            added_size.Width = containers
-                    .Where(x => x != null && x.DataContext != null && x.DataContext is MpAvClipTileViewModel)
-                    .Select(x => x.DataContext)
-                    .Cast<MpAvClipTileViewModel>()
-                    .Sum(x => x.BoundWidth);
-            added_size.Height = containers
-                    .Where(x => x != null && x.DataContext != null && x.DataContext is MpAvClipTileViewModel)
-                    .Select(x => x.DataContext)
-                    .Cast<MpAvClipTileViewModel>()
-                    .Sum(x => x.BoundHeight);
-
-            var gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
-            var gs_grid = ctrcv.FindControl<Grid>("ClipTrayContainerGrid");
-            double new_length = 0;
-            if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
-                new_length = Math.Min(BindingContext.MaxPinTrayScreenWidth + gs.Bounds.Width, Math.Max(this.Bounds.Width + gs.Bounds.Width, added_size.Width + 40.0d));
-            } else {
-                new_length = Math.Min(BindingContext.MaxPinTrayScreenHeight + gs.Bounds.Height, Math.Max(this.Bounds.Height + gs.Bounds.Height, added_size.Height));
-            }
-            ctrcv.UpdatePinTrayVarDimension(new GridLength(new_length, GridUnitType.Auto));
-        }
-
-        private void PinTrayListBox_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            InitDnd();
-
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
-        }
-
-        private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.PinTrayEmptyOrHasTile:
-                    // NOTE these layout values need to match UpdateContentOrientation settings
-                    var ptrlb = this.FindControl<ListBox>("PinTrayListBox");
-                    if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
-                        // to avoid interfering w/ user-defined layout
-                    } else {
-                        ptrlb.Padding = new Thickness();
-                    }
-                    if (MpAvClipTrayViewModel.Instance.ListOrientation == Orientation.Horizontal) {
-                        ptrlb.Padding = new Thickness(10, 0, 10, 0);
-                    } else {
-                        ptrlb.Padding = new Thickness(10, 10, 10, 10);
-                    }
-                    break;
-            }
-        }
     }
 }

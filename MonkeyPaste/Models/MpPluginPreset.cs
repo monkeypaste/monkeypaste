@@ -21,7 +21,7 @@ namespace MonkeyPaste {
         #region MpISourceRef Implementation
 
         [Ignore]
-        int MpISourceRef.Priority => 2;
+        int MpISourceRef.Priority => (int)MpTransactionSourceType.AnalyzerPreset;
         [Ignore]
         int MpISourceRef.SourceObjId => Id;
 

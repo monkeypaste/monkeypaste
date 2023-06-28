@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Drop Helpers
+        #region Drop Helpers (supposed to link drop to tag but disabled cause bugz)
 
         private void InitDnd() {
             var ctrlb = this.FindControl<ListBox>("ClipTrayListBox");

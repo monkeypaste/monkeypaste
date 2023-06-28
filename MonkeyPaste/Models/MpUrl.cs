@@ -89,7 +89,7 @@ namespace MonkeyPaste {
 
         #region MpISourceRef Implementation
         [Ignore]
-        int MpISourceRef.Priority => 3;
+        int MpISourceRef.Priority => (int)MpTransactionSourceType.Url;
 
         [Ignore]
         int MpISourceRef.SourceObjId => Id;

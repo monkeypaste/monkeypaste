@@ -68,15 +68,25 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
             string gesture_label = Mp.Services.KeyConverter.ConvertKeySequenceToString(gesture);
-            //await WaitAndStartSimulateAsync(gesture_label);
-            await MpFifoAsyncQueue.WaitByConditionAsync(
-                restoreDownState ? _RestoreGestureLock : _GestureLock,
-                () => {
-                    // when hotkey pasting (or some shortcut driven keyboard macro), state needs to be restored so only wait for a prev gesture then clear/restore downs
 
-                    // when just automating keys wait for no current downs to proceed
-                    return restoreDownState ? false : Mp.Services.KeyDownHelper.Downs.Any();
-                }, gesture_label);
+            try {
+                await MpFifoAsyncQueue.WaitByConditionAsync(
+                    lockObj: restoreDownState ? _RestoreGestureLock : _GestureLock,
+                    waitWhenTrueFunc: () => {
+                        // when hotkey pasting (or some shortcut driven keyboard macro), state needs to be restored so only wait for a prev gesture then clear/restore downs
+
+                        // when just automating keys wait for no current downs to proceed
+                        return restoreDownState ? false : Mp.Services.KeyDownHelper.Downs.Any();
+                    },
+                    wait_step: 100,
+                    locked_step: 200,
+                    enter_step: 300,
+                    debug_label: gesture_label);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Key Gesture '{gesture_label}' simulation FAILED.", ex);
+                return false;
+            }
 
             IEnumerable<KeyCode> to_restore = null;
 

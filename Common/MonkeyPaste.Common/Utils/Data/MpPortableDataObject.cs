@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 
 namespace MonkeyPaste.Common {
-
     public class MpPortableDataObject : MpJsonObject, MpIPortableDataObject {
         #region Statics
 

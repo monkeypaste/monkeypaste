@@ -845,6 +845,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public int CopyItemIconId {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.IconId;
+            }
+        }
+
         public string CopyItemTitle {
             get {
                 if (CopyItem == null) {
@@ -989,9 +998,13 @@ namespace MonkeyPaste.Avalonia {
                     FileItemCollectionViewModel.Items.Count > 0) {
                     return FileItemCollectionViewModel.Items.FirstOrDefault().IconBase64;
                 }
-                return TransactionCollectionViewModel.CreateTransaction == null ?
-                            MpDefaultDataModelTools.ThisAppIconId :
-                            TransactionCollectionViewModel.CreateTransaction.IconSourceObj;
+                if (CopyItemIconId == 0) {
+                    return MpDefaultDataModelTools.ThisAppIconId;
+                }
+                return CopyItemIconId;
+                //return TransactionCollectionViewModel.CreateTransaction == null ?
+                //            MpDefaultDataModelTools.ThisAppIconId :
+                //            TransactionCollectionViewModel.CreateTransaction.IconSourceObj;
             }
         }
 
@@ -1108,7 +1121,7 @@ namespace MonkeyPaste.Avalonia {
 
                 CopyItem = ci;
                 CycleDetailCommand.Execute(0);
-                await TransactionCollectionViewModel.InitializeAsync(CopyItemId);
+                TransactionCollectionViewModel.InitializeAsync(CopyItemId).FireAndForgetSafeAsync(this);
 
                 if (isRestoringSelection) {
                     Parent.RestoreSelectionState(this);
@@ -1153,9 +1166,9 @@ namespace MonkeyPaste.Avalonia {
             if (IsAnyPlaceholder) {
                 return;
             }
-            while (TransactionCollectionViewModel.IsAnyBusy) {
-                await Task.Delay(100);
-            }
+            //while (TransactionCollectionViewModel.IsAnyBusy) {
+            //    await Task.Delay(100);
+            //}
             if (IsAnyPlaceholder) {
                 return;
             }

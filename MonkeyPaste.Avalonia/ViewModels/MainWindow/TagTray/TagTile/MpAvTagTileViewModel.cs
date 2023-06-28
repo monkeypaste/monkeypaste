@@ -15,6 +15,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvTagTileViewModel :
         MpAvTreeSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>,
+        MpIBadgeCountViewModel,
         MpIHoverableViewModel,
         MpIConditionalSelectableViewModel,
         MpIShortcutCommandViewModel,
@@ -41,6 +42,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIBadgeCountViewModel Implementation
+
+        int MpIBadgeCountViewModel.BadgeCount =>
+            BadgeCount;
+
+        #endregion
 
         #region MpAvTreeSelectorViewModelBase Implementation
 
@@ -1020,6 +1028,12 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(TagName):
                     OnPropertyChanged(nameof(TagNameWidth));
                     OnPropertyChanged(nameof(TagNameLength));
+                    break;
+                case nameof(BadgeCount):
+                    if (Parent == null) {
+                        break;
+                    }
+                    Parent.OnPropertyChanged(nameof(Parent.BadgeCount));
                     break;
             }
         }

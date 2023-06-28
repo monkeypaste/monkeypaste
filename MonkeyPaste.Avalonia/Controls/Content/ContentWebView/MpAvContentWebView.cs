@@ -95,6 +95,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvIWebViewBindingResponseHandler {
 
         #region Private Variables
+        private object _sendMessageLock = new object();
         private string _contentScreenShotBase64_ntf { get; set; }
 
         private string _lastLoadedContentHandle = null;
@@ -104,6 +105,14 @@ namespace MonkeyPaste.Avalonia {
         private MpQuillContentDataObjectResponseMessage _lastDataObjectResp = null;
         private MpQuillEditorContentChangedMessage _lastReadOnlyEnabledFromHostResp = null;
         private MpQuillEditorSelectionStateMessage _lastEditorSelectionStateMessage = null;
+
+        private string[] _noStateReqMessages = new string[] {
+            "initMain_ext"
+        };
+
+        private string[] _initOnlyMessages = new string[] {
+            "loadContent_ext"
+        };
         #endregion
 
         #region Constants
@@ -158,6 +167,35 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIJsonMessenger Implementation
         public void SendMessage(string msgJsonBase64Str) {
+            //if (!CanSendContentMessage) {
+            //    // when webview isn't load yet, sending msg can create js exceptions
+            //    // and/or screw the editor state up so wait by fifo
+            //    MpConsole.WriteLine($"Webview '{DataContext}' not ready for messages. About to wait!");
+            //    Dispatcher.UIThread.Post(async () => {
+            //        try {
+            //            await MpFifoAsyncQueue.WaitByConditionAsync(
+            //                lockObj: _sendMessageLock,
+            //                () => {
+            //                    MpConsole.WriteLine($"Webview '{DataContext}' waiting...");
+            //                    if (_noStateReqMessages.Any(x => msgJsonBase64Str.StartsWith(x))) {
+            //                        return false;
+            //                    }
+            //                    if (_initOnlyMessages.Any(x => msgJsonBase64Str.StartsWith(x))) {
+            //                        return !IsEditorInitialized;
+            //                    }
+            //                    return !CanSendContentMessage;
+            //                });
+            //        }
+            //        catch (Exception ex) {
+            //            MpConsole.WriteTraceLine($"Webview '{DataContext}' waiting...FAILED", ex);
+            //            return;
+            //        }
+            //        MpConsole.WriteLine($"Webview '{DataContext}' waiting...DONE");
+            //        SendMessage(msgJsonBase64Str);
+            //    });
+            //    return;
+            //}
+
 #if DESKTOP
             this.ExecuteJavascript(msgJsonBase64Str);
 #else
@@ -405,7 +443,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            bool is_full_content = ctvm.CopyItemType != MpCopyItemType.Text || contentDataResp.isAllContent;
+            bool is_full_content = ctvm.CopyItemType == MpCopyItemType.Image || contentDataResp.isAllContent;
             avdo.AddContentReferences(ctvm.CopyItem, is_full_content);
 
             if (ctvm.CopyItemType == MpCopyItemType.Image &&
@@ -900,6 +938,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public MpQuillContentQuerySearchRangesChangedNotificationMessage SearchResponse { get; set; }
+
+        public bool CanSendContentMessage =>
+            IsEditorInitialized &&
+            IsEditorLoaded;
+
         #endregion
 
         #endregion
@@ -1602,7 +1645,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Append
 
-        public async void ProcessAppendStateChangedMessage(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
+        public void ProcessAppendStateChangedMessage(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
             if (!Dispatcher.UIThread.CheckAccess()) {
                 Dispatcher.UIThread.Post(() => ProcessAppendStateChangedMessage(appendChangedMsg, source));
                 return;
@@ -1643,21 +1686,18 @@ namespace MonkeyPaste.Avalonia {
                     ctrvm.DeactivateAppendModeCommand.Execute(null);
                 }
             } else {
-                while (!IsEditorInitialized) {
-                    await Task.Delay(100);
+                if (!CanSendContentMessage) {
+                    // won't need to update state, its passed in init so ignore this case
+                    return;
                 }
-                while (!IsEditorLoaded) {
-                    await Task.Delay(100);
-                }
+                //while (!IsEditorInitialized) {
+                //    await Task.Delay(100);
+                //}
+                //while (!IsEditorLoaded) {
+                //    await Task.Delay(100);
+                //}
                 SendMessage($"appendStateChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')");
             }
-            //while (ctrvm.IsAnyBusy) {
-            //    await Task.Delay(100);
-            //}
-            //while (ctrvm.IsAddingClipboardItem) {
-            //    await Task.Delay(100);
-            //}
-            //SendMessage($"appendStateChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')");
         }
         #endregion
 
