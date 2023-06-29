@@ -105,6 +105,7 @@ namespace MonkeyPaste.Avalonia {
                 //Mp.Services.ContextMenuCloser.CloseMenu();
 
                 var result = await cw.ShowChildDialogWithResultAsync(owner as Window);
+                MpConsole.WriteLine($"Custom color result: '{result.ToStringOrEmpty("NULL")}'");
                 //await Task.Delay(200);
                 Mp.Services.ContextMenuCloser.CloseMenu();
 

@@ -71,9 +71,7 @@ namespace MonkeyPaste.Avalonia {
 
             // TO TRASH /////////////////////////////////////////////////////
 
-            string total_active_query = @"
-select count(pk_MpCopyItemId) from MpCopyItem where pk_MpCopyItemId not in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=?)";
-            int totalCount = await MpDb.QueryScalarAsync<int>(total_active_query, MpTag.TrashTagId);
+            int totalCount = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
 
             // examples (content cap)
             // content cap 5, actual 4 (needs next to trash)
@@ -94,9 +92,7 @@ select count(pk_MpCopyItemId) from MpCopyItem where pk_MpCopyItemId not in (sele
 
             // TO REMOVE //////////////////////////////////////////
 
-            string total_trash_query = @"
-select count(pk_MpCopyItemId) from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=?)";
-            int totalTrash = await MpDb.QueryScalarAsync<int>(total_trash_query, MpTag.TrashTagId);
+            int totalTrash = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.TrashTagId);
 
             // examples (trash cap)
             // trash cap 100 actual 99 (needs next)

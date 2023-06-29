@@ -9,22 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    [Flags]
-    public enum MpAnalyzerInputFormatFlags {
-        None = 0,
-        Text = 1,
-        Image = 2,
-        File = 4
-    }
-
-    [Flags]
-    public enum MpAnalyzerOutputFormatFlags {
-        None = 0,
-        Text = 1,
-        Image = 2,
-        BoundingBox = 4,
-        File = 8
-    }
     public class MpAvAnalyticItemViewModel :
         MpAvTreeSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>,
         MpISelectableViewModel,

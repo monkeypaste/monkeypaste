@@ -20,6 +20,7 @@ namespace MonkeyPaste.Avalonia {
         MpIConditionalSelectableViewModel,
         MpIShortcutCommandViewModel,
         MpIUserColorViewModel,
+        MpIColorPalettePickerViewModel,
         MpIActionComponent,
         MpIContextMenuViewModel,
         MpIPopupMenuViewModel,
@@ -110,6 +111,30 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpIColorPalettePickerViewModel Implementation
+
+        public MpIAsyncCommand<object> PaletteColorPickedCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (args is not string paletteItemData) {
+                    return;
+                }
+                string new_color = string.Empty;
+                if (paletteItemData == "custom") {
+                    new_color = await Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
+                        selectedColor: TagHexColor);
+                } else {
+                    new_color = paletteItemData;
+                }
+                if (!new_color.IsStringHexColor()) {
+                    return;
+                }
+
+                MpAvMenuExtension.CloseMenu();
+                TagHexColor = new_color;
+            });
+
+        #endregion
+
         #region MpIProgressIndicatorViewModel Implementation
         public double PercentLoaded =>
             TotalAnalysisCount == 0 ? 1 : (double)CompletedAnalysisCount / (double)TotalAnalysisCount;
@@ -175,12 +200,7 @@ namespace MonkeyPaste.Avalonia {
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("ResetImage") as string,
                             Command = Parent.RestoreAllTrashCommand
                         },
-                        //new MpMenuItemViewModel() { IsSeparator = true},
-                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this,true),
-                        //new MpMenuItemViewModel() {
-                        //    IsSeparator = true,
-                        //    IsVisible = !IsTagReadOnly
-                        //},
+                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel2(this,true),
                         new MpMenuItemViewModel() {
                             IsVisible = !IsTagReadOnly,
                             HasLeadingSeperator = true,
@@ -792,12 +812,7 @@ namespace MonkeyPaste.Avalonia {
 
             await Dispatcher.UIThread.InvokeAsync(async () => {
                 if (IsAllTag) {
-                    if (TagClipCount == null) {
-                        // startup case
-                        TagClipCount = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
-                    } else {
-                        // ignored, all updated handled in db callbacks
-                    }
+                    TagClipCount = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
                 } else {
                     if (IsLinkTag) {
                         // NOTE omit trashed ids on all tags EXCEPT trashed which has empty omits
@@ -849,7 +864,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(KeyString));
             } else if (e is MpCopyItem && IsAllTag) {
                 Dispatcher.UIThread.Post(() => {
-                    TagClipCount++;
+                    //TagClipCount++;
                 });
             }
         }
@@ -1149,8 +1164,15 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.TraySelectionChanged);
             }
             IsBusy = false;
-            MpAvClipTrayViewModel.Instance.UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
-            MpAvClipTrayViewModel.Instance.ProcessAccountCapsAsync("link", TagId).FireAndForgetSafeAsync();
+
+            Dispatcher.UIThread.Post(async () => {
+                // always do in place requery to catch the many cases for placeholder changes
+                await MpAvClipTrayViewModel.Instance.UpdateEmptyPropertiesAsync();
+                await MpAvClipTrayViewModel.Instance.ProcessAccountCapsAsync("link", TagId);
+                while (!MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(string.Empty)) { await Task.Delay(100); }
+                MpAvClipTrayViewModel.Instance.QueryCommand.Execute(string.Empty);
+            });
+
         }
 
         private void UpdateBadge() {

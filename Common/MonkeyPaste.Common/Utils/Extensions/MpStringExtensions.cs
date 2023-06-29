@@ -85,8 +85,8 @@ namespace MonkeyPaste.Common {
         public static string ToStringOrDefault(this object obj) {
             return obj == null ? null : obj.ToString();
         }
-        public static string ToStringOrEmpty(this object obj) {
-            return obj == null ? string.Empty : obj.ToString();
+        public static string ToStringOrEmpty(this object obj, string emptyText = "") {
+            return obj == null ? emptyText : obj.ToString();
         }
         public static string ToFileSystemUriFromPath(this string path) {
             if (Uri.TryCreate(path, UriKind.Absolute, out Uri fp_uri)) {

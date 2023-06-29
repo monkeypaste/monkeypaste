@@ -112,6 +112,7 @@
                   Margin="2,5"
                   FontSize="16"
                   BorderThickness="1"
+                  IsDropDownOpen="{Binding IsSortDropDownOpen, Source={x:Static local:MpAvClipTileSortFieldViewModel.Instance}, Mode=TwoWay}"
                   HorizontalContentAlignment="Left"
                   VerticalContentAlignment="Center"
                   SelectedIndex="{Binding SelectedSortTypeIdx, Source={x:Static local:MpAvClipTileSortFieldViewModel.Instance}, Mode=TwoWay}"

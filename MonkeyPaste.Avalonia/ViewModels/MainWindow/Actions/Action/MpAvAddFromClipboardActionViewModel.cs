@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (ido_obj is MpPortableDataObject) {
                 mpdo = ido_obj as MpPortableDataObject;
-                new_ci = await Dispatcher.UIThread.InvokeAsync<MpCopyItem>(async () => {
+                new_ci = await Dispatcher.UIThread.InvokeAsync(async () => {
                     //avoid collisions if clipboard just changed work w/ cliptrays result and avoid building seperately
                     if (MpAvClipTrayViewModel.Instance.IsAddingClipboardItem) {
                         MpConsole.WriteLine("Add content from clipboard action called while clip tray adding new item...");
@@ -110,7 +110,8 @@ namespace MonkeyPaste.Avalonia {
 
                         MpConsole.WriteLine("Add content from Clipboard called, clipboard not busy adding manually");
                     }
-                    var result = await Mp.Services.CopyItemBuilder.BuildAsync(mpdo, transType: MpTransactionType.Created);
+                    //var result = await Mp.Services.CopyItemBuilder.BuildAsync(mpdo, transType: MpTransactionType.Created);
+                    var result = await Mp.Services.ContentBuilder.BuildFromDataObject(mpdo, false);
                     return result;
                 });
             }

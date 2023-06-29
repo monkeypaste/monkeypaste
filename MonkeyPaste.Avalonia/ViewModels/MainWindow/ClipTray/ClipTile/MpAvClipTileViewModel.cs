@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
         MpIWantsTopmostWindowViewModel,
         MpIScrollIntoView,
         MpIUserColorViewModel,
+        MpIColorPalettePickerViewModel,
         MpIHoverableViewModel,
         MpIResizableViewModel,
         MpITextContentViewModel,
@@ -138,6 +139,30 @@ namespace MonkeyPaste.Avalonia {
             get => CopyItemHexColor;
             set => CopyItemHexColor = value;
         }
+
+        #endregion
+
+        #region MpIColorPalettePickerViewModel Implementation
+
+        public MpIAsyncCommand<object> PaletteColorPickedCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (args is not string paletteItemData) {
+                    return;
+                }
+                string new_color = string.Empty;
+                if (paletteItemData == "custom") {
+                    new_color = await Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
+                        selectedColor: CopyItemHexColor);
+                } else {
+                    new_color = paletteItemData;
+                }
+                if (!new_color.IsStringHexColor()) {
+                    return;
+                }
+                MpAvMenuExtension.CloseMenu();
+                CopyItemHexColor = new_color;
+                await InitTitleLayersAsync();
+            });
 
         #endregion
 
@@ -268,8 +293,6 @@ namespace MonkeyPaste.Avalonia {
         public int[] TitleLayerZIndexes { get; private set; } = Enumerable.Range(1, 3).ToArray();
         public string[] TitleLayerHexColors { get; private set; } = Enumerable.Repeat(MpSystemColors.Transparent, 4).ToArray();
 
-        public string DetailHexColor =>
-            TitleLayerHexColors.Any() ? TitleLayerHexColors[0] : MpSystemColors.White;
         public string DetailTooltipText { get; set; }
         public string DetailText {
             get {
@@ -1011,11 +1034,14 @@ namespace MonkeyPaste.Avalonia {
         private string _curItemRandomHexColor;
         public string CopyItemHexColor {
             get {
-                if (CopyItem == null || string.IsNullOrEmpty(CopyItem.ItemColor)) {
-                    if (string.IsNullOrEmpty(_curItemRandomHexColor)) {
-                        _curItemRandomHexColor = MpColorHelpers.GetRandomHexColor();
-                    }
-                    return _curItemRandomHexColor;
+                //if (CopyItem == null || string.IsNullOrEmpty(CopyItem.ItemColor)) {
+                //    if (string.IsNullOrEmpty(_curItemRandomHexColor)) {
+                //        _curItemRandomHexColor = MpColorHelpers.GetRandomHexColor();
+                //    }
+                //    return _curItemRandomHexColor;
+                //}
+                if (CopyItem == null) {
+                    return string.Empty;
                 }
                 return CopyItem.ItemColor;
             }
@@ -1063,6 +1089,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1, bool isRestoringSelection = false) {
+            await Task.Delay(1);
             IsBusy = true;
             bool is_reload =
                 (CopyItemId == 0 && ci == null) ||
@@ -1071,7 +1098,7 @@ namespace MonkeyPaste.Avalonia {
 
             _contentView = null;
             if (!is_reload) {
-                _curItemRandomHexColor = string.Empty;
+                //_curItemRandomHexColor = string.Empty;
                 IsChildWindowOpen = false;
             }
 
@@ -1122,7 +1149,7 @@ namespace MonkeyPaste.Avalonia {
                 CopyItem = ci;
                 CycleDetailCommand.Execute(0);
                 TransactionCollectionViewModel.InitializeAsync(CopyItemId).FireAndForgetSafeAsync(this);
-
+                InitTitleLayersAsync().FireAndForgetSafeAsync(this);
                 if (isRestoringSelection) {
                     Parent.RestoreSelectionState(this);
                 }
@@ -1166,39 +1193,93 @@ namespace MonkeyPaste.Avalonia {
             if (IsAnyPlaceholder) {
                 return;
             }
-            //while (TransactionCollectionViewModel.IsAnyBusy) {
-            //    await Task.Delay(100);
-            //}
-            if (IsAnyPlaceholder) {
-                return;
-            }
 
+            int layer_seed = -1;
+            List<string> hexColors = await GetTitleColorsAsync();
+            for (int i = 0; i < hexColors.Count; i++) {
+                // randomize alpha and layer order so its constant but unique for item
+                char let = PublicHandle.ToUpper()[i];
+                int seed;
+                if (let <= '9') {
+                    seed = (int)(let - '0');
+                } else {
+                    seed = (int)(let - 'A') + 10;
+                }
+                // seed is 0-15
+
+                int alpha_range = 120 - 40;
+                int alpha = 40 + (int)((double)alpha_range * ((double)seed / (double)15));
+                hexColors[i] = hexColors[i].AdjustAlpha((double)alpha / 255d);
+
+                if (i == 0) {
+                    // just use first seed for layer groups
+
+                    // group seed into 6 possible layer orientations
+                    // 1,2,3 | 1,3,2 | 2,1,3 | 2,3,1 | 3,1,2 | 3,2,1
+                    layer_seed = (int)((((double)seed / (double)15) * 18) / 3);
+                }
+            }
+            TitleLayerHexColors = hexColors.ToArray();
+            MpConsole.WriteLine($"Layer Group for '{this}' is {layer_seed}");
+            switch (layer_seed) {
+                case 0:
+                    TitleLayerZIndexes = new int[] { 1, 2, 3 };
+                    break;
+                case 1:
+                    TitleLayerZIndexes = new int[] { 1, 3, 2 };
+                    break;
+                case 2:
+                    TitleLayerZIndexes = new int[] { 2, 1, 3 };
+                    break;
+                case 3:
+                    TitleLayerZIndexes = new int[] { 2, 3, 1 };
+                    break;
+                case 4:
+                    TitleLayerZIndexes = new int[] { 3, 1, 2 };
+                    break;
+                case 5:
+                    TitleLayerZIndexes = new int[] { 3, 2, 1 };
+                    break;
+            }
+            //TitleLayerHexColors = hexColors.Select((x, i) => x.AdjustAlpha((double)MpRandom.Rand.Next(40, 120) / 255)).ToArray();
+            //TitleLayerZIndexes = new List<int> { 1, 2, 3 }.Randomize().ToArray();
+        }
+
+        private async Task<List<string>> GetTitleColorsAsync() {
+            // layer notes:
+            // -colors decided by item color, source colors and link tag colors
+            // -IconId is primary source icon
             int layerCount = 4;
 
-            bool hasUserDefinedColor = !string.IsNullOrEmpty(CopyItem.ItemColor);
+            bool hasUserDefinedColor = !string.IsNullOrEmpty(CopyItemHexColor);
+
+
+            if (hasUserDefinedColor) {
+                return Enumerable.Repeat(CopyItemHexColor, layerCount).ToList();
+            }
 
             List<string> hexColors = new List<string>();
-
-            if (IconResourceObj is int iconId && iconId > 0 && !hasUserDefinedColor) {
+            var tagColors = await MpDataModelProvider.GetTagColorsForCopyItemAsync(CopyItemId);
+            if (tagColors.Any()) {
+                hexColors.AddRange(tagColors);
+            }
+            if (hexColors.Count < layerCount) {
                 while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
                     await Task.Delay(100);
                 }
-                var ivm = MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == iconId);
-                if (ivm == null) {
-                    var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(iconId);
-                    hexColors = icon.HexColors;
+                if (MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == CopyItemIconId) is MpAvIconViewModel ivm) {
+                    hexColors.AddRange(ivm.PrimaryIconColorList);
                 } else {
-                    hexColors = ivm.PrimaryIconColorList.ToList();
+                    var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(CopyItemIconId);
+                    if (icon != null) {
+                        hexColors.AddRange(icon.HexColors);
+                    }
                 }
-            } else if (hasUserDefinedColor) {
-                hexColors = Enumerable.Repeat(CopyItem.ItemColor, layerCount).ToList();
-            } else {
-                var tagColors = await MpDataModelProvider.GetTagColorsForCopyItemAsync(CopyItemId);
-                tagColors.ForEach(x => hexColors.Insert(0, x));
             }
-
-            if (hexColors.Count == 0) {
-                hexColors = Enumerable.Repeat(MpColorHelpers.GetRandomHexColor(), layerCount).ToList();
+            int to_add = layerCount - hexColors.Count;
+            while (to_add > 0) {
+                hexColors.Add(MpColorHelpers.GetRandomHexColor());
+                to_add--;
             }
 
             // BUG very intermittently hexColors is list of nulls I think
@@ -1207,13 +1288,10 @@ namespace MonkeyPaste.Avalonia {
             hexColors =
                 hexColors
                 .Take(layerCount)
-                .Select(x => string.IsNullOrEmpty(x) ? MpColorHelpers.GetRandomHexColor() : x)
+                //.Select(x => string.IsNullOrEmpty(x) ? MpColorHelpers.GetRandomHexColor() : x)
                 .ToList();
 
-            TitleLayerHexColors = hexColors.Select((x, i) => x.AdjustAlpha((double)MpRandom.Rand.Next(40, 120) / 255)).ToArray();
-            TitleLayerZIndexes = new List<int> { 1, 2, 3 }.Randomize().ToArray();
-            OnPropertyChanged(nameof(DetailHexColor));
-            //IsBusy = wasBusy;
+            return hexColors;
         }
 
         public void TriggerUnloadedNotification(bool removeQueryItem, bool clearPersistentProps = true) {
@@ -1570,7 +1648,6 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyHovering));
                     Parent.OnPropertyChanged(nameof(Parent.CanTouchScroll));
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
-                    OnPropertyChanged(nameof(DetailHexColor));
                     if (PinnedItemForThisPlaceholder != null) {
                         PinnedItemForThisPlaceholder.OnPropertyChanged(nameof(PinnedItemForThisPlaceholder.IsPinnedItemForThisPlaceholderHovering));
                     }
@@ -1769,12 +1846,6 @@ namespace MonkeyPaste.Avalonia {
                             });
                         });
                     }
-                    break;
-                case nameof(CopyItemHexColor):
-                    InitTitleLayersAsync().FireAndForgetSafeAsync(this);
-                    break;
-                case nameof(IconResourceObj):
-                    InitTitleLayersAsync().FireAndForgetSafeAsync(this);
                     break;
                 case nameof(CopyItemData):
                     OnPropertyChanged(nameof(EditorFormattedItemData));

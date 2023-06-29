@@ -123,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
 
             Dispatcher.UIThread.Post(async () => {
                 var avdo_ci = await mpdo.ToCopyItemAsync(is_copy);
-                if (avdo_ci == null) {
+                if (avdo_ci == null || avdo_ci.Id <= 0) {
                     // source rejected, add blocked or no content-enabled format
                 } else {
                     var drop_ctvm = await BindingContext.CreateClipTileViewModelAsync(avdo_ci, -1);
@@ -131,16 +131,6 @@ namespace MonkeyPaste.Avalonia {
 
                     MpConsole.WriteLine($"PARTIAL Tile '{drop_ctvm}' dropped onto pintray idx: {drop_idx}");
                 }
-
-                //bool is_internal = mpdo.ContainsContentRef();
-                //bool is_partial_internal = mpdo.ContainsPartialContentRef();
-                //if (is_internal && !is_partial_internal) {
-                //    // Internal Drop
-                //    await PerformTileDropAsync(drop_idx, mpdo, is_copy);
-                //} else {
-                //    // External or partial Drop
-                //    await PerformExternalOrPartialDropAsync(drop_idx, mpdo);
-                //}
 
                 while (BindingContext.IsAnyBusy) {
                     await Task.Delay(100);

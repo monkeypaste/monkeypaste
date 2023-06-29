@@ -43,6 +43,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsAnySortDirOrFieldFocused {
             get {
+                if (MpAvClipTileSortFieldViewModel.Instance.IsSortDropDownOpen) {
+                    return true;
+                }
                 if (Mp.Services.FocusMonitor.FocusElement is Control c && (
                     c.TryGetSelfOrAncestorDataContext<MpAvFilterMenuViewModel>(out _) ||
                     c.TryGetSelfOrAncestorDataContext<MpAvClipTileSortDirectionViewModel>(out _) ||

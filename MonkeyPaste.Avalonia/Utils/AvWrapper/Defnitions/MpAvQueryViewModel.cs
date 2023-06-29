@@ -87,17 +87,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task QueryForTotalCountAsync(bool isRequery) {
-            MpConsole.WriteLine("total count called");
+            //MpConsole.WriteLine("total count called");
             int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
-            //int total_count = await MpContentQuery.QueryForTotalCountAsync(this, null);
             _pageTools.SetTotalCount(total_count);
 
         }
 
         public async Task<List<MpCopyItem>> FetchPageAsync(int offset, int limit) {
             var items = await MpContentQuery.FetchItemsAsync(this, offset, limit, Mp.Services.ContentQueryTools.GetOmittedContentIds());
-            //var items = await MpContentQuery.FetchItemsAsync(this, offset, limit, null);
-
             return items;
         }
         public async Task<int> FetchItemOffsetIdxAsync(int ciid) {
@@ -105,7 +102,6 @@ namespace MonkeyPaste.Avalonia {
                 return -1;
             }
             int offset_idx = await MpContentQuery.FetchItemOffsetAsync(this, ciid, Mp.Services.ContentQueryTools.GetOmittedContentIds());
-
             return offset_idx;
         }
 
@@ -131,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (has_query_changed || forceRequery) {
                     //MpPrefViewModel.Instance.LastQueryInfoJson = SerializeJsonObject();
-                    MpConsole.WriteLine("Simp requery called");
+                    //MpConsole.WriteLine("Simp requery called");
                     //_pageTools.AllQueryIds.Clear();
                     MpMessenger.SendGlobal(MpMessageType.QueryChanged);
                 } else {

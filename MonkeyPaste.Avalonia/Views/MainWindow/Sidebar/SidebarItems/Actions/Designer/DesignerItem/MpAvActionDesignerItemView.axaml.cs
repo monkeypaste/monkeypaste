@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 // external drop
                 var ext_ci = await e.Data.ToCopyItemAsync();
-                if (ext_ci != null) {
+                if (ext_ci != null && ext_ci.Id > 0) {
                     drop_cil.Add(ext_ci);
                 }
             }

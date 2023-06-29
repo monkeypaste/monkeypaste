@@ -474,6 +474,54 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
+        public static MpMenuItemViewModel GetColorPalleteMenuItemViewModel2(MpIColorPalettePickerViewModel ucvm, bool has_leading_sep = false) {
+            bool isAnySelected = false;
+            var colors = new List<MpMenuItemViewModel>();
+            string selectedHexStr = ucvm.UserHexColor == null ? string.Empty : ucvm.UserHexColor;
+            if (selectedHexStr.Length == 7) {
+                // add alpha for matching
+                selectedHexStr = $"#FF{selectedHexStr.Substring(1)}";
+            }
+            for (int i = 0; i < MpSystemColors.ContentColors.Count; i++) {
+                string cc = MpSystemColors.ContentColors[i].ToUpper();
+                bool isCustom = i == MpSystemColors.ContentColors.Count - 1;
+                bool isSelected = selectedHexStr.ToUpper() == cc;
+                if (isSelected) {
+                    isAnySelected = true;
+                }
+                ICommand command = ucvm.PaletteColorPickedCommand;
+                object commandArg;
+                string header = cc;
+
+                if (isCustom) {
+                    if (!isAnySelected) {
+                        isSelected = true;
+                        // if selected color is custom make background of custom icon that color (default white)
+                        header = selectedHexStr;
+                    }
+                    commandArg = "custom";
+                } else {
+                    commandArg = cc;
+                }
+
+                colors.Add(new MpMenuItemViewModel() {
+                    IsChecked = isSelected,
+                    Header = header,
+                    Command = command,
+                    CommandParameter = commandArg,
+                    IsVisible = isCustom,
+                    IsCustomColorButton = isCustom,
+                    IsColorPalleteItem = true,
+                    SortOrderIdx = i
+                });
+            }
+
+            return new MpMenuItemViewModel() {
+                IsColorPallete = true,
+                HasLeadingSeperator = has_leading_sep,
+                SubItems = colors.OrderBy(x => x.SortOrderIdx).ToList()
+            };
+        }
         public static MpMenuItemViewModel GetColorPalleteMenuItemViewModel(MpIUserColorViewModel ucvm, bool has_leading_sep = false) {
             bool isAnySelected = false;
             var colors = new List<MpMenuItemViewModel>();

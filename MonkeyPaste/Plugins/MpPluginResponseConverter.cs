@@ -77,11 +77,12 @@ namespace MonkeyPaste {
                 mpdo.SetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, ref_urls);
 
                 // create new item
-                var target_ci = await
-                    Mp.Services.CopyItemBuilder
-                    .BuildAsync(
-                        pdo: mpdo,
-                        transType: MpTransactionType.Created);
+                //var target_ci = await
+                //    Mp.Services.CopyItemBuilder
+                //    .BuildAsync(
+                //        pdo: mpdo,
+                //        transType: MpTransactionType.Created);
+                var target_ci = await Mp.Services.ContentBuilder.BuildFromDataObject(mpdo, false);
                 return target_ci;
             }
 

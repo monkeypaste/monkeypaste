@@ -262,7 +262,7 @@ namespace MonkeyPaste.Avalonia {
                         new MpMenuItemViewModel() {IsSeparator = true},
                         MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.CopyItemType),
                         new MpMenuItemViewModel() {IsSeparator = true},
-                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(SelectedItem),
+                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel2(SelectedItem),
                         new MpMenuItemViewModel() {IsSeparator = true},
                         new MpMenuItemViewModel() {
                             Header = @"Collections",
@@ -1826,6 +1826,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             _isProcessingCap = true;
+            string last_cap_info = Mp.Services.AccountTools.LastCapInfo.ToString();
             var cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync();
             MpConsole.WriteLine($"Account cap refreshed. Source: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
             MpConsole.WriteLine(cap_info.ToString(), false, true);
@@ -2467,6 +2468,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task RefreshQueryPageOffsetsAsync() {
+            return;
             Dispatcher.UIThread.VerifyAccess();
 
             while (IsAnyBusy) {
@@ -2681,7 +2683,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
             }
-            bool from_ext = false;
+            bool from_ext = true;
             if (mpdo is IDataObject ido) {
                 // should always be avdo but trying to keep portable interfaces...
                 from_ext = !ido.ContainsContentRef();
@@ -3112,6 +3114,10 @@ namespace MonkeyPaste.Avalonia {
 
                      to_select_ctvm = pin_placeholder_ctvm;
                  }
+                 int to_select_ciid = to_select_ctvm == null ? 0 : to_select_ctvm.CopyItemId;
+                 while (!QueryCommand.CanExecute(string.Empty)) { await Task.Delay(100); }
+                 QueryCommand.Execute(string.Empty);
+                 to_select_ctvm = to_select_ciid == 0 ? null : AllItems.FirstOrDefault(x => x.CopyItemId == to_select_ciid);
 
                  if (to_select_ctvm == null) {
                      // unpinned tile not in query page, try to select next pinned tile

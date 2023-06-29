@@ -29,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
 
         [SuppressPropertyChangedWarnings]
         void MpIFileSystemEventHandler.OnFileSystemItemChanged(object sender, FileSystemEventArgs e) {
+            // NOTE 
             MpDebug.Assert(IsEnabled, $"Folder Watcher change shouldn't be received when not enabled");
 
             bool is_core_loaded = Mp.Services != null &&
@@ -52,73 +53,25 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
+
             Dispatcher.UIThread.Post(async () => {
-                MpCopyItem ci = null;
-
-                switch (e.ChangeType) {
-                    // TODO this is barely tested, should use os file manager as source
-                    case WatcherChangeTypes.Changed:
-                    case WatcherChangeTypes.Created: {
-                            //ci = await MpCopyItem.CreateAsync(
-                            ////sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
-                            //itemType: MpCopyItemType.FileList,
-                            //data: e.FullPath,
-                            //suppressWrite: true);
-
-                            var si = await e.FullPath.ToFileOrFolderStorageItemAsync();
-                            ci = await Mp.Services.CopyItemBuilder.BuildAsync(
-                                pdo: new MpAvDataObject(MpPortableDataFormats.AvFileNames, new[] { si }),
-                                //suppressWrite: true,
-                                transType: MpTransactionType.Created,
-                                force_allow_dup: true,
-                                force_ext_sources: false);
-                            break;
-                        }
-
-                    case WatcherChangeTypes.Renamed: {
-                            RenamedEventArgs re = e as RenamedEventArgs;
-                            ci = await MpDataModelProvider.GetCopyItemByDataAsync(re.OldFullPath);
-                            if (ci == null) {
-                                //ci = await MpCopyItem.CreateAsync(
-                                //    //sourceId: MpDefaultDataModelTools.ThisOsFileManagerAppId,
-                                //    itemType: MpCopyItemType.FileList,
-                                //    data: e.FullPath,
-                                //    suppressWrite: true);
-
-                                var si = await e.FullPath.ToFileOrFolderStorageItemAsync();
-                                ci = await Mp.Services.CopyItemBuilder.BuildAsync(
-                                    pdo: new MpAvDataObject(MpPortableDataFormats.AvFileNames, new[] { si }),
-                                    //suppressWrite: true,
-                                    transType: MpTransactionType.Created,
-                                    force_allow_dup: true,
-                                    force_ext_sources: false);
-                            } else {
-                                ci.ItemData = re.FullPath;
-                                await ci.WriteToDatabaseAsync();
-                            }
-                            break;
-                        }
-                    case WatcherChangeTypes.Deleted:
-                        ci = await MpDataModelProvider.GetCopyItemByDataAsync(e.FullPath);
-                        if (ci == null) {
-                            return;
-                        }
-                        bool isVisible = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == ci.Id) != null;
-                        await ci.DeleteFromDatabaseAsync();
-                        if (isVisible) {
-                            Mp.Services.Query.NotifyQueryChanged();
-
-                        }
-                        break;
+                var si = await e.FullPath.ToFileOrFolderStorageItemAsync();
+                if (si == null) {
+                    return;
                 }
+                MpAvDataObject avdo = new MpAvDataObject(MpPortableDataFormats.AvFileNames, new[] { si });
 
-                if (ci != null) {
-                    var ao = new MpAvFileSystemTriggerOutput() {
-                        CopyItem = ci,
-                        FileSystemChangeType = e.ChangeType
-                    };
-                    await base.PerformActionAsync(ao);
+                // set title to '<FileName> <ChangeType>'
+                avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, Path.GetFileNameWithoutExtension(e.FullPath) + $" {e.ChangeType}");
+                MpCopyItem ci = await avdo.ToCopyItemAsync(true);
+                if (ci == null) {
+                    return;
                 }
+                var ao = new MpAvFileSystemTriggerOutput() {
+                    CopyItem = ci,
+                    FileSystemChangeType = e.ChangeType
+                };
+                await base.PerformActionAsync(ao);
             });
         }
 
@@ -179,7 +132,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public override string ActionHintText =>
-            "Folder Changed - Triggered when a file is added to the selected directory (or subdirectory if checked)";
+            "Folder Changed - Triggered when a folders content changes. The output will be a new content item of the file or folder that has changed along with the type of change.";
 
         #endregion
 

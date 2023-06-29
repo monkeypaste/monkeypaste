@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
             set => SelectedSortTypeIdx = (int)value;
         }
 
-
+        public bool IsSortDropDownOpen { get; set; }
         //public bool IsReseting { get; private set; } = false;
         #endregion
 

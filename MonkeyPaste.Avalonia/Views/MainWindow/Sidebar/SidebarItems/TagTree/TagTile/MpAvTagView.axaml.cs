@@ -250,25 +250,9 @@ namespace MonkeyPaste.Avalonia {
                     // CONTENT DROP
 
                     BindingContext.IsBusy = true;
-                    //bool is_internal = mpdo.ContainsContentRef();
-                    //if (is_internal) {
-                    //    // Internal Drop
-                    //    await PerformTileDropAsync(mpdo, is_copy);
-                    //} else {
-                    //    // External Drop
-                    //    await PerformExternalOrPartialDropAsync(mpdo, is_copy);
-                    //}
+                    var drop_ci = await mpdo.ToCopyItemAsync(is_copy);
 
-                    // NOTE need to use processed/output data object, avdo becomes disposed
-                    // (or weird stuff happens..external drop made invalid copyitemTag w/ the ciid. it was a huge number, not sure why
-                    // hard to step trace due dnd thread)
-
-                    var drop_ci = await mpdo.ToCopyItemAsync(
-                        //addAsNewItem: true,
-                        is_copy: is_copy
-                        );
-
-                    if (drop_ci == null || drop_ci.Id == 0) {
+                    if (drop_ci == null || drop_ci.Id <= 0) {
                         ResetDrop();
                         BindingContext.IsBusy = false;
                         return;
