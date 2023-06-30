@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
             IBrush fallback = MpSystemColors.Transparent.ToAvBrush();
             if (!has_value &&
                     parameter is string fparamStr &&
-                !string.IsNullOrEmpty(fparamStr)) {
+                    fparamStr.IsStringHexColor()) {
                 return Convert(fparamStr, null, null, null) as IBrush;
             }
             if (value is string valStr) {

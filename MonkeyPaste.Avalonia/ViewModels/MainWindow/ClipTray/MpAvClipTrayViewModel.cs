@@ -183,15 +183,23 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
                         },
                         new MpMenuItemViewModel() {
+                            IsSeparator = true,
+                            Header = "TEST"
+                        },
+                        new MpMenuItemViewModel() {
+                            Header = "Duplicate",
+                            AltNavIdx = 0,
+                            IconResourceKey = "DuplicateImage",
+                            Command = DuplicateSelectedClipsCommand,
+                            ShortcutArgs = new object[] { MpShortcutType.Duplicate },
+                        },
+                        new MpMenuItemViewModel() {
                             Header = @"Paste Here",
                             AltNavIdx = 6,
                             IconResourceKey = "PasteImage",
                             Command = PasteHereFromContextMenuCommand,
                             IsVisible = false,
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
-                        },
-                        new MpMenuItemViewModel() {
-                            IsSeparator = true
                         },
                         new MpMenuItemViewModel() {
                             Header = $"Paste To '{MpAvAppCollectionViewModel.Instance.LastActiveAppViewModel.AppName}'",
@@ -201,17 +209,12 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.PasteSelectedItems },
                         },
                         new MpMenuItemViewModel() {
-                            IsSeparator = true
-                        },
-                        new MpMenuItemViewModel() {
+                            HasLeadingSeperator = true,
                             Header = @"Delete",
                             AltNavIdx = 0,
                             IconResourceKey = "TrashCanImage",
                             Command = TrashSelectedClipCommand,
                             ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
-                        },
-                        new MpMenuItemViewModel() {
-                            IsSeparator = true
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Rename",
@@ -228,34 +231,11 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.ToggleContentReadOnly },
                         },
                         new MpMenuItemViewModel() {
-                            Header = SelectedItem.IsPinned ? "Un-pin":"Pin",
+                            Header = @"Find and Replace...",
                             AltNavIdx = 0,
-                            IconResourceKey = "PinImage",
-                            Command = ToggleSelectedTileIsPinnedCommand,
-                            ShortcutArgs = new object[] { MpShortcutType.TogglePinned },
-                        },
-                        new MpMenuItemViewModel() {
-                            IsSeparator = true
-                        },
-                        new MpMenuItemViewModel() {
-                            Header = @"Transform",
-                            IconResourceKey = "ToolsImage",
-                            SubItems = new List<MpMenuItemViewModel>() {
-                                new MpMenuItemViewModel() {
-                                    Header = @"Find and Replace",
-                                    AltNavIdx = 0,
-                                    IconResourceKey = "SearchImage",
-                                    Command = EnableFindAndReplaceForSelectedItem,
-                                    ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
-                                },
-                                new MpMenuItemViewModel() {
-                                    Header = "Duplicate",
-                                    AltNavIdx = 0,
-                                    IconResourceKey = "DuplicateImage",
-                                    Command = DuplicateSelectedClipsCommand,
-                                    ShortcutArgs = new object[] { MpShortcutType.Duplicate },
-                                }
-                            }
+                            IconResourceKey = "SearchImage",
+                            Command = EnableFindAndReplaceForSelectedItem,
+                            ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
                         },
                         new MpMenuItemViewModel() {IsSeparator = true},
                         SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
@@ -2985,7 +2965,7 @@ namespace MonkeyPaste.Avalonia {
                      return;
                  }
 
-                 await ctvm_to_pin.PersistSelectionStateCommand.ExecuteAsync();
+                 await ctvm_to_pin.PersistContentSelectionStateCommand.ExecuteAsync();
 
                  int ctvm_to_pin_query_idx = -1;
                  MpAvClipTileViewModel query_ctvm_to_pin = QueryItems.FirstOrDefault(x => x.CopyItemId == ctvm_to_pin.CopyItemId);
@@ -3079,8 +3059,16 @@ namespace MonkeyPaste.Avalonia {
                      return;
                  }
 
+                 await unpinned_ctvm.PersistContentSelectionStateCommand.ExecuteAsync();
+
                  int unpinned_ciid = unpinned_ctvm.CopyItemId;
                  int unpinned_ctvm_idx = PinnedItems.IndexOf(unpinned_ctvm);
+
+                 if (unpinned_ctvm.IsChildWindowOpen) {
+                     await unpinned_ctvm.TransactionCollectionViewModel.CloseTransactionPaneCommand.ExecuteAsync();
+                     MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(unpinned_ciid, unpinned_ctvm_idx);
+                     unpinned_ctvm.IsChildWindowOpen = false;
+                 }
 
                  PinnedItems.Remove(unpinned_ctvm);
 
@@ -3171,6 +3159,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (pctvm.IsPinned) {
                     await UnpinTileCommand.ExecuteAsync(args);
+                    return;
                 } else {
                     await PinTileCommand.ExecuteAsync(args);
                 }

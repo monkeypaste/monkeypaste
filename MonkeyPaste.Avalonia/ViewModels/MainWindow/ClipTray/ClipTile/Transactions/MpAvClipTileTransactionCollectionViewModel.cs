@@ -31,23 +31,43 @@ namespace MonkeyPaste.Avalonia {
 
         public MpMenuItemViewModel ContextMenuViewModel {
             get {
-                return new MpMenuItemViewModel() {
-                    Header = "Sources",
-                    IconResourceKey = "EggImage",
-                    SubItems =
-                        SortedTransactions
+                var source_mil = SortedTransactions
                         .SelectMany(x => x.Sources)
                         .Where(x => x.SourceRef != null)
                         .DistinctBy(x => new { x.SourceType, x.SourceObjId })
                         .Where(x => !(x.SourceType == MpTransactionSourceType.App && x.SourceObjId == MpDefaultDataModelTools.ThisAppId))
                         .Select(x => x.ContextMenuItemViewModel)
-                        .Union(
-                            Transactions
+                        .ToList();
+                List<MpMenuItemViewModel> cmil = new List<MpMenuItemViewModel>();
+                if (source_mil.Any()) {
+                    source_mil.Insert(0,
+                        new MpMenuItemViewModel() {
+                            IsSeparator = true,
+                            Header = "Annotations"
+                        });
+                    cmil.AddRange(source_mil);
+                }
+                var analysis_mil = Transactions
                             .SelectMany(x => x.Messages)
                             .OfType<MpAvParameterRequestMessageViewModel>()
-                            .Select(x => x.ContextMenuItemViewModel))
-                        .Where(x => x != null)
-                        .ToList()
+                            .Select(x => x.ContextMenuItemViewModel)
+                            .ToList();
+
+                if (analysis_mil.Any()) {
+                    analysis_mil.Insert(0,
+                        new MpMenuItemViewModel() {
+                            IsSeparator = true,
+                            Header = "Annotations"
+                        });
+                    cmil.AddRange(analysis_mil);
+                }
+
+                return new MpMenuItemViewModel() {
+                    Header = "Sources",
+                    IconResourceKey = "EggImage",
+                    IsVisible = cmil.Any(),
+                    SubItems = cmil
+
                 };
             }
         }

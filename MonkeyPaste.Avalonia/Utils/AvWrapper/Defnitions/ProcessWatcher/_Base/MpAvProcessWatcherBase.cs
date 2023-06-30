@@ -187,26 +187,18 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string GetProcessApplicationName(IntPtr hWnd) {
             string process_path = GetProcessPath(hWnd);
-            if (process_path.IsFile()) {
-                var fvi = FileVersionInfo.GetVersionInfo(process_path);
-                //if (!string.IsNullOrWhiteSpace(fvi.ProductName)) {
-                //    return fvi.ProductName;
-                //}
+            if (process_path.IsFile() &&
+                FileVersionInfo.GetVersionInfo(process_path) is FileVersionInfo fvi) {
+
                 if (!string.IsNullOrWhiteSpace(fvi.FileDescription)) {
                     return fvi.FileDescription;
                 }
+                if (!string.IsNullOrWhiteSpace(fvi.ProductName)) {
+                    return fvi.ProductName;
+                }
             }
-
-            string mwTitle = GetProcessTitle(hWnd);
-            string appName = ParseTitleForApplicationName(mwTitle);
-
-            if (string.IsNullOrWhiteSpace(appName)) {
-                // NOTE trying to enforce app name to not be empty or end up
-                // being file name when window title is normal pattern
-                string processPath = GetProcessPath(hWnd);
-                return Path.GetFileName(processPath);
-            }
-            return appName;
+            string processPath = GetProcessPath(hWnd);
+            return Path.GetFileName(processPath);
         }
 
         public virtual string GetProcessTitle(IntPtr handle) {

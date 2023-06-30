@@ -1943,6 +1943,7 @@ namespace MonkeyPaste.Avalonia {
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
                 Content = new MpAvClipTileView(),
                 Topmost = true,
+                Opacity = 1
             };
 
 
@@ -1971,16 +1972,17 @@ namespace MonkeyPaste.Avalonia {
                     Converter = MpAvStringToWindowTitleConverter.Instance
                 });
 
-            pow.Bind(
-                Window.BackgroundProperty,
-                new Binding() {
-                    Source = this,
-                    Path = nameof(CopyItemHexColor),
-                    Mode = BindingMode.OneWay,
-                    Converter = MpAvStringHexToBrushConverter.Instance,
-                    TargetNullValue = MpSystemColors.darkviolet,
-                    FallbackValue = MpSystemColors.darkviolet
-                });
+            //pow.Bind(
+            //    Window.BackgroundProperty,
+            //    new Binding() {
+            //        Source = this,
+            //        Path = nameof(CopyItemHexColor),
+            //        Mode = BindingMode.OneWay,
+            //        Converter = MpAvStringHexToBrushConverter.Instance,
+            //        ConverterParameter = "1",
+            //        TargetNullValue = MpSystemColors.darkviolet,
+            //        FallbackValue = MpSystemColors.darkviolet
+            //    });
 
             if (pow.Content is Control c) {
                 // BUG hover doesn't work binding to window
@@ -2031,7 +2033,7 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
 
                     Dispatcher.UIThread.Post(async () => {
-                        await PopInTileCommand.ExecuteAsync();
+                        await Parent.UnpinTileCommand.ExecuteAsync(this);
                         pow.Close();
                     });
                     return;
@@ -2280,7 +2282,7 @@ namespace MonkeyPaste.Avalonia {
                 return CanShowContextMenu && !IsPinPlaceholder;
             });
 
-        public MpIAsyncCommand PersistSelectionStateCommand => new MpAsyncCommand(
+        public MpIAsyncCommand PersistContentSelectionStateCommand => new MpAsyncCommand(
             async () => {
                 if (GetContentView() is MpAvContentWebView wv) {
                     // store cur sel state
@@ -2291,18 +2293,18 @@ namespace MonkeyPaste.Avalonia {
                 return !IsAnyPlaceholder;
             });
 
-        public MpIAsyncCommand PopInTileCommand => new MpAsyncCommand(async () => {
-            // NOTE called from confirmed popout closing
+        public MpIAsyncCommand PopInTileCommand => new MpAsyncCommand(
+            async () => {
+                // NOTE called from confirmed popout closing
 
-            int ciid = CopyItemId;
-            await PersistSelectionStateCommand.ExecuteAsync();
+                int ciid = CopyItemId;
+                await PersistContentSelectionStateCommand.ExecuteAsync();
 
-            await TransactionCollectionViewModel.CloseTransactionPaneCommand.ExecuteAsync();
-            MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(ciid, QueryOffsetIdx);
-            Parent.UnpinTileCommand.Execute(this);
-        }, () => {
-            return Parent != null;
-        });
+                await TransactionCollectionViewModel.CloseTransactionPaneCommand.ExecuteAsync();
+                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(ciid, QueryOffsetIdx);
+            }, () => {
+                return Parent != null;
+            });
         public ICommand PinToPopoutWindowCommand => new MpCommand<object>(
             (args) => {
                 if (!IsSelected) {

@@ -33,6 +33,20 @@
     padding: 2px 10px;
     caret-color: var(--caretcolor) !important;
 }
+
+#editor.light .ql-editor code:not(.font-color-override-on) {
+    color: dimgray !important;
+}
+#editor.light .ql-editor code:not(.font-bg-color-override-on) {
+    background-color: silver !important;
+}
+#editor.dark .ql-editor code:not(.font-color-override-on) {
+    color: silver !important;
+}
+#editor.dark .ql-editor code:not(.font-bg-color-override-on) {
+    background-color: dimgray !important;
+}
+
 .ql-editor::selection {    
   color: var(--selfgcolor);
   background: var(--selbgcolor);

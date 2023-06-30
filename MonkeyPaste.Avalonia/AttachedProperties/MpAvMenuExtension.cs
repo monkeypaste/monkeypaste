@@ -556,10 +556,20 @@ namespace MonkeyPaste.Avalonia {
                     control = mi;
                     break;
                 case MpMenuItemViewModel.SEPERATOR_TEMPLATE_NAME:
-                    control = new MenuItem() {
-                        Header = "-",
-                        DataContext = mivm
-                    };
+                    //control = new MenuItem() {
+                    //    Icon = mivm.Header,
+                    //    Header = "-",
+                    //    DataContext = mivm
+                    //};
+                    if (string.IsNullOrEmpty(mivm.Header)) {
+                        control = new Separator() { DataContext = mivm };
+                    } else {
+                        control = new DockPanel() {
+
+                            //HeaderText = mivm.Header,
+                            DataContext = mivm
+                        };
+                    }
                     break;
                 case MpMenuItemViewModel.COLOR_PALETTE_TEMPLATE_NAME:
                     control = new MenuItem() {

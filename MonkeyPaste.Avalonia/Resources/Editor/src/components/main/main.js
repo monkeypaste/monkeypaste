@@ -57,6 +57,7 @@ function initDefaults(defaultsObj) {
 	if(!isNullOrUndefined(defaultsObj.currentTheme)) {
 		globals.EditorTheme = defaultsObj.currentTheme;
 
+
 		let no_sel_bg = 'transparent';
 		let sub_sel_bg = `rgba(189,188,188,${bg_opacity})`;
 		let edit_bg = `rgba(255,248,220,${bg_opacity})`;
@@ -72,7 +73,10 @@ function initDefaults(defaultsObj) {
 		let caret_color = 'black';
 		let copy_color = 'green';
 
-		if(defaultsObj.currentTheme.toLowerCase() == 'dark') {
+		if (defaultsObj.currentTheme.toLowerCase() == 'dark') {
+			getEditorContainerElement().classList.remove('light');
+			getEditorContainerElement().classList.add('dark');
+
 			no_sel_bg = `rgba(0,0,0,${bg_opacity})`;
 			sub_sel_bg = `rgba(67,67,67,${bg_opacity})`;
 			edit_bg = `rgba(0,0,0,${bg_opacity})`;
@@ -87,6 +91,9 @@ function initDefaults(defaultsObj) {
 			sel_fg = 'white';
 			caret_color = 'white';
 			copy_color = 'lime';
+		} else {
+			getEditorContainerElement().classList.add('light');
+			getEditorContainerElement().classList.remove('dark');
 		}
 
 		globals.DefaultSelectionFgColor = sel_fg; 
