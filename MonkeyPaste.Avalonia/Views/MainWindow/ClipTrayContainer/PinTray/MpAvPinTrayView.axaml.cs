@@ -195,38 +195,6 @@ namespace MonkeyPaste.Avalonia {
             ClearAdorner();
         }
 
-        private async Task PerformTileDropAsync(int drop_idx, IDataObject avdo, bool isCopy) {
-            string drop_ctvm_pub_handle = avdo.Get(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
-            var drop_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == drop_ctvm_pub_handle);
-            if (drop_ctvm == null) {
-                MpDebug.Break();
-            }
-
-            if (isCopy) {
-                //  duplicate
-                var dup_ci = await BindingContext.SelectedItem.CopyItem.CloneDbModelAsync(deepClone: true);
-                await dup_ci.WriteToDatabaseAsync();
-                drop_ctvm = await BindingContext.CreateClipTileViewModelAsync(dup_ci, -1);
-            }
-            BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
-            MpConsole.WriteLine($"Tile '{drop_ctvm}' dropped onto pintray idx: {drop_idx}");
-        }
-
-        private async Task PerformExternalOrPartialDropAsync(int drop_idx, IDataObject avdo) {
-            // NOTE external or partial drop never needs to copy since result is always new content
-
-            //var avdo_ci = await Mp.Services.CopyItemBuilder.BuildAsync(
-            //    pdo: mpdo,
-            //    force_ext_sources: from_ext,
-            //    transType: MpTransactionType.Created);
-            //bool from_ext = !avdo.ContainsContentRef();
-            var avdo_ci = await avdo.ToCopyItemAsync();
-
-            var drop_ctvm = await BindingContext.CreateClipTileViewModelAsync(avdo_ci, -1);
-            BindingContext.PinTileCommand.Execute(new object[] { drop_ctvm, drop_idx });
-
-            MpConsole.WriteLine($"PARTIAL Tile '{drop_ctvm}' dropped onto pintray idx: {drop_idx}");
-        }
 
         #endregion
 

@@ -93,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIParameterCollectionViewModel Implementation
         IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items =>
-            Items;
+            FilteredItems;
         //public MpAvParameterViewModelBase SelectedItem { get; set; }
         public ICommand SaveCommand =>
             MpAvSettingsViewModel.Instance.SaveSettingsCommand;
@@ -109,6 +109,10 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+
+        public IEnumerable<MpAvParameterViewModelBase> FilteredItems =>
+            Items
+            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsViewModel.Instance.FilterText));
 
         public IList<MpAvParameterViewModelBase> Items { get; set; }
 

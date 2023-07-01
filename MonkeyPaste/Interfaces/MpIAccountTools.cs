@@ -7,6 +7,7 @@ namespace MonkeyPaste {
         public const int MAX_CAP_NTF_SHOW_TIME_MS = 5_000;
         public const string NEXT_TRASH_IMG_RESOURCE_KEY = "GhostImage";
         public const string NEXT_REMOVE_IMG_RESOURCE_KEY = "SkullImage";
+        public const string ADD_BLOCKED_RESOURCE_KEY = "LockImage";
 
         public int ToBeTrashed_ciid { get; set; }
         public int NextToBeTrashed_ciid { get; set; }

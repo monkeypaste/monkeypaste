@@ -2,6 +2,7 @@
 using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace MonkeyPaste {
     public class MpQuillInitMainRequestMessage : MpJsonObject {

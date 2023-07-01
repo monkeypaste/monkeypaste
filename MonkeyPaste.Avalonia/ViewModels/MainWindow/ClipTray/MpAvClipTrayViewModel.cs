@@ -182,10 +182,10 @@ namespace MonkeyPaste.Avalonia {
                             Command = CopySelectionFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
                         },
-                        new MpMenuItemViewModel() {
-                            IsSeparator = true,
-                            Header = "TEST"
-                        },
+                        //new MpMenuItemViewModel() {
+                        //    IsSeparator = true,
+                        //    Header = "TEST"
+                        //},
                         new MpMenuItemViewModel() {
                             Header = "Duplicate",
                             AltNavIdx = 0,
@@ -1281,7 +1281,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSubQuerying { get; set; } = false;
         public int SparseLoadMoreRemaining { get; set; }
 
-        public MpQuillPasteButtonInfoMessage CurPasteInfoMessage { get; private set; } = new MpQuillPasteButtonInfoMessage();
+        public MpQuillPasteButtonInfoMessage CurPasteInfoMessage { get; private set; }
 
         #region Drag Drop
         public bool IsAnyDropOverTrays { get; private set; }
@@ -1392,8 +1392,10 @@ namespace MonkeyPaste.Avalonia {
 
             IsGridLayout = LayoutType == MpClipTrayLayoutType.Grid;
 
-            await ProcessAccountCapsAsync("init");
+            await ProcessAccountCapsAsync(MpAccountCapCheckType.Init);
             await UpdateEmptyPropertiesAsync();
+
+            await SetCurPasteInfoMessageAsync(Mp.Services.ProcessWatcher.LastProcessInfo);
 
             IsBusy = false;
         }
@@ -1800,71 +1802,105 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private bool _isProcessingCap = false;
-        public async Task ProcessAccountCapsAsync(string source, object arg = null) {
+        public async Task ProcessAccountCapsAsync(MpAccountCapCheckType source, object arg = null) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                await Dispatcher.UIThread.InvokeAsync(async () => { await ProcessAccountCapsAsync(source, arg); });
+                return;
+            }
+
             if (_isProcessingCap) {
                 MpConsole.WriteLine($"Account cap refreshed IGNORED (already processing). Source: '{source}' Args: '{arg.ToStringOrDefault()}'");
                 return;
             }
             _isProcessingCap = true;
+
             string last_cap_info = Mp.Services.AccountTools.LastCapInfo.ToString();
             var cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync();
             MpConsole.WriteLine($"Account cap refreshed. Source: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
             MpConsole.WriteLine(cap_info.ToString(), false, true);
 
-            await Dispatcher.UIThread.InvokeAsync(async () => {
-                if (source == "add") {
-                    // TODO should change these ntf to actions that open in-app purchase
-                    var add_msg_sb = new StringBuilder();
+            // triggers:
+            // init
+            // content add
+            // content delete
+            // (un)link tag
+            // block
 
+            bool apply_changes = false;
+            string cap_msg_title_suffix = string.Empty;
+            string cap_msg_icon = string.Empty;
+            var cap_msg_sb = new StringBuilder();
+            MpNotificationType cap_msg_type = MpNotificationType.None;
 
-                    if (cap_info.ToBeTrashed_ciid > 0) {
-                        add_msg_sb.AppendLine(
-                            $"Max storage is {Mp.Services.AccountTools.GetContentCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
-                    }
-                    if (cap_info.ToBeRemoved_ciid > 0) {
-                        add_msg_sb.AppendLine(
-                            $"Max archive is {Mp.Services.AccountTools.GetTrashCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
-                    }
-                    if (!string.IsNullOrEmpty(add_msg_sb.ToString())) {
-                        add_msg_sb.AppendLine(string.Empty);
-                        add_msg_sb.AppendLine(string.Empty);
-                        if (IsAddingStartupClipboardItem) {
-                            add_msg_sb.AppendLine($"* To prevent add on startup, uncheck '{nameof(MpPrefViewModel.Instance.AddClipboardOnStartup).ToLabel()}' or '{nameof(MpPrefViewModel.Instance.IsClipboardListeningOnStartup).ToLabel()}' ");
-                        } else {
-                            add_msg_sb.AppendLine($"* You can hide these warnings by clicking 'hide all' from the options menu above 😉");
-                        }
-
-                        MpNotificationBuilder.ShowMessageAsync(
-                               title: $"'{Mp.Services.AccountTools.CurrentAccountType}' Capacity Reached",
-                               body: add_msg_sb.ToString(),
-                               msgType: MpNotificationType.ContentCapReached,
-                               maxShowTimeMs: MpContentCapInfo.MAX_CAP_NTF_SHOW_TIME_MS,
-                               iconSourceObj: MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY).FireAndForgetSafeAsync();
-                    }
-                    await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);
-                    await DeleteItemByCopyItemIdAsync(cap_info.ToBeRemoved_ciid);
-                } else if (source == "block") {
-                    // block refresh called BEFORE an add would occur to check favorite count again
-                    // since tag linking doesn't refresh caps, this does it when last add set account to block state
-                    if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
-                        // no linking changes, add will be blocked
-                        MpNotificationBuilder.ShowMessageAsync(
-                               title: $"Add blocked!",
-                               body: $"Max storage is {Mp.Services.AccountTools.GetContentCapacity(Mp.Services.AccountTools.CurrentAccountType)}.",
-                               msgType: MpNotificationType.ContentAddBlockedByAccount,
-                               maxShowTimeMs: MpContentCapInfo.MAX_CAP_NTF_SHOW_TIME_MS,
-                               iconSourceObj: MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY).FireAndForgetSafeAsync();
-                    } else {
-                        // links were changed since last refresh, item will be added..
-                    }
-                } else if (source == "link") {
-
+            if (source == MpAccountCapCheckType.Add) {
+                if (cap_info.ToBeTrashed_ciid > 0) {
+                    cap_msg_icon = MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY;
+                    cap_msg_title_suffix = $"Content Capacity Reached!";
+                    cap_msg_sb.AppendLine(
+                        $"Max storage is {Mp.Services.AccountTools.GetContentCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
                 }
-                AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IconResourceObj)));
-                AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyNextCapByAccount)));
-            });
+                if (cap_info.ToBeRemoved_ciid > 0) {
+                    cap_msg_icon = MpContentCapInfo.NEXT_REMOVE_IMG_RESOURCE_KEY;
+                    if (string.IsNullOrEmpty(cap_msg_title_suffix)) {
+                        cap_msg_title_suffix = $"Archive Capacity Reached!";
+                    } else {
+                        cap_msg_title_suffix = $"Content & Archive Capacity Reached!";
+                    }
+                    cap_msg_sb.AppendLine(
+                        $"Max archive is {Mp.Services.AccountTools.GetTrashCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
+                }
+                if (!string.IsNullOrEmpty(cap_msg_sb.ToString())) {
+                    apply_changes = true;
+                    cap_msg_type = MpNotificationType.ContentCapReached;
+                    cap_msg_sb.AppendLine(string.Empty);
+                    if (IsAddingStartupClipboardItem) {
+                        cap_msg_sb.AppendLine($"* To prevent add on startup, uncheck '{nameof(MpPrefViewModel.Instance.AddClipboardOnStartup).ToLabel()}' or '{nameof(MpPrefViewModel.Instance.IsClipboardListeningOnStartup).ToLabel()}' ");
+                    } else {
+                        cap_msg_sb.AppendLine($"* You can hide these warnings by clicking 'hide all' from the options menu above 😉");
+                    }
+                }
 
+            } else if (source == MpAccountCapCheckType.Block) {
+                // block refresh called BEFORE an add would occur to check favorite count again and avoid delete
+                // since tag linking doesn't refresh caps, this does it when last add set account to block state
+                if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
+                    // no linking changes, add will be blocked
+                    cap_msg_title_suffix = "Add Blocked!";
+                    cap_msg_sb.AppendLine($"Max storage is {Mp.Services.AccountTools.GetContentCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
+                    cap_msg_icon = MpContentCapInfo.ADD_BLOCKED_RESOURCE_KEY;
+                    cap_msg_type = MpNotificationType.ContentAddBlockedByAccount;
+                } else {
+                    // links were changed since last refresh, item will be added..
+                }
+            } else if (source == MpAccountCapCheckType.Link &&
+                arg is int tag_id) {
+                bool is_unlink = tag_id < 0;
+                tag_id = Math.Abs(tag_id);
+                if (tag_id == MpTag.TrashTagId) {
+                    if (is_unlink) {
+
+                    }
+                }
+            }
+
+            if (apply_changes) {
+                // only after add or (un)link to trash/favorites
+
+                await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);
+                await DeleteItemByCopyItemIdAsync(cap_info.ToBeRemoved_ciid);
+            }
+            AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IconResourceObj)));
+            AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyNextCapByAccount)));
             _isProcessingCap = false;
+            if (cap_msg_type == MpNotificationType.None) {
+                return;
+            }
+            MpNotificationBuilder.ShowMessageAsync(
+                       title: $"'{Mp.Services.AccountTools.CurrentAccountType}' {cap_msg_title_suffix}",
+                       body: cap_msg_sb.ToString(),
+                       msgType: cap_msg_type,
+                       iconSourceObj: cap_msg_icon,
+                       maxShowTimeMs: MpContentCapInfo.MAX_CAP_NTF_SHOW_TIME_MS).FireAndForgetSafeAsync();
         }
 
         #endregion
@@ -2377,6 +2413,27 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
+            Dispatcher.UIThread.Post(async () => {
+                await SetCurPasteInfoMessageAsync(e);
+            }, DispatcherPriority.Background);
+        }
+        private async Task SetCurPasteInfoMessageAsync(MpPortableProcessInfo e) {
+
+            while (MpAvAppCollectionViewModel.Instance.IsAnyBusy) {
+                // wait if app new/db updating 
+                await Task.Delay(100);
+            }
+            CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage();
+            var active_avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e);
+            if (active_avm == null) {
+                // let editor use fallback
+            } else {
+                CurPasteInfoMessage.pasteButtonTooltipText = string.IsNullOrEmpty(e.ApplicationName) ? e.MainWindowTitle : e.ApplicationName;
+                CurPasteInfoMessage.pasteButtonIconBase64 = await MpDataModelProvider.GetDbImageBase64ByIconIdAsync(active_avm.IconId);
+            }
+
+            string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeJsonObjectToBase64()}')";
+
             var to_notify_ctvml =
                 AllActiveItems
                     .Where(x => x.IsSubSelectionEnabled)
@@ -2386,28 +2443,10 @@ namespace MonkeyPaste.Avalonia {
                 // no sub-selectable items to ntf
                 return;
             }
+            to_notify_ctvml
+                .ForEach(x => x.SendMessage(msg));
 
-            Dispatcher.UIThread.Post(async () => {
-                while (MpAvAppCollectionViewModel.Instance.IsAnyBusy) {
-                    // wait if app new/db updating 
-                    await Task.Delay(100);
-                }
-                CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage();
-                var active_avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e);
-                if (active_avm == null) {
-                    // let editor use fallback
-                } else {
-                    CurPasteInfoMessage.pasteButtonTooltipText = string.IsNullOrEmpty(e.ProcessName) ? e.MainWindowTitle : e.ProcessName;
-                    CurPasteInfoMessage.pasteButtonIconBase64 = await MpDataModelProvider.GetDbImageBase64ByIconIdAsync(active_avm.IconId);
-                }
-
-                string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeJsonObjectToBase64()}')";
-
-                to_notify_ctvml
-                    .ForEach(x => x.SendMessage(msg));
-
-                MpConsole.WriteLine($"{to_notify_ctvml.Count()} items notified of active app change");
-            }, DispatcherPriority.Background);
+            MpConsole.WriteLine($"{to_notify_ctvml.Count()} items notified of active app change");
         }
 
         private void ClipboardWatcher_OnClipboardChanged(object sender, MpPortableDataObject mpdo) {
@@ -2416,7 +2455,7 @@ namespace MonkeyPaste.Avalonia {
             bool is_change_ignored =
                 !is_startup_ido &&
                 (IsAppPaused ||
-                 (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && Mp.Services.ProcessWatcher.IsThisAppActive));
+                 (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && MpAvWindowManager.IsAnyActive));
             if (is_startup_ido && !is_change_ignored && !MpPrefViewModel.Instance.AddClipboardOnStartup) {
                 // ignore startup item
                 is_change_ignored = true;
@@ -2426,7 +2465,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("Clipboard Change Ignored by tray");
                 MpConsole.WriteLine($"IsMainWindowLoading: {MpAvMainWindowViewModel.Instance.IsMainWindowLoading}");
                 MpConsole.WriteLine($"IsAppPaused: {IsAppPaused}");
-                MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpPrefViewModel.Instance.IgnoreInternalClipboardChanges} IsThisAppActive: {Mp.Services.ProcessWatcher.IsThisAppActive}");
+                MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpPrefViewModel.Instance.IgnoreInternalClipboardChanges} IsThisAppActive: {MpAvWindowManager.IsAnyActive}");
                 return;
             }
 
@@ -2447,6 +2486,40 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
+        private async Task TrashItemByCopyItemIdAsync(int ciid) {
+            if (ciid == 0) {
+                return;
+            }
+            // add link to trash tag which caches ciid
+            await MpAvTagTrayViewModel.Instance.TrashTagViewModel
+                .LinkCopyItemCommand.ExecuteAsync(ciid);
+
+            MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
+
+
+            var trashed_ctvm = AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid);
+            if (trashed_ctvm == null) {
+                return;
+            }
+
+
+            if (trashed_ctvm.IsPinned) {
+
+                bool needs_query_refresh =
+                    trashed_ctvm.HasPinPlaceholder;
+                UnpinTileCommand.Execute(trashed_ctvm);
+                if (needs_query_refresh) {
+                    // needs requery to remove placeholder
+                    // or the frozen trash item (when query is not trash query)
+                    // is used
+                    while (IsAnyBusy) { await Task.Delay(100); }
+                } else {
+                    return;
+                }
+            }
+            // trigger in place requery to remove trashed item
+            QueryCommand.Execute(string.Empty);
+        }
         private async Task RefreshQueryPageOffsetsAsync() {
             return;
             Dispatcher.UIThread.VerifyAccess();
@@ -2657,16 +2730,16 @@ namespace MonkeyPaste.Avalonia {
 
             if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                 MpConsole.WriteLine($"Add content blocked, acct capped. Ensuring accuracy...");
-                await ProcessAccountCapsAsync("blocked", mpdo);
+                await ProcessAccountCapsAsync(MpAccountCapCheckType.Block, mpdo);
                 if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                     MpConsole.WriteLine($"Add content blocked confirmed.");
                     return null;
                 }
             }
-            bool from_ext = true;
+            bool force_ext = true;
             if (mpdo is IDataObject ido) {
                 // should always be avdo but trying to keep portable interfaces...
-                from_ext = !ido.ContainsContentRef();
+                force_ext = !ido.ContainsContentRef();
             }
 
             IsAddingClipboardItem = true;
@@ -2674,7 +2747,7 @@ namespace MonkeyPaste.Avalonia {
             MpCopyItem newCopyItem = await Mp.Services.CopyItemBuilder.BuildAsync(
                 pdo: mpdo,
                 transType: MpTransactionType.Created,
-                force_ext_sources: from_ext,
+                force_ext_sources: force_ext,
                 force_allow_dup: is_copy);
 
             MpCopyItem processed_result = await AddUpdateOrAppendCopyItemAsync(newCopyItem);
@@ -2704,7 +2777,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"Duplicate item '{ci.Title}' unlinked from trash");
                 }
             } else {
-                await ProcessAccountCapsAsync("add");
+                await ProcessAccountCapsAsync(MpAccountCapCheckType.Add);
             }
 
             if (AppendClipTileViewModel == null &&
@@ -2738,7 +2811,6 @@ namespace MonkeyPaste.Avalonia {
                 }
 
             } else {
-                MpPrefViewModel.Instance.UniqueContentItemIdx++;
                 MpMessenger.SendGlobal(MpMessageType.ContentAdded);
                 AddNewItemsCommand.Execute(null);
             }
@@ -3189,13 +3261,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
-                var clonedCopyItem = await SelectedItem.CopyItem.CloneDbModelAsync(
-                    deepClone: true);
 
-                await clonedCopyItem.WriteToDatabaseAsync();
-                PendingNewModels.Add(clonedCopyItem);
-
-                AddNewItemsCommand.Execute(true);
+                await AddItemFromDataObjectAsync(SelectedItem.CopyItem.ToPortableDataObject());
 
                 IsBusy = false;
             }, () => SelectedItem != null);
@@ -3288,6 +3355,7 @@ namespace MonkeyPaste.Avalonia {
             if (IsThumbDragging ||
                 IsAnyBusy ||
                 IsAnyResizing ||
+                IsQueryTrayEmpty ||
                 MpAvMainWindowViewModel.Instance.IsResizing ||
                 // Mp.Services.Query.TotalAvailableItemsInQuery == 0 ||
                 //!MpAvTagTrayViewModel.Instance.IsAnyTagActive ||
@@ -3845,18 +3913,6 @@ namespace MonkeyPaste.Avalonia {
             //return idxs;
         }
 
-
-        public ICommand ChangeSelectedClipsColorCommand => new MpCommand<object>(
-             (hexStrOrBrush) => {
-                 string hexStr = string.Empty;
-                 if (hexStrOrBrush is SolidColorBrush scb && scb.Color is Color color) {
-                     hexStr = new MpColor(color.A, color.R, color.G, color.B).ToHex(); //scb.ToHex();
-                 } else if (hexStrOrBrush is string) {
-                     hexStr = (string)hexStrOrBrush;
-                 }
-                 SelectedItem.ChangeColorCommand.Execute(hexStr.ToString());
-             });
-
         public ICommand CopySelectedClipFromShortcutCommand => new MpCommand(
             () => {
                 SelectedItem.CopyToClipboardCommand.Execute(null);
@@ -4043,40 +4099,6 @@ namespace MonkeyPaste.Avalonia {
                 return can_restore;
             });
 
-        private async Task TrashItemByCopyItemIdAsync(int ciid) {
-            if (ciid == 0) {
-                return;
-            }
-            // add link to trash tag which caches ciid
-            await MpAvTagTrayViewModel.Instance.TrashTagViewModel
-                .LinkCopyItemCommand.ExecuteAsync(ciid);
-
-            MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
-
-
-            var trashed_ctvm = AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid);
-            if (trashed_ctvm == null) {
-                return;
-            }
-
-
-            if (trashed_ctvm.IsPinned) {
-
-                bool needs_query_refresh =
-                    trashed_ctvm.HasPinPlaceholder;
-                UnpinTileCommand.Execute(trashed_ctvm);
-                if (needs_query_refresh) {
-                    // needs requery to remove placeholder
-                    // or the frozen trash item (when query is not trash query)
-                    // is used
-                    while (IsAnyBusy) { await Task.Delay(100); }
-                } else {
-                    return;
-                }
-            }
-            // trigger in place requery to remove trashed item
-            QueryCommand.Execute(string.Empty);
-        }
         public ICommand TrashSelectedClipCommand => new MpAsyncCommand(
             async () => {
                 await TrashItemByCopyItemIdAsync(SelectedItem.CopyItemId);
@@ -4110,7 +4132,7 @@ namespace MonkeyPaste.Avalonia {
                 await to_delete_ctvm.CopyItem.DeleteFromDatabaseAsync();
             }
 
-            await ProcessAccountCapsAsync("remove", ciid);
+            await ProcessAccountCapsAsync(MpAccountCapCheckType.Remove, ciid);
 
             //db delete event is handled in clip tile
             IsBusy = false;

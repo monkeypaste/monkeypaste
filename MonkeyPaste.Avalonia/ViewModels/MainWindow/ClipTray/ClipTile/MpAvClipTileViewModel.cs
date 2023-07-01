@@ -2143,11 +2143,6 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return !IsSubSelectionEnabled && !IsFrozen;
             });
-
-        public ICommand ChangeColorCommand => new MpCommand<string>(
-            (b) => {
-                CopyItemHexColor = b;
-            });
         public ICommand SendSubSelectedToEmailCommand => new MpCommand(
             () => {
                 //MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemData.ToPlainText()));

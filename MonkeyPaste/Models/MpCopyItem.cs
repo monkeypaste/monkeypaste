@@ -11,7 +11,6 @@ namespace MonkeyPaste {
     public class MpCopyItem :
         MpDbModelBase,
         MpISyncableDbObject,
-        MpIClonableDbModel<MpCopyItem>,
         MpISourceRef,
         MpILabelText {
         #region Statics
@@ -41,6 +40,8 @@ namespace MonkeyPaste {
         public string ItemTypeName { get; set; } = MpCopyItemType.None.ToString();
 
         public DateTime CopyDateTime { get; set; }
+
+        public DateTime LastCapRelatedDateTime { get; set; }
 
         [Indexed]
         public string ItemData { get; set; } = string.Empty;
@@ -118,46 +119,6 @@ namespace MonkeyPaste {
         public string Uri => Mp.Services.SourceRefTools.ConvertToInternalUrl(this);
         #endregion
 
-        #region MpIClonableDbModel Implementation
-
-        public async Task<MpCopyItem> CloneDbModelAsync(
-            bool deepClone = true,
-            bool suppressWrite = false) {
-            // NOTE parent are ignored for this model
-
-            var newItem = new MpCopyItem() {
-                ItemType = this.ItemType,
-                Title = this.Title,
-                ItemData = this.ItemData,
-                IconId = this.IconId,
-                //SourceId = this.SourceId,
-                CopyCount = 1,
-                CopyDateTime = DateTime.Now,
-                Id = 0,
-                CopyItemGuid = System.Guid.NewGuid()
-            };
-
-            if (deepClone) {
-                await newItem.WriteToDatabaseAsync();
-
-                var tags = await MpDataModelProvider.GetCopyItemTagsForCopyItemAsync(this.Id);
-                foreach (var tag in tags) {
-                    await MpCopyItemTag.CreateAsync(
-                        tagId: tag.Id,
-                        copyItemId: newItem.Id);
-                }
-
-                //var templates = await MpDataModelProvider.GetTextTemplatesAsync(this.Id);
-                //foreach (var template in templates) {
-                //    var templateClone = await template.CloneDbModel();
-                //    templateClone.CopyItemId = newItem.Id;
-                //    await templateClone.WriteToDatabaseAsync();
-                //}
-            }
-
-            return newItem;
-        }
-        #endregion
 
         #endregion
 
@@ -173,10 +134,11 @@ namespace MonkeyPaste {
             if (dataObjectId <= 0 && !suppressWrite) {
                 throw new Exception($"Should have dataObjectId. param was {dataObjectId}");
             }
-
+            var create_dt = DateTime.Now;
             var newCopyItem = new MpCopyItem() {
                 CopyItemGuid = System.Guid.NewGuid(),
-                CopyDateTime = DateTime.Now,
+                CopyDateTime = create_dt,
+                LastCapRelatedDateTime = create_dt,
                 Title = title,
                 ItemData = data,
                 ItemType = itemType,

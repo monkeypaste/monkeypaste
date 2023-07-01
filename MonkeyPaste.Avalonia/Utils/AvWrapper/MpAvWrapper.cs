@@ -38,6 +38,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion 
 
+        public MpILoadOnLoginTools LoadOnLoginTools { get; set; }
         public MpIPlatformUserInfo PlatformUserInfo { get; set; }
         public MpIThisAppInfo ThisAppInfo { get; set; }
         public MpIAccountTools AccountTools { get; set; }
@@ -132,7 +133,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
-
+            LoadOnLoginTools = new MpAvLoginLoadTools();
             AccountTools = new MpAvAccountTools();
             ColorQueryTools = new MpAvColorQueryTools();
             NativePathDialog = new MpAvPathDialog();

@@ -35,7 +35,7 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public static async Task<Tuple<string, int>> DiscoverPrefInfoAsync(MpIDbInfo dbInfo, MpIPlatformInfo osInfo) {
+        public static async Task<string> DiscoverPrefInfoAsync(MpIDbInfo dbInfo, MpIPlatformInfo osInfo) {
             bool wouldBeNewDb = await MpDb.InitDbConnectionAsync(dbInfo, false);
             if (wouldBeNewDb) {
                 //this should be caught in pref init so somethings wrong
@@ -78,12 +78,10 @@ namespace MonkeyPaste {
             }
 
             await MpDb.CreateTableAsync<MpCopyItem>();
-            int total_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(
-                tid: MpTag.AllTagId,
-                ignore_trash_if_not_tid: false);
 
             await MpDb.CloseConnectionAsync();
-            return new Tuple<string, int>(ThisUserDeviceGuid, total_count);
+
+            return ThisUserDeviceGuid;
         }
 
         public static async Task CreateAsync(string thisDeviceGuid) {

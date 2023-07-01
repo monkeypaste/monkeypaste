@@ -203,10 +203,6 @@ namespace MonkeyPaste.Avalonia {
                             MpAvClipTrayViewModel.Instance.AssignShortcutToSelectedItemCommand
                         },
                         {
-                            MpShortcutType.ChangeColor,
-                            MpAvClipTrayViewModel.Instance.ChangeSelectedClipsColorCommand
-                        },
-                        {
                             MpShortcutType.Undo,
                             MpAvUndoManagerViewModel.Instance.UndoCommand
                         },

@@ -13,31 +13,33 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
-            string processPath, appName, iconBase64;
+            string processPath = pi.ProcessPath;
+            string appName = pi.ApplicationName;
+            //iconBase64;
 
-            // GET APP PATH
-            if (string.IsNullOrWhiteSpace(pi.ProcessPath)) {
-                if (pi.Handle == IntPtr.Zero) {
-                    // when does this happen? likely a problem
-                    MpDebug.Break();
-                    return null;
-                }
-                // likely running application when no process path, find the path from the handle and use handle to query for mw title (if not already set)
-                processPath = Mp.Services.ProcessWatcher.GetProcessPath(pi.Handle);
-            } else {
-                processPath = pi.ProcessPath;
-            }
-            if (string.IsNullOrEmpty(processPath)) {
-                MpConsole.WriteWarningLine($"could not find process path for info (using this app): ");
-                MpConsole.WriteLine(pi.ToString());
-                var this_app_fallback = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
-                return this_app_fallback;
-            }
-            // GET APP NAME
-            appName = Mp.Services.ProcessWatcher.GetProcessApplicationName(pi.Handle);
+            //// GET APP PATH
+            //if (string.IsNullOrWhiteSpace(pi.ProcessPath)) {
+            //    if (pi.Handle == IntPtr.Zero) {
+            //        // when does this happen? likely a problem
+            //        MpDebug.Break();
+            //        return null;
+            //    }
+            //    // likely running application when no process path, find the path from the handle and use handle to query for mw title (if not already set)
+            //    processPath = Mp.Services.ProcessWatcher.GetProcessPath(pi.Handle);
+            //} else {
+            //    processPath = pi.ProcessPath;
+            //}
+            //if (string.IsNullOrEmpty(processPath)) {
+            //    MpConsole.WriteWarningLine($"could not find process path for info (using this app): ");
+            //    MpConsole.WriteLine(pi.ToString());
+            //    var this_app_fallback = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
+            //    return this_app_fallback;
+            //}
+            //// GET APP NAME
+            //appName = Mp.Services.ProcessWatcher.GetProcessApplicationName(pi.Handle);
 
             // GET APP ICON
-            iconBase64 =
+            string iconBase64 =
                 string.IsNullOrEmpty(pi.MainWindowIconBase64) ?
                     Mp.Services.IconBuilder.GetPathIconBase64(processPath) :
                     pi.MainWindowIconBase64;

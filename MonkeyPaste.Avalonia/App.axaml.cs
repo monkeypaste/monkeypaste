@@ -8,6 +8,7 @@ using Avalonia.Styling;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Wpf;
 using PropertyChanged;
 using System;
 using System.Diagnostics;

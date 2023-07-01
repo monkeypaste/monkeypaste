@@ -6,7 +6,7 @@ namespace MonkeyPaste.Common {
     public class MpPortableProcessInfo {
         public IntPtr Handle { get; set; } = IntPtr.Zero;
         public string ProcessPath { get; set; } = string.Empty;
-        public string ProcessName { get; set; } // app name
+        public string ApplicationName { get; set; } // app name
 
         public string MainWindowTitle { get; set; }
 

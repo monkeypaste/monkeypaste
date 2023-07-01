@@ -40,11 +40,11 @@ namespace MonkeyPaste.Avalonia {
                         .ToList();
                 List<MpMenuItemViewModel> cmil = new List<MpMenuItemViewModel>();
                 if (source_mil.Any()) {
-                    source_mil.Insert(0,
-                        new MpMenuItemViewModel() {
-                            IsSeparator = true,
-                            Header = "Annotations"
-                        });
+                    //source_mil.Insert(0,
+                    //    new MpMenuItemViewModel() {
+                    //        IsSeparator = true,
+                    //        Header = "Annotations"
+                    //    });
                     cmil.AddRange(source_mil);
                 }
                 var analysis_mil = Transactions
@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                     analysis_mil.Insert(0,
                         new MpMenuItemViewModel() {
                             IsSeparator = true,
-                            Header = "Annotations"
+                            //Header = "Annotations"
                         });
                     cmil.AddRange(analysis_mil);
                 }

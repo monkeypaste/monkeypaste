@@ -545,8 +545,14 @@ namespace MonkeyPaste.Common {
         }
 
         public static string ToPrettyPrintJson(this string jsonStr) {
-            JToken jt = JToken.Parse(jsonStr);
-            return jt.ToString();
+            try {
+                JToken jt = JToken.Parse(jsonStr);
+                return jt.ToString();
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error pretty printing json '{jsonStr}'", ex);
+                return jsonStr;
+            }
         }
 
         public static bool HasInvalidFileNameChars(this string filename) {

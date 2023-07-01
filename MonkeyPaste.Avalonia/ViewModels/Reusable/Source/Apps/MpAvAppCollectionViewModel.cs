@@ -76,38 +76,40 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public async Task InitAsync() {
-            await Task.Delay(1);
-            Dispatcher.UIThread.Post(async () => {
-                //IsBusy = true;
+            Dispatcher.UIThread.VerifyAccess();
 
-                var appl = await MpDataModelProvider.GetItemsAsync<MpApp>();
-                Items.Clear();
-                foreach (var app in appl) {
-                    //if(Items.Any(x=>x.AppId == app.Id)) {
-                    //    // unknown apps in register will already be added so no duppys
-                    //    continue;
-                    //}
-                    var avm = await CreateAppViewModel(app);
+            IsBusy = true;
 
-                    Items.Add(avm);
-                }
+            var appl = await MpDataModelProvider.GetItemsAsync<MpApp>();
+            Items.Clear();
+            foreach (var app in appl) {
+                //if(Items.Any(x=>x.AppId == app.Id)) {
+                //    // unknown apps in register will already be added so no duppys
+                //    continue;
+                //}
+                var avm = await CreateAppViewModel(app);
 
-                while (Items.Any(x => x.IsAnyBusy)) {
-                    await Task.Delay(100);
-                }
+                Items.Add(avm);
+            }
 
-                await RegisterWithProcessesManager();
+            while (Items.Any(x => x.IsAnyBusy)) {
+                await Task.Delay(100);
+            }
 
-                OnPropertyChanged(nameof(Items));
+            LastActiveAppViewModel = ThisAppViewModel;
 
-                if (Items.Count > 0) {
-                    SelectedItem = Items[0];
-                }
+            // wait to add activated handler until all apps at startup are syncd
+            Mp.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
 
-                ValidateAppViewModels();
+            OnPropertyChanged(nameof(Items));
 
-                //IsBusy = false;
-            });
+            if (Items.Count > 0) {
+                SelectedItem = Items[0];
+            }
+
+            ValidateAppViewModels();
+
+            IsBusy = false;
         }
 
         public async Task<MpAvAppViewModel> CreateAppViewModel(MpApp app) {
@@ -133,7 +135,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpAvAppViewModel GetAppByProcessInfo(MpPortableProcessInfo ppi) {
-            // NOTE this assumes ppi is a running process and device is on this system
+            if (ppi == null) {
+                return null;
+            }
             return
                 Items
                 .FirstOrDefault(x =>
@@ -141,40 +145,18 @@ namespace MonkeyPaste.Avalonia {
                 x.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId);
         }
 
-        public async Task<MpAvAppViewModel> GetOrCreateAppViewModelByProcessInfo(MpPortableProcessInfo ppi) {
-            if (GetAppByProcessInfo(ppi) is MpAvAppViewModel avm) {
-                return avm;
-            }
-            var app = await Mp.Services.AppBuilder.CreateAsync(ppi);
-            if (app == null) {
-                return null;
-            }
-            var new_avm = await CreateAppViewModel(app);
-            Items.Add(new_avm);
-            while (IsAnyBusy) {
-                await Task.Delay(100);
-            }
-            return new_avm;
-        }
-
         public MpAvAppViewModel GetAppViewModelFromScreenPoint(MpPoint gmp, double pixelDensity) {
-            IntPtr handle = IntPtr.Zero;
+            MpPortableProcessInfo ppi = null;
 
             if (MpAvMainWindowViewModel.Instance.MainWindowScreenRect.Contains(gmp)) {
                 // at least on windows (i think since its a tool window) the p/invoke doesn't return mw handle
-                handle = Mp.Services.ProcessWatcher.ThisAppHandle;
-            }
-            if (handle == IntPtr.Zero) {
+                //handle = Mp.Services.ProcessWatcher.ThisAppHandle;
+                ppi = Mp.Services.ProcessWatcher.ThisAppProcessInfo;
+            } else {
                 var unscaled_gmp = gmp * pixelDensity;
-                handle = Mp.Services.ProcessWatcher.GetParentHandleAtPoint(unscaled_gmp);
+                ppi = Mp.Services.ProcessWatcher.GetProcessInfoFromScreenPoint(unscaled_gmp);
             }
-            if (handle == IntPtr.Zero) {
-                return null;
-            }
-            string handle_path = Mp.Services.ProcessWatcher.GetProcessPath(handle);
-            //MpConsole.WriteLine("Drop Path: " + handle_path, true, true);
-            // TODO need to filter by current device here
-            return Items.FirstOrDefault(x => x.AppPath.ToLower() == handle_path.ToLower());
+            return GetAppByProcessInfo(ppi);
         }
         #endregion
 
@@ -275,51 +257,51 @@ namespace MonkeyPaste.Avalonia {
             MpDebug.Assert(dups == null, "Dup apps found");
         }
 
-        private async Task InitLastAppViewModel() {
-            // wait for running processes to get created
-            await Task.Delay(0);
-            var la_pi = Mp.Services.ProcessWatcher.LastProcessInfo;
-            if (la_pi == null) {
-                // since application is being started from file system init LastActive to file system app
-                la_pi = Mp.Services.ProcessWatcher.FileSystemProcessInfo;
-                if (la_pi == null) {
-                    // need to get this set on init in process watcher
-                    //MpDebug.Break();
-                }
-            }
-            if (la_pi != null) {
-                LastActiveAppViewModel = Items.FirstOrDefault(x => x.AppPath.ToLower() == la_pi.ProcessPath.ToLower());
-                if (LastActiveAppViewModel == null) {
-                    // what's the deal?
-                    MpDebug.Break();
-                    LastActiveAppViewModel = ThisAppViewModel;
-                }
-            }
-        }
-        private async Task RegisterWithProcessesManager() {
-            // This is only called during init to keep app storage in sync so any running apps are added if unknown
-            //PlatformWrapper.Services.ProcessWatcher.StartWatcher();
+        //private async Task InitLastAppViewModel() {
+        //    // wait for running processes to get created
+        //    await Task.Delay(0);
+        //    var la_pi = Mp.Services.ProcessWatcher.LastProcessInfo;
+        //    if (la_pi == null) {
+        //        // since application is being started from file system init LastActive to file system app
+        //        la_pi = Mp.Services.ProcessWatcher.FileSystemProcessInfo;
+        //        if (la_pi == null) {
+        //            // need to get this set on init in process watcher
+        //            //MpDebug.Break();
+        //        }
+        //    }
+        //    if (la_pi != null) {
+        //        LastActiveAppViewModel = Items.FirstOrDefault(x => x.AppPath.ToLower() == la_pi.ProcessPath.ToLower());
+        //        if (LastActiveAppViewModel == null) {
+        //            // what's the deal?
+        //            MpDebug.Break();
+        //            LastActiveAppViewModel = ThisAppViewModel;
+        //        }
+        //    }
+        //}
+        //private async Task RegisterWithProcessesManager() {
+        //    // This is only called during init to keep app storage in sync so any running apps are added if unknown
+        //    //PlatformWrapper.Services.ProcessWatcher.StartWatcher();
 
-            var unknownApps = Mp.Services.ProcessWatcher.RunningProcessLookup.Keys
-                                    .Where(x => Items.All(y => y.AppPath.ToLower() != x.ToLower()))
-                                    .Select(x => new MpPortableProcessInfo() { ProcessPath = x }).ToList();
+        //    //var unknownApps = Mp.Services.ProcessWatcher.RunningProcessLookup.Keys
+        //    //                        .Where(x => Items.All(y => y.AppPath.ToLower() != x.ToLower()))
+        //    //                        .Select(x => new MpPortableProcessInfo() { ProcessPath = x }).ToList();
 
-            MpConsole.WriteLine($"AppCollection RegisterWithProcessesManager '{unknownApps.Count}' unknown apps detected.");
-            foreach (var uap in unknownApps) {
-                _ = await Mp.Services.AppBuilder.CreateAsync(uap);
-                // wait for db add callback to pickup db add event
-                await Task.Delay(100);
-                while (IsBusy) {
-                    // wait for app to be added to items from db add callback
-                    await Task.Delay(100);
-                }
-            }
+        //    //MpConsole.WriteLine($"AppCollection RegisterWithProcessesManager '{unknownApps.Count}' unknown apps detected.");
+        //    //foreach (var uap in unknownApps) {
+        //    //    _ = await Mp.Services.AppBuilder.CreateAsync(uap);
+        //    //    // wait for db add callback to pickup db add event
+        //    //    await Task.Delay(100);
+        //    //    while (IsBusy) {
+        //    //        // wait for app to be added to items from db add callback
+        //    //        await Task.Delay(100);
+        //    //    }
+        //    //}
 
-            await InitLastAppViewModel();
+        //    await InitLastAppViewModel();
 
-            // wait to add activated handler until all apps at startup are syncd
-            Mp.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
-        }
+        //    // wait to add activated handler until all apps at startup are syncd
+        //    Mp.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
+        //}
 
         private async void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
             // if app is unknown add it

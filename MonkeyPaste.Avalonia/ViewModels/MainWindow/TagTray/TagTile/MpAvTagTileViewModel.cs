@@ -322,6 +322,7 @@ namespace MonkeyPaste.Avalonia {
         public bool CanAddChild =>
             !IsQueryTag &&
             !IsFormatGroupTag &&
+            !IsFavoritesTag &&
             !IsAllTag &&
             !IsTrashTag;
 
@@ -372,6 +373,7 @@ namespace MonkeyPaste.Avalonia {
                     IsTrashTag ||
                     IsQueryTag ||
                     IsFormatGroupTag ||
+                    IsFavoritesTag ||
                     IsRecentTag) {
                     return new[] { MpTagType.None };
                 }
@@ -1120,6 +1122,13 @@ namespace MonkeyPaste.Avalonia {
         private async Task LinkOrUnlinkCopyItemAsync(int ciid, bool isLink) {
             IsBusy = true;
 
+            var ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
+            if (ci == null) {
+                MpDebug.Break($"Error (un)linking ciid '{ciid}' to tag {TagId}");
+                return;
+            }
+            bool is_cap_related = IsTrashTag || IsFavoritesTag;
+            bool report_link = false;
             if (isLink) {
                 // try to create link, if it was created (and didn't already exist) notify any triggers
                 int linkCount = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(TagId);
@@ -1130,6 +1139,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (!cit.WasDupOnCreate) {
                     CopyItemIdsNeedingView.Add(ciid);
+                    report_link = true;
                 }
                 if (IsTrashTag && !Parent.TrashedCopyItemIds.Contains(ciid)) {
                     Parent.TrashedCopyItemIds.Add(ciid);
@@ -1140,6 +1150,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (cit != null) {
                     // only delete link/notify if exists
+                    report_link = true;
                     await cit.DeleteFromDatabaseAsync();
                 }
                 CopyItemIdsNeedingView.Remove(ciid);
@@ -1147,6 +1158,23 @@ namespace MonkeyPaste.Avalonia {
                 if (IsTrashTag && Parent.TrashedCopyItemIds.Contains(ciid)) {
                     Parent.TrashedCopyItemIds.Remove(ciid);
                 }
+            }
+
+            if (report_link) {
+                Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                    copyItemId: ciid,
+                    reqType: MpJsonMessageFormatType.Link,
+                    req: ciid.ToString(),
+                    respType: MpJsonMessageFormatType.Link,
+                    resp: TagId.ToString(),
+                    ref_uris: new[] { Mp.Services.SourceRefTools.ConvertToInternalUrl(ci) },
+                    transType: isLink ? MpTransactionType.Linked : MpTransactionType.Unlinked)
+                    .FireAndForgetSafeAsync(this);
+                if (is_cap_related) {
+                    ci.LastCapRelatedDateTime = DateTime.Now;
+                    await ci.WriteToDatabaseAsync();
+                }
+
             }
 
             Dispatcher.UIThread.VerifyAccess();
@@ -1168,7 +1196,11 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => {
                 // always do in place requery to catch the many cases for placeholder changes
                 await MpAvClipTrayViewModel.Instance.UpdateEmptyPropertiesAsync();
-                await MpAvClipTrayViewModel.Instance.ProcessAccountCapsAsync("link", TagId);
+                if (is_cap_related) {
+                    // NOTE infer link/unlink by +/- id
+                    await MpAvClipTrayViewModel.Instance.ProcessAccountCapsAsync(MpAccountCapCheckType.Link, TagId * (isLink ? 1 : -1));
+                }
+
                 while (!MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(string.Empty)) { await Task.Delay(100); }
                 MpAvClipTrayViewModel.Instance.QueryCommand.Execute(string.Empty);
             });

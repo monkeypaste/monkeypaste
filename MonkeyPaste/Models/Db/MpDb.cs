@@ -883,7 +883,6 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                  new string[] {"674bae7f-0a60-4f17-ac2c-81d5c6c3d879","Down", MpShortcutType.SelectNextRowItem.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"b916ab44-d4bd-4d8b-ac4a-de947343bd5a","Up", MpShortcutType.SelectPreviousRowItem.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"6487f6ff-da0c-475b-a2ae-ef1484233de0","Control+I", MpShortcutType.AssignShortcut.ToString(), MpRoutingType.Internal.ToString()},
-                 new string[] {"837e0c20-04b8-4211-ada0-3b4236da0821","Control+M", MpShortcutType.ChangeColor.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"118a2ca6-7021-47a0-8458-7ebc31094329","Control+Z", MpShortcutType.Undo.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"3980efcc-933b-423f-9cad-09e455c6824a","Control+Y", MpShortcutType.Redo.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"7a7580d1-4129-432d-a623-2fff0dc21408","Control+E", MpShortcutType.ToggleContentReadOnly.ToString(), MpRoutingType.Internal.ToString()},

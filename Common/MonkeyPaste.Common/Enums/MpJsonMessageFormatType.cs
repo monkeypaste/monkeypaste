@@ -4,8 +4,9 @@
         DataObject,
         Annotation,
         Delta,
+        Link,
         ParameterRequest,
-        Error
+        Error,
     }
 
 }

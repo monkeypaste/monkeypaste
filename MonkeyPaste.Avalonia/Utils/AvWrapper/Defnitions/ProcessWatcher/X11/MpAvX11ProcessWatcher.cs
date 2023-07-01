@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        public override bool CanWatchProcesses() {
+        protected override bool CanWatchProcesses() {
             string xdotoolPath = "command -v xdotool".ShellExec();
             MpConsole.WriteLine("CanWatchProcessOutput: " + xdotoolPath);
             return !string.IsNullOrEmpty(xdotoolPath);
@@ -40,26 +40,26 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIProcessWatcher Overrides
-        public override bool IsAdmin(object handleIdOrTitle) {
+        protected override bool IsAdmin(object handleIdOrTitle) {
             throw new NotImplementedException();
         }
-        public override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
+        protected override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
             throw new NotImplementedException();
         }
-        public override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
+        protected override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
             throw new NotImplementedException();
         }
-        public override IntPtr GetParentHandleAtPoint(MpPoint poIntPtr) {
+        protected override IntPtr GetParentHandleAtPoint(MpPoint poIntPtr) {
             return IntPtr.Zero;
         }
 
-        public override IntPtr SetActiveProcess(IntPtr handle) {
+        protected override IntPtr SetActiveProcess(IntPtr handle) {
             IntPtr lastHandle = GetActiveProcessInfo().Handle;
             int handle_val = handle.ToInt32();
             $"xdotool windowactivate {handle_val}".ShellExec();
             return lastHandle;
         }
-        public override MpPortableProcessInfo GetActiveProcessInfo() {
+        protected override MpPortableProcessInfo GetActiveProcessInfo() {
             var active_info = new MpPortableProcessInfo();
             string activeWindow = "xdotool getfocuswindow".ShellExec().Trim();
             active_info.MainWindowTitle = "xdotool getfocuswindow getwindowname".ShellExec().Trim();
@@ -106,25 +106,25 @@ namespace MonkeyPaste.Avalonia {
             return active_info;
         }
 
-        protected override void CreateRunningProcessLookup() {
+        protected void CreateRunningProcessLookup() {
             var runningApps = GetRunningAppsWrapper();
             if (runningApps == null) {
                 return;
             }
-            foreach (var kvp in runningApps) {
-                foreach (var handle in kvp.Value) {
-                    IntPtr handlePtr = new IntPtr(int.Parse(handle));
-                    if (!RunningProcessLookup.ContainsKey(kvp.Key)) {
-                        RunningProcessLookup.TryAdd(kvp.Key, new() { handlePtr });
-                    } else if (RunningProcessLookup.TryGetValue(kvp.Key, out var handles)) {
-                        handles.Add(handlePtr);
-                        RunningProcessLookup[kvp.Key] = handles;
-                    }
-                }
-            }
+            //foreach (var kvp in runningApps) {
+            //    foreach (var handle in kvp.Value) {
+            //        IntPtr handlePtr = new IntPtr(int.Parse(handle));
+            //        if (!RunningProcessLookup.ContainsKey(kvp.Key)) {
+            //            RunningProcessLookup.TryAdd(kvp.Key, new() { handlePtr });
+            //        } else if (RunningProcessLookup.TryGetValue(kvp.Key, out var handles)) {
+            //            handles.Add(handlePtr);
+            //            RunningProcessLookup[kvp.Key] = handles;
+            //        }
+            //    }
+            //}
         }
 
-        protected override MpPortableProcessInfo RefreshRunningProcessLookup() {
+        protected MpPortableProcessInfo RefreshRunningProcessLookup() {
             lock (_lockObj) {
                 string activeWindow = "xdotool getactivewindow".ShellExec().Trim();
                 if (_errorWindows.Contains(activeWindow)) {
@@ -237,6 +237,18 @@ namespace MonkeyPaste.Avalonia {
             //     return MpAvX11ProcessWatcher_xlib.GetRunningApps();
             // }
             return MpAvX11ProcessWatcher_shell.GetRunningApps();
+        }
+
+        protected override string GetProcessTitle(nint handle) {
+            throw new NotImplementedException();
+        }
+
+        protected override string GetProcessPath(nint handle) {
+            throw new NotImplementedException();
+        }
+
+        protected override MpPortableProcessInfo GetProcessInfoByHandle(nint handle) {
+            throw new NotImplementedException();
         }
         #endregion
 

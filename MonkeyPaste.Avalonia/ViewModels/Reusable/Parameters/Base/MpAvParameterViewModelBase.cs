@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvParameterViewModelBase :
         MpViewModelBase<MpViewModelBase>,
         MpITreeItemViewModel,
+        MpIFilterMatch,
         MpIAsyncCollectionObject,
         MpISelectableViewModel,
         MpIHoverableViewModel {
@@ -54,6 +55,14 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpIFilterMatch Implementation
+
+        bool MpIFilterMatch.IsMatch(string filter) {
+            return
+                Label.ToStringOrEmpty().ToLower().Contains(filter.ToStringOrEmpty().ToLower()) ||
+                Description.ToStringOrEmpty().ToLower().Contains(filter.ToStringOrEmpty().ToLower());
+        }
+        #endregion
         #endregion
 
         #region Properties

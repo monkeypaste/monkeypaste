@@ -1,12 +1,19 @@
 ﻿
 using MonkeyPaste.Common;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+    public enum MpAccountCapCheckType {
+        None = 0,
+        Add,
+        Link,
+        Block,
+        Remove,
+        Init
+    }
     public class MpAvAccountTools : MpIAccountTools {
         #region Private Variables
         private MpContentCapInfo _lastCapInfo = new();
@@ -78,8 +85,8 @@ namespace MonkeyPaste.Avalonia {
             // content cap 5 actual 5 (needs both)
             // content cap 5 actual 3 (none)
             int cur_content_diff = content_cap - totalCount;
-            bool needs_content_cap_info = cur_content_diff <= 1;
-            bool is_1_before_content_cap = cur_content_diff == 1;
+            bool needs_content_cap_info = cur_content_diff < 1;
+            bool is_1_before_content_cap = cur_content_diff == 0;
             List<int> to_trash_result = Enumerable.Repeat(0, 2).ToList();
             if (needs_content_cap_info) {
                 to_trash_result = await GetNowAndNextToTrashAsync();
@@ -100,8 +107,8 @@ namespace MonkeyPaste.Avalonia {
             // trash cap 100, actual 4 (none)
             int trash_cap = GetTrashCapacity(CurrentAccountType);
             int cur_trash_diff = trash_cap - totalTrash;
-            bool needs_trash_cap_info = cur_trash_diff <= 1;
-            bool is_1_before_trash_cap = cur_trash_diff == 1;
+            bool needs_trash_cap_info = cur_trash_diff < 1;
+            bool is_1_before_trash_cap = cur_trash_diff == 0;
             List<int> to_remove_result = Enumerable.Repeat(0, 2).ToList();
             if (needs_trash_cap_info) {
                 to_remove_result = await GetNowAndNextToRemoveAsync();
@@ -144,18 +151,19 @@ namespace MonkeyPaste.Avalonia {
         private async Task<List<int>> GetNowAndNextToTrashAsync() {
             // select oldest and next oldest created item not in trash(5) and not in favorites(3) [fallbacks] and not 
             string to_trash_query = @"
-select RootId
-from 
-	(select distinct RootId from MpContentQueryView where TransactionLabel='Created' order by TransactionDateTime) 
+select pk_MpCopyItemId 
+from MpCopyItem 
 where 
-	RootId not in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=? or fk_MpTagId=?) and RootId != ? limit 2
+pk_MpCopyItemId not in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=? or fk_MpTagId=?) and 
+pk_MpCopyItemId != ? 
+order by LastCapRelatedDateTime limit 2
 ";
 
             var to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, MpTag.FavoritesTagId, 0);
             if (to_trash_result.Count < 2) {
                 // no non-favorited items to trash or next to trash has no result,
 
-                // omit non-favorited item to trash and allow favorites
+                // requery allowing favorites
                 int to_trash_ciid = to_trash_result.Count == 1 ? to_trash_result[0] : 0;
                 var to_trash_fallback_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, 0, to_trash_ciid);
                 //MpDebug.Assert(to_trash_fallback_result.Count == 2, $"Account cap fallback error, should always have 2 results if reached this point");
@@ -167,16 +175,28 @@ where
                     to_trash_result.Add(to_trash_fallback_result[0]);
                 }
             }
+            int to_add = 2 - to_trash_result.Count;
+            while (to_add > 0) {
+                to_trash_result.Add(0);
+            }
             return to_trash_result;
         }
 
         private async Task<List<int>> GetNowAndNextToRemoveAsync() {
-            List<int> to_remove_result = null;
-            // select oldest and next oldest linked and not unlinked item to trash(5)
+            // select oldest and next oldest linked to trash(5)
             string to_remove_query = @"
-select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=? order by CreatedDateTime limit 2
+select pk_MpCopyItemId 
+from MpCopyItem 
+where 
+pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=?)
+order by LastCapRelatedDateTime limit 2
 ";
-            to_remove_result = await MpDb.QueryScalarsAsync<int>(to_remove_query, MpTag.TrashTagId);
+            List<int> to_remove_result = await MpDb.QueryScalarsAsync<int>(to_remove_query, MpTag.TrashTagId);
+
+            int to_add = 2 - to_remove_result.Count;
+            while (to_add > 0) {
+                to_remove_result.Add(0);
+            }
             return to_remove_result;
         }
 

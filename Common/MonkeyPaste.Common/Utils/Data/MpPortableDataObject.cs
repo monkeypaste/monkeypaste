@@ -141,9 +141,9 @@ namespace MonkeyPaste.Common {
             foreach (var kvp in DataFormatLookup) {
                 sb.AppendLine($"Format '{kvp.Key.Name}':");
                 if (kvp.Value is IEnumerable<object> objl) {
-                    objl.ForEach(x => sb.AppendLine(x.ToStringOrDefault().ToPrettyPrintJson()));
+                    objl.ForEach(x => sb.AppendLine(x.ToStringOrEmpty().ToPrettyPrintJson()));
                 } else {
-                    sb.AppendLine($"'{kvp.Value.ToStringOrDefault().ToPrettyPrintJson()}'");
+                    sb.AppendLine($"'{kvp.Value.ToStringOrEmpty().ToPrettyPrintJson()}'");
                 }
 
             }

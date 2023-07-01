@@ -25,6 +25,8 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvWindow ActiveWindow =>
             AllWindows.FirstOrDefault(x => x.IsActive);
 
+        public static bool IsAnyActive =>
+            ActiveWindow != null;
 
         #endregion
 

@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsViewModel :
         MpViewModelBase,
         MpIChildWindowViewModel,
+        MpIWindowStateViewModel,
         MpIWantsTopmostWindowViewModel,
         MpIActiveWindowViewModel,
         MpISettingsTools {
@@ -68,6 +69,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region MpIWindowStateViewModel Implementation
+
+        public MpWindowState WindowState { get; set; }
+        #endregion
+
         #endregion
 
         #region Properties
@@ -75,6 +81,10 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public ObservableCollection<MpAvSettingsFrameViewModel> Items { get; set; } = new ObservableCollection<MpAvSettingsFrameViewModel>();
+        public IList<MpAvSettingsFrameViewModel> FilteredItems =>
+            Items
+            .Where(x => x.FilteredItems.Any())
+            .ToList();
 
         public MpAvSettingsFrameViewModel SelectedItem {
             get =>
@@ -121,6 +131,10 @@ namespace MonkeyPaste.Avalonia {
             .OrderBy(x => x.SortOrderIdx)
             .ToList();
 
+        public IList<MpAvSettingsFrameViewModel> FilteredPreferenceItems =>
+            PreferenceItems
+            .Where(x => x.Items.Any())
+            .ToList();
         public MpAvSettingsFrameViewModel LookAndFeelFrame { get; set; }
         public MpAvSettingsFrameViewModel InternationalFrame { get; set; }
         public MpAvSettingsFrameViewModel ContentFrame { get; set; }
@@ -881,6 +895,8 @@ namespace MonkeyPaste.Avalonia {
                         var test = MpAvWindowManager.FindByHashCode(FilterText);
                     }
 #endif
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.FilteredItems)));
+                    OnPropertyChanged(nameof(FilteredPreferenceItems));
                     break;
                 case nameof(IsChildWindowOpen):
                     MpConsole.WriteLine($"Settings window: {(IsChildWindowOpen ? "OPEN" : "CLOSED")}");
@@ -948,29 +964,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void SetLoadOnLogin(bool loadOnLogin) {
-            if (!Mp.Services.ProcessWatcher.IsAdmin(Mp.Services.ProcessWatcher.ThisAppHandle)) {
-                //MonkeyPaste.MpConsole.WriteLine("Process not running as admin, cannot alter load on login");
-                return;
-            }
-#if WINDOWS
-            // see https://stackoverflow.com/questions/674628/how-do-i-set-a-program-to-launch-at-startup
-            Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            string appName = Assembly.GetExecutingAssembly().GetName().Name;
-            string appPath = Mp.Services.PlatformInfo.ExecutingPath;
-            if (loadOnLogin) {
-                // NOTE adding login loaded flag arg for startup state logic
-                appPath += " " + App.LOGIN_LOAD_ARG;
-                rk.SetValue(appName, appPath);
-            } else {
-                rk.DeleteValue(appName, false);
-            }
-#else
-            // TODO add other os'
-            loadOnLogin = false;
-#endif
-            MpPrefViewModel.Instance.LoadOnLogin = loadOnLogin;
+            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
 
-            MpConsole.WriteLine($"Load At Login: {(loadOnLogin ? "ON" : "OFF")}");
+            MpPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
+
+            MpConsole.WriteLine($"Load At Login: {(MpPrefViewModel.Instance.LoadOnLogin ? "ON" : "OFF")}");
         }
 
         private void AttachThemeButtonColorUpdate() {
@@ -1168,6 +1166,9 @@ namespace MonkeyPaste.Avalonia {
                     GetParamAndFrameByParamId(focus_param_id) is Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> focus_tuple) {
                     SelectedTabIdx = (int)focus_tuple.Item1.TabType;
                     Dispatcher.UIThread.Post(async () => {
+                        // clear search to ensure focus is visible
+                        FilterText = string.Empty;
+
                         // wait for param to be in view...
                         var param_view = await GetParameterControlByParamIdAsync<MpAvPluginParameterItemView>(focus_param_id);
                         while (true) {
@@ -1189,7 +1190,9 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     SelectedTabIdx = tab_idx;
                 }
-
+                if (WindowState == MpWindowState.Minimized) {
+                    WindowState = MpWindowState.Normal;
+                }
             });
 
         public ICommand ToggleShowSettingsWindowCommand => new MpCommand<object>(
@@ -1336,6 +1339,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                 }
             });
+
         #endregion
     }
 }

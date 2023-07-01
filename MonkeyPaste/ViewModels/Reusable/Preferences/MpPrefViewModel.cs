@@ -47,7 +47,6 @@ namespace MonkeyPaste {
             nameof(UserEmail),
             nameof(DbCreateDateTime),
             nameof(LastStartupDateTime),
-            nameof(UniqueContentItemIdx),
             nameof(SslPrivateKey),
             nameof(SslPublicKey),
             nameof(SslCertExpirationDateTime),
@@ -472,8 +471,6 @@ namespace MonkeyPaste {
         public DateTime StartupDateTime { get; set; } = DateTime.MinValue;
         public DateTime? LastStartupDateTime { get; set; } = null;
 
-        public int UniqueContentItemIdx { get; set; } = 0;
-
         public string ClipTrayLayoutTypeName { get; set; } = MpClipTrayLayoutType.Stack.ToString();
 
         #endregion
@@ -693,9 +690,7 @@ namespace MonkeyPaste {
                     }
                 }
                 _instance = new MpPrefViewModel();
-                var info_tuple = await MpDefaultDataModelTools.DiscoverPrefInfoAsync(_dbInfo, _osInfo);
-                string discovered_device_guid = info_tuple.Item1;
-                int total_count = info_tuple.Item2;
+                string discovered_device_guid = await MpDefaultDataModelTools.DiscoverPrefInfoAsync(_dbInfo, _osInfo);
                 if (string.IsNullOrEmpty(discovered_device_guid)) {
                     // this means no machine name/os type or just os type match was found in db file
                     // which would be strange and will wait to handle but should probably
@@ -704,7 +699,6 @@ namespace MonkeyPaste {
                 } else {
                     IsLoading = true;
                     Instance.ThisDeviceGuid = discovered_device_guid;
-                    Instance.UniqueContentItemIdx = total_count;
                 }
             } else {
                 _instance = new MpPrefViewModel();

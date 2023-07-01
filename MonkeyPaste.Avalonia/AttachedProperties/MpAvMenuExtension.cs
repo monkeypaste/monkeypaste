@@ -564,9 +564,9 @@ namespace MonkeyPaste.Avalonia {
                     if (string.IsNullOrEmpty(mivm.Header)) {
                         control = new Separator() { DataContext = mivm };
                     } else {
-                        control = new DockPanel() {
-
-                            //HeaderText = mivm.Header,
+                        control = new MenuItem() {
+                            Icon = new TextBlock() { Text = mivm.Header },
+                            Header = new Border() { Background = Brushes.Black, Height = 5, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Stretch, MinWidth = 100 },
                             DataContext = mivm
                         };
                     }

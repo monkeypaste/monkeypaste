@@ -17,24 +17,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        private static int _UniqueItemCount = -1;
-        public static int UniqueItemCount {
-            get {
-                if (_UniqueItemCount < 0) {
-                    _UniqueItemCount = MpPrefViewModel.Instance.UniqueContentItemIdx;
-                }
-                return _UniqueItemCount;
-            }
-            set {
-                if (UniqueItemCount != value) {
-                    _UniqueItemCount = value;
-                    Task.Run(() => {
-                        // update pref in bg thread since duplicates are popping up
-                        MpPrefViewModel.Instance.UniqueContentItemIdx = _UniqueItemCount;
-                    });
-                }
-            }
-        }
+
+        private static int _LastAddId = -1;
         #endregion
 
 
@@ -82,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
                 MpCopyItemType itemType = data_tuple.Item1;
                 string itemData = data_tuple.Item2;
                 string itemDelta = data_tuple.Item3;
-                string default_title = GetDefaultItemTitle(itemType, mpdo);
+                string default_title = await GetDefaultItemTitleAsync(itemType, mpdo);
                 int itemIconId = PickIconIdFromSourceRefs(refs);
 
                 ci = await MpCopyItem.CreateAsync(
@@ -407,15 +391,18 @@ namespace MonkeyPaste.Avalonia {
             return new Tuple<MpCopyItemType, string, string>(itemType, itemData, delta);
         }
 
-        private string GetDefaultItemTitle(MpCopyItemType itemType, MpPortableDataObject mpdo) {
+        private async Task<string> GetDefaultItemTitleAsync(MpCopyItemType itemType, MpPortableDataObject mpdo) {
+            if (_LastAddId < 0) {
+                _LastAddId = await MpDataModelProvider.GetLastRowIdAsync<MpCopyItem>();
+            }
+            _LastAddId++;
 
             string default_title = null;
             if (mpdo.ContainsData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT)) {
                 default_title = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT) as string;
             }
             if (string.IsNullOrEmpty(default_title)) {
-                UniqueItemCount = UniqueItemCount + 1;
-                default_title = $"{itemType} {(UniqueItemCount)}";
+                default_title = $"{itemType} {(_LastAddId)}";
             }
             return default_title;
         }

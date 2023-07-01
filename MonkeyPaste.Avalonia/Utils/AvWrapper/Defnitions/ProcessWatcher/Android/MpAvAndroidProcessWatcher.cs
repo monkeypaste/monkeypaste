@@ -6,28 +6,28 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAndroidProcessWatcher : MpAvProcessWatcherBase {
-        public override nint GetParentHandleAtPoint(MpPoint poIntPtr) {
+        protected override nint GetParentHandleAtPoint(MpPoint poIntPtr) {
             return App.Current.GetMainWindowHandle();
         }
 
-        public override nint SetActiveProcess(nint handle) {
+        protected override nint SetActiveProcess(nint handle) {
             return handle;
         }
 
-        public override nint SetActiveProcess(nint handle, ProcessWindowStyle windowStyle) {
+        protected override nint SetActiveProcess(nint handle, ProcessWindowStyle windowStyle) {
             return handle;
         }
 
-        public override bool IsAdmin(object handleIdOrTitle) {
+        protected override bool IsAdmin(object handleIdOrTitle) {
             return false;
         }
 
-        public override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
+        protected override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
             return ProcessWindowStyle.Maximized;
         }
 
         private MpPortableProcessInfo _thisAppInfo;
-        public override MpPortableProcessInfo GetActiveProcessInfo() {
+        protected override MpPortableProcessInfo GetActiveProcessInfo() {
             if (_thisAppInfo == null) {
                 _thisAppInfo = new MpPortableProcessInfo() {
                     Handle = App.Current.GetMainWindowHandle(),
@@ -39,12 +39,24 @@ namespace MonkeyPaste.Avalonia {
             return _thisAppInfo;
         }
 
-        protected override MpPortableProcessInfo RefreshRunningProcessLookup() {
+        protected MpPortableProcessInfo RefreshRunningProcessLookup() {
             return GetActiveProcessInfo();
         }
 
-        protected override void CreateRunningProcessLookup() {
+        protected void CreateRunningProcessLookup() {
 
+        }
+
+        protected override string GetProcessTitle(nint handle) {
+            throw new System.NotImplementedException();
+        }
+
+        protected override string GetProcessPath(nint handle) {
+            throw new System.NotImplementedException();
+        }
+
+        protected override MpPortableProcessInfo GetProcessInfoByHandle(nint handle) {
+            throw new System.NotImplementedException();
         }
     }
 }

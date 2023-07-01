@@ -32,7 +32,6 @@
         SelectNextRowItem,
         SelectPreviousRowItem,
         AssignShortcut,
-        ChangeColor,
         Undo,
         Redo,
         ToggleContentReadOnly,
