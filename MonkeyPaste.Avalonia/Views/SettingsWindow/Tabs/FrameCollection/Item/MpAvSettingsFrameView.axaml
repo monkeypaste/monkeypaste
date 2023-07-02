@@ -14,7 +14,7 @@
                        x:CompileBindings="True"
                        IsVisible="{Binding IsVisible}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameView">
-    <Border Padding="5">
+    <local:MpAvClipBorder Padding="5">
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Image Classes="frame header icon"
@@ -30,5 +30,6 @@
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch" />
         </StackPanel>
-    </Border>
+    </local:MpAvClipBorder>
+
 </local:MpAvUserControl>

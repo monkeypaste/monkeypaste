@@ -223,15 +223,15 @@
                             Content="Reset" />
 
                     <Border Grid.Column="3"
-                            IsVisible="{Binding !IsDesignerWindowOpen}" />
+                            IsVisible="{Binding !IsWindowOpen}" />
 
                     <!--  POP OUT WINDOW BUTTON  -->
 
                     <Button x:Name="ShowDesignerWindowButton"
                             Grid.Column="4"
                             Classes="noBg noHoverBg defaultButton outline outlineOver"
-                            IsVisible="{Binding !IsDesignerWindowOpen}"
-                            Command="{Binding OpenDesignerWindowCommand}">
+                            IsVisible="{Binding !IsWindowOpen}"
+                            Command="{Binding ShowDesignerWindowCommand}">
                         <ToolTip.Tip>
                             <local:MpAvToolTipView ToolTipText="Float" />
                         </ToolTip.Tip>

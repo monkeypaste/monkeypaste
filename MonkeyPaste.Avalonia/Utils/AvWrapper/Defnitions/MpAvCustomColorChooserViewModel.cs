@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvCustomColorChooserViewModel :
         MpViewModelBase,
         MpICustomColorChooserMenuAsync,
-        MpIChildWindowViewModel,
+        MpICloseWindowViewModel,
         MpIWantsTopmostWindowViewModel {
         #region Private Variables
         #endregion
@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
         #region MpIChildWindowViewModel Implementation
 
-        public bool IsChildWindowOpen { get; set; }
+        public bool IsWindowOpen { get; set; }
         public MpWindowType WindowType =>
             MpWindowType.Modal;
 

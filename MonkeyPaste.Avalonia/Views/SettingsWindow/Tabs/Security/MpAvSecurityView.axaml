@@ -153,6 +153,7 @@
 
                 <Border Classes="filterDataGridContainer">
                     <DataGrid x:Name="ExcludedUrlDatagrid"
+                              CanUserResizeColumns="True"
                               ItemsSource="{Binding FilteredItems}"
                               SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                         <DataGrid.Columns>

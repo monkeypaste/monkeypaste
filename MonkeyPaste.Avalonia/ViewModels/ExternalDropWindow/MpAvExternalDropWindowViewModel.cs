@@ -18,7 +18,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvExternalDropWindowViewModel :
         MpViewModelBase,
-        MpIChildWindowViewModel,
+        MpICloseWindowViewModel,
         MpIWantsTopmostWindowViewModel,
         MpIHoverableViewModel {
         #region Private Variables
@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
         public MpWindowType WindowType =>
             MpWindowType.Modal;
 
-        public bool IsChildWindowOpen { get; set; }
+        public bool IsWindowOpen { get; set; }
         #endregion
 
         #endregion
@@ -137,8 +137,8 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvExternalDropWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsChildWindowOpen):
-                    if (IsChildWindowOpen) {
+                case nameof(IsWindowOpen):
+                    if (IsWindowOpen) {
                         break;
                     }
                     if (_dropWidgetWindow != null) {
@@ -397,7 +397,7 @@ namespace MonkeyPaste.Avalonia {
             _wasHiddenOrCanceled = false;
             _lastGlobalMousePoint = null;
 
-            IsChildWindowOpen = false;
+            IsWindowOpen = false;
             _dropWidgetWindow = null;
             _dropCompleteWindow = null;
 
@@ -428,7 +428,7 @@ namespace MonkeyPaste.Avalonia {
             async (drop_gmp_arg) => {
                 StopDropTargetListener();
 
-                IsChildWindowOpen = false;
+                IsWindowOpen = false;
 
                 bool show_finish_menu = DidPresetsChange(DropAppViewModel);
                 if (!show_finish_menu) {
@@ -490,7 +490,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 _wasHiddenOrCanceled = true;
                 MpConsole.WriteLine("Drop canceled");
-                IsChildWindowOpen = false;
+                IsWindowOpen = false;
             });
 
         public ICommand ToggleIsDropWidgetEnabledCommand => new MpCommand(

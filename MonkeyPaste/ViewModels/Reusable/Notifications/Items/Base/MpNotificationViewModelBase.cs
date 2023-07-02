@@ -9,7 +9,7 @@ namespace MonkeyPaste {
     public abstract class MpNotificationViewModelBase :
         MpViewModelBase,
         MpIWantsTopmostWindowViewModel,
-        MpIChildWindowViewModel,
+        MpICloseWindowViewModel,
         MpIPopupMenuViewModel {
         #region Constants
 
@@ -36,6 +36,7 @@ namespace MonkeyPaste {
                 case MpNotificationType.ExecuteParametersRequest:
                 case MpNotificationType.ContentCapReached:
                 case MpNotificationType.TrashCapReached:
+                case MpNotificationType.ContentAddBlockedByAccount:
                     return MpNotificationLayoutType.UserAction;
                 case MpNotificationType.AnalyzerTimeout:
                 case MpNotificationType.InvalidRequest:
@@ -132,7 +133,7 @@ namespace MonkeyPaste {
         MpWindowType MpIWindowViewModel.WindowType =>
             IsModal ? MpWindowType.Modal : MpWindowType.Toast;
 
-        bool MpIChildWindowViewModel.IsChildWindowOpen {
+        bool MpICloseWindowViewModel.IsWindowOpen {
             get => IsVisible;
             set => IsVisible = value;
         }

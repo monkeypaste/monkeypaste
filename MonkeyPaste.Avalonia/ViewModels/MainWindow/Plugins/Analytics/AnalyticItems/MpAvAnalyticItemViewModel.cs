@@ -553,10 +553,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
         public virtual bool CanExecuteAnalysis(object args) {
-            if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
-                MpConsole.WriteLine($"Analyzer '{this}' execute analysis rejected. Account capped");
-                return false;
-            }
+            //if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
+            //    MpConsole.WriteLine($"Analyzer '{this}' execute analysis rejected. Account capped");
+            //    return false;
+            //}
 
             CurrentExecuteArgs = args;
             //if (IsBusy && (SelectedItem == null || !SelectedItem.IsExecuting)) {

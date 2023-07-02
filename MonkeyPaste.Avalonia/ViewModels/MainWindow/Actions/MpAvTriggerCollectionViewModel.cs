@@ -20,8 +20,8 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase,
         MpIPopupMenuViewModel,
         MpIAsyncCollectionObject,
-        MpIChildWindowViewModel,
-        MpIWindowStateViewModel,
+        MpICloseWindowViewModel,
+        MpIActiveWindowViewModel,
         MpISidebarItemViewModel,
         MpIDesignerSettingsViewModel {
         #region Private Variables
@@ -37,19 +37,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpIChildWindowViewModel Implementation
+        #region MpIWindowViewModel Implementation
         MpWindowType MpIWindowViewModel.WindowType =>
             MpWindowType.PopOut;
-        bool MpIChildWindowViewModel.IsChildWindowOpen {
-            get => IsDesignerWindowOpen;
-            set => IsDesignerWindowOpen = value;
-        }
+
+
+        #endregion
+        #region MpICloseWindowViewModel Implementation
+        public bool IsWindowOpen { get; set; }
 
         #endregion
 
-        #region MpIWindowStateViewModel Implementation
-        MpWindowState MpIWindowStateViewModel.WindowState { get; set; }
-
+        #region MpIActiveWindowViewModel Implementation        
+        public bool IsWindowActive { get; set; }
         #endregion
 
         #region MpIPopupMenuViewModel Implementation
@@ -124,11 +124,10 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
         public ICommand ResetDesignerViewCommand => new MpCommand(() => {
 
             MpAvZoomBorder zb = null;
-            if (IsDesignerWindowOpen &&
+            if (IsWindowOpen &&
                 MpAvWindowManager.LocateWindow(this) is Window dsw &&
                 dsw.GetVisualDescendant<MpAvZoomBorder>() is MpAvZoomBorder dsw_zb) {
                 zb = dsw_zb;
@@ -279,7 +278,7 @@ namespace MonkeyPaste.Avalonia {
         //private double _defaultParameterColumnVarDimLength = 625;
         public double DefaultSidebarWidth {
             get {
-                if (IsDesignerWindowOpen) {
+                if (IsWindowOpen) {
                     return 0;
                 }
                 if (MpAvMainWindowViewModel.Instance.IsVerticalOrientation) {
@@ -296,7 +295,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public double DefaultSidebarHeight {
             get {
-                if (IsDesignerWindowOpen) {
+                if (IsWindowOpen) {
                     return 0;
                 }
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
@@ -315,7 +314,7 @@ namespace MonkeyPaste.Avalonia {
             (Mp.Services.PlatformResource.GetResource("ActionPropertyListBgBrush") as IBrush).ToHex();
 
         bool MpISidebarItemViewModel.CanResize =>
-            !IsDesignerWindowOpen;
+            !IsWindowOpen;
         #endregion
 
         #endregion
@@ -345,7 +344,7 @@ namespace MonkeyPaste.Avalonia {
 
         public Orientation SidebarOrientation {
             get {
-                if (IsDesignerWindowOpen) {
+                if (IsWindowOpen) {
                     return Orientation.Horizontal;
                 }
                 if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItemWidth <= _defaultSelectorColumnVarDimLength * 2) {
@@ -365,7 +364,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsHorizontal =>
             SidebarOrientation == Orientation.Horizontal;
 
-        public bool IsDesignerWindowOpen { get; set; }
 
         public int SelectedTriggerIdx {
             get => Triggers.IndexOf(SelectedTrigger);
@@ -587,7 +585,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
             Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsTrigger)));
@@ -645,6 +642,53 @@ namespace MonkeyPaste.Avalonia {
         private async Task UpdateSortOrderAsync() {
             Items.ForEach(x => x.SortOrderIdx = Items.IndexOf(x));
             await Task.WhenAll(Items.Select(x => x.Action.WriteToDatabaseAsync()));
+        }
+
+        private MpAvWindow CreateDesignerWindow() {
+            // WINDOW
+
+            var dw = new MpAvWindow() {
+                Width = 800,
+                Height = 500,
+                ShowInTaskbar = true,
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BoltImage", typeof(WindowIcon), null, null) as WindowIcon,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Content = new MpAvTriggerActionChooserView(),
+                Topmost = true,
+                DataContext = this,
+                Padding = new Thickness(10),
+                //Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment2Color.ToString())
+                //Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
+                Background = Brushes.DimGray
+            };
+            dw.Classes.Add("fadeIn");
+            dw.Bind(
+                Window.TitleProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(FocusActionName),
+                    StringFormat = "Trigger Designer '{0}'",
+                    Converter = MpAvStringToWindowTitleConverter.Instance
+                });
+
+            //dw.Bind(
+            //    Window.BackgroundProperty,
+            //    new Binding() {
+            //        Source = FocusAction,
+            //        Path = nameof(MpAvActionViewModelBase.ActionBackgroundHexColor),
+            //        Mode = BindingMode.OneWay,
+            //        Converter = MpAvStringHexToContrastBrushConverter.Instance,
+            //        ConverterParameter =
+            //            MpPrefViewModel.Instance.ThemeType == MpThemeType.Dark ?
+            //                "darker" :
+            //                "lighter"
+            //    });
+
+            dw.Opened += (s, e) => {
+                ResetDesignerViewCommand.Execute(null);
+                MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
+            };
+            return dw;
         }
         #endregion
 
@@ -906,52 +950,15 @@ namespace MonkeyPaste.Avalonia {
 
             });
 
-        public ICommand OpenDesignerWindowCommand => new MpCommand(
+        public ICommand ShowDesignerWindowCommand => new MpCommand(
             () => {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
-                    // WINDOW
+                    if (IsWindowOpen) {
+                        IsWindowActive = true;
+                        return;
+                    }
 
-                    var dw = new MpAvWindow() {
-                        Width = 800,
-                        Height = 500,
-                        ShowInTaskbar = true,
-                        Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BoltImage", typeof(WindowIcon), null, null) as WindowIcon,
-                        WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                        Content = new MpAvTriggerActionChooserView(),
-                        Topmost = true,
-                        DataContext = this,
-                        Padding = new Thickness(10),
-                        //Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment2Color.ToString())
-                        //Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
-                        Background = Brushes.DimGray
-                    };
-                    dw.Classes.Add("fadeIn");
-                    dw.Bind(
-                        Window.TitleProperty,
-                        new Binding() {
-                            Source = this,
-                            Path = nameof(FocusActionName),
-                            StringFormat = "Trigger Designer '{0}'",
-                            Converter = MpAvStringToWindowTitleConverter.Instance
-                        });
-
-                    //dw.Bind(
-                    //    Window.BackgroundProperty,
-                    //    new Binding() {
-                    //        Source = FocusAction,
-                    //        Path = nameof(MpAvActionViewModelBase.ActionBackgroundHexColor),
-                    //        Mode = BindingMode.OneWay,
-                    //        Converter = MpAvStringHexToContrastBrushConverter.Instance,
-                    //        ConverterParameter =
-                    //            MpPrefViewModel.Instance.ThemeType == MpThemeType.Dark ?
-                    //                "darker" :
-                    //                "lighter"
-                    //    });
-
-                    dw.Opened += (s, e) => {
-                        ResetDesignerViewCommand.Execute(null);
-                        MpAvSidebarItemCollectionViewModel.Instance.ToggleIsSidebarItemSelectedCommand.Execute(this);
-                    };
+                    var dw = CreateDesignerWindow();
                     dw.ShowChild();
 
                     OnPropertyChanged(nameof(SidebarOrientation));
@@ -960,9 +967,7 @@ namespace MonkeyPaste.Avalonia {
                     // see https://github.com/AvaloniaUI/Avalonia/discussions/9818
 
                 }
-                IsDesignerWindowOpen = true;
-            }, () => {
-                return !IsDesignerWindowOpen;
+                IsWindowOpen = true;
             });
 
 

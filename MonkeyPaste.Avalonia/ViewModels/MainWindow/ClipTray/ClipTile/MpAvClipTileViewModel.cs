@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpIConditionalSelectableViewModel,
-        MpIChildWindowViewModel,
+        MpICloseWindowViewModel,
         MpIWindowHandlesClosingViewModel,
         MpIDisposableObject,
         MpIShortcutCommandViewModel,
@@ -78,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
         public MpWindowType WindowType =>
             IsAppendNotifier ? MpWindowType.Append : MpWindowType.PopOut;
 
-        public bool IsChildWindowOpen { get; set; }
+        public bool IsWindowOpen { get; set; }
         #endregion
 
         #region MpIWantsTopmostWindowViewModel Implementation
@@ -90,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIWindowHandlesClosingViewModel Implementation
 
-        public bool IsCloseHandled =>
+        public bool IsWindowCloseHandled =>
             //(IsAppendNotifier && !WasCloseAppendWindowConfirmed) && 
             !IsFinalClosingState;
 
@@ -238,7 +238,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel Next {
             get {
-                if (IsPlaceholder || Parent == null || IsChildWindowOpen) {
+                if (IsPlaceholder || Parent == null || IsWindowOpen) {
                     return null;
                 }
                 if (IsPinned) {
@@ -251,7 +251,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel Prev {
             get {
-                if (IsPlaceholder || Parent == null || QueryOffsetIdx == 0 || IsChildWindowOpen) {
+                if (IsPlaceholder || Parent == null || QueryOffsetIdx == 0 || IsWindowOpen) {
                     return null;
                 }
                 if (IsPinned) {
@@ -360,7 +360,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return 0;
                 }
-                if (!IsSubSelectionEnabled || !IsChildWindowOpen) {
+                if (!IsSubSelectionEnabled || !IsWindowOpen) {
                     return IsPinned ? Parent.DefaultPinItemWidth : Parent.DefaultQueryItemWidth;
                 }
                 if (IsContentReadOnly) {
@@ -424,7 +424,7 @@ namespace MonkeyPaste.Avalonia {
                     return PASTE_TEMPLATE_TOOLBAR_MIN_WIDTH;
                 }
                 if (IsPinned) {
-                    if (IsChildWindowOpen) {
+                    if (IsWindowOpen) {
                         return BoundWidth;
                     }
                     return Math.Min(EDITOR_TOOLBAR_MIN_WIDTH, Parent.ObservedPinTrayScreenWidth);
@@ -501,7 +501,7 @@ namespace MonkeyPaste.Avalonia {
                 //    return true;
                 //}
                 //return IsSelected;
-                if (IsChildWindowOpen) {
+                if (IsWindowOpen) {
                     return true;
                 }
                 return MpAvMainWindowViewModel.Instance.IsHorizontalOrientation;
@@ -516,7 +516,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsResizerEnabled =>
             //MpAvThemeViewModel.Instance.IsDesktop &&
-            !IsChildWindowOpen &&
+            !IsWindowOpen &&
             !IsFrozen;
 
         public MpIEmbedHost EmbedHost =>
@@ -1099,7 +1099,7 @@ namespace MonkeyPaste.Avalonia {
             _contentView = null;
             if (!is_reload) {
                 //_curItemRandomHexColor = string.Empty;
-                IsChildWindowOpen = false;
+                IsWindowOpen = false;
             }
 
             if (ci == null || ci.Id <= 0) {
@@ -1316,7 +1316,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void OpenPopOutWindow(MpAppendModeType amt) {
             IsAppendNotifier = amt != MpAppendModeType.None;
-            if (!IsChildWindowOpen) {
+            if (!IsWindowOpen) {
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, QueryOffsetIdx);
 
                 var pow = CreatePopoutWindow();
@@ -1332,7 +1332,7 @@ namespace MonkeyPaste.Avalonia {
                 pow.ShowChild();
             }
 
-            OnPropertyChanged(nameof(IsChildWindowOpen));
+            OnPropertyChanged(nameof(IsWindowOpen));
             OnPropertyChanged(nameof(IsResizerEnabled));
             OnPropertyChanged(nameof(IsTitleVisible));
             OnPropertyChanged(nameof(WantsTopmost));
@@ -1340,8 +1340,8 @@ namespace MonkeyPaste.Avalonia {
             if (this is MpIWantsTopmostWindowViewModel wtwvm) {
                 wtwvm.OnPropertyChanged(nameof(wtwvm.WantsTopmost));
             }
-            if (this is MpIChildWindowViewModel cwvm) {
-                cwvm.OnPropertyChanged(nameof(cwvm.IsChildWindowOpen));
+            if (this is MpICloseWindowViewModel cwvm) {
+                cwvm.OnPropertyChanged(nameof(cwvm.IsWindowOpen));
             }
         }
 
@@ -1911,7 +1911,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     Parent.UpdateTileRectCommand.Execute(new object[] { this, Prev });
                     break;
-                case nameof(IsChildWindowOpen):
+                case nameof(IsWindowOpen):
                     break;
                 case nameof(CopyItemSize1):
                 case nameof(CopyItemSize2):
@@ -2054,7 +2054,7 @@ namespace MonkeyPaste.Avalonia {
                         // allow close
                         WasCloseAppendWindowConfirmed = true;
                         await Parent.DeactivateAppendModeCommand.ExecuteAsync();
-                        IsChildWindowOpen = false;
+                        IsWindowOpen = false;
                         return;
                     }
                     pow.IsHitTestVisible = true;
@@ -2313,7 +2313,7 @@ namespace MonkeyPaste.Avalonia {
 
                 }
             }, (args) => {
-                return !IsChildWindowOpen && Parent != null;
+                return !IsWindowOpen && Parent != null;
             }, new[] { this });
 
         public ICommand DisableSubSelectionCommand => new MpCommand(

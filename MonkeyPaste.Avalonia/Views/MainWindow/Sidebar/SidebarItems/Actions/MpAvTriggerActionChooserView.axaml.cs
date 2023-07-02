@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void BindingContext_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             if (MpAvSidebarItemCollectionViewModel.Instance.SelectedItem != BindingContext &&
-                !BindingContext.IsDesignerWindowOpen) {
+                !BindingContext.IsWindowOpen) {
                 return;
             }
 
@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
 
                     if (BindingContext.SidebarOrientation == Orientation.Horizontal) {
                         var rd = new RowDefinition(GridLength.Star);
-                        if (!BindingContext.IsDesignerWindowOpen) {
+                        if (!BindingContext.IsWindowOpen) {
                             if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                                 rd.Bind(
                                     RowDefinition.MaxHeightProperty,
@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
                         Grid.SetRow(adc, 0);
                         Grid.SetColumn(adc, 1);
 
-                        if (BindingContext.IsDesignerWindowOpen) {
+                        if (BindingContext.IsWindowOpen) {
                             vert_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                             vert_sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                             horiz_sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;

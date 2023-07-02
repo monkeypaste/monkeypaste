@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
                     if (nav_to_ctvm == null) {
                         return;
                     }
-                    if (nav_to_ctvm.IsChildWindowOpen &&
+                    if (nav_to_ctvm.IsWindowOpen &&
                     MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == nav_to_ctvm) is MpAvWindow w) {
                         w.Activate();
                     } else {

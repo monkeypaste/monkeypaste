@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvThemeViewModel :
         MpViewModelBase,
-        MpIChildWindowViewModel {
+        MpICloseWindowViewModel {
 
         #region Private Variable
 
@@ -100,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIChildWindowViewModel Implementation
 
-        public bool IsChildWindowOpen { get; set; }
+        public bool IsWindowOpen { get; set; }
         public MpWindowType WindowType =>
             MpWindowType.Modal;
 
@@ -212,7 +212,7 @@ namespace MonkeyPaste.Avalonia {
             }
             CreatePalette();
             if (showWait) {
-                IsChildWindowOpen = false;
+                IsWindowOpen = false;
             }
         }
 

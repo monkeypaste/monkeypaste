@@ -1540,7 +1540,7 @@ namespace MonkeyPaste.Avalonia {
             }
             Dispatcher.UIThread.Post(async () => {
                 if (IsContentReadOnly) {
-                    if (!BindingContext.IsChildWindowOpen) {
+                    if (!BindingContext.IsWindowOpen) {
                         MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
                     }
 

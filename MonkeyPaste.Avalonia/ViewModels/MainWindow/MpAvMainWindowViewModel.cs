@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIActiveWindowViewModel Implementation
-        bool MpIActiveWindowViewModel.IsActive {
+        bool MpIActiveWindowViewModel.IsWindowActive {
             get => IsMainWindowActive;
             set => IsMainWindowActive = value;
         }

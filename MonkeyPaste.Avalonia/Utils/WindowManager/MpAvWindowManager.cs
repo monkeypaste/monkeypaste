@@ -14,6 +14,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvWindowManager {
         #region Private Variables
         private static Dictionary<Window, IEnumerable<IDisposable>> _dispLookup = new Dictionary<Window, IEnumerable<IDisposable>>();
+        private static Dictionary<Window, WindowState> _restoreStateLookup = new Dictionary<Window, WindowState>();
         #endregion
 
         #region Properties
@@ -100,48 +101,36 @@ namespace MonkeyPaste.Avalonia {
                 wbovm.Bounds = oldAndNewVals.newValue.ToPortableRect();
             }
         }
+
         private static void TopmostChangedHandler(Window w, AvaloniaPropertyChangedEventArgs<bool> e) {
             UpdateTopmost();
         }
 
+
         private static void IsVisibleChangedHandler(Window w, AvaloniaPropertyChangedEventArgs<bool> e) {
             UpdateTopmost();
         }
-        private static void Nw_DataContextChanged(object sender, EventArgs e) {
+
+        private static void WindowStateChangedHandler(Window w, AvaloniaPropertyChangedEventArgs<bool> e) {
+            if (w.DataContext is MpIActiveWindowViewModel rwvm) {
+                rwvm.IsWindowActive = w.WindowState != WindowState.Minimized;
+            }
+            if (w.WindowState != WindowState.Minimized) {
+                _restoreStateLookup.AddOrReplace(w, w.WindowState);
+            }
+        }
+        private static void Window_DataContextChanged(object sender, EventArgs e) {
             if (sender is Window w) {
                 AttachWindowViewModelHandlers(w);
             }
         }
 
-
-        private static void TopmostWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if (sender is MpIWantsTopmostWindowViewModel tmwvm) {
-                UpdateTopmost();
-            }
-        }
-
-        private static void ChildWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if (sender is MpIChildWindowViewModel cwvm) {
-                if (e.PropertyName == nameof(cwvm.IsChildWindowOpen)) {
-                    var cw = AllWindows.FirstOrDefault(x => x.DataContext == sender);
-                    if (cw != null) {
-                        if (cwvm.IsChildWindowOpen) {
-                            if (!cw.IsActive) {
-                                cw.Show();
-                            }
-                        } else {
-                            cw.Close();
-                        }
-                    }
-                }
-            }
-        }
-        private static void Nw_Activated(object sender, EventArgs e) {
+        private static void Window_Activated(object sender, EventArgs e) {
             if (sender is Window w) {
                 MpMessenger.SendGlobal(MpMessageType.AppWindowActivated);
 
                 if (w.DataContext is MpIActiveWindowViewModel awvm) {
-                    awvm.IsActive = true;
+                    awvm.IsWindowActive = true;
                 }
                 if (w.DataContext is MpIIsAnimatedWindowViewModel adwvm &&
                     adwvm.IsAnimated && !adwvm.IsComplete && !adwvm.IsAnimating) {
@@ -150,12 +139,12 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        private static void Nw_Deactivated(object sender, EventArgs e) {
+        private static void Window_Deactivated(object sender, EventArgs e) {
             if (sender is Window w) {
                 MpMessenger.SendGlobal(MpMessageType.AppWindowDeactivated);
 
                 if (w.DataContext is MpIActiveWindowViewModel awvm) {
-                    awvm.IsActive = false;
+                    awvm.IsWindowActive = false;
                 }
                 if (w.DataContext is MpIIsAnimatedWindowViewModel adwvm &&
                     adwvm.IsAnimated && !adwvm.IsComplete && !adwvm.IsAnimating) {
@@ -165,12 +154,12 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        private static void Nw_Opened(object sender, System.EventArgs e) {
+        private static void Window_Opened(object sender, System.EventArgs e) {
             if (sender is Window w) {
                 //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
 
-                if (w.DataContext is MpIChildWindowViewModel cwvm) {
-                    cwvm.IsChildWindowOpen = true;
+                if (w.DataContext is MpICloseWindowViewModel cwvm) {
+                    cwvm.IsWindowOpen = true;
                 }
                 UpdateTopmost();
                 //w.Activate();
@@ -182,7 +171,7 @@ namespace MonkeyPaste.Avalonia {
         private static void Nw_Closing(object sender, WindowClosingEventArgs e) {
             if (sender is Window w) {
                 if (w.DataContext is MpIWindowHandlesClosingViewModel whcvm &&
-                    whcvm.IsCloseHandled) {
+                    whcvm.IsWindowCloseHandled) {
                     // without this check closing evt is called twice in impl 
                     // handler from extra w.Close below
                     return;
@@ -222,8 +211,11 @@ namespace MonkeyPaste.Avalonia {
 
         private static void Nw_Closed(object sender, System.EventArgs e) {
             if (sender is Window w) {
-                if (w.DataContext is MpIChildWindowViewModel cwvm) {
-                    cwvm.IsChildWindowOpen = false;
+                if (w.DataContext is MpIActiveWindowViewModel awvm) {
+                    awvm.IsWindowActive = false;
+                }
+                if (w.DataContext is MpICloseWindowViewModel cwvm) {
+                    cwvm.IsWindowOpen = false;
                 }
                 StartChildLifecycleChangeDelay(w);
             }
@@ -232,30 +224,31 @@ namespace MonkeyPaste.Avalonia {
         #region Helpers
 
         private static void AttachAllHandlers(Window nw) {
-            nw.Opened += Nw_Opened;
+            nw.Opened += Window_Opened;
             nw.Closed += Nw_Closed;
             nw.Closing += Nw_Closing;
-            nw.Activated += Nw_Activated;
-            nw.Deactivated += Nw_Deactivated;
-            nw.DataContextChanged += Nw_DataContextChanged;
+            nw.Activated += Window_Activated;
+            nw.Deactivated += Window_Deactivated;
+            nw.DataContextChanged += Window_DataContextChanged;
             IDisposable dsp1 = Window.BoundsProperty.Changed.AddClassHandler<Window>((x, y) => BoundsChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<Rect>));
             IDisposable dsp2 = Window.TopmostProperty.Changed.AddClassHandler<Window>((x, y) => TopmostChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
             IDisposable dsp3 = Window.IsVisibleProperty.Changed.AddClassHandler<Window>((x, y) => IsVisibleChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
+            IDisposable dsp4 = Window.WindowStateProperty.Changed.AddClassHandler<Window>((x, y) => WindowStateChangedHandler(x, y as AvaloniaPropertyChangedEventArgs<bool>));
             if (_dispLookup.ContainsKey(nw)) {
                 MpDebug.Break("Error, window shouldn't already exist here");
             } else {
-                _dispLookup.Add(nw, new[] { dsp1, dsp2, dsp3 });
+                _dispLookup.Add(nw, new[] { dsp1, dsp2, dsp3, dsp4 });
             }
             AttachWindowViewModelHandlers(nw);
         }
 
         private static void DetachAllHandlers(Window nw) {
-            nw.Opened -= Nw_Opened;
+            nw.Opened -= Window_Opened;
             nw.Closed -= Nw_Closed;
             nw.Closing -= Nw_Closing;
-            nw.Activated -= Nw_Activated;
-            nw.Deactivated -= Nw_Deactivated;
-            nw.DataContextChanged -= Nw_DataContextChanged;
+            nw.Activated -= Window_Activated;
+            nw.Deactivated -= Window_Deactivated;
+            nw.DataContextChanged -= Window_DataContextChanged;
             if (_dispLookup.TryGetValue(nw, out var displ)) {
                 displ.ForEach(x => x.Dispose());
                 _dispLookup.Remove(nw);
@@ -263,22 +256,53 @@ namespace MonkeyPaste.Avalonia {
             DetachWindowViewModelHandlers(nw);
         }
         private static void AttachWindowViewModelHandlers(Window w) {
-            if (w.DataContext is MpIWantsTopmostWindowViewModel tmwvm) {
-                tmwvm.PropertyChanged += TopmostWindowViewModel_PropertyChanged;
-            }
-            if (w.DataContext is MpIChildWindowViewModel cwvm) {
-                cwvm.PropertyChanged += ChildWindowViewModel_PropertyChanged;
+            if (w.DataContext is MpViewModelBase vmb) {
+                vmb.PropertyChanged += WindowViewModel_PropertyChanged;
             }
         }
 
         private static void DetachWindowViewModelHandlers(Window w) {
-            if (w.DataContext is MpIWantsTopmostWindowViewModel tmwvm) {
-                tmwvm.PropertyChanged -= TopmostWindowViewModel_PropertyChanged;
-            }
-            if (w.DataContext is MpIChildWindowViewModel cwvm) {
-                cwvm.PropertyChanged -= ChildWindowViewModel_PropertyChanged;
+            if (w.DataContext is MpViewModelBase vmb) {
+                vmb.PropertyChanged -= WindowViewModel_PropertyChanged;
             }
         }
+
+        private static void WindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            if (LocateWindow(sender) is not MpAvWindow cw) {
+                return;
+            }
+            if (sender is MpICloseWindowViewModel cwvm &&
+                e.PropertyName == nameof(cwvm.IsWindowOpen)) {
+                if (cwvm.IsWindowOpen) {
+                    if (!cw.IsActive) {
+                        cw.Show();
+                    }
+                } else {
+                    cw.Close();
+                }
+                return;
+            }
+
+            if (sender is MpIWantsTopmostWindowViewModel tmwvm &&
+                e.PropertyName == nameof(tmwvm.WantsTopmost)) {
+                UpdateTopmost();
+                return;
+            }
+
+            if (sender is MpIActiveWindowViewModel wsvm &&
+                e.PropertyName == nameof(wsvm.IsWindowActive)) {
+                if (!wsvm.IsWindowActive) {
+                    //cw.WindowState = WindowState.Minimized;
+                    return;
+                }
+                WindowState restore_state = WindowState.Normal;
+                if (_restoreStateLookup.TryGetValue(cw, out WindowState last_state)) {
+                    restore_state = last_state;
+                }
+                cw.WindowState = restore_state;
+            }
+        }
+
 
         private static void UpdateTopmost() {
             Dispatcher.UIThread.Post(() => {

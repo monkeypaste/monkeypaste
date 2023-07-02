@@ -32,18 +32,31 @@ namespace MonkeyPaste.Avalonia {
         public object IconResourceObj {
             get {
                 switch (FrameType) {
-                    case MpSettingsFrameType.None:
-                    default:
-                        return null;
+                    case MpSettingsFrameType.Account:
+                        return "UserImage";
                     case MpSettingsFrameType.LookAndFeel:
-                        return "OpenEyeImage";
+                        return "HeartImage";
+                    case MpSettingsFrameType.International:
+                        return "GlobeImage";
+                    case MpSettingsFrameType.History:
+                        return "ClockArrowImage";
+                    case MpSettingsFrameType.System:
+                        return "AppShellImage";
+                    case MpSettingsFrameType.Content:
+                        return "ClipboardImage";
+                    case MpSettingsFrameType.Pointer:
+                        return "MouseNoneClickImage";
+                    default:
+                        return string.Empty;
                 }
             }
         }
         #endregion
 
         #region MpILabelTextViewModel Implementation
-        public string LabelText { get; set; }
+        public string LabelText =>
+            FrameType.EnumToLabel();
+
         #endregion
 
         #region MpISelectableViewModel Implementation
@@ -130,17 +143,31 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
 
-        public MpSettingsTabType TabType { get; set; }
         public MpSettingsFrameType FrameType { get; set; } = MpSettingsFrameType.None;
-        public int SortOrderIdx { get; set; }
+
 
         public bool IsVisible { get; set; } = true;
+        #endregion
+
+        #region Layout
+
+
+        #endregion
+
+        #region Appearance
+        public int SortOrderIdx =>
+            (int)FrameType;
+
         #endregion
         #endregion
 
         #region Constructors
-        public MpAvSettingsFrameViewModel() : base(null) {
+        public MpAvSettingsFrameViewModel() : this(MpSettingsFrameType.None) {
+        }
+
+        public MpAvSettingsFrameViewModel(MpSettingsFrameType sft) : base(null) {
             PropertyChanged += MpAvPreferenceFrameViewModel_PropertyChanged;
+            FrameType = sft;
             OnPropertyChanged(nameof(IconResourceObj));
         }
         #endregion

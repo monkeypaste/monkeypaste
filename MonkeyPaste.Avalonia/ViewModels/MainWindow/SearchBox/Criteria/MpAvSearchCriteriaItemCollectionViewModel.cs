@@ -16,7 +16,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchCriteriaItemCollectionViewModel :
         MpViewModelBase,
-        MpIChildWindowViewModel,
+        MpICloseWindowViewModel,
         MpIExpandableViewModel {
 
         #region Private Variable
@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIWindowViewModel Implementation
         public MpWindowType WindowType =>
             MpWindowType.PopOut;
-        bool MpIChildWindowViewModel.IsChildWindowOpen {
+        bool MpICloseWindowViewModel.IsWindowOpen {
             get => IsCriteriaWindowOpen;
             set => IsCriteriaWindowOpen = value;
         }
@@ -303,11 +303,11 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsCriteriaWindowOpen):
                     if (IsCriteriaWindowOpen) {
                         IsExpanded = false;
-                    } else if (IsExpanded && this is MpIChildWindowViewModel cwvm) {
+                    } else if (IsExpanded && this is MpICloseWindowViewModel cwvm) {
                         // when close button on search expander is clicked IsExpanded=true
                         // so this is only called when closed from the window x button
-                        cwvm.IsChildWindowOpen = false;
-                        cwvm.OnPropertyChanged(nameof(cwvm.IsChildWindowOpen));
+                        cwvm.IsWindowOpen = false;
+                        cwvm.OnPropertyChanged(nameof(cwvm.IsWindowOpen));
                     }
 
 

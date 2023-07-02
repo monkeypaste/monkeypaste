@@ -100,7 +100,7 @@
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleTileIsPinnedCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                       local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
                       IsChecked="{Binding IsPinned}"
-                      IsVisible="{Binding !IsChildWindowOpen}">
+                      IsVisible="{Binding !IsWindowOpen}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=TogglePinned, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                        ToolTipText="Toggle Pin" />
@@ -124,7 +124,7 @@
         <Button x:Name="OpenWindowButton"
                 Classes="noBg noHoverBg noBorder cornerButton top right"
                 local:MpAvPointerCommandExtension.LeftPressCommand="{Binding PinToPopoutWindowCommand}"
-                IsVisible="{Binding !IsChildWindowOpen}"
+                IsVisible="{Binding !IsWindowOpen}"
                 CommandParameter="{Binding}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"

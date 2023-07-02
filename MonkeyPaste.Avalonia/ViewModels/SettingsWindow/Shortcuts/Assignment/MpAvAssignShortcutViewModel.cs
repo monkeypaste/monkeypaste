@@ -25,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase,
         MpIWantsTopmostWindowViewModel,
         MpIActiveWindowViewModel,
-        MpIChildWindowViewModel,
+        MpICloseWindowViewModel,
         MpAvIKeyGestureViewModel {
         #region Static Variables
         #endregion
@@ -95,9 +95,9 @@ namespace MonkeyPaste.Avalonia {
         MpWindowType MpIWindowViewModel.WindowType =>
             MpWindowType.Modal;
 
-        public bool IsChildWindowOpen { get; set; }
+        public bool IsWindowOpen { get; set; }
 
-        public bool IsActive { get; set; }
+        public bool IsWindowActive { get; set; }
 
         #endregion
 
@@ -257,8 +257,8 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(KeyItems):
                     OnPropertyChanged(nameof(KeyGroups));
                     break;
-                case nameof(IsChildWindowOpen):
-                    if (IsChildWindowOpen) {
+                case nameof(IsWindowOpen):
+                    if (IsWindowOpen) {
                         StartKeyListener();
                     } else {
                         StopKeyListener();
@@ -333,7 +333,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private void Instance_OnGlobalKeyPressed(object sender, string keyStr) {
             Dispatcher.UIThread.Post(() => {
-                if (!IsActive) {
+                if (!IsWindowActive) {
                     return;
                 }
                 AddKeyDownCommand.Execute(keyStr);
@@ -341,7 +341,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private void Instance_OnGlobalKeyReleased(object sender, string keyStr) {
             Dispatcher.UIThread.Post(() => {
-                if (!IsActive) {
+                if (!IsWindowActive) {
                     return;
                 }
                 RemoveKeyDownCommand.Execute(keyStr);

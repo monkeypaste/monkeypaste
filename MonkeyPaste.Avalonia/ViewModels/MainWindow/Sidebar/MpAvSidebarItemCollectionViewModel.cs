@@ -155,8 +155,8 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainView.Instance.UpdateContentLayout();
                     OnPropertyChanged(nameof(SelectedItemIdx));
 
-                    if (SelectedItem is MpIChildWindowViewModel cwvm &&
-                        cwvm.IsChildWindowOpen &&
+                    if (SelectedItem is MpICloseWindowViewModel cwvm &&
+                        cwvm.IsWindowOpen &&
                         MpAvWindowManager.LocateWindow(SelectedItem) is MpAvWindow w) {
                         w.WindowState = WindowState.Normal;
                         w.Activate();

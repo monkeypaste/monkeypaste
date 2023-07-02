@@ -192,6 +192,7 @@
     <AndroidAsset Remove="Assets\Images\burlap.png" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Accents.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Defaults.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Fade.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
@@ -243,6 +244,7 @@
     <None Remove="Assets\Images\append.png" />
     <None Remove="Assets\Images\appendline.png" />
     <None Remove="Assets\Images\appframe.png" />
+    <None Remove="Assets\Images\appshell.png" />
     <None Remove="Assets\Images\appstore.png" />
     <None Remove="Assets\Images\asc.png" />
     <None Remove="Assets\Images\asc_black.png" />
@@ -271,6 +273,7 @@
     <None Remove="Assets\Images\check_partial.png" />
     <None Remove="Assets\Images\cleargrid.png" />
     <None Remove="Assets\Images\clipboard.png" />
+    <None Remove="Assets\Images\clockarrow.png" />
     <None Remove="Assets\Images\Close.png" />
     <None Remove="Assets\Images\close1.png" />
     <None Remove="Assets\Images\close2.png" />
@@ -325,6 +328,7 @@
     <None Remove="Assets\Images\googleIcon.png" />
     <None Remove="Assets\Images\google_signin.png" />
     <None Remove="Assets\Images\graph.png" />
+    <None Remove="Assets\Images\heart.png" />
     <None Remove="Assets\Images\help.png" />
     <None Remove="Assets\Images\highlighter.png" />
     <None Remove="Assets\Images\hotkey.png" />
@@ -505,7 +509,13 @@
     <AvaloniaResource Include="Assets\Images\appframe.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\appshell.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\boxcorners.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\clockarrow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\closewindow.png">
@@ -521,6 +531,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\graph.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\heart.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\missingfile.png">
@@ -1138,6 +1151,7 @@
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Defaults.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Animations\Fade.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\RadioButton.axaml" />
@@ -1338,8 +1352,8 @@
     <Compile Update="Views\Reusable\ToolTip\Hint\MpAvToolTipInfoHintView.axaml.cs">
       <DependentUpon>MpAvToolTipInfoHintView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SettingsWindow\Tabs\Account\MpAvAccountView.axaml.cs">
-      <DependentUpon>MpAvAccountView.axaml</DependentUpon>
+    <Compile Update="Views\SettingsWindow\Tabs\FrameCollection\MpAvSettingsFrameCollectionView.axaml.cs">
+      <DependentUpon>MpAvSettingsFrameCollectionView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Help\MpAvHelpView.axaml.cs">
       <DependentUpon>MpAvHelpView.axaml</DependentUpon>
@@ -1347,14 +1361,11 @@
     <Compile Update="Views\SettingsWindow\Tabs\Interop\MpAvInteropView.axaml.cs">
       <DependentUpon>MpAvInteropView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SettingsWindow\Frame\MpAvSettingsFrameView.axaml.cs">
+    <Compile Update="Views\SettingsWindow\Tabs\FrameCollection\Item\MpAvSettingsFrameView.axaml.cs">
       <DependentUpon>MpAvSettingsFrameView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SettingsWindow\Frame\MpAvSettingsFrameView.axaml.cs">
+    <Compile Update="Views\SettingsWindow\Tabs\FrameCollection\Item\MpAvSettingsFrameView.axaml.cs">
       <DependentUpon>MpAvSettingsFrameView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\SettingsWindow\Tabs\Preferences\MpAvPreferencesView.axaml.cs">
-      <DependentUpon>MpAvPreferencesView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Security\MpAvSecurityView.axaml.cs">
       <DependentUpon>MpAvSecurityView.axaml</DependentUpon>

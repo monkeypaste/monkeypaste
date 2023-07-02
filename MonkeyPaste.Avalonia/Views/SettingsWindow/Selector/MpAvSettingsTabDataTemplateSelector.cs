@@ -26,9 +26,6 @@ namespace MonkeyPaste.Avalonia {
                         key = "ShortcutsTemplate";
                         break;
                     case 4:
-                        key = "InteropTemplate";
-                        break;
-                    case 5:
                         key = "HelpTemplate";
                         break;
                 }

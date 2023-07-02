@@ -81,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
                  }
 
                  if (fc.TryGetSelfOrAncestorDataContext<MpAvTriggerCollectionViewModel>(out _)) {
-                     MpAvTriggerCollectionViewModel.Instance.OpenDesignerWindowCommand.Execute(null);
+                     MpAvTriggerCollectionViewModel.Instance.ShowDesignerWindowCommand.Execute(null);
                      return;
                  }
              },
@@ -100,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (fc.TryGetSelfOrAncestorDataContext<MpAvTriggerCollectionViewModel>(out _)) {
-                    return MpAvTriggerCollectionViewModel.Instance.OpenDesignerWindowCommand.CanExecute(null);
+                    return MpAvTriggerCollectionViewModel.Instance.ShowDesignerWindowCommand.CanExecute(null);
                 }
                 return false;
             });

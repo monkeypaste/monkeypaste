@@ -14,7 +14,7 @@ using Application = Avalonia.Application;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSystemTrayViewModel :
         MpViewModelBase,
-        MpIChildWindowViewModel {
+        MpICloseWindowViewModel {
 
         #region Private Variables
         #endregion
@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
         public MpWindowType WindowType =>
             MpWindowType.PopOut;
 
-        public bool IsChildWindowOpen { get; set; }
+        public bool IsWindowOpen { get; set; }
 
         #endregion
 

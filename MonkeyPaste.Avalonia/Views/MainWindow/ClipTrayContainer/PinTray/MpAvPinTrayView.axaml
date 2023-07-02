@@ -27,7 +27,7 @@
             <Setter Property="IsVisible">
                 <Setter.Value>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
-                        <Binding Path="!IsChildWindowOpen" />
+                        <Binding Path="!IsWindowOpen" />
                         <Binding Path="!IsAppendNotifier" />
                     </MultiBinding>
                 </Setter.Value>

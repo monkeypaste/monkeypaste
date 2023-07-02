@@ -83,7 +83,7 @@ namespace MonkeyPaste.Common {
         #region Converters
 
         public static string ToStringOrDefault(this object obj) {
-            return obj == null ? null : obj.ToString();
+            return obj == null ? default : obj.ToString();
         }
         public static string ToStringOrEmpty(this object obj, string emptyText = "") {
             return obj == null ? emptyText : obj.ToString();

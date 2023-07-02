@@ -829,7 +829,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IList<MpAvClipTileViewModel> InternalPinnedItems =>
             PinnedItems
-            .Where(x => !x.IsChildWindowOpen && !x.IsAppendNotifier)
+            .Where(x => !x.IsWindowOpen && !x.IsAppendNotifier)
             .Take(MpPrefViewModel.Instance.MaxStagedClipCount)
             .ToList();
 
@@ -1826,6 +1826,10 @@ namespace MonkeyPaste.Avalonia {
             // (un)link tag
             // block
 
+            MpUserAccountType account_type = Mp.Services.AccountTools.CurrentAccountType;
+            int cur_content_cap = Mp.Services.AccountTools.GetContentCapacity(account_type);
+            int cur_trash_cap = Mp.Services.AccountTools.GetTrashCapacity(account_type);
+
             bool apply_changes = false;
             string cap_msg_title_suffix = string.Empty;
             string cap_msg_icon = string.Empty;
@@ -1837,7 +1841,7 @@ namespace MonkeyPaste.Avalonia {
                     cap_msg_icon = MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY;
                     cap_msg_title_suffix = $"Content Capacity Reached!";
                     cap_msg_sb.AppendLine(
-                        $"Max storage is {Mp.Services.AccountTools.GetContentCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
+                        $"Max '{account_type.ToString()}' storage is {cur_content_cap}.");
                 }
                 if (cap_info.ToBeRemoved_ciid > 0) {
                     cap_msg_icon = MpContentCapInfo.NEXT_REMOVE_IMG_RESOURCE_KEY;
@@ -1847,7 +1851,7 @@ namespace MonkeyPaste.Avalonia {
                         cap_msg_title_suffix = $"Content & Archive Capacity Reached!";
                     }
                     cap_msg_sb.AppendLine(
-                        $"Max archive is {Mp.Services.AccountTools.GetTrashCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
+                        $"Max archive is {cur_trash_cap}.");
                 }
                 if (!string.IsNullOrEmpty(cap_msg_sb.ToString())) {
                     apply_changes = true;
@@ -1865,8 +1869,9 @@ namespace MonkeyPaste.Avalonia {
                 // since tag linking doesn't refresh caps, this does it when last add set account to block state
                 if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                     // no linking changes, add will be blocked
-                    cap_msg_title_suffix = "Add Blocked!";
-                    cap_msg_sb.AppendLine($"Max storage is {Mp.Services.AccountTools.GetContentCapacity(Mp.Services.AccountTools.CurrentAccountType)}.");
+                    cap_msg_title_suffix = "Add Blocked";
+                    cap_msg_sb.AppendLine($"Delete or unlink something from 'Favorites' to add more.");
+                    cap_msg_sb.AppendLine($"Max '{account_type.ToString()}' storage is {cur_content_cap}.");
                     cap_msg_icon = MpContentCapInfo.ADD_BLOCKED_RESOURCE_KEY;
                     cap_msg_type = MpNotificationType.ContentAddBlockedByAccount;
                 } else {
@@ -1896,7 +1901,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             MpNotificationBuilder.ShowMessageAsync(
-                       title: $"'{Mp.Services.AccountTools.CurrentAccountType}' {cap_msg_title_suffix}",
+                       title: $"'{account_type}' {cap_msg_title_suffix}",
                        body: cap_msg_sb.ToString(),
                        msgType: cap_msg_type,
                        iconSourceObj: cap_msg_icon,
@@ -2657,7 +2662,7 @@ namespace MonkeyPaste.Avalonia {
             //}
 
             bool is_editor_nav =
-                SelectedItem.IsSubSelectionEnabled && SelectedItem.GetContentView() is Control cv && (cv.IsFocused || cv.IsKeyboardFocusWithin);
+                SelectedItem != null && SelectedItem.IsSubSelectionEnabled && SelectedItem.GetContentView() is Control cv && (cv.IsFocused || cv.IsKeyboardFocusWithin);
             bool is_title_nav =
                 SelectedItem != null && !SelectedItem.IsTitleReadOnly && SelectedItem.IsTitleFocused;
 
@@ -3136,10 +3141,10 @@ namespace MonkeyPaste.Avalonia {
                  int unpinned_ciid = unpinned_ctvm.CopyItemId;
                  int unpinned_ctvm_idx = PinnedItems.IndexOf(unpinned_ctvm);
 
-                 if (unpinned_ctvm.IsChildWindowOpen) {
+                 if (unpinned_ctvm.IsWindowOpen) {
                      await unpinned_ctvm.TransactionCollectionViewModel.CloseTransactionPaneCommand.ExecuteAsync();
                      MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(unpinned_ciid, unpinned_ctvm_idx);
-                     unpinned_ctvm.IsChildWindowOpen = false;
+                     unpinned_ctvm.IsWindowOpen = false;
                  }
 
                  PinnedItems.Remove(unpinned_ctvm);
@@ -3244,7 +3249,7 @@ namespace MonkeyPaste.Avalonia {
                 int pin_count = PinnedItems.Count;
                 while (pin_count > 0) {
                     var to_unpin_ctvm = PinnedItems[--pin_count];
-                    if (to_unpin_ctvm.IsChildWindowOpen ||
+                    if (to_unpin_ctvm.IsWindowOpen ||
                         to_unpin_ctvm.IsAppendNotifier) {
                         continue;
                     }
@@ -3256,7 +3261,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 SelectedItem.PinToPopoutWindowCommand.Execute(null);
             }, () => {
-                return SelectedItem != null && !SelectedItem.IsChildWindowOpen;
+                return SelectedItem != null && !SelectedItem.IsWindowOpen;
             });
         public ICommand DuplicateSelectedClipsCommand => new MpAsyncCommand(
             async () => {
@@ -4713,7 +4718,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand AppendDataCommand => new MpCommand<object>(
             (args) => {
-                AppendClipTileViewModel.IsChildWindowOpen = true;
+                AppendClipTileViewModel.IsWindowOpen = true;
                 if (AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
                     wv.ProcessAppendStateChangedMessage(GetAppendStateMessage(args as string), "command");
                 }

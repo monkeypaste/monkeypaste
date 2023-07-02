@@ -172,7 +172,7 @@
                     <GridSplitter.IsVisible>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="IsHorizontal" />
-                            <Binding Path="IsDesignerWindowOpen" />
+                            <Binding Path="IsWindowOpen" />
                         </MultiBinding>
                     </GridSplitter.IsVisible>
                 </GridSplitter>

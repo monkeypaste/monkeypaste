@@ -137,7 +137,7 @@
             <ToggleButton x:Name="SettingsToggleButton"
                           Classes="noBg noHoverBg"
                           Command="{Binding ToggleShowSettingsWindowCommand, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
-                          IsChecked="{Binding IsChildWindowOpen, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=OneWay}"
+                          IsChecked="{Binding IsWindowOpen, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=OneWay}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Settings"

@@ -1,6 +1,9 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="ClockArrowImage">avares://MonkeyPaste.Avalonia/Assets/Images/clockarrow.png</sys:String>
+    <sys:String x:Key="HeartImage">avares://MonkeyPaste.Avalonia/Assets/Images/heart.png</sys:String>
+    <sys:String x:Key="AppShellImage">avares://MonkeyPaste.Avalonia/Assets/Images/appshell.png</sys:String>
     <sys:String x:Key="MonkeyWinkImage">avares://MonkeyPaste.Avalonia/Assets/Images/monkeywink.png</sys:String>
     <sys:String x:Key="GhostImage">avares://MonkeyPaste.Avalonia/Assets/Images/ghost.png</sys:String>
     <sys:String x:Key="SkullImage">avares://MonkeyPaste.Avalonia/Assets/Images/skull.png</sys:String>

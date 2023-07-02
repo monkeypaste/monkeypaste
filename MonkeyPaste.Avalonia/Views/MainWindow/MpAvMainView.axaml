@@ -96,7 +96,7 @@
                                 <DataTemplate x:Key="TriggerActionChooserViewTemplate"
                                               x:DataType="local:MpAvTriggerCollectionViewModel">
 
-                                    <local:MpAvTriggerActionChooserView IsVisible="{Binding !IsDesignerWindowOpen}"
+                                    <local:MpAvTriggerActionChooserView IsVisible="{Binding !IsWindowOpen}"
                                                                         HorizontalAlignment="Stretch"
                                                                         HorizontalContentAlignment="Stretch" />
                                 </DataTemplate>
