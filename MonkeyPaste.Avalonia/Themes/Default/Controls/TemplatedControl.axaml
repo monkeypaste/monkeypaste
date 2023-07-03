@@ -51,5 +51,4 @@
         <Setter Property="ToolTip.Placement"
                 Value="Pointer" />
     </Style>
-
 </Styles>

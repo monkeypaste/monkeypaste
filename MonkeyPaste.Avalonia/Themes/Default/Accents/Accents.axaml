@@ -208,10 +208,11 @@
         <!--  FILTER MENU  -->
 
         <!--  ADV SEARCH  -->
-        <SolidColorBrush x:Key="SearchCriteriaRowBgBrush1" Color="{DynamicResource ThemeCompliment3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SearchCriteriaRowBgBrush2" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SearchCriteriaRowBgHoverBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-
+        <SolidColorBrush x:Key="SearchCriteriaBgBrush" Color="{DynamicResource ThemeCompliment5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SearchCriteriaHeaderBgBrush" Color="{DynamicResource ThemeCompliment5DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SearchCriteriaRowBgBrush1" Color="{DynamicResource ThemeCompliment5LighterColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SearchCriteriaRowBgBrush2" Color="{DynamicResource ThemeCompliment5DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        
         <!--  SIDE BAR  -->
 
         <SolidColorBrush x:Key="SidebarButtonGroupBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />

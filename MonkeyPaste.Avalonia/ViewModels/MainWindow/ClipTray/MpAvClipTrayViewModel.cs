@@ -2476,7 +2476,8 @@ namespace MonkeyPaste.Avalonia {
 
             Dispatcher.UIThread.Post(async () => {
                 while (MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening ||
-                        MpAvPlainHtmlConverter.Instance.IsBusy) {
+                        MpAvPlainHtmlConverter.Instance.IsBusy ||
+                        !Mp.Services.StartupState.IsPlatformLoaded) {
                     await Task.Delay(100);
                 }
                 if (is_startup_ido) {

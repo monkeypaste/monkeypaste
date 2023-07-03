@@ -1592,6 +1592,8 @@ namespace MonkeyPaste.Avalonia {
                     cloned_tag.PinSortIdx = -1;
                     // reset clones treeIdx to tail 
                     cloned_tag.TreeSortIdx = temp_parent_vm.Items.Count;
+                    await cloned_tag.WriteToDatabaseAsync();
+
                     var cloned_tag_vm = await temp_parent_vm.CreateChildTagTileViewModel(cloned_tag);
                     temp_parent_vm.Items.Add(cloned_tag_vm);
 

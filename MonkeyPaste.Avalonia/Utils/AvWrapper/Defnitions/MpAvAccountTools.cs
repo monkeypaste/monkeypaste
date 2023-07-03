@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIAccountTools Implementation
-        public MpUserAccountType CurrentAccountType { get; private set; } = MpUserAccountType.Free;
+        public MpUserAccountType CurrentAccountType { get; private set; } = MpUserAccountType.Premium;
 
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {
@@ -62,11 +62,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpContentCapInfo> RefreshCapInfoAsync() {
-
             int content_cap = GetContentCapacity(CurrentAccountType);
             if (content_cap < 0) {
                 // unlimited, no need to check trash
-                return null;
+                _lastCapInfo = new MpContentCapInfo();
+                return _lastCapInfo;
             }
 
             // ADD LOCK /////////////////////////////////////////////////////

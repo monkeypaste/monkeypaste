@@ -50,15 +50,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIExpandableViewModel Implementation
 
-        //private bool _isExpanded;
-        //public bool IsExpanded {
-        //    get => _isExpanded;
-        //    set {
-        //        if (IsExpanded != value) {
-        //            SetIsExpandedAsync(value).FireAndForgetSafeAsync(this);
-        //        }
-        //    }
-        //}
         public bool IsExpanded { get; set; }
 
         #endregion
@@ -84,6 +75,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public string DisabledInputTooltip =>
+            CanAlter ? string.Empty : "Pre-Loaded Filters are read-only. Duplicate to alter.";
         public bool IsAnyDragging =>
             Items.Any(x => x.IsDragging);
         public bool IsCriteriaWindowOpen { get; set; }
@@ -300,6 +294,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(CanSave));
                     OnPropertyChanged(nameof(CanAlter));
                     break;
+                case nameof(CanAlter):
+                    OnPropertyChanged(nameof(DisabledInputTooltip));
+                    break;
                 case nameof(IsCriteriaWindowOpen):
                     if (IsCriteriaWindowOpen) {
                         IsExpanded = false;
@@ -508,7 +505,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand RejectPendingCriteriaItemsCommand => new MpAsyncCommand(
             async () => {
                 await InitializeAsync(0, false);
-                IsExpanded = false;
+                //IsExpanded = false;
             }, () => IsPendingQuery, this, new[] { this });
 
         public ICommand SelectAdvancedSearchCommand => new MpCommand<object>(
@@ -519,7 +516,7 @@ namespace MonkeyPaste.Avalonia {
                 if (args is int tagId) {
                     queryTagId = tagId;
                 }
-                IsExpanded = false;
+                //IsExpanded = false;
 
                 // NOTE since query takes have no linked content
                 // but are the selected tag treat search as from
@@ -559,15 +556,8 @@ namespace MonkeyPaste.Avalonia {
                         ShowInTaskbar = true,
                         Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BinocularsImage", typeof(WindowIcon), null, null) as WindowIcon,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                        Content = new Border() {
-                            Padding = new Thickness(3),
-                            Background = Brushes.Black,
-                            Child = new MpAvSearchCriteriaListBoxView() {
-                                Background = Brushes.Violet,
-                            }
-                        },
-                        Topmost = true,
-                        Padding = new Thickness(10)
+                        Content = new MpAvSearchCriteriaListBoxView(),
+                        Topmost = true
                     };
 
                     _criteriaWindow.Bind(
@@ -581,16 +571,16 @@ namespace MonkeyPaste.Avalonia {
                             Converter = MpAvStringToWindowTitleConverter.Instance
                         });
 
-                    _criteriaWindow.Bind(
-                        Window.BackgroundProperty,
-                        new Binding() {
-                            Source = this,
-                            Path = nameof(CurrentTagHexColor),
-                            Mode = BindingMode.OneWay,
-                            Converter = MpAvStringHexToBrushConverter.Instance,
-                            TargetNullValue = MpSystemColors.darkviolet,
-                            FallbackValue = MpSystemColors.darkviolet
-                        });
+                    //_criteriaWindow.Bind(
+                    //    Window.BackgroundProperty,
+                    //    new Binding() {
+                    //        Source = this,
+                    //        Path = nameof(CurrentTagHexColor),
+                    //        Mode = BindingMode.OneWay,
+                    //        Converter = MpAvStringHexToBrushConverter.Instance,
+                    //        TargetNullValue = MpSystemColors.darkviolet,
+                    //        FallbackValue = MpSystemColors.darkviolet
+                    //    });
                     //IsCriteriaWindowOpen = true;
                     _criteriaWindow.ShowChild();
                 } else {

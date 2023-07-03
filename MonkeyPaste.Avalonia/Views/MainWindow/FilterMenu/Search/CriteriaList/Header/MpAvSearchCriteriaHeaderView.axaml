@@ -51,8 +51,7 @@
             <!--  SAVE BUTTON  -->
 
             <Button x:Name="SaveAdvSearchButton"
-                    Classes="defaultButton textOnlyButton outline outlineOver"
-                    IsEnabled="{Binding CanAlter}"
+                    Classes="defaultButton textOnlyButton outline outlineOver alterOnly"
                     IsVisible="{Binding CanSave}"
                     Command="{Binding SaveQueryCommand}">
                 <TextBlock Text="Save" />

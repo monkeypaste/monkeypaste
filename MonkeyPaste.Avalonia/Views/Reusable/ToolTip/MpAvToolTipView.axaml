@@ -74,6 +74,7 @@
                 </TextBlock>
                 <TextBlock x:Name="ToolTipTextBlock"
                            FontSize="14"
+                           Margin="0"
                            Foreground="{DynamicResource ThemeInteractiveBgColor}"
                            Text="{Binding ToolTipText, ElementName=ToolTipView}" />
             </DockPanel>

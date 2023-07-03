@@ -24,11 +24,11 @@
             <Setter Property="FontWeight"
                     Value="SemiBold" />
         </Style>
-      <Style Selector="TextBox.colorTextBox">        
+        <Style Selector="TextBox.colorTextBox">
             <Setter Property="Foreground"
                     Value="{Binding Value, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}" />
-      </Style>
-      
+        </Style>
+
         <Style Selector="TextBox.colorTextBox /template/ Border#PART_BorderElement"
                x:DataType="local:MpAvSearchCriteriaOptionViewModel">
             <Setter Property="Background"
@@ -46,7 +46,7 @@
                               DataType="local:MpAvSearchCriteriaOptionViewModel">
                     <ComboBox IsDropDownOpen="{Binding IsDropDownOpen}"
                               ItemsSource="{Binding Items}"
-                              Classes="criteriaComboBox"
+                              Classes="criteriaComboBox alterOnly"
                               SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -73,15 +73,18 @@
                             <!--  CASE SENSITIVE CHECKBOX  -->
                             <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
                                       IsVisible="{Binding IsCheckable}"
+                                      Classes="alterOnly"
                                       Content="Case Sensitive" />
                             <!--  WHOLE WORD CHECKBOX  -->
                             <CheckBox IsChecked="{Binding IsChecked2, Mode=TwoWay}"
                                       IsVisible="{Binding IsCheckable}"
+                                      Classes="alterOnly"
                                       Content="Whole Word" />
 
                             <!--  Color picker  -->
                             <Button x:Name="ColorPickerButton"
                                     DockPanel.Dock="Right"
+                                    Classes="alterOnly"
                                     IsVisible="{Binding IsColorOption}"
                                     Command="{Binding ShowColorPickerCommand}"
                                     CommandParameter="{Binding $self}"
@@ -98,6 +101,7 @@
 
                         <TextBox x:Name="MatchValueTextBox"
                                  Watermark="{Binding Label, StringFormat='\{0\}...'}"
+                                 Classes="alterOnly"
                                  Classes.valid="{Binding IsValid}"
                                  Classes.colorTextBox="{Binding IsColorOption}"
                                  local:MpAvTextControlDropExtension.IsEnabled="True"
@@ -118,7 +122,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="A" />
                             <TextBox Classes.valid="{Binding IsValid1}"
-                                     Classes="colorTextBox"
+                                     Classes="colorTextBox alterOnly"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value4, Mode=TwoWay}" />
@@ -126,7 +130,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="R" />
                             <TextBox Classes.valid="{Binding IsValid2}"
-                                     Classes="colorTextBox"
+                                     Classes="colorTextBox alterOnly"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value1, Mode=TwoWay}" />
@@ -134,7 +138,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="G" />
                             <TextBox Classes.valid="{Binding IsValid3}"
-                                     Classes="colorTextBox"
+                                     Classes="colorTextBox alterOnly"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value2, Mode=TwoWay}" />
@@ -142,7 +146,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="B" />
                             <TextBox Classes.valid="{Binding IsValid4}"
-                                     Classes="colorTextBox"
+                                     Classes="colorTextBox alterOnly"
                                      local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                      Text="{Binding Value3, Mode=TwoWay}" />
@@ -150,6 +154,7 @@
                         <StackPanel Orientation="Horizontal">
                             <!--  Color picker  -->
                             <Button x:Name="ColorPickerButton"
+                                    Classes="alterOnly"
                                     Command="{Binding ShowColorPickerCommand}"
                                     CommandParameter="{Binding $self}"
                                     Margin="5,0,0,0">
@@ -181,6 +186,7 @@
                                VerticalAlignment="Center" />
                         <local:MpAvSliderParameterView Width="100"
                                                        Height="30"
+                                                       Classes="alterOnly"
                                                        Background="Silver"
                                                        HasTextInput="False"
                                                        IsSliding="{Binding IsValueChanging, Mode=TwoWay}" />
@@ -192,6 +198,7 @@
                 <DataTemplate x:Key="DateOptionTemplate"
                               DataType="local:MpAvSearchCriteriaOptionViewModel">
                     <DatePicker Width="300"
+                                Classes="alterOnly"
                                 Margin="5,0,0,0"
                                 SelectedDate="{Binding Value, Converter={x:Static local:MpAvStringToDateTimeOffsetConverter.Instance}, Mode=TwoWay}" />
                 </DataTemplate>

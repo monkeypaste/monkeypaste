@@ -204,7 +204,6 @@
         <!--  ADVANCED SEARCH  -->
         <Border x:Name="AdvancedSearchContainerBorder"
                 Grid.Row="0"
-                Background="{DynamicResource SearchCriteriaRowBgBrush1}"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
                 MaxWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"

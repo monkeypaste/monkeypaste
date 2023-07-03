@@ -25,13 +25,23 @@
             5
         </sys:Double>
         <sys:Double x:Key="CriteriaOptionMinWidth">150</sys:Double>
+        <sys:String x:Key="ReadOnlyTooltipText">Pre-Loaded Filters are read-only. Duplicate to alter.</sys:String>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
 
-        <!--  READONLY CRITERIA LBI  -->
-        <Style Selector="ListBox.criteriaList:not(.alterable) > ListBoxItem">
+        <!--  ALTER ONLY  -->
+        <Style Selector=":is(Control).alterOnly">
+            <Setter Property="local:MpAvShowDisabledTooltipExtension.ShowOnDisabled"
+                    Value="True" />
             <Setter Property="IsEnabled"
-                    Value="False" />
+                    Value="{Binding CanAlter, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{Binding DisabledInputTooltip, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!--  CRITIERA LISTBOX ITEM & HEADER  -->
@@ -49,15 +59,15 @@
             <Setter Property="BorderThickness"
                     Value="{StaticResource CriteriaItemBorderThickness}" />
             <Setter Property="BorderBrush"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
         </Style>
 
-        <Style Selector="ListBox.criteriaList:not(.drag) > ListBoxItem:pointerover, ListBox.criteriaList:not(.drag) local|MpAvSearchCriteriaHeaderView:pointerover">
+        <Style Selector="DockPanel#SearchCriteriaContainer:not(.drag) ListBox.criteriaList > ListBoxItem:pointerover, DockPanel#SearchCriteriaContainer:not(.drag) local|MpAvSearchCriteriaHeaderView:pointerover">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
-        <Style Selector="ListBox.criteriaList.drag > ListBoxItem, local|MpAvSearchCriteriaHeaderView">
+        <Style Selector="DockPanel#SearchCriteriaContainer.drag ListBox.criteriaList > ListBoxItem, DockPanel#SearchCriteriaContainer.drag local|MpAvSearchCriteriaHeaderView">
             <!--  NOTE LBI Borders are transparent during dnd to see drop lines  -->
             <Setter Property="BorderBrush"
                     Value="Transparent" />
@@ -75,25 +85,14 @@
             <Setter Property="Height"
                     Value="{Binding CriteriaItemHeight, FallbackValue=0, TargetNullValue=0}" />
         </Style>
-        <!--<Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(even) /template/ ContentPresenter">
+
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd) /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush1}" />
         </Style>
-        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(odd) /template/ ContentPresenter">
+        <Style Selector="ListBox.criteriaList > ListBoxItem:nth-child(even) /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="{DynamicResource SearchCriteriaRowBgBrush2}" />
-        </Style>
-          <Style Selector="local|MpAvSearchCriteriaHeaderView">
-            <Setter Property="Background"
-                    Value="{DynamicResource SearchCriteriaRowBgBrush2}" />
-        </Style>
-        <Style Selector="ListBox.criteriaList > ListBoxItem:pointerover /template/ ContentPresenter">
-            <Setter Property="Background"
-                    Value="{DynamicResource SearchCriteriaRowBgHoverBrush}" />
-        </Style>-->
-        <Style Selector="ListBox.criteriaList > ListBoxItem:selected /template/ ContentPresenter">
-            <Setter Property="BorderBrush"
-                    Value="Red" />
         </Style>
 
         <!--  CRITERIA ROW OPTIONS  -->
@@ -109,26 +108,17 @@
         </Style>
 
         <!--  COMBOX BOXES  -->
-
-        <Style Selector="ComboBox:pointerover.criteriaComboBox">
-            <!--<Setter Property="BorderBrush"
-                    Value="Yellow" />-->
-        </Style>
         <Style Selector="ComboBox.criteriaComboBox">
             <Setter Property="CornerRadius"
                     Value="10" />
             <Setter Property="BorderThickness"
                     Value="1" />
-            <!--<Setter Property="BorderBrush"
-                    Value="Silver" />-->
             <Setter Property="HorizontalAlignment"
                     Value="Center" />
             <Setter Property="VerticalAlignment"
                     Value="Center" />
             <Setter Property="Margin"
                     Value="5" />
-            <!--<Setter Property="Background"
-                    Value="White" />-->
             <Setter Property="HorizontalContentAlignment"
                     Value="Left" />
             <Setter Property="VerticalContentAlignment"
@@ -152,8 +142,6 @@
                     Value="5,0" />
             <Setter Property="VerticalAlignment"
                     Value="Center" />
-            <!--<Setter Property="Foreground"
-                    Value="Black" />-->
         </Style>
         <!--  TEXT BOXES  -->
 
@@ -169,15 +157,9 @@
             </Setter>
         </Style>
 
-        <Style Selector="TextBox:not(.colorTextBox)">
-            <!--<Setter Property="Background"
-                    Value="White" />-->
-        </Style>
         <Style Selector="TextBox">
             <Setter Property="BorderThickness"
                     Value="1" />
-            <!--<Setter Property="BorderBrush"
-                    Value="White" />-->
             <Setter Property="Margin"
                     Value="10,5,5,5" />
             <Setter Property="Padding"
@@ -216,8 +198,6 @@
         <!--  TEXT BLOCKS  -->
 
         <Style Selector="TextBlock">
-            <!--<Setter Property="Foreground"
-                    Value="Black" />-->
             <Setter Property="VerticalAlignment"
                     Value="Center" />
             <Setter Property="HorizontalAlignment"
@@ -244,18 +224,14 @@
                     Value="25" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <!--<ScrollViewer x:Name="SearchCriteriaContainerScrollViewer"
-                  VerticalAlignment="Stretch"
-                  VerticalContentAlignment="Stretch"
-                  HorizontalAlignment="Stretch"
-                  HorizontalScrollBarVisibility="Auto"
-                  VerticalScrollBarVisibility="Auto">
-        <Grid RowDefinitions="Auto,*"
-              HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch">-->
-    <DockPanel>
-        <local:MpAvSearchCriteriaHeaderView Grid.Row="0"
-                                            DockPanel.Dock="Top"
+
+
+    <DockPanel x:Name="SearchCriteriaContainer"
+               Background="{DynamicResource SearchCriteriaBgBrush}"
+               Classes.drag="{Binding IsAnyDragging}"
+               Classes.alterable="{Binding CanAlter}">
+        <local:MpAvSearchCriteriaHeaderView DockPanel.Dock="Top"
+                                            Background="{DynamicResource SearchCriteriaHeaderBgBrush}"
                                             Padding="5"
                                             Classes.popout="{Binding IsCriteriaWindowOpen}"
                                             HorizontalAlignment="Stretch"
@@ -264,11 +240,9 @@
                  Grid.Row="1"
                  Classes="criteriaList"
                  Classes.windowed="{Binding IsCriteriaWindowOpen}"
-                 Classes.drag="{Binding IsAnyDragging}"
-                 Classes.alterable="{Binding CanAlter}"
-                 Background="{DynamicResource SearchCriteriaRowBgBrush1}"
-                 BorderThickness="0"
-                 BorderBrush="Black"
+                 Background="{DynamicResource SearchCriteriaBgBrush}"
+                 BorderThickness="1"
+                 BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
                  ItemsSource="{Binding SortedItems}"
                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                  SelectionMode="Single"
@@ -276,14 +250,14 @@
                  VerticalAlignment="Stretch"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
-            <ListBox.Resources>
+            <!--<ListBox.Resources>
                 <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
                 <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
                 <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
                 <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
                 <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
                 <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
-            </ListBox.Resources>
+            </ListBox.Resources>-->
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid HorizontalAlignment="Stretch"
@@ -305,7 +279,5 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <!--</Grid>
-    </ScrollViewer>-->
     </DockPanel>
 </local:MpAvUserControl>
