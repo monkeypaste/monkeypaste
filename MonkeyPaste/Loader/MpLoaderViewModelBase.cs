@@ -91,8 +91,8 @@ namespace MonkeyPaste {
 
         public virtual async Task BeginLoaderAsync() {
             await LoadItemsAsync(CoreItems);
+            IsCoreLoaded = true;
             MpConsole.WriteLine("Core load complete");
-            await Task.Delay(1000);
         }
 
         public virtual async Task FinishLoaderAsync() {

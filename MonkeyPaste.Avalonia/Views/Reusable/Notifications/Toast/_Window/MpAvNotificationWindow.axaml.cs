@@ -13,12 +13,41 @@ namespace MonkeyPaste.Avalonia {
 
         public MpLoaderNotificationViewModel BindingContext => DataContext as MpLoaderNotificationViewModel;
         public MpAvNotificationWindow() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
 #if DEBUG
             this.AttachDevTools();
 #endif
 
-            this.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnIsVisibleChanged());
+            this.Opened += (s, e) => {
+                if (BindingContext == null) {
+                    return;
+                }
+                BindingContext.ProgressLoader.BeginLoaderAsync().FireAndForgetSafeAsync(BindingContext);
+                Dispatcher.UIThread.Post(async () => {
+                    while (true) {
+                        BindingContext.OnPropertyChanged(nameof(BindingContext.ProgressBarCurrentWidth));
+                        BindingContext.OnPropertyChanged(nameof(BindingContext.Title));
+                        BindingContext.OnPropertyChanged(nameof(BindingContext.Body));
+                        BindingContext.OnPropertyChanged(nameof(BindingContext.Detail));
+                        BindingContext.OnPropertyChanged(nameof(BindingContext.ValueLoaded));
+                        if (BindingContext.ValueLoaded >= 100.0d) {
+                            await Task.Delay(1000);
+                            BindingContext.HideNotification();
+                            return;
+                        }
+                        await Task.Delay(100);
+                    }
+                });
+            };
+
+            this.Closed += (s, e) => {
+
+                if (BindingContext == null) {
+                    return;
+                }
+                BindingContext.ProgressLoader.FinishLoaderAsync().FireAndForgetSafeAsync(BindingContext);
+            };
+            //this.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnIsVisibleChanged());
             //this.Opened += MpAvLoaderNotificationWindow_Opened;
         }
 
@@ -50,11 +79,6 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 BindingContext.ProgressLoader.FinishLoaderAsync().FireAndForgetSafeAsync(BindingContext);
             }
-        }
-
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
     }
 }

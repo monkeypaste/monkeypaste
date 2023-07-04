@@ -217,6 +217,16 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void EnableTrigger() {
+            if (Parent.IsRestoringEnabled &&
+                !Mp.Services.StartupState.IsPlatformLoaded) {
+                Dispatcher.UIThread.Post(async () => {
+                    while (!Mp.Services.StartupState.IsPlatformLoaded) {
+                        await Task.Delay(100);
+                    }
+                    EnableTrigger();
+                });
+                return;
+            }
             if (ShortcutViewModel == null) {
                 return;
             }

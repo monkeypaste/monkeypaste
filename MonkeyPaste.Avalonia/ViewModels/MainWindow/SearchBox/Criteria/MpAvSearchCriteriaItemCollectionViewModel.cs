@@ -557,7 +557,8 @@ namespace MonkeyPaste.Avalonia {
                         Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("BinocularsImage", typeof(WindowIcon), null, null) as WindowIcon,
                         WindowStartupLocation = WindowStartupLocation.CenterScreen,
                         Content = new MpAvSearchCriteriaListBoxView(),
-                        Topmost = true
+                        Topmost = true,
+                        Padding = new Thickness(5)
                     };
 
                     _criteriaWindow.Bind(

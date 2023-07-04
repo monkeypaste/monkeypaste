@@ -822,15 +822,38 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             await InitDefaultShortcutsAsync(routingProfile);
         }
         private static async Task CreateTestContentAsync() {
-            return;
+            // create test link tags
+
+            var test_tag_1 = await MpTag.CreateAsync(
+                tagName: "TEST_1",
+                treeSortIdx: 1,
+                parentTagId: MpTag.CollectionsTagId,
+                tagType: MpTagType.Link);
+
+            var test_tag_2 = await MpTag.CreateAsync(
+                tagName: "TEST_1_1",
+                treeSortIdx: 0,
+                parentTagId: test_tag_1.Id,
+                tagType: MpTagType.Link);
+
+            var test_tag_3 = await MpTag.CreateAsync(
+                tagName: "TEST_1_2",
+                treeSortIdx: 0,
+                parentTagId: test_tag_1.Id,
+                tagType: MpTagType.Link);
+
             var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
             string this_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(this_app);
+            int content_count = 300;
+            int link_count = 10;
 
-            int content_cap = Mp.Services.AccountTools.GetContentCapacity(MpUser.TEST_ACCOUNT_TYPE);
-            // NOTE subtracting 2 for 1 the loading item and 2 
-            int test_items = content_cap < 0 ? 300 : content_cap - 2;
-            for (int i = 0; i < 300; i++) {
-                string data = $"<p>This is test {i + 1}.</p>";
+            int[] test_tag_ids = new int[] { test_tag_1.Id, test_tag_2.Id, test_tag_3.Id };
+            int[] link_idxs = MpRandom.GetUniqueRandomInts(0, content_count - 1, link_count);
+
+            async Task CreateTestItemAsync(int i) {
+                //string data = $"<p>This is test {i + 1}.</p><p>{System.Guid.NewGuid()}</p>";
+                string data = $"<p><span style=\"color:#ffffff\">This&nbsp;is&nbsp;test&nbsp;{i}.</span><br/><span style=\"color:#ffffff\">e751712c-398c-465b-a70d-faf5a1590183</span></p>";
+
                 var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, data);
                 var dobj = await MpDataObject.CreateAsync(pdo: mpdo);
                 var ci = await MpCopyItem.CreateAsync(
@@ -846,8 +869,23 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                     transType: MpTransactionType.Created,
                     ref_uris: new[] { this_app_url });
 
+                if (link_idxs.Contains(i)) {
+                    await MpCopyItemTag.CreateAsync(
+                        tagId: test_tag_ids[MpRandom.Rand.Next(test_tag_ids.Length)],
+                        copyItemId: ci.Id);
+                }
+                if (i % 100 == 0) {
+                    MpConsole.WriteLine($"{content_count - i} Test Items Remaining");
+                }
             }
-
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < content_count; i++) {
+                await CreateTestItemAsync(i);
+            }
+            //var tasks = Enumerable.Range(0, content_count).Select(x => CreateTestItemAsync(x));
+            //await Task.WhenAll(tasks);
+            sw.Stop();
+            MpConsole.WriteLine($"Total ms: {sw.ElapsedMilliseconds} Time per item: {sw.ElapsedMilliseconds / content_count}");
         }
         private static async Task InitDefaultShortcutsAsync(MpShortcutRoutingProfileType routingProfile = MpShortcutRoutingProfileType.Internal) {
             MpRoutingType mw_routing = routingProfile.GetProfileBasedRoutingType(MpShortcutType.ToggleMainWindow);

@@ -600,10 +600,18 @@ namespace MonkeyPaste.Common {
                 {'<',"&lt;" }
             };
 
-
+        private static Regex _AmpNotSpecialEntityRegex;
         public static string EncodeSpecialHtmlEntities(this string str) {
             foreach (var pattern in HtmlEntityLookup) {
-                str = str.Replace(pattern.Key.ToString(), pattern.Value);
+                if (pattern.Key == '&') {
+                    // special case for & to avoid double encoding
+                    if (_AmpNotSpecialEntityRegex == null) {
+                        _AmpNotSpecialEntityRegex = new Regex(@"&(?!(#[0-9]{2,4}|[A-z]{2,6});)/g", RegexOptions.Compiled);
+                    }
+                    str = _AmpNotSpecialEntityRegex.Replace(str, pattern.Value);
+                } else {
+                    str = str.Replace(pattern.Key.ToString(), pattern.Value);
+                }
             }
             return str;
         }

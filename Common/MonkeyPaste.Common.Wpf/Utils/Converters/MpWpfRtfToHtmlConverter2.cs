@@ -74,7 +74,7 @@ namespace MonkeyPaste.Common.Wpf {
             //    string html_text = MpRichHtmlToPlainTextConverter.Convert(_htmlDoc.DocumentNode.InnerHtml, Environment.NewLine);
             //    html_text = html_text.UnescapeSpecialHtmlEntities();
             //    if (valid_pt != html_text) {
-            //        Console.WriteLine("rtf2html validation error! returning plain text");
+            //        MpConsole.WriteLine("rtf2html validation error! returning plain text");
             //        return valid_pt;
             //    }
             //}
@@ -83,7 +83,7 @@ namespace MonkeyPaste.Common.Wpf {
             string encoded_html = _htmlDoc.DocumentNode.InnerHtml;
             var errors = _htmlDoc.ParseErrors;
             foreach (var error in errors) {
-                Console.WriteLine("rtf2html parse error: " + error);
+                MpConsole.WriteLine("rtf2html parse error: " + error);
             }
             return encoded_html;//HttpUtility.HtmlDecode(encoded_html);
         }
@@ -200,13 +200,13 @@ namespace MonkeyPaste.Common.Wpf {
             string valid_check = r.Text.EncodeSpecialHtmlEntities();
             string test_check = span_node.InnerText;
             if (valid_check != test_check) {
-                Console.WriteLine("Error encoding run.", true);
-                Console.WriteLine($"Actual Text:");
-                Console.WriteLine(r.Text);
-                Console.WriteLine($"Encoded Text:");
-                Console.WriteLine(valid_check);
-                Console.WriteLine($"Processed Text:");
-                Console.WriteLine(test_check, false, true);
+                MpConsole.WriteLine("Error encoding run.", true);
+                MpConsole.WriteLine($"Actual Text:");
+                MpConsole.WriteLine(r.Text);
+                MpConsole.WriteLine($"Encoded Text:");
+                MpConsole.WriteLine(valid_check);
+                MpConsole.WriteLine($"Processed Text:");
+                MpConsole.WriteLine(test_check, false, true);
                 MpDebug.Break();
             }
 
@@ -574,7 +574,7 @@ namespace MonkeyPaste.Common.Wpf {
                 }
             }
             catch (Exception ex) {
-                Console.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                MpConsole.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
                 return null;
             }
         }
@@ -587,7 +587,7 @@ namespace MonkeyPaste.Common.Wpf {
                 }
             }
             catch (Exception ex) {
-                Console.WriteLine($"Error writing to path '{filePath}' with text '{text}'", ex);
+                MpConsole.WriteTraceLine($"Error writing to path '{filePath}' with text '{text}'", ex);
                 return null;
             }
         }

@@ -170,6 +170,22 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Unique Size
+
+        public static MpSize GetTotalUniqueSizeBeforeIdx(int idx, MpSize defSize) {
+            MpSize total = new MpSize();
+            if (idx == 0) {
+                return total;
+            }
+
+            for (int i = 0; i < _props.Count; i++) {
+                if (i >= idx && idx >= 0) {
+                    break;
+                }
+                total.Width += _props[i].UniqueWidth.HasValue ? (_props[i].UniqueWidth.Value - defSize.Width) : 0;
+                total.Height += _props[i].UniqueHeight.HasValue ? (_props[i].UniqueHeight.Value - defSize.Height) : 0;
+            }
+            return total;
+        }
         public static void AddOrReplaceUniqueWidth_ById(int ciid, double uniqueWidth, int idx) {
             GetProps(ciid, true, idx).UniqueWidth = uniqueWidth;
         }
@@ -286,6 +302,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
         #endregion
 
         #region Private Methods

@@ -237,7 +237,6 @@ namespace MonkeyPaste.Avalonia {
                             Command = EnableFindAndReplaceForSelectedItem,
                             ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
                         },
-                        new MpMenuItemViewModel() {IsSeparator = true},
                         SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
                         new MpMenuItemViewModel() {IsSeparator = true},
                         MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.CopyItemType),
@@ -540,7 +539,97 @@ namespace MonkeyPaste.Avalonia {
             return -1;
         }
 
-        private object FindTileRectOrQueryIdxOrTotalTileSize_internal(int queryOffsetIdx, double scrollOffsetX, double scrollOffsetY, MpRect prevOffsetRect = null) {
+        private object FindTileRectOrQueryIdxOrTotalTileSize_internal2(
+            int queryOffsetIdx,
+            double scrollOffsetX,
+            double scrollOffsetY,
+            MpRect prevOffsetRect = null) {
+            // For TotalTileSize<MpSize>: all params -1
+            // For TileRect<MpRect>:  0 <= queryOffsetIdx < MpPlatform.Services.Query.TotalAvailableItemsInQuery and scrollOffsets == -1
+            // For TileQueryIdx<[]{int,MpRect}>: queryoffsetIdx < 0 and both scrollOffset > 0
+
+            bool isFindTileIdx = scrollOffsetX >= 0 && scrollOffsetY >= 0;
+            bool isFindTileRect = !isFindTileIdx && queryOffsetIdx >= 0;
+            bool isFindTotalSize = !isFindTileRect;
+
+            int totalTileCount = Mp.Services.Query.TotalAvailableItemsInQuery;
+            queryOffsetIdx = isFindTotalSize ? Mp.Services.Query.TotalAvailableItemsInQuery - 1 : queryOffsetIdx;
+            if (queryOffsetIdx >= totalTileCount) {
+                return null;
+            }
+            UpdateDefaultItemSize();
+            MpSize def_size = new MpSize(DefaultQueryItemWidth, DefaultQueryItemHeight);
+
+            if (isFindTotalSize ||
+                isFindTileRect) {
+                MpSize leading_unique_size = MpAvPersistentClipTilePropertiesHelper.GetTotalUniqueSizeBeforeIdx(queryOffsetIdx, def_size);
+                MpSize total_size = MpSize.Empty;
+                int offset_count = queryOffsetIdx + 1;
+                if (LayoutType == MpClipTrayLayoutType.Grid) {
+                    MpSize leading_default_size = (def_size.ToPortablePoint() * queryOffsetIdx).ToPortableSize();
+                    total_size = ((leading_unique_size.ToPortablePoint()) + (leading_default_size.ToPortablePoint())).ToPortableSize();
+                    if (ListOrientation == Orientation.Horizontal) {
+                        total_size.Width = DesiredMaxTileRight;
+                        total_size.Height = Math.Max(DefaultQueryItemHeight, ((double)offset_count / (double)CurGridFixedCount) * DefaultQueryItemHeight);
+                    } else {
+                        total_size.Width = Math.Max(DefaultQueryItemWidth, ((double)offset_count / (double)CurGridFixedCount) * DefaultQueryItemWidth);
+                        total_size.Height = DesiredMaxTileBottom;
+                    }
+                } else {
+
+                }
+                if (isFindTotalSize) {
+                    if (LayoutType == MpClipTrayLayoutType.Grid) {
+                        if (ListOrientation == Orientation.Horizontal) {
+                            CurGridFixedCount = (int)(DesiredMaxTileRight / DefaultQueryItemWidth);
+                        } else {
+                            CurGridFixedCount = (int)(DesiredMaxTileBottom / DefaultQueryItemHeight);
+                        }
+                    }
+                    return total_size;
+                }
+                // find tile rect
+                MpSize tile_size = def_size;
+                if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueWidth_ByOffsetIdx(queryOffsetIdx, out double uw)) {
+                    tile_size.Width = uw;
+                }
+                if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueHeight_ByOffsetIdx(queryOffsetIdx, out double uh)) {
+                    tile_size.Height = uh;
+                }
+                MpPoint tile_loc = total_size.ToPortablePoint();
+                if (LayoutType == MpClipTrayLayoutType.Grid) {
+                    if (ListOrientation == Orientation.Horizontal) {
+                        int row = (int)(total_size.Width / DesiredMaxTileRight);
+                        tile_loc.X = total_size.Width - (row * DesiredMaxTileRight);
+                        tile_loc.Y = row * DefaultQueryItemHeight;
+                    } else {
+                        int col = (int)(total_size.Height / DesiredMaxTileBottom);
+                        tile_loc.X = col * DefaultQueryItemWidth;
+                        tile_loc.Y = total_size.Height - (col * DesiredMaxTileBottom);
+                    }
+                }
+                return new MpRect(tile_loc, tile_size);
+            }
+            // find idx at offset
+
+            // find baseline offset, ignoring unique sizes
+            if (LayoutType == MpClipTrayLayoutType.Grid) {
+
+            } else {
+                if (ListOrientation == Orientation.Horizontal) {
+                    queryOffsetIdx = (int)(scrollOffsetX / DefaultQueryItemWidth);
+                } else {
+                    queryOffsetIdx = (int)(scrollOffsetY / DefaultQueryItemHeight);
+                }
+            }
+            return null;
+        }
+
+        private object FindTileRectOrQueryIdxOrTotalTileSize_internal(
+            int queryOffsetIdx,
+            double scrollOffsetX,
+            double scrollOffsetY,
+            MpRect prevOffsetRect = null) {
             // For TotalTileSize<MpSize>: all params -1
             // For TileRect<MpRect>:  0 <= queryOffsetIdx < MpPlatform.Services.Query.TotalAvailableItemsInQuery and scrollOffsets == -1
             // For TileQueryIdx<[]{int,MpRect}>: queryoffsetIdx < 0 and both scrollOffset > 0
@@ -567,11 +656,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpRect last_rect = null;// prevOffsetRect;
 
-            if (isFindTotalSize) {
-
-            }
             UpdateDefaultItemSize();
-
 
             for (int i = startIdx; i <= queryOffsetIdx; i++) {
                 MpSize tile_size = new MpSize(DefaultQueryItemWidth, DefaultQueryItemHeight);

@@ -420,7 +420,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Items));
 
             // restore all blocks until core fully loaded (needs to wait to attach shortcuts or any other later loaded components)
-            RestoreAllEnabledAsync().FireAndForgetSafeAsync();
+            //RestoreAllEnabledAsync().FireAndForgetSafeAsync();
 
             if (Items.Count() > 0) {
                 // select most recent action
@@ -619,9 +619,9 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task RestoreAllEnabledAsync() {
             // NOTE this is only called on init and needs to wait for dependant vm's to load so wait here
-            while (!Mp.Services.StartupState.IsPlatformLoaded) {
-                await Task.Delay(100);
-            }
+            //while (!Mp.Services.StartupState.IsPlatformLoaded) {
+            //    await Task.Delay(100);
+            //}
 
             IsRestoringEnabled = true;
 
@@ -635,6 +635,10 @@ namespace MonkeyPaste.Avalonia {
             .ForEach(x => x.EnableTriggerCommand.Execute(null));
 
             while (Items.Any(x => x.IsAnyBusy)) {
+                await Task.Delay(100);
+            }
+            while (enabled_triggers.Any(x => !x.IsEnabled)) {
+                // wait to enable
                 await Task.Delay(100);
             }
             IsRestoringEnabled = false;

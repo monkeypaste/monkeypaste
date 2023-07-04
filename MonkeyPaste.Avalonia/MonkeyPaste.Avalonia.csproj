@@ -1424,13 +1424,13 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia" Version="11.0.0-rc2.2" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0-rc2.2" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-rc2.2" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-rc1.1" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-rc2.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-rc2.2" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0-rc2.2" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-rc1.1" />
     <PackageReference Include="Markdig" Version="0.31.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
@@ -1440,7 +1440,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(IsDesktop) == 'true'">
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.0-rc2.2" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">

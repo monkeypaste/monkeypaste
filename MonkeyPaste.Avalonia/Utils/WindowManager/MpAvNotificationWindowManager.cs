@@ -168,10 +168,15 @@ namespace MonkeyPaste.Avalonia {
                     nw.Position = primaryScreen.Bounds.BottomRight.ToAvPixelPoint(primaryScreen.Scaling);
                 }
             }
-            if (nvmb.Owner is Window ow) {
-                nw.Show(ow);
-            } else {
-                nw.Show();
+            try {
+                if (nvmb.Owner is Window ow) {
+                    nw.Show(ow);
+                } else {
+                    nw.Show();
+                }
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error showing window '{nvmb}', window likely closed. ", ex);
             }
             return;
         }

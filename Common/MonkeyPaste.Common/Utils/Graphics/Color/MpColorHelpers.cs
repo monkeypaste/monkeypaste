@@ -86,9 +86,13 @@ namespace MonkeyPaste.Common {
             return new byte[] { a, r, g, b };
         }
 
-        public static string GetRandomHexColor() {
+        public static string GetRandomHexColor(bool includeAlpha = true) {
             int idx = MpRandom.Rand.Next(0, MpSystemColors.ContentColors.Count);
-            return MpSystemColors.ContentColors[idx];
+            string hex = MpSystemColors.ContentColors[idx];
+            if (includeAlpha) {
+                return hex;
+            }
+            return hex.Replace("#FF", "#");
         }
 
 

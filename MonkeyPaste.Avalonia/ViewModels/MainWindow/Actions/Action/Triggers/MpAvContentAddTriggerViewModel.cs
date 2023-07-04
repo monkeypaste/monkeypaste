@@ -1,6 +1,8 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIContentTypeDependant {

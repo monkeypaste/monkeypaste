@@ -67,7 +67,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override async Task FinishLoaderAsync() {
-            IsCoreLoaded = true;
 
             await base.FinishLoaderAsync();
 
