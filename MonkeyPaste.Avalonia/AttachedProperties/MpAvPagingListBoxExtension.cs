@@ -848,7 +848,8 @@ namespace MonkeyPaste.Avalonia {
                timer.Tag is ListBox lb &&
                GetScrollViewer(lb) is ScrollViewer sv) {
                 if (sv.DataContext is MpViewModelBase vm &&
-                    vm.IsBusy) {
+                    vm.IsBusy
+                    ) {
                     return;
                 }
                 if (GetIsTouchScrolling(lb)) {
@@ -934,14 +935,13 @@ namespace MonkeyPaste.Avalonia {
                 // and load more check doesn't occur to mouse up
                 lb_sv.ScrollToHorizontalOffset(x);
                 sv.ScrollToHorizontalOffset(x);
+
             }
             if (GetCanScrollY(lb)) {
                 SetScrollOffsetY(lb, y);
                 lb_sv.ScrollToVerticalOffset(y);
                 sv.ScrollToVerticalOffset(y);
             }
-
-
         }
 
         private static bool BindScrollViewerAndTracks(ListBox lb) {
@@ -966,7 +966,6 @@ namespace MonkeyPaste.Avalonia {
                 foreach (var track in tracks) {
                     track.Tag = lb;
                     track.IgnoreThumbDrag = true;
-                    //track.IsThumbDragHandled = true;
 
                     track.Bind(
                             Track.MaximumProperty,
@@ -999,68 +998,64 @@ namespace MonkeyPaste.Avalonia {
             }
             var thumb = track.GetVisualDescendant<Thumb>();
             var tt = thumb.RenderTransform as TranslateTransform;
-            //TransformOperation tt = GetThumbTranslateOp(thumb);
             if (track.Orientation == Orientation.Horizontal) {
                 SetIsThumbDraggingX(attached_control, true);
-                //var tt = thumb.GetTransform<TranslateTransform>(true);
 
                 if (isThumbPress) {
                     tt.X = 0;
-                    //tt.Data.Translate.X = 0;
                 } else {
                     double hw = thumb.Bounds.Width / 2;
                     double tx_min = -thumb.Bounds.X;
                     double tx_max = track.Bounds.Width - hw - thumb.Bounds.X;
                     double tx = track_mp.X - hw - thumb.Bounds.X;
                     tt.X = Math.Max(tx_min, Math.Min(tx, tx_max));
-                    //tt.Data.Translate.X = Math.Max(tx_min, Math.Min(tx, tx_max));
                 }
             } else {
                 SetIsThumbDraggingY(attached_control, true);
                 if (isThumbPress) {
                     tt.Y = 0;
-                    //tt.Data.Translate.Y = 0;
                 } else {
                     double hh = thumb.Bounds.Height / 2;
                     double ty_min = -thumb.Bounds.Y;
                     double ty_max = track.Bounds.Height - hh - thumb.Bounds.Y;
                     double ty = track_mp.Y - hh - thumb.Bounds.Y;
                     tt.Y = Math.Max(ty_min, Math.Min(ty, ty_max));
-                    //tt.Data.Translate.Y = Math.Max(ty_min, Math.Min(ty, ty_max));
                 }
             }
-            //tt.Bake();
         }
 
         private static void FinishThumbDrag(ListBox lb, Track track) {
             var thumb = track.GetVisualDescendant<Thumb>();
 
             var tt = thumb.RenderTransform as TranslateTransform;
-            //TransformOperation tt = GetThumbTranslateOp(thumb);
 
             if (GetIsThumbDraggingX(lb)) {
                 double hw = thumb.Bounds.Width / 2;
                 double x = tt.X + thumb.Bounds.X + hw;
-                //double x = tt.Data.Translate.X + thumb.Bounds.X + hw;
-                track.Value = track.ValueFromPoint(new Point(x, 0));
+
+                double final_val = track.ValueFromPoint(new Point(x, 0));
+                if (track.GetVisualAncestor<ScrollBar>() is ScrollBar sb) {
+                    sb.SetCurrentValue(ScrollBar.ValueProperty, final_val);
+                }
+
                 tt.X = 0;
-                //tt.Data.Translate.X = 0;
-                SetScrollOffsetX(lb, track.Value);
+                SetScrollOffsetX(lb, final_val);
                 SetIsThumbDraggingX(lb, false);
             } else if (GetIsThumbDraggingY(lb)) {
                 double hh = thumb.Bounds.Height / 2;
                 double y = tt.Y + thumb.Bounds.Y + hh;
-                //double y = tt.Data.Translate.Y + thumb.Bounds.Y + hh;
-                track.Value = track.ValueFromPoint(new Point(0, y));
+
+                double final_val = track.ValueFromPoint(new Point(0, y));
+                if (track.GetVisualAncestor<ScrollBar>() is ScrollBar sb) {
+                    sb.SetCurrentValue(ScrollBar.ValueProperty, final_val);
+                }
                 tt.Y = 0;
-                //tt.Data.Translate.Y = 0;
                 SetScrollOffsetY(lb, track.Value);
                 SetIsThumbDraggingY(lb, false);
             } else {
                 // shouldn't happen
                 MpDebug.Break();
             }
-            //tt.Bake();
         }
 
         #endregion

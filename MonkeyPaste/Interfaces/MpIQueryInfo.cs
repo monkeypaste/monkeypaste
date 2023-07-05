@@ -27,6 +27,9 @@ namespace MonkeyPaste {
         IEnumerable<MpIQueryInfo> Infos { get; }
 
         MpIQueryPageTools PageTools { get; }
+
+        // fragment 'MpQuillContentSearchRequestMessage'[]
+        string SearchFragmentMessage { get; }
     }
 
     public interface MpIQueryInfo {

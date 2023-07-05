@@ -98,8 +98,8 @@
                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedQueryTrayScreenWidth, Mode=TwoWay}"
                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedQueryTrayScreenHeight, Mode=TwoWay}">
             <local:MpAvPagingScrollViewer x:Name="ClipTrayScrollViewer"
-                                          HorizontalScrollBarVisibility="{Binding CanScrollX, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
-                                          VerticalScrollBarVisibility="{Binding CanScrollY, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
+                                          HorizontalScrollBarVisibility="{Binding IsQueryHorizontalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
+                                          VerticalScrollBarVisibility="{Binding IsQueryVerticalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
                                           IsScrollInertiaEnabled="False"
                                           HorizontalAlignment="Left"
                                           VerticalAlignment="Top"

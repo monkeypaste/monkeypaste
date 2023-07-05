@@ -852,7 +852,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
             async Task CreateTestItemAsync(int i) {
                 //string data = $"<p>This is test {i + 1}.</p><p>{System.Guid.NewGuid()}</p>";
-                string data = $"<p><span style=\"color:#ffffff\">This&nbsp;is&nbsp;test&nbsp;{i}.</span><br/><span style=\"color:#ffffff\">e751712c-398c-465b-a70d-faf5a1590183</span></p>";
+                string data = $"<p><span style=\"color:#ffffff\">This&nbsp;is&nbsp;test&nbsp;{i}.</span><br/><span style=\"color:#ffffff\">{System.Guid.NewGuid()}</span></p>";
 
                 var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, data);
                 var dobj = await MpDataObject.CreateAsync(pdo: mpdo);

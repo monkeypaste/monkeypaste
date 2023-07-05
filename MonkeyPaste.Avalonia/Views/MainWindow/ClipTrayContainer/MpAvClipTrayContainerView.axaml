@@ -72,8 +72,18 @@
                     Value="{Binding BoundHeight}" />
             <!--<Setter Property="IsHitTestVisible"
                     Value="{Binding !HasScrollVelocity, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />-->
-            <Setter Property="IsHitTestVisible"
-                    Value="{Binding !IsTouchScrolling, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />
+            <!--<Setter Property="IsHitTestVisible"
+                    Value="{Binding !IsTouchScrolling, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />-->
+            <Setter Property="IsHitTestVisible">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="!HasScrollVelocity"
+                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                        <Binding Path="!IsTouchScrolling"
+                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!--  TILE BORDER TRANSITIONS  -->

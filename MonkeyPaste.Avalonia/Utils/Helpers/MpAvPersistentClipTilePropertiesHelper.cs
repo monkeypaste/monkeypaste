@@ -171,6 +171,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region Unique Size
 
+        public static MpSize DefQuerySize { get; set; } = MpSize.Empty;
+        public static IEnumerable<(int, double)> UniqueQueryWidths =>
+            _props
+            .Where(x => x.Value.UniqueWidth.HasValue && x.Value.QueryOffsetIdx >= 0)
+            .Select(x => (x.Value.QueryOffsetIdx, x.Value.UniqueWidth.Value));
+
+        public static IEnumerable<(int, double)> UniqueQueryHeights =>
+            _props
+            .Where(x => x.Value.UniqueHeight.HasValue && x.Value.QueryOffsetIdx >= 0)
+            .Select(x => (x.Value.QueryOffsetIdx, x.Value.UniqueHeight.Value));
+
+        public static IEnumerable<(int, MpSize)> UniqueQuerySizes =>
+            _props
+            .Where(x => (x.Value.UniqueWidth.HasValue || x.Value.UniqueHeight.HasValue) && x.Value.QueryOffsetIdx >= 0)
+            .Select(x =>
+                (x.Key,
+                new MpSize(
+                    x.Value.UniqueWidth.HasValue ? x.Value.UniqueWidth.Value : DefQuerySize.Width,
+                    x.Value.UniqueHeight.HasValue ? x.Value.UniqueHeight.Value : DefQuerySize.Height)));
+
         public static MpSize GetTotalUniqueSizeBeforeIdx(int idx, MpSize defSize) {
             MpSize total = new MpSize();
             if (idx == 0) {

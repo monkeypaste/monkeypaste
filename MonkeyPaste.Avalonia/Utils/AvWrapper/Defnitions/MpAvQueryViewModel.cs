@@ -86,6 +86,17 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private string _searchFragmentMessage;
+        [JsonIgnore]
+        public string SearchFragmentMessage {
+            get {
+                if (_searchFragmentMessage == null) {
+
+                }
+                return null;
+            }
+
+        }
         public async Task QueryForTotalCountAsync(bool isRequery) {
             //MpConsole.WriteLine("total count called");
             int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());

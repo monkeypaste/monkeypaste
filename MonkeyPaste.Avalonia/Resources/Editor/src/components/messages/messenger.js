@@ -41,7 +41,7 @@ function isDesktop() {
 
 function sendMessage(fn, msg) {
 	if (isRunningOnCef()) {
-		window[fn](msg);
+		window[fn](msg, globals.ContentHandle);
 		return;
 	}
 	if (isRunningOnXam()) {

@@ -40,10 +40,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 
-        //private MpAvWindow pow;
-        private List<string> _tempFileList = new List<string>();
-        private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
-        //private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
         private string _originalTitle;
 
         #endregion
@@ -517,7 +513,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsResizerEnabled =>
             //MpAvThemeViewModel.Instance.IsDesktop &&
             !IsWindowOpen &&
-            !IsFrozen;
+            !IsFrozen &&
+            (IsPinned || (Parent != null && Parent.IsQueryItemResizeEnabled));
 
         public MpIEmbedHost EmbedHost =>
             GetContentView() as MpIEmbedHost;
@@ -796,8 +793,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsContentAndTitleReadOnly => IsContentReadOnly && IsTitleReadOnly;
 
         public bool IsContextMenuOpen { get; set; } = false;
-
-        public bool AllowMultiSelect { get; set; } = false;
 
         public DateTime TileCreatedDateTime { get; set; }
         #endregion
@@ -1091,6 +1086,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1, bool isRestoringSelection = false) {
             await Task.Delay(1);
             IsBusy = true;
+
             bool is_reload =
                 (CopyItemId == 0 && ci == null) ||
                 (ci != null && CopyItemId == ci.Id) ||
@@ -1098,7 +1094,6 @@ namespace MonkeyPaste.Avalonia {
 
             _contentView = null;
             if (!is_reload) {
-                //_curItemRandomHexColor = string.Empty;
                 IsWindowOpen = false;
             }
 
@@ -1220,7 +1215,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             TitleLayerHexColors = hexColors.ToArray();
-            MpConsole.WriteLine($"Layer Group for '{this}' is {layer_seed}");
+            //MpConsole.WriteLine($"Layer Group for '{this}' is {layer_seed}");
             switch (layer_seed) {
                 case 0:
                     TitleLayerZIndexes = new int[] { 1, 2, 3 };
@@ -1495,12 +1490,6 @@ namespace MonkeyPaste.Avalonia {
             return neighbor_ctvm;
         }
 
-        public void SubSelectAll() {
-            AllowMultiSelect = true;
-            IsSelected = true;
-            AllowMultiSelect = false;
-        }
-
 
         #region View Event Invokers
 
@@ -1543,27 +1532,6 @@ namespace MonkeyPaste.Avalonia {
                 IsPasting = false;
                 //Parent.RequestUnexpand();
             }
-        }
-
-        public void DeleteTempFiles() {
-            foreach (var f in _tempFileList) {
-                if (File.Exists(f)) {
-                    File.Delete(f);
-                }
-            }
-        }
-
-        public void RefreshAsyncCommands() {
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowLoading) {
-                return;
-            }
-
-            //(Parent.BringSelectedClipTilesToFrontCommand as MpCommand).NotifyCanExecuteChanged();
-            //(Parent.SendSelectedClipTilesToBackCommand as MpCommand).NotifyCanExecuteChanged();
-            //(Parent.SpeakSelectedClipsCommand as MpCommand).NotifyCanExecuteChanged();
-            //(Parent.MergeSelectedClipsCommand as MpCommand).NotifyCanExecuteChanged();
-            //(Parent.TranslateSelectedClipTextAsyncCommand as MpCommand<string>).NotifyCanExecuteChanged();
-            //(Parent.CreateQrCodeFromSelectedClipsCommand as MpCommand).NotifyCanExecuteChanged();
         }
 
         public void UpdateQueryOffset(int forceOffsetIdx) {
@@ -2341,9 +2309,17 @@ namespace MonkeyPaste.Avalonia {
                 return CanEdit && IsContentReadOnly;
             });
 
-        public ICommand ToggleIsContentReadOnlyCommand => new MpCommand(
-            () => {
-                IsContentReadOnly = !IsContentReadOnly;
+        public ICommand ToggleIsContentReadOnlyCommand => new MpAsyncCommand(
+            async () => {
+                if (IsResizerEnabled || !IsContentReadOnly) {
+                    IsContentReadOnly = !IsContentReadOnly;
+                    return;
+                }
+                int ciid = CopyItemId;
+                await Parent.PinTileCommand.ExecuteAsync(new object[] { this, MpPinType.Window });
+                if (Parent.PinnedItems.FirstOrDefault(x => x.CopyItemId == ciid) is MpAvClipTileViewModel ctvm) {
+                    ctvm.IsContentReadOnly = false;
+                }
             },
             () => {
                 if (IsContentReadOnly) {

@@ -632,6 +632,7 @@ const globals = {
 	ContentClassAttrb: null,
 	ContentHandle: null,
 	ContentItemType: 'Text',
+	ContentId: 0,
 
 	// #region TEXT
 	// #endregion

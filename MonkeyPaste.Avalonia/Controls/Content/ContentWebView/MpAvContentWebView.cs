@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Org.BouncyCastle.Utilities;
 using Avalonia.Layout;
+using Avalonia.Controls.Notifications;
 #if DESKTOP
 
 using CefNet;
@@ -498,11 +499,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIWebViewBindingResponseHandler Implementation
 
-        public virtual void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str) {
+        private string _lastContentHandle = null;
+        public virtual void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
+            _lastContentHandle = contentHandle;
             if (!this.IsAttachedToVisualTree()) {
                 NeedsEvalJsCleared = true;
                 return;
             }
+
             var ctvm = BindingContext;
             if (ctvm == null &&
                 notificationType != MpAvEditorBindingFunctionType.notifyDomLoaded &&
@@ -1068,6 +1072,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
+                contentId = BindingContext.CopyItemId,
                 contentHandle = BindingContext.PublicHandle,
                 contentType = BindingContext.CopyItemType.ToString(),
                 itemData = BindingContext.EditorFormattedItemData,
@@ -1358,7 +1363,15 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.IsAnyPlaceholder) {
                 return;
             }
+
             bool is_reload = BindingContext.PublicHandle == _lastLoadedContentHandle;
+
+            if (BindingContext.PublicHandle != _lastContentHandle.ToStringOrEmpty() &&
+                _lastContentHandle != null) {
+                var resp_vm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == _lastContentHandle);
+                MpDebug.Break($"Editor/Vm id mismatch for msg 'LoadCOntent'. should be {BindingContext.CopyItemId} but received {(resp_vm == null ? $"unknown (unloaded, handle '{_lastContentHandle}')" : resp_vm)}", true);
+                return;
+            }
             _lastLoadedContentHandle = BindingContext.PublicHandle;
             IsEditorLoaded = true;
 

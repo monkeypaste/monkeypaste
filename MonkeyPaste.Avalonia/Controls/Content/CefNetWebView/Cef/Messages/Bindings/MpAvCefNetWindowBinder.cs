@@ -49,6 +49,7 @@ namespace MonkeyPaste.Avalonia {
 
             string msgTypeStr = e.Message.ArgumentList.GetString(0);
             string msgJsonStr = e.Message.ArgumentList.GetString(1);
+            string contentHandle = e.Message.ArgumentList.GetString(2);
             var funcType = msgTypeStr.ToEnum<MpAvEditorBindingFunctionType>();
 
             Dispatcher.UIThread.Post(() => {
@@ -60,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 if (e.Frame.Browser.Host.Client.GetWebView() is MpAvIWebViewBindingResponseHandler respHandler) {
-                    respHandler.HandleBindingNotification(funcType, msgJsonStr);
+                    respHandler.HandleBindingNotification(funcType, msgJsonStr, contentHandle);
                 }
             });
 

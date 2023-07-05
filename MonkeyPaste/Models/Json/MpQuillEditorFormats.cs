@@ -29,6 +29,7 @@ namespace MonkeyPaste {
 
 
     public class MpQuillLoadContentRequestMessage : MpJsonObject {
+        public int contentId { get; set; }
         public bool isSubSelectionEnabled { get; set; }
         // fragment 'MpQuillPasteButtonInfoMessage'
         public string pasteButtonInfoFragment { get; set; }

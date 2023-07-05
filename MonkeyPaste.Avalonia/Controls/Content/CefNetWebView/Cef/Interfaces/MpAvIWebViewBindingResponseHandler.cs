@@ -2,6 +2,6 @@
 
 namespace MonkeyPaste.Avalonia {
     public interface MpAvIWebViewBindingResponseHandler {
-        void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str);
+        void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle);
     }
 }
