@@ -47,9 +47,9 @@ namespace MonkeyPaste.Avalonia {
                 if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                     var loader_window = desktop.MainWindow;
                     desktop.MainWindow = mw;
-                    if (loader_window != null) {
-                        loader_window.Close();
-                    }
+                    //if (loader_window != null) {
+                    //    loader_window.Close();
+                    //}
                 }
                 //MpAvWindowManager.MainWindow = mw;
                 if (MpAvWindowManager.MainWindow == null) {
@@ -136,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvMainView() {
             if (_instance != null) {
-                MpDebug.Break("Duplicat singleton");
+                MpDebug.Break("Duplicate singleton");
                 return;
             }
             AvaloniaXamlLoader.Load(this);
@@ -157,6 +157,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+
         #region Orientation Updates
         public void UpdateContentLayout() {
             var mwvm = MpAvMainWindowViewModel.Instance;

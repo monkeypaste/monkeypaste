@@ -91,7 +91,7 @@ namespace MonkeyPaste {
 
                 // NOTE since this is from a view w/ subqueries there's no rowid alias
                 // so need to temporarily return whole result and grab udex
-                string offset_query = $"SELECT RowNum FROM(SELECT RootId, ROW_NUMBER() OVER (ORDER BY RootId) RowNum FROM({sb}) WHERE RootId={offsetRootId})";
+                string offset_query = $"SELECT RowNum FROM(SELECT RootId, ROW_NUMBER() OVER () RowNum FROM({sb})) WHERE RootId={offsetRootId}";
                 var offset_args = sub_queries.SelectMany(x => x.Item3).ToArray();
                 int offset_idx = await MpDb.QueryScalarAsync<int>(offset_query, offset_args);
 

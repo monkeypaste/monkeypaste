@@ -183,7 +183,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void FinishClose(Window w) {
             if (w is MpAvLoaderNotificationWindow) {
-                // ignore so bootstrapper can swap main window
+                // ignore, in mainview ctor mainwindow is swapped and loader is closed
             }
             //else if (w == MpAvAppendNotificationWindow.Instance) {
             //    w.Hide();

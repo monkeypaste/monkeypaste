@@ -20,7 +20,6 @@ namespace MonkeyPaste {
         MpIContentViewLocator ContentViewLocator { get; set; }
 
         MpINativePathDialog NativePathDialog { get; set; }
-        MpIStartupObjectLocator StartupObjectLocator { get; set; }
         MpIStartupState StartupState { get; set; }
         MpIPlatformShorcuts PlatformShorcuts { get; set; }
         MpINotificationManager NotificationManager { get; set; }

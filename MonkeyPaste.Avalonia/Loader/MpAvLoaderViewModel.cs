@@ -29,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvLoaderViewModel(bool wasStartedAtLogin) {
             StartupFlags |= wasStartedAtLogin ? MpStartupFlags.Login : MpStartupFlags.UserInvoked;
         }
+
         #endregion
 
         #region Public Methods
@@ -42,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMacHelpers.EnsureInitialized();
 #endif
 
-            await Mp.InitAsync(new MpAvWrapper(this, this));
+            await Mp.InitAsync(new MpAvWrapper(this));
 
             if (MpPrefViewModel.Instance != null) {
                 if (MpPrefViewModel.Instance.LastStartupDateTime == null) {

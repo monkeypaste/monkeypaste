@@ -141,7 +141,7 @@
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Settings"
-                                           InputGestureText="{Binding ., ConverterParameter=ShowSettings, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"/>
+                                           InputGestureText="{Binding ., ConverterParameter=ShowSettings, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                 </ToolTip.Tip>
                 <PathIcon Data="{StaticResource CogSvg}" />
             </ToggleButton>
@@ -218,7 +218,8 @@
             <!--  Layout Toggle Button  -->
             <ToggleButton x:Name="GridLayoutToggleButton"
                           Classes="noBg noHoverBg noBorder"
-                          IsChecked="{Binding IsGridLayout, Mode=TwoWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                          Command="{Binding ToggleLayoutTypeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                          IsChecked="{Binding IsGridLayout, Mode=OneWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           ToolTip.ShowDelay="0">
                 <Grid>
                     <PathIcon IsVisible="{Binding IsGridLayout, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"

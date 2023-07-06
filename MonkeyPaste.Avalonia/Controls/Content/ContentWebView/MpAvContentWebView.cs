@@ -1279,7 +1279,6 @@ namespace MonkeyPaste.Avalonia {
                 !BindingContext.IsContentReadOnly) {
                 return;
             }
-
             PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
         }
 

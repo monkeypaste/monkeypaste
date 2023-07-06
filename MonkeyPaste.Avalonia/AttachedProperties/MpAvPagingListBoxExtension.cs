@@ -194,24 +194,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region IsScrollJumping 
-        public static bool GetIsScrollJumping(AvaloniaObject obj) {
-            return obj.GetValue(IsScrollJumpingProperty);
-        }
-
-        public static void SetIsScrollJumping(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsScrollJumpingProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> IsScrollJumpingProperty =
-            AvaloniaProperty.RegisterAttached<object, ListBox, bool>(
-                "IsScrollJumping",
-                false,
-                false,
-                BindingMode.TwoWay);
-
-        #endregion
-
         #region Thumb Properties
         #region IsThumbDragging 
         public static bool GetIsThumbDragging(AvaloniaObject obj) {
@@ -848,8 +830,7 @@ namespace MonkeyPaste.Avalonia {
                timer.Tag is ListBox lb &&
                GetScrollViewer(lb) is ScrollViewer sv) {
                 if (sv.DataContext is MpViewModelBase vm &&
-                    vm.IsBusy
-                    ) {
+                    vm.IsBusy) {
                     return;
                 }
                 if (GetIsTouchScrolling(lb)) {
@@ -1118,6 +1099,14 @@ namespace MonkeyPaste.Avalonia {
             AdjustThumbTransform(hit_track, gmp.TranslatePoint(hit_track, false), is_thumb_press);
 
             return true;
+        }
+
+        public static void ForceScrollOffset(MpPoint offset) {
+            if (MpAvWindowManager.MainWindow.GetVisualDescendant<MpAvQueryTrayView>() is not MpAvQueryTrayView qtv ||
+                qtv.FindControl<ListBox>("ClipTrayListBox") is not ListBox qt_lb) {
+                return;
+            }
+            ApplyScrollOffset(qt_lb, offset.X, offset.Y);
         }
         #endregion
     }

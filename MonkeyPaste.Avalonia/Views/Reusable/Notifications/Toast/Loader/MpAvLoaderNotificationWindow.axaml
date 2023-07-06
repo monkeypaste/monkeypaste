@@ -185,65 +185,81 @@
                         Margin="5,0,5,0"
                         Classes="labelUnderline"
                         Height="1" />
-
-                <Border x:Name="ProgressBarContainer"
-                        CornerRadius="5"
-                        Grid.Row="1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Height="30"
-                        Width="220"
-                        ClipToBounds="True"
-                        BorderThickness="1"
-                        BorderBrush="{DynamicResource ThemeWhite}"
-                        Background="Transparent"
-                        Margin="0"
-                        Padding="0">
-                    <Canvas x:Name="ProgressCanvas"
+                <Grid Grid.Row="1">
+                    <!--  PLEASE WAIT SPINNER  -->
+                    <Border x:Name="QueryTrayBusyInnerBorder"
+                            IsVisible="{Binding ShowSpinner}"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                        <local:MpAvBusySpinnerView x:Name="QueryTrayBusySpinner"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Width="50"
+                                                   Height="50" />
+                    </Border>
+                    <!--  PROGRESS BAR  -->
+                    <Border x:Name="ProgressBarContainer"
+                            IsVisible="{Binding !ShowSpinner}"
+                            CornerRadius="5"
+                            Grid.Row="1"
                             HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
+                            VerticalAlignment="Center"
+                            Height="30"
+                            Width="220"
                             ClipToBounds="True"
-                            MaxWidth="218"
-                            MinWidth="0"
-                            Height="28">
-                        <Canvas.Width>
-                            <MultiBinding Converter="{x:Static local:MpAvMultiSliderValueToLengthConverter.Instance}">
-                                <Binding>
-                                    <Binding.Source>
-                                        <sys:Double>0</sys:Double>
-                                    </Binding.Source>
-                                </Binding>
-                                <Binding>
-                                    <Binding.Source>
-                                        <sys:Double>1</sys:Double>
-                                    </Binding.Source>
-                                </Binding>
-                                <Binding Path="PercentLoaded" />
-                                <Binding ElementName="ProgressCanvas"
-                                         Path="MaxWidth" />
-                            </MultiBinding>
-                        </Canvas.Width>
-                        <Border x:Name="ProgressRectangle"
-                                Canvas.Left="0"
-                                Canvas.Top="0"
-                                CornerRadius="5"
-                                BorderThickness="1"
-                                BorderBrush="Transparent"
-                                Width="{Binding $parent.Bounds.Width}"
-                                Height="{Binding $parent.Bounds.Height}"
-                                Background="{DynamicResource ThemeAccent3Color}" />
-                        <Rectangle x:Name="ProgressShine1"
-                                   Fill="{StaticResource ShineBrush}"
-                                   Width="30"
-                                   Height="{Binding $parent.Bounds.Height}"
-                                   RenderTransform="skewX(-45deg)" />
-                        <Rectangle x:Name="ProgressShine2"
-                                   Fill="{StaticResource ShineBrush}"
-                                   Width="30"
-                                   Height="{Binding $parent.Bounds.Height}"
-                                   RenderTransform="skewX(-45deg)" />
-                    </Canvas>
-                </Border>
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource ThemeWhite}"
+                            Background="Transparent"
+                            Margin="0"
+                            Padding="0">
+                        <Canvas x:Name="ProgressCanvas"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                ClipToBounds="True"
+                                MaxWidth="218"
+                                MinWidth="0"
+                                Height="28">
+                            <Canvas.Width>
+                                <MultiBinding Converter="{x:Static local:MpAvMultiSliderValueToLengthConverter.Instance}">
+                                    <Binding>
+                                        <Binding.Source>
+                                            <sys:Double>0</sys:Double>
+                                        </Binding.Source>
+                                    </Binding>
+                                    <Binding>
+                                        <Binding.Source>
+                                            <sys:Double>1</sys:Double>
+                                        </Binding.Source>
+                                    </Binding>
+                                    <Binding Path="PercentLoaded" />
+                                    <Binding ElementName="ProgressCanvas"
+                                             Path="MaxWidth" />
+                                </MultiBinding>
+                            </Canvas.Width>
+                            <Border x:Name="ProgressRectangle"
+                                    Canvas.Left="0"
+                                    Canvas.Top="0"
+                                    CornerRadius="5"
+                                    BorderThickness="1"
+                                    BorderBrush="Transparent"
+                                    Width="{Binding $parent.Bounds.Width}"
+                                    Height="{Binding $parent.Bounds.Height}"
+                                    Background="{DynamicResource ThemeAccent3Color}" />
+                            <Rectangle x:Name="ProgressShine1"
+                                       Fill="{StaticResource ShineBrush}"
+                                       Width="30"
+                                       Height="{Binding $parent.Bounds.Height}"
+                                       RenderTransform="skewX(-45deg)" />
+                            <Rectangle x:Name="ProgressShine2"
+                                       Fill="{StaticResource ShineBrush}"
+                                       Width="30"
+                                       Height="{Binding $parent.Bounds.Height}"
+                                       RenderTransform="skewX(-45deg)" />
+                        </Canvas>
+                    </Border>
+
+                </Grid>
+
                 <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
                                              Grid.Row="2"
                                              Margin="0,0,7,7"

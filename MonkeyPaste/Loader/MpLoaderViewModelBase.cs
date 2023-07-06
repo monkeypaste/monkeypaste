@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
 
-    public interface MpIStartupObjectLocator {
-        IEnumerable<object> Items { get; }
-    }
     public abstract class MpLoaderViewModelBase :
         MpViewModelBase,
         MpIStartupState,
-        MpIProgressLoaderViewModel,
-        MpIStartupObjectLocator {
+        MpIProgressLoaderViewModel {
         #region Private Variables
 
         #endregion
@@ -22,11 +18,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Interfaces
-
-        #region MpIStartupObjectLocator Implementation
-
-        IEnumerable<object> MpIStartupObjectLocator.Items => CoreItems.Union(PlatformItems);
-        #endregion
 
         #region MpIStartupState Implementation
 
@@ -51,10 +42,12 @@ namespace MonkeyPaste {
         }
 
         public double PercentLoaded =>
-            (double)LoadedCount / (double)(CoreItems.Count);
+            (double)LoadedCount / (double)(Items.Count);
 
         public MpNotificationType DialogType => MpNotificationType.Loader;
 
+        public bool ShowSpinner =>
+            PercentLoaded >= 100;
         #endregion
 
         #endregion
@@ -66,6 +59,8 @@ namespace MonkeyPaste {
         public List<MpLoaderItemViewModel> CoreItems { get; private set; } = new List<MpLoaderItemViewModel>();
         public List<MpLoaderItemViewModel> PlatformItems { get; private set; } = new List<MpLoaderItemViewModel>();
 
+        public IList<MpLoaderItemViewModel> Items =>
+            CoreItems.Union(PlatformItems).ToList();
 
         #endregion
 

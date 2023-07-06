@@ -22,5 +22,6 @@ namespace MonkeyPaste {
     public interface MpIProgressLoaderViewModel : MpIProgressIndicatorViewModel, MpINotification {
         Task BeginLoaderAsync();
         Task FinishLoaderAsync();
+        bool ShowSpinner { get; }
     }
 }

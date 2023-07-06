@@ -133,7 +133,6 @@
                          local:MpAvPagingListBoxExtension.CanThumbDragX="{Binding CanThumbDragX}"
                          local:MpAvPagingListBoxExtension.CanThumbDragY="{Binding CanThumbDragY}"
                          local:MpAvPagingListBoxExtension.CanThumbDrag="{Binding CanThumbDrag}"
-                         local:MpAvPagingListBoxExtension.IsScrollJumping="{Binding IsScrollJumping, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.MaxScrollOffsetX="{Binding MaxScrollOffsetX}"
                          local:MpAvPagingListBoxExtension.MaxScrollOffsetY="{Binding MaxScrollOffsetY}"
                          local:MpAvPagingListBoxExtension.VelocityX="{Binding ScrollVelocityX, Mode=TwoWay}"
@@ -182,9 +181,10 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 IsHitTestVisible="False"
+                IsVisible="{Binding IsQueryEmpty}"
                 Grid.Row="1"
                 Background="Transparent">
-            <Border.IsVisible>
+            <!--<Border.IsVisible>
                 <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
                               ConverterParameter="AND">
 
@@ -195,7 +195,7 @@
                     <Binding Path="!IsMainWindowInitiallyOpening"
                              Source="{x:Static local:MpAvMainWindowViewModel.Instance}" />
                 </MultiBinding>
-            </Border.IsVisible>
+            </Border.IsVisible>-->
             <TextBlock Text="{Binding EmptyQueryTrayText}"
                        Classes="disabled emptyTrayText" />
         </Border>

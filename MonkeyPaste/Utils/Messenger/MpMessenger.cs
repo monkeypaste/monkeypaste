@@ -65,7 +65,8 @@ namespace MonkeyPaste {
 
         TraySelectionChanged,
 
-        TrayLayoutChanged,
+        PreTrayLayoutChange,
+        PostTrayLayoutChange,
 
         SidebarItemSizeChanged,
         SelectedSidebarItemChanged,

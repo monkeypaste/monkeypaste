@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Input.GestureRecognizers;
 using Avalonia.Layout;
@@ -388,23 +389,6 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.PlatformInfo != null &&
             Mp.Services.PlatformInfo.IsDesktop;
 
-        private IEnumerable<MpIAsyncObject> _busyCheckInstances;
-        public bool IsAnyBusy {
-            get {
-                if (IsBusy) {
-                    return true;
-                }
-                if (_busyCheckInstances == null) {
-                    _busyCheckInstances =
-                        Mp.Services.StartupObjectLocator
-                        .Items
-                        .Where(x => x is MpIAsyncObject)
-                        .Cast<MpIAsyncObject>();
-                }
-                return
-                    _busyCheckInstances.Any(x => x.IsBusy);
-            }
-        }
         public string ShowOrHideLabel => IsMainWindowOpen ? "Hide" : "Show";
         public string ShowOrHideIconResourceKey => IsMainWindowOpen ? "ClosedEyeImage" : "OpenEyeImage";
         public bool AnimateShowWindow =>
@@ -569,6 +553,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync() {
             MainWindowOrientationType = (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpPrefViewModel.Instance.MainWindowOrientation, false);
             MainWindowShowBehaviorType = (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPrefViewModel.Instance.MainWindowShowBehaviorType, false);
+
             OnPropertyChanged(nameof(MainWindowScreen));
             OnPropertyChanged(nameof(IsDesktop));
 
@@ -589,9 +574,9 @@ namespace MonkeyPaste.Avalonia {
             SetupMainWindowSize();
             SetMainWindowRect(MainWindowClosedScreenRect);
 
-            MpConsole.WriteLine($"MainWindow rect '{MainWindowScreen}'");
-            MpConsole.WriteLine($"MainWindow closed rect '{MainWindowClosedScreenRect}'");
-            MpConsole.WriteLine($"MainWindow opened rect '{MainWindowOpenedScreenRect}'");
+            //MpConsole.WriteLine($"MainWindow rect '{MainWindowScreen}'");
+            //MpConsole.WriteLine($"MainWindow closed rect '{MainWindowClosedScreenRect}'");
+            //MpConsole.WriteLine($"MainWindow opened rect '{MainWindowOpenedScreenRect}'");
 
             ShowMainWindowCommand.Execute(null);
 
@@ -1094,6 +1079,27 @@ namespace MonkeyPaste.Avalonia {
 
             await HideMainWindowCommand.ExecuteAsync();
 
+            // only show in taskbar once initial/hidden show is complete
+            MpAvWindowManager.MainWindow.Bind(
+                Window.ShowInTaskbarProperty,
+                new Binding() {
+                    Source = MpPrefViewModel.Instance,
+                    Path = nameof(MpPrefViewModel.Instance.ShowInTaskbar)
+                });
+
+            if (MpAvWindowManager.AllWindows.FirstOrDefault(x => x is MpAvLoaderNotificationWindow) is MpAvLoaderNotificationWindow lnw &&
+                lnw.DataContext is MpNotificationViewModelBase nvm) {
+                // only show loaded msg if progress wasn't there
+                bool show_loaded_msg = !lnw.IsVisible;
+                nvm.HideNotification();
+                if (!show_loaded_msg) {
+                    return;
+                }
+            }
+            // wait a bit to avoid laggy animation due to hide mw handlers
+            await Task.Delay(1_000);
+
+
             MpNotificationBuilder.ShowMessageAsync(
                 title: "Loaded",
                 body: $"Monkey Paste is now loaded. \nClipboard listening is: {(MpAvClipTrayViewModel.Instance.IsAppPaused ? "Paused" : "Active")}",
@@ -1269,7 +1275,7 @@ namespace MonkeyPaste.Avalonia {
                 SetupMainWindowSize(true);
 
                 SetMainWindowRect(MainWindowOpenedScreenRect);
-                MpConsole.WriteLine($"MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
+                //MpConsole.WriteLine($"MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
 
 
                 MpAvMainView.Instance.UpdateContentLayout();

@@ -30,8 +30,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIDownKeyHelper KeyDownHelper { get; set; }
         public MpIContentQueryPage ContentQueryTools { get; set; }
         public MpITagQueryTools TagQueryTools { get; set; }
-        public MpIStartupObjectLocator StartupObjectLocator { get; set; }
-
         public MpIContentViewLocator ContentViewLocator { get; set; }
         public MpIGlobalInputListener GlobalInputListener { get; set; }
         public MpIShortcutGestureLocator ShortcutGestureLocator { get; set; }
@@ -88,9 +86,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvWrapper(MpIStartupState ss, MpIStartupObjectLocator sol) {
+        public MpAvWrapper(MpIStartupState ss) {
             StartupState = ss;
-            StartupObjectLocator = sol;
         }
         #endregion
 

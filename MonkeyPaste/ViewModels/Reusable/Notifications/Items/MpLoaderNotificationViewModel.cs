@@ -20,9 +20,11 @@ namespace MonkeyPaste {
                 return ProgressTotalBarWidth * ProgressLoader.PercentLoaded;
             }
         }
+
         #endregion
 
         #region State
+
 
         public double ValueLoaded {
             get {

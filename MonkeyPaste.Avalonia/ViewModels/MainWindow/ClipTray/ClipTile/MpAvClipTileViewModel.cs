@@ -588,12 +588,12 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDevToolsVisible { get; set; } = false;
 
-        private bool _isViewLoaded;
+        private bool _isEditorLoaded;
         public bool IsEditorLoaded {
-            get => _isViewLoaded;
+            get => _isEditorLoaded;
             set {
-                if (_isViewLoaded != value) {
-                    _isViewLoaded = value;
+                if (_isEditorLoaded != value) {
+                    _isEditorLoaded = value;
                     OnPropertyChanged(nameof(IsEditorLoaded));
                 }
             }
@@ -664,7 +664,6 @@ namespace MonkeyPaste.Avalonia {
                 if (!IsAnyPlaceholder && !IsEditorLoaded) {
                     return true;
                 }
-
 
                 if (FileItemCollectionViewModel != null && FileItemCollectionViewModel.IsAnyBusy) {
                     return true;

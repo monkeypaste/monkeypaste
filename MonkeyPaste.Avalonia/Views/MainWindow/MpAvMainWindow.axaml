@@ -16,7 +16,7 @@
                   SystemDecorations="None"
                   ClipToBounds="True"
                   Background="Transparent"
-                  ShowInTaskbar="{Binding ShowInTaskbar, Source={x:Static pcl:MpPrefViewModel.Instance}}"
+                  ShowInTaskbar="False"
                   MinWidth="{Binding MainWindowMinWidth}"
                   MinHeight="{Binding MainWindowMinHeight}"
                   Width="{Binding MainWindowWidth}"

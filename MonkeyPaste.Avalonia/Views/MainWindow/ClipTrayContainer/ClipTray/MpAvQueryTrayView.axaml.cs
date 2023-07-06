@@ -173,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.MainWindowSizeChanged:
                 case MpMessageType.MainWindowOrientationChangeBegin:
-                case MpMessageType.TrayLayoutChanged:
+                case MpMessageType.PreTrayLayoutChange:
                     //this.InvalidateMeasure();
                     break;
                 case MpMessageType.DropOverTraysBegin:

@@ -171,7 +171,7 @@ namespace MonkeyPaste.Avalonia {
             string lastNotifiedText = GetLastNotifiedText(control);
 
             if (GetLastNotifiedDt(control) == null) {
-                MpConsole.WriteLine("Input recv'd delay started");
+                //MpConsole.WriteLine("Input recv'd delay started");
             }
 
             var this_input_change_dt = DateTime.Now;
@@ -185,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     if (lndt != this_input_change_dt) {
                         // new input was received, cancel ntf
-                        MpConsole.WriteLine("Input recv'd update rejected");
+                        //MpConsole.WriteLine("Input recv'd update rejected");
                         return;
                     }
                     if (DateTime.Now - lndt > TimeSpan.FromMilliseconds(delayMs)) {
@@ -204,7 +204,7 @@ namespace MonkeyPaste.Avalonia {
                     // ignore if text is the same
                     return;
                 }
-                MpConsole.WriteLine($"Input delay reached ntf change from '{lastNotifiedText}' to '{controlText}'");
+                //MpConsole.WriteLine($"Input delay reached ntf change from '{lastNotifiedText}' to '{controlText}'");
                 SetLastNotifiedText(control, (string)controlText);
                 SetText(control, (string)controlText);
             });
