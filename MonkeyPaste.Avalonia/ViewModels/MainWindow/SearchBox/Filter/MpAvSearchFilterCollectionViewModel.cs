@@ -18,12 +18,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuViewModel Implementation
 
+        private MpMenuItemViewModel _pmivm;
         public MpMenuItemViewModel PopupMenuViewModel {
             get {
-                return new MpMenuItemViewModel() {
-                    ParentObj = this,
-                    SubItems = Filters.Select(x => x.MenuItemViewModel).ToList()
-                };
+                if (_pmivm == null) {
+                    _pmivm = new MpMenuItemViewModel() {
+                        ParentObj = this,
+                        SubItems = Filters.Select(x => x.MenuItemViewModel).ToList()
+                    };
+                }
+                return _pmivm;
             }
         }
 

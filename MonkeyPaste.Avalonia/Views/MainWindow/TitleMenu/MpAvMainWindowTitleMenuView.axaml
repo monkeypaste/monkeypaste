@@ -182,6 +182,7 @@
                     HorizontalAlignment="Right">
             <!--  Zoom Factor Slider  -->
             <Grid x:Name="ZoomSliderContainerGrid"
+                  IsVisible="False"
                   Background="{StaticResource HitTestableTransparent}"
                   Cursor="Hand">
 

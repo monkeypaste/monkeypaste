@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
             if (ContentRange != null &&
                 ContentRange.Document is MpAvContentWebView wv &&
-                wv.IsEditorLoaded) {
+                wv.IsEditorInitialized) {
                 if (SelectedIdx < 0) {
                     wv.SendMessage($"deactivateFindReplace_ext()");
                     return;
@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
         public override void ClearHighlighting() {
             if (ContentRange != null &&
                 ContentRange.Document is MpAvContentWebView wv &&
-                wv.IsEditorLoaded) {
+                wv.IsEditorInitialized) {
 
                 wv.SendMessage($"deactivateFindReplace_ext()");
                 wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();

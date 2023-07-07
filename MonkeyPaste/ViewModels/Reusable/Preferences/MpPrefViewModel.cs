@@ -629,6 +629,13 @@ namespace MonkeyPaste {
             }
             return new FileInfo(PreferencesPath).CreationTimeUtc.ToString();
         }
+
+        private static string GetBackupPrefPassword() {
+            if (!PreferencesPathBackup.IsFile()) {
+                using (File.Create(PreferencesPathBackup)) { }
+            }
+            return new FileInfo(PreferencesPathBackup).CreationTimeUtc.ToString();
+        }
         private static async Task LoadPrefsAsync() {
             IsLoading = true;
 
@@ -681,6 +688,9 @@ namespace MonkeyPaste {
             if (isReset) {
                 if (PreferencesPathBackup.IsFile()) {
                     string backup_str = MpFileIo.ReadTextFromFile(PreferencesPathBackup);
+                    if (IsEncrypted(backup_str)) {
+                        backup_str = MpEncryption.SimpleDecryptWithPassword(backup_str, GetBackupPrefPassword());
+                    }
                     if (ValidatePrefData(backup_str)) {
                         // pref is corrupt, check it and backup etc.
                         MpDebug.Break();

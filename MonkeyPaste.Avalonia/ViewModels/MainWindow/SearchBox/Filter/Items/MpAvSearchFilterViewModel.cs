@@ -11,6 +11,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        private MpMenuItemViewModel _mivm;
         public MpMenuItemViewModel MenuItemViewModel {
             get {
                 if (IsSeperator) {
@@ -18,23 +19,26 @@ namespace MonkeyPaste.Avalonia {
                         IsSeparator = true
                     };
                 }
-                return new MpMenuItemViewModel() {
-                    IsCheckedSrcObj = this,
-                    IsCheckedPropPath = nameof(IsChecked),
-                    CommandSrcObj = this,
-                    CommandPath = nameof(ToggleIsCheckedCommand),
-                    Header = Label,
-                    IconBorderHexColor = MpSystemColors.Black,
-                    IconSrcBindingObj = this,
-                    IconPropPath = nameof(CheckBoxBgHexStr),
-                    CheckedResourceSrcObj = this,
-                    CheckedResourcePropPath = nameof(CheckedResourceObj),
+                if (_mivm == null) {
+                    _mivm = new MpMenuItemViewModel() {
+                        IsCheckedSrcObj = this,
+                        IsCheckedPropPath = nameof(IsChecked),
+                        //CommandSrcObj = this,
+                        //CommandPath = nameof(ToggleIsCheckedCommand),
+                        Header = Label,
+                        IconBorderHexColor = MpSystemColors.Black,
+                        IconSrcBindingObj = this,
+                        IconPropPath = nameof(CheckBoxBgHexStr),
+                        CheckedResourceSrcObj = this,
+                        CheckedResourcePropPath = nameof(CheckedResourceObj),
 
 
-                    IsChecked = IsChecked,
-                    Command = ToggleIsCheckedCommand,
-                    IconHexStr = CheckBoxBgHexStr,
-                };
+                        IsChecked = IsChecked,
+                        Command = ToggleIsCheckedCommand,
+                        IconHexStr = CheckBoxBgHexStr,
+                    };
+                }
+                return _mivm;
             }
         }
 
@@ -114,6 +118,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleIsCheckedCommand => new MpCommand(
             () => {
                 IsChecked = !IsChecked;
+                Parent.PopupMenuViewModel.SubItems.ForEach(x => x.OnPropertyChanged(nameof(MenuItemViewModel.CheckedResourcePropPath)));
+                Parent.PopupMenuViewModel.SubItems.ForEach(x => x.OnPropertyChanged(nameof(MenuItemViewModel.IconPropPath)));
             }, () => {
                 return IsEnabled;
             });

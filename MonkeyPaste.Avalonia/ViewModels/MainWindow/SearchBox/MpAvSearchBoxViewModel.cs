@@ -322,7 +322,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMenuExtension.ShowMenu(
                     target_control,
                     SearchFilterCollectionViewModel.PopupMenuViewModel,
-
+                    hideOnClick: false,
                     placement: PlacementMode.Pointer);
             });
 

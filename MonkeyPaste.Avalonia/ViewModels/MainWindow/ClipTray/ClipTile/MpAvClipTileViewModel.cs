@@ -185,6 +185,9 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelected {
             get => _isSelected;
             set {
+                if (CopyItemTitle == "Text 333") {
+
+                }
                 if (_isSelected != value) {
                     // NOTE always triggering prop change when selecting
                     // to update LastSelectedDateTime to ensure
@@ -1124,7 +1127,6 @@ namespace MonkeyPaste.Avalonia {
                 BoundHeight = h;
             }
 
-
             if (ci != null &&
                 queryOffset >= 0 &&
                 Parent != null &&
@@ -1144,6 +1146,7 @@ namespace MonkeyPaste.Avalonia {
                 CycleDetailCommand.Execute(0);
                 TransactionCollectionViewModel.InitializeAsync(CopyItemId).FireAndForgetSafeAsync(this);
                 InitTitleLayersAsync().FireAndForgetSafeAsync(this);
+
                 if (isRestoringSelection) {
                     Parent.RestoreSelectionState(this);
                 }
@@ -1381,114 +1384,6 @@ namespace MonkeyPaste.Avalonia {
             return _contentView;
         }
 
-        public async Task<MpAvClipTileViewModel> GetNeighborByRowOffsetAsync(int row_offset) {
-            var items = IsPinned ? Parent.InternalPinnedItems : Parent.Items;
-            MpAvClipTileViewModel target_ctvm = null;
-            if (row_offset < 0) {
-                var pre_items =
-                    items
-                    .Where(x => x != this && x.ObservedBounds != null && x.ObservedBounds.Y < ObservedBounds.Y)
-                    .OrderByDescending(x => x.ObservedBounds.Y);
-                if (pre_items.Count() > 0) {
-                    target_ctvm =
-                       pre_items.Aggregate((a, b) =>
-                               a.ObservedBounds.Location.Distance(ObservedBounds.Location) <
-                               b.ObservedBounds.Location.Distance(ObservedBounds.Location) ? a : b);
-                }
-
-                if (target_ctvm == null) {
-                    if (IsPinned || Parent.LayoutType == MpClipTrayLayoutType.Stack || Parent.HeadQueryIdx == 0) {
-                        // fallback and treat up as left
-                        target_ctvm = await GetNeighborByColumnOffsetAsync(row_offset);
-                    } else {
-                        Parent.ScrollToPreviousPageCommand.Execute(null);
-                        await Task.Delay(100);
-                        while (Parent.IsAnyBusy) { await Task.Delay(100); }
-                        target_ctvm = await GetNeighborByRowOffsetAsync(row_offset);
-                    }
-                }
-            } else {
-                var post_items =
-                    items
-                    .Where(x => x != this && x.ObservedBounds != null && x.ObservedBounds.Y > ObservedBounds.Y)
-                    .OrderBy(x => x.ObservedBounds.Y);
-                if (post_items.Count() > 0) {
-                    target_ctvm =
-                        post_items.Aggregate((a, b) =>
-                            a.ObservedBounds.Location.Distance(ObservedBounds.Location) <
-                            b.ObservedBounds.Location.Distance(ObservedBounds.Location) ? a : b);
-                }
-                if (target_ctvm == null) {
-                    if (IsPinned || Parent.LayoutType == MpClipTrayLayoutType.Stack || Parent.TailQueryIdx == Parent.MaxClipTrayQueryIdx) {
-                        // fallback and treat down as right
-                        target_ctvm = await GetNeighborByColumnOffsetAsync(row_offset);
-                    } else {
-                        Parent.ScrollToNextPageCommand.Execute(null);
-                        await Task.Delay(100);
-                        while (Parent.IsAnyBusy) { await Task.Delay(100); }
-                        target_ctvm = await GetNeighborByRowOffsetAsync(row_offset);
-                    }
-                }
-            }
-            return target_ctvm;
-        }
-
-        public async Task<MpAvClipTileViewModel> GetNeighborByColumnOffsetAsync(int col_offset) {
-            int target_idx = -1;
-            if (IsPinned) {
-                // find col neighbor of pinned tile
-                target_idx = Parent.InternalPinnedItems.IndexOf(this) + col_offset;
-                if (target_idx < 0) {
-                    // target is before all pinned items
-                    return null;
-                }
-                if (target_idx >= Parent.InternalPinnedItems.Count) {
-                    // neighbor is beyond pinned items
-                    target_idx = target_idx - Parent.InternalPinnedItems.Count;
-                    if (target_idx < Parent.VisibleQueryItems.Count()) {
-                        if (Parent.DefaultScrollOrientation == Orientation.Horizontal) {
-                            return Parent.VisibleQueryItems.OrderBy(x => TrayX).ElementAt(target_idx);
-                        }
-                        return Parent.VisibleQueryItems.OrderBy(x => TrayY).ElementAt(target_idx);
-                    }
-                    return null;
-                }
-                return Parent.InternalPinnedItems[target_idx];
-            }
-            // find col neighbor of query tile
-            target_idx = QueryOffsetIdx + col_offset;
-            if (target_idx < 0) {
-                // target is before query tray
-                if (Parent.IsPinTrayEmpty) {
-                    return null;
-                }
-                target_idx = Parent.InternalPinnedItems.Count + target_idx;
-                if (target_idx < 0) {
-                    return null;
-                }
-                return Parent.InternalPinnedItems[target_idx];
-            }
-            if (target_idx >= Mp.Services.Query.TotalAvailableItemsInQuery) {
-                // target is after all query items
-                return null;
-            }
-            var neighbor_ctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
-            if (neighbor_ctvm == null) {
-                // target is outside current query page
-                while (neighbor_ctvm == null) {
-                    // perform load more in target dir
-                    Parent.QueryCommand.Execute(col_offset > 0);
-                    while (Parent.IsQuerying) { await Task.Delay(100); }
-                    neighbor_ctvm = Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
-                }
-                //Parent.ScrollIntoView(neighbor_ctvm);
-                //await Task.Delay(100);
-                //while (Parent.IsAnyBusy) { await Task.Delay(100); }
-                //return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
-            }
-            return neighbor_ctvm;
-        }
-
 
         #region View Event Invokers
 
@@ -1659,12 +1554,16 @@ namespace MonkeyPaste.Avalonia {
                         if (!Parent.IsRestoringSelection) {
                             Parent.StoreSelectionState(this);
                         }
+                        //MpAvPersistentClipTilePropertiesHelper.SetPersistentSelectedItem(CopyItemId, QueryOffsetIdx);
                     } else {
                         if (IsContentReadOnly) {
                             if (IsSubSelectionEnabled) {
                                 DisableSubSelectionCommand.Execute(null);
                             }
                         }
+                        //if (MpAvPersistentClipTilePropertiesHelper.GetPersistentSelectedItemId() == CopyItemId) {
+                        //    MpAvPersistentClipTilePropertiesHelper.ClearPersistentSelection();
+                        //}
                     }
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     Parent.NotifySelectionChanged();
