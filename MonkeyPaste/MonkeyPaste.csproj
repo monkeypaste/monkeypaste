@@ -104,12 +104,6 @@
     <Compile Include="ViewModels\Reusable\ContextMenu\MpColorPalettePopupMenuViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpMenuItemViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Culture\MpCurrentCultureViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Notifications\Builder\MpNotificationBuilder.cs" />
-    <Compile Include="ViewModels\Reusable\Notifications\Items\Base\MpNotificationViewModelBase.cs" />
-    <Compile Include="ViewModels\Reusable\Notifications\Items\MpAppendNotificationViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Notifications\Items\MpLoaderNotificationViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Notifications\Items\MpMessageNotificationViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Notifications\Items\MpUserActionNotificationViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Preferences\MpPrefViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Undo\MpAvUndoManagerViewModel.cs" />
   </ItemGroup>

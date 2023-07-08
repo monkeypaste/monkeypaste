@@ -45,7 +45,7 @@
         <Setter Property="Background"
                 Value="{DynamicResource ThemeGrayAccent2}" />
     </Style>
-  
+
     <!--  NTF OUTER BORDER  -->
 
     <Style Selector="Window.notificationWindow > Border">
@@ -61,7 +61,7 @@
                 Value="0" />
     </Style>
     <Style Selector="Window.msg[IsVisible=true]"
-           x:DataType="pcl:MpMessageNotificationViewModel">
+           x:DataType="local:MpAvMessageNotificationViewModel">
         <Style.Animations>
             <Animation Duration="0:0:0.4"
                        FillMode="Forward">

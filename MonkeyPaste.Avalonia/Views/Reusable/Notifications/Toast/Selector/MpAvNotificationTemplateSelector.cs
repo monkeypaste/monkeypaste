@@ -13,11 +13,11 @@ namespace MonkeyPaste.Avalonia {
 
         Control ITemplate<object, Control>.Build(object param) {
             string key;
-            if (param is MpLoaderNotificationViewModel) {
+            if (param is MpAvLoaderNotificationViewModel) {
                 key = "LoaderTemplate";
-            } else if (param is MpMessageNotificationViewModel) {
+            } else if (param is MpAvMessageNotificationViewModel) {
                 key = "MessageTemplate";
-            } else if (param is MpUserActionNotificationViewModel) {
+            } else if (param is MpAvUserActionNotificationViewModel) {
                 key = "UserActionTemplate";
             } else {
                 throw new Exception("Unknown notification: " + param);
@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool Match(object data) {
             // Check if we can accept the provided data
-            return data is MpNotificationViewModelBase;
+            return data is MpAvNotificationViewModelBase;
         }
     }
 }

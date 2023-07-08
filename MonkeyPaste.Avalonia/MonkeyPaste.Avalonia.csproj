@@ -1328,9 +1328,6 @@
     <Compile Update="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationWindow.axaml.cs">
       <DependentUpon>MpAvUserActionNotificationWindow.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\Notifications\Toast\_Window\MpAvNotificationWindow.axaml.cs">
-      <DependentUpon>MpAvNotificationWindow.axaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutView.axaml.cs">
       <DependentUpon>MpAvAssignShortcutView.axaml</DependentUpon>
     </Compile>

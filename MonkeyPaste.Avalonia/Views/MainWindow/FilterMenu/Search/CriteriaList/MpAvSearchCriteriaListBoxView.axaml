@@ -38,10 +38,16 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="{Binding DisabledInputTooltip, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
+                        <local:MpAvToolTipView Classes="warning"
+                                               ToolTipText="{Binding DisabledInputTooltip, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
                     </Template>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <Style Selector="local|MpAvSearchCriteriaHeaderView :is(Control).alterOnly">
+            <Setter Property="IsVisible"
+                    Value="False" />
         </Style>
 
         <!--  CRITIERA LISTBOX ITEM & HEADER  -->

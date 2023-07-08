@@ -45,29 +45,28 @@ namespace MonkeyPaste.Avalonia {
         public MpAvNotificationPositioner() {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             _windows.CollectionChanged += _ntfWindows_CollectionChanged;
-            MpAvNotificationWindowManager.Instance.OnNotificationWindowIsVisibleChanged += Instance_OnNotificationWindowIsVisibleChanged;
         }
-
 
         #endregion
 
         #region Public Methods
 
+        public void AddWindow(Window w) {
+            if (_windows.Contains(w)) {
+                return;
+            }
+            _windows.Add(w);
+            w.EffectiveViewportChanged += W_EffectiveViewportChanged;
+            w.GetObservable(Window.BoundsProperty).Subscribe(value => OnNotificationWindowBoundsChangedHandler(w));
+        }
+
+        public void RemoveWindow(Window w) {
+            _windows.Remove(w);
+
+        }
         #endregion
 
         #region Private Methods
-        private void Instance_OnNotificationWindowIsVisibleChanged(object sender, Window w) {
-            if (w.IsVisible) {
-                if (!_windows.Contains(w)) {
-                    _windows.Add(w);
-                    w.EffectiveViewportChanged += W_EffectiveViewportChanged;
-                    w.GetObservable(Window.BoundsProperty).Subscribe(value => OnNotificationWindowBoundsChangedHandler(w));
-
-                }
-            } else {
-                _windows.Remove(w);
-            }
-        }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.MainWindowOpening:
@@ -95,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void PositionWindowByNotificationType(Window w) {
-            var nvmb = w.DataContext as MpNotificationViewModelBase;
+            var nvmb = w.DataContext as MpAvNotificationViewModelBase;
             if (nvmb == null) {
                 return;
             }
@@ -200,7 +199,7 @@ namespace MonkeyPaste.Avalonia {
             }
             double width = w.Bounds.Width.IsNumber() && w.Bounds.Width != 0 ? w.Bounds.Width : 350;
             double height = w.Bounds.Height.IsNumber() && w.Bounds.Height != 0 ? w.Bounds.Height : 150;
-            if (w.DataContext is MpMessageNotificationViewModel mnvm) {
+            if (w.DataContext is MpAvMessageNotificationViewModel mnvm) {
                 width = mnvm.MessageWindowFixedWidth;
             }
             return new Size(width, height + GetWindowTitleHeight(w));

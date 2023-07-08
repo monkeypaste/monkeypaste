@@ -56,10 +56,14 @@ namespace MonkeyPaste.Avalonia {
         //protected override Type StyleKeyOverride => typeof(MpAvPagingScrollBar);
         #endregion
 
+        public RepeatButton LineUpButton { get; private set; }
+        public RepeatButton LineDownButton { get; private set; }
         public Track Track { get; private set; }
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
             base.OnApplyTemplate(e);
             Track = e.NameScope.Find<Track>("PART_Track");
+            LineUpButton = e.NameScope.Find<RepeatButton>("PART_LineUpButton");
+            LineDownButton = e.NameScope.Find<RepeatButton>("PART_LineDownButton");
             MpDebug.Assert(Track != null, "Need track...");
         }
     }

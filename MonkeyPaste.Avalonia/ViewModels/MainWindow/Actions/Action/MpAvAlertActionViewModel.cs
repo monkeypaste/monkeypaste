@@ -294,7 +294,7 @@ namespace MonkeyPaste.Avalonia {
                             callback);
                 }
 
-                MpNotificationBuilder.ShowMessageAsync(
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
                     title: Label,
                     body: evald_msg,
                     msgType: MpNotificationType.AlertAction,

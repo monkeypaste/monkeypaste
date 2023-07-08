@@ -8,7 +8,6 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-
     public class MpAvWrapper : MpIPlatformWrapper {
 
         #region Interfaces
@@ -23,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Startup Set Services 
 
+        public MpIShutdownTools ShutdownHelper { get; set; }
         public MpIContentBuilder ContentBuilder { get; set; }
 
         public MpISettingsTools SettingsTools { get; set; }
@@ -36,6 +36,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion 
 
+        public MpINotificationBuilder NotificationBuilder { get; set; }
         public MpILoadOnLoginTools LoadOnLoginTools { get; set; }
         public MpIPlatformUserInfo PlatformUserInfo { get; set; }
         public MpIThisAppInfo ThisAppInfo { get; set; }
@@ -94,6 +95,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
+            ShutdownHelper = App.Instance;
             ThisAppInfo = new MpAvThisAppInfo();
             PlatformUserInfo = new MpAvPlatformUserInfo();
 
@@ -130,6 +132,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
+            NotificationBuilder = new MpAvNotificationBuilder();
             LoadOnLoginTools = new MpAvLoginLoadTools();
             AccountTools = new MpAvAccountTools();
             ColorQueryTools = new MpAvColorQueryTools();

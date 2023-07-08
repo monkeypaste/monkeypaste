@@ -1,6 +1,6 @@
 ﻿namespace MonkeyPaste {
     public interface MpINotificationManager {
-        void ShowNotification(MpNotificationViewModelBase dc);
-        void HideNotification(MpNotificationViewModelBase dc);
+        void ShowNotification(object dc);
+        void HideNotification(object dc);
     }
 }

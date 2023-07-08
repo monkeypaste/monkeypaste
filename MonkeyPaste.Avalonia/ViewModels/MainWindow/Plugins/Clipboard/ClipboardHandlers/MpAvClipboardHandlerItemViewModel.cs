@@ -286,7 +286,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 };
 
-                var result = await MpNotificationBuilder.ShowNotificationAsync(invalid_nf);
+                var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(invalid_nf);
                 if (result == MpNotificationDialogResultType.Ignore) {
                     // ignoring these errors flags plugin to be completely ignored
                     return false;

@@ -3,6 +3,29 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
 
+    <!--  DEFAULT  -->
+
+    <Style Selector="local|MpAvToolTipView Border#TooltipOuterContainer">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource ThemeInteractiveBgColor}" />
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeInteractiveColor}" />
+    </Style>
+
+    <Style Selector="local|MpAvToolTipView TextBlock#ToolTipTextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveBgColor}" />
+    </Style>
+
+    <!--  WARNING  -->
+
+    <Style Selector="local|MpAvToolTipView.warning Border">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource ThemeAccent1BgColor}" />
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeAccent1Color}" />
+    </Style>
+
     <!--  ERROR  -->
 
     <Style Selector="local|MpAvToolTipView.error Border">
@@ -11,6 +34,7 @@
         <Setter Property="Background"
                 Value="{DynamicResource ThemeAccent2Color}" />
     </Style>
+
     <!--  HINTS  -->
     <!--  INFO  -->
     <Style Selector="local|MpAvToolTipInfoHintView:not(.warning):not(.error) Grid :is(Control).hint:not(.info)">

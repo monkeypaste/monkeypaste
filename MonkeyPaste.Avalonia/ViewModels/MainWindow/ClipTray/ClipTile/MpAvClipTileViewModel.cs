@@ -653,18 +653,17 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsTrialOverlayVisibile {
-            get {
-                return MpPrefViewModel.Instance.IsTrialExpired ? true : false;
-            }
-        }
-
         public bool IsAnyBusy {
             get {
                 if (IsBusy) {
                     return true;
                 }
                 if (!IsAnyPlaceholder && !IsEditorLoaded) {
+                    if (_contentView == null && GetContentView() is MpIContentView cv) {
+                        // BUG pinning editable tile, content never loads
+                        // maybe the msg handle check is rejecting the load?
+                        cv.LoadContentAsync().FireAndForgetSafeAsync(this);
+                    }
                     return true;
                 }
 
@@ -1955,7 +1954,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task DisableReadOnlyInPlainTextHandlerAsync() {
             Dispatcher.UIThread.VerifyAccess();
 
-            var result = await MpNotificationBuilder.ShowNotificationAsync(
+            var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalContentFormatDegradation,
                                     title: "Data Degradation Warning",
                                     body: $"Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?");
@@ -2143,14 +2142,20 @@ namespace MonkeyPaste.Avalonia {
                 return CanShowContextMenu && !IsPinPlaceholder;
             });
 
-        public MpIAsyncCommand PersistContentSelectionStateCommand => new MpAsyncCommand(
-            async () => {
-                if (GetContentView() is MpAvContentWebView wv) {
-                    // store cur sel state
-                    var sel_state = await wv.GetSelectionStateAsync();
-                    MpAvPersistentClipTilePropertiesHelper.AddPersistentSubSelectionState(CopyItemId, QueryOffsetIdx, sel_state);
+        public MpIAsyncCommand<object> PersistContentStateCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (args is bool make_editable && make_editable) {
+                    // query tile edit in grid mode so popout tile init picks up editable state
+                    MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);
                 }
-            }, () => {
+
+                if (GetContentView() is not MpAvContentWebView wv) {
+                    return;
+                }
+                // store cur sel state
+                var sel_state = await wv.GetSelectionStateAsync();
+                MpAvPersistentClipTilePropertiesHelper.AddPersistentSubSelectionState(CopyItemId, QueryOffsetIdx, sel_state);
+            }, (args) => {
                 return !IsAnyPlaceholder;
             });
 
@@ -2159,7 +2164,7 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE called from confirmed popout closing
 
                 int ciid = CopyItemId;
-                await PersistContentSelectionStateCommand.ExecuteAsync();
+                await PersistContentStateCommand.ExecuteAsync(null);
 
                 await TransactionCollectionViewModel.CloseTransactionPaneCommand.ExecuteAsync();
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(ciid, QueryOffsetIdx);
@@ -2213,11 +2218,10 @@ namespace MonkeyPaste.Avalonia {
                     IsContentReadOnly = !IsContentReadOnly;
                     return;
                 }
+                // when disabling read-only from query tray in grid
+                // mode pop tile out since tile isn't resizable
                 int ciid = CopyItemId;
-                await Parent.PinTileCommand.ExecuteAsync(new object[] { this, MpPinType.Window });
-                if (Parent.PinnedItems.FirstOrDefault(x => x.CopyItemId == ciid) is MpAvClipTileViewModel ctvm) {
-                    ctvm.IsContentReadOnly = false;
-                }
+                await Parent.PinTileCommand.ExecuteAsync(new object[] { this, MpPinType.Window, true });
             },
             () => {
                 if (IsContentReadOnly) {

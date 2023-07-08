@@ -230,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
 
                 string error_msg = ex.Message;
 
-                var result = await MpNotificationBuilder.ShowNotificationAsync(
+                var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.InvalidAction,
                     title: $"{Label} Error",
                     body: error_msg,

@@ -5,6 +5,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.ReactiveUI;
@@ -963,11 +964,38 @@ namespace MonkeyPaste.Avalonia {
                         thumb.Tag = lb;
                         thumb.RenderTransform = new TranslateTransform();
                     }
+
                 }
+
+                sv.ScrollBars.Select(x => x.LineUpButton).ForEach(x => x.AddHandler(RepeatButton.PointerPressedEvent, ScrollViewerRepeatButton_Click, RoutingStrategies.Tunnel));
+                sv.ScrollBars.Select(x => x.LineDownButton).ForEach(x => x.AddHandler(RepeatButton.PointerPressedEvent, ScrollViewerRepeatButton_Click, RoutingStrategies.Tunnel));
                 return true;
             }
             return false;
         }
+
+        private static void ScrollViewerRepeatButton_Click(object sender, RoutedEventArgs e) {
+            e.Handled = true;
+            if (sender is not RepeatButton rb ||
+                rb.GetVisualAncestor<ScrollBar>() is not ScrollBar sb ||
+                sb.GetVisualAncestor<ScrollViewer>() is not ScrollViewer sv ||
+                sv.Tag is not ListBox lb) {
+                return;
+            }
+            MpPoint dir = MpPoint.Zero;
+            if (sb.Orientation == Orientation.Horizontal) {
+                dir.X = rb.Name.ToLower().Contains("down") ? 1 : -1;
+            } else {
+                dir.Y = rb.Name.ToLower().Contains("down") ? 1 : -1;
+            }
+            double repeat_val = 10;
+            var delta = dir * repeat_val;
+            double scroll_x = GetScrollOffsetX(lb);
+            double scroll_y = GetScrollOffsetY(lb);
+
+            ApplyScrollOffset(lb, scroll_x + delta.X, scroll_y + delta.Y);
+        }
+
         private static void AdjustThumbTransform(Track track, MpPoint track_mp, bool isThumbPress) {
             var attached_control = track.Tag as AvaloniaObject;
             if (attached_control == null) {

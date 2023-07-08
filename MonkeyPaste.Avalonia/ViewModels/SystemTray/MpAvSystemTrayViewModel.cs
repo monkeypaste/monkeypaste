@@ -169,19 +169,7 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand ExitApplicationCommand => new MpCommand(
             () => {
-                Dispatcher.UIThread.Post(async () => {
-                    MpConsole.WriteLine("ExitApplicationCommand begin");
-#if DESKTOP
-                    MpAvCefNetApplication.ShutdownCefNet();
-#endif
-                    await Task.Delay(3000);
-
-                    MpConsole.WriteLine("CefNet Shutdown Complete");
-
-                    if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
-                        lifetime.Shutdown();
-                    }
-                });
+                Mp.Services.ShutdownHelper.ShutdownApp("systray cmd");
             });
 
         public ICommand NavigateToCefNetUriCommand => new MpAsyncCommand(

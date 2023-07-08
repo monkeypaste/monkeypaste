@@ -8,7 +8,7 @@
         d:DesignWidth="800"
         d:DesignHeight="450"
         x:Name="UserActionNotificationWindow"
-        x:DataType="pcl:MpUserActionNotificationViewModel"
+        x:DataType="local:MpAvUserActionNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
@@ -122,7 +122,7 @@
                 <ContentControl.DataTemplates>
                     <local:MpAvUserActionBodyTemplateSelector>
                         <DataTemplate x:Key="TextBodyTemplate"
-                                      x:DataType="pcl:MpUserActionNotificationViewModel">
+                                      x:DataType="local:MpAvUserActionNotificationViewModel">
                             <SelectableTextBlock FontSize="14"
                                                  HorizontalAlignment="Left"
                                                  VerticalAlignment="Top"
@@ -134,7 +134,7 @@
                                                  Text="{Binding Body}" />
                         </DataTemplate>
                         <DataTemplate x:Key="ParameterCollectionTemplate"
-                                      x:DataType="pcl:MpUserActionNotificationViewModel">
+                                      x:DataType="local:MpAvUserActionNotificationViewModel">
                             <Border DataContext="{Binding Body}"
                                     MinWidth="250"
                                     x:DataType="local:MpAvAnalyticItemPresetViewModel">

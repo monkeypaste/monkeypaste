@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
 
         Control ITemplate<object, Control>.Build(object param) {
             string key = "TextBodyTemplate";
-            if (param is MpUserActionNotificationViewModel uanvm &&
+            if (param is MpAvUserActionNotificationViewModel uanvm &&
                 uanvm.Body is MpAvAnalyticItemPresetViewModel aipvm) {
                 key = "ParameterCollectionTemplate";
                 aipvm.ExecuteItems.ForEach(x => x.PropertyChanged += (s, e) => {

@@ -14,8 +14,8 @@ namespace MonkeyPaste.Avalonia {
             try {
                 App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-                //.StartWithClassicDesktopLifetime(args);
-                .StartWithCefNetApplicationLifetime(args);
+                .StartWithClassicDesktopLifetime(args);
+                //.StartWithCefNetApplicationLifetime(args);
             }
             catch (Exception e) {
                 // here we can work with the exception, for example add it to our log file
@@ -25,6 +25,7 @@ namespace MonkeyPaste.Avalonia {
                 // This block is optional. 
                 // Use the finally-block if you need to clean things up or similar
                 //Log.CloseAndFlush();
+                Mp.Services.ShutdownHelper.ShutdownApp("TopLevel exception");
             }
         }
 

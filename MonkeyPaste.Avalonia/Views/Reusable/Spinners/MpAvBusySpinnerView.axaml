@@ -36,7 +36,8 @@
     </UserControl.Styles>
     <Image>
         <Image.Resources>
-            <SolidColorBrush x:Key="Brush0" Color="{Binding $parent[UserControl].Foreground}" />
+            <!--<SolidColorBrush x:Key="Brush0" Color="{Binding $parent[UserControl].Foreground}" />-->
+            <SolidColorBrush x:Key="Brush0" Color="White" />
         </Image.Resources>
         <DrawingImage>
             <DrawingGroup>

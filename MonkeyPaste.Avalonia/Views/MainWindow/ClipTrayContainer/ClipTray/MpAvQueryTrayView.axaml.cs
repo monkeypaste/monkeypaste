@@ -37,24 +37,29 @@ namespace MonkeyPaste.Avalonia {
 
             this.AttachedToVisualTree += MpAvQueryTrayView_AttachedToVisualTree;
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
-
-            //var advSearchSplitter = this.FindControl<GridSplitter>("AdvancedSearchSplitter");
-            //advSearchSplitter.DragDelta += AdvSearchSplitter_DragDelta;
-            //advSearchSplitter.AddHandler(GridSplitter.DragDeltaEvent, AdvSearchSplitter_DragDelta, RoutingStrategies.Tunnel);
         }
 
 
         private void MpAvQueryTrayView_AttachedToVisualTree(object sender, global::Avalonia.VisualTreeAttachmentEventArgs e) {
-            //InitDnd();
+            InitDnd();
         }
 
         #region Drop
 
+        private void InitDnd() {
+            var ctrlb = this.FindControl<ListBox>("ClipTrayListBox");
+            DragDrop.SetAllowDrop(ctrlb, true);
+            ctrlb.AddHandler(DragDrop.DragEnterEvent, DragEnter);
+            ctrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
+            ctrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+            ctrlb.AddHandler(DragDrop.DropEvent, Drop);
+        }
         #region Drop Events
 
         private void DragEnter(object sender, DragEventArgs e) {
             //MpConsole.WriteLine("[DragEnter] PinTrayListBox: ");
             BindingContext.IsDragOverQueryTray = true;
+            StartAutoScroll();
         }
 
         private void DragOver(object sender, DragEventArgs e) {
@@ -84,36 +89,30 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.DataObjectHelperAsync
                 .ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
 
-            var drop_ci = await mpdo.ToCopyItemAsync(is_copy: is_copy);
-            if (drop_ci == null || drop_ci.Id == 0) {
-                ResetDrop();
-                return;
-            }
-
-            cur_ttvm.LinkCopyItemCommand.Execute(drop_ci.Id);
-            if (cur_ttvm.IsSelected) {
-                // when selected do in-place requery
-                while (!BindingContext.QueryCommand.CanExecute(string.Empty)) {
-                    await Task.Delay(100);
+            Dispatcher.UIThread.Post(async () => {
+                var drop_ci = await mpdo.ToCopyItemAsync(is_copy: is_copy);
+                if (drop_ci == null || drop_ci.Id == 0) {
+                    ResetDrop();
+                    return;
                 }
-                BindingContext.QueryCommand.CanExecute(string.Empty);
-            }
 
-            ResetDrop();
+                cur_ttvm.LinkCopyItemCommand.Execute(drop_ci.Id);
+                if (cur_ttvm.IsSelected) {
+                    // when selected do in-place requery
+                    while (!BindingContext.QueryCommand.CanExecute(string.Empty)) {
+                        await Task.Delay(100);
+                    }
+                    BindingContext.QueryCommand.CanExecute(string.Empty);
+                }
+
+                ResetDrop();
+            });
         }
 
         #endregion
 
         #region Drop Helpers (supposed to link drop to tag but disabled cause bugz)
 
-        private void InitDnd() {
-            var ctrlb = this.FindControl<ListBox>("ClipTrayListBox");
-            DragDrop.SetAllowDrop(ctrlb, true);
-            ctrlb.AddHandler(DragDrop.DragEnterEvent, DragEnter);
-            ctrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
-            ctrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
-            ctrlb.AddHandler(DragDrop.DropEvent, Drop);
-        }
         private DragDropEffects GetDndEffects(bool is_drop_valid, bool is_copy) {
             DragDropEffects dde = DragDropEffects.None;
 
@@ -154,20 +153,12 @@ namespace MonkeyPaste.Avalonia {
 
         private void ResetDrop() {
             BindingContext.IsDragOverQueryTray = false;
+            StopAutoScroll();
         }
         #endregion
 
         #endregion
 
-        private void AdvSearchSplitter_DragDelta(object sender, VectorEventArgs e) {
-            var gs = sender as GridSplitter;
-            var pg = gs.Parent as Grid;
-            var pg_r0_def = pg.RowDefinitions[0];
-            var sc_sv = this.FindControl<MpAvSearchCriteriaListBoxView>("SearchCriteriaView").FindControl<ScrollViewer>("SearchCriteriaContainerScrollViewer");
-            if (pg_r0_def.ActualHeight >= sc_sv.Extent.Height) {
-                e.Handled = true;
-            }
-        }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {

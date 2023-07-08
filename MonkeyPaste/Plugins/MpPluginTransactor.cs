@@ -137,7 +137,7 @@ namespace MonkeyPaste {
                     Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync("test", "Fix me");
                 });
 
-                var result = await MpNotificationBuilder.ShowNotificationAsync(nf);
+                var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(nf);
                 if (result == MpNotificationDialogResultType.Ignore) {
                     continue;
                 }
@@ -172,7 +172,7 @@ namespace MonkeyPaste {
                         },
                         transType: MpTransactionType.Error).FireAndForgetSafeAsync();
 
-            var userAction = await MpNotificationBuilder.ShowNotificationAsync(
+            var userAction = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                 notificationType: MpNotificationType.InvalidRequest,
                 body: ex.Message,
                 maxShowTimeMs: 5000);

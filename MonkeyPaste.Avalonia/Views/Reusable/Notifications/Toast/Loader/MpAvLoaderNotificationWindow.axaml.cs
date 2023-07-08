@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvLoaderNotificationWindow : MpAvWindow {
 
-        public MpLoaderNotificationViewModel BindingContext => DataContext as MpLoaderNotificationViewModel;
+        public MpAvLoaderNotificationViewModel BindingContext => DataContext as MpAvLoaderNotificationViewModel;
         public MpAvLoaderNotificationWindow() {
             AvaloniaXamlLoader.Load(this);
 #if DEBUG
@@ -22,36 +22,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void OnIsVisibleChanged() {
-            if (BindingContext == null) {
+            if (BindingContext == null || !IsVisible) {
                 return;
             }
-            if (IsVisible) {
-                this.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(this);
-                //BindingContext.ProgressLoader.BeginLoaderAsync().FireAndForgetSafeAsync(BindingContext);
-                Dispatcher.UIThread.Post(async () => {
-                    await BindingContext.ProgressLoader.BeginLoaderAsync();
-                    await BindingContext.ProgressLoader.FinishLoaderAsync();
-                    //while (true) {
-                    //    BindingContext.OnPropertyChanged(nameof(BindingContext.ProgressBarCurrentWidth));
-                    //    BindingContext.OnPropertyChanged(nameof(BindingContext.Title));
-                    //    BindingContext.OnPropertyChanged(nameof(BindingContext.Body));
-                    //    BindingContext.OnPropertyChanged(nameof(BindingContext.Detail));
-                    //    BindingContext.OnPropertyChanged(nameof(BindingContext.ValueLoaded));
-                    //    if (BindingContext.ValueLoaded >= 100.0d) {
-                    //        BindingContext.ProgressLoader.OnPropertyChanged(nameof(BindingContext.ProgressLoader.ShowSpinner));
-                    //        BindingContext.OnPropertyChanged(nameof(BindingContext.ProgressLoader.Detail));
-
-                    //        //await Task.Delay(1000);
-                    //        BindingContext.HideNotification();
-                    //        //await BindingContext.ProgressLoader.FinishLoaderAsync();
-                    //        return;
-                    //    }
-                    //    await Task.Delay(100);
-                    //}
-                });
-            } else {
-                //BindingContext.ProgressLoader.FinishLoaderAsync().FireAndForgetSafeAsync(BindingContext);
-            }
+            Dispatcher.UIThread.Post(async () => {
+                await BindingContext.ProgressLoader.BeginLoaderAsync();
+                await BindingContext.ProgressLoader.FinishLoaderAsync();
+            });
         }
     }
 }

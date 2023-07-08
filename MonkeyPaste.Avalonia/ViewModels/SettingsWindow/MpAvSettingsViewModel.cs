@@ -1234,7 +1234,7 @@ namespace MonkeyPaste.Avalonia {
 
                             IsBusy = false;
                             if (!success) {
-                                MpNotificationBuilder.ShowMessageAsync(
+                                Mp.Services.NotificationBuilder.ShowMessageAsync(
                                     title: "Error",
                                     body: $"Could not delete plugin cache from path: '{cache_dir}'",
                                     msgType: MpNotificationType.FileIoWarning).FireAndForgetSafeAsync(this);

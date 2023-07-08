@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste {
-    public class MpMessageNotificationViewModel : MpNotificationViewModelBase {
+namespace MonkeyPaste.Avalonia {
+    public class MpAvMessageNotificationViewModel : MpAvNotificationViewModelBase {
         #region Properties
 
         public double MessageWindowFixedWidth =>
@@ -27,7 +27,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Constructors
-        public MpMessageNotificationViewModel() : base() { }
+        public MpAvMessageNotificationViewModel() : base() { }
         #endregion
 
         #region Public Methods

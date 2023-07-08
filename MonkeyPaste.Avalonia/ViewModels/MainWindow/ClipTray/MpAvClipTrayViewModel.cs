@@ -242,13 +242,13 @@ namespace MonkeyPaste.Avalonia {
                             Command = EnableFindAndReplaceForSelectedItem,
                             ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
                         },
+                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel2(SelectedItem,true),
+                        new MpMenuItemViewModel() {IsSeparator = true},
                         SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
                         new MpMenuItemViewModel() {IsSeparator = true},
                         MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.CopyItemType),
-                        new MpMenuItemViewModel() {IsSeparator = true},
-                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel2(SelectedItem),
-                        new MpMenuItemViewModel() {IsSeparator = true},
                         new MpMenuItemViewModel() {
+                            HasLeadingSeperator = true,
                             Header = @"Collections",
                             AltNavIdx = 0,
                             IconResourceKey = "PinToCollectionImage",
@@ -346,6 +346,7 @@ namespace MonkeyPaste.Avalonia {
             QueryTrayTotalTileWidth > ObservedQueryTrayScreenWidth;
         public bool IsQueryVerticalScrollBarVisible =>
             QueryTrayTotalTileHeight > ObservedQueryTrayScreenHeight;
+
 
         public double LastScrollOffsetX { get; set; } = 0;
         public double LastScrollOffsetY { get; set; } = 0;
@@ -677,8 +678,11 @@ namespace MonkeyPaste.Avalonia {
         private void UpdateDefaultItemSize() {
             //double query_square_length = Math.Max(0, (QueryTrayFixedDimensionLength * ZoomFactor) - ScrollBarFixedAxisSize);
             //double pin_square_length = Math.Max(0, (PinTrayFixedDimensionLength * ZoomFactor) - ScrollBarFixedAxisSize);
-            double qw = DEFAULT_ITEM_SIZE, qh = DEFAULT_ITEM_SIZE;
-            double pw = DEFAULT_ITEM_SIZE, ph = DEFAULT_ITEM_SIZE;
+
+            double qw = DEFAULT_ITEM_SIZE - QueryTrayVerticalScrollBarWidth;
+            double qh = DEFAULT_ITEM_SIZE - QueryTrayHorizontalScrollBarHeight;
+            double pw = DEFAULT_ITEM_SIZE;
+            double ph = DEFAULT_ITEM_SIZE;
 
             if (ListOrientation == Orientation.Vertical) {
                 qh = DEFAULT_UNEXPANDED_HEIGHT;
@@ -717,6 +721,7 @@ namespace MonkeyPaste.Avalonia {
 
         public double QueryTrayVerticalScrollBarWidth =>
             IsQueryVerticalScrollBarVisible ? ScrollBarFixedAxisSize : 0;
+
 
         #endregion
 
@@ -1142,17 +1147,17 @@ namespace MonkeyPaste.Avalonia {
 
         public int DefaultLoadCount {
             get {
-                if (LayoutType == MpClipTrayLayoutType.Stack) {
-                    if (Mp.Services.PlatformInfo.IsDesktop) {
-                        return 20;
-                    }
-                    return 5;
-                } else {
-                    if (Mp.Services.PlatformInfo.IsDesktop) {
-                        return 40;
-                    }
-                    return 5;
+                //if (LayoutType == MpClipTrayLayoutType.Stack) {
+                //    if (Mp.Services.PlatformInfo.IsDesktop) {
+                //        return 20;
+                //    }
+                //    return 5;
+                //} else {
+                if (Mp.Services.PlatformInfo.IsDesktop) {
+                    return 40;
                 }
+                return 5;
+                //}
             }
         }
         public bool IsTitleLayersVisible { get; set; } = true;
@@ -1381,7 +1386,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void ValidateQueryTray() {
-            return;
             var dups =
                 Items.Where(x => x.QueryOffsetIdx >= 0 && Items.Any(y => y != x && x.QueryOffsetIdx == y.QueryOffsetIdx));
             var skips =
@@ -1391,12 +1395,15 @@ namespace MonkeyPaste.Avalonia {
             if (!dups.Any() && !skips.Any()) {
                 return;
             }
-            MpDebug.Break($"Query validation failed. Either offsets skipped or duplicated");
+            MpDebug.Break($"Query validation failed. Either offsets skipped or duplicated", true);
             if (dups.Count() > 0) {
                 dups
                     .OrderByDescending(x => x.TileCreatedDateTime)
                     .Skip(1)
                     .ForEach(x => x.TriggerUnloadedNotification(false));
+
+            }
+            if (skips.Any()) {
 
             }
         }
@@ -1405,6 +1412,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void RefreshQueryTrayLayout(MpAvClipTileViewModel fromItem = null) {
+            UpdateDefaultItemSize();
             FindTotalTileSize();
 
             fromItem = fromItem == null ? HeadItem : fromItem;
@@ -1823,7 +1831,7 @@ namespace MonkeyPaste.Avalonia {
             if (cap_msg_type == MpNotificationType.None) {
                 return;
             }
-            MpNotificationBuilder.ShowMessageAsync(
+            Mp.Services.NotificationBuilder.ShowMessageAsync(
                        title: $"'{account_type}' {cap_msg_title_suffix}",
                        body: cap_msg_sb.ToString(),
                        msgType: cap_msg_type,
@@ -3050,21 +3058,27 @@ namespace MonkeyPaste.Avalonia {
                  MpPinType pinType = MpPinType.Internal;
                  MpAppendModeType appendType = MpAppendModeType.None;
                  int pin_idx = 0;
+                 bool? pin_as_editable = null;
                  MpAvClipTileViewModel ctvm_to_pin = null;
                  if (args is MpAvClipTileViewModel) {
                      // pinning new or query tray tile from overlay button
                      ctvm_to_pin = args as MpAvClipTileViewModel;
                  } else if (args is object[] argParts) {
-                     // dnd pin tray drop or pop out
                      ctvm_to_pin = argParts[0] as MpAvClipTileViewModel;
                      if (argParts[1] is int) {
+                         // dnd pin tray drop
                          pin_idx = (int)argParts[1];
                      } else {
+                         // pop out
                          pinType = (MpPinType)argParts[1];
                          int cur_pin_idx = PinnedItems.IndexOf(ctvm_to_pin);
                          if (cur_pin_idx >= 0) {
                              // for pop out of already existing items retain current idx
                              pin_idx = cur_pin_idx;
+                         }
+                         if (argParts.Length > 2 &&
+                            argParts[2] is bool make_editable) {
+                             pin_as_editable = make_editable;
                          }
                      }
                      if (pinType == MpPinType.Append) {
@@ -3082,7 +3096,7 @@ namespace MonkeyPaste.Avalonia {
                      return;
                  }
 
-                 await ctvm_to_pin.PersistContentSelectionStateCommand.ExecuteAsync();
+                 await ctvm_to_pin.PersistContentStateCommand.ExecuteAsync(pin_as_editable.HasValue ? pin_as_editable.Value : null);
 
                  int ctvm_to_pin_query_idx = -1;
                  MpAvClipTileViewModel query_ctvm_to_pin = QueryItems.FirstOrDefault(x => x.CopyItemId == ctvm_to_pin.CopyItemId);
@@ -3176,7 +3190,7 @@ namespace MonkeyPaste.Avalonia {
                      return;
                  }
 
-                 await unpinned_ctvm.PersistContentSelectionStateCommand.ExecuteAsync();
+                 await unpinned_ctvm.PersistContentStateCommand.ExecuteAsync(null);
 
                  int unpinned_ciid = unpinned_ctvm.CopyItemId;
                  int unpinned_ctvm_idx = PinnedItems.IndexOf(unpinned_ctvm);
@@ -4164,7 +4178,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleRightClickPasteCommand => new MpCommand(
             () => {
                 IsRightClickPasteMode = !IsRightClickPasteMode;
-                MpNotificationBuilder.ShowMessageAsync(
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
                     title: "MODE CHANGED",
                     body: $"RIGHT CLICK PASTE MODE: {(IsRightClickPasteMode ? "ON" : "OFF")}",
                     msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
@@ -4175,7 +4189,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsAutoCopyMode = !IsAutoCopyMode;
 
-                MpNotificationBuilder.ShowMessageAsync(
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
                     title: "MODE CHANGED",
                     body: $"AUTO-COPY SELECTION MODE: {(IsAutoCopyMode ? "ON" : "OFF")}",
                     msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
@@ -4341,7 +4355,7 @@ namespace MonkeyPaste.Avalonia {
                 string manual_change_str = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? "Manual" : "Extent";
                 string detail_str = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? "Appends added where you select" : "Appends added to top or bottom of the clip";
                 string icon_key = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? "CaretImage" : "DoubleSidedArrowSolidImage";
-                MpNotificationBuilder.ShowMessageAsync(
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
                        title: $"{manual_change_str} Append Mode Activated",
                        body: detail_str,
                        msgType: MpNotificationType.AppendModeChanged,
@@ -4352,7 +4366,7 @@ namespace MonkeyPaste.Avalonia {
                 string pause_change_str = cur_flags.HasFlag(MpAppendModeFlags.Paused) ? "Paused" : "Resumed";
                 string detail_str = cur_flags.HasFlag(MpAppendModeFlags.Paused) ? "Clipboard accumulation halted" : "Clipboard accumulation resumed";
                 string icon_key = cur_flags.HasFlag(MpAppendModeFlags.Paused) ? "PauseImage" : "PlayImage";
-                MpNotificationBuilder.ShowMessageAsync(
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
                        title: $"Append {pause_change_str}",
                        body: detail_str,
                        msgType: MpNotificationType.AppendModeChanged,
@@ -4363,7 +4377,7 @@ namespace MonkeyPaste.Avalonia {
                 string manual_change_str = cur_flags.HasFlag(MpAppendModeFlags.Pre) ? "Before" : "After";
                 string detail_str = cur_flags.HasFlag(MpAppendModeFlags.Pre) ? "Clipboard changes will now be prepended" : "Clipboard changes will now be appended";
                 string icon_key = cur_flags.HasFlag(MpAppendModeFlags.Pre) ? "BringToFrontImage" : "SendToBackImage";
-                MpNotificationBuilder.ShowMessageAsync(
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
                        title: $"{manual_change_str} Append Mode Activated",
                        body: detail_str,
                        msgType: MpNotificationType.AppendModeChanged,
@@ -4418,7 +4432,7 @@ namespace MonkeyPaste.Avalonia {
             string type_str = IsAppendLineMode ? "Block" : "Inline";
             string manual_str = IsAppendManualMode ? "(Manual) " : string.Empty;
             string icon_key = IsAppendLineMode ? "AppendLineImage" : "AppendImage";
-            MpNotificationBuilder.ShowMessageAsync(
+            Mp.Services.NotificationBuilder.ShowMessageAsync(
                    title: $"Append {type_str} {manual_str}Mode Activated",
                    body: "Copy text or file(s) to apply.",
                    msgType: MpNotificationType.AppendModeChanged,
@@ -4432,7 +4446,7 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal(MpMessageType.AppendModeDeactivated);
             if (AppendClipTileViewModel == null) {
                 // only show deactivate ntf if no windows there
-                MpNotificationBuilder.ShowMessageAsync(
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
                            title: $"Append Deactivated",
                            body: $"Normal clipboard behavior has been restored",
                            msgType: MpNotificationType.AppendModeChanged,

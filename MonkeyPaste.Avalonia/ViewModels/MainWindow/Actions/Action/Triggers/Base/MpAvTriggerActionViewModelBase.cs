@@ -246,7 +246,7 @@ namespace MonkeyPaste.Avalonia {
                 string typeStr = ParentActionId == 0 ? "Trigger" : "Action";
                 string notificationText = $"{typeStr} '{FullName}' is now  {enabledText}";
 
-                await MpNotificationBuilder.ShowMessageAsync(
+                await Mp.Services.NotificationBuilder.ShowMessageAsync(
                     iconSourceObj: IconResourceObj.ToString(),
                     title: $"{typeStr.ToUpper()} STATUS",
                     body: notificationText,

@@ -121,7 +121,7 @@ namespace MonkeyPaste {
                     MpFileIo.CopyDirectory(dir_to_backup, backup_path, true, true);
                 }
                 catch (Exception ex) {
-                    MpNotificationBuilder.ShowNotificationAsync(
+                    Mp.Services.NotificationBuilder.ShowNotificationAsync(
                         notificationType: MpNotificationType.FileIoWarning,
                         body: $"Error backing up {dir_to_backup} to '{backup_path}. Details: '{ex.Message}'").FireAndForgetSafeAsync();
                     backup_path = null;
@@ -193,7 +193,7 @@ namespace MonkeyPaste {
 
                 }
                 catch (Exception ex) {
-                    MpNotificationBuilder.ShowNotificationAsync(
+                    Mp.Services.NotificationBuilder.ShowNotificationAsync(
                         notificationType: MpNotificationType.FileIoWarning,
                         body: $"Error installing plugin: {ex.Message}").FireAndForgetSafeAsync();
                     return null;
@@ -201,7 +201,7 @@ namespace MonkeyPaste {
 
                 string manifest_path = Path.Combine(PluginRootFolderPath, pluginName, "manifest.json");
                 if (!manifest_path.IsFile()) {
-                    MpNotificationBuilder.ShowNotificationAsync(
+                    Mp.Services.NotificationBuilder.ShowNotificationAsync(
                         notificationType: MpNotificationType.FileIoWarning,
                         body: $"Error installing plugin '{pluginName}' corrupt or improper directory structure. Manifest should exist at '{manifest_path}' but was not found.").FireAndForgetSafeAsync();
                     return null;
@@ -215,7 +215,7 @@ namespace MonkeyPaste {
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error installing plugin from uri '{packageUrl}'. ", ex);
-                MpNotificationBuilder.ShowNotificationAsync(
+                Mp.Services.NotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.FileIoWarning,
                     body: ex.Message).FireAndForgetSafeAsync();
 
@@ -270,7 +270,7 @@ namespace MonkeyPaste {
             string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
             if (string.IsNullOrEmpty(manifestStr)) {
                 // Empty or io error on manifest file read
-                var manifest_not_found_result = await MpNotificationBuilder.ShowNotificationAsync(
+                var manifest_not_found_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.InvalidPlugin,
                     body: $"Plugin manifest not found in '{manifestPath}'",
                     retryAction: retryFunc,
@@ -294,7 +294,7 @@ namespace MonkeyPaste {
                     bool isValid = ValidatePluginManifest(plugin, manifestPath);
                 }
                 catch (Exception ex) {
-                    var invalid_or_malformed_json_result = await MpNotificationBuilder.ShowNotificationAsync(
+                    var invalid_or_malformed_json_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.InvalidPlugin,
                             body: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
                             retryAction: retryFunc,
@@ -316,7 +316,7 @@ namespace MonkeyPaste {
                         }
                     }
                     catch (Exception ex) {
-                        var ivalid_plugin_component_result = await MpNotificationBuilder.ShowNotificationAsync(
+                        var ivalid_plugin_component_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                 notificationType: MpNotificationType.InvalidPlugin,
                                 body: ex.Message,
                                 retryAction: retryFunc,

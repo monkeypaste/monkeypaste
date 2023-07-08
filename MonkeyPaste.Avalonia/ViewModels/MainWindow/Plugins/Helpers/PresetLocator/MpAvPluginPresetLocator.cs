@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (showMessages) {
                     // hide clipboard since its like 30 msgs
-                    MpNotificationBuilder.ShowMessageAsync(
+                    Mp.Services.NotificationBuilder.ShowMessageAsync(
                     msgType: MpNotificationType.PluginUpdated,
                     title: $"Plugin Updated",
                     iconSourceObj: ivm.IconBase64,

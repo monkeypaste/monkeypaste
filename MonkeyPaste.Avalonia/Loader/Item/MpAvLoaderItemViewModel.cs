@@ -5,20 +5,20 @@ using System.Reflection;
 using System.Threading.Tasks;
 //using Xamarin.Forms;
 
-namespace MonkeyPaste {
-    public class MpLoaderItemViewModel : MpViewModelBase<MpLoaderViewModelBase> {
+namespace MonkeyPaste.Avalonia {
+    public class MpAvLoaderItemViewModel : MpViewModelBase {
         public object ItemArg { get; set; }
         public Type ItemType { get; set; }
         public string Label { get; set; }
 
-        public MpLoaderItemViewModel() : base(null) { }
+        public MpAvLoaderItemViewModel() : base(null) { }
 
-        public MpLoaderItemViewModel(MpLoaderViewModelBase parent, Type itemType, string label = "") : base(parent) {
+        public MpAvLoaderItemViewModel(Type itemType, string label = "") : this() {
             Label = label;
             ItemType = itemType;
         }
 
-        public MpLoaderItemViewModel(MpLoaderViewModelBase parent, Type itemType, string label = "", object arg = null) : this(parent, itemType, label) {
+        public MpAvLoaderItemViewModel(Type itemType, string label = "", object arg = null) : this(itemType, label) {
             ItemArg = arg;
         }
 

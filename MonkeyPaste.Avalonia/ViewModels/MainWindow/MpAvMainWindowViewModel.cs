@@ -1088,7 +1088,7 @@ namespace MonkeyPaste.Avalonia {
                 });
 
             if (MpAvWindowManager.AllWindows.FirstOrDefault(x => x is MpAvLoaderNotificationWindow) is MpAvLoaderNotificationWindow lnw &&
-                lnw.DataContext is MpNotificationViewModelBase nvm) {
+                lnw.DataContext is MpAvNotificationViewModelBase nvm) {
                 // only show loaded msg if progress wasn't there
                 bool show_loaded_msg = !lnw.IsVisible;
                 nvm.HideNotification();
@@ -1100,7 +1100,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1_000);
 
 
-            MpNotificationBuilder.ShowMessageAsync(
+            Mp.Services.NotificationBuilder.ShowMessageAsync(
                 title: "Loaded",
                 body: $"Monkey Paste is now loaded. \nClipboard listening is: {(MpAvClipTrayViewModel.Instance.IsAppPaused ? "Paused" : "Active")}",
                 msgType: MpNotificationType.StartupComplete,

@@ -1,8 +1,8 @@
 ﻿using MonkeyPaste.Common;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste {
-    public class MpLoaderNotificationViewModel : MpNotificationViewModelBase {
+namespace MonkeyPaste.Avalonia {
+    public class MpAvLoaderNotificationViewModel : MpAvNotificationViewModelBase {
         #region Private Variables
         #endregion
 
@@ -62,7 +62,7 @@ namespace MonkeyPaste {
 
         #region Constructors
 
-        public MpLoaderNotificationViewModel() : base() { }
+        public MpAvLoaderNotificationViewModel() : base() { }
 
         #endregion
 

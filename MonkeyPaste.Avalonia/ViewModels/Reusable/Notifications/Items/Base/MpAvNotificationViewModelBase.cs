@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace MonkeyPaste {
-    public abstract class MpNotificationViewModelBase :
+namespace MonkeyPaste.Avalonia {
+    public abstract class MpAvNotificationViewModelBase :
         MpViewModelBase,
         MpIWantsTopmostWindowViewModel,
         MpICloseWindowViewModel,
@@ -365,7 +365,7 @@ namespace MonkeyPaste {
 
         #region Constructors
 
-        public MpNotificationViewModelBase() : base(null) {
+        public MpAvNotificationViewModelBase() : base(null) {
             PropertyChanged += MpNotificationViewModelBase_PropertyChanged;
             NotifierGuid = System.Guid.NewGuid().ToString();
         }

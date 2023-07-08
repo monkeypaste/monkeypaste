@@ -18,6 +18,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         private List<MpAvMessageNotificationWindow> _pendingMessages = new List<MpAvMessageNotificationWindow>();
         private ObservableCollection<Window> _windows = new ObservableCollection<Window>();
+        private MpAvNotificationPositioner _positioner;
         #endregion
 
         #region Statics
@@ -31,7 +32,8 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpINotificationManager Implementation
-        public void ShowNotification(MpNotificationViewModelBase nvmb) {
+        public void ShowNotification(object dc) {
+            var nvmb = dc as MpAvNotificationViewModelBase;
             if (nvmb == null) {
                 // somethigns wrong
                 MpDebug.Break();
@@ -39,7 +41,8 @@ namespace MonkeyPaste.Avalonia {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 ShowDesktopNotification(nvmb);
             } else {
-                if (nvmb is MpLoaderNotificationViewModel lnvm) {
+                // TODO need to merge or handle mobile ntf
+                if (nvmb is MpAvLoaderNotificationViewModel lnvm) {
                     Dispatcher.UIThread.Post(async () => {
 
                         await lnvm.ProgressLoader.BeginLoaderAsync();
@@ -48,7 +51,10 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public void HideNotification(MpNotificationViewModelBase nvmb) {
+        public void HideNotification(object dc) {
+            if (dc is not MpAvNotificationViewModelBase nvmb) {
+                return;
+            }
             nvmb.IsClosing = true;
         }
 
@@ -75,28 +81,27 @@ namespace MonkeyPaste.Avalonia {
 
         #region Events
 
-        public event EventHandler<Window> OnNotificationWindowIsVisibleChanged;
+        //public event EventHandler<Window> OnNotificationWindowIsVisibleChanged;
 
         #endregion
 
         #region Constructors
-        private MpAvNotificationWindowManager() { }
+        private MpAvNotificationWindowManager() {
+            MpConsole.WriteLine("ntf windowmanager ctor called");
+            _positioner = new MpAvNotificationPositioner();
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+        }
         #endregion
 
         #region Public Methods
-        public void Init() {
-            _ = new MpAvNotificationPositioner();
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
-        }
-
 
         #endregion
 
         #region Private Methods
-        private void ShowDesktopNotification(MpNotificationViewModelBase nvmb) {
+        private void ShowDesktopNotification(MpAvNotificationViewModelBase nvmb) {
             Dispatcher.UIThread.Post(() => {
                 MpAvWindow nw = null;
-                var layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
+                var layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
                 switch (layoutType) {
                     case MpNotificationLayoutType.Loader:
                         nw = new MpAvLoaderNotificationWindow() {
@@ -110,9 +115,6 @@ namespace MonkeyPaste.Avalonia {
                             DataContext = nvmb
                         };
                         break;
-                    //case MpNotificationLayoutType.Append:
-                    //    nw = MpAvAppendNotificationWindow.Instance;
-                    //    break;
                     default:
                         nw = new MpAvMessageNotificationWindow() {
                             DataContext = nvmb,
@@ -135,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
             });
         }
         private void BeginOpen(MpAvWindow nw) {
-            var nvmb = nw.DataContext as MpNotificationViewModelBase;
+            var nvmb = nw.DataContext as MpAvNotificationViewModelBase;
             nvmb.IsClosing = false;
 
             if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
@@ -152,6 +154,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (!_windows.Contains(nw)) {
                 _windows.Add(nw);
+                _positioner.AddWindow(nw);
             }
             bool is_platform_loaded = Mp.Services != null &&
                      Mp.Services.StartupState != null &&
@@ -197,6 +200,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             _windows.Remove(w);
+            _positioner.RemoveWindow(w);
         }
 
         //private async Task ForceTopmostAsync(MpAvWindow w) {
@@ -232,14 +236,15 @@ namespace MonkeyPaste.Avalonia {
 
 
         private async void OnNotificationWindowIsVisibleChangedHandler(Window w) {
-            OnNotificationWindowIsVisibleChanged?.Invoke(this, w);
+            //OnNotificationWindowIsVisibleChanged?.Invoke(this, w);
+
             if (w.IsVisible) {
                 await Task.Delay(1000);
                 MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = false;
                 return;
             }
             if (!w.IsVisible &&
-                w.DataContext is MpNotificationViewModelBase nvmb &&
+                w.DataContext is MpAvNotificationViewModelBase nvmb &&
                 nvmb.IsClosing) {
                 FinishClose(w);
             }

@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class App : Application {
+    public partial class App : Application, MpIShutdownTools {
         #region Private Variable
         #endregion
 
@@ -34,6 +34,8 @@ namespace MonkeyPaste.Avalonia {
         public static string[] Args { get; set; } = new string[] { };
 
         private static App _instance;
+        public static App Instance =>
+            _instance;
 
         public static MpIMainView MainView {
             get {
@@ -57,6 +59,21 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIShutdownTools Implementation
+        public void ShutdownApp(object args) {
+            MpConsole.WriteLine($"App shutdown called. Args: '{args.ToStringOrEmpty("NULL")}'");
+
+            MpTempFileManager.Shutdown();
+            if (Mp.Services.PlatformInfo.IsDesktop) {
+                MpAvCefNetApplication.ShutdownCefNet();
+            }
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
+                lifetime.Shutdown();
+            }
+        }
+
+        #endregion
         #endregion
 
         #region Properties
@@ -127,9 +144,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ReportCommandLineArgs(string[] args) {
-            Console.WriteLine("Program args: ");
-            Console.Write(string.Join(Environment.NewLine, args));
+            MpConsole.WriteLine("Program args: ");
+            MpConsole.WriteLine(string.Join(Environment.NewLine, args));
         }
+
         #endregion
 
         #region Commands

@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace MonkeyPaste {
-    public class MpUserActionNotificationViewModel : MpNotificationViewModelBase {
+namespace MonkeyPaste.Avalonia {
+    public class MpAvUserActionNotificationViewModel : MpAvNotificationViewModelBase {
         #region Private Variables
         #endregion
 
@@ -89,7 +89,7 @@ namespace MonkeyPaste {
 
         #region Constructors
 
-        public MpUserActionNotificationViewModel() : base() {
+        public MpAvUserActionNotificationViewModel() : base() {
             PropertyChanged += MpUserActionNotificationViewModel_PropertyChanged;
         }
 
@@ -274,8 +274,7 @@ namespace MonkeyPaste {
         public ICommand ShutdownCommand => new MpCommand(
             () => {
                 DialogResult = MpNotificationDialogResultType.Shutdown;
-                // TODO should have global shutdown workflow instead of just shutting down maybe
-                System.Diagnostics.Process.GetCurrentProcess().CloseMainWindow();
+                Mp.Services.ShutdownHelper.ShutdownApp("userAction cmd");
             });
 
         public ICommand YesCommand => new MpCommand(

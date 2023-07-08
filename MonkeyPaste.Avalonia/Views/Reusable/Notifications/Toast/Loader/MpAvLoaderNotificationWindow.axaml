@@ -9,7 +9,7 @@
         d:DesignWidth="800"
         d:DesignHeight="450"
         x:Name="LoaderNotificationWindow"
-        x:DataType="pcl:MpLoaderNotificationViewModel"
+        x:DataType="local:MpAvLoaderNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
@@ -192,8 +192,9 @@
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
                         <local:MpAvBusySpinnerView x:Name="QueryTrayBusySpinner"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
+                                                   Foreground="White"
+                                                   IsVisible="True"
+                                                   RenderTransform="translateX(-50px)"
                                                    Width="50"
                                                    Height="50" />
                     </Border>

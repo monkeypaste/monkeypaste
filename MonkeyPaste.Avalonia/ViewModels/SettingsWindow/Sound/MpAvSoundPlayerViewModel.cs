@@ -133,7 +133,7 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSoundEnabled) {
                         // don't notify file length error if disabled...
 
-                        MpNotificationBuilder.ShowMessageAsync(
+                        Mp.Services.NotificationBuilder.ShowMessageAsync(
                             title: $"Error",
                             body: $"Cannot load sound from path '{sound_path}' file path must be no more than '{MAX_PATH}' characters. You will need to move this apps folder to a higher directory to hear that sound.",
                             msgType: MpNotificationType.FileIoWarning).FireAndForgetSafeAsync(this);

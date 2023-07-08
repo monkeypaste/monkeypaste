@@ -455,7 +455,7 @@ namespace MonkeyPaste.Avalonia {
                 // currently only managed exception is for missing deferredValueComponent when paramFormat is flagged w/ isDeferredValue
 
                 // show exception but continue loading
-                _ = MpNotificationBuilder.ShowNotificationAsync(
+                _ = Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                 notificationType: MpNotificationType.PluginResponseWarning,
                                 body: ex.Message);
             }

@@ -1,15 +1,12 @@
 ﻿using MonkeyPaste.Common;
-//using Xamarin.Forms;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-//using Xamarin.Essentials;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste.Avalonia {
 
-
-    public static class MpNotificationBuilder {
+    public class MpAvNotificationBuilder : MpINotificationBuilder {
         #region Static Variables
         #endregion
 
@@ -45,7 +42,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public static async Task ShowMessageAsync(
+        public async Task ShowMessageAsync(
             string title = "",
             object body = null,
             int maxShowTimeMs = MpNotificationFormat.MAX_MESSAGE_DISPLAY_MS,
@@ -61,7 +58,7 @@ namespace MonkeyPaste {
                 iconSourceObj: iconSourceObj);
         }
 
-        public static async Task<MpNotificationDialogResultType> ShowLoaderNotificationAsync(MpIProgressLoaderViewModel loader) {
+        public async Task<MpNotificationDialogResultType> ShowLoaderNotificationAsync(MpIProgressLoaderViewModel loader) {
             var result = await ShowNotificationAsync(
                 title: loader.Title,
                 notificationType: MpNotificationType.Loader,
@@ -69,7 +66,7 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<MpNotificationDialogResultType> ShowNotificationAsync(
+        public async Task<MpNotificationDialogResultType> ShowNotificationAsync(
             MpNotificationType notificationType = MpNotificationType.None,
             string title = "",
             object body = null,
@@ -113,7 +110,7 @@ namespace MonkeyPaste {
             return result;
         }
 
-        public static async Task<string> ShowInputResultNotificationAsync(
+        public async Task<string> ShowInputResultNotificationAsync(
             string title,
             string body,
             string currentInput = null,
@@ -132,13 +129,13 @@ namespace MonkeyPaste {
                 Owner = owner
             };
             var nvm = await CreateNotifcationViewModelAsync(nf);
-            if (nvm is MpUserActionNotificationViewModel uanvm) {
+            if (nvm is MpAvUserActionNotificationViewModel uanvm) {
                 string result = await uanvm.ShowInputResultNotificationAsync();
                 return result;
             }
             return null;
         }
-        public static async Task<MpNotificationDialogResultType> ShowNotificationAsync(MpINotificationFormat inf) {
+        public async Task<MpNotificationDialogResultType> ShowNotificationAsync(MpINotificationFormat inf) {
             var nf = inf as MpNotificationFormat;
             if (nf == null && inf is MpPluginUserNotificationFormat pnf) {
                 // convert plugin notification to core nf
@@ -151,22 +148,22 @@ namespace MonkeyPaste {
         }
 
 
-        public static async Task<MpNotificationViewModelBase> CreateNotifcationViewModelAsync(MpNotificationFormat nf) {
-            MpNotificationLayoutType layoutType = MpNotificationViewModelBase.GetLayoutTypeFromNotificationType(nf.NotificationType);
-            MpNotificationViewModelBase nvmb = null;
+        public async Task<MpAvNotificationViewModelBase> CreateNotifcationViewModelAsync(MpNotificationFormat nf) {
+            MpNotificationLayoutType layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nf.NotificationType);
+            MpAvNotificationViewModelBase nvmb = null;
             switch (layoutType) {
                 case MpNotificationLayoutType.Loader:
-                    nvmb = new MpLoaderNotificationViewModel();
+                    nvmb = new MpAvLoaderNotificationViewModel();
                     break;
                 case MpNotificationLayoutType.Warning:
                 case MpNotificationLayoutType.Error:
                 case MpNotificationLayoutType.Message:
-                    nvmb = new MpMessageNotificationViewModel();
+                    nvmb = new MpAvMessageNotificationViewModel();
                     break;
                 case MpNotificationLayoutType.UserAction:
                 case MpNotificationLayoutType.ErrorWithOption:
                 case MpNotificationLayoutType.ErrorAndShutdown:
-                    nvmb = new MpUserActionNotificationViewModel();
+                    nvmb = new MpAvUserActionNotificationViewModel();
                     break;
                 default:
                     throw new Exception("Unhandled notification type: " + nf.NotificationType);

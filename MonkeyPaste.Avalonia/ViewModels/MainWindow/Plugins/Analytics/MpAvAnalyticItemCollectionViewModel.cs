@@ -437,7 +437,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                     if (!revert_success) {
-                        MpNotificationBuilder.ShowNotificationAsync(
+                        Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.FileIoWarning,
                             body: $"Unknown error occured.").FireAndForgetSafeAsync();
                     }

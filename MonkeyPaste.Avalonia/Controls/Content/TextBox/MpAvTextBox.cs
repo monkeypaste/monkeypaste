@@ -86,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
                 if (DataContext is MpAvClipTileViewModel) {
                     return DataContext as MpAvClipTileViewModel;
                 }
-                if (DataContext is MpNotificationViewModelBase nvmb) {
+                if (DataContext is MpAvNotificationViewModelBase nvmb) {
                     return nvmb.Body as MpAvClipTileViewModel;
                 }
                 return null;

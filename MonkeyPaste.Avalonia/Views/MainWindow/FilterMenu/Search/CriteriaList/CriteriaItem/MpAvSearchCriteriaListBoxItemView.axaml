@@ -35,7 +35,7 @@
         </Style>
 
         <Style Selector="ListBox.optionsList > ListBoxItem:not(:selected):not(:nth-child(1)):not(:nth-last-child(1))">
-            <!--  NOTE -->
+            <!--  NOTE  -->
             <!--<Setter Property="IsHitTestVisible"
                     Value="False" />
             <Setter Property="IsVisible"
@@ -94,10 +94,11 @@
                        HorizontalAlignment="Left"
                        IsVisible="{Binding IsJoinPanelVisible}">
                 <TextBlock DockPanel.Dock="Right"
+                           Classes="alterOnly"
                            Text="of the following are true"
                            Margin="15,0,0,0"
                            VerticalAlignment="Center" />
-                <ComboBox Classes="criteriaComboBox joinComboBox"
+                <ComboBox Classes="criteriaComboBox joinComboBox alterOnly"
                           ItemsSource="{Binding JoinTypeLabels}"
                           SelectedIndex="{Binding SelectedJoinTypeIdx, Mode=TwoWay}">
                     <ComboBox.ItemTemplate>
@@ -117,7 +118,7 @@
 
                 <Button x:Name="AddCriteriaItemButton"
                         Grid.Column="0"
-                        Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg"
+                        Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg alterOnly"
                         Command="{Binding AddNextCriteriaItemCommand}">
                     <Image Source="{Binding ., Source={StaticResource PlusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>
@@ -126,7 +127,7 @@
 
                 <Button x:Name="RemoveCriteriaItemButton"
                         Grid.Column="1"
-                        Classes="defaultButton outline outlineOver addRemoveBtn removeBtn noBg noHoverBg"
+                        Classes="defaultButton outline outlineOver addRemoveBtn removeBtn noBg noHoverBg alterOnly"
                         Command="{Binding RemoveThisCriteriaItemCommand}">
                     <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </Button>
@@ -136,7 +137,7 @@
 
                 <Button x:Name="SpecialJoinTypeButton"
                         Grid.Column="2"
-                        Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg"
+                        Classes="defaultButton outline outlineOver addRemoveBtn noBg noHoverBg alterOnly"
                         IsVisible="{Binding !IsJoinPanelVisible}"
                         Command="{Binding SelectCustomNextJoinTypeCommand}">
                     <Image Source="{Binding ., Source={StaticResource Dots3x1Image}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />

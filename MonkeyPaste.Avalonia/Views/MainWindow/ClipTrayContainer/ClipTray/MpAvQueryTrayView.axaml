@@ -66,7 +66,7 @@
         <!--  BUSY OVERLAY  -->
 
         <Border x:Name="QueryTrayBusyOuterBorder"
-                IsVisible="False"
+                IsVisible="{Binding IsRequerying}"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Grid.Row="1">

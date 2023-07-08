@@ -666,7 +666,7 @@ namespace MonkeyPaste.Avalonia {
 
                     while (needs_to_show) {
                         // show execute params
-                        var exec_ntf_result = await MpNotificationBuilder.ShowNotificationAsync(
+                        var exec_ntf_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.ExecuteParametersRequest,
                             title: "Enter Values",
                             body: SelectedItem,
