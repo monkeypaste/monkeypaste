@@ -58,6 +58,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 var mivm = new MpMenuItemViewModel() {
+                    ParentObj = this,
                     IconSourceObj = IconSourceObj,
                     Header = SourceLabel,
                     Tooltip = MpAvDateTimeToStringConverter.Instance.Convert(SourcedDateTimeUtc, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null),

@@ -20,6 +20,7 @@
                     <DataTemplate x:Key="PlainTextMessageTemplate"
                                   x:DataType="local:MpIPlainTextViewModel">
                         <TextBlock MinHeight="15"
+                                   Foreground="{DynamicResource ThemeInteractiveColor}"
                                    TextWrapping="Wrap"
                                    Text="{Binding PlainText}" />
                     </DataTemplate>
@@ -52,9 +53,9 @@
                                     </Button>
                                 </StackPanel>
                                 <local:MpAvParameterCollectionView Grid.Row="1"
-                                                                      DataContext="{Binding PresetViewModel}"
-                                                                      HorizontalAlignment="Stretch"
-                                                                      VerticalAlignment="Stretch" />
+                                                                   DataContext="{Binding PresetViewModel}"
+                                                                   HorizontalAlignment="Stretch"
+                                                                   VerticalAlignment="Stretch" />
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -83,8 +84,8 @@
                                                VerticalAlignment="Center"
                                                Width="15"
                                                Height="15"
-                                               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}}" />
-                                        <TextBlock Foreground="Black"
+                                               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                                        <TextBlock Foreground="{DynamicResource ThemeInteractiveColor}"
                                                    Margin="5,0,0,0"
                                                    VerticalAlignment="Center"
                                                    HorizontalAlignment="Left"

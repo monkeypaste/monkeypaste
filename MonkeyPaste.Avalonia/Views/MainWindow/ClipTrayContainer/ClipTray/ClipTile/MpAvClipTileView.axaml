@@ -66,11 +66,18 @@
         </Style>
 
 
+        <!--  CORNER BUTTON SCROLLBAR MARGIN  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.noTitle.hasVertContentScroll local|MpAvClipTileCornerButtonsView">
+            <Setter Property="Margin"
+                    Value="0,0,30,0" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
+                          Classes.noTitle="{Binding !IsTitleVisible}"
+                          Classes.hasVertContentScroll="{Binding IsVerticalScrollbarVisibile}"
                           Classes.implicitHover="{Binding IsImplicitHover}"
                           Classes.TileHover="{Binding IsHovering}"
                           Classes.CanResize="{Binding CanResize}"
@@ -299,6 +306,7 @@
             <local:MpAvClipTileCornerButtonsView x:Name="CornerButtonOverlay"
                                                  Grid.Row="0"
                                                  Grid.RowSpan="3"
+                                                 Grid.Column="0"
                                                  IsVisible="{Binding IsCornerButtonsVisible}"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch" />
@@ -314,7 +322,15 @@
                                                    Background="{DynamicResource ClipTileTransactionPaneBackgroundBrush}"
                                                    IsVisible="{Binding IsTransactionPaneOpen}"
                                                    HorizontalAlignment="Stretch"
-                                                   VerticalAlignment="Stretch" />
+                                                   VerticalAlignment="Stretch">
+                <local:MpAvClipTileTransactionPaneView.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="IsTransactionPaneOpen" />
+                        <Binding Path="!IsVisible"
+                                 ElementName="PinPlaceholderOverlay" />
+                    </MultiBinding>
+                </local:MpAvClipTileTransactionPaneView.IsVisible>
+            </local:MpAvClipTileTransactionPaneView>
             <!--  TRANSACTION SPLITTER  -->
 
             <GridSplitter x:Name="TransactionContentSplitter"

@@ -146,7 +146,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 await Task.Delay(100);
                 if (sw.ElapsedMilliseconds >= timeOutMs) {
                     MpConsole.WriteLine($"GetVisualDescendantAsync from {visual.GetType()} to {typeof(T)} timeout {timeOutMs} reached.");
-                    return default;
+                    return null;
                 }
             }
             return result;
@@ -163,7 +163,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 await Task.Delay(100);
                 if (sw.ElapsedMilliseconds >= timeOutMs) {
                     MpConsole.WriteLine($"GetVisualAncestorAsync from {visual.GetType()} to {typeof(T)} timeout {timeOutMs} reached.");
-                    return default;
+                    return null;
                 }
             }
             return result;
@@ -173,19 +173,10 @@ namespace MonkeyPaste.Common.Avalonia {
                 return (T)visual;
             }
             var visualResult = (T)visual.GetVisualAncestors().FirstOrDefault(x => x is T);
-            //if (visualResult == null && visual is Control control && control.TemplatedParent is Control templatedParent) {
-            //    return templatedParent.GetVisualAncestor<T>(includeSelf);
-            //}
             return visualResult;
         }
         public static IEnumerable<T> GetVisualAncestors<T>(this Visual visual, bool includeSelf = true) where T : Visual {
-            IEnumerable<T> visualResult;
-            visualResult = visual.GetVisualAncestors().Where(x => x is T).Cast<T>();
-
-            //if ((visualResult == null || visualResult.Count() == 0) && 
-            //    visual is Control control && control.TemplatedParent is Control templatedParent) {
-            //    return templatedParent.GetVisualAncestors<T>(includeSelf);
-            //}
+            IEnumerable<T> visualResult = visual.GetVisualAncestors().Where(x => x is T).Cast<T>();
             if (includeSelf && visual is T ct) {
                 visualResult.Append(ct);
             }
@@ -199,8 +190,7 @@ namespace MonkeyPaste.Common.Avalonia {
             return (T)control.GetVisualDescendants().FirstOrDefault(x => x is T);
         }
         public static IEnumerable<T> GetVisualDescendants<T>(this Visual control, bool includeSelf = true) where T : Visual {
-            IEnumerable<T> result;
-            result = control.GetVisualDescendants().OfType<T>();
+            IEnumerable<T> result = control.GetVisualDescendants().OfType<T>();
             if (includeSelf && control is T ct) {
                 result.Append(ct);
             }

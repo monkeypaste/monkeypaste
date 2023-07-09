@@ -31,41 +31,68 @@ namespace MonkeyPaste.Avalonia {
 
         public MpMenuItemViewModel ContextMenuViewModel {
             get {
-                var source_mil = SortedTransactions
+                // NOTE this tries to show menu of all unique souces
+                // ordered by their most recent trans
+                // with sub-items of pertinent msgs ordered by trans dt
+                // then (after seperator) the source menu items (they're all the same so just any of them)
+                // if no msgs then no seperator and just the source menu items
+
+                // get distinct sources that are not this app as an app source
+                var distinct_sources = SortedTransactions
                         .SelectMany(x => x.Sources)
                         .Where(x => x.SourceRef != null)
                         .DistinctBy(x => new { x.SourceType, x.SourceObjId })
-                        .Where(x => !(x.SourceType == MpTransactionSourceType.App && x.SourceObjId == MpDefaultDataModelTools.ThisAppId))
-                        .Select(x => x.ContextMenuItemViewModel)
+                        .Where(x => !(x.SourceType == MpTransactionSourceType.App && x.SourceObjId == MpDefaultDataModelTools.ThisAppId) && x.ContextMenuItemViewModel != null)
+                        .Select(x => x.SourceRef)
+                        .OrderBy(x => SortedTransactions.IndexOf(SortedTransactions.FirstOrDefault(y => y.HasSource(x))))
                         .ToList();
+
                 List<MpMenuItemViewModel> cmil = new List<MpMenuItemViewModel>();
-                if (source_mil.Any()) {
-                    //source_mil.Insert(0,
-                    //    new MpMenuItemViewModel() {
-                    //        IsSeparator = true,
-                    //        Header = "Annotations"
-                    //    });
-                    cmil.AddRange(source_mil);
-                }
-                var analysis_mil = Transactions
+                foreach (var source_ref in distinct_sources) {
+                    // find all pertinent msgs for this source ordered by trans dt
+
+                    var analysis_mil =
+                        Transactions
+                            .OrderByDescending(x => x.TransactionDateTime)
+                            .Where(x => x.HasSource(source_ref))
                             .SelectMany(x => x.Messages)
                             .OfType<MpAvParameterRequestMessageViewModel>()
+                            .Where(x => x.ContextMenuItemViewModel != null)
                             .Select(x => x.ContextMenuItemViewModel)
                             .ToList();
 
-                if (analysis_mil.Any()) {
-                    analysis_mil.Insert(0,
-                        new MpMenuItemViewModel() {
-                            IsSeparator = true,
-                            //Header = "Annotations"
-                        });
-                    cmil.AddRange(analysis_mil);
+                    // get any source vm menu item
+                    var source_mi =
+                        Transactions
+                        .FirstOrDefault(x => x.HasSource(source_ref))
+                        .Sources
+                        .FirstOrDefault(x => x.SourceRef.IsSourceEqual(source_ref))
+                        .ContextMenuItemViewModel;
+
+                    if (analysis_mil.Any()) {
+                        // insert seperator between source and messages
+                        source_mi.SubItems.Insert(0, new MpMenuItemViewModel() { IsSeparator = true });
+                    }
+
+                    // insert msgs (header is trans dt)
+                    analysis_mil.ForEach((x, idx) => source_mi.SubItems.Insert(idx, x));
+
+                    // add source to output list
+                    cmil.Add(source_mi);
                 }
 
+                if (!cmil.Any()) {
+                    // no transactions to show, something must be wrong
+                    // to avoid weird menu layout show stub item
+                    cmil.Add(
+                        new MpMenuItemViewModel() {
+                            IconResourceKey = "QuestionMarkImage",
+                            Header = "Odd, nothing available. Something must be wrong 😕"
+                        });
+                }
                 return new MpMenuItemViewModel() {
                     Header = "Sources",
                     IconResourceKey = "EggImage",
-                    IsVisible = cmil.Any(),
                     SubItems = cmil
 
                 };
@@ -269,6 +296,11 @@ namespace MonkeyPaste.Avalonia {
                     if (Parent == null) {
                         break;
                     }
+                    if (IsTransactionPaneOpen) {
+                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsTransactionPaneOpenTile_ById(Parent.CopyItemId, Parent.QueryOffsetIdx);
+                    } else {
+                        MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsTransactionPaneOpenTile_ById(Parent.CopyItemId, Parent.QueryOffsetIdx);
+                    }
                     Parent.OnPropertyChanged(nameof(Parent.IsTitleVisible));
                     break;
                 case nameof(IsTransactionPaneAnimating):
@@ -404,6 +436,11 @@ namespace MonkeyPaste.Avalonia {
 
                 IsTransactionPaneOpen = true;
 
+                if (!Parent.IsResizerEnabled) {
+                    // grid mode query item, needs pop out
+                    Parent.PinToPopoutWindowCommand.Execute(null);
+                    return;
+                }
                 OnPropertyChanged(nameof(MaxWidth));
                 //BoundWidth = DefaultTransactionPanelLength;
                 //BoundHeight = Parent.BoundHeight;

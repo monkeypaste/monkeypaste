@@ -9,7 +9,8 @@ namespace MonkeyPaste.Avalonia {
             this MpIBoundSizeViewModel bsvm,
             MpSize new_size,
             Func<bool> onComplete = null,
-            Func<MpSizeChangeEventArgs, bool> onTick = null) {
+            Func<MpSizeChangeEventArgs, bool> onTick = null,
+            double ntfAnimThresholdDelta = 10.0d) {
             double zeta, omega, fps;
 
             double cw = bsvm.ContainerBoundWidth;
@@ -47,6 +48,13 @@ namespace MonkeyPaste.Avalonia {
             double vx = 0;
             double vy = 0;
             Dispatcher.UIThread.Post(async () => {
+                if (bsvm is MpIAnimatedSizeViewModel asvm_begin &&
+                    Math.Abs(new MpPoint(nw, nh).Length - new MpPoint(cw, ch).Length) >= ntfAnimThresholdDelta) {
+                    // change is sig enough to ntf 
+                    // (currently used for scroll anchoring when sidebar opens/closes)
+                    asvm_begin.IsAnimating = true;
+                }
+
                 double lw, lh;
                 while (true) {
                     lw = bsvm.ContainerBoundWidth;
@@ -71,6 +79,10 @@ namespace MonkeyPaste.Avalonia {
 
                 onTick?.Invoke(new MpSizeChangeEventArgs(new MpSize(lw, lh), new MpSize(cw, ch)));
                 onComplete?.Invoke();
+
+                if (bsvm is MpIAnimatedSizeViewModel asvm_end) {
+                    asvm_end.IsAnimating = false;
+                }
             });
         }
     }

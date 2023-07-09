@@ -14,6 +14,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsTitleReadOnly { get; set; } = true;
         public bool IsContentReadOnly { get; set; } = true;
+        public bool IsTransactionPaneOpen { get; set; }
+        public string SelectedTransNodeGuid { get; set; }
 
         public double? UniqueWidth { get; set; }
         public double? UniqueHeight { get; set; }
@@ -24,6 +26,8 @@ namespace MonkeyPaste.Avalonia {
             //CopyItemId <= 0 ?
             //false :
             //QueryOffsetIdx < 0 ||
+            IsTransactionPaneOpen ||
+            !string.IsNullOrEmpty(SelectedTransNodeGuid) ||
             SubSelectionState != null ||
             IsTileDragging ||
             IsPinPlaceholder ||
@@ -311,14 +315,45 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region IsPinPlaceholder
-        public static void AddOrReplaceIsPinPlaceholder(int ciid, bool isPinPlaceholder, int idx) {
-            if (GetProps(ciid, false, idx) == null && !isPinPlaceholder) {
-                // no need to update
-                return;
+        #region IsTransactionPaneOpen
+
+        public static void AddPersistentIsTransactionPaneOpenTile_ById(int ciid, int idx) {
+            if (GetProps(ciid, true, idx) is MpAvPersistentClipTileProperties pp) {
+                pp.IsTransactionPaneOpen = false;
             }
-            GetProps(ciid, true, idx).IsPinPlaceholder = isPinPlaceholder;
-            GetProps(ciid, true, idx).QueryOffsetIdx = idx;
+        }
+        public static void RemovePersistentIsTransactionPaneOpenTile_ById(int ciid, int idx) {
+            if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
+                pp.IsTransactionPaneOpen = true;
+                CleanupProps();
+            }
+        }
+
+        public static bool IsPersistentTileTransactionPaneOpen_ById(int ciid, int idx) {
+            return GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp && !pp.IsTransactionPaneOpen;
+        }
+
+        #endregion
+
+        #region SelectedTransNodeGuid
+
+        public static void AddPersistentSelectedTransNodeGuidTile_ById(int ciid, int idx, string node_guid) {
+            if (GetProps(ciid, true, idx) is MpAvPersistentClipTileProperties pp) {
+                pp.SelectedTransNodeGuid = node_guid;
+            }
+        }
+        public static void RemovePersistentSelectedTransNodeGuidTile_ById(int ciid, int idx) {
+            if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
+                pp.SelectedTransNodeGuid = null;
+                CleanupProps();
+            }
+        }
+
+        public static string GetPersistentSelectedTransNodeGuid_ById(int ciid, int idx) {
+            if (GetProps(ciid, false, idx) is not MpAvPersistentClipTileProperties pp) {
+                return null;
+            }
+            return pp.SelectedTransNodeGuid;
         }
 
         #endregion

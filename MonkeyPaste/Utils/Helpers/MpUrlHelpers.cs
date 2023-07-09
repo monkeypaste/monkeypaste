@@ -6,8 +6,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using System.Xml.Linq;
 
 namespace MonkeyPaste {
 
@@ -66,7 +68,7 @@ namespace MonkeyPaste {
 
             return url_props;
         }
-        public static string GetFullyFormattedUrl(string str) {
+        private static string GetFullyFormattedUrl(string str) {
             // reading linux moz url source pads every character of url w/ empty character
             // but trying to trim it doesn't work this manually parses string for actual characters
             // because Uri throws error on create
@@ -91,11 +93,45 @@ namespace MonkeyPaste {
             return @"http://" + str;
         }
 
-        public static string ParseHtmlTitle(string html) {
+        private static string ParseHtmlTitle(string html) {
+            // from https://stackoverflow.com/a/329324/105028
+            string title =
+                Regex.Match(
+                    html,
+                    @"\<title\b[^>]*\>\s*(?<Title>[\s\S]*?)\</title\>",
+                    RegexOptions.IgnoreCase)
+                .Groups["Title"]
+                .Value;
+            return title;
+        }
+
+        private static string ParseHtmlTitle2(string html) {
+            string GetXmlElementContent(string xml, string element) {
+                if (string.IsNullOrEmpty(xml) || string.IsNullOrEmpty(element)) {
+                    return string.Empty;
+                }
+                element = element.Replace(@"<", string.Empty).Replace(@"/>", string.Empty);
+                element = @"<" + element + @">";
+                var strl = xml.Split(new string[] { element }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                if (strl.Count > 1) {
+                    element = element.Replace(@"<", @"</");
+                    return strl[1].Substring(0, strl[1].IndexOf(element));
+                }
+                return string.Empty;
+            }
+
             return GetXmlElementContent(html, @"title");
         }
 
-        public static async Task<string> ReadUrlAsString(string url) {
+        private static string ParseHtmlTitle3(HtmlDocument doc) {
+            // from https://stackoverflow.com/a/49487198/105028
+            if (doc.DocumentNode.SelectSingleNode("html/head/title") is not HtmlNode titleNode) {
+                return string.Empty;
+            }
+            return titleNode.InnerText;
+        }
+
+        private static async Task<string> ReadUrlAsString(string url) {
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute)) {//if (!IsValidUrl(url)) {
                 return string.Empty;
             }
@@ -123,7 +159,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static bool IsValidUrl(string str) {
+        private static bool IsValidUrl(string str) {
             bool hasValidExtension = false;
             string lstr = str.ToLower();
             foreach (var ext in _domainExtensions) {
@@ -138,21 +174,7 @@ namespace MonkeyPaste {
             return MpRegEx.RegExLookup[MpRegExType.Uri].IsMatch(lstr);
         }
 
-        public static string GetXmlElementContent(string xml, string element) {
-            if (string.IsNullOrEmpty(xml) || string.IsNullOrEmpty(element)) {
-                return string.Empty;
-            }
-            element = element.Replace(@"<", string.Empty).Replace(@"/>", string.Empty);
-            element = @"<" + element + @">";
-            var strl = xml.Split(new string[] { element }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            if (strl.Count > 1) {
-                element = element.Replace(@"<", @"</");
-                return strl[1].Substring(0, strl[1].IndexOf(element));
-            }
-            return string.Empty;
-        }
-
-        public static string GetUrlDomain(string url) {
+        private static string GetUrlDomain(string url) {
             //returns protocol prefixed domain url text
             try {
                 url = GetFullyFormattedUrl(url);
@@ -189,7 +211,7 @@ namespace MonkeyPaste {
             return null;
         }
 
-        public static async Task<string> GetUrlFavIconAsync(string url) {
+        private static async Task<string> GetUrlFavIconAsync(string url) {
             try {
                 string base64FavIcon = string.Empty;
                 if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
@@ -274,11 +296,7 @@ namespace MonkeyPaste {
                 return null;
             }
 
-            string title = null;
-            if (headNode.ChildNodes.FirstOrDefault(x => x.Name.ToLower() == "title") is HtmlNode titleNode) {
-                // NOTE this is an edge case here, likely not to occur, title parsed from source string
-                title = HttpUtility.HtmlDecode(titleNode.InnerText);
-            }
+            string title = ParseHtmlTitle3(url_doc);
 
             string icon_base64 = null;
             // icon based on https://www.how7o.com/t/how-to-get-a-websites-favicon-url-with-javascript/57/2

@@ -54,6 +54,11 @@ namespace MonkeyPaste.Avalonia {
         /// 
         protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
             if (browser.Host.Client.GetWebView() is MpAvIDragSource ds) {
+                if (ds is MpIContentView cv && !cv.IsContentLoaded) {
+                    // not a real drag, not sure why this happens (occured attempting resize) 
+                    // maybe coming from transparent placeholder?
+                    return false;
+                }
                 Dispatcher.UIThread.Post(async () => {
 
                     //var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;

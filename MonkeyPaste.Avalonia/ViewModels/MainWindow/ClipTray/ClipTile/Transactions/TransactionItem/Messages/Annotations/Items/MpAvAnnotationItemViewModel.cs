@@ -7,9 +7,13 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+    public interface MpIHaveGuid {
+        string Guid { get; }
+    }
     public class MpAvAnnotationItemViewModel :
         MpViewModelBase<MpAvAnnotationMessageViewModel>,
         MpAvITransactionNodeViewModel,
+        MpIHaveGuid,
         MpIClampedValue {
 
         #region Private Variable
@@ -23,6 +27,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIHaveGuid Implementation
+
+        string MpIHaveGuid.Guid =>
+            AnnotationGuid;
+
+        #endregion
 
         #region MpIClampedValue Implementation
 

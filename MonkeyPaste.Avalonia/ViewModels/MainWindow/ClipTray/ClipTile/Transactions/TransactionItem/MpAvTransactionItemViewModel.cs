@@ -354,6 +354,10 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
+        public bool HasSource(MpISourceRef sr) {
+            return Sources.Any(x => x.SourceRef.IsSourceEqual(sr));
+        }
+
         public MpQuillDelta GetTransactionDelta() {
             if (Response == null) {
                 return null;
@@ -394,7 +398,18 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(FocusNode):
+                    if (FocusNode != null &&
+                        IsSelected &&
+                        HostClipTileViewModel != null) {
+                        // TODO this be inconsisten since only annotation nodes have guids atm 
+                        // but nothing else is enabled for trans so should be ok
+                        if (FocusNode is MpIHaveGuid gfn) {
+                            MpAvPersistentClipTilePropertiesHelper.AddPersistentSelectedTransNodeGuidTile_ById(HostCopyItemId, HostClipTileViewModel.QueryOffsetIdx, gfn.Guid);
+                        } else {
+                            MpAvPersistentClipTilePropertiesHelper.RemovePersistentSelectedTransNodeGuidTile_ById(HostCopyItemId, HostClipTileViewModel.QueryOffsetIdx);
+                        }
 
+                    }
                     BringNodeIntoViewAsync(FocusNode).FireAndForgetSafeAsync(this);
 
                     break;

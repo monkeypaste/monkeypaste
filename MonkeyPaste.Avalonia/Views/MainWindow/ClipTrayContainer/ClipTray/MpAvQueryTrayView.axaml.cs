@@ -37,6 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
             this.AttachedToVisualTree += MpAvQueryTrayView_AttachedToVisualTree;
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
+
         }
 
 

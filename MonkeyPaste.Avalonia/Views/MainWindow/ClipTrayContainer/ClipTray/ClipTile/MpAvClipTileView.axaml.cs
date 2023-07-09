@@ -31,7 +31,8 @@ namespace MonkeyPaste.Avalonia {
                 .Subscribe(value => OnPinPlaceholderOverlayIsVisibleChanged(value));
         }
         private void OnPinPlaceholderOverlayIsVisibleChanged(bool isVisible) {
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening) {
+            if (MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening ||
+                !isVisible) {
                 return;
             }
 

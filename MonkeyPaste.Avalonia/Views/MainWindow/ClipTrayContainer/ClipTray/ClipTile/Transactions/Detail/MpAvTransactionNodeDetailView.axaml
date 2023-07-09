@@ -20,8 +20,10 @@
                     <!--  SCORE LABEL  -->
                     <DataTemplate x:Key="AnnotationItemDetailTemplate"
                                   x:DataType="local:MpAvAnnotationItemViewModel">
-                        <Grid RowDefinitions="Auto,Auto,Auto">
+                        <StackPanel Orientation="Vertical"
+                                    Spacing="10">
                             <TextBlock Grid.Row="0"
+                                       Foreground="{DynamicResource ThemeInteractiveColor}"
                                        Text="{Binding AnnotationType, StringFormat='Type: {0}'}" />
                             <local:MpAvProgressSpinner Grid.Row="1"
                                                        Width="30"
@@ -30,6 +32,7 @@
                                                        PercentBrush="Lime"
                                                        IsVisible="{Binding AnnotationScore, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                                        RingBrush="Red"
+                                                       LabelBrush="{DynamicResource ThemeInteractiveColor}"
                                                        HorizontalAlignment="Left"
                                                        VerticalAlignment="Center"
                                                        Percent="{Binding CurScorePercent}" />
@@ -37,8 +40,9 @@
                             <!--<TextBlock Grid.Row="1"
                                                Text="{Binding AnnotationScore, StringFormat='Score: {0}'}" />-->
                             <TextBlock Grid.Row="2"
+                                       Foreground="{DynamicResource ThemeInteractiveColor}"
                                        Text="{Binding Body}" />
-                        </Grid>
+                        </StackPanel>
                     </DataTemplate>
 
                     <!--  NAVIGATE TO SOURCE LINK  -->
@@ -51,10 +55,10 @@
                                    Height="10"
                                    VerticalAlignment="Center"
                                    Margin="5,0,0,0"
-                                   Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                   Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
                             <local:MpAvMarqueeTextBox IsReadOnly="True"
                                                       DropShadowBrush="Transparent"
-                                                      ReadOnlyForeground="Black"
+                                                      ReadOnlyForeground="{DynamicResource ThemeInteractiveColor}"
                                                       VerticalAlignment="Center"
                                                       Margin="5,0"
                                                       EditOnFocus="False"

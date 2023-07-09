@@ -1161,6 +1161,23 @@ namespace MonkeyPaste.Avalonia {
                 IsTitleReadOnly = false;
             }
 
+            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTransactionPaneOpen_ById(CopyItemId, queryOffset)) {
+                Dispatcher.UIThread.Post(async () => {
+                    // wait for everything to load since trans pane is size related (wait may not be needed)
+                    int ciid = CopyItemId;
+                    while (!IsEditorLoaded) {
+                        await Task.Delay(100);
+                        if (CopyItemId != ciid) {
+                            // model changed, cancel
+                            return;
+                        }
+                    }
+
+                    string selected_guid = MpAvPersistentClipTilePropertiesHelper.GetPersistentSelectedTransNodeGuid_ById(CopyItemId, queryOffset);
+                    TransactionCollectionViewModel.SelectChildCommand.Execute(selected_guid);
+                });
+            }
+
             OnPropertyChanged(nameof(IconResourceObj));
             OnPropertyChanged(nameof(IsPlaceholder));
             OnPropertyChanged(nameof(IsTextItem));

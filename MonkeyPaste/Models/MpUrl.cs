@@ -78,7 +78,10 @@ namespace MonkeyPaste {
         #endregion
 
         #region MpILabelText Implementation
-        string MpILabelText.LabelText => UrlTitle;
+        string MpILabelText.LabelText =>
+            string.IsNullOrWhiteSpace(UrlTitle) ?
+                UrlDomainPath :
+                UrlTitle;
 
         #endregion
 
@@ -121,17 +124,6 @@ namespace MonkeyPaste {
                 UrlTitle = title,
                 UrlDomainPath = domain
             };
-
-            // NOTE omitting icon fetch since this create only called from builder and it should already exist
-            // or there's an error and this will just make it happen again
-            //if (iconId == 0) {
-            //    string favIconImg64 = await MpUrlHelpers.GetUrlFavIconAsync(urlPath);
-            //    MpIcon icon = await Mp.Services.IconBuilder.CreateAsync(
-            //            iconBase64: favIconImg64,
-            //            suppressWrite: suppressWrite);
-            //    iconId = icon.Id;
-            //}
-
 
             newUrl.IconId = iconId;
             if (newUrl.IconId == 0) {

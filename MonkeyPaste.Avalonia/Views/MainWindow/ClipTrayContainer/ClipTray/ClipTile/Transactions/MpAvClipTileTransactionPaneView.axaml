@@ -15,6 +15,13 @@
     <local:MpAvUserControl.Resources>
         <sys:Double x:Key="TabItemMinHeight">20</sys:Double>
         <sys:Double x:Key="TabItemHeaderFontSize">16</sys:Double>
+
+      <!-- TREE VIEW (FLIPPED FROM THEME) -->
+      
+      <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+     
+      <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+      
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  TREES  -->
@@ -31,7 +38,7 @@
             <Setter Property="BorderThickness"
                     Value="0" />
             <Setter Property="BorderBrush"
-                    Value="Black" />
+                    Value="{DynamicResource ThemeInteractiveColor}" />
             <Setter Property="CornerRadius"
                     Value="3" />
             <Setter Property="Padding"
@@ -45,24 +52,24 @@
         <!--  LISTBOXES  -->
 
         <Style Selector="ListBox#TransactionListBox > ListBoxItem">
-            <Setter Property="BorderBrush"
-                    Value="Black" />
+            <!--<Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeInteractiveColor}" />-->
             <Setter Property="BorderThickness"
                     Value="1,0.5,1,0.5" />
         </Style>
 
-        <Style Selector="ListBox#TransactionListBox > ListBoxItem:nth-child(odd)">
+        <!--<Style Selector="ListBox#TransactionListBox > ListBoxItem:nth-child(odd)">
             <Setter Property="Background"
-                    Value="Silver" />
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
         </Style>
         <Style Selector="ListBox#TransactionListBox > ListBoxItem:nth-child(even)">
             <Setter Property="Background"
-                    Value="Gainsboro" />
+                    Value="{DynamicResource ThemeGrayAccent3}" />
         </Style>
 
         <Style Selector="ListBoxItem /template/ ContentPresenter, TreeViewItem /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="Transparent" />
+                    Value="{DynamicResource ThemeGrayAccent3}" />
         </Style>
 
         <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter, TreeViewItem:pointerover /template/ ContentPresenter, TreeViewItem:expanded:not(:selected) /template/ ContentPresenter">
@@ -72,24 +79,18 @@
         <Style Selector="ListBoxItem:selected /template/ ContentPresenter, TreeViewItem:selected /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="{DynamicResource SelectableItemSelectedBgBrush}" />
-        </Style>
+        </Style>-->
 
         <!--  CLOSE PANEL BUTTON  -->
 
         <Style Selector="Button#CloseTransactionsButton Image">
             <Setter Property="Source"
-                    Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
         </Style>
 
         <Style Selector="Button#CloseTransactionsButton:pointerover Image">
-            <Setter Property="Source">
-                <Setter.Value>
-                    <MultiBinding Converter="{x:Static local:MpAvMultiObjToTintedBitmapConverter.Instance}">
-                        <Binding Source="pink" />
-                        <Binding Source="{StaticResource DescendingImage}" />
-                    </MultiBinding>
-                </Setter.Value>
-            </Setter>
+          <Setter Property="Source"
+                  Value="{Binding ., Source={StaticResource DescendingImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themeaccent1fg}" />
         </Style>
 
         <!--  PLAIN TEXT TOGGLE  -->
@@ -151,7 +152,8 @@
                 <Image Width="20"
                        Height="20" />
             </ToggleButton>
-            <TextBlock Text="Transactions"
+            <TextBlock Text="Annotations"
+                       Foreground="{DynamicResource ThemeInteractiveColor}"
                        FontSize="20"
                        FontWeight="Medium"
                        VerticalAlignment="Center" />
@@ -161,7 +163,7 @@
 
         <ListBox x:Name="TransactionListBox"
                  Grid.Row="1"
-                 BorderBrush="Black"
+                 BorderBrush="{DynamicResource ThemeInteractiveColor}"
                  BorderThickness="1"
                  ItemsSource="{Binding VisibleTransactions}"
                  SelectionMode="Single,AlwaysSelected"
@@ -186,13 +188,13 @@
                             <StackPanel Grid.Column="1"
                                         Orientation="Vertical"
                                         Margin="12,0,5,0">
-                                <TextBlock Foreground="Black"
+                                <TextBlock Foreground="{DynamicResource ThemeInteractiveBgColor}"
                                            FontSize="14"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Left"
                                            TextAlignment="Left"
                                            Text="{Binding LabelText}" />
-                                <TextBlock Foreground="DimGray"
+                                <TextBlock Foreground="{DynamicResource ThemeGrayAccent1}"
                                            FontSize="12"
                                            VerticalAlignment="Top"
                                            HorizontalAlignment="Left"
@@ -216,7 +218,7 @@
                       VerticalAlignment="Bottom"
                       ResizeDirection="Rows"
                       Margin="0,0,0,0"
-                      Background="Black"
+                      Background="{DynamicResource ThemeInteractiveColor}"
                       Height="1"
                       Classes="horizontal" />
 
@@ -243,7 +245,7 @@
                 <!--  SELECTED TRANSACTION TABS  -->
                 <TabControl Grid.Row="0"
                             BorderThickness="1"
-                            BorderBrush="Black"
+                            BorderBrush="{DynamicResource ThemeInteractiveColor}"
                             IsVisible="{Binding !IsPlainTextView}"
                             SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
                             HorizontalAlignment="Stretch"
@@ -291,7 +293,6 @@
                 <GridSplitter x:Name="TransactionDetailSplitter"
                               Grid.Row="1"
                               Height="1"
-                              Background="Black"
                               Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Top"

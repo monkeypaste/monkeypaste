@@ -234,6 +234,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentView
 
+        bool MpIContentView.IsContentLoaded =>
+            IsEditorLoaded;
         void MpIHasDevTools.ShowDevTools() =>
             ShowDevTools();
 

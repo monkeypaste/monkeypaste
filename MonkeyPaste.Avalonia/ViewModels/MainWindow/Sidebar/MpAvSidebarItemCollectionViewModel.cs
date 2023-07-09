@@ -1,14 +1,17 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSidebarItemCollectionViewModel :
         MpViewModelBase,
-        MpIBoundSizeViewModel {
+        MpIAnimatedSizeViewModel {
         #region Private Variable
         #endregion
 
@@ -27,6 +30,7 @@ namespace MonkeyPaste.Avalonia {
         public double ContainerBoundWidth { get; set; }
         public double ContainerBoundHeight { get; set; }
 
+        public bool IsAnimating { get; set; }
         #endregion
 
         #region Properties
@@ -105,6 +109,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region State
+
+        #endregion
+
         #endregion
 
         #region Constructors
@@ -140,7 +148,26 @@ namespace MonkeyPaste.Avalonia {
             Items.Add(sbivm);
             sbivm.PropertyChanged += Sbivm_PropertyChanged;
         }
+        private void NotifySidebarSelectionChanging() {
+            Dispatcher.UIThread.Post(async () => {
+                var sw = Stopwatch.StartNew();
+                while (!IsAnimating) {
+                    // wait for anim to start
+                    if (sw.ElapsedMilliseconds > 3_000) {
+                        // time out, anim not significant size
+                        return;
+                    }
+                    await Task.Delay(100);
+                }
 
+                MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeBegin);
+                while (!IsAnimating) {
+                    // wait for anim to finish
+                    await Task.Delay(100);
+                }
+                MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChangeEnd);
+            });
+        }
 
         private void MpAvSidebarItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -152,12 +179,15 @@ namespace MonkeyPaste.Avalonia {
                     if (SelectedItem != null) {
                         LastSelectedItem = SelectedItem;
                     }
+                    NotifySidebarSelectionChanging();
+
                     MpAvMainView.Instance.UpdateContentLayout();
                     OnPropertyChanged(nameof(SelectedItemIdx));
 
                     if (SelectedItem is MpICloseWindowViewModel cwvm &&
                         cwvm.IsWindowOpen &&
                         MpAvWindowManager.LocateWindow(SelectedItem) is MpAvWindow w) {
+                        // trigger sidebar pop out
                         w.WindowState = WindowState.Normal;
                         w.Activate();
                         w.Topmost = true;
@@ -178,7 +208,7 @@ namespace MonkeyPaste.Avalonia {
                     MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChanged);
                     break;
                 case nameof(SelectedItemIdx):
-                    MpMessenger.SendGlobal(MpMessageType.SelectedSidebarItemChanged);
+
                     break;
             }
         }

@@ -27,14 +27,16 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 return new MpMenuItemViewModel() {
-                    Header = PresetViewModel.Label,
+                    ParentObj = this,
+                    Header =
+                        MpAvDateTimeToStringConverter.Instance.Convert(Parent.TransactionDateTime, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null) as string,
                     IconSourceObj = PresetViewModel.IconId,
                     SubItems = new List<MpMenuItemViewModel>() {
                         new MpMenuItemViewModel() {
                             Header = "Select",
                             IconSourceObj = "SlidersImage",
                             Command = PresetViewModel.Parent.SelectPresetCommand,
-                            CommandParameter = new object[] { PresetViewModel, HostClipTileViewModel.CopyItem }
+                            CommandParameter = new object[] { PresetViewModel, ParameterReqFormat }
                         },
                         new MpMenuItemViewModel() {
                             Header = "View",

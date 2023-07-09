@@ -34,6 +34,7 @@ namespace MonkeyPaste {
 
     public interface MpIContentView :
         MpIHasDataContext, MpIHasDevTools, MpIJsonMessenger {
+        bool IsContentLoaded { get; }
         bool IsSubSelectable { get; }
         Task LoadContentAsync();
         Task ReloadAsync();

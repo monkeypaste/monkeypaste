@@ -153,26 +153,17 @@ namespace MonkeyPaste.Avalonia {
 
                 return new MpMenuItemViewModel() {
                     SubItems = new List<MpMenuItemViewModel>() {
+#if DEBUG
                         new MpMenuItemViewModel() {
                             Header = @"Show Dev Tools",
-                            Command = ShowDevToolsCommand,
-                            IsVisible =
-#if DEBUG
-                            true,
-#else
-                            false,
-#endif
+                            Command = ShowDevToolsCommand
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Reload",
-                            Command = ReloadSelectedItemCommand,
-                            IsVisible =
-#if DEBUG
-                            true,
-#else
-                            false,
-#endif
+                            Command = ReloadSelectedItemCommand
                         },
+                        new MpMenuItemViewModel() { IsSeparator = true },
+#endif
                         new MpMenuItemViewModel() {
                             Header = @"Cut",
                             IconResourceKey = "ScissorsImage",
@@ -676,18 +667,22 @@ namespace MonkeyPaste.Avalonia {
             _defaultQueryItemHeight;
 
         private void UpdateDefaultItemSize() {
-            //double query_square_length = Math.Max(0, (QueryTrayFixedDimensionLength * ZoomFactor) - ScrollBarFixedAxisSize);
-            //double pin_square_length = Math.Max(0, (PinTrayFixedDimensionLength * ZoomFactor) - ScrollBarFixedAxisSize);
-
-            double qw = DEFAULT_ITEM_SIZE - QueryTrayVerticalScrollBarWidth;
-            double qh = DEFAULT_ITEM_SIZE - QueryTrayHorizontalScrollBarHeight;
-            double pw = DEFAULT_ITEM_SIZE;
-            double ph = DEFAULT_ITEM_SIZE;
+            // NOTE safe_pad keeps content slightly smaller than container
+            // where padding/margin may lead to false scrollbar visibility
+            // (like 1 horiz layout pin item shows vert scrollbar)
+            double safe_pad = 2.0d;
+            double qw = DEFAULT_ITEM_SIZE - QueryTrayVerticalScrollBarWidth - safe_pad;
+            double qh = DEFAULT_ITEM_SIZE - QueryTrayHorizontalScrollBarHeight - safe_pad;
+            double pw = DEFAULT_ITEM_SIZE - safe_pad;
+            double ph = DEFAULT_ITEM_SIZE - safe_pad;
 
             if (ListOrientation == Orientation.Vertical) {
                 qh = DEFAULT_UNEXPANDED_HEIGHT;
                 ph = DEFAULT_UNEXPANDED_HEIGHT;
-            } else if (LayoutType == MpClipTrayLayoutType.Grid) {
+            } else if (LayoutType == MpClipTrayLayoutType.Grid &&
+                        Mp.Services.Query.TotalAvailableItemsInQuery > CurGridFixedCount) {
+                // when there's multiple query rows shorten height a bit to 
+                // hint theres more there (if not multiple rows, don't shorten looks funny
                 qh *= 0.7;
             }
 
@@ -905,6 +900,11 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvClipTileViewModel> VisibleQueryItems =>
             Items.Where(x => x.IsAnyQueryCornerVisible && !x.IsPlaceholder);
+
+        public IEnumerable<MpAvClipTileViewModel> VisibleFromTopLeftQueryItems =>
+            VisibleQueryItems
+            .Where(x => x.ScreenRect.X >= 0 && x.ScreenRect.Y >= 0)
+            .OrderBy(x => x.QueryOffsetIdx);
 
         //Items
         //.Where(x => x.IsAnyQueryCornerVisible && !x.IsPlaceholder)
@@ -1436,64 +1436,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(MaxContainerScreenWidth));
             OnPropertyChanged(nameof(MaxContainerScreenHeight));
         }
-        public void ForceScrollOffsetX(double newOffsetX) {
-            LastScrollOffsetX = newOffsetX;
-            _scrollOffsetX = newOffsetX;
-            OnPropertyChanged(nameof(ScrollOffsetX));
-        }
 
-        public void ForceScrollOffsetY(double newOffsetY) {
-            LastScrollOffsetY = newOffsetY;
-            _scrollOffsetY = newOffsetY;
-            OnPropertyChanged(nameof(ScrollOffsetY));
-        }
-        public void ForceScrollOffset(MpPoint newOffset) {
-            if ((newOffset - ScrollOffset).Length < 1) {
-                // avoid double query
-                MpConsole.WriteLine($"Force ScrollOffset reject length: {(newOffset - ScrollOffset).Length}");
-                return;
-            }
-            var old_offset = ScrollOffset;
-            IsForcingScroll = true;
-            ForceScrollOffsetX(newOffset.X);
-            ForceScrollOffsetY(newOffset.Y);
-            IsForcingScroll = false;
-            MpAvPagingListBoxExtension.ForceScrollOffset(newOffset);
-            MpConsole.WriteLine($"ScrollOffset forced from '{old_offset}' to '{newOffset}'");
-        }
-
-        public void SetScrollAnchor() {
-            if (_query_anchor_idx.HasValue) {
-                MpConsole.WriteLine($"SetScrollAnchor ignored, anchor already set.");
-            }
-            if (VisibleQueryItems.Where(x => x.ScreenRect.X >= 0 && x.ScreenRect.Y >= 0).OrderBy(x => x.QueryOffsetIdx).FirstOrDefault() is MpAvClipTileViewModel anchor_ctvm) {
-                _query_anchor_idx = anchor_ctvm.QueryOffsetIdx;
-            } else {
-                _query_anchor_idx = 0;
-            }
-            MpConsole.WriteLine($"[SET] Anchor idx: {_query_anchor_idx.Value}");
-        }
-
-        public void ScrollToAnchor() {
-            if (!_query_anchor_idx.HasValue) {
-                return;
-            }
-            Dispatcher.UIThread.Post(async () => {
-                while (true) {
-                    if (!_query_anchor_idx.HasValue) {
-                        return;
-                    }
-                    if (QueryCommand.CanExecute(new MpPoint())) {
-                        break;
-                    }
-                    await Task.Delay(100);
-                }
-
-                //var anchor_offset = MaxScrollOffset * _query_anchor_idx.Value;
-                QueryCommand.Execute(_query_anchor_idx.Value);
-                _query_anchor_idx = null;
-            });
-        }
 
         #region View Invokers
 
@@ -2153,24 +2096,26 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 // CONTENT RESIZE
                 case MpMessageType.ContentResized:
-                    RefreshQueryTrayLayout();
+                    //RefreshQueryTrayLayout();
                     ScrollToAnchor();
-                    CheckLoadMore();
+                    //CheckLoadMore();
+                    //SetScrollAnchor();
+                    break;
+                case MpMessageType.SelectedSidebarItemChangeBegin:
                     SetScrollAnchor();
+                    break;
+                case MpMessageType.SelectedSidebarItemChangeEnd:
+                    //RefreshQueryTrayLayout();
+                    ScrollToAnchor();
+                    //CheckLoadMore();
                     break;
                 case MpMessageType.PinTrayResizeBegin:
                     SetScrollAnchor();
                     break;
                 case MpMessageType.PinTrayResizeEnd:
                     ScrollToAnchor();
-                    // NOTE swapped out below to avoid unneeded refresh since 
-                    // this only needs to check load more
-                    //if (!IsQueryTrayEmpty) {
-                    //    QueryCommand.Execute(string.Empty);
-                    //}
-
-                    CheckLoadMore();
-                    SetScrollAnchor();
+                    //CheckLoadMore();
+                    //SetScrollAnchor();
                     break;
                 case MpMessageType.SidebarItemSizeChanged:
                     OnPropertyChanged(nameof(MaxContainerScreenWidth));
@@ -2186,7 +2131,7 @@ namespace MonkeyPaste.Avalonia {
                     ResetItemSizes(true, false);
                     break;
                 case MpMessageType.PostTrayLayoutChange:
-                    RefreshQueryTrayLayout();
+                    //RefreshQueryTrayLayout();
                     ScrollToAnchor();
                     _isLayoutChanging = false;
                     break;
@@ -2195,16 +2140,16 @@ namespace MonkeyPaste.Avalonia {
                     SetScrollAnchor();
                     break;
                 case MpMessageType.MainWindowSizeChanged:
-                    RefreshQueryTrayLayout();
+                    //RefreshQueryTrayLayout();
                     ScrollToAnchor();
-                    CheckLoadMore();
+                    //CheckLoadMore();
                     break;
                 case MpMessageType.MainWindowSizeChangeEnd:
                     // NOTE Size reset doesn't call changed so treat end as changed too
-                    RefreshQueryTrayLayout();
+                    //RefreshQueryTrayLayout();
                     ScrollToAnchor();
-                    CheckLoadMore();
-                    SetScrollAnchor();
+                    //CheckLoadMore();
+                    //SetScrollAnchor();
                     break;
 
                 // MAIN WINDOW ORIENTATION
@@ -2224,7 +2169,7 @@ namespace MonkeyPaste.Avalonia {
                         .OfType<MpAvContentWebView>()
                         .ForEach(x => x.ResizerControl = null);
 
-                    RefreshQueryTrayLayout();
+                    //RefreshQueryTrayLayout();
                     ScrollToAnchor();
                     _isMainWindowOrientationChanging = false;
                     break;
@@ -2236,17 +2181,17 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.TrayZoomFactorChanged:
                     MpConsole.WriteLine("Zoom changed: " + ZoomFactor);
-                    RefreshQueryTrayLayout();
+                    //RefreshQueryTrayLayout();
                     ScrollToAnchor();
-                    CheckLoadMore(true);
+                    //CheckLoadMore(true);
                     break;
                 case MpMessageType.TrayZoomFactorChangeEnd:
                     MpConsole.WriteLine("Zoom change end: " + ZoomFactor);
-                    RefreshQueryTrayLayout();
+                    //RefreshQueryTrayLayout();
                     ScrollToAnchor();
-                    CheckLoadMore(true);
+                    //CheckLoadMore(true);
 
-                    SetScrollAnchor();
+                    //SetScrollAnchor();
                     break;
 
                 // SCROLL JUMP
@@ -2556,6 +2501,95 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsQueryHorizontalScrollBarVisible));
             OnPropertyChanged(nameof(IsQueryVerticalScrollBarVisible));
         }
+
+        #region Scroll Offset
+        private void ForceScrollOffsetX(double newOffsetX) {
+            LastScrollOffsetX = newOffsetX;
+            _scrollOffsetX = newOffsetX;
+            OnPropertyChanged(nameof(ScrollOffsetX));
+        }
+
+        private void ForceScrollOffsetY(double newOffsetY) {
+            LastScrollOffsetY = newOffsetY;
+            _scrollOffsetY = newOffsetY;
+            OnPropertyChanged(nameof(ScrollOffsetY));
+        }
+        private void ForceScrollOffset(MpPoint newOffset) {
+            if ((newOffset - ScrollOffset).Length < 1) {
+                // avoid double query
+                MpConsole.WriteLine($"Force ScrollOffset reject length: {(newOffset - ScrollOffset).Length}");
+                return;
+            }
+            var old_offset = ScrollOffset;
+            IsForcingScroll = true;
+            ForceScrollOffsetX(newOffset.X);
+            ForceScrollOffsetY(newOffset.Y);
+            IsForcingScroll = false;
+            MpAvPagingListBoxExtension.ForceScrollOffset(newOffset);
+            MpConsole.WriteLine($"ScrollOffset forced from '{old_offset}' to '{newOffset}'");
+        }
+        #endregion
+
+        #region Scroll Anchor
+
+        private int FindCurScrollAnchor() {
+            if (SelectedItem != null &&
+                !SelectedItem.IsPinned) {
+                // prefer to anchor to selection
+                return SelectedItem.QueryOffsetIdx;
+            }
+            if (VisibleFromTopLeftQueryItems.FirstOrDefault() is MpAvClipTileViewModel anchor_ctvm) {
+                // anchor to item with top left visible closest to top left
+                return anchor_ctvm.QueryOffsetIdx;
+            }
+            return 0;
+        }
+        private bool CanScrollToAnchor() {
+            if (!_query_anchor_idx.HasValue) {
+                // no anchor set
+                return false;
+            }
+
+            if (_query_anchor_idx.Value == FindCurScrollAnchor() &&
+                VisibleFromTopLeftQueryItems.Any(x => x.QueryOffsetIdx == _query_anchor_idx.Value)) {
+                // already at anchor
+
+                return false;
+            }
+            return true;
+        }
+        private void SetScrollAnchor() {
+            if (_query_anchor_idx.HasValue) {
+                MpConsole.WriteLine($"SetScrollAnchor ignored, anchor already set.");
+            }
+            _query_anchor_idx = FindCurScrollAnchor();
+            MpConsole.WriteLine($"[SET] Anchor idx: {_query_anchor_idx.Value}");
+        }
+
+        private void ScrollToAnchor() {
+            Dispatcher.UIThread.Post(async () => {
+                RefreshQueryTrayLayout();
+
+                while (true) {
+                    if (!CanScrollToAnchor()) {
+                        _query_anchor_idx = null;
+                        CheckLoadMore();
+                        return;
+                    }
+                    if (QueryCommand.CanExecute(new MpPoint())) {
+                        break;
+                    }
+                    await Task.Delay(100);
+                }
+
+                //var anchor_offset = MaxScrollOffset * _query_anchor_idx.Value;
+                QueryCommand.Execute(_query_anchor_idx.Value);
+                _query_anchor_idx = null;
+                CheckLoadMore();
+            });
+        }
+
+        #endregion
 
         #region Keyboard Tile Navigation
         private bool CanTileNavigate() {
