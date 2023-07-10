@@ -68,7 +68,8 @@ namespace MonkeyPaste {
         ThisWeek,
         ThisMonth,
         ThisYear,
-        Exact
+        Exact,
+        Startup
     }
 
     public enum MpDateAfterUnitType {
@@ -77,7 +78,8 @@ namespace MonkeyPaste {
         LastWeek,
         LastMonth,
         LastYear,
-        Exact
+        Exact,
+        Startup
     }
 
 

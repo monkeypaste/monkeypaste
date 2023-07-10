@@ -1083,6 +1083,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsQueryResizeEnabled =>
+            LayoutType == MpClipTrayLayoutType.Stack;
+
         public bool IsRestoringSelection { get; set; }
 
         #region Append
@@ -4288,6 +4291,27 @@ namespace MonkeyPaste.Avalonia {
                 mgs.ApplyDelta(new Vector(dw, dh));
             });
 
+        public ICommand SelectClipTileTransactionNodeCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (args is not object[] argParts) {
+                    return;
+                }
+                int ciid = (int)argParts[0];
+                string anguid = argParts[1] as string;
+
+                var ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
+                if (ctvm == null) {
+                    return;
+                }
+                if (!ctvm.IsWindowOpen) {
+                    await ctvm.PinToPopoutWindowCommand.ExecuteAsync();
+                    // get new dc
+                    ctvm = AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
+                }
+                ctvm.TransactionCollectionViewModel.SelectChildCommand.Execute(anguid);
+            }, (args) => {
+                return args != null;
+            });
         #region Append
         public MpQuillAppendStateChangedMessage GetAppendStateMessage(string data) {
             return new MpQuillAppendStateChangedMessage() {

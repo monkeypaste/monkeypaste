@@ -210,10 +210,9 @@
                 DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}">
             <Border.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-                    <Binding Path="IsExpanded"
-                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
-                    <Binding Path="!IsCriteriaWindowOpen"
-                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
+                    <Binding Path="IsExpanded" />
+                    <Binding Path="!IsCriteriaWindowOpen" />
+                    <Binding Path="IsAdvSearchActive" />
                 </MultiBinding>
             </Border.IsVisible>
             <local:MpAvSearchCriteriaListBoxView x:Name="SearchCriteriaView"
@@ -226,15 +225,14 @@
                       Grid.Row="0"
                       Classes="horizontal"
                       Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                      IsVisible="{Binding IsExpanded, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Bottom">
             <GridSplitter.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-                    <Binding Path="IsExpanded"
-                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
-                    <Binding Path="!IsCriteriaWindowOpen"
-                             Source="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}" />
+                    <Binding Path="IsVisible"
+                             ElementName="SearchCriteriaView" />
+                    <Binding Path="IsVisible"
+                             ElementName="AdvancedSearchContainerBorder" />
                 </MultiBinding>
             </GridSplitter.IsVisible>
         </GridSplitter>

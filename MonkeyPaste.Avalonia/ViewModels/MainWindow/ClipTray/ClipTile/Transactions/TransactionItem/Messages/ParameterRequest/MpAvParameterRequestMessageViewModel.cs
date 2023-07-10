@@ -38,15 +38,24 @@ namespace MonkeyPaste.Avalonia {
                             Command = PresetViewModel.Parent.SelectPresetCommand,
                             CommandParameter = new object[] { PresetViewModel, ParameterReqFormat }
                         },
+                        //new MpMenuItemViewModel() {
+                        //    Header = "View",
+                        //    IconSourceObj = "GraphImage",
+                        //    IsVisible = Parent.Response is MpAvAnnotationMessageViewModel amvm && amvm.RootAnnotationViewModel != null,
+                        //    Command = HostClipTileViewModel.TransactionCollectionViewModel.SelectChildCommand,
+                        //    CommandParameter =
+                        //        Parent.Response is MpAvAnnotationMessageViewModel amvm2 && amvm2.RootAnnotationViewModel != null ?
+                        //        amvm2.RootAnnotationViewModel : null
+                        //},
                         new MpMenuItemViewModel() {
                             Header = "View",
                             IconSourceObj = "GraphImage",
                             IsVisible = Parent.Response is MpAvAnnotationMessageViewModel amvm && amvm.RootAnnotationViewModel != null,
-                            Command = HostClipTileViewModel.TransactionCollectionViewModel.SelectChildCommand,
+                            Command = MpAvClipTrayViewModel.Instance.SelectClipTileTransactionNodeCommand,
                             CommandParameter =
                                 Parent.Response is MpAvAnnotationMessageViewModel amvm2 && amvm2.RootAnnotationViewModel != null ?
-                                amvm2.RootAnnotationViewModel : null
-                        },
+                                new object[]{HostClipTileViewModel.CopyItemId, amvm2.RootAnnotationViewModel.AnnotationGuid } : null
+                        }
                     }
                 };
             }

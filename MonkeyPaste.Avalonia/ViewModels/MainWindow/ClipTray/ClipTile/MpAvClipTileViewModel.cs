@@ -244,7 +244,11 @@ namespace MonkeyPaste.Avalonia {
                     int pinIdx = Parent.InternalPinnedItems.IndexOf(this);
                     return Parent.InternalPinnedItems.FirstOrDefault(x => Parent.InternalPinnedItems.IndexOf(x) == pinIdx + 1);
                 }
-                return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx + 1);
+                if (IsQueryItem) {
+                    // during pin tile create, it doesn't know its pinned yet so need to make sure its a query item here
+                    return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx + 1);
+                }
+                return null;
             }
         }
 
@@ -257,7 +261,11 @@ namespace MonkeyPaste.Avalonia {
                     int pinIdx = Parent.InternalPinnedItems.IndexOf(this);
                     return Parent.InternalPinnedItems.FirstOrDefault(x => Parent.InternalPinnedItems.IndexOf(x) == pinIdx - 1);
                 }
-                return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx - 1);
+                if (IsQueryItem) {
+                    // during pin tile create, it doesn't know its pinned yet so need to make sure its a query item here
+                    return Parent.Items.FirstOrDefault(x => x.QueryOffsetIdx == QueryOffsetIdx - 1);
+                }
+                return null;
             }
         }
 
@@ -740,11 +748,15 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        public bool IsPinned => Parent != null &&
-                                Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
+        public bool IsQueryItem =>
+            QueryOffsetIdx >= 0;
+        public bool IsPinned =>
+            Parent != null &&
+            Parent.PinnedItems.Any(x => x.CopyItemId == CopyItemId);
 
         public bool IsResizable =>
-            !IsAppendNotifier && !IsFrozen;
+            !IsAppendNotifier &&
+            !IsFrozen;
         public bool CanResize { get; set; } = false;
 
         public bool IsResizing { get; set; } = false;
@@ -1088,6 +1100,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
             IsBusy = true;
 
+            bool is_query_itme = queryOffset >= 0;
             bool is_reload =
                 (CopyItemId == 0 && ci == null) ||
                 (ci != null && CopyItemId == ci.Id) ||
@@ -1096,34 +1109,6 @@ namespace MonkeyPaste.Avalonia {
             _contentView = null;
             if (!is_reload) {
                 IsWindowOpen = false;
-            }
-
-            if (ci == null || ci.Id <= 0) {
-                BoundWidth = 0;
-                BoundHeight = 0;
-            } else {
-                double w = MinWidth;
-                double h = MinHeight;
-                if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueWidth_ById(ci.Id, queryOffset, out double uw)) {
-                    if (Math.Abs(uw - w) < 1) {
-                        // i think this is a bug when tile goes from placeholder to active it thinks it has
-                        // a unique size
-                        MpAvPersistentClipTilePropertiesHelper.RemoveUniqueWidth_ById(ci.Id, queryOffset);
-                    } else {
-                        w = uw;
-                    }
-                }
-                if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueHeight_ById(ci.Id, queryOffset, out double uh)) {
-                    if (Math.Abs(uh - h) < 1) {
-                        // i think this is a bug when tile goes from placeholder to active it thinks it has
-                        // a unique size
-                        MpAvPersistentClipTilePropertiesHelper.RemoveUniqueHeight_ById(ci.Id, queryOffset);
-                    } else {
-                        h = uh;
-                    }
-                }
-                BoundWidth = w;
-                BoundHeight = h;
             }
 
             if (ci != null &&
@@ -1151,32 +1136,18 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
+            if (IsPlaceholder) {
+                BoundWidth = 0;
+                BoundHeight = 0;
+            } else {
+                double w = MinWidth;
+                double h = MinHeight;
+                BoundWidth = w;
+                BoundHeight = h;
+            }
             UpdateQueryOffset(queryOffset);
+            RestorePersistentState();
 
-
-            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(CopyItemId, queryOffset)) {
-                IsContentReadOnly = false;
-            }
-            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId, queryOffset)) {
-                IsTitleReadOnly = false;
-            }
-
-            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTransactionPaneOpen_ById(CopyItemId, queryOffset)) {
-                Dispatcher.UIThread.Post(async () => {
-                    // wait for everything to load since trans pane is size related (wait may not be needed)
-                    int ciid = CopyItemId;
-                    while (!IsEditorLoaded) {
-                        await Task.Delay(100);
-                        if (CopyItemId != ciid) {
-                            // model changed, cancel
-                            return;
-                        }
-                    }
-
-                    string selected_guid = MpAvPersistentClipTilePropertiesHelper.GetPersistentSelectedTransNodeGuid_ById(CopyItemId, queryOffset);
-                    TransactionCollectionViewModel.SelectChildCommand.Execute(selected_guid);
-                });
-            }
 
             OnPropertyChanged(nameof(IconResourceObj));
             OnPropertyChanged(nameof(IsPlaceholder));
@@ -1495,7 +1466,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
         private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
                 case nameof(IsAnyBusy):
@@ -1982,18 +1952,36 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private async Task AutoCycleDetailsAsync() {
-            if (IsPlaceholder) {
-                return;
-            }
-            DateTime lastCycle = DateTime.Now;
-            TimeSpan cycle_delay = TimeSpan.FromMilliseconds(AUTO_CYCLE_DETAIL_DELAY_MS);
-            while (IsCornerButtonsVisible) {
-                if (DateTime.Now - lastCycle > cycle_delay) {
-                    lastCycle = DateTime.Now;
-                    CycleDetailCommand.Execute(null);
+        private void RestorePersistentState() {
+
+            if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueWidth_ById(CopyItemId, QueryOffsetIdx, out double uw)) {
+                if (Math.Abs(uw - BoundWidth) < 1 || !IsResizerEnabled) {
+                    // i think this is a bug when tile goes from placeholder to active it thinks it has
+                    // a unique size
+                    MpAvPersistentClipTilePropertiesHelper.RemoveUniqueWidth_ById(CopyItemId, QueryOffsetIdx);
+                } else {
+                    BoundWidth = uw;
                 }
-                await Task.Delay(100);
+            }
+            if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueHeight_ById(CopyItemId, QueryOffsetIdx, out double uh)) {
+                if (Math.Abs(uh - BoundHeight) < 1 || !IsResizerEnabled) {
+                    // i think this is a bug when tile goes from placeholder to active it thinks it has
+                    // a unique size
+                    MpAvPersistentClipTilePropertiesHelper.RemoveUniqueHeight_ById(CopyItemId, QueryOffsetIdx);
+                } else {
+                    BoundHeight = uh;
+                }
+            }
+
+            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId, QueryOffsetIdx)) {
+                IsTitleReadOnly = false;
+            }
+            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(CopyItemId, QueryOffsetIdx)) {
+                if (IsResizerEnabled) {
+                    IsContentReadOnly = false;
+                } else {
+                    MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);
+                }
             }
         }
         #endregion
@@ -2176,33 +2164,21 @@ namespace MonkeyPaste.Avalonia {
                 return !IsAnyPlaceholder;
             });
 
-        public MpIAsyncCommand PopInTileCommand => new MpAsyncCommand(
+        public MpIAsyncCommand PinToPopoutWindowCommand => new MpAsyncCommand(
             async () => {
-                // NOTE called from confirmed popout closing
-
-                int ciid = CopyItemId;
-                await PersistContentStateCommand.ExecuteAsync(null);
-
-                await TransactionCollectionViewModel.CloseTransactionPaneCommand.ExecuteAsync();
-                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(ciid, QueryOffsetIdx);
-            }, () => {
-                return Parent != null;
-            });
-        public ICommand PinToPopoutWindowCommand => new MpCommand<object>(
-            (args) => {
                 if (!IsSelected) {
                     IsSelected = true;
                 }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
-                    Parent.PinTileCommand.Execute(new object[] { this, MpPinType.Window });
+                    await Parent.PinTileCommand.ExecuteAsync(new object[] { this, MpPinType.Window });
                 } else {
                     // Some kinda view nav here
                     // see https://github.com/AvaloniaUI/Avalonia/discussions/9818
 
                 }
-            }, (args) => {
+            }, () => {
                 return !IsWindowOpen && Parent != null;
-            }, new[] { this });
+            });
 
         public ICommand DisableSubSelectionCommand => new MpCommand(
             () => {

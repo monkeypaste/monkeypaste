@@ -3,7 +3,10 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
     <Nullable>enable</Nullable>
+    <LangVersion>$(DefaultLangVersion)</LangVersion>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <!--<UseMauiEssentials>true</UseMauiEssentials>
+    <UseMaui>true</UseMaui>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">

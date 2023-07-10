@@ -6,8 +6,10 @@
     <TrimMode>copyused</TrimMode>
      <AvaloniaNameGeneratorIsEnabled>false</AvaloniaNameGeneratorIsEnabled>
     <WarningLevel>4</WarningLevel>
+     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
+     <!--<UseMauiEssentials>true</UseMauiEssentials>-->
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  

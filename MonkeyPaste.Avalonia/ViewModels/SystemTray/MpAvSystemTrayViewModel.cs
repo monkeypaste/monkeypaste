@@ -128,6 +128,10 @@ namespace MonkeyPaste.Avalonia {
                             Header = "Open Cef Uri",
                             Command = NavigateToCefNetUriCommand,
                         },
+                        new MpMenuItemViewModel() {
+                            Header = "Share Test",
+                            Command = ShareTestCommand,
+                        },
                         //new MpMenuItemViewModel() {
                         //    Header = "Show Notifier DevTools",
                         //    Command = MpAvClipTrayViewModel.Instance.ShowAppendDevToolsCommand
@@ -212,6 +216,10 @@ namespace MonkeyPaste.Avalonia {
                 w.ShowChild();
             });
 
+        public ICommand ShareTestCommand => new MpAsyncCommand(
+            async () => {
+                //await ShareTest.ShareText("kiss my butt");
+            });
         #endregion
     }
 }

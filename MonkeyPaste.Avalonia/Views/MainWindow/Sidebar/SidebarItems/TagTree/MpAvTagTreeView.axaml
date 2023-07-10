@@ -13,7 +13,6 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvTagTreeView">
     <local:MpAvUserControl.Resources>
-        <SolidColorBrush x:Key="TreeViewItemForeground" Color="White" />
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  TREE ITEM DEFAULT OVERRIDES  -->

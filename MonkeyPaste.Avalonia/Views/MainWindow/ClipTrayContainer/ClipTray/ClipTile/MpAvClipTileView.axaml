@@ -104,8 +104,7 @@
 
         <Grid x:Name="TileGrid"
               HorizontalAlignment="Stretch"
-              VerticalAlignment="Stretch"
-              ColumnDefinitions="*,Auto">
+              VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"
                                MaxHeight="40" />
@@ -113,7 +112,23 @@
                 <RowDefinition Height="Auto"
                                MaxHeight="20" />
             </Grid.RowDefinitions>
-
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto">
+                    <ColumnDefinition.MaxWidth>
+                        <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                      ConverterParameter="*">
+                            <Binding Path="Bounds.Width"
+                                     ElementName="ClipTileContainerBorder" />
+                            <Binding>
+                                <Binding.Source>
+                                    <sys:Double>0.75</sys:Double>
+                                </Binding.Source>
+                            </Binding>
+                        </MultiBinding>
+                    </ColumnDefinition.MaxWidth>
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
             <!--  TITLE  -->
 
             <local:MpAvClipTileTitleView x:Name="TileTitleView"
@@ -323,6 +338,12 @@
                                                    IsVisible="{Binding IsTransactionPaneOpen}"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch">
+                <!--<local:MpAvClipTileTransactionPaneView.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Width"
+                                          Duration="0:0:0.5" />
+                    </Transitions>
+                </local:MpAvClipTileTransactionPaneView.Transitions>-->
                 <local:MpAvClipTileTransactionPaneView.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                         <Binding Path="IsTransactionPaneOpen" />
@@ -340,7 +361,7 @@
                           Grid.RowSpan="3"
                           Classes="vertical"
                           Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-                          IsVisible="{Binding IsTransactionPaneOpen, FallbackValue=False, TargetNullValue=False}"
+                          IsVisible="{Binding IsVisible, ElementName=TransactionPanelColumn}"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Stretch" />
 

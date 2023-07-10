@@ -8,6 +8,7 @@
   <PropertyGroup>
     <BuildOs>WINDOWS</BuildOs>
     <BuildMode>Debug</BuildMode>
+    <DefaultLangVersion>11.0</DefaultLangVersion>
   </PropertyGroup>
   
   <PropertyGroup>

@@ -714,9 +714,9 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                             (int)MpRootOptionType.History, //5
                             (int)MpHistoryTypeOptionType.Created, //1
                             (int)MpDateTimeOptionType.After, //3 
-                            (int)MpDateAfterUnitType.Yesterday} //1
+                            (int)MpDateAfterUnitType.Startup} //1
                         .Select(x => x.ToString())),
-                matchValue: 0.ToString());
+                matchValue: (-1).ToString());
 
             #endregion
 

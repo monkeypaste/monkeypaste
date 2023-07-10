@@ -23,6 +23,7 @@ namespace MonkeyPaste.Avalonia {
         //private Window _criteriaWindow;
         private Tuple<int, int>[] _lastSaveCriteriaItemIdAndSortLookup;
 
+        private object _initLockObj = new object();
         #endregion
 
         #region Constants
@@ -181,7 +182,11 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync(int tagId, bool isPending) {
+            await MpFifoAsyncQueue.WaitByConditionAsync(_initLockObj, () => { return IsBusy; });
 
+            if (IsBusy) {
+
+            }
             IsBusy = true;
 
             if (UserDevices == null) {
@@ -400,6 +405,12 @@ namespace MonkeyPaste.Avalonia {
             return pending_tag.Id;
         }
 
+        private void ValidateCriteriaItems() {
+            var dups = Items.GroupBy(x => x.SearchCriteriaItemId).Where(x => x.Count() > 1);
+            if (dups.Any()) {
+
+            }
+        }
         #endregion
 
         #region Commands

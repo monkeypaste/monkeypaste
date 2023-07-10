@@ -6,6 +6,7 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,9 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAvClipTileTransactionCollectionViewModel :
-        MpViewModelBase<MpAvClipTileViewModel>, MpIContextMenuViewModel {
+        MpViewModelBase<MpAvClipTileViewModel>,
+        MpIAnimatedSizeViewModel,
+        MpIContextMenuViewModel {
         #region Private Variables
 
         #endregion
@@ -26,6 +29,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIAnimatedSizeViewModel Implementation
+
+        bool MpIAnimatedSizeViewModel.IsAnimating { get; set; }
+        double MpIBoundSizeViewModel.ContainerBoundWidth { get; set; }
+        double MpIBoundSizeViewModel.ContainerBoundHeight { get; set; }
+
+        #endregion
 
         #region MpIContextMenuItemViewModel Implementation
 
@@ -151,12 +162,6 @@ namespace MonkeyPaste.Avalonia {
                 return MpAvClipTrayViewModel.Instance.DefaultQueryItemHeight * 0.5;
             }
         }
-        public double BoundWidth { get; set; }
-        public double BoundHeight { get; set; }
-
-        public double ObservedWidth { get; set; }
-        public double ObservedHeight { get; set; }
-
         public double MaxWidth {
             get {
                 if (Parent == null) {
@@ -296,11 +301,6 @@ namespace MonkeyPaste.Avalonia {
                     if (Parent == null) {
                         break;
                     }
-                    if (IsTransactionPaneOpen) {
-                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsTransactionPaneOpenTile_ById(Parent.CopyItemId, Parent.QueryOffsetIdx);
-                    } else {
-                        MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsTransactionPaneOpenTile_ById(Parent.CopyItemId, Parent.QueryOffsetIdx);
-                    }
                     Parent.OnPropertyChanged(nameof(Parent.IsTitleVisible));
                     break;
                 case nameof(IsTransactionPaneAnimating):
@@ -367,32 +367,34 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            if (Parent.GetContentView() is MpIContentView cv) {
-                MpJsonObject updateObj = null;
-                updateObj = tivm.GetTransactionDelta();
-                if (updateObj == null) {
-                    updateObj = tivm.GetTransactionAnnotation();
-                }
-                if (updateObj == null) {
+            if (Parent.GetContentView() is not MpIContentView cv) {
+                return;
+            }
+            if (tivm.GetTransactionDelta() is not MpJsonObject updateObj) {
+                updateObj = tivm.GetTransactionAnnotation();
+            }
+            if (updateObj == null) {
+                return;
+            }
+
+            bool success = await cv.UpdateContentAsync(updateObj);
+            if (success) {
+                tivm.HasTransactionBeenApplied = true;
+
+                if (tivm.IsOneTimeAppliableTransaction) {
+                    tivm.AppliedDateTime = DateTime.Now;
+
+                    // for now, assume this is only text annotator and doesn't need auto-selecting
                     return;
                 }
-                bool success = await cv.UpdateContentAsync(updateObj);
-                if (success) {
-                    if (tivm.IsOneTimeAppliableTransaction) {
-                        tivm.AppliedDateTime = DateTime.Now;
 
-                        // for now, assume this is only text annotator and doesn't need auto-selecting
-                        return;
-                    }
-
-                    object to_select_tnvm_or_root_ann_guid = null;
-                    if (updateObj is MpAnnotationNodeFormat root_anf) {
-                        to_select_tnvm_or_root_ann_guid = root_anf.guid;
-                    } else {
-                        to_select_tnvm_or_root_ann_guid = tivm;
-                    }
-                    SelectChildCommand.Execute(to_select_tnvm_or_root_ann_guid);
+                object to_select_tnvm_or_root_ann_guid = null;
+                if (updateObj is MpAnnotationNodeFormat root_anf) {
+                    to_select_tnvm_or_root_ann_guid = root_anf.guid;
+                } else {
+                    to_select_tnvm_or_root_ann_guid = tivm;
                 }
+                SelectChildCommand.Execute(to_select_tnvm_or_root_ann_guid);
             }
         }
 
@@ -428,68 +430,6 @@ namespace MonkeyPaste.Avalonia {
                     Parent.Parent.SelectClipTileCommand.Execute(Parent);
                 }
                 MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
-            });
-
-        public MpIAsyncCommand<object> OpenTransactionPaneCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                Dispatcher.UIThread.VerifyAccess();
-
-                IsTransactionPaneOpen = true;
-
-                if (!Parent.IsResizerEnabled) {
-                    // grid mode query item, needs pop out
-                    Parent.PinToPopoutWindowCommand.Execute(null);
-                    return;
-                }
-                OnPropertyChanged(nameof(MaxWidth));
-                //BoundWidth = DefaultTransactionPanelLength;
-                //BoundHeight = Parent.BoundHeight;
-                SetTransactionViewGridLength(new GridLength(DefaultTransactionPanelWidth, GridUnitType.Auto));
-
-                IsTransactionPaneAnimating = true;
-                double nw = Parent.BoundWidth + DefaultTransactionPanelWidth;
-                double nh = Parent.BoundHeight;
-
-                MpAvResizeExtension.ResizeAnimated(
-                        Parent.GetContentView() as Control,
-                        nw, nh,
-                        () => {
-                            IsTransactionPaneAnimating = false;
-                        });
-
-                while (IsTransactionPaneAnimating) {
-                    await Task.Delay(100);
-                }
-
-                // only wait for executeAsync calls
-                return;
-            }, (args) => {
-                return Parent != null && !IsTransactionPaneOpen && VisibleTransactions.Any();
-            });
-
-        public MpIAsyncCommand CloseTransactionPaneCommand => new MpAsyncCommand(
-            async () => {
-                Dispatcher.UIThread.VerifyAccess();
-                IsTransactionPaneOpen = false;
-
-                SetTransactionViewGridLength(new GridLength(0, GridUnitType.Auto));
-                IsTransactionPaneAnimating = true;
-                double nw = Parent.Parent.DefaultQueryItemWidth;
-                double nh = Parent.Parent.DefaultQueryItemHeight;
-
-                MpAvResizeExtension.ResizeAnimated(
-                        Parent.GetContentView() as Control,
-                        nw, nh,
-                        () => {
-                            IsTransactionPaneAnimating = false;
-                        });
-                while (IsTransactionPaneAnimating) {
-                    await Task.Delay(100);
-                }
-                // only wait if executed async for timing
-                return;
-            }, () => {
-                return Parent != null && IsTransactionPaneOpen;
             });
 
         public ICommand ToggleTransactionPaneOpenCommand => new MpCommand(
@@ -528,6 +468,71 @@ namespace MonkeyPaste.Avalonia {
         public ICommand RemoveMostRecentTransactionCommand => new MpCommand(
             () => {
                 RemoveTransactionCommand.Execute(MostRecentTransaction);
+            });
+
+
+        public MpIAsyncCommand CloseTransactionPaneCommand => new MpAsyncCommand(
+            async () => {
+                Dispatcher.UIThread.VerifyAccess();
+                IsTransactionPaneOpen = false;
+
+                //SetTransactionViewGridLength(new GridLength(0, GridUnitType.Auto));
+                //IsTransactionPaneAnimating = true;
+                //double nw = Parent.Parent.DefaultQueryItemWidth;
+                //double nh = Parent.Parent.DefaultQueryItemHeight;
+
+                //MpAvResizeExtension.ResizeAnimated(
+                //        Parent.GetContentView() as Control,
+                //        nw, nh,
+                //        () => {
+                //            IsTransactionPaneAnimating = false;
+                //        });
+                //while (IsTransactionPaneAnimating) {
+                //    await Task.Delay(100);
+                //}
+                //// only wait if executed async for timing
+                //return;
+            }, () => {
+                return Parent != null && IsTransactionPaneOpen;
+            });
+
+        public MpIAsyncCommand<object> OpenTransactionPaneCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                Dispatcher.UIThread.VerifyAccess();
+
+                IsTransactionPaneOpen = true;
+                return;
+
+                //OnPropertyChanged(nameof(MaxWidth));
+                ////BoundWidth = DefaultTransactionPanelLength;
+                ////BoundHeight = Parent.BoundHeight;
+                //if(Parent.GetContentView() is not Control cv ||
+                //    cv.GetVisualAncestor<MpAvClipTileView>() is not MpAvClipTileView ctv ||
+                //    ctv.FindControl<MpAvClipTileTransactionPaneView>("TransactionPanelColumn") is not MpAvClipTileTransactionPaneView cttpv) {
+                //    return;
+                //}
+
+                //SetTransactionViewGridLength(new GridLength(DefaultTransactionPanelWidth, GridUnitType.Auto));
+
+                //IsTransactionPaneAnimating = true;
+                //double nw = Parent.BoundWidth + DefaultTransactionPanelWidth;
+                //double nh = Parent.BoundHeight;
+
+                //MpAvResizeExtension.ResizeAnimated(
+                //        cttpv,
+                //        nw, nh,
+                //        () => {
+                //            IsTransactionPaneAnimating = false;
+                //        });
+
+                //while (IsTransactionPaneAnimating) {
+                //    await Task.Delay(100);
+                //}
+
+                //// only wait for executeAsync calls
+                //return;
+            }, (args) => {
+                return Parent != null && Parent.IsWindowOpen && !IsTransactionPaneOpen && VisibleTransactions.Any();
             });
 
         public MpIAsyncCommand<object> SelectChildCommand => new MpAsyncCommand<object>(
@@ -587,7 +592,6 @@ namespace MonkeyPaste.Avalonia {
             }) {
 
         };
-
         #endregion
     }
 }

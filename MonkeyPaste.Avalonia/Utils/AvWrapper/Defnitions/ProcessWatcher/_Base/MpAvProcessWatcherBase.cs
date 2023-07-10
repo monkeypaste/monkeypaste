@@ -192,9 +192,15 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
+            bool is_new_active_process = !IsProcessPathEqual(activeProcessInfo.Handle, _lastActiveHandle);
             _lastActiveHandle = activeProcessInfo.Handle;
 
+            if (!is_new_active_process) {
+                // ignore inner-process window changes not relevant for this event
+                return;
+            }
             MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", LastProcessInfo.MainWindowTitle, LastProcessInfo.ProcessPath, LastProcessInfo.Handle));
+
             OnAppActivated?.Invoke(this, LastProcessInfo);
         }
 

@@ -79,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
                 attached_controls
                     .FirstOrDefault(x =>
                         x.Bounds.Contains(e.GetPosition(x.Parent as Visual)) &&
+                        x.IsEffectivelyVisible &&
                         !x.IsEnabled);
 
             if (disabled_child_under_pointer == null) {

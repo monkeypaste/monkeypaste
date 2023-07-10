@@ -16,7 +16,7 @@
              Grid.Row="2"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Top"
-             SelectionMode="Single,AlwaysSelected"
+             SelectionMode="Single"
              SelectedItem="{Binding SelectedSource, Mode=TwoWay}"
              ItemsSource="{Binding Sources}">
         <ListBox.Styles>

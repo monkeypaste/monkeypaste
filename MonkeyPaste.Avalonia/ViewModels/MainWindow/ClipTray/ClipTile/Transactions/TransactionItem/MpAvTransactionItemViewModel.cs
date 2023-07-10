@@ -190,6 +190,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsRunTimeAppliableTransaction =>
             Response is MpAvAnnotationMessageViewModel;
 
+        private bool _hasTransactionBeenApplied;
         public bool HasTransactionBeenApplied {
             get {
                 if (!IsAppliableTransaction) {
@@ -200,9 +201,15 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (IsSelected &&
                     Response is MpAvAnnotationMessageViewModel amvm) {
-                    return amvm.SelectedItem != null;
+                    return amvm.SelectedItem != null && _hasTransactionBeenApplied;
                 }
                 return false;
+            }
+            set {
+                if (HasTransactionBeenApplied != value) {
+                    _hasTransactionBeenApplied = value;
+                    OnPropertyChanged(nameof(HasTransactionBeenApplied));
+                }
             }
         }
 
@@ -403,11 +410,7 @@ namespace MonkeyPaste.Avalonia {
                         HostClipTileViewModel != null) {
                         // TODO this be inconsisten since only annotation nodes have guids atm 
                         // but nothing else is enabled for trans so should be ok
-                        if (FocusNode is MpIHaveGuid gfn) {
-                            MpAvPersistentClipTilePropertiesHelper.AddPersistentSelectedTransNodeGuidTile_ById(HostCopyItemId, HostClipTileViewModel.QueryOffsetIdx, gfn.Guid);
-                        } else {
-                            MpAvPersistentClipTilePropertiesHelper.RemovePersistentSelectedTransNodeGuidTile_ById(HostCopyItemId, HostClipTileViewModel.QueryOffsetIdx);
-                        }
+
 
                     }
                     BringNodeIntoViewAsync(FocusNode).FireAndForgetSafeAsync(this);
@@ -546,7 +549,7 @@ namespace MonkeyPaste.Avalonia {
                 sources = Sources.Select(x => x.SourceRef).ToList()
             };
             string output = JsonConvert.SerializeObject(jtrans);
-            return output;
+            return output.ToPrettyPrintJson();
         }
 
         #endregion

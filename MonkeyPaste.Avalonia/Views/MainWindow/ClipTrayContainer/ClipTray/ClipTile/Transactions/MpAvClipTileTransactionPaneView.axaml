@@ -166,7 +166,7 @@
                  BorderBrush="{DynamicResource ThemeInteractiveColor}"
                  BorderThickness="1"
                  ItemsSource="{Binding VisibleTransactions}"
-                 SelectionMode="Single,AlwaysSelected"
+                 SelectionMode="Single"
                  SelectedItem="{Binding SelectedTransaction, Mode=TwoWay}"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch">

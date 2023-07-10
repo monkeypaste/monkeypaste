@@ -822,6 +822,13 @@ namespace MonkeyPaste.Avalonia {
                         tovm.UnitType = MpSearchCriteriaUnitFlags.DateTime;
                         tovm.FilterValue = MpContentQueryBitFlags.Exactly;
                         break;
+                    case MpDateBeforeUnitType.Startup:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        // NOTE using -1 as special match value to denote flag as startup ticks
+                        // since no other date/time matchvalue will be < 0 this should be ok?
+                        tovm.Value = (-1).ToString();
+                        break;
                 }
                 novml.Add(tovm);
             }
@@ -863,6 +870,13 @@ namespace MonkeyPaste.Avalonia {
                     case MpDateAfterUnitType.Exact:
                         tovm.UnitType = MpSearchCriteriaUnitFlags.DateTime;
                         tovm.FilterValue = MpContentQueryBitFlags.Exactly;
+                        break;
+                    case MpDateAfterUnitType.Startup:
+                        tovm.UnitType = MpSearchCriteriaUnitFlags.EnumerableValue;
+                        tovm.FilterValue = MpContentQueryBitFlags.Days;
+                        // NOTE using -1 as special match value to denote flag as startup ticks
+                        // since no other date/time matchvalue will be < 0 this should be ok?
+                        tovm.Value = (-1).ToString();
                         break;
                 }
                 novml.Add(tovm);

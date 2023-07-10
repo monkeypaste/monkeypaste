@@ -315,48 +315,48 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region IsTransactionPaneOpen
+        //#region IsTransactionPaneOpen
 
-        public static void AddPersistentIsTransactionPaneOpenTile_ById(int ciid, int idx) {
-            if (GetProps(ciid, true, idx) is MpAvPersistentClipTileProperties pp) {
-                pp.IsTransactionPaneOpen = false;
-            }
-        }
-        public static void RemovePersistentIsTransactionPaneOpenTile_ById(int ciid, int idx) {
-            if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
-                pp.IsTransactionPaneOpen = true;
-                CleanupProps();
-            }
-        }
+        //public static void AddPersistentIsTransactionPaneOpenTile_ById(int ciid, int idx) {
+        //    if (GetProps(ciid, true, idx) is MpAvPersistentClipTileProperties pp) {
+        //        pp.IsTransactionPaneOpen = false;
+        //    }
+        //}
+        //public static void RemovePersistentIsTransactionPaneOpenTile_ById(int ciid, int idx) {
+        //    if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
+        //        pp.IsTransactionPaneOpen = true;
+        //        CleanupProps();
+        //    }
+        //}
 
-        public static bool IsPersistentTileTransactionPaneOpen_ById(int ciid, int idx) {
-            return GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp && !pp.IsTransactionPaneOpen;
-        }
+        //public static bool IsPersistentTileTransactionPaneOpen_ById(int ciid, int idx) {
+        //    return GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp && !pp.IsTransactionPaneOpen;
+        //}
 
-        #endregion
+        //#endregion
 
-        #region SelectedTransNodeGuid
+        //#region SelectedTransNodeGuid
 
-        public static void AddPersistentSelectedTransNodeGuidTile_ById(int ciid, int idx, string node_guid) {
-            if (GetProps(ciid, true, idx) is MpAvPersistentClipTileProperties pp) {
-                pp.SelectedTransNodeGuid = node_guid;
-            }
-        }
-        public static void RemovePersistentSelectedTransNodeGuidTile_ById(int ciid, int idx) {
-            if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
-                pp.SelectedTransNodeGuid = null;
-                CleanupProps();
-            }
-        }
+        //public static void AddPersistentSelectedTransNodeGuidTile_ById(int ciid, int idx, string node_guid) {
+        //    if (GetProps(ciid, true, idx) is MpAvPersistentClipTileProperties pp) {
+        //        pp.SelectedTransNodeGuid = node_guid;
+        //    }
+        //}
+        //public static void RemovePersistentSelectedTransNodeGuidTile_ById(int ciid, int idx) {
+        //    if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
+        //        pp.SelectedTransNodeGuid = null;
+        //        CleanupProps();
+        //    }
+        //}
 
-        public static string GetPersistentSelectedTransNodeGuid_ById(int ciid, int idx) {
-            if (GetProps(ciid, false, idx) is not MpAvPersistentClipTileProperties pp) {
-                return null;
-            }
-            return pp.SelectedTransNodeGuid;
-        }
+        //public static string GetPersistentSelectedTransNodeGuid_ById(int ciid, int idx) {
+        //    if (GetProps(ciid, false, idx) is not MpAvPersistentClipTileProperties pp) {
+        //        return null;
+        //    }
+        //    return pp.SelectedTransNodeGuid;
+        //}
 
-        #endregion
+        //#endregion
 
         #endregion
 

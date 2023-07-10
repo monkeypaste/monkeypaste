@@ -64,6 +64,10 @@ namespace MonkeyPaste.Common {
         }
 
         private static void DecrementWaitByLock(object lockObj, string debug_label) {
+            if (_lockCountLookup == null ||
+                !_lockCountLookup.ContainsKey(lockObj)) {
+                return;
+            }
             _lockCountLookup[lockObj]--;
 
             MpConsole.WriteLine($"Item '{debug_label}' waiting DONE");

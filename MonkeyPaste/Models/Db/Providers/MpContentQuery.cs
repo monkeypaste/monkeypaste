@@ -375,6 +375,11 @@ namespace MonkeyPaste {
             string match_ticks1 = null;
             string match_ticks2 = null;
 
+            if (mv == "-1") {
+                //adjust mv so match_ticks is AFTER today by negating day span of today to startup 
+                mv = (-1 * ((Mp.Services.StartupState.LoadedDateTime.Value - DateTime.Today).TotalDays)).ToString();
+            }
+
             try {
                 if (qf.HasFlag(MpContentQueryBitFlags.Exactly)) {
                     //exactly
