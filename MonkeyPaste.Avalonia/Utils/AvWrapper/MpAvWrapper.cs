@@ -14,6 +14,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPlatformWrapper Implementation
 
+        #region Platform Services
+
+        public MpIShare ShareTools { get; set; }
+
+        #endregion
+
         #region Lazy Services
 
         public MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
@@ -46,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIKeyConverterHub KeyConverter { get; set; }
         public MpIKeyStrokeSimulator KeyStrokeSimulator { get; set; }
-        public MpINativePathDialog NativePathDialog { get; set; }
+        public MpIPlatformPathDialog NativePathDialog { get; set; }
         public MpIUserProvidedFileExts UserProvidedFileExts { get; set; }
         public MpIStartupState StartupState { get; set; }
         public MpIPlatformShorcuts PlatformShorcuts { get; set; }
@@ -132,6 +138,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
+            ShareTools = new MpAvShare();
             NotificationBuilder = new MpAvNotificationBuilder();
             LoadOnLoginTools = new MpAvLoginLoadTools();
             AccountTools = new MpAvAccountTools();

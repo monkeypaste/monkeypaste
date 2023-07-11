@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPlatformLoaded { get; protected set; } = false;
         public MpStartupFlags StartupFlags { get; protected set; }
 
+        public bool IsReady { get; private set; }
         #endregion
 
         #region MpIProgressLoaderViewModel Implementation
@@ -81,6 +82,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvLoaderViewModel(bool wasStartedAtLogin) {
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             StartupFlags |= wasStartedAtLogin ? MpStartupFlags.Login : MpStartupFlags.UserInvoked;
             PropertyChanged += MpAvLoaderViewModel_PropertyChanged;
         }
@@ -237,6 +239,13 @@ namespace MonkeyPaste.Avalonia {
                     if (ShowSpinner) {
 
                     }
+                    break;
+            }
+        }
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.MainWindowLoadComplete:
+                    IsReady = true;
                     break;
             }
         }

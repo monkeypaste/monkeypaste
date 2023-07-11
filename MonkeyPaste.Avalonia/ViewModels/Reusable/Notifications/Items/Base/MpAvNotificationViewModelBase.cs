@@ -37,6 +37,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ContentCapReached:
                 case MpNotificationType.TrashCapReached:
                 case MpNotificationType.ContentAddBlockedByAccount:
+                case MpNotificationType.ContentRestoreBlockedByAccount:
                     return MpNotificationLayoutType.UserAction;
                 case MpNotificationType.AnalyzerTimeout:
                 case MpNotificationType.InvalidRequest:
@@ -73,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ContentCapReached:
                 case MpNotificationType.TrashCapReached:
                 case MpNotificationType.ContentAddBlockedByAccount:
+                case MpNotificationType.ContentRestoreBlockedByAccount:
                     return MpNotificationButtonsType.UpgradeLearnMore;
                 default:
                     MpNotificationLayoutType layoutType = GetLayoutTypeFromNotificationType(ndt);

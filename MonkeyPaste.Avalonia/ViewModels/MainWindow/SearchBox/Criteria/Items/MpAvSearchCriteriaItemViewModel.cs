@@ -1154,7 +1154,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvSearchCriteriaItemViewModel(MpAvSearchCriteriaItemCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAvSearchCriteriaItemViewModel_PropertyChanged;
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
         public async Task InitializeAsync(MpSearchCriteriaItem sci) {
@@ -1254,9 +1253,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void ReceivedGlobalMessage(MpMessageType msg) {
-
-        }
         private void MpAvSearchCriteriaItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IgnoreHasModelChanged):

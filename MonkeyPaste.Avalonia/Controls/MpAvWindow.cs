@@ -1,7 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
@@ -22,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+
         #endregion
 
         #region Interfaces

@@ -22,14 +22,15 @@ namespace MonkeyPaste {
         WholeWord = 16384
     };
     public static class MpSearchCriteriaUnitFlagExtensions {
-        public static bool IsUnsignedNumeric(this MpSearchCriteriaUnitFlags scuf) {
+
+        public static bool HasUnsignedNumeric(this MpSearchCriteriaUnitFlags scuf) {
             return
                 scuf.HasFlag(MpSearchCriteriaUnitFlags.Integer) ||
                 scuf.HasFlag(MpSearchCriteriaUnitFlags.Rgba) ||
                 scuf.HasFlag(MpSearchCriteriaUnitFlags.Decimal);
         }
         public static Tuple<double, double> GetNumericBounds(this MpSearchCriteriaUnitFlags scuf) {
-            if (!scuf.IsUnsignedNumeric()) {
+            if (!scuf.HasUnsignedNumeric()) {
                 return null;
             }
             // NOTE order from smallest to largest

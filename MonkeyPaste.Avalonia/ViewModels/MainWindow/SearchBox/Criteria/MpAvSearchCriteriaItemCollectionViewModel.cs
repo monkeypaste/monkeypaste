@@ -176,22 +176,19 @@ namespace MonkeyPaste.Avalonia {
             Items.CollectionChanged += Items_CollectionChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
+            Task.Run(async () => {
+                UserDevices = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
+            });
         }
         #endregion
 
         #region Public Methods
 
         public async Task InitializeAsync(int tagId, bool isPending) {
+            MpConsole.WriteLine($"adv search called tagId: {tagId} pending: {isPending}");
             await MpFifoAsyncQueue.WaitByConditionAsync(_initLockObj, () => { return IsBusy; });
 
-            if (IsBusy) {
-
-            }
             IsBusy = true;
-
-            if (UserDevices == null) {
-                UserDevices = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
-            }
 
             if (isPending && tagId > 0) {
                 // shouldn't happen
@@ -212,7 +209,7 @@ namespace MonkeyPaste.Avalonia {
                 await MpAvQueryViewModel.Instance.RestoreAdvSearchValuesAsync(simple_cil.FirstOrDefault());
 
                 var adv_cil = cil.Where(x => x.QueryType == MpQueryType.Advanced);
-                foreach (var adv_ci in adv_cil) {
+                foreach (var adv_ci in adv_cil.OrderBy(x => x.SortOrderIdx)) {
                     var civm = await CreateCriteriaItemViewModelAsync(adv_ci);
                     Items.Add(civm);
                 }
@@ -235,9 +232,6 @@ namespace MonkeyPaste.Avalonia {
 
             ResetLastStateToCurrent();
             IsBusy = false;
-
-
-
 
             if (IsSavedQuery) {
                 Mp.Services.Query.NotifyQueryChanged(true);
@@ -311,12 +305,10 @@ namespace MonkeyPaste.Avalonia {
                         cwvm.IsWindowOpen = false;
                         cwvm.OnPropertyChanged(nameof(cwvm.IsWindowOpen));
                     }
-
-
                     break;
                 case nameof(IsExpanded):
                     MpMessenger.SendGlobal(MpMessageType.AdvancedSearchExpandedChanged);
-                    AnimateAdvSearchMenuAsync(IsExpanded).FireAndForgetSafeAsync(this);
+                    HandleExpandChangedAsync(IsExpanded).FireAndForgetSafeAsync(this);
                     break;
                 case nameof(HasAnyCriteriaModelChanged):
                     OnPropertyChanged(nameof(CanSave));
@@ -324,7 +316,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            MpMessenger.SendGlobal<MpMessageType>(MpMessageType.SearchCriteriaItemsChanged);
+            MpMessenger.SendGlobal(MpMessageType.SearchCriteriaItemsChanged);
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(SortedItems));
             OnPropertyChanged(nameof(HasCriteriaItems));
@@ -343,7 +335,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(CanSave));
         }
 
-        private async Task AnimateAdvSearchMenuAsync(bool isExpanding) {
+        private async Task HandleExpandChangedAsync(bool isExpanding) {
             if (isExpanding) {
                 if (!IsAdvSearchActive) {
                     // plus on search box toggled to checked
@@ -405,12 +397,6 @@ namespace MonkeyPaste.Avalonia {
             return pending_tag.Id;
         }
 
-        private void ValidateCriteriaItems() {
-            var dups = Items.GroupBy(x => x.SearchCriteriaItemId).Where(x => x.Count() > 1);
-            if (dups.Any()) {
-
-            }
-        }
         #endregion
 
         #region Commands

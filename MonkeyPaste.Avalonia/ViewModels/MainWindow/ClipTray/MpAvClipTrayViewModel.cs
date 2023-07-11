@@ -138,7 +138,10 @@ namespace MonkeyPaste.Avalonia {
                         SubItems = new List<MpMenuItemViewModel>() {
                             new MpMenuItemViewModel() {
                                 Header = @"Restore",
-                                IconResourceKey = "ResetImage",
+                                IconResourceKey =
+                                    Mp.Services.AccountTools.IsContentAddPausedByAccount ?
+                                        MpContentCapInfo.ADD_BLOCKED_RESOURCE_KEY :
+                                        "ResetImage",
                                 Command = RestoreSelectedClipCommand,
                             },
                             new MpMenuItemViewModel() {
@@ -248,7 +251,13 @@ namespace MonkeyPaste.Avalonia {
                                     .RootLinkableItems
                                     .Select(x=>x.ContentMenuItemViewModel)
                                     .ToList()
-                        }
+                        },
+                        new MpMenuItemViewModel() {
+                            HasLeadingSeperator = true,
+                            Header = @"Share...",
+                            IconResourceKey = "ShareImage",
+                            Command = SelectedItem.ShareCommand
+                        },
                     },
                 };
             }
@@ -1713,6 +1722,13 @@ namespace MonkeyPaste.Avalonia {
             var cap_msg_sb = new StringBuilder();
             MpNotificationType cap_msg_type = MpNotificationType.None;
 
+            if (source == MpAccountCapCheckType.Link &&
+                arg is int tid &&
+                tid < 0 &&
+                MpTag.TrashTagId == -tid) {
+                // unlinking from trash tag should be internally treated internally as add
+                source = MpAccountCapCheckType.Add;
+            }
             if (source == MpAccountCapCheckType.Add) {
                 if (cap_info.ToBeTrashed_ciid > 0) {
                     cap_msg_icon = MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY;
@@ -1741,16 +1757,22 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 
-            } else if (source == MpAccountCapCheckType.Block) {
+            } else if (source == MpAccountCapCheckType.AddBlock || source == MpAccountCapCheckType.RestoreBlock) {
                 // block refresh called BEFORE an add would occur to check favorite count again and avoid delete
                 // since tag linking doesn't refresh caps, this does it when last add set account to block state
+                string block_prefix = source.ToString().Replace("Block", string.Empty);
+                MpNotificationType block_msg_type =
+                    source == MpAccountCapCheckType.AddBlock ?
+                        MpNotificationType.ContentAddBlockedByAccount :
+                        MpNotificationType.ContentRestoreBlockedByAccount;
+
                 if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                     // no linking changes, add will be blocked
-                    cap_msg_title_suffix = "Add Blocked";
-                    cap_msg_sb.AppendLine($"Delete or unlink something from 'Favorites' to add more.");
+                    cap_msg_title_suffix = $"{block_prefix} Blocked";
+                    cap_msg_sb.AppendLine($"Trash or unlink something from 'Favorites' to add more.");
                     cap_msg_sb.AppendLine($"Max '{account_type.ToString()}' storage is {cur_content_cap}.");
                     cap_msg_icon = MpContentCapInfo.ADD_BLOCKED_RESOURCE_KEY;
-                    cap_msg_type = MpNotificationType.ContentAddBlockedByAccount;
+                    cap_msg_type = block_msg_type;
                 } else {
                     // links were changed since last refresh, item will be added..
                 }
@@ -2324,7 +2346,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ClipboardWatcher_OnClipboardChanged(object sender, MpPortableDataObject mpdo) {
-            bool is_startup_ido = MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening;
+            bool is_startup_ido = !Mp.Services.StartupState.IsReady;
 
             bool is_ext_change = !MpAvWindowManager.IsAnyActive || is_startup_ido;
 
@@ -2339,7 +2361,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (is_change_ignored) {
                 MpConsole.WriteLine("Clipboard Change Ignored by tray", true);
-                MpConsole.WriteLine($"IsMainWindowLoading: {MpAvMainWindowViewModel.Instance.IsMainWindowLoading}");
+                MpConsole.WriteLine($"Mp.Services.StartupState.IsReady: {Mp.Services.StartupState.IsReady}");
                 MpConsole.WriteLine($"IsAppPaused: {IsAppPaused}");
                 MpConsole.WriteLine($"IsThisAppActive: {MpAvWindowManager.IsAnyActive}");
                 MpConsole.WriteLine($"is_startup_ido: {is_startup_ido}");
@@ -2823,7 +2845,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                 MpConsole.WriteLine($"Add content blocked, acct capped. Ensuring accuracy...");
-                await ProcessAccountCapsAsync(MpAccountCapCheckType.Block, mpdo);
+                await ProcessAccountCapsAsync(MpAccountCapCheckType.AddBlock, mpdo);
                 if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                     MpConsole.WriteLine($"Add content blocked confirmed.");
                     return null;
@@ -3991,7 +4013,12 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand RestoreSelectedClipCommand => new MpAsyncCommand(
             async () => {
-                // add link to trash tag which caches ciid
+                if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
+                    // user at cblock
+                    ProcessAccountCapsAsync(MpAccountCapCheckType.RestoreBlock, SelectedItem.CopyItemId).FireAndForgetSafeAsync(this);
+                    return;
+                }
+                // unlink from trash tag (triggers 
                 await MpAvTagTrayViewModel.Instance.TrashTagViewModel
                 .UnlinkCopyItemCommand.ExecuteAsync(SelectedItem.CopyItemId);
 
@@ -4003,14 +4030,12 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 bool can_restore =
                     SelectedItem != null &&
-                    SelectedItem.IsTrashed &&
-                    !Mp.Services.AccountTools.IsContentAddPausedByAccount;
+                    SelectedItem.IsTrashed;
 
                 if (!can_restore) {
                     MpConsole.WriteLine("RestoreSelectedClipCommand CanExecute: " + can_restore);
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
                     MpConsole.WriteLine($"SelectedItem: Trashed: {SelectedItem.IsTrashed}");
-                    MpConsole.WriteLine($"SIsContentAddPausedByAccount: {Mp.Services.AccountTools.IsContentAddPausedByAccount}");
                 }
                 return can_restore;
             });

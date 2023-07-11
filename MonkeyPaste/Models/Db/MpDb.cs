@@ -702,7 +702,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                     MpContentQueryBitFlags.ImageType |
                     MpContentQueryBitFlags.FileType)).ToString());
 
-            var recent_tag_datetime_cri = await MpSearchCriteriaItem.CreateAsync(
+            var recent_tag_created_datetime_cri = await MpSearchCriteriaItem.CreateAsync(
                 tagId: recent_tag.Id,
                 sortOrderIdx: 1,
                 joinType: MpLogicalQueryType.And,
@@ -712,7 +712,23 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                         ",",
                         new[] {
                             (int)MpRootOptionType.History, //5
-                            (int)MpHistoryTypeOptionType.Created, //1
+                            (int)MpTransactionType.Created, //1
+                            (int)MpDateTimeOptionType.After, //3 
+                            (int)MpDateAfterUnitType.Startup} //1
+                        .Select(x => x.ToString())),
+                matchValue: (-1).ToString());
+
+            var recent_tag_recreated_datetime_cri = await MpSearchCriteriaItem.CreateAsync(
+                tagId: recent_tag.Id,
+                sortOrderIdx: 2,
+                joinType: MpLogicalQueryType.Or,
+                queryType: MpQueryType.Advanced,
+                options:
+                    string.Join(
+                        ",",
+                        new[] {
+                            (int)MpRootOptionType.History, //5
+                            (int)MpTransactionType.Recreated, //1
                             (int)MpDateTimeOptionType.After, //3 
                             (int)MpDateAfterUnitType.Startup} //1
                         .Select(x => x.ToString())),

@@ -2232,6 +2232,11 @@ namespace MonkeyPaste.Avalonia {
 
             }, () => IsTextItem);
 
+        public MpIAsyncCommand<object> ShareCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                string pt = CopyItemData.ToPlainText("html");
+                await Mp.Services.ShareTools.ShareTextAsync(CopyItemTitle, pt);
+            });
         #endregion
     }
 }

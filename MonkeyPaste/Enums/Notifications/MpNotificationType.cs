@@ -15,6 +15,7 @@
         ContentCapReached,
         TrashCapReached,
         ContentAddBlockedByAccount,
+        ContentRestoreBlockedByAccount,
 
         AppendModeChanged,
         TriggerEnabled,

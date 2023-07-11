@@ -52,8 +52,13 @@
 
             <Button x:Name="SaveAdvSearchButton"
                     Classes="defaultButton textOnlyButton outline outlineOver alterOnly"
-                    IsVisible="{Binding CanSave}"
                     Command="{Binding SaveQueryCommand}">
+                <Button.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="CanSave" />
+                        <Binding Path="CanAlter" />
+                    </MultiBinding>
+                </Button.IsVisible>
                 <TextBlock Text="Save" />
             </Button>
             <!--  ADVANCED SEARCH TOGGLE BUTTON  -->

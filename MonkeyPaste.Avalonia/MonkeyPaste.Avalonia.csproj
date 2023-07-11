@@ -394,6 +394,7 @@
     <None Remove="Assets\Images\selectall.png" />
     <None Remove="Assets\Images\selection.png" />
     <None Remove="Assets\Images\sendToBack.png" />
+    <None Remove="Assets\Images\share.png" />
     <None Remove="Assets\Images\sheep.png" />
     <None Remove="Assets\Images\shield.png" />
     <None Remove="Assets\Images\signout.png" />
@@ -557,6 +558,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\resize_backup2\doubleSidedArrow.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\share.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\skull.png">
@@ -1426,11 +1430,11 @@
     <PackageReference Include="Avalonia" Version="11.0.0" />
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.0" />
     <PackageReference Include="Avalonia.Diagnostics" Version="11.0.0" />
-    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.0" />
-    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0-rc1.1" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.0.1" />
     <PackageReference Include="Markdig" Version="0.31.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="System.Management" Version="7.0.2" />
@@ -1441,7 +1445,10 @@
   <ItemGroup Condition="$(IsDesktop) == 'true'">
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />    
+  </ItemGroup>
   <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
@@ -1464,6 +1471,8 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
+    
+    <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'BROWSER'">
@@ -1538,6 +1547,7 @@
   <PropertyGroup>
   <!-- Makes the TypeScript compilation task a no-op -->
   <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants)</DefineConstants>

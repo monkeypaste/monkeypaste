@@ -17,7 +17,8 @@ namespace MonkeyPaste.Common {
             int time_out_ms = 10_000,
             int wait_step = 100,
             int locked_step = 100,
-            int enter_step = 0) {
+            int enter_step = 0,
+            bool continue_after_timeout = false) {
             if (lockObj == null) {
                 throw new NullReferenceException("must have lockObj");
             }
@@ -44,7 +45,13 @@ namespace MonkeyPaste.Common {
                     // remove its tick in the count
 
                     DecrementWaitByLock(lockObj, debug_label);
-                    throw new TimeoutException($"Lock for Item '{debug_label}' timed out waiting. Wait count reduced to {wait_count}");
+                    if (continue_after_timeout) {
+                        // waiting for something that failed or broke? (used in cliptray additem)
+                        break;
+                    } else {
+
+                        throw new TimeoutException($"Lock for Item '{debug_label}' timed out waiting. Wait count reduced to {wait_count}");
+                    }
                 }
 
                 if (waitWhenTrueFunc()) {
@@ -58,8 +65,10 @@ namespace MonkeyPaste.Common {
                     await Task.Delay(locked_step);
                     continue;
                 }
+                // its our turn!
                 await Task.Delay(enter_step);
                 DecrementWaitByLock(lockObj, debug_label);
+                break;
             }
         }
 

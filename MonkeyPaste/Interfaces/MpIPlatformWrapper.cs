@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
+        MpIShare ShareTools { get; set; }
         MpINotificationBuilder NotificationBuilder { get; set; }
         MpIShutdownTools ShutdownHelper { get; set; }
         MpILoadOnLoginTools LoadOnLoginTools { get; set; }
@@ -20,7 +21,7 @@ namespace MonkeyPaste {
         MpIKeyStrokeSimulator KeyStrokeSimulator { get; set; }
         MpIContentViewLocator ContentViewLocator { get; set; }
 
-        MpINativePathDialog NativePathDialog { get; set; }
+        MpIPlatformPathDialog NativePathDialog { get; set; }
         MpIStartupState StartupState { get; set; }
         MpIPlatformShorcuts PlatformShorcuts { get; set; }
         MpINotificationManager NotificationManager { get; set; }

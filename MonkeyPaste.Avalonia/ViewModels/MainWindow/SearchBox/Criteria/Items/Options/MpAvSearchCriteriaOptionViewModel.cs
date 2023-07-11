@@ -394,7 +394,7 @@ namespace MonkeyPaste.Avalonia {
                 return true;
             }
 
-            if (UnitType.IsUnsignedNumeric()) {
+            if (UnitType.HasUnsignedNumeric()) {
                 string non_numeric_msg = "Value must contain only numbers or '.-'";
                 var notNumRegEx = MpRegEx.RegExLookup[MpRegExType.Is_NOT_Number];
 

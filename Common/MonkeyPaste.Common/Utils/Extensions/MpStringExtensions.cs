@@ -545,6 +545,9 @@ namespace MonkeyPaste.Common {
         }
 
         public static string ToPrettyPrintJson(this string jsonStr) {
+            if (string.IsNullOrWhiteSpace(jsonStr)) {
+                return jsonStr;
+            }
             try {
                 JToken jt = JToken.Parse(jsonStr);
                 return jt.ToString();

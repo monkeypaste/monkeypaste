@@ -206,9 +206,21 @@
                 Grid.Row="0"
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
-                MaxWidth="{Binding ObservedContainerScreenWidth, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
+                MaxWidth="{Binding Bounds.Width, ElementName=QueryTrayContainerBorder}"
                 DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}">
-            <Border.IsVisible>
+            <Border.MaxHeight>                
+                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                              ConverterParameter="*">
+                    <Binding Path="Bounds.Height"
+                             ElementName="QueryTrayContainerBorder" />
+                    <Binding>
+                        <Binding.Source>
+                            <sys:Double>0.9191</sys:Double>
+                        </Binding.Source>
+                    </Binding>
+                </MultiBinding>
+            </Border.MaxHeight>
+              <Border.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="IsExpanded" />
                     <Binding Path="!IsCriteriaWindowOpen" />

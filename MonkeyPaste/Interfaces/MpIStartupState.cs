@@ -6,5 +6,6 @@ namespace MonkeyPaste {
         MpStartupFlags StartupFlags { get; }
         bool IsCoreLoaded { get; }
         bool IsPlatformLoaded { get; }
+        bool IsReady { get; }
     }
 }

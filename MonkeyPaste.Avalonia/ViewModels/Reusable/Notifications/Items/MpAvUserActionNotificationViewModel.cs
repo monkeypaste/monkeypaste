@@ -16,7 +16,8 @@ namespace MonkeyPaste.Avalonia {
         public override bool ShowOptionsButton =>
             NotificationType == MpNotificationType.ContentCapReached ||
             NotificationType == MpNotificationType.TrashCapReached ||
-            NotificationType == MpNotificationType.ContentAddBlockedByAccount;
+            NotificationType == MpNotificationType.ContentAddBlockedByAccount ||
+            NotificationType == MpNotificationType.ContentRestoreBlockedByAccount;
 
         public bool IsFixing { get; set; } = false;
 

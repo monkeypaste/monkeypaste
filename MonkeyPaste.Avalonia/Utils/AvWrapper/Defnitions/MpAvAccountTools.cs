@@ -10,7 +10,8 @@ namespace MonkeyPaste.Avalonia {
         None = 0,
         Add,
         Link,
-        Block,
+        RestoreBlock,
+        AddBlock,
         Remove,
         Init
     }

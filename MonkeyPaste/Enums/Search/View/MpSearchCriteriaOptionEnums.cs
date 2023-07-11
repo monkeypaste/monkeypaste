@@ -56,13 +56,6 @@ namespace MonkeyPaste {
         Title
     }
 
-    public enum MpHistoryTypeOptionType {
-        None = 0,
-        Created,
-        Modified,
-        Pasted
-    }
-
     public enum MpDateTimeOptionType {
         None = 0,
         WithinLast,

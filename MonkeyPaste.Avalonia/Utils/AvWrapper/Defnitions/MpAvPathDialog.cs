@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvPathDialog : MpINativePathDialog {
+    public class MpAvPathDialog : MpIPlatformPathDialog {
         public async Task<string> ShowFileDialogAsync(
             string title = "",
             string initDir = "",
@@ -84,7 +84,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static IStorageProvider GetStorageProvider() {
-            return App.Current.GetMainWindow().StorageProvider;
+            return MpAvWindowManager.MainWindow.StorageProvider;
         }
     }
 }

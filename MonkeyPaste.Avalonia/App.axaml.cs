@@ -20,6 +20,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class App : Application, MpIShutdownTools {
         #region Private Variable
+        private bool _isShuttingDown = false;
         #endregion
 
         #region Constants
@@ -61,7 +62,11 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIShutdownTools Implementation
-        public void ShutdownApp(object args) {
+        void MpIShutdownTools.ShutdownApp(object args) {
+            if (_isShuttingDown) {
+                return;
+            }
+            _isShuttingDown = true;
             MpConsole.WriteLine($"App shutdown called. Args: '{args.ToStringOrEmpty("NULL")}'");
 
             MpTempFileManager.Shutdown();

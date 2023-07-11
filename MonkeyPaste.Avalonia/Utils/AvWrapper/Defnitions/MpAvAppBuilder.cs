@@ -38,6 +38,7 @@ namespace MonkeyPaste.Avalonia {
             //// GET APP NAME
             //appName = Mp.Services.ProcessWatcher.GetProcessApplicationName(pi.Handle);
 
+            MpDebug.Assert(processPath.IsFile(), $"Invalid process path detected '{processPath}'");
             // GET APP ICON
             string iconBase64 =
                 string.IsNullOrEmpty(pi.MainWindowIconBase64) ?

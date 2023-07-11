@@ -21,7 +21,9 @@
     
   
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
-    <MainTargetFramework>net7.0-windows</MainTargetFramework>
+    <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
+    <Tfm>10.0.22621.0</Tfm>
+    <MainTargetFramework>net7.0-windows$(Tfm)</MainTargetFramework>
     <DefineConstants>WINDOWS;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>

@@ -219,6 +219,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShareTestCommand => new MpAsyncCommand(
             async () => {
                 //await ShareTest.ShareText("kiss my butt");
+                await Mp.Services.ShareTools.ShareTextAsync("test title", "test text");
             });
         #endregion
     }

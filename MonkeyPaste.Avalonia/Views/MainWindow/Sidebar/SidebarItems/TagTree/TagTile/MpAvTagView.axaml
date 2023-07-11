@@ -260,7 +260,7 @@
                                               FocusOnDisableReadOnly="True"
                                               EnableReadOnlyOnLostFocus="False"
                                               SelectViewModelOnFocus="False"
-                                              Cursor="{Binding IsTagNameReadOnly, ConverterParameter=Arrow|IBeam, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}}"
+                                              Cursor="{Binding IsTagNameReadOnly, ConverterParameter=Hand|IBeam, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}}"
                                               CancelEditCommand="{Binding CancelRenameTagCommand}"
                                               BeginEditCommand="{Binding FinishRenameTagCommand}"
                                               ScrollViewer.VerticalScrollBarVisibility="Hidden"
