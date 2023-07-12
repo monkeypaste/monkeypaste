@@ -150,7 +150,6 @@ namespace MonkeyPaste {
         #endregion
 
         #region Editor
-
         #endregion
 
         #region Encyption

@@ -773,8 +773,8 @@ const globals = {
 
 	SuppressNextEditorScrollChangedNotification:  false,
 
-	LastScrollBarXIsVisible:  false,
-	LastScrollBarYIsVisible:  false,
+	LastVerticalScrollBarIsVisible:  false,
+	LastHorizontalScrollBarIsVisible:  false,
 	// #region AUTO SCROLL
 
 	AutoScrolledOffset:  null,

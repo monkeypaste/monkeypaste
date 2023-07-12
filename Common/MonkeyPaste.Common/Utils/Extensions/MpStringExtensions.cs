@@ -445,9 +445,12 @@ namespace MonkeyPaste.Common {
 
         public static async Task<byte[]> ReadUriBytesAsync(this string uri, int timeoutMs = 5000) {
             using (var httpClient = new HttpClient()) {
+                httpClient.SetDefaultUserAgent();
+                if (timeoutMs > 0) {
+                    httpClient.Timeout = TimeSpan.FromMilliseconds(timeoutMs);
+                }
                 try {
-                    httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
-                    byte[] bytes = await httpClient.GetByteArrayAsync(uri).TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
+                    byte[] bytes = await httpClient.GetByteArrayAsync(uri);//.TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
                     return bytes;
                 }
                 catch (Exception ex) {
@@ -456,7 +459,6 @@ namespace MonkeyPaste.Common {
             }
             return null;
         }
-
 
 
 

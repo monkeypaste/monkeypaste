@@ -10,6 +10,7 @@
         IgnoreRetryFix,
         IgnoreRetryShutdown,
         ProgressBar,
-        UpgradeLearnMore
+        UpgradeLearnMore,
+        ProgressCancel
     }
 }

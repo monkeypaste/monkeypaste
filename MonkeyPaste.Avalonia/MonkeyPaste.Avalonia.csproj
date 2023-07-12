@@ -269,6 +269,7 @@
     <None Remove="Assets\Images\butterfly.png" />
     <None Remove="Assets\Images\caret.png" />
     <None Remove="Assets\Images\catdog.jpg" />
+    <None Remove="Assets\Images\cef.png" />
     <None Remove="Assets\Images\chain.png" />
     <None Remove="Assets\Images\check.png" />
     <None Remove="Assets\Images\checkgray.png" />
@@ -516,6 +517,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\boxcorners.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\cef.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\clockarrow.png">
@@ -1444,6 +1448,7 @@
 
   <ItemGroup Condition="$(IsDesktop) == 'true'">
     <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
+    <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
 
   <ItemGroup>

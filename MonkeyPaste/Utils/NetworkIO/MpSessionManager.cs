@@ -13,7 +13,7 @@ namespace MonkeyPaste {
                 HttpClientHandler handler = new HttpClientHandler();
                 handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
                 HttpClient client = new HttpClient(handler);
-                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.SetDefaultUserAgent();
                 return client;
             }
         }

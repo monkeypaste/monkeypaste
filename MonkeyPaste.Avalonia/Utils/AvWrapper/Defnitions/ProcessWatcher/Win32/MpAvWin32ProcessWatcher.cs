@@ -168,11 +168,16 @@ namespace MonkeyPaste.Avalonia {
                 GetProcessPath4,
             };
 
-            foreach (var getMeth in getMeths) {
+            foreach (var (getMeth, meth_idx) in getMeths.WithIndex()) {
                 try {
                     string process_path = getMeth(hWnd);
-                    if (!string.IsNullOrEmpty(process_path)) {
+                    if (process_path.IsFile()) {
                         return process_path;
+                    }
+                    if (!string.IsNullOrEmpty(process_path)) {
+                        MpConsole.WriteLine($"GetProcessMethod{(meth_idx + 1)} is gave invalid process path: '{process_path}'");
+                    } else {
+                        MpConsole.WriteLine($"GetProcessMethod{(meth_idx + 1)} couldn't find process path");
                     }
                 }
                 catch (Exception ex) {

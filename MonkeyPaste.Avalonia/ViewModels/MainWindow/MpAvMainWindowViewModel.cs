@@ -1099,6 +1099,7 @@ namespace MonkeyPaste.Avalonia {
             // wait a bit to avoid laggy animation due to hide mw handlers
             await Task.Delay(1_000);
 
+            MpMessenger.SendGlobal(MpMessageType.StartupComplete);
 
             Mp.Services.NotificationBuilder.ShowMessageAsync(
                 title: "Loaded",

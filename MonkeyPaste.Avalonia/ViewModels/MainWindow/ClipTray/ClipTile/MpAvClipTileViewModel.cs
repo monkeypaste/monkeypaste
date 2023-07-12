@@ -655,6 +655,10 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsVerticalScrollbarVisibile { get; set; }
 
+        public bool IsAnyScrollbarVisible =>
+            IsHorizontalScrollbarVisibile ||
+            IsVerticalScrollbarVisibile;
+
         public bool IsPinButtonVisible {
             get {
                 return IsSelected || IsHovering ? true : false;
@@ -1096,11 +1100,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public async Task InitializeAsync(MpCopyItem ci, int queryOffset = -1, bool isRestoringSelection = false) {
+        public async Task InitializeAsync(
+            MpCopyItem ci,
+            int queryOffset = -1,
+            bool isRestoringSelection = false) {
             await Task.Delay(1);
             IsBusy = true;
 
-            bool is_query_itme = queryOffset >= 0;
+            bool is_query_item = queryOffset >= 0;
+            bool is_pinned_item = !is_query_item && ci != null && ci.Id > 0;
             bool is_reload =
                 (CopyItemId == 0 && ci == null) ||
                 (ci != null && CopyItemId == ci.Id) ||
@@ -1507,17 +1515,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsPlaceholderForThisPinnedItemHovering):
                     OnPropertyChanged(nameof(IsImplicitHover));
                     break;
-                case nameof(IsCornerButtonsVisible):
-                    //if (IsCornerButtonsVisible) {
-                    //    AutoCycleDetailsAsync().FireAndForgetSafeAsync(this);
-                    //    Dispatcher.UIThread.Post(async () => {
-                    //        while (IsCornerButtonsVisible) {
-                    //            OnPropertyChanged(nameof(CopyItemTitle));
-                    //            await Task.Delay(AUTO_CYCLE_DETAIL_DELAY_MS);
-                    //        }
-                    //    });
-                    //}
-                    break;
                 case nameof(IsOverDetailGrid):
                     if (!IsOverDetailGrid) {
                         break;
@@ -1532,7 +1529,6 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
                         if (Parent.SelectedItem != this) {
-                            //Parent.SelectedItem = this;
                             Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                         }
 
@@ -1540,28 +1536,22 @@ namespace MonkeyPaste.Avalonia {
                         if (!Parent.IsRestoringSelection) {
                             Parent.StoreSelectionState(this);
                         }
-                        //MpAvPersistentClipTilePropertiesHelper.SetPersistentSelectedItem(CopyItemId, QueryOffsetIdx);
                     } else {
                         if (IsContentReadOnly) {
                             if (IsSubSelectionEnabled) {
                                 DisableSubSelectionCommand.Execute(null);
                             }
                         }
-                        //if (MpAvPersistentClipTilePropertiesHelper.GetPersistentSelectedItemId() == CopyItemId) {
-                        //    MpAvPersistentClipTilePropertiesHelper.ClearPersistentSelection();
-                        //}
                     }
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
                     Parent.NotifySelectionChanged();
                     break;
                 case nameof(CopyItem):
-                    //DetailCollectionViewModel.InitializeAsync().FireAndForgetSafeAsync();
                     if (CopyItem == null) {
                         break;
                     }
                     OnPropertyChanged(nameof(CopyItemData));
                     OnPropertyChanged(nameof(IsPlaceholder));
-                    //UpdateDetails();
                     break;
                 case nameof(IsPinned):
                     OnPropertyChanged(nameof(PinButtonAngle));

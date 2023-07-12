@@ -41,6 +41,7 @@
         ModalOkCancelMessageBox,
         ModalOkMessageBox,
         ModalTextBoxOkCancelMessageBox,
+        ModalProgressCancelMessageBox,
 
         // Plugin Wrapper 
         PluginResponseMessage,

@@ -7,6 +7,7 @@ using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -144,13 +145,16 @@ namespace MonkeyPaste.Avalonia {
                 dataFormatType = inputFormatType,
                 isBase64 = true
             };
-            //string respStr = await ConverterWebView.SendMessageAsync($"convertPlainHtml_ext_ntf('{req.SerializeJsonObjectToBase64()}')");
-            //var resp = MpJsonConverter.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(respStr);
 
             ConverterWebView.LastPlainHtmlResp = null;
             ConverterWebView.SendMessage($"convertPlainHtml_ext_ntf('{req.SerializeJsonObjectToBase64()}')");
+            var sw = Stopwatch.StartNew();
             while (ConverterWebView.LastPlainHtmlResp == null) {
                 await Task.Delay(100);
+                if (sw.ElapsedMilliseconds >= 5_000) {
+                    // shouldn't happen, check converter dev tool console for errors..
+                    return null;
+                }
             }
             MpQuillConvertPlainHtmlToQuillHtmlResponseMessage resp = ConverterWebView.LastPlainHtmlResp;
             ConverterWebView.LastPlainHtmlResp = null;

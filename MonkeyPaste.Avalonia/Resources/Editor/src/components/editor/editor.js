@@ -61,8 +61,8 @@ function getEditorContainerRect(includeScrollBars = true) {
 	let editor_container_rect = getEditorContainerElement().getBoundingClientRect();
 	editor_container_rect = cleanRect(editor_container_rect);
 	if (!includeScrollBars) {
-		editor_container_rect.right -= getVerticalScrollBarWidth();
-		editor_container_rect.bottom -= getHorizontalScrollBarHeight();
+		editor_container_rect.right -= getEditorVerticalScrollBarWidth();
+		editor_container_rect.bottom -= getEditorHorizontalScrollBarHeight();
 		editor_container_rect = cleanRect(editor_container_rect);
 	}
 	

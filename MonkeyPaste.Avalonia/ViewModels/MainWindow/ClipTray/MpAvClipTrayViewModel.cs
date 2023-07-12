@@ -482,7 +482,7 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
                 // TODO? giving item scroll priority maybe better by checking if content exceeds visible boundaries here
-                if ((HoverItem.IsVerticalScrollbarVisibile && HoverItem.IsSubSelectionEnabled) ||
+                if ((HoverItem.IsAnyScrollbarVisible && HoverItem.IsSubSelectionEnabled) ||
                     HoverItem.TransactionCollectionViewModel.IsTransactionPaneOpen) {
                     // when tray is not scrolling (is still) and mouse is over sub-selectable item keep tray scroll frozen
                     return false;
@@ -492,10 +492,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool CanScrollX =>
-            CanScroll && DefaultScrollOrientation == Orientation.Horizontal; //(LayoutType == MpClipTrayLayoutType.Grid || ListOrientation == Orientation.Horizontal);
+            CanScroll && DefaultScrollOrientation == Orientation.Horizontal;
 
         public bool CanScrollY =>
-            CanScroll && DefaultScrollOrientation == Orientation.Vertical; //(LayoutType == MpClipTrayLayoutType.Grid || ListOrientation == Orientation.Vertical);
+            CanScroll && DefaultScrollOrientation == Orientation.Vertical;
         public bool IsThumbDraggingX { get; set; } = false;
         public bool IsThumbDraggingY { get; set; } = false;
         public bool IsThumbDragging => IsThumbDraggingX || IsThumbDraggingY;
@@ -2499,6 +2499,17 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(InternalPinnedItems));
             OnPropertyChanged(nameof(IsPinTrayEmpty));
             OnPropertyChanged(nameof(IsAnyTilePinned));
+
+            // NOTE tile init is before added to pin collection,
+            // need to refresh size when added/removed
+            if (e.NewItems != null &&
+                e.NewItems.Cast<MpAvClipTileViewModel>() is IList<MpAvClipTileViewModel> npctvml) {
+                npctvml.ForEach(x => x.OnPropertyChanged(nameof(x.IsPinned)));
+            }
+            if (e.OldItems != null &&
+                e.OldItems.Cast<MpAvClipTileViewModel>() is IList<MpAvClipTileViewModel> opctvml) {
+                opctvml.ForEach(x => x.OnPropertyChanged(nameof(x.IsPinned)));
+            }
             UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync();
         }
 
@@ -2635,20 +2646,22 @@ namespace MonkeyPaste.Avalonia {
                 // tile not ancestor of current focus, reject
                 return false;
             }
-            //if (SelectedItem != focus_ctvm) {
-            //    MpConsole.WriteLine($"TileNav check overriding selected item from '{SelectedItem}' to focus item '{focus_ctvm}'");
-            //    focus_ctvm.IsSelected = true;
-            //    MpDebug.Assert(SelectedItem == focus_ctvm, $"Selection not updating.");
-            //    return false;
-            //}
+
+            if (SelectedItem == null) {
+                return true;
+            }
 
             bool is_editor_nav =
-                SelectedItem != null && SelectedItem.IsSubSelectionEnabled && SelectedItem.GetContentView() is Control cv && (cv.IsFocused || cv.IsKeyboardFocusWithin);
+                SelectedItem.IsSubSelectionEnabled && SelectedItem.GetContentView() is Control cv && (cv.IsFocused || cv.IsKeyboardFocusWithin);
             bool is_title_nav =
-                SelectedItem != null && !SelectedItem.IsTitleReadOnly && SelectedItem.IsTitleFocused;
+                !SelectedItem.IsTitleReadOnly && SelectedItem.IsTitleFocused;
+
+            bool is_pin_nav =
+                SelectedItem.IsPinned;
 
             if (is_editor_nav ||
-                is_title_nav) {
+                is_title_nav ||
+                is_pin_nav) {
                 return false;
             }
 
@@ -2677,6 +2690,8 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvClipTileViewModel cur_ctvm = SelectedItem;
             MpAvClipTileViewModel target_ctvm = null;
+
+            MpDebug.Assert(cur_ctvm != null && !cur_ctvm.IsPinned, $"Error tile nav only for query items tile '{cur_ctvm}' is pinned");
 
             while (true) {
                 // iterate neighbors until result isn't pin placeholder
@@ -2707,25 +2722,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<MpAvClipTileViewModel> GetNeighborByRowOffsetAsync(MpAvClipTileViewModel ctvm, bool is_next) {
-            int row_offset = is_next ? 1 : -1;
-            double pad = 10 * (row_offset > 0 ? 1 : -1);
-            double offset_y = row_offset > 0 ? ctvm.ScreenRect.Bottom : ctvm.ScreenRect.Top;
-            var compare_loc = ctvm.ScreenRect.Centroid() + new MpPoint(0, offset_y + pad);
-            MpAvClipTileViewModel target_ctvm = null;
-            if (ctvm.IsPinned) {
+            int query_idx_delta = is_next ? 1 : -1;
 
-                target_ctvm = InternalPinnedItems.FirstOrDefault(x => x.ScreenRect.Contains(compare_loc));
-                if (target_ctvm != null) {
-                    return target_ctvm;
-                }
-                if (ListOrientation == Orientation.Horizontal ||
-                        row_offset < 0) {
-                    // no tile above or below
-                    return null;
-                }
-                // at bottom of vert pin tray, select nearest query item
-                return VisibleQueryItems.OrderBy(x => x.ScreenRect.Centroid().Distance(compare_loc)).FirstOrDefault();
-            }
             if (LayoutType == MpClipTrayLayoutType.Stack &&
                 ListOrientation == Orientation.Horizontal) {
                 // horizontal stack, no row change
@@ -2735,97 +2733,42 @@ namespace MonkeyPaste.Avalonia {
                 LayoutType == MpClipTrayLayoutType.Grid) {
                 // horizontal grid qidx's are left-to-right 
                 // adj row offset by fixed row count
-                row_offset *= CurGridFixedCount;
+                query_idx_delta *= CurGridFixedCount;
             }
-            int target_qidx = ctvm.QueryOffsetIdx + row_offset;
-            if (target_qidx >= Mp.Services.Query.TotalAvailableItemsInQuery) {
-                // this last item
-                return null;
-            }
-            if (target_qidx < 0) {
-                // select nearest pin item
-                return InternalPinnedItems.OrderBy(x => x.ScreenRect.Centroid().Distance(compare_loc)).FirstOrDefault();
-            }
-            target_ctvm = QueryItems.FirstOrDefault(x => x.QueryOffsetIdx == target_qidx);
-            if (target_ctvm != null) {
-                return target_ctvm;
-            }
-            if (is_next) {
-                await ScrollToNextPageCommand.ExecuteAsync();
-            } else {
-                await ScrollToPreviousPageCommand.ExecuteAsync();
-            }
-            return QueryItems.FirstOrDefault(x => x.QueryOffsetIdx == target_qidx);
+            return await GetNeighborByQueryOffsetDeltaAsync(ctvm, query_idx_delta);
         }
 
         private async Task<MpAvClipTileViewModel> GetNeighborByColumnOffsetAsync(MpAvClipTileViewModel ctvm, bool is_next) {
-            int col_offset = is_next ? 1 : -1;
-            if (ctvm.IsPinned) {
-                // find col neighbor of pinned tile
-                int target_pidx = InternalPinnedItems.IndexOf(ctvm) + col_offset;
-                if (target_pidx < 0) {
-                    // target is before all pinned items
-                    return null;
-                }
-                if (target_pidx >= InternalPinnedItems.Count) {
-                    // neighbor is beyond pinned items
-                    target_pidx = target_pidx - InternalPinnedItems.Count;
-                    if (target_pidx < VisibleQueryItems.Count()) {
-                        if (DefaultScrollOrientation == Orientation.Horizontal) {
-                            return VisibleQueryItems.OrderBy(x => ctvm.TrayX).ElementAt(target_pidx);
-                        }
-                        return VisibleQueryItems.OrderBy(x => ctvm.TrayY).ElementAt(target_pidx);
-                    }
-                    return null;
-                }
-                return InternalPinnedItems[target_pidx];
-            }
+            int query_idx_delta = is_next ? 1 : -1;
             // find col neighbor of query tile
             if (ListOrientation == Orientation.Vertical &&
                 LayoutType == MpClipTrayLayoutType.Grid) {
                 // vertical grid qidx's are top-to-bottom, left-to-right 
                 // adj offset by fixed row count
-                col_offset *= CurGridFixedCount;
+                query_idx_delta *= CurGridFixedCount;
             }
-            int target_qidx = ctvm.QueryOffsetIdx + col_offset;
-            if (target_qidx < 0) {
-                if (ListOrientation == Orientation.Vertical) {
-                    // no tile to left
-                    return null;
-                }
-                // target is before query tray
-                if (IsPinTrayEmpty) {
-                    return null;
-                }
-                target_qidx = InternalPinnedItems.Count + target_qidx;
-                if (target_qidx < 0) {
-                    return null;
-                }
-                return InternalPinnedItems[target_qidx];
+            return await GetNeighborByQueryOffsetDeltaAsync(ctvm, query_idx_delta);
+        }
+        private async Task<MpAvClipTileViewModel> GetNeighborByQueryOffsetDeltaAsync(MpAvClipTileViewModel ctvm, int deltaOffset) {
+            if (deltaOffset == 0) {
+                return ctvm;
             }
-            if (target_qidx >= Mp.Services.Query.TotalAvailableItemsInQuery) {
-                if (ListOrientation == Orientation.Vertical) {
-                    // no tile to right
-                    return null;
-                }
-                // target is after all query items
+            int target_qidx = ctvm.QueryOffsetIdx + deltaOffset;
+            if (target_qidx < 0 ||
+                target_qidx >= Mp.Services.Query.TotalAvailableItemsInQuery) {
+                // target out of range
                 return null;
             }
-            var neighbor_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == target_qidx);
-            if (neighbor_ctvm == null) {
-                // target is outside current query page
-                while (neighbor_ctvm == null) {
-                    // perform load more in target dir
-                    QueryCommand.Execute(col_offset > 0);
-                    while (IsQuerying) { await Task.Delay(100); }
-                    neighbor_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == target_qidx);
-                }
-                //ScrollIntoView(neighbor_ctvm);
-                //await Task.Delay(100);
-                //while (IsAnyBusy) { await Task.Delay(100); }
-                //return Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
+            MpAvClipTileViewModel target_ctvm = QueryItems.FirstOrDefault(x => x.QueryOffsetIdx == target_qidx);
+            if (target_ctvm != null) {
+                return target_ctvm;
             }
-            return neighbor_ctvm;
+            if (deltaOffset > 0) {
+                await ScrollToNextPageCommand.ExecuteAsync();
+            } else {
+                await ScrollToPreviousPageCommand.ExecuteAsync();
+            }
+            return QueryItems.FirstOrDefault(x => x.QueryOffsetIdx == target_qidx);
         }
         #endregion
 

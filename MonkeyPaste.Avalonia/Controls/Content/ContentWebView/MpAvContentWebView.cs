@@ -937,17 +937,25 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Bindings & Life Cycle
-
-
-        #endregion
-
         #region State
         public MpQuillContentQuerySearchRangesChangedNotificationMessage SearchResponse { get; set; }
 
         public bool CanSendContentMessage =>
             IsEditorInitialized &&
             IsEditorLoaded;
+
+        #region IsScrollWheelEnabled
+
+        public static readonly StyledProperty<bool> IsScrollWheelEnabledProperty =
+            AvaloniaProperty.Register<MpAvContentWebView, bool>(
+                nameof(IsScrollWheelEnabled),
+                defaultValue: true);
+
+        public bool IsScrollWheelEnabled {
+            get { return GetValue(IsScrollWheelEnabledProperty); }
+            set { SetValue(IsScrollWheelEnabledProperty, value); }
+        }
+        #endregion
 
         #endregion
 
@@ -1019,6 +1027,14 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnLoadingStateChange(LoadingStateChangeEventArgs e) {
             base.OnLoadingStateChange(e);
+        }
+
+        protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
+            if (!IsScrollWheelEnabled) {
+                // disabled in no-select mode, otherwise cefnet swallows event and pin tray won't scroll
+                return;
+            }
+            base.OnPointerWheelChanged(e);
         }
 
 #endif

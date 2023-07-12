@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
     public interface MpIPlatformMessageBox {
         Task ShowOkMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null);
+        Task<bool> ShowCancelableProgressMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null, object iprog_and_or_cancel_token_arg = default);
         Task<bool> ShowOkCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null);
 
         Task<bool?> ShowYesNoCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null);

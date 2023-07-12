@@ -1,9 +1,26 @@
 ﻿using MonkeyPaste.Common;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMessageBox : MpIPlatformMessageBox {
+        public async Task<bool> ShowCancelableProgressMessageBoxAsync(
+            string title, string message, object anchor = null, object iconResourceObj = null, object owner = null, object iprog_and_or_cancel_token_arg = null) {
+            // NOTE returns true if percent completes, false if canceled by user or token
+            var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                                    notificationType: MpNotificationType.ModalProgressCancelMessageBox,
+                                    title: title,
+                                    body: message,
+                                    iconSourceObj: iconResourceObj,
+                                    anchor: anchor,
+                                    owner: owner,
+                                    otherArgs: iprog_and_or_cancel_token_arg);
+            if (result == MpNotificationDialogResultType.Dismiss) {
+                return true;
+            }
+            return false;
+        }
         public async Task ShowOkMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null) {
             await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalOkMessageBox,

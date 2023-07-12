@@ -1,4 +1,5 @@
 ﻿namespace MonkeyPaste.Common {
+
     public interface MpIPlatformInfo {
         string OsMachineName { get; }
         string OsVersionInfo { get; }

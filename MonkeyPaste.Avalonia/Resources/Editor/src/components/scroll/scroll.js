@@ -15,12 +15,22 @@ function getEditorScroll() {
     };
 }
 
-function getVerticalScrollBarWidth() {
+function getEditorVerticalScrollBarWidth() {
     return getEditorContainerElement().offsetWidth - getEditorContainerElement().clientWidth;
 }
 
-function getHorizontalScrollBarHeight() {
+function getEditorHorizontalScrollBarHeight() {
     return getEditorContainerElement().offsetHeight - getEditorContainerElement().clientHeight;
+}
+
+function getScrollableElements() {
+    let scroll_elms = [getEditorContainerElement()];
+
+    let table_elms = getTableElements();
+    for (var i = 0; i < length; i++) {
+        scroll_elms.push(table_elms[i]);
+    }
+    return scroll_elms;
 }
 
 // #endregion Getters
@@ -44,12 +54,27 @@ function didEditorScrollChange(old_scroll, new_scroll) {
     return old_scroll.left != new_scroll.left || old_scroll.top != new_scroll.top;
 }
 
-function isScrollBarXVisible() {
-    return getEditorContainerElement().scrollWidth > getEditorContainerElement().clientWidth;
+function isAnyVerticalScrollBarVisible() {
+    let scroll_elms = getScrollableElements();
+    for (var i = 0; i < scroll_elms.length; i++) {
+        let scroll_elm = scroll_elms[i];
+        if (scroll_elm.scrollHeight > scroll_elm.clientHeight) {
+            return true;
+        }
+    }
+    return false;
 }
-function isScrollBarYVisible() {
-    return getEditorContainerElement().scrollHeight > getEditorContainerElement().clientHeight;
+function isAnyHorizontalScrollBarVisible() {
+    let scroll_elms = getScrollableElements();
+    for (var i = 0; i < scroll_elms.length; i++) {
+        let scroll_elm = scroll_elms[i];
+        if (scroll_elm.scrollWidth > scroll_elm.clientWidth) {
+            return true;
+        }
+    }
+    return false;
 }
+
 
 // #endregion State
 
@@ -147,11 +172,13 @@ function setEditorScroll(new_scroll) {
 function hideAllScrollbars() {
     hideEditorScrollbars();
     hideTableScrollbars();
+    updateScrollBarSizeAndPositions();
 }
 
 function showAllScrollbars() {
     showEditorScrollbars();
     showTableScrollbars();
+    updateScrollBarSizeAndPositions();
 }
 
 
@@ -164,15 +191,14 @@ function scrollToEnd() {
 }
 
 function updateScrollBarSizeAndPositions() {
-    const cur_x = isScrollBarXVisible();
-    const cur_y = isScrollBarYVisible();
-    if (cur_x != globals.LastScrollBarXIsVisible ||
-        cur_y != globals.LastScrollBarYIsVisible) {
-        onScrollBarVisibilityChanged_ntf(cur_x, cur_y);
-
+    const cur_x_vis = isAnyHorizontalScrollBarVisible();
+    const cur_y_vis = isAnyVerticalScrollBarVisible();
+    if (cur_x_vis != globals.LastHorizontalScrollBarIsVisible ||
+        cur_y_vis != globals.LastVerticalScrollBarIsVisible) {
+        onScrollBarVisibilityChanged_ntf(cur_x_vis, cur_y_vis);
     }
-    globals.LastScrollBarXIsVisible = cur_x;
-    globals.LastScrollBarYIsVisible = cur_y;
+    globals.LastVerticalScrollBarIsVisible = cur_y_vis;
+    globals.LastHorizontalScrollBarIsVisible = cur_x_vis;
 }
 
 // #endregion Actions

@@ -137,7 +137,7 @@ namespace MonkeyPaste {
             }
             try {
                 using (HttpClient client = new HttpClient()) {
-                    client.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
+                    client.SetDefaultUserAgent();
 
                     try {
                         using (HttpResponseMessage response = await client.GetAsync(url)) {

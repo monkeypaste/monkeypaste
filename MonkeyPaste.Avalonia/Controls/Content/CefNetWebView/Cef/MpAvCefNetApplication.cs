@@ -4,6 +4,7 @@ using Avalonia.Threading;
 using CefNet;
 using MonkeyPaste.Common;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -16,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
         private MpAvCefNetMessageHub _messageHub;
         private Timer messagePump;
         private const int messagePumpDelay = 10;
+        private bool _wasCefUpdated = false;
         #endregion
 
         #region Constants
@@ -29,11 +31,28 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        public string LogFilePath =>
+        public static string LogFilePath =>
             Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "debug.log");
 
-        public string CefFrameworkPath =>
-            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "cef", $"cef_{Mp.Services.PlatformInfo.OsShortName}");
+        public static string CefFrameworkFolderName =>
+            $"cef_{Mp.Services.PlatformInfo.OsShortName}";
+        public static string CefRootPath =>
+            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "cef");
+
+
+        public static string CefTempUpdateFolderPath =>
+            Path.Combine(CefRootPath, "temp");
+        public static string CefTempUpdateBackupFolderPath =>
+            Path.Combine(CefRootPath, "backup");
+
+        public static string CefTempUpdateBackupFrameworkPath =>
+            Path.Combine(CefTempUpdateBackupFolderPath, CefFrameworkFolderName);
+
+        public static string CefFrameworkPath =>
+            Path.Combine(CefRootPath, CefFrameworkFolderName);
+        public static string CefReleasePath =>
+            Path.Combine(CefFrameworkPath, "Release");
+
 
         #endregion
 
@@ -75,8 +94,24 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("CefNet Successfully shutdown");
         }
 
+        public static string GetCurrentCefVersion() {
+            // TODO file name is os-dependent
+            string cefLibFileName = "libcef.dll";
+            string cefLibPath = Path.Combine(CefReleasePath, cefLibFileName);
+            if (cefLibPath.IsFile() &&
+                FileVersionInfo.GetVersionInfo(cefLibPath) is FileVersionInfo fvi) {
+                // NOTE only checked on windows, FileVersion is CEF version
+                return fvi.FileVersion;
+            }
+            return string.Empty;
+        }
+
         private MpAvCefNetApplication() : base() {
             ResetCefNetLogging();
+            //if (MpAvCefUpdater.IsUpdatePendingInstall()) {
+            //    _wasCefUpdated = MpAvCefUpdater.PerformInstall();
+            //}
+            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             string datFileName = "icudtl.dat";
             string cefRootDir = CefFrameworkPath;
@@ -138,7 +173,18 @@ namespace MonkeyPaste.Avalonia {
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
             MpConsole.WriteLine("CefNet Initialized.");
         }
-
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.StartupComplete:
+                    if (_wasCefUpdated) {
+                        Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                            title: "Update Successfull",
+                            message: "Content View updated succesfully").FireAndForgetSafeAsync();
+                    }
+                    Dispatcher.UIThread.InvokeAsync(MpAvCefUpdater.CheckForCefUpdateAsync);
+                    break;
+            }
+        }
         protected override void OnBeforeCommandLineProcessing(string processType, CefCommandLine commandLine) {
             base.OnBeforeCommandLineProcessing(processType, commandLine);
             //return;

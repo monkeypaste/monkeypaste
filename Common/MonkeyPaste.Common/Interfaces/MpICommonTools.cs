@@ -6,6 +6,7 @@
         MpIUserProvidedFileExts UserProvidedFileExts { get; set; }
         MpIStringTools StringTools { get; set; }
         MpIPlatformInfo PlatformInfo { get; set; }
+        MpIThisAppInfo ThisAppInfo { get; set; }
         MpIPlatformMessageBox PlatformMessageBox { get; set; }
 
         MpIMainThreadMarshal MainThreadMarshal { get; set; }

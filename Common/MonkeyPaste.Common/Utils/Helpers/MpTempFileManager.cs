@@ -50,7 +50,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static void Shutdown() {
-            MpDebug.Break("check temp files here before shutdown");
+            MpDebug.Break("check temp files here before shutdown", true);
             foreach (string tfp in _tempFileList) {
                 if (File.Exists(tfp)) {
                     try {

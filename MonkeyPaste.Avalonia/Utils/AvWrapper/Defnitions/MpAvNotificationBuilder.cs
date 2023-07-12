@@ -78,7 +78,8 @@ namespace MonkeyPaste.Avalonia {
             ICommand fixCommand = null,
             object fixCommandArgs = null,
             MpIProgressLoaderViewModel loader = null,
-            object owner = null) {
+            object owner = null,
+            object otherArgs = null) {
             if (body == null) {
                 body = string.Empty;
             }
@@ -97,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
                 FixCommandArgs = fixCommandArgs,
                 RetryAction = retryAction,
                 RetryActionObj = retryActionObj,
-                OtherArgs = loader,
+                OtherArgs = loader == null ? otherArgs : loader,
                 Owner = owner
             };
 

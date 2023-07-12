@@ -29,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalYesNoMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
+                case MpNotificationType.ModalProgressCancelMessageBox:
                 case MpNotificationType.InvalidPlugin:
                 case MpNotificationType.InvalidAction:
                 case MpNotificationType.InvalidClipboardFormatHandler:
@@ -67,6 +68,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                     return MpNotificationButtonsType.OkCancel;
+                case MpNotificationType.ModalProgressCancelMessageBox:
+                    return MpNotificationButtonsType.ProgressCancel;
                 case MpNotificationType.ExecuteParametersRequest:
                     return MpNotificationButtonsType.SubmitCancel;
                 case MpNotificationType.ModalOkMessageBox:
@@ -100,6 +103,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalOkMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
+                case MpNotificationType.ModalProgressCancelMessageBox:
                     return MpNotificationPlacementType.ModalAnchor;
                 default:
                     return MpNotificationPlacementType.SystemTray;
@@ -114,6 +118,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalOkMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
+                case MpNotificationType.ModalProgressCancelMessageBox:
                     return true;
                 default:
                     return false;

@@ -15,6 +15,7 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPinTrayView">
     <local:MpAvUserControl.Styles>
+        <!--  PIN TRAY LBI  -->
         <Style Selector="ListBox#PinTrayListBox > ListBoxItem">
             <Setter Property="HorizontalAlignment"
                     Value="Left" />
@@ -34,6 +35,7 @@
             </Setter>
         </Style>
 
+        <!--  UNPIN ALL/BUSY BUTTON  -->
         <Style Selector="Button#UnpinAllButton Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
@@ -42,6 +44,13 @@
         <Style Selector="Button#UnpinAllButton:pointerover Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+        </Style>
+
+        <!--  PIN TILE WEBVIEW  -->
+        <Style Selector="ListBox#PinTrayListBox local|MpAvContentWebView"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="IsScrollWheelEnabled"
+                    Value="{Binding IsSubSelectionEnabled}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="PinTrayContainerBorder"

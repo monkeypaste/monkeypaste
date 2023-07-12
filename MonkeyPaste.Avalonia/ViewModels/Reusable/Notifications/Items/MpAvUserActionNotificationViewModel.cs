@@ -1,12 +1,19 @@
 ﻿using MonkeyPaste.Common;
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvUserActionNotificationViewModel : MpAvNotificationViewModelBase {
+    public class MpAvUserActionNotificationViewModel : MpAvNotificationViewModelBase, MpIProgressIndicatorViewModel {
         #region Private Variables
+        #endregion
+
+        #region Interfaces
+        public double PercentLoaded { get; set; }
+
         #endregion
 
         #region Properties
@@ -33,6 +40,7 @@ namespace MonkeyPaste.Avalonia {
         public bool ShowYesButton { get; set; } = false;
         public bool ShowNoButton { get; set; } = false;
         public bool ShowCancelButton { get; set; } = false;
+        public bool ShowProgressSpinner { get; set; } = false;
         public bool ShowOkButton { get; set; } = false;
         public bool ShowUpgradeButton { get; set; } = false;
         public bool ShowLearnMoreButton { get; set; } = false;
@@ -121,6 +129,11 @@ namespace MonkeyPaste.Avalonia {
                     ShowNoButton = true;
                     ShowCancelButton = true;
                     break;
+
+                case MpNotificationButtonsType.ProgressCancel:
+                    ShowCancelButton = true;
+                    ShowProgressSpinner = true;
+                    break;
                 case MpNotificationButtonsType.SubmitCancel:
                     ShowSubmitButton = true;
                     ShowCancelButton = true;
@@ -169,7 +182,22 @@ namespace MonkeyPaste.Avalonia {
                 if (DialogResult != MpNotificationDialogResultType.None) {
                     break;
                 }
-                if (MaxShowTimeMs > 0) {
+                if (ShowProgressSpinner) {
+                    if (OtherArgs is object[] argParts) {
+                        if (argParts.OfType<MpAvProgressViewModel>().FirstOrDefault() is MpAvProgressViewModel prog_vm) {
+                            PercentLoaded = prog_vm.Progress;
+                        }
+                        if (argParts.OfType<CancellationToken>().FirstOrDefault() is CancellationToken ct &&
+                            ct.IsCancellationRequested) {
+                            MpConsole.WriteLine($"Progress canceled by token!");
+                            DialogResult = MpNotificationDialogResultType.Cancel;
+                        }
+                    }
+                    MpConsole.WriteLine($"Cur Percent loaded: " + PercentLoaded);
+                    if (PercentLoaded >= 1.0) {
+                        DialogResult = MpNotificationDialogResultType.Dismiss;
+                    }
+                } else if (MaxShowTimeMs > 0) {
                     if (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(MaxShowTimeMs)) {
                         // max show not reache yet
                         while (IsFadeDelayFrozen) {
@@ -240,6 +268,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
         private bool Validate() {
             ValidationText = string.Empty;
             if (ShowTextBox && string.IsNullOrEmpty(BoundInputText)) {

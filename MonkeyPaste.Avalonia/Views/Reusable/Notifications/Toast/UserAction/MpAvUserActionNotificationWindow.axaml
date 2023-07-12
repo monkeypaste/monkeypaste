@@ -190,6 +190,23 @@
                          BorderThickness="0"
                          Text="{Binding BoundInputText, Mode=TwoWay}" />
             </Border>
+            <!--  PROGRESS (Optional)  -->
+            <Border Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    MinHeight="100"
+                    IsVisible="{Binding ShowProgressSpinner}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center">
+
+                <local:MpAvProgressSpinner x:Name="UserActionProgressSpinner"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           LabelBrush="{DynamicResource ThemeWhite}"
+                                           Width="100"
+                                           Height="100"
+                                           Percent="{Binding PercentLoaded}" />
+            </Border>
 
             <!--  BUTTONS ROW  -->
 
