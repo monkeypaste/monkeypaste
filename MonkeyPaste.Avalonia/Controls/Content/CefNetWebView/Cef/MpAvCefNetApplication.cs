@@ -209,8 +209,9 @@ namespace MonkeyPaste.Avalonia {
             //}
             //commandLine.AppendSwitchWithValue("force-device-scale-factor", scale.ToString());
 
-            //commandLine.AppendSwitch("disable-gpu");
-            //commandLine.AppendSwitch("disable-gpu-compositing");
+            commandLine.AppendSwitch("disable-gpu");
+            commandLine.AppendSwitch("disable-gpu-compositing");
+            commandLine.AppendSwitch("in-process-gpu");
             //commandLine.AppendSwitch("disable-gpu-vsync");
 
             //commandLine.AppendSwitch("enable-begin-frame-scheduling");
@@ -220,6 +221,7 @@ namespace MonkeyPaste.Avalonia {
 
             commandLine.AppendSwitch("disable-component-update");
             commandLine.AppendSwitch("process-per-site");
+
             if (OperatingSystem.IsLinux()) {
                 commandLine.AppendSwitch("no-zygote");
                 commandLine.AppendSwitch("no-sandbox");

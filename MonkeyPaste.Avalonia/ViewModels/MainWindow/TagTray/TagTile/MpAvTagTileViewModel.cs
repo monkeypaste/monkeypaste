@@ -1122,11 +1122,6 @@ namespace MonkeyPaste.Avalonia {
         private async Task LinkOrUnlinkCopyItemAsync(int ciid, bool isLink) {
             IsBusy = true;
 
-            var ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
-            if (ci == null) {
-                MpDebug.Break($"Error (un)linking ciid '{ciid}' to tag {TagId}");
-                return;
-            }
             bool is_cap_related = IsTrashTag || IsFavoritesTag;
             bool report_link = false;
             if (isLink) {
@@ -1161,15 +1156,23 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (report_link) {
+
+                MpCopyItem ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
+                if (ci == null) {
+                    // NOTE item will no longer exist if unlink is part of copyitem.delete
+                    MpDebug.Assert(!isLink, $"Error adding link to unknown item ciid {ciid}. Can only be null if unlinking");
+                    return;
+                }
                 Mp.Services.TransactionBuilder.ReportTransactionAsync(
                     copyItemId: ciid,
                     reqType: MpJsonMessageFormatType.Link,
                     req: ciid.ToString(),
                     respType: MpJsonMessageFormatType.Link,
                     resp: TagId.ToString(),
-                    ref_uris: new[] { Mp.Services.SourceRefTools.ConvertToInternalUrl(ci) },
+                    ref_uris: new[] { Mp.Services.SourceRefTools.ConvertToInternalUrl(MpTransactionSourceType.CopyItem, ciid) },
                     transType: isLink ? MpTransactionType.Linked : MpTransactionType.Unlinked)
                     .FireAndForgetSafeAsync(this);
+
                 if (is_cap_related) {
                     ci.LastCapRelatedDateTime = DateTime.Now;
                     await ci.WriteToDatabaseAsync();

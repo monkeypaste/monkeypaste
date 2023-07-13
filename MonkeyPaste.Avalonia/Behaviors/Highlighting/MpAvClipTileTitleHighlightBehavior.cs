@@ -33,7 +33,13 @@ namespace MonkeyPaste.Avalonia {
         public override async Task FindHighlightingAsync() {
             await Task.Delay(1);
             _matches.Clear();
-            if (AssociatedObject is MpAvMarqueeTextBox mtb) {
+
+            bool can_match =
+                Mp.Services.Query.Infos
+                .Any(x => x.QueryFlags.HasTitleMatchFilterFlag());
+
+            if (AssociatedObject is MpAvMarqueeTextBox mtb &&
+                can_match) {
                 _matches.AddRange(
                     Mp.Services.Query.Infos
                     .Where(x => !string.IsNullOrEmpty(x.MatchValue) && x.QueryFlags.HasStringMatchFilterFlag())

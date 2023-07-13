@@ -131,6 +131,9 @@ namespace MonkeyPaste {
         TagTileNotificationAdded,
         TagTileNotificationRemoved,
 
+        AccountDowngrade,
+        AccountUpgrade,
+
         Loaded, //has context (object)
         Busy,
         NotBusy

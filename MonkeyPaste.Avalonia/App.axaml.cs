@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using AvaloniaWebView;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Wpf;
@@ -15,6 +16,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WebViewCore.Configurations;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -100,6 +102,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+        public override void RegisterServices() {
+            base.RegisterServices();
+
+            // if you use only WebView  
+            AvaloniaWebViewBuilder.Initialize(
+                _ => new WebViewCreationProperties() {
+                    AdditionalBrowserArguments = "--process-per-site"
+                });
+        }
         public override void Initialize() {
             AvaloniaXamlLoader.Load(this);
         }

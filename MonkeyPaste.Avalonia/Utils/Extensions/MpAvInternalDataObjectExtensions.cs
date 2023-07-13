@@ -172,7 +172,7 @@ namespace MonkeyPaste.Avalonia {
             this IDataObject avdo,
             //bool addAsNewItem = false,
             bool is_copy = false) {
-            var result = await Mp.Services.ContentBuilder.BuildFromDataObject(avdo, is_copy);
+            var result = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, is_copy);
             return result;
         }
 

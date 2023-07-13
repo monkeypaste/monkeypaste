@@ -67,7 +67,7 @@
 
 
         <!--  CORNER BUTTON SCROLLBAR MARGIN  -->
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.noTitle.hasVertContentScroll local|MpAvClipTileCornerButtonsView">
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.transOpen.hasVertContentScroll local|MpAvClipTileCornerButtonsView">
             <Setter Property="Margin"
                     Value="0,0,30,0" />
         </Style>
@@ -76,7 +76,7 @@
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
-                          Classes.noTitle="{Binding !IsTitleVisible}"
+                          Classes.transOpen="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen}"
                           Classes.hasVertContentScroll="{Binding IsVerticalScrollbarVisibile}"
                           Classes.implicitHover="{Binding IsImplicitHover}"
                           Classes.TileHover="{Binding IsHovering}"
@@ -162,7 +162,8 @@
                     </MultiBinding>
                 </Border.IsVisible>
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{Binding CapToolTipText}" />
+                    <local:MpAvToolTipView Classes="warning"
+                                           ToolTipText="{Binding CapToolTipText}" />
                 </ToolTip.Tip>
                 <Border x:Name="AccountCapOverlay"
                         Opacity="{Binding IsHovering, ConverterParameter=0.2|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
@@ -178,12 +179,15 @@
                         <SolidColorBrush Color="Black" Opacity="0.2" />
                     </Border.Background>
                     <Image Stretch="UniformToFill"
+                           Classes.shake="{Binding IsHovering}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Width="50"
                            Height="50"
                            Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
-
+                        <Image.RenderTransform>
+                            <RotateTransform />
+                        </Image.RenderTransform>
                     </Image>
                 </Border>
             </Border>
@@ -312,6 +316,7 @@
                            Margin="0,0,0,1"
                            TextAlignment="Center"
                            Foreground="Black"
+                           IsHitTestVisible="False"
                            Text="{Binding DetailText}">
                 </TextBlock>
             </Grid>

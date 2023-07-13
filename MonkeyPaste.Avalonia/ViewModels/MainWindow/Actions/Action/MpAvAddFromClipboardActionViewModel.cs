@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
                         MpConsole.WriteLine("Add content from Clipboard called, clipboard not busy adding manually");
                     }
                     //var result = await Mp.Services.CopyItemBuilder.BuildAsync(mpdo, transType: MpTransactionType.Created);
-                    var result = await Mp.Services.ContentBuilder.BuildFromDataObject(mpdo, false);
+                    var result = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(mpdo, false);
                     return result;
                 });
             }

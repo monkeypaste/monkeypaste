@@ -315,6 +315,10 @@ namespace MonkeyPaste.Avalonia {
                 if (avm == null) {
                     // unknown app activated add like in registration
                     var new_app = await Mp.Services.AppBuilder.CreateAsync(e);
+                    if (new_app == null) {
+                        MpConsole.WriteLine("Warning! Unknown app activated, ignoring it. Should we add a default unknownAppId? What would the process path be?");
+                        return;
+                    }
                     var sw = Stopwatch.StartNew();
                     while (true) {
                         avm = GetAppByProcessInfo(e);

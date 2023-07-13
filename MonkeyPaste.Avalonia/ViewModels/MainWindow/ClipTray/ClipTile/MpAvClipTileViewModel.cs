@@ -360,6 +360,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpRect ObservedBounds { get; set; }
+
         //public double MinWidth =>
         //    IsPinned ? Parent.DefaultPinItemWidth : Parent.DefaultQueryItemWidth;
         public double MinWidth {

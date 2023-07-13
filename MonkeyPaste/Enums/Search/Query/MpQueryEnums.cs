@@ -16,74 +16,6 @@ namespace MonkeyPaste {
 
     [Flags]
     public enum MpContentQueryBitFlags : long {
-        //None = 0,
-        //CaseSensitive = 1,
-        //Title = 2 ^ 1,
-        //TextType = 2 ^ 2,
-        //FileType = 2 ^ 3,
-        //ImageType = 2 ^ 4,
-        //Url = 2 ^ 5,
-        //AppName = 2 ^ 6,
-        //AppPath = 2 ^ 7,
-        //Annotations = 2 ^ 8,
-        //Tag = 2 ^ 9,
-        //Regex = 2 ^ 10,
-        //Content = 2 ^ 11,
-        //UrlTitle = 2 ^ 12,
-        //Time = 2 ^ 13,
-        //WholeWord = 2 ^ 14,
-        //DeviceType = 2 ^ 15,
-        //DeviceName = 2 ^ 16,
-
-        //ItemColor = 2 ^ 17,
-
-        //Matches = 2 ^ 18,
-        //Contains = 2 ^ 19,
-        //BeginsWith = 2 ^ 20,
-        //EndsWith = 2 ^ 21,
-
-        //Width = 2 ^ 22,
-        //Height = 2 ^ 23,
-
-        //Hex = 2 ^ 24,
-        //Rgba = 2 ^ 25,
-        //ColorDistance = 2 ^ 26,
-
-        //Equals = 2 ^ 27,
-        //GreaterThan = 2 ^ 28,
-        //LessThan = 2 ^ 29,
-        //IsNot = 2 ^ 30,
-
-        //Exactly = 2 ^ 31,
-        //Before = 2 ^ 32,
-        //After = 2 ^ 33,
-        //Between = 2 ^ 34,
-
-        //FileName = 2 ^ 35,
-        //FilePath = 2 ^ 36,
-        //FileExt = 2 ^ 37,
-
-        //UrlDomain = 2 ^ 38,
-
-        //Created = 2 ^ 39, // mirrors MpTransactionType
-        //Dropped = 2 ^ 40,
-        //Dragged = 2 ^ 41,
-        //Pasted = 2 ^ 42,
-        //Copied = 2 ^ 43,
-        //Cut = 2 ^ 44,
-        //Edited = 2 ^ 45,
-        //Analyzed = 2 ^ 46,
-        //Appended = 2 ^ 47,
-        //Recreated = 2 ^ 48,
-        //Error = 2 ^ 49,
-        //System = 2 ^ 50,
-
-        //Hours = 2 ^ 51,
-        //Days = 2 ^ 52,
-
-        //And = 2 ^ 53,
-        //Or = 2 ^ 54,
-        //Not = 2 ^ 55
         None = 0,
         CaseSensitive = 1L << 0,
         Title = 1L << 1,
@@ -214,6 +146,29 @@ namespace MonkeyPaste {
                 default:
                     return false;
             }
+        }
+
+        public static bool HasTitleMatchFilterFlag(this MpContentQueryBitFlags qf) {
+            return
+                qf.HasFlag(MpContentQueryBitFlags.Title);
+        }
+        public static bool HasContentMatchFilterFlag(this MpContentQueryBitFlags qf) {
+            return
+                qf.HasFlag(MpContentQueryBitFlags.Content) ||
+                qf.HasFlag(MpContentQueryBitFlags.FileName) ||
+                qf.HasFlag(MpContentQueryBitFlags.FilePath) ||
+                qf.HasFlag(MpContentQueryBitFlags.FileExt);
+        }
+
+        public static bool HasSourceMatchFilterFlag(this MpContentQueryBitFlags qf) {
+            return
+                qf.HasFlag(MpContentQueryBitFlags.Url) ||
+                qf.HasFlag(MpContentQueryBitFlags.UrlTitle) ||
+                qf.HasFlag(MpContentQueryBitFlags.UrlDomain) ||
+                qf.HasFlag(MpContentQueryBitFlags.AppName) ||
+                qf.HasFlag(MpContentQueryBitFlags.AppPath) ||
+                qf.HasFlag(MpContentQueryBitFlags.Annotations) ||
+                qf.HasFlag(MpContentQueryBitFlags.DeviceName);
         }
 
         public static bool HasStringMatchFilterFlag(this MpContentQueryBitFlags qf) {

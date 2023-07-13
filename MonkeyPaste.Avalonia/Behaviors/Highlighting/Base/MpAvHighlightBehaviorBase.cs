@@ -46,6 +46,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Events
+        public event EventHandler<int> MatchCountChanged;
+        #endregion
+
         #region Constructors
         protected override void OnAttached() {
             base.OnAttached();
@@ -76,13 +80,12 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected void SetMatchCount(int count) {
+            bool changed = _matchCount != count;
             _matchCount = count;
-            if (count > 0) {
+            if (changed) {
+                MatchCountChanged?.Invoke(this, _matchCount);
+            }
 
-            }
-            if (MatchCount > 1) {
-                MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
-            }
         }
         #endregion
 

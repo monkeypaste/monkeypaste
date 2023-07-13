@@ -14,6 +14,8 @@
                   WindowState="{Binding WindowState, Mode=TwoWay}"
                   Icon="{Binding Source={StaticResource AppIcon}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                   SystemDecorations="None"
+                  ShowActivated="{Binding !IsMainWindowInHiddenLoadState}"
+                  Focusable="{Binding !IsMainWindowInHiddenLoadState}"
                   ClipToBounds="True"
                   Background="Transparent"
                   ShowInTaskbar="False"

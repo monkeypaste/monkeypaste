@@ -2,6 +2,6 @@
 
 namespace MonkeyPaste {
     public interface MpIContentBuilder {
-        Task<MpCopyItem> BuildFromDataObject(object avOrPortableDataObject, bool is_copy);
+        Task<MpCopyItem> BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy);
     }
 }

@@ -52,41 +52,44 @@ function enableReadOnly_ext_ntf() {
 function convertPlainHtml_ext_ntf(convertPlainHtmlReqMsgBase64Str) {
 	// input 'MpQuillConvertPlainHtmlToQuillHtmlRequestMessage'
 	// output 'MpQuillConvertPlainHtmlToQuillHtmlResponseMessage'
+	let respObj = null;
+	try {
+		let req = toJsonObjFromBase64Str(convertPlainHtmlReqMsgBase64Str);
+		if (!req || !req.data) {
+			throw new Error('could not decode conversion request');
+		}
+		let url = '';
+		let plainHtml = '';
+		let qhtml = '';
+		let delta = '';
 
-	let req = toJsonObjFromBase64Str(convertPlainHtmlReqMsgBase64Str);
-	if (!req || !req.data) {
+		if (req.isBase64) {
+			plainHtml = b64_to_utf8(req.data);
+		} else {
+			plainHtml = req.data;
+		}
 
-		sendMessage('notifyPlainHtmlConverted', null);
-		return;
+		let is_html_cb_data = isHtmlClipboardFragment(plainHtml);
+		if (is_html_cb_data) {
+			// html is just plain html when coming from internal copy,cut, or drop 
+			let cbData = parseHtmlFromHtmlClipboardFragment(plainHtml);
+			plainHtml = cbData.html;
+			url = cbData.sourceUrl;
+		}
+		let convert_result = convertPlainHtml(plainHtml, req.dataFormatType);
+
+		respObj = {
+			html: toBase64FromJsonObj(plainHtml),
+			quillHtml: toBase64FromJsonObj(convert_result.html),
+			quillDelta: toBase64FromJsonObj(convert_result.delta),
+			sourceUrl: url,
+			success: true
+		};
+	} catch (ex) {
+		onException_ntf('error converting item', ex);
+
 	}
-	let url = '';
-	let plainHtml = '';
-	let qhtml = '';
-	let delta = '';
-
-	if (req.isBase64) {
-		plainHtml = b64_to_utf8(req.data);
-	} else {
-		plainHtml = req.data;
-	}
-
-	let is_html_cb_data = isHtmlClipboardFragment(plainHtml);
-	if (is_html_cb_data) {
-		// html is just plain html when coming from internal copy,cut, or drop 
-		let cbData = parseHtmlFromHtmlClipboardFragment(plainHtml);
-		plainHtml = cbData.html;
-		url = cbData.sourceUrl;
-	}
-	let convert_result = convertPlainHtml(plainHtml, req.dataFormatType);
-
-	let respObj = {
-		html: toBase64FromJsonObj(plainHtml),
-		quillHtml: toBase64FromJsonObj(convert_result.html),
-		quillDelta: toBase64FromJsonObj(convert_result.delta),
-		sourceUrl: url
-	};
 	let resp = toBase64FromJsonObj(respObj);
-
 	sendMessage('notifyPlainHtmlConverted', resp);
 }
 function selectionStateRequest_ext_ntf() {

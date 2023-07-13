@@ -13,7 +13,9 @@ namespace MonkeyPaste.Avalonia {
         RestoreBlock,
         AddBlock,
         Remove,
-        Init
+        Init,
+        AccountTypeDowngraded,
+        AccountTypeUpgraded,
     }
     public class MpAvAccountTools : MpIAccountTools {
         #region Private Variables
@@ -29,7 +31,18 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIAccountTools Implementation
-        public MpUserAccountType CurrentAccountType { get; private set; } = MpUserAccountType.Premium;
+#if DEBUG
+        public void SetAccountType(MpUserAccountType newType) {
+            // NOTE this maybe a good all around interface method, not sure though
+            bool changed = CurrentAccountType != newType;
+            if (changed) {
+                bool is_upgrade = (int)newType > (int)CurrentAccountType;
+                CurrentAccountType = newType;
+                MpMessenger.SendGlobal(is_upgrade ? MpMessageType.AccountUpgrade : MpMessageType.AccountDowngrade);
+            }
+        }
+#endif
+        public MpUserAccountType CurrentAccountType { get; private set; } = MpUserAccountType.Free;
 
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {

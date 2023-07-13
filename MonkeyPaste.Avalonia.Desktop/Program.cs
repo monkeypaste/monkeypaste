@@ -14,8 +14,8 @@ namespace MonkeyPaste.Avalonia {
             try {
                 App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args);
-                //.StartWithCefNetApplicationLifetime(args);
+                //.StartWithClassicDesktopLifetime(args);
+                .StartWithCefNetApplicationLifetime(args);
             }
             catch (Exception e) {
                 // here we can work with the exception, for example add it to our log file

@@ -129,8 +129,8 @@ namespace MonkeyPaste.Avalonia {
                             Command = NavigateToCefNetUriCommand,
                         },
                         new MpMenuItemViewModel() {
-                            Header = "Share Test",
-                            Command = ShareTestCommand,
+                            Header = "Generic Test",
+                            Command = GenericTestCommand,
                         },
                         //new MpMenuItemViewModel() {
                         //    Header = "Show Notifier DevTools",
@@ -216,10 +216,14 @@ namespace MonkeyPaste.Avalonia {
                 w.ShowChild();
             });
 
-        public ICommand ShareTestCommand => new MpAsyncCommand(
+        public ICommand GenericTestCommand => new MpAsyncCommand(
             async () => {
-                //await ShareTest.ShareText("kiss my butt");
-                await Mp.Services.ShareTools.ShareTextAsync("test title", "test text");
+                int next_type = (int)Mp.Services.AccountTools.CurrentAccountType + 1;
+                if (next_type > (int)MpUserAccountType.Premium) {
+                    next_type = (int)MpUserAccountType.Free;
+                }
+                Mp.Services.AccountTools.SetAccountType((MpUserAccountType)next_type);
+
             });
         #endregion
     }

@@ -19,6 +19,7 @@
         Height="130"
         SizeToContent="Manual"
         ShowInTaskbar="False"
+        ShowActivated="False"
         WindowState="Normal"
         SystemDecorations="None"
         TransparencyLevelHint="Transparent"

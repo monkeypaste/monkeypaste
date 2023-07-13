@@ -19,6 +19,7 @@
         MinHeight="150"
         SizeToContent="WidthAndHeight"
         ShowInTaskbar="False"
+        ShowActivated="{Binding IsModal}"
         WindowState="Normal"
         Topmost="True"
         SystemDecorations="None"
@@ -221,7 +222,7 @@
                         IsVisible="{Binding ShowUpgradeButton}"
                         Command="{Binding UpgradeCommand}">
                     <Border Background="Green"
-                            Padding="5,3">
+                            Padding="10,5">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="15"
                                    Height="15"
@@ -244,7 +245,7 @@
                         IsVisible="{Binding ShowLearnMoreButton}"
                         Command="{Binding LearnMoreCommand}">
                     <Border Background="Blue"
-                            Padding="5,3">
+                            Padding="7,5">
                         <TextBlock Text="Learn More..."
                                    VerticalAlignment="Center"
                                    Foreground="White"
@@ -289,7 +290,7 @@
 
             <local:MpAvOptionsButton Grid.Row="0"
                                      Grid.Column="1"
-                                     RenderTransform="translateX(12px) translateY(-10px)"
+                                     RenderTransform="translateX(13px) translateY(-10px)"
                                      HorizontalAlignment="Right"
                                      IsVisible="{Binding ShowOptionsButton}"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"

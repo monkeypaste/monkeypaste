@@ -123,5 +123,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #endregion
+
+        #region Helpers
+
+
+        #endregion
     }
 }

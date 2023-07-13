@@ -1186,7 +1186,7 @@ namespace MonkeyPaste.Avalonia {
         private MpAvShortcutViewModel _exact_match;
 
         private void HandleGestureRouting_Down(string keyLiteral, object down_e) {
-            MpConsole.WriteLine($"Global key DOWN: " + keyLiteral);
+            //MpConsole.WriteLine($"Global key DOWN: " + keyLiteral);
 
             if (_downChecker.Where(x => DateTime.Now - x.Item2 > TimeSpan.FromSeconds(15)) is IEnumerable<Tuple<KeyCode, DateTime>> dttl &&
                 dttl.Any()) {
@@ -1261,7 +1261,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task HandleGestureRouting_Up(string keyLiteral, object up_e) {
-            MpConsole.WriteLine($"Global key UP: " + keyLiteral);
+            //MpConsole.WriteLine($"Global key UP: " + keyLiteral);
             var sharp_up = up_e as KeyboardHookEventArgs;
             KeyCode kc = sharp_up.Data.KeyCode;
             _downs.Remove(kc);

@@ -15,30 +15,12 @@ namespace MonkeyPaste.Avalonia {
 
             string processPath = pi.ProcessPath;
             string appName = pi.ApplicationName;
-            //iconBase64;
 
-            //// GET APP PATH
-            //if (string.IsNullOrWhiteSpace(pi.ProcessPath)) {
-            //    if (pi.Handle == IntPtr.Zero) {
-            //        // when does this happen? likely a problem
-            //        MpDebug.Break();
-            //        return null;
-            //    }
-            //    // likely running application when no process path, find the path from the handle and use handle to query for mw title (if not already set)
-            //    processPath = Mp.Services.ProcessWatcher.GetProcessPath(pi.Handle);
-            //} else {
-            //    processPath = pi.ProcessPath;
-            //}
-            //if (string.IsNullOrEmpty(processPath)) {
-            //    MpConsole.WriteWarningLine($"could not find process path for info (using this app): ");
-            //    MpConsole.WriteLine(pi.ToString());
-            //    var this_app_fallback = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
-            //    return this_app_fallback;
-            //}
-            //// GET APP NAME
-            //appName = Mp.Services.ProcessWatcher.GetProcessApplicationName(pi.Handle);
+            if (!processPath.IsFile()) {
+                MpDebug.Break($"Invalid process path detected '{processPath}'");
+                return null;
+            }
 
-            MpDebug.Assert(processPath.IsFile(), $"Invalid process path detected '{processPath}'");
             // GET APP ICON
             string iconBase64 =
                 string.IsNullOrEmpty(pi.MainWindowIconBase64) ?

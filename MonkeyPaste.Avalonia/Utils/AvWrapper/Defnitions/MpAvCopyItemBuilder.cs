@@ -313,19 +313,19 @@ namespace MonkeyPaste.Avalonia {
                     inputTextFormat = "text";
                 }
 
-                MpAvHtmlClipboardData htmlClipboardData = null;
+                MpAvRichHtmlConvertResult htmlClipboardData = null;
 
                 if (MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-                    htmlClipboardData = await MpAvPlainHtmlConverter.Instance.ParseAsync(itemData, inputTextFormat);
+                    htmlClipboardData = await MpAvPlainHtmlConverter.Instance.ConvertAsync(itemData, inputTextFormat);
                     if (htmlClipboardData == null) {
                         itemData = null;
                     } else {
                         itemData = htmlClipboardData.RichHtml;
                         delta = htmlClipboardData.Delta;
-                        if (!string.IsNullOrEmpty(htmlClipboardData.Html) &&
-                            htmlClipboardData.Html.StartsWith("<img")) {
+                        if (!string.IsNullOrEmpty(htmlClipboardData.InputHtml) &&
+                            htmlClipboardData.InputHtml.StartsWith("<img")) {
                             try {
-                                var img_parts = htmlClipboardData.Html.Split("src=\"");
+                                var img_parts = htmlClipboardData.InputHtml.Split("src=\"");
                                 if (img_parts.Length > 1) {
                                     var img_parts2 = img_parts[1].Split("\"");
                                     if (img_parts2.Length > 0) {
@@ -342,7 +342,7 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                             catch (Exception ex) {
-                                MpConsole.WriteTraceLine($"Error converting img html to img content. Img html: '{htmlClipboardData.Html}'", ex);
+                                MpConsole.WriteTraceLine($"Error converting img html to img content. Img html: '{htmlClipboardData.InputHtml}'", ex);
                             }
                             // handle special case that item is an image drop from browser (tested on chrome in windows)
 

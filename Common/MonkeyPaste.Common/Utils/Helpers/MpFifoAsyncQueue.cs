@@ -22,10 +22,6 @@ namespace MonkeyPaste.Common {
             if (lockObj == null) {
                 throw new NullReferenceException("must have lockObj");
             }
-            if (!waitWhenTrueFunc.Invoke()) {
-                // effectively waited 0 ms
-                return;
-            }
             Stopwatch time_out_sw =
                 time_out_ms >= 0 ?
                     Stopwatch.StartNew() :
@@ -35,6 +31,11 @@ namespace MonkeyPaste.Common {
             int this_sim_id = AddWaiterByLock(lockObj, debug_label);
             debug_label = string.IsNullOrEmpty(debug_label) ? "Unknown" + this_sim_id : debug_label;
 
+            if (!waitWhenTrueFunc.Invoke()) {
+                // effectively waited 0 ms
+                DecrementWaitByLock(lockObj, debug_label);
+                return;
+            }
             MpConsole.WriteLine($"Item '{debug_label}' waiting at queue: {this_sim_id}...");
 
             while (true) {

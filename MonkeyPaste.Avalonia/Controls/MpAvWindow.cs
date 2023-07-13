@@ -127,8 +127,12 @@ namespace MonkeyPaste.Avalonia {
             var result = await ShowDialog<object>(owner ?? MpAvWindowManager.MainWindow);
 
             if (owner is Window w) {
-                w.Activate();
-                w.Focus();
+                if (!w.ShowActivated) {
+
+                } else {
+                    w.Activate();
+                    w.Focus();
+                }
             }
             return DialogResult;
         }

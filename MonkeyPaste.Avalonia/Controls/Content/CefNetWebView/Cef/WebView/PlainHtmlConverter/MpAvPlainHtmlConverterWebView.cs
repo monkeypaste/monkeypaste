@@ -51,13 +51,15 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public override void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
-            base.HandleBindingNotification(notificationType, msgJsonBase64Str, contentHandle);
             switch (notificationType) {
                 case MpAvEditorBindingFunctionType.notifyPlainHtmlConverted:
                     var ntf = MpJsonConverter.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillConvertPlainHtmlToQuillHtmlResponseMessage plainHtmlResp) {
                         _lastPlainHtmlConvertedResp = plainHtmlResp;
                     }
+                    break;
+                default:
+                    base.HandleBindingNotification(notificationType, msgJsonBase64Str, contentHandle);
                     break;
             }
         }

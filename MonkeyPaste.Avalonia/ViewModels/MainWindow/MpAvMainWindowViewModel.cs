@@ -815,7 +815,10 @@ namespace MonkeyPaste.Avalonia {
 
             bool is_other_win_active = MpAvWindowManager.AllWindows.Any(x => x.DataContext != this && x.IsActive);
 
-            bool force_activate = !IsMainWindowActive && !is_other_win_active;
+            bool force_activate =
+                !IsMainWindowActive &&
+                !is_other_win_active &&
+                !IsMainWindowInHiddenLoadState;
             if (force_activate) {
                 // when mw is shown and not active it doesn't hide or receive input until activated
                 MpAvWindowManager.MainWindow.Activate();
@@ -1030,8 +1033,9 @@ namespace MonkeyPaste.Avalonia {
 
             if (source == "show" && IsMainWindowOpen && IsMainWindowLocked) {
                 // CAse 1
+                bool can_activate = !IsMainWindowInHiddenLoadState;
                 bool needs_activate = !IsMainWindowVisible || !IsMainWindowActive;
-                if (needs_activate) {
+                if (can_activate && needs_activate) {
                     //if(source == "show") {
                     //MpConsole.WriteLine($"Fixing mw state, locked but not visible");
                     MpAvWindowManager.MainWindow.Activate();
@@ -1119,7 +1123,7 @@ namespace MonkeyPaste.Avalonia {
 
                  await ResetMainWindowAnimationStateAsync();
 
-                 MpConsole.WriteLine("Opening Main Widow");
+                 MpConsole.WriteLine("Opening Main Window");
 
                  StartMainWindowShow();
 

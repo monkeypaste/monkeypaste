@@ -860,15 +860,15 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
             var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
             string this_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(this_app);
-            int content_count = 300;
-            int link_count = 10;
+            int content_count = 5;
+            int link_count = 2;
 
             int[] test_tag_ids = new int[] { test_tag_1.Id, test_tag_2.Id, test_tag_3.Id };
             int[] link_idxs = MpRandom.GetUniqueRandomInts(0, content_count - 1, link_count);
 
             async Task CreateTestItemAsync(int i) {
                 //string data = $"<p>This is test {i + 1}.</p><p>{System.Guid.NewGuid()}</p>";
-                string data = $"<p><span style=\"color:#ffffff\">This&nbsp;is&nbsp;test&nbsp;{i}.</span><br/><span style=\"color:#ffffff\">{System.Guid.NewGuid()}</span></p>";
+                string data = $"<p><span style=\"color:#ffffff\">This&nbsp;is&nbsp;test&nbsp;{i + 1}.</span><br/><span style=\"color:#ffffff\">{System.Guid.NewGuid()}</span></p>";
 
                 var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, data);
                 var dobj = await MpDataObject.CreateAsync(pdo: mpdo);

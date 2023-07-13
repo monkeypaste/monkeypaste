@@ -22,6 +22,7 @@
         MinHeight="50"
         SizeToContent="Height"
         ShowInTaskbar="False"
+        ShowActivated="False"
         Topmost="True"
         WindowState="Normal"
         SystemDecorations="None"

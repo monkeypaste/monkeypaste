@@ -42,6 +42,20 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
             InitDnd();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+
+            var ptrlb = this.FindControl<ListBox>("PinTrayListBox");
+            ptrlb.AddHandler(KeyDownEvent, PinTrayListBox_KeyDown, RoutingStrategies.Tunnel);
+        }
+
+        private void PinTrayListBox_KeyDown(object sender, KeyEventArgs e) {
+            // prevent default list arrow navigation (it doesn't account for row nav)
+            if (e.Key != Key.Left &&
+                e.Key != Key.Up &&
+                e.Key != Key.Right &&
+                e.Key != Key.Down) {
+                return;
+            }
+            e.Handled = BindingContext.CanTileNavigate();
         }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {

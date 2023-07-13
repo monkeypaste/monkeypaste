@@ -21,67 +21,23 @@ using System.Web;
 using Org.BouncyCastle.Utilities;
 using Avalonia.Layout;
 using Avalonia.Controls.Notifications;
+using Avalonia.Media;
 #if DESKTOP
 
 using CefNet;
 using CefNet.Avalonia;
 using CefNet.Internal;
 
+//using AvaloniaWebView;
+
 #endif
 
 namespace MonkeyPaste.Avalonia {
-
-    public enum MpAvEditorBindingFunctionType {
-        // two-way (editor as source) *_get async requests
-        getAllSharedTemplatesFromDb,
-        getClipboardDataTransferObject,
-        getDragDataTransferObject,
-        getContactsFromFetcher,
-        getMessageBoxResult,
-
-        // two-way (host as source) *_ext_ntf requests
-        notifySelectionState,
-        notifyPlainHtmlConverted,
-        notifyReadOnlyEnabledFromHost,
-        notifyDataObjectResponse,
-
-
-        // one-way *_ntf notifications
-        notifyDocSelectionChanged,
-        notifyContentChanged,
-        notifySubSelectionEnabledChanged,
-        notifyException,
-        notifyReadOnlyEnabled,
-        notifyReadOnlyDisabled,
-        notifyInitComplete,
-        notifyDomLoaded,
-        notifyDropCompleted,
-        notifyDragEnter,
-        notifyDragLeave,
-        notifyDragEnd,
-        notifyContentScreenShot,
-        notifyUserDeletedTemplate,
-        notifyAddOrUpdateTemplate,
-        notifyPasteRequest,
-        notifyFindReplaceVisibleChange,
-        notifyQuerySearchRangesChanged,
-        notifyLoadComplete,
-        notifyShowCustomColorPicker,
-        notifyNavigateUriRequested,
-        notifySetClipboardRequested,
-        notifyDataTransferCompleted,
-        notifyAppendStateChanged,
-        notifyInternalContextMenuIsVisibleChanged,
-        notifyInternalContextMenuCanBeShownChanged,
-        notifyLastTransactionUndone,
-        notifyAnnotationSelected,
-        notifyShowDebugger,
-        notifyScrollBarVisibilityChanged,
-    }
     [DoNotNotify]
     public class MpAvContentWebView :
 #if DESKTOP
         WebView,
+        //Control,
 #else
         MpAvNativeWebViewHost,
 #endif
@@ -168,35 +124,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIJsonMessenger Implementation
         public void SendMessage(string msgJsonBase64Str) {
-            //if (!CanSendContentMessage) {
-            //    // when webview isn't load yet, sending msg can create js exceptions
-            //    // and/or screw the editor state up so wait by fifo
-            //    MpConsole.WriteLine($"Webview '{DataContext}' not ready for messages. About to wait!");
-            //    Dispatcher.UIThread.Post(async () => {
-            //        try {
-            //            await MpFifoAsyncQueue.WaitByConditionAsync(
-            //                lockObj: _sendMessageLock,
-            //                () => {
-            //                    MpConsole.WriteLine($"Webview '{DataContext}' waiting...");
-            //                    if (_noStateReqMessages.Any(x => msgJsonBase64Str.StartsWith(x))) {
-            //                        return false;
-            //                    }
-            //                    if (_initOnlyMessages.Any(x => msgJsonBase64Str.StartsWith(x))) {
-            //                        return !IsEditorInitialized;
-            //                    }
-            //                    return !CanSendContentMessage;
-            //                });
-            //        }
-            //        catch (Exception ex) {
-            //            MpConsole.WriteTraceLine($"Webview '{DataContext}' waiting...FAILED", ex);
-            //            return;
-            //        }
-            //        MpConsole.WriteLine($"Webview '{DataContext}' waiting...DONE");
-            //        SendMessage(msgJsonBase64Str);
-            //    });
-            //    return;
-            //}
-
 #if DESKTOP
             this.ExecuteJavascript(msgJsonBase64Str);
 #else
@@ -922,6 +849,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region Web View
+        //public static readonly DirectProperty<MpAvContentWebView, WebView> WebViewProperty =
+        //    AvaloniaProperty.RegisterDirect<MpAvContentWebView, WebView>(
+        //        nameof(WebView),
+        //        o => o.WebView);
+
+        //public WebView? WebView {
+        //    get { return GetValue(WebViewProperty); }
+        //    set { SetValue(WebViewProperty, value); }
+        //}
+
+        #endregion
+
         #region View Models
         public MpAvClipTileViewModel BindingContext {
             get {
@@ -1078,7 +1018,7 @@ namespace MonkeyPaste.Avalonia {
             };
         }
 
-        private MpQuillLoadContentRequestMessage GetLoadContentMessage() {
+        private MpQuillLoadContentRequestMessage GetLoadContentMessage(bool isSearchEnabled = true) {
             if (BindingContext == null) {
                 return new MpQuillLoadContentRequestMessage() {
                     contentHandle = "<EMPTY CONTENT HANDLE>",
@@ -1098,22 +1038,24 @@ namespace MonkeyPaste.Avalonia {
                 isSubSelectionEnabled = BindingContext.IsSubSelectionEnabled
             };
 
-            var searches =
-                Mp.Services.Query.Infos
-                .Where(x => !string.IsNullOrEmpty(x.MatchValue) && x.QueryFlags.HasStringMatchFilterFlag())
-                .Select(x => new MpQuillContentSearchRequestMessage() {
-                    searchText = x.MatchValue,
-                    isCaseSensitive = x.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive),
-                    isWholeWordMatch = x.QueryFlags.HasFlag(MpContentQueryBitFlags.WholeWord),
-                    useRegEx = x.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex),
-                    matchType = x.QueryFlags.GetStringMatchType().ToString()
-                });
+            if (isSearchEnabled) {
+                var searches =
+                    Mp.Services.Query.Infos
+                        .Where(x => !string.IsNullOrEmpty(x.MatchValue) && x.QueryFlags.HasStringMatchFilterFlag())
+                        .Select(x => new MpQuillContentSearchRequestMessage() {
+                            searchText = x.MatchValue,
+                            isCaseSensitive = x.QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive),
+                            isWholeWordMatch = x.QueryFlags.HasFlag(MpContentQueryBitFlags.WholeWord),
+                            useRegEx = x.QueryFlags.HasFlag(MpContentQueryBitFlags.Regex),
+                            matchType = x.QueryFlags.GetStringMatchType().ToString()
+                        });
 
-            loadContentMsg.searchesFragment =
-                searches.Any() ?
-                new MpQuillContentSearchesFragment() {
-                    searches = searches.ToList()
-                }.SerializeJsonObjectToBase64() : null;
+                loadContentMsg.searchesFragment =
+                    searches.Any() ?
+                    new MpQuillContentSearchesFragment() {
+                        searches = searches.ToList()
+                    }.SerializeJsonObjectToBase64() : null;
+            }
 
             loadContentMsg.appendStateFragment =
                 BindingContext.IsAppendNotifier ?
@@ -1333,7 +1275,7 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
-        public async Task PerformLoadContentRequestAsync() {
+        public async Task PerformLoadContentRequestAsync(bool isSearchEnabled = true) {
             Dispatcher.UIThread.VerifyAccess();
 
             IsEditorLoaded = false;
@@ -1364,7 +1306,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            var loadContentMsg = GetLoadContentMessage();
+            var loadContentMsg = GetLoadContentMessage(isSearchEnabled);
             string msgStr = loadContentMsg.SerializeJsonObjectToBase64();
 
             SendMessage($"loadContent_ext('{msgStr}')");

@@ -7,6 +7,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvHiddenWindow() : base() {
             Width = 0;
             Height = 0;
+            ShowActivated = false;
             Opacity = 0;
             TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
             ShowInTaskbar = false;

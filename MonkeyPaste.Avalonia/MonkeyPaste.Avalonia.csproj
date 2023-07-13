@@ -1444,6 +1444,7 @@
     <PackageReference Include="System.Management" Version="7.0.2" />
     <PackageReference Include="NetCoreAudio" Version="1.7.0" />
     <PackageReference Include="System.Speech" Version="7.0.0" />
+    <PackageReference Include="WebView.Avalonia" Version="11.0.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition="$(IsDesktop) == 'true'">

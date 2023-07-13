@@ -563,19 +563,7 @@ namespace MonkeyPaste {
         public void Save() {
             IsSaving = true;
 
-            var sw = Stopwatch.StartNew();
-
-            string prefStr = SerializeJsonObject();
-
-            if (IsSettingsEncrypted) {
-                prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, GetPrefPassword());
-            }
-
-            MpFileIo.WriteTextToFile(PreferencesPath, prefStr, false);
-            // write backup after succesful save
-            MpFileIo.WriteTextToFile(PreferencesPathBackup, prefStr, false);
-
-            MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
+            WriteToDisk(SerializeJsonObject());
 
             IsSaving = false;
         }
@@ -638,10 +626,7 @@ namespace MonkeyPaste {
         private static async Task LoadPrefsAsync() {
             IsLoading = true;
 
-            string prefsStr = MpFileIo.ReadTextFromFile(PreferencesPath);
-            if (IsEncrypted(prefsStr)) {
-                prefsStr = MpEncryption.SimpleDecryptWithPassword(prefsStr, GetPrefPassword());
-            }
+            _ = ReadRawData(false, out string prefsStr);
 
             MpPrefViewModel prefVm = null;
             if (ValidatePrefData(prefsStr)) {
@@ -681,19 +666,47 @@ namespace MonkeyPaste {
             return prefStr != null && prefStr.Length > 10 && !ValidatePrefData(prefStr);
         }
 
+        private static bool ReadRawData(bool from_backup, out string raw_str) {
+            raw_str = MpFileIo.ReadTextFromFile(from_backup ? PreferencesPathBackup : PreferencesPath);
+            if (IsEncrypted(raw_str)) {
+                try {
+                    raw_str = MpEncryption.SimpleDecryptWithPassword(raw_str, from_backup ? GetBackupPrefPassword() : GetPrefPassword());
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error decrypting pref file '{PreferencesPath}'", ex);
+                    raw_str = null;
+                }
+                return true;
+            }
+            return false;
+        }
+        private static void WriteToDisk(string prefStr, bool encrypt = true) {
+            var sw = Stopwatch.StartNew();
+
+            string backupStr = prefStr;
+            if (encrypt) {
+                prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, GetPrefPassword());
+                backupStr = MpEncryption.SimpleEncryptWithPassword(backupStr, GetBackupPrefPassword());
+            }
+
+            MpFileIo.WriteTextToFile(PreferencesPath, prefStr, false);
+            // write backup after succesful save
+            MpFileIo.WriteTextToFile(PreferencesPathBackup, backupStr, false);
+
+            MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
+        }
         private static async Task CreateDefaultPrefsAsync(bool isReset = false) {
             MpConsole.WriteLine("Pref file was either missing, empty or this is initial startup. (re)creating");
 
             if (isReset) {
                 if (PreferencesPathBackup.IsFile()) {
-                    string backup_str = MpFileIo.ReadTextFromFile(PreferencesPathBackup);
-                    if (IsEncrypted(backup_str)) {
-                        backup_str = MpEncryption.SimpleDecryptWithPassword(backup_str, GetBackupPrefPassword());
-                    }
+                    bool encrypt = ReadRawData(true, out string backup_str);
+
                     if (ValidatePrefData(backup_str)) {
                         // pref is corrupt, check it and backup etc.
-                        MpDebug.Break();
-                        MpFileIo.WriteTextToFile(PreferencesPath, backup_str, false);
+                        MpDebug.Break($"Pref corrupt or missing but backup ok");
+                        //MpFileIo.WriteTextToFile(PreferencesPath, backup_str, false);
+                        WriteToDisk(backup_str, encrypt);
                         await InitAsync(_prefPath, _dbInfo, _osInfo);
                         return;
                     }

@@ -94,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
-        public async Task<MpAvHtmlClipboardData> ParseAsync(
+        public async Task<MpAvRichHtmlConvertResult> ConvertAsync(
             string inputStr,
             string inputFormatType,
             MpCsvFormatProperties csvProps = null) {
@@ -103,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-                var result = MpAvHtmlClipboardData.Parse(htmlDataStr.ToString());
+                var result = MpAvRichHtmlConvertResult.Parse(htmlDataStr.ToString());
                 return result;
             }
 
@@ -136,7 +136,6 @@ namespace MonkeyPaste.Avalonia {
 
             if (string.IsNullOrWhiteSpace(htmlDataStr)) {
                 MpConsole.WriteTraceLine("Error parsing html data obj, no data found");
-                //MpDebug.Break();
                 return null;
             }
 
@@ -151,20 +150,24 @@ namespace MonkeyPaste.Avalonia {
             var sw = Stopwatch.StartNew();
             while (ConverterWebView.LastPlainHtmlResp == null) {
                 await Task.Delay(100);
-                if (sw.ElapsedMilliseconds >= 5_000) {
+                if (sw.ElapsedMilliseconds >= MpAvClipTrayViewModel.ADD_CONTENT_TIMEOUT_MS) {
                     // shouldn't happen, check converter dev tool console for errors..
+                    MpConsole.WriteLine($"Error! Html converter timed out. Cannot convert");
                     return null;
                 }
             }
             MpQuillConvertPlainHtmlToQuillHtmlResponseMessage resp = ConverterWebView.LastPlainHtmlResp;
             ConverterWebView.LastPlainHtmlResp = null;
-
-            return new MpAvHtmlClipboardData() {
-                Html = resp.html.ToStringFromBase64(),
-                RichHtml = resp.quillHtml.ToStringFromBase64(),
-                Delta = resp.quillDelta.ToStringFromBase64(),
-                SourceUrl = resp.sourceUrl
-            };
+            MpConsole.WriteLine($"{(resp.success ? "[SUCCESS]" : "[FAILED]")}Content Conversion Complete. Total Time {sw.ElapsedMilliseconds}ms");
+            if (resp.success) {
+                return new MpAvRichHtmlConvertResult() {
+                    InputHtml = resp.html.ToStringFromBase64(),
+                    RichHtml = resp.quillHtml.ToStringFromBase64(),
+                    Delta = resp.quillDelta.ToStringFromBase64(),
+                    SourceUrl = resp.sourceUrl
+                };
+            }
+            return null;
         }
 
         #endregion

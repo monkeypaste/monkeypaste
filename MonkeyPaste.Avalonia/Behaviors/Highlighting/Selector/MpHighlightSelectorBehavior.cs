@@ -114,10 +114,17 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 _items = Items.OrderBy(x => x.Priority).ToList();
+                _items.ForEach(x => x.MatchCountChanged += HighlightBehavior_MatchCountChanged);
             }
             PerformHighlighting().FireAndForgetSafeAsync();
         }
 
+        private void HighlightBehavior_MatchCountChanged(object sender, int matchCount) {
+            int totalCount = _items.Sum(x => x.MatchCount);
+            if (totalCount > 1) {
+                MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
+            }
+        }
 
         private async void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {

@@ -82,7 +82,7 @@ namespace MonkeyPaste {
                 //    .BuildAsync(
                 //        pdo: mpdo,
                 //        transType: MpTransactionType.Created);
-                var target_ci = await Mp.Services.ContentBuilder.BuildFromDataObject(mpdo, false);
+                var target_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(mpdo, false);
                 return target_ci;
             }
 

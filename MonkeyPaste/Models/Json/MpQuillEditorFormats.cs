@@ -146,6 +146,8 @@ namespace MonkeyPaste {
         public string quillHtml { get; set; }
         public string quillDelta { get; set; }
         public string sourceUrl { get; set; }
+
+        public bool success { get; set; }
     }
 
     public class MpQuillIsHostFocusedChangedMessage : MpJsonObject {

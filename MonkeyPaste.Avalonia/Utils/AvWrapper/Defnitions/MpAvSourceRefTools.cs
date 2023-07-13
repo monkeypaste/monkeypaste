@@ -198,7 +198,7 @@ namespace MonkeyPaste.Avalonia {
             var app = await Mp.Services.AppBuilder.CreateAsync(last_pinfo);
 
             MpUrl url = null;
-            string source_url = MpAvHtmlClipboardData.FindSourceUrl(avdo);
+            string source_url = MpAvRichHtmlConvertResult.FindSourceUrl(avdo);
             if (!string.IsNullOrWhiteSpace(source_url)) {
                 url = await Mp.Services.UrlBuilder.CreateAsync(
                     url: source_url,
@@ -233,7 +233,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string ConvertToInternalUrl(MpISourceRef sr) {
-            return $"{INTERNAL_SOURCE_DOMAIN}?type={sr.SourceType.ToString()}&id={sr.SourceObjId}";
+            if (sr == null) {
+                return string.Empty;
+            }
+            return ConvertToInternalUrl(sr.SourceType, sr.SourceObjId);
+        }
+        public string ConvertToInternalUrl(MpTransactionSourceType sourceType, int sourceId) {
+
+            return $"{INTERNAL_SOURCE_DOMAIN}?type={sourceType.ToString()}&id={sourceId}";
         }
         public string ConvertToAbsolutePath(MpISourceRef sr) {
             if (sr is MpApp app) {

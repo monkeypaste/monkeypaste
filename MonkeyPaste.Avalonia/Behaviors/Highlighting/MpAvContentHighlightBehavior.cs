@@ -31,14 +31,20 @@ namespace MonkeyPaste.Avalonia {
             MpContentQueryBitFlags.Content;
         public override async Task FindHighlightingAsync() {
             int matchCount = 0;
+            bool can_match =
+                Mp.Services.Query.Infos
+                .Any(x => x.QueryFlags.HasContentMatchFilterFlag());
+
             if (ContentRange != null &&
                 ContentRange.Document is MpAvContentWebView wv) {
-                await wv.PerformLoadContentRequestAsync();
-                while (wv.SearchResponse == null) {
-                    await Task.Delay(100);
+                await wv.PerformLoadContentRequestAsync(can_match);
+                if (can_match) {
+                    while (wv.SearchResponse == null) {
+                        await Task.Delay(100);
+                    }
+                    matchCount = wv.SearchResponse.rangeCount;
+                    wv.SearchResponse = null;
                 }
-                matchCount = wv.SearchResponse.rangeCount;
-                wv.SearchResponse = null;
             }
             SetMatchCount(matchCount);
         }

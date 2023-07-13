@@ -49,6 +49,7 @@ namespace MonkeyPaste.Avalonia {
             await Task.Delay(1);
 
             _matches.Clear();
+
             if (AssociatedObject == null) {
                 return;
             }
@@ -87,6 +88,9 @@ namespace MonkeyPaste.Avalonia {
             //}
             //_matches = _matches.Distinct().ToList();
 
+            bool can_match =
+                Mp.Services.Query.Infos
+                .Any(x => x.QueryFlags.HasSourceMatchFilterFlag());
             SelectedIdx = -1;
             SetMatchCount(_matches.Count);
         }
