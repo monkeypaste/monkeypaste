@@ -11,6 +11,9 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <local:MpAvUserControl.Resources>
+        <Thickness x:Key="ListBoxItemPadding">0,0,0,0</Thickness>
+    </local:MpAvUserControl.Resources>
     <Border x:Name="ListBoxContainerBorder"
             Classes="paramBorder">
         <Grid RowDefinitions="Auto,Auto">
@@ -23,7 +26,7 @@
                      ItemsSource="{Binding Items}"
                      Selection="{Binding Selection}"
                      SelectionMode="Single"
-                     Margin="10,0"
+                     Margin="0"
                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      MaxWidth="{Binding Bounds.Width, ElementName=ListBoxContainerBorder}">

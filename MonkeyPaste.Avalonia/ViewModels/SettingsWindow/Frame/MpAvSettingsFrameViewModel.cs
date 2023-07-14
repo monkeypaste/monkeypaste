@@ -34,18 +34,36 @@ namespace MonkeyPaste.Avalonia {
                 switch (FrameType) {
                     case MpSettingsFrameType.Account:
                         return "UserImage";
-                    case MpSettingsFrameType.LookAndFeel:
-                        return "HeartImage";
+                    case MpSettingsFrameType.Theme:
+                        return "ColorsImage";
+                    case MpSettingsFrameType.Fonts:
+                        return "FontImage";
+                    case MpSettingsFrameType.Sound:
+                        return "SpeakerImage";
+                    case MpSettingsFrameType.Taskbar:
+                        return "Dots2x2Image";
+                    case MpSettingsFrameType.Window:
+                        return "AppFrameImage";
+                    case MpSettingsFrameType.Hints:
+                        return "InfoImage";
                     case MpSettingsFrameType.International:
                         return "GlobeImage";
-                    case MpSettingsFrameType.History:
+                    case MpSettingsFrameType.Limits:
+                        return "SlidersImage";
+                    case MpSettingsFrameType.Tracking:
+                        return "ClipboardImage";
+                    case MpSettingsFrameType.Startup:
                         return "ClockArrowImage";
+                    case MpSettingsFrameType.Search:
+                        return "SearchImage";
+                    case MpSettingsFrameType.Content:
+                        return "BananaImage";
+                    case MpSettingsFrameType.DragAndDrop:
+                        return "DragAndDropImage";
+                    case MpSettingsFrameType.Shortcuts:
+                        return "HotkeyImage";
                     case MpSettingsFrameType.System:
                         return "AppShellImage";
-                    case MpSettingsFrameType.Content:
-                        return "ClipboardImage";
-                    case MpSettingsFrameType.Pointer:
-                        return "MouseNoneClickImage";
                     default:
                         return string.Empty;
                 }

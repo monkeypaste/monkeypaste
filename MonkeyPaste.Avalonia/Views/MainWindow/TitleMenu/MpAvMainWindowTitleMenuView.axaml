@@ -180,7 +180,9 @@
         <StackPanel x:Name="RightStackPanel"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
+          
             <!--  Zoom Factor Slider  -->
+          
             <Grid x:Name="ZoomSliderContainerGrid"
                   IsVisible="False"
                   Background="{StaticResource HitTestableTransparent}"
@@ -216,44 +218,20 @@
                     </Button>
                 </Canvas>
             </Grid>
+          
             <!--  Layout Toggle Button  -->
+          
             <ToggleButton x:Name="GridLayoutToggleButton"
                           Classes="noBg noHoverBg noBorder"
                           Command="{Binding ToggleLayoutTypeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           IsChecked="{Binding IsGridLayout, Mode=OneWay, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           ToolTip.ShowDelay="0">
-                <Grid>
-                    <PathIcon IsVisible="{Binding IsGridLayout, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                              Data="{StaticResource StackLayoutSvg}">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="Stack Layout" />
-                        </ToolTip.Tip>
-                    </PathIcon>
-                    <PathIcon IsVisible="{Binding !IsGridLayout, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                              Data="{StaticResource GridLayoutSvg}">
-                        <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="Grid Layout" />
-                        </ToolTip.Tip>
-                    </PathIcon>
-                </Grid>
-
-            </ToggleButton>
-            <!--  Orientation Cycle CW Button  -->
-
-            <!--<Button x:Name="MainWindowCycleOrientationCwButton"
-                    Command="{Binding CycleOrientationCommand}"
-                    CommandParameter="CW"
-                    ToolTip.ShowDelay="0">
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Cycle Orientation CW" />
-                </ToolTip.Tip>
-
-                <PathIcon Data="{StaticResource RotateCcwSvg}">
-                    <PathIcon.RenderTransform>
-                        <ScaleTransform ScaleX="-1" />
-                    </PathIcon.RenderTransform>
+                <PathIcon Data="{StaticResource GridLayoutSvg}">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="Toggle Grid Layout" />
+                    </ToolTip.Tip>
                 </PathIcon>
-            </Button>-->
+            </ToggleButton>
 
             <!--  Orientation Cycle CCW Button  -->
 

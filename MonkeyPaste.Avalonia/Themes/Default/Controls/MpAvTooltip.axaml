@@ -25,7 +25,10 @@
         <Setter Property="Background"
                 Value="{DynamicResource ThemeAccent1Color}" />
     </Style>
-
+    <Style Selector="local|MpAvToolTipView.warning TextBlock#ToolTipTextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeBlack}" />
+    </Style>
     <!--  ERROR  -->
 
     <Style Selector="local|MpAvToolTipView.error Border">

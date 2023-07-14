@@ -790,7 +790,7 @@ namespace MonkeyPaste.Avalonia {
         public IList<MpAvClipTileViewModel> InternalPinnedItems =>
             PinnedItems
             .Where(x => !x.IsWindowOpen && !x.IsAppendNotifier)
-            .Take(MpPrefViewModel.Instance.MaxStagedClipCount)
+            .Take(MpPrefViewModel.Instance.MaxPinClipCount)
             .ToList();
 
         //public MpAvClipTileViewModel ModalClipTileViewModel { get; private set; }
@@ -1821,8 +1821,7 @@ namespace MonkeyPaste.Avalonia {
                        body: cap_msg_sb.ToString(),
                        msgType: cap_msg_type,
                        iconSourceObj: cap_msg_icon,
-                       maxShowTimeMs: cap_msg_timeout,
-                       maxShowTimeMs: MpContentCapInfo.MAX_CAP_NTF_SHOW_TIME_MS).FireAndForgetSafeAsync();
+                       maxShowTimeMs: cap_msg_timeout).FireAndForgetSafeAsync();
         }
 
         #endregion

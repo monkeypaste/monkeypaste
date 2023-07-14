@@ -380,7 +380,22 @@ namespace MonkeyPaste.Avalonia {
         public DateTime LastRightClickDateTime { get; set; }
         public DateTime LastLeftClickDateTime { get; set; }
 
-        public int SelectedShortcutRoutingProfileTypeIdx { get; set; }
+        public int RoutingProfileTypeIdx {
+            get => (int)RoutingProfileType;
+            set {
+                if (value < 0 || value >= typeof(MpShortcutRoutingProfileType).Length()) {
+                    // bad ui value set
+                    return;
+                }
+                if (value != (int)RoutingProfileType) {
+                    RoutingProfileType = (MpShortcutRoutingProfileType)value;
+                    OnPropertyChanged(nameof(RoutingProfileTypeIdx));
+                }
+            }
+        }
+
+
+        public MpShortcutRoutingProfileType RoutingProfileType { get; private set; }
         #endregion
 
         #endregion
@@ -435,7 +450,9 @@ namespace MonkeyPaste.Avalonia {
                 IS_PSEUDO_GLOBAL_INPUT_ENABLED = false;
             }
             Items.CollectionChanged += Items_CollectionChanged;
+            PropertyChanged += MpAvShortcutCollectionViewModel_PropertyChanged;
         }
+
 
 
         #endregion
@@ -453,6 +470,8 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             InitExternalPasteTracking();
+
+            UpdateRoutingProfileCommand.Execute(null);
 
             IsBusy = false;
         }
@@ -539,19 +558,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public MpShortcutRoutingProfileType DetermineShortcutRoutingProfileType() {
-            var globalable_scvml = Items.Where(x => x.CanBeGlobalShortcut);
-            if (globalable_scvml.All(x => x.RoutingType == MpRoutingType.Internal)) {
-                return MpShortcutRoutingProfileType.Internal;
-            }
-            if (globalable_scvml.All(x => x.RoutingType == MpRoutingType.Passive)) {
-                return MpShortcutRoutingProfileType.Global;
-            }
-            if (globalable_scvml.Any(x => x.ShortcutType == MpShortcutType.ToggleMainWindow && x.RoutingType == MpRoutingType.Override)) {
-                return MpShortcutRoutingProfileType.Default;
-            }
-            return MpShortcutRoutingProfileType.Custom;
-        }
         public int GetViewModelCommandShortcutId(MpIShortcutCommandViewModel scvm) {
             if (GetViewModelCommandShortcut(scvm) is MpAvShortcutViewModel svm) {
                 return svm.ShortcutId;
@@ -589,10 +595,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Db Overrides
 
+        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+            if (e is MpShortcut sc) {
+                Dispatcher.UIThread.Post(() => {
+                    UpdateRoutingProfileCommand.Execute(null);
+                });
+            }
+        }
+
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc && sc.ShortcutType.IsEditorShortcut()) {
                 UpdateEditorShortcutsMessageStr();
                 Dispatcher.UIThread.Post(() => {
+                    UpdateRoutingProfileCommand.Execute(null);
+
                     MpAvClipTrayViewModel.Instance
                         .AllActiveItems
                         .Where(x => !x.IsAnyPlaceholder)
@@ -607,6 +623,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             MpAvShortcutViewModel scvmToRemove = null;
             if (e is MpShortcut sc) {
+                UpdateRoutingProfileCommand.Execute(null);
                 scvmToRemove = Items.FirstOrDefault(x => x.ShortcutId == sc.Id);
             } else if (e is MpCopyItem ci) {
                 scvmToRemove = Items.FirstOrDefault(x => x.CommandParameter == ci.Id.ToString() && x.ShortcutType == MpShortcutType.PasteCopyItem);
@@ -630,6 +647,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private void MpAvShortcutCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(RoutingProfileType):
+                    OnPropertyChanged(nameof(RoutingProfileTypeIdx));
+                    MpMessenger.SendGlobal(MpMessageType.ShortcutRoutingProfileChanged);
+                    break;
+            }
+        }
         private async Task InitShortcutsAsync() {
             Dispatcher.UIThread.VerifyAccess();
             //using mainwindow, map all saved shortcuts to their commands
@@ -712,7 +737,37 @@ namespace MonkeyPaste.Avalonia {
                 }.SerializeJsonObjectToBase64();
         }
 
+
+        private MpShortcutRoutingProfileType DetermineShortcutRoutingProfileType() {
+            var globalable_scvml = Items.Where(x => x.CanBeGlobalShortcut);
+            if (globalable_scvml.All(x => x.RoutingType == MpRoutingType.Internal)) {
+                return MpShortcutRoutingProfileType.Internal;
+            }
+            if (globalable_scvml.All(x => x.RoutingType == MpRoutingType.Passive)) {
+                return MpShortcutRoutingProfileType.Global;
+            }
+            if (globalable_scvml.Any(x => x.ShortcutType == MpShortcutType.ToggleMainWindow && x.RoutingType == MpRoutingType.Override)) {
+                return MpShortcutRoutingProfileType.Default;
+            }
+            return MpShortcutRoutingProfileType.Custom;
+        }
+
+        private async Task SetShortcutRoutingToProfileTypeAsync(MpShortcutRoutingProfileType new_profile_type) {
+            var globalable_scvml = Items.Where(x => x.CanBeGlobalShortcut);
+            foreach (var globalable_scvm in globalable_scvml) {
+                globalable_scvm.RoutingType = new_profile_type.GetProfileBasedRoutingType(globalable_scvm.ShortcutType);
+            }
+            await Task.Delay(100);
+            while (globalable_scvml.Any(x => x.IsBusy)) {
+                await Task.Delay(100);
+            }
+
+            RoutingProfileType = DetermineShortcutRoutingProfileType();
+            MpDebug.Assert(RoutingProfileType == new_profile_type, $"Routing profile mismatch. Set to '{new_profile_type}' but Determined is '{RoutingProfileType}'");
+        }
+
         #region Paste Tracking
+
         private string _activePasteKeystring = null;
         private MpPortableProcessInfo _activeProcessInfo = null;
         public void InitExternalPasteTracking() {
@@ -1343,6 +1398,27 @@ namespace MonkeyPaste.Avalonia {
                 await scvm.Shortcut.WriteToDatabaseAsync();
             }, (args) => args is MpAvShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));
 
+        public ICommand UpdateRoutingProfileCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                Dispatcher.UIThread.VerifyAccess();
+                if (args is not MpShortcutRoutingProfileType srpt) {
+                    // data changed, assess state
+                    RoutingProfileType = DetermineShortcutRoutingProfileType();
+                    return;
+                }
+
+                bool confirm = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+                    title: "Confirm",
+                    message: $"Are you sure you want to change your shortcut routing profile to '{srpt}'",
+                    iconResourceObj: "WarningImage");
+                if (!confirm) {
+                    // user canceled, send change msg to update pref ui
+                    MpMessenger.SendGlobal(MpMessageType.ShortcutRoutingProfileChanged);
+                    return;
+                }
+                await SetShortcutRoutingToProfileTypeAsync(srpt);
+            });
+
         public ICommand ResetAllShortcuts => new MpAsyncCommand(async () => {
             bool result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                 title: "Confirm",
@@ -1352,7 +1428,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             Items.Clear();
-            await MpDb.ResetShortcutsAsync(MpPrefViewModel.Instance.InstallerShortcutProfileType);
+            await MpDb.ResetShortcutsAsync(RoutingProfileType);
             InitShortcutsAsync().FireAndForgetSafeAsync(this);
         });
 

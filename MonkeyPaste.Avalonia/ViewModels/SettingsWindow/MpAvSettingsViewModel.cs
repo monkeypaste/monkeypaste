@@ -120,6 +120,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+        public IList<string> RecentSettingsSearches { get; private set; }
         #endregion
 
         #region State
@@ -168,6 +169,8 @@ namespace MonkeyPaste.Avalonia {
 
             IsTabSelected = new ObservableCollection<bool>(Enumerable.Repeat(false, 6));
             IsTabSelected.CollectionChanged += IsTabSelected_CollectionChanged;
+
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
 
@@ -198,8 +201,20 @@ namespace MonkeyPaste.Avalonia {
                                                         "Unavailable":MpPrefViewModel.Instance.UserEmail
                                                 },
                                             }
-
-                                        }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ChangeAccountType.ToString(),
+                                            controlType = MpParameterControlType.ComboBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "Status",
+                                            values =
+                                                Enum.GetNames(typeof(MpUserAccountType))
+                                                .Select(x=> new MpPluginParameterValueFormat() {
+                                                    isDefault = Mp.Services.AccountTools.CurrentAccountType.ToString() == x,
+                                                    value = x,
+                                                    label = x.ToLabel()
+                                                }).ToList()
+                                        },
                                     }
                                 }
                             }
@@ -210,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
                 {
                     MpSettingsTabType.Preferences,
                     new[] {
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.LookAndFeel) {
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Theme) {
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
@@ -235,7 +250,7 @@ namespace MonkeyPaste.Avalonia {
                                             }
                                         },
                                         new MpParameterFormat() {
-                                            paramId = MpButtonCommandPrefType.ThemeHexColor.ToString(),
+                                            paramId = MpRuntimePrefParamType.ThemeHexColor.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             label = "Theme Color",
                                             description = "Caution! Palette colors are decided by math not eyes! So please be careful as some color and style combinations may not have proper contrast for readability.",
@@ -243,15 +258,23 @@ namespace MonkeyPaste.Avalonia {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
                                                     label = "Select",
-                                                    value = MpButtonCommandPrefType.ThemeHexColor.ToString()
+                                                    value = MpRuntimePrefParamType.ThemeHexColor.ToString()
                                                 }
                                             }
-                                        },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Fonts) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily),
                                             controlType = MpParameterControlType.ComboBox,
                                             unitType = MpParameterValueUnitType.PlainText,
-                                            label = "UI Font Family",
+                                            label = "Interface",
                                             description = "Requires restart :(",
                                             values =
                                                 FontManager.Current.SystemFonts
@@ -268,7 +291,7 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily),
                                             controlType = MpParameterControlType.ComboBox,
                                             unitType = MpParameterValueUnitType.PlainText,
-                                            label = "Content Font Family",
+                                            label = "Content",
                                             values =
                                                 FontManager.Current.SystemFonts
                                                 .Select(x=>x.Name)
@@ -285,14 +308,22 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = nameof(MpPrefViewModel.Instance.DefaultFontSize),
                                             controlType = MpParameterControlType.ComboBox,
                                             unitType = MpParameterValueUnitType.Integer,
-                                            label = "Content Font Size",
+                                            label = "Size",
                                             values =
                                                 new int[]{ 8, 9, 10, 12, 14, 16, 20, 24, 32, 42, 54, 68, 84, 98 }
                                                 .Select(x=>new MpPluginParameterValueFormat() {
                                                     isDefault = MpPrefViewModel.Instance.DefaultFontSize == x,
                                                     value = x.ToString(),
                                                 }).ToList()
-                                        },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Sound) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpPrefViewModel.Instance.NotificationSoundGroupIdx),
                                             controlType = MpParameterControlType.ComboBox,
@@ -319,19 +350,15 @@ namespace MonkeyPaste.Avalonia {
                                                     value = MpPrefViewModel.Instance.NotificationSoundVolume.ToString()
                                                 }
                                             }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.ShowHints),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Show Hints",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpPrefViewModel.Instance.ShowHints.ToString()
-                                                }
-                                            }
-                                        },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Taskbar) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpPrefViewModel.Instance.ShowInTaskbar),
                                             controlType = MpParameterControlType.CheckBox,
@@ -357,7 +384,15 @@ namespace MonkeyPaste.Avalonia {
                                                     value = MpPrefViewModel.Instance.ShowInTaskSwitcher.ToString()
                                                 }
                                             }
-                                        },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Window) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpPrefViewModel.Instance.MainWindowShowBehaviorType),
                                             controlType = MpParameterControlType.ComboBox,
@@ -369,6 +404,19 @@ namespace MonkeyPaste.Avalonia {
                                                     isDefault = MpPrefViewModel.Instance.MainWindowShowBehaviorType.ToLower() == x.ToLower(),
                                                     value = x
                                                 }).ToList()
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta),
+                                            description = "Monkey Paste will be revealed by performing a scroll gesture on the top edge of your monitor",
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Show on top screen scroll",
+                                            values =new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta.ToString()
+                                                },
+                                            }
                                         },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpPrefViewModel.Instance.AnimateMainWindow),
@@ -400,6 +448,26 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Hints) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.ShowHints),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Show Hints",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.ShowHints.ToString()
+                                                }
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.International) {
                             IsVisible = false,
                             PluginFormat = new MpPluginFormat() {
@@ -418,13 +486,24 @@ namespace MonkeyPaste.Avalonia {
                                                     label = x.Value,
                                                     value = x.Key
                                                 }).ToList()
-
-                                        }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.IsTextRightToLeft),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Right-to-left",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.IsTextRightToLeft.ToString()
+                                                }
+                                            }
+                                        },
                                     }
                                 }
                             }
                         },
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.History) {
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Limits) {
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
@@ -455,195 +534,28 @@ namespace MonkeyPaste.Avalonia {
                                             }
                                         },
                                         new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.MaxRecentTextsCount),
-                                            controlType = MpParameterControlType.ComboBox,
-                                            unitType = MpParameterValueUnitType.PlainText,
-                                            label = "Recent Text Limit",
-                                            description = "This applies to all auto-completable inputs, lower values will improve performance",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = MpPrefViewModel.Instance.MaxRecentTextsCount.ToString() == "10",
-                                                    value = "10".ToString()
-                                                },
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = MpPrefViewModel.Instance.MaxRecentTextsCount.ToString() == "50",
-                                                    value = "50".ToString()
-                                                },
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = MpPrefViewModel.Instance.MaxRecentTextsCount.ToString() == "100",
-                                                    value = "100".ToString()
-                                                }
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.MaxStagedClipCount),
+                                            paramId = nameof(MpPrefViewModel.Instance.MaxPinClipCount),
                                             controlType = MpParameterControlType.Slider,
                                             unitType = MpParameterValueUnitType.Integer,
                                             minimum = 1,
                                             maximum = 50,
-                                            label = "Max Staged Clips",
+                                            label = "Pin Capacity",
                                             description = "Large or many staged items can consume significant memory. removal follows a first-in-first-out policy",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
-                                                    value = MpPrefViewModel.Instance.MaxStagedClipCount.ToString()
+                                                    value = MpPrefViewModel.Instance.MaxPinClipCount.ToString()
                                                 }
                                             }
                                         },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.TrackExternalPasteHistory),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Paste History",
-                                            description = "This setting will track system-wide keyboard paste counts for usage statistics. This information is private and not shared but also not guarenteed. Accurate results may require providing application specific keyboard paste command.",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpPrefViewModel.Instance.TrackExternalPasteHistory.ToString()
-                                                }
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.TrashCleanupModeTypeStr),
-                                            description = $"<warning/>Automatic trash cleanup will occur on startup at the set interval. It is not required but definitely don't let it get too large! Overall performance and CPU usage will have an impact if it becomes large ie. over 100 items lets say...",
-                                            controlType = MpParameterControlType.ComboBox,
-                                            unitType = MpParameterValueUnitType.PlainText,
-                                            label = "Trash Emptying",
-                                            values =
-                                                Enum.GetNames(typeof(MpTrashCleanupModeType))
-                                                .Select(x=> new MpPluginParameterValueFormat() {
-                                                    isDefault = MpPrefViewModel.Instance.TrashCleanupModeTypeStr.ToLower() == x.ToString().ToLower(),
-                                                    value = x
-                                                }).ToList()
-                                        }
                                     }
                                 }
                             }
                         },
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.System) {
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Tracking) {
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.LoadOnLogin),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Load on Login",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpPrefViewModel.Instance.LoadOnLogin.ToString()
-                                                },
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = MpButtonCommandPrefType.ResetNtf.ToString(),
-                                            controlType = MpParameterControlType.Button,
-                                            label = "Reset Notifications",
-                                            description = "All ignored notifications previously set.",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpButtonCommandPrefType.ResetNtf.ToString()
-                                                }
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = MpButtonCommandPrefType.ResetPluginCache.ToString(),
-                                            controlType = MpParameterControlType.Button,
-                                            label = "Reset Plugins",
-                                            description = "All plugins will be reset to initial default state",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpButtonCommandPrefType.ResetPluginCache.ToString()
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Content) {
-                            PluginFormat = new MpPluginFormat() {
-                                headless = new MpHeadlessPluginFormat() {
-                                    parameters = new List<MpParameterFormat>() {
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.IsAutoSearchEnabled),
-                                            description = "Text typed will be automatically applied to a search when no text control is focused.",
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Auto Search Input",
-                                            values =new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpPrefViewModel.Instance.IsAutoSearchEnabled.ToString()
-                                                },
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.IsDuplicateCheckEnabled),
-                                            description = "When <b>duplicate</b> is detected on clipboard, it will be <b>staged</b> from original source and not added redundantly.",
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Ignore New Duplicates",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpPrefViewModel.Instance.IsDuplicateCheckEnabled.ToString()
-                                                },
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.IsSpellCheckEnabled),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Content Spell Check",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpPrefViewModel.Instance.IsSpellCheckEnabled.ToString()
-                                                },
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.IsRichHtmlContentEnabled),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Rich Content",
-                                            description = "Disabling rich text will significantly reduce memory consumption but will disable some advanced features, such as: templates, annotations, find/replace and drag drop",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpPrefViewModel.Instance.IsRichHtmlContentEnabled.ToString()
-                                                }
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.IsClipboardListeningOnStartup),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Listen to clipboard on startup",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpPrefViewModel.Instance.IsClipboardListeningOnStartup.ToString()
-                                                }
-                                            }
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.AddClipboardOnStartup),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Add Startup Clipboard",
-                                            description = "On startup the source of the clipboard will be unknown and depending on your security settings the content may come from an excluded website or application.",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpPrefViewModel.Instance.AddClipboardOnStartup.ToString()
-                                                }
-                                            }
-                                        },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpPrefViewModel.Instance.IgnoreAppendedItems),
                                             controlType = MpParameterControlType.CheckBox,
@@ -684,16 +596,129 @@ namespace MonkeyPaste.Avalonia {
                                             }
                                         },
                                         new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste),
+                                            paramId = nameof(MpPrefViewModel.Instance.TrackExternalPasteHistory),
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
-                                            label = "Reset Clipboard after Monkey Pasting",
-                                            description = "<warning/>Monkey Paste uses the system clipboard to interoperate and changes your current clipboard when pasting to an external program. This will <b>attempt</b> to restore the state of the clipboard after an external paste. Restoration cannot be guaranteed and may reduce performance or even crash Monkey Paste depending on the source of the data (looking at you windows).",
+                                            label = "Paste History",
+                                            description = "This setting will track system-wide keyboard paste counts for usage statistics. This information is private and not shared but also not guarenteed. Accurate results may require providing application specific keyboard paste command.",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
-                                                    value = MpPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste.ToString()
+                                                    value = MpPrefViewModel.Instance.TrackExternalPasteHistory.ToString()
                                                 }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.IsDuplicateCheckEnabled),
+                                            description = "When <b>duplicate</b> is detected on clipboard, it will be <b>staged</b> from original source and not added redundantly.",
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Ignore New Duplicates",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.IsDuplicateCheckEnabled.ToString()
+                                                },
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Startup) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.LoadOnLogin),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Load on Login",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.LoadOnLogin.ToString()
+                                                },
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.AddClipboardOnStartup),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Add Startup Clipboard",
+                                            description = "On startup the source of the clipboard will be unknown and depending on your security settings the content may come from an excluded website or application.",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.AddClipboardOnStartup.ToString()
+                                                }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.TrashCleanupModeTypeStr),
+                                            description = $"Automatic trash cleanup will occur on startup at the set interval. It is not required but definitely don't let it get too large! Overall performance and CPU usage will have an impact if it becomes large ie. over 100 items lets say...",
+                                            controlType = MpParameterControlType.ComboBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "Trash Emptying",
+                                            values =
+                                                Enum.GetNames(typeof(MpTrashCleanupModeType))
+                                                .Select(x=> new MpPluginParameterValueFormat() {
+                                                    isDefault = MpPrefViewModel.Instance.TrashCleanupModeTypeStr.ToLower() == x.ToString().ToLower(),
+                                                    value = x
+                                                }).ToList()
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.IsClipboardListeningOnStartup),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Listen to clipboard on startup",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.IsClipboardListeningOnStartup.ToString()
+                                                }
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Search) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.MaxRecentTextsCount),
+                                            controlType = MpParameterControlType.ComboBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "Recent Text Limit",
+                                            description = "This applies to all auto-completable inputs, lower values will improve performance",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = MpPrefViewModel.Instance.MaxRecentTextsCount.ToString() == "10",
+                                                    value = "10".ToString()
+                                                },
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = MpPrefViewModel.Instance.MaxRecentTextsCount.ToString() == "50",
+                                                    value = "50".ToString()
+                                                },
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = MpPrefViewModel.Instance.MaxRecentTextsCount.ToString() == "100",
+                                                    value = "100".ToString()
+                                                }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.IsAutoSearchEnabled),
+                                            description = "Text typed will be automatically applied to a search when no text control is focused.",
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Auto Search Input",
+                                            values =new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.IsAutoSearchEnabled.ToString()
+                                                },
                                             }
                                         },
                                         new MpParameterFormat() {
@@ -723,7 +748,53 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Pointer) {
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Content) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.IsSpellCheckEnabled),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Enable Spell Check",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.IsSpellCheckEnabled.ToString()
+                                                },
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.IsRichHtmlContentEnabled),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Rich Content",
+                                            description = "Disabling rich text will significantly reduce memory consumption but will disable some advanced features, such as: templates, annotations, find/replace and drag drop",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.IsRichHtmlContentEnabled.ToString()
+                                                }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Reset Clipboard after Monkey Pasting",
+                                            description = "<warning/>Monkey Paste uses the system clipboard to interoperate and changes your current clipboard when pasting to an external program. This will <b>attempt</b> to restore the state of the clipboard after an external paste. Restoration cannot be guaranteed and may reduce performance or even crash Monkey Paste depending on the source of the data (looking at you windows).",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste.ToString()
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.DragAndDrop) {
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
@@ -752,18 +823,70 @@ namespace MonkeyPaste.Avalonia {
                                                     value = MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop.ToString()
                                                 },
                                             }
-                                        },
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Shortcuts) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
-                                            paramId = nameof(MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta),
-                                            description = "Monkey Paste will be revealed by performing a scroll gesture on the top edge of your monitor",
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Show on top screen scroll",
-                                            values =new List<MpPluginParameterValueFormat>() {
+                                            paramId = MpRuntimePrefParamType.ChangeRoutingType.ToString(),
+                                            controlType = MpParameterControlType.ComboBox,
+                                            label = "Profile",
+                                            description = Mp.Services.PlatformResource.GetResource<string>("RoutingProfileInfoHtml"),
+                                            values =
+                                                Enum.GetNames(typeof(MpShortcutRoutingProfileType))
+                                                .Select(x=> new MpPluginParameterValueFormat() {
+                                                    isDefault = MpAvShortcutCollectionViewModel.Instance.RoutingProfileType.ToString() == x,
+                                                    value = x,
+                                                    label = x.ToLabel()
+                                                }).ToList()
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.System) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ResetNtf.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = "Reset",
+                                            description = "All ignored notifications previously set.",
+                                            values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
-                                                    value = MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta.ToString()
-                                                },
+                                                    value = MpRuntimePrefParamType.ResetNtf.ToString()
+                                                }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ResetShortcuts.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = "Reset",
+                                            description = "All application shortcuts will be reset to their default key gestures.",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpRuntimePrefParamType.ResetShortcuts.ToString()
+                                                }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ResetPluginCache.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = "Reset",
+                                            description = "All plugins will be reset to initial default state",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpRuntimePrefParamType.ResetPluginCache.ToString()
+                                                }
                                             }
                                         }
                                     }
@@ -771,6 +894,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         }
                     }
+                    .OrderBy(x=>x.FrameType.ToString())
                 }
             };
 
@@ -794,7 +918,6 @@ namespace MonkeyPaste.Avalonia {
                     .Cast<MpAvButtonParameterViewModel>()
                     .ForEach(x => x.ClickCommand = ButtonParameterClickCommand);
             }
-
             UpdateFilters();
         }
 
@@ -803,6 +926,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ShortcutRoutingProfileChanged:
+                    SetRoutingProfileType(MpAvShortcutCollectionViewModel.Instance.RoutingProfileType);
+                    break;
+                case MpMessageType.AccountDowngrade:
+                case MpMessageType.AccountUpgrade:
+                    SetAccountType(Mp.Services.AccountTools.CurrentAccountType);
+                    break;
+            }
+        }
         private void MpAvSettingsWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
 
             switch (e.PropertyName) {
@@ -847,6 +981,8 @@ namespace MonkeyPaste.Avalonia {
                 SetupFontFamilyComboBoxes();
                 ProcessListenOnStartupChanged();
                 AttachThemeButtonColorUpdate();
+                AttachRoutingProfileSelectionChange();
+                AttachAccountTypeSelectionChange();
             }
             void Sw_Closed(object sender, EventArgs e) {
                 sw.Opened -= Sw_Opened;
@@ -874,6 +1010,15 @@ namespace MonkeyPaste.Avalonia {
 
             IsTabButtonVisible3 = MpAvShortcutCollectionViewModel.Instance.FilteredItems.Any();
             IsTabButtonVisible4 = true;
+
+            AddOrUpdateRecentFilterTextsAsync(FilterText).FireAndForgetSafeAsync();
+        }
+
+        private async Task AddOrUpdateRecentFilterTextsAsync(string st) {
+            while (MpPrefViewModel.Instance == null) {
+                await Task.Delay(100);
+            }
+            RecentSettingsSearches = await MpPrefViewModel.Instance.AddOrUpdateAutoCompleteTextAsync(nameof(MpPrefViewModel.Instance.RecentSettingsSearchTexts), st);
         }
 
         #region Pref Handling
@@ -899,7 +1044,7 @@ namespace MonkeyPaste.Avalonia {
                     });
 
                     break;
-                case nameof(MpPrefViewModel.Instance.MaxStagedClipCount):
+                case nameof(MpPrefViewModel.Instance.MaxPinClipCount):
                     MpAvClipTrayViewModel.Instance.OnPropertyChanged(nameof(MpAvClipTrayViewModel.Instance.InternalPinnedItems));
                     break;
                 case nameof(MpPrefViewModel.Instance.TrackExternalPasteHistory):
@@ -935,9 +1080,10 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"Load At Login: {(MpPrefViewModel.Instance.LoadOnLogin ? "ON" : "OFF")}");
         }
 
+        #region Theme Button Color
         private void AttachThemeButtonColorUpdate() {
             Dispatcher.UIThread.Post(async () => {
-                var tb = await GetParameterControlByParamIdAsync<Button>(MpButtonCommandPrefType.ThemeHexColor.ToString());
+                var tb = await GetParameterControlByParamIdAsync<Button>(MpRuntimePrefParamType.ThemeHexColor.ToString());
                 if (tb == null) {
                     return;
                 }
@@ -945,6 +1091,7 @@ namespace MonkeyPaste.Avalonia {
                 SetThemeButtonColor(tb);
             });
         }
+
         private void SetThemeButtonColor(Button tb) {
             if (tb == null) {
                 return;
@@ -970,6 +1117,64 @@ namespace MonkeyPaste.Avalonia {
         private void Tb_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             SetThemeButtonColor(sender as Button);
         }
+
+        #endregion
+
+        #region Routing Profile 
+        private void AttachRoutingProfileSelectionChange() {
+            Dispatcher.UIThread.Post(async () => {
+                var cmb = await GetParameterControlByParamIdAsync<ComboBox>(MpRuntimePrefParamType.ChangeRoutingType.ToString());
+                if (cmb == null) {
+                    return;
+                }
+                void RoutingSelectionChanged(object sender, SelectionChangedEventArgs e) {
+                    if (cmb.SelectedIndex < 0) {
+                        // occurs when filtered out
+                        return;
+                    }
+                    MpShortcutRoutingProfileType sel_type = (MpShortcutRoutingProfileType)cmb.SelectedIndex;
+                    MpAvShortcutCollectionViewModel.Instance.UpdateRoutingProfileCommand.Execute(sel_type);
+                }
+                cmb.SelectionChanged += RoutingSelectionChanged;
+            });
+        }
+
+        private void SetRoutingProfileType(MpShortcutRoutingProfileType rpt) {
+            Dispatcher.UIThread.Post(async () => {
+                var cmb = await GetParameterControlByParamIdAsync<ComboBox>(MpRuntimePrefParamType.ChangeRoutingType.ToString());
+                if (cmb == null) {
+                    return;
+                }
+                cmb.SelectedIndex = (int)rpt;
+            });
+        }
+        #endregion
+
+        #region Account Type
+        private void AttachAccountTypeSelectionChange() {
+            Dispatcher.UIThread.Post(async () => {
+                var cmb = await GetParameterControlByParamIdAsync<ComboBox>(MpRuntimePrefParamType.ChangeAccountType.ToString());
+                if (cmb == null) {
+                    return;
+                }
+                void AccountTypeSelectionChanged(object sender, SelectionChangedEventArgs e) {
+                    MpUserAccountType sel_type = (MpUserAccountType)cmb.SelectedIndex;
+                    Mp.Services.AccountTools.SetAccountType(sel_type);
+                }
+                cmb.SelectionChanged += AccountTypeSelectionChanged;
+            });
+        }
+
+        private void SetAccountType(MpUserAccountType at) {
+            Dispatcher.UIThread.Post(async () => {
+                var cmb = await GetParameterControlByParamIdAsync<ComboBox>(MpRuntimePrefParamType.ChangeAccountType.ToString());
+                if (cmb == null) {
+                    return;
+                }
+                cmb.SelectedIndex = (int)at;
+            });
+        }
+        #endregion
 
         private void ProcessListenOnStartupChanged() {
             Dispatcher.UIThread.Post(async () => {
@@ -1170,6 +1375,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand ShowSettingsWindowCommand => new MpCommand<object>(
             (args) => {
+                UpdateFilters();
                 SelectTabCommand.Execute(args);
                 if (IsWindowOpen) {
                     IsWindowActive = true;
@@ -1184,18 +1390,18 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand ButtonParameterClickCommand => new MpAsyncCommand<object>(
             async (args) => {
-                MpButtonCommandPrefType cmdType = MpButtonCommandPrefType.None;
+                MpRuntimePrefParamType cmdType = MpRuntimePrefParamType.None;
                 if (args is string strArg &&
-                    strArg.ToEnum<MpButtonCommandPrefType>() is MpButtonCommandPrefType typeArg) {
+                    strArg.ToEnum<MpRuntimePrefParamType>() is MpRuntimePrefParamType typeArg) {
                     cmdType = typeArg;
-                } else if (args is MpButtonCommandPrefType) {
-                    cmdType = (MpButtonCommandPrefType)args;
+                } else if (args is MpRuntimePrefParamType) {
+                    cmdType = (MpRuntimePrefParamType)args;
                 }
-                if (cmdType == MpButtonCommandPrefType.None) {
+                if (cmdType == MpRuntimePrefParamType.None) {
                     return;
                 }
                 switch (cmdType) {
-                    case MpButtonCommandPrefType.ResetNtf: {
+                    case MpRuntimePrefParamType.ResetNtf: {
                             var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: "Confirm",
                             message: "Are you sure you want to reset all notifications?",
@@ -1207,7 +1413,7 @@ namespace MonkeyPaste.Avalonia {
                             break;
                         }
 
-                    case MpButtonCommandPrefType.ResetPluginCache: {
+                    case MpRuntimePrefParamType.ResetPluginCache: {
                             var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: "Confirm",
                             message: "Are you sure you want to reset all plugins to defaults?",
@@ -1242,7 +1448,7 @@ namespace MonkeyPaste.Avalonia {
 
                             break;
                         }
-                    case MpButtonCommandPrefType.ThemeHexColor: {
+                    case MpRuntimePrefParamType.ThemeHexColor: {
                             var result = await
                                 Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
                                     title: "Theme Color",
@@ -1266,7 +1472,7 @@ namespace MonkeyPaste.Avalonia {
 
                             MpPrefViewModel.Instance.ThemeColor = result;
                             Dispatcher.UIThread.Post(async () => {
-                                var tb = await GetParameterControlByParamIdAsync<Button>(MpButtonCommandPrefType.ThemeHexColor.ToString());
+                                var tb = await GetParameterControlByParamIdAsync<Button>(MpRuntimePrefParamType.ThemeHexColor.ToString());
                                 if (tb == null) {
                                     return;
                                 }
@@ -1278,6 +1484,10 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
 
+        public ICommand ClearFilterTextCommand => new MpCommand(
+            () => {
+                FilterText = string.Empty;
+            });
         #endregion
     }
 }

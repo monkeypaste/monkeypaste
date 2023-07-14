@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
@@ -219,7 +220,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-
         #region Experience
 
         public int ShowMainWindowMouseHitZoneHeight {
@@ -324,10 +324,13 @@ namespace MonkeyPaste {
         #region Installer Properties
 
         // NOTE this intended for reset shortcuts/all and will be set during installer
-        public string InstallerShortcutProfileTypeName { get; set; } = MpShortcutRoutingProfileType.Internal.ToString();
-        [JsonIgnore]
-        public MpShortcutRoutingProfileType InstallerShortcutProfileType =>
-            InstallerShortcutProfileTypeName.ToEnum<MpShortcutRoutingProfileType>();
+        //public string ShortcutProfileTypeName { get; set; } = MpShortcutRoutingProfileType.Internal.ToString();
+        //[JsonIgnore]
+        //public MpShortcutRoutingProfileType ShortcutProfileType =>
+        //    ShortcutProfileTypeName.ToEnum<MpShortcutRoutingProfileType>();
+
+        //[JsonConverter(typeof(StringEnumConverter))]
+        //public MpShortcutRoutingProfileType ShortcutProfileType { get; set; }
 
         #endregion
 
@@ -368,6 +371,7 @@ namespace MonkeyPaste {
         #region Language
 
         public string UserLanguageCode { get; set; } = CultureInfo.CurrentCulture.Name;
+        public bool IsTextRightToLeft { get; set; } = CultureInfo.GetCultureInfo(CultureInfo.CurrentCulture.Name).TextInfo.IsRightToLeft;
 
         #endregion
 
@@ -376,7 +380,7 @@ namespace MonkeyPaste {
         public int MaxUndoLimit { get; set; } = 10;
         public int MaxRecentTextsCount { get; set; } = 10;
 
-        public int MaxStagedClipCount { get; set; } = 25;
+        public int MaxPinClipCount { get; set; } = 25;
 
         public bool TrackExternalPasteHistory { get; set; } = false; // will show warning about storage or something
 
@@ -428,16 +432,8 @@ namespace MonkeyPaste {
         #region Runtime/Dependant Properties
 
         #region Language
-        [JsonIgnore]
-        public string FlowDirectionName {
-            get {
-                if (CultureInfo.GetCultureInfo(UserLanguageCode) is CultureInfo ci &&
-                    ci.TextInfo.IsRightToLeft) {
-                    return "RightToLeft";
-                }
-                return "LeftToRight";
-            }
-        }
+
+
 
         #endregion
 
@@ -446,6 +442,7 @@ namespace MonkeyPaste {
         public string RecentSearchTexts { get; set; } = string.Empty;
 
         public string RecentPluginSearchTexts { get; set; } = string.Empty;
+        public string RecentSettingsSearchTexts { get; set; } = string.Empty;
         #endregion
 
         #region Ignored Ntf

@@ -24,7 +24,8 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Button Classes="noBg noHoverBg noBorder"
-            Command="{Binding Command, ElementName=ClearTextButton}">
+            Command="{Binding Command, ElementName=ClearTextButton}"
+            CommandParameter="{Binding CommandParameter, ElementName=ClearTextButton}">
         <Grid x:Name="ClearTextContainerGrid"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">

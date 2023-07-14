@@ -21,16 +21,23 @@ namespace MonkeyPaste {
                 return;
             }
 
-            var oldItem = await MpDb.GetDbObjectByTableGuidAsync(tableName, objectGuid.ToString());
-            var alteredColumnNameValuePairs = await (dbModel as MpISyncableDbObject).DbDiffAsync(oldItem);
-            if (alteredColumnNameValuePairs.Count == 0) {
+            try {
+                var oldItem = await MpDb.GetDbObjectByTableGuidAsync(tableName, objectGuid.ToString());
+                var alteredColumnNameValuePairs = await (dbModel as MpISyncableDbObject).DbDiffAsync(oldItem);
+                if (alteredColumnNameValuePairs.Count == 0) {
+                    return;
+                }
+
+                foreach (var kvp in alteredColumnNameValuePairs) {
+                    var dbi = new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid);
+                    await dbi.WriteToDatabaseAsync(string.Empty, true, true);
+                }
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error logging something. ", ex);
                 return;
             }
 
-            foreach (var kvp in alteredColumnNameValuePairs) {
-                var dbi = new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid);
-                await dbi.WriteToDatabaseAsync(string.Empty, true, true);
-            }
         }
 
         //public static void TrackDbWrite(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {

@@ -254,6 +254,7 @@
     <None Remove="Assets\Images\asc_white.png" />
     <None Remove="Assets\Images\asterisk.png" />
     <None Remove="Assets\Images\back_black.png" />
+    <None Remove="Assets\Images\banana.png" />
     <None Remove="Assets\Images\beaker.png" />
     <None Remove="Assets\Images\bingIcon.png" />
     <None Remove="Assets\Images\binoculars.png" />
@@ -305,6 +306,7 @@
     <None Remove="Assets\Images\doubleSidedArrow2.png" />
     <None Remove="Assets\Images\down_black.png" />
     <None Remove="Assets\Images\drag.png" />
+    <None Remove="Assets\Images\draganddrop.png" />
     <None Remove="Assets\Images\duckduckgoIcon.png" />
     <None Remove="Assets\Images\duplicate.png" />
     <None Remove="Assets\Images\edgearrowdown.png" />
@@ -323,6 +325,7 @@
     <None Remove="Assets\Images\folder.png" />
     <None Remove="Assets\Images\folderoutline.png" />
     <None Remove="Assets\Images\foldersolid.png" />
+    <None Remove="Assets\Images\font.png" />
     <None Remove="Assets\Images\forward_black.png" />
     <None Remove="Assets\Images\frame_grip.png" />
     <None Remove="Assets\Images\frame_grip_org.png" />
@@ -403,6 +406,7 @@
     <None Remove="Assets\Images\sliders.png" />
     <None Remove="Assets\Images\slidersVertical.png" />
     <None Remove="Assets\Images\speak.png" />
+    <None Remove="Assets\Images\speaker.png" />
     <None Remove="Assets\Images\spellcheck.png" />
     <None Remove="Assets\Images\spreadsheet.png" />
     <None Remove="Assets\Images\staroutline.png" />
@@ -516,6 +520,9 @@
     <AvaloniaResource Include="Assets\Images\appshell.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\banana.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\boxcorners.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -528,10 +535,16 @@
     <AvaloniaResource Include="Assets\Images\closewindow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\draganddrop.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\equation.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\folderoutline.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\font.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\ghost.png">
@@ -568,6 +581,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\skull.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\speaker.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\staryellow.png">
@@ -1227,6 +1243,16 @@
   
   
   <ItemGroup>
+    <Compile Update="Resources\Locales\ja-JP.Designer.cs">
+      <DependentUpon>ja-JP.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\Locales\en-US.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>en-US.resx</DependentUpon>
+    </Compile>
     <Compile Update="Views\ExternalDropWindow\DropComplete\MpAvDropCompleteView.axaml.cs">
       <DependentUpon>MpAvDropCompleteView.axaml</DependentUpon>
     </Compile>
@@ -1359,7 +1385,7 @@
     <Compile Update="Views\Reusable\ToolTip\Hint\MpAvToolTipInfoHintView.axaml.cs">
       <DependentUpon>MpAvToolTipInfoHintView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SettingsWindow\Tabs\FrameCollection\MpAvSettingsFrameCollectionView.axaml.cs">
+    <Compile Update="Views\SettingsWindow\Tabs\Preferences\MpAvSettingsFrameCollectionView.axaml.cs">
       <DependentUpon>MpAvSettingsFrameCollectionView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Help\MpAvHelpView.axaml.cs">
@@ -1368,10 +1394,10 @@
     <Compile Update="Views\SettingsWindow\Tabs\Interop\MpAvInteropView.axaml.cs">
       <DependentUpon>MpAvInteropView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SettingsWindow\Tabs\FrameCollection\Item\MpAvSettingsFrameView.axaml.cs">
+    <Compile Update="Views\SettingsWindow\Tabs\Preferences\Item\MpAvSettingsFrameView.axaml.cs">
       <DependentUpon>MpAvSettingsFrameView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SettingsWindow\Tabs\FrameCollection\Item\MpAvSettingsFrameView.axaml.cs">
+    <Compile Update="Views\SettingsWindow\Tabs\Preferences\Item\MpAvSettingsFrameView.axaml.cs">
       <DependentUpon>MpAvSettingsFrameView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Security\MpAvSecurityView.axaml.cs">
@@ -1531,6 +1557,17 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Locales\ja-JP.resx">
+      <LastGenOutput>ja-JP.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Locales\en-US.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

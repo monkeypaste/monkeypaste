@@ -13,22 +13,14 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSecurityView">
-    <local:MpAvUserControl.Styles>
-
-    </local:MpAvUserControl.Styles>
-
-    <StackPanel Grid.Column="0"
-                Orientation="Vertical"
-                Spacing="25"
-                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                ScrollViewer.HorizontalScrollBarVisibility="Auto">
+    <StackPanel>
 
         <!--  APPS  -->
         <Expander>
             <Expander.Header>
                 <StackPanel Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themewhite}" />
                     <TextBlock Classes="expander header text"
                                Text="Applications" />
                 </StackPanel>
@@ -129,7 +121,7 @@
             <Expander.Header>
                 <StackPanel Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource WebImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+                           Source="{Binding Source={StaticResource WebImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themewhite}" />
                     <TextBlock Classes="expander header text"
                                Text="Websites" />
                     <local:MpAvToolTipInfoHintView Classes="expander header warning"

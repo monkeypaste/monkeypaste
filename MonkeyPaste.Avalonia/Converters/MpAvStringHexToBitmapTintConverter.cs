@@ -19,10 +19,17 @@ namespace MonkeyPaste.Avalonia {
             if (!IS_DYNAMIC_TINT_ENABLED) {
                 return MpAvIconSourceObjToBitmapConverter.Instance.Convert(value, targetType, parameter, culture);
             }
+            if (value is string &&
+                MpAvThemeViewModel.Instance.IsColoredImageResource(value.ToString())) {
+                // ignore tinting known color images
+                return MpAvIconSourceObjToBitmapConverter.Instance.Convert(value, targetType, parameter, culture);
+            }
 
             object imgResourceObj = null;
             string hex = null;
             if (parameter is string paramStr) {
+                paramStr = paramStr.Replace("themewhite", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeWhite.ToString()));
+                paramStr = paramStr.Replace("themeblack", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlack.ToString()));
                 paramStr = paramStr.Replace("themebg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString()));
                 paramStr = paramStr.Replace("themefg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveColor.ToString()));
                 paramStr = paramStr.Replace("themeaccent1fg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1Color.ToString()));

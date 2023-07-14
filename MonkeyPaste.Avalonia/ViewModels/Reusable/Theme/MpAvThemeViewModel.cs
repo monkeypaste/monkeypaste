@@ -77,7 +77,8 @@ namespace MonkeyPaste.Avalonia {
             "text.png",
             "warning.png",
             "yandexicon.png",
-            "ghost.png"
+            "ghost.png",
+            "banana.png"
         };
 
         #endregion
@@ -220,8 +221,8 @@ namespace MonkeyPaste.Avalonia {
             return _themePrefPropNames.Contains(prefName);
         }
 
-        public bool IsColoredImageResource(object resource_key_uri) {
-            if (resource_key_uri is not string res_str) {
+        public bool IsColoredImageResource(object resource_key_or_uri) {
+            if (resource_key_or_uri is not string res_str) {
                 return true;
             }
 

@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <sys:String x:Key="GestureInfoHtml">Gesture info here</sys:String>
+    <sys:String x:Key="RoutingProfileInfoHtml">Bullet list of profile labels and descriptions here</sys:String>
+    <sys:String x:Key="GestureInfoHtml">Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control,Shift,Alt,Meta/Win depending on platform)</sys:String>
     <sys:String x:Key="RoutingInfoHtml">&lt;ul&gt;	&lt;li&gt;&lt;b&gt;Internal&lt;/b&gt; In app shortcuts, are not globally enabled&lt;/li&gt;	&lt;li&gt;&lt;b&gt;Direct&lt;/b&gt; Gesture will &lt;b&gt;&lt;i&gt;override&lt;/i&gt;&lt;/b&gt; the input, ie. it will &lt;b style=&quot;foreground: #FF0000&quot;&gt;not&lt;/b&gt; be received by active application. &lt;/li&gt;	&lt;li&gt;&lt;b&gt;Bubble&lt;/b&gt; Gesture will execute &lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt; active application &lt;/li&gt;	&lt;li&gt;&lt;b&gt;Tunnel&lt;/b&gt; Gesture will execute &lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt; active application &lt;/li&gt;&lt;/ul&gt;</sys:String>
 </ResourceDictionary>

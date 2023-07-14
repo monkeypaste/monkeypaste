@@ -18,6 +18,10 @@
         <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Stretch</HorizontalAlignment>
         <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush">Transparent</SolidColorBrush>
         <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush">Transparent</SolidColorBrush>
+        <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{DynamicResource ThemeWhite}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="{DynamicResource ThemeWhite}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderChevronForeground" Color="{DynamicResource ThemeWhite}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
     </local:MpAvUserControl.Resources>
 
     <local:MpAvUserControl.Styles>
@@ -132,7 +136,7 @@
 
         <Style Selector="Label.h1">
             <Setter Property="Margin"
-                    Value="0,10,0,0" />
+                    Value="0,0,0,0" />
         </Style>
 
         <!--  HEADER TEXT  -->
@@ -142,7 +146,7 @@
             <Setter Property="Margin"
                     Value="0,0,10,0" />
         </Style>
-        <Style Selector="TextBlock.frame.header.text">
+        <Style Selector="TextBlock.header">
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeWhite}" />
             <Setter Property="FontSize"
@@ -161,6 +165,8 @@
                     Value="20" />
             <Setter Property="Height"
                     Value="20" />
+            <Setter Property="Margin"
+                    Value="0,0,10,0" />
         </Style>
 
         <!--  EMPTY GRID TEXTBLOCKS  -->
@@ -173,8 +179,6 @@
                     Value="Italic" />
             <Setter Property="TextAlignment"
                     Value="Center" />
-            <!--<Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveColor}" />-->
             <Setter Property="FontSize"
                     Value="16" />
         </Style>
@@ -330,6 +334,51 @@
             <Setter Property="Margin"
                     Value="2" />
         </Style>
+
+        <!--  SECURITY/SHORTCUT CONTAINER PANELS  -->
+        <Style Selector="local|MpAvShortcutsView > StackPanel, local|MpAvSecurityView > StackPanel">
+            <Setter Property="Margin"
+                    Value="0,20,0,0" />
+            <Setter Property="Spacing"
+                    Value="25" />
+            <Setter Property="Orientation"
+                    Value="Vertical" />
+
+        </Style>
+
+        <!--  PREF FRAME BG  -->
+        <Style Selector="local|MpAvSettingsFrameView">
+            <Setter Property="CornerRadius"
+                    Value="10" />
+            <Setter Property="Padding"
+                    Value="10,5" />
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="Black" Opacity="0.05" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="local|MpAvSettingsFrameView:pointerover,local|MpAvSettingsFrameView:focus-within">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="White" Opacity="0.05" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  PARAM LBI CORNER RADIUS  -->
+        <Style Selector="ListBox#PluginParameterListBox > ListBoxItem:nth-child(1):nth-last-child(1)">
+            <Setter Property="CornerRadius"
+                    Value="10,10,10,10" />
+        </Style>
+        <Style Selector="ListBox#PluginParameterListBox > ListBoxItem:nth-child(1):not(:nth-last-child(1))">
+            <Setter Property="CornerRadius"
+                    Value="10,10,0,0" />
+        </Style>
+        <Style Selector="ListBox#PluginParameterListBox > ListBoxItem:nth-last-child(1):not(:nth-child(1))">
+            <Setter Property="CornerRadius"
+                    Value="0,0,10,10" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <DockPanel LastChildFill="True"
                Background="{DynamicResource SettingsWindowBgBrush}">
@@ -340,7 +389,7 @@
               DockPanel.Dock="Top"
               MaxHeight="250"
               ColumnDefinitions="*,*,*,*,*"
-              RowDefinitions="Auto,30">
+              RowDefinitions="Auto,50">
             <!--  Account Tab Button  -->
             <RadioButton Grid.Column="0"
                          Opacity="{Binding IsTabButtonVisible0, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
@@ -408,39 +457,66 @@
             </RadioButton>
 
             <!--  FILTER TEXTBOX  -->
-            <Border Grid.Row="1"
-                    Grid.ColumnSpan="6"
-                    MinHeight="50"
-                    Margin="0,5"
-                    Padding="10">
-                <TextBox Grid.Row="1"
-                         HorizontalAlignment="Right"
-                         VerticalContentAlignment="Center"
-                         MinWidth="150"
-                         CornerRadius="10"
-                         BorderBrush="{DynamicResource ThemeGrayAccent2}"
-                         BorderThickness="1"
-                         Margin="0"
-                         Padding="10,0,0,0"
-                         local:MpAvDelayedTextChangedExtension.IsEnabled="True"
-                         local:MpAvDelayedTextChangedExtension.DelayMs="500"
-                         local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
-                         Watermark="Filter..." />
-            </Border>
+            <local:MpAvClipBorder Grid.Row="1"
+                                  Grid.ColumnSpan="6"
+                                  Margin="10,0"
+                                  Padding="0"
+                                  CornerRadius="10"
+                                  BorderBrush="{DynamicResource ThemeGrayAccent2}"
+                                  BorderThickness="1"
+                                  Background="{DynamicResource ThemeInteractiveBgColor}"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Center"
+                                  VerticalContentAlignment="Center">
+                <Grid>
+
+                    <!--  FILTER TEXTBOX  -->
+
+                    <AutoCompleteBox MinWidth="150"
+                                     MinHeight="30"
+                                     VerticalAlignment="Stretch"
+                                     BorderThickness="0"
+                                     Margin="0"
+                                     Padding="10,5,0,0"
+                                     IsTextCompletionEnabled="False"
+                                     MinimumPrefixLength="0"
+                                     MinimumPopulateDelay="0.25"
+                                     ItemsSource="{Binding RecentSettingsSearches}"
+                                     local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                     local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                     local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
+                                     Watermark="Filter..." />
+
+
+                    <!--  CLEAR FILTER BUTTON  -->
+
+                    <local:MpAvClearTextButton x:Name="ClearSearchTextButton"
+                                               Classes="TextBoxButton square"
+                                               Height="20"
+                                               Margin="5"
+                                               IsVisible="{Binding FilterText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                               Command="{Binding ClearFilterTextCommand}"
+                                               HorizontalAlignment="Right"
+                                               VerticalAlignment="Center" />
+                </Grid>
+            </local:MpAvClipBorder>
         </Grid>
 
         <!--  Footer  -->
-        <DockPanel DockPanel.Dock="Bottom"
-                   HorizontalAlignment="Stretch"
-                   Background="{DynamicResource ThemeCompliment2Color}">
-            <Button x:Name="ResetButton"
-                    Classes="defaultButton textOnlyButton footer"
-                    Margin="10"
-                    DockPanel.Dock="Left"
-                    Content="Reset All"
-                    Command="{Binding ResetSettingsCommand}" />
-        </DockPanel>
-
+        <Border DockPanel.Dock="Bottom"
+                HorizontalAlignment="Stretch"
+                BorderThickness="0,1.5,0,0"
+                BorderBrush="Silver"
+                Background="{DynamicResource ThemeCompliment2Color}">
+            <DockPanel>
+                <Button x:Name="ResetButton"
+                        Classes="defaultButton textOnlyButton footer"
+                        Margin="10"
+                        DockPanel.Dock="Left"
+                        Content="Reset All"
+                        Command="{Binding ResetSettingsCommand}" />
+            </DockPanel>
+        </Border>
         <!--  Content  -->
         <ScrollViewer>
             <TransitioningContentControl x:Name="SettingsTransitioningContentControl"

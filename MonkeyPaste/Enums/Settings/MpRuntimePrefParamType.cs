@@ -1,6 +1,9 @@
 ﻿namespace MonkeyPaste {
-    public enum MpButtonCommandPrefType {
+    public enum MpRuntimePrefParamType {
         None = 0,
+        ChangeAccountType,
+        ResetShortcuts,
+        ChangeRoutingType,
         ResetNtf,
         ResetPluginCache,
         AccountRegister,

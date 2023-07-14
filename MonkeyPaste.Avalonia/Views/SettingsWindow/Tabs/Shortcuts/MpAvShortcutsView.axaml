@@ -13,23 +13,15 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvShortcutCollectionViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutsView">
-    <local:MpAvUserControl.Resources>
-        <sys:String x:Key="GestureInfoHtml">Gesture info here</sys:String>
-        <sys:String x:Key="RoutingInfoHtml">&lt;ul&gt;	&lt;li&gt;		&lt;b&gt;Internal&lt;/b&gt; In app shortcuts, are not globally enabled&lt;/li&gt;	&lt;li&gt;		&lt;b&gt;Direct&lt;/b&gt; Gesture will &lt;b&gt;			&lt;i&gt;override&lt;/i&gt;		&lt;/b&gt; the input, ie. it will &lt;b&gt;&lt;span style=&quot;foreground: #FF0000&quot;&gt;not&lt;/span&gt;&lt;/b&gt; be received by active application. &lt;/li&gt;	&lt;li&gt;		&lt;b&gt;Bubble&lt;/b&gt; Gesture will execute &lt;b&gt;			&lt;i&gt;after&lt;/i&gt;		&lt;/b&gt; active application &lt;/li&gt;	&lt;li&gt;		&lt;b&gt;Tunnel&lt;/b&gt; Gesture will execute &lt;b&gt;			&lt;i&gt;before&lt;/i&gt;		&lt;/b&gt; active application &lt;/li&gt;&lt;/ul&gt;</sys:String>
-    </local:MpAvUserControl.Resources>
-    <local:MpAvUserControl.Styles>
-    </local:MpAvUserControl.Styles>
-    <StackPanel Orientation="Vertical"
-                Margin="0,20,0,0"
-                Spacing="25">
+    <StackPanel>
 
         <!--  APPLICATION SHORTCUTS  -->
 
-        <Expander IsExpanded="True">
+        <Expander>
             <Expander.Header>
                 <StackPanel Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+                           Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themewhite}" />
                     <TextBlock Classes="expander header text"
                                Text="Commands" />
                 </StackPanel>
@@ -46,6 +38,7 @@
                 Command="{Binding ResetAllShortcuts}"
                 HorizontalAlignment="Right"
                 Content="Reset All Shortcuts"
+                IsVisible="False"
                 Margin="0,0,20,0" />
 
         <!--  PASTE INTEROP SHORTCUTS  -->
@@ -55,7 +48,7 @@
             <Expander.Header>
                 <StackPanel Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themebg}" />
+                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themewhite}" />
                     <TextBlock Classes="expander header text"
                                Text="Custom Paste Commands" />
                     <local:MpAvToolTipInfoHintView ToolTipText="#p#Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.#p##p#Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)" />

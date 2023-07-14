@@ -45,45 +45,50 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100" />
-                <ColumnDefinition MinWidth="150" />
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition MinWidth="150"
+                                  Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <!--  LABEL & HINT  -->
 
-            <DockPanel Grid.Column="0"
+            <!--<DockPanel Grid.Column="0"
                        LastChildFill="False"
                        HorizontalAlignment="Stretch"
-                       VerticalAlignment="Top">
-                <!--  LABEL  -->
+                       VerticalAlignment="Top">-->
+            <!--  LABEL  -->
 
-                <TextBlock DockPanel.Dock="Left"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Top"
-                           MaxWidth="70"
-                           FontSize="12"
-                           TextWrapping="Wrap"
-                           Foreground="White"
-                           Margin="5,1,0,0"
-                           Text="{Binding Label}" />
+            <TextBlock Grid.Column="0"
+                       DockPanel.Dock="Left"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       FontSize="12"
+                       TextAlignment="Left"
+                       TextWrapping="Wrap"
+                       FontWeight="SemiBold"
+                       Foreground="White"
+                       Margin="5,1,0,0"
+                       Text="{Binding Label}" />
 
-                <!--
-                    DESCRIPTION
-                -->
+            <!--
+                DESCRIPTION
+            -->
 
-                <local:MpAvToolTipInfoHintView DockPanel.Dock="Right"
-                                               Margin="0,5,2,0"
-                                               IsVisible="{Binding Description, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                               VerticalAlignment="Top"
-                                               HorizontalAlignment="Right"
-                                               ToolTipText="{Binding Description}" />
-            </DockPanel>
+            <local:MpAvToolTipInfoHintView Grid.Column="1"
+                                           DockPanel.Dock="Right"
+                                           Margin="0,5,2,0"
+                                           IsVisible="{Binding Description, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                           VerticalAlignment="Top"
+                                           HorizontalAlignment="Right"
+                                           ToolTipText="{Binding Description}" />
+            <!--</DockPanel>-->
 
 
             <!--  PARAMETER  -->
 
             <ContentControl x:Name="ParameterContentControl"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Margin="1"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Stretch"
@@ -187,7 +192,7 @@
 
             <!--  REMEMBER  -->
             <CheckBox x:Name="RemeberParamCheckbox"
-                      Grid.Column="2"
+                      Grid.Column="3"
                       IsChecked="{Binding IsRememberChecked, Mode=TwoWay}"
                       IsVisible="{Binding IsConfirmRemember}">
                 <ToolTip.Tip>
