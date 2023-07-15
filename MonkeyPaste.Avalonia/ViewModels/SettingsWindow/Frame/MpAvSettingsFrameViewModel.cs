@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpSettingsFrameType.Account:
                         return "UserImage";
                     case MpSettingsFrameType.Theme:
-                        return "ColorsImage";
+                        return "BrushImage";
                     case MpSettingsFrameType.Fonts:
                         return "FontImage";
                     case MpSettingsFrameType.Sound:
@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpSettingsFrameType.Window:
                         return "AppFrameImage";
                     case MpSettingsFrameType.Hints:
-                        return "InfoImage";
+                        return "InfoBwImage";
                     case MpSettingsFrameType.International:
                         return "GlobeImage";
                     case MpSettingsFrameType.Limits:
@@ -57,11 +57,11 @@ namespace MonkeyPaste.Avalonia {
                     case MpSettingsFrameType.Search:
                         return "SearchImage";
                     case MpSettingsFrameType.Content:
-                        return "BananaImage";
+                        return "BananaBwImage";
                     case MpSettingsFrameType.DragAndDrop:
                         return "DragAndDropImage";
                     case MpSettingsFrameType.Shortcuts:
-                        return "HotkeyImage";
+                        return "JoystickImage";
                     case MpSettingsFrameType.System:
                         return "AppShellImage";
                     default:
@@ -101,7 +101,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIFilterMatch Implementation
 
-        bool MpIFilterMatch.IsMatch(string filter) {
+        bool MpIFilterMatch.IsFilterMatch(string filter) {
             throw new System.NotImplementedException();
         }
         #endregion
@@ -143,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvParameterViewModelBase> FilteredItems =>
             Items
-            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsViewModel.Instance.FilterText));
+            .Where(x => (x as MpIFilterMatch).IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText));
 
         public IList<MpAvParameterViewModelBase> Items { get; set; }
 

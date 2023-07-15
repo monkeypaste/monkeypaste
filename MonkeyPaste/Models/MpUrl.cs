@@ -77,6 +77,8 @@ namespace MonkeyPaste {
 
         #endregion
 
+        #region Interfaces
+
         #region MpILabelText Implementation
         string MpILabelText.LabelText =>
             string.IsNullOrWhiteSpace(UrlTitle) ?
@@ -103,6 +105,8 @@ namespace MonkeyPaste {
         public object IconResourceObj => IconId;
         #endregion
 
+        #endregion
+
         public static async Task<MpUrl> CreateAsync(
             string urlPath = "",
             string title = "",
@@ -116,6 +120,12 @@ namespace MonkeyPaste {
                 dupCheck.WasDupOnCreate = true;
                 return dupCheck;
             }
+
+            if (Mp.Services.SourceRefTools.IsInternalUrl(urlPath)) {
+                MpDebug.Break($"MpUrl error. Attempting to add Internal Url '{urlPath}' which should only be determined at runtime.");
+                return null;
+            }
+
 
             var newUrl = new MpUrl() {
                 UrlGuid = System.Guid.NewGuid(),

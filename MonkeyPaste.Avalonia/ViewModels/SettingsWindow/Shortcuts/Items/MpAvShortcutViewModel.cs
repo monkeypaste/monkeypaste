@@ -40,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIFilterMatch Implementation
-        bool MpIFilterMatch.IsMatch(string filter) {
+        public bool IsFilterMatch(string filter) {
             if (string.IsNullOrEmpty(filter)) {
                 return true;
             }

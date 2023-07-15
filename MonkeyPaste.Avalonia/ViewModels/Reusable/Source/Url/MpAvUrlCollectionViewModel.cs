@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public IEnumerable<MpAvUrlViewModel> FilteredItems =>
             Items
-            .Where(x => (x as MpIFilterMatch).IsMatch(MpAvSettingsViewModel.Instance.FilterText));
+            .Where(x => (x as MpIFilterMatch).IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText));
 
         #endregion
 

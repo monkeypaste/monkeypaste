@@ -14,7 +14,6 @@ namespace MonkeyPaste {
         bool IsQuerying { get; }
         bool CanRequery { get; }
         public int TotalAvailableItemsInQuery { get; }
-        //Task<List<MpCopyItem>> FetchItemsByQueryIdxListAsync(IEnumerable<int> copyItemQueryIdxList, IEnumerable<int> idsToOmit);
         Task<List<MpCopyItem>> FetchPageAsync(int offset, int limit);
         Task QueryForTotalCountAsync(bool isRequery);
 
@@ -27,9 +26,6 @@ namespace MonkeyPaste {
         IEnumerable<MpIQueryInfo> Infos { get; }
 
         MpIQueryPageTools PageTools { get; }
-
-        // fragment 'MpQuillContentSearchRequestMessage'[]
-        string SearchFragmentMessage { get; }
     }
 
     public interface MpIQueryInfo {

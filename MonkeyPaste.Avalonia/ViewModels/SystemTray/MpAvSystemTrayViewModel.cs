@@ -218,6 +218,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand GenericTestCommand => new MpAsyncCommand(
             async () => {
+                await Task.Delay(1);
                 int next_type = (int)Mp.Services.AccountTools.CurrentAccountType + 1;
                 if (next_type > (int)MpUserAccountType.Premium) {
                     next_type = (int)MpUserAccountType.Free;

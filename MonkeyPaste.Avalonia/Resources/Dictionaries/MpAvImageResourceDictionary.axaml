@@ -1,6 +1,9 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="InfoBwImage">avares://MonkeyPaste.Avalonia/Assets/Images/infobw.png</sys:String>
+    <sys:String x:Key="BrushImage">avares://MonkeyPaste.Avalonia/Assets/Images/brush.png</sys:String>
+    <sys:String x:Key="BananaBwImage">avares://MonkeyPaste.Avalonia/Assets/Images/bananabw.png</sys:String>
     <sys:String x:Key="BananaImage">avares://MonkeyPaste.Avalonia/Assets/Images/banana.png</sys:String>
     <sys:String x:Key="Dots2x2Image">avares://MonkeyPaste.Avalonia/Assets/Images/dots_2x2.png</sys:String>
     <sys:String x:Key="DragAndDropImage">avares://MonkeyPaste.Avalonia/Assets/Images/draganddrop.png</sys:String>
@@ -88,7 +91,7 @@
     <sys:String x:Key="SendToBackImage">avares://MonkeyPaste.Avalonia/Assets/Images/sendToBack.png</sys:String>
     <sys:String x:Key="SelectAllImage">avares://MonkeyPaste.Avalonia/Assets/Images/selectall.png</sys:String>
     <sys:String x:Key="InvertSelectionImage">avares://MonkeyPaste.Avalonia/Assets/Images/invertSelection.png</sys:String>
-    <sys:String x:Key="HotkeyImage">avares://MonkeyPaste.Avalonia/Assets/Images/joystick2.png</sys:String>
+    <sys:String x:Key="JoystickImage">avares://MonkeyPaste.Avalonia/Assets/Images/joystick2.png</sys:String>
     <sys:String x:Key="HotkeyActiveImage">avares://MonkeyPaste.Avalonia/Assets/Images/joystickactive2.png</sys:String>
     <sys:String x:Key="PasteToAppImage">avares://MonkeyPaste.Avalonia/Assets/Images/bullseye.png</sys:String>
     <sys:String x:Key="BullsEyeImage">avares://MonkeyPaste.Avalonia/Assets/Images/bullseye.png</sys:String>

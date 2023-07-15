@@ -105,7 +105,7 @@
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=TogglePinned, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                        ToolTipText="Toggle Pin" />
             </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource PinImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
+            <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource PinImage}">
                 <Image.Transitions>
                     <Transitions>
                         <DoubleTransition Property="RotateTransform.Angle"
@@ -130,7 +130,7 @@
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                        ToolTipText="Float" />
             </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource NewWindowImage}" />
 
         </Button>
 
@@ -144,7 +144,7 @@
                                        ToolTipText="{Binding ShortcutTooltipText}" />
             </ToolTip.Tip>
             <Image Classes.activeHotkey="{Binding KeyString, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                   Source="{Binding Source={StaticResource HotkeyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                   local:MpAvImageTintExtension.ImageResourceObj="{StaticResource JoystickImage}" />
         </Button>
 
         <!--  BR Edit Toggle Button  -->
@@ -157,7 +157,7 @@
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ToggleContentReadOnly, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                        ToolTipText="Toggle Edit" />
             </ToolTip.Tip>
-            <Image Source="{Binding Source={StaticResource EditImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource EditImage}" />
         </ToggleButton>
     </Grid>
 </local:MpAvUserControl>

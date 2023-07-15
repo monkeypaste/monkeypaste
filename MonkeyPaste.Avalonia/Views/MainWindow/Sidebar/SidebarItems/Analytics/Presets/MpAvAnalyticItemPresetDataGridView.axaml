@@ -32,11 +32,11 @@
         <!--  HOTKEY  -->
         <Style Selector="Button#HotkeyButton Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource HotkeyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding Source={StaticResource JoystickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
         <Style Selector="Button#HotkeyButton.assigned Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource HotkeyActiveImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding Source={StaticResource JoystickImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent2Color}" />
         </Style>
 
         <!--  EDIT  -->

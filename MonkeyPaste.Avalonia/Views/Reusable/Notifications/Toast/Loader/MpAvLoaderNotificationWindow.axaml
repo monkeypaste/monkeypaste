@@ -139,11 +139,8 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             BorderThickness="7"
-            BorderBrush="{DynamicResource OuterGradientBrush}"
-            Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
-            local:MpAvIsHoveringExtension.IsEnabled="True"
-            local:MpAvIsHoveringExtension.IsBorderFollowEnabled="True"
-            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+            BorderBrush="{DynamicResource ThemeWhite}"
+            Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
         <Grid x:Name="NotificationWindowContainerGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.35*" />
@@ -151,6 +148,7 @@
             </Grid.ColumnDefinitions>
             <Image x:Name="LogoImage"
                    Grid.Row="0"
+                   Effect="drop-shadow(0 0 11 white)"
                    Grid.Column="0"
                    Classes="shakeOnce shakeOnceOver"
                    Width="72"
@@ -159,7 +157,7 @@
                    Stretch="Fill"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   Margin="10,5,0,0">
+                   Margin="10,10,0,0">
                 <Image.RenderTransform>
                     <RotateTransform />
                 </Image.RenderTransform>
@@ -171,8 +169,7 @@
                   VerticalAlignment="Stretch"
                   RowDefinitions="0.2*,0.3*,0.1*">
                 <TextBlock Grid.Row="0"
-                           Margin="10,10,0,1"
-                           FontSize="20"
+                           FontSize="26"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Left"
                            Foreground="{DynamicResource ThemeWhite}"
@@ -264,7 +261,8 @@
 
                 <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
                                              Grid.Row="2"
-                                             Margin="0,0,7,7"
+                                             ClipToBounds="False"
+                                             Margin="0,0,8,10"
                                              VerticalAlignment="Center"
                                              HorizontalAlignment="Right"
                                              Content="{Binding Body}">
@@ -274,6 +272,7 @@
                     <TransitioningContentControl.ContentTemplate>
                         <DataTemplate DataType="sys:String">
                             <TextBlock x:Name="ProgressInfoBlock"
+                                       ClipToBounds="False"
                                        Width="200"
                                        FontSize="12"
                                        TextAlignment="Right"

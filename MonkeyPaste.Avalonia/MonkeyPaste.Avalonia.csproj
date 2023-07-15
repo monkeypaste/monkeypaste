@@ -255,6 +255,7 @@
     <None Remove="Assets\Images\asterisk.png" />
     <None Remove="Assets\Images\back_black.png" />
     <None Remove="Assets\Images\banana.png" />
+    <None Remove="Assets\Images\bananabw.png" />
     <None Remove="Assets\Images\beaker.png" />
     <None Remove="Assets\Images\bingIcon.png" />
     <None Remove="Assets\Images\binoculars.png" />
@@ -265,6 +266,7 @@
     <None Remove="Assets\Images\brain.png" />
     <None Remove="Assets\Images\brainwhite.png" />
     <None Remove="Assets\Images\bringToFront.png" />
+    <None Remove="Assets\Images\brush.png" />
     <None Remove="Assets\Images\bullseye.png" />
     <None Remove="Assets\Images\burger.png" />
     <None Remove="Assets\Images\butterfly.png" />
@@ -346,6 +348,7 @@
     <None Remove="Assets\Images\info.png" />
     <None Remove="Assets\Images\Info1.png" />
     <None Remove="Assets\Images\info2.png" />
+    <None Remove="Assets\Images\infobw.png" />
     <None Remove="Assets\Images\invertSelection.png" />
     <None Remove="Assets\Images\jigsaw.png" />
     <None Remove="Assets\Images\joystick.png" />
@@ -523,7 +526,13 @@
     <AvaloniaResource Include="Assets\Images\banana.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\bananabw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\boxcorners.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\brush.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\cef.png">
@@ -554,6 +563,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\heart.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\infobw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\missingfile.png">
@@ -888,16 +900,7 @@
     <AvaloniaResource Include="Assets\Images\jigsaw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\joystick.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\joystick2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\joystickactive.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Images\joystickactive2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\keyboard.png">

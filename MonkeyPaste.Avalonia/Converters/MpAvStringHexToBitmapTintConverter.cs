@@ -1,17 +1,22 @@
-﻿using Avalonia.Data.Converters;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using Org.BouncyCastle.Utilities.Encoders;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringHexToBitmapTintConverter : IValueConverter {
-        private static Dictionary<object, Dictionary<string, Bitmap>> _tintCache = new Dictionary<object, Dictionary<string, Bitmap>>();
+        private Dictionary<object, Dictionary<string, Bitmap>> _tintCache = new Dictionary<object, Dictionary<string, Bitmap>>();
 
-        private static bool IS_DYNAMIC_TINT_ENABLED = true;
+        private bool IS_DYNAMIC_TINT_ENABLED = true;
 
         public static readonly MpAvStringHexToBitmapTintConverter Instance = new();
 
@@ -27,22 +32,13 @@ namespace MonkeyPaste.Avalonia {
 
             object imgResourceObj = null;
             string hex = null;
-            if (parameter is string paramStr) {
-                paramStr = paramStr.Replace("themewhite", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeWhite.ToString()));
-                paramStr = paramStr.Replace("themeblack", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlack.ToString()));
-                paramStr = paramStr.Replace("themebg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString()));
-                paramStr = paramStr.Replace("themefg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveColor.ToString()));
-                paramStr = paramStr.Replace("themeaccent1fg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1Color.ToString()));
-                paramStr = paramStr.Replace("themeaccent2fg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent2Color.ToString()));
-                paramStr = paramStr.Replace("themeaccent1bg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1BgColor.ToString()));
-                paramStr = paramStr.Replace("themeaccent5bg", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent5BgColor.ToString()));
-                paramStr = paramStr.Replace("themegray1", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent1.ToString()));
-                paramStr = paramStr.Replace("themecomp5", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeCompliment5Color.ToString()));
-                paramStr = paramStr.Replace("themecomp5light", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeCompliment5LighterColor.ToString()));
-                paramStr = paramStr.Replace("themecomp5dark", Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeCompliment5DarkColor.ToString()));
-                if (paramStr.Contains("|")) {
-                    hex = MpColorHelpers.ParseHexFromString(paramStr.SplitNoEmpty("|")[0]);
-                    imgResourceObj = MpColorHelpers.ParseHexFromString(paramStr.SplitNoEmpty("|")[1]);
+            if (parameter is string paramStr &&
+                paramStr.SplitNoEmpty("|") is string[] paramParts) {
+                if (paramParts.FirstOrDefault(x => x.StartsWith("Theme")) is string theme_key &&
+                    Enum.TryParse(theme_key, true, out MpThemeResourceKey trk)) {
+                    hex = Mp.Services.PlatformResource.GetResource<string>(trk.ToString());
+                } else if (paramParts.Length > 1) {
+                    hex = MpColorHelpers.ParseHexFromString(paramParts[0]);
                 } else if (paramStr.IsStringImageResourcePathOrKey()) {
                     imgResourceObj = paramStr;
                 } else {
@@ -99,6 +95,14 @@ namespace MonkeyPaste.Avalonia {
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
             throw new NotSupportedException();
+        }
+
+        public void RefreshCache() {
+            _tintCache.Clear();
+
+            MpAvWindowManager.AllWindows
+                    .SelectMany(x => x.GetVisualDescendants<Image>())
+                    .ForEach(x => x.InvalidateVisual());
         }
     }
 }

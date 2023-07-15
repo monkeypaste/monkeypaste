@@ -18,10 +18,11 @@
         <!--  APPS  -->
         <Expander>
             <Expander.Header>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Classes="header expander"
+                            Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themewhite}" />
-                    <TextBlock Classes="expander header text"
+                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhite}" />
+                    <TextBlock Classes="expander header"
                                Text="Applications" />
                 </StackPanel>
             </Expander.Header>
@@ -40,15 +41,11 @@
                             <Label Content="Add Application" />
                         </DockPanel>
                     </Button>
-                    <Border Classes="filterDataGridContainer">
+                    <local:MpAvClipBorder Classes="filterDataGridContainer">
                         <DataGrid Grid.Row="1"
                                   x:Name="ExcludedAppDatagrid"
-                                  HeadersVisibility="All"
-                                  CanUserResizeColumns="True"
                                   ItemsSource="{Binding FilteredItems}"
-                                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                  Focusable="True"
-                                  IsReadOnly="False">
+                                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Width="30"
                                                         CanUserResize="False">
@@ -111,7 +108,7 @@
 
                             </DataGrid.Columns>
                         </DataGrid>
-                    </Border>
+                    </local:MpAvClipBorder>
                 </DockPanel>
             </Expander.Content>
         </Expander>
@@ -119,10 +116,11 @@
         <!--  WEBSITES  -->
         <Expander>
             <Expander.Header>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Classes="header expander"
+                            Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource WebImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themewhite}" />
-                    <TextBlock Classes="expander header text"
+                           Source="{Binding Source={StaticResource WebImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhite}" />
+                    <TextBlock Classes="expander header"
                                Text="Websites" />
                     <local:MpAvToolTipInfoHintView Classes="expander header warning"
                                                    ToolTipText="Source url recognition is dependant on the host applications clipboard support so rejection is not guaranteed :(" />
@@ -143,7 +141,7 @@
                     </DockPanel>
                 </Button>
 
-                <Border Classes="filterDataGridContainer">
+                <local:MpAvClipBorder Classes="filterDataGridContainer">
                     <DataGrid x:Name="ExcludedUrlDatagrid"
                               CanUserResizeColumns="True"
                               ItemsSource="{Binding FilteredItems}"
@@ -226,7 +224,7 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </Border>
+                </local:MpAvClipBorder>
             </DockPanel>
         </Expander>
     </StackPanel>

@@ -1092,9 +1092,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
         public bool IsQueryResizeEnabled =>
-            LayoutType == MpClipTrayLayoutType.Stack;
+    LayoutType == MpClipTrayLayoutType.Stack;
 
         public bool IsRestoringSelection { get; set; }
 
@@ -1263,6 +1262,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsGridLayout => LayoutType == MpClipTrayLayoutType.Grid;
 
+        public bool IsInPlaceRequerying { get; set; }
         public bool IsRequerying { get; set; } = false;
         public bool IsQuerying { get; set; } = false;
         public bool IsSubQuerying { get; set; } = false;
@@ -2438,26 +2438,27 @@ namespace MonkeyPaste.Avalonia {
             QueryCommand.Execute(string.Empty);
         }
         private async Task RefreshQueryPageOffsetsAsync() {
-            return;
-            Dispatcher.UIThread.VerifyAccess();
+            await Task.Delay(0);
+            //return;
+            //Dispatcher.UIThread.VerifyAccess();
 
-            while (IsAnyBusy) {
-                await Task.Delay(100);
-            }
-            int head_offset_idx = -1;
-            if (!IsQueryTrayEmpty) {
-                var ordered_query_item_ids = QueryItems.OrderBy(x => x.QueryOffsetIdx).Select(x => x.IsPinPlaceholder ? x.PinPlaceholderCopyItemId : x.CopyItemId).ToList();
-                head_offset_idx = await Mp.Services.Query.FetchItemOffsetIdxAsync(ordered_query_item_ids.First());
-                for (int i = 0; i < ordered_query_item_ids.Count; i++) {
-                    int new_offset_idx = head_offset_idx + i;
-                    var ctvm = QueryItems.FirstOrDefault(x => x.IsPinPlaceholder ? x.PinPlaceholderCopyItemId == ordered_query_item_ids[i] : x.CopyItemId == ordered_query_item_ids[i]);
-                    if (ctvm == null) {
-                        continue;
-                    }
-                    ctvm.UpdateQueryOffset(new_offset_idx);
-                }
+            //while (IsAnyBusy) {
+            //    await Task.Delay(100);
+            //}
+            //int head_offset_idx = -1;
+            //if (!IsQueryTrayEmpty) {
+            //    var ordered_query_item_ids = QueryItems.OrderBy(x => x.QueryOffsetIdx).Select(x => x.IsPinPlaceholder ? x.PinPlaceholderCopyItemId : x.CopyItemId).ToList();
+            //    head_offset_idx = await Mp.Services.Query.FetchItemOffsetIdxAsync(ordered_query_item_ids.First());
+            //    for (int i = 0; i < ordered_query_item_ids.Count; i++) {
+            //        int new_offset_idx = head_offset_idx + i;
+            //        var ctvm = QueryItems.FirstOrDefault(x => x.IsPinPlaceholder ? x.PinPlaceholderCopyItemId == ordered_query_item_ids[i] : x.CopyItemId == ordered_query_item_ids[i]);
+            //        if (ctvm == null) {
+            //            continue;
+            //        }
+            //        ctvm.UpdateQueryOffset(new_offset_idx);
+            //    }
 
-            }
+            //}
         }
         private async Task<MpAvClipTileViewModel> CreateOrRetrieveClipTileViewModelAsync(MpCopyItem ci) {
             MpAvClipTileViewModel nctvm = null;
@@ -3566,7 +3567,11 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.Query.Infos.All(x => string.IsNullOrEmpty(x.MatchValue));
 
             if (is_empty_query) {
-                // intermittently occurs on startup and query throws exception
+                // cases:
+                // -intermittently occurs on startup and query throws exception
+                // -after selected tag delete and parent is group tag
+                Items.ForEach(x => x.TriggerUnloadedNotification(true, true));
+                await UpdateEmptyPropertiesAsync();
                 return;
             }
 
@@ -3594,6 +3599,7 @@ namespace MonkeyPaste.Avalonia {
 
             #region TotalCount Query & Offset Calc
 
+            IsInPlaceRequerying = isInPlaceRequery;
             IsBusy = !isLoadMore && !isLoadRange;
             IsQuerying = true;
 
@@ -3753,14 +3759,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            //if (Items.All(x => x.IsPlaceholder)) {
-            //    // reset scroll if empty 
-            //    ScrollOffsetX = 0;
-            //    LastScrollOffsetX = 0;
-            //    ScrollOffsetY = 0;
-            //    LastScrollOffsetY = 0;
-            //}
-
             IsBusy = false;
             IsQuerying = false;
 
@@ -3790,10 +3788,6 @@ namespace MonkeyPaste.Avalonia {
                     ForceScrollOffset(newScrollOffset);
                     MpMessenger.SendGlobal(MpMessageType.JumpToIdxCompleted);
                 } else {
-                    //recheck loadMore once done for rejected scroll change events
-                    //while (IsAnyBusy) {
-                    //    await Task.Delay(100);
-                    //}
                     if (isLoadMore) {
                         if (CheckLoadMore()) {
                             return;
@@ -3813,7 +3807,9 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 if (!isLoadMore) {
-
+                    // wait for all loading to finish before unflagging iprq busy
+                    // so busy spinners stay hidden
+                    IsInPlaceRequerying = false;
                     MpMessenger.SendGlobal(MpMessageType.QueryCompleted);
                 }
 

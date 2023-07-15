@@ -43,16 +43,12 @@
                     Value="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
     </UserControl.Styles>
-    <Border Classes="filterDataGridContainer">
+    <local:MpAvClipBorder Classes="filterDataGridContainer">
         <Grid>
             <DataGrid x:Name="ShortcutDatagrid"
-                      local:MpAvDataGridRefreshExtension.IsEnabled="True"
+                      local:MpAvDataGridRefreshExtension.IsEnabled="False"
                       IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                      CanUserSortColumns="True"
-                      CanUserResizeColumns="True"
-                      ItemsSource="{Binding}"
-                      IsReadOnly="False"
-                      AutoGenerateColumns="False">
+                      ItemsSource="{Binding}">
                 <DataGrid.Columns>
 
                     <!--  SHORTCUT TYPE LABEL  -->
@@ -88,22 +84,6 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <!--<Grid Classes="marqueeContainer"
-                                      HorizontalAlignment="Center">
-                                    <local:MpAvMarqueeTextBox EditOnFocus="False"
-                                                              DropShadowBrush="Transparent"
-                                                              ReadOnlyForeground="Blue"
-                                                              HorizontalAlignment="Center"
-                                                              TextAlignment="Center"
-                                                              FontWeight="SemiBold"
-                                                              MinWidth="80"
-                                                              HoverBrush="Red"
-                                                              NavigateUriCommand="{Binding ShowAssignShortcutDialogCommand, Source={x:Static local:MpAvShortcutCollectionViewModel.Instance}}"
-                                                              NavigateUriCommandParameter="{Binding}"
-                                                              NavigateUriRequiredKeyString=""
-                                                              SelectViewModelOnFocus="False"
-                                                              Text="{Binding RoutingType}" />
-                                </Grid>-->
                                 <Grid HorizontalAlignment="Center">
                                     <Grid.Styles>
                                         <Style Selector="ComboBox.routingBox > ComboBoxItem:nth-child(1)">
@@ -182,5 +162,5 @@
                        Text="No results available" />
         </Grid>
 
-    </Border>
+    </local:MpAvClipBorder>
 </UserControl>

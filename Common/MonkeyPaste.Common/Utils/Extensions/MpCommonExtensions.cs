@@ -267,6 +267,17 @@ namespace MonkeyPaste.Common {
                 action(item, idx++);
             }
         }
+        public static void ReplaceItems<T>(this ObservableCollection<T> collection, IEnumerable<T> source) {
+            var to_remove = collection.Where(x => !source.Contains(x)).ToList();
+            int to_remove_count = to_remove.Count;
+            while (to_remove_count > 0) {
+                collection.Remove(source.ElementAt(to_remove_count - 1));
+                to_remove_count--;
+            }
+            foreach (var si in source) {
+                //if()
+            }
+        }
         public static List<T> GetRange<T>(this ObservableCollection<T> collection, int startIdx, int count) {
             if (count == 0 && startIdx + count > 0) {
                 throw new Exception("Collection empty");

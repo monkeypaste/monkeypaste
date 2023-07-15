@@ -18,7 +18,7 @@ namespace MonkeyPaste.Common.Plugin {
             tags,
             projectUrl
         };
-        bool MpIFilterMatch.IsMatch(string filter) {
+        bool MpIFilterMatch.IsFilterMatch(string filter) {
             if (string.IsNullOrEmpty(filter)) {
                 return true;
             }

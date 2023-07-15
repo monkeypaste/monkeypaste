@@ -108,7 +108,7 @@
                                                                 IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                                                             <DockPanel LastChildFill="True">
                                                                 <Image DockPanel.Dock="Left"
-                                                                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                                                                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                                                                 <TextBlock Text="{Binding Label}" />
                                                             </DockPanel>
                                                         </Border>

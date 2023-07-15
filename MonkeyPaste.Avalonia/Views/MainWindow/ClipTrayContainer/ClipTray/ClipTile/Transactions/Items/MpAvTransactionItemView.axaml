@@ -84,7 +84,7 @@
                                                VerticalAlignment="Center"
                                                Width="15"
                                                Height="15"
-                                               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                                               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                                         <TextBlock Foreground="{DynamicResource ThemeInteractiveColor}"
                                                    Margin="5,0,0,0"
                                                    VerticalAlignment="Center"

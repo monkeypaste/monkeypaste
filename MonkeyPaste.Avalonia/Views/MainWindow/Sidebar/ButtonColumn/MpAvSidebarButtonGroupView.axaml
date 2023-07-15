@@ -235,13 +235,14 @@
                 </Flyout>
             </RadioButton.Flyout>
             <Grid>
-                <Image Source="{Binding Source={StaticResource MouseNoneClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseNoneClickImage}" />
+
                 <Image IsVisible="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                       Source="{Binding Source={StaticResource MouseLeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                       local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseLeftClickImage}" />
                 <Image IsVisible="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                       Source="{Binding Source={StaticResource MouseRightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                       local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseRightClickImage}" />
                 <Image IsVisible="{Binding IsDropWidgetEnabled, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}}"
-                       Source="{Binding Source={StaticResource MouseFilledBaseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                       local:MpAvImageTintExtension.ImageResourceObj="{StaticResource MouseFilledBaseImage}" />
             </Grid>
         </RadioButton>
     </Grid>

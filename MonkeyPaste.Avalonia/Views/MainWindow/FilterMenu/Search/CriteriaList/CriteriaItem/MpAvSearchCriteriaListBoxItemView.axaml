@@ -16,15 +16,15 @@
         <!--  RE-ORDER BUTTONS  -->
         <Style Selector="Button#CriteriaDragButton Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource LinesX2HorizImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                    Value="{Binding Source={StaticResource LinesX2HorizImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
         </Style>
         <Style Selector="Button#CriteriaDragButton:pointerover Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource LinesX2HorizVertArrowsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themeaccent1fg}" />
+                    Value="{Binding Source={StaticResource LinesX2HorizVertArrowsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
         </Style>
         <Style Selector="Button#CriteriaDragButton:pressed Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource LinesX2HorizVertArrowsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themegray1}" />
+                    Value="{Binding Source={StaticResource LinesX2HorizVertArrowsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeGrayAccent1}" />
         </Style>
 
         <!--  OPTION LISTBOXITEM  -->
@@ -92,11 +92,13 @@
 
             <DockPanel DockPanel.Dock="Top"
                        HorizontalAlignment="Left"
+                       RenderTransform="translateX(-30px)"
                        IsVisible="{Binding IsJoinPanelVisible}">
                 <TextBlock DockPanel.Dock="Right"
+                           FontWeight="SemiBold"
                            Classes="alterOnly"
-                           Text="of the following are true"
-                           Margin="15,0,0,0"
+                           Text="all of the following are true"
+                           Margin="5,0,0,0"
                            VerticalAlignment="Center" />
                 <ComboBox Classes="criteriaComboBox joinComboBox alterOnly"
                           ItemsSource="{Binding JoinTypeLabels}"

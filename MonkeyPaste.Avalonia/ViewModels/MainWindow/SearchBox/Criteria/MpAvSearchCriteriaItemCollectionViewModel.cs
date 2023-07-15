@@ -259,7 +259,9 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpTag t && t.Id == QueryTagId) {
-                InitializeAsync(0, false).FireAndForgetSafeAsync();
+                Dispatcher.UIThread.Post(async () => {
+                    await InitializeAsync(0, false);
+                });
             }
         }
 
@@ -446,17 +448,18 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand DuplicateQueryCommand => new MpAsyncCommand(
             async () => {
-                var qttvm = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == QueryTagId);
-                if (qttvm == null) {
+                var ttvm_to_duplicate = MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == QueryTagId);
+                if (ttvm_to_duplicate == null) {
                     return;
                 }
-                await qttvm.MoveOrCopyThisTagCommand.ExecuteAsync(new object[] { qttvm.ParentTagId, -1, false, true });
+                await ttvm_to_duplicate.MoveOrCopyThisTagCommand.ExecuteAsync(new object[] { ttvm_to_duplicate.ParentTagId, -1, false, true });
 
-                var dup_ttvm = qttvm.ParentTreeItem.SortedItems.Last();
+                var dup_ttvm = ttvm_to_duplicate.ParentTreeItem.SortedItems.Last();
                 await MpAvTagTrayViewModel.Instance.SelectTagAndBringIntoTreeViewCommand.ExecuteAsync(dup_ttvm);
 
-                //await Task.Delay(300);
-                //MpAvTagTrayViewModel.Instance.SelectedItem.RenameTagCommand.Execute(null);
+                // NOTE select tag again to update adv search ui
+                await Task.Delay(300);
+                MpAvTagTrayViewModel.Instance.SelectTagCommand.Execute(dup_ttvm.TagId);
             }, () => {
                 return IsSavedQuery;
             });

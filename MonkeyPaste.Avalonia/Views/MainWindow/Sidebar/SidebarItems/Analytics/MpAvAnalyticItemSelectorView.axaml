@@ -46,7 +46,7 @@
                                     <ToolTip.Tip>
                                         <local:MpAvToolTipView ToolTipText="Browse Plugins" />
                                     </ToolTip.Tip>
-                                    <Image Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                                    <Image Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
 
                                 </Button>
                                 <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"

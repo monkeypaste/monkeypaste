@@ -106,11 +106,13 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public ObservableCollection<MpAvShortcutViewModel> FilteredItems =>
-            new ObservableCollection<MpAvShortcutViewModel>(
-                Items
-                    .Where(x => (x as MpIFilterMatch)
-                    .IsMatch(MpAvSettingsViewModel.Instance.FilterText)));
+        public ObservableCollection<MpAvShortcutViewModel> FilteredItems { get; private set; } = new ObservableCollection<MpAvShortcutViewModel>();
+        //public ObservableCollection<MpAvShortcutViewModel> FilteredItems =>
+        //    new ObservableCollection<MpAvShortcutViewModel>(
+        //        Items
+        //            .Where(x => (x as MpIFilterMatch)
+        //            .IsMatch(MpAvSettingsViewModel.Instance.FilterText)));
+
 
         public IEnumerable<MpAvShortcutViewModel> AvailableItems =>
             MpAvMainWindowViewModel.Instance.IsAnyAppWindowActive ?
@@ -676,7 +678,7 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.SettingsFilterTextChanged:
-                    OnPropertyChanged(nameof(FilteredItems));
+                    UpdateFilteredItems();
                     break;
                 case MpMessageType.MainWindowLoadComplete: {
                         StartInputListener();
@@ -714,7 +716,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
-            OnPropertyChanged(nameof(FilteredItems));
+            UpdateFilteredItems();
             //OnPropertyChanged(nameof(InternalApplicationShortcuts));
             //OnPropertyChanged(nameof(CustomShortcuts));
         }
@@ -737,7 +739,21 @@ namespace MonkeyPaste.Avalonia {
                 }.SerializeJsonObjectToBase64();
         }
 
+        private void UpdateFilteredItems() {
+            int selected_scid = SelectedItem == null ? 0 : SelectedItem.ShortcutId;
+            FilteredItems.Clear();
+            foreach (var scvm in Items) {
+                if (scvm.IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText)) {
+                    FilteredItems.Add(scvm);
+                }
+            }
+            if (selected_scid > 0 &&
+                FilteredItems.All(x => x.ShortcutId != selected_scid)) {
+                SelectedItem = null;
+            }
+        }
 
+        #region Routing Profile
         private MpShortcutRoutingProfileType DetermineShortcutRoutingProfileType() {
             var globalable_scvml = Items.Where(x => x.CanBeGlobalShortcut);
             if (globalable_scvml.All(x => x.RoutingType == MpRoutingType.Internal)) {
@@ -765,6 +781,8 @@ namespace MonkeyPaste.Avalonia {
             RoutingProfileType = DetermineShortcutRoutingProfileType();
             MpDebug.Assert(RoutingProfileType == new_profile_type, $"Routing profile mismatch. Set to '{new_profile_type}' but Determined is '{RoutingProfileType}'");
         }
+
+        #endregion
 
         #region Paste Tracking
 
@@ -1375,7 +1393,7 @@ namespace MonkeyPaste.Avalonia {
                         scpvm.KeyString = result;
                     }
                 }
-                OnPropertyChanged(nameof(FilteredItems));
+                UpdateFilteredItems();
                 MpAvDataGridRefreshExtension.RefreshDataGrid(this);
             });
 

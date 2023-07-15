@@ -14,7 +14,10 @@ namespace MonkeyPaste.Avalonia {
     public abstract class MpAvProcessWatcherBase : MpIProcessWatcher {
         #region Private Variables
         private DispatcherTimer _timer;
-        private nint _lastActiveHandle;
+        #endregion
+
+        #region Protected Variables
+        protected nint _lastActiveHandle;
         #endregion
 
         #region Constants

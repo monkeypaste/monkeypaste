@@ -80,10 +80,10 @@ namespace MonkeyPaste.Avalonia {
 #else
             // TODO add other os'
             loadOnLogin = false;
-#endif
             MpPrefViewModel.Instance.LoadOnLogin = loadOnLogin;
 
             MpConsole.WriteLine($"Load At Login: {(loadOnLogin ? "ON" : "OFF")}");
+#endif
         }
 
         #endregion

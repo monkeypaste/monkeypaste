@@ -22,10 +22,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // GET APP ICON
-            string iconBase64 =
-                string.IsNullOrEmpty(pi.MainWindowIconBase64) ?
-                    Mp.Services.IconBuilder.GetPathIconBase64(processPath) :
-                    pi.MainWindowIconBase64;
+            string iconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(processPath);
 
             if (string.IsNullOrEmpty(iconBase64)) {
                 MpConsole.WriteWarningLine($" could not find icon for info (using question mark): ");

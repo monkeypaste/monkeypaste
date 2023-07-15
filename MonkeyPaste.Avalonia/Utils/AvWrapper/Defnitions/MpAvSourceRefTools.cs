@@ -11,7 +11,12 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSourceRefTools : MpISourceRefTools {
         public const string INTERNAL_SOURCE_DOMAIN = "https://localhost";
-
+        public bool IsInternalUrl(string url) {
+            if (string.IsNullOrEmpty(url)) {
+                return false;
+            }
+            return url.ToLower().StartsWith(INTERNAL_SOURCE_DOMAIN);
+        }
         public bool IsExternalSource(MpISourceRef sr) {
             if (sr is MpApp app) {
                 return app.Id != MpDefaultDataModelTools.ThisAppId;

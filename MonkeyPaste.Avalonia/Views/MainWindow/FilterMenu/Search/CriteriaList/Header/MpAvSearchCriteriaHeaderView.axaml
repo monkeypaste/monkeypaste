@@ -34,7 +34,7 @@
                 </ToolTip.Tip>
                 <Grid>
                     <Image IsVisible="{Binding $parent.IsEnabled}"
-                           Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                           Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <local:MpAvBusySpinnerView IsVisible="{Binding !$parent.IsEnabled}"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch" />
@@ -72,7 +72,7 @@
                     Width="{Binding $self.Bounds.Height}"
                     Classes="noBg noHoverBg addRemoveBtn outline"
                     Command="{Binding RejectPendingCriteriaItemsCommand}">
-                <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
             </Button>
 
             <!--  POP OUT WINDOW BUTTON  -->
@@ -87,7 +87,7 @@
                 </ToolTip.Tip>
                 <Image Width="25"
                        Height="25"
-                       Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                       Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
             </Button>
         </StackPanel>
     </DockPanel>

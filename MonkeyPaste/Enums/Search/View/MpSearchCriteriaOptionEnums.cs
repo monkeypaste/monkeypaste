@@ -7,9 +7,9 @@ namespace MonkeyPaste {
     public enum MpNextJoinOptionType {
         // NOTE these need to align w/ MpLogicalQueryType
         None = 0,
-        All,
-        Any,
-        NotOne
+        And,
+        Or,
+        Not
     }
     public enum MpRootOptionType {
         None = 0,

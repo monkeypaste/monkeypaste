@@ -127,6 +127,15 @@ namespace MonkeyPaste.Avalonia {
             IsVisible =
                 !string.IsNullOrEmpty(ToolTipText) ||
                 !string.IsNullOrEmpty(ToolTipHtml);
+
+            if (IsVisible && GetHostControl() is Control hc) {
+                // workaround to pass tooltip type from hint to tooltip
+                if (hc.Classes.Contains("warning")) {
+                    this.Classes.Add("warning");
+                } else if (hc.Classes.Contains("error")) {
+                    this.Classes.Add("error");
+                }
+            }
         }
 
         private void OnVisibleChanged() {

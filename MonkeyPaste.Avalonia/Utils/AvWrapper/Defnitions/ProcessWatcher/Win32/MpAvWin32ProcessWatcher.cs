@@ -24,7 +24,6 @@ namespace MonkeyPaste.Avalonia {
             "dwm",
             "mmc"
         };
-
         #endregion
 
         #region Constants
@@ -128,7 +127,11 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override MpPortableProcessInfo GetActiveProcessInfo() {
             IntPtr active_handle = WinApi.GetForegroundWindow();
-            return GetProcessInfoByHandle(active_handle);
+            if (WinApi.IsWindowVisible(active_handle) &&
+                WinApi.IsWindow(active_handle)) {
+                return GetProcessInfoByHandle(active_handle);
+            }
+            return null;
         }
         protected override string GetProcessTitle(IntPtr hWnd) {
             try {
@@ -334,9 +337,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #endregion
-
-        #region Commands
         #endregion
     }
 }

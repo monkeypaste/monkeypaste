@@ -475,7 +475,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 Dispatcher.UIThread.VerifyAccess();
                 IsTransactionPaneOpen = false;
-
+                await Task.Delay(1);
                 //SetTransactionViewGridLength(new GridLength(0, GridUnitType.Auto));
                 //IsTransactionPaneAnimating = true;
                 //double nw = Parent.Parent.DefaultQueryItemWidth;
@@ -500,6 +500,7 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 Dispatcher.UIThread.VerifyAccess();
 
+                await Task.Delay(1);
                 IsTransactionPaneOpen = true;
                 return;
 

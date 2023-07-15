@@ -266,7 +266,7 @@ namespace MonkeyPaste.Avalonia {
                 var filtered_ml =
                         manifests_to_filter
                         .Cast<MpIFilterMatch>()
-                        .Where(x => x.IsMatch(FilterText))
+                        .Where(x => x.IsFilterMatch(FilterText))
                         .Cast<MpManifestFormat>();
 
                 Items.Clear();

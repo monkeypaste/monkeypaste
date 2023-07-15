@@ -1044,7 +1044,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private string _curItemRandomHexColor;
         public string CopyItemHexColor {
             get {
                 //if (CopyItem == null || string.IsNullOrEmpty(CopyItem.ItemColor)) {

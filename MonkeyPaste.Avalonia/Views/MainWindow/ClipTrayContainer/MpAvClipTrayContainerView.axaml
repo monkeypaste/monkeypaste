@@ -14,6 +14,13 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTrayContainerView">
     <local:MpAvUserControl.Styles>
 
+        <!--  BUSY CURSOR  -->
+
+        <Style Selector="Grid#ClipTrayContainerGrid:not(.iprqBusy) local|MpAvClipBorder#ClipTileContainerBorder.IsAnyBusy">
+            <Setter Property="Cursor"
+                    Value="Wait" />
+        </Style>
+
         <!--  EMPTY TEXT  -->
         <Style Selector="TextBlock.emptyTrayText">
             <Setter Property="FontSize"
@@ -169,6 +176,7 @@
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"
           Classes.busy="{Binding IsAnyBusy}"
+          Classes.iprqBusy="{Binding IsInPlaceRequerying}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <!--  PIN TRAY  -->

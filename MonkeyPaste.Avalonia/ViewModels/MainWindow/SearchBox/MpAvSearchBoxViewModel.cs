@@ -107,6 +107,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string ExpandTooltipText {
+            get {
+                if (MpAvSearchCriteriaItemCollectionViewModel.Instance.IsCriteriaWindowOpen) {
+                    return "Restore Filters";
+                }
+                if (IsExpanded) {
+                    return "Hide Filters";
+                }
+                if (!MpAvSearchCriteriaItemCollectionViewModel.Instance.IsSavedQuery) {
+                    return "Create Filter";
+                }
+                return "Show Filters";
+            }
+        }
         #endregion
 
         #region Model

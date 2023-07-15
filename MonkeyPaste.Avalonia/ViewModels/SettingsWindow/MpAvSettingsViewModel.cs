@@ -894,7 +894,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         }
                     }
-                    .OrderBy(x=>x.FrameType.ToString())
+                    .OrderByDescending(x=>x.Items == null ? 0:x.Items.Count)
                 }
             };
 
@@ -966,7 +966,7 @@ namespace MonkeyPaste.Avalonia {
         private MpAvWindow CreateSettingsWindow() {
             var sw = new MpAvWindow() {
                 ShowInTaskbar = true,
-                Width = 660,
+                Width = 1000,
                 Height = 500,
                 Topmost = true,
                 Title = "Settings".ToWindowTitleText(),
@@ -983,6 +983,7 @@ namespace MonkeyPaste.Avalonia {
                 AttachThemeButtonColorUpdate();
                 AttachRoutingProfileSelectionChange();
                 AttachAccountTypeSelectionChange();
+                sw.Topmost = true;
             }
             void Sw_Closed(object sender, EventArgs e) {
                 sw.Opened -= Sw_Opened;
@@ -991,7 +992,6 @@ namespace MonkeyPaste.Avalonia {
 
             sw.Opened += Sw_Opened;
             sw.Closed += Sw_Closed;
-            sw.Topmost = true;
             return sw;
         }
 
@@ -1057,8 +1057,10 @@ namespace MonkeyPaste.Avalonia {
                     ProcessListenOnStartupChanged();
                     break;
             }
+
             if (MpAvThemeViewModel.Instance.IsThemePref(e.PropertyName)) {
                 MpAvThemeViewModel.Instance.SyncThemePrefs(true);
+                MpAvStringHexToBitmapTintConverter.Instance.RefreshCache();
             }
 
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {

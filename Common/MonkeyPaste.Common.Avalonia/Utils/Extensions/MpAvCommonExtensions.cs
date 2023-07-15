@@ -501,7 +501,6 @@ namespace MonkeyPaste.Common.Avalonia {
                     sw = Stopwatch.StartNew();
                 }
                 if (sw.ElapsedMilliseconds >= timeout_ms) {
-                    MpDebug.Break();
                     break;
                 }
                 await Task.Delay(100);

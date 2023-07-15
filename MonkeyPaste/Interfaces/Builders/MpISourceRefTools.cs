@@ -17,6 +17,7 @@ namespace MonkeyPaste {
         byte[] ToUrlAsciiBytes(MpISourceRef sr);
 
         Tuple<MpTransactionSourceType, int> ParseUriForSourceRef(string uri);
+        bool IsInternalUrl(string url);
         bool IsExternalSource(MpISourceRef sr);
         bool IsSourceRejected(MpISourceRef sr);
     }

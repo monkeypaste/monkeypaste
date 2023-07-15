@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpTriggerType.FileSystemChange:
                         return "FolderEventImage";
                     case MpTriggerType.Shortcut:
-                        return "HotkeyImage";
+                        return "JoystickImage";
                 }
             }
             if (actionOrTriggerType is MpActionType at) {

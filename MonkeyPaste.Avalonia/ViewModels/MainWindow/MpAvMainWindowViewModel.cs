@@ -799,7 +799,11 @@ namespace MonkeyPaste.Avalonia {
                     IsMainWindowInHiddenLoadState = false;
                 }
             }
-            App.MainView.Show();
+            DispatcherPriority show_priority =
+                IsMainWindowInHiddenLoadState ?
+                    DispatcherPriority.Background : DispatcherPriority.Normal;
+            Dispatcher.UIThread.Post(App.MainView.Show, show_priority);
+
             IsMainWindowVisible = true;
         }
         private void FinishMainWindowShow() {

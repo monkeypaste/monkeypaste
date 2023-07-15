@@ -20,12 +20,6 @@
         <local:MpHighlightSelectorBehavior />
     </Interaction.Behaviors>
     <local:MpAvUserControl.Styles>
-        <!--  BUSY CURSOR  -->
-
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.IsAnyBusy">
-            <Setter Property="Cursor"
-                    Value="Wait" />
-        </Style>
 
         <!--  DETAIL COLOR  -->
 
@@ -47,7 +41,7 @@
         <!--  PIN PLACEHOLDER OVERLAY  -->
         <Style Selector="Grid#PinPlaceholderOverlay Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PinImage}, ConverterParameter=themefg, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+                    Value="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeInteractiveColor, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
 
         <Style Selector="Grid#PinPlaceholderOverlay TextBlock">
@@ -57,7 +51,7 @@
 
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.TileHover Grid#PinPlaceholderOverlay Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource PinImage}, ConverterParameter=themeaccent1fg, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+                    Value="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeAccent1Color, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
 
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.TileHover Grid#PinPlaceholderOverlay TextBlock">
@@ -217,7 +211,7 @@
                        Stretch="Uniform"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Source="{Binding Source={StaticResource PinImage}, ConverterParameter=themefg, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}">
+                       Source="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeInteractiveColor, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}">
                     <Image.Height>
                         <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
                                       ConverterParameter="/">
@@ -261,9 +255,18 @@
             <!--  BUSY OVERLAY  -->
             <Border x:Name="BusyOverlay"
                     Grid.Row="1"
-                    IsVisible="{Binding IsAnyBusy, FallbackValue=True, TargetNullValue=True}"
+                    IsVisible="{Binding IsAnyBusy}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
+                <Border.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}"
+                                  FallbackValue="True"
+                                  TargetNullValue="True">
+                        <Binding Path="IsAnyBusy" />
+                        <Binding Path="IsInPlaceRequerying"
+                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                    </MultiBinding>
+                </Border.IsVisible>
 
                 <local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                            VerticalAlignment="Center"

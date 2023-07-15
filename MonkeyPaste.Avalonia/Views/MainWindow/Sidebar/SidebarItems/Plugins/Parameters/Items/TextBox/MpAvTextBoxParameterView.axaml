@@ -17,7 +17,7 @@
                     Classes="defaultButton noBg noHoverBg outline outlineOver"
                     IsVisible="{Binding IsContentQuery}"
                     local:MpAvMenuExtension.IsEnabled="True">
-                <Image Source="{Binding ., Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg, Source={StaticResource FilterImage}}" />
+                <Image Source="{Binding ., Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor, Source={StaticResource FilterImage}}" />
             </Button>
             <TextBox x:Name="ParameterTextBox"
                      local:MpAvIsFocusedExtension.IsEnabled="True"

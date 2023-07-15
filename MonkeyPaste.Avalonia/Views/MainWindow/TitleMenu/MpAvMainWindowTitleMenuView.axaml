@@ -44,11 +44,11 @@
 
         <Style Selector="Button#WindowOrientationHandleButton:pointerover Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themeaccent1fg}" />
+                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
         </Style>
         <Style Selector="Button#WindowOrientationHandleButton:pressed Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themegray1}" />
+                    Value="{Binding Source={StaticResource Dots2x10Image}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeGrayAccent1}" />
         </Style>
 
         <!--  ZOOM SLIDER  -->

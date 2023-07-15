@@ -55,7 +55,7 @@
                                    Height="10"
                                    VerticalAlignment="Center"
                                    Margin="5,0,0,0"
-                                   Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                                   Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                             <local:MpAvMarqueeTextBox IsReadOnly="True"
                                                       DropShadowBrush="Transparent"
                                                       ReadOnlyForeground="{DynamicResource ThemeInteractiveColor}"

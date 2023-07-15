@@ -55,7 +55,7 @@
                     <Template>
                         <DockPanel>
                             <Image DockPanel.Dock="Left"
-                                   Source="{Binding Source={StaticResource PauseImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                                   Source="{Binding Source={StaticResource PauseImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                             <TextBlock Text="Pause" />
                         </DockPanel>
                     </Template>
@@ -70,7 +70,7 @@
                     <Template>
                         <DockPanel>
                             <Image DockPanel.Dock="Left"
-                                   Source="{Binding Source={StaticResource PlayImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                                   Source="{Binding Source={StaticResource PlayImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                             <TextBlock Text="Play" />
                         </DockPanel>
                     </Template>

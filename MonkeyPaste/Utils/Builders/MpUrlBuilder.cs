@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using MonkeyPaste.Common;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpUrlBuilder : MpIUrlBuilder {
@@ -14,6 +15,11 @@ namespace MonkeyPaste {
         #region Public Methods
         public async Task<MpUrl> CreateAsync(string url, int appId = 0, bool suppressWrite = false) {
             if (string.IsNullOrWhiteSpace(url)) {
+                return null;
+            }
+
+            if (Mp.Services.SourceRefTools.IsInternalUrl(url)) {
+                MpDebug.Break($"Should not be adding internal urls, check stack and fix case");
                 return null;
             }
 

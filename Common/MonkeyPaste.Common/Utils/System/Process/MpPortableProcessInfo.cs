@@ -10,8 +10,6 @@ namespace MonkeyPaste.Common {
 
         public string MainWindowTitle { get; set; }
 
-        public string MainWindowIconBase64 { get; set; }
-
         public DateTime LastActiveDateTime { get; set; }
 
         public List<string> ArgumentList { get; set; } = new List<string>();

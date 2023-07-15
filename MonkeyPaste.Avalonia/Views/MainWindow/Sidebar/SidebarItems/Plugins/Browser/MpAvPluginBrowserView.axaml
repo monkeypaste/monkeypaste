@@ -156,7 +156,7 @@
                     </ToolTip.Tip>
                     <Grid>
                         <Image IsVisible="{Binding $parent.IsEnabled}"
-                               Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                               Source="{Binding ., Source={StaticResource ResetImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                         <local:MpAvBusySpinnerView IsVisible="{Binding !$parent.IsEnabled}"
                                                    HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Stretch" />
@@ -175,7 +175,7 @@
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="Settings" />
                 </ToolTip.Tip>
-                <Image Source="{Binding ., Source={StaticResource CogImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                <Image Source="{Binding ., Source={StaticResource CogImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
 
             </Button>
         </DockPanel>

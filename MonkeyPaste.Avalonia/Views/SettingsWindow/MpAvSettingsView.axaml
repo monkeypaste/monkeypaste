@@ -35,10 +35,16 @@
                     Value="0" />
             <Setter Property="Margin"
                     Value="0" />
+            <Setter Property="Padding"
+                    Value="0" />
+        </Style>
+        <Style Selector="RadioButton.tab /template/ ContentPresenter">
             <Setter Property="BorderThickness"
-                    Value="2.5,5" />
+                    Value="2.5" />
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeGrayAccent1}" />
+                    Value="Transparent" />
+            <Setter Property="BoxShadow"
+                    Value="inset 0 0 10 0 black" />
         </Style>
         <Style Selector="RadioButton.tab:unchecked /template/ ContentPresenter">
             <Setter Property="Background"
@@ -47,6 +53,8 @@
         <Style Selector="RadioButton.tab:unchecked:pointerover /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="{DynamicResource ThemeAccent1Color}" />
+            <Setter Property="BoxShadow"
+                    Value="inset 0 0 10 0 white" />
         </Style>
 
         <!--<Style Selector="RadioButton.tab:unchecked:pointerover /template/ ContentPresenter">
@@ -99,6 +107,11 @@
             <Setter Property="Margin"
                     Value="0,10,0,0" />
         </Style>
+
+        <Style Selector="RadioButton.tab:pointerover Image">
+            <!--<Setter Property="Effect"
+                    Value="drop-shadow(0 0 10 black)" />-->
+        </Style>
         <Style Selector="RadioButton.tab Label">
             <Setter Property="DockPanel.Dock"
                     Value="Bottom" />
@@ -134,23 +147,25 @@
 
         <!--  HEADERS  -->
 
-        <Style Selector="Label.h1">
-            <Setter Property="Margin"
-                    Value="0,0,0,0" />
-        </Style>
-
-        <!--  HEADER TEXT  -->
-
-        <!--  HEADER ICON  -->
-        <Style Selector=":is(Control).header">
-            <Setter Property="Margin"
-                    Value="0,0,10,0" />
+        <!--  HEADERS  -->
+        <Style Selector="StackPanel.header">
+            <Setter Property="Spacing"
+                    Value="5" />
         </Style>
         <Style Selector="TextBlock.header">
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeWhite}" />
+            <Setter Property="VerticalAlignment"
+                    Value="Bottom" />
+        </Style>
+
+        <Style Selector="TextBlock.header.frame">
             <Setter Property="FontSize"
                     Value="18" />
+        </Style>
+        <Style Selector="TextBlock.header.expander">
+            <Setter Property="FontSize"
+                    Value="22" />
         </Style>
 
         <Style Selector="Image.expander.header.icon">
@@ -165,8 +180,11 @@
                     Value="20" />
             <Setter Property="Height"
                     Value="20" />
+        </Style>
+
+        <Style Selector="Border.header.labelUnderline">
             <Setter Property="Margin"
-                    Value="0,0,10,0" />
+                    Value="0,5" />
         </Style>
 
         <!--  EMPTY GRID TEXTBLOCKS  -->
@@ -198,11 +216,6 @@
         </Style>
 
 
-        <Style Selector="Expander Border.labelUnderline_long, Expander Border.labelUnderline">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
         <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
             <Setter Property="HorizontalContentAlignment"
                     Value="Left" />
@@ -220,10 +233,6 @@
                     Value="{DynamicResource ThemeInteractiveColor}" />
             <Setter Property="BorderThickness"
                     Value="1" />
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeAccent5Color}" />
-            <Setter Property="Padding"
-                    Value="15" />
         </Style>
         <Style Selector="DataGrid">
             <Setter Property="Background"
@@ -247,6 +256,12 @@
             <Setter Property="VerticalAlignment"
                     Value="Stretch" />
             <Setter Property="AutoGenerateColumns"
+                    Value="False" />
+            <Setter Property="CanUserResizeColumns"
+                    Value="True" />
+            <Setter Property="CanUserSortColumns"
+                    Value="True" />
+            <Setter Property="IsReadOnly"
                     Value="False" />
         </Style>
 
@@ -394,7 +409,7 @@
             <RadioButton Grid.Column="0"
                          Opacity="{Binding IsTabButtonVisible0, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                          Theme="{StaticResource SwitchlessRadioButton}"
-                         Classes="tab outline outlineOver fade"
+                         Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[0], Mode=OneWay}"
                          Command="{Binding SelectTabCommand}"
                          CommandParameter="0">
@@ -407,7 +422,7 @@
             <RadioButton Grid.Column="1"
                          Opacity="{Binding IsTabButtonVisible1, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                          Theme="{StaticResource SwitchlessRadioButton}"
-                         Classes="tab outline outlineOver fade"
+                         Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[1], Mode=OneWay}"
                          Command="{Binding SelectTabCommand}"
                          CommandParameter="1">
@@ -420,7 +435,7 @@
             <RadioButton Grid.Column="2"
                          Opacity="{Binding IsTabButtonVisible2, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                          Theme="{StaticResource SwitchlessRadioButton}"
-                         Classes="tab outline outlineOver fade"
+                         Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[2], Mode=OneWay}"
                          Command="{Binding SelectTabCommand}"
                          CommandParameter="2">
@@ -433,20 +448,20 @@
             <RadioButton Grid.Column="3"
                          Opacity="{Binding IsTabButtonVisible3, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                          Theme="{StaticResource SwitchlessRadioButton}"
-                         Classes="tab outline outlineOver fade"
+                         Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[3], Mode=OneWay}"
                          Command="{Binding SelectTabCommand}"
                          CommandParameter="3">
                 <DockPanel>
                     <Label Content="Shortcuts" />
-                    <Image Source="{Binding Source={StaticResource HotkeyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    <Image Source="{Binding Source={StaticResource JoystickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </DockPanel>
             </RadioButton>
             <!--  Help tab Button  -->
             <RadioButton Grid.Column="4"
                          Opacity="{Binding IsTabButtonVisible4, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                          Theme="{StaticResource SwitchlessRadioButton}"
-                         Classes="tab outline outlineOver fade"
+                         Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"
                          Command="{Binding SelectTabCommand}"
                          CommandParameter="5">
@@ -518,39 +533,38 @@
             </DockPanel>
         </Border>
         <!--  Content  -->
-        <ScrollViewer>
+        <ScrollViewer BringIntoViewOnFocusChange="False">
             <TransitioningContentControl x:Name="SettingsTransitioningContentControl"
                                          Margin="10,5"
-                                         Content="{Binding}">
+                                         DataContext="{Binding}"
+                                         Content="{Binding SelectedTabIdx}">
                 <TransitioningContentControl.PageTransition>
                     <CrossFade Duration="0:00:00.500" />
                 </TransitioningContentControl.PageTransition>
                 <TransitioningContentControl.DataTemplates>
 
+                    <local:MpAvSettingsTabDataTemplateSelector>
+                        <DataTemplate x:Key="AccountTemplate"
+                                      x:DataType="local:MpAvSettingsViewModel">
+                            <local:MpAvSettingsFrameCollectionView DataContext="{Binding FilteredAccountFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="PreferencesTemplate"
+                                      x:DataType="local:MpAvSettingsViewModel">
+                            <local:MpAvSettingsFrameCollectionView DataContext="{Binding FilteredPreferenceFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="SecurityTemplate">
+                            <local:MpAvSecurityView />
+                        </DataTemplate>
+                        <DataTemplate x:Key="ShortcutsTemplate">
+                            <local:MpAvShortcutsView />
+                        </DataTemplate>
+                        <DataTemplate x:Key="HelpTemplate">
+                            <local:MpAvHelpView />
+                        </DataTemplate>
+                    </local:MpAvSettingsTabDataTemplateSelector>
                 </TransitioningContentControl.DataTemplates>
-                <ContentControl Content="{Binding SelectedTabIdx}"
-                                x:CompileBindings="False">
-                    <ContentControl.DataTemplates>
-                        <local:MpAvSettingsTabDataTemplateSelector>
-                            <DataTemplate x:Key="AccountTemplate">
-                                <local:MpAvSettingsFrameCollectionView DataContext="{Binding FilteredAccountFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
-                            </DataTemplate>
-                            <DataTemplate x:Key="PreferencesTemplate">
-                                <local:MpAvSettingsFrameCollectionView DataContext="{Binding FilteredPreferenceFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
-                            </DataTemplate>
-                            <DataTemplate x:Key="SecurityTemplate">
-                                <local:MpAvSecurityView />
-                            </DataTemplate>
-                            <DataTemplate x:Key="ShortcutsTemplate">
-                                <local:MpAvShortcutsView />
-                            </DataTemplate>
-                            <DataTemplate x:Key="HelpTemplate">
-                                <local:MpAvHelpView />
-                            </DataTemplate>
-                        </local:MpAvSettingsTabDataTemplateSelector>
-                    </ContentControl.DataTemplates>
-                </ContentControl>
             </TransitioningContentControl>
         </ScrollViewer>
+
     </DockPanel>
 </local:MpAvUserControl>

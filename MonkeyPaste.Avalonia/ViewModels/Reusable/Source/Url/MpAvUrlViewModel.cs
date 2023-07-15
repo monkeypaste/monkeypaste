@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIFilterMatch Implementation
-        bool MpIFilterMatch.IsMatch(string filter) {
+        bool MpIFilterMatch.IsFilterMatch(string filter) {
             if (string.IsNullOrEmpty(filter)) {
                 return true;
             }

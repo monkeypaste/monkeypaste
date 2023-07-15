@@ -10,6 +10,7 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -38,6 +39,21 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleTintChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             UpdateTint(element);
         }
+        #endregion
+
+        #region ImageResourceObj AvaloniaProperty
+        public static object GetImageResourceObj(AvaloniaObject obj) {
+            return obj.GetValue(ImageResourceObjProperty);
+        }
+
+        public static void SetImageResourceObj(AvaloniaObject obj, object value) {
+            obj.SetValue(ImageResourceObjProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> ImageResourceObjProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "ImageResourceObj",
+                null);
         #endregion
 
         #region IsEnabled AvaloniaProperty
@@ -92,41 +108,54 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private static void UpdateTint(object element) {
+            // element can be an image or container control
+            // where all child images will be tinted
+
             if (element is Control c &&
                 c.GetSelfAndLogicalDescendants().OfType<Image>() is IEnumerable<Image> imgl &&
                 imgl.Any() &&
                 GetTint(c) is object tintObj) {
-                int c_hash = c.GetHashCode();
-                if (!_isTintingLookup.ContainsKey(c_hash)) {
-                    _isTintingLookup.Add(c_hash, true);
-                } else if (_isTintingLookup[c_hash]) {
-                    return;
-                } else {
-                    _isTintingLookup[c_hash] = true;
-                }
-
                 string tint_hex = tintObj.ToHex();
-
-                if (!_tintLookup.ContainsKey(c_hash)) {
-                    _tintLookup.Add(c_hash, tint_hex);
-                } else if (_tintLookup[c_hash] != tint_hex) {
-                    _tintLookup[c_hash] = tint_hex;
-                } else {
-                    // no change needed
-                    _isTintingLookup[c_hash] = false;
-                    return;
-                }
                 foreach (var img in imgl) {
-
-                    if (img.Source is Bitmap bmp) {
-                        if (tint_hex.IsHexStringTransparent()) {
-                            // how handle this?
-
-                        }
-                        img.Source = bmp.Tint(tint_hex);
+                    object resourceObj = GetImageResourceObj(img);
+                    if (resourceObj == null) {
+                        resourceObj = GetImageResourceObj(c);
+                    }
+                    if (MpAvStringHexToBitmapTintConverter.Instance.Convert(resourceObj, typeof(Bitmap), tint_hex, CultureInfo.InvariantCulture) is Bitmap bmp) {
+                        img.Source = bmp;
                     }
                 }
-                _isTintingLookup[c_hash] = false;
+                //int c_hash = c.GetHashCode();
+                //if (!_isTintingLookup.ContainsKey(c_hash)) {
+                //    _isTintingLookup.Add(c_hash, true);
+                //} else if (_isTintingLookup[c_hash]) {
+                //    return;
+                //} else {
+                //    _isTintingLookup[c_hash] = true;
+                //}
+
+                //string tint_hex = tintObj.ToHex();
+
+                //if (!_tintLookup.ContainsKey(c_hash)) {
+                //    _tintLookup.Add(c_hash, tint_hex);
+                //} else if (_tintLookup[c_hash] != tint_hex) {
+                //    _tintLookup[c_hash] = tint_hex;
+                //} else {
+                //    // no change needed
+                //    _isTintingLookup[c_hash] = false;
+                //    return;
+                //}
+                //foreach (var img in imgl) {
+
+                //if (img.Source is Bitmap bmp) {
+                //    if (tint_hex.IsHexStringTransparent()) {
+                //        // how handle this?
+
+                //    }
+                //    img.Source = bmp.Tint(tint_hex);
+                //}
+                //}
+                //_isTintingLookup[c_hash] = false;
             }
         }
 

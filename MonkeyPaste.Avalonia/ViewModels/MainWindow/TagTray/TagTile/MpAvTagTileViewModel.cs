@@ -173,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
                             IsVisible = CanHotkey,
                             Header = "Assign Hotkey",
                             AltNavIdx = 0,
-                            IconResourceKey = Mp.Services.PlatformResource.GetResource("HotkeyImage") as string,
+                            IconResourceKey = Mp.Services.PlatformResource.GetResource("JoystickImage") as string,
                             Command = MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand,
                             CommandParameter = this,
                             ShortcutArgs = new object[] { MpShortcutType.SelectTag, this },
@@ -1423,6 +1423,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DeleteChildTagCommand => new MpAsyncCommand<object>(
             async (args) => {
                 var child_ttvm_to_remove = args as MpAvTagTileViewModel;
+                bool was_child_active =
+                    Parent.LastSelectedActiveItem != null &&
+                    Parent.LastSelectedActiveItem.TagId == child_ttvm_to_remove.TagId;
                 if (child_ttvm_to_remove.IsModelPinned) {
                     // NOTE I think this is a listbox collection problem but
                     // deleting pinned tile doesn't remove pinned lbi so unpinning first
@@ -1438,11 +1441,22 @@ namespace MonkeyPaste.Avalonia {
                 await Task.WhenAll(deleteTasks);
 
                 Items.Remove(child_ttvm_to_remove);
+                Parent.Items.Remove(child_ttvm_to_remove);
                 SortedItems.ToList().ForEach((x, idx) => x.TreeSortIdx = idx);
                 OnPropertyChanged(nameof(SortedItems));
                 Parent.OnPropertyChanged(nameof(Parent.PinnedItems));
+                Parent.OnPropertyChanged(nameof(Parent.LastSelectedActiveItem));
 
-                Parent.SelectTagCommand.Execute(this);
+                var ttvm_to_select = this;
+                if (IsGroupTag && was_child_active) {
+                    // NOTE selecting group tag won't update query
+                    // and configuring state to no tag could be problematic 
+                    // so just auto-selecting 'All' for this case
+                    ttvm_to_select = Parent.Items.FirstOrDefault(x => x.TagId == MpTag.AllTagId);
+
+                }
+                Parent.SelectTagCommand.Execute(ttvm_to_select);
+
             });
 
         public ICommand DeleteThisTagCommand => new MpCommand(

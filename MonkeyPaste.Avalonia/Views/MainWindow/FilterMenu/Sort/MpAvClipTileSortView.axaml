@@ -65,22 +65,22 @@
 
         <Style Selector="Button#SortDirectionButton:not(.descending) Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AscImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                    Value="{Binding Source={StaticResource AscImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
 
 
         </Style>
         <Style Selector="Button#SortDirectionButton.descending Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DescImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themefg}" />
+                    Value="{Binding Source={StaticResource DescImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
 
         </Style>
         <Style Selector="Button#SortDirectionButton:pointerover:not(.descending) Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AscImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themeaccent1fg}" />
+                    Value="{Binding Source={StaticResource AscImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
         </Style>
         <Style Selector="Button#SortDirectionButton:pointerover.descending Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DescImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=themeaccent1fg}" />
+                    Value="{Binding Source={StaticResource DescImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeAccent1Color}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <StackPanel Orientation="Horizontal"

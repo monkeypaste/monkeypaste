@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIFilterMatch Implementation
 
-        bool MpIFilterMatch.IsMatch(string filter) {
+        bool MpIFilterMatch.IsFilterMatch(string filter) {
             return
                 Label.ToStringOrEmpty().ToLower().Contains(filter.ToStringOrEmpty().ToLower()) ||
                 Description.ToStringOrEmpty().ToLower().Contains(filter.ToStringOrEmpty().ToLower());
