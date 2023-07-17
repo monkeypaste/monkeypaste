@@ -18,11 +18,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Init() {
-
             AvaloniaXamlLoader.Load(this);
-#if DEBUG
-            this.AttachDevTools();
-#endif
 
             var retry_btn = this.FindControl<Button>("RetryButton");
             retry_btn.PointerReleased += Retry_btn_PointerReleased;

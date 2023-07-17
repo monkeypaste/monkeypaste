@@ -2,6 +2,9 @@
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
+#if PLAT_WV
+using AvaloniaWebView;
+#endif
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -38,21 +41,36 @@ namespace MonkeyPaste.Avalonia {
             set => _lastPlainHtmlConvertedResp = value;
         }
 
+#if PLAT_WV
+        public override WebView WebView {
+            get {
+                if (_webView == null) {
+                    _webView = new WebView() {
+                        Url = MpAvClipTrayViewModel.Instance.EditorUri
+                    };
+                }
+                return _webView;
+            }
+        } 
+#endif
+
         #endregion
 
         #region Constructors
-        public MpAvPlainHtmlConverterWebView() : base() {
+        public MpAvPlainHtmlConverterWebView() {
             Mp.Services.ContentViewLocator = this;
-
+#if PLAT_WV
+            this.Content = WebView; 
+#endif
         }
 
         #endregion
 
         #region Public Methods
 
-        public override void HandleBindingNotification(MpAvEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
+        public override void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
             switch (notificationType) {
-                case MpAvEditorBindingFunctionType.notifyPlainHtmlConverted:
+                case MpEditorBindingFunctionType.notifyPlainHtmlConverted:
                     var ntf = MpJsonConverter.DeserializeBase64Object<MpQuillConvertPlainHtmlToQuillHtmlResponseMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillConvertPlainHtmlToQuillHtmlResponseMessage plainHtmlResp) {
                         _lastPlainHtmlConvertedResp = plainHtmlResp;
@@ -83,6 +101,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
         #region Private Methods
         #endregion
 

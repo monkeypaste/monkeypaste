@@ -463,6 +463,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+
         public double PinButtonAngle =>
             IsPinButtonHovering ||
             IsPinned ?
@@ -1911,9 +1912,9 @@ namespace MonkeyPaste.Avalonia {
                 IsFinalClosingState = false;
                 WasCloseAppendWindowConfirmed = false;
 
-                // NOTE for some reason even canceling closing webview tries to dispose
-                // so it is ignored from final closing state. here is the only place it'll dispose
                 if (_contentView is MpAvContentWebView wv) {
+                    // NOTE for some reason even canceling closing webview tries to dispose
+                    // so it is ignored from final closing state. here is the only place it'll dispose
                     wv.FinishDisposal();
                 }
                 _contentView = null;

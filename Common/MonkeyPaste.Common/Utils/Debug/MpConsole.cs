@@ -5,35 +5,49 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace MonkeyPaste.Common {
 
     public static class MpConsole {
         #region Private Variables
-
+        private static bool _canLogToFile = true;
+        private static bool _hasInitialized = false;
+        private static StreamWriter _logStream;
         #endregion
 
         #region Properties
 
         public static double MaxLogFileSizeInMegaBytes = 3.25;
 
-        public static bool LogToFile { get; set; } = false;
+        public static bool LogToFile { get; set; } = true;
         public static bool LogToConsole { get; set; } = true;
 
-        public static string LogFilePath => Path.Combine(Directory.GetCurrentDirectory(), "log.txt");
+        public static string LogFilePath => Path.Combine(Directory.GetCurrentDirectory(), "consolelog.txt");
 
         #endregion
 
         #region Public Methods
 
         public static void Init() {
+            if (_hasInitialized) {
+                return;
+            }
+            _hasInitialized = true;
+            if (!LogToFile) {
+                return;
+            }
             try {
+                bool in_use = MpFileIo.IsFileInUse(LogFilePath);
+                MpDebug.Assert(!in_use, "Close log file");
                 if (File.Exists(LogFilePath)) {
                     File.Delete(LogFilePath);
                 }
+                _logStream = new StreamWriter(File.Create(LogFilePath));
             }
             catch (Exception ex) {
-                WriteTraceLine(@"Error deleting previus log file w/ path: " + LogFilePath + " with exception: " + ex);
+                _canLogToFile = false;
+                WriteTraceLine(@"Error deleting previous log file w/ path: " + LogFilePath + " with exception: " + ex);
             }
         }
 
@@ -96,17 +110,13 @@ namespace MonkeyPaste.Common {
                 WriteLineWrapper("Exception: " + ex.ToString(), isTrace);
             }
         }
-
-        //public static void WriteTraceLine(string format,object args, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath="",[CallerLineNumber] int lineNum = 0) {
-        //    if(args == null || args.GetType() != typeof(Exception)) {
-        //        WriteTraceLine(string.Format(format, args),null,callerName,callerFilePath,lineNum);
-        //    } else {
-        //        WriteTraceLine(format, args, callerName, callerFilePath, lineNum);
-        //    }
-
-        //}
-
+        private static object _logLock = new object();
+        private static int _write_count = 0;
         public static void WriteLogLine(object line, params object[] args) {
+
+            if (!_canLogToFile || _logStream == null) {
+                return;
+            }
             line = line == null ? string.Empty : line;
             string str = line.ToString();
             str = $"<{DateTime.Now}> {str}";
@@ -114,9 +124,28 @@ namespace MonkeyPaste.Common {
                 str = string.Format(str, args);
             }
             line = $"<{DateTime.Now}> {line}";
-            File.AppendAllLines(LogFilePath, new List<string> { line.ToString() });
+
+            try {
+                lock (_logLock) {
+                    _logStream.WriteLine(line.ToString());
+                    _logStream.Flush();
+                }
+            }
+            catch {
+                _canLogToFile = false;
+                //WriteTraceLine($"Error writing to console log file at path '{LogFilePath}'", aex);
+
+            }
         }
 
+        public static void ShutdownLog() {
+            if (_logStream == null) {
+                return;
+            }
+            _logStream.Close();
+            _logStream.Dispose();
+            _logStream = null;
+        }
         #endregion
 
         #region Private Methods
@@ -167,5 +196,53 @@ namespace MonkeyPaste.Common {
         }
 
         #endregion
+
+        private class ExclusiveSynchronizationContext : SynchronizationContext {
+            private bool done;
+            public Exception InnerException { get; set; }
+            readonly AutoResetEvent workItemsWaiting = new AutoResetEvent(false);
+            readonly Queue<Tuple<SendOrPostCallback, object>> items =
+                new Queue<Tuple<SendOrPostCallback, object>>();
+
+            public override void Send(SendOrPostCallback d, object state) {
+                throw new NotSupportedException("We cannot send to our same thread");
+            }
+
+            public override void Post(SendOrPostCallback d, object state) {
+                lock (items) {
+                    items.Enqueue(Tuple.Create(d, state));
+                }
+                workItemsWaiting.Set();
+            }
+
+            public void EndMessageLoop() {
+                Post(_ => done = true, null);
+            }
+
+            public void BeginMessageLoop() {
+                while (!done) {
+                    Tuple<SendOrPostCallback, object> task = null;
+                    lock (items) {
+                        if (items.Count > 0) {
+                            task = items.Dequeue();
+                        }
+                    }
+                    if (task != null) {
+                        task.Item1(task.Item2);
+                        if (InnerException != null) // the method threw an exeption
+                        {
+                            throw new AggregateException("MpAsyncHelpers.Run method threw an exception.", InnerException);
+                        }
+                    } else {
+                        workItemsWaiting.WaitOne();
+                    }
+                }
+            }
+
+            public override SynchronizationContext CreateCopy() {
+                return this;
+            }
+        }
     }
+
 }

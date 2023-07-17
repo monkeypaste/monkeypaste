@@ -2,13 +2,15 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
-using AvaloniaWebView;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
 using System.Globalization;
 using System.Linq;
+#if PLAT_WV
+using AvaloniaWebView;
 using WebViewCore.Configurations;
+#endif
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -63,10 +65,11 @@ namespace MonkeyPaste.Avalonia {
             _isShuttingDown = true;
             MpConsole.WriteLine($"App shutdown called. Args: '{args.ToStringOrEmpty("NULL")}'");
 
-            MpTempFileManager.Shutdown();
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 MpAvCefNetApplication.ShutdownCefNet();
             }
+            MpTempFileManager.Shutdown();
+            MpConsole.ShutdownLog();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
                 lifetime.Shutdown();
             }
@@ -94,15 +97,17 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+#if PLAT_WV
         public override void RegisterServices() {
             base.RegisterServices();
 
-            // if you use only WebView  
-            AvaloniaWebViewBuilder.Initialize(
-                _ => new WebViewCreationProperties() {
-                    AdditionalBrowserArguments = "--process-per-site"
-                });
+            // if you use only WebView
+                AvaloniaWebViewBuilder.Initialize(
+                    _ => new WebViewCreationProperties() {
+                        AdditionalBrowserArguments = "--process-per-site"
+                    }); 
         }
+#endif
         public override void Initialize() {
             AvaloniaXamlLoader.Load(this);
         }

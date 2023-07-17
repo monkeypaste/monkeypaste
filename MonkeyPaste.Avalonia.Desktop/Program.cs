@@ -1,7 +1,12 @@
 using Avalonia;
-using CefNet;
 using MonkeyPaste.Common;
 using System;
+#if CEF_WV
+using CefNet;
+
+#elif PLAT_WV
+using Avalonia.WebView.Desktop;
+#endif
 
 namespace MonkeyPaste.Avalonia {
     internal class Program {
@@ -12,10 +17,14 @@ namespace MonkeyPaste.Avalonia {
         [STAThread]
         public static void Main(string[] args) {
             try {
+                MpConsole.Init();
+#if CEF_WV
+                MpAvCefNetApplication.ResetCefNetLogging();
+#endif
                 App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-                //.StartWithClassicDesktopLifetime(args);
-                .StartWithCefNetApplicationLifetime(args);
+                //.StartWithClassicDesktopLifetime(App.Args);
+                .StartWithCefNetApplicationLifetime(App.Args);
             }
             catch (Exception e) {
                 // here we can work with the exception, for example add it to our log file
@@ -32,8 +41,10 @@ namespace MonkeyPaste.Avalonia {
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-                            .UsePlatformDetect()
-
+                .UsePlatformDetect()
+#if PLAT_WV
+                .UseDesktopWebView()
+#endif
             //.With(new Win32PlatformOptions { UseWgl = true })
             //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
             //.With(new Win32PlatformOptions {
@@ -43,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
             //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
             //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
             //.With(new AvaloniaNativePlatformOptions { UseGpu = false })
-            //.LogToTrace()
+            .LogToTrace()
             ;
     }
 }

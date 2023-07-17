@@ -5,6 +5,12 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace MonkeyPaste {
+    public class MpQuillPostMessageResponse : MpJsonObject {
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public MpEditorBindingFunctionType msgType { get; set; }
+        public string msgData { get; set; }
+        public string handle { get; set; }
+    }
     public class MpQuillInitMainRequestMessage : MpJsonObject {
 
         public string envName { get; set; } // will be wpf,android, etc.

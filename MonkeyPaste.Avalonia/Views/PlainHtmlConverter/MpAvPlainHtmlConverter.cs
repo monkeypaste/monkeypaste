@@ -29,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsBusy { get; private set; } = false;
         #endregion
+
         #region MpIAsyncCollectionObject Implementation
 
         bool MpIAsyncCollectionObject.IsAnyBusy => IsBusy;

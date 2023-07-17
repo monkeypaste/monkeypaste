@@ -31,7 +31,6 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIAccountTools Implementation
-#if DEBUG
         public void SetAccountType(MpUserAccountType newType) {
             // NOTE this maybe a good all around interface method, not sure though
             bool changed = CurrentAccountType != newType;
@@ -41,7 +40,6 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(is_upgrade ? MpMessageType.AccountUpgrade : MpMessageType.AccountDowngrade);
             }
         }
-#endif
         public MpUserAccountType CurrentAccountType { get; private set; } = MpUserAccountType.Free;
 
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {

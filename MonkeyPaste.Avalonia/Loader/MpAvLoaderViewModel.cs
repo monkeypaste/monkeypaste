@@ -165,13 +165,13 @@ namespace MonkeyPaste.Avalonia {
 
             CoreItems.AddRange(
                new List<MpAvLoaderItemViewModel>() {
-                    new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
+                    //new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
                     new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
-                    new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger"),
+                    //new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger"),
                     new MpAvLoaderItemViewModel(typeof(MpTempFileManager),"Temp File Manager"),
                     new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),"Supported Clipboard Formats",Mp.Services.DataObjectRegistrar),
                     new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
+                    //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
                     new MpAvLoaderItemViewModel(typeof(MpPluginLoader), "Plugins"),
                     new MpAvLoaderItemViewModel(typeof(MpAvSoundPlayerViewModel), "Sound Player"),
                     new MpAvLoaderItemViewModel(typeof(MpAvIconCollectionViewModel), "Icons"),
@@ -188,7 +188,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvLoaderItemViewModel(typeof(MpAvDragProcessWatcher), "Drag-and-Drop"),
                     new MpAvLoaderItemViewModel(typeof(MpAvTagTrayViewModel), "Collections"),
                     new MpAvLoaderItemViewModel(typeof(MpAvExternalPasteHandler), "Paste Interop"),
-                    new MpAvLoaderItemViewModel(typeof(MpDataModelProvider), "Querying"),
+                    //new MpAvLoaderItemViewModel(typeof(MpDataModelProvider), "Querying"),
                     new MpAvLoaderItemViewModel(typeof(MpAvTriggerCollectionViewModel), "Triggers"),
                     new MpAvLoaderItemViewModel(typeof(MpAvExternalDropWindowViewModel), "Drop Widget"),
                     new MpAvLoaderItemViewModel(typeof(MpAvShortcutCollectionViewModel), "Shortcuts"),

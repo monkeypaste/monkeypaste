@@ -1,10 +1,5 @@
-﻿#if DESKTOP
-
-
-#endif
-
-namespace MonkeyPaste.Avalonia {
-    public enum MpAvEditorBindingFunctionType {
+﻿namespace MonkeyPaste {
+    public enum MpEditorBindingFunctionType {
         // two-way (editor as source) *_get async requests
         getAllSharedTemplatesFromDb,
         getClipboardDataTransferObject,

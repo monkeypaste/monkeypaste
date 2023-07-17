@@ -374,27 +374,15 @@ namespace MonkeyPaste.Common {
 
         public static void AppendTextToFile(string path, string textToAppend) {
             try {
-                locker.AcquireWriterLock(int.MaxValue);
-                if (!File.Exists(path)) {
-                    // Create a file to write to.
-                    using (var sw = File.CreateText(path)) {
-                        sw.WriteLine(textToAppend);
-                    }
-                } else {
-                    // This text is always added, making the file longer over time
-                    // if it is not deleted.
-                    using (StreamWriter sw = File.AppendText(path)) {
-                        sw.WriteLine(textToAppend);
-                    }
-                }
+                locker.AcquireWriterLock(Timeout.Infinite);
+                File.AppendAllLines(path, new[] { textToAppend });
+                locker.ReleaseWriterLock();
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine($"Error appending text '{textToAppend}' to path '{path}'");
-                MpConsole.WriteTraceLine($"With exception: {ex}");
+                locker.ReleaseWriterLock();
+                throw ex;
             }
             finally {
-
-                locker.ReleaseWriterLock();
             }
         }
 
@@ -407,15 +395,18 @@ namespace MonkeyPaste.Common {
 
         public static string ReadTextFromFile(string filePath) {
             try {
+                locker.AcquireReaderLock(Timeout.Infinite);
                 using (StreamReader f = new StreamReader(filePath)) {
                     string outStr = string.Empty;
                     outStr = f.ReadToEnd();
                     f.Close();
+                    locker.ReleaseReaderLock();
                     return outStr;
                 }
             }
             catch (Exception ex) {
                 MpConsole.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                locker.ReleaseReaderLock();
                 return null;
             }
         }
@@ -423,15 +414,18 @@ namespace MonkeyPaste.Common {
         public static string ReadTextFromResource(string resourcePath, Assembly assembly = null) {
             try {
                 assembly = assembly == null ? Assembly.GetExecutingAssembly() : assembly;
+                locker.AcquireReaderLock(Timeout.Infinite);
                 using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
                 using (StreamReader reader = new StreamReader(stream)) {
                     string result = reader.ReadToEnd();
+                    locker.ReleaseReaderLock();
                     return result;
                 }
 
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine("error for resource path: " + resourcePath, ex);
+                locker.ReleaseReaderLock();
                 return string.Empty;
             }
         }
@@ -481,6 +475,7 @@ namespace MonkeyPaste.Common {
                 return null;
             }
             try {
+                locker.AcquireReaderLock(Timeout.Infinite);
                 using (var fs = new FileStream(filePath, FileMode.Open)) {
                     int c;
                     var bytes = new List<byte>();
@@ -488,12 +483,13 @@ namespace MonkeyPaste.Common {
                     while ((c = fs.ReadByte()) != -1) {
                         bytes.Add((byte)c);
                     }
-
+                    locker.ReleaseReaderLock();
                     return bytes.ToArray();
                 }
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                locker.ReleaseReaderLock();
                 return null;
             }
         }
@@ -503,7 +499,8 @@ namespace MonkeyPaste.Common {
                 return false;
             }
             try {
-                using (FileStream fs = File.Open(path, FileMode.Open)) {
+                using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.ReadWrite)) {
+                    fs.Close();
                 }
             }
             catch {
@@ -577,16 +574,16 @@ namespace MonkeyPaste.Common {
                     string extension = MpCommonTools.Services.StringTools.DetectStringFileExt(text);
                     filePath = filePath.ToLower().Replace(@".tmp", extension);
                 }
-                locker.AcquireWriterLock(int.MaxValue);
+                locker.AcquireWriterLock(Timeout.Infinite);
                 File.WriteAllText(filePath, text);
+                locker.ReleaseWriterLock();
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error writing to path '{filePath}' with text '{text}'", ex);
                 success = false;
-            }
-            finally {
                 locker.ReleaseWriterLock();
             }
+
             if (success && isTemporary && filePath.IsUnderTemporaryFolder()) {
                 MpTempFileManager.AddTempFilePath(filePath);
             }
@@ -599,17 +596,17 @@ namespace MonkeyPaste.Common {
                 if (filePath.ToLower().Contains(@".tmp")) {
                     filePath = filePath.ToLower().Replace(@".tmp", @".png");
                 }
-                locker.AcquireWriterLock(int.MaxValue);
+                locker.AcquireWriterLock(Timeout.Infinite);
                 File.WriteAllBytes(filePath, byteArray);
+                locker.ReleaseWriterLock();
 
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error writing to path {filePath} for byte array " + (byteArray == null ? "which is null" : "which is NOT null"), ex);
                 success = false;
-            }
-            finally {
                 locker.ReleaseWriterLock();
             }
+
             if (success && isTemporary && filePath.IsUnderTemporaryFolder()) {
                 MpTempFileManager.AddTempFilePath(filePath);
             }

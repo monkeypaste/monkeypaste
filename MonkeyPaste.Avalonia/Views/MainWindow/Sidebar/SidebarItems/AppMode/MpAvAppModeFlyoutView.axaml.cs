@@ -33,10 +33,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvAppModeFlyoutView_AttachedToVisualTree(object sender, global::Avalonia.VisualTreeAttachmentEventArgs e) {
             if (this.GetVisualRoot() is PopupRoot pur) {
-#if DEBUG
-                // pur.AttachDevTools();
-#endif
-
                 pur.TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
                 pur.Background = Brushes.Transparent;
 

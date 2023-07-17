@@ -57,12 +57,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvMainWindow() {
-            //App.MainView = this;
-
             InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
 
         #endregion
@@ -71,7 +66,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Overrides
-
+        protected override void OnClosed(EventArgs e) {
+            base.OnClosed(e);
+            Mp.Services.ShutdownHelper.ShutdownApp("MainWindow Closed");
+        }
         #endregion
 
         #region Private Methods

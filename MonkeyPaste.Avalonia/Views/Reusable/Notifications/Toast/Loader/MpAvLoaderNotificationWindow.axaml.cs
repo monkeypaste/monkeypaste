@@ -14,9 +14,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvLoaderNotificationViewModel BindingContext => DataContext as MpAvLoaderNotificationViewModel;
         public MpAvLoaderNotificationWindow() {
             AvaloniaXamlLoader.Load(this);
-#if DEBUG
-            this.AttachDevTools();
-#endif
 
             this.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnIsVisibleChanged());
         }

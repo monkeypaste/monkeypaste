@@ -65,14 +65,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvWindow() : base() {
-            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon;
-
             Init();
         }
 
         public MpAvWindow(Window owner) : base(owner.PlatformImpl) {
-            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon;
-
             Init();
         }
         #endregion
@@ -151,6 +147,7 @@ namespace MonkeyPaste.Avalonia {
 #if DEBUG
             this.AttachDevTools();
 #endif
+            Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon;
             if (Mp.Services != null &&
                 Mp.Services.ScreenInfoCollection == null) {
                 Mp.Services.ScreenInfoCollection = new MpAvDesktopScreenInfoCollection(this);

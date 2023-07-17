@@ -5,9 +5,6 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvMessageNotificationViewModel : MpAvNotificationViewModelBase {
         #region Properties
 
-        public double MessageWindowFixedWidth =>
-            350;
-
         #region State
 
         public bool IsOpenAnimated =>

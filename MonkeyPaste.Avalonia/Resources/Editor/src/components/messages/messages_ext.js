@@ -9,6 +9,7 @@ function initMain_ext(initMsgStr_base64) {
 		return;
 	}
 	initMain(initMsgObj);
+	return 'test response';
 }
 
 function initDefaults_ext(defaultsMsgStr_base64) {

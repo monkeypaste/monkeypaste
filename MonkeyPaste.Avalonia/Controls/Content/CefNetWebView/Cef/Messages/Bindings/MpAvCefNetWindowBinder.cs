@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
             try {
                 CefV8Value window = context.GetGlobal();
                 var fnhandler = new MpAvCefV8Func(_dbPath);
-                foreach (string functionName in typeof(MpAvEditorBindingFunctionType).GetEnumNames()) {
+                foreach (string functionName in typeof(MpEditorBindingFunctionType).GetEnumNames()) {
                     window.SetValue(functionName, CefV8Value.CreateFunction(functionName, fnhandler), CefV8PropertyAttribute.ReadOnly);
                 }
             }
@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
             string msgTypeStr = e.Message.ArgumentList.GetString(0);
             string msgJsonStr = e.Message.ArgumentList.GetString(1);
             string contentHandle = e.Message.ArgumentList.GetString(2);
-            var funcType = msgTypeStr.ToEnum<MpAvEditorBindingFunctionType>();
+            var funcType = msgTypeStr.ToEnum<MpEditorBindingFunctionType>();
 
             Dispatcher.UIThread.Post(() => {
                 if (e.Frame == null ||

@@ -7,10 +7,9 @@
 
   <PropertyGroup>
     <BuildOs>WINDOWS</BuildOs>
-    <BuildMode>Debug</BuildMode>
     <DefaultLangVersion>11.0</DefaultLangVersion>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <ApplicationName>MonkeyPaste</ApplicationName>
     <ApplicationAuthor>Tommy K</ApplicationAuthor>
@@ -24,7 +23,7 @@
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
     <MainTargetFramework>net7.0-windows$(Tfm)</MainTargetFramework>
-    <DefineConstants>WINDOWS;DESKTOP;</DefineConstants>
+    <DefineConstants>WINDOWS;DESKTOP;CEF_WV</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
   </PropertyGroup>
@@ -65,11 +64,13 @@
   
   <PropertyGroup>
     <MainProjectDir>$(SolutionDir)\$(MainProjectName)</MainProjectDir>
-    <MainTargetDir>$(MainProjectDir)\bin\$(BuildMode)\$(MainTargetFramework)</MainTargetDir>
+    <MainTargetDir>$(MainProjectDir)\bin\$(Configuration)\$(MainTargetFramework)</MainTargetDir>
     <PluginSourceDir>$(SolutionDir)\Plugins</PluginSourceDir>
     <DeclarativePluginBaseDir>$(PluginSourceDir)\DeclarativePlugins\DeclarativeBase</DeclarativePluginBaseDir>
     <PluginTargetDir>$(MainTargetDir)\Plugins</PluginTargetDir>
     <UiProjectDir>$(SolutionDir)\MonkeyPaste.Avalonia</UiProjectDir>
+    <CefNetLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.dll</CefNetLibDir>
+    <CefNetAvLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.Avalonia.dll</CefNetAvLibDir>
   </PropertyGroup>
 
 

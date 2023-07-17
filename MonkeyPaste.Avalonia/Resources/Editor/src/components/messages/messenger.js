@@ -12,6 +12,15 @@
 
 // #region State
 
+function isRunningOnWebView2() {
+	if (window &&
+		window.chrome &&
+		window.chrome.webview &&
+		typeof window.chrome.webview.postMessage === 'function') {
+		return true;
+	}
+	return false;
+}
 function isRunningOnHost() {
 	return isRunningOnCef() || isRunningOnXam();
 }
@@ -40,6 +49,18 @@ function isDesktop() {
 // #region Actions
 
 function sendMessage(fn, msg) {
+	if (isRunningOnWebView2()) {
+		log('webview2 host detected!')
+		// output 'MpQuillPostMessageResponse'
+		let resp = {
+			msgType: fn,
+			msgData: msg,
+			handle: globals.ContentHandle
+		}; 
+		log(JSON.stringify(resp));
+		window.chrome.webview.postMessage(JSON.stringify(resp));
+		return;
+	}
 	if (isRunningOnCef()) {
 		window[fn](msg, globals.ContentHandle);
 		return;

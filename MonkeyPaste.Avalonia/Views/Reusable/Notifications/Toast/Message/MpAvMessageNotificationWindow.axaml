@@ -18,7 +18,7 @@
         Classes="notificationWindow fadeIn fadeOut msg"
         Classes.animX="{Binding IsOpenAnimated}"
         IsVisible="{Binding IsVisible}"
-        Width="{Binding MessageWindowFixedWidth}"
+        Width="350"
         MinHeight="50"
         SizeToContent="Height"
         ShowInTaskbar="False"
@@ -52,6 +52,7 @@
                                       Grid.Column="1"
                                       AutoMarquee="True"
                                       EditOnFocus="False"
+                                      MaxWidth="200"
                                       MinHeight="30"
                                       FontSize="20"
                                       IsReadOnly="True"
@@ -81,7 +82,8 @@
                                      local:MpAvMenuExtension.PlacementMode="Left" />
 
             <Border Grid.Row="1"
-                    Grid.Column="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
                     BorderThickness="1"
                     BorderBrush="Transparent"
                     MinHeight="50"

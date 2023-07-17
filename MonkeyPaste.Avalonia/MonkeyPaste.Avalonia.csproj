@@ -9,6 +9,7 @@
      <LangVersion>$(DefaultLangVersion)</LangVersion>
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
      <!--<UseMauiEssentials>true</UseMauiEssentials>-->
   </PropertyGroup>
   
@@ -1444,10 +1445,10 @@
 
   <ItemGroup Condition="$(IsDesktop) == 'true'">
     <Reference Include="CefNet">
-      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.dll</HintPath>
+      <HintPath>$(CefNetLibDir)</HintPath>
     </Reference>
     <Reference Include="CefNet.Avalonia">
-      <HintPath>..\..\..\..\Desktop\DotNetExamples\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.Avalonia.dll</HintPath>
+      <HintPath>$(CefNetAvLibDir)</HintPath>
     </Reference>
   </ItemGroup>
   
@@ -1473,7 +1474,6 @@
     <PackageReference Include="System.Management" Version="7.0.2" />
     <PackageReference Include="NetCoreAudio" Version="1.7.0" />
     <PackageReference Include="System.Speech" Version="7.0.0" />
-    <PackageReference Include="WebView.Avalonia" Version="11.0.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition="$(IsDesktop) == 'true'">
@@ -1598,7 +1598,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants)</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DefineConstants>$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DefineConstants>$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 </Project>

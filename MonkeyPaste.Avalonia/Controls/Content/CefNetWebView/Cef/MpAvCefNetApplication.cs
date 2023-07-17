@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
         public static string LogFilePath =>
-            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "debug.log");
+            Path.Combine(Directory.GetCurrentDirectory(), "debug.log");
 
         public static string CefFrameworkFolderName =>
             $"cef_{Mp.Services.PlatformInfo.OsShortName}";
@@ -107,7 +107,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpAvCefNetApplication() : base() {
-            ResetCefNetLogging();
             //if (MpAvCefUpdater.IsUpdatePendingInstall()) {
             //    _wasCefUpdated = MpAvCefUpdater.PerformInstall();
             //}
@@ -238,9 +237,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public void ResetCefNetLogging() {
-            if (!string.IsNullOrEmpty(LogFilePath)) {
-                MpFileIo.WriteTextToFile(LogFilePath, string.Empty, false);
+        public static void ResetCefNetLogging() {
+            if (LogFilePath.IsFile()) {
+                MpFileIo.DeleteFile(LogFilePath);
             }
         }
     }

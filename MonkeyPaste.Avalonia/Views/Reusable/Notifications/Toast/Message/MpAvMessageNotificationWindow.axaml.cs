@@ -14,9 +14,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvMessageNotificationViewModel BindingContext => DataContext as MpAvMessageNotificationViewModel;
         public MpAvMessageNotificationWindow() {
             AvaloniaXamlLoader.Load(this);
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
 
     }

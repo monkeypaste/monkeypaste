@@ -17,7 +17,7 @@
         IsVisible="{Binding IsVisible}"
         Width="350"
         MinHeight="150"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="Height"
         ShowInTaskbar="False"
         ShowActivated="{Binding IsModal}"
         WindowState="Normal"
@@ -112,7 +112,8 @@
 
             <!--  MESSAGE BODY  -->
             <ContentControl Grid.Row="1"
-                            Grid.Column="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto"

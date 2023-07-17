@@ -30,7 +30,7 @@
             <Setter Property="Margin"
                     Value="20" />
             <Setter Property="TextWrapping"
-                    Value="NoWrap" />
+                    Value="WrapWithOverflow" />
             <Setter Property="TextAlignment"
                     Value="Center" />
             <Setter Property="HorizontalAlignment"
@@ -172,11 +172,24 @@
                     Value="{Binding IsListBoxItemFocused, Mode=OneWay}" />
         </Style>
 
+        <!--  ORIENTATION-BASED MARGINS  -->
+        <Style Selector="local|MpAvQueryTrayView">
+            <!--<Setter Property="Margin"
+                    Value="10,0,0,0" />-->
+        </Style>
+        <Style Selector="Grid#ClipTrayContainerGrid.vert local|MpAvQueryTrayView">
+            <!--<Setter Property="Margin"
+                    Value="0,10,0,0" />-->
+        </Style>
+
+
     </local:MpAvUserControl.Styles>
     <!--  NOTE! Layout is in mw code behind orientation change  -->
     <Grid x:Name="ClipTrayContainerGrid"
+          Background="{DynamicResource ClipTrayBgColor}"
           Classes.busy="{Binding IsAnyBusy}"
           Classes.iprqBusy="{Binding IsInPlaceRequerying}"
+          Classes.vert="{Binding IsVerticalOrientation}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <!--  PIN TRAY  -->
@@ -202,7 +215,6 @@
 
         <!--  QUERY TRAY  -->
         <local:MpAvQueryTrayView x:Name="ClipTrayView"
-                                 Classes.dragover="{Binding IsDragOverQueryTray}"
-                                 Background="{DynamicResource ClipTrayBgColor}" />
+                                 Classes.dragover="{Binding IsDragOverQueryTray}" />
     </Grid>
 </local:MpAvUserControl>

@@ -940,7 +940,7 @@ namespace MonkeyPaste.Avalonia {
                     if (IsActiveTag) {
                         break;
                     }
-                    if (IsQueryTag) {
+                    if (!IsGroupTag) {
                         UpdateClipCountAsync().FireAndForgetSafeAsync(this);
                     }
                     break;
