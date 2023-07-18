@@ -5,7 +5,7 @@
 
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>$(DefaultPlatforms)</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

@@ -9,6 +9,7 @@ namespace MonkeyPaste.Avalonia {
     public abstract class MpAvNotificationViewModelBase :
         MpViewModelBase,
         MpIWantsTopmostWindowViewModel,
+
         MpICloseWindowViewModel,
         MpIPopupMenuViewModel {
         #region Constants
@@ -23,6 +24,8 @@ namespace MonkeyPaste.Avalonia {
             switch (ndt) {
                 case MpNotificationType.Loader:
                     return MpNotificationLayoutType.Loader;
+                case MpNotificationType.Welcome:
+                    return MpNotificationLayoutType.Welcome;
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalOkMessageBox:
                 case MpNotificationType.ModalYesNoCancelMessageBox:
@@ -104,6 +107,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
+                case MpNotificationType.Welcome:
                     return MpNotificationPlacementType.ModalAnchor;
                 default:
                     return MpNotificationPlacementType.SystemTray;
@@ -119,6 +123,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
+                case MpNotificationType.Welcome:
                     return true;
                 default:
                     return false;
@@ -137,10 +142,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIChildWindowViewModel Implementation
-        MpWindowType MpIWindowViewModel.WindowType =>
+        public MpWindowType WindowType =>
             IsModal ? MpWindowType.Modal : MpWindowType.Toast;
 
-        bool MpICloseWindowViewModel.IsWindowOpen {
+        public bool IsWindowOpen {
             get => IsVisible;
             set => IsVisible = value;
         }
@@ -238,6 +243,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsDoNotShowType =>
+            MpPrefViewModel.Instance != null &&
+            MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
+                    .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => Convert.ToInt32(x))
+                    .Any(x => x == (int)NotificationType);
         public bool IsFadeDelayFrozen =>
             MaxShowTimeMs > 0 &&
             (IsHovering || IsPinned || IsPopupMenuOpen);
@@ -263,6 +274,9 @@ namespace MonkeyPaste.Avalonia {
                     LayoutType == MpNotificationLayoutType.UserAction;
             }
         }
+
+        public virtual bool IsShowOnceNotification =>
+            false;
 
 
         public bool IsHovering { get; set; } = false;
@@ -365,7 +379,8 @@ namespace MonkeyPaste.Avalonia {
 
         public int NotificationId => (int)NotificationType;
 
-        public MpNotificationFormat NotificationFormat { get; private set; }
+        public MpNotificationFormat NotificationFormat { get; set; }
+
         #endregion
 
         #endregion
@@ -393,34 +408,30 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public virtual async Task<MpNotificationDialogResultType> ShowNotificationAsync() {
-            bool isDoNotShowType = MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
-                    .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(x => Convert.ToInt32(x)).Any(x => x == (int)NotificationType);
-
-            if (isDoNotShowType) {
+            if (IsDoNotShowType) {
                 MpConsole.WriteTraceLine($"Notification: {NotificationType} marked as hidden");
                 return MpNotificationDialogResultType.DoNotShow;
             }
             await Task.Delay(1);
-            ShowBalloon();
+
+            Mp.Services.NotificationManager.ShowNotification(this);
+
             return MpNotificationDialogResultType.None;
         }
 
         public virtual void HideNotification() {
-            HideBalloon();
+            if (IsShowOnceNotification &&
+                !IsDoNotShowType) {
+                // this was initial show, add to do not show
+                DoNotShowAgain = true;
+            }
+            Mp.Services.NotificationManager.HideNotification(this);
         }
 
         #endregion
 
         #region Protected Methods
-        protected void ShowBalloon() {
-            Mp.Services.NotificationManager.ShowNotification(this);
 
-        }
-
-        protected void HideBalloon() {
-            Mp.Services.NotificationManager.HideNotification(this);
-        }
 
         #endregion
 

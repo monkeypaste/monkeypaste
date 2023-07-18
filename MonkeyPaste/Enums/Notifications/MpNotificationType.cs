@@ -18,6 +18,8 @@
         ContentRestoreBlockedByAccount,
         AccountChanged,
 
+        Welcome,
+
         AppendModeChanged,
         TriggerEnabled,
         AlertAction,

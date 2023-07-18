@@ -6,7 +6,7 @@
     <PackageId>mp-core-plugin-google-contact-fetcher</PackageId>
     <Title>Monkey Paste Google Contact Fetcher</Title>
     <Authors>Thomas Kefauver</Authors>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>$(DefaultPlatforms)</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

@@ -85,16 +85,6 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             StartupFlags |= wasStartedAtLogin ? MpStartupFlags.Login : MpStartupFlags.UserInvoked;
             PropertyChanged += MpAvLoaderViewModel_PropertyChanged;
-            Dispatcher.UIThread.Post(async () => {
-                while (true) {
-
-                    var focus = MpAvFocusManager.Instance.FocusElement;
-                    if (focus != null) {
-                        var test = MpAvMainWindowViewModel.Instance.IsMainWindowInHiddenLoadState;
-                    }
-                    await Task.Delay(100);
-                }
-            });
         }
 
 
@@ -126,6 +116,12 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitAsync() {
             _sw = Stopwatch.StartNew();
+
+            await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                new MpNotificationFormat() {
+                    NotificationType = MpNotificationType.Welcome,
+                    MaxShowTimeMs = -1
+                });
 
             CreateLoaderItems();
 

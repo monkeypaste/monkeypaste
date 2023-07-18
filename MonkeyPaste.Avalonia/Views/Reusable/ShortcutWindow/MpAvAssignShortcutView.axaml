@@ -6,7 +6,6 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:dd="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
-                       d:DataContext="{x:Static dd:MpAvDesignData.AssignShortcutViewModel}"
                        Background="{DynamicResource ThemeInteractiveBgColor}"
                        mc:Ignorable="d"
                        d:DesignWidth="400"

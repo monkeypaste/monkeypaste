@@ -37,6 +37,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public DateTime? OpenDateTime { get; set; }
         public object DialogResult { get; set; }
 
         public MpWindowType WindowType {

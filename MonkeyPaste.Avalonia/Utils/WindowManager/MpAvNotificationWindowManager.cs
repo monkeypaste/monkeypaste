@@ -108,6 +108,15 @@ namespace MonkeyPaste.Avalonia {
                             DataContext = nvmb
                         };
                         break;
+                    case MpNotificationLayoutType.Welcome:
+                        nw = new MpAvWindow() {
+                            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                            SizeToContent = SizeToContent.WidthAndHeight,
+                            SystemDecorations = SystemDecorations.None,
+                            Content = new MpAvWelcomeView(),
+                            DataContext = nvmb
+                        };
+                        break;
                     case MpNotificationLayoutType.ErrorWithOption:
                     case MpNotificationLayoutType.UserAction:
                     case MpNotificationLayoutType.ErrorAndShutdown:
@@ -127,7 +136,11 @@ namespace MonkeyPaste.Avalonia {
                 }
 
 #if WINDOWS
-                MpAvToolWindow_Win32.InitToolWindow(nw.TryGetPlatformHandle().Handle);
+
+                if (nvmb is not MpAvWelcomeNotificationViewModel) {
+
+                    MpAvToolWindow_Win32.InitToolWindow(nw.TryGetPlatformHandle().Handle);
+                }
 #endif
                 nw.Closed += Nw_Closed;
 
@@ -141,11 +154,12 @@ namespace MonkeyPaste.Avalonia {
             nvmb.IsClosing = false;
 
             if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
-                    desktop.MainWindow == null) {
-                // occurs on startup
+                desktop.MainWindow is not MpAvMainWindow) {
                 desktop.MainWindow = nw;
             }
-
+            if (!nvmb.IsModal) {
+                nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
+            }
             if (nvmb.Owner is Window w &&
                 nvmb.AnchorTarget == null) {
                 // let anchor to precedence over owner for positioning
@@ -181,10 +195,17 @@ namespace MonkeyPaste.Avalonia {
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error showing window '{nvmb}', window likely closed. ", ex);
             }
+            if (nw is MpAvLoaderNotificationWindow &&
+                        MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext is MpAvWelcomeNotificationViewModel) is MpAvWindow wwv && wwv.DataContext is MpAvWelcomeNotificationViewModel wwvm) {
+                //desktop.MainWindow = nw;
+                // wait for loader to get set to mw before closing welcome
+                wwvm.HideNotification();
+                nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
+            }
             return;
         }
 
-        private void FinishClose(Window w) {
+        private void FinishClose(MpAvWindow w) {
             if (w is MpAvLoaderNotificationWindow) {
                 // ignore, in mainview ctor mainwindow is swapped and loader is closed
             }
@@ -230,12 +251,12 @@ namespace MonkeyPaste.Avalonia {
         private void Nw_Closed(object sender, EventArgs e) {
             //MpConsole.WriteLine($"fade out complete for: '{(sender as Control).DataContext}'");
 
-            var w = sender as Window;
+            var w = sender as MpAvWindow;
             FinishClose(w);
         }
 
 
-        private async void OnNotificationWindowIsVisibleChangedHandler(Window w) {
+        private async void OnNotificationWindowIsVisibleChangedHandler(MpAvWindow w) {
             //OnNotificationWindowIsVisibleChanged?.Invoke(this, w);
 
             if (w.IsVisible) {

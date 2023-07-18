@@ -38,7 +38,7 @@
             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="NotificationWindowContainerGrid"
               ColumnDefinitions="0.15*,*,15"
-              RowDefinitions="40,Auto">
+              RowDefinitions="Auto,*">
             <Image x:Name="NotificationIconImage"
                    Grid.Row="0"
                    Grid.Column="0"
@@ -82,8 +82,8 @@
                                      local:MpAvMenuExtension.PlacementMode="Left" />
 
             <Border Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="1"
                     BorderThickness="1"
                     BorderBrush="Transparent"
                     MinHeight="50"

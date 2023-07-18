@@ -61,6 +61,15 @@ namespace MonkeyPaste.Avalonia.Resources.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential..
+        /// </summary>
+        internal static string ProductDescription {
+            get {
+                return ResourceManager.GetString("ProductDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is english test text.
         /// </summary>
         internal static string TestText {

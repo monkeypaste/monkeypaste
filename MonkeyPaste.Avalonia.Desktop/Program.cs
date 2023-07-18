@@ -1,6 +1,7 @@
 using Avalonia;
 using MonkeyPaste.Common;
 using System;
+using Avalonia.Logging;
 #if CEF_WV
 using CefNet;
 
@@ -23,8 +24,8 @@ namespace MonkeyPaste.Avalonia {
 #endif
                 App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-                //.StartWithClassicDesktopLifetime(App.Args);
-                .StartWithCefNetApplicationLifetime(App.Args);
+                .StartWithClassicDesktopLifetime(App.Args);
+                //.StartWithCefNetApplicationLifetime(App.Args);
             }
             catch (Exception e) {
                 // here we can work with the exception, for example add it to our log file
@@ -54,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
             //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
             //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
             //.With(new AvaloniaNativePlatformOptions { UseGpu = false })
-            .LogToTrace()
+            .LogToTrace()//LogEventLevel.Verbose)
             ;
     }
 }

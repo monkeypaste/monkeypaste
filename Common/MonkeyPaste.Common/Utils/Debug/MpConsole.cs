@@ -111,7 +111,6 @@ namespace MonkeyPaste.Common {
             }
         }
         private static object _logLock = new object();
-        private static int _write_count = 0;
         public static void WriteLogLine(object line, params object[] args) {
 
             if (!_canLogToFile || _logStream == null) {

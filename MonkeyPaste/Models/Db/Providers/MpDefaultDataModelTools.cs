@@ -26,7 +26,6 @@ namespace MonkeyPaste {
         public static int ThisAppId { get; private set; }
         public static int ThisOsFileManagerAppId { get; private set; }
 
-
         #endregion
 
         #region Constructors

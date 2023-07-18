@@ -1,9 +1,8 @@
 ﻿namespace MonkeyPaste {
     public enum MpNotificationLayoutType {
-        //Default = 0,
-        Message,
-        // Append,
+        Welcome,
         Loader,
+        Message,
         Warning, //confirm
         UserAction, //retry/ignore/quit
         Error, //confirm

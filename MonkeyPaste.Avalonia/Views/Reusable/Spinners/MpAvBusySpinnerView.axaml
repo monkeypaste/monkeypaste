@@ -39,6 +39,9 @@
             <!--<SolidColorBrush x:Key="Brush0" Color="{Binding $parent[UserControl].Foreground}" />-->
             <SolidColorBrush x:Key="Brush0" Color="White" />
         </Image.Resources>
+        <Image.RenderTransform>
+            <RotateTransform />
+        </Image.RenderTransform>
         <DrawingImage>
             <DrawingGroup>
                 <DrawingGroup Opacity="0.2">

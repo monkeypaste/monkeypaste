@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -102,7 +103,6 @@ namespace MonkeyPaste.Avalonia {
                 Owner = owner
             };
 
-
             MpConsole.WriteLine($"Notification balloon set to:", true);
             MpConsole.WriteLine($"\tmsg: '{body}'");
             MpConsole.WriteLine($"\ttype: '{notificationType.ToString()}'");
@@ -149,12 +149,19 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public async Task<MpAvNotificationViewModelBase> CreateNotifcationViewModelAsync(MpNotificationFormat nf) {
+        #endregion
+
+        #region Private Methods
+
+        private async Task<MpAvNotificationViewModelBase> CreateNotifcationViewModelAsync(MpNotificationFormat nf) {
             MpNotificationLayoutType layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nf.NotificationType);
             MpAvNotificationViewModelBase nvmb = null;
             switch (layoutType) {
                 case MpNotificationLayoutType.Loader:
                     nvmb = new MpAvLoaderNotificationViewModel();
+                    break;
+                case MpNotificationLayoutType.Welcome:
+                    nvmb = new MpAvWelcomeNotificationViewModel();
                     break;
                 case MpNotificationLayoutType.Warning:
                 case MpNotificationLayoutType.Error:
@@ -172,10 +179,6 @@ namespace MonkeyPaste.Avalonia {
             await nvmb.InitializeAsync(nf);
             return nvmb;
         }
-        #endregion
-
-        #region Private Methods
-
 
 
         #endregion

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>$(DefaultPlatforms)</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>

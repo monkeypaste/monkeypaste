@@ -8,7 +8,7 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <UseMauiEssentials>true</UseMauiEssentials>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>$(DefaultPlatforms)</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

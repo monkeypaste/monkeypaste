@@ -5,15 +5,21 @@
     <Nullable>enable</Nullable>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-    <Platforms>AnyCPU;x64</Platforms>
-    <!--<UseMauiEssentials>true</UseMauiEssentials>
-    <UseMaui>true</UseMaui>-->
-    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+    <Platforms>$(DefaultPlatforms)</Platforms>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
   </PropertyGroup>
+  
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>monkey.ico</ApplicationIcon>

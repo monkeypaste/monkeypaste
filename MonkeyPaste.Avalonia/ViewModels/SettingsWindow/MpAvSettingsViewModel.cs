@@ -856,11 +856,12 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ResetNtf.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            label = "Reset",
+                                            label = "Hidden Notifications",
                                             description = "All ignored notifications previously set.",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
+                                                    label = "Reset",
                                                     value = MpRuntimePrefParamType.ResetNtf.ToString()
                                                 }
                                             }
@@ -868,11 +869,12 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ResetShortcuts.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            label = "Reset",
+                                            label = "App Shortcuts",
                                             description = "All application shortcuts will be reset to their default key gestures.",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
+                                                    label = "Reset",
                                                     value = MpRuntimePrefParamType.ResetShortcuts.ToString()
                                                 }
                                             }
@@ -880,11 +882,12 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ResetPluginCache.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            label = "Reset",
+                                            label = "Plugin Cache",
                                             description = "All plugins will be reset to initial default state",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
+                                                    label = "Reset",
                                                     value = MpRuntimePrefParamType.ResetPluginCache.ToString()
                                                 }
                                             }

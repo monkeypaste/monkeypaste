@@ -5,10 +5,7 @@
   <!-- ANDROID - net7.0-android-->
   <!-- IOS - net7.0-ios-->
 
-  <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
-    <DefaultLangVersion>11.0</DefaultLangVersion>
-  </PropertyGroup>
+  <!-- VERSION (Is this redundant?) -->
 
   <PropertyGroup>
     <ApplicationName>MonkeyPaste</ApplicationName>
@@ -17,7 +14,21 @@
     <ApplicationVersionMinor>0.1</ApplicationVersionMinor>
     <ApplicationVersion>$(ApplicationVersionMajor)$(ApplicationVersionMinor)</ApplicationVersion>
   </PropertyGroup>
-    
+  
+  <!-- MANUALLY SET PROPERTIES-->
+  <PropertyGroup>
+    <BuildOs>WINDOWS</BuildOs>
+  </PropertyGroup>
+
+  <!-- DEFAULT PROPERTIES-->
+  
+  <PropertyGroup>
+    <DefaultLangVersion>11.0</DefaultLangVersion>
+    <IsDesktop>false</IsDesktop>
+    <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
+  </PropertyGroup>
+  
+  <!-- DYNAMIC PROPERTIES-->
   
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
@@ -26,6 +37,8 @@
     <DefineConstants>WINDOWS;DESKTOP;CEF_WV</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'">
@@ -60,6 +73,9 @@
     <MainTargetFramework>net7.0-ios</MainTargetFramework>
     <DefineConstants>MOBILE;IOS;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(IsDesktop) == 'true'">
   </PropertyGroup>
   
   <PropertyGroup>

@@ -1,0 +1,117 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       Background="Silver"
+                       x:Class="MonkeyPaste.Avalonia.MpAvWelcomeView"
+                       x:TypeArguments="local:MpAvWelcomeNotificationViewModel"
+                       d:DesignWidth="1000"
+                       d:DesignHeight="800"
+                       Width="800"
+                       Height="600">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Button.navButton">
+            <Setter Property="Padding"
+                    Value="10,5" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="FontSize"
+                    Value="18" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid RowDefinitions="100,*,50"
+          Margin="10">
+
+        <!--  TITLE HEADER  -->
+
+        <TextBlock Grid.Row="0"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Center"
+                   TextAlignment="Center"
+                   FontSize="42"
+                   Foreground="DimGray"
+                   Text="Welcome" />
+
+        <Button x:Name="MinimizeButton"
+                Grid.Row="0"
+                Classes="outline outlineOver noBg noHoverBg"
+                CornerRadius="7"
+                Padding="10"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top">
+            <!--<TextBlock Text="X"
+                       FontSize="20"
+                       Foreground="Black" />-->
+            <Border Width="30"
+                    Height="5"
+                    CornerRadius="5"
+                    Background="DimGray" />
+
+        </Button>
+
+        <!--  CONTENT  -->
+
+        <TransitioningContentControl Grid.Row="1"
+                                     HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Content="{Binding CurPageType}">
+            <TransitioningContentControl.PageTransition>
+                <CrossFade Duration="0:00:00.500" />
+            </TransitioningContentControl.PageTransition>
+            <TransitioningContentControl.DataTemplates>
+
+                <local:MpAvWelcomeContentTemplateSelector>
+                    <DataTemplate x:Key="IntroTemplate"
+                                  x:DataType="local:MpAvWelcomeNotificationViewModel">
+                        <Label Content="Intro" />
+                    </DataTemplate>
+                    <DataTemplate x:Key="SecurityTemplate"
+                                  x:DataType="local:MpAvWelcomeNotificationViewModel">
+                        <Label Content="Security" />
+                    </DataTemplate>
+                    <DataTemplate x:Key="InputTemplate"
+                                  x:DataType="local:MpAvWelcomeNotificationViewModel">
+                        <Label Content="Input" />
+                    </DataTemplate>
+                    <DataTemplate x:Key="AccountTemplate"
+                                  x:DataType="local:MpAvWelcomeNotificationViewModel">
+                        <Label Content="Account" />
+                    </DataTemplate>
+                </local:MpAvWelcomeContentTemplateSelector>
+            </TransitioningContentControl.DataTemplates>
+        </TransitioningContentControl>
+
+        <!--  WIZARD NAV  -->
+        <Grid Grid.Row="2">
+            <Button HorizontalAlignment="Left"
+                    Classes="navButton"
+                    Command="{Binding SkipWelcomeCommand}">
+                <TextBlock Text="Skip" />
+            </Button>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Margin="0,0,5,0"
+                        Classes="defaultButton textOnlyButton navButton"
+                        Command="{Binding SelectPrevPageCommand}">
+                    <TextBlock Text="Previous" />
+                </Button>
+                <Button Classes="defaultButton textOnlyButton navButton"
+                        IsVisible="{Binding !IsVisible, ElementName=FinishButton}"
+                        Command="{Binding SelectNextPageCommand}">
+                    <TextBlock Text="Next" />
+                </Button>
+
+                <Button x:Name="FinishButton"
+                        HorizontalAlignment="Right"
+                        Classes="defaultButton textOnlyButton navButton"
+                        IsVisible="{Binding CanFinish}"
+                        Command="{Binding FinishWelcomeCommand}">
+                    <TextBlock Text="Done" />
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</local:MpAvUserControl>

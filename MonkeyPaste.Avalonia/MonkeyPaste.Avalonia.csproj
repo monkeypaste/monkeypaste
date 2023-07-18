@@ -4,12 +4,12 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <Nullable>disable</Nullable>
     <TrimMode>copyused</TrimMode>
-     <AvaloniaNameGeneratorIsEnabled>false</AvaloniaNameGeneratorIsEnabled>
+     <!--<AvaloniaNameGeneratorIsEnabled>false</AvaloniaNameGeneratorIsEnabled>-->
     <WarningLevel>4</WarningLevel>
      <LangVersion>$(DefaultLangVersion)</LangVersion>
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>$(DefaultPlatforms)</Platforms>
      <!--<UseMauiEssentials>true</UseMauiEssentials>-->
   </PropertyGroup>
   
@@ -1413,7 +1413,7 @@
     <Compile Update="Views\SettingsWindow\Tabs\Shortcuts\ShortcutDataGrid\MpAvShortcutDataGridView.axaml.cs">
       <DependentUpon>MpAvShortcutDataGridView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Welcome\MpAvWelcomeView.axaml.cs">
+    <Compile Update="Views\Reusable\Notifications\Welcome\MpAvWelcomeView.axaml.cs">
       <DependentUpon>MpAvWelcomeView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>

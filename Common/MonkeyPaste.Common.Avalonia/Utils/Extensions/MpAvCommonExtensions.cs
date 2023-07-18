@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.Platform;
@@ -121,16 +122,31 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Visual Tree
 
-        public static Control FindVisualDescendantWithHashCode(this Control control, int hashCode, bool printInfo = false) {
-            var target = control.GetVisualDescendants<Control>().FirstOrDefault(x => x.GetHashCode() == hashCode);
+        public static Visual FindVisualDescendantWithHashCode(this Visual visual, int hashCode, bool printInfo = false) {
+            var target = visual.GetSelfAndVisualDescendants().FirstOrDefault(x => x.GetHashCode() == hashCode);
             if (target != null && printInfo) {
-                var control_up = target.GetVisualAncestors<Control>();
+                var control_up = target.GetVisualAncestors();
                 MpConsole.WriteLine("UP:");
                 control_up.ForEach(x => MpConsole.WriteLine($"Type: '{x.GetType()}' Name: '{x.Name}'"));
 
-                var control_down = target.GetVisualDescendants<Control>();
+                var control_down = target.GetVisualDescendants();
                 MpConsole.WriteLine("DOWN:");
                 control_down.ForEach(x => MpConsole.WriteLine($"Type: '{x.GetType()}' Name: '{x.Name}'"));
+            }
+            return target;
+        }
+
+        public static ILogical FindLogicalDescendantWithHashCode(this ILogical logical, int hashCode, bool printInfo = false) {
+            var logical_tree = logical.GetSelfAndLogicalDescendants();
+            var target = logical_tree.FirstOrDefault(x => x.GetHashCode() == hashCode);
+            if (target != null && printInfo) {
+                var control_up = target.GetLogicalAncestors();
+                MpConsole.WriteLine("UP:");
+                control_up.ForEach(x => MpConsole.WriteLine($"Type: '{x.GetType()}' Name: '{(x is Visual v && !string.IsNullOrEmpty(v.Name) ? v.Name : x.ToString())}'"));
+
+                var control_down = target.GetLogicalAncestors();
+                MpConsole.WriteLine("DOWN:");
+                control_down.ForEach(x => MpConsole.WriteLine($"Type: '{x.GetType()}' Name: '{(x is Visual v && !string.IsNullOrEmpty(v.Name) ? v.Name : x.ToString())}'"));
             }
             return target;
         }

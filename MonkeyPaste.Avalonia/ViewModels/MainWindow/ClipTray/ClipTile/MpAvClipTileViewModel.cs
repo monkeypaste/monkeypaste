@@ -2198,7 +2198,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleIsContentReadOnlyCommand => new MpAsyncCommand(
             async () => {
-                if (IsResizerEnabled || !IsContentReadOnly) {
+                if (IsResizerEnabled || !IsContentReadOnly || IsPinned) {
                     IsContentReadOnly = !IsContentReadOnly;
                     return;
                 }

@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public static Control FindByHashCode(object codeObj) {
+        public static object FindByHashCode(object codeObj) {
             int code = 0;
             if (codeObj is string codeStr) {
                 if (codeStr.StartsWith("#") &&
@@ -57,6 +57,13 @@ namespace MonkeyPaste.Avalonia {
                     return result;
                 }
             }
+            foreach (var w in AllWindows) {
+                var result = w.FindLogicalDescendantWithHashCode(code, true);
+                if (result != null) {
+                    return result;
+                }
+            }
+            MpConsole.WriteLine($"No visuals found for hash code: '{code}'");
             return null;
         }
 
@@ -155,7 +162,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private static void Window_Opened(object sender, System.EventArgs e) {
-            if (sender is Window w) {
+            if (sender is MpAvWindow w) {
+                w.OpenDateTime = DateTime.Now;
                 //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
 
                 if (w.DataContext is MpICloseWindowViewModel cwvm) {

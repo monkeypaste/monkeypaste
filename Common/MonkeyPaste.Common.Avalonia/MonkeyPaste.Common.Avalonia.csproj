@@ -7,7 +7,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <TargetFramework>net7.0</TargetFramework>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>$(DefaultPlatforms)</Platforms>
   </PropertyGroup>
   <PropertyGroup>
     <NoWarn>CS8632</NoWarn>
@@ -49,7 +49,6 @@
     <PackageReference Include="Avalonia" Version="11.0.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="SharpHook" Version="4.2.1" />
-    <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
   </ItemGroup>
   
   <ItemGroup Condition="$(IsDesktop) == 'true'">

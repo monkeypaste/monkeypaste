@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 #if PLAT_WV
@@ -114,6 +115,7 @@ namespace MonkeyPaste.Avalonia {
         public override async void OnFrameworkInitializationCompleted() {
             DateTime startup_datetime = DateTime.Now;
 
+
             ReportCommandLineArgs(Args);
             bool is_login_load = true;// HasStartupArg(LOGIN_LOAD_ARG);
 
@@ -121,16 +123,16 @@ namespace MonkeyPaste.Avalonia {
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;
 
-                var bootstrapper = new MpAvLoaderViewModel(is_login_load);
-                await bootstrapper.CreatePlatformAsync(startup_datetime);
-                await bootstrapper.InitAsync();
+                var loader = new MpAvLoaderViewModel(is_login_load);
+                await loader.CreatePlatformAsync(startup_datetime);
+                await loader.InitAsync();
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                 if (MpDeviceWrapper.Instance != null) {
                     await MpDeviceWrapper.Instance.InitAsync(null);
                 }
-                var bootstrapper = new MpAvLoaderViewModel(is_login_load);
-                await bootstrapper.CreatePlatformAsync(startup_datetime);
-                bootstrapper.InitAsync().FireAndForgetSafeAsync();
+                var loader = new MpAvLoaderViewModel(is_login_load);
+                await loader.CreatePlatformAsync(startup_datetime);
+                loader.InitAsync().FireAndForgetSafeAsync();
 
                 mobile.MainView = new MpAvMainView() {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
