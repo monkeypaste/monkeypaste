@@ -644,7 +644,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
         private static async Task InitDefaultDataAsync() {
             await InitDefaultTagsAsync();
-            await InitDefaultShortcutsAsync();
+            await InitDefaultShortcutsAsync(MpPrefViewModel.Instance.InitialStartupRoutingProfileType);
 #if DEBUG
             if (MpPrefViewModel.Instance.IsInitialLoad) {
                 await CreateTestContentAsync();
@@ -903,7 +903,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             sw.Stop();
             MpConsole.WriteLine($"Total ms: {sw.ElapsedMilliseconds} Time per item: {sw.ElapsedMilliseconds / content_count}");
         }
-        private static async Task InitDefaultShortcutsAsync(MpShortcutRoutingProfileType routingProfile = MpShortcutRoutingProfileType.Internal) {
+        private static async Task InitDefaultShortcutsAsync(MpShortcutRoutingProfileType routingProfile) {
             MpRoutingType mw_routing = routingProfile.GetProfileBasedRoutingType(MpShortcutType.ToggleMainWindow);
             MpRoutingType globalRouting = routingProfile.GetProfileBasedRoutingType(MpShortcutType.ToggleListenToClipboard);
 

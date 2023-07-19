@@ -244,6 +244,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsDoNotShowType =>
+            !ForceShow &&
             MpPrefViewModel.Instance != null &&
             MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
                     .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
@@ -365,6 +366,14 @@ namespace MonkeyPaste.Avalonia {
                     return string.Empty;
                 }
                 return NotificationFormat.Detail;
+            }
+        }
+        public virtual bool ForceShow {
+            get {
+                if (NotificationFormat == null) {
+                    return false;
+                }
+                return NotificationFormat.ForceShow;
             }
         }
 

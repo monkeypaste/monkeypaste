@@ -117,12 +117,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             _sw = Stopwatch.StartNew();
 
-            await Mp.Services.NotificationBuilder.ShowNotificationAsync(
-                new MpNotificationFormat() {
-                    NotificationType = MpNotificationType.Welcome,
-                    MaxShowTimeMs = -1
-                });
-
+            await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification();
             CreateLoaderItems();
 
             // init cefnet (if needed) BEFORE window creation

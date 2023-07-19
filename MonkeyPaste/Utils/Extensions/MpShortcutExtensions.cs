@@ -38,15 +38,15 @@
             return (int)stype > (int)MpShortcutType.MAX_APP_SHORTCUT;
         }
 
-        public static MpRoutingType GetProfileBasedRoutingType(this MpShortcutRoutingProfileType profile, MpShortcutType st = MpShortcutType.None) {
+        public static MpRoutingType GetProfileBasedRoutingType(
+            this MpShortcutRoutingProfileType profile,
+            MpShortcutType st = MpShortcutType.None) {
             if (!st.CanBeGlobal()) {
                 return MpRoutingType.Internal;
             }
 
             switch (profile) {
                 case MpShortcutRoutingProfileType.Global:
-                    return MpRoutingType.Passive;
-                case MpShortcutRoutingProfileType.Default:
                     if (st == MpShortcutType.ToggleMainWindow) {
                         return MpRoutingType.Override;
                     }

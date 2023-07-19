@@ -46,6 +46,7 @@ namespace MonkeyPaste.Avalonia {
         private string[] _colorImageFileNames = new string[] {
             "add.png",
             "appstore.png",
+            "banana.png",
             "bitmap.png",
             "bingicon.png",
             "close.png",
@@ -57,6 +58,7 @@ namespace MonkeyPaste.Avalonia {
             "duckduckgoicon.png",
             "error.png",
             "folder.png",
+            "ghost.png",
             "global.png",
             "graph.png",
             "html.png",
@@ -65,6 +67,7 @@ namespace MonkeyPaste.Avalonia {
             "joystickative2.png",
             "monkey.png",
             "noentry.png",
+            "private.png",
             "pindown.png",
             "pindownover.png",
             "pinover.png",
@@ -77,8 +80,6 @@ namespace MonkeyPaste.Avalonia {
             "text.png",
             "warning.png",
             "yandexicon.png",
-            "ghost.png",
-            "banana.png"
         };
 
         #endregion
@@ -407,7 +408,7 @@ namespace MonkeyPaste.Avalonia {
             // 12
             palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.15d).ToHex(true));
             // 13
-            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.1d, 0.97d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h, 0.01d, 0.999d).ToHex(true));
             // 14
             palette.Add(MpColorHelpers.ColorFromHsv((h1_te - 30d).Wrap(0, 360), s, v).ToHex(true));
             // 15

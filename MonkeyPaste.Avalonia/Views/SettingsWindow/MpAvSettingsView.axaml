@@ -38,13 +38,14 @@
             <Setter Property="Padding"
                     Value="0" />
         </Style>
+
         <Style Selector="RadioButton.tab /template/ ContentPresenter">
             <Setter Property="BorderThickness"
                     Value="2.5" />
             <Setter Property="BorderBrush"
                     Value="Transparent" />
             <Setter Property="BoxShadow"
-                    Value="inset 0 0 10 0 black" />
+                    Value="inset 0 0 15 0 black" />
         </Style>
         <Style Selector="RadioButton.tab:unchecked /template/ ContentPresenter">
             <Setter Property="Background"
@@ -54,7 +55,15 @@
             <Setter Property="Background"
                     Value="{DynamicResource ThemeAccent1Color}" />
             <Setter Property="BoxShadow"
-                    Value="inset 0 0 10 0 white" />
+                    Value="inset 0 0 15 0 white" />
+        </Style>
+        <Style Selector="RadioButton.tab.omitted">
+            <Setter Property="Cursor"
+                    Value="Arrow" />
+            <Setter Property="IsEnabled"
+                    Value="False" />
+            <Setter Property="Opacity"
+                    Value="0" />
         </Style>
 
         <!--<Style Selector="RadioButton.tab:unchecked:pointerover /template/ ContentPresenter">
@@ -407,7 +416,7 @@
               RowDefinitions="Auto,50">
             <!--  Account Tab Button  -->
             <RadioButton Grid.Column="0"
-                         Opacity="{Binding IsTabButtonVisible0, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                         Classes.omitted="{Binding !IsTabButtonVisible0}"
                          Theme="{StaticResource SwitchlessRadioButton}"
                          Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[0], Mode=OneWay}"
@@ -420,7 +429,7 @@
             </RadioButton>
             <!--  Prefs Tab Button  -->
             <RadioButton Grid.Column="1"
-                         Opacity="{Binding IsTabButtonVisible1, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                         Classes.omitted="{Binding !IsTabButtonVisible0}"
                          Theme="{StaticResource SwitchlessRadioButton}"
                          Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[1], Mode=OneWay}"
@@ -433,7 +442,7 @@
             </RadioButton>
             <!--  Security Tab Button  -->
             <RadioButton Grid.Column="2"
-                         Opacity="{Binding IsTabButtonVisible2, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                         Classes.omitted="{Binding !IsTabButtonVisible0}"
                          Theme="{StaticResource SwitchlessRadioButton}"
                          Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[2], Mode=OneWay}"
@@ -446,7 +455,7 @@
             </RadioButton>
             <!--  Shortcuts tab button  -->
             <RadioButton Grid.Column="3"
-                         Opacity="{Binding IsTabButtonVisible3, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                         Classes.omitted="{Binding !IsTabButtonVisible0}"
                          Theme="{StaticResource SwitchlessRadioButton}"
                          Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[3], Mode=OneWay}"
@@ -459,7 +468,7 @@
             </RadioButton>
             <!--  Help tab Button  -->
             <RadioButton Grid.Column="4"
-                         Opacity="{Binding IsTabButtonVisible4, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                         Classes.omitted="{Binding !IsTabButtonVisible0}"
                          Theme="{StaticResource SwitchlessRadioButton}"
                          Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"

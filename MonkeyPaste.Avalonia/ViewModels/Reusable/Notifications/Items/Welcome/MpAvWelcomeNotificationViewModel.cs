@@ -1,13 +1,17 @@
 ﻿using MonkeyPaste.Common;
+using System.Collections;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpWelcomePageType {
-        Intro,
-        Security,
-        Input,
-        Account
+        Welcome,
+        Account,
+        Keyboard,
+        Mouse,
+        //Security,
     }
     public class MpAvWelcomeNotificationViewModel :
         MpAvNotificationViewModelBase {
@@ -18,17 +22,34 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        public static async Task ShowWelcomeNotification(bool forceShow = false) {
+            await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                new MpNotificationFormat() {
+                    ForceShow = forceShow,
+                    NotificationType = MpNotificationType.Welcome,
+                    MaxShowTimeMs = -1
+                });
+        }
         #endregion
 
         #region Interfaces
         #endregion
 
         #region Properties
+
+        #region View Models
+        public MpAvGestureProfileCollectionViewModel GestureProfilesViewModel { get; set; }
+        #endregion
+
         #region State
         public bool IsWelcomeDone { get; set; } = false;
         public override bool IsShowOnceNotification =>
             true;
-        public MpWelcomePageType CurPageType { get; set; } = MpWelcomePageType.Intro;
+
+        public int CurPageIdx =>
+            (int)CurPageType;
+
+        public MpWelcomePageType CurPageType { get; set; } = MpWelcomePageType.Welcome;
 
         public bool CanSelectPrevious =>
             (int)CurPageType > 0;
@@ -39,9 +60,20 @@ namespace MonkeyPaste.Avalonia {
             (int)CurPageType + 1 >= typeof(MpWelcomePageType).Length();
 
         #endregion
+
+        #region Appearance
+
+        public string WelcomeTitle =>
+            CurPageType.ToString();
+
+        #endregion
+
         #endregion
 
         #region Constructors
+        public MpAvWelcomeNotificationViewModel() {
+            GestureProfilesViewModel = new MpAvGestureProfileCollectionViewModel();
+        }
         #endregion
 
         #region Public Methods
@@ -54,7 +86,6 @@ namespace MonkeyPaste.Avalonia {
             while (!IsWelcomeDone) {
                 await Task.Delay(100);
             }
-            //IsWindowOpen = false;
             return MpNotificationDialogResultType.Dismiss;
         }
 
@@ -68,6 +99,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+        private void FinishWelcomeSetup() {
+            IsWelcomeDone = true;
+            MpPrefViewModel.Instance.InitialStartupRoutingProfileType =
+                GestureProfilesViewModel.Items.FirstOrDefault(x => x.IsChecked).ProfileType;
+        }
         #endregion
 
         #region Commands
@@ -88,18 +124,17 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand SkipWelcomeCommand => new MpCommand(
             () => {
-                IsWelcomeDone = true;
+                FinishWelcomeSetup();
             });
 
         public ICommand FinishWelcomeCommand => new MpCommand(
             () => {
-                IsWelcomeDone = true;
+                FinishWelcomeSetup();
             }, () => {
                 return CanFinish;
             });
 
         #endregion
-
 
     }
 }

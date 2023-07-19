@@ -759,13 +759,13 @@ namespace MonkeyPaste.Avalonia {
             if (globalable_scvml.All(x => x.RoutingType == MpRoutingType.Internal)) {
                 return MpShortcutRoutingProfileType.Internal;
             }
-            if (globalable_scvml.All(x => x.RoutingType == MpRoutingType.Passive)) {
-                return MpShortcutRoutingProfileType.Global;
+            var toggle_mw_override = globalable_scvml.FirstOrDefault(x => x.ShortcutType == MpShortcutType.ToggleMainWindow && x.RoutingType == MpRoutingType.Override);
+            if (toggle_mw_override == null ||
+                globalable_scvml.Where(x => x != toggle_mw_override).Any(x => x.RoutingType != MpRoutingType.Passive)) {
+                return MpShortcutRoutingProfileType.Custom;
             }
-            if (globalable_scvml.Any(x => x.ShortcutType == MpShortcutType.ToggleMainWindow && x.RoutingType == MpRoutingType.Override)) {
-                return MpShortcutRoutingProfileType.Default;
-            }
-            return MpShortcutRoutingProfileType.Custom;
+
+            return MpShortcutRoutingProfileType.Global;
         }
 
         private async Task SetShortcutRoutingToProfileTypeAsync(MpShortcutRoutingProfileType new_profile_type) {

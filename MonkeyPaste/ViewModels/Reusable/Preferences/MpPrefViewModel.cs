@@ -321,7 +321,7 @@ namespace MonkeyPaste {
 
         #region Dynamic Properties          
 
-        #region Installer Properties
+        #region Welcome Properties
 
         // NOTE this intended for reset shortcuts/all and will be set during installer
         //public string ShortcutProfileTypeName { get; set; } = MpShortcutRoutingProfileType.Internal.ToString();
@@ -332,6 +332,8 @@ namespace MonkeyPaste {
         //[JsonConverter(typeof(StringEnumConverter))]
         //public MpShortcutRoutingProfileType ShortcutProfileType { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MpShortcutRoutingProfileType InitialStartupRoutingProfileType { get; set; } = MpShortcutRoutingProfileType.Internal;
         #endregion
 
         #region Account
@@ -747,12 +749,21 @@ namespace MonkeyPaste {
                 // create dummy pref with default values
                 // then set each non-omitted pref individually so the change flows through its intended channels
                 MpPrefViewModel def_pref = new();
-                var propNames = this.GetType().GetProperties().Select(x => x.Name);
+                var propNames =
+                    this.GetType().GetProperties()
+                    .Where(x => x.SetMethod != null && !IsPropertyResetOmitted(x.Name))
+                    .Select(x => x.Name);
+                MpConsole.WriteLine("Reseting prefs...", true);
                 foreach (var pn in propNames) {
-                    if (IsPropertyResetOmitted(pn)) {
-                        continue;
+                    try {
+                        object old_val = this.GetPropertyValue(pn);
+                        this.SetPropertyValue(pn, def_pref.GetPropertyValue(pn));
+                        object new_val = this.GetPropertyValue(pn);
+                        MpConsole.WriteLine($"Property '{pn}' changed from '{old_val}' to '{new_val}'");
                     }
-                    this.SetPropertyValue(pn, def_pref.GetPropertyValue(pn));
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"Error reseting '{pn}'.", ex);
+                    }
                 }
             });
 #if DEBUG

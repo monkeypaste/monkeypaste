@@ -116,6 +116,8 @@ namespace MonkeyPaste.Avalonia {
                             Content = new MpAvWelcomeView(),
                             DataContext = nvmb
                         };
+                        nw.Classes.Add("fadeIn");
+                        nw.Classes.Add("fadeOut");
                         break;
                     case MpNotificationLayoutType.ErrorWithOption:
                     case MpNotificationLayoutType.UserAction:

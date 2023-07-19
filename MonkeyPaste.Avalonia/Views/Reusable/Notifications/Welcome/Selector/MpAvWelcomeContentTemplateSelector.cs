@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
 
         Control ITemplate<object, Control>.Build(object param) {
             string key = null;
-            if (param is MpWelcomePageType wpt) {
+            if (param is int wptIdx && ((MpWelcomePageType)wptIdx) is MpWelcomePageType wpt) {
                 key = $"{wpt}Template";
             }
             if (string.IsNullOrEmpty(key)) {

@@ -686,11 +686,14 @@ namespace MonkeyPaste.Common {
 
         public static void SetPropertyValue(this object obj, string propertyPath, object newValue) {
             PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyPath);
-            if (propertyInfo != null) {
-                Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
-                object safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
-                propertyInfo.SetValue(obj, safeValue, null);
+            if (propertyInfo == null ||
+                propertyInfo.SetMethod == null) {
+                return;
             }
+
+            Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
+            object safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
+            propertyInfo.SetValue(obj, safeValue, null);
         }
         #endregion
 

@@ -1257,6 +1257,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>en-US.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Locales\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <CustomToolNamespace></CustomToolNamespace>
+    </Compile>
     <Compile Update="Views\ExternalDropWindow\DropComplete\MpAvDropCompleteView.axaml.cs">
       <DependentUpon>MpAvDropCompleteView.axaml</DependentUpon>
     </Compile>
@@ -1568,8 +1574,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Locales\en-US.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Locales\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   

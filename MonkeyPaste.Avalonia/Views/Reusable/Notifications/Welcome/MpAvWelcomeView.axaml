@@ -21,6 +21,23 @@
             <Setter Property="FontSize"
                     Value="18" />
         </Style>
+        <Style Selector="TextBlock.description">
+            <Setter Property="Foreground"
+                    Value="Gray" />
+            <Setter Property="FontSize"
+                    Value="18" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+            <Setter Property="MaxWidth"
+                    Value="500" />
+            <Setter Property="TextWrapping"
+                    Value="WrapWithOverflow" />
+
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid RowDefinitions="100,*,50"
           Margin="10">
@@ -33,7 +50,7 @@
                    TextAlignment="Center"
                    FontSize="42"
                    Foreground="DimGray"
-                   Text="Welcome" />
+                   Text="{Binding WelcomeTitle}" />
 
         <Button x:Name="MinimizeButton"
                 Grid.Row="0"
@@ -42,9 +59,6 @@
                 Padding="10"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top">
-            <!--<TextBlock Text="X"
-                       FontSize="20"
-                       Foreground="Black" />-->
             <Border Width="30"
                     Height="5"
                     CornerRadius="5"
@@ -57,28 +71,98 @@
         <TransitioningContentControl Grid.Row="1"
                                      HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
-                                     Content="{Binding CurPageType}">
+                                     DataContext="{Binding}"
+                                     Content="{Binding CurPageIdx}">
             <TransitioningContentControl.PageTransition>
-                <CrossFade Duration="0:00:00.500" />
+                <PageSlide Duration="0:00:00.500" />
             </TransitioningContentControl.PageTransition>
             <TransitioningContentControl.DataTemplates>
 
                 <local:MpAvWelcomeContentTemplateSelector>
-                    <DataTemplate x:Key="IntroTemplate"
+
+                    <!--  WELCOME PAGE  -->
+
+                    <DataTemplate x:Key="WelcomeTemplate"
                                   x:DataType="local:MpAvWelcomeNotificationViewModel">
-                        <Label Content="Intro" />
+                        <TextBlock Classes="description"
+                                   Text="Hey! Let's setup a few things that may improve your overall experience with MonkeyPaste." />
                     </DataTemplate>
-                    <DataTemplate x:Key="SecurityTemplate"
+
+                    <!--  ACCOUNT PAGE  -->
+
+                    <DataTemplate x:Key="AccountTemplate"
                                   x:DataType="local:MpAvWelcomeNotificationViewModel">
-                        <Label Content="Security" />
+                        <Label Content="Use Account view from settings here" />
+                    </DataTemplate>
+
+                    <!--  KEYBOARD PAGE  -->
+
+                    <DataTemplate x:Key="KeyboardTemplate"
+                                  x:DataType="local:MpAvWelcomeNotificationViewModel">
+                        <StackPanel x:DataType="local:MpAvGestureProfileCollectionViewModel"
+                                    DataContext="{Binding GestureProfilesViewModel}"
+                                    Orientation="Vertical"
+                                    Spacing="10">
+                            <!--  GESTURE BUTTONS  -->
+                            <ItemsControl ItemsSource="{Binding Items}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton Classes="defaultButton"
+                                                     Theme="{StaticResource SwitchlessRadioButton}"
+                                                     GroupName="GestureProfile"
+                                                     Margin="0,0,10,0"
+                                                     Padding="15"
+                                                     Width="80"
+                                                     Height="80"
+                                                     HorizontalContentAlignment="Center"
+                                                     VerticalContentAlignment="Center"
+                                                     IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                                     local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+                                            <DockPanel>
+                                                <TextBlock DockPanel.Dock="Bottom"
+                                                           Text="{Binding LabelText}" />
+                                                <Image Classes="square"
+                                                       Height="50"
+                                                       Stretch="UniformToFill"
+                                                       Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                            </DockPanel>
+                                        </RadioButton>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!--  GESTURE CAPTION  -->
+
+                            <Border BorderBrush="DimGray"
+                                    BorderThickness="1"
+                                    Padding="5"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+
+                                <TransitioningContentControl HorizontalAlignment="Center"
+                                                             VerticalAlignment="Center"
+                                                             Content="{Binding Caption}">
+                                    <TransitioningContentControl.PageTransition>
+                                        <CrossFade Duration="0:00:00.500" />
+                                    </TransitioningContentControl.PageTransition>
+                                    <TransitioningContentControl.ContentTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Classes="description"
+                                                       Text="{Binding}" />
+                                        </DataTemplate>
+                                    </TransitioningContentControl.ContentTemplate>
+                                </TransitioningContentControl>
+
+                            </Border>
+                        </StackPanel>
+
                     </DataTemplate>
                     <DataTemplate x:Key="InputTemplate"
                                   x:DataType="local:MpAvWelcomeNotificationViewModel">
                         <Label Content="Input" />
-                    </DataTemplate>
-                    <DataTemplate x:Key="AccountTemplate"
-                                  x:DataType="local:MpAvWelcomeNotificationViewModel">
-                        <Label Content="Account" />
                     </DataTemplate>
                 </local:MpAvWelcomeContentTemplateSelector>
             </TransitioningContentControl.DataTemplates>

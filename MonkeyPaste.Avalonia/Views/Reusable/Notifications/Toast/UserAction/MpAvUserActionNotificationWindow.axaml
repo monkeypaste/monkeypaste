@@ -95,7 +95,7 @@
                            HorizontalAlignment="Stretch"
                            TextAlignment="Left"
                            FontSize="24"
-                           Foreground="{DynamicResource ThemeWhite}"
+                           Foreground="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
                            FontWeight="SemiBold"
                            TextWrapping="WrapWithOverflow"
                            Text="{Binding Title}" />
@@ -105,21 +105,19 @@
                 <Border VerticalAlignment="Top"
                         HorizontalAlignment="Stretch"
                         Classes="labelUnderline labelUnderline_long"
-                        Background="{DynamicResource ThemeWhite}"
+                        Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
                         BorderThickness="0" />
             </StackPanel>
 
 
             <!--  MESSAGE BODY  -->
             <ContentControl Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
+                            Grid.Column="1"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
                             ScrollViewer.VerticalScrollBarVisibility="Auto"
                             Margin="5,5,5,10"
-                            MaxWidth="300"
                             Content="{Binding}">
                 <ContentControl.DataTemplates>
                     <local:MpAvUserActionBodyTemplateSelector>
@@ -128,11 +126,11 @@
                             <SelectableTextBlock FontSize="14"
                                                  HorizontalAlignment="Left"
                                                  VerticalAlignment="Top"
-                                                 TextWrapping="Wrap"
+                                                 TextWrapping="WrapWithOverflow"
                                                  FontWeight="SemiBold"
                                                  Background="Transparent"
                                                  Focusable="True"
-                                                 Foreground="{Binding ForegroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                                                 Foreground="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
                                                  Text="{Binding Body}" />
                         </DataTemplate>
                         <DataTemplate x:Key="ParameterCollectionTemplate"
@@ -204,7 +202,7 @@
                 <local:MpAvProgressSpinner x:Name="UserActionProgressSpinner"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           LabelBrush="{DynamicResource ThemeWhite}"
+                                           LabelBrush="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
                                            Width="100"
                                            Height="100"
                                            Percent="{Binding PercentLoaded}" />
