@@ -84,7 +84,7 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        public async Task<string> ShowTextBoxMessageBoxAsync(string title, string message, string currentText = null, string placeholderText = null, object anchor = null, object iconResourceObj = null, object owner = null) {
+        public async Task<string> ShowTextBoxMessageBoxAsync(string title, string message, string currentText = null, string placeholderText = null, object anchor = null, object iconResourceObj = null, object owner = null, char passwordChar = default, MpNotificationType ntfType = MpNotificationType.ModalTextBoxOkCancelMessageBox) {
             var result = await Mp.Services.NotificationBuilder.ShowInputResultNotificationAsync(
                                     title: title,
                                     body: message,
@@ -92,7 +92,9 @@ namespace MonkeyPaste.Avalonia {
                                     placeholderText: placeholderText,
                                     iconResourceObj: iconResourceObj,
                                     anchor: anchor,
-                                    owner: owner);
+                                    owner: owner,
+                                    passwordChar: passwordChar,
+                                    ntfType: ntfType);
             return result;
         }
     }

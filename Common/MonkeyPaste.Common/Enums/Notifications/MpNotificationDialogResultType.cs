@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste {
+﻿namespace MonkeyPaste.Common {
     public enum MpNotificationDialogResultType {
         None = 0,
         Yes,

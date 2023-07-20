@@ -42,6 +42,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.TrashCapReached:
                 case MpNotificationType.ContentAddBlockedByAccount:
                 case MpNotificationType.ContentRestoreBlockedByAccount:
+                case MpNotificationType.DbPasswordInput:
                     return MpNotificationLayoutType.UserAction;
                 case MpNotificationType.AnalyzerTimeout:
                 case MpNotificationType.InvalidRequest:
@@ -67,6 +68,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalYesNoMessageBox:
                     return MpNotificationButtonsType.YesNo;
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
+                case MpNotificationType.DbPasswordInput:
                     return MpNotificationButtonsType.TextBoxOkCancel;
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
@@ -442,10 +444,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
 
-        #endregion
-
-        #region Private Methods
-        private void MpNotificationViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        protected virtual void MpNotificationViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(DoNotShowAgain):
                     if (DoNotShowAgain) {
@@ -465,6 +464,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+        #endregion
+
+        #region Private Methods
         #endregion
 
         #region Commands

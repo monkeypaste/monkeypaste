@@ -1,0 +1,201 @@
+<local:MpAvWindow xmlns="https://github.com/avaloniaui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                  xmlns:local="using:MonkeyPaste.Avalonia"
+                  xmlns:pcl="using:MonkeyPaste"
+                  x:Class="MonkeyPaste.Avalonia.MpAvWelcomeWindow"
+                  Background="Transparent"
+                  WindowStartupLocation="CenterScreen"
+                  SizeToContent="Manual"
+                  SystemDecorations="None">
+    <local:MpAvWindow.Styles>
+
+        <!--  NAV BUTTONS  -->
+
+        <Style Selector="Button.navButton">
+            <Setter Property="Padding"
+                    Value="10,5" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="FontSize"
+                    Value="18" />
+        </Style>
+
+        <!--  CAPTIONS  -->
+        <Style Selector="TextBlock.description">
+            <Setter Property="Foreground"
+                    Value="Gray" />
+            <Setter Property="FontSize"
+                    Value="18" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+            <Setter Property="MaxWidth"
+                    Value="500" />
+            <Setter Property="TextWrapping"
+                    Value="WrapWithOverflow" />
+        </Style>
+
+        <!--  DB PASSWORD  -->
+        <Style Selector="TextBox.dbPassword">
+            <Setter Property="PasswordChar"
+                    Value="●" />
+            <Setter Property="FontSize"
+                    Value="18" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="TextAlignment"
+                    Value="Left" />
+            <Setter Property="CornerRadius"
+                    Value="7" />
+            <Setter Property="Padding"
+                    Value="5" />
+            <Setter Property="Margin"
+                    Value="0,0,0,5" />
+            <Setter Property="BorderThickness"
+                    Value="1.5" />
+            <Setter Property="Width"
+                    Value="200" />
+        </Style>
+        <Style Selector="TextBox.dbPassword:not(.valid)">
+            <Setter Property="BorderBrush"
+                    Value="Red" />
+        </Style>
+    </local:MpAvWindow.Styles>
+    <Border Background="Silver"
+            CornerRadius="10"
+            BorderBrush="White"
+            BorderThickness="5"
+            Width="1000"
+            Height="600">
+
+        <Grid RowDefinitions="100,*,50"
+              Margin="10">
+
+            <!--  TITLE HEADER  -->
+
+            <TextBlock Grid.Row="0"
+                       DataContext="{Binding CurOptGroupViewModel}"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Center"
+                       TextAlignment="Center"
+                       FontSize="42"
+                       Foreground="DimGray"
+                       Text="{Binding Title}" />
+
+            <Button x:Name="MinimizeButton"
+                    Grid.Row="0"
+                    Classes="outline outlineOver noBg noHoverBg"
+                    CornerRadius="7"
+                    Padding="10"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top">
+                <Border Width="30"
+                        Height="5"
+                        CornerRadius="5"
+                        Background="DimGray" />
+
+            </Button>
+
+            <!--  CONTENT  -->
+
+            <TransitioningContentControl Grid.Row="1"
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Stretch"
+                                         HorizontalContentAlignment="Center"
+                                         VerticalContentAlignment="Center"
+                                         DataContext="{Binding}"
+                                         Content="{Binding CurPageIdx}">
+                <TransitioningContentControl.PageTransition>
+                    <PageSlide Duration="0:00:00.250" />
+                </TransitioningContentControl.PageTransition>
+                <TransitioningContentControl.DataTemplates>
+                    <local:MpAvWelcomeContentTemplateSelector>
+                        <DataTemplate x:Key="OptionsTemplate"
+                                      x:DataType="local:MpAvWelcomeNotificationViewModel">
+                            <local:MpAvWelcomeOptionsView HorizontalContentAlignment="Center"
+                                                          VerticalContentAlignment="Center" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="DbPasswordTemplate"
+                                      x:DataType="local:MpAvWelcomeNotificationViewModel">
+                            <Grid RowDefinitions="Auto,Auto,Auto,40"
+                                  HorizontalAlignment="Center">
+                                <Grid.Resources>
+                                    <!--<SolidColorBrush x:Key="TextControlForeground" Color="Black" />
+                                    <SolidColorBrush x:Key="TextControlBackground" Color="White" />
+                                    <SolidColorBrush x:Key="TextControlBorderBrush" Color="White" />
+                                    <SolidColorBrush x:Key="TextControlForegroundFocused" Color="Black" />
+                                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="White" />
+                                    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="White" />
+                                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White" />-->
+
+                                </Grid.Resources>
+
+                                <!--  CAPTION  -->
+                                <TextBlock Grid.Row="0"
+                                           Classes="description"
+                                           Margin="0,0,0,20"
+                                           Text="{Binding DbPasswordViewModel.Caption}" />
+
+                                <TextBox Grid.Row="1"
+                                         Classes.valid="{Binding IsDbPasswordValid}"
+                                         Classes="dbPassword"
+                                         Watermark="Password"
+                                         Text="{Binding DbPassword1}" />
+                                <TextBox Grid.Row="2"
+                                         Classes="dbPassword"
+                                         Classes.valid="{Binding IsDbPasswordValid}"
+                                         PasswordChar="●"
+                                         Watermark="Confirm"
+                                         Text="{Binding DbPassword2}" />
+                                <TextBlock Grid.Row="3"
+                                           IsVisible="{Binding !IsDbPasswordValid}"
+                                           HorizontalAlignment="Center"
+                                           FontSize="18"
+                                           Foreground="Crimson"
+                                           Text="⚠️ Passwords do not match" />
+                            </Grid>
+                        </DataTemplate>
+                    </local:MpAvWelcomeContentTemplateSelector>
+                </TransitioningContentControl.DataTemplates>
+            </TransitioningContentControl>
+
+            <!--  WIZARD NAV  -->
+            <Grid Grid.Row="2">
+                <Button HorizontalAlignment="Left"
+                        Classes="navButton"
+                        Command="{Binding SkipWelcomeCommand}">
+                    <TextBlock Text="Skip" />
+                </Button>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <Button Margin="0,0,5,0"
+                            Classes="defaultButton textOnlyButton navButton"
+                            Command="{Binding SelectPrevPageCommand}">
+                        <TextBlock Text="Previous" />
+                    </Button>
+                    <Button Classes="defaultButton textOnlyButton navButton"
+                            IsVisible="{Binding !IsVisible, ElementName=FinishButton}"
+                            Command="{Binding SelectNextPageCommand}">
+                        <TextBlock Text="Next" />
+                    </Button>
+
+                    <Button x:Name="FinishButton"
+                            HorizontalAlignment="Right"
+                            Classes="defaultButton textOnlyButton navButton"
+                            IsVisible="{Binding CanFinish}"
+                            Command="{Binding FinishWelcomeCommand}">
+                        <TextBlock Text="Done" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</local:MpAvWindow>

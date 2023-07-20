@@ -1,0 +1,110 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvWelcomeOptionGroupViewModel"
+                       x:Class="MonkeyPaste.Avalonia.MpAvWelcomeOptionsView"
+                       mc:Ignorable="d"
+                       d:DesignWidth="400"
+                       d:DesignHeight="300">
+    <local:MpAvUserControl.Styles>
+
+        <!--  GESTURE PROFILE BUTTONS  -->
+
+        <Style Selector="RadioButton.gestureButton">
+            <Setter Property="Theme"
+                    Value="{StaticResource SwitchlessRadioButton}" />
+            <Setter Property="GroupName"
+                    Value="GestureProfile" />
+            <Setter Property="Margin"
+                    Value="0,0,10,0" />
+            <Setter Property="Padding"
+                    Value="15" />
+            <Setter Property="Width"
+                    Value="80" />
+            <Setter Property="Height"
+                    Value="80" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <StackPanel Orientation="Vertical">
+        <!--  CAPTION  -->
+        <TextBlock Classes="description"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0,0,0,10"
+                   Text="{Binding Caption}" />
+
+
+        <!--  GESTURE BUTTONS  -->
+        <ItemsControl DockPanel.Dock="Top"
+                      ItemsSource="{Binding Items}"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Margin="0,0,0,10">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <RadioButton Classes="defaultButton"
+                                 Theme="{StaticResource SwitchlessRadioButton}"
+                                 GroupName="GestureProfile"
+                                 CornerRadius="7"
+                                 Margin="0,0,15,0"
+                                 Padding="15,15,15,5"
+                                 Width="200"
+                                 Height="230"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                 local:MpAvIsHoveringExtension.IsEnabled="True"
+                                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+                        <DockPanel HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch">
+                            <TextBlock DockPanel.Dock="Bottom"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Bottom"
+                                       TextAlignment="Center"
+                                       FontSize="20"
+                                       Text="{Binding LabelText}" />
+                            <Image Width="160"
+                                   Height="160"
+                                   Margin="0,0,0,10"
+                                   Stretch="UniformToFill"
+                                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        </DockPanel>
+                    </RadioButton>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!--  GESTURE CAPTION  -->
+
+        <TransitioningContentControl DockPanel.Dock="Bottom"
+                                     Padding="5"
+                                     Height="120"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Top"
+                                     Content="{Binding HoverItem, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}">
+            <TransitioningContentControl.PageTransition>
+                <CrossFade Duration="0:00:00.500" />
+            </TransitioningContentControl.PageTransition>
+            <TransitioningContentControl.ContentTemplate>
+                <DataTemplate>
+                    <TextBlock Classes="description"
+                               Foreground="White"
+                               Text="{Binding DescriptionText}" />
+                </DataTemplate>
+            </TransitioningContentControl.ContentTemplate>
+        </TransitioningContentControl>
+    </StackPanel>
+
+</local:MpAvUserControl>

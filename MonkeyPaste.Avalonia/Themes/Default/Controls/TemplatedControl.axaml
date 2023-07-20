@@ -28,6 +28,14 @@
         <Setter Property="Width"
                 Value="{Binding $self.Bounds.Height}" />
     </Style>
+    <Style Selector=":is(TemplatedControl).squareByHeight">
+        <Setter Property="Width"
+                Value="{Binding $self.Bounds.Height}" />
+    </Style>
+    <Style Selector=":is(TemplatedControl).squareByWidth">
+        <Setter Property="Height"
+                Value="{Binding $self.Bounds.Width}" />
+    </Style>
 
     <Style Selector=":is(TemplatedControl).noBg">
         <Setter Property="Background"

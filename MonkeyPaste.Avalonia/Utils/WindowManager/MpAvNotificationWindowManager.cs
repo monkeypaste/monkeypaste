@@ -109,11 +109,7 @@ namespace MonkeyPaste.Avalonia {
                         };
                         break;
                     case MpNotificationLayoutType.Welcome:
-                        nw = new MpAvWindow() {
-                            WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                            SizeToContent = SizeToContent.WidthAndHeight,
-                            SystemDecorations = SystemDecorations.None,
-                            Content = new MpAvWelcomeView(),
+                        nw = new MpAvWelcomeWindow() {
                             DataContext = nvmb
                         };
                         nw.Classes.Add("fadeIn");

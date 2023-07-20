@@ -118,14 +118,17 @@ namespace MonkeyPaste.Avalonia {
             string placeholderText = null,
             object anchor = null,
             object iconResourceObj = null,
-            object owner = null) {
+            object owner = null,
+            char passwordChar = default,
+            MpNotificationType ntfType = MpNotificationType.ModalTextBoxOkCancelMessageBox) {
             MpNotificationFormat nf = new MpNotificationFormat() {
                 Title = title,
                 Body = body,
                 OtherArgs = currentInput,
                 Detail = placeholderText,
                 AnchorTarget = anchor,
-                NotificationType = MpNotificationType.ModalTextBoxOkCancelMessageBox,
+                NotificationType = ntfType,
+                PasswordChar = passwordChar,
                 IconSourceObj = iconResourceObj,
                 Owner = owner
             };
@@ -161,7 +164,7 @@ namespace MonkeyPaste.Avalonia {
                     nvmb = new MpAvLoaderNotificationViewModel();
                     break;
                 case MpNotificationLayoutType.Welcome:
-                    nvmb = new MpAvWelcomeNotificationViewModel();
+                    nvmb = MpAvWelcomeNotificationViewModel.Instance;
                     break;
                 case MpNotificationLayoutType.Warning:
                 case MpNotificationLayoutType.Error:

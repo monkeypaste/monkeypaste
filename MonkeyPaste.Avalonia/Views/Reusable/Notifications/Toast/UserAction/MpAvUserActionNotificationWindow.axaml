@@ -184,6 +184,7 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Center">
                 <TextBox Watermark="{Binding Detail}"
+                         PasswordChar="{Binding PasswordChar}"
                          TextAlignment="Left"
                          FontSize="14"
                          Padding="3"

@@ -58,6 +58,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
+        public char PasswordChar {
+            get {
+                if (NotificationFormat == null) {
+                    return default;
+                }
+                return NotificationFormat.PasswordChar;
+            }
+        }
         public object FixCommandArgs {
             get {
                 if (NotificationFormat == null) {

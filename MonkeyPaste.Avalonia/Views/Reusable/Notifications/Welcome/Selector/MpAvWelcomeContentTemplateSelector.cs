@@ -9,14 +9,19 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         Control ITemplate<object, Control>.Build(object param) {
-            string key = null;
-            if (param is int wptIdx && ((MpWelcomePageType)wptIdx) is MpWelcomePageType wpt) {
-                key = $"{wpt}Template";
+            string key = "OptionsTemplate";
+            if (param is int wptIdx && ((MpWelcomePageType)wptIdx) is MpWelcomePageType wpt &&
+                wpt == MpWelcomePageType.DbPassword) {
+                if (AvailableTemplates["DbPasswordTemplate"].Build(param) is Control pc) {
+                    pc.DataContext = MpAvWelcomeNotificationViewModel.Instance;
+                    return pc;
+                }
             }
-            if (string.IsNullOrEmpty(key)) {
-                return null;
+            if (AvailableTemplates["OptionsTemplate"].Build(param) is Control c) {
+                c.DataContext = MpAvWelcomeNotificationViewModel.Instance.CurOptGroupViewModel;
+                return c;
             }
-            return AvailableTemplates[key].Build(param);
+            return null;
         }
 
         public bool Match(object data) {

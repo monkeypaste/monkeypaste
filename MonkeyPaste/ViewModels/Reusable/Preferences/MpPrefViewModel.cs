@@ -334,6 +334,7 @@ namespace MonkeyPaste {
 
         [JsonConverter(typeof(StringEnumConverter))]
         public MpShortcutRoutingProfileType InitialStartupRoutingProfileType { get; set; } = MpShortcutRoutingProfileType.Internal;
+
         #endregion
 
         #region Account

@@ -362,6 +362,7 @@
     <None Remove="Assets\Images\lines_x2_horiz_vert_arrows.png" />
     <None Remove="Assets\Images\lines_x3_horiz.png" />
     <None Remove="Assets\Images\lock.png" />
+    <None Remove="Assets\Images\login.png" />
     <None Remove="Assets\Images\merge.png" />
     <None Remove="Assets\Images\minus.png" />
     <None Remove="Assets\Images\minus2.png" />
@@ -383,6 +384,7 @@
     <None Remove="Assets\Images\plaintext.png" />
     <None Remove="Assets\Images\play.png" />
     <None Remove="Assets\Images\Preferences.png" />
+    <None Remove="Assets\Images\private.png" />
     <None Remove="Assets\Images\qr.png" />
     <None Remove="Assets\Images\question.png" />
     <None Remove="Assets\Images\questionmark.png" />
@@ -429,6 +431,7 @@
     <None Remove="Assets\Images\translate.png" />
     <None Remove="Assets\Images\transparent.png" />
     <None Remove="Assets\Images\trashcan.png" />
+    <None Remove="Assets\Images\trophy.png" />
     <None Remove="Assets\Images\tshadowdown.png" />
     <None Remove="Assets\Images\tshadowdownleft.png" />
     <None Remove="Assets\Images\tshadowdownright.png" />
@@ -569,6 +572,9 @@
     <AvaloniaResource Include="Assets\Images\infobw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\login.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\missingfile.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -585,6 +591,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\plaintext.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\private.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\resize_backup2\doubleSidedArrow.png">
@@ -1081,6 +1090,9 @@
     <AvaloniaResource Include="Assets\Images\trashcan.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\trophy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\tshadowdown.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1374,6 +1386,9 @@
     <Compile Update="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationWindow.axaml.cs">
       <DependentUpon>MpAvUserActionNotificationWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Reusable\Notifications\Welcome\Pages\MpAvWelcomeOptionsView.axaml.cs">
+      <DependentUpon>MpAvWelcomeOptionsView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutView.axaml.cs">
       <DependentUpon>MpAvAssignShortcutView.axaml</DependentUpon>
     </Compile>
@@ -1419,8 +1434,8 @@
     <Compile Update="Views\SettingsWindow\Tabs\Shortcuts\ShortcutDataGrid\MpAvShortcutDataGridView.axaml.cs">
       <DependentUpon>MpAvShortcutDataGridView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\Notifications\Welcome\MpAvWelcomeView.axaml.cs">
-      <DependentUpon>MpAvWelcomeView.axaml</DependentUpon>
+    <Compile Update="Views\Reusable\Notifications\Welcome\MpAvWelcomeWindow.axaml.cs">
+      <DependentUpon>MpAvWelcomeWindow.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
   

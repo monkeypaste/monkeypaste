@@ -34,6 +34,8 @@ namespace MonkeyPaste {
         public object OtherArgs { get; set; } // used to pass MpIloader to loader notification
 
         public bool ForceShow { get; set; }
+
+        public char PasswordChar { get; set; }
         //public MpTextContentFormat BodyFormat { get; set; } = MpTextContentFormat.PlainText;
 
         #endregion

@@ -4,7 +4,7 @@
         string DbFileName { get; }
         string DbDir { get; }
         string DbPath { get; }
-        string DbPassword { get; }
+        string DbPassword { get; set; }
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using MonkeyPaste.Common;
+using System.Collections.ObjectModel;
 
 namespace MonkeyPaste.Avalonia {
 

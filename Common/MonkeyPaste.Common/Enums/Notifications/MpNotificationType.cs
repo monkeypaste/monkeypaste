@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste {
+﻿namespace MonkeyPaste.Common {
     public enum MpNotificationType {
         None = 0,
         // Loader
@@ -35,6 +35,7 @@
         InvalidRequest,
         InvalidResponse,
         ExecuteParametersRequest,
+        DbPasswordInput,
 
         // User Action (Modal) 
 

@@ -380,6 +380,30 @@ namespace MonkeyPaste {
 
             await CreateConnectionAsync(dbPath);
 
+            bool success = await TestDbConnectionAsync();
+            if (!success) {
+                int curAttemptNum = 0;
+                int maxAttempts = 3;
+                while (curAttemptNum < maxAttempts) {
+                    dbInfo.DbPassword = await GetDbPasswordAsync(curAttemptNum, maxAttempts);
+                    if (dbInfo.DbPassword == null) {
+                        // user canceled
+                        Mp.Services.ShutdownHelper.ShutdownApp("canceled db password");
+                        return false;
+                    }
+                    await _connectionAsync.CloseAsync();
+                    _connectionAsync = null;
+                    await CreateConnectionAsync(dbPath);
+                    success = await TestDbConnectionAsync();
+                    if (success) {
+                        break;
+                    }
+                    // wait for pw box to hide (so new one doesn't reposition)
+                    await Task.Delay(3000);
+                    curAttemptNum++;
+                }
+            }
+
             MpConsole.WriteLine($"Db {(isNewDb ? "CREATED" : "CONNECTED")} at '{dbPath}'");
 #if DEBUG
             MpConsole.WriteLine($"Db Password: '{dbPass}'");
@@ -422,6 +446,20 @@ namespace MonkeyPaste {
                 return null;
             }
             return connStr;
+        }
+
+        private static async Task<bool> TestDbConnectionAsync() {
+            if (_connectionAsync == null) {
+                return false;
+            }
+            try {
+                await _connectionAsync.CreateTableAsync<MpTag>();
+                return true;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"DB connect test failed (couldn't create tag table).", ex);
+                return false;
+            }
         }
         private static async Task CreateConnectionAsync(
             string dbPath = "",
@@ -990,6 +1028,19 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             }
         }
 
+        private static async Task<string> GetDbPasswordAsync(int attemptNum, int maxAttempts) {
+            if (attemptNum >= maxAttempts) {
+                return null;
+            }
+            int remaining = maxAttempts - attemptNum;
+            string result = await Mp.Services.PlatformMessageBox.ShowTextBoxMessageBoxAsync(
+                title: $"Enter Password",
+                passwordChar: '●',
+                message: $"{remaining} attempt{(remaining == 0 ? string.Empty : "s")} remaining",
+                iconResourceObj: "LockImage",
+                ntfType: MpNotificationType.DbPasswordInput);
+            return result;
+        }
         #endregion
 
         #region Sync Data

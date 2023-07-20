@@ -22,9 +22,22 @@ namespace MonkeyPaste.Avalonia {
         public string DbPath =>
             Path.Combine(DbDir, DbFileName);
 
-        public string DbPassword =>
-            MpPrefViewModel.Instance == null ?
-                null :
-                MpPrefViewModel.Instance.DbCreateDateTime.ToString();
+        private string _dbPassword;
+        public string DbPassword {
+            get {
+                if (string.IsNullOrEmpty(_dbPassword)) {
+                    return MpPrefViewModel.Instance == null ?
+                            null :
+                            MpPrefViewModel.Instance.DbCreateDateTime.ToString();
+                }
+                return _dbPassword;
+            }
+            set {
+                if (_dbPassword != value) {
+                    _dbPassword = value;
+                }
+            }
+        }
+
     }
 }

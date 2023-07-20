@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste {
+﻿namespace MonkeyPaste.Common {
     public enum MpNotificationLayoutType {
         Welcome,
         Loader,

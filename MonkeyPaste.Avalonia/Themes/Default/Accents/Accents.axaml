@@ -69,6 +69,22 @@
         <Color x:Key="ThemeGrayAccent3">Gainsboro</Color>
 
         <!--  FLUENT OVERRIDES  -->
+        <SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForeground" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBorderBrush" Color="{DynamicResource ThemeGrayAccent2}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
+        <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{DynamicResource ThemeGrayAccent2}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+
         <SolidColorBrush x:Key="ComboBoxForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="ComboBoxBackground" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />

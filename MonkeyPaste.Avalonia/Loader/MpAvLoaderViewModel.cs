@@ -118,6 +118,7 @@ namespace MonkeyPaste.Avalonia {
             _sw = Stopwatch.StartNew();
 
             await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification();
+
             CreateLoaderItems();
 
             // init cefnet (if needed) BEFORE window creation
