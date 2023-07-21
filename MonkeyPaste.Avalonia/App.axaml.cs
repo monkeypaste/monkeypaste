@@ -76,6 +76,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        bool MpIShutdownTools.WasShutdownSignaled =>
+            _isShuttingDown;
         #endregion
         #endregion
 

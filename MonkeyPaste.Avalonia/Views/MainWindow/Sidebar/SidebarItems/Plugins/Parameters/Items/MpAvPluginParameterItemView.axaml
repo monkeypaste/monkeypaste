@@ -89,6 +89,7 @@
             <ContentControl x:Name="ParameterContentControl"
                             Grid.Column="2"
                             Margin="1"
+                            IsEnabled="{Binding IsEnabled}"
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Stretch"
                             Content="{Binding}">

@@ -27,5 +27,7 @@ namespace MonkeyPaste {
         int GetTrashCapacity(MpUserAccountType acctType);
         MpUserAccountType CurrentAccountType { get; }
         void SetAccountType(MpUserAccountType newType);
+
+        string AccountStateInfo { get; }
     }
 }

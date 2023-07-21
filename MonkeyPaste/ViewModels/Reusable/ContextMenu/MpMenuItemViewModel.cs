@@ -122,6 +122,10 @@ namespace MonkeyPaste {
 
         public IList<MpMenuItemViewModel> SubItems { get; set; }
 
+        public IEnumerable<MpMenuItemViewModel> AllDescendants =>
+            GetAllDescendants(false);
+        public IEnumerable<MpMenuItemViewModel> SelfAndAllDescendants =>
+            GetAllDescendants(true);
         #endregion
 
         #region Data Template Helpers
@@ -269,6 +273,12 @@ namespace MonkeyPaste {
 
         public object CheckedResourceSrcObj { get; set; }
         public string CheckedResourcePropPath { get; set; }
+
+        public object IsEnabledSrcObj { get; set; }
+        public string IsEnabledPropPath { get; set; }
+
+        public object InputGestureSrcObj { get; set; }
+        public string InputGesturePropPath { get; set; }
         #endregion
 
         #region Commands
@@ -311,7 +321,8 @@ namespace MonkeyPaste {
 
         public string InputGestureText {
             get {
-                if (!Mp.Services.PlatformInfo.IsDesktop) {
+                if (!Mp.Services.PlatformInfo.IsDesktop ||
+                    Mp.Services.ShortcutGestureLocator == null) {
                     return null;
                 }
                 //if (MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {
@@ -474,6 +485,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
+
         public static MpMenuItemViewModel GetColorPalleteMenuItemViewModel2(MpIColorPalettePickerViewModel ucvm, bool has_leading_sep = false) {
             bool isAnySelected = false;
             var colors = new List<MpMenuItemViewModel>();
@@ -583,6 +595,18 @@ namespace MonkeyPaste {
 
         #region Private Methods
 
+        private IEnumerable<MpMenuItemViewModel> GetAllDescendants(bool includeSelf) {
+            var mivml = new List<MpMenuItemViewModel>();
+            if (includeSelf) {
+                mivml.Add(this);
+            }
+            if (SubItems != null) {
+                SubItems
+                    .Where(x => !x.IsSeparator)
+                    .ForEach(x => mivml.AddRange(x.GetAllDescendants(true)));
+            }
+            return mivml;
+        }
         #endregion
 
         #region Commands

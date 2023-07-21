@@ -11,5 +11,6 @@ namespace MonkeyPaste {
     public interface MpIShortcutGestureLocator {
         string LocateByType(MpShortcutType sct);
         string LocateByCommand(MpIShortcutCommandViewModel scvm);
+        object LocateSourceByType(MpShortcutType sct);
     }
 }

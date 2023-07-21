@@ -8,8 +8,8 @@ namespace MonkeyPaste {
     public enum MpUserAccountType {
         None = 0,
         Free,
-        Basic,
-        Premium,
+        Standard,
+        Unlimited,
         Trial,
         Admin
     }

@@ -78,9 +78,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public string DbPassword1 { get; set; }
-        public string DbPassword2 { get; set; }
-        public bool IsDbPasswordValid { get; private set; }
+        public bool IsDbPasswordValid { get; set; } = true;
 
         public bool IsWelcomeDone { get; set; } = false;
         public override bool IsShowOnceNotification =>
@@ -103,6 +101,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string DbPassword { get; set; }
         public string WelcomeTitle =>
             CurPageType.ToString();
 
@@ -133,11 +132,11 @@ namespace MonkeyPaste.Avalonia {
                         IconSourceObj = "StarOutlineImage",
                         LabelText = "Free"
                     },
-                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Basic) {
+                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Standard) {
                         IconSourceObj = "StarYellowImage",
                         LabelText = "Standard"
                     },
-                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Premium) {
+                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Unlimited) {
                         IsChecked = true,
                         IconSourceObj = "TrophyImage",
                         LabelText = "Unlimited"
@@ -246,8 +245,8 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.AccountTools.SetAccountType(acct_type);
 
             // DB PASSWORD
-            if (!string.IsNullOrEmpty(DbPassword1)) {
-                Mp.Services.DbInfo.DbPassword = DbPassword1;
+            if (!string.IsNullOrEmpty(DbPassword)) {
+                Mp.Services.DbInfo.DbPassword = DbPassword;
             }
         }
         #endregion
@@ -255,6 +254,7 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand SelectNextPageCommand => new MpAsyncCommand(
             async () => {
+                await Task.Delay(1);
                 if (CurPageType == MpWelcomePageType.Account) {
                     var test = Mp.Services.AccountTools;
                     var sel_acct_vm = AccountViewModel.Items.FirstOrDefault(x => x.IsChecked);
@@ -287,7 +287,6 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 FinishWelcomeSetup();
             }, () => {
-                IsDbPasswordValid = DbPassword1 == DbPassword2;
                 if (!IsDbPasswordValid) {
                     return false;
                 }

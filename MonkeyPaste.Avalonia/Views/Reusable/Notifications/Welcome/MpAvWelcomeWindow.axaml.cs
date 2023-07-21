@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvWelcomeView_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
             _downPos = null;
             if (e.Source is Control sc &&
-                sc.GetSelfAndVisualAncestors().Any(x => x is Button)) {
+                sc.GetSelfAndVisualAncestors().Any(x => IsWindowMoveRejected(x))) {
                 return;
             }
             _initialWindowPos = this.Position;
@@ -55,6 +55,10 @@ namespace MonkeyPaste.Avalonia {
             _downPos = null;
             e.Pointer.Capture(null);
             this.Cursor = new Cursor(StandardCursorType.Arrow);
+        }
+
+        private bool IsWindowMoveRejected(Visual v) {
+            return v is Button || v is TextBox;
         }
     }
 

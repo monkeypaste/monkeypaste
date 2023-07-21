@@ -16,13 +16,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string Title =>
-            ParameterFormat == null ||
-            ParameterFormat.values == null ||
-            ParameterFormat.values.Count == 0 ||
-            string.IsNullOrEmpty(ParameterFormat.values[0].label) ?
-                ParameterFormat.label :
-                ParameterFormat.values[0].label;
+        private string _title;
+        public string Title {
+            get {
+                return _title != null ?
+                        _title :
+                        ParameterFormat == null ||
+                        ParameterFormat.values == null ||
+                        ParameterFormat.values.Count == 0 ||
+                        string.IsNullOrEmpty(ParameterFormat.values[0].label) ?
+                            ParameterFormat.label :
+                            ParameterFormat.values[0].label;
+            }
+            set {
+                if (_title != value) {
+                    _title = value;
+                    OnPropertyChanged(nameof(Title));
+                }
+            }
+        }
 
         #endregion
         #region Model

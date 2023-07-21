@@ -64,6 +64,8 @@ namespace MonkeyPaste.Avalonia {
                         return "JoystickImage";
                     case MpSettingsFrameType.System:
                         return "AppShellImage";
+                    case MpSettingsFrameType.Password:
+                        return "LockImage";
                     default:
                         return string.Empty;
                 }
@@ -98,7 +100,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region MpIFilterMatch Implementation
 
         bool MpIFilterMatch.IsFilterMatch(string filter) {
@@ -120,7 +121,6 @@ namespace MonkeyPaste.Avalonia {
                 PluginFormat.headless;
 
         #endregion
-
 
         #region MpAvIParameterCollectionViewModel Implementation
         IEnumerable<MpAvParameterViewModelBase> MpAvIParameterCollectionViewModel.Items =>

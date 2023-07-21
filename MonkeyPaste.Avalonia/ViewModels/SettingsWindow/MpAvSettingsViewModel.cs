@@ -789,6 +789,18 @@ namespace MonkeyPaste.Avalonia {
                                                     value = MpPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste.ToString()
                                                 }
                                             }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpPrefViewModel.Instance.ShowContentTitles),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Show Titles",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpPrefViewModel.Instance.ShowContentTitles.ToString()
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -845,6 +857,38 @@ namespace MonkeyPaste.Avalonia {
                                                     label = x.ToLabel()
                                                 }).ToList()
                                         }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Password) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ChangeDbPassword.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = "Change Password",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    label = "Change",
+                                                    value = MpRuntimePrefParamType.ChangeDbPassword.ToString()
+                                                }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ClearDbPassword.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = "Clear Password",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    label = "Clear",
+                                                    value = MpRuntimePrefParamType.ClearDbPassword.ToString()
+                                                }
+                                            }
+                                        },
                                     }
                                 }
                             }
@@ -971,7 +1015,6 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Width = 1000,
                 Height = 500,
-                Topmost = true,
                 Title = "Settings".ToWindowTitleText(),
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -986,7 +1029,8 @@ namespace MonkeyPaste.Avalonia {
                 AttachThemeButtonColorUpdate();
                 AttachRoutingProfileSelectionChange();
                 AttachAccountTypeSelectionChange();
-                sw.Topmost = true;
+                SetupPasswordButtons();
+                sw.Activate();
             }
             void Sw_Closed(object sender, EventArgs e) {
                 sw.Opened -= Sw_Opened;
@@ -1035,6 +1079,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(MpPrefViewModel.Instance.MaxUndoLimit):
                     MpAvUndoManagerViewModel.Instance.MaximumUndoLimit = MpPrefViewModel.Instance.MaxUndoLimit;
+                    break;
+                case nameof(MpPrefViewModel.Instance.ShowContentTitles):
+                    MpAvClipTrayViewModel.Instance.AllItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsTitleVisible)));
                     break;
                 case nameof(MpPrefViewModel.Instance.NotificationSoundVolume):
                     if (MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown) {
@@ -1181,14 +1228,25 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        #region Clear Password
+
+        private void SetupPasswordButtons() {
+            Dispatcher.UIThread.VerifyAccess();
+            var clear_pwd_param_tuple = GetParamAndFrameByParamId(MpRuntimePrefParamType.ClearDbPassword.ToString());
+            clear_pwd_param_tuple.Item2.IsEnabled = Mp.Services.DbInfo.HasUserDefinedPassword;
+
+            var change_pwd_param_tuple = GetParamAndFrameByParamId(MpRuntimePrefParamType.ChangeDbPassword.ToString());
+            if (change_pwd_param_tuple.Item2 is MpAvButtonParameterViewModel bpvm) {
+                bpvm.Title =
+                    Mp.Services.DbInfo.HasUserDefinedPassword ? "Change" : "Set";
+            }
+        }
+        #endregion
+
         private void ProcessListenOnStartupChanged() {
-            Dispatcher.UIThread.Post(async () => {
-                var add_startup_item_cb = await GetParameterControlByParamIdAsync<CheckBox>(nameof(MpPrefViewModel.Instance.AddClipboardOnStartup));
-                if (add_startup_item_cb == null) {
-                    return;
-                }
-                add_startup_item_cb.IsEnabled = MpPrefViewModel.Instance.IsClipboardListeningOnStartup;
-            });
+            Dispatcher.UIThread.VerifyAccess();
+            var add_startup_param_tupe = GetParamAndFrameByParamId(nameof(MpPrefViewModel.Instance.AddClipboardOnStartup));
+            add_startup_param_tupe.Item2.IsEnabled = MpPrefViewModel.Instance.IsClipboardListeningOnStartup;
         }
 
         #region Font Helpers
@@ -1248,7 +1306,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Param Locators
-        private async Task<T> GetParameterControlByParamIdAsync<T>(string paramId) where T : Visual {
+        private async Task<T> GetParameterControlByParamIdAsync<T>(string paramId) where T : Control {
             if (!IsWindowOpen) {
                 return null;
             }
@@ -1283,6 +1341,7 @@ namespace MonkeyPaste.Avalonia {
                         is MpAvSettingsFrameViewModel frame_vm &&
                         frame_vm.Items.FirstOrDefault(x => x.ParamId.ToString().ToLower() == paramId.ToLower())
                         is MpAvParameterViewModelBase param_vm) {
+                MpDebug.Assert(param_vm.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower(), $"param assert failed '{paramId}'");
                 return new Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase>(frame_vm, param_vm);
             }
             return null;
@@ -1406,6 +1465,51 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 switch (cmdType) {
+                    case MpRuntimePrefParamType.ChangeDbPassword: {
+                            var cpw = new MpAvWindow() {
+                                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                                SizeToContent = SizeToContent.Height,
+                                Width = 325,
+                                Topmost = true,
+                                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment1DarkColor.ToString()),
+                                CanResize = false,
+                                Title = "Set Password".ToWindowTitleText(),
+                                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LockImage", typeof(WindowIcon), null, null) as WindowIcon,
+                                Content = new MpAvSetPasswordView() {
+                                    ShowDialogButtons = true
+                                }
+                            };
+
+                            var result = await cpw.ShowChildDialogWithResultAsync(MpAvWindowManager.LocateWindow(this));
+                            if (result is not string new_pwd || new_pwd == null) {
+                                // user cancel or closed window
+                                break;
+                            }
+
+                            var success = await MpDb.ChangeDbPasswordAsync(new_pwd);
+                            SetupPasswordButtons();
+
+                            if (!success) {
+                                Mp.Services.NotificationBuilder.ShowMessageAsync(
+                                title: $"Error",
+                                body: "Password change failed",
+                                iconSourceObj: "WarningImage").FireAndForgetSafeAsync(this);
+                            }
+
+                            break;
+                        }
+                    case MpRuntimePrefParamType.ClearDbPassword: {
+                            var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+                                title: "Confirm",
+                                message: "Are you sure you want to reset your password?",
+                                iconResourceObj: "QuestionMarkImage");
+                            if (!result) {
+                                return;
+                            }
+                            await MpDb.ChangeDbPasswordAsync(null);
+                            SetupPasswordButtons();
+                            break;
+                        }
                     case MpRuntimePrefParamType.ResetNtf: {
                             var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: "Confirm",

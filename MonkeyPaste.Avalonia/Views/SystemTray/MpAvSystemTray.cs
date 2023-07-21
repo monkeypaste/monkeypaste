@@ -29,9 +29,16 @@ namespace MonkeyPaste.Avalonia {
 
         private static TrayIcon CreateTrayIcon() {
             MpMenuItemViewModel tmivm = MpAvSystemTrayViewModel.Instance.TrayMenuItemViewModel;
-            var rootIcon = new TrayIcon() {
-                //Menu = new NativeMenu()
-            };
+            var rootIcon = new TrayIcon();
+
+            // IS ENABLED
+
+            rootIcon.Bind(
+                    NativeMenuItem.IsEnabledProperty,
+                    new Binding() {
+                        Source = MpAvSystemTrayViewModel.Instance,
+                        Path = nameof(MpAvSystemTrayViewModel.Instance.IsSystemTrayItemsEnabled)
+                    });
 
             // TOOLTIP
 
@@ -121,12 +128,18 @@ namespace MonkeyPaste.Avalonia {
                 iconSourcBindingObj: mivm.IconSrcBindingObj,
                 iconSrcPath: mivm.IconPropPath,
 
+                isEnabled: mivm.IsEnabled,
+                isEnabledBindingObj: mivm.IsEnabledSrcObj,
+                isEnabledSrcPath: mivm.IsEnabledPropPath,
+
                 isChecked: mivm.IsChecked,
                 isCheckedSrcObj: mivm.IsCheckedSrcObj,
                 isCheckedPropPath: mivm.IsCheckedPropPath,
                 toggleType: mivm.ToggleType.ToEnum<NativeMenuItemToggleType>(),
 
                 keyGestureStr: mivm.InputGestureText,
+                keyGestureSrcObj: mivm.InputGestureSrcObj,
+                keyGesturePropPath: mivm.InputGesturePropPath,
 
                 children: mivm.SubItems == null ? null : mivm.SubItems.Select(x => CreateMenuItem(x)));
             return nmi;
@@ -149,15 +162,34 @@ namespace MonkeyPaste.Avalonia {
             object iconSourcBindingObj = null,
             string iconSrcPath = "",
 
+            bool isEnabled = true,
+            object isEnabledBindingObj = null,
+            string isEnabledSrcPath = default,
+
             bool? isChecked = null,
             object isCheckedSrcObj = null,
             string isCheckedPropPath = "",
             NativeMenuItemToggleType toggleType = NativeMenuItemToggleType.None,
 
             string keyGestureStr = "",
+            object keyGestureSrcObj = null,
+            string keyGesturePropPath = "",
 
             IEnumerable<NativeMenuItem> children = null) {
             var nmi = new NativeMenuItem();
+            // IS ENABLED
+
+            if (isEnabledBindingObj != null) {
+                nmi.Bind(
+                    NativeMenuItem.IsEnabledProperty,
+                    new Binding() {
+                        Source = isEnabledBindingObj,
+                        Path = isEnabledSrcPath
+                    });
+            } else {
+                nmi.IsEnabled = isEnabled;
+            }
+
             // HEADER
 
             if (headerSrcObj != null) {
@@ -227,12 +259,24 @@ namespace MonkeyPaste.Avalonia {
             nmi.ToggleType = toggleType;
 
             // KEY GESTURE
-            KeyGesture inputGesture = null;
-            if (!string.IsNullOrEmpty(keyGestureStr) &&
+            if (keyGestureSrcObj != null) {
+                nmi.Bind(
+                    NativeMenuItem.GestureProperty,
+                    new Binding() {
+                        Source = keyGestureSrcObj,
+                        Path = keyGesturePropPath,
+                        Converter = MpAvKeyStringToKeyGestureConverter.Instance
+                    });
+            } else {
+                KeyGesture inputGesture = null;
+                nmi.IsChecked = isChecked.Value;
+                if (!string.IsNullOrEmpty(keyGestureStr) &&
                 !keyGestureStr.Contains(MpInputConstants.SEQUENCE_SEPARATOR)) {
-                inputGesture = KeyGesture.Parse(keyGestureStr);
+                    inputGesture = MpAvKeyStringToKeyGestureConverter.Instance.Convert(keyGestureStr, null, null, null) as KeyGesture;
+                }
+                nmi.Gesture = inputGesture;
             }
-            nmi.Gesture = inputGesture;
+
 
             // SUB ITEMS
 

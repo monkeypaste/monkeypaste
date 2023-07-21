@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         private static Dictionary<Window, IEnumerable<IDisposable>> _dispLookup = new Dictionary<Window, IEnumerable<IDisposable>>();
         private static Dictionary<Window, WindowState> _restoreStateLookup = new Dictionary<Window, WindowState>();
+        private static List<MpAvWindow> _waitingToClose = new List<MpAvWindow>();
         #endregion
 
         #region Properties
@@ -158,75 +159,89 @@ namespace MonkeyPaste.Avalonia {
                     ShowWhileAnimatingAsync(w).FireAndForgetSafeAsync();
                 } else {
                     UpdateTopmost();
+                    StartChildLifecycleChangeDelay(w);
                 }
             }
         }
         private static void Window_Opened(object sender, System.EventArgs e) {
-            if (sender is MpAvWindow w) {
-                w.OpenDateTime = DateTime.Now;
-                //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
-
-                if (w.DataContext is MpICloseWindowViewModel cwvm) {
-                    cwvm.IsWindowOpen = true;
-                }
-                UpdateTopmost();
-                //w.Activate();
-                //w.Focus();
-
+            if (sender is not MpAvWindow w) {
+                return;
             }
+            // close any waiting windows (startup bug)
+            _waitingToClose.ForEach(x => x.Close());
+            w.OpenDateTime = DateTime.Now;
+            //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
+
+            if (w.DataContext is MpICloseWindowViewModel cwvm) {
+                cwvm.IsWindowOpen = true;
+            }
+            UpdateTopmost();
+            //w.Activate();
+            //w.Focus();
         }
 
         private static void Nw_Closing(object sender, WindowClosingEventArgs e) {
-            if (sender is Window w) {
-                if (w.DataContext is MpIWindowHandlesClosingViewModel whcvm &&
+            if (sender is not MpAvWindow w) {
+                return;
+            }
+            if (w.DataContext is MpIWindowHandlesClosingViewModel whcvm &&
                     whcvm.IsWindowCloseHandled) {
-                    // without this check closing evt is called twice in impl 
-                    // handler from extra w.Close below
+                // without this check closing evt is called twice in impl 
+                // handler from extra w.Close below
+                return;
+            }
+
+            if (w != MainWindow) {
+                if (AllWindows.Count <= 1 && !_waitingToClose.Contains(w)) {
+                    // occurs in startup if loader was previously set to always hide and password attempt fails
+                    // when pwd window closes theres no main window so app closes
+                    // need to hide window and store ref and wait for new window before closing
+                    e.Cancel = true;
+                    w.Hide();
+                    _waitingToClose.Add(w);
                     return;
                 }
-
-                if (w != MainWindow) {
-                    if (!MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked) {
-                        MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
-                        e.Cancel = true;
-                        object dresult = null;
-                        if (w is MpAvWindow avw) {
-                            dresult = avw.DialogResult;
-                        }
-                        w.Close(dresult);
-                        return;
+                if (!MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked) {
+                    MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+                    e.Cancel = true;
+                    object dresult = null;
+                    if (w is MpAvWindow avw) {
+                        dresult = avw.DialogResult;
                     }
+                    w.Close(dresult);
+                    return;
                 }
+            }
 
-                // workaround for https://github.com/AvaloniaUI/Avalonia/pull/10951
-                w.GetVisualDescendants()
-                    .Where(x => x is MpIOverrideRender)
-                    .Cast<MpIOverrideRender>()
-                    .ForEach(x => x.IgnoreRender = true);
+            // workaround for https://github.com/AvaloniaUI/Avalonia/pull/10951
+            w.GetVisualDescendants()
+                .Where(x => x is MpIOverrideRender)
+                .Cast<MpIOverrideRender>()
+                .ForEach(x => x.IgnoreRender = true);
 
-                if (w.DataContext is MpIDisposableObject disp_obj) {
+            if (w.DataContext is MpIDisposableObject disp_obj) {
 
-                    // NOTE used to dispose webview and cancel js
-                    //disp_obj.Dispose();
-                    //w.DataContext = null;
-                }
-                if (w.GetVisualDescendants<Control>().Where(x => x is IDisposable).Cast<IDisposable>() is IEnumerable<IDisposable> disp_controls) {
-                    disp_controls.ForEach(x => x.Dispose());
-                }
-
+                // NOTE used to dispose webview and cancel js
+                //disp_obj.Dispose();
+                //w.DataContext = null;
+            }
+            if (w.GetVisualDescendants<Control>().Where(x => x is IDisposable).Cast<IDisposable>() is IEnumerable<IDisposable> disp_controls) {
+                disp_controls.ForEach(x => x.Dispose());
             }
         }
 
         private static void Nw_Closed(object sender, System.EventArgs e) {
-            if (sender is Window w) {
-                if (w.DataContext is MpIActiveWindowViewModel awvm) {
-                    awvm.IsWindowActive = false;
-                }
-                if (w.DataContext is MpICloseWindowViewModel cwvm) {
-                    cwvm.IsWindowOpen = false;
-                }
-                StartChildLifecycleChangeDelay(w);
+            if (sender is not MpAvWindow w) {
+                return;
             }
+            if (w.DataContext is MpIActiveWindowViewModel awvm) {
+                awvm.IsWindowActive = false;
+            }
+            if (w.DataContext is MpICloseWindowViewModel cwvm) {
+                cwvm.IsWindowOpen = false;
+            }
+            UpdateTopmost();
+            StartChildLifecycleChangeDelay(w);
         }
 
         #region Helpers
@@ -320,12 +335,19 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 // NOTE only update unowned windows because modal ntf
-                var priority_ordered_topmost_wl = AllWindows
-                    .Where(x => x.Owner == null && x.WantsTopmost)
-                    .OrderByDescending(x => (int)(x.DataContext as MpIWindowViewModel).WindowType);
 
+                // get non-minimzed windows wanting topmost ordered by least priority
+                var priority_ordered_topmost_wl = AllWindows
+                    .Where(x => x.Owner == null && x.WantsTopmost && x.WindowState != WindowState.Minimized)
+                    .OrderBy(x => (int)x.BindingContext.WindowType);
+
+                // activate windows wanting top most for lowest to highest priority
                 priority_ordered_topmost_wl
-                    .ForEach((x, idx) => x.Topmost = idx == 0);
+                    .ForEach(x => x.Topmost = true);
+
+
+                //priority_ordered_topmost_wl
+                //    .ForEach((x, idx) => x.Topmost = idx == 0);
             });
         }
 

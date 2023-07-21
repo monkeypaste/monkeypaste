@@ -75,6 +75,13 @@ namespace MonkeyPaste.Avalonia {
         string MpIShortcutGestureLocator.LocateByCommand(MpIShortcutCommandViewModel scvm) =>
 
             GetViewModelCommandShortcutKeyString(scvm);
+
+        object MpIShortcutGestureLocator.LocateSourceByType(MpShortcutType sct) {
+            if (Items.FirstOrDefault(x => x.ShortcutType == sct) is MpAvShortcutViewModel scvm) {
+                return scvm;
+            }
+            return null;
+        }
         #endregion
 
         #region MpIGlobalInputListener
@@ -673,6 +680,8 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
+            // signal keystring change for sys tray shortcuts
+            Items.ForEach(x => x.OnPropertyChanged(nameof(x.KeyString)));
             UpdateEditorShortcutsMessageStr();
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {

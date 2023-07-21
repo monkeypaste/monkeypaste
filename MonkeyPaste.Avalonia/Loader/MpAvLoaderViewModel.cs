@@ -77,6 +77,7 @@ namespace MonkeyPaste.Avalonia {
 
         public int LoadedCount { get; set; } = 0;
 
+
         #endregion
         #endregion
 

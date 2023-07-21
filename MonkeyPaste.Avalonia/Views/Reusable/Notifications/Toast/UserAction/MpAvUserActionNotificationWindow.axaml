@@ -219,6 +219,7 @@
                         HorizontalAlignment="Center">
                 <!--  Upgrade, LearnMore  -->
                 <Button Padding="0"
+                        IsDefault="True"
                         IsVisible="{Binding ShowUpgradeButton}"
                         Command="{Binding UpgradeCommand}">
                     <Border Background="Green"
@@ -270,15 +271,18 @@
                         Command="{Binding ShutdownCommand}" />
                 <!--  Yes, No, Cancel or Ok, Cancel States  -->
                 <Button Content="Yes"
+                        IsDefault="{Binding ShowYesButton}"
                         Command="{Binding YesCommand}"
                         IsVisible="{Binding ShowYesButton}" />
                 <Button Content="No"
                         Command="{Binding NoCommand}"
                         IsVisible="{Binding ShowNoButton}" />
                 <Button Content="Ok"
+                        IsDefault="{Binding ShowOkButton}"
                         Command="{Binding OkCommand}"
                         IsVisible="{Binding ShowOkButton}" />
                 <Button Content="Submit"
+                        IsDefault="{Binding ShowSubmitButton}"
                         Command="{Binding SubmitCommand}"
                         IsVisible="{Binding ShowSubmitButton}" />
                 <Button Content="Cancel"

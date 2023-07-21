@@ -9,7 +9,6 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         Control ITemplate<object, Control>.Build(object param) {
-            string key = "OptionsTemplate";
             if (param is int wptIdx && ((MpWelcomePageType)wptIdx) is MpWelcomePageType wpt &&
                 wpt == MpWelcomePageType.DbPassword) {
                 if (AvailableTemplates["DbPasswordTemplate"].Build(param) is Control pc) {

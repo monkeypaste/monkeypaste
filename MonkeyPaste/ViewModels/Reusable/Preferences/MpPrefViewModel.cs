@@ -220,24 +220,6 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region Experience
-
-        public int ShowMainWindowMouseHitZoneHeight {
-            get {
-                return 5;
-            }
-        }
-
-        public string DefaultCultureInfoName {
-            get {
-                return @"en-US";
-            }
-        }
-
-        public string ApplicationName =>
-            "MonkeyPaste";
-        #endregion
-
         #region REST
 
         public string CurrencyConverterFreeApiKey {
@@ -323,15 +305,6 @@ namespace MonkeyPaste {
 
         #region Welcome Properties
 
-        // NOTE this intended for reset shortcuts/all and will be set during installer
-        //public string ShortcutProfileTypeName { get; set; } = MpShortcutRoutingProfileType.Internal.ToString();
-        //[JsonIgnore]
-        //public MpShortcutRoutingProfileType ShortcutProfileType =>
-        //    ShortcutProfileTypeName.ToEnum<MpShortcutRoutingProfileType>();
-
-        //[JsonConverter(typeof(StringEnumConverter))]
-        //public MpShortcutRoutingProfileType ShortcutProfileType { get; set; }
-
         [JsonConverter(typeof(StringEnumConverter))]
         public MpShortcutRoutingProfileType InitialStartupRoutingProfileType { get; set; } = MpShortcutRoutingProfileType.Internal;
 
@@ -347,6 +320,7 @@ namespace MonkeyPaste {
 
         #region Look & Feel
 
+        public bool ShowContentTitles { get; set; } = true;
         public string ThemeTypeName { get; set; } = MpThemeType.Dark.ToString();
         public string ThemeColor { get; set; } = MpSystemColors.purple;
         public int NotificationSoundGroupIdx { get; set; } = (int)MpSoundGroupType.Minimal;

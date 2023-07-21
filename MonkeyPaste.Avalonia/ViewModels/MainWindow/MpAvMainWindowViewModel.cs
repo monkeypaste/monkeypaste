@@ -40,6 +40,7 @@ namespace MonkeyPaste.Avalonia {
         private DispatcherTimer _animationTimer;
 
         private const int _ANIMATE_WINDOW_TIMEOUT_MS = 2000;
+        private const int SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT = 5;
         #endregion
 
         #region Statics
@@ -64,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
             AnimateShowWindow;
         bool MpIIsAnimatedWindowViewModel.IsAnimating { get; set; }
         bool MpIIsAnimatedWindowViewModel.IsComplete =>
-            !IsMainWindowAnimating();//!IsMainWindowClosing && !IsMainWindowOpen;
+            !IsMainWindowAnimating();
 
 
         #endregion
@@ -964,7 +965,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (!IsMainWindowOpening && is_core_loaded) {
                     if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
-                             MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+                             MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y <= SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT) {
                         // show mw on top edge scroll flick
                         ShowMainWindowCommand.Execute(null);
                     }
@@ -1017,7 +1018,7 @@ namespace MonkeyPaste.Avalonia {
                     MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
                     if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation != null &&
                         gmp.Distance(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation) >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST &&
-                        gmp.Y <= MpPrefViewModel.Instance.ShowMainWindowMouseHitZoneHeight) {
+                        gmp.Y <= SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT) {
                         // show mw during dnd and user drags to top of screen (when pref set)
                         ShowMainWindowCommand.Execute(null);
                     }

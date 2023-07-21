@@ -20,6 +20,9 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvAccountTools : MpIAccountTools {
         #region Private Variables
         private MpContentCapInfo _lastCapInfo = new();
+        private int _lastContentCount = 0;
+        private int _lastTrashCount = 0;
+
         #endregion
 
         #region Constants
@@ -31,6 +34,14 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIAccountTools Implementation
+        public string AccountStateInfo {
+            get {
+                if (CurrentAccountType == MpUserAccountType.Unlimited) {
+                    return $"{CurrentAccountType}-(Total {_lastContentCount})";
+                }
+                return $"{CurrentAccountType} - ({_lastContentCount} total / {GetContentCapacity(CurrentAccountType)} capacity {(GetContentCapacity(CurrentAccountType) - _lastContentCount)} remaining)";
+            }
+        }
         public void SetAccountType(MpUserAccountType newType) {
             // NOTE this maybe a good all around interface method, not sure though
             bool changed = CurrentAccountType != newType;
@@ -46,10 +57,10 @@ namespace MonkeyPaste.Avalonia {
             switch (acctType) {
                 case MpUserAccountType.Free:
                     return 5;
-                case MpUserAccountType.Basic:
+                case MpUserAccountType.Standard:
                     return 100;
                 case MpUserAccountType.Trial:
-                case MpUserAccountType.Premium:
+                case MpUserAccountType.Unlimited:
                 case MpUserAccountType.Admin:
                     return -1;
                 default:
@@ -62,9 +73,9 @@ namespace MonkeyPaste.Avalonia {
             switch (acctType) {
                 case MpUserAccountType.Free:
                     return 20;
-                case MpUserAccountType.Basic:
+                case MpUserAccountType.Standard:
                 case MpUserAccountType.Trial:
-                case MpUserAccountType.Premium:
+                case MpUserAccountType.Unlimited:
                 case MpUserAccountType.Admin:
                     return -1;
                 default:
@@ -74,6 +85,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<MpContentCapInfo> RefreshCapInfoAsync() {
+            int new_content_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
+            int new_trash_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.TrashTagId);
+            bool has_changed = new_content_count != _lastContentCount || new_trash_count != _lastTrashCount;
+            _lastContentCount = new_content_count;
+            _lastTrashCount = new_trash_count;
+            if (has_changed) {
+                MpMessenger.SendGlobal(MpMessageType.AccountInfoChanged);
+            }
+
             int content_cap = GetContentCapacity(CurrentAccountType);
             if (content_cap < 0) {
                 // unlimited, no need to check trash
@@ -90,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
 
             // TO TRASH /////////////////////////////////////////////////////
 
-            int totalCount = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
+            int totalCount = _lastContentCount;
 
             // examples (content cap)
             // content cap 5, actual 4 (needs next to trash)
@@ -111,7 +131,7 @@ namespace MonkeyPaste.Avalonia {
 
             // TO REMOVE //////////////////////////////////////////
 
-            int totalTrash = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.TrashTagId);
+            int totalTrash = _lastTrashCount;
 
             // examples (trash cap)
             // trash cap 100 actual 99 (needs next)

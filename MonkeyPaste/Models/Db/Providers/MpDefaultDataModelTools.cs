@@ -35,8 +35,8 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static async Task<string> DiscoverPrefInfoAsync(MpIDbInfo dbInfo, MpIPlatformInfo osInfo) {
-            bool wouldBeNewDb = await MpDb.InitDbConnectionAsync(dbInfo, false);
-            if (wouldBeNewDb) {
+            bool? wouldBeNewDb = await MpDb.InitDbConnectionAsync(dbInfo, false);
+            if (!wouldBeNewDb.HasValue || wouldBeNewDb.Value) {
                 //this should be caught in pref init so somethings wrong
                 MpDebug.Break();
                 return null;

@@ -10,6 +10,8 @@
         AccountSignIn,
         AccountClick,
         AccountSignOut,
-        ThemeHexColor
+        ThemeHexColor,
+        ChangeDbPassword,
+        ClearDbPassword
     }
 }

@@ -38,6 +38,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-
+        public bool HasUserDefinedPassword =>
+            !string.IsNullOrEmpty(_dbPassword);
     }
 }

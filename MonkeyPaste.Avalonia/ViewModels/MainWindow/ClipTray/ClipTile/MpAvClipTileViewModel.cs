@@ -775,6 +775,9 @@ namespace MonkeyPaste.Avalonia {
         private bool _isTitleVisible = true;
         public bool IsTitleVisible {
             get {
+                if (!MpPrefViewModel.Instance.ShowContentTitles) {
+                    return false;
+                }
                 if (IsAppendNotifier ||
                     IsFrozen ||
                     !IsContentReadOnly ||

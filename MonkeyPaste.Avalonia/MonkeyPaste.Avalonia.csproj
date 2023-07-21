@@ -341,6 +341,7 @@
     <None Remove="Assets\Images\help.png" />
     <None Remove="Assets\Images\highlighter.png" />
     <None Remove="Assets\Images\hotkey.png" />
+    <None Remove="Assets\Images\hourglass.png" />
     <None Remove="Assets\Images\html.png" />
     <None Remove="Assets\Images\icecube.png" />
     <None Remove="Assets\Images\image.png" />
@@ -567,6 +568,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\heart.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\hourglass.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\infobw.png">
@@ -1388,6 +1392,9 @@
     </Compile>
     <Compile Update="Views\Reusable\Notifications\Welcome\Pages\MpAvWelcomeOptionsView.axaml.cs">
       <DependentUpon>MpAvWelcomeOptionsView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Password\MpAvSetPasswordView.axaml.cs">
+      <DependentUpon>MpAvSetPasswordView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\MpAvAssignShortcutView.axaml.cs">
       <DependentUpon>MpAvAssignShortcutView.axaml</DependentUpon>

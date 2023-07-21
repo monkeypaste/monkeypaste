@@ -9,7 +9,9 @@
                   Background="Transparent"
                   WindowStartupLocation="CenterScreen"
                   SizeToContent="Manual"
-                  SystemDecorations="None">
+                  SystemDecorations="None"
+                  Width="1000"
+                  Height="600">
     <local:MpAvWindow.Styles>
 
         <!--  NAV BUTTONS  -->
@@ -41,40 +43,14 @@
                     Value="WrapWithOverflow" />
         </Style>
 
-        <!--  DB PASSWORD  -->
-        <Style Selector="TextBox.dbPassword">
-            <Setter Property="PasswordChar"
-                    Value="●" />
-            <Setter Property="FontSize"
-                    Value="18" />
-            <Setter Property="HorizontalAlignment"
-                    Value="Center" />
-            <Setter Property="VerticalAlignment"
-                    Value="Center" />
-            <Setter Property="TextAlignment"
-                    Value="Left" />
-            <Setter Property="CornerRadius"
-                    Value="7" />
-            <Setter Property="Padding"
-                    Value="5" />
-            <Setter Property="Margin"
-                    Value="0,0,0,5" />
-            <Setter Property="BorderThickness"
-                    Value="1.5" />
-            <Setter Property="Width"
-                    Value="200" />
-        </Style>
-        <Style Selector="TextBox.dbPassword:not(.valid)">
-            <Setter Property="BorderBrush"
-                    Value="Red" />
-        </Style>
+
     </local:MpAvWindow.Styles>
     <Border Background="Silver"
             CornerRadius="10"
             BorderBrush="White"
             BorderThickness="5"
-            Width="1000"
-            Height="600">
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
 
         <Grid RowDefinitions="100,*,50"
               Margin="10">
@@ -125,18 +101,8 @@
                         </DataTemplate>
                         <DataTemplate x:Key="DbPasswordTemplate"
                                       x:DataType="local:MpAvWelcomeNotificationViewModel">
-                            <Grid RowDefinitions="Auto,Auto,Auto,40"
+                            <Grid RowDefinitions="Auto,Auto"
                                   HorizontalAlignment="Center">
-                                <Grid.Resources>
-                                    <!--<SolidColorBrush x:Key="TextControlForeground" Color="Black" />
-                                    <SolidColorBrush x:Key="TextControlBackground" Color="White" />
-                                    <SolidColorBrush x:Key="TextControlBorderBrush" Color="White" />
-                                    <SolidColorBrush x:Key="TextControlForegroundFocused" Color="Black" />
-                                    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="White" />
-                                    <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="White" />
-                                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="White" />-->
-
-                                </Grid.Resources>
 
                                 <!--  CAPTION  -->
                                 <TextBlock Grid.Row="0"
@@ -144,23 +110,12 @@
                                            Margin="0,0,0,20"
                                            Text="{Binding DbPasswordViewModel.Caption}" />
 
-                                <TextBox Grid.Row="1"
-                                         Classes.valid="{Binding IsDbPasswordValid}"
-                                         Classes="dbPassword"
-                                         Watermark="Password"
-                                         Text="{Binding DbPassword1}" />
-                                <TextBox Grid.Row="2"
-                                         Classes="dbPassword"
-                                         Classes.valid="{Binding IsDbPasswordValid}"
-                                         PasswordChar="●"
-                                         Watermark="Confirm"
-                                         Text="{Binding DbPassword2}" />
-                                <TextBlock Grid.Row="3"
-                                           IsVisible="{Binding !IsDbPasswordValid}"
-                                           HorizontalAlignment="Center"
-                                           FontSize="18"
-                                           Foreground="Crimson"
-                                           Text="⚠️ Passwords do not match" />
+                                <!--  SET PASSWORD VIEW  -->
+
+                                <local:MpAvSetPasswordView Grid.Row="1"
+                                                           ShowDialogButtons="False"
+                                                           ConfirmedPassword="{Binding DbPassword}"
+                                                           IsPasswordValid="{Binding IsDbPasswordValid}" />
                             </Grid>
                         </DataTemplate>
                     </local:MpAvWelcomeContentTemplateSelector>

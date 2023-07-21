@@ -31,6 +31,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+        public MpIWindowViewModel BindingContext =>
+            DataContext as MpIWindowViewModel;
 
         #region Overrides
         protected override Type StyleKeyOverride => typeof(Window);

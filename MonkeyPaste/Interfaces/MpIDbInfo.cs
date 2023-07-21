@@ -5,6 +5,7 @@
         string DbDir { get; }
         string DbPath { get; }
         string DbPassword { get; set; }
+        bool HasUserDefinedPassword { get; }
     }
 
 }

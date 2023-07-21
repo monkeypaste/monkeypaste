@@ -389,8 +389,12 @@ namespace MonkeyPaste.Avalonia {
         public MpCsvFormatProperties CsvProps =>
             ParameterFormat == null ? null : ParameterFormat.CsvProps;
 
+        private string _label;
         public string Label {
             get {
+                if (_label != null) {
+                    return _label;
+                }
                 if (ParameterFormat == null) {
                     return string.Empty;
                 }
@@ -399,7 +403,14 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return ParameterFormat.label;
             }
+            set {
+                if (_label != value) {
+                    _label = value;
+                    OnPropertyChanged(nameof(Label));
+                }
+            }
         }
+        public bool IsEnabled { get; set; } = true;
 
         public MpParameterControlType ControlType {
             get {

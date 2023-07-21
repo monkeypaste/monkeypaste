@@ -64,7 +64,12 @@ namespace MonkeyPaste {
             var sw = new Stopwatch();
             sw.Start();
 
-            IsInitialDbCreate = await InitDbConnectionAsync(Mp.Services.DbInfo, true);
+            bool? init_result = await InitDbConnectionAsync(Mp.Services.DbInfo, true);
+            if (!init_result.HasValue) {
+                // connection failed, shutdown triggered
+                return;
+            }
+            IsInitialDbCreate = init_result.Value;
 
             await InitTablesAsync();
 
@@ -111,6 +116,42 @@ namespace MonkeyPaste {
             return sb.ToString();
         }
 
+        public static async Task<bool> ChangeDbPasswordAsync(string new_password) {
+            // run test in case this is before db initialized
+            bool can_change = await TestDbConnectionAsync();
+            if (!can_change) {
+                MpDebug.Break($"Cannot change password.Connection test failed.");
+                return false;
+            }
+            string old_password = Mp.Services.DbInfo.DbPassword;
+            try {
+                string key_query = $"PRAGMA key = '{old_password}'";
+                var key_result = await QueryScalarAsync<object>(key_query);
+                bool is_clearing_pwd = string.IsNullOrEmpty(new_password);
+                if (is_clearing_pwd) {
+                    // user cleared db password
+                    // Null DbInfo pwd to activate default
+                    Mp.Services.DbInfo.DbPassword = null;
+                    new_password = Mp.Services.DbInfo.DbPassword;
+                }
+                string rekey_query = $"PRAGMA rekey = '{new_password}'";
+                var rekey_result = await QueryScalarAsync<object>(rekey_query);
+                if (!is_clearing_pwd) {
+                    // set new pwd
+                    Mp.Services.DbInfo.DbPassword = new_password;
+                }
+
+                var success = await TestDbConnectionAsync();
+                MpDebug.Assert(success, $"Password change failed");
+                return success;
+
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error changing db password: ", ex);
+                return false;
+            }
+
+        }
         #region Queries
 
         #region Async Query
@@ -368,7 +409,7 @@ namespace MonkeyPaste {
 
         #region Private Methods  
 
-        public static async Task<bool> InitDbConnectionAsync(MpIDbInfo dbInfo, bool allowCreate) {
+        public static async Task<bool?> InitDbConnectionAsync(MpIDbInfo dbInfo, bool allowCreate) {
             string dbPath = dbInfo.DbPath;
             bool isNewDb = !File.Exists(dbPath);
 
@@ -389,7 +430,7 @@ namespace MonkeyPaste {
                     if (dbInfo.DbPassword == null) {
                         // user canceled
                         Mp.Services.ShutdownHelper.ShutdownApp("canceled db password");
-                        return false;
+                        return null;
                     }
                     await _connectionAsync.CloseAsync();
                     _connectionAsync = null;
@@ -408,7 +449,7 @@ namespace MonkeyPaste {
 #if DEBUG
             MpConsole.WriteLine($"Db Password: '{dbPass}'");
 #endif
-            return isNewDb;
+            return success ? isNewDb : null;
         }
 
         private static SQLiteConnectionString GetConnectionString(
@@ -453,6 +494,7 @@ namespace MonkeyPaste {
                 return false;
             }
             try {
+                //await _connectionAsync.QueryScalarsAsync<int>("select 1");
                 await _connectionAsync.CreateTableAsync<MpTag>();
                 return true;
             }
@@ -876,6 +918,11 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             await InitDefaultShortcutsAsync(routingProfile);
         }
         private static async Task CreateTestContentAsync() {
+            int content_count = 0;
+            int link_count = 2;
+            if (content_count == 0) {
+                return;
+            }
             // create test link tags
 
             var test_tag_1 = await MpTag.CreateAsync(
@@ -898,8 +945,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
             var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
             string this_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(this_app);
-            int content_count = 5;
-            int link_count = 2;
+
 
             int[] test_tag_ids = new int[] { test_tag_1.Id, test_tag_2.Id, test_tag_3.Id };
             int[] link_idxs = MpRandom.GetUniqueRandomInts(0, content_count - 1, link_count);
