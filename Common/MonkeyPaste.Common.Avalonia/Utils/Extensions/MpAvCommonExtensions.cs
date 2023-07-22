@@ -208,11 +208,17 @@ namespace MonkeyPaste.Common.Avalonia {
         public static IEnumerable<T> GetVisualDescendants<T>(this Visual control, bool includeSelf = true) where T : Visual {
             IEnumerable<T> result = control.GetVisualDescendants().OfType<T>();
             if (includeSelf && control is T ct) {
-                result.Append(ct);
+                result.Prepend(ct);
             }
             return result;
         }
-
+        public static IEnumerable<T> GetLogicalDescendants<T>(this ILogical logical, bool includeSelf = true) where T : ILogical {
+            IEnumerable<T> result = logical.GetLogicalDescendants().OfType<T>();
+            if (includeSelf && logical is T t) {
+                result.Prepend(t);
+            }
+            return result;
+        }
         public static bool TryGetVisualAncestor<T>(this Visual control, out T ancestor) where T : Visual {
             ancestor = control.GetVisualAncestor<T>();
             return ancestor != null;

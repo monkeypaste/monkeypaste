@@ -1,15 +1,22 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
+using Avalonia.Controls.Presenters;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Styling;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvTextBox :
+    public class MpAvContentTextBox :
         TextBox,
         MpAvIDragSource {
         #region Private Variables
@@ -18,12 +25,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        static MpAvTextBox() {
-            TextProperty.Changed.AddClassHandler<MpAvTextBox>((x, y) => HandleTextChanged(x, y));
+        static MpAvContentTextBox() {
+            TextProperty.Changed.AddClassHandler<MpAvContentTextBox>((x, y) => HandleTextChanged(x, y));
         }
 
         private static void HandleTextChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
-            if (element is MpAvTextBox tb) {
+            if (element is MpAvContentTextBox tb) {
                 //RaisePropertyChanged(TextProperty, oldValue, value);
             }
         }
@@ -52,24 +59,28 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool WasDragCanceled { get; set; } = false;
 
-        public PointerPressedEventArgs LastPointerPressedEventArgs { get; }
+        public PointerPressedEventArgs LastPointerPressedEventArgs { get; private set; }
 
         public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta) {
-            throw new NotImplementedException();
+            return;
         }
 
-        public void NotifyDropComplete(DragDropEffects dropEffect) {
-            throw new NotImplementedException();
-        }
 
-        public Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false) {
-            throw new NotImplementedException();
+        public async Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false) {
+            if (BindingContext == null ||
+                BindingContext.IsPlaceholder ||
+                BindingContext.CopyItem.ToPortableDataObject(formats, true, true) is not MpPortableDataObject mpdo ||
+                mpdo.DataFormatLookup == null) {
+                return null;
+            }
+            await Task.Delay(1);
+            return new MpAvDataObject(mpdo.DataFormatLookup.ToDictionary(x => x.Key.Name, x => x.Value));
         }
         public string[] GetDragFormats() {
-            if (DataContext is MpAvClipTileViewModel ctvm) {
-                return ctvm.GetOleFormats(true);
+            if (DataContext is not MpAvClipTileViewModel ctvm) {
+                return new string[] { };
             }
-            return new string[] { };
+            return ctvm.GetOleFormats(true);
         }
         #endregion
         #endregion
@@ -96,7 +107,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvTextBox() : base() {
+        public MpAvContentTextBox() : base() {
+            this.GetObservable(FontFamilyProperty).Subscribe(value => OnFontFamilyChanged());
         }
 
         #endregion
@@ -112,6 +124,7 @@ namespace MonkeyPaste.Avalonia {
             if (DataContext is MpAvClipTileViewModel ctvm) {
                 ctvm.IsEditorLoaded = true;
             }
+            this.FontFamily = MpAvStringToFontFamilyConverter.Instance.Convert(MpPrefViewModel.Instance.DefaultEditableFontFamily, null, null, null) as FontFamily;
         }
 
         protected override void OnDataContextChanged(EventArgs e) {
@@ -121,9 +134,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        protected override void OnPointerPressed(PointerPressedEventArgs e) {
+            LastPointerPressedEventArgs = e;
+            base.OnPointerPressed(e);
+        }
         #endregion
 
         #region Private Methods
+        private void OnFontFamilyChanged() {
+            Dispatcher.UIThread.Post(async () => {
+                var tp = await this.GetVisualDescendantAsync<TextPresenter>();
+                TextElement.SetFontFamily(tp, this.FontFamily);
+            });
+
+        }
 
 
         #endregion

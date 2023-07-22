@@ -313,48 +313,51 @@ namespace MonkeyPaste.Avalonia {
                     inputTextFormat = "text";
                 }
 
-                MpAvRichHtmlConvertResult htmlClipboardData = null;
+                MpAvRichHtmlConvertResult htmlClipboardData = await MpAvPlainHtmlConverter.Instance.ConvertAsync(itemData, inputTextFormat);
 
-                if (MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-                    htmlClipboardData = await MpAvPlainHtmlConverter.Instance.ConvertAsync(itemData, inputTextFormat);
-                    if (htmlClipboardData == null) {
-                        itemData = null;
-                    } else {
-                        itemData = htmlClipboardData.RichHtml;
-                        delta = htmlClipboardData.Delta;
-                        if (!string.IsNullOrEmpty(htmlClipboardData.InputHtml) &&
-                            htmlClipboardData.InputHtml.StartsWith("<img")) {
-                            try {
-                                var img_parts = htmlClipboardData.InputHtml.Split("src=\"");
-                                if (img_parts.Length > 1) {
-                                    var img_parts2 = img_parts[1].Split("\"");
-                                    if (img_parts2.Length > 0) {
-                                        string img_src_uri = img_parts2[0];
-                                        var img_bytes = await MpFileIo.ReadBytesFromUriAsync(img_src_uri);
-                                        if (img_bytes != null && img_bytes.Length > 0 &&
-                                            Convert.ToBase64String(img_bytes) is string img_base64) {
-                                            // update item type to image and clear delta (it references img uri not bytes)
-                                            itemType = MpCopyItemType.Image;
-                                            itemData = img_base64;
-                                            delta = null;
-                                        }
+                //if (MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                if (htmlClipboardData == null) {
+                    itemData = null;
+                } else {
+                    inputTextFormat = "html";
+
+                    itemData = htmlClipboardData.RichHtml;
+                    delta = htmlClipboardData.Delta;
+                    if (!string.IsNullOrEmpty(htmlClipboardData.InputHtml) &&
+                        htmlClipboardData.InputHtml.StartsWith("<img")) {
+                        // HTML IMAGE
+                        try {
+                            var img_parts = htmlClipboardData.InputHtml.Split("src=\"");
+                            if (img_parts.Length > 1) {
+                                var img_parts2 = img_parts[1].Split("\"");
+                                if (img_parts2.Length > 0) {
+                                    string img_src_uri = img_parts2[0];
+                                    var img_bytes = await MpFileIo.ReadBytesFromUriAsync(img_src_uri);
+                                    if (img_bytes != null && img_bytes.Length > 0 &&
+                                        Convert.ToBase64String(img_bytes) is string img_base64) {
+                                        // update item type to image and clear delta (it references img uri not bytes)
+                                        itemType = MpCopyItemType.Image;
+                                        itemData = img_base64;
+                                        delta = null;
                                     }
                                 }
                             }
-                            catch (Exception ex) {
-                                MpConsole.WriteTraceLine($"Error converting img html to img content. Img html: '{htmlClipboardData.InputHtml}'", ex);
-                            }
-                            // handle special case that item is an image drop from browser (tested on chrome in windows)
+                        }
+                        catch (Exception ex) {
+                            MpConsole.WriteTraceLine($"Error converting img html to img content. Img html: '{htmlClipboardData.InputHtml}'", ex);
+                        }
+                        // handle special case that item is an image drop from browser (tested on chrome in windows)
 
-                        }
-                    }
-                } else {
-                    if (!string.IsNullOrEmpty(itemData)) {
-                        if (inputTextFormat == "html") {
-                            itemData = itemData.ToPlainText();
-                        }
+                    } else if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                        //plain text mode, just use plain text for now
+                        itemData = itemData.ToPlainText();
                     }
                 }
+                //} else {
+                //    if (!string.IsNullOrEmpty(itemData)) {
+                //        itemData = itemData.ToPlainText();
+                //    }
+                //}
             }
 
             if (itemType == MpCopyItemType.Text && !string.IsNullOrEmpty(itemData) &&

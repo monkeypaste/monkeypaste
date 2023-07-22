@@ -41,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
         private bool _isMainWindowOrientationChanging = false;
         private bool _isLayoutChanging = false;
         private object _addDataObjectContentLock = new object();
+        private object _processCapLock = new object();
 
         #endregion
 
@@ -1721,7 +1722,15 @@ namespace MonkeyPaste.Avalonia {
                 await Dispatcher.UIThread.InvokeAsync(async () => { await ProcessAccountCapsAsync(source, arg); });
                 return;
             }
+            //await MpFifoAsyncQueue.WaitByConditionAsync(
+            //    _processCapLock,
+            //    waitWhenTrueFunc: () => {
+            //        MpConsole.WriteLine($"Account cap process waiting. src: '{source}' arg: '{arg}'");
 
+            //        return _isProcessingCap;
+            //    },
+            //    debug_label: "cap queue item",
+            //    time_out_ms: -1);
             if (_isProcessingCap) {
                 MpConsole.WriteLine($"Account cap refreshed IGNORED (already processing). Source: '{source}' Args: '{arg.ToStringOrDefault()}'");
                 return;
@@ -1843,12 +1852,26 @@ namespace MonkeyPaste.Avalonia {
             if (cap_msg_type == MpNotificationType.None) {
                 return;
             }
-            Mp.Services.NotificationBuilder.ShowMessageAsync(
-                       title: $"'{account_type}' {cap_msg_title_suffix}",
-                       body: cap_msg_sb.ToString(),
-                       msgType: cap_msg_type,
-                       iconSourceObj: cap_msg_icon,
-                       maxShowTimeMs: cap_msg_timeout).FireAndForgetSafeAsync();
+            Dispatcher.UIThread.Post(async () => {
+                var sw = Stopwatch.StartNew();
+                string title = $"'{account_type}' {cap_msg_title_suffix}";
+                string msg = cap_msg_sb.ToString();
+                while (sw.ElapsedMilliseconds < 3_000) {
+                    if (_isProcessingCap) {
+                        // new cap happened, suppress this ntf
+                        MpConsole.WriteLine($"Ignoring cap msg. title '{title}' msg '{msg}'");
+                        return;
+                    }
+                    await Task.Delay(100);
+                }
+
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
+                           title: title,
+                           body: msg,
+                           msgType: cap_msg_type,
+                           iconSourceObj: cap_msg_icon,
+                           maxShowTimeMs: cap_msg_timeout).FireAndForgetSafeAsync();
+            });
         }
 
         #endregion

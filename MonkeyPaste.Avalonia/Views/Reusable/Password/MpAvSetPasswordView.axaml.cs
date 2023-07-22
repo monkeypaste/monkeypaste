@@ -6,6 +6,8 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using PropertyChanged;
+using System;
+using System.Reactive.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -25,6 +27,20 @@ namespace MonkeyPaste.Avalonia {
                 name: nameof(ConfirmedPassword),
                 defaultValue: string.Empty,
                 defaultBindingMode: BindingMode.TwoWay);
+
+        #endregion
+
+        #region AutoFilledPassword AvaloniaProperty
+
+        public string AutoFilledPassword {
+            get { return GetValue(AutoFilledPasswordProperty); }
+            set { SetValue(AutoFilledPasswordProperty, value); }
+        }
+
+        public static readonly StyledProperty<string> AutoFilledPasswordProperty =
+            AvaloniaProperty.Register<MpAvSetPasswordView, string>(
+                name: nameof(AutoFilledPassword),
+                defaultValue: string.Empty);
 
         #endregion
 
@@ -70,8 +86,25 @@ namespace MonkeyPaste.Avalonia {
             cancelButton.Click += CancelButton_Click;
             var doneButton = this.FindControl<Button>("DoneButton");
             doneButton.Click += DoneButton_Click;
+
+            this.GetObservable(AutoFilledPasswordProperty)
+                .Subscribe(value => OnAutoFillValueChanged());
+            //this.DataContextChanged += MpAvSetPasswordView_DataContextChanged;
+            //if (DataContext != null) {
+            //    MpAvSetPasswordView_DataContextChanged(this, null);
+            //}
         }
 
+        private void OnAutoFillValueChanged() {
+            if (string.IsNullOrEmpty(AutoFilledPassword)) {
+                return;
+            }
+
+            var pwtb1 = this.FindControl<TextBox>("PasswordBox1");
+            var pwtb2 = this.FindControl<TextBox>("PasswordBox2");
+            pwtb1.Text = AutoFilledPassword;
+            pwtb2.Text = AutoFilledPassword;
+        }
 
         private void Password_TextChanged(object sender, TextChangedEventArgs e) {
             IsPasswordValid = Validate();

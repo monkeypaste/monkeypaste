@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
+        private const string PRE_ESTABLISHED_USER_DB_PWD_TEXT = "<^&user has already set a password^&>";
         #endregion
 
         #region Statics
@@ -79,6 +80,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool IsDbPasswordValid { get; set; } = true;
+        public bool IsDbPasswordProvided =>
+            IsDbPasswordValid && !string.IsNullOrEmpty(DbPassword);
+        public bool IsDbPasswordIgnored =>
+            !IsDbPasswordProvided ||
+            (IsDbPasswordProvided && DbPassword == PRE_ESTABLISHED_USER_DB_PWD_TEXT);
 
         public bool IsWelcomeDone { get; set; } = false;
         public override bool IsShowOnceNotification =>
@@ -101,6 +107,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string AutoFillPassword { get; set; }
         public string DbPassword { get; set; }
         public string WelcomeTitle =>
             CurPageType.ToString();
@@ -193,10 +200,8 @@ namespace MonkeyPaste.Avalonia {
             if (base_result == MpNotificationDialogResultType.DoNotShow) {
                 return base_result;
             }
-            IsWelcomeDone = false;
-            while (!IsWelcomeDone) {
-                await Task.Delay(100);
-            }
+            await BeginWelcomeSetupAsync();
+
             return MpNotificationDialogResultType.Dismiss;
         }
 
@@ -219,6 +224,19 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+
+        private async Task BeginWelcomeSetupAsync() {
+            IsWelcomeDone = false;
+            bool is_pwd_already_set = await MpDb.CheckIsUserPasswordSetAsync();
+            if (is_pwd_already_set) {
+                // this is not initial startup, user has reset ntf
+                // fill pwd with special const so finish knows not to use if still same
+                AutoFillPassword = PRE_ESTABLISHED_USER_DB_PWD_TEXT;
+            }
+            while (!IsWelcomeDone) {
+                await Task.Delay(100);
+            }
+        }
 
         private void FinishWelcomeSetup() {
             IsWelcomeDone = true;
@@ -245,7 +263,7 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.AccountTools.SetAccountType(acct_type);
 
             // DB PASSWORD
-            if (!string.IsNullOrEmpty(DbPassword)) {
+            if (!IsDbPasswordIgnored) {
                 Mp.Services.DbInfo.DbPassword = DbPassword;
             }
         }

@@ -24,7 +24,8 @@ namespace MonkeyPaste.Avalonia {
             NotificationType == MpNotificationType.ContentCapReached ||
             NotificationType == MpNotificationType.TrashCapReached ||
             NotificationType == MpNotificationType.ContentAddBlockedByAccount ||
-            NotificationType == MpNotificationType.ContentRestoreBlockedByAccount;
+            NotificationType == MpNotificationType.ContentRestoreBlockedByAccount ||
+            NotificationType == MpNotificationType.ModalContentFormatDegradation;
 
         public bool IsFixing { get; set; } = false;
 
@@ -220,9 +221,16 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         DialogResult = MpNotificationDialogResultType.Dismiss;
                     }
+                } else if (DoNotShowAgain) {
+                    // set from CheckDoNotShowAgainCmd
+                    DialogResult = MpNotificationDialogResultType.DoNotShow;
+                    CloseNotificationCommand.Execute(null);
+                    return DialogResult;
+
                 }
                 await Task.Delay(100);
             }
+
             if (DialogResult == MpNotificationDialogResultType.Fix) {
                 // if fix is result, fix button becomes retry 
                 // either wait for retry to become result or immediatly trigger

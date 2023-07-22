@@ -15,8 +15,12 @@ namespace MonkeyPaste.Avalonia {
                 value = Mp.Services.PlatformResource.GetResource(dre.ResourceKey.ToString()) as string;
             }
             if (value is string valueStr && !string.IsNullOrEmpty(valueStr)) {
+                if (valueStr != "Segoe UI") {
+
+                }
                 try {
-                    return new FontFamily(valueStr);
+                    var ff = new FontFamily(valueStr);
+                    return ff;
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error converting str '{valueStr}' to font family", ex);

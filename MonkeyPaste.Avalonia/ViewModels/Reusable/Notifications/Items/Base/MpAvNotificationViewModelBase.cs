@@ -490,7 +490,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand CloseNotificationCommand => new MpCommand(
             () => {
-                Mp.Services.NotificationManager.HideNotification(this);
+                HideNotification();
+                IsClosing = false;
             });
 
         public ICommand ToggleIsPinnedCommand => new MpCommand(

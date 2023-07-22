@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Avalonia.Media.Fonts;
 using Avalonia.Platform;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -38,6 +39,8 @@ namespace MonkeyPaste.Avalonia {
             nameof(MpPrefViewModel.Instance.ThemeColor),
             nameof(MpPrefViewModel.Instance.GlobalBgOpacity),
         };
+
+        private Dictionary<object, Action<MpAvPluginParameterItemView>> _runtimeParamAttachActions;
         #endregion
 
         #region CONSTANTS
@@ -174,11 +177,23 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
+
         #endregion
 
         #region Public Methods
 
         public async Task InitAsync() {
+            await InitSettingFramesAsync();
+            UpdateFilters();
+            InitRuntimeParams();
+        }
+
+
+        #endregion
+
+        #region Private Methods
+
+        private async Task InitSettingFramesAsync() {
             TabLookup = new Dictionary<MpSettingsTabType, IEnumerable<MpAvSettingsFrameViewModel>>() {
                 {
                     MpSettingsTabType.Account,
@@ -275,7 +290,7 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.ComboBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = "Interface",
-                                            description = "Requires restart :(",
+                                            description = "Requires restart",
                                             values =
                                                 FontManager.Current.SystemFonts
                                                 .Select(x=>x.Name)
@@ -291,6 +306,7 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily),
                                             controlType = MpParameterControlType.ComboBox,
                                             unitType = MpParameterValueUnitType.PlainText,
+                                            description = "Requires restart",
                                             label = "Content",
                                             values =
                                                 FontManager.Current.SystemFonts
@@ -769,7 +785,7 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = "Rich Content",
-                                            description = "Disabling rich text will significantly reduce memory consumption but will disable some advanced features, such as: templates, annotations, find/replace and drag drop",
+                                            description = "(requires restart) Disabling formatted will reduce memory consumption but will disable some advanced features, such as: templates, annotations and find/replace",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
@@ -965,13 +981,95 @@ namespace MonkeyPaste.Avalonia {
                     .Cast<MpAvButtonParameterViewModel>()
                     .ForEach(x => x.ClickCommand = ButtonParameterClickCommand);
             }
-            UpdateFilters();
+        }
+        private void InitRuntimeParams() {
+
+            _runtimeParamAttachActions = new Dictionary<object, Action<MpAvPluginParameterItemView>>() {
+                {
+                    nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily),
+                    (piv) => {
+                        if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cb) {
+                            return;
+                        }
+                        SetupFontFamilyComboBox(cb);
+                    }
+                },
+                {
+                    nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily),
+                    (piv) => {
+                        if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cb) {
+                            return;
+                        }
+                        if(!cb.Classes.Contains("fontFamilyOverride")) {
+                            cb
+                            .GetSelfAndVisualDescendants()
+                            .OfType<TemplatedControl>()
+                            .ForEach(x=>x.Classes.Add("fontFamilyOverride"));
+                        }
+                        SetupFontFamilyComboBox(cb);
+                    }
+                },
+                {
+                    MpRuntimePrefParamType.ThemeHexColor.ToString(),
+                    (piv) => {
+                        if(piv.GetVisualDescendant<Button>() is not Button b) {
+                            return;
+                        }
+                        SetThemeButtonColor(b);
+                    }
+                },
+                {
+                    MpRuntimePrefParamType.ChangeRoutingType.ToString(),
+                    (piv) => {
+                        if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cmb) {
+                            return;
+                        }
+                        void RoutingSelectionChanged(object sender, SelectionChangedEventArgs e) {
+                            if (cmb.SelectedIndex < 0) {
+                                // occurs when filtered out
+                                return;
+                            }
+                            MpShortcutRoutingProfileType sel_type = (MpShortcutRoutingProfileType)cmb.SelectedIndex;
+                            MpAvShortcutCollectionViewModel.Instance.UpdateRoutingProfileCommand.Execute(sel_type);
+                        }
+                        cmb.SelectionChanged += RoutingSelectionChanged;
+                    }
+                },
+                {
+                    MpRuntimePrefParamType.ChangeAccountType.ToString(),
+                    (piv) => {
+                        if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cmb) {
+                            return;
+                        }
+                        void AccountTypeSelectionChanged(object sender, SelectionChangedEventArgs e) {
+                            MpUserAccountType sel_type = (MpUserAccountType)cmb.SelectedIndex;
+                            Mp.Services.AccountTools.SetAccountType(sel_type);
+                        }
+                        cmb.SelectionChanged += AccountTypeSelectionChanged;
+                    }
+                }
+            };
+
+            MpAvSettingsFrameView.ParamViews.CollectionChanged += ParamViews_CollectionChanged;
+
+            // init bindings (view props not needed)
+
+            ProcessListenOnStartupChanged();
+            SetupPasswordButtons();
         }
 
-
-        #endregion
-
-        #region Private Methods
+        private void ParamViews_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            if (e.NewItems != null) {
+                foreach (MpAvPluginParameterItemView piv in e.NewItems) {
+                    if (piv.DataContext is not MpAvParameterViewModelBase pvmb) {
+                        continue;
+                    }
+                    if (_runtimeParamAttachActions.TryGetValue(pvmb.ParamId, out var setupAction)) {
+                        setupAction.Invoke(piv);
+                    }
+                }
+            }
+        }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
@@ -1024,12 +1122,6 @@ namespace MonkeyPaste.Avalonia {
             sw.Classes.Add("fadeIn");
 
             void Sw_Opened(object sender, EventArgs e) {
-                SetupFontFamilyComboBoxes();
-                ProcessListenOnStartupChanged();
-                AttachThemeButtonColorUpdate();
-                AttachRoutingProfileSelectionChange();
-                AttachAccountTypeSelectionChange();
-                SetupPasswordButtons();
                 sw.Activate();
             }
             void Sw_Closed(object sender, EventArgs e) {
@@ -1041,6 +1133,8 @@ namespace MonkeyPaste.Avalonia {
             sw.Closed += Sw_Closed;
             return sw;
         }
+
+
 
         private void UpdateFilters() {
 
@@ -1133,16 +1227,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Theme Button Color
-        private void AttachThemeButtonColorUpdate() {
-            Dispatcher.UIThread.Post(async () => {
-                var tb = await GetParameterControlByParamIdAsync<Button>(MpRuntimePrefParamType.ThemeHexColor.ToString());
-                if (tb == null) {
-                    return;
-                }
-                tb.AttachedToVisualTree += Tb_AttachedToVisualTree;
-                SetThemeButtonColor(tb);
-            });
-        }
 
         private void SetThemeButtonColor(Button tb) {
             if (tb == null) {
@@ -1173,58 +1257,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Routing Profile 
-        private void AttachRoutingProfileSelectionChange() {
-            Dispatcher.UIThread.Post(async () => {
-                var cmb = await GetParameterControlByParamIdAsync<ComboBox>(MpRuntimePrefParamType.ChangeRoutingType.ToString());
-                if (cmb == null) {
-                    return;
-                }
-                void RoutingSelectionChanged(object sender, SelectionChangedEventArgs e) {
-                    if (cmb.SelectedIndex < 0) {
-                        // occurs when filtered out
-                        return;
-                    }
-                    MpShortcutRoutingProfileType sel_type = (MpShortcutRoutingProfileType)cmb.SelectedIndex;
-                    MpAvShortcutCollectionViewModel.Instance.UpdateRoutingProfileCommand.Execute(sel_type);
-                }
-                cmb.SelectionChanged += RoutingSelectionChanged;
-            });
-        }
 
         private void SetRoutingProfileType(MpShortcutRoutingProfileType rpt) {
-            Dispatcher.UIThread.Post(async () => {
-                var cmb = await GetParameterControlByParamIdAsync<ComboBox>(MpRuntimePrefParamType.ChangeRoutingType.ToString());
-                if (cmb == null) {
-                    return;
-                }
-                cmb.SelectedIndex = (int)rpt;
-            });
+            Dispatcher.UIThread.VerifyAccess();
+            if (GetParameterControlByParamId<ComboBox>(MpRuntimePrefParamType.ChangeRoutingType.ToString()) is not ComboBox cmb) {
+                return;
+            }
+            cmb.SelectedIndex = (int)rpt;
         }
         #endregion
 
         #region Account Type
-        private void AttachAccountTypeSelectionChange() {
-            Dispatcher.UIThread.Post(async () => {
-                var cmb = await GetParameterControlByParamIdAsync<ComboBox>(MpRuntimePrefParamType.ChangeAccountType.ToString());
-                if (cmb == null) {
-                    return;
-                }
-                void AccountTypeSelectionChanged(object sender, SelectionChangedEventArgs e) {
-                    MpUserAccountType sel_type = (MpUserAccountType)cmb.SelectedIndex;
-                    Mp.Services.AccountTools.SetAccountType(sel_type);
-                }
-                cmb.SelectionChanged += AccountTypeSelectionChanged;
-            });
-        }
 
         private void SetAccountType(MpUserAccountType at) {
-            Dispatcher.UIThread.Post(async () => {
-                var cmb = await GetParameterControlByParamIdAsync<ComboBox>(MpRuntimePrefParamType.ChangeAccountType.ToString());
-                if (cmb == null) {
-                    return;
-                }
-                cmb.SelectedIndex = (int)at;
-            });
+            Dispatcher.UIThread.VerifyAccess();
+            if (GetParameterControlByParamId<ComboBox>(MpRuntimePrefParamType.ChangeAccountType.ToString()) is not ComboBox cmb) {
+                return;
+            }
+            cmb.SelectedIndex = (int)at;
         }
         #endregion
 
@@ -1232,10 +1282,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void SetupPasswordButtons() {
             Dispatcher.UIThread.VerifyAccess();
-            var clear_pwd_param_tuple = GetParamAndFrameByParamId(MpRuntimePrefParamType.ClearDbPassword.ToString());
+            var clear_pwd_param_tuple = GetParamAndFrameViewModelsByParamId(MpRuntimePrefParamType.ClearDbPassword.ToString());
             clear_pwd_param_tuple.Item2.IsEnabled = Mp.Services.DbInfo.HasUserDefinedPassword;
 
-            var change_pwd_param_tuple = GetParamAndFrameByParamId(MpRuntimePrefParamType.ChangeDbPassword.ToString());
+            var change_pwd_param_tuple = GetParamAndFrameViewModelsByParamId(MpRuntimePrefParamType.ChangeDbPassword.ToString());
             if (change_pwd_param_tuple.Item2 is MpAvButtonParameterViewModel bpvm) {
                 bpvm.Title =
                     Mp.Services.DbInfo.HasUserDefinedPassword ? "Change" : "Set";
@@ -1245,30 +1295,18 @@ namespace MonkeyPaste.Avalonia {
 
         private void ProcessListenOnStartupChanged() {
             Dispatcher.UIThread.VerifyAccess();
-            var add_startup_param_tupe = GetParamAndFrameByParamId(nameof(MpPrefViewModel.Instance.AddClipboardOnStartup));
+            var add_startup_param_tupe = GetParamAndFrameViewModelsByParamId(nameof(MpPrefViewModel.Instance.AddClipboardOnStartup));
             add_startup_param_tupe.Item2.IsEnabled = MpPrefViewModel.Instance.IsClipboardListeningOnStartup;
         }
 
         #region Font Helpers
-        private void SetupFontFamilyComboBoxes() {
-            Dispatcher.UIThread.Post(async () => {
-                var ro_cb = await GetParameterControlByParamIdAsync<ComboBox>(nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily));
-                if (ro_cb != null) {
-                    SetupFontFamilyComboBox(ro_cb);
-                }
-
-                var e_cb = await GetParameterControlByParamIdAsync<ComboBox>(nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily));
-                if (e_cb != null) {
-                    SetupFontFamilyComboBox(e_cb);
-                }
-            });
-        }
-
 
         private void SetupFontFamilyComboBox(ComboBox cb) {
+
             if (cb == null) {
                 return;
             }
+
             var cbpvm = cb.DataContext as MpAvEnumerableParameterViewModelBase;
             if (cbpvm == null) {
                 return;
@@ -1306,35 +1344,17 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Param Locators
-        private async Task<T> GetParameterControlByParamIdAsync<T>(string paramId) where T : Control {
-            if (!IsWindowOpen) {
-                return null;
-            }
-            var param_tuple = GetParamAndFrameByParamId(paramId);
-            if (param_tuple == null) {
+
+        private T GetParameterControlByParamId<T>(string paramId) where T : Control {
+            if (MpAvSettingsFrameView.ParamViews
+                .FirstOrDefault(x => x.DataContext != null && x.BindingContext.ParamId.ToString() == paramId)
+                    is not MpAvPluginParameterItemView piv) {
                 return default;
             }
-
-            Window w = MpAvWindowManager.LocateWindow(this);
-            while (w == null) {
-                await Task.Delay(100);
-                w = MpAvWindowManager.LocateWindow(this);
-            }
-
-            var param_vm = param_tuple.Item2;
-            T param_control_of_t = w.GetSelfAndLogicalDescendants().OfType<T>().FirstOrDefault(x => x.DataContext == param_vm);
-            while (param_control_of_t == null) {
-                await Task.Delay(100);
-                if (!w.IsInitialized || !w.IsLoaded) {
-                    // pref tab never selected and closed so stop it
-                    return default;
-                }
-                param_control_of_t = w.GetSelfAndLogicalDescendants().OfType<T>().FirstOrDefault(x => x.DataContext == param_vm);
-            }
-            return param_control_of_t;
+            return piv.GetVisualDescendant<T>();
         }
 
-        private Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameByParamId(string paramId) {
+        private Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId) {
             if (Items.FirstOrDefault(
                         x => x.Items.Any(
                             y => y.ParamId.ToString().ToLower() == paramId.ToLower()))
@@ -1357,7 +1377,7 @@ namespace MonkeyPaste.Avalonia {
                 var result = await Mp.Services.PlatformMessageBox
                 .ShowOkCancelMessageBoxAsync(
                     title: "Confirm",
-                    message: "Are you sure you want to reset all preferences? This action cannot be undone.",
+                    message: "Are you sure you want to reset all preferences? This action cannot be undone. *Some Settings will not update until restart",
                     iconResourceObj: "WarningImage",
                     owner: MpAvWindowManager.LocateWindow(this));
 
@@ -1394,7 +1414,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (focus_param_id != null &&
-                    GetParamAndFrameByParamId(focus_param_id) is Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> focus_tuple) {
+                    GetParamAndFrameViewModelsByParamId(focus_param_id) is Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> focus_tuple) {
                     //SelectedTabIdx = (int)focus_tuple.Item1.TabType;
                     if (TabLookup.Any(x => x.Value.Contains(focus_tuple.Item1))) {
                         var tab_kvp = TabLookup.FirstOrDefault(x => x.Value.Contains(focus_tuple.Item1));
@@ -1408,13 +1428,13 @@ namespace MonkeyPaste.Avalonia {
                         FilterText = string.Empty;
 
                         // wait for param to be in view...
-                        var param_view = await GetParameterControlByParamIdAsync<MpAvPluginParameterItemView>(focus_param_id);
+                        var param_view = GetParameterControlByParamId<MpAvPluginParameterItemView>(focus_param_id);
                         while (true) {
                             if (param_view != null && param_view.IsVisible) {
                                 break;
                             }
                             if (param_view == null) {
-                                param_view = await GetParameterControlByParamIdAsync<MpAvPluginParameterItemView>(focus_param_id);
+                                param_view = GetParameterControlByParamId<MpAvPluginParameterItemView>(focus_param_id);
                             }
                             await Task.Delay(100);
                         }
@@ -1580,8 +1600,8 @@ namespace MonkeyPaste.Avalonia {
                             }
 
                             MpPrefViewModel.Instance.ThemeColor = result;
-                            Dispatcher.UIThread.Post(async () => {
-                                var tb = await GetParameterControlByParamIdAsync<Button>(MpRuntimePrefParamType.ThemeHexColor.ToString());
+                            Dispatcher.UIThread.Post(() => {
+                                var tb = GetParameterControlByParamId<Button>(MpRuntimePrefParamType.ThemeHexColor.ToString());
                                 if (tb == null) {
                                     return;
                                 }

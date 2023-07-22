@@ -114,6 +114,7 @@
 
                                 <local:MpAvSetPasswordView Grid.Row="1"
                                                            ShowDialogButtons="False"
+                                                           AutoFilledPassword="{Binding AutoFillPassword}"
                                                            ConfirmedPassword="{Binding DbPassword}"
                                                            IsPasswordValid="{Binding IsDbPasswordValid}" />
                             </Grid>

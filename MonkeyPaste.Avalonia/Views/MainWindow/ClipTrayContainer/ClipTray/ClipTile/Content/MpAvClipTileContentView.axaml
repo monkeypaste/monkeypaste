@@ -18,6 +18,7 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
             <ContentControl x:Name="ClipTileContentControl"
+                            Padding="5"
                             Content="{Binding}">
                 <Interaction.Behaviors>
                     <local:MpAvContentHighlightBehavior />
@@ -35,10 +36,108 @@
                         </DataTemplate>
                         <DataTemplate x:Key="PlainTextTemplate"
                                       DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvPlainTextContentView 
-                                                            Classes="ContentDragAndDrop"
+                            <local:MpAvPlainTextContentView Classes="ContentDragAndDrop"
                                                             HorizontalAlignment="Stretch"
                                                             VerticalAlignment="Stretch" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="ImageTemplate"
+                                      DataType="local:MpAvClipTileViewModel">
+                            <Image Stretch="UniformToFill"
+                                   Source="{Binding CopyItemData, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="FileListTemplate"
+                                      DataType="local:MpAvClipTileViewModel">
+                            <ListBox Background="Transparent"
+                                     BorderThickness="0"
+                                     DataContext="{Binding FileItemCollectionViewModel}"
+                                     ItemsSource="{Binding Items}"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch">
+                                <ListBox.Styles>
+                                    <Style Selector="ListBoxItem">
+                                        <Setter Property="MaxHeight"
+                                                Value="50" />
+                                        <Setter Property="HorizontalAlignment"
+                                                Value="Stretch" />
+                                        <Setter Property="VerticalContentAlignment"
+                                                Value="Stretch" />
+                                        <Setter Property="BorderThickness"
+                                                Value="1" />
+                                        <Setter Property="BorderBrush"
+                                                Value="{DynamicResource ThemeGrayAccent3}" />
+                                    </Style>
+                                    <Style Selector="ListBoxItem:nth-child(even) /template/ ContentPresenter">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                    <Style Selector="ListBoxItem:nth-child(odd) /template/ ContentPresenter">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="{DynamicResource ThemeGrayAccent2}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+
+                                    <Style Selector="ListBoxItem:nth-child(even):pointerover /template/ ContentPresenter, ListBoxItem:nth-child(odd):pointerover /template/ ContentPresenter,ListBoxItem:focus-within /template/ ContentPresenter">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="BorderBrush"
+                                                Value="{DynamicResource ThemeAccent1Color}" />
+                                    </Style>
+                                    <Style Selector="TextBlock#PathTextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{DynamicResource ThemeInteractiveColor}" />
+                                    </Style>
+                                    <Style Selector="TextBlock#PathTextBlock:pointerover">
+                                        <Setter Property="Foreground"
+                                                Value="{DynamicResource ThemeAccent1Color}" />
+                                        <Setter Property="TextDecorations"
+                                                Value="Underline" />
+                                        <Setter Property="FontWeight"
+                                                Value="SemiBold" />
+                                        <Setter Property="Cursor"
+                                                Value="Hand" />
+
+                                    </Style>
+                                </ListBox.Styles>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel>
+                                            <Image DockPanel.Dock="Left"
+                                                   Width="35"
+                                                   Height="35"
+                                                   Stretch="Uniform"
+                                                   HorizontalAlignment="Left"
+                                                   VerticalAlignment="Center"
+                                                   Source="{Binding Path, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                            <TextBlock x:Name="PathTextBlock"
+                                                       IsHitTestVisible="{Binding $parent[ListBoxItem].IsSelected}"
+                                                       HorizontalAlignment="Stretch"
+                                                       VerticalAlignment="Center"
+                                                       TextAlignment="Right"
+                                                       TextWrapping="Wrap"
+                                                       FontSize="16"
+                                                       Foreground="{DynamicResource ThemeInteractiveColor}"
+                                                       local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                       local:MpAvPointerCommandExtension.LeftReleaseCommand="{Binding NavigateToFileItemCommand}"
+                                                       Text="{Binding PathLabel}">
+                                                <ToolTip.Tip>
+                                                    <local:MpAvToolTipView ToolTipText="Control + Click to follow..." />
+                                                </ToolTip.Tip>
+                                            </TextBlock>
+
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
                         </DataTemplate>
                     </local:MpAvClipTileContentDataTemplateSelector>
                 </ContentControl.DataTemplates>

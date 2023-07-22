@@ -1,6 +1,12 @@
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
 using PropertyChanged;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -8,5 +14,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSettingsFrameCollectionView() {
             AvaloniaXamlLoader.Load(this);
         }
+
     }
 }

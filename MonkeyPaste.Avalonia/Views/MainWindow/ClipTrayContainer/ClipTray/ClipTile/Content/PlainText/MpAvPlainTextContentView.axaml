@@ -11,11 +11,16 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPlainTextContentView">
-    <local:MpAvTextBox x:Name="PlainTextContentTextBox"
+    <local:MpAvUserControl.Styles>
+        <!--<Style Selector=":is(TextElement)">
+            <Setter Property="FontFamily"
+                    Value="{Binding DefaultEditableFontFamily, Source={x:Static pcl:MpPrefViewModel.Instance}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
+        </Style>-->
+    </local:MpAvUserControl.Styles>
+    <local:MpAvContentTextBox x:Name="PlainTextContentTextBox"
+                       Classes="fontFamilyOverride"
                        Focusable="True"
                        BorderThickness="0"
-                       Padding="3"
-                       Background="Transparent"
                        TextWrapping="WrapWithOverflow"
                        AcceptsReturn="True"
                        AcceptsTab="True"
@@ -23,11 +28,11 @@
                        ScrollViewer.VerticalScrollBarVisibility="{Binding IsVerticalScrollbarVisibile, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|DISABLED}"
                        IsHitTestVisible="{Binding IsSubSelectionEnabled}"
                        IsReadOnly="{Binding IsContentReadOnly}"
-                       Width="{Binding BoundWidth}"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Top"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
                        HorizontalContentAlignment="Left"
                        VerticalContentAlignment="Top"
-                       Foreground="Black"
+                       Background="Transparent"
+                       Foreground="{DynamicResource ThemeInteractiveColor}"
                        Text="{Binding CopyItemData, Converter={x:Static local:MpAvContentDataConverter.Instance}, ConverterParameter=PlainText}" />
 </local:MpAvUserControl>

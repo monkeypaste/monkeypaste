@@ -1,5 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace MonkeyPaste.Common {
     public static class MpRichHtmlToPlainTextConverter {
@@ -16,8 +18,18 @@ namespace MonkeyPaste.Common {
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(html);
 
-            foreach (HtmlNode node in doc.DocumentNode.SafeSelectNodes("//br")) {
+            var break_nodes = doc.DocumentNode.SafeSelectNodes("//br");
+            foreach (HtmlNode node in break_nodes) {
                 node.ParentNode.ReplaceChild(doc.CreateTextNode(envNewLine), node);
+            }
+            if (!break_nodes.Any() &&
+                doc.DocumentNode.SafeSelectNodes("//p") is HtmlNodeCollection pars && pars.Count > 0) {
+                // special case for plain text mode rtf convert
+                // rtf->html doesn't insert <br> at end of <p> because quill does it automatically
+                // so when there are p's but no br's it wasn't pre-processed by quill convert
+                foreach (var par in pars) {
+                    par.InsertAfter(doc.CreateTextNode(envNewLine), par.LastChild);
+                }
             }
             return doc.DocumentNode.InnerText;
         }

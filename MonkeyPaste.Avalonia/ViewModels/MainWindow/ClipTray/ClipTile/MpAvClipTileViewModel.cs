@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
@@ -1016,6 +1017,9 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CopyItem != null && CopyItem.ItemData != value) {
+                    if (CopyItemType != MpCopyItemType.Text && !MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+
+                    }
                     //CopyItem.ItemData = value;
                     //HasModelChanged = true;
 
@@ -1940,10 +1944,12 @@ namespace MonkeyPaste.Avalonia {
                                     title: "Data Degradation Warning",
                                     body: $"Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?");
 
-            if (result == MpNotificationDialogResultType.Ok) {
-                _isContentReadOnly = false;
-                OnPropertyChanged(nameof(IsContentReadOnly));
+            if (result == MpNotificationDialogResultType.Cancel) {
+                return;
             }
+
+            _isContentReadOnly = false;
+            OnPropertyChanged(nameof(IsContentReadOnly));
         }
 
         private void RestorePersistentState() {

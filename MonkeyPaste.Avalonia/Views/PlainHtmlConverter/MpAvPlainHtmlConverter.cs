@@ -103,6 +103,11 @@ namespace MonkeyPaste.Avalonia {
             if (htmlDataStr == null) {
                 return null;
             }
+            if (inputFormatType == "rtf") {
+                // create 'dirty' quill html w/ internal converter and treat as plain for quill to parse
+                htmlDataStr = htmlDataStr.ToRichHtmlText(MpPortableDataFormats.WinRtf);
+                inputFormatType = "rtf2html";
+            }
             if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 var result = MpAvRichHtmlConvertResult.Parse(htmlDataStr.ToString());
                 return result;
@@ -123,11 +128,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpConsole.WriteLine("Html converter initialized");
             }
-            if (inputFormatType == "rtf") {
-                // create 'dirty' quill html w/ internal converter and treat as plain for quill to parse
-                htmlDataStr = htmlDataStr.ToRichHtmlText(MpPortableDataFormats.WinRtf);
-                inputFormatType = "rtf2html";
-            } else if (inputFormatType == "csv") {
+            if (inputFormatType == "csv") {
                 htmlDataStr = htmlDataStr.CsvStrToRichHtmlTable(csvProps);
                 inputFormatType = "html";
             } else if (inputFormatType == "text") {

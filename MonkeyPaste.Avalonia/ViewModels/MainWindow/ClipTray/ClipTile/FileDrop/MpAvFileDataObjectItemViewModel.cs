@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFileDataObjectItemViewModel : MpViewModelBase<MpAvFileItemCollectionViewModel>,
@@ -28,7 +28,20 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Appearance
-
+        public string PathLabel {
+            get {
+                if (string.IsNullOrWhiteSpace(Path)) {
+                    return string.Empty;
+                }
+                try {
+                    return System.IO.Path.GetFileName(Path);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error converting file path '{Path}' to file name. ", ex);
+                    return string.Empty;
+                }
+            }
+        }
         public string FileItemBackgroundHexColor {
             get {
                 if (IsHovering || IsSelected) {
@@ -143,6 +156,21 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(IconBase64));
             }
         }
+        #endregion
+
+        #region COmmands 
+
+        public ICommand NavigateToFileItemCommand => new MpCommand(
+            () => {
+                if (!Path.IsFileOrDirectory() ||
+                    !Uri.IsWellFormedUriString(Path.ToFileSystemUriFromPath(), UriKind.Absolute) ||
+                    new Uri(Path.ToFileSystemUriFromPath()) is not Uri fi_uri) {
+                    return;
+                }
+                MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(fi_uri);
+            }, () => {
+                return MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown;
+            });
         #endregion
     }
 }

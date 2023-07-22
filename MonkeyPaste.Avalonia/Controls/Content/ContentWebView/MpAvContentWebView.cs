@@ -223,10 +223,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region MpAvIDropTarget Implementation 
-        public bool IsDropping => BindingContext == null ? false : BindingContext.IsDropOverTile;
-        #endregion
-
         #region MpAvIContentDragSource Implementation
         public string[] GetDragFormats() {
             if (BindingContext == null) {
@@ -252,20 +248,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public bool WasDragCanceled { get; set; }
-        //public void NotifyDropComplete(DragDropEffects dropEffect) {
-        //    var dragEndMsg = new MpQuillDragEndMessage() {
-        //        dataTransfer = new MpQuillDataTransferMessageFragment() {
-        //            dropEffect = dropEffect.ToString().ToLower()
-        //        },
-        //        fromHost = true,
-        //        wasCancel = dropEffect == DragDropEffects.None
-        //    };
 
-        //    SendMessage($"dragEnd_ext('{dragEndMsg.SerializeJsonObjectToBase64()}')");
-
-        //    //IsDragging = false;
-        //    MpConsole.WriteLine($"Drag complete for '{BindingContext}'. DropEffect: '{dropEffect}'");
-        //}
         public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta) {
             if (!Dispatcher.UIThread.CheckAccess()) {
                 Dispatcher.UIThread.Post(() => (this as MpAvIDragSource).NotifyModKeyStateChanged(ctrl, alt, shift, esc, meta));

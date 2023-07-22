@@ -3,9 +3,6 @@ using MonkeyPaste.Common.Avalonia;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpAvIDropTarget {
-        bool IsDropping { get; }
-    }
     public interface MpAvIDragSource {
         bool WasDragCanceled { get; set; }
         bool IsDragging { get; set; }
