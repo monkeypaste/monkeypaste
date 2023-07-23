@@ -245,6 +245,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool CanMoveWindow =>
+            IsModal;
+        public List<Type> RejectedMoveControlTypes { get; set; }
+
         public bool IsDoNotShowType =>
             !ForceShow &&
             MpPrefViewModel.Instance != null &&

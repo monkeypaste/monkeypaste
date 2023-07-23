@@ -145,7 +145,7 @@ function processEffectAllowed(e) {
 
 // #region Event Handlers
 function onDragEnter(e) {
-    updateWindowMouseState(e);
+    updateWindowMouseState(e,'dragEnter');
 
     if (e.fromHost === undefined) {
         e.stopPropagation();
@@ -187,7 +187,7 @@ function onDragEnter(e) {
 function onDragOver(e) {
     //log('drag over called');
 
-    updateWindowMouseState(e);
+    updateWindowMouseState(e,'dragOver');
 
     if (e.fromHost === undefined) {
         e.stopPropagation();
@@ -269,7 +269,7 @@ function onDragOver(e) {
 function onDragLeave(e) {
     log('drag leave called');
 
-    updateWindowMouseState(e);
+    updateWindowMouseState(e,'dragLeave');
 
     let editor_rect = getEditorContainerRect();
     if (isPointInRect(editor_rect, globals.WindowMouseLoc)) {
@@ -308,7 +308,7 @@ function onDrop(e) {
         isDragging() && isPoint(globals.WindowMouseLoc) && isPoint(globals.WindowMouseDownLoc) ?
             dist(globals.WindowMouseLoc, globals.WindowMouseDownLoc) : null;
 
-    updateWindowMouseState(e);    
+    updateWindowMouseState(e,'drop');    
 
     // VALIDATE
 

@@ -54,7 +54,7 @@ function disableDragOverlay() {
 
 function onDragStart(e) {
     // dragstart doesn't have buttons set so updateState'll screw up
-    updateWindowMouseState(e);
+    updateWindowMouseState(e,'dragStart');
 
     if (isDragging()) {
         return;
@@ -97,7 +97,7 @@ function onDragStart(e) {
 
 function onDragEnd(e) {
     log('drag end');
-    updateWindowMouseState(e);
+    updateWindowMouseState(e,'dragEnd');
     globals.CurDragTargetElm = null;
     globals.IsShiftDown = false;
     globals.IsCtrlDown = false;

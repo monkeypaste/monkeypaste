@@ -184,7 +184,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<IEnumerable<MpISourceRef>> GatherExternalSourceRefsAsync(MpAvDataObject avdo) {
-            var last_pinfo = Mp.Services.ProcessWatcher.LastProcessInfo;
+            MpPortableProcessInfo last_pinfo =
+                avdo.ContainsData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) ?
+                    avdo.GetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) as MpPortableProcessInfo :
+                    Mp.Services.ProcessWatcher.LastProcessInfo;
 
             //if(OperatingSystem.IsLinux()) {
             //    // this maybe temporary but linux not following process watching convention because its SLOW

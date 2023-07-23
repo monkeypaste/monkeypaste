@@ -379,6 +379,9 @@ namespace MonkeyPaste.Avalonia {
                     if (IsAppendNotifier) {
                         return PASTE_APPEND_TOOLBAR_MIN_WIDTH;
                     }
+                    if (IsWindowOpen) {
+                        return 50;
+                    }
                 }
                 return EDITOR_TOOLBAR_MIN_WIDTH;
             }
@@ -2109,7 +2112,7 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
                     return;
                 }
-                await Mp.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
+                await Mp.Services.DataObjectHelperAsync.WriteToClipboardAsync(mpdo, true);
 
                 // wait extra for cb watcher to know about data
                 //await Task.Delay(300);

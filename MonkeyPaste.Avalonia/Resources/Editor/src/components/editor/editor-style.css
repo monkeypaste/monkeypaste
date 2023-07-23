@@ -29,6 +29,16 @@
     color: var(--defcontentfgcolor);
 }
 
+
+.show-scrollbars {
+    overflow: auto !important;
+    scroll-behavior: smooth;
+}
+
+.hide-scrollbars {
+    overflow: hidden !important;
+}
+
 .no-select {
     user-select: none;
     cursor: default;
@@ -41,15 +51,6 @@
         overflow: hidden;
         height: auto;
     }
-
-.show-scrollbars {
-    overflow: auto !important;
-    scroll-behavior: smooth;
-}
-
-.hide-scrollbars {
-    overflow: hidden !important;
-}
 
 .sub-select {
     user-select: auto;
@@ -83,6 +84,9 @@ body:has(.sub-select) {
     text-decoration: unset;
 }
 
+.range-selected {
+    cursor: move !important;
+}
 body:has(.editable) {
     background-color: var(--editableeditorbgcolor);
     /*opacity: var(--editableopacity);*/

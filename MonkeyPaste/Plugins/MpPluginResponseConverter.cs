@@ -59,10 +59,12 @@ namespace MonkeyPaste {
             }
 
             if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT, out IEnumerable<string> mpdo_urls)) {
-                // retain any references response may have included (remove cur plugin and source item since it will be added, probably shouldn't be there)
+                // retain any references response may have included
+                // (remove cur plugin and source item since it will be added, probably shouldn't be there)
                 ref_urls = mpdo_urls
                     .Where(x => x != source_url_ref && x != plugin_param_req_ref_url).ToList();
             }
+            MpTransactionSourceType
 
             // add reference to preset with args ie 'https://<preset endpoint>/<preset request>'
             ref_urls.Add(plugin_param_req_ref_url);

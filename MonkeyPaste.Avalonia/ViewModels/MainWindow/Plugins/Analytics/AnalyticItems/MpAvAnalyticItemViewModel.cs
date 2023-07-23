@@ -624,27 +624,19 @@ namespace MonkeyPaste.Avalonia {
                 MpAvAnalyticItemPresetViewModel targetAnalyzer = null;
                 Func<string> lastOutputCallback = null;
 
-                if (args is object[] argParts) {
-                    targetAnalyzer = argParts[0] as MpAvAnalyticItemPresetViewModel;
+                if (args is object[] argParts &&
+                    argParts.Length >= 0 &&
+                    argParts[0] is MpAvAnalyticItemPresetViewModel action_aipvm) {
+                    targetAnalyzer = action_aipvm;
                     // when analyzer is triggered from action not user selection 
-                    if (argParts[1] is string) {
-                        suppressWrite = true;
-                        //sourceCopyItem = await MpCopyItem.CreateAsync(
-                        //                                    data: argParts[1] as string,
-                        //                                    suppressWrite: true);
-                        sourceCopyItem = await Mp.Services.CopyItemBuilder.BuildAsync(
-                            pdo: new MpAvDataObject(MpPortableDataFormats.Text, argParts[1] as string),
-                            suppressWrite: true,
-                            transType: MpTransactionType.Analyzed,
-                            force_allow_dup: true,
-                            force_ext_sources: false);
-                    } else if (argParts[1] is MpCopyItem) {
-                        sourceCopyItem = argParts[1] as MpCopyItem;
+                    if (argParts.Length > 1 &&
+                        argParts[1] is MpCopyItem ci) {
+                        sourceCopyItem = ci;
                     }
 
-                    if (argParts.Length == 3 &&
-                        argParts[2] != null) {
-                        lastOutputCallback = argParts[2] as Func<string>;
+                    if (argParts.Length > 2 &&
+                        argParts[2] is Func<string> valCallback) {
+                        lastOutputCallback = valCallback;
                     }
                 } else {
                     if (args is MpAvAnalyticItemPresetViewModel aipvm) {

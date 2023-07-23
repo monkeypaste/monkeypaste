@@ -50,6 +50,7 @@ body {
     color: var(--selfgcolor);
 }
 
+
 .hidden {
     display: none !important;
 }

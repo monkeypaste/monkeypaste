@@ -9,6 +9,8 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvDoubleToGridLengthConverter : IValueConverter {
         public static readonly MpAvDoubleToGridLengthConverter Instance = new();
 
+        public MpAvDoubleToGridLengthConverter() { }
+
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             GridUnitType gut = parameter == null ?
                 GridUnitType.Pixel : (GridUnitType)Enum.Parse(typeof(GridUnitType), parameter.ToString());

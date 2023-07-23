@@ -817,7 +817,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpEditorBindingFunctionType.getClipboardDataTransferObject:
                     var cb_dtObjReq = MpJsonConverter.DeserializeObject<MpQuillEditorClipboardDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
-                    var cb_ido = await Mp.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false) as IDataObject;
+                    var cb_ido = await Mp.Services.DataObjectHelperAsync.ReadClipboardAsync(false) as IDataObject;
                     var cb_dtObjResp = cb_ido.ToQuillDataItemsMessage();
                     getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(cb_dtObjResp);
                     break;
@@ -1353,7 +1353,7 @@ namespace MonkeyPaste.Avalonia {
                 // sync append item to current clipboard
                 var append_mpdo = await GetDataObjectAsync(null, false, true);
                 await Mp.Services.DataObjectHelperAsync
-                    .SetPlatformClipboardAsync(append_mpdo, true);
+                    .WriteToClipboardAsync(append_mpdo, true);
                 MpConsole.WriteLine($"Clipboard updated with append data. Plain Text: ");
                 if (append_mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {
                     MpConsole.WriteLine(pt);

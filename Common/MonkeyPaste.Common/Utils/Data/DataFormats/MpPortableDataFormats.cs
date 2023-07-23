@@ -58,7 +58,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT,
             INTERNAL_TAG_ITEM_FORMAT,
             INTERNAL_CONTENT_TYPE_FORMAT,
-            INTERNAL_ACTION_ITEM_FORMAT
+            INTERNAL_ACTION_ITEM_FORMAT,
+            INTERNAL_PROCESS_INFO_FORMAT
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup = new Dictionary<int, MpPortableDataFormat>();
@@ -119,6 +120,7 @@ namespace MonkeyPaste.Common {
         public const string INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT = "Mp Internal Search Criteria Item";
         public const string INTERNAL_TAG_ITEM_FORMAT = "Mp Internal Tag Tile Item";
         public const string INTERNAL_ACTION_ITEM_FORMAT = "Mp Internal Action Item";
+        public const string INTERNAL_PROCESS_INFO_FORMAT = "Mp Internal Process Info";
 
 
         // NOTE data object is not registered and only used to merge data objects
@@ -141,7 +143,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_TAG_ITEM_FORMAT,
             INTERNAL_DATA_OBJECT_FORMAT,
             INTERNAL_CONTENT_TYPE_FORMAT,
-            INTERNAL_ACTION_ITEM_FORMAT
+            INTERNAL_ACTION_ITEM_FORMAT,
+            INTERNAL_PROCESS_INFO_FORMAT
         };
         #endregion
 

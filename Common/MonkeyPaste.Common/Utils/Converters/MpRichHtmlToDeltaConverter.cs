@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 
 namespace MonkeyPaste.Common {
-    public static class MpRichHtmlToPlainTextConverter {
+    public static class MpRichHtmlToDeltaConverter {
         public static string Convert(string html, string envNewLine = null) {
             string pt = FormatLineBreaks(html, envNewLine)
                 .DecodeSpecialHtmlEntities();
@@ -23,14 +23,10 @@ namespace MonkeyPaste.Common {
                 node.ParentNode.ReplaceChild(doc.CreateTextNode(envNewLine), node);
             }
             if (!break_nodes.Any() &&
-                doc.DocumentNode.SafeSelectNodes("//p") is HtmlNodeCollection pars && pars.Count > 1) {
-                // TODO? may need to make lookup list of block elements besides p's here, not sure
-
-                // NOTE1 special case for plain text mode rtf convert
+                doc.DocumentNode.SafeSelectNodes("//p") is HtmlNodeCollection pars && pars.Count > 0) {
+                // special case for plain text mode rtf convert
                 // rtf->html doesn't insert <br> at end of <p> because quill does it automatically
                 // so when there are p's but no br's it wasn't pre-processed by quill convert
-
-                // NOTE2 not adding line break when there's only 1 paragraph
                 foreach (var par in pars) {
                     par.InsertAfter(doc.CreateTextNode(envNewLine), par.LastChild);
                 }

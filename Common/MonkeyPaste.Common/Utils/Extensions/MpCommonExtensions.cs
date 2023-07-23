@@ -830,5 +830,25 @@ namespace MonkeyPaste.Common {
             return false;
         }
         #endregion
+
+        #region Type
+
+        public static bool IsClassSubclassOfOrImplements(this Type t, Type ot) {
+            if (t == ot) {
+                return true;
+            }
+            if (ot.IsInterface && ot.IsAssignableFrom(t)) {
+                return true;
+            }
+            if (t.IsSubclassOf(ot)) {
+                return true;
+            }
+            return false;
+        }
+
+        public static string ToAssemblyReferencedString(this Type t) {
+            return $"{t}, {t.Assembly}";
+        }
+        #endregion
     }
 }

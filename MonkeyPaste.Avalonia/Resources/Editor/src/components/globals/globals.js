@@ -266,6 +266,7 @@ const globals = {
 	DragCopySelBgColor: 'green',
 	LastSelRange: null,
 	CurSelRange: { index: 0, length: 0 },
+	CurSelRects: null,
 	SelectionOnMouseDown: null,
 	// #endregion
 

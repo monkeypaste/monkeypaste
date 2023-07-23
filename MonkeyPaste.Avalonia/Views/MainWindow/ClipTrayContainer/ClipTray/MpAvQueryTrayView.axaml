@@ -49,8 +49,18 @@
                     Value="{Binding TrayX}" />
             <Setter Property="Canvas.Top"
                     Value="{Binding TrayY}" />
-            <Setter Property="Opacity"
-                    Value="{Binding IsPlaceholder, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}" />
+            <!--<Setter Property="Opacity"
+                    Value="{Binding IsPlaceholder, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}" />-->
+            <Setter Property="Opacity">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static local:MpAvMultiBoolToDoubleConverter.Instance}"
+                                  ConverterParameter="And|0|1">
+                        <Binding Path="IsPlaceholder" />
+                        <Binding Path="!IsInPlaceRequerying"
+                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
         </Style>
 
     </local:MpAvUserControl.Styles>

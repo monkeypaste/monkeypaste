@@ -63,7 +63,7 @@ function prepareDeltaLogForDataTransfer() {
             dataItems: [
                 {
                     format: globals.URI_LIST_FORMAT,
-                    data: JSON.stringify([`${globals.LOCAL_HOST_URL}/?type=UserDevice&id=-1`])
+                    data: JSON.stringify([`${globals.LOCAL_HOST_URL}/?type=CopyItem&handle=${globals.ContentHandle}`])
                 }
             ]
         };

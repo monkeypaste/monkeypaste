@@ -112,8 +112,6 @@ namespace MonkeyPaste.Avalonia {
                         nw = new MpAvWelcomeWindow() {
                             DataContext = nvmb
                         };
-                        nw.Classes.Add("fadeIn");
-                        nw.Classes.Add("fadeOut");
                         break;
                     case MpNotificationLayoutType.ErrorWithOption:
                     case MpNotificationLayoutType.UserAction:
@@ -158,6 +156,13 @@ namespace MonkeyPaste.Avalonia {
             if (!nvmb.IsModal) {
                 nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
             }
+            if (nvmb.CanMoveWindow) {
+                MpAvMoveWindowExtension.SetIsEnabled(nw, true);
+                if (nvmb.RejectedMoveControlTypes != null) {
+                    MpAvMoveWindowExtension.SetRejectedControlTypeNames(nw, string.Join("|", nvmb.RejectedMoveControlTypes.Select(x => x.ToString())));
+                }
+            }
+
             if (nvmb.Owner is Window w &&
                 nvmb.AnchorTarget == null) {
                 // let anchor to precedence over owner for positioning

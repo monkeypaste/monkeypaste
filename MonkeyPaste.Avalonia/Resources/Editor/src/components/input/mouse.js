@@ -59,26 +59,18 @@ function getScreenMousePos(e) {
 
 // #region Actions
 
-function updateWindowMouseState(e) {
+function updateWindowMouseState(e, eventType) {
 	// NOTE this is called from both mouse and dnd events so state is 'always' accurate
-	if (!e || e.buttons === undefined) {
+	if (!e) {
 		return;
 	}
 	globals.WindowMouseLoc = getClientMousePos(e);
-	if ((!isNullOrUndefined(e.button) && e.button === 0) ||
-		e.buttons === 1) {
-		if (globals.WindowMouseDownLoc == null) {
-			globals.WindowMouseDownLoc = globals.WindowMouseLoc;
-			if (isDragging()) {
-				// drag end was not triggered, so reset here
-				// i think this only happen when resuming from breakpoint in dnd
-
-				//log('lingering drag elm caught in mouse down, manually calling dragEnd...')
-				//onDragEnd('forced from window mousedown');
-			}
-		}
-	} else if (e.dataTransfer === undefined) {
-		// 
+	if (globals.WindowMouseDownLoc == null &&
+		(eventType == 'down' || eventType == 'dragStart')) {
+		globals.WindowMouseDownLoc = globals.WindowMouseLoc;
+	}
+	if (globals.WindowMouseDownLoc &&
+		(eventType == 'up' || eventType == 'dragEnd' || eventType == 'dragLeave' || eventType == 'drop')) {
 		globals.WindowMouseDownLoc = null;
 	}
 }
@@ -168,7 +160,7 @@ function onWindowMouseDown(e) {
 	}
 
 	//globals.WindowMouseDownLoc = { x: e.clientX, y: e.clientY };
-	updateWindowMouseState(e);
+	updateWindowMouseState(e,'down');
 	globals.SelectionOnMouseDown = getDocSelection();
 	if (e.buttons !== 2 && hasEditableTable()) {
 		// deal w/ table drag selection to supppress table select if on already selected cell
@@ -177,10 +169,11 @@ function onWindowMouseDown(e) {
 }
 
 function onWindowMouseMove(e) {
-	updateWindowMouseState(e);
+	updateWindowMouseState(e,'move');
 	if (hasAnnotations()) {
 		onAnnotationWindowPointerMove(e);
-	}	
+	}
+	updateSelCursor();
 }
 
 function onWindowMouseUp(e) {
@@ -205,7 +198,7 @@ function onWindowMouseUp(e) {
 		globals.WasInternalContextMenuAbleToShow = false;
 	}
 
-	updateWindowMouseState(e);
+	updateWindowMouseState(e,'up');
 	globals.SelectionOnMouseDown = null;
 	updateTableDragState(null);
 }

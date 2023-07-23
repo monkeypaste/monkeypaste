@@ -8,7 +8,8 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvUserActionNotificationWindow : MpAvWindow {
 
-        public MpAvUserActionNotificationViewModel BindingContext => DataContext as MpAvUserActionNotificationViewModel;
+        public override MpAvUserActionNotificationViewModel BindingContext =>
+            DataContext as MpAvUserActionNotificationViewModel;
 
         public MpAvUserActionNotificationWindow() : base() {
             Init();

@@ -1197,8 +1197,12 @@
       
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Defaults.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Animations\WelcomeWindowGrow.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Animations\FadeWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Fade.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Animations\FadeWindow.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Animations\WelcomeWindowGrow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\RadioButton.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />

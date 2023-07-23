@@ -50,6 +50,22 @@ function resetForcedCursor() {
 	}
 }
 
+function updateSelCursor() {
+	// change cursor to move when hovering over selected range and
+	// not in a drag state
+	if (globals.WindowMouseDownLoc ||
+		!globals.CurSelRects) {
+		getEditorContainerElement().classList.remove('range-selected');
+		return;
+	}
+	let over_sel = globals.CurSelRects.some(x => isPointInRect(x, globals.WindowMouseLoc));
+	if (over_sel) {
+		getEditorContainerElement().classList.add('range-selected');
+	} else {
+		getEditorContainerElement().classList.remove('range-selected');
+	}
+}
+
 // #endregion Actions
 
 // #region Event Handlers

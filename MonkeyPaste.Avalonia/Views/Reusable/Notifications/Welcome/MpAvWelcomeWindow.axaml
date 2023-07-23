@@ -5,13 +5,13 @@
                   xmlns:sys="clr-namespace:System;assembly=mscorlib"
                   xmlns:local="using:MonkeyPaste.Avalonia"
                   xmlns:pcl="using:MonkeyPaste"
+                  Classes="fadeOut welcomeGrow"
                   x:Class="MonkeyPaste.Avalonia.MpAvWelcomeWindow"
+                  local:MpAvMoveWindowExtension.IsEnabled="True"
                   Background="Transparent"
                   WindowStartupLocation="CenterScreen"
                   SizeToContent="Manual"
-                  SystemDecorations="None"
-                  Width="1000"
-                  Height="600">
+                  SystemDecorations="None">
     <local:MpAvWindow.Styles>
 
         <!--  NAV BUTTONS  -->
@@ -34,7 +34,7 @@
             <Setter Property="HorizontalAlignment"
                     Value="Center" />
             <Setter Property="VerticalAlignment"
-                    Value="Center" />
+                    Value="Top" />
             <Setter Property="TextAlignment"
                     Value="Center" />
             <Setter Property="MaxWidth"
@@ -53,11 +53,14 @@
             VerticalAlignment="Stretch">
 
         <Grid RowDefinitions="100,*,50"
-              Margin="10">
+              Margin="10"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
 
             <!--  TITLE HEADER  -->
 
             <TextBlock Grid.Row="0"
+                       Effect="drop-shadow(0 0 7 white)"
                        DataContext="{Binding CurOptGroupViewModel}"
                        HorizontalAlignment="Stretch"
                        VerticalAlignment="Center"

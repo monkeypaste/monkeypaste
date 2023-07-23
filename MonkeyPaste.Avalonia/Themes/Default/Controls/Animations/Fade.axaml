@@ -12,4 +12,20 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style Selector="Image.fadeIn">
+        <Setter Property="Opacity"
+                Value="0" />
+        <Setter Property="Transitions">
+            <Setter.Value>
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="0:0:0.5" />
+                </Transitions>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="Image.fadeIn[IsVisible=true]">
+        <Setter Property="Opacity"
+                Value="1" />
+    </Style>
 </Styles>

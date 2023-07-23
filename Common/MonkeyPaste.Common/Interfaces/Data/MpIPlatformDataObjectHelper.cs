@@ -5,8 +5,8 @@ namespace MonkeyPaste.Common {
         bool IsOleBusy { get; }
         Task<object> ReadDragDropDataObjectAsync(object idoObj);
         Task<object> ProcessDragDropDataObjectAsync(object idoObj);
-        Task SetPlatformClipboardAsync(object idoObj, bool ignoreClipboardChange);
-        Task<object> GetPlatformClipboardDataObjectAsync(bool ignorePlugins);
+        Task WriteToClipboardAsync(object idoObj, bool ignoreClipboardChange);
+        Task<object> ReadClipboardAsync(bool ignorePlugins);
 
         Task UpdateDragDropDataObjectAsync(object source, object target);
     }

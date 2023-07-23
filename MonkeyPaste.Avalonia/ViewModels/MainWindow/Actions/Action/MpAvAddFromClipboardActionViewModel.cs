@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
             MpPortableDataObject mpdo = null;
             MpCopyItem new_ci = null;
             object ido_obj = await Dispatcher.UIThread.InvokeAsync<object>(async () => {
-                return await Mp.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false);
+                return await Mp.Services.DataObjectHelperAsync.ReadClipboardAsync(false);
             });
 
 

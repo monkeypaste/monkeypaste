@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -121,75 +122,7 @@ namespace MonkeyPaste.Avalonia {
             MpDebug.Assert(_instance == null, "Only 1 welcome vm should be created");
             _instance = this;
             MpConsole.WriteLine("Welcome vm created");
-            GreetingViewModel = new MpAvWelcomeOptionGroupViewModel() {
-                Title = "Welcome",
-                Caption = "Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.",
-            };
-
-            // TODO add pricing & capacity values as item description
-            AccountViewModel = new MpAvWelcomeOptionGroupViewModel() {
-                Title = "Subscription",
-                Caption = "No features are limited by subscription, only storage capacity and can be changed at anytime. ",
-                Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,null) {
-                        IconSourceObj = "LoginImage",
-                        LabelText = "Restore"
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Free) {
-                        IconSourceObj = "StarOutlineImage",
-                        LabelText = "Free"
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Standard) {
-                        IconSourceObj = "StarYellowImage",
-                        LabelText = "Standard"
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Unlimited) {
-                        IsChecked = true,
-                        IconSourceObj = "TrophyImage",
-                        LabelText = "Unlimited"
-                    },
-                }
-            };
-
-            GestureProfilesViewModel = new MpAvWelcomeOptionGroupViewModel() {
-                Title = "Shortcuts",
-                Caption = "Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings->Shortcuts' menu. ",
-                Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,0) {
-                        IsChecked = MpPrefViewModel.Instance.InitialStartupRoutingProfileType == MpShortcutRoutingProfileType.Internal,
-                        IconSourceObj = "PrivateImage",
-                        LabelText = MpShortcutRoutingProfileType.Internal.ToString(),
-                        DescriptionText = "No global shortcuts will be enabled by default."
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,1) {
-                        IsChecked = MpPrefViewModel.Instance.InitialStartupRoutingProfileType != MpShortcutRoutingProfileType.Internal,
-                        IconSourceObj = "GlobeImage",
-                        LabelText = MpShortcutRoutingProfileType.Global.ToString(),
-                        DescriptionText = "MonkeyPaste's clipboard shortcuts will be available in all applications"
-                    },
-                }
-            };
-            ScrollWheelBehaviorViewModel = new MpAvWelcomeOptionGroupViewModel() {
-                Title = "Scroll-to-Open",
-                Caption = "When enabled, a scroll gesture at the top of the screen will reveal MonkeyPaste.",
-                Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,0) {
-                        IsChecked = !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
-                        IconSourceObj = "CloseWindowImage",
-                        LabelText = "Disabled"
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,1) {
-                        IsChecked = MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
-                        IconSourceObj = "AppFrameImage",
-                        LabelText = "Enabled"
-                    }
-                }
-            };
-
-            DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel() {
-                Title = "Password",
-                Caption = "Your privacy is important and clipboard data can be very personal. Storage is always encrypted but you can set a password that will be required in case your device is stolen or someone else is using your device.",
-            };
+            InitWelcomeItems();
         }
 
         #endregion
@@ -224,7 +157,84 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+        private void InitWelcomeItems() {
+            GreetingViewModel = new MpAvWelcomeOptionGroupViewModel() {
+                Title = "Welcome",
+                SplashIconSourceObj = "AppImage",
+                Caption = "Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.",
+            };
 
+            // TODO add pricing & capacity values as item description
+            AccountViewModel = new MpAvWelcomeOptionGroupViewModel() {
+                Title = "Subscription",
+                Caption = "No features are limited by subscription, only storage capacity and can be changed at anytime. ",
+                Items = new[] {
+                    new MpAvWelcomeOptionItemViewModel(this,null) {
+                        IconSourceObj = "LoginImage",
+                        LabelText = "Restore",
+                        DescriptionText = "Restore your existing account.."
+                    },
+                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Free) {
+                        IconSourceObj = "StarOutlineImage",
+                        LabelText = "Free",
+                        DescriptionText = "Content and archive is limited to 5 and 20 clips respectively. No syncing capabilities are enabled. More info here."
+                    },
+                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Standard) {
+                        IconSourceObj = "StarYellowImage",
+                        LabelText = "Standard",
+                        DescriptionText = $"$0.99/$9.99 (monthly/annually) {Environment.NewLine} Content is limited to 100 clips with an unlimited archive and syncing across all devices. More info here."
+                    },
+                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Unlimited) {
+                        IsChecked = true,
+                        IconSourceObj = "TrophyImage",
+                        LabelText = "Unlimited",
+                        DescriptionText = $"$2.99/$29.99 (monthly/annually) {Environment.NewLine} Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices. More info here."
+                    },
+                }
+            };
+
+            GestureProfilesViewModel = new MpAvWelcomeOptionGroupViewModel() {
+                Title = "Shortcuts",
+                Caption = "Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings->Shortcuts' menu.",
+                Items = new[] {
+                    new MpAvWelcomeOptionItemViewModel(this,0) {
+                        IsChecked = MpPrefViewModel.Instance.InitialStartupRoutingProfileType == MpShortcutRoutingProfileType.Internal,
+                        IconSourceObj = "PrivateImage",
+                        LabelText = MpShortcutRoutingProfileType.Internal.ToString(),
+                        DescriptionText = "No global shortcuts will be enabled by default."
+                    },
+                    new MpAvWelcomeOptionItemViewModel(this,1) {
+                        IsChecked = MpPrefViewModel.Instance.InitialStartupRoutingProfileType != MpShortcutRoutingProfileType.Internal,
+                        IconSourceObj = "GlobeImage",
+                        LabelText = MpShortcutRoutingProfileType.Global.ToString(),
+                        DescriptionText = "MonkeyPaste's clipboard shortcuts will be available in all applications."
+                    },
+                }
+            };
+            ScrollWheelBehaviorViewModel = new MpAvWelcomeOptionGroupViewModel() {
+                Title = "Scroll-to-Open",
+                Caption = "When enabled, a scroll gesture at the top of the screen will reveal MonkeyPaste.",
+                Items = new[] {
+                    new MpAvWelcomeOptionItemViewModel(this,0) {
+                        IsChecked = !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
+                        IconSourceObj = "CloseWindowImage",
+                        LabelText = "Disabled",
+                        DescriptionText = "Left-clicking the taskbar icon will still open MonkeyPaste."
+                    },
+                    new MpAvWelcomeOptionItemViewModel(this,1) {
+                        IsChecked = MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
+                        IconSourceObj = "AppFrameImage",
+                        LabelText = "Enabled",
+                        DescriptionText = "More window preferences are available from the 'Settings->Preferences->Window' menu."
+                    }
+                }
+            };
+
+            DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel() {
+                Title = "Password",
+                Caption = "Your privacy is important and clipboard data can be very personal. Storage is always encrypted but you can set a password that will be required in case your device is stolen or someone else is using your device.",
+            };
+        }
         private async Task BeginWelcomeSetupAsync() {
             IsWelcomeDone = false;
             bool is_pwd_already_set = await MpDb.CheckIsUserPasswordSetAsync();

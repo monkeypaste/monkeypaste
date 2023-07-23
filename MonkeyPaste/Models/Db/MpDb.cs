@@ -61,9 +61,13 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static async Task<bool> CheckIsUserPasswordSetAsync() {
+            if (!Mp.Services.DbInfo.DbPath.IsFile()) {
+                return false;
+            }
             if (Mp.Services.DbInfo.HasUserDefinedPassword) {
                 return true;
             }
+
             // if password is set Test should fail with default pwd
             bool does_default_connect = await TestDbConnectionAsync();
             return !does_default_connect;
@@ -499,9 +503,6 @@ namespace MonkeyPaste {
 
         private static async Task<bool> TestDbConnectionAsync() {
             if (_connectionAsync == null) {
-                if (!File.Exists(Mp.Services.DbInfo.DbPath)) {
-                    return false;
-                }
                 await CreateConnectionAsync();
                 if (_connectionAsync == null) {
                     return false;

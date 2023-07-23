@@ -418,6 +418,11 @@ function onDocumentSelectionChange(e) {
 	if (didSelectionChange(new_range, globals.CurSelRange)) {		
 		globals.LastSelRange = globals.CurSelRange;
 		globals.CurSelRange = new_range;
+		if (new_range && new_range.length > 1) {
+			globals.CurSelRects = getRangeRects(new_range);
+		} else {			
+			globals.CurSelRects = null;
+		}
 		updateAllElements();
 	}
 }

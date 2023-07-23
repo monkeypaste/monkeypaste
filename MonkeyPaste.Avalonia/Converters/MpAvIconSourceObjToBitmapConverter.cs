@@ -13,6 +13,9 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvIconSourceObjToBitmapConverter : IValueConverter {
+        public MpAvIconSourceObjToBitmapConverter() : base() { }
+        public MpAvIconSourceObjToBitmapConverter(object dummy) : base() { }
+
         public static MpAvIconSourceObjToBitmapConverter Instance = new MpAvIconSourceObjToBitmapConverter();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {

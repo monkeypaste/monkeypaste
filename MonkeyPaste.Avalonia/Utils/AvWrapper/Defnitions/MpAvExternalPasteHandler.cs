@@ -82,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
 
             // SET CLIPBOARD
 
-            await Mp.Services.DataObjectHelperAsync.SetPlatformClipboardAsync(mpdo, true);
+            await Mp.Services.DataObjectHelperAsync.WriteToClipboardAsync(mpdo, true);
 
             // ACTIVATE TARGET
             if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {

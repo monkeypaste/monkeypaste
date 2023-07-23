@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using static TheArtOfDev.HtmlRenderer.Adapters.RGraphicsPath;
 
 namespace MonkeyPaste.Avalonia {
+
     [DoNotNotify]
     public class MpAvWindow : Window {
 
@@ -31,7 +32,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        public MpIWindowViewModel BindingContext =>
+
+        public virtual MpIWindowViewModel BindingContext =>
             DataContext as MpIWindowViewModel;
 
         #region Overrides

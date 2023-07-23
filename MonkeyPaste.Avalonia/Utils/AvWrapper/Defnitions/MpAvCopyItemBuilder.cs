@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
                             reqType: MpJsonMessageFormatType.DataObject,
                             //req: mpdo.SerializeData(),
                             respType: MpJsonMessageFormatType.Delta,
-                            //resp: itemDelta,
+                            //resp: string.IsNullOrEmpty(itemDelta) ? ci.ToDelta():itemDelta,
                             ref_uris: ref_urls,
                             transType: transType);
             }
@@ -367,30 +367,6 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
-            if (string.IsNullOrEmpty(delta)) {
-                MpQuillDelta deltaObj = new MpQuillDelta() {
-                    ops = new List<Op>()
-                };
-
-                switch (itemType) {
-                    case MpCopyItemType.Text:
-                        deltaObj.ops.Add(new Op() { insert = itemData.ToPlainText(inputTextFormat) });
-                        break;
-                    case MpCopyItemType.Image:
-                        deltaObj.ops.Add(new Op() {
-                            insert = new ImageInsert() { image = $"data:image/png;base64,{itemData}" },
-                            attributes = new Attributes() { align = "center" }
-                        });
-                        break;
-                    case MpCopyItemType.FileList:
-                        deltaObj.ops.Add(new Op() {
-                            insert = itemData
-                        });
-
-                        break;
-                }
-                delta = deltaObj.SerializeJsonObject();
-            }
             return new Tuple<MpCopyItemType, string, string>(itemType, itemData, delta);
         }
 

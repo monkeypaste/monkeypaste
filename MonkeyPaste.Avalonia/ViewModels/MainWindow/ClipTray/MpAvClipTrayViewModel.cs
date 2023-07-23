@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentBuilder Implementation
 
-        async Task<MpCopyItem> MpIContentBuilder.BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy) {
+        public async Task<MpCopyItem> BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy) {
             MpAvDataObject mpdo = await Mp.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avOrPortableDataObject) as MpAvDataObject;
 
             if (mpdo == null) {
@@ -81,15 +81,6 @@ namespace MonkeyPaste.Avalonia {
                 bool is_partial_internal = mpdo.ContainsPartialContentRef();
                 mpdo.FinalizeContentOleTitle(!is_partial_internal, is_copy);
             }
-            //string source_ctvm_pub_handle = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT) as string;
-            //if (!string.IsNullOrEmpty(source_ctvm_pub_handle)) {
-            //    // ido from internal content source
-            //    var source_ctvm = AllItems.FirstOrDefault(x => x.PublicHandle == source_ctvm_pub_handle);
-            //    if (source_ctvm != null) {
-            //        // sub-selection ido
-            //        mpdo.SetData(MpPortableDataFormats.LinuxUriList, new string[] { Mp.Services.SourceRefTools.ConvertToInternalUrl(source_ctvm.CopyItem) });
-            //    }
-            //}
             MpCopyItem content = await AddItemFromDataObjectAsync(mpdo, is_copy);
             return content;
         }
@@ -2428,6 +2419,7 @@ namespace MonkeyPaste.Avalonia {
                 !is_startup_ido &&
                 (IsAppPaused ||
                  (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && !is_ext_change));
+
             if (is_startup_ido && !is_change_ignored && !MpPrefViewModel.Instance.AddClipboardOnStartup) {
                 // ignore startup item
                 is_change_ignored = true;
@@ -2444,13 +2436,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             Dispatcher.UIThread.Post(async () => {
-                if (is_startup_ido) {
-                    IsAddingStartupClipboardItem = true;
-                    //await Task.Delay(500);
-                    //while (IsAnyBusy) {
-                    //    await Task.Delay(100);
-                    //}
-                }
+                IsAddingStartupClipboardItem = is_startup_ido;
                 await AddItemFromDataObjectAsync(mpdo);
                 IsAddingStartupClipboardItem = false;
             });
@@ -4003,7 +3989,7 @@ namespace MonkeyPaste.Avalonia {
 
                 // NOTE even though re-creating paste object here the copy item
                 // builder should recognize it as a duplicate and use original (just created)
-                var mpdo = await Mp.Services.DataObjectHelperAsync.GetPlatformClipboardDataObjectAsync(false);
+                var mpdo = await Mp.Services.DataObjectHelperAsync.ReadClipboardAsync(false);
 
                 SelectedItem.RequestPastePortableDataObject(mpdo);
             }, () => {

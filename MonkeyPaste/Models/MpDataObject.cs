@@ -10,6 +10,13 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpDataObject : MpDbModelBase {
+        #region Statics
+        static string[] _IgnoredFormatNames = new string[] {
+            MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT
+            // TODO add more as needed when create breaks
+        };
+        #endregion
+
         #region Columns
 
         [Column("pk_MpDataObjectId")]
@@ -104,7 +111,11 @@ namespace MonkeyPaste {
 
                     itemDataStr = kvp.Value.ToString();
                 } else {
-                    if (kvp.Key.Name == MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT) {
+                    MpDebug.Assert(
+                        kvp.Key.Name != MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT,
+                        $"DataObject error! URI List should ALWAYS be a collection but was '{kvp.Value}'");
+
+                    if (_IgnoredFormatNames.Contains(kvp.Key.Name)) {
                         // don't need to worry about storing this (value type is list)
                         continue;
                     }

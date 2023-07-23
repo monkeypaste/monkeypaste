@@ -28,6 +28,9 @@
     <!--  ANIMATIONS  -->
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/Defaults.axaml" />
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/Shake.axaml" />
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/Fade.axaml" />
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/FadeWindow.axaml" />
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Animations/WelcomeWindowGrow.axaml" />
 
     <!--  DND  -->
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Dnd/Dnd.axaml" />

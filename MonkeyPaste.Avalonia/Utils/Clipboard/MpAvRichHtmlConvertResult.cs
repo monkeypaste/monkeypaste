@@ -46,7 +46,6 @@ namespace MonkeyPaste.Avalonia {
                        url_bytes.ToDecodedString(Encoding.ASCII, true) is string source_url_str) {
                 // on linux html is not in fragment format like windows and firefox supports this format
                 // but chrome doesn't
-                //source_url_str = System.Web.HttpUtility.HtmlDecode(source_url_str);
                 return source_url_str;
             }
             if (mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
