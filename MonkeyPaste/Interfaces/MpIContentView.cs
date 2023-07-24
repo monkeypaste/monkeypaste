@@ -36,7 +36,7 @@ namespace MonkeyPaste {
         MpIHasDataContext, MpIHasDevTools, MpIJsonMessenger {
         bool IsContentLoaded { get; }
         bool IsSubSelectable { get; }
-        Task LoadContentAsync();
+        Task LoadContentAsync(bool isSearchEnabled = true);
         Task ReloadAsync();
         Task<bool> UpdateContentAsync(MpJsonObject contentJsonObj);
 

@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Diagnostics;
 using Avalonia.Input;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
@@ -25,6 +26,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+
+        private static DevToolsOptions _defaultDevToolOptions;
+        public static DevToolsOptions DefaultDevToolOptions =>
+            _defaultDevToolOptions ?? (_defaultDevToolOptions = new DevToolsOptions() { ShowAsChildWindow = false });
 
         #endregion
 
@@ -150,7 +155,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void Init() {
 #if DEBUG
-            this.AttachDevTools();
+            this.AttachDevTools(DefaultDevToolOptions);
 #endif
             Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon;
             if (Mp.Services != null &&

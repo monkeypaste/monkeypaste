@@ -12,7 +12,7 @@ using System.Windows;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvContentHighlightBehavior : MpAvHighlightBehaviorBase<Control> {
+    public class MpAvContentWebViewHighlightBehavior : MpAvHighlightBehaviorBase<Control> {
 
         private MpTextRange _contentRange;
         protected override MpTextRange ContentRange {
@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (ContentRange != null &&
                 ContentRange.Document is MpAvContentWebView wv) {
-                await wv.PerformLoadContentRequestAsync(can_match);
+                await wv.LoadContentAsync(can_match);
                 if (can_match) {
                     while (wv.SearchResponse == null) {
                         await Task.Delay(100);
@@ -72,7 +72,7 @@ namespace MonkeyPaste.Avalonia {
                 wv.IsEditorInitialized) {
 
                 wv.SendMessage($"deactivateFindReplace_ext()");
-                wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
+                wv.LoadContentAsync().FireAndForgetSafeAsync();
             }
         }
     }

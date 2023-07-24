@@ -77,5 +77,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #endregion
+
+
+        #region Text Search
+
+        public static IEnumerable<(int, int)> QueryText(this string search_text, MpITextMatchInfo tmi) {
+            return search_text.QueryText(tmi.MatchValue, tmi.CaseSensitive, tmi.WholeWord, tmi.UseRegex);
+        }
+        #endregion
     }
 }

@@ -9,6 +9,7 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using CefNet.Avalonia;
+using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -20,12 +21,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
+public interface MpIHighlightTextRangesInfoViewModel : MpIViewModel {
+    ObservableCollection<MpTextRange> HighlightRanges { get; }
+    int ActiveHighlightIdx { get; set; }
+}
+
 
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpIConditionalSelectableViewModel,
         MpICloseWindowViewModel,
+        MpIHighlightTextRangesInfoViewModel,
         MpIWindowHandlesClosingViewModel,
         MpIDisposableObject,
         MpIShortcutCommandViewModel,
@@ -63,6 +70,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpICanHighlightTextRanges Implementation
+        ObservableCollection<MpTextRange> MpIHighlightTextRangesInfoViewModel.HighlightRanges { get; } = new ObservableCollection<MpTextRange>();
+        int MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx { get; set; }
+
+        #endregion
 
         #region MpIDisposableObject Implementation
         void MpIDisposableObject.Dispose() {
@@ -1862,7 +1875,7 @@ namespace MonkeyPaste.Avalonia {
                 if (GetContentView() is MpAvContentWebView wv &&
                     !IsContentReadOnly) {
                     OnPropertyChanged(nameof(IsTitleVisible));
-                    wv.PerformLoadContentRequestAsync().FireAndForgetSafeAsync(this);
+                    wv.LoadContentAsync().FireAndForgetSafeAsync(this);
                 }
                 pow.Opened -= open_handler;
             };
@@ -2240,6 +2253,7 @@ namespace MonkeyPaste.Avalonia {
                 string pt = CopyItemData.ToPlainText("html");
                 await Mp.Services.ShareTools.ShareTextAsync(CopyItemTitle, pt);
             });
+
         #endregion
     }
 }

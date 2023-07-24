@@ -18,6 +18,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvContentTextBox :
         TextBox,
+        MpIContentView,
         MpAvIDragSource {
         #region Private Variables
 
@@ -40,7 +41,45 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpIContentView Implementation
 
+        public bool IsContentLoaded =>
+            IsInitialized && BindingContext != null;
+        public bool IsSubSelectable =>
+            BindingContext.IsSubSelectionEnabled;
+
+        public async Task LoadContentAsync(bool isSearchEnabled = true) {
+            // really dont need to do anything
+            this.InvalidateVisual();
+            await Task.Delay(1);
+        }
+
+        public async Task ReloadAsync() {
+            await LoadContentAsync();
+        }
+
+        public async Task<bool> UpdateContentAsync(MpJsonObject contentJsonObj) {
+            // annotations not supported, so return false to not confuse transaction history
+
+            await Task.Delay(1);
+            return false;
+        }
+
+        public void ShowDevTools() {
+#if !DEBUG
+            return;
+#endif
+            // focus this control so its the dev tools focus
+            this.Focus();
+            MpConsole.WriteLine($"Showing dev tools with gesture '{MpAvWindow.DefaultDevToolOptions.Gesture.ToString()}'");
+            Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(MpAvWindow.DefaultDevToolOptions.Gesture.ToString()).FireAndForgetSafeAsync();
+
+        }
+
+        public void SendMessage(string msgJsonBase64Str) {
+            throw new NotImplementedException();
+        }
+        #endregion
 
         #region MpAvIDragSource Implementation
         public bool IsDragging {
@@ -148,6 +187,7 @@ namespace MonkeyPaste.Avalonia {
             });
 
         }
+
 
 
         #endregion

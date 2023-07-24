@@ -28,7 +28,14 @@ namespace MonkeyPaste {
         MpIQueryPageTools PageTools { get; }
     }
 
-    public interface MpIQueryInfo {
+    public interface MpITextMatchInfo {
+        string MatchValue { get; }
+        bool CaseSensitive { get; }
+        bool WholeWord { get; }
+        bool UseRegex { get; }
+
+    }
+    public interface MpIQueryInfo : MpITextMatchInfo {
         MpQueryType QueryType { get; }
         public MpLogicalQueryType JoinType { get; } // advanced
         MpIQueryInfo Next { get; } // advanced

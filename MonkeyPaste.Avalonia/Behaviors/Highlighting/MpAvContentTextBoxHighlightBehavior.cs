@@ -1,45 +1,45 @@
-﻿
-
-using Avalonia.Controls;
-using Avalonia.Threading;
+﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvClipTileTitleHighlightBehavior : MpAvHighlightBehaviorBase<Control> {
-        protected List<MpTextRange> _matches = new List<MpTextRange>();
+    [DoNotNotify]
+    public class MpAvContentTextBoxHighlightBehavior : MpAvHighlightBehaviorBase<Control> {
 
+        protected List<MpTextRange> _matches = new List<MpTextRange>();
         private MpTextRange _contentRange;
         protected override MpTextRange ContentRange {
             get {
                 if (_contentRange == null &&
-                    AssociatedObject is MpAvMarqueeTextBox mtb) {
-                    _contentRange = mtb.ContentRange;
+                    AssociatedObject.TryGetVisualDescendant<MpAvContentTextBox>(out var tb)) {
+                    _contentRange = new MpTextRange(tb);
                 }
                 return _contentRange;
             }
         }
 
-        public override MpHighlightType HighlightType =>
-            MpHighlightType.Title;
-
+        public override MpHighlightType HighlightType => MpHighlightType.Content;
         public override MpContentQueryBitFlags AcceptanceFlags =>
-            MpContentQueryBitFlags.Title;
-
+            MpContentQueryBitFlags.Annotations |
+            MpContentQueryBitFlags.Content;
         public override async Task FindHighlightingAsync() {
             await Task.Delay(1);
             _matches.Clear();
 
             bool can_match =
                 Mp.Services.Query.Infos
-                .Any(x => x.QueryFlags.HasTitleMatchFilterFlag());
+                .Any(x => x.QueryFlags.HasContentMatchFilterFlag());
 
             if (AssociatedObject != null &&
-                AssociatedObject is TextBox tb &&
+                AssociatedObject.GetVisualDescendant<TextBox>() is TextBox tb &&
                 AssociatedObject.DataContext is MpIHighlightTextRangesInfoViewModel htrivm &&
                 can_match) {
                 _matches.AddRange(
@@ -50,17 +50,12 @@ namespace MonkeyPaste.Avalonia {
                     .Distinct()
                     .OrderBy(x => x.StartIdx)
                     .ThenBy(x => x.Count));
-
-                //if (mtb.HighlightRanges == null) {
-                //    mtb.HighlightRanges = new ObservableCollection<MpTextRange>();
-                //}
-                //mtb.HighlightRanges.Clear();
-                //mtb.HighlightRanges.AddRange(_matches);
                 htrivm.HighlightRanges.Clear();
                 htrivm.HighlightRanges.AddRange(_matches);
             }
             SetMatchCount(_matches.Count);
         }
+
         public override async Task ApplyHighlightingAsync() {
             await Task.Delay(1);
 

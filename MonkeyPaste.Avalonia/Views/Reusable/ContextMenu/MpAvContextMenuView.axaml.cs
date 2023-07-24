@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvContextMenuView_Initialized(object sender, EventArgs e) {
             if (this.VisualRoot is PopupRoot pr) {
-                pr.AttachDevTools();
+                pr.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
             }
         }
 

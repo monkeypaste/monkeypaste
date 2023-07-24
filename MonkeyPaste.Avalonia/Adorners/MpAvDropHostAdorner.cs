@@ -22,7 +22,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvDropHostAdorner(Control uie) : base(uie) {
-            IsVisible = false;
         }
         #endregion
 

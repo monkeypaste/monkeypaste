@@ -95,10 +95,29 @@ namespace MonkeyPaste.Avalonia {
             if (!Items.Any()) {
 
                 Items.Clear();
+                var hlbl = AssociatedObject.GetLogicalDescendants<Visual>().Where(x => Interaction.GetBehaviors(x).FirstOrDefault() is MpIHighlightRegion);
+
+                if (AssociatedObject.DataContext is MpAvClipTileViewModel ctvm &&
+                    !ctvm.IsPlaceholder) {
+
+                }
                 if (AssociatedObject.FindControl<Control>("ClipTileContentView") is Control ctcv) {
                     if (ctcv.FindControl<ContentControl>("ClipTileContentControl") is ContentControl ctcc) {
-                        // content
-                        Items.Add(Interaction.GetBehaviors(ctcc).FirstOrDefault() as MpIHighlightRegion);
+                        if (Interaction.GetBehaviors(ctcc).FirstOrDefault() is MpIHighlightRegion wv_hlr) {
+                            // content
+                            Items.Add(wv_hlr);
+                        } else {
+                            // cant find content controls easily and changing lifecycle stuff is no thanks
+                            MpAvHighlightBehaviorBase<Control> lazy_hlb = null;
+                            if (MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                                lazy_hlb = new MpAvContentWebViewHighlightBehavior();
+                            } else {
+                                lazy_hlb = new MpAvContentTextBoxHighlightBehavior();
+                            }
+                            Interaction.SetBehaviors(ctcc, new BehaviorCollection() { lazy_hlb });
+                            Items.Add(lazy_hlb);
+                        }
+
 
                     }
                 }

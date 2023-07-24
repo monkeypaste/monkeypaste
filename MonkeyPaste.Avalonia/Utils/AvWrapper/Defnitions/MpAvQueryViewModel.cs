@@ -56,6 +56,8 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
 
+
+
         #region MpIQueryResultProvider Implementation
         [JsonIgnore]
         public bool IsQuerying { get; private set; }
@@ -140,6 +142,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIQueryInfo Implementation
+
+
         public MpQueryType QueryType =>
             MpQueryType.Simple;
         public bool IsDescending { get; set; } = true;
@@ -159,6 +163,19 @@ namespace MonkeyPaste.Avalonia {
                 null;
 
         public int SortOrderIdx { get; set; } = 0;
+
+        #region MpITextMatchInfo Implementation
+
+        string MpITextMatchInfo.MatchValue =>
+            (this as MpIQueryInfo).MatchValue;
+        bool MpITextMatchInfo.CaseSensitive =>
+            (this as MpIQueryInfo).QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive);
+
+        bool MpITextMatchInfo.WholeWord =>
+            (this as MpIQueryInfo).QueryFlags.HasFlag(MpContentQueryBitFlags.WholeWord);
+        bool MpITextMatchInfo.UseRegex =>
+            (this as MpIQueryInfo).QueryFlags.HasFlag(MpContentQueryBitFlags.Regex);
+        #endregion
 
         #endregion
 
@@ -283,6 +300,7 @@ namespace MonkeyPaste.Avalonia {
 
             return hasChanged;
         }
+
 
         #endregion
     }

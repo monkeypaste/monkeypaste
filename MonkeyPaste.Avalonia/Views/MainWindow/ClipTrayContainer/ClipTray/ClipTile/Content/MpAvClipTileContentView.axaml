@@ -20,9 +20,6 @@
             <ContentControl x:Name="ClipTileContentControl"
                             Padding="5"
                             Content="{Binding}">
-                <Interaction.Behaviors>
-                    <local:MpAvContentHighlightBehavior />
-                </Interaction.Behaviors>
                 <ContentControl.DataTemplates>
                     <local:MpAvClipTileContentDataTemplateSelector>
                         <DataTemplate x:Key="ContentWebViewTemplate"
@@ -30,15 +27,21 @@
                             <local:MpAvContentWebViewContainer Classes="ContentDragAndDrop"
                                                                HorizontalAlignment="Stretch"
                                                                VerticalAlignment="Stretch">
-
-
+                                <Interaction.Behaviors>
+                                    <local:MpAvContentWebViewHighlightBehavior />
+                                </Interaction.Behaviors>
                             </local:MpAvContentWebViewContainer>
                         </DataTemplate>
                         <DataTemplate x:Key="PlainTextTemplate"
                                       DataType="local:MpAvClipTileViewModel">
                             <local:MpAvPlainTextContentView Classes="ContentDragAndDrop"
+                                                            
                                                             HorizontalAlignment="Stretch"
-                                                            VerticalAlignment="Stretch" />
+                                                            VerticalAlignment="Stretch">
+                                <Interaction.Behaviors>
+                                    <local:MpAvContentTextBoxHighlightBehavior />
+                                </Interaction.Behaviors>
+                            </local:MpAvPlainTextContentView>
                         </DataTemplate>
                         <DataTemplate x:Key="ImageTemplate"
                                       DataType="local:MpAvClipTileViewModel">

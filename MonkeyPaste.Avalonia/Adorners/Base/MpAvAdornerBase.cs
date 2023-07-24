@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         public Control AdornedControl { get; private set; }
 
         public MpAvAdornerBase(Control adornedControl) : base() {
+            IsVisible = false;
             AdornedControl = adornedControl;
             //adornedControl.GetObservable(Control.IsVisibleProperty).Subscribe(value => Draw());
             //adornedControl.GetObservable(Control.BoundsProperty).Subscribe(value => Draw());

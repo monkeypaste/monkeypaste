@@ -522,7 +522,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (sw == null && timeout_ms >= 0) {
                     sw = Stopwatch.StartNew();
                 }
-                if (sw.ElapsedMilliseconds >= timeout_ms) {
+                if (sw != null && sw.ElapsedMilliseconds >= timeout_ms) {
                     break;
                 }
                 await Task.Delay(100);

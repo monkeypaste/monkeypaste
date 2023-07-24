@@ -125,37 +125,6 @@ namespace MonkeyPaste.Avalonia {
                         img.Source = bmp;
                     }
                 }
-                //int c_hash = c.GetHashCode();
-                //if (!_isTintingLookup.ContainsKey(c_hash)) {
-                //    _isTintingLookup.Add(c_hash, true);
-                //} else if (_isTintingLookup[c_hash]) {
-                //    return;
-                //} else {
-                //    _isTintingLookup[c_hash] = true;
-                //}
-
-                //string tint_hex = tintObj.ToHex();
-
-                //if (!_tintLookup.ContainsKey(c_hash)) {
-                //    _tintLookup.Add(c_hash, tint_hex);
-                //} else if (_tintLookup[c_hash] != tint_hex) {
-                //    _tintLookup[c_hash] = tint_hex;
-                //} else {
-                //    // no change needed
-                //    _isTintingLookup[c_hash] = false;
-                //    return;
-                //}
-                //foreach (var img in imgl) {
-
-                //if (img.Source is Bitmap bmp) {
-                //    if (tint_hex.IsHexStringTransparent()) {
-                //        // how handle this?
-
-                //    }
-                //    img.Source = bmp.Tint(tint_hex);
-                //}
-                //}
-                //_isTintingLookup[c_hash] = false;
             }
         }
 

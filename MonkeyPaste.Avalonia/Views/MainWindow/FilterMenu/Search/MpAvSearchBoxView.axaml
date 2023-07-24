@@ -226,6 +226,7 @@
                     <!--  Search Icon Dropdown Button  -->
 
                     <Button x:Name="SearchDropDownButton"
+                            TabIndex="0"
                             DockPanel.Dock="Left"
                             ClipToBounds="False"
                             VerticalAlignment="Stretch"
@@ -289,6 +290,7 @@
                         <!--  Clear SearchText Button  -->
 
                         <local:MpAvClearTextButton x:Name="ClearSearchTextButton"
+                                                   TabIndex="4"
                                                    Classes="TextBoxButton square"
                                                    Height="20"
                                                    Grid.Column="0"
@@ -310,6 +312,7 @@
                             <!--  Previous Result Button  -->
 
                             <Button x:Name="PreviousTemplateButton"
+                                    TabIndex="2"
                                     Grid.Column="0"
                                     Classes="noBg noHoverBg navButton noBorder"
                                     Margin="0,5"
@@ -326,6 +329,7 @@
 
                             <!--  Next Result Button  -->
                             <Button x:Name="NextTemplateButton"
+                                    TabIndex="3"
                                     Grid.Column="1"
                                     Classes="noBg noHoverBg navButton noBorder"
                                     Margin="0,5"
@@ -345,6 +349,7 @@
                     <!--  SEARCH AUTOCOMPLETE BOX  -->
 
                     <AutoCompleteBox x:Name="SearchBox"
+                                     TabIndex="1"
                                      DragDrop.AllowDrop="True"
                                      VerticalAlignment="Stretch"
                                      HorizontalAlignment="Stretch"
@@ -387,6 +392,7 @@
         <!--  CONVERT SIMPLE TO ADVANCED SEARCH BUTTON  -->
 
         <ToggleButton x:Name="ConvertToAdvancedSearchToggleButton"
+                      TabIndex="5"
                       Grid.Column="1"
                       VerticalAlignment="Stretch"
                       HorizontalAlignment="Stretch"

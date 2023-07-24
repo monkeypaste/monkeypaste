@@ -185,8 +185,6 @@ namespace MonkeyPaste.Avalonia {
         bool MpIContentView.IsSubSelectable =>
             IsContentSubSelectable;
 
-        Task MpIContentView.LoadContentAsync() =>
-            PerformLoadContentRequestAsync();
 
         Task<bool> MpIContentView.UpdateContentAsync(MpJsonObject contentJsonObj) =>
             PerformUpdateContentRequestAsync(contentJsonObj);
@@ -197,7 +195,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIReloadableWebView Implementation
 
         async Task MpAvIReloadableContentWebView.ReloadContentAsync() {
-            await PerformLoadContentRequestAsync();
+            await LoadContentAsync();
         }
 
         #endregion
@@ -977,7 +975,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task ReloadAsync() {
             await LoadEditorAsync();
-            await PerformLoadContentRequestAsync();
+            await LoadContentAsync();
         }
 
         public async Task<MpQuillEditorSelectionStateMessage> GetSelectionStateAsync() {
@@ -1223,7 +1221,7 @@ namespace MonkeyPaste.Avalonia {
                 !BindingContext.IsContentReadOnly) {
                 return;
             }
-            PerformLoadContentRequestAsync().FireAndForgetSafeAsync();
+            LoadContentAsync().FireAndForgetSafeAsync();
         }
 
         public async Task<bool> PerformUpdateContentRequestAsync(MpJsonObject jsonObj) {
@@ -1259,7 +1257,7 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
-        public async Task PerformLoadContentRequestAsync(bool isSearchEnabled = true) {
+        public async Task LoadContentAsync(bool isSearchEnabled = true) {
             Dispatcher.UIThread.VerifyAccess();
 
             IsEditorLoaded = false;

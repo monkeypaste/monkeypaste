@@ -1,5 +1,7 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Windows.Input;
 
@@ -112,6 +114,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 if (fc.TryGetSelfOrAncestorDataContext<MpAvClipTileViewModel>(out var ctvm)) {
+                    // clip tile control focus
                     if (fc is TextBox && !ctvm.IsTitleReadOnly) {
                         ctvm.FinishEditTitleCommand.Execute(null);
                         return;
@@ -123,6 +126,24 @@ namespace MonkeyPaste.Avalonia {
                         }
                         ctvm.EnableContentReadOnlyCommand.Execute(null);
                         return;
+                    }
+                }
+                if (fc.TryGetSelfOrAncestorDataContext<MpAvSearchBoxViewModel>(out var sbvm)) {
+                    // search box control focus
+                    if (fc is TextBox || fc is AutoCompleteBox) {
+                        if (fc.GetVisualAncestor<MpAvSearchBoxView>() is MpAvSearchBoxView sbv &&
+                            sbv.FindControl<MpAvClearTextButton>("ClearSearchTextButton") is MpAvClearTextButton ctb) {
+                            // move focus to clear text button
+                            // (user can then press to clear or escape again to focus mw)
+                            ctb.TrySetFocusAsync().FireAndForgetSafeAsync();
+                            return;
+                        }
+                    }
+                    if (fc.GetVisualAncestor<MpAvClearTextButton>() is MpAvClearTextButton focus_ctb &&
+                        focus_ctb.DataContext is MpAvSearchBoxViewModel &&
+                        TopLevel.GetTopLevel(fc) is MpAvWindow w) {
+                        // searchbox clear text button is focus, move focus to mw
+                        w.TrySetFocusAsync().FireAndForgetSafeAsync();
                     }
                 }
 

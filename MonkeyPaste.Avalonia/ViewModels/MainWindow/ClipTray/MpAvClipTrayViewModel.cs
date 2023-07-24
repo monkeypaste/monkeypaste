@@ -1881,7 +1881,7 @@ namespace MonkeyPaste.Avalonia {
             if (e is MpCopyItemAnnotation cia &&
                 AllActiveItems.FirstOrDefault(x => cia.CopyItemId == x.CopyItemId) is MpAvClipTileViewModel cia_ctvm) {
                 Dispatcher.UIThread.Post(async () => {
-                    await cia_ctvm.InitializeAsync(cia_ctvm.CopyItem);
+                    await cia_ctvm.InitializeAsync(cia_ctvm.CopyItem, cia_ctvm.QueryOffsetIdx);
                     //wait for model to propagate then trigger view to reload
                     if (cia_ctvm.GetContentView() is MpIContentView cv) {
                         cv.LoadContentAsync().FireAndForgetSafeAsync();
@@ -1903,7 +1903,7 @@ namespace MonkeyPaste.Avalonia {
                     // this means the model has been updated from the view model so ignore
                 } else {
                     Dispatcher.UIThread.Post(async () => {
-                        await ci_ctvm.InitializeAsync(ci);
+                        await ci_ctvm.InitializeAsync(ci, ci_ctvm.QueryOffsetIdx);
                         //wait for model to propagate then trigger view to reload
                         if (ci_ctvm.GetContentView() is MpIContentView cv) {
                             cv.LoadContentAsync().FireAndForgetSafeAsync();
@@ -2379,7 +2379,11 @@ namespace MonkeyPaste.Avalonia {
             }, DispatcherPriority.Background);
         }
         private async Task SetCurPasteInfoMessageAsync(MpPortableProcessInfo e) {
-
+            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                // no paste toolbar so ignore
+                // TODO? add plain text paste toolbar? (tip of an iceburg)
+                return;
+            }
             while (MpAvAppCollectionViewModel.Instance.IsAnyBusy) {
                 // wait if app new/db updating 
                 await Task.Delay(100);

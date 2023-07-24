@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
+using Avalonia.Xaml.Interactivity;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
@@ -9,10 +10,8 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         Control ITemplate<object, Control>.Build(object param) {
-
             string key = "ContentWebViewTemplate";
-            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled &&
-                param is MpAvClipTileViewModel ctvm) {
+            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled && param is MpAvClipTileViewModel ctvm) {
                 ctvm.IsEditorLoaded = true;
                 switch (ctvm.CopyItemType) {
                     case MpCopyItemType.Text:
@@ -20,7 +19,6 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     case MpCopyItemType.Image:
                         key = "ImageTemplate";
-
                         break;
                     case MpCopyItemType.FileList:
                         key = "FileListTemplate";
