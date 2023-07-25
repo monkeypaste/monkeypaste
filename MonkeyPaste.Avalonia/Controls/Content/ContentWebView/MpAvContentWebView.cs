@@ -47,8 +47,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvNativeWebViewHost,
 #endif
         MpIContentView,
-        //MpIAyncJsonMessenger,
-        MpIContentViewLocator,
         MpAvIDragSource,
         MpAvIResizableControl,
         MpAvIDomStateAwareWebView,
@@ -85,37 +83,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-
-        private static List<MpAvContentWebView> _AllWebViews = new();
-
-        public static MpAvContentWebView LocateTileWebView(int ciid) {
-            if (ciid < 1) {
-                return null;
-            }
-            var result = _AllWebViews
-                .Where(x =>
-                    x.DataContext is MpAvClipTileViewModel ctvm &&
-                    //!ctvm.IsAppendNotifier &&
-                    ctvm.CopyItemId == ciid)
-                .OrderByDescending(x => x._locatedDateTime)
-                .ToList();
-
-            if (result.Count == 0) {
-                return null;
-            }
-            if (result.Count > 1) {
-                // is this during a pin toggle? was this item pinned?
-                //MpDebug.Break();
-                // remove old refs
-                var stale_wvl = result.Skip(1);
-                // TODO? do these need further processing? besides hiding from locator?
-                _AllWebViews = _AllWebViews.Where(x => stale_wvl.Contains(x)).ToList();
-
-                MpConsole.WriteLine($"{stale_wvl.Count()} stale webviews removed for item '{result[0].DataContext}'");
-            }
-            return result[0];
-        }
-
         #endregion
 
         #region Interfaces
@@ -164,14 +131,14 @@ namespace MonkeyPaste.Avalonia {
         //        }
         //        #endregion
 
-        #region MpIContentViewLocator
-
-        MpIContentView MpIContentViewLocator.LocateContentView(int contentId) =>
-            LocateTileWebView(contentId);
-
-        #endregion
 
         #region MpIContentView
+
+        #region MpIRecyclableLocatorItem Implementation
+        int MpILocatorItem.LocationId =>
+            BindingContext is MpILocatorItem ? (BindingContext as MpILocatorItem).LocationId : 0;
+        DateTime? MpIRecyclableLocatorItem.LocatedDateTime { get; set; }
+        #endregion
 
         bool MpIContentView.IsContentLoaded =>
             IsEditorLoaded;
@@ -1089,15 +1056,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Control Life Cycle
         private void MpAvCefNetWebView_AttachedToLogicalTree(object sender, LogicalTreeAttachmentEventArgs e) {
-            if (_AllWebViews.Contains(this)) {
-                // should only happen once
-                MpDebug.Break();
-                return;
-            }
-            // set locatedDateTime to filter out webviews recyling during
-            // pin/unpin ops (especially unpinall)
-            _locatedDateTime = DateTime.Now;
-            _AllWebViews.Add(this);
+
+            Mp.Services.ContentViewLocator.AddView(this);
 
 
 #if PLAT_WV
@@ -1112,9 +1072,7 @@ namespace MonkeyPaste.Avalonia {
         }
         protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) {
             base.OnDetachedFromLogicalTree(e);
-            _AllWebViews.Remove(this);
-            _locatedDateTime = null;
-            _resizerControl = null;
+            Mp.Services.ContentViewLocator.RemoveView(this);
 
         }
 

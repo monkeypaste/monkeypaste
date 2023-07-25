@@ -623,7 +623,7 @@ namespace MonkeyPaste.Common {
         public static string bisque2 => "#FFEED5B7";
         public static string bisque3 => "#FFCDB79E";
         public static string bisque4 => "#FF8B7D6B";
-        public static string black => "#FF000000";
+        public static string black => "#FF040404";
         public static string blanchedalmond => "#FFFFEBCD";
         public static string blue1 => "#FF0000FF";
         public static string blue2 => "#FF0000EE";
@@ -734,7 +734,7 @@ namespace MonkeyPaste.Common {
         public static string goldenrod3 => "#FFCD9B1D";
         public static string goldenrod4 => "#FF8B6914";
         public static string gray => "#FFBEBEBE";
-        public static string gray1 => "#FF030303";
+        public static string gray1 => "#FF000000";
         public static string gray2 => "#FF050505";
         public static string gray3 => "#FF080808";
         public static string gray4 => "#FF0A0A0A";

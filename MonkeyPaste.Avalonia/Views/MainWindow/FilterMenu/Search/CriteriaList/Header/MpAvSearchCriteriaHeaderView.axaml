@@ -8,7 +8,6 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:DataType="local:MpAvSearchCriteriaItemCollectionViewModel"
                        x:TypeArguments="local:MpAvSearchCriteriaItemCollectionViewModel"
-                       x:CompileBindings="False"
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">

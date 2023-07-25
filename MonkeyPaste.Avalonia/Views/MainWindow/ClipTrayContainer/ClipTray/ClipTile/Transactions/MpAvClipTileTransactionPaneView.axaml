@@ -64,12 +64,12 @@
         </Style>
         <Style Selector="ListBox#TransactionListBox > ListBoxItem:nth-child(even)">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeGrayAccent3}" />
+                    Value="{DynamicResource ThemeGrayAccent3Color}" />
         </Style>
 
         <Style Selector="ListBoxItem /template/ ContentPresenter, TreeViewItem /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeGrayAccent3}" />
+                    Value="{DynamicResource ThemeGrayAccent3Color}" />
         </Style>
 
         <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter, TreeViewItem:pointerover /template/ ContentPresenter, TreeViewItem:expanded:not(:selected) /template/ ContentPresenter">
@@ -194,7 +194,7 @@
                                            HorizontalAlignment="Left"
                                            TextAlignment="Left"
                                            Text="{Binding LabelText}" />
-                                <TextBlock Foreground="{DynamicResource ThemeGrayAccent1}"
+                                <TextBlock Foreground="{DynamicResource ThemeGrayAccent1Color}"
                                            FontSize="12"
                                            VerticalAlignment="Top"
                                            HorizontalAlignment="Left"

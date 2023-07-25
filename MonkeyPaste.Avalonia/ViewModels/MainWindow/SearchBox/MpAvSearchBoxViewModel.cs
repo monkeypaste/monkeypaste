@@ -197,6 +197,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceiveGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.QueryCompleted:
                 case MpMessageType.RequeryCompleted:
                     IsSearching = false;
                     OnPropertyChanged(nameof(IsSearchValid));
@@ -281,22 +282,6 @@ namespace MonkeyPaste.Avalonia {
                 if (!IsAnySearchControlFocused) {
                     IsExpanded = false;
                 }
-                //if (Mp.Services.FocusMonitor.FocusElement == null) {
-                //    // focus is null when inactive (or hidden at least)
-                //    await Task.Delay(1000);
-                //    continue;
-                //}
-                //if (IsAnySearchControlFocused) {
-                //    no_focus_start_dt = null;
-                //} else if (no_focus_start_dt == null) {
-                //    no_focus_start_dt = DateTime.Now;
-                //}
-
-                //if (no_focus_start_dt.HasValue) {
-                //    if (DateTime.Now - no_focus_start_dt >= InactivityUnexpandWaitTimeSpan) {
-                //        IsExpanded = false;
-                //    }
-                //}
                 await Task.Delay(100);
             }
         }
@@ -316,11 +301,7 @@ namespace MonkeyPaste.Avalonia {
                     IsExpanded = true;
 
                     bool success = await tb.TrySetFocusAsync(NavigationMethod.Pointer);
-                    MpConsole.WriteLine($"Auto search for success: {success}");
-                    //if (!success) {
-                    //    return;
-                    //}
-                    //acb.Text += args.ToStringOrDefault();
+                    MpConsole.WriteLine($"Auto search focus success: {success}");
                 }
 
             });

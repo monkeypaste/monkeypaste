@@ -19,7 +19,7 @@
     </Style>
     <Style Selector="Label.h1">
         <Setter Property="Foreground"
-                Value="{DynamicResource ThemeWhite}" />
+                Value="{DynamicResource ThemeWhiteColor}" />
     </Style>
     <Style Selector="Label.h2">
         <Setter Property="FontSize"

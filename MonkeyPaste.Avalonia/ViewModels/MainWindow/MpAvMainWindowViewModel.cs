@@ -564,6 +564,9 @@ namespace MonkeyPaste.Avalonia {
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseClicked += Instance_OnGlobalMouseClicked;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseWheelScroll += Instance_OnGlobalMouseWheelScroll;
 
+            while (App.MainView == null) {
+                await Task.Delay(100);
+            }
             App.MainView.DataContext = this;
 
             MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChanged);

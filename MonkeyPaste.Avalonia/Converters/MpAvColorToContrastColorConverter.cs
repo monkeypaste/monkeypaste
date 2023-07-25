@@ -13,6 +13,9 @@ namespace MonkeyPaste.Avalonia {
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
             string hexStr = value.ToHex();
+            if (hexStr != null && (hexStr.ToLower() == "#ff252226" || hexStr.ToLower() == "#252226")) {
+
+            }
             if (hexStr.IsStringHexColor()) {
                 bool flip = false;
                 string contrast_type = "fg";
@@ -40,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
             //MpDebug.Break($"Unhandled color '{hexStr}'");
-            //return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlack.ToString()).ToAvColor();
+            //return Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeBlackColor.ToString()).ToAvColor();
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {

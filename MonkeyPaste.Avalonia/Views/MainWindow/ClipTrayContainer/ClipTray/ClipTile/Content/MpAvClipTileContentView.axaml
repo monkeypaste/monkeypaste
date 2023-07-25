@@ -18,6 +18,8 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
             <ContentControl x:Name="ClipTileContentControl"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
                             Padding="5"
                             Content="{Binding}">
                 <ContentControl.DataTemplates>
@@ -26,22 +28,13 @@
                                       DataType="local:MpAvClipTileViewModel">
                             <local:MpAvContentWebViewContainer Classes="ContentDragAndDrop"
                                                                HorizontalAlignment="Stretch"
-                                                               VerticalAlignment="Stretch">
-                                <Interaction.Behaviors>
-                                    <local:MpAvContentWebViewHighlightBehavior />
-                                </Interaction.Behaviors>
-                            </local:MpAvContentWebViewContainer>
+                                                               VerticalAlignment="Stretch" />
                         </DataTemplate>
                         <DataTemplate x:Key="PlainTextTemplate"
                                       DataType="local:MpAvClipTileViewModel">
                             <local:MpAvPlainTextContentView Classes="ContentDragAndDrop"
-                                                            
                                                             HorizontalAlignment="Stretch"
-                                                            VerticalAlignment="Stretch">
-                                <Interaction.Behaviors>
-                                    <local:MpAvContentTextBoxHighlightBehavior />
-                                </Interaction.Behaviors>
-                            </local:MpAvPlainTextContentView>
+                                                            VerticalAlignment="Stretch" />
                         </DataTemplate>
                         <DataTemplate x:Key="ImageTemplate"
                                       DataType="local:MpAvClipTileViewModel">
@@ -69,19 +62,19 @@
                                         <Setter Property="BorderThickness"
                                                 Value="1" />
                                         <Setter Property="BorderBrush"
-                                                Value="{DynamicResource ThemeGrayAccent3}" />
+                                                Value="{DynamicResource ThemeGrayAccent3Brush}" />
                                     </Style>
                                     <Style Selector="ListBoxItem:nth-child(even) /template/ ContentPresenter">
                                         <Setter Property="Background">
                                             <Setter.Value>
-                                                <SolidColorBrush Color="{DynamicResource ThemeGrayAccent1}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                                                <SolidColorBrush Color="{DynamicResource ThemeGrayAccent1Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
                                             </Setter.Value>
                                         </Setter>
                                     </Style>
                                     <Style Selector="ListBoxItem:nth-child(odd) /template/ ContentPresenter">
                                         <Setter Property="Background">
                                             <Setter.Value>
-                                                <SolidColorBrush Color="{DynamicResource ThemeGrayAccent2}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                                                <SolidColorBrush Color="{DynamicResource ThemeGrayAccent2Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
                                             </Setter.Value>
                                         </Setter>
                                     </Style>
@@ -89,19 +82,19 @@
                                     <Style Selector="ListBoxItem:nth-child(even):pointerover /template/ ContentPresenter, ListBoxItem:nth-child(odd):pointerover /template/ ContentPresenter,ListBoxItem:focus-within /template/ ContentPresenter">
                                         <Setter Property="Background">
                                             <Setter.Value>
-                                                <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                                                <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
                                             </Setter.Value>
                                         </Setter>
                                         <Setter Property="BorderBrush"
-                                                Value="{DynamicResource ThemeAccent1Color}" />
+                                                Value="{DynamicResource ThemeAccent1Brush}" />
                                     </Style>
                                     <Style Selector="TextBlock#PathTextBlock">
                                         <Setter Property="Foreground"
-                                                Value="{DynamicResource ThemeInteractiveColor}" />
+                                                Value="{DynamicResource ThemeInteractiveBrush}" />
                                     </Style>
                                     <Style Selector="TextBlock#PathTextBlock:pointerover">
                                         <Setter Property="Foreground"
-                                                Value="{DynamicResource ThemeAccent1Color}" />
+                                                Value="{DynamicResource ThemeAccent1Brush}" />
                                         <Setter Property="TextDecorations"
                                                 Value="Underline" />
                                         <Setter Property="FontWeight"

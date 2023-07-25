@@ -32,6 +32,8 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpIConditionalSelectableViewModel,
         MpICloseWindowViewModel,
+        MpILocatorItem,
+        MpIAsyncCollectionObject,
         MpIHighlightTextRangesInfoViewModel,
         MpIWindowHandlesClosingViewModel,
         MpIDisposableObject,
@@ -71,9 +73,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpICanHighlightTextRanges Implementation
+        #region MpIDbModelId Implementation
+        int MpILocatorItem.LocationId =>
+            IsPinPlaceholder ? PinPlaceholderCopyItemId : CopyItemId;
+
+        #endregion
+
+        #region MpIHighlightTextRangesInfoViewModel Implementation
         ObservableCollection<MpTextRange> MpIHighlightTextRangesInfoViewModel.HighlightRanges { get; } = new ObservableCollection<MpTextRange>();
-        int MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx { get; set; }
+        int MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx { get; set; } = -1;
 
         #endregion
 
@@ -1212,6 +1220,9 @@ namespace MonkeyPaste.Avalonia {
 
             int layer_seed = -1;
             List<string> hexColors = await GetTitleColorsAsync();
+            if (IsAnyPlaceholder) {
+                return;
+            }
             for (int i = 0; i < hexColors.Count; i++) {
                 // randomize alpha and layer order so its constant but unique for item
                 char let = PublicHandle.ToUpper()[i];
@@ -1696,11 +1707,12 @@ namespace MonkeyPaste.Avalonia {
                         //        return;
                         //    }
                         //}
-                        if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-                            MpConsole.WriteLine("Ignoring plain text mode copyitem write for " + this);
-                            HasModelChanged = false;
-                            return;
-                        }
+
+                        //if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                        //    MpConsole.WriteLine("Ignoring plain text mode copyitem write for " + this);
+                        //    HasModelChanged = false;
+                        //    return;
+                        //}
                         Task.Run(async () => {
                             await CopyItem.WriteToDatabaseAsync();
                             Dispatcher.UIThread.Post(() => {

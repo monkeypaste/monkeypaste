@@ -28,6 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
+        public static bool IsCefNetLoaded { get; private set; }
         #endregion
 
         #region Properties
@@ -82,7 +83,13 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         public static void Init() {
-            _ = new MpAvCefNetApplication();
+            try {
+                _ = new MpAvCefNetApplication();
+                IsCefNetLoaded = true;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error loading cefnet. ", ex);
+            }
         }
 
 

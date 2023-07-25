@@ -58,9 +58,9 @@
         <!--  EMPTY  -->
         <Style Selector="Border.msg.empty">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeGrayAccent3}" />
+                    Value="{DynamicResource ThemeGrayAccent3Color}" />
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeGrayAccent1}" />
+                    Value="{DynamicResource ThemeGrayAccent1Color}" />
         </Style>
         <Style Selector="Border.msg.empty TextBlock">
             <Setter Property="Foreground"
@@ -85,7 +85,7 @@
         </Style>
         <Style Selector="Border.msg.warning TextBlock">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeWhite}" />
+                    Value="{DynamicResource ThemeWhiteColor}" />
         </Style>
         <Style Selector="Border.msg.warning Image">
             <Setter Property="Source"
@@ -110,7 +110,7 @@
 
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid Background="{DynamicResource ThemeGrayAccent3}"
+    <Grid Background="{DynamicResource ThemeGrayAccent3Color}"
           RowDefinitions="Auto,Auto,Auto,*,Auto,Auto,50">
         <!--  HEADER ROW  -->
         <DockPanel Grid.Row="0"

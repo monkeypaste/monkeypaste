@@ -47,7 +47,7 @@
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeGrayAccent2}" />
+                    Value="{DynamicResource ThemeGrayAccent2Color}" />
         </Style>
 
         <Style Selector="ListBox#ExecuteParameterListBox ListBoxItem">

@@ -671,11 +671,12 @@ namespace MonkeyPaste.Avalonia {
 
             //IsCustomRoutingEnabled = scl.All(x => x.RoutingType == MpRoutingType.Internal || x.RoutingType == MpRoutingType.Direct);
 
-            foreach (var sc in scl) {
+            async Task AddShortcutViewModelAsync(MpShortcut sc) {
                 AppCommandLookup.TryGetValue(sc.ShortcutType, out ICommand shortcutCommand);
                 var scvm = await CreateShortcutViewModel(sc, shortcutCommand);
                 Items.Add(scvm);
             }
+            await Task.WhenAll(scl.Select(x => AddShortcutViewModelAsync(x)));
             while (Items.Any(x => x.IsBusy)) {
                 await Task.Delay(100);
             }

@@ -37,6 +37,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region State
+
+        public bool IsWebViewConverterEnabled =>
+            MpAvCefNetApplication.IsCefNetLoaded;
+        #endregion
         public MpAvPlainHtmlConverterWebView ConverterWebView { get; private set; }
 
         #endregion
@@ -48,9 +53,39 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitAsync() {
-            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-                return;
+            if (IsWebViewConverterEnabled) {
+                await CreateWebViewConverterAsync();
+            } else {
+                MpConsole.WriteLine("Plain Html converter has no webview for conversion. Using fallback.");
             }
+        }
+
+        public async Task<MpAvRichHtmlConvertResult> ConvertAsync(
+            string inputStr,
+            string inputFormatType,
+            MpCsvFormatProperties csvProps = null) {
+            string htmlDataStr = inputStr;
+            if (htmlDataStr == null) {
+                return null;
+            }
+            if (inputFormatType == "rtf") {
+                // create 'dirty' quill html w/ internal converter and treat as plain for quill to parse
+                htmlDataStr = htmlDataStr.ToRichHtmlText(MpPortableDataFormats.WinRtf);
+                inputFormatType = "rtf2html";
+            }
+            MpAvRichHtmlConvertResult result;
+            if (IsWebViewConverterEnabled) {
+                result = await ConvertWithWebViewAsync(inputFormatType, htmlDataStr, csvProps);
+            } else {
+                result = ConvertWithFallback(htmlDataStr);
+            }
+            return result;
+        }
+
+        #endregion
+
+        #region Private Methods
+        private async Task CreateWebViewConverterAsync() {
             IsBusy = true;
             if (OperatingSystem.IsBrowser()) {
                 await MpDeviceWrapper.Instance.JsImporter.ImportAllAsync();
@@ -95,24 +130,16 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
-        public async Task<MpAvRichHtmlConvertResult> ConvertAsync(
-            string inputStr,
-            string inputFormatType,
-            MpCsvFormatProperties csvProps = null) {
-            string htmlDataStr = inputStr;
-            if (htmlDataStr == null) {
-                return null;
-            }
-            if (inputFormatType == "rtf") {
-                // create 'dirty' quill html w/ internal converter and treat as plain for quill to parse
-                htmlDataStr = htmlDataStr.ToRichHtmlText(MpPortableDataFormats.WinRtf);
-                inputFormatType = "rtf2html";
-            }
-            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
-                var result = MpAvRichHtmlConvertResult.Parse(htmlDataStr.ToString());
-                return result;
-            }
 
+        private MpAvRichHtmlConvertResult ConvertWithFallback(string htmlDataStr) {
+            var result = MpAvRichHtmlConvertResult.Parse(htmlDataStr.ToString());
+            return result;
+        }
+
+        private async Task<MpAvRichHtmlConvertResult> ConvertWithWebViewAsync(
+            string inputFormatType,
+            string htmlDataStr,
+            MpCsvFormatProperties csvProps = null) {
             if (ConverterWebView == null) {
                 MpConsole.WriteLine("Cannot parse html. Waiting for Html converter to load...");
                 while (ConverterWebView == null) {
@@ -171,10 +198,6 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
-
-        #endregion
-
-        #region Private Methods
         #endregion
 
         #region Commands

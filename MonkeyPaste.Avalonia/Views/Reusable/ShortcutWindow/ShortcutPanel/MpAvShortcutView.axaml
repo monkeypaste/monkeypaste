@@ -8,7 +8,6 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvIKeyGestureViewModel"
                        x:DataType="local:MpAvIKeyGestureViewModel"
-                       x:CompileBindings="False"
                        mc:Ignorable="d"
                        Classes.active="{Binding KeyGroups, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                        x:Name="ShortcutView"

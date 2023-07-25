@@ -84,6 +84,15 @@
         </Style>
 
         <!--  TL PIN IMAGE  -->
+        <Style Selector="ToggleButton#PinTileButton">
+            <Setter Property="RotateTransform.Angle"
+                    Value="0" />
+        </Style>
+
+        <Style Selector="ToggleButton#PinTileButton:pointerover, ToggleButton#PinTileButton:checked">
+            <Setter Property="RotateTransform.Angle"
+                    Value="-45" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid Classes.tileHover="{Binding IsHovering}"
           Classes.subselect="{Binding IsSubSelectionEnabled}"
@@ -101,21 +110,22 @@
                       local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding}"
                       IsChecked="{Binding IsPinned}"
                       IsVisible="{Binding !IsWindowOpen}">
+
+            <ToggleButton.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="RotateTransform.Angle"
+                                      Duration="0:0:0.5" />
+                </Transitions>
+            </ToggleButton.Transitions>
+
+            <ToggleButton.RenderTransform>
+                <RotateTransform />
+            </ToggleButton.RenderTransform>
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=TogglePinned, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                        ToolTipText="Toggle Pin" />
             </ToolTip.Tip>
             <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource PinImage}">
-                <Image.Transitions>
-                    <Transitions>
-                        <DoubleTransition Property="RotateTransform.Angle"
-                                          Duration="0:0:0.5" />
-                    </Transitions>
-                </Image.Transitions>
-
-                <Image.RenderTransform>
-                    <RotateTransform Angle="{Binding PinButtonAngle}" />
-                </Image.RenderTransform>
             </Image>
         </ToggleButton>
 

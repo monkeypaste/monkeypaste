@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvHighlightTextExtension {
         #region Private Variables
-        private static double _DefaultOpacity = 0.3d;
+        private static double _DefaultOpacity = 0.5d;
         private static Dictionary<Control, MpAvTextHighlightAdorner> _AttachedControlAdornerLookup = new Dictionary<Control, MpAvTextHighlightAdorner>();
         #endregion
 
@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!e.PropertyName.StartsWith(nameof(MpIHighlightTextRangesInfoViewModel))) {
                     return;
                 }
-                MpConsole.WriteLine($"highlight prop changed: '{e.PropertyName}'");
+                //MpConsole.WriteLine($"highlight prop changed: '{e.PropertyName}'");
                 UpdateHighlights(element);
             }
 
@@ -124,6 +124,7 @@ namespace MonkeyPaste.Avalonia {
                 if (isEnabledVal) {
                     attached_control.AttachedToLogicalTree += Attached_control_AttachedToLogicalTree;
                     attached_control.DetachedFromLogicalTree += Attached_control_DetachedFromLogicalTree;
+                    attached_control.EffectiveViewportChanged += Attached_control_EffectiveViewportChanged;
                     if (attached_control.IsInitialized) {
                         Attached_control_AttachedToLogicalTree(attached_control, null);
                     }
@@ -134,6 +135,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private static void Attached_control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
+            if (sender is not Control attached_control) {
+                return;
+            }
+            UpdateHighlights(attached_control);
+        }
 
         private static void Attached_control_AttachedToLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
             if (sender is not Control attached_control ||
@@ -170,6 +177,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private static void UpdateHighlights(Control attached_control) {
+            if (!_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha)) {
+                return;
+            }
+
             FormattedText ft = null;
             bool is_empty = false;
             if (attached_control.TryGetVisualDescendant<TextBox>(out var tb)) {
@@ -183,17 +194,15 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm ||
-                !_AttachedControlAdornerLookup.TryGetValue(attached_control, out var tha) ||
+            if (is_empty ||
+                GetRangesInfoViewModel(attached_control) is not MpIHighlightTextRangesInfoViewModel hrivm ||
                 hrivm.HighlightRanges.Where(x => x.Document == attached_control) is not IEnumerable<MpTextRange> hlrl ||
                 !hlrl.Any()) {
-
-                return;
-            }
-            if (is_empty) {
                 tha.DrawHighlights(null);
                 return;
             }
+
+            ft.MaxTextWidth = attached_control.Bounds.Width;
             var all_brl =
                 hrivm
                 .HighlightRanges
@@ -213,18 +222,6 @@ namespace MonkeyPaste.Avalonia {
             tha.DrawHighlights(gl);
         }
 
-        private static void AddVisualAdorner(Visual visual, Control? adorner, AdornerLayer? layer) {
-            if (adorner is null || layer == null || layer.Children.Contains(adorner)) {
-                return;
-            }
-
-
-            AdornerLayer.SetAdornedElement(adorner, visual);
-            //AdornerLayer.SetIsClipEnabled(adorner, false);
-
-            ((ISetLogicalParent)adorner).SetParent(visual);
-            layer.Children.Add(adorner);
-        }
 
         private static void RemoveVisualAdorner(Visual visual, Control? adorner, AdornerLayer? layer) {
             if (adorner is null || layer is null || !layer.Children.Contains(adorner)) {
@@ -234,8 +231,6 @@ namespace MonkeyPaste.Avalonia {
             layer.Children.Remove(adorner);
             ((ISetLogicalParent)adorner).SetParent(null);
         }
-
-
     }
 
     internal class MpAvTextHighlightAdorner : MpAvAdornerBase {
@@ -252,10 +247,9 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(InvalidateVisual);
         }
         public override void Render(DrawingContext context) {
-            if (!IsVisible) {
-                return;
+            if (IsVisible) {
+                _gl.Where(x => x.Item2 != null).ForEach(x => context.DrawGeometry(x.Item1, null, x.Item2));
             }
-            _gl.ForEach((x, idx) => context.DrawGeometry(x.Item1, null, x.Item2));
             base.Render(context);
         }
     }

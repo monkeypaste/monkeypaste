@@ -43,7 +43,7 @@
                                                   HorizontalContentAlignment="Stretch"
                                                   VerticalContentAlignment="Stretch">
                     <local:MpAvSidebarButtonGroupView.Background>
-                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
                     </local:MpAvSidebarButtonGroupView.Background>
                 </local:MpAvSidebarButtonGroupView>
 
@@ -122,7 +122,6 @@
                 <!--  CONTENT TRAY CONTAINER  -->
 
                 <Border x:Name="ClipTrayContainerBorder"
-                        x:CompileBindings="False"
                         Grid.Column="2"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">

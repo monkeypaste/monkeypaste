@@ -29,11 +29,11 @@
         </Style>
         <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(even)">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeGrayAccent1}" />
+                    Value="{DynamicResource ThemeGrayAccent1Color}" />
         </Style>
         <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(odd)">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeGrayAccent2}" />
+                    Value="{DynamicResource ThemeGrayAccent2Color}" />
         </Style>
         <Style Selector="TextBlock.detailLabel">
             <Setter Property="FontWeight"

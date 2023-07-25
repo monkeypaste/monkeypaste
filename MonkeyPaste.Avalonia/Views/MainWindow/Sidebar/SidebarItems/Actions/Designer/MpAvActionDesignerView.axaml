@@ -143,7 +143,7 @@
                                   TailWidth="3"
                                   WarningBrush1="{DynamicResource DefaultWarningBrush1}"
                                   WarningBrush2="{DynamicResource DefaultWarningBrush2}"
-                                  TransitionLineDefaultBorderBrush="{DynamicResource ThemeWhite}"
+                                  TransitionLineDefaultBorderBrush="{DynamicResource ThemeWhiteColor}"
                                   TransitionLineHoverBorderBrush="{DynamicResource HoverDefaultBorderBrush}"
                                   TransitionLineDisabledFillBrush="{DynamicResource DisabledHighlightBrush}"
                                   TransitionLineEnabledFillBrush="{DynamicResource EnabledHighlightBrush}"

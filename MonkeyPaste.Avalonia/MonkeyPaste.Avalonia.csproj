@@ -415,6 +415,7 @@
     <None Remove="Assets\Images\speak.png" />
     <None Remove="Assets\Images\speaker.png" />
     <None Remove="Assets\Images\spellcheck.png" />
+    <None Remove="Assets\Images\spinner.png" />
     <None Remove="Assets\Images\spreadsheet.png" />
     <None Remove="Assets\Images\staroutline.png" />
     <None Remove="Assets\Images\starsolid.png" />
@@ -610,6 +611,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\speaker.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\spinner.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\staryellow.png">

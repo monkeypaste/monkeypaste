@@ -25,7 +25,7 @@
 
     <Style Selector=":is(Button).outline /template/ ContentPresenter">
         <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeGrayAccent2}" />
+                Value="{DynamicResource ThemeGrayAccent2Color}" />
     </Style>
     <Style Selector=":is(Button).outlineOver">
         <Setter Property="BorderBrush"

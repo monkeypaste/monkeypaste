@@ -20,7 +20,7 @@
                         Orientation="Horizontal">
                 <Image Classes="frame header icon"
                        IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhite}" />
+                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhiteColor}" />
                 <TextBlock Classes="frame header text"
                            Text="{Binding LabelText}" />
             </StackPanel>
@@ -28,7 +28,7 @@
             <local:MpAvParameterCollectionView x:Name="ParameterCollectionView"
                                                BorderThickness="1"
                                                CornerRadius="10"
-                                               BorderBrush="{DynamicResource ThemeWhite}"
+                                               BorderBrush="{DynamicResource ThemeWhiteColor}"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch" />
         </StackPanel>

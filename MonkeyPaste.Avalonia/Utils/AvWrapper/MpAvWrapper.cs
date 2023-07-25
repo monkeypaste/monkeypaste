@@ -138,6 +138,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
+            ContentViewLocator = new MpAvContentViewLocator();
             ShareTools = new MpAvShare();
             NotificationBuilder = new MpAvNotificationBuilder();
             LoadOnLoginTools = new MpAvLoginLoadTools();

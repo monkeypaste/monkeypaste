@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -864,10 +865,6 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut sc && sc.IsShortcutCommand(this)) {
                 OnPropertyChanged(nameof(KeyString));
-            } else if (e is MpCopyItem && IsAllTag) {
-                Dispatcher.UIThread.Post(() => {
-                    //TagClipCount++;
-                });
             }
         }
 
@@ -890,10 +887,6 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(KeyString));
             } else if (e is MpCopyItemTag cit && cit.TagId == TagId) {
                 UnlinkCopyItemCommand.Execute(cit.CopyItemId);
-            } else if (e is MpCopyItem && IsAllTag) {
-                Dispatcher.UIThread.Post(() => {
-                    TagClipCount--;
-                });
             }
         }
         #endregion

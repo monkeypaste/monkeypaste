@@ -14,6 +14,7 @@ namespace MonkeyPaste.Avalonia {
             if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled && param is MpAvClipTileViewModel ctvm) {
                 ctvm.IsEditorLoaded = true;
                 switch (ctvm.CopyItemType) {
+                    default:
                     case MpCopyItemType.Text:
                         key = "PlainTextTemplate";
                         break;
@@ -24,6 +25,8 @@ namespace MonkeyPaste.Avalonia {
                         key = "FileListTemplate";
                         break;
                 }
+            } else {
+
             }
 
             return AvailableTemplates[key].Build(param);

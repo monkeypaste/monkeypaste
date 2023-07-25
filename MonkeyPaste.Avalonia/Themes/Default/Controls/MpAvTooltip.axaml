@@ -7,35 +7,35 @@
 
     <Style Selector="local|MpAvToolTipView Border#TooltipOuterContainer">
         <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeInteractiveBgColor}" />
+                Value="{DynamicResource ThemeInteractiveBgBrush}" />
         <Setter Property="Background"
-                Value="{DynamicResource ThemeInteractiveColor}" />
+                Value="{DynamicResource ThemeInteractiveBrush}" />
     </Style>
 
     <Style Selector="local|MpAvToolTipView TextBlock#ToolTipTextBlock">
         <Setter Property="Foreground"
-                Value="{DynamicResource ThemeInteractiveBgColor}" />
+                Value="{DynamicResource ThemeInteractiveBgBrush}" />
     </Style>
 
     <!--  WARNING  -->
 
     <Style Selector="local|MpAvToolTipView.warning Border">
         <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeAccent1BgColor}" />
+                Value="{DynamicResource ThemeAccent1BgBrush}" />
         <Setter Property="Background"
-                Value="{DynamicResource ThemeAccent1Color}" />
+                Value="{DynamicResource ThemeAccent1Brush}" />
     </Style>
     <Style Selector="local|MpAvToolTipView.warning TextBlock#ToolTipTextBlock">
         <Setter Property="Foreground"
-                Value="{DynamicResource ThemeBlack}" />
+                Value="{DynamicResource ThemeBlackBrush}" />
     </Style>
     <!--  ERROR  -->
 
     <Style Selector="local|MpAvToolTipView.error Border">
         <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeAccent2BgColor}" />
+                Value="{DynamicResource ThemeAccent2BgBrush}" />
         <Setter Property="Background"
-                Value="{DynamicResource ThemeAccent2Color}" />
+                Value="{DynamicResource ThemeAccent2Brush}" />
     </Style>
 
     <!--  HINTS  -->

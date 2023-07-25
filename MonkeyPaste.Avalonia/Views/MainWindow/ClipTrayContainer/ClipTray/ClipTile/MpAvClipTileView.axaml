@@ -17,7 +17,7 @@
                        VerticalContentAlignment="Stretch"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileView">
     <Interaction.Behaviors>
-        <local:MpHighlightSelectorBehavior />
+        <local:MpAvHighlightSelectorBehavior />
     </Interaction.Behaviors>
     <local:MpAvUserControl.Styles>
 
@@ -46,7 +46,7 @@
 
         <Style Selector="Grid#PinPlaceholderOverlay TextBlock">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveColor}" />
+                    Value="{DynamicResource ThemeInteractiveBrush}" />
         </Style>
 
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.TileHover Grid#PinPlaceholderOverlay Image">
@@ -56,7 +56,7 @@
 
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.TileHover Grid#PinPlaceholderOverlay TextBlock">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeAccent1Color}" />
+                    Value="{DynamicResource ThemeAccent1Brush}" />
         </Style>
 
 
@@ -198,7 +198,7 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
                 <Grid.Background>
-                    <SolidColorBrush Color="{DynamicResource ClipTileContentBackgroundBrush}" Opacity="0.6" />
+                    <SolidColorBrush Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="0.6" />
                 </Grid.Background>
                 <Grid.Transitions>
                     <Transitions>

@@ -69,13 +69,13 @@
                     VerticalAlignment="Bottom"
                     BorderThickness="0"
                     Margin="0,0,5,0"
-                    Background="{DynamicResource ThemeWhite}"
+                    Background="{DynamicResource ThemeWhiteColor}"
                     Height="1" />
 
 
             <local:MpAvOptionsButton Grid.Row="0"
                                      Grid.Column="2"
-                                     Foreground="{DynamicResource ThemeWhite}"
+                                     Foreground="{DynamicResource ThemeWhiteColor}"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
                                      local:MpAvMenuExtension.IsEnabled="True"
@@ -103,7 +103,7 @@
                            FontWeight="SemiBold"
                            Background="Transparent"
                            Focusable="True"
-                           Foreground="{DynamicResource ThemeWhite}"
+                           Foreground="{DynamicResource ThemeWhiteColor}"
                            Text="{Binding Body}" />
             </Border>
         </Grid>

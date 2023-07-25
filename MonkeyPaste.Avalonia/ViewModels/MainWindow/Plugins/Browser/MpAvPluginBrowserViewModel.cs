@@ -202,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent3.ToString()),
+                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent3Color.ToString()),
                 Content = new MpAvPluginBrowserView(),
                 Topmost = true
             };

@@ -24,7 +24,7 @@
         <Setter Property="Background"
                 Value="Silver" />
         <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeGrayAccent1}" />
+                Value="{DynamicResource ThemeGrayAccent1Color}" />
         <Setter Property="Foreground"
                 Value="{DynamicResource ThemeInteractiveBgColor}" />
         <Setter Property="FontWeight"
@@ -37,13 +37,13 @@
 
     <Style Selector="Window.notificationWindow Button:not(.optionsButton):pointerover /template/ ContentPresenter">
         <Setter Property="Background"
-                Value="{DynamicResource ThemeGrayAccent1}" />
+                Value="{DynamicResource ThemeGrayAccent1Color}" />
     </Style>
     <Style Selector="Window.userActionNotificationWindow Button:not(.optionsButton):pointerover">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
         <Setter Property="Background"
-                Value="{DynamicResource ThemeGrayAccent2}" />
+                Value="{DynamicResource ThemeGrayAccent2Color}" />
     </Style>
 
     <!--  NTF OUTER BORDER  -->

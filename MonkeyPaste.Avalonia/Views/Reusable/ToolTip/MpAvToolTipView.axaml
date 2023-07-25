@@ -12,6 +12,9 @@
              d:DesignHeight="450"
              x:Class="MonkeyPaste.Avalonia.MpAvToolTipView"
              Background="Transparent">
+    <UserControl.RenderTransform>
+        <RotateTransform />
+    </UserControl.RenderTransform>
     <UserControl.Resources>
         <sys:String x:Key="CssStyle">
             body{foreground: black; background: khaki;border: 1.5 outset darkkhaki;}
@@ -49,9 +52,6 @@
                     Value="False" />
         </Style>
     </UserControl.Styles>
-    <UserControl.RenderTransform>
-        <TranslateTransform />
-    </UserControl.RenderTransform>
     <Border x:Name="TooltipOuterContainer"
             CornerRadius="10"
             BorderThickness="1.5"
@@ -66,7 +66,7 @@
                            Margin="5,0,0,0"
                            FontSize="14"
                            FontStyle="Italic"
-                           Foreground="{DynamicResource ThemeGrayAccent3}"
+                           Foreground="{DynamicResource ThemeGrayAccent3Color}"
                            Text="{Binding InputGestureText, ElementName=ToolTipView, StringFormat='({0})'}">
 
                 </TextBlock>

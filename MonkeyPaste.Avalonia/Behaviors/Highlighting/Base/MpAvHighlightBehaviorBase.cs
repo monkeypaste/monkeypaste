@@ -9,6 +9,7 @@ using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,7 +39,16 @@ namespace MonkeyPaste.Avalonia {
 
         public int Priority => (int)HighlightType;
 
-        public int SelectedIdx { get; set; } = -1;
+        private int _selectedIdx = -1;
+        public int SelectedIdx {
+            get => _selectedIdx;
+            set {
+                if (SelectedIdx != value) {
+                    _selectedIdx = value;
+                    SelIdxChanged?.Invoke(this, SelectedIdx);
+                }
+            }
+        }
 
         private int _matchCount = 0;
         public int MatchCount =>
@@ -48,17 +58,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Events
         public event EventHandler<int> MatchCountChanged;
+        public event EventHandler<int> SelIdxChanged;
         #endregion
 
         #region Constructors
-        protected override void OnAttached() {
-            base.OnAttached();
-            Reset();
+        public MpAvHighlightBehaviorBase() : base() {
         }
-        protected override void OnDetaching() {
-            base.OnDetaching();
-            Reset();
-        }
+
         #endregion
 
         #region Public Methods
@@ -71,14 +77,31 @@ namespace MonkeyPaste.Avalonia {
 
         public abstract Task FindHighlightingAsync();
 
-        public abstract void ClearHighlighting();
+        public virtual void ClearHighlighting() { }
 
-        public abstract Task ApplyHighlightingAsync();
+        public virtual async Task ApplyHighlightingAsync() {
+            await Task.Delay(1);
+        }
 
         #endregion
 
         #region Protected Methods
 
+        protected override void OnAttached() {
+            base.OnAttached();
+            AssociatedObject.Initialized += AssociatedObject_Initialized;
+        }
+
+        private void AssociatedObject_Initialized(object sender, EventArgs e) {
+            Reset();
+            AttachToSelectorAsync().FireAndForgetSafeAsync();
+        }
+
+        protected override void OnDetaching() {
+            base.OnDetaching();
+            Reset();
+            DetachToSelectorAsync().FireAndForgetSafeAsync();
+        }
         protected void SetMatchCount(int count) {
             bool changed = _matchCount != count;
             _matchCount = count;
@@ -87,6 +110,55 @@ namespace MonkeyPaste.Avalonia {
             }
 
         }
+
+        protected async Task AttachToSelectorAsync() {
+            var hsb = await FindSelectorAsync();
+            if (hsb == null) {
+                return;
+            }
+            hsb.AddHighlighter(this);
+        }
+        protected async Task DetachToSelectorAsync() {
+            var hsb = await FindSelectorAsync();
+            if (hsb == null) {
+                return;
+            }
+            hsb.RemoveHighlighter(this);
+        }
+
+        protected async Task<MpAvHighlightSelectorBehavior> FindSelectorAsync(int timeout = 10_000) {
+            var sw = Stopwatch.StartNew();
+            while (true) {
+                if (AssociatedObject != null && AssociatedObject.DataContext != null) {
+                    break;
+                }
+                if (sw.ElapsedMilliseconds >= 10_000) {
+                    break;
+                }
+                await Task.Delay(100);
+            }
+            MpAvClipTileView ctv = null;
+            var parent = AssociatedObject.Parent;
+            while (true) {
+                if (parent is MpAvClipTileView parent_ctv) {
+                    ctv = parent_ctv;
+                    break;
+                }
+                if (parent == null) {
+                    break;
+                }
+                parent = parent.Parent;
+            }
+            if (ctv == null) {
+                return null;
+            }
+            if (Interaction.GetBehaviors(ctv).OfType<MpAvHighlightSelectorBehavior>()
+                .FirstOrDefault() is MpAvHighlightSelectorBehavior hsb) {
+                return hsb;
+            }
+            return null;
+        }
+
         #endregion
 
         #region Private Methods

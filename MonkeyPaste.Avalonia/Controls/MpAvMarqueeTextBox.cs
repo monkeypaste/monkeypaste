@@ -27,9 +27,12 @@ namespace MonkeyPaste.Avalonia {
     public interface MpIOverrideRender {
         bool IgnoreRender { get; set; }
     }
+    public interface MpITextDocumentContainer {
+        MpTextRange ContentRange { get; }
+    }
 
     [DoNotNotify]
-    public class MpAvMarqueeTextBox : TextBox, MpIOverrideRender {
+    public class MpAvMarqueeTextBox : TextBox, MpIOverrideRender, MpITextDocumentContainer {
 
         #region Private Variables
 
@@ -58,6 +61,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpITextDocumentContainer Implementation
+        private MpTextRange _contentRange;
+        public MpTextRange ContentRange {
+            get {
+                if (_contentRange == null) {
+                    _contentRange = new MpTextRange(this);
+                }
+                return _contentRange;
+            }
+        }
+        #endregion
 
         #region MpIOverrideRender Implementation
         public bool IgnoreRender { get; set; }
@@ -71,15 +85,6 @@ namespace MonkeyPaste.Avalonia {
         protected override Type StyleKeyOverride => typeof(TextBox);
         #endregion
 
-        private MpTextRange _contentRange;
-        public MpTextRange ContentRange {
-            get {
-                if (_contentRange == null) {
-                    _contentRange = new MpTextRange(this);
-                }
-                return _contentRange;
-            }
-        }
 
         #region ReadOnlyForeground AvaloniaProperty
 

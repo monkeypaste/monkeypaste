@@ -21,7 +21,7 @@
                 <StackPanel Classes="header expander"
                             Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhite}" />
+                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhiteColor}" />
                     <TextBlock Classes="expander header"
                                Text="Applications" />
                 </StackPanel>
@@ -119,7 +119,7 @@
                 <StackPanel Classes="header expander"
                             Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource WebImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhite}" />
+                           Source="{Binding Source={StaticResource WebImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhiteColor}" />
                     <TextBlock Classes="expander header"
                                Text="Websites" />
                     <local:MpAvToolTipInfoHintView Classes="expander header warning"

@@ -18,6 +18,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public class MpAvContentTextBox :
         TextBox,
+        MpITextDocumentContainer,
         MpIContentView,
         MpAvIDragSource {
         #region Private Variables
@@ -40,6 +41,18 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpITextDocumentContainer Implementation
+        private MpTextRange _contentRange;
+        public MpTextRange ContentRange {
+            get {
+                if (_contentRange == null) {
+                    _contentRange = new MpTextRange(this);
+                }
+                return _contentRange;
+            }
+        }
+        #endregion
 
         #region MpIContentView Implementation
 
@@ -79,6 +92,14 @@ namespace MonkeyPaste.Avalonia {
         public void SendMessage(string msgJsonBase64Str) {
             throw new NotImplementedException();
         }
+
+
+        #region MpIRecyclableLocatorItem Implementation
+        int MpILocatorItem.LocationId =>
+            BindingContext is MpILocatorItem ? (BindingContext as MpILocatorItem).LocationId : 0;
+        DateTime? MpIRecyclableLocatorItem.LocatedDateTime { get; set; }
+        #endregion
+
         #endregion
 
         #region MpAvIDragSource Implementation
@@ -160,10 +181,15 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
+            Mp.Services.ContentViewLocator.AddView(this);
             if (DataContext is MpAvClipTileViewModel ctvm) {
                 ctvm.IsEditorLoaded = true;
             }
             this.FontFamily = MpAvStringToFontFamilyConverter.Instance.Convert(MpPrefViewModel.Instance.DefaultEditableFontFamily, null, null, null) as FontFamily;
+        }
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnDetachedFromVisualTree(e);
+            Mp.Services.ContentViewLocator.RemoveView(this);
         }
 
         protected override void OnDataContextChanged(EventArgs e) {

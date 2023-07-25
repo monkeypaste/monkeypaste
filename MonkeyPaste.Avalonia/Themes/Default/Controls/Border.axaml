@@ -8,7 +8,7 @@
                              StartPoint="0%,0%"
                              EndPoint="100%,0%">
             <GradientStop Offset="0"
-                          Color="{DynamicResource ThemeWhite}" />
+                          Color="{DynamicResource ThemeWhiteColor}" />
             <GradientStop Offset="0.75"
                           Color="Transparent" />
         </LinearGradientBrush>
@@ -17,7 +17,7 @@
                              StartPoint="0%,0%"
                              EndPoint="100%,0%">
             <GradientStop Offset="0"
-                          Color="{DynamicResource ThemeWhite}" />
+                          Color="{DynamicResource ThemeWhiteColor}" />
             <GradientStop Offset="0.9"
                           Color="Transparent" />
         </LinearGradientBrush>
@@ -59,6 +59,6 @@
 
     <Style Selector="Border.roundedTextBoxContainer:focus-within">
         <Setter Property="BorderBrush"
-                Value="{DynamicResource ThemeGrayAccent3}" />
+                Value="{DynamicResource ThemeGrayAccent3Color}" />
     </Style>
 </Styles>

@@ -32,8 +32,14 @@ namespace MonkeyPaste {
 
     }
 
+    public interface MpIRecyclableLocatorItem : MpILocatorItem {
+        DateTime? LocatedDateTime { get; set; }
+    }
+    public interface MpILocatorItem {
+        int LocationId { get; }
+    }
     public interface MpIContentView :
-        MpIHasDataContext, MpIHasDevTools, MpIJsonMessenger {
+        MpIHasDataContext, MpIHasDevTools, MpIRecyclableLocatorItem, MpIJsonMessenger {
         bool IsContentLoaded { get; }
         bool IsSubSelectable { get; }
         Task LoadContentAsync(bool isSearchEnabled = true);

@@ -14,8 +14,8 @@
 
         ThemeColor,
 
-        ThemeBlack,
-        ThemeWhite,
+        ThemeBlackColor,
+        ThemeWhiteColor,
 
         ThemeInteractiveColor,
         ThemeInteractiveBgColor,
@@ -44,11 +44,9 @@
         ThemeCompliment5DarkColor,
         ThemeCompliment5LighterColor,
 
-        ThemeGrayAccent1,
-        ThemeGrayAccent2,
-        ThemeGrayAccent3,
-
-        ThemeShadowFg,
+        ThemeGrayAccent1Color,
+        ThemeGrayAccent2Color,
+        ThemeGrayAccent3Color,
 
         PostThemeIdx,
         #endregion

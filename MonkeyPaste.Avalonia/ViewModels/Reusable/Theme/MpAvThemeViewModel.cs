@@ -396,9 +396,9 @@ namespace MonkeyPaste.Avalonia {
             // 9, 10, 11
 
             // when theme CHANGED from default/light to dark or vice versa swap most/least darkest gray references
-            string dark_gray = MpSystemColors.dimgray; //MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true);
-            string med_gray = MpSystemColors.gray; //MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true);
-            string light_gray = MpSystemColors.lightgray; //MpColorHelpers.ColorFromHsv(h, 0.1d, Math.Max(0, v - 0.1d)).ToHex(true);
+            string dark_gray = MpSystemColors.dimgray.RemoveHexAlpha(); //MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true);
+            string med_gray = MpSystemColors.gray.RemoveHexAlpha(); //MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true);
+            string light_gray = MpSystemColors.lightgray.RemoveHexAlpha(); //MpColorHelpers.ColorFromHsv(h, 0.1d, Math.Max(0, v - 0.1d)).ToHex(true);
             if (tt == MpThemeType.Default || tt == MpThemeType.Light) {
                 palette.AddRange(new[] { dark_gray, med_gray, light_gray });
             } else {
@@ -445,7 +445,6 @@ namespace MonkeyPaste.Avalonia {
             // 26
             palette.Add(MpColorHelpers.ColorFromHsv((h - 240.0d).Wrap(0, 360), 0.05d, 0.95d).ToHex(true));
 
-
             var colors = palette.Select(x => x.ToAvColor()).ToArray();
             SetThemeValue(MpThemeResourceKey.ThemeColor, colors[0]);
             SetThemeValue(MpThemeResourceKey.ThemeAccent1BgColor, colors[1]);
@@ -457,12 +456,12 @@ namespace MonkeyPaste.Avalonia {
             SetThemeValue(MpThemeResourceKey.ThemeCompliment1Color, colors[7]);
             SetThemeValue(MpThemeResourceKey.ThemeCompliment1DarkColor, colors[8]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeGrayAccent1, colors[9]);
-            SetThemeValue(MpThemeResourceKey.ThemeGrayAccent2, colors[10]);
-            SetThemeValue(MpThemeResourceKey.ThemeGrayAccent3, colors[11]);
+            SetThemeValue(MpThemeResourceKey.ThemeGrayAccent1Color, colors[9]);
+            SetThemeValue(MpThemeResourceKey.ThemeGrayAccent2Color, colors[10]);
+            SetThemeValue(MpThemeResourceKey.ThemeGrayAccent3Color, colors[11]);
 
-            SetThemeValue(MpThemeResourceKey.ThemeBlack, colors[12]);
-            SetThemeValue(MpThemeResourceKey.ThemeWhite, colors[13]);
+            SetThemeValue(MpThemeResourceKey.ThemeBlackColor, colors[12]);
+            SetThemeValue(MpThemeResourceKey.ThemeWhiteColor, colors[13]);
 
             SetThemeValue(MpThemeResourceKey.ThemeAccent4Color, colors[14]);
             SetThemeValue(MpThemeResourceKey.ThemeAccent4BgColor, colors[15]);
@@ -483,13 +482,7 @@ namespace MonkeyPaste.Avalonia {
             SetThemeValue(MpThemeResourceKey.ThemeCompliment5DarkColor, colors[25]);
             SetThemeValue(MpThemeResourceKey.ThemeCompliment5LighterColor, colors[26]);
 
-            BoxShadows new_fg_shadows = new BoxShadows(
-                new BoxShadow() {
-                    Color = colors[21],
-                    Spread = 5
-                });
-
-            Mp.Services.PlatformResource.SetResource(MpThemeResourceKey.ThemeShadowFg.ToString(), new_fg_shadows);
+            var test = palette.Where(x => x.ToLower() == "#ff252226" || x.ToLower() == "#252226").Select(x => palette.IndexOf(x));
         }
 
         #endregion

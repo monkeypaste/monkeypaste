@@ -58,7 +58,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvPlainHtmlConverterWebView() {
-            Mp.Services.ContentViewLocator = this;
 #if PLAT_WV
             this.Content = WebView; 
 #endif

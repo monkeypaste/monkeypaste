@@ -384,8 +384,8 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Opacity="0.5"
-                    Background="{DynamicResource ThemeGrayAccent1}"
-                    BorderBrush="{DynamicResource ThemeGrayAccent1}"
+                    Background="{DynamicResource ThemeGrayAccent1Color}"
+                    BorderBrush="{DynamicResource ThemeGrayAccent1Color}"
                     IsVisible="False" />
         </Grid>
 

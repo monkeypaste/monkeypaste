@@ -139,7 +139,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             BorderThickness="7"
-            BorderBrush="{DynamicResource ThemeWhite}"
+            BorderBrush="{DynamicResource ThemeWhiteColor}"
             Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
         <Grid x:Name="NotificationWindowContainerGrid">
             <Grid.ColumnDefinitions>
@@ -172,7 +172,7 @@
                            FontSize="26"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Left"
-                           Foreground="{DynamicResource ThemeWhite}"
+                           Foreground="{DynamicResource ThemeWhiteColor}"
                            FontWeight="SemiBold"
                            Text="{Binding Title}" />
                 <Border Grid.Row="0"
@@ -207,7 +207,7 @@
                             Width="220"
                             ClipToBounds="True"
                             BorderThickness="1"
-                            BorderBrush="{DynamicResource ThemeWhite}"
+                            BorderBrush="{DynamicResource ThemeWhiteColor}"
                             Background="Transparent"
                             Margin="0"
                             Padding="0">
@@ -276,7 +276,7 @@
                                        Width="200"
                                        FontSize="12"
                                        TextAlignment="Right"
-                                       Foreground="{DynamicResource ThemeWhite}"
+                                       Foreground="{DynamicResource ThemeWhiteColor}"
                                        Text="{Binding}" />
                         </DataTemplate>
                     </TransitioningContentControl.ContentTemplate>
@@ -284,7 +284,7 @@
             </Grid>
 
             <local:MpAvOptionsButton Grid.Column="1"
-                                     Foreground="{DynamicResource ThemeWhite}"
+                                     Foreground="{DynamicResource ThemeWhiteBrush}"
                                      local:MpAvIsHoveringExtension.IsEnabled="True"
                                      local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
                                      local:MpAvMenuExtension.IsEnabled="True"

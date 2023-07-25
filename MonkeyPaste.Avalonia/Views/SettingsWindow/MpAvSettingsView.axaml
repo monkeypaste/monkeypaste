@@ -18,9 +18,9 @@
         <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Stretch</HorizontalAlignment>
         <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush">Transparent</SolidColorBrush>
         <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{DynamicResource ThemeWhite}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="{DynamicResource ThemeWhite}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderChevronForeground" Color="{DynamicResource ThemeWhite}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{DynamicResource ThemeWhiteColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="{DynamicResource ThemeWhiteColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderChevronForeground" Color="{DynamicResource ThemeWhiteColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
     </local:MpAvUserControl.Resources>
 
@@ -72,11 +72,11 @@
                     <LinearGradientBrush StartPoint="0%,0%"
                                          EndPoint="0%,100%">
                         <LinearGradientBrush.GradientStops>
-                            <GradientStop Color="{DynamicResource ThemeGrayAccent3}"
+                            <GradientStop Color="{DynamicResource ThemeGrayAccent3Color}"
                                           Offset="0" />
                             <GradientStop Color="{DynamicResource ThemeAccent1Color}"
                                           Offset="0.7" />
-                            <GradientStop Color="{DynamicResource ThemeGrayAccent3}"
+                            <GradientStop Color="{DynamicResource ThemeGrayAccent3Color}"
                                           Offset="1" />
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
@@ -91,11 +91,11 @@
                     <LinearGradientBrush StartPoint="0%,0%"
                                          EndPoint="0%,100%">
                         <LinearGradientBrush.GradientStops>
-                            <GradientStop Color="{DynamicResource ThemeGrayAccent3}"
+                            <GradientStop Color="{DynamicResource ThemeGrayAccent3Color}"
                                           Offset="0" />
                             <GradientStop Color="{DynamicResource ThemeAccent5Color}"
                                           Offset="0.7" />
-                            <GradientStop Color="{DynamicResource ThemeGrayAccent3}"
+                            <GradientStop Color="{DynamicResource ThemeGrayAccent3Color}"
                                           Offset="1" />
                         </LinearGradientBrush.GradientStops>
                     </LinearGradientBrush>
@@ -163,7 +163,7 @@
         </Style>
         <Style Selector="TextBlock.header">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeWhite}" />
+                    Value="{DynamicResource ThemeWhiteColor}" />
             <Setter Property="VerticalAlignment"
                     Value="Bottom" />
         </Style>
@@ -486,7 +486,7 @@
                                   Margin="10,0"
                                   Padding="0"
                                   CornerRadius="10"
-                                  BorderBrush="{DynamicResource ThemeGrayAccent2}"
+                                  BorderBrush="{DynamicResource ThemeGrayAccent2Color}"
                                   BorderThickness="1"
                                   Background="{DynamicResource ThemeInteractiveBgColor}"
                                   HorizontalAlignment="Right"

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public interface MpIHighlightRegion {
         event EventHandler<int> MatchCountChanged;
+        event EventHandler<int> SelIdxChanged;
         int Priority { get; }
 
         MpHighlightType HighlightType { get; }

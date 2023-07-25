@@ -7,7 +7,6 @@
                        xmlns:pcl="using:MonkeyPaste"
                        x:DataType="local:MpAvClipTrayViewModel"
                        x:TypeArguments="local:MpAvClipTrayViewModel"
-                       x:CompileBindings="False"
                        DataContext="{x:Static local:MpAvClipTrayViewModel.Instance}"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
@@ -218,6 +217,7 @@
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
                 MaxWidth="{Binding Bounds.Width, ElementName=QueryTrayContainerBorder}"
+                x:DataType="local:MpAvSearchCriteriaItemCollectionViewModel"
                 DataContext="{x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}">
             <Border.MaxHeight>
                 <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
@@ -234,8 +234,8 @@
             <Border.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="IsExpanded" />
-                    <Binding Path="!IsCriteriaWindowOpen" />
-                    <Binding Path="IsAdvSearchActive" />
+                    <Binding Path="!IsCriteriaWindowOpen"  />
+                    <Binding Path="IsAdvSearchActive"  />
                 </MultiBinding>
             </Border.IsVisible>
             <local:MpAvSearchCriteriaListBoxView x:Name="SearchCriteriaView"

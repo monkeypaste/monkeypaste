@@ -844,7 +844,8 @@ namespace MonkeyPaste.Common {
             }
             var hex_chars = hexStr.ToCharArray();
             removedAlpha = string.Join(string.Empty, hex_chars.Skip(1).Take(2));
-            return string.Join(string.Empty, hexStr.ToCharArray().Take(1).Skip(2).Take(6));
+            string result = "#" + hexStr.Substring(3);
+            return result;
         }
 
         public static bool IsStringHexColor(this string str) {

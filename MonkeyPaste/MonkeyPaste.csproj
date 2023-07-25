@@ -90,7 +90,6 @@
     <None Remove="Resources\Fonts\password.ttf" />
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
-    <EmbeddedResource Remove="App.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -139,7 +138,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="App.xaml" />
     <None Include="Controls\MpPopupPage.xaml" />
   </ItemGroup>
   <ItemGroup>

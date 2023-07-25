@@ -23,7 +23,7 @@
                               local:MpAvHighlightTextExtension.RangesInfoViewModel="{Binding}"
                               Focusable="True"
                               BorderThickness="0"
-                              TextWrapping="WrapWithOverflow"
+                              TextWrapping="Wrap"
                               AcceptsReturn="True"
                               AcceptsTab="True"
                               ScrollViewer.HorizontalScrollBarVisibility="{Binding IsHorizontalScrollbarVisibile, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|DISABLED}"
@@ -35,6 +35,11 @@
                               HorizontalContentAlignment="Left"
                               VerticalContentAlignment="Top"
                               Background="Transparent"
-                              Foreground="{DynamicResource ThemeInteractiveColor}"
-                              Text="{Binding CopyItemData, Converter={x:Static local:MpAvContentDataConverter.Instance}, ConverterParameter=PlainText}" />
+                              Foreground="{DynamicResource ThemeInteractiveBrush}"
+                              Text="{Binding CopyItemData, Converter={x:Static local:MpAvContentDataConverter.Instance}, ConverterParameter=PlainText}">
+
+        <Interaction.Behaviors>
+            <local:MpAvContentTextBoxHighlightBehavior />
+        </Interaction.Behaviors>
+    </local:MpAvContentTextBox>
 </local:MpAvUserControl>

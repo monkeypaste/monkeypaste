@@ -232,7 +232,7 @@
             <Button x:Name="ClipTileAppIconImageButton"
                     x:DataType="local:MpAvClipTileTransactionCollectionViewModel"
                     DataContext="{Binding TransactionCollectionViewModel}"
-                    Classes="noBg noHoverBg shakeOver"
+                    Classes="noBg noHoverBg"
                     Classes.shakeOnce="{Binding DoShake}"
                     Command="{Binding OpenTransactionPaneCommand}"
                     ClipToBounds="False"
@@ -285,21 +285,7 @@
                            Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch">
-                    </Image>
-                    <!--<Image x:Name="NextToTrashClipTileAppIconImage"
-                           IsHitTestVisible="False"
-                           Source="{Binding Parent.IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
-                           Stretch="UniformToFill"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch">
-                        <Image.IsVisible>
-                            <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                <Binding Path="Parent.IsHovering" />
-                                <Binding Path="Parent.IsNextTrashedByAccount" />
-                            </MultiBinding>
-                        </Image.IsVisible>
-                    </Image>-->
+                           VerticalAlignment="Stretch" />
                 </Grid>
             </Button>
 

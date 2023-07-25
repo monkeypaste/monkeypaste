@@ -5,7 +5,6 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
-                       x:CompileBindings="False"
                        DataContext="{x:Static local:MpAvTriggerCollectionViewModel.Instance}"
                        x:TypeArguments="local:MpAvTriggerCollectionViewModel"
                        x:DataType="local:MpAvTriggerCollectionViewModel"
@@ -36,7 +35,7 @@
             <Setter Property="Padding"
                     Value="5,7.5" />
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeWhite}" />
+                    Value="{DynamicResource ThemeWhiteColor}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="TriggerSidebarOuterContainer"

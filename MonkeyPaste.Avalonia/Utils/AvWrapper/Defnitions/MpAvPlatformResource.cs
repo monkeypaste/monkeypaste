@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
             }
             if (typeof(T) == typeof(string)) {
                 if (valObj is Color color) {
-                    return (T)((object)color.ToPortableColor().ToHex());
+                    return (T)((object)color.ToPortableColor().ToHex(true));
                 }
             }
             if (typeof(T) == typeof(IBrush)) {

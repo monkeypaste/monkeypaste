@@ -24,7 +24,7 @@
         </Style>
         <Style Selector="Button#CriteriaDragButton:pressed Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource LinesX2HorizVertArrowsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeGrayAccent1}" />
+                    Value="{Binding Source={StaticResource LinesX2HorizVertArrowsImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeGrayAccent1Color}" />
         </Style>
 
         <!--  OPTION LISTBOXITEM  -->

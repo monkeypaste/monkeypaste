@@ -81,7 +81,7 @@
 
         <Style Selector="local|MpAvSearchCriteriaItemView">
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeGrayAccent1}" />
+                    Value="{DynamicResource ThemeGrayAccent1Color}" />
         </Style>
 
         <Style Selector="ListBox.criteriaList > ListBoxItem"

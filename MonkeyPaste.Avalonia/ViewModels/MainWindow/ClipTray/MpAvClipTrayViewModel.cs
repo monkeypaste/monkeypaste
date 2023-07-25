@@ -3605,18 +3605,6 @@ namespace MonkeyPaste.Avalonia {
         private async Task PerformQueryAsync(object offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) {
             //MpConsole.WriteLine($"Query called. Arg: '{offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg}'");
             Dispatcher.UIThread.VerifyAccess();
-            bool is_empty_query =
-                !MpAvTagTrayViewModel.Instance.IsAnyTagActive &&
-                Mp.Services.Query.Infos.All(x => string.IsNullOrEmpty(x.MatchValue));
-
-            if (is_empty_query) {
-                // cases:
-                // -intermittently occurs on startup and query throws exception
-                // -after selected tag delete and parent is group tag
-                Items.ForEach(x => x.TriggerUnloadedNotification(true, true));
-                await UpdateEmptyPropertiesAsync();
-                return;
-            }
 
             var sw = new Stopwatch();
             sw.Start();
@@ -3637,6 +3625,27 @@ namespace MonkeyPaste.Avalonia {
             bool isLoadMoreTail = false;
 
             MpPoint newScrollOffset = default;
+
+            #endregion
+
+            #region Reject Empty Query
+
+            bool is_empty_query =
+                !MpAvTagTrayViewModel.Instance.IsAnyTagActive &&
+                Mp.Services.Query.Infos.All(x => string.IsNullOrEmpty(x.MatchValue));
+
+            if (is_empty_query) {
+                // cases:
+                // -startup clipboard item added at cap and oldest linked to trash (triggers iprq)
+                // -after selected tag delete and parent is group tag
+                Items.ForEach(x => x.TriggerUnloadedNotification(true, true));
+                await UpdateEmptyPropertiesAsync();
+                if (isRequery) {
+                    MpMessenger.SendGlobal(MpMessageType.RequeryCompleted);
+                }
+                MpMessenger.SendGlobal(MpMessageType.QueryCompleted);
+                return;
+            }
 
             #endregion
 
