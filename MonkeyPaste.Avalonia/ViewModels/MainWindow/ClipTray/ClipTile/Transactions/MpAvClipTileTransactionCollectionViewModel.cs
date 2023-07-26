@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -262,14 +263,20 @@ namespace MonkeyPaste.Avalonia {
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpCopyItemTransaction cit && cit.CopyItemId == CopyItemId) {
                 Dispatcher.UIThread.Post(async () => {
-                    var cisvm = await CreateTransactionItemViewModelAsync(cit);
-                    while (cisvm.IsAnyBusy) {
+                    IsBusy = true;
+                    while (Mp.Services.TransactionBuilder.CopyItemTransactionsInProgress.Contains(Parent.CopyItemId)) {
+                        // wait for item transactions to complete..
                         await Task.Delay(100);
                     }
-
+                    var cisvm = await CreateTransactionItemViewModelAsync(cit);
+                    while (cisvm.IsAnyBusy) {
+                        // wait for transaction to load
+                        await Task.Delay(100);
+                    }
+                    IsBusy = false;
                     DoShake = true;
 
-                    ApplyTransactionAsync(cisvm).FireAndForgetSafeAsync(this);
+                    await ApplyTransactionAsync(cisvm);
 
                     //OpenTransactionPaneCommand.Execute(null);
                     //SelectedTransaction = cisvm;
@@ -441,6 +448,59 @@ namespace MonkeyPaste.Avalonia {
                 }
                 OnPropertyChanged(nameof(Parent.IsTitleVisible));
             }, () => {
+                return Parent != null;
+            });
+
+        public MpIAsyncCommand<object> CreateTransactionFromOleOpCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (args is not object[] argParts ||
+                    argParts.Length != 2 ||
+                    argParts[0] is not MpTransactionType transType ||
+                    argParts[1] is not MpPortableDataObject mpdo) {
+                    return;
+                }
+                if (transType == MpTransactionType.Appended) {
+                    // NOTE append sources are added before notifying editor since the source of the event
+                    // is clipboard change not drop or paste events which come from editor so
+                    // more accurate sources can be obtained checking in build workflow..
+
+                    if (!Parent.IsAppendNotifier) {
+                        MpDebug.Break("Append state mismatch");
+                    }
+
+                    return;
+                }
+
+                // TODO below is current way web view returns dt delta, should put it in 
+                // the data object instead (when, if ever change tracking is added)
+                //if (!string.IsNullOrEmpty(dataTransferCompleted_ntf.changeDeltaJsonStr)) {
+                //    resp_json = dataTransferCompleted_ntf.changeDeltaJsonStr.ToStringFromBase64();
+                //}
+                string resp_json = mpdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT) as string;
+
+
+                IEnumerable<string> refs = null;
+                if (mpdo != null) {
+                    var other_refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(mpdo);
+                    refs = other_refs.Select(x => Mp.Services.SourceRefTools.ConvertToInternalUrl(x));
+                }
+
+                if (transType == MpTransactionType.None) {
+                    // what's the label?
+                    MpDebug.Break();
+                    transType = MpTransactionType.Error;
+                }
+
+                await Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                    copyItemId: Parent.CopyItemId,
+                    reqType: MpJsonMessageFormatType.DataObject,
+                    req: mpdo.SerializeData(),
+                    respType: MpJsonMessageFormatType.Delta,
+                    resp: resp_json,
+                    ref_uris: refs,
+                    transType: transType);
+
+            }, (args) => {
                 return Parent != null;
             });
 

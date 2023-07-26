@@ -578,7 +578,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsHostWindowActive {
             get {
                 if (GetContentView() is Control c &&
-                    c.GetVisualAncestor<Window>() is Window w) {
+                    TopLevel.GetTopLevel(c) is Window w) {
                     return w.IsActive;
                 }
                 return false;
@@ -1398,6 +1398,7 @@ namespace MonkeyPaste.Avalonia {
         private MpIContentView _contentView;
         public MpIContentView GetContentView() {
             if (_contentView != null) {
+                // view already stored, verify this is data context or reset
                 if (_contentView is Control c &&
                     c.DataContext == this) {
                     return _contentView;
@@ -1884,10 +1885,10 @@ namespace MonkeyPaste.Avalonia {
 
             EventHandler open_handler = null;
             open_handler = (s, e) => {
-                if (GetContentView() is MpAvContentWebView wv &&
+                if (GetContentView() is MpIContentView cv &&
                     !IsContentReadOnly) {
                     OnPropertyChanged(nameof(IsTitleVisible));
-                    wv.LoadContentAsync().FireAndForgetSafeAsync(this);
+                    cv.LoadContentAsync().FireAndForgetSafeAsync(this);
                 }
                 pow.Opened -= open_handler;
             };
@@ -2125,7 +2126,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CopyToClipboardCommand => new MpAsyncCommand(
             async () => {
                 //IsBusy = true;
-                var ds = GetContentView() as MpAvIDragSource;
+                var ds = GetContentView() as MpIDragSource;
                 if (ds == null) {
                     MpDebug.Break();
                     return;

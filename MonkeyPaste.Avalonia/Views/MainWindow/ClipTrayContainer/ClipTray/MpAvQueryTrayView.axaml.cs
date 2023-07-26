@@ -59,7 +59,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             //MpConsole.WriteLine("[DragEnter] PinTrayListBox: ");
-            BindingContext.IsDragOverQueryTray = true;
+            Dispatcher.UIThread.Post(() => {
+                BindingContext.IsDragOverQueryTray = true;
+            });
             StartAutoScroll();
         }
 

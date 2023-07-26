@@ -258,6 +258,13 @@
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch">
+                        <Image.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="IsAnyAnalysisTransaction" />
+                                <Binding Path="!IsVisible"
+                                         ElementName="TransBusySpinner" />
+                            </MultiBinding>
+                        </Image.IsVisible>
                         <Image.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="{StaticResource IconBorderMaxScale}"
@@ -267,6 +274,7 @@
                         </Image.RenderTransform>
                     </Image>
                     <Image x:Name="ClipTileAppIconBorderImage"
+                           IsVisible="{Binding !IsVisible, ElementName=TransBusySpinner}"
                            IsHitTestVisible="False"
                            Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border}"
                            Stretch="UniformToFill"
@@ -281,11 +289,18 @@
                         </Image.RenderTransform>
                     </Image>
                     <Image x:Name="ClipTileAppIconImage"
+                           IsVisible="{Binding !IsVisible, ElementName=TransBusySpinner}"
                            IsHitTestVisible="False"
                            Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                            Stretch="UniformToFill"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch" />
+
+                    <local:MpAvBusySpinnerView x:Name="TransBusySpinner"
+                                               IsVisible="{Binding IsBusy}"
+                                               Width="{Binding $parent.Width}"
+                                               Height="{Binding $parent.Height}"
+                                               Classes="square" />
                 </Grid>
             </Button>
 

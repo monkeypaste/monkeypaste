@@ -342,7 +342,9 @@ namespace MonkeyPaste.Avalonia {
             if (resp != null) {
                 Items.Add(resp);
             }
+            if (TransactionId == 480) {
 
+            }
             var sources = await MpDataModelProvider.GetCopyItemTransactionSourcesAsync(TransactionId);
             foreach (var source in sources) {
                 var tsvm = await CreateSourceViewModelAsync(source);

@@ -1071,9 +1071,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
+                case MpMessageType.InPlaceRequeryCompleted:
                 case MpMessageType.RequeryCompleted:
                     UpdateBadge();
-                    if (IsActiveTag && IsQueryTag) {
+                    if (IsActiveTag) {
                         // repopulate count for query tag
                         UpdateClipCountAsync().FireAndForgetSafeAsync(this);
                     }

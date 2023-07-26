@@ -84,7 +84,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void DragEnter(object sender, DragEventArgs e) {
             //MpConsole.WriteLine("[DragEnter] PinTrayListBox: ");
-            BindingContext.IsDragOverPinTray = true;
+            Dispatcher.UIThread.Post(() => {
+                BindingContext.IsDragOverPinTray = true;
+            });
         }
 
         private void DragOver(object sender, DragEventArgs e) {

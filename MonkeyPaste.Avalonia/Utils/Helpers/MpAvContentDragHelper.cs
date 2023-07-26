@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvContentDragHelper {
         #region Private Variables
 
-        private static MpAvIDragSource _dragSource;
+        private static MpIDragSource _dragSource;
 
         #endregion
 
@@ -28,11 +28,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public static async Task StartDragAsync(
-            MpAvIDragSource dragSource,
-            PointerEventArgs pointerEventArgs,
+            MpIDragSource dragSource,
             DragDropEffects allowedEffects) {
+            if (dragSource == null || dragSource.LastPointerPressedEventArgs is not PointerPressedEventArgs ppe_args) {
+                MpDebug.Break($"Content drag error. Must provide pointer press event to start drag.");
+                return;
+            }
             if (!Dispatcher.UIThread.CheckAccess()) {
-                await Dispatcher.UIThread.InvokeAsync(() => StartDragAsync(dragSource, pointerEventArgs, allowedEffects));
+                await Dispatcher.UIThread.InvokeAsync(() => StartDragAsync(dragSource, allowedEffects));
                 return;
             }
 
@@ -44,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
             dragSource.IsDragging = true;
             // wait for source data
             bool use_placeholders = MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled;
-            SourceDataObject = await dragSource.GetDataObjectAsync(_dragSource.GetDragFormats(), use_placeholders);
+            SourceDataObject = await dragSource.GetDataObjectAsync(_dragSource.GetDragFormats(), use_placeholders) as MpAvDataObject;
 
             if (SourceDataObject == null) {
                 // is none selected?
@@ -58,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
 
             // signal drag start in sub-ui task
-            var result = await DragDrop.DoDragDrop(pointerEventArgs, DragDataObject, allowedEffects);
+            var result = await DragDrop.DoDragDrop(ppe_args, DragDataObject, allowedEffects);
 
             MpConsole.WriteLine($"Content drop effect: '{result}'");
             // wait for possible dragEnd.wasCanceled == true msg

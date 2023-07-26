@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
         #region MpIStartupState Implementation
 
         public DateTime? LoadedDateTime { get; private set; } = null;

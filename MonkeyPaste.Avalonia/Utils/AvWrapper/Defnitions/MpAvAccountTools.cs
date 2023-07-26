@@ -26,6 +26,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
+        const MpUserAccountType TEST_ACCOUNT_TYPE = MpUserAccountType.Unlimited;
         #endregion
 
         #region Statics
@@ -51,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(is_upgrade ? MpMessageType.AccountUpgrade : MpMessageType.AccountDowngrade);
             }
         }
-        public MpUserAccountType CurrentAccountType { get; private set; } = MpUserAccountType.Free;
+        public MpUserAccountType CurrentAccountType { get; private set; } = TEST_ACCOUNT_TYPE;
 
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {

@@ -176,6 +176,7 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
 
+
         #endregion
 
         #region Tags

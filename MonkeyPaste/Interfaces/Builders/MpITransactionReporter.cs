@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpITransactionReporter {
+        IEnumerable<int> CopyItemTransactionsInProgress { get; }
         Task<MpCopyItemTransaction> ReportTransactionAsync(
             int copyItemId,
             MpJsonMessageFormatType reqType = MpJsonMessageFormatType.None,

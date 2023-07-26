@@ -25,7 +25,7 @@ namespace MonkeyPaste.Common.Avalonia {
         public MpAvDataObject() : base() { }
         public MpAvDataObject(string format, object data) : base(format, data) { }
         public MpAvDataObject(Dictionary<string, object> items, bool caseSensitive = false) : base(items, caseSensitive) { }
-
+        public MpAvDataObject(MpPortableDataObject mpdo) : this(mpdo.DataFormatLookup.ToDictionary(x => x.Key.Name, x => x.Value)) { }
         //public override object GetData(string format) {
         //    object base_result = base.GetData(format);
         //    if (format == MpPortableDataFormats.AvFileNames &&

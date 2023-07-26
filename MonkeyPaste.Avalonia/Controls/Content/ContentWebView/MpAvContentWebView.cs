@@ -47,7 +47,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvNativeWebViewHost,
 #endif
         MpIContentView,
-        MpAvIDragSource,
         MpAvIResizableControl,
         MpAvIDomStateAwareWebView,
         MpAvIAsyncJsEvalWebView,
@@ -196,7 +195,7 @@ namespace MonkeyPaste.Avalonia {
             return BindingContext.GetOleFormats(true);
         }
 
-        public PointerPressedEventArgs LastPointerPressedEventArgs { get; private set; }
+        public object LastPointerPressedEventArgs { get; private set; }
 
         public bool IsDragging {
             get {
@@ -216,7 +215,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta) {
             if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => (this as MpAvIDragSource).NotifyModKeyStateChanged(ctrl, alt, shift, esc, meta));
+                Dispatcher.UIThread.Post(() => (this as MpIDragSource).NotifyModKeyStateChanged(ctrl, alt, shift, esc, meta));
                 return;
             }
             var modKeyMsg = new MpQuillModifierKeysNotification() {
@@ -229,7 +228,7 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
         }
 
-        public async Task<MpAvDataObject> GetDataObjectAsync(
+        public async Task<MpPortableDataObject> GetDataObjectAsync(
             string[] formats = null,
             bool use_placeholders = true,
             bool ignore_selection = false) {
@@ -463,7 +462,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpEditorBindingFunctionType.notifyDataTransferCompleted:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
-                        ProcessDataTransferCompleteResponse(dataTransferCompleted_ntf).FireAndForgetSafeAsync(BindingContext);
+                        ProcessDataTransferCompleteResponse(dataTransferCompleted_ntf);
                     }
                     break;
                 case MpEditorBindingFunctionType.notifyLastTransactionUndone:
@@ -1284,7 +1283,7 @@ namespace MonkeyPaste.Avalonia {
             if (!string.IsNullOrWhiteSpace(contentChanged_ntf.dataTransferCompletedRespFragment) &&
                 MpJsonConverter.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(contentChanged_ntf.dataTransferCompletedRespFragment) is
                 MpQuillDataTransferCompletedNotification dtcn) {
-                ProcessDataTransferCompleteResponse(dtcn).FireAndForgetSafeAsync(BindingContext);
+                ProcessDataTransferCompleteResponse(dtcn);
             }
 
             if (contentChanged_ntf.itemSize1 >= 0 &&
@@ -1320,7 +1319,7 @@ namespace MonkeyPaste.Avalonia {
             //IsEditorLoaded = true;
         }
 
-        private async Task ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
+        private void ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
             if (BindingContext.IsAnyPlaceholder) {
                 // occurs for edit
                 return;
@@ -1328,43 +1327,9 @@ namespace MonkeyPaste.Avalonia {
             var dtobj = MpJsonConverter.DeserializeBase64Object<MpQuillHostDataItemsMessage>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
             MpTransactionType transType = dataTransferCompleted_ntf.transferLabel.ToEnum<MpTransactionType>();
             MpPortableDataObject req_mpdo = dtobj.ToAvDataObject();
-            if (transType == MpTransactionType.Appended) {
-                // NOTE append sources are added before notifying editor since the source of the event
-                // is clipboard change not drop or paste events which come from editor so
-                // more accurate sources can be obtained checking in build workflow..
-
-                if (!BindingContext.IsAppendNotifier) {
-                    MpDebug.Break("Append state mismatch");
-                }
-
-                return;
-            }
-
-            string resp_json = null;
-            if (!string.IsNullOrEmpty(dataTransferCompleted_ntf.changeDeltaJsonStr)) {
-                resp_json = dataTransferCompleted_ntf.changeDeltaJsonStr.ToStringFromBase64();
-            }
-
-            IEnumerable<string> refs = null;
-            if (req_mpdo != null) {
-                var other_refs = await Mp.Services.SourceRefTools.GatherSourceRefsAsync(req_mpdo);
-                refs = other_refs.Select(x => Mp.Services.SourceRefTools.ConvertToInternalUrl(x));
-            }
-
-            if (transType == MpTransactionType.None) {
-                // what's the label?
-                MpDebug.Break();
-                transType = MpTransactionType.Error;
-            }
-
-            await Mp.Services.TransactionBuilder.ReportTransactionAsync(
-                copyItemId: BindingContext.CopyItemId,
-                reqType: MpJsonMessageFormatType.DataObject,
-                req: req_mpdo.SerializeData(),
-                respType: MpJsonMessageFormatType.Delta,
-                resp: resp_json,
-                ref_uris: refs,
-                transType: transType);
+            BindingContext
+                .TransactionCollectionViewModel
+                .CreateTransactionFromOleOpCommand.Execute(new object[] { transType, req_mpdo });
         }
 
         #endregion

@@ -24,10 +24,18 @@ namespace MonkeyPaste {
         void SendMessage(string msgJsonBase64Str);
     }
 
-    //public interface MpIAyncJsonMessenger {
-    //    Task<string> SendMessageAsync(string msgJsonBase64Str);
-    //}
 
+    public interface MpIDragSource {
+        bool WasDragCanceled { get; set; }
+        bool IsDragging { get; set; }
+        object LastPointerPressedEventArgs { get; }
+        //bool IsDragging { get; set; }
+        void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta);
+        //void NotifyDragComplete(DragDropEffects dropEffect);
+        Task<MpPortableDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false);
+
+        string[] GetDragFormats();
+    }
     public interface MpIPlainHtmlConverterView : MpIJsonMessenger, MpIHasDevTools, MpIPlatformView {
 
     }
@@ -39,7 +47,7 @@ namespace MonkeyPaste {
         int LocationId { get; }
     }
     public interface MpIContentView :
-        MpIHasDataContext, MpIHasDevTools, MpIRecyclableLocatorItem, MpIJsonMessenger {
+        MpIHasDataContext, MpIDragSource, MpIHasDevTools, MpIRecyclableLocatorItem, MpIJsonMessenger {
         bool IsContentLoaded { get; }
         bool IsSubSelectable { get; }
         Task LoadContentAsync(bool isSearchEnabled = true);

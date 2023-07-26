@@ -30,6 +30,10 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task AddUpdateOrDeleteTemplateAsync(int notifier_ciid, MpTextTemplate tt, bool isDelete) {
+            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                MpConsole.WriteLine($"Template Model change ignored for '{tt}'. Rich Content disabled");
+                return;
+            }
             MpConsole.WriteLine($"Shared template '{tt.TemplateName}' update started from tile id {notifier_ciid}");
             // get db ref to template
             tt.Id = await MpDataModelProvider.GetItemIdByGuidAsync<MpTextTemplate>(tt.Guid);

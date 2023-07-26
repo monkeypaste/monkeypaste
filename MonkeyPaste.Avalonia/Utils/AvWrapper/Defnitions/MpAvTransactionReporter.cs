@@ -1,11 +1,15 @@
 ﻿using MonkeyPaste.Common;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTransactionReporter : MpITransactionReporter {
+        private ConcurrentDictionary<int, int> _copyItemTransCountLookup = new ConcurrentDictionary<int, int>();
+        public IEnumerable<int> CopyItemTransactionsInProgress =>
+            _copyItemTransCountLookup.Select(x => x.Key);
 
         public async Task<MpCopyItemTransaction> ReportTransactionAsync(
             int copyItemId,
@@ -22,6 +26,12 @@ namespace MonkeyPaste.Avalonia {
             if (transactionType != MpTransactionType.Analyzed) {
                 req = null;
                 resp = null;
+            }
+            if (!_copyItemTransCountLookup.ContainsKey(copyItemId)) {
+                // flag this item as reporting so db triggers wait until completed before creating transaction (otherwise sources will be empty)
+                _copyItemTransCountLookup.TryAdd(copyItemId, 1);
+            } else {
+                _copyItemTransCountLookup[copyItemId]++;
             }
             var cit = await MpCopyItemTransaction.CreateAsync(
                             copyItemId: copyItemId,
@@ -49,6 +59,12 @@ namespace MonkeyPaste.Avalonia {
                 cit.Id,
                 source_refs);
 
+            _copyItemTransCountLookup[copyItemId]--;
+            if (_copyItemTransCountLookup[copyItemId] == 0) {
+                // no more transactions for this item so no longer in progress
+                _copyItemTransCountLookup.TryRemove(copyItemId, out _);
+                MpConsole.WriteLine($"Transactions done for ciid: {copyItemId}");
+            }
             return cit;
         }
     }

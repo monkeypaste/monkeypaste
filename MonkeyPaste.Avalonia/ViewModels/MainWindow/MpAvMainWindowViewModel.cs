@@ -558,7 +558,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(MainWindowScreen));
             OnPropertyChanged(nameof(IsDesktop));
 
-            //MpAvShortcutCollectionViewModel.Instance.OnGlobalMousePressed += Instance_OnGlobalMousePressed;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseMove += Instance_OnGlobalMouseMove;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseClicked += Instance_OnGlobalMouseClicked;
@@ -577,10 +576,6 @@ namespace MonkeyPaste.Avalonia {
 
             SetupMainWindowSize();
             SetMainWindowRect(MainWindowClosedScreenRect);
-
-            //MpConsole.WriteLine($"MainWindow rect '{MainWindowScreen}'");
-            //MpConsole.WriteLine($"MainWindow closed rect '{MainWindowClosedScreenRect}'");
-            //MpConsole.WriteLine($"MainWindow opened rect '{MainWindowOpenedScreenRect}'");
 
             ShowMainWindowCommand.Execute(null);
 

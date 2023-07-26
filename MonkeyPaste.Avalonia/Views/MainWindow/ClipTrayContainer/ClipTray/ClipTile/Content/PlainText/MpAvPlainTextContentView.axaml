@@ -11,25 +11,21 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPlainTextContentView">
-    <local:MpAvUserControl.Styles>
-        <!--<Style Selector=":is(TextElement)">
-            <Setter Property="FontFamily"
-                    Value="{Binding DefaultEditableFontFamily, Source={x:Static pcl:MpPrefViewModel.Instance}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
-        </Style>-->
-    </local:MpAvUserControl.Styles>
     <local:MpAvContentTextBox x:Name="PlainTextContentTextBox"
                               Classes="fontFamilyOverride"
                               local:MpAvHighlightTextExtension.IsEnabled="True"
                               local:MpAvHighlightTextExtension.RangesInfoViewModel="{Binding}"
-                              Focusable="True"
+                              local:MpAvTextControlDragExtension.IsEnabled="True"
+                              local:MpAvTextControlDropExtension.IsEnabled="True"
+                              local:MpAvTextControlDropExtension.IsDragOverHandled="True"
+                              local:MpAvTextControlDropExtension.IsDropHandled="True"
+                              local:MpAvTextControlDropExtension.DropCommand="{Binding TransactionCollectionViewModel.CreateTransactionFromOleOpCommand}"
                               BorderThickness="0"
                               TextWrapping="Wrap"
                               AcceptsReturn="True"
                               AcceptsTab="True"
                               ScrollViewer.HorizontalScrollBarVisibility="{Binding IsHorizontalScrollbarVisibile, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|DISABLED}"
                               ScrollViewer.VerticalScrollBarVisibility="{Binding IsVerticalScrollbarVisibile, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|DISABLED}"
-                              IsHitTestVisible="{Binding IsSubSelectionEnabled}"
-                              IsReadOnly="{Binding IsContentReadOnly}"
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch"
                               HorizontalContentAlignment="Left"
@@ -37,7 +33,26 @@
                               Background="Transparent"
                               Foreground="{DynamicResource ThemeInteractiveBrush}"
                               Text="{Binding CopyItemData, Converter={x:Static local:MpAvContentDataConverter.Instance}, ConverterParameter=PlainText}">
-
+        <local:MpAvContentTextBox.ContextMenu>
+            <ContextMenu IsVisible="False" />
+        </local:MpAvContentTextBox.ContextMenu>
+        <!--  NOTE drop needs to not be read-only but avoiding setting binding to editable so title logic is intact  -->
+        <!--<local:MpAvContentTextBox.IsReadOnly>
+            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                <Binding Path="IsContentReadOnly" />
+                <Binding Path="IsAnyDropOverTrays"
+                         Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+            </MultiBinding>
+        </local:MpAvContentTextBox.IsReadOnly>
+        <local:MpAvContentTextBox.IsHitTestVisible>
+            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                <Binding Path="!IsReadOnly"
+                         ElementName="PlainTextContentTextBox" />
+                <Binding Path="IsSubSelectionEnabled" />
+                <Binding Path="IsAnyDropOverTrays"
+                         Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+            </MultiBinding>
+        </local:MpAvContentTextBox.IsHitTestVisible>-->
         <Interaction.Behaviors>
             <local:MpAvContentTextBoxHighlightBehavior />
         </Interaction.Behaviors>

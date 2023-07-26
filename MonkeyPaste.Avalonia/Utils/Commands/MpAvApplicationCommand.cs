@@ -122,6 +122,9 @@ namespace MonkeyPaste.Avalonia {
                     if (ctvm.IsSubSelectionEnabled) {
                         if (ctvm.IsContentReadOnly) {
                             ctvm.DisableSubSelectionCommand.Execute(null);
+                            if (fc is MpAvContentTextBox ctb) {
+                                ctb.TryKillFocusAsync().FireAndForgetSafeAsync();
+                            }
                             return;
                         }
                         ctvm.EnableContentReadOnlyCommand.Execute(null);

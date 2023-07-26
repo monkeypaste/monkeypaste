@@ -308,13 +308,24 @@ namespace MonkeyPaste.Avalonia {
             // h2_te = (h + 180) % 360
             // h3_te = (h + 270) % 360
 
+            // hexadic
+            // h1_hx = (h + 60) % 360
+            // h5_hx = (h + 300) % 360
+
+            // octadic
+            // h1_oc = (h + 45) % 360
+            // h3_oc = (h + 135) % 360
+            // h4_oc = (h + 180) % 360
+            // h5_oc = (h + 225) % 360
+            // h7_oc = (h + 315) % 360
+
             // 0: main bg color (theme color) 
             // 1: title color h1_tr (accent1bg)
             // 2: selected list h2_tr (S (accent5bg)
             // 3: list item hover h3_te (accent5)
             // 4: selected hover h2_te (V=100) (accent3)
             // 5: selected nohover h1_te (V=100) (accent2)
-            // 6: hover h1_tr (V=100) (accent1)
+            // 6: hover h3_oc (V=100) (accent1)
             // 7: pin tray bg h1_te(S -60) (theme compliment1)
             // 8: pin tray shadow bg h1_te(S -60, V - 45) (theme compliment1 dark)
 
@@ -372,6 +383,9 @@ namespace MonkeyPaste.Avalonia {
             double h2_te = (h + 180).Wrap(0, 360);
             double h3_te = (h + 270).Wrap(0, 360);
 
+            // oxadic
+            double h3_oc = (h + 135).Wrap(0, 360);
+
 
             // *HSV based*
             // 0
@@ -387,7 +401,7 @@ namespace MonkeyPaste.Avalonia {
             // 5
             palette.Add(MpColorHelpers.ColorFromHsv(h1_te, s, 1d).ToHex(true));
             // 6
-            palette.Add(MpColorHelpers.ColorFromHsv(h1_tr, s, 1d).ToHex(true));
+            palette.Add(MpColorHelpers.ColorFromHsv(h3_oc, s, 1d).ToHex(true));
             // 7
             palette.Add(MpColorHelpers.ColorFromHsv(h1_te, Math.Max(0, s - 0.6d), v).ToHex(true));
             // 8

@@ -160,9 +160,15 @@
         <!--  BR Edit Toggle Button  -->
         <ToggleButton x:Name="ClipTileToggleEditButton"
                       Classes="noBg noHoverBg noBorder cornerButton bottom right"
-                      IsVisible="{Binding CanEdit}"
                       local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsContentReadOnlyCommand}"
                       IsChecked="{Binding !IsContentReadOnly, Mode=OneWay}">
+            <ToggleButton.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="CanEdit" />
+                    <Binding Path="!IsAutoEditEnabled"
+                             Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                </MultiBinding>
+            </ToggleButton.IsVisible>
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ToggleContentReadOnly, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
                                        ToolTipText="Toggle Edit" />

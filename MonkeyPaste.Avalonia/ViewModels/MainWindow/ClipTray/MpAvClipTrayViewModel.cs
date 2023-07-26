@@ -34,14 +34,11 @@ namespace MonkeyPaste.Avalonia {
         MpIContentQueryPage,
         MpIProgressIndicatorViewModel {
         #region Private Variables
-
-        //private double? _query_anchor_percent = null;
         private int? _query_anchor_idx = null;
 
         private bool _isMainWindowOrientationChanging = false;
         private bool _isLayoutChanging = false;
         private object _addDataObjectContentLock = new object();
-        private object _processCapLock = new object();
 
         #endregion
 
@@ -217,6 +214,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Edit",
+                            IsVisible = !IsAutoEditEnabled,
                             AltNavIdx = 0,
                             IconResourceKey = "EditContentImage",
                             Command = EditSelectedContentCommand,
@@ -1102,6 +1100,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsAutoEditEnabled =>
+            !MpPrefViewModel.Instance.IsRichHtmlContentEnabled;
+
         private Uri _editorUri;
         public Uri EditorUri {
             get {
@@ -1713,32 +1714,13 @@ namespace MonkeyPaste.Avalonia {
                 await Dispatcher.UIThread.InvokeAsync(async () => { await ProcessAccountCapsAsync(source, arg); });
                 return;
             }
-            //await MpFifoAsyncQueue.WaitByConditionAsync(
-            //    _processCapLock,
-            //    waitWhenTrueFunc: () => {
-            //        MpConsole.WriteLine($"Account cap process waiting. src: '{source}' arg: '{arg}'");
 
-            //        return _isProcessingCap;
-            //    },
-            //    debug_label: "cap queue item",
-            //    time_out_ms: -1);
-            if (_isProcessingCap) {
-                MpConsole.WriteLine($"Account cap refreshed IGNORED (already processing). Source: '{source}' Args: '{arg.ToStringOrDefault()}'");
-                return;
-            }
             _isProcessingCap = true;
 
             string last_cap_info = Mp.Services.AccountTools.LastCapInfo.ToString();
             var cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync();
             MpConsole.WriteLine($"Account cap refreshed. Source: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
             MpConsole.WriteLine(cap_info.ToString(), false, true);
-
-            // triggers:
-            // init
-            // content add
-            // content delete
-            // (un)link tag
-            // block
 
             MpUserAccountType account_type = Mp.Services.AccountTools.CurrentAccountType;
             int cur_content_cap = Mp.Services.AccountTools.GetContentCapacity(account_type);
@@ -1840,6 +1822,7 @@ namespace MonkeyPaste.Avalonia {
             AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IconResourceObj)));
             AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyNextCapByAccount)));
             _isProcessingCap = false;
+
             if (cap_msg_type == MpNotificationType.None) {
                 return;
             }
@@ -2853,23 +2836,14 @@ namespace MonkeyPaste.Avalonia {
                     while (IsQuerying) { await Task.Delay(100); }
                     target_ctvm = Items.FirstOrDefault(x => x.QueryOffsetIdx == target_qidx);
                 }
-                //ScrollIntoView(neighbor_ctvm);
-                //await Task.Delay(100);
-                //while (IsAnyBusy) { await Task.Delay(100); }
-                //return Items.FirstOrDefault(x => x.QueryOffsetIdx == target_idx);
             }
             return target_ctvm;
         }
         #endregion
 
         private async Task<MpCopyItem> AddItemFromDataObjectAsync(MpPortableDataObject mpdo, bool is_copy = false) {
-            //while (//MpAvMainWindowViewModel.Instance.IsMainWindowInitiallyOpening ||
-            //        MpAvPlainHtmlConverter.Instance.IsBusy ||
-            //        !Mp.Services.StartupState.IsPlatformLoaded) {
-            //    await Task.Delay(100);
-            //}
-
-            await MpFifoAsyncQueue.WaitByConditionAsync(
+            try {
+                await MpFifoAsyncQueue.WaitByConditionAsync(
                 lockObj: _addDataObjectContentLock,
                 time_out_ms: ADD_CONTENT_TIMEOUT_MS,
                 waitWhenTrueFunc: () => {
@@ -2883,6 +2857,11 @@ namespace MonkeyPaste.Avalonia {
                     return is_waiting;
                 },
                 debug_label: "Add Content Queue Item");
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Add content ex. Probably too hot outside. ", ex);
+                return null;
+            }
 
             IsAddingClipboardItem = true;
             if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
@@ -3003,7 +2982,7 @@ namespace MonkeyPaste.Avalonia {
                 if (ctvm.CopyItem != null) {
                     mpdo = ctvm.CopyItem.ToPortableDataObject();
                 }
-            } else if (cv is MpAvIDragSource ds) {
+            } else if (cv is MpIDragSource ds) {
                 mpdo = await ds.GetDataObjectAsync(
                     formats: ctvm.GetOleFormats(false),
                     use_placeholders: false,
@@ -3838,7 +3817,12 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 if (isOffsetJump || isScrollJump || isInPlaceRequery) {
                     ForceScrollOffset(newScrollOffset);
-                    MpMessenger.SendGlobal(MpMessageType.JumpToIdxCompleted);
+                    if (isInPlaceRequery) {
+                        MpMessenger.SendGlobal(MpMessageType.InPlaceRequeryCompleted);
+                    } else {
+                        MpMessenger.SendGlobal(MpMessageType.JumpToIdxCompleted);
+                    }
+
                 } else {
                     if (isLoadMore) {
                         if (CheckLoadMore()) {
@@ -4753,6 +4737,32 @@ namespace MonkeyPaste.Avalonia {
                 if (SelectedItem != null && SelectedItem.GetContentView() is MpAvContentWebView wv) {
                     wv.ReloadAsync().FireAndForgetSafeAsync();
                 }
+            });
+
+        public ICommand ReloadAllContentCommand => new MpAsyncCommand(
+            async () => {
+                // store all items content state
+                await Task.WhenAll(
+                    AllActiveItems
+                    .Select(x => x.PersistContentStateCommand.ExecuteAsync(null)));
+
+                AllActiveItems.ForEach(x => x.IsEditorLoaded = false);
+                AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyBusy)));
+
+                // get all content content controls
+                var ctccl =
+                    MpAvWindowManager.AllWindows
+                        .SelectMany(x => x.GetVisualDescendants<MpAvClipTileContentView>())
+                        .Select(x => x.FindControl<ContentControl>("ClipTileContentControl"));
+
+                // trigger data context change
+                ctccl.ForEach(x => x.ReloadDataContext());
+
+
+                while (AllActiveItems.Any(x => x.IsAnyBusy)) {
+                    await Task.Delay(100);
+                }
+
             });
 
         #endregion

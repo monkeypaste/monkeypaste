@@ -12,6 +12,7 @@ namespace MonkeyPaste {
         QueryChanged,
         SubQueryChanged,
         JumpToIdxCompleted,
+        InPlaceRequeryCompleted,
         TotalQueryCountChanged,
 
         IsReadOnly, //has context (tile)

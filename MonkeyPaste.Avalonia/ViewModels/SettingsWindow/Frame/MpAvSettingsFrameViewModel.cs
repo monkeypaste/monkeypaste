@@ -11,7 +11,6 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsFrameViewModel :
         MpViewModelBase,
-        MpIFilterMatch,
         MpILabelTextViewModel,
         MpIIconResource,
         MpISelectableViewModel,
@@ -98,13 +97,6 @@ namespace MonkeyPaste.Avalonia {
 
         public DateTime LastSelectedDateTime { get; set; }
 
-        #endregion
-
-        #region MpIFilterMatch Implementation
-
-        bool MpIFilterMatch.IsFilterMatch(string filter) {
-            throw new System.NotImplementedException();
-        }
         #endregion
 
         #region MpIParameterHostViewModel Implementation

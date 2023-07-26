@@ -184,10 +184,10 @@ namespace MonkeyPaste.Avalonia {
             FormattedText ft = null;
             bool is_empty = false;
             if (attached_control.TryGetVisualDescendant<TextBox>(out var tb)) {
-                ft = tb.ToFormattedText();
+                ft = tb.ToFormattedText(true);
                 is_empty = string.IsNullOrEmpty(tb.Text);
             } else if (attached_control.TryGetVisualDescendant<TextBlock>(out var tbl)) {
-                ft = tbl.ToFormattedText();
+                ft = tbl.ToFormattedText(true);
                 is_empty = string.IsNullOrEmpty(tbl.Text);
             } else {
                 MpDebug.Break($"unknown control type '{attached_control.GetType()}', need formatted text to highlight");
@@ -202,7 +202,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            ft.MaxTextWidth = attached_control.Bounds.Width;
             var all_brl =
                 hrivm
                 .HighlightRanges

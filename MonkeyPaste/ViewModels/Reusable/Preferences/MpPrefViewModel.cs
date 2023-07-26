@@ -148,6 +148,7 @@ namespace MonkeyPaste {
         public string ThisDeviceGuid { get; set; } = System.Guid.NewGuid().ToString();
 
         public int LastLoggedInUserId { get; set; } = 0;
+
         #endregion
 
         #region Editor
@@ -306,7 +307,8 @@ namespace MonkeyPaste {
         #region Welcome Properties
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public MpShortcutRoutingProfileType InitialStartupRoutingProfileType { get; set; } = MpShortcutRoutingProfileType.Internal;
+        public MpShortcutRoutingProfileType InitialStartupRoutingProfileType { get; set; } = MpShortcutRoutingProfileType.Global;
+
 
         #endregion
 

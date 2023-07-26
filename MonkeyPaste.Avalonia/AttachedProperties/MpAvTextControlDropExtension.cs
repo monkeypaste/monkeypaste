@@ -1,9 +1,16 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Media;
+using Avalonia.Media.TextFormatting;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using Org.BouncyCastle.Crypto.Signers;
 using System.Linq;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvTextControlDropExtension {
@@ -26,6 +33,36 @@ namespace MonkeyPaste.Avalonia {
                 "IsDragOverHandled",
                 false,
                 false);
+
+        #endregion
+
+        #region IsDropHandled AvaloniaProperty
+        public static bool GetIsDropHandled(AvaloniaObject obj) {
+            return obj.GetValue(IsDropHandledProperty);
+        }
+
+        public static void SetIsDropHandled(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsDropHandledProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsDropHandledProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsDropHandled", true);
+
+        #endregion
+
+        #region DropCommand AvaloniaProperty
+        public static ICommand GetDropCommand(AvaloniaObject obj) {
+            return obj.GetValue(DropCommandProperty);
+        }
+
+        public static void SetDropCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(DropCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> DropCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "DropCommand", null);
 
         #endregion
 
@@ -65,14 +102,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drop
         private static void EnableDnd(Control control) {
-            if (control is not TextBox && control is not AutoCompleteBox) {
-                MpDebug.Break("DropExt only supports textbox and autocompletebox");
-                return;
-            }
             DragDrop.SetAllowDrop(control, true);
+            control.AddHandler(DragDrop.DragOverEvent, DragEnter);
             control.AddHandler(DragDrop.DragOverEvent, DragOver);
             control.AddHandler(DragDrop.DropEvent, Drop);
             control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
+        }
+        private static void DisableDnd(Control control) {
+            DragDrop.SetAllowDrop(control, false);
+            control.RemoveHandler(DragDrop.DragOverEvent, DragEnter);
+            control.RemoveHandler(DragDrop.DragOverEvent, DragOver);
+            control.RemoveHandler(DragDrop.DropEvent, Drop);
         }
 
         private static void Control_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
@@ -80,38 +120,104 @@ namespace MonkeyPaste.Avalonia {
             if (control == null) {
                 return;
             }
-            DragDrop.SetAllowDrop(control, true);
-            control.AddHandler(DragDrop.DragOverEvent, DragOver);
-            control.AddHandler(DragDrop.DropEvent, Drop);
+            DisableDnd(control);
             control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
         }
 
-        private static void DisableDnd(Control control) {
-            DragDrop.SetAllowDrop(control, false);
-            control.RemoveHandler(DragDrop.DragOverEvent, DragOver);
-            control.RemoveHandler(DragDrop.DropEvent, Drop);
-        }
-        private static void DragOver(object sender, DragEventArgs e) {
-            //e.DragEffects = DragDropEffects.Default;
-            if (!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
-                e.DragEffects = DragDropEffects.None;
-            } else {
-                // override criteria sorting
-                e.Handled = GetIsDragOverHandled(sender as Control);
-            }
-        }
-        private static void Drop(object sender, DragEventArgs e) {
-            if (!e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
-                e.DragEffects = DragDropEffects.None;
+
+        private static void DragEnter(object sender, DragEventArgs e) {
+            e.DragEffects = GetDropEffects(e);
+            if (FindTextBox(sender) is not TextBox tb ||
+                e.DragEffects == DragDropEffects.None) {
                 return;
             }
-            if (sender is TextBox tb) {
-                tb.Text = e.Data.Get(MpPortableDataFormats.Text) as string;
-            } else if (sender is AutoCompleteBox acb) {
-                acb.Text = e.Data.Get(MpPortableDataFormats.Text) as string;
+            Dispatcher.UIThread.Post(async () => {
+                bool success = await tb.TrySetFocusAsync();
+                MpConsole.WriteLine($"DragEnter focus success: {success}");
+            });
+        }
+        private static void DragOver(object sender, DragEventArgs e) {
+            e.DragEffects = GetDropEffects(e);
+            if (FindTextBox(sender) is not TextBox tb ||
+                e.DragEffects == DragDropEffects.None) {
+                return;
             }
+
+            // override criteria sorting
+            e.Handled = GetIsDragOverHandled(tb);
+
+            UpdateDropPosition(tb, e);
+        }
+        private static async void Drop(object sender, DragEventArgs e) {
+            e.DragEffects = GetDropEffects(e);
+            if (sender is not Control c ||
+                FindTextBox(c) is not TextBox tb ||
+                e.DragEffects == DragDropEffects.None) {
+                return;
+            }
+            e.Handled = GetIsDropHandled(tb);
+            var processed_drag_avdo = await Mp.Services
+                       .DataObjectHelperAsync.ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
+            Dispatcher.UIThread.Post(() => {
+                string drop_text = processed_drag_avdo.GetData(MpPortableDataFormats.Text) as string;
+                int drop_idx = tb.CaretIndex;
+                tb.Text =
+                    tb.Text.Substring(0, drop_idx) +
+                    drop_text +
+                    tb.Text.Substring(drop_idx);
+
+                tb.SelectionStart = drop_idx;
+                tb.SelectionEnd = drop_idx + drop_text.Length;
+
+                if (GetDropCommand(c) is ICommand drop_cmd) {
+                    drop_cmd.Execute(new object[] { MpTransactionType.Dropped, processed_drag_avdo });
+                }
+            });
         }
 
+        #endregion
+
+        #region Drop Helpers
+
+        private static DragDropEffects GetDropEffects(DragEventArgs e) {
+            DragDropEffects dde = DragDropEffects.None;
+            if (e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
+                if (e.KeyModifiers.HasFlag(KeyModifiers.Control)) {
+                    dde |= DragDropEffects.Copy;
+                } else {
+                    dde |= DragDropEffects.Move;
+                }
+            }
+            return dde;
+        }
+        private static void UpdateDropPosition(TextBox tb, DragEventArgs e) {
+            var mp = e.GetPosition(tb);
+            TextLayout tl = tb.ToTextLayout();
+            TextHitTestResult htt = tl.HitTestPoint(mp);
+            //if (!htt.IsInside) {
+            //    // ignore
+            //    return;
+            //}
+            int caret_idx = htt.TextPosition + (htt.IsTrailing ? 1 : 0);
+            MpConsole.WriteLine($"Drop caret idx: {caret_idx}");
+            tb.CaretIndex = caret_idx;
+            tb.SelectionStart = caret_idx;
+            tb.SelectionEnd = caret_idx;
+        }
+
+        private static TextBox FindTextBox(object obj) {
+            if (obj is not Control c) {
+                return null;
+            }
+            if (c is TextBox tb) {
+                return tb;
+            }
+            if (c is AutoCompleteBox acb &&
+                acb.FindNameScope().Find("PART_TextBox") is TextBox acb_tb) {
+                return acb_tb;
+            }
+            return c.GetVisualDescendant<TextBox>();
+        }
         #endregion
     }
 }

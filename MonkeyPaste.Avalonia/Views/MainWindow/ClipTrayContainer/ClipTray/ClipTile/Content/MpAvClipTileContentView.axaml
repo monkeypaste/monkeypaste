@@ -26,15 +26,13 @@
                     <local:MpAvClipTileContentDataTemplateSelector>
                         <DataTemplate x:Key="ContentWebViewTemplate"
                                       DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvContentWebViewContainer Classes="ContentDragAndDrop"
-                                                               HorizontalAlignment="Stretch"
+                            <local:MpAvContentWebViewContainer HorizontalAlignment="Stretch"
                                                                VerticalAlignment="Stretch" />
                         </DataTemplate>
                         <DataTemplate x:Key="PlainTextTemplate"
                                       DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvPlainTextContentView Classes="ContentDragAndDrop"
-                                                            HorizontalAlignment="Stretch"
-                                                            VerticalAlignment="Stretch" />
+                            <local:MpAvPlainTextContentView HorizontalAlignment="Stretch"
+                                                            VerticalAlignment="Stretch"/>
                         </DataTemplate>
                         <DataTemplate x:Key="ImageTemplate"
                                       DataType="local:MpAvClipTileViewModel">

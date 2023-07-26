@@ -19,8 +19,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvContentTextBox :
         TextBox,
         MpITextDocumentContainer,
-        MpIContentView,
-        MpAvIDragSource {
+        MpIContentView {
         #region Private Variables
 
         #endregion
@@ -119,22 +118,28 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool WasDragCanceled { get; set; } = false;
 
-        public PointerPressedEventArgs LastPointerPressedEventArgs { get; private set; }
+        public object LastPointerPressedEventArgs { get; private set; }
 
         public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta) {
             return;
         }
 
 
-        public async Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false) {
+        public async Task<MpPortableDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false) {
             if (BindingContext == null ||
                 BindingContext.IsPlaceholder ||
-                BindingContext.CopyItem.ToPortableDataObject(formats, true, true) is not MpPortableDataObject mpdo ||
+                BindingContext.CopyItem.ToPortableDataObject(true, true) is not MpPortableDataObject mpdo ||
                 mpdo.DataFormatLookup == null) {
                 return null;
             }
+            if (!ignore_selection &&
+                SelectionEnd - SelectionStart is int sel_len &&
+                sel_len > 0) {
+                // only use selection if range is selected
+                mpdo.SetData(MpPortableDataFormats.Text, this.Text.Substring(SelectionStart, sel_len));
+            }
             await Task.Delay(1);
-            return new MpAvDataObject(mpdo.DataFormatLookup.ToDictionary(x => x.Key.Name, x => x.Value));
+            return new MpAvDataObject(mpdo);
         }
         public string[] GetDragFormats() {
             if (DataContext is not MpAvClipTileViewModel ctvm) {
@@ -200,6 +205,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
+            if (e.IsRightDown(this)) {
+                e.Handled = true;
+                return;
+            }
             LastPointerPressedEventArgs = e;
             base.OnPointerPressed(e);
         }

@@ -932,9 +932,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
             await InitDefaultShortcutsAsync(routingProfile);
         }
-        private static async Task CreateTestContentAsync() {
-            int content_count = 0;
-            int link_count = 2;
+        public static async Task CreateTestContentAsync(int content_count = 0, int link_count = 0) {
             if (content_count == 0) {
                 return;
             }

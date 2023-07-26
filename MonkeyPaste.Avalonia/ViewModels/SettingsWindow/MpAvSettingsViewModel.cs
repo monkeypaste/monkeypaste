@@ -1218,25 +1218,7 @@ namespace MonkeyPaste.Avalonia {
                     ProcessListenOnStartupChanged();
                     break;
                 case nameof(MpPrefViewModel.Instance.IsRichHtmlContentEnabled):
-                    Dispatcher.UIThread.Post(async () => {
-                        // get all content content controls
-                        var ctccl =
-                            MpAvWindowManager.AllWindows
-                                .SelectMany(x => x.GetVisualDescendants<MpAvClipTileContentView>())
-                                .Select(x => x.FindControl<ContentControl>("ClipTileContentControl"));
-
-                        // clear their datacontext and wait
-                        // (probably more factors for waiting, to hot to test)
-                        var ctcc_dcl = ctccl.Select(x => x.DataContext).ToList();
-                        ctccl.ForEach(x => x.DataContext = null);
-
-                        while (ctcc_dcl.OfType<MpIAsyncCollectionObject>().Any(x => x.IsAnyBusy)) {
-                            await Task.Delay(100);
-                        }
-
-                        // set datacontext back to reapply template
-                        ctccl.ForEach((x, idx) => x.DataContext = ctcc_dcl[idx]);
-                    });
+                    MpAvClipTrayViewModel.Instance.ReloadAllContentCommand.Execute(null);
                     break;
             }
 

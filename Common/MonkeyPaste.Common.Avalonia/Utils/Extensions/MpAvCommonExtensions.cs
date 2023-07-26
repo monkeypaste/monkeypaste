@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
+using Avalonia.Media.TextFormatting;
 using Avalonia.Media.Transformation;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
@@ -238,6 +239,16 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Control
 
+        public static void ReloadDataContext(this Control c) {
+            // this is useful to reapply template 
+            if (c == null || c.DataContext == null) {
+                // nothing to reload
+                return;
+            }
+            object temp = c.DataContext;
+            c.DataContext = null;
+            c.DataContext = temp;
+        }
         public static void RefreshTopLevel(this Control control) {
             if (TopLevel.GetTopLevel(control) is TopLevel tl) {
                 // HACK i think this a preview7 bug but items collections don't update
@@ -425,29 +436,68 @@ namespace MonkeyPaste.Common.Avalonia {
                     foreground);
             return ft;
         }
+        public static Typeface ToTypeface(this TextBox tb) {
+            return new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight, tb.FontStretch);
+        }
 
-
-        public static FormattedText ToFormattedText(this TextBox tb) {
+        public static FormattedText ToFormattedText(this TextBox tb, bool inheritBounds = false) {
             var ft = new FormattedText(
                     tb.Text ?? string.Empty,
                     CultureInfo.CurrentCulture,
                     tb.FlowDirection,
-                    new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
+                    tb.ToTypeface(),
                     Math.Max(1, tb.FontSize),
                     tb.Foreground);
             ft.TextAlignment = tb.TextAlignment;
+            if (inheritBounds) {
+                SetBoundConstraints(ft, tb.Bounds, tb.FontSize);
+            }
             return ft;
         }
-        public static FormattedText ToFormattedText(this TextBlock tb) {
+        public static FormattedText ToFormattedText(this TextBlock tb, bool inheritBounds = false) {
             var ft = new FormattedText(
                     tb.Text ?? string.Empty,
                     CultureInfo.CurrentCulture,
                     tb.FlowDirection,
-                    new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight),
+                    new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight, tb.FontStretch),
                     Math.Max(1, tb.FontSize),
                     tb.Foreground);
             ft.TextAlignment = tb.TextAlignment;
+            if (inheritBounds) {
+                SetBoundConstraints(ft, tb.Bounds, tb.FontSize);
+            }
             return ft;
+        }
+        public static FormattedText ToFormattedText(this AutoCompleteBox acb, bool inheritBounds = false) {
+            if (acb.FindNameScope().Find("PART_TextBox") is not TextBox tb) {
+                return null;
+            }
+            return tb.ToFormattedText(inheritBounds);
+        }
+
+        public static TextLayout ToTextLayout(this TextBox tb) {
+            var ft = tb.ToFormattedText();
+            var tl = new TextLayout(
+                tb.Text ?? string.Empty,
+                tb.ToTypeface(),
+                Math.Max(1, tb.FontSize),
+                tb.Foreground,
+                textAlignment: tb.TextAlignment,
+                textWrapping: tb.TextWrapping,
+                textTrimming: ft.Trimming,
+                flowDirection: tb.FlowDirection,
+                maxWidth: tb.Bounds.Width,
+                maxHeight: tb.Bounds.Height,
+                lineHeight: tb.LineHeight,
+                letterSpacing: tb.LetterSpacing,
+                maxLines: tb.MaxLines);
+            return tl;
+        }
+
+        private static void SetBoundConstraints(FormattedText ft, Rect r, double fs) {
+            // based on docs should add fontsize to max width for wrapping
+            ft.MaxTextWidth = r.Width + fs;
+            ft.MaxTextHeight = r.Height;
         }
         #endregion
 
