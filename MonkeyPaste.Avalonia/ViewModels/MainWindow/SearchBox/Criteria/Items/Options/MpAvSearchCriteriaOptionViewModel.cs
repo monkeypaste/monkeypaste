@@ -68,7 +68,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
         #region Properties
 
         #region View Models

@@ -228,74 +228,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region DragEnterCommand AvaloniaProperty
-        public static ICommand GetDragEnterCommand(AvaloniaObject obj) {
-            return obj.GetValue(DragEnterCommandProperty);
-        }
-
-        public static void SetDragEnterCommand(AvaloniaObject obj, ICommand value) {
-            obj.SetValue(DragEnterCommandProperty, value);
-        }
-
-        public static readonly AttachedProperty<ICommand> DragEnterCommandProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
-                "DragEnterCommand",
-                null,
-                false);
-
-        #endregion
-
-        #region DragEnterCommandParameter AvaloniaProperty
-        public static object GetDragEnterCommandParameter(AvaloniaObject obj) {
-            return obj.GetValue(DragEnterCommandParameterProperty);
-        }
-
-        public static void SetDragEnterCommandParameter(AvaloniaObject obj, object value) {
-            obj.SetValue(DragEnterCommandParameterProperty, value);
-        }
-
-        public static readonly AttachedProperty<object> DragEnterCommandParameterProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, object>(
-                "DragEnterCommandParameter",
-                null,
-                false);
-
-        #endregion
-
-        #region DragLeaveCommand AvaloniaProperty
-        public static ICommand GetDragLeaveCommand(AvaloniaObject obj) {
-            return obj.GetValue(DragLeaveCommandProperty);
-        }
-
-        public static void SetDragLeaveCommand(AvaloniaObject obj, ICommand value) {
-            obj.SetValue(DragLeaveCommandProperty, value);
-        }
-
-        public static readonly AttachedProperty<ICommand> DragLeaveCommandProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
-                "DragLeaveCommand",
-                null,
-                false);
-
-        #endregion
-
-        #region DragLeaveCommandParameter AvaloniaProperty
-        public static object GetDragLeaveCommandParameter(AvaloniaObject obj) {
-            return obj.GetValue(DragLeaveCommandParameterProperty);
-        }
-
-        public static void SetDragLeaveCommandParameter(AvaloniaObject obj, object value) {
-            obj.SetValue(DragLeaveCommandParameterProperty, value);
-        }
-
-        public static readonly AttachedProperty<object> DragLeaveCommandParameterProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, object>(
-                "DragLeaveCommandParameter",
-                null,
-                false);
-
-        #endregion
-
         #region IsHoldingEnabled AvaloniaProperty
         public static bool GetIsHoldingEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsHoldingEnabledProperty);
@@ -429,13 +361,6 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         MpDebug.Break("Error must be attached to button");
                     }
-                }
-
-                if (GetDragEnterCommand(control) != null) {
-                    EnableDragEnter(control);
-                }
-                if (GetDragLeaveCommand(control) != null) {
-                    EnableDragLeave(control);
                 }
             }
         }
@@ -580,32 +505,6 @@ namespace MonkeyPaste.Avalonia {
             return control;
         }
 
-        #region Dnd
-
-        private static void EnableDragEnter(Control control) {
-            void Control_DragEnter(object sender, DragEventArgs e) {
-                if (GetDragEnterCommand(control) is ICommand cmd) {
-                    cmd.Execute(GetDragEnterCommandParameter(control));
-                }
-            }
-            if (control is MpAvPlainTextContentView) {
-
-            }
-            DragDrop.SetAllowDrop(control, true);
-            control.AddHandler(DragDrop.DragEnterEvent, Control_DragEnter, RoutingStrategies.Tunnel);
-        }
-
-        private static void EnableDragLeave(Control control) {
-            void Control_DragLeave(object sender, DragEventArgs e) {
-                if (GetDragLeaveCommand(control) is ICommand cmd) {
-                    cmd.Execute(GetDragLeaveCommandParameter(control));
-                }
-            }
-            DragDrop.SetAllowDrop(control, true);
-            control.AddHandler(DragDrop.DragLeaveEvent, Control_DragLeave, RoutingStrategies.Tunnel);
-        }
-
-        #endregion
 
         #endregion
     }

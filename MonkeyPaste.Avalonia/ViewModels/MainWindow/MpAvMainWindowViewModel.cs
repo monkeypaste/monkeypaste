@@ -1176,7 +1176,7 @@ namespace MonkeyPaste.Avalonia {
 
                 await ResetMainWindowAnimationStateAsync();
 
-                MpConsole.WriteLine("Closing Main WIndow");
+                MpConsole.WriteLine("Closing Main Window");
                 IsMainWindowClosing = true;
                 //}
                 if (AnimateShowWindow) {

@@ -19,11 +19,19 @@ using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchBoxViewModel : MpViewModelBase,
-        MpIExpandableViewModel {
+        MpIExpandableViewModel,
+        MpIHighlightTextRangesInfoViewModel {
         #region Private Variables
         #endregion
 
         #region Interfaces
+
+        #region MpIHighlightTextRangesInfoViewModel Implementation
+
+        ObservableCollection<MpTextRange> MpIHighlightTextRangesInfoViewModel.HighlightRanges { get; } = new ObservableCollection<MpTextRange>();
+        int MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx { get; set; } = -1;
+
+        #endregion
 
         #region MpIExpandableViewModel Implementation
 
@@ -378,6 +386,7 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return !IsExpanded;
             });
+
 
         #endregion
     }

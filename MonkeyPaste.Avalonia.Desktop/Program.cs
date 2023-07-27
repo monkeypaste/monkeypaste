@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         public static void Main(string[] args) {
             try {
                 MpConsole.Init();
+
 #if CEF_WV
                 MpAvCefNetApplication.ResetCefNetLogging();
 #endif

@@ -17,6 +17,7 @@
             Margin="3">
         <Grid ColumnDefinitions="*">
             <TextBox x:Name="ContentQueryTextBox"
+                     Classes="clearButton dnd"
                      Grid.Column="0"
                      MaxWidth="{Binding $parent[ListBox].Bounds.Width}"
                      Padding="3"

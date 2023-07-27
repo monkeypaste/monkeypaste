@@ -70,7 +70,7 @@
                 </Border.Background>
             </Border>
             <ListBox x:Name="PinTrayListBox"
-                     Classes="clipTileListBox"
+                     Classes="clipTileListBox pinListBox"
                      Background="Transparent"
                      MaxWidth="{Binding MaxPinTrayScreenWidth}"
                      MaxHeight="{Binding MaxPinTrayScreenHeight}"

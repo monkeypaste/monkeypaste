@@ -67,7 +67,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void Sccvm_OnGlobalDragEnd(object sender, System.EventArgs e) {
             Dispatcher.UIThread.Post(() => {
-                //DragProcess = _activeProcessInfo;
                 DropProcess = Mp.Services.ProcessWatcher.LastProcessInfo;
             }, _watcherPriority);
         }

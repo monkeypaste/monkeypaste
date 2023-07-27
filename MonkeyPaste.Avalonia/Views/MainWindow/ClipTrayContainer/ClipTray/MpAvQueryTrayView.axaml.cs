@@ -137,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             var cur_ttvm = MpAvTagTrayViewModel.Instance.LastSelectedActiveItem;
-            if (!cur_ttvm.CanLinkContent) {
+            if (cur_ttvm == null || !cur_ttvm.CanLinkContent) {
                 // only allow drop onto link tags
                 return false;
             }

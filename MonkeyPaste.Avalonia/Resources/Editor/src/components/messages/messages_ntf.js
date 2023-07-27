@@ -211,6 +211,7 @@ function onDataTransferCompleted_ntf(changeDelta, input_dataObj, transfer_label)
 	let msg = {
 		changeDeltaJsonStr: changeDelta ? toBase64FromJsonObj(changeDelta) : null,
 		sourceDataItemsJsonStr: input_dataObj ? toBase64FromJsonObj(input_dataObj) : null,
+		contentChangedMessageFragment: toBase64FromJsonObj(getContentAsMessage()),
 		transferLabel: transfer_label
 	};
 	let msgStr = toBase64FromJsonObj(msg);

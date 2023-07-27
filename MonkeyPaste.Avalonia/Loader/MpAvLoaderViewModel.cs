@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool IS_PARALLEL_LOADING_ENABLED =>
-            true;
+            false;
 
         public int LoadedCount { get; set; } = 0;
 

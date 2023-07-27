@@ -89,6 +89,7 @@ body.no-host .tooltip-hint-container::before {
 
 #tooltipToolbar {
     text-align: left;
+    white-space: pre-wrap;
 }
     #tooltipToolbar span {
         margin-left: 10px;

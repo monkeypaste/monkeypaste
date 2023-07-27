@@ -20,6 +20,14 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         private static double _DefaultOpacity = 0.5d;
         private static Dictionary<Control, MpAvTextHighlightAdorner> _AttachedControlAdornerLookup = new Dictionary<Control, MpAvTextHighlightAdorner>();
+
+        private static IBrush _DefaultInactiveHighlightBrush =>
+            Mp.Services == null || Mp.Services.PlatformResource == null ?
+                null : Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1BgColor.ToString()).AdjustAlpha(_DefaultOpacity).ToAvBrush();
+
+        private static IBrush _DefaultActiveHighlightBrush =>
+        Mp.Services == null || Mp.Services.PlatformResource == null ?
+            null : Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent3Color.ToString()).AdjustAlpha(_DefaultOpacity).ToAvBrush();
         #endregion
 
         #region Statics
@@ -34,7 +42,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region RangesInfoViewModel AvaloniaProperty
         public static MpIHighlightTextRangesInfoViewModel GetRangesInfoViewModel(AvaloniaObject obj) {
-            return obj.GetValue(RangesInfoViewModelProperty);
+            if (obj.GetValue(RangesInfoViewModelProperty) is not MpIHighlightTextRangesInfoViewModel bound_htrvm) {
+                if (obj is not Control c ||
+                        c.DataContext == null) {
+                    return null;
+                }
+                if (c.DataContext is not MpIHighlightTextRangesInfoViewModel dc_htrvm) {
+                    throw new NotImplementedException($"Highlight ext needs highlight vm by datacontext or property binding");
+                }
+                // manually set hlr to trigger prop change attach
+                SetRangesInfoViewModel(obj, dc_htrvm);
+                return dc_htrvm;
+            }
+            return bound_htrvm;
         }
 
         public static void SetRangesInfoViewModel(AvaloniaObject obj, MpIHighlightTextRangesInfoViewModel value) {
@@ -84,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<object> ActiveHighlightBrushProperty =
             AvaloniaProperty.RegisterAttached<object, Control, object>(
                 "ActiveHighlightBrush",
-                defaultValue: Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent3Color.ToString()).AdjustAlpha(_DefaultOpacity).ToAvBrush());
+                defaultValue: null);// 
 
         #endregion
 
@@ -100,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<object> InactiveHighlightBrushProperty =
             AvaloniaProperty.RegisterAttached<object, Control, object>(
                 "InactiveHighlightBrush",
-                defaultValue: Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1BgColor.ToString()).AdjustAlpha(_DefaultOpacity).ToAvBrush());
+                defaultValue: null);// 
 
         #endregion
 
@@ -208,8 +228,8 @@ namespace MonkeyPaste.Avalonia {
                 .Select((x, idx) =>
                     (
                         idx == hrivm.ActiveHighlightIdx ?
-                            GetActiveHighlightBrush(attached_control) :
-                            GetInactiveHighlightBrush(attached_control),
+                            GetActiveHighlightBrush(attached_control) ?? _DefaultActiveHighlightBrush :
+                            GetInactiveHighlightBrush(attached_control) ?? _DefaultInactiveHighlightBrush,
                         x));
             var gl =
                 all_brl

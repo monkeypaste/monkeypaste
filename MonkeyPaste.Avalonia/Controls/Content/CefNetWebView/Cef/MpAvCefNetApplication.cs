@@ -218,6 +218,7 @@ namespace MonkeyPaste.Avalonia {
             commandLine.AppendSwitch("disable-gpu");
             commandLine.AppendSwitch("disable-gpu-compositing");
             commandLine.AppendSwitch("in-process-gpu");
+
             //commandLine.AppendSwitch("disable-gpu-vsync");
 
             //commandLine.AppendSwitch("enable-begin-frame-scheduling");

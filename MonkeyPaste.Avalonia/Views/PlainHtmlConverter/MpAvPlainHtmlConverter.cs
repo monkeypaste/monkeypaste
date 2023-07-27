@@ -41,8 +41,14 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsWebViewConverterEnabled =>
             MpAvCefNetApplication.IsCefNetLoaded;
+
+        bool IsWebViewConverterAvailable =>
+            IsWebViewConverterEnabled &&
+            ConverterWebView != null &&
+            ConverterWebView.IsEditorInitialized;
+
         #endregion
-        public MpAvPlainHtmlConverterWebView ConverterWebView { get; private set; }
+        public MpAvPlainHtmlConverterWebView ConverterWebView { get; set; }
 
         #endregion
 
@@ -74,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                 inputFormatType = "rtf2html";
             }
             MpAvRichHtmlConvertResult result;
-            if (IsWebViewConverterEnabled) {
+            if (IsWebViewConverterAvailable) {
                 result = await ConvertWithWebViewAsync(inputFormatType, htmlDataStr, csvProps);
             } else {
                 result = ConvertWithFallback(htmlDataStr);
@@ -102,27 +108,28 @@ namespace MonkeyPaste.Avalonia {
 
 
             if (Mp.Services.PlatformInfo.IsDesktop) {
+                var sw = Stopwatch.StartNew();
                 var quillWindow = new MpAvHiddenWindow();
 
                 quillWindow.Content = ConverterWebView;
-                ConverterWebView.AttachedToVisualTree += (s, e) => {
+                ConverterWebView.AttachedToVisualTree += async (s, e) => {
                     if (OperatingSystem.IsWindows()) {
                         // hide converter window from windows alt-tab menu
                         MpAvToolWindow_Win32.InitToolWindow(quillWindow.TryGetPlatformHandle().Handle);
                     }
+
+                    while (!ConverterWebView.IsEditorInitialized) {
+                        MpConsole.WriteLine("[loader] waiting for html converter init...");
+                        await Task.Delay(100);
+                    }
                     quillWindow.Hide();
                     quillWindow.WindowState = WindowState.Minimized;
+                    sw.Stop();
+                    MpConsole.WriteLine($"Html converter initialized. Load time: {sw.ElapsedMilliseconds}ms");
                 };
                 quillWindow.Show();
-
-                while (!ConverterWebView.IsEditorInitialized) {
-                    MpConsole.WriteLine("[loader] waiting for html converter init...");
-                    await Task.Delay(100);
-                }
-                MpConsole.WriteLine("Html converter initialized");
             } else if (App.MainView is MpAvMainView mv) {
                 ConverterWebView.AttachedToLogicalTree += (s, e) => {
-
                     ConverterWebView.IsVisible = false;
                 };
                 mv.RootGrid.Children.Add(ConverterWebView);
@@ -140,20 +147,9 @@ namespace MonkeyPaste.Avalonia {
             string inputFormatType,
             string htmlDataStr,
             MpCsvFormatProperties csvProps = null) {
-            if (ConverterWebView == null) {
-                MpConsole.WriteLine("Cannot parse html. Waiting for Html converter to load...");
-                while (ConverterWebView == null) {
-                    // should only occur when creating test data from db init
-                    await Task.Delay(100);
-                }
-            }
-            if (!ConverterWebView.IsEditorInitialized) {
-                MpConsole.WriteLine("Cannot parse html. Waiting for Html converter to initialize...");
-                while (!ConverterWebView.IsEditorInitialized) {
-                    MpConsole.WriteLine("[parser] waiting...");
-                    await Task.Delay(100);
-                }
-                MpConsole.WriteLine("Html converter initialized");
+            if (!IsWebViewConverterAvailable) {
+                MpDebug.Break($"Convert from webview called before available");
+                return ConvertWithFallback(htmlDataStr);
             }
             if (inputFormatType == "csv") {
                 htmlDataStr = htmlDataStr.CsvStrToRichHtmlTable(csvProps);

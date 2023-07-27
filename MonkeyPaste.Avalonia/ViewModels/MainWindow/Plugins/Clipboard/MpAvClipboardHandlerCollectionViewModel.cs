@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
             }
             var avdo = await ReadClipboardOrDropObjectAsync(null, ignorePlugins);
             if (cb_pi != null) {
-                avdo.Set(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, cb_pi);
+                avdo.Set(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, cb_pi.Clone());
             }
             return avdo;
         }
@@ -135,7 +135,7 @@ namespace MonkeyPaste.Avalonia {
             }
             var avdo = await ReadClipboardOrDropObjectAsync(ido);
             if (drag_pi != null) {
-                avdo.Set(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, drag_pi);
+                avdo.Set(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, drag_pi.Clone());
             }
             return avdo;
         }

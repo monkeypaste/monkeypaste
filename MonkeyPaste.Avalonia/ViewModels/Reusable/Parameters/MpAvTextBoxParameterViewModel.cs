@@ -75,15 +75,17 @@ namespace MonkeyPaste.Avalonia {
         public int SelectionStart { get; set; }
         public int SelectionEnd { get; set; }
         public string SelectedPlainText {
-            get => Text.Substring(SelectionStart, SelectionLength);
+            get => Text.Substring(Math.Min(SelectionStart, SelectionEnd), SelectionLength);
             set {
-                string pre_text = Text.Substring(SelectionStart);
+                int actual_start_idx = Math.Min(SelectionStart, SelectionEnd);
+                string pre_text = Text.Substring(actual_start_idx);
                 string post_text = Text.Substring(SelectionLength);
                 Text = $"{pre_text}{value}{post_text}";
-                SelectionEnd = SelectionStart + value.Length;
+                SelectionStart = actual_start_idx;
+                SelectionEnd = actual_start_idx + value.Length;
             }
         }
-        public int SelectionLength => SelectionEnd - SelectionStart;
+        public int SelectionLength => Math.Max(SelectionStart, SelectionEnd) - Math.Min(SelectionStart, SelectionEnd);
 
         public string Text { get; set; }
 

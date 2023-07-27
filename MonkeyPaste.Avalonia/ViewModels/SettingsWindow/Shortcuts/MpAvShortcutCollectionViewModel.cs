@@ -290,12 +290,11 @@ namespace MonkeyPaste.Avalonia {
                         },
                         {
                             MpShortcutType.OpenInWindow,
-                            //MpAvClipTrayViewModel.Instance.OpenSelectedTileInWindowCommand
                             MpAvApplicationCommand.Instance.OpenPopoutCommand
                         },
                         {
                             MpShortcutType.PasteCopyItem,
-                            MpAvClipTrayViewModel.Instance.PasteCopyItemByIdCommand
+                            MpAvClipTrayViewModel.Instance.PasteCopyItemByIdFromShortcutCommand
                         },
                         {
                             MpShortcutType.SelectTag,

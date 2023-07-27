@@ -13,8 +13,8 @@ using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public static class MpAvTextControlDropExtension {
-        static MpAvTextControlDropExtension() {
+    public static class MpAvDropExtension {
+        static MpAvDropExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
         #region Properties
@@ -31,8 +31,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> IsDragOverHandledProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
                 "IsDragOverHandled",
-                false,
-                false);
+                true);
 
         #endregion
 
@@ -48,6 +47,74 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> IsDropHandledProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
                 "IsDropHandled", true);
+
+        #endregion
+
+        #region DragEnterCommand AvaloniaProperty
+        public static ICommand GetDragEnterCommand(AvaloniaObject obj) {
+            return obj.GetValue(DragEnterCommandProperty);
+        }
+
+        public static void SetDragEnterCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(DragEnterCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> DragEnterCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "DragEnterCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region DragEnterCommandParameter AvaloniaProperty
+        public static object GetDragEnterCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(DragEnterCommandParameterProperty);
+        }
+
+        public static void SetDragEnterCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(DragEnterCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> DragEnterCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "DragEnterCommandParameter",
+                null,
+                false);
+
+        #endregion
+
+        #region DragLeaveCommand AvaloniaProperty
+        public static ICommand GetDragLeaveCommand(AvaloniaObject obj) {
+            return obj.GetValue(DragLeaveCommandProperty);
+        }
+
+        public static void SetDragLeaveCommand(AvaloniaObject obj, ICommand value) {
+            obj.SetValue(DragLeaveCommandProperty, value);
+        }
+
+        public static readonly AttachedProperty<ICommand> DragLeaveCommandProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
+                "DragLeaveCommand",
+                null,
+                false);
+
+        #endregion
+
+        #region DragLeaveCommandParameter AvaloniaProperty
+        public static object GetDragLeaveCommandParameter(AvaloniaObject obj) {
+            return obj.GetValue(DragLeaveCommandParameterProperty);
+        }
+
+        public static void SetDragLeaveCommandParameter(AvaloniaObject obj, object value) {
+            obj.SetValue(DragLeaveCommandParameterProperty, value);
+        }
+
+        public static readonly AttachedProperty<object> DragLeaveCommandParameterProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, object>(
+                "DragLeaveCommandParameter",
+                null,
+                false);
 
         #endregion
 
@@ -103,15 +170,17 @@ namespace MonkeyPaste.Avalonia {
         #region Drop
         private static void EnableDnd(Control control) {
             DragDrop.SetAllowDrop(control, true);
-            control.AddHandler(DragDrop.DragOverEvent, DragEnter);
+            control.AddHandler(DragDrop.DragEnterEvent, DragEnter);
             control.AddHandler(DragDrop.DragOverEvent, DragOver);
+            control.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
             control.AddHandler(DragDrop.DropEvent, Drop);
             control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
         }
         private static void DisableDnd(Control control) {
             DragDrop.SetAllowDrop(control, false);
-            control.RemoveHandler(DragDrop.DragOverEvent, DragEnter);
+            control.RemoveHandler(DragDrop.DragEnterEvent, DragEnter);
             control.RemoveHandler(DragDrop.DragOverEvent, DragOver);
+            control.RemoveHandler(DragDrop.DragLeaveEvent, DragLeave);
             control.RemoveHandler(DragDrop.DropEvent, Drop);
         }
 
@@ -126,9 +195,18 @@ namespace MonkeyPaste.Avalonia {
 
 
         private static void DragEnter(object sender, DragEventArgs e) {
-            e.DragEffects = GetDropEffects(e);
-            if (FindTextBox(sender) is not TextBox tb ||
-                e.DragEffects == DragDropEffects.None) {
+            if (sender is not Control c) {
+                return;
+            }
+
+            if (GetDragEnterCommand(c) is ICommand cmd) {
+                cmd.Execute(GetDragEnterCommandParameter(c));
+            }
+            if (FindTextBox(c) is not TextBox tb) {
+                return;
+            }
+            e.DragEffects = GetTextControlDropEffects(c, e);
+            if (e.DragEffects == DragDropEffects.None) {
                 return;
             }
             Dispatcher.UIThread.Post(async () => {
@@ -137,22 +215,39 @@ namespace MonkeyPaste.Avalonia {
             });
         }
         private static void DragOver(object sender, DragEventArgs e) {
-            e.DragEffects = GetDropEffects(e);
-            if (FindTextBox(sender) is not TextBox tb ||
-                e.DragEffects == DragDropEffects.None) {
+            if (sender is not Control c) {
+                return;
+            }
+            if (FindTextBox(c) is not TextBox tb) {
+                return;
+            }
+            e.DragEffects = GetTextControlDropEffects(c, e);
+            if (e.DragEffects == DragDropEffects.None) {
                 return;
             }
 
             // override criteria sorting
             e.Handled = GetIsDragOverHandled(tb);
 
-            UpdateDropPosition(tb, e);
+            UpdateTextControlDropPosition(tb, e);
+        }
+        private static void DragLeave(object sender, DragEventArgs e) {
+            if (sender is not Control c) {
+                return;
+            }
+            if (GetDragLeaveCommand(c) is ICommand cmd) {
+                cmd.Execute(GetDragLeaveCommandParameter(c));
+            }
         }
         private static async void Drop(object sender, DragEventArgs e) {
-            e.DragEffects = GetDropEffects(e);
-            if (sender is not Control c ||
-                FindTextBox(c) is not TextBox tb ||
-                e.DragEffects == DragDropEffects.None) {
+            if (sender is not Control c) {
+                return;
+            }
+            if (FindTextBox(c) is not TextBox tb) {
+                return;
+            }
+            e.DragEffects = GetTextControlDropEffects(c, e);
+            if (e.DragEffects == DragDropEffects.None) {
                 return;
             }
             e.Handled = GetIsDropHandled(tb);
@@ -179,7 +274,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drop Helpers
 
-        private static DragDropEffects GetDropEffects(DragEventArgs e) {
+        private static DragDropEffects GetTextControlDropEffects(Control attached_control, DragEventArgs e) {
+            if (MpAvTextControlDragExtension.GetIsDragging(attached_control)) {
+                return DragDropEffects.None;
+            }
             DragDropEffects dde = DragDropEffects.None;
             if (e.Data.GetDataFormats().Contains(MpPortableDataFormats.Text)) {
                 if (e.KeyModifiers.HasFlag(KeyModifiers.Control)) {
@@ -190,19 +288,13 @@ namespace MonkeyPaste.Avalonia {
             }
             return dde;
         }
-        private static void UpdateDropPosition(TextBox tb, DragEventArgs e) {
+        private static void UpdateTextControlDropPosition(TextBox tb, DragEventArgs e) {
             var mp = e.GetPosition(tb);
-            TextLayout tl = tb.ToTextLayout();
-            TextHitTestResult htt = tl.HitTestPoint(mp);
-            //if (!htt.IsInside) {
-            //    // ignore
-            //    return;
-            //}
-            int caret_idx = htt.TextPosition + (htt.IsTrailing ? 1 : 0);
-            MpConsole.WriteLine($"Drop caret idx: {caret_idx}");
-            tb.CaretIndex = caret_idx;
-            tb.SelectionStart = caret_idx;
-            tb.SelectionEnd = caret_idx;
+            int mp_caret_idx = tb.GetTextIndexFromTextBoxPoint(mp);
+            MpConsole.WriteLine($"Drop caret idx: {mp_caret_idx}");
+            tb.CaretIndex = mp_caret_idx;
+            tb.SelectionStart = mp_caret_idx;
+            tb.SelectionEnd = mp_caret_idx;
         }
 
         private static TextBox FindTextBox(object obj) {

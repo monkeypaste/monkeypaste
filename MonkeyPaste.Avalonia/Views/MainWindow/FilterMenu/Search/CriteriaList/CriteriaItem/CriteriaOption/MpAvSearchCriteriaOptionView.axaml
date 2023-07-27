@@ -24,6 +24,7 @@
             <Setter Property="FontWeight"
                     Value="SemiBold" />
         </Style>
+
         <Style Selector="TextBox.colorTextBox">
             <Setter Property="Foreground"
                     Value="{Binding Value, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}" />
@@ -101,11 +102,9 @@
 
                         <TextBox x:Name="MatchValueTextBox"
                                  Watermark="{Binding Label, StringFormat='\{0\}...'}"
-                                 Classes="alterOnly"
+                                 Classes="alterOnly dnd clearButton"
                                  Classes.valid="{Binding IsValid}"
                                  Classes.colorTextBox="{Binding IsColorOption}"
-                                 local:MpAvTextControlDropExtension.IsEnabled="True"
-                                 local:MpAvTextControlDropExtension.IsDragOverHandled="True"
                                  local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                  local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                  local:MpAvDelayedTextChangedExtension.Text="{Binding Value, Mode=TwoWay}" />
@@ -122,33 +121,25 @@
                         <StackPanel Orientation="Horizontal">
                             <Label Content="A" />
                             <TextBox Classes.valid="{Binding IsValid1}"
-                                     Classes="colorTextBox alterOnly"
-                                     local:MpAvTextControlDropExtension.IsEnabled="True"
-                                     local:MpAvTextControlDropExtension.IsDragOverHandled="True"
+                                     Classes="colorTextBox alterOnly dnd"
                                      Text="{Binding Value4, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="R" />
                             <TextBox Classes.valid="{Binding IsValid2}"
-                                     Classes="colorTextBox alterOnly"
-                                     local:MpAvTextControlDropExtension.IsEnabled="True"
-                                     local:MpAvTextControlDropExtension.IsDragOverHandled="True"
+                                     Classes="colorTextBox alterOnly dnd"
                                      Text="{Binding Value1, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="G" />
                             <TextBox Classes.valid="{Binding IsValid3}"
-                                     Classes="colorTextBox alterOnly"
-                                     local:MpAvTextControlDropExtension.IsEnabled="True"
-                                     local:MpAvTextControlDropExtension.IsDragOverHandled="True"
+                                     Classes="colorTextBox alterOnly dnd"
                                      Text="{Binding Value2, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="B" />
                             <TextBox Classes.valid="{Binding IsValid4}"
-                                     Classes="colorTextBox alterOnly"
-                                     local:MpAvTextControlDropExtension.IsEnabled="True"
-                                     local:MpAvTextControlDropExtension.IsDragOverHandled="True"
+                                     Classes="colorTextBox alterOnly dnd"
                                      Text="{Binding Value3, Mode=TwoWay}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">

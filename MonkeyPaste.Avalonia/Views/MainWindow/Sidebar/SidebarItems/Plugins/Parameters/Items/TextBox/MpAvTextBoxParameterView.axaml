@@ -20,8 +20,12 @@
                 <Image Source="{Binding ., Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor, Source={StaticResource FilterImage}}" />
             </Button>
             <TextBox x:Name="ParameterTextBox"
+                     Classes="clearButton dnd"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     MaxHeight="400"
+                     HorizontalAlignment="Stretch"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
-                     local:MpAvTextControlDropExtension.IsEnabled="True"
                      IsReadOnly="{Binding IsReadOnly, Mode=OneWay}"
                      Watermark="{Binding Placeholder}"
                      SelectionStart="{Binding SelectionStart, Mode=TwoWay}"

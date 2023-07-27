@@ -65,6 +65,20 @@
             <Setter Property="Margin"
                     Value="0,0,30,0" />
         </Style>
+
+        <!--  USER BG COLOR  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource ClipTileContentBackgroundBrush}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
@@ -79,6 +93,7 @@
                           Classes.IsAnyBusy="{Binding IsAnyBusy}"
                           Classes.frozen="{Binding IsFrozen}"
                           Classes.trashed="{Binding IsTrashed}"
+                          Classes.userColor="{Binding CopyItemHexColor, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                           local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           local:MpAvReceivesEventsExtension.SenderFilter="{Binding EmbedHost}"
                           VerticalAlignment="Stretch"
@@ -93,8 +108,7 @@
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="{StaticResource TileCornerRadius}"
-                          BorderThickness="{StaticResource TileBorderThickness}"
-                          Background="{DynamicResource ClipTileContentBackgroundBrush}">
+                          BorderThickness="{StaticResource TileBorderThickness}">
 
         <Grid x:Name="TileGrid"
               HorizontalAlignment="Stretch"
@@ -252,21 +266,11 @@
             </Grid>
 
 
-            <!--  BUSY OVERLAY  -->
+            <!--  BUSY OVERLAY (VISIBILITY SET IN TRAY CONTAINER)  -->
             <Border x:Name="BusyOverlay"
                     Grid.Row="1"
-                    IsVisible="{Binding IsAnyBusy}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                <Border.IsVisible>
-                    <MultiBinding Converter="{x:Static BoolConverters.And}"
-                                  FallbackValue="True"
-                                  TargetNullValue="True">
-                        <Binding Path="IsAnyBusy" />
-                        <Binding Path="IsInPlaceRequerying"
-                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
-                    </MultiBinding>
-                </Border.IsVisible>
 
                 <local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                            VerticalAlignment="Center"

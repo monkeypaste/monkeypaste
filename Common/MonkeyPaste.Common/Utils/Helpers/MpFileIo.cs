@@ -729,7 +729,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static void SetDefaultUserAgent(this HttpClient httpClient) {
-
+            //httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"Mozilla/5.0 (compatible; {MpCommonTools.Services.ThisAppInfo.ThisAppProductName}/{MpCommonTools.Services.ThisAppInfo.ThisAppProductVersion})");
         }
     }

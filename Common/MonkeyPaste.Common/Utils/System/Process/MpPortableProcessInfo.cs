@@ -20,6 +20,19 @@ namespace MonkeyPaste.Common {
         public override string ToString() {
             return string.Format(@"Title '{0}' Handle '{1}' Path '{2}' ", MainWindowTitle, Handle, ProcessPath);
         }
+
+        public object Clone() {
+            return new MpPortableProcessInfo() {
+                Handle = Handle,
+                ProcessPath = ProcessPath,
+                ApplicationName = ApplicationName,
+                MainWindowTitle = MainWindowTitle,
+                LastActiveDateTime = LastActiveDateTime,
+                ArgumentList = ArgumentList,
+                Arguments = Arguments,
+                WindowState = WindowState
+            };
+        }
     }
 
 }

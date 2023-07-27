@@ -165,7 +165,6 @@
                                   ClipToBounds="True"
                                   MinWidth="50"
                                   local:MpAvHighlightTextExtension.IsEnabled="True"
-                                  local:MpAvHighlightTextExtension.RangesInfoViewModel="{Binding}"
                                   local:MpAvClampedFontSizeExtension.IsEnabled="True"
                                   local:MpAvClampedFontSizeExtension.MinFontSize="18"
                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"

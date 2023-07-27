@@ -25,6 +25,12 @@ namespace MonkeyPaste.Avalonia {
         protected const int POLL_INTERVAL_MS = 300;
         #endregion
 
+        #region Statics
+        public static void Test() {
+
+        }
+        #endregion
+
         #region Interfaces
 
         #region MpIActionComponent Implementation
@@ -62,33 +68,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        //private bool _isThisAppActive = false;
-        //public bool IsThisAppActive {
-        //    get {
-        //        if (IsProcessTreePolled) {
-        //            return _isThisAppActive;
-        //        }
-        //        var active_info = GetActiveProcessInfo();
-        //        if (active_info == null) {
-        //            return false;
-        //        }
-        //        return IsProcessPathEqual(ThisAppHandle, active_info.Handle);
-        //    }
-        //    set {
-        //        if (!IsProcessTreePolled) {
-        //            throw new Exception("Cannot set when not polling");
-        //        }
-        //        _isThisAppActive = value;
-        //    }
-        //}
-
-
         private MpPortableProcessInfo _thisAppProcessInfo;
         public MpPortableProcessInfo ThisAppProcessInfo =>
             _thisAppProcessInfo ?? (_thisAppProcessInfo = GetProcessInfoByHandle(ThisAppHandle));
 
         public MpPortableProcessInfo LastProcessInfo =>
-            GetProcessInfoByHandle(_lastActiveHandle);
+            GetProcessInfoByHandle(_lastActiveHandle) ?? ThisAppProcessInfo;
 
         #endregion
 
@@ -110,7 +95,6 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void StartWatcher() {
-
             if (_timer == null) {
                 // initial start
 

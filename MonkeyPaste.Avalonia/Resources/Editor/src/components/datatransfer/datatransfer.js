@@ -222,7 +222,6 @@ function performDataTransferOnContent(
         host_dt_obj,
         transferLabel);
 
-
     // SCROLL TO DEST
 
     updateQuill();

@@ -61,9 +61,9 @@
             </Grid>
             <Button x:Name="HideDropMenuBorder"
                     Classes="noBg noHoverBg square"
-                    local:MpAvPointerCommandExtension.IsEnabled="True"
-                    local:MpAvPointerCommandExtension.DragEnterCommand="{Binding CancelDropWidgetCommand}"
-                    local:MpAvPointerCommandExtension.DragEnterCommandParameter="{Binding $self}"
+                    local:MpAvDropExtension.IsEnabled="True"
+                    local:MpAvDropExtension.DragEnterCommand="{Binding CancelDropWidgetCommand}"
+                    local:MpAvDropExtension.DragEnterCommandParameter="{Binding $self}"
                     Background="Transparent"
                     Grid.Row="0"
                     Width="20"

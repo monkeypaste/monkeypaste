@@ -490,9 +490,9 @@ namespace MonkeyPaste.Avalonia {
                     MpDebug.Break();
                     transType = MpTransactionType.Error;
                 }
-
+                int ciid = Parent.CopyItemId;
                 await Mp.Services.TransactionBuilder.ReportTransactionAsync(
-                    copyItemId: Parent.CopyItemId,
+                    copyItemId: ciid,
                     reqType: MpJsonMessageFormatType.DataObject,
                     req: mpdo.SerializeData(),
                     respType: MpJsonMessageFormatType.Delta,

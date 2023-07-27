@@ -19,11 +19,11 @@
     <local:MpAvUserControl.Styles>
         <!--  SIDEBAR RADIO BUTTONS  -->
         <Style Selector="RadioButton.sidebarRadio">
-            <Setter Property="local:MpAvPointerCommandExtension.IsEnabled"
+            <Setter Property="local:MpAvDropExtension.IsEnabled"
                     Value="True" />
-            <Setter Property="local:MpAvPointerCommandExtension.DragEnterCommand"
+            <Setter Property="local:MpAvDropExtension.DragEnterCommand"
                     Value="{Binding SidebarButtonDragEnterCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}" />
-            <Setter Property="local:MpAvPointerCommandExtension.DragEnterCommandParameter"
+            <Setter Property="local:MpAvDropExtension.DragEnterCommandParameter"
                     Value="{Binding $self}" />
             <Setter Property="Background"
                     Value="{StaticResource HitTestableTransparent}" />

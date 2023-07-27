@@ -220,7 +220,7 @@
                     Classes.unexpanded="{Binding !IsExpanded}"
                     Classes.expandAnimating="{Binding IsExpandAnimating}"
                     local:MpAvPointerCommandExtension.IsEnabled="True"
-                    local:MpAvPointerCommandExtension.DragEnterCommand="{Binding ExpandFromDragCommand}">
+                    local:MpAvDropExtension.DragEnterCommand="{Binding ExpandFromDragCommand}">
                 <DockPanel LastChildFill="True">
 
                     <!--  Search Icon Dropdown Button  -->
@@ -350,11 +350,10 @@
 
                     <AutoCompleteBox x:Name="SearchBox"
                                      TabIndex="1"
-                                     DragDrop.AllowDrop="True"
+                                     Classes="dnd"
                                      VerticalAlignment="Stretch"
                                      HorizontalAlignment="Stretch"
                                      Cursor="IBeam"
-                                     local:MpAvTextControlDropExtension.IsEnabled="True"
                                      local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                      local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                      local:MpAvDelayedTextChangedExtension.Text="{Binding SearchText, Mode=TwoWay}"
@@ -389,7 +388,7 @@
                     IsVisible="False" />
         </Grid>
 
-        <!--  CONVERT SIMPLE TO ADVANCED SEARCH BUTTON  -->
+        <!--  COLLAPASED SEARCH BTN OR CONVERT SIMPLE TO ADVANCED SEARCH BUTTON  -->
 
         <ToggleButton x:Name="ConvertToAdvancedSearchToggleButton"
                       TabIndex="5"
@@ -397,8 +396,8 @@
                       VerticalAlignment="Stretch"
                       HorizontalAlignment="Stretch"
                       IsVisible="{Binding !IsExpandAnimating}"
-                      local:MpAvPointerCommandExtension.IsEnabled="True"
-                      local:MpAvPointerCommandExtension.DragEnterCommand="{Binding ExpandCriteriaFromDragEnterCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
+                      local:MpAvDropExtension.IsEnabled="True"
+                      local:MpAvDropExtension.DragEnterCommand="{Binding ExpandCriteriaFromDragEnterCommand, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       IsChecked="{Binding IsExpanded, Mode=TwoWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes="noBg noHoverBg outlineOver"
                       Classes.popout="{Binding IsCriteriaWindowOpen, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"

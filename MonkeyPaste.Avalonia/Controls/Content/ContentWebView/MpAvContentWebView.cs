@@ -1216,7 +1216,9 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task LoadContentAsync(bool isSearchEnabled = true) {
             Dispatcher.UIThread.VerifyAccess();
+            if (this is MpAvPlainHtmlConverterWebView) {
 
+            }
             IsEditorLoaded = false;
 
 #if CEF_WV
@@ -1253,7 +1255,7 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"loadContent_ext('{msgStr}')");
         }
 
-        private async void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
+        private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
             if (!IsEditorInitialized) {
                 // BUG load stalls on reload while editing waiting for initialzing...
                 IsEditorInitialized = true;
@@ -1295,7 +1297,7 @@ namespace MonkeyPaste.Avalonia {
             if (contentChanged_ntf.itemData != null) {
                 if (contentChanged_ntf.itemData.IsEmptyRichHtmlString()) {
                     // data's getting reset again
-                    MpDebug.Break("data reset caught in content changed");
+                    MpDebug.Break("data reset caught in content changed", true);
                 }
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
@@ -1305,16 +1307,18 @@ namespace MonkeyPaste.Avalonia {
 
             if (BindingContext.IsAppendNotifier) {
                 MpConsole.WriteLine("content changed on append");
-                // sync append item to current clipboard
-                var append_mpdo = await GetDataObjectAsync(null, false, true);
-                await Mp.Services.DataObjectHelperAsync
-                    .WriteToClipboardAsync(append_mpdo, true);
-                MpConsole.WriteLine($"Clipboard updated with append data. Plain Text: ");
-                if (append_mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {
-                    MpConsole.WriteLine(pt);
-                } else {
-                    MpConsole.WriteLine("NO PLAIN TEXT AVAILABLE");
-                }
+                Dispatcher.UIThread.Post(async () => {
+                    // sync append item to current clipboard
+                    var append_mpdo = await GetDataObjectAsync(null, false, true);
+                    await Mp.Services.DataObjectHelperAsync
+                        .WriteToClipboardAsync(append_mpdo, true);
+                    MpConsole.WriteLine($"Clipboard updated with append data. Plain Text: ");
+                    if (append_mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {
+                        MpConsole.WriteLine(pt);
+                    } else {
+                        MpConsole.WriteLine("NO PLAIN TEXT AVAILABLE");
+                    }
+                });
             }
             //IsEditorLoaded = true;
         }
@@ -1324,6 +1328,10 @@ namespace MonkeyPaste.Avalonia {
                 // occurs for edit
                 return;
             }
+            ProcessContentChangedMessage(
+                MpJsonConverter.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(
+                    dataTransferCompleted_ntf.contentChangedMessageFragment));
+
             var dtobj = MpJsonConverter.DeserializeBase64Object<MpQuillHostDataItemsMessage>(dataTransferCompleted_ntf.sourceDataItemsJsonStr);
             MpTransactionType transType = dataTransferCompleted_ntf.transferLabel.ToEnum<MpTransactionType>();
             MpPortableDataObject req_mpdo = dtobj.ToAvDataObject();

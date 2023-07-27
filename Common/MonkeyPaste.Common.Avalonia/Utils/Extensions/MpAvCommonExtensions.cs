@@ -344,7 +344,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 return 0;
             }
 
-            return tb.SelectionEnd - tb.SelectionStart;
+            return Math.Abs(tb.SelectionEnd - tb.SelectionStart);
         }
         #endregion
 
@@ -603,6 +603,11 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region TextBox
 
+        public static int GetTextIndexFromTextBoxPoint(this TextBox tb, Point p) {
+            TextLayout tl = tb.ToTextLayout();
+            TextHitTestResult htt = tl.HitTestPoint(p);
+            return htt.TextPosition;
+        }
 
         #endregion
 

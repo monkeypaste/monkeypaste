@@ -477,11 +477,11 @@ namespace MonkeyPaste.Common.Wpf {
             }
             if (s.Foreground is SolidColorBrush fg_scb) {
                 style_parts.Add($"color: {GetHtmlColor(fg_scb.Color)}");
-                span_node.AddClass("font-color-override-on");
+                //span_node.AddClass("font-color-override-on");
             }
             if (s.Background is SolidColorBrush bg_scb) {
                 style_parts.Add($"background-color: {GetHtmlColor(bg_scb.Color)}");
-                span_node.AddClass("font-bg-color-override-on");
+                //span_node.AddClass("font-bg-color-override-on");
             }
             span_node.SetAttributeValue("style", string.Join(" ", style_parts));
             return span_node;

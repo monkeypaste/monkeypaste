@@ -3,12 +3,15 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using Org.BouncyCastle.Crypto.Signers;
+using System;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -50,6 +53,23 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region IsDragging AvaloniaProperty
+        public static bool GetIsDragging(AvaloniaObject obj) {
+            return obj.GetValue(IsDraggingProperty);
+        }
+
+        public static void SetIsDragging(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsDraggingProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsDraggingProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsDragging",
+                defaultValue: false,
+                defaultBindingMode: BindingMode.TwoWay);
+
+        #endregion
+
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -68,17 +88,62 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleIsEnabledChanged(Control control, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal) {
                 if (isEnabledVal) {
-                    control.PointerPressed += Control_PointerPressed;
+                    control.AttachedToVisualTree += Control_AttachedToVisualTree;
+                    if (control.IsAttachedToVisualTree()) {
+                        Control_AttachedToVisualTree(control, null);
+                    }
                 } else {
-                    control.PointerPressed -= Control_PointerPressed;
+                    Control_DetachedFromVisualTree(control, null);
                 }
             }
         }
 
-        private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
-            if (FindTextBox(sender) is not TextBox tb) {
+        private static void Control_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            if (sender is not Control control) {
                 return;
             }
+            control.RemoveHandler(Control.PointerPressedEvent, Control_PointerPressed);
+            control.RemoveHandler(Control.PointerMovedEvent, Control_PointerMoved);
+            control.DetachedFromVisualTree -= Control_DetachedFromVisualTree;
+        }
+
+        private static void Control_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+            if (sender is not Control control) {
+                return;
+            }
+            control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, RoutingStrategies.Tunnel);
+            control.AddHandler(Control.PointerMovedEvent, Control_PointerMoved, RoutingStrategies.Tunnel);
+            control.DetachedFromVisualTree += Control_DetachedFromVisualTree;
+        }
+        private static void Control_PointerMoved(object sender, PointerEventArgs e) {
+            if (sender is not Control attached_control ||
+                FindTextBox(sender) is not TextBox tb) {
+                return;
+            }
+            if (IsPointInTextBoxSelection(tb, e.GetPosition(tb)) &&
+                tb.SelectionLength() > 0 &&
+                (!e.IsLeftDown(attached_control) || GetIsDragging(attached_control))) {
+                //MpConsole.WriteLine($"cursor OVER sel");
+                tb.GetVisualDescendant<TextPresenter>().Cursor = new Cursor(StandardCursorType.SizeAll);
+            } else {
+                //MpConsole.WriteLine($"cursor NOT over sel");
+                tb.GetVisualDescendant<TextPresenter>().Cursor = new Cursor(StandardCursorType.Ibeam);
+            }
+        }
+
+        private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
+            if (sender is not Control attached_control ||
+                FindTextBox(sender) is not TextBox tb) {
+                return;
+            }
+            if (tb.SelectionLength() == 0) {
+                return;
+            }
+            if (!IsPointInTextBoxSelection(tb, e.GetPosition(tb))) {
+                // only start drag if down is over selection
+                return;
+            }
+
             tb.DragCheckAndStart(e,
                 start: async (start_e) => {
                     MpAvDataObject avdo = null;
@@ -89,10 +154,13 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         avdo = new MpAvDataObject(MpPortableDataFormats.Text, tb.Text);
                     }
+
                     if (tb.SelectionLength() > 0) {
                         avdo.SetData(MpPortableDataFormats.Text, tb.Text.Substring(tb.SelectionStart, tb.SelectionLength()));
                     }
+                    SetIsDragging(attached_control, true);
                     var result = await DragDrop.DoDragDrop(e, avdo, DragDropEffects.Link | DragDropEffects.Copy);
+                    SetIsDragging(attached_control, false);
 
                     if (ctvm != null) {
                         ctvm.IsTileDragging = false;
@@ -112,6 +180,17 @@ namespace MonkeyPaste.Avalonia {
                 return acb_tb;
             }
             return null;
+        }
+
+        private static bool IsPointInTextBoxSelection(TextBox tb, Point p) {
+            int mp_tb_idx = tb.GetTextIndexFromTextBoxPoint(p);
+            int actual_start_idx = Math.Min(tb.SelectionStart, tb.SelectionEnd);
+            int actual_end_idx = Math.Max(tb.SelectionStart, tb.SelectionEnd);
+            if (!(mp_tb_idx >= actual_start_idx && mp_tb_idx <= actual_end_idx)) {
+                // press not over selection
+                return false;
+            }
+            return true;
         }
         #endregion
     }

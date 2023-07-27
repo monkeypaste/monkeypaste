@@ -291,8 +291,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand GenericTestCommand => new MpAsyncCommand(
             async () => {
-                await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
-
+                //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
+                await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
             });
         #endregion
     }

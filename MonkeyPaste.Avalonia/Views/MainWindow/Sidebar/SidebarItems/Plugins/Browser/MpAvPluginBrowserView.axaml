@@ -121,11 +121,10 @@
                                       BorderBrush="{DynamicResource ThemeInteractiveColor}"
                                       CornerRadius="5">
                     <AutoCompleteBox x:Name="FilterPluginBox"
-                                     DragDrop.AllowDrop="True"
                                      VerticalAlignment="Stretch"
                                      HorizontalAlignment="Stretch"
                                      Padding="5,3,0,0"
-                                     local:MpAvTextControlDropExtension.IsEnabled="True"
+                                     local:MpAvDropExtension.IsEnabled="True"
                                      local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                      local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                      local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Mode=TwoWay}"

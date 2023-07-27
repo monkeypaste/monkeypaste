@@ -98,6 +98,8 @@
                     Value="{DynamicResource ThemeInteractiveColor}" />
             <Setter Property="BorderThickness"
                     Value="0,0,0,2" />
+            <Setter Property="MaxWidth"
+                    Value="300" />
         </Style>
 
         <Style Selector="ListBox#PluginParameterListBox > ListBoxItem:nth-last-child()">

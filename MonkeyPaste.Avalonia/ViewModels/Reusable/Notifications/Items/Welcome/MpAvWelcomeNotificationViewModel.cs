@@ -163,7 +163,9 @@ namespace MonkeyPaste.Avalonia {
                 SplashIconSourceObj = "AppImage",
                 Caption = "Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.",
             };
-
+            int free_ccap = Mp.Services.AccountTools.GetContentCapacity(MpUserAccountType.Free);
+            int free_tcap = Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Free);
+            int standard_ccap = Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Standard);
             // TODO add pricing & capacity values as item description
             AccountViewModel = new MpAvWelcomeOptionGroupViewModel() {
                 Title = "Subscription",
@@ -177,12 +179,12 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Free) {
                         IconSourceObj = "StarOutlineImage",
                         LabelText = "Free",
-                        DescriptionText = "Content and archive is limited to 5 and 20 clips respectively. No syncing capabilities are enabled. More info here."
+                        DescriptionText = $"Content and archive is limited to {free_ccap} and {free_tcap} clips respectively. No syncing capabilities are enabled. More info here."
                     },
                     new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Standard) {
                         IconSourceObj = "StarYellowImage",
                         LabelText = "Standard",
-                        DescriptionText = $"$0.99/$9.99 (monthly/annually) {Environment.NewLine} Content is limited to 100 clips with an unlimited archive and syncing across all devices. More info here."
+                        DescriptionText = $"$0.99/$9.99 (monthly/annually) {Environment.NewLine} Content is limited to {standard_ccap} clips with an unlimited archive and syncing across all devices. More info here."
                     },
                     new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Unlimited) {
                         IsChecked = true,

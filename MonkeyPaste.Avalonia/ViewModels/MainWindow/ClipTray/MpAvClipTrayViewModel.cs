@@ -2850,9 +2850,9 @@ namespace MonkeyPaste.Avalonia {
                     bool is_waiting =
                         IsAddingClipboardItem ||
                         MpAvPlainHtmlConverter.Instance.IsBusy ||
-                        !Mp.Services.StartupState.IsPlatformLoaded;
+                        !Mp.Services.StartupState.IsCoreLoaded;
                     if (is_waiting) {
-                        MpConsole.WriteLine($"waiting to add item to cliptray...(IsAddingClipboardItem:{IsAddingClipboardItem},MpAvPlainHtmlConverter.Instance.IsBusy:{MpAvPlainHtmlConverter.Instance.IsBusy},Mp.Services.StartupState.IsPlatformLoaded:{Mp.Services.StartupState.IsPlatformLoaded})");
+                        MpConsole.WriteLine($"waiting to add item to cliptray...(IsAddingClipboardItem:{IsAddingClipboardItem},MpAvPlainHtmlConverter.Instance.IsBusy:{MpAvPlainHtmlConverter.Instance.IsBusy},Mp.Services.StartupState.IsCoreLoaded:{Mp.Services.StartupState.IsCoreLoaded})");
                     }
                     return is_waiting;
                 },
@@ -3993,7 +3993,7 @@ namespace MonkeyPaste.Avalonia {
                 return SelectedItem != null && !SelectedItem.IsAnyPlaceholder;
             });
 
-        public ICommand PasteCopyItemByIdCommand => new MpAsyncCommand<object>(
+        public ICommand PasteCopyItemByIdFromShortcutCommand => new MpAsyncCommand<object>(
             async (args) => {
                 int copyItemId = 0;
                 if (args is int ciid) {

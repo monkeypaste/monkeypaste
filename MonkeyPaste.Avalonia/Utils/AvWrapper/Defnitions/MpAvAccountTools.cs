@@ -57,9 +57,9 @@ namespace MonkeyPaste.Avalonia {
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {
                 case MpUserAccountType.Free:
-                    return 5;
-                case MpUserAccountType.Standard:
                     return 100;
+                case MpUserAccountType.Standard:
+                    return 1000;
                 case MpUserAccountType.Trial:
                 case MpUserAccountType.Unlimited:
                 case MpUserAccountType.Admin:

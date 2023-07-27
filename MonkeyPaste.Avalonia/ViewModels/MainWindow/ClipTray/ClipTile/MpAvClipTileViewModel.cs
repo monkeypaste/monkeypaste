@@ -194,7 +194,7 @@ namespace MonkeyPaste.Avalonia {
         public object ShortcutCommandParameter =>
             CopyItemId;
         ICommand MpIShortcutCommandViewModel.ShortcutCommand =>
-            Parent == null ? null : Parent.PasteCopyItemByIdCommand;
+            Parent == null ? null : Parent.PasteCopyItemByIdFromShortcutCommand;
 
         #endregion
 
@@ -1278,12 +1278,10 @@ namespace MonkeyPaste.Avalonia {
             // -IconId is primary source icon
             int layerCount = 4;
 
-            bool hasUserDefinedColor = !string.IsNullOrEmpty(CopyItemHexColor);
-
-
-            if (hasUserDefinedColor) {
-                return Enumerable.Repeat(CopyItemHexColor, layerCount).ToList();
-            }
+            //bool hasUserDefinedColor = !string.IsNullOrEmpty(CopyItemHexColor);
+            //if (hasUserDefinedColor) {
+            //    return Enumerable.Repeat(CopyItemHexColor, layerCount).ToList();
+            //}
 
             List<string> hexColors = new List<string>();
             var tagColors = await MpDataModelProvider.GetTagColorsForCopyItemAsync(CopyItemId);
@@ -1373,26 +1371,27 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string[] GetOleFormats(bool isDnd) {
-            string[] req_formats = null;
+            List<string> req_formats = new() {
+                MpPortableDataFormats.Text,
+                MpPortableDataFormats.AvFileNames,
+            };
             if (isDnd && MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled) {
                 // initialize target with all possible formats set to null
-                req_formats = MpPortableDataFormats.RegisteredFormats.ToArray();
+                req_formats = MpPortableDataFormats.RegisteredFormats.ToList();
 
-            } else {
+            } else if (MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 // initialize target with default format for type
                 switch (CopyItemType) {
                     case MpCopyItemType.Text:
-                        req_formats = new[] { MpPortableDataFormats.Text };
                         break;
                     case MpCopyItemType.Image:
-                        req_formats = new[] { MpPortableDataFormats.AvPNG };
+                        req_formats.Add(MpPortableDataFormats.AvPNG);
                         break;
                     case MpCopyItemType.FileList:
-                        req_formats = new[] { MpPortableDataFormats.AvFileNames };
                         break;
                 }
             }
-            return req_formats;
+            return req_formats.ToArray();
         }
 
         private MpIContentView _contentView;

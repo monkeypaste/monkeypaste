@@ -4,7 +4,7 @@
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Style Selector="Border.paramBorder">
         <Setter Property="Margin"
-                Value="10,2" />
+                Value="2" />
         <Setter Property="HorizontalAlignment"
                 Value="Stretch" />
         <Setter Property="CornerRadius"
@@ -13,12 +13,6 @@
                 Value="1" />
         <Setter Property="BorderBrush"
                 Value="Transparent" />
-    </Style>
-    <Style Selector="Border.paramBorder Button">
-        <Setter Property="Margin"
-                Value="10,2" />
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch" />
     </Style>
     <Style Selector="Border.paramBorder.sliderBorder">
         <Setter Property="BorderBrush"

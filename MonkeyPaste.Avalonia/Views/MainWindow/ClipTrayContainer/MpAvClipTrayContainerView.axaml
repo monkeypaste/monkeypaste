@@ -172,14 +172,25 @@
                     Value="{Binding IsListBoxItemFocused, Mode=OneWay}" />
         </Style>
 
-        <!--  ORIENTATION-BASED MARGINS  -->
-        <Style Selector="local|MpAvQueryTrayView">
-            <!--<Setter Property="Margin"
-                    Value="10,0,0,0" />-->
+        <!--  TILE BUSY OVERLAY VISIBILITY  -->
+        <Style Selector="ListBox.queryListBox > ListBoxItem Border#BusyOverlay"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="IsVisible">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}"
+                                  FallbackValue="True"
+                                  TargetNullValue="True">
+                        <Binding Path="IsAnyBusy" />
+                        <Binding Path="!IsInPlaceRequerying"
+                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
         </Style>
-        <Style Selector="Grid#ClipTrayContainerGrid.vert local|MpAvQueryTrayView">
-            <!--<Setter Property="Margin"
-                    Value="0,10,0,0" />-->
+        <Style Selector="ListBox.pinListBox > ListBoxItem Border#BusyOverlay"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="IsVisible"
+                    Value="{Binding IsAnyBusy}" />
         </Style>
 
 
