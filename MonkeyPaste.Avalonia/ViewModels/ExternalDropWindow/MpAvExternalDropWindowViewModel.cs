@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static SQLite.SQLite3;
 
 
 namespace MonkeyPaste.Avalonia {
@@ -22,6 +23,8 @@ namespace MonkeyPaste.Avalonia {
         MpIWantsTopmostWindowViewModel,
         MpIHoverableViewModel {
         #region Private Variables
+
+
 
         private MpAvWindow _dropWidgetWindow;
         private MpAvWindow _dropCompleteWindow;
@@ -68,7 +71,21 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Appearance
+
+        public object DropAppIconSourceObj =>
+            CurDropProcessInfo == null ?
+                "QuestionMarkImage" :
+                CurDropProcessInfo.MainWindowIconBase64;
+        public object DropAppName =>
+            CurDropProcessInfo == null ?
+                "Unknown" :
+                CurDropProcessInfo.ApplicationName;
+
+        #endregion
+
         #region State
+        MpPortableProcessInfo CurDropProcessInfo { get; set; }
 
         public bool CanEnableDropWidget =>
             Mp.Services.PlatformInfo.IsDesktop;
@@ -192,31 +209,33 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task SaveAppPresetFormatStateAsync() {
-            if (DropAppViewModel == null ||
-                DropAppViewModel.IsThisApp) {
+            if (CurDropProcessInfo == null ||
+                CurDropProcessInfo.IsThisAppProcess()) {
                 return;
             }
 
             // TODO should use MpAppClipboardFormatInfo data for last active here
+            var drop_app = await Mp.Services.SourceRefTools.FetchOrCreateAppRefAsync(CurDropProcessInfo);
             var test = MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets.Select(x => new object[] { x.PresetId, x.IsEnabled });
             foreach (var preset_vm in MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets) {
                 string param_info = preset_vm.GetPresetParamJson();
                 await MpAppClipboardFormatInfo.CreateAsync(
-                    appId: DropAppViewModel.AppId,
+                    appId: drop_app.Id,
                     format: preset_vm.ClipboardFormat.clipboardName,
                     formatInfo: param_info,
                     ignoreFormat: !preset_vm.IsEnabled);
             }
         }
-        private bool DidPresetsChange(MpAvAppViewModel avm) {
-            if (avm == null || avm.IsThisApp) {
+        private bool DidPresetsChange(MpPortableProcessInfo drop_pi) {
+            if (drop_pi == null || drop_pi.IsThisAppProcess()) {
                 return false;
             }
 
             var cur_preset_state = GetFormatPresetState();
             bool is_default = !_preShowPresetState.Difference(cur_preset_state).Any();
 
-            if (avm.ClipboardFormatInfos.Items == null) {
+            if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(drop_pi) is not MpAvAppViewModel avm ||
+                avm.ClipboardFormatInfos.Items == null) {
                 return !is_default;
             }
 
@@ -289,39 +308,43 @@ namespace MonkeyPaste.Avalonia {
 
             _lastGlobalMousePoint = gmp;
             // TODO? may need to account for multiple screens in process watcher
+            nint lastDropHandle = CurDropProcessInfo == null ? nint.Zero : CurDropProcessInfo.Handle;
+            CurDropProcessInfo = Mp.Services.ProcessWatcher.GetProcessInfoFromScreenPoint(gmp.ToAvPixelPoint(MpAvWindowManager.MainWindow.VisualPixelDensity()).ToPortablePoint(1));
 
-            var result = MpAvAppCollectionViewModel.Instance.GetAppViewModelFromScreenPoint(gmp, MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
-            if (result != null &&
-                !result.IsThisApp) {
-                bool is_same_drop_target = DropAppViewModel != null && result.AppId == DropAppViewModel.AppId;
-                if (is_same_drop_target) {
-                    return;
-                }
-                DropAppViewModel = result;
-                if (HasUserToggledAnyHandlers) {
-                    // NOTE when user toggles format the change needs to stick and for rest
-                    // of drag app overrides need to be ignored or their toggle maybe lost
-                    return;
-                }
+            if (CurDropProcessInfo == null) {
+                return;
+            }
 
-                // only execute from here if any format list item was toggled or drop target has changed
-                // so presets match current widget state 
-                if (DropAppViewModel.ClipboardFormatInfos is MpAppClipboardFormatInfoCollectionViewModel cfic && !cfic.IsEmpty) {
-                    foreach (var cfivm in cfic.Items) {
-                        // get preset for app specified format
-                        var wpvm =
-                        MpAvClipboardHandlerCollectionViewModel.Instance
-                            .AllAvailableWriterPresets
-                            .FirstOrDefault(x => x.ClipboardFormat.clipboardName == cfivm.ClipboardFormat);
-                        if (wpvm == null) {
-                            continue;
-                        }
-                        wpvm.IsEnabled = !cfivm.IgnoreFormat;
+            if (CurDropProcessInfo.IsThisAppProcess() ||
+                CurDropProcessInfo.IsHandleProcess(lastDropHandle)) {
+                return;
+            }
+
+            if (HasUserToggledAnyHandlers) {
+                // NOTE when user toggles format the change needs to stick and for rest
+                // of drag app overrides need to be ignored or their toggle maybe lost
+                return;
+            }
+
+            // only execute from here if any format list item was toggled or drop target has changed
+            // so presets match current widget state 
+            if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(CurDropProcessInfo) is MpAvAppViewModel drop_avm &&
+                drop_avm.ClipboardFormatInfos is MpAppClipboardFormatInfoCollectionViewModel cfic &&
+                !cfic.IsEmpty) {
+                foreach (var cfivm in cfic.Items) {
+                    // get preset for app specified format
+                    var wpvm =
+                    MpAvClipboardHandlerCollectionViewModel.Instance
+                        .AllAvailableWriterPresets
+                        .FirstOrDefault(x => x.ClipboardFormat.clipboardName == cfivm.ClipboardFormat);
+                    if (wpvm == null) {
+                        continue;
                     }
-                } else if (!is_same_drop_target) {
-                    // no overrides, reset to default
-                    RestoreFormatPresetState();
+                    wpvm.IsEnabled = !cfivm.IgnoreFormat;
                 }
+            } else {
+                // no overrides, reset to default
+                RestoreFormatPresetState();
             }
         }
 
@@ -406,7 +429,7 @@ namespace MonkeyPaste.Avalonia {
             HasUserToggledAnyHandlers = false;
 
             _preShowPresetState.Clear();
-            DropAppViewModel = null;
+            CurDropProcessInfo = null;
 
             StopDropTargetListener();
         }
@@ -430,7 +453,7 @@ namespace MonkeyPaste.Avalonia {
 
                 IsWindowOpen = false;
 
-                bool show_finish_menu = DidPresetsChange(DropAppViewModel);
+                bool show_finish_menu = DidPresetsChange(CurDropProcessInfo);
                 if (!show_finish_menu) {
                     DoNotRememberDropInfoCommand.Execute(null);
                     return;

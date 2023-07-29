@@ -23,15 +23,16 @@
                     Value="False" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Button Classes="noBg noHoverBg noBorder"
-            Command="{Binding Command, ElementName=ClearTextButton}"
-            CommandParameter="{Binding CommandParameter, ElementName=ClearTextButton}">
+    <Button x:Name="ClearButton"
+            Classes="defaultButton noBg noHoverBg"
+            Command="{Binding ClearCommand, ElementName=ClearTextButton}"
+            CommandParameter="{Binding ClearCommandParameter, ElementName=ClearTextButton}">
         <Grid x:Name="ClearTextContainerGrid"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
             <Image x:Name="X_OverImage">
                 <Image.Resources>
-                    <SolidColorBrush x:Key="Brush0" Color="{DynamicResource ThemeInteractiveColor}" />
+                    <SolidColorBrush x:Key="Brush0" Color="{DynamicResource ThemeGrayAccent2Color}" />
                 </Image.Resources>
                 <DrawingImage>
                     <DrawingGroup>

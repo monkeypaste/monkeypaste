@@ -82,28 +82,22 @@ namespace MonkeyPaste.Avalonia {
                     control.DataContext is MpAvClipTileViewModel ctvm) {
                 // gather transaction refs
                 string drop_app_url = null;
-                if (Mp.Services.ProcessWatcher.LastProcessInfo is MpPortableProcessInfo drop_pi &&
-                    MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(drop_pi) is MpAvAppViewModel drop_avm) {
-                    drop_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(drop_avm.App);
-                } else {
+                if (Mp.Services.DropProcessWatcher.DropProcess is MpPortableProcessInfo drop_pi) {
+                    drop_app_url = await Mp.Services.SourceRefTools.FetchOrCreateAppRefUrlAsync(drop_pi);
+                }
+                if (drop_app_url == null) {
                     drop_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(
                         MpAvAppCollectionViewModel.Instance.ThisAppViewModel.App);
                 }
-                if (string.IsNullOrEmpty(drop_app_url)) {
-                    // maybe we should lax ref url req in report transaction...
-                    MpDebug.Break();
-                } else {
-
-                    // report drop transaction
-                    Mp.Services.TransactionBuilder.ReportTransactionAsync(
-                                copyItemId: ctvm.CopyItemId,
-                                reqType: MpJsonMessageFormatType.DataObject,
-                                req: null,//mpdo.SerializeData(),
-                                respType: MpJsonMessageFormatType.None,
-                                resp: null,
-                                ref_uris: new[] { drop_app_url },
-                                transType: MpTransactionType.Dragged).FireAndForgetSafeAsync(ctvm);
-                }
+                // report drop transaction
+                Mp.Services.TransactionBuilder.ReportTransactionAsync(
+                            copyItemId: ctvm.CopyItemId,
+                            reqType: MpJsonMessageFormatType.DataObject,
+                            req: null,//mpdo.SerializeData(),
+                            respType: MpJsonMessageFormatType.None,
+                            resp: null,
+                            ref_uris: new[] { drop_app_url },
+                            transType: MpTransactionType.Dragged).FireAndForgetSafeAsync(ctvm);
             }
 
             FinishDrag(result);

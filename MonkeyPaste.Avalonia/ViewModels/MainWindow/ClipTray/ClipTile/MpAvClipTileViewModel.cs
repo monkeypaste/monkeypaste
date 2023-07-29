@@ -1692,12 +1692,12 @@ namespace MonkeyPaste.Avalonia {
                         //return;
                         if (CopyItemData.IsEmptyRichHtmlString()) {
                             // what IS this nasty shit??
-                            MpDebug.Break();
+                            MpDebug.Break($"Empty content write ignored", true);
 
                             return;
                         }
                         if (CopyItemType == MpCopyItemType.Image && CopyItemData.StartsWith("<p>")) {
-                            MpDebug.Break();
+                            MpDebug.Break($"Image should not contain paragraph");
                         }
                         //if(!MpAvCefNetApplication.UseCefNet && HasContentDataChanged) {
                         //    if(IsInitializing) {

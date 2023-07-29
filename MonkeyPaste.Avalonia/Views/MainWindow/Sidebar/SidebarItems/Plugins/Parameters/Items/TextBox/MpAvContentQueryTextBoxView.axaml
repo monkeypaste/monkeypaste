@@ -1,0 +1,79 @@
+﻿<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvContentQueryTextBoxView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="pcl:MpIContentQueryTextBoxViewModel"
+                       x:DataType="pcl:MpIContentQueryTextBoxViewModel"
+                       x:CompileBindings="True"
+                       mc:Ignorable="d"
+                       d:DesignHeight="450"
+                       d:DesignWidth="800">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Button#FilterButton Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource FilterImage}, ConverterParameter=ThemeInteractiveColor, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+        </Style>
+        <Style Selector="Button#FilterButton:pointerover Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource FilterImage}, ConverterParameter=ThemeAccent1Color, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Border x:Name="QueryItemGridContainer"
+            Classes="paramBorder">
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Right"
+                        Orientation="Horizontal">
+                <!--  FILTER BUTTON  -->
+
+                <Button x:Name="FilterButton"
+                        Classes="defaultButton noBg noHoverBg noBorder"
+                        IsVisible="{Binding IsFieldButtonVisible}"
+                        HorizontalAlignment="Right"
+                        local:MpAvPointerCommandExtension.IsEnabled="True"
+                        local:MpAvPointerCommandExtension.ButtonClickCommand="{Binding ShowQueryMenuCommand}"
+                        local:MpAvPointerCommandExtension.ButtonClickCommandParameter="{Binding $self}">
+                    <Image />
+                </Button>
+
+                <!--  CLEAR TEXT BUTTON  -->
+
+                <local:MpAvClearTextButton x:Name="ClearButton"
+                                           Grid.Column="0"
+                                           Classes="TextBoxButton square"
+                                           Height="20"
+                                           ClearCommand="{Binding ClearQueryCommand}"
+                                           ClearCommandParameter="{Binding .}"
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Center">
+                    <local:MpAvClearTextButton.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="IsPointerOver"
+                                     ElementName="QueryItemGridContainer" />
+                            <Binding Path="Text"
+                                     ElementName="ContentQueryTextBox"
+                                     Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                        </MultiBinding>
+                    </local:MpAvClearTextButton.IsVisible>
+                </local:MpAvClearTextButton>
+            </StackPanel>
+
+            <!--  TEXTBOX  -->
+
+            <TextBox x:Name="ContentQueryTextBox"
+                     Classes="dnd"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     MaxHeight="400"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     local:MpAvIsFocusedExtension.IsEnabled="True"
+                     SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
+                     SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
+                     Watermark="{Binding Watermark}"
+                     Text="{Binding ContentQuery, Mode=TwoWay}" />
+        </DockPanel>
+    </Border>
+</local:MpAvUserControl>

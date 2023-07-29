@@ -157,8 +157,8 @@ namespace MonkeyPaste.Avalonia {
 
             FocusMonitor = MpAvFocusManager.Instance as MpIFocusMonitor;
 
-            DragProcessWatcher = new MpAvDragProcessWatcher();
-            DropProcessWatcher = new MpAvDropProcessWatcher();
+            DragProcessWatcher = new MpAvDndProcessWatcher();
+            DropProcessWatcher = DragProcessWatcher as MpIDropProcessWatcher;
 
             AppCommandManager = new MpAvApplicationCommandManager();
 

@@ -26,11 +26,11 @@
         </Style>
         <Style Selector="RadioButton.gestureButton:pointerover TextBlock">
             <Setter Property="Effect"
-                    Value="drop-shadow(0 0 7 white)" />
+                    Value="drop-shadow(0 0 3 white)" />
         </Style>
         <Style Selector="RadioButton.gestureButton:checked TextBlock">
             <Setter Property="Effect"
-                    Value="drop-shadow(0 0 7 black)" />
+                    Value="drop-shadow(0 0 3 black)" />
         </Style>
     </local:MpAvUserControl.Styles>
     <StackPanel Orientation="Vertical"

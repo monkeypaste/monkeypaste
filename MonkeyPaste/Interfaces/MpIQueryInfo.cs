@@ -37,21 +37,19 @@ namespace MonkeyPaste {
     }
     public interface MpIQueryInfo : MpITextMatchInfo {
         MpQueryType QueryType { get; }
-        public MpLogicalQueryType JoinType { get; } // advanced
+        MpLogicalQueryType JoinType { get; } // advanced
         MpIQueryInfo Next { get; } // advanced
 
-        public bool IsDescending { get; }
+        bool IsDescending { get; }
 
-        public MpContentSortType SortType { get; }
+        MpContentSortType SortType { get; }
 
-        public MpContentQueryBitFlags QueryFlags { get; }
+        MpContentQueryBitFlags QueryFlags { get; }
 
 
-        public int TagId { get; }
+        int TagId { get; }
 
-        public string MatchValue { get; }
-
-        public int SortOrderIdx { get; }
+        int SortOrderIdx { get; }
 
 
     }

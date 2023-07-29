@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        public MpAvMainWindowViewModel BindingContext => MpAvMainWindowViewModel.Instance;
+        public override MpAvMainWindowViewModel BindingContext => MpAvMainWindowViewModel.Instance;
 
         #endregion
 

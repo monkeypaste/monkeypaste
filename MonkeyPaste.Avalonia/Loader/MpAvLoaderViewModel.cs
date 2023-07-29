@@ -179,7 +179,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvLoaderItemViewModel(typeof(MpAvAnalyticItemCollectionViewModel), "Analyzers"),
                     new MpAvLoaderItemViewModel(typeof(MpAvSettingsViewModel), "Preferences"),
                     new MpAvLoaderItemViewModel(typeof(MpAvClipTrayViewModel), "Content"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvDragProcessWatcher), "Drag-and-Drop"),
+                    new MpAvLoaderItemViewModel(typeof(MpAvDndProcessWatcher), "Drag-and-Drop"),
                     new MpAvLoaderItemViewModel(typeof(MpAvTagTrayViewModel), "Collections"),
                     new MpAvLoaderItemViewModel(typeof(MpAvExternalPasteHandler), "Paste Interop"),
                     //new MpAvLoaderItemViewModel(typeof(MpDataModelProvider), "Querying"),

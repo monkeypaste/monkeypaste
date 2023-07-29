@@ -191,9 +191,9 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
                         },
                         new MpMenuItemViewModel() {
-                            Header = $"Paste To '{MpAvAppCollectionViewModel.Instance.LastActiveAppViewModel.AppName}'",
+                            Header = $"Paste To '{CurPasteInfoMessage.pasteButtonTooltipText}'",
                             AltNavIdx = 0,
-                            IconId = MpAvAppCollectionViewModel.Instance.LastActiveAppViewModel.IconId,
+                            IconSourceObj = CurPasteInfoMessage.pasteButtonIconBase64,
                             Command = PasteSelectedClipTileFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.PasteSelectedItems },
                         },
@@ -1406,7 +1406,7 @@ namespace MonkeyPaste.Avalonia {
             await ProcessAccountCapsAsync(MpAccountCapCheckType.Init);
             await UpdateEmptyPropertiesAsync();
 
-            await SetCurPasteInfoMessageAsync(Mp.Services.ProcessWatcher.LastProcessInfo);
+            SetCurPasteInfoMessage(Mp.Services.ProcessWatcher.LastProcessInfo);
 
             IsBusy = false;
         }
@@ -1642,7 +1642,7 @@ namespace MonkeyPaste.Avalonia {
             IsRestoringSelection = false;
         }
 
-        public void CleanupAfterPaste(MpAvClipTileViewModel sctvm, MpPortableProcessInfo pasted_pi, MpPortableDataObject mpdo) {
+        private async Task CleanupAfterPasteAsync(MpAvClipTileViewModel sctvm, MpPortableProcessInfo pasted_pi, MpPortableDataObject mpdo) {
             IsPasting = false;
             //clean up pasted items state after paste
             sctvm.PasteCount++;
@@ -1652,14 +1652,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            string pasted_app_url = null;
-            var avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(pasted_pi);
-            if (avm == null) {
-                // we're f'd
-                MpDebug.Break();
-            } else {
-                pasted_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(avm.App);
-            }
+            string pasted_app_url = await Mp.Services.SourceRefTools.FetchOrCreateAppRefUrlAsync(pasted_pi);
             if (string.IsNullOrEmpty(pasted_app_url)) {
                 // f'd
                 MpDebug.Break();
@@ -2357,28 +2350,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
-            Dispatcher.UIThread.Post(async () => {
-                await SetCurPasteInfoMessageAsync(e);
-            }, DispatcherPriority.Background);
+            Dispatcher.UIThread.Post(() => SetCurPasteInfoMessage(e), DispatcherPriority.Background);
         }
-        private async Task SetCurPasteInfoMessageAsync(MpPortableProcessInfo e) {
+        private void SetCurPasteInfoMessage(MpPortableProcessInfo e) {
             if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 // no paste toolbar so ignore
                 // TODO? add plain text paste toolbar? (tip of an iceburg)
                 return;
             }
-            while (MpAvAppCollectionViewModel.Instance.IsAnyBusy) {
-                // wait if app new/db updating 
-                await Task.Delay(100);
-            }
-            CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage();
-            var active_avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e);
-            if (active_avm == null) {
-                // let editor use fallback
-            } else {
-                CurPasteInfoMessage.pasteButtonTooltipText = string.IsNullOrEmpty(e.ApplicationName) ? e.MainWindowTitle : e.ApplicationName;
-                CurPasteInfoMessage.pasteButtonIconBase64 = await MpDataModelProvider.GetDbImageBase64ByIconIdAsync(active_avm.IconId);
-            }
+            CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
+                pasteButtonTooltipText = string.IsNullOrEmpty(e.ApplicationName) ? e.MainWindowTitle : e.ApplicationName,
+                pasteButtonIconBase64 = e.MainWindowIconBase64
+            };
 
             string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeJsonObjectToBase64()}')";
 
@@ -3007,8 +2990,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            CleanupAfterPaste(ctvm, pi, mpdo);
             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
+            await CleanupAfterPasteAsync(ctvm, pi, mpdo);
         }
         private async Task CutOrCopySelectionAsync(bool isCut) {
             string keys = isCut ?

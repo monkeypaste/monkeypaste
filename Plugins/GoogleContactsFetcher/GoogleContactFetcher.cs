@@ -19,8 +19,7 @@ namespace GoogleContactsFetcher {
     public class GoogleContactFetcher :
         MpIContactFetcherComponentAsync,
         MpISupportDeferredParameterCommand,
-        MpIAnalyzeAsyncComponent,
-        INotifyPropertyChanged {
+        MpIAnalyzeAsyncComponent {
 
         private string _clientSecretsPath = null;
         //string ClientSecretsPath {
@@ -53,7 +52,7 @@ namespace GoogleContactsFetcher {
                     _clientSecretsPath = Path.Combine(manifestDir, @"client_secrets_desktop.json");
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error finding google secrets at path '{manifestDir}'");
+                    MpConsole.WriteTraceLine($"Error finding google secrets at path '{manifestDir}'", ex);
                     return new MpIContact[] { };
                 }
             }
@@ -130,6 +129,5 @@ namespace GoogleContactsFetcher {
                 MpDebug.Break("cmd deferred");
             });
 
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

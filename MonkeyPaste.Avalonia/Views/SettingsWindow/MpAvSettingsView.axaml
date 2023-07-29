@@ -519,7 +519,7 @@
                                                Height="20"
                                                Margin="5"
                                                IsVisible="{Binding FilterText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                               Command="{Binding ClearFilterTextCommand}"
+                                               ClearCommand="{Binding ClearFilterTextCommand}"
                                                HorizontalAlignment="Right"
                                                VerticalAlignment="Center" />
                 </Grid>

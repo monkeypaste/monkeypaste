@@ -72,8 +72,30 @@ namespace MonkeyPaste.Avalonia {
         public MpPortableProcessInfo ThisAppProcessInfo =>
             _thisAppProcessInfo ?? (_thisAppProcessInfo = GetProcessInfoByHandle(ThisAppHandle));
 
-        public MpPortableProcessInfo LastProcessInfo =>
-            GetProcessInfoByHandle(_lastActiveHandle) ?? ThisAppProcessInfo;
+        private MpPortableProcessInfo _lastProcessInfo;
+        public MpPortableProcessInfo LastProcessInfo {
+            get {
+                if (_lastProcessInfo == null) {
+                    if (_lastActiveHandle == nint.Zero) {
+                        return ThisAppProcessInfo;
+                    }
+                    _lastProcessInfo = GetProcessInfoByHandle(_lastActiveHandle);
+                    if (_lastProcessInfo == null) {
+                        return ThisAppProcessInfo;
+                    }
+                }
+                if (_lastProcessInfo.Handle != _lastActiveHandle) {
+                    if (IsProcessPathEqual(_lastProcessInfo.Handle, _lastActiveHandle)) {
+                        // only upate new handle to reduce processing
+                        _lastProcessInfo.Handle = _lastActiveHandle;
+                    } else {
+                        // active just changed, refresh info
+                        _lastProcessInfo = GetProcessInfoByHandle(_lastActiveHandle);
+                    }
+                }
+                return _lastProcessInfo;
+            }
+        }
 
         #endregion
 
@@ -98,8 +120,6 @@ namespace MonkeyPaste.Avalonia {
             if (_timer == null) {
                 // initial start
 
-                var active_pi = GetActiveProcessInfo();
-                var this_pi = ThisAppProcessInfo;
                 _timer = new DispatcherTimer(DispatcherPriority.Background) {
                     Interval = TimeSpan.FromMilliseconds(POLL_INTERVAL_MS)
                 };
@@ -113,8 +133,8 @@ namespace MonkeyPaste.Avalonia {
             _timer?.Stop();
         }
 
-        public MpPortableProcessInfo GetProcessInfoFromScreenPoint(MpPoint screenPoint) {
-            var handle = GetParentHandleAtPoint(screenPoint);
+        public MpPortableProcessInfo GetProcessInfoFromScreenPoint(MpPoint pixelPoint) {
+            var handle = GetParentHandleAtPoint(pixelPoint);
             return GetProcessInfoByHandle(handle);
         }
         public abstract nint SetActiveProcess(nint handle);
@@ -144,7 +164,6 @@ namespace MonkeyPaste.Avalonia {
             return Path.GetFileNameWithoutExtension(processPath);
         }
 
-        protected abstract string GetProcessTitle(nint handle);
 
         protected abstract string GetProcessPath(nint handle);
         protected virtual bool CanWatchProcesses() {
@@ -164,52 +183,42 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
-        protected abstract MpPortableProcessInfo GetActiveProcessInfo();
+
+        protected abstract nint GetActiveProcessHandle();
+        protected abstract bool IsHandleWindowProcess(nint handle);
         protected abstract MpPortableProcessInfo GetProcessInfoByHandle(nint handle);
 
         protected virtual void ProcessWatcherTimer_tick(object sender, EventArgs e) {
-            var activeProcessInfo = GetActiveProcessInfo();
-            if (activeProcessInfo == null) {
-                return;
-            }
-            if (activeProcessInfo.Handle == _lastActiveHandle) {
-                return;
-            }
-            if (IsProcessPathEqual(ThisAppHandle, activeProcessInfo.Handle)) {
+            nint activeHandle = GetActiveProcessHandle();
+            if (activeHandle == nint.Zero ||
+                activeHandle == _lastActiveHandle) {
                 return;
             }
 
-            bool is_new_active_process = !IsProcessPathEqual(activeProcessInfo.Handle, _lastActiveHandle);
-            _lastActiveHandle = activeProcessInfo.Handle;
+            if (IsProcessPathEqual(ThisAppHandle, activeHandle)) {
+                // when this app is active ignore update
+                return;
+            }
+            if (!IsHandleWindowProcess(activeHandle)) {
+                // some weird process, ignore
+                return;
+            }
 
-            if (!is_new_active_process) {
+            // should be valid window process here
+            nint prevActiveHandle = _lastActiveHandle;
+            _lastActiveHandle = activeHandle;
+
+            if (IsProcessPathEqual(prevActiveHandle, activeHandle)) {
                 // ignore inner-process window changes not relevant for this event
                 return;
             }
-            MpConsole.WriteLine(string.Format(@"Last Window: {0} '{1}' ({2})", LastProcessInfo.MainWindowTitle, LastProcessInfo.ProcessPath, LastProcessInfo.Handle));
-
+            MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo}");
             OnAppActivated?.Invoke(this, LastProcessInfo);
         }
 
         #endregion
 
         #region Private Methods
-
-        private string ParseTitleForApplicationName(string windowTitle) {
-            string mwt = windowTitle;
-            if (string.IsNullOrEmpty(mwt)) {
-                return mwt;
-            }
-            var mwta = mwt.Split(new string[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
-            if (mwta.Length == 1) {
-                if (string.IsNullOrEmpty(mwta[0])) {
-                    return "Explorer";
-                }
-                return mwta[0];
-            }
-            return mwta[mwta.Length - 1].Trim();
-        }
-
 
         private Process FindProcess(nint handle) => FindProcess(p => p.Handle == handle);
         private Process FindProcess(int id) => FindProcess(p => p.Id == id);
@@ -223,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        private bool IsProcessPathEqual(nint h1, nint h2) {
+        public bool IsProcessPathEqual(nint h1, nint h2) {
             return GetProcessPath(h1) == GetProcessPath(h2);
         }
 

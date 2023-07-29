@@ -273,7 +273,7 @@
                         </Image.RenderTransform>
                     </Image>
                     <Image x:Name="ClipTileAppIconBorderImage"
-                           IsVisible="{Binding !IsVisible, ElementName=TransBusySpinner}"
+                           IsVisible="False"
                            IsHitTestVisible="False"
                            Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border}"
                            Stretch="UniformToFill"

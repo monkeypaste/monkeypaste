@@ -59,7 +59,7 @@
         <Image Grid.Row="1"
                Grid.Column="0"
                Margin="10"
-               Source="{Binding DropAppViewModel.IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+               Source="{Binding DropAppIconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                Stretch="UniformToFill"
                Width="{Binding $self.Bounds.Height}"
                HorizontalAlignment="Right"
@@ -74,7 +74,7 @@
                    TextWrapping="WrapWithOverflow"
                    FontSize="16"
                    Foreground="White"
-                   Text="{Binding DropAppViewModel.AppName}" />
+                   Text="{Binding DropAppName}" />
         <Button x:Name="DoNotRememberDropInfoButton"
                 Grid.Row="2"
                 Grid.Column="0"

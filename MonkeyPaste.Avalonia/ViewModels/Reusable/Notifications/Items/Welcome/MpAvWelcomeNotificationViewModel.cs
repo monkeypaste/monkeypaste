@@ -234,6 +234,7 @@ namespace MonkeyPaste.Avalonia {
 
             DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel() {
                 Title = "Password",
+                SplashIconSourceObj = "LockImage",
                 Caption = "Your privacy is important and clipboard data can be very personal. Storage is always encrypted but you can set a password that will be required in case your device is stolen or someone else is using your device.",
             };
         }

@@ -11,7 +11,8 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvLoaderNotificationWindow : MpAvWindow {
 
-        public MpAvLoaderNotificationViewModel BindingContext => DataContext as MpAvLoaderNotificationViewModel;
+        public override MpAvLoaderNotificationViewModel BindingContext =>
+            DataContext as MpAvLoaderNotificationViewModel;
         public MpAvLoaderNotificationWindow() {
             AvaloniaXamlLoader.Load(this);
 

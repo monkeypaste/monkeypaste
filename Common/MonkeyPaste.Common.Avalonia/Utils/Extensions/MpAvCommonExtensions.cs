@@ -340,11 +340,25 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Text Box
 
         public static int SelectionLength(this TextBox tb) {
-            if (tb == null) {
-                return 0;
-            }
+            return tb.LiteralSelectionEnd() - tb.LiteralSelectionStart();
+        }
 
-            return Math.Abs(tb.SelectionEnd - tb.SelectionStart);
+        public static int LiteralSelectionStart(this TextBox tb) {
+            return Math.Min(tb.SelectionEnd, tb.SelectionStart);
+        }
+        public static int LiteralSelectionEnd(this TextBox tb) {
+            return Math.Max(tb.SelectionEnd, tb.SelectionStart);
+        }
+
+
+        public static bool IsPointInTextBoxSelection(this TextBox tb, Point p) {
+            int mp_tb_idx = tb.GetTextIndexFromTextBoxPoint(p);
+            if (mp_tb_idx < tb.LiteralSelectionStart() ||
+                mp_tb_idx > tb.LiteralSelectionEnd()) {
+                // press not over selection
+                return false;
+            }
+            return true;
         }
         #endregion
 

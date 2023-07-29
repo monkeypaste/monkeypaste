@@ -295,7 +295,7 @@
                                                    Height="20"
                                                    Grid.Column="0"
                                                    Margin="5"
-                                                   Command="{Binding ClearTextCommand}"
+                                                   ClearCommand="{Binding ClearTextCommand}"
                                                    VerticalAlignment="Center">
                             <local:MpAvClearTextButton.IsVisible>
                                 <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"

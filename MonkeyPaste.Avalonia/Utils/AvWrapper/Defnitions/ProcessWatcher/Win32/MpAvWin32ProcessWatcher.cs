@@ -113,27 +113,31 @@ namespace MonkeyPaste.Avalonia {
                     return ProcessWindowStyle.Normal;
             }
         }
+
+        protected override nint GetActiveProcessHandle() {
+            return WinApi.GetForegroundWindow();
+        }
         protected override MpPortableProcessInfo GetProcessInfoByHandle(nint handle) {
             if (handle == nint.Zero) {
                 return null;
             }
-            var active_info = new MpPortableProcessInfo() {
+            var ppi = new MpPortableProcessInfo() {
                 Handle = handle,
                 ProcessPath = GetProcessPath(handle),
                 ApplicationName = GetProcessApplicationName(handle),
                 MainWindowTitle = GetProcessTitle(handle)
             };
-            return active_info;
+            ppi.MainWindowIconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(ppi.ProcessPath);
+            return ppi;
         }
-        protected override MpPortableProcessInfo GetActiveProcessInfo() {
-            IntPtr active_handle = WinApi.GetForegroundWindow();
-            if (WinApi.IsWindowVisible(active_handle) &&
-                WinApi.IsWindow(active_handle)) {
-                return GetProcessInfoByHandle(active_handle);
-            }
-            return null;
+        protected override bool IsHandleWindowProcess(nint handle) {
+            return
+                WinApi.IsWindowVisible(handle) &&
+                WinApi.IsWindow(handle) &&
+                WinApi.GetWindowTextLength(handle) > 0;
         }
-        protected override string GetProcessTitle(IntPtr hWnd) {
+
+        private string GetProcessTitle(IntPtr hWnd) {
             try {
                 if (hWnd == IntPtr.Zero) {
                     return "Unknown Application";

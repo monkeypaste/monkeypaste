@@ -69,6 +69,26 @@ namespace MonkeyPaste.Avalonia {
             return result;
         }
 
+        public async Task<MpApp> FetchOrCreateAppRefAsync(MpPortableProcessInfo ppi) {
+            MpApp app_ref = null;
+            if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(ppi) is MpAvAppViewModel avm) {
+                app_ref = avm.App;
+            } else {
+                app_ref = await Mp.Services.AppBuilder.CreateAsync(ppi);
+                if (app_ref == null) {
+                    MpDebug.Break($"Error creating app from proess info '{ppi}'");
+                    return null;
+                }
+            }
+            return app_ref;
+        }
+        public async Task<string> FetchOrCreateAppRefUrlAsync(MpPortableProcessInfo ppi) {
+            var result = await FetchOrCreateAppRefAsync(ppi);
+            if (result == null) {
+                return null;
+            }
+            return ConvertToInternalUrl(result);
+        }
 
         public Tuple<MpTransactionSourceType, int> ParseUriForSourceRef(string uri) {
             Tuple<MpTransactionSourceType, int> no_match_result = new Tuple<MpTransactionSourceType, int>(MpTransactionSourceType.None, 0);

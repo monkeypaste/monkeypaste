@@ -52,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
             if (!IsDragValid(sender, e)) {
                 return;
             }
-            e.DragEffects = DragDropEffects.Link;
+            e.DragEffects = DragDropEffects.Copy;
         }
         private void DragLeave(object sender, RoutedEventArgs e) {
             // assume its the container border, false readings from internal textblock

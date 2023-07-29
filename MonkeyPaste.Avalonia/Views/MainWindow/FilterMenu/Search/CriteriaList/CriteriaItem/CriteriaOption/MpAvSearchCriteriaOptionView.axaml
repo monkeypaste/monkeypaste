@@ -102,7 +102,7 @@
 
                         <TextBox x:Name="MatchValueTextBox"
                                  Watermark="{Binding Label, StringFormat='\{0\}...'}"
-                                 Classes="alterOnly dnd clearButton"
+                                 Classes="alterOnly dnd"
                                  Classes.valid="{Binding IsValid}"
                                  Classes.colorTextBox="{Binding IsColorOption}"
                                  local:MpAvDelayedTextChangedExtension.IsEnabled="True"

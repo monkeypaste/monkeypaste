@@ -149,7 +149,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsDescending { get; set; } = true;
         public MpContentSortType SortType { get; set; } = MpContentSortType.CopyDateTime;
         public int TagId { get; set; } = MpAvTagTrayViewModel.DEFAULT_SELECTED_TAG_ID;
-        public string MatchValue { get; set; } = string.Empty;
 
         public MpContentQueryBitFlags QueryFlags { get; set; } = MpContentQueryBitFlags.Content | MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType;
 
@@ -166,8 +165,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITextMatchInfo Implementation
 
-        string MpITextMatchInfo.MatchValue =>
-            (this as MpIQueryInfo).MatchValue;
+        public string MatchValue { get; set; } = string.Empty;
         bool MpITextMatchInfo.CaseSensitive =>
             (this as MpIQueryInfo).QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive);
 

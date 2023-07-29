@@ -120,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
                 FindTextBox(sender) is not TextBox tb) {
                 return;
             }
-            if (IsPointInTextBoxSelection(tb, e.GetPosition(tb)) &&
+            if (tb.IsPointInTextBoxSelection(e.GetPosition(tb)) &&
                 tb.SelectionLength() > 0 &&
                 (!e.IsLeftDown(attached_control) || GetIsDragging(attached_control))) {
                 //MpConsole.WriteLine($"cursor OVER sel");
@@ -131,7 +131,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
+        private static async void Control_PointerPressed(object sender, PointerPressedEventArgs e) {
             if (sender is not Control attached_control ||
                 FindTextBox(sender) is not TextBox tb) {
                 return;
@@ -139,33 +139,33 @@ namespace MonkeyPaste.Avalonia {
             if (tb.SelectionLength() == 0) {
                 return;
             }
-            if (!IsPointInTextBoxSelection(tb, e.GetPosition(tb))) {
+            if (!tb.IsPointInTextBoxSelection(e.GetPosition(tb))) {
                 // only start drag if down is over selection
                 return;
             }
 
-            tb.DragCheckAndStart(e,
-                start: async (start_e) => {
-                    MpAvDataObject avdo = null;
-                    MpAvClipTileViewModel ctvm = tb.GetSelfOrAncestorDataContext<MpAvClipTileViewModel>();
-                    if (ctvm != null) {
-                        avdo = new MpAvDataObject(ctvm.CopyItem.ToPortableDataObject(true, true));
-                        ctvm.IsTileDragging = true;
-                    } else {
-                        avdo = new MpAvDataObject(MpPortableDataFormats.Text, tb.Text);
-                    }
+            //tb.DragCheckAndStart(e,
+            //    start: async (start_e) => {
+            MpAvDataObject avdo = null;
+            MpAvClipTileViewModel ctvm = tb.GetSelfOrAncestorDataContext<MpAvClipTileViewModel>();
+            if (ctvm != null) {
+                avdo = new MpAvDataObject(ctvm.CopyItem.ToPortableDataObject(true, true));
+                ctvm.IsTileDragging = true;
+            } else {
+                avdo = new MpAvDataObject(MpPortableDataFormats.Text, tb.Text);
+            }
 
-                    if (tb.SelectionLength() > 0) {
-                        avdo.SetData(MpPortableDataFormats.Text, tb.Text.Substring(tb.SelectionStart, tb.SelectionLength()));
-                    }
-                    SetIsDragging(attached_control, true);
-                    var result = await DragDrop.DoDragDrop(e, avdo, DragDropEffects.Link | DragDropEffects.Copy);
-                    SetIsDragging(attached_control, false);
+            if (tb.SelectionLength() > 0) {
+                avdo.SetData(MpPortableDataFormats.Text, tb.Text.Substring(tb.LiteralSelectionStart(), tb.SelectionLength()));
+            }
+            SetIsDragging(attached_control, true);
+            var result = await DragDrop.DoDragDrop(e, avdo, DragDropEffects.Copy);
+            SetIsDragging(attached_control, false);
 
-                    if (ctvm != null) {
-                        ctvm.IsTileDragging = false;
-                    }
-                });
+            if (ctvm != null) {
+                ctvm.IsTileDragging = false;
+            }
+            //});
         }
 
 
@@ -182,16 +182,6 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
-        private static bool IsPointInTextBoxSelection(TextBox tb, Point p) {
-            int mp_tb_idx = tb.GetTextIndexFromTextBoxPoint(p);
-            int actual_start_idx = Math.Min(tb.SelectionStart, tb.SelectionEnd);
-            int actual_end_idx = Math.Max(tb.SelectionStart, tb.SelectionEnd);
-            if (!(mp_tb_idx >= actual_start_idx && mp_tb_idx <= actual_end_idx)) {
-                // press not over selection
-                return false;
-            }
-            return true;
-        }
         #endregion
     }
 }

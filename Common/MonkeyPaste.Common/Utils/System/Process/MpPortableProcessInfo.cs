@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace MonkeyPaste.Common {
     public class MpPortableProcessInfo {
@@ -9,28 +10,28 @@ namespace MonkeyPaste.Common {
         public string ApplicationName { get; set; } // app name
 
         public string MainWindowTitle { get; set; }
-
-        public DateTime LastActiveDateTime { get; set; }
+        public string MainWindowIconBase64 { get; set; }
 
         public List<string> ArgumentList { get; set; } = new List<string>();
-        public string Arguments { get; set; }
 
-        public ProcessWindowStyle WindowState { get; set; }
+        public bool IsThisAppProcess() {
+            return MpCommonTools.Services.ProcessWatcher.IsProcessPathEqual(Handle, MpCommonTools.Services.ProcessWatcher.ThisAppProcessInfo.Handle);
+        }
+        public bool IsHandleProcess(IntPtr handle) {
+            return MpCommonTools.Services.ProcessWatcher.IsProcessPathEqual(Handle, handle);
+        }
 
         public override string ToString() {
-            return string.Format(@"Title '{0}' Handle '{1}' Path '{2}' ", MainWindowTitle, Handle, ProcessPath);
+            return string.Format(@"Handle '{0}' Path '{1}' Title '{2}' ", Handle, ProcessPath, MainWindowTitle);
         }
 
         public object Clone() {
             return new MpPortableProcessInfo() {
                 Handle = Handle,
                 ProcessPath = ProcessPath,
-                ApplicationName = ApplicationName,
                 MainWindowTitle = MainWindowTitle,
-                LastActiveDateTime = LastActiveDateTime,
-                ArgumentList = ArgumentList,
-                Arguments = Arguments,
-                WindowState = WindowState
+                ApplicationName = ApplicationName,
+                ArgumentList = ArgumentList
             };
         }
     }

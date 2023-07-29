@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
 
             string processPath = pi.ProcessPath;
             string appName = pi.ApplicationName;
+            string iconBase64 = pi.MainWindowIconBase64;
 
             if (!processPath.IsFile()) {
                 MpDebug.Break($"Invalid process path detected '{processPath}'");
@@ -22,7 +23,9 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // GET APP ICON
-            string iconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(processPath);
+            if (string.IsNullOrEmpty(iconBase64)) {
+                iconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(processPath);
+            }
 
             if (string.IsNullOrEmpty(iconBase64)) {
                 MpConsole.WriteWarningLine($" could not find icon for info (using question mark): ");

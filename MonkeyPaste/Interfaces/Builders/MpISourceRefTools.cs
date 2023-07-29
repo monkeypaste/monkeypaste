@@ -20,5 +20,8 @@ namespace MonkeyPaste {
         bool IsInternalUrl(string url);
         bool IsExternalSource(MpISourceRef sr);
         bool IsSourceRejected(MpISourceRef sr);
+
+        Task<MpApp> FetchOrCreateAppRefAsync(MpPortableProcessInfo ppi);
+        Task<string> FetchOrCreateAppRefUrlAsync(MpPortableProcessInfo ppi);
     }
 }

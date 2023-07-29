@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,32 +33,24 @@ namespace MonkeyPaste.Avalonia {
             get => Value;
             set => Value = value;
         }
+        public string Watermark =>
+            Label;
 
-        public ICommand AddContentPropertyPathCommand => new MpCommand<object>(
-            (args) => {
-                if (args == null) {
-                    return;
-                }
-                var cppt = (MpContentQueryPropertyPathType)args;
-                if (cppt == MpContentQueryPropertyPathType.None) {
-                    if (args is int intArg) {
-                        cppt = (MpContentQueryPropertyPathType)intArg;
-                    }
-                    if (cppt == MpContentQueryPropertyPathType.None) {
-                        return;
-                    }
-                }
-
-                string pathStr = string.Format(@"{{{0}}}", cppt.ToString());
-                Value = Value.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
-            });
 
         public ICommand ClearQueryCommand => new MpCommand(() => {
             if (Parent is MpAvEditableEnumerableParameterViewModel epvm) {
                 epvm.RemoveValueCommand.Execute(this);
             }
         });
-        bool MpIContentQueryTextBoxViewModel.IsPathSelectorPopupOpen { get; set; }
+
+        public ICommand ShowQueryMenuCommand => new MpCommand<object>(
+            (args) => {
+                if (args is not Control c) {
+                    return;
+                }
+                MpAvMenuExtension.ShowMenu(c, PopupMenuViewModel);
+            });
+
         #endregion
 
         #region MpITextSelectionRangeViewModel Implementation 
@@ -87,27 +80,6 @@ namespace MonkeyPaste.Avalonia {
                 AddContentPropertyPathCommand,
                 IsActionParameter ? null : new[] { MpContentQueryPropertyPathType.LastOutput });
 
-        //    {
-        //    get {
-        //        var tmivml = new List<MpMenuItemViewModel>();
-        //        var propertyPathLabels = typeof(MpContentQueryPropertyPathType).EnumToLabels();
-        //        for (int i = 0; i < propertyPathLabels.Length; i++) {
-        //            var ppt = (MpContentQueryPropertyPathType)i;
-        //            var mivm = new MpMenuItemViewModel() {
-        //                Header = propertyPathLabels[i],
-        //                Command = AddContentPropertyPathCommand,
-        //                CommandParameter = ppt
-        //            };
-        //            if (ppt == MpContentQueryPropertyPathType.None || (ppt == MpContentQueryPropertyPathType.LastOutput && !IsActionParameter)) {
-        //                mivm.IsVisible = false;
-        //            }
-        //            tmivml.Add(mivm);
-        //        }
-        //        return new MpMenuItemViewModel() {
-        //            SubItems = tmivml
-        //        };
-        //    }
-        //}
 
         public bool IsPopupMenuOpen { get; set; }
         #endregion
@@ -140,35 +112,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsHovering { get; set; } = false;
 
-        //public bool IsSelected {
-        //    get {
-        //        if (Parent == null) {
-        //            return false;
-        //        }
-        //        if (Parent.IsMultiValue) {
-        //            return Parent.SelectedItems.Contains(this);
-        //        }
-        //        return Parent.SelectedItem == this;
-        //    }
-        //    set {
-        //        if (IsSelected != value) {
-        //            if (Parent.IsMultiValue) {
-        //                if (value) {
-        //                    Parent.SelectedItems.Add(this);
-        //                } else {
-        //                    Parent.SelectedItems.Remove(this);
-        //                }
-        //            } else {
-        //                if (value) {
-        //                    Parent.SelectedItem = this;
-        //                } else {
-        //                    Parent.SelectedItem = null;
-        //                }
-        //            }
-        //            OnPropertyChanged(nameof(IsSelected));
-        //        }
-        //    }
-        //}
         public bool IsSelected =>
             Parent == null ? false : Parent.Selection.SelectedItems.Contains(this);
 
@@ -275,6 +218,29 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
+        #endregion
+
+        #region Commands
+
+        public ICommand AddContentPropertyPathCommand => new MpCommand<object>(
+            (args) => {
+                if (args == null) {
+                    return;
+                }
+                var cppt = (MpContentQueryPropertyPathType)args;
+                if (cppt == MpContentQueryPropertyPathType.None) {
+                    if (args is int intArg) {
+                        cppt = (MpContentQueryPropertyPathType)intArg;
+                    }
+                    if (cppt == MpContentQueryPropertyPathType.None) {
+                        return;
+                    }
+                }
+
+                string pathStr = string.Format(@"{{{0}}}", cppt.ToString());
+                Value = Value.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
+            });
 
         #endregion
     }

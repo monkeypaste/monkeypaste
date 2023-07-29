@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,6 +60,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
+        public string IconBase64 {
+            get {
+                if (MpAvIconCollectionViewModel.Instance.IconViewModels.FirstOrDefault(x => x.IconId == IconId) is MpAvIconViewModel ivm) {
+                    return ivm.IconBase64;
+                }
+                return string.Empty;
+            }
+        }
         #endregion
 
         #region State
@@ -69,14 +78,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsThisApp =>
             Parent != null && Parent.ThisAppViewModel == this;
 
-        public bool IsActiveProcess {
-            get {
-                if (Parent == null) {
-                    return false;
-                }
-                return Parent.LastActiveAppViewModel == this;
-            }
-        }
 
         public bool IsSelected {
             get {
@@ -96,6 +97,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Model
+
+        public List<string> ArgumentList {
+            get {
+                if (App == null) {
+                    return null;
+                }
+                return App.Arguments.SplitNoEmpty(" ").ToList();
+            }
+        }
 
         public int UserDeviceId {
             get {
@@ -228,6 +238,14 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
+        public MpPortableProcessInfo ToProcessInfo() {
+            return new MpPortableProcessInfo() {
+                ProcessPath = AppPath,
+                ApplicationName = AppName,
+                MainWindowIconBase64 = IconBase64,
+                ArgumentList = ArgumentList
+            };
+        }
         public override string ToString() {
             if (App == null) {
                 return base.ToString();

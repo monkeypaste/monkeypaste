@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Common {
     public static class MpTempFileManager {
         private static string _lastTempListFileName = @"temps.txt";
-        private static bool _isLoaded = false;
+        //private static bool _isLoaded = false;
 
         public static string TempFilePath {
             get {

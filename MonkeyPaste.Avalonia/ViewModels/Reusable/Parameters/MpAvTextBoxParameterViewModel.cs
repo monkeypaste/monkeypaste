@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -21,27 +22,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIPopupMenuViewModel Implementation
-        //public MpMenuItemViewModel PopupMenuViewModel {
-        //    get {
-        //        var tmivml = new List<MpMenuItemViewModel>();
-        //        var propertyPathLabels = typeof(MpContentQueryPropertyPathType).EnumToLabels();
-        //        for (int i = 0; i < propertyPathLabels.Length; i++) {
-        //            var ppt = (MpContentQueryPropertyPathType)i;
-        //            var mivm = new MpMenuItemViewModel() {
-        //                Header = propertyPathLabels[i],
-        //                Command = AddContentPropertyPathCommand,
-        //                CommandParameter = ppt
-        //            };
-        //            if (ppt == MpContentQueryPropertyPathType.None || (ppt == MpContentQueryPropertyPathType.LastOutput && !IsActionParameter)) {
-        //                mivm.IsVisible = false;
-        //            }
-        //            tmivml.Add(mivm);
-        //        }
-        //        return new MpMenuItemViewModel() {
-        //            SubItems = tmivml
-        //        };
-        //    }
-        //}
+
         public MpMenuItemViewModel PopupMenuViewModel =>
             MpContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
                 AddContentPropertyPathCommand,
@@ -53,23 +34,29 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentQueryTextBoxViewModel Implementation
 
-        bool MpIContentQueryTextBoxViewModel.IsFieldButtonVisible =>
+        public bool IsFieldButtonVisible =>
             UnitType == MpParameterValueUnitType.PlainTextContentQuery ||
             UnitType == MpParameterValueUnitType.RawDataContentQuery ||
             UnitType == MpParameterValueUnitType.DelimitedPlainTextContentQuery;
-        string MpIContentQueryTextBoxViewModel.ContentQuery {
+        public string ContentQuery {
             get => CurrentValue;
             set => CurrentValue = value;
         }
 
-        ICommand MpIContentQueryTextBoxViewModel.ClearQueryCommand => new MpCommand(
+        public ICommand ClearQueryCommand => new MpCommand(
             () => {
                 CurrentValue = string.Empty;
             },
             () => !string.IsNullOrEmpty(CurrentValue));
-        bool MpIContentQueryTextBoxViewModel.IsPathSelectorPopupOpen { get; set; }
-
-        #endregion
+        public ICommand ShowQueryMenuCommand => new MpCommand<object>(
+            (args) => {
+                if (args is not Control c) {
+                    return;
+                }
+                MpAvMenuExtension.ShowMenu(c, PopupMenuViewModel);
+            });
+        public string Watermark =>
+            Placeholder;
 
         #region MpITextSelectionRange Implementation 
         public int SelectionStart { get; set; }
@@ -88,6 +75,8 @@ namespace MonkeyPaste.Avalonia {
         public int SelectionLength => Math.Max(SelectionStart, SelectionEnd) - Math.Min(SelectionStart, SelectionEnd);
 
         public string Text { get; set; }
+
+        #endregion
 
         #endregion
 
@@ -183,6 +172,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectionStart):
                     MpConsole.WriteLine($"Start: {SelectionStart} Length: {SelectionLength}");
                     break;
+                case nameof(CurrentValue):
+                    (this as MpIContentQueryTextBoxViewModel).OnPropertyChanged(nameof(MpIContentQueryTextBoxViewModel.ContentQuery));
+                    break;
             }
         }
 
@@ -191,12 +183,6 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(IsValid));
         }
-
-        //private void ContextMenu_Closed(object sender, RoutedEventArgs e) {
-        //    var cm = sender as ContextMenu;
-        //    IsActionParameter = false;
-        //    cm.Closed -= ContextMenu_Closed;
-        //}
 
         #endregion
 

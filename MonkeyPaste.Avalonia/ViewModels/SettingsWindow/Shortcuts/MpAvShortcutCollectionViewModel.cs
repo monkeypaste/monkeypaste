@@ -860,14 +860,7 @@ namespace MonkeyPaste.Avalonia {
                         Task.WhenAll(match_cil.Select(x => x.WriteToDatabaseAsync())).FireAndForgetSafeAsync(this);
                         match_cil.ForEach(x => MpConsole.WriteLine($"New paste count: {x.PasteCount} for '{x}'"));
                         if (_activeProcessInfo != null) {
-                            string pasted_app_url = null;
-                            var avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(_activeProcessInfo);
-                            if (avm == null) {
-                                // we're f'd
-                                MpDebug.Break();
-                            } else {
-                                pasted_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(avm.App);
-                            }
+                            string pasted_app_url = await Mp.Services.SourceRefTools.FetchOrCreateAppRefUrlAsync(_activeProcessInfo);
                             if (string.IsNullOrEmpty(pasted_app_url)) {
                                 // f'd
                                 MpDebug.Break();

@@ -8,8 +8,8 @@ namespace MonkeyPaste.Common {
     public interface MpIProcessWatcher : MpIActionComponent {
         //nint ThisAppHandle { get; }
         bool IsWatching { get; }
-
-        MpPortableProcessInfo GetProcessInfoFromScreenPoint(MpPoint screenPoint);
+        bool IsProcessPathEqual(nint h1, nint h2);
+        MpPortableProcessInfo GetProcessInfoFromScreenPoint(MpPoint pixelPoint);
         MpPortableProcessInfo LastProcessInfo { get; }
         MpPortableProcessInfo ThisAppProcessInfo { get; }
         nint SetActiveProcess(nint handle);

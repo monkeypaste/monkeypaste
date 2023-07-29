@@ -105,8 +105,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpITextMatchInfo Implementation
 
-        string MpITextMatchInfo.MatchValue =>
-            (this as MpIQueryInfo).MatchValue;
         bool MpITextMatchInfo.CaseSensitive =>
             (this as MpIQueryInfo).QueryFlags.HasFlag(MpContentQueryBitFlags.CaseSensitive);
 

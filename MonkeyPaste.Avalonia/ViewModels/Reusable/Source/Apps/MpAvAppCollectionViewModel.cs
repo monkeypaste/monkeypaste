@@ -37,16 +37,16 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAppViewModel ThisAppViewModel =>
             Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);
 
-        private MpAvAppViewModel _lastActiveAppViewModel;
-        public MpAvAppViewModel LastActiveAppViewModel {
-            get => _lastActiveAppViewModel == null ? ThisAppViewModel : _lastActiveAppViewModel;
-            private set {
-                if (LastActiveAppViewModel != value) {
-                    _lastActiveAppViewModel = value;
-                    OnPropertyChanged(nameof(LastActiveAppViewModel));
-                }
-            }
-        }
+        //private MpAvAppViewModel _lastActiveAppViewModel;
+        //public MpAvAppViewModel LastActiveAppViewModel {
+        //    get => _lastActiveAppViewModel == null ? ThisAppViewModel : _lastActiveAppViewModel;
+        //    private set {
+        //        if (LastActiveAppViewModel != value) {
+        //            _lastActiveAppViewModel = value;
+        //            OnPropertyChanged(nameof(LastActiveAppViewModel));
+        //        }
+        //    }
+        //}
 
         public MpAvAppViewModel SelectedItem { get; set; }
         #endregion
@@ -96,10 +96,10 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            LastActiveAppViewModel = ThisAppViewModel;
+            //LastActiveAppViewModel = ThisAppViewModel;
 
             // wait to add activated handler until all apps at startup are syncd
-            Mp.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
+            //Mp.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
 
             OnPropertyChanged(nameof(Items));
 
@@ -145,19 +145,6 @@ namespace MonkeyPaste.Avalonia {
                 x.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId);
         }
 
-        public MpAvAppViewModel GetAppViewModelFromScreenPoint(MpPoint gmp, double pixelDensity) {
-            MpPortableProcessInfo ppi = null;
-
-            if (MpAvMainWindowViewModel.Instance.MainWindowScreenRect.Contains(gmp)) {
-                // at least on windows (i think since its a tool window) the p/invoke doesn't return mw handle
-                //handle = Mp.Services.ProcessWatcher.ThisAppHandle;
-                ppi = Mp.Services.ProcessWatcher.ThisAppProcessInfo;
-            } else {
-                var unscaled_gmp = gmp * pixelDensity;
-                ppi = Mp.Services.ProcessWatcher.GetProcessInfoFromScreenPoint(unscaled_gmp);
-            }
-            return GetAppByProcessInfo(ppi);
-        }
         #endregion
 
         #region Protected Methods
@@ -214,9 +201,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     break;
-                case nameof(LastActiveAppViewModel):
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveProcess)));
-                    break;
+                //case nameof(LastActiveAppViewModel):
+                //    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveProcess)));
+                //    break;
                 case nameof(CustomPasteItems):
                     MpAvDataGridRefreshExtension.RefreshDataGrid(this);
                     break;
@@ -257,82 +244,35 @@ namespace MonkeyPaste.Avalonia {
             MpDebug.Assert(dups == null, "Dup apps found");
         }
 
-        //private async Task InitLastAppViewModel() {
-        //    // wait for running processes to get created
-        //    await Task.Delay(0);
-        //    var la_pi = Mp.Services.ProcessWatcher.LastProcessInfo;
-        //    if (la_pi == null) {
-        //        // since application is being started from file system init LastActive to file system app
-        //        la_pi = Mp.Services.ProcessWatcher.FileSystemProcessInfo;
-        //        if (la_pi == null) {
-        //            // need to get this set on init in process watcher
-        //            //MpDebug.Break();
-        //        }
+        //private async void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
+        //    // if app is unknown add it
+        //    // TODO device logic
+        //    while (IsBusy) {
+        //        await Task.Delay(100);
         //    }
-        //    if (la_pi != null) {
-        //        LastActiveAppViewModel = Items.FirstOrDefault(x => x.AppPath.ToLower() == la_pi.ProcessPath.ToLower());
-        //        if (LastActiveAppViewModel == null) {
-        //            // what's the deal?
-        //            MpDebug.Break();
-        //            LastActiveAppViewModel = ThisAppViewModel;
+        //    Dispatcher.UIThread.Post(async () => {
+        //        var avm = GetAppByProcessInfo(e); //Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
+
+        //        if (avm == null) {
+        //            // unknown app activated add like in registration
+        //            var new_app = await Mp.Services.AppBuilder.CreateAsync(e);
+        //            if (new_app == null) {
+        //                MpConsole.WriteLine("Warning! Unknown app activated, ignoring it. Should we add a default unknownAppId? What would the process path be?");
+        //                return;
+        //            }
+        //            var sw = Stopwatch.StartNew();
+        //            while (true) {
+        //                avm = GetAppByProcessInfo(e);
+        //                if (avm != null) {
+        //                    break;
+        //                }
+        //                await Task.Delay(100);
+        //                MpDebug.Assert(sw.ElapsedMilliseconds < 10_000, $"Activating app error for process '{e}'");
+        //            }
         //        }
-        //    }
+        //        LastActiveAppViewModel = avm;
+        //    });
         //}
-        //private async Task RegisterWithProcessesManager() {
-        //    // This is only called during init to keep app storage in sync so any running apps are added if unknown
-        //    //PlatformWrapper.Services.ProcessWatcher.StartWatcher();
-
-        //    //var unknownApps = Mp.Services.ProcessWatcher.RunningProcessLookup.Keys
-        //    //                        .Where(x => Items.All(y => y.AppPath.ToLower() != x.ToLower()))
-        //    //                        .Select(x => new MpPortableProcessInfo() { ProcessPath = x }).ToList();
-
-        //    //MpConsole.WriteLine($"AppCollection RegisterWithProcessesManager '{unknownApps.Count}' unknown apps detected.");
-        //    //foreach (var uap in unknownApps) {
-        //    //    _ = await Mp.Services.AppBuilder.CreateAsync(uap);
-        //    //    // wait for db add callback to pickup db add event
-        //    //    await Task.Delay(100);
-        //    //    while (IsBusy) {
-        //    //        // wait for app to be added to items from db add callback
-        //    //        await Task.Delay(100);
-        //    //    }
-        //    //}
-
-        //    await InitLastAppViewModel();
-
-        //    // wait to add activated handler until all apps at startup are syncd
-        //    Mp.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
-        //}
-
-        private async void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
-            // if app is unknown add it
-            // TODO device logic
-            while (IsBusy) {
-                await Task.Delay(100);
-            }
-            Dispatcher.UIThread.Post(async () => {
-                var avm = GetAppByProcessInfo(e); //Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
-
-                if (avm == null) {
-                    // unknown app activated add like in registration
-                    var new_app = await Mp.Services.AppBuilder.CreateAsync(e);
-                    if (new_app == null) {
-                        MpConsole.WriteLine("Warning! Unknown app activated, ignoring it. Should we add a default unknownAppId? What would the process path be?");
-                        return;
-                    }
-                    var sw = Stopwatch.StartNew();
-                    while (true) {
-                        avm = GetAppByProcessInfo(e);
-                        if (avm != null) {
-                            break;
-                        }
-                        await Task.Delay(100);
-                        MpDebug.Assert(sw.ElapsedMilliseconds < 10_000, $"Activating app error for process '{e}'");
-                    }
-                }
-                LastActiveAppViewModel = avm;
-            });
-
-        }
 
         private async Task<MpAvAppViewModel> AddOrSelectAppFromFileDialogAsync() {
             string appPath = await Mp.Services.NativePathDialog.ShowFileDialogAsync(

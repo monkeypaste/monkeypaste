@@ -71,14 +71,14 @@
             <Setter Property="Background"
                     Value="{DynamicResource ClipTileContentBackgroundBrush}" />
         </Style>
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor"
+        <!--<Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Background">
                 <Setter.Value>
                     <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalBgOpacity}" />
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
