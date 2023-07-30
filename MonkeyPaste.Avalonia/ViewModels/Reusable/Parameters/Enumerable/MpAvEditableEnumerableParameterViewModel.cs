@@ -33,6 +33,8 @@ namespace MonkeyPaste.Avalonia {
         public override MpCsvFormatProperties CsvProperties =>
             MpCsvFormatProperties.DefaultBase64Value;
 
+        public bool CanDeleteOrMoveValue =>
+            Items.Count > 1;
 
         #endregion
 
@@ -69,29 +71,9 @@ namespace MonkeyPaste.Avalonia {
             }
 
             foreach (var paramVal in current_values) {
-                //bool is_selected = current_values.Contains(paramVal.value);
                 var naipvvm = await CreateAnalyticItemParameterValueViewModel(Items.Count, string.Empty, paramVal);
                 Items.Add(naipvvm);
-                //while (naipvvm.IsBusy) { await Task.Delay(100); }
-                //if (is_selected) {
-                //    // in case of multiple entries, remove first
-                //    current_values.RemoveAt(current_values.IndexOf(paramVal.value));
-                //    //Selection.Select(Items.Count - 1);
-                //}
             }
-
-            // NOTE this secondary add is very editable lists where values wouldn't be found in parameter format..
-            // reverse selected values to retain order (valueIdx increment maybe unnecessary, don't remember why its necessary but this retains order)
-            //current_values.Reverse();
-            //foreach (var selectValueStr in current_values) {
-            //    // for new values add them to front of Items
-            //    Items.ForEach(x => x.ValueIdx++);
-            //    //for new values from preset add and select
-            //    var nsaipvvm = await CreateAnalyticItemParameterValueViewModel(0, selectValueStr, selectValueStr);
-            //    Items.Insert(0, nsaipvvm);
-            //    while (nsaipvvm.IsBusy) { await Task.Delay(100); }
-            //    //Selection.Select(0);
-            //}
             if (Selection.Count == 0 && Items.Count > 0) {
                 Selection.Select(0);
             }
@@ -116,6 +98,9 @@ namespace MonkeyPaste.Avalonia {
                     if (Parent is MpISaveOrCancelableViewModel socvm) {
                         socvm.OnPropertyChanged(nameof(socvm.CanSaveOrCancel));
                     }
+                    break;
+                case nameof(CanDeleteOrMoveValue):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.CanDeleteOrMove)));
                     break;
             }
         }
@@ -175,7 +160,9 @@ namespace MonkeyPaste.Avalonia {
 
                  HasModelChanged = true;
                  IsBusy = false;
-             }, (args) => Items.Count > 0);
+             }, (args) => {
+                 return Items.Count > 0 || args is not MpAvEnumerableParameterValueViewModel;
+             });
         #endregion
     }
 }

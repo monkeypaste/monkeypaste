@@ -24,7 +24,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Button x:Name="ClearButton"
-            Classes="defaultButton noBg noHoverBg"
+            Classes="defaultButton noBg noHoverBg noBorder"
             Command="{Binding ClearCommand, ElementName=ClearTextButton}"
             CommandParameter="{Binding ClearCommandParameter, ElementName=ClearTextButton}">
         <Grid x:Name="ClearTextContainerGrid"

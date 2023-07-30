@@ -1030,10 +1030,15 @@ namespace MonkeyPaste.Avalonia {
                                 // occurs when filtered out
                                 return;
                             }
+                            if(cmb.GetSelfAndVisualDescendants().OfType<Control>().All(x=>!x.IsFocused)) {
+                                // indirect change, shortcuts reset
+                                return;
+                            }
                             MpShortcutRoutingProfileType sel_type = (MpShortcutRoutingProfileType)cmb.SelectedIndex;
                             MpAvShortcutCollectionViewModel.Instance.UpdateRoutingProfileCommand.Execute(sel_type);
                         }
                         cmb.SelectionChanged += RoutingSelectionChanged;
+                        SetRoutingProfileType(MpAvShortcutCollectionViewModel.Instance.RoutingProfileType);
                     }
                 },
                 {
@@ -1167,6 +1172,8 @@ namespace MonkeyPaste.Avalonia {
                 MpAvUrlCollectionViewModel.Instance.FilteredItems.Any();
 
             IsTabButtonVisible3 = MpAvShortcutCollectionViewModel.Instance.FilteredItems.Any();
+
+            // TODO add filtering to help, for now it'll stick around
             IsTabButtonVisible4 = true;
 
             AddOrUpdateRecentFilterTextsAsync(FilterText).FireAndForgetSafeAsync();
@@ -1630,6 +1637,9 @@ namespace MonkeyPaste.Avalonia {
 
                             break;
                         }
+                    case MpRuntimePrefParamType.ResetShortcuts:
+                        MpAvShortcutCollectionViewModel.Instance.ResetAllShortcutsCommand.Execute(null);
+                        break;
                 }
             });
 

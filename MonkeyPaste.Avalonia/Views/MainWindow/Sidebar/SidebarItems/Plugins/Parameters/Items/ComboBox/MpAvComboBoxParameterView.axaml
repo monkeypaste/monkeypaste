@@ -23,7 +23,7 @@
                     Value="{Binding $self.Text, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Border Classes="paramBorder">
+    <Border Classes="paramBorder comboBoxBorder">
         <ToolTip.Tip>
             <local:MpAvToolTipView ToolTipText="{Binding ParameterTooltipText}" />
         </ToolTip.Tip>

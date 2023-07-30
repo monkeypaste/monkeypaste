@@ -46,8 +46,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ClearQueryCommand => new MpCommand(
             () => {
                 CurrentValue = string.Empty;
-            },
-            () => !string.IsNullOrEmpty(CurrentValue));
+            });
+
         public ICommand ShowQueryMenuCommand => new MpCommand<object>(
             (args) => {
                 if (args is not Control c) {

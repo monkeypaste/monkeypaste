@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool IS_PARALLEL_LOADING_ENABLED =>
-            false;
+            true;
 
         public int LoadedCount { get; set; } = 0;
 
@@ -159,6 +159,7 @@ namespace MonkeyPaste.Avalonia {
 
             CoreItems.AddRange(
                new List<MpAvLoaderItemViewModel>() {
+                    new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
                     new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
                     //new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger"),
@@ -191,7 +192,6 @@ namespace MonkeyPaste.Avalonia {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
-                        new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
                         //new MpLoaderItemViewModel(typeof(MpAppendNotificationViewModel)),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainView), "User Interface"),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel), "User Experience")

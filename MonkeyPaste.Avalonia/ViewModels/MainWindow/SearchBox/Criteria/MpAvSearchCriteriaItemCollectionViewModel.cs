@@ -538,7 +538,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsExpanded = true;
             }, () => {
-                return /*IsAdvSearchActive && */!IsExpanded && !IsCriteriaWindowOpen;
+                return IsAdvSearchActive && !IsExpanded && !IsCriteriaWindowOpen;
             });
 
         public ICommand OpenCriteriaWindowCommand => new MpCommand<object>(

@@ -52,6 +52,7 @@
         TogglePinned,
         OpenInWindow,
         ToggleAppendManualMode,
+        PermanentlyDelete,
         // CUT-OFF 
         MAX_APP_SHORTCUT,
         //remaining are data (not context) driven using commandId

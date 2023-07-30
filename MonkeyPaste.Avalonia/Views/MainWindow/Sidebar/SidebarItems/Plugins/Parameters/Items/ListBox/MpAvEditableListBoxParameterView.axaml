@@ -15,10 +15,11 @@
         <Thickness x:Key="ListBoxItemPadding">0,0,0,0</Thickness>
     </local:MpAvUserControl.Resources>
     <Border x:Name="ListBoxContainerBorder"
-            Classes="paramBorder">
+            Classes="paramBorder editableListBorder">
         <Grid RowDefinitions="Auto,Auto">
             <ListBox x:Name="EditableList"
                      Classes="paramValueListBox"
+                     Classes.showMoveDelete="{Binding CanDeleteOrMoveValue}"
                      IsVisible="{Binding Items, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                      Grid.Row="0"
                      Background="Transparent"
@@ -31,15 +32,61 @@
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      MaxWidth="{Binding Bounds.Width, ElementName=ListBoxContainerBorder}">
                 <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <local:MpAvContentQueryTextBoxView Background="Transparent"
-                                                           BorderBrush="{Binding BorderBrush, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
+                    <DataTemplate x:DataType="local:MpAvEnumerableParameterValueViewModel">
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel.Styles>
+                                <Style Selector="local|MpAvContentQueryTextBoxView Border.paramBorder">
+                                    <Setter Property="Margin"
+                                            Value="0" />
+                                    <Setter Property="HorizontalAlignment"
+                                            Value="Left" />
+                                </Style>
+                                <Style Selector="local|MpAvContentQueryTextBoxView Border.paramBorder">
+                                    <Setter Property="MaxWidth"
+                                            Value="210" />
+                                </Style>
+                                <Style Selector="local|MpAvContentQueryTextBoxView.canDelete Border.paramBorder">
+                                    <Setter Property="MaxWidth"
+                                            Value="190" />
+                                </Style>
+                            </StackPanel.Styles>
+                            <local:MpAvContentQueryTextBoxView Background="Transparent"
+                                                               Classes.canDelete="{Binding CanDeleteOrMove}"
+                                                               BorderBrush="{Binding BorderBrush, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
+                            <!--<StackPanel x:Name="MoveOrDeleteContainer"
+                                        IsVisible="{Binding CanDeleteOrMove}"
+                                        Grid.Column="1"
+                                        Margin="1,0,0,0"
+                                        Orientation="Horizontal"
+                                        Spacing="1">-->
+
+                            <!--<Button x:Name="MoveRowDragButton"
+                                        Classes="defaultButton"
+                                        IsVisible="False"
+                                        PointerPressed="MoveRowButton_PointerPressed"
+                                        Width="20"
+                                        Height="20"
+                                        Cursor="SizeNorthSouth">
+                                    <Image Source="{Binding Source={StaticResource LinesX2HorizImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                </Button>-->
+                            <Button x:Name="DeleteRowButton"
+                                    Classes="defaultButton"
+                                    IsVisible="{Binding CanDeleteOrMove}"
+                                    Grid.Column="1"
+                                    Margin="1,0,0,0"
+                                    Width="20"
+                                    Height="20"
+                                    Command="{Binding RemoveThisValueCommand}">
+                                <Image Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            </Button>
+                            <!--</StackPanel>-->
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
             <Button Grid.Row="1"
                     Classes="defaultButton"
-                    Margin="0,5,0,0"
+                    Margin="0,5,10,0"
                     HorizontalAlignment="Right"
                     Command="{Binding AddValueCommand}">
                 <DockPanel>

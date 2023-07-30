@@ -23,42 +23,7 @@
     </local:MpAvUserControl.Styles>
     <Border x:Name="QueryItemGridContainer"
             Classes="paramBorder">
-        <DockPanel>
-            <StackPanel DockPanel.Dock="Right"
-                        Orientation="Horizontal">
-                <!--  FILTER BUTTON  -->
-
-                <Button x:Name="FilterButton"
-                        Classes="defaultButton noBg noHoverBg noBorder"
-                        IsVisible="{Binding IsFieldButtonVisible}"
-                        HorizontalAlignment="Right"
-                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                        local:MpAvPointerCommandExtension.ButtonClickCommand="{Binding ShowQueryMenuCommand}"
-                        local:MpAvPointerCommandExtension.ButtonClickCommandParameter="{Binding $self}">
-                    <Image />
-                </Button>
-
-                <!--  CLEAR TEXT BUTTON  -->
-
-                <local:MpAvClearTextButton x:Name="ClearButton"
-                                           Grid.Column="0"
-                                           Classes="TextBoxButton square"
-                                           Height="20"
-                                           ClearCommand="{Binding ClearQueryCommand}"
-                                           ClearCommandParameter="{Binding .}"
-                                           HorizontalAlignment="Right"
-                                           VerticalAlignment="Center">
-                    <local:MpAvClearTextButton.IsVisible>
-                        <MultiBinding Converter="{x:Static BoolConverters.And}">
-                            <Binding Path="IsPointerOver"
-                                     ElementName="QueryItemGridContainer" />
-                            <Binding Path="Text"
-                                     ElementName="ContentQueryTextBox"
-                                     Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
-                        </MultiBinding>
-                    </local:MpAvClearTextButton.IsVisible>
-                </local:MpAvClearTextButton>
-            </StackPanel>
+        <Grid>
 
             <!--  TEXTBOX  -->
 
@@ -74,6 +39,38 @@
                      SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
                      Watermark="{Binding Watermark}"
                      Text="{Binding ContentQuery, Mode=TwoWay}" />
-        </DockPanel>
+
+            <StackPanel HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="0,5,0,0"
+                        Orientation="Horizontal">
+
+                <!--  CLEAR TEXT BUTTON  -->
+
+                <local:MpAvClearTextButton x:Name="ClearButton"
+                                           Grid.Column="0"
+                                           Classes="TextBoxButton square"
+                                           IsVisible="{Binding Text, ElementName=ContentQueryTextBox, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                           Height="20"
+                                           ClearCommand="{Binding ClearQueryCommand}"
+                                           ClearCommandParameter="{Binding .}"
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Center" />
+
+                <!--  FILTER BUTTON  -->
+
+                <Button x:Name="FilterButton"
+                        Margin="0,0,5,0"
+                        Classes="defaultButton noBg noHoverBg noBorder"
+                        IsVisible="{Binding IsFieldButtonVisible}"
+                        HorizontalAlignment="Right"
+                        local:MpAvPointerCommandExtension.IsEnabled="True"
+                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowQueryMenuCommand}"
+                        local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">
+                    <Image />
+                </Button>
+
+            </StackPanel>
+        </Grid>
     </Border>
 </local:MpAvUserControl>

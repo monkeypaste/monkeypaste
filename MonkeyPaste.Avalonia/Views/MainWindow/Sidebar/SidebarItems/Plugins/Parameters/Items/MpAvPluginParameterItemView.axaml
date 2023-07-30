@@ -133,7 +133,6 @@
 
                         <DataTemplate x:Key="TextBoxParameterTemplate"
                                       DataType="local:MpAvTextBoxParameterViewModel">
-                            <!--<local:MpAvTextBoxParameterView />-->
                             <local:MpAvContentQueryTextBoxView />
                         </DataTemplate>
 

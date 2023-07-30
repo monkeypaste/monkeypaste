@@ -429,7 +429,7 @@
             </RadioButton>
             <!--  Prefs Tab Button  -->
             <RadioButton Grid.Column="1"
-                         Classes.omitted="{Binding !IsTabButtonVisible0}"
+                         Classes.omitted="{Binding !IsTabButtonVisible1}"
                          Theme="{StaticResource SwitchlessRadioButton}"
                          Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[1], Mode=OneWay}"
@@ -442,7 +442,7 @@
             </RadioButton>
             <!--  Security Tab Button  -->
             <RadioButton Grid.Column="2"
-                         Classes.omitted="{Binding !IsTabButtonVisible0}"
+                         Classes.omitted="{Binding !IsTabButtonVisible2}"
                          Theme="{StaticResource SwitchlessRadioButton}"
                          Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[2], Mode=OneWay}"
@@ -455,7 +455,7 @@
             </RadioButton>
             <!--  Shortcuts tab button  -->
             <RadioButton Grid.Column="3"
-                         Classes.omitted="{Binding !IsTabButtonVisible0}"
+                         Classes.omitted="{Binding !IsTabButtonVisible3}"
                          Theme="{StaticResource SwitchlessRadioButton}"
                          Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[3], Mode=OneWay}"
@@ -468,7 +468,7 @@
             </RadioButton>
             <!--  Help tab Button  -->
             <RadioButton Grid.Column="4"
-                         Classes.omitted="{Binding !IsTabButtonVisible0}"
+                         Classes.omitted="{Binding !IsTabButtonVisible4}"
                          Theme="{StaticResource SwitchlessRadioButton}"
                          Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"

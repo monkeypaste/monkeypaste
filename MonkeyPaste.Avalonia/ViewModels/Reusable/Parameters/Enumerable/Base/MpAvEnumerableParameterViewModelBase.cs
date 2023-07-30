@@ -118,7 +118,6 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
 
 
-
         #endregion
     }
 }

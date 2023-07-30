@@ -1055,6 +1055,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                  new string[] {"5143ed80-a50a-41b9-9979-5e00c084560d", "Control+P", MpShortcutType.TogglePinned.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"755a4d0e-d26a-42cf-89a3-6c5710bd2e4c", "Control+O", MpShortcutType.OpenInWindow.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"728bfb06-1d96-441c-b710-efee383138be", "Control+G", MpShortcutType.ToggleAppendManualMode.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] { "2025c6eb-2e89-4fa7-a69b-37f0eb4c0281", "Control+Delete", MpShortcutType.PermanentlyDelete.ToString(), MpRoutingType.Internal.ToString()},
             };
 
             foreach (var defaultShortcut in defaultShortcutDefinitions) {

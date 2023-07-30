@@ -31,7 +31,7 @@
                 Value="{DynamicResource ThemeInteractiveBrush}" />
     </Style>
 
-    <Style Selector="TextBox.dnd">
+    <Style Selector="TextBox.dnd, :is(AutoCompleteBox).dnd">
         <Setter Property="local:MpAvDropExtension.IsEnabled"
                 Value="True" />
         <Setter Property="local:MpAvTextControlDragExtension.IsEnabled"

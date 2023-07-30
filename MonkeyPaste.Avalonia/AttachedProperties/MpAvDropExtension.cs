@@ -304,8 +304,12 @@ namespace MonkeyPaste.Avalonia {
             if (c is TextBox tb) {
                 return tb;
             }
+            //if (c is MpAvAutoCompleteBox acb &&
+            //    acb.TextBox is TextBox acb_tb) {
+            //    return acb_tb;
+            //}
             if (c is AutoCompleteBox acb &&
-                acb.FindNameScope().Find("PART_TextBox") is TextBox acb_tb) {
+                acb.GetVisualDescendant<TextBox>() is TextBox acb_tb) {
                 return acb_tb;
             }
             return c.GetVisualDescendant<TextBox>();

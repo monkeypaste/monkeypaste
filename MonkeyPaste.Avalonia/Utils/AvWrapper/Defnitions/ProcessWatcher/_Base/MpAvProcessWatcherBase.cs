@@ -150,18 +150,18 @@ namespace MonkeyPaste.Avalonia {
 
         protected virtual string GetProcessApplicationName(nint hWnd) {
             string process_path = GetProcessPath(hWnd);
+            string process_ext = Path.GetExtension(process_path);
             if (process_path.IsFile() &&
                 FileVersionInfo.GetVersionInfo(process_path) is FileVersionInfo fvi) {
 
                 if (!string.IsNullOrWhiteSpace(fvi.FileDescription)) {
-                    return fvi.FileDescription;
+                    return fvi.FileDescription.Replace(process_ext, string.Empty);
                 }
                 if (!string.IsNullOrWhiteSpace(fvi.ProductName)) {
-                    return fvi.ProductName;
+                    return fvi.ProductName.Replace(process_ext, string.Empty);
                 }
             }
-            string processPath = GetProcessPath(hWnd);
-            return Path.GetFileNameWithoutExtension(processPath);
+            return Path.GetFileNameWithoutExtension(process_path);
         }
 
 

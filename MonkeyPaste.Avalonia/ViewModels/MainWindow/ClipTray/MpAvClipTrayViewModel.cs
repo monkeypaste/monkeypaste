@@ -138,7 +138,8 @@ namespace MonkeyPaste.Avalonia {
                                 HasLeadingSeperator = true,
                                 Header = @"Permanently Delete",
                                 IconResourceKey = "TrashCanImage",
-                                Command = DeleteSelectedClipCommand
+                                Command = DeleteSelectedClipCommand,
+                                ShortcutArgs = new object[] { MpShortcutType.PermanentlyDelete },
                             },
                         }
                     };
@@ -199,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpMenuItemViewModel() {
                             HasLeadingSeperator = true,
-                            Header = @"Trash",
+                            Header = @"Delete",
                             AltNavIdx = 0,
                             IconResourceKey = "TrashCanImage",
                             Command = TrashSelectedClipCommand,
@@ -4099,6 +4100,20 @@ namespace MonkeyPaste.Avalonia {
                 bool can_delete =
                     SelectedItem != null &&
                     SelectedItem.IsTrashed;
+                if (!can_delete) {
+                    MpConsole.WriteLine("DeleteSelectedClipCommand CanExecute: " + can_delete);
+                    MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
+                }
+                return can_delete;
+            });
+
+        public ICommand PermanentlyDeleteSelectedClipFromShortcutCommand => new MpAsyncCommand(
+            async () => {
+                await DeleteItemByCopyItemIdAsync(SelectedItem.CopyItemId);
+            },
+            () => {
+                bool can_delete =
+                    SelectedItem != null;
                 if (!can_delete) {
                     MpConsole.WriteLine("DeleteSelectedClipCommand CanExecute: " + can_delete);
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));

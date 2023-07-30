@@ -120,6 +120,7 @@ namespace MonkeyPaste.Common {
         public const string INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT = "Mp Internal Search Criteria Item";
         public const string INTERNAL_TAG_ITEM_FORMAT = "Mp Internal Tag Tile Item";
         public const string INTERNAL_ACTION_ITEM_FORMAT = "Mp Internal Action Item";
+        public const string INTERNAL_PARAMETER_VALUE_FORMAT = "Mp Internal Parameter Value";
         public const string INTERNAL_PROCESS_INFO_FORMAT = "Mp Internal Process Info";
 
 
@@ -144,7 +145,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_DATA_OBJECT_FORMAT,
             INTERNAL_CONTENT_TYPE_FORMAT,
             INTERNAL_ACTION_ITEM_FORMAT,
-            INTERNAL_PROCESS_INFO_FORMAT
+            INTERNAL_PROCESS_INFO_FORMAT,
+            INTERNAL_PARAMETER_VALUE_FORMAT
         };
         #endregion
 

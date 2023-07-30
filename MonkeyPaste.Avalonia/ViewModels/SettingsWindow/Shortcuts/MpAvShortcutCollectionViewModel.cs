@@ -114,12 +114,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
         public ObservableCollection<MpAvShortcutViewModel> FilteredItems { get; private set; } = new ObservableCollection<MpAvShortcutViewModel>();
-        //public ObservableCollection<MpAvShortcutViewModel> FilteredItems =>
-        //    new ObservableCollection<MpAvShortcutViewModel>(
-        //        Items
-        //            .Where(x => (x as MpIFilterMatch)
-        //            .IsMatch(MpAvSettingsViewModel.Instance.FilterText)));
-
 
         public IEnumerable<MpAvShortcutViewModel> AvailableItems =>
             MpAvMainWindowViewModel.Instance.IsAnyAppWindowActive ?
@@ -307,6 +301,10 @@ namespace MonkeyPaste.Avalonia {
                         {
                             MpShortcutType.InvokeTrigger,
                             MpAvTriggerCollectionViewModel.Instance.InvokeActionCommand
+                        },
+                        {
+                            MpShortcutType.PermanentlyDelete,
+                            MpAvClipTrayViewModel.Instance.PermanentlyDeleteSelectedClipFromShortcutCommand
                         }
                     };
                 }
@@ -1439,7 +1437,8 @@ namespace MonkeyPaste.Avalonia {
                 await SetShortcutRoutingToProfileTypeAsync(srpt);
             });
 
-        public ICommand ResetAllShortcuts => new MpAsyncCommand(async () => {
+        public ICommand ResetAllShortcutsCommand => new MpAsyncCommand(async () => {
+            var drpt = MpPrefViewModel.Instance.InitialStartupRoutingProfileType;
             bool result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                 title: "Confirm",
                 message: "Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.",
@@ -1448,8 +1447,8 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             Items.Clear();
-            await MpDb.ResetShortcutsAsync(RoutingProfileType);
-            InitShortcutsAsync().FireAndForgetSafeAsync(this);
+            await MpDb.ResetShortcutsAsync(drpt);
+            await InitShortcutsAsync();
         });
 
         #endregion

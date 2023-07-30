@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Properties
+        #region Interfaces
 
         #region MpIContentQueryTextBoxViewModel Implementation
 
@@ -84,6 +85,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPopupMenuOpen { get; set; }
         #endregion
 
+        #endregion
+
+        #region Properties
+
         #region Appearance
 
         public string BackgroundBrush {
@@ -106,6 +111,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsDragAbove { get; set; }
+        public bool IsDragBelow { get; set; }
+
+        public bool CanDeleteOrMove =>
+            Parent is MpAvEditableEnumerableParameterViewModel &&
+            (Parent as MpAvEditableEnumerableParameterViewModel).CanDeleteOrMoveValue;
 
         public MpCsvFormatProperties CsvProperties =>
             Parent == null ? MpCsvFormatProperties.Default : Parent.CsvProperties;
@@ -242,6 +254,13 @@ namespace MonkeyPaste.Avalonia {
                 Value = Value.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
             });
 
+        public ICommand RemoveThisValueCommand => new MpCommand(
+            () => {
+                (Parent as MpAvEditableEnumerableParameterViewModel).RemoveValueCommand.Execute(this);
+            },
+            () => {
+                return Parent is MpAvEditableEnumerableParameterViewModel eepvm && eepvm.CanDeleteOrMoveValue;
+            });
         #endregion
     }
 }
