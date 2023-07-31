@@ -163,7 +163,7 @@ function isEditorFocused() {
 // #region Actions
 
 function updateEditorPlaceholderText() {
-	let plt = globals.IsLoaded ? 'Empty content...' : 'Place wait...';
+	let plt = 'Please wait...';// globals.IsLoaded ? 'Empty content...' : 'Please wait...';
 	setEditorPlaceholderText(plt);
 }
 function hideEditorScrollbars() {

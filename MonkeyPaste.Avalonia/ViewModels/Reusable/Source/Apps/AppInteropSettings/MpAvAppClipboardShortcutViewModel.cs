@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvPasteShortcutViewModel :
+    public class MpAvAppClipboardShortcutViewModel :
         MpViewModelBase<MpAvAppViewModel>,
         MpAvIKeyGestureViewModel {
 
@@ -29,73 +30,77 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool HasPasteShortcut =>
-            !string.IsNullOrEmpty(PasteCmdKeyString) && PasteShortcutId > 0;
+        public bool IsCopyShortcut { get; set; }
+        public bool HasShortcut =>
+            !string.IsNullOrEmpty(ShortcutCmdKeyString) && ClipboardShortcutsId > 0;
+
         #endregion
 
         #region Model
 
-        public int PasteShortcutId {
+        public string ShortcutCmdKeyString {
             get {
-                if (PasteShortcut == null) {
-                    return 0;
-                }
-                return PasteShortcut.Id;
-            }
-        }
-        public int AppId {
-            get {
-                if (PasteShortcut == null) {
-                    return 0;
-                }
-                return PasteShortcut.AppId;
-            }
-        }
-        public string PasteCmdKeyString {
-            get {
-                if (PasteShortcut == null) {
+                if (ClipboardShortcuts == null) {
                     return string.Empty;
                 }
-                return PasteShortcut.PasteCmdKeyString;
+                return IsCopyShortcut ?
+                    ClipboardShortcuts.CopyCmdKeyString :
+                    ClipboardShortcuts.PasteCmdKeyString;
             }
             set {
-                if (PasteCmdKeyString != value) {
-                    if (PasteShortcut == null) {
-                        PasteShortcut = new MpAppPasteShortcut() {
-                            Guid = System.Guid.NewGuid().ToString(),
-                            AppId = Parent == null ? 0 : Parent.AppId,
-                        };
+                if (ShortcutCmdKeyString != value) {
+                    if (IsCopyShortcut) {
+                        ClipboardShortcuts.CopyCmdKeyString = value;
+                    } else {
+                        ClipboardShortcuts.PasteCmdKeyString = value;
                     }
-                    PasteShortcut.PasteCmdKeyString = value;
+
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(PasteCmdKeyString));
+                    OnPropertyChanged(nameof(ShortcutCmdKeyString));
                 }
             }
         }
 
-        public MpAppPasteShortcut PasteShortcut { get; set; }
+        public int AppId {
+            get {
+                if (ClipboardShortcuts == null) {
+                    return 0;
+                }
+                return ClipboardShortcuts.AppId;
+            }
+        }
+        public int ClipboardShortcutsId {
+            get {
+                if (ClipboardShortcuts == null) {
+                    return 0;
+                }
+                return ClipboardShortcuts.Id;
+            }
+        }
+        public MpAppClipboardShortcuts ClipboardShortcuts { get; set; }
 
         #endregion
 
         #endregion
 
         #region Constructors
-        public MpAvPasteShortcutViewModel() : base(null) { }
+        public MpAvAppClipboardShortcutViewModel() : base(null) { }
 
-        public MpAvPasteShortcutViewModel(MpAvAppViewModel parent) : base(parent) {
+        public MpAvAppClipboardShortcutViewModel(MpAvAppViewModel parent, bool isCopyShortcut) : base(parent) {
             PropertyChanged += MpPasteShortcutViewModel_PropertyChanged;
+            IsCopyShortcut = isCopyShortcut;
         }
 
 
         #endregion
 
         #region Public Methods
-        public async Task InitializeAsync(MpAppPasteShortcut aps) {
+        public async Task InitializeAsync(MpAppClipboardShortcuts aps) {
             IsBusy = true;
 
             await Task.Delay(1);
-            PasteShortcut = aps;
-            if (aps == null) {
+            ClipboardShortcuts = aps;
+            if (ClipboardShortcuts == null) {
                 if (_keyGroups != null) {
                     _keyGroups.Clear();
                     _keyGroups = null;
@@ -105,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
                     _keyGroups = new ObservableCollection<MpAvShortcutKeyGroupViewModel>();
                 }
                 _keyGroups.Clear();
-                var kivml = aps.PasteCmdKeyString.ToKeyItems();
+                var kivml = ShortcutCmdKeyString.ToKeyItems();
                 foreach (var kivm in kivml) {
                     _keyGroups.Add(kivm);
                 }
@@ -121,8 +126,8 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             var result_tuple = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(
-                    shortcutName: $"Record paste shortcut for '{Parent.AppName}'",
-                    keys: PasteCmdKeyString,
+                    shortcutName: $"Record {(IsCopyShortcut ? "copy" : "paste")} shortcut for '{Parent.AppName}'",
+                    keys: ShortcutCmdKeyString,
                     curShortcutId: 0,
                     assignmentType: MpShortcutAssignmentType.AppPaste, Parent.IconId,
                     owner: MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == MpAvSettingsViewModel.Instance));
@@ -131,12 +136,11 @@ namespace MonkeyPaste.Avalonia {
                 // canceled
                 return false;
             }
-
-            PasteCmdKeyString = result_tuple.Item1;
+            ShortcutCmdKeyString = result_tuple.Item1;
             while (IsBusy) {
                 await Task.Delay(100);
             }
-            await InitializeAsync(PasteShortcut);
+            await InitializeAsync(ClipboardShortcuts);
             return true;
         }
         #endregion
@@ -151,13 +155,13 @@ namespace MonkeyPaste.Avalonia {
                         Dispatcher.UIThread.Post(async () => {
                             IsBusy = true;
 
-                            if (string.IsNullOrWhiteSpace(PasteCmdKeyString) ||
-                                PasteCmdKeyString.ToLower() == Mp.Services.PlatformShorcuts.PasteKeys.ToLower()) {
+                            if (string.IsNullOrWhiteSpace(ShortcutCmdKeyString) ||
+                                ShortcutCmdKeyString.ToLower() == Mp.Services.PlatformShorcuts.PasteKeys.ToLower()) {
                                 if (AppId > 0) {
-                                    await PasteShortcut.DeleteFromDatabaseAsync();
+                                    await ClipboardShortcuts.DeleteFromDatabaseAsync();
                                 }
                             } else {
-                                await PasteShortcut.WriteToDatabaseAsync();
+                                await ClipboardShortcuts.WriteToDatabaseAsync();
                             }
                             HasModelChanged = false;
                             IsBusy = false;
@@ -174,12 +178,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        //public ICommand AssignPasteShortcutCommand => new MpCommand(
+        //public ICommand AddOrUpdateAppClipboardShortcutCommand => new MpCommand(
         //    () => {
         //        ShowAssignDialogAsync().FireAndForgetSafeAsync(this);
         //    });
 
-        //public ICommand DeletePasteShortcutCommand => new MpAsyncCommand(
+        //public ICommand DeleteAppClipboardShortcutsCommand => new MpAsyncCommand(
         //    async () => {
         //        var result = await Mp.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
         //            title: $"Confirm",
@@ -193,4 +197,5 @@ namespace MonkeyPaste.Avalonia {
         //    });
         #endregion
     }
+
 }

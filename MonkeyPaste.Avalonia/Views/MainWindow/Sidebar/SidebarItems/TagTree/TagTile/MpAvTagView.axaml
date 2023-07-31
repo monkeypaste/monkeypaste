@@ -126,9 +126,6 @@
           local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
           local:MpAvPointerCommandExtension.DoubleLeftPressCommand="{Binding RenameTagCommand}"
           local:MpAvPointerCommandExtension.DoubleLeftPressCommandParameter="IsPressEvent"
-          local:MpAvPointerCommandExtension.IsHoldingEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
-          local:MpAvPointerCommandExtension.HoldingCommand="{Binding ShowContextMenuCommand}"
-          local:MpAvPointerCommandExtension.HoldingCommandParameter="{Binding $self}"
           Cursor="Hand"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
@@ -156,135 +153,120 @@
                                      Duration="0:0:0.3" />
                 </Transitions>
             </Border.Transitions>
-            <StackPanel Orientation="Horizontal">
-                <Grid VerticalAlignment="Stretch">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <!--  Tag Count Box  -->
-                    <Border x:Name="TagCountContainer"
-                            CornerRadius="5"
-                            Grid.Column="0"
-                            MinWidth="{Binding $self.Bounds.Height}"
-                            MinHeight="20"
-                            Margin="1"
-                            Padding="4,1"
-                            BorderThickness="1.5"
-                            BorderBrush="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
-                            Background="{Binding TagHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
-                        <Grid x:Name="CountContainer">
-                            <TextBlock x:Name="TagCountTextBlock"
-                                       Background="Transparent"
-                                       VerticalAlignment="Stretch"
-                                       HorizontalAlignment="Center"
-                                       TextAlignment="Center"
-                                       Text="{Binding TagClipCount, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
-                                       Foreground="{Binding $parent[Border].BorderBrush}">
-                                <TextBlock.IsVisible>
-                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                        <Binding Path="TagClipCount"
-                                                 Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
-                                                 ConverterParameter="allowzero" />
-                                        <Binding Path="!IsVisible"
-                                                 ElementName="TagCountBusySpinner" />
 
-                                        <Binding Path="!IsVisible"
-                                                 ElementName="TagCountProgressSpinner" />
-                                    </MultiBinding>
-
-                                </TextBlock.IsVisible>
-                            </TextBlock>
-                            <Image x:Name="PseudoTagPlaceholderImage"
-                                   Classes="square"
-                                   Classes.isgroup="{Binding IsGroupTag}"
-                                   Classes.isquery="{Binding IsQueryTag}"
-                                   Classes.istrash="{Binding IsTrashTag}"
-                                   HorizontalAlignment="Stretch"
+            <Grid VerticalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!--  Tag Count Box  -->
+                <Border x:Name="TagCountContainer"
+                        CornerRadius="5"
+                        Grid.Column="0"
+                        MinWidth="{Binding $self.Bounds.Height}"
+                        MinHeight="20"
+                        Margin="1"
+                        Padding="4,1"
+                        BorderThickness="1.5"
+                        BorderBrush="{Binding $self.Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                        Background="{Binding TagHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
+                    <Grid x:Name="CountContainer">
+                        <TextBlock x:Name="TagCountTextBlock"
+                                   Background="Transparent"
                                    VerticalAlignment="Stretch"
-                                   Stretch="UniformToFill"
-                                   Margin="1">
-                                <Image.IsVisible>
-                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                        <Binding Path="!IsVisible"
-                                                 ElementName="TagCountTextBlock" />
-                                        <Binding Path="!IsVisible"
-                                                 ElementName="TagCountBusySpinner" />
-                                        <Binding Path="!IsVisible"
-                                                 ElementName="TagCountProgressSpinner" />
-                                    </MultiBinding>
-                                </Image.IsVisible>
-                            </Image>
-                            <local:MpAvBusySpinnerView x:Name="TagCountBusySpinner"
-                                                       HorizontalAlignment="Stretch"
-                                                       VerticalAlignment="Stretch"
-                                                       Foreground="{Binding Background, ElementName=TagCountContainer, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
-                                                       Cursor="Wait">
-                                <local:MpAvBusySpinnerView.IsVisible>
-                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                        <!--<Binding Path="IsSelected" />-->
-                                        <Binding Path="IsActiveTag" />
-                                        <Binding Path="IsBusy"
-                                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
-                                        <Binding Path="!IsSubQuerying"
-                                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
-                                        <Binding Path="!IsVisible"
-                                                 ElementName="TagCountProgressSpinner" />
-                                    </MultiBinding>
-                                </local:MpAvBusySpinnerView.IsVisible>
-                            </local:MpAvBusySpinnerView>
-                            <local:MpAvProgressSpinner x:Name="TagCountProgressSpinner"
-                                                       HorizontalAlignment="Stretch"
-                                                       VerticalAlignment="Stretch"
-                                                       ArcWidth="1"
-                                                       PercentBrush="{DynamicResource ThemeAccent3Color}"
-                                                       RingBrush="{DynamicResource ThemeAccent2Color}"
-                                                       LabelBrush="Transparent"
-                                                       IsVisible="{Binding TotalAnalysisCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                                       Percent="{Binding PercentLoaded}" />
-                        </Grid>
-                    </Border>
-                    <!--  Tag Name TextBox/ Marquee  -->
-                    <local:MpAvMarqueeTextBox x:Name="TagNameTextBox"
-                                              Grid.Column="1"
-                                              FocusAdorner="{x:Null}"
-                                              HorizontalAlignment="Stretch"
-                                              VerticalAlignment="Center"
-                                              HorizontalContentAlignment="Left"
-                                              VerticalContentAlignment="Center"
-                                              Margin="5,0,0,0"
-                                              FontSize="16"
-                                              Padding="0"
-                                              MaxWidth="110"
-                                              EditOnFocus="False"
-                                              FocusOnDisableReadOnly="True"
-                                              EnableReadOnlyOnLostFocus="False"
-                                              SelectViewModelOnFocus="False"
-                                              Cursor="{Binding IsTagNameReadOnly, ConverterParameter=Hand|IBeam, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}}"
-                                              CancelEditCommand="{Binding CancelRenameTagCommand}"
-                                              BeginEditCommand="{Binding FinishRenameTagCommand}"
-                                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                              IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
-                                              ReadOnlyBackground="Transparent"
-                                              ReadOnlyForeground="{Binding TagTextHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
-                                              Text="{Binding TagName, Mode=TwoWay}" />
-                </Grid>
-                <local:MpAvOptionsButton x:Name="MobileContextOptionButton"
-                                         VerticalAlignment="Stretch"
-                                         Margin="3,0"
-                                         local:MpAvMenuExtension.IsEnabled="True"
-                                         Command="{Binding ShowContextMenuCommand}"
-                                         CommandParameter="{Binding $self}">
-                    <local:MpAvOptionsButton.IsVisible>
-                        <MultiBinding Converter="{x:Static BoolConverters.And}">
-                            <Binding Path="IsSelected" />
-                            <Binding Path="!IsDesktop"
-                                     Source="{x:Static local:MpAvThemeViewModel.Instance}" />
-                        </MultiBinding>
-                    </local:MpAvOptionsButton.IsVisible>
-                </local:MpAvOptionsButton>
-            </StackPanel>
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Text="{Binding TagClipCount, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
+                                   Foreground="{Binding $parent[Border].BorderBrush}">
+                            <TextBlock.IsVisible>
+                                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                    <Binding Path="TagClipCount"
+                                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
+                                             ConverterParameter="allowzero" />
+                                    <Binding Path="!IsVisible"
+                                             ElementName="TagCountBusySpinner" />
+
+                                    <Binding Path="!IsVisible"
+                                             ElementName="TagCountProgressSpinner" />
+                                </MultiBinding>
+
+                            </TextBlock.IsVisible>
+                        </TextBlock>
+                        <Image x:Name="PseudoTagPlaceholderImage"
+                               Classes="square"
+                               Classes.isgroup="{Binding IsGroupTag}"
+                               Classes.isquery="{Binding IsQueryTag}"
+                               Classes.istrash="{Binding IsTrashTag}"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch"
+                               Stretch="UniformToFill"
+                               Margin="1">
+                            <Image.IsVisible>
+                                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                    <Binding Path="!IsVisible"
+                                             ElementName="TagCountTextBlock" />
+                                    <Binding Path="!IsVisible"
+                                             ElementName="TagCountBusySpinner" />
+                                    <Binding Path="!IsVisible"
+                                             ElementName="TagCountProgressSpinner" />
+                                </MultiBinding>
+                            </Image.IsVisible>
+                        </Image>
+                        <local:MpAvBusySpinnerView x:Name="TagCountBusySpinner"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch"
+                                                   Foreground="{Binding Background, ElementName=TagCountContainer, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
+                                                   Cursor="Wait">
+                            <local:MpAvBusySpinnerView.IsVisible>
+                                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                    <!--<Binding Path="IsSelected" />-->
+                                    <Binding Path="IsActiveTag" />
+                                    <Binding Path="IsBusy"
+                                             Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                                    <Binding Path="!IsSubQuerying"
+                                             Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                                    <Binding Path="!IsVisible"
+                                             ElementName="TagCountProgressSpinner" />
+                                </MultiBinding>
+                            </local:MpAvBusySpinnerView.IsVisible>
+                        </local:MpAvBusySpinnerView>
+                        <local:MpAvProgressSpinner x:Name="TagCountProgressSpinner"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch"
+                                                   ArcWidth="1"
+                                                   PercentBrush="{DynamicResource ThemeAccent3Color}"
+                                                   RingBrush="{DynamicResource ThemeAccent2Color}"
+                                                   LabelBrush="Transparent"
+                                                   IsVisible="{Binding TotalAnalysisCount, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                   Percent="{Binding PercentLoaded}" />
+                    </Grid>
+                </Border>
+                <!--  Tag Name TextBox/ Marquee  -->
+                <local:MpAvMarqueeTextBox x:Name="TagNameTextBox"
+                                          Grid.Column="1"
+                                          FocusAdorner="{x:Null}"
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Center"
+                                          HorizontalContentAlignment="Left"
+                                          VerticalContentAlignment="Center"
+                                          Margin="5,0,0,0"
+                                          FontSize="16"
+                                          Padding="0"
+                                          MaxWidth="110"
+                                          EditOnFocus="False"
+                                          FocusOnDisableReadOnly="True"
+                                          EnableReadOnlyOnLostFocus="False"
+                                          SelectViewModelOnFocus="False"
+                                          Cursor="{Binding IsTagNameReadOnly, ConverterParameter=Hand|IBeam, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}}"
+                                          CancelEditCommand="{Binding CancelRenameTagCommand}"
+                                          BeginEditCommand="{Binding FinishRenameTagCommand}"
+                                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                          IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
+                                          ReadOnlyBackground="Transparent"
+                                          ReadOnlyForeground="{Binding TagTextHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                                          Text="{Binding TagName, Mode=TwoWay}" />
+            </Grid>
         </Border>
 
         <!--  BADGE COUNT  -->

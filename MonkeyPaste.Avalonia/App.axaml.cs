@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         public const string RESET_DATA_ARG = "resetdata";
         public const string BACKUP_DATA_ARG = "backupdata";
         public const string MULTI_TOUCH_ARG = "multitouch";
-        public const string LOGIN_LOAD_ARG = "autologin";
+        public const string LOGIN_LOAD_ARG = "loginload";
 
         #endregion
 
@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
 
 
             ReportCommandLineArgs(Args);
-            bool is_login_load = true;// HasStartupArg(LOGIN_LOAD_ARG);
+            bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
                 desktop.Startup += Startup;

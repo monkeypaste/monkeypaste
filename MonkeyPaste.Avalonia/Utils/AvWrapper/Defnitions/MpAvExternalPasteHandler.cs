@@ -58,8 +58,8 @@ namespace MonkeyPaste.Avalonia {
                 MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(processInfo);
             //MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == processInfo.ProcessPath.ToLower() && x.PasteShortcutViewModel != null);
 
-            if (custom_paste_app_vm != null && custom_paste_app_vm.PasteShortcutViewModel.HasPasteShortcut) {
-                pasteCmd = custom_paste_app_vm.PasteShortcutViewModel.PasteCmdKeyString;
+            if (custom_paste_app_vm != null && custom_paste_app_vm.PasteShortcutViewModel.HasShortcut) {
+                pasteCmd = custom_paste_app_vm.PasteShortcutViewModel.ShortcutCmdKeyString;
             }
 
             bool success = await PasteDataObjectAsync_internal_async(mpdo, pasteToHandle, pasteCmd, fromKeyboard);

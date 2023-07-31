@@ -9,7 +9,6 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using CefNet.Avalonia;
-using MonkeyPaste;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -21,17 +20,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
-public interface MpIHighlightTextRangesInfoViewModel : MpIViewModel {
-    ObservableCollection<MpTextRange> HighlightRanges { get; }
-    int ActiveHighlightIdx { get; set; }
-}
-
 
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpIConditionalSelectableViewModel,
         MpICloseWindowViewModel,
+        MpIDraggableViewModel,
         MpILocatorItem,
         MpIAsyncCollectionObject,
         MpIHighlightTextRangesInfoViewModel,
@@ -73,6 +68,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpIDraggableViewModel Implementation
+        bool MpIDraggableViewModel.IsDragging {
+            get => IsTileDragging;
+            set => IsTileDragging = value;
+        }
+
+        #endregion
         #region MpIDbModelId Implementation
         int MpILocatorItem.LocationId =>
             IsPinPlaceholder ? PinPlaceholderCopyItemId : CopyItemId;

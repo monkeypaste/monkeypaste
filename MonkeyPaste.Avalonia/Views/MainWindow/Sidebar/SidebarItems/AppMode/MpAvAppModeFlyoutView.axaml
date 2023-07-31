@@ -77,26 +77,8 @@
                       IsChecked="{Binding IsAutoCopyMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleAutoCopyModeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView>
-                    <local:MpAvToolTipView.ToolTipText>
-                        <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>Auto Copy - [</sys:String>
-                                </Binding.Source>
-                            </Binding>
-                            <Binding Path=""
-                                     Converter="{x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}"
-                                     ConverterParameter="ToggleAutoCopyMode" />
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>]</sys:String>
-                                </Binding.Source>
-                            </Binding>
-
-                        </MultiBinding>
-                    </local:MpAvToolTipView.ToolTipText>
-                </local:MpAvToolTipView>
+                <local:MpAvToolTipView ToolTipText="Toggle Auto Copy Mode - Auto Copy Mode will trigger a copy command every time the mouse is released. (To add a custom copy command goto 'Settings->Shortcuts->Custom Clipboard Commands')"
+                                       InputGestureText="{Binding ., ConverterParameter=ToggleAutoCopyMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource MouseLeftClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>
@@ -109,27 +91,8 @@
                       IsChecked="{Binding IsRightClickPasteMode, Source={x:Static local:MpAvClipTrayViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleRightClickPasteCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}">
             <ToolTip.Tip>
-                <!--<local:MpAvToolTipView ToolTipText="Right Click Paste =  [add detail here]" />-->
-                <local:MpAvToolTipView>
-                    <local:MpAvToolTipView.ToolTipText>
-                        <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>Right Click Paste = [</sys:String>
-                                </Binding.Source>
-                            </Binding>
-                            <Binding Path=""
-                                     Converter="{x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}"
-                                     ConverterParameter="ToggleRightClickPasteMode" />
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>]</sys:String>
-                                </Binding.Source>
-                            </Binding>
-
-                        </MultiBinding>
-                    </local:MpAvToolTipView.ToolTipText>
-                </local:MpAvToolTipView>
+                <local:MpAvToolTipView ToolTipText="Toggle Right Click Paste Mode - Right Click Paste Mode will SUPPRESS (not available on linux) right mouse click and issue a paste command to the active application. (To add a custom paste command goto 'Settings->Shortcuts->Custom Clipboard Commands')"
+                                       InputGestureText="{Binding ., ConverterParameter=ToggleRightClickPasteMode, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource MouseRightClickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>

@@ -198,18 +198,18 @@ namespace MonkeyPaste {
 
         #endregion MpAppInteropSetting
 
-        #region MpAppPasteShortcut
+        #region MpAppClipboardShortcuts
 
-        public static async Task<MpAppPasteShortcut> GetAppPasteShortcutAsync(int appId) {
-            string query = $"select * from MpAppPasteShortcut where fk_MpAppId=?";
-            var result = await MpDb.QueryAsync<MpAppPasteShortcut>(query, appId);
+        public static async Task<MpAppClipboardShortcuts> GetAppClipboardShortcutsAsync(int appId) {
+            string query = $"select * from MpAppClipboardShortcuts where fk_MpAppId=?";
+            var result = await MpDb.QueryAsync<MpAppClipboardShortcuts>(query, appId);
             if (result == null || result.Count == 0) {
                 return null;
             }
             return result[0];
         }
 
-        #endregion MpAppPasteShortcut
+        #endregion MpAppClipboardShortcuts
 
         #region MpUrl
 

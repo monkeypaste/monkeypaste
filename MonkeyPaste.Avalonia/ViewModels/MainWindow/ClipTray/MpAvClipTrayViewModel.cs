@@ -2359,10 +2359,14 @@ namespace MonkeyPaste.Avalonia {
                 // TODO? add plain text paste toolbar? (tip of an iceburg)
                 return;
             }
-            CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
-                pasteButtonTooltipText = string.IsNullOrEmpty(e.ApplicationName) ? e.MainWindowTitle : e.ApplicationName,
-                pasteButtonIconBase64 = e.MainWindowIconBase64
-            };
+            if (e != null) {
+                CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
+                    pasteButtonTooltipText = string.IsNullOrEmpty(e.ApplicationName) ? e.MainWindowTitle : e.ApplicationName,
+                    pasteButtonIconBase64 = e.MainWindowIconBase64
+                };
+            } else {
+                CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage();
+            }
 
             string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeJsonObjectToBase64()}')";
 
@@ -4247,16 +4251,10 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                var preset = await MpDataModelProvider.GetItemAsync<MpPluginPreset>(presetId);
-                var analyticItemVm =
-                    MpAvAnalyticItemCollectionViewModel.Instance
-                    .Items.FirstOrDefault(x => x.PluginGuid == preset.PluginGuid);
-                int selected_ciid = SelectedItem.CopyItemId;
-                var presetVm = analyticItemVm.Items.FirstOrDefault(x => x.Preset.Id == preset.Id);
-
-                analyticItemVm.SelectPresetCommand.Execute(presetVm);
-                if (analyticItemVm.ExecuteAnalysisCommand.CanExecute(null)) {
-                    analyticItemVm.ExecuteAnalysisCommand.Execute(null);
+                if (MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.Items.Any(x => x.AnalyticItemPresetId == presetId))
+                    is MpAvAnalyticItemViewModel aivm &&
+                    aivm.Items.FirstOrDefault(x => x.AnalyticItemPresetId == presetId) is MpAvAnalyticItemPresetViewModel aipvm) {
+                    await aivm.ExecuteAnalysisCommand.ExecuteAsync(aipvm);
                 }
             });
 

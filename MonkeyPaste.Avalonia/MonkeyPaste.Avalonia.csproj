@@ -1512,6 +1512,7 @@
     <PackageReference Include="System.Management" Version="7.0.2" />
     <PackageReference Include="NetCoreAudio" Version="1.7.0" />
     <PackageReference Include="System.Speech" Version="7.0.0" />
+    <PackageReference Include="TaskScheduler" Version="2.10.1" />
     <!--<PackageReference Include="WebViewControl-Avalonia" Version="2.106.11" />-->
   </ItemGroup>
 
@@ -1522,6 +1523,7 @@
 
   <ItemGroup>
     <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.uwp.cs" />    
   </ItemGroup>
   <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
@@ -1547,6 +1549,7 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
     
     <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.uwp.cs" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'BROWSER'">

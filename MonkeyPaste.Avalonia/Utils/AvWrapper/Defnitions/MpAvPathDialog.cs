@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
             if (storage_provider == null) {
                 return null;
             }
-            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+            //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
             IStorageFolder start_location = await GetInitFolderAsync(initDir);
             IReadOnlyList<IStorageItem> result;
             if (isFolder) {
@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
                            SuggestedStartLocation = start_location
                        });
             }
-            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
+            //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
 
             if (result.FirstOrDefault() is IStorageItem si &&
                 si.TryGetLocalPath() is string path) {

@@ -117,13 +117,15 @@
                    HorizontalAlignment="Center">
             <!--  HEADER ICON  -->
             <Border DockPanel.Dock="Left"
+                    Classes="squareByWidth"
                     IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                     CornerRadius="10"
                     Margin="3"
-                    BorderThickness="3"
+                    BorderThickness="0"
                     BorderBrush="White">
                 <Image Height="20"
                        Width="20"
+                       Stretch="Uniform"
                        Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Border>
             <!--  HEADER TITLE  -->

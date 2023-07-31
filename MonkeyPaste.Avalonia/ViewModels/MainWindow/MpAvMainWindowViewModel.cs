@@ -416,12 +416,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsMainWindowVisible { get; set; }
         public bool IsMainWindowLoading { get; set; } = true;
 
-        public bool HideInitialOpen =>
-            Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Login);
-
-        public bool ShowLoadCompleteNtf =>
-            HideInitialOpen;
-
         public bool IsMainWindowInHiddenLoadState { get; private set; }
 
         private bool _isMainWindowLocked;
@@ -785,19 +779,19 @@ namespace MonkeyPaste.Avalonia {
                 MpPrefViewModel.Instance.ShowInTaskbar) {
                 w.WindowState = WindowState.Normal;
             }
-            if (HideInitialOpen) {
-                // app started from login, initial show is transparent/nohtt
-                // shows splash loader and loaded msg by default but user can hide
-                if (IsMainWindowInitiallyOpening) {
-                    MpAvToolWindow_Win32.SetAsNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
-                    MpAvWindowManager.MainWindow.Opacity = 0;
-                    IsMainWindowInHiddenLoadState = true;
-                } else if (IsMainWindowInHiddenLoadState) {
-                    MpAvToolWindow_Win32.RemoveNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
-                    MpAvWindowManager.MainWindow.Opacity = 1;
-                    IsMainWindowInHiddenLoadState = false;
-                }
+            //if (HideInitialOpen) {
+            // app started from login, initial show is transparent/nohtt
+            // shows splash loader and loaded msg by default but user can hide
+            if (IsMainWindowInitiallyOpening) {
+                MpAvToolWindow_Win32.SetAsNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
+                MpAvWindowManager.MainWindow.Opacity = 0;
+                IsMainWindowInHiddenLoadState = true;
+            } else if (IsMainWindowInHiddenLoadState) {
+                MpAvToolWindow_Win32.RemoveNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
+                MpAvWindowManager.MainWindow.Opacity = 1;
+                IsMainWindowInHiddenLoadState = false;
             }
+            //}
             DispatcherPriority show_priority =
                 IsMainWindowInHiddenLoadState ?
                     DispatcherPriority.Background : DispatcherPriority.Normal;
@@ -1058,10 +1052,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task FinishMainWindowLoadAsync() {
-            if (!HideInitialOpen) {
-                return;
-            }
-
             // wait for mw to come into view..
             while (IsMainWindowInitiallyOpening) {
                 await Task.Delay(100);
@@ -1077,7 +1067,8 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPlainHtmlConverter.Instance
             };
             while (true) {
-                if (wait_vml.Any(x => x.IsAnyBusy)) {
+                if (wait_vml.Any(x => x.IsAnyBusy) ||
+                    MpAvClipTrayViewModel.Instance.IsAddingClipboardItem) {
                     await Task.Delay(100);
                     continue;
                 }
@@ -1093,26 +1084,32 @@ namespace MonkeyPaste.Avalonia {
                     Source = MpPrefViewModel.Instance,
                     Path = nameof(MpPrefViewModel.Instance.ShowInTaskbar)
                 });
-
+            bool was_loader_visible = false;
             if (MpAvWindowManager.AllWindows.FirstOrDefault(x => x is MpAvLoaderNotificationWindow) is MpAvLoaderNotificationWindow lnw &&
                 lnw.DataContext is MpAvNotificationViewModelBase nvm) {
                 // only show loaded msg if progress wasn't there
-                bool show_loaded_msg = !lnw.IsVisible;
+                was_loader_visible = lnw.IsVisible;
                 nvm.HideNotification();
-                if (!show_loaded_msg) {
-                    return;
-                }
             }
             // wait a bit to avoid laggy animation due to hide mw handlers
             await Task.Delay(1_000);
 
             MpMessenger.SendGlobal(MpMessageType.StartupComplete);
+            MpAvLoaderViewModel.LoaderStopWatch.Stop();
+            MpConsole.WriteLine($"Startup complete. Total Time {MpAvLoaderViewModel.LoaderStopWatch.ElapsedMilliseconds}ms");
 
-            Mp.Services.NotificationBuilder.ShowMessageAsync(
+            if (!was_loader_visible) {
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
                 title: "Loaded",
                 body: $"Monkey Paste is now loaded. \nClipboard listening is: {(MpAvClipTrayViewModel.Instance.IsAppPaused ? "Paused" : "Active")}",
                 msgType: MpNotificationType.StartupComplete,
                 iconSourceObj: "AppImage").FireAndForgetSafeAsync();
+            }
+            bool was_login_load = Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Login);
+            if (!was_login_load) {
+                ShowMainWindowCommand.Execute(null);
+            }
+
         }
         #endregion
 

@@ -14,13 +14,13 @@ namespace MonkeyPaste.Avalonia {
         MpIStartupState,
         MpIProgressLoaderViewModel {
         #region Private Variables
-        private Stopwatch _sw;
         #endregion
 
         #region Constants
         #endregion
 
         #region Statics
+        public static Stopwatch LoaderStopWatch;
         #endregion
 
         #region Interfaces
@@ -84,6 +84,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvLoaderViewModel(bool wasStartedAtLogin) {
+            LoaderStopWatch = Stopwatch.StartNew();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             StartupFlags |= wasStartedAtLogin ? MpStartupFlags.Login : MpStartupFlags.UserInvoked;
             PropertyChanged += MpAvLoaderViewModel_PropertyChanged;
@@ -117,7 +118,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task InitAsync() {
-            _sw = Stopwatch.StartNew();
 
             await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification();
 
@@ -142,10 +142,8 @@ namespace MonkeyPaste.Avalonia {
 
                 if (Mp.Services.PlatformInfo.IsDesktop) {
                     App.MainView.Show();
-                    MpAvSystemTray.Init();
                 }
                 IsPlatformLoaded = true;
-                _sw.Stop();
             }, DispatcherPriority.Background);
         }
         #endregion
@@ -154,12 +152,15 @@ namespace MonkeyPaste.Avalonia {
 
         private void CreateLoaderItems() {
 #if DESKTOP
-            BaseItems.Add(new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"));
+            BaseItems.AddRange(new[] {
+                new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"),
+                new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), "System Tray"),
+            }.ToList());
 #endif
 
             CoreItems.AddRange(
                new List<MpAvLoaderItemViewModel>() {
-                    new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
+                    //new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
                     new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
                     //new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger"),
@@ -193,6 +194,7 @@ namespace MonkeyPaste.Avalonia {
                 PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
                         //new MpLoaderItemViewModel(typeof(MpAppendNotificationViewModel)),
+                        new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainView), "User Interface"),
                         new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel), "User Experience")
                    });

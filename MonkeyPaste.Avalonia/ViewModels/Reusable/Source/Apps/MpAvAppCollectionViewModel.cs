@@ -30,23 +30,12 @@ namespace MonkeyPaste.Avalonia {
             Items
             .Where(x => (x as MpIFilterMatch).IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText));
 
-        public IEnumerable<MpAvAppViewModel> CustomPasteItems =>
+        public IEnumerable<MpAvAppViewModel> CustomClipboardItems =>
             FilteredItems
-            .Where(x => x.PasteShortcutViewModel.HasPasteShortcut);
+            .Where(x => x.HasAnyShortcut);
 
         public MpAvAppViewModel ThisAppViewModel =>
             Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);
-
-        //private MpAvAppViewModel _lastActiveAppViewModel;
-        //public MpAvAppViewModel LastActiveAppViewModel {
-        //    get => _lastActiveAppViewModel == null ? ThisAppViewModel : _lastActiveAppViewModel;
-        //    private set {
-        //        if (LastActiveAppViewModel != value) {
-        //            _lastActiveAppViewModel = value;
-        //            OnPropertyChanged(nameof(LastActiveAppViewModel));
-        //        }
-        //    }
-        //}
 
         public MpAvAppViewModel SelectedItem { get; set; }
         #endregion
@@ -160,19 +149,19 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
                     MpConsole.WriteLine($"App w/ id: '{a.Id}' added to collection.");
                 });
-            } else if (e is MpAppPasteShortcut apsc &&
+            } else if (e is MpAppClipboardShortcuts apsc &&
                 Items.FirstOrDefault(x => x.AppId == apsc.AppId) is MpAvAppViewModel avm) {
                 Dispatcher.UIThread.Post(() => {
-                    OnPropertyChanged(nameof(CustomPasteItems));
+                    OnPropertyChanged(nameof(CustomClipboardItems));
                 });
             }
         }
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpAppPasteShortcut apsc &&
+            if (e is MpAppClipboardShortcuts apsc &&
                 Items.FirstOrDefault(x => x.AppId == apsc.AppId) is MpAvAppViewModel avm) {
                 Dispatcher.UIThread.Post(() => {
-                    OnPropertyChanged(nameof(CustomPasteItems));
+                    OnPropertyChanged(nameof(CustomClipboardItems));
                 });
             }
         }
@@ -182,10 +171,10 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(() => {
                     Items.Remove(avm);
                 });
-            } else if (e is MpAppPasteShortcut apsc &&
+            } else if (e is MpAppClipboardShortcuts apsc &&
                 Items.FirstOrDefault(x => x.AppId == apsc.AppId) is MpAvAppViewModel shortcut_avm) {
                 Dispatcher.UIThread.Post(() => {
-                    OnPropertyChanged(nameof(CustomPasteItems));
+                    OnPropertyChanged(nameof(CustomClipboardItems));
                 });
             }
         }
@@ -204,7 +193,7 @@ namespace MonkeyPaste.Avalonia {
                 //case nameof(LastActiveAppViewModel):
                 //    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveProcess)));
                 //    break;
-                case nameof(CustomPasteItems):
+                case nameof(CustomClipboardItems):
                     MpAvDataGridRefreshExtension.RefreshDataGrid(this);
                     break;
             }
@@ -212,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(FilteredItems));
-            OnPropertyChanged(nameof(CustomPasteItems));
+            OnPropertyChanged(nameof(CustomClipboardItems));
 
 
             ValidateAppViewModels();
@@ -314,23 +303,14 @@ namespace MonkeyPaste.Avalonia {
                 SelectAppCommand.Execute(avm);
             });
 
-        public ICommand AddAppWithAssignPasteShortcutCommand => new MpAsyncCommand(
+        public ICommand AddAppWithAssignClipboardShortcutCommand => new MpAsyncCommand(
             async () => {
                 var avm = await AddOrSelectAppFromFileDialogAsync();
                 if (avm == null) {
                     // canceled app chooser dialg
                     return;
                 }
-                SelectAppCommand.Execute(avm);
-
-                var assign_result = await avm.PasteShortcutViewModel.ShowAssignDialogAsync();
-                if (!assign_result) {
-                    //assign canceled
-                    if (avm.IsNew) {
-                        // remove new app if assignment was canceled
-                        await avm.App.DeleteFromDatabaseAsync();
-                    }
-                }
+                AddOrUpdateAppClipboardShortcutCommand.Execute(avm);
             });
 
         public ICommand SelectAppCommand => new MpCommand<object>(
@@ -352,7 +332,7 @@ namespace MonkeyPaste.Avalonia {
                 var appFlyout = new MenuFlyout() {
                     ItemsSource =
                         Items
-                        .Where(x => !CustomPasteItems.Contains(x) && !string.IsNullOrWhiteSpace(x.AppName))
+                        .Where(x => !CustomClipboardItems.Contains(x) && !string.IsNullOrWhiteSpace(x.AppName))
                         .OrderBy(x => x.AppName)
                         .Select(x => new MenuItem() {
                             Icon = new Image() {
@@ -361,7 +341,7 @@ namespace MonkeyPaste.Avalonia {
                                 Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(x.IconId, null, null, null) as Bitmap
                             },
                             Header = x.AppName,
-                            Command = AssignPasteShortcutCommand,
+                            Command = AddOrUpdateAppClipboardShortcutCommand,
                             CommandParameter = x
                         }).AsEnumerable<object>()
                         .Union(new object[] {
@@ -374,7 +354,7 @@ namespace MonkeyPaste.Avalonia {
                                     }
                                 },
                                 Header = "Add App",
-                                Command = AddAppWithAssignPasteShortcutCommand
+                                Command = AddAppWithAssignClipboardShortcutCommand
                             }
                         }).ToList()
                 };
@@ -383,12 +363,14 @@ namespace MonkeyPaste.Avalonia {
                 Flyout.ShowAttachedFlyout(ddb);
             });
 
-        public ICommand DeletePasteShortcutCommand => new MpAsyncCommand<object>(
+        public ICommand DeleteAppClipboardShortcutsCommand => new MpAsyncCommand<object>(
             async (args) => {
                 var avm = args as MpAvAppViewModel;
                 if (avm == null) {
                     return;
                 }
+                MpDebug.Assert(avm.HasAnyShortcut, $"'avm' should has clipboard shortcuts to delete");
+
                 var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
                     title: $"Confirm",
                     message: $"Are you sure want to remove the paste shortcut for '{avm.AppName}'",
@@ -397,16 +379,29 @@ namespace MonkeyPaste.Avalonia {
                     // canceled
                     return;
                 }
-                avm.PasteShortcutViewModel.PasteCmdKeyString = null;
+                await avm.PasteShortcutViewModel.ClipboardShortcuts.DeleteFromDatabaseAsync();
+                await avm.InitializeAsync(avm.App);
+                OnPropertyChanged(nameof(CustomClipboardItems));
             });
 
-        public ICommand AssignPasteShortcutCommand => new MpAsyncCommand<object>(
+        public ICommand AddOrUpdateAppClipboardShortcutCommand => new MpAsyncCommand<object>(
             async (args) => {
-                var avm = args as MpAvAppViewModel;
-                if (avm == null) {
+                if (args is MpAvAppViewModel avm) {
+                    // app selected from shortcut dropdown
+                    MpDebug.Assert(!CustomClipboardItems.Contains(avm), $"{avm} should have been filtered out from this menu");
+                    await MpAppClipboardShortcuts.CreateAsync(
+                        appId: avm.AppId);
+                    await avm.InitializeAsync(avm.App);
+
+                    OnPropertyChanged(nameof(CustomClipboardItems));
+
+                    SelectAppCommand.Execute(avm);
                     return;
                 }
-                await avm.PasteShortcutViewModel.ShowAssignDialogAsync();
+                if (args is not MpAvAppClipboardShortcutViewModel acsvm) {
+                    return;
+                }
+                await acsvm.ShowAssignDialogAsync();
             });
 
         public ICommand ToggleIsRejectedCommand => new MpAsyncCommand<object>(

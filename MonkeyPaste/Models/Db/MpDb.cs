@@ -611,7 +611,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpParameterValue>();
             await _connectionAsync.CreateTableAsync<MpApp>();
             await _connectionAsync.CreateTableAsync<MpAppClipboardFormatInfo>();
-            await _connectionAsync.CreateTableAsync<MpAppPasteShortcut>();
+            await _connectionAsync.CreateTableAsync<MpAppClipboardShortcuts>();
             await _connectionAsync.CreateTableAsync<MpBillableItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpCopyItemAnnotation>();

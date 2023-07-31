@@ -567,15 +567,10 @@ namespace MonkeyPaste.Avalonia {
             MpAvAnalyticItemPresetViewModel spvm = null;
             MpCopyItem sci = null;
             string sstr = null;
-            if (args == null) {
-                // analyzer request from MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand
-
-                spvm = SelectedItem;
-                if (MpAvClipTrayViewModel.Instance.SelectedItem != null) {
-                    sci = MpAvClipTrayViewModel.Instance.SelectedItem.CopyItem;
-                }
-            } else if (args is MpAvAnalyticItemPresetViewModel) {
+            if (args is MpAvAnalyticItemPresetViewModel) {
                 // analyzer request from MpAnalyticItemPresetDataGridView
+                // or
+                // analyzer request from MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand
 
                 if (MpAvClipTrayViewModel.Instance.SelectedItem == null) {
                     return false;
@@ -623,10 +618,12 @@ namespace MonkeyPaste.Avalonia {
                 MpCopyItem sourceCopyItem = null;
                 MpAvAnalyticItemPresetViewModel targetAnalyzer = null;
                 Func<string> lastOutputCallback = null;
+                bool is_user_initiated = true;
 
                 if (args is object[] argParts &&
                     argParts.Length >= 0 &&
                     argParts[0] is MpAvAnalyticItemPresetViewModel action_aipvm) {
+                    is_user_initiated = false;
                     targetAnalyzer = action_aipvm;
                     // when analyzer is triggered from action not user selection 
                     if (argParts.Length > 1 &&
@@ -679,7 +676,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 MpAvClipTileViewModel source_ctvm = null;
-                if (sourceCopyItem != null) {
+                if (is_user_initiated &&
+                    sourceCopyItem != null) {
                     source_ctvm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.CopyItemId == sourceCopyItem.Id);
                     if (source_ctvm != null) {
                         source_ctvm.IsBusy = true;
@@ -698,7 +696,6 @@ namespace MonkeyPaste.Avalonia {
                 if (result == null) {
                     CurrentExecuteArgs = null;
                     SelectedItem.IsExecuting = false;
-                    //IsBusy = false;
                     return;
                 }
 
@@ -712,17 +709,21 @@ namespace MonkeyPaste.Avalonia {
                     result.Response,
                     retryAnalyzerFunc);
 
-                if (result is MpAnalyzerTransaction) {
-                    LastTransaction = result as MpAnalyzerTransaction;
-                    OnAnalysisCompleted?.Invoke(SelectedItem, LastTransaction.ResponseContent);
-                }
-                if (source_ctvm != null) {
+                if (is_user_initiated && source_ctvm != null) {
                     source_ctvm.IsBusy = false;
                 }
-                if (LastTransaction.ResponseContent is MpCopyItem rci) {
-                    rci.WasDupOnCreate = rci.Id == sourceCopyItem.Id;
-                    MpAvClipTrayViewModel.Instance
-                        .AddUpdateOrAppendCopyItemAsync(rci).FireAndForgetSafeAsync(this);
+
+                if (result is MpAnalyzerTransaction result_trans) {
+                    if (result_trans.ResponseContent is MpCopyItem rci) {
+                        rci.WasDupOnCreate = rci.Id == sourceCopyItem.Id;
+                        await MpAvClipTrayViewModel.Instance.AddUpdateOrAppendCopyItemAsync(rci);
+                    } else if (result_trans.Response != null &&
+                                result_trans.Response.dataObject != null &&
+                                new MpAvDataObject(result_trans.Response.dataObject) is MpAvDataObject avdo) {
+                        result_trans.ResponseContent = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false);
+                    }
+                    LastTransaction = result_trans;
+                    OnAnalysisCompleted?.Invoke(SelectedItem, LastTransaction.ResponseContent);
                 }
 
                 CurrentExecuteArgs = null;

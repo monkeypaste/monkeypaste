@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTagTileViewModel :
         MpAvTreeSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>,
         MpIBadgeCountViewModel,
+        MpIDraggableViewModel,
         MpIHoverableViewModel,
         MpIConditionalSelectableViewModel,
         MpIShortcutCommandViewModel,
@@ -44,6 +45,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIDraggableViewModel Implementation
+        bool MpIDraggableViewModel.IsDragging {
+            get => IsDragging || IsPinTagDragging;
+            set => throw new NotImplementedException();
+        }
+
+        #endregion
 
         #region MpIBadgeCountViewModel Implementation
 

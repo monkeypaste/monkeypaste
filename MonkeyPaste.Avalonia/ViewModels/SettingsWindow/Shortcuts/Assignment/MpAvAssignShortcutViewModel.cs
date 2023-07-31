@@ -49,8 +49,8 @@ namespace MonkeyPaste.Avalonia {
             await scavm.InitializeAsync(shortcutName, keys, curShortcutId, assignmentType, iconResourceObj);
             var ascw = new MpAvWindow() {
                 DataContext = scavm,
-                Height = 400,
-                Width = 400,
+                MinHeight = 400,
+                MinWidth = 400,
                 //SizeToContent = SizeToContent.WidthAndHeight,
                 ShowInTaskbar = false,
                 Topmost = true,

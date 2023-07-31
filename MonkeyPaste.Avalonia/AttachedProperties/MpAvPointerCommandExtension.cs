@@ -24,40 +24,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        #region ButtonClickCommand AvaloniaProperty
-        public static ICommand GetButtonClickCommand(AvaloniaObject obj) {
-            return obj.GetValue(ButtonClickCommandProperty);
-        }
-
-        public static void SetButtonClickCommand(AvaloniaObject obj, ICommand value) {
-            obj.SetValue(ButtonClickCommandProperty, value);
-        }
-
-        public static readonly AttachedProperty<ICommand> ButtonClickCommandProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
-                "ButtonClickCommand",
-                null,
-                false);
-
-        #endregion
-
-        #region ButtonClickCommandParameter AvaloniaProperty
-        public static object GetButtonClickCommandParameter(AvaloniaObject obj) {
-            return obj.GetValue(ButtonClickCommandParameterProperty);
-        }
-
-        public static void SetButtonClickCommandParameter(AvaloniaObject obj, object value) {
-            obj.SetValue(ButtonClickCommandParameterProperty, value);
-        }
-
-        public static readonly AttachedProperty<object> ButtonClickCommandParameterProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, object>(
-                "ButtonClickCommandParameter",
-                null,
-                false);
-
-        #endregion
-
         #region LeftPressCommand AvaloniaProperty
         public static ICommand GetLeftPressCommand(AvaloniaObject obj) {
             return obj.GetValue(LeftPressCommandProperty);
@@ -194,56 +160,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region HoldingCommand AvaloniaProperty
-        public static ICommand GetHoldingCommand(AvaloniaObject obj) {
-            return obj.GetValue(HoldingCommandProperty);
-        }
-
-        public static void SetHoldingCommand(AvaloniaObject obj, ICommand value) {
-            obj.SetValue(HoldingCommandProperty, value);
-        }
-
-        public static readonly AttachedProperty<ICommand> HoldingCommandProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, ICommand>(
-                "HoldingCommand",
-                null,
-                false);
-
-        #endregion
-
-        #region HoldingCommandParameter AvaloniaProperty
-        public static object GetHoldingCommandParameter(AvaloniaObject obj) {
-            return obj.GetValue(HoldingCommandParameterProperty);
-        }
-
-        public static void SetHoldingCommandParameter(AvaloniaObject obj, object value) {
-            obj.SetValue(HoldingCommandParameterProperty, value);
-        }
-
-        public static readonly AttachedProperty<object> HoldingCommandParameterProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, object>(
-                "HoldingCommandParameter",
-                null,
-                false);
-
-        #endregion
-
-        #region IsHoldingEnabled AvaloniaProperty
-        public static bool GetIsHoldingEnabled(AvaloniaObject obj) {
-            return obj.GetValue(IsHoldingEnabledProperty);
-        }
-
-        public static void SetIsHoldingEnabled(AvaloniaObject obj, bool value) {
-            obj.SetValue(IsHoldingEnabledProperty, value);
-        }
-
-        public static readonly AttachedProperty<bool> IsHoldingEnabledProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, bool>(
-                "IsHoldingEnabled",
-                true);
-
-        #endregion
-
         #region RoutingStrategy AvaloniaProperty
         public static RoutingStrategies GetRoutingStrategy(AvaloniaObject obj) {
             return obj.GetValue(RoutingStrategyProperty);
@@ -257,6 +173,22 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaProperty.RegisterAttached<object, Control, RoutingStrategies>(
                 "RoutingStrategy",
                 RoutingStrategies.Direct);
+
+        #endregion
+
+        #region RouteHoldToRightPress AvaloniaProperty
+        public static bool GetRouteHoldToRightPress(AvaloniaObject obj) {
+            return obj.GetValue(RouteHoldToRightPressProperty);
+        }
+
+        public static void SetRouteHoldToRightPress(AvaloniaObject obj, bool value) {
+            obj.SetValue(RouteHoldToRightPressProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> RouteHoldToRightPressProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "RouteHoldToRightPress",
+                true);
 
         #endregion
 
@@ -334,8 +266,7 @@ namespace MonkeyPaste.Avalonia {
                 bool has_any_press =
                     GetLeftPressCommand(control) != null ||
                     GetRightPressCommand(control) != null ||
-                    GetDoubleLeftPressCommand(control) != null ||
-                    (GetHoldingCommand(control) != null && GetIsHoldingEnabled(control));
+                    GetDoubleLeftPressCommand(control) != null;
 
 
                 if (has_any_press) {
@@ -345,22 +276,13 @@ namespace MonkeyPaste.Avalonia {
                     }
                     control.AddHandler(Control.PointerPressedEvent, Control_PointerPressed, GetRoutingStrategy(control));
 
-                    if (GetHoldingCommand(control) != null &&
-                        GetIsHoldingEnabled(control)) {
+                    if (GetRightPressCommand(control) is ICommand rght_press_cmd && GetRouteHoldToRightPress(control)) {
                         control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
                     }
                 }
 
                 if (GetLeftReleaseCommand(control) != null) {
                     control.AddHandler(Control.PointerReleasedEvent, Control_PointerReleased, GetRoutingStrategy(control));
-                }
-
-                if (GetButtonClickCommand(control) != null) {
-                    if (control is Button button) {
-                        button.AddHandler(Button.ClickEvent, Button_Click, GetRoutingStrategy(control));
-                    } else {
-                        MpDebug.Break("Error must be attached to button");
-                    }
                 }
             }
         }
@@ -378,6 +300,7 @@ namespace MonkeyPaste.Avalonia {
             var control = ResolveEventControl(sender, e);
             ICommand cmd = null;
             object param = null;
+
             if (e.IsLeftPress(control)) {
                 if (e.ClickCount == 2) {
                     cmd = GetDoubleLeftPressCommand(control);
@@ -389,9 +312,9 @@ namespace MonkeyPaste.Avalonia {
                          GetLeftReleaseCommand(control).CanExecute(GetLeftReleaseCommandParameter(control));
                     bool can_double_left_press = GetDoubleLeftPressCommand(control) != null &&
                         GetDoubleLeftPressCommand(control).CanExecute(GetDoubleLeftPressCommandParameter(control));
-                    bool can_hold = GetIsHoldingEnabled(control) &&
-                          GetHoldingCommand(control) != null &&
-                          GetHoldingCommand(control).CanExecute(GetHoldingCommandParameter(control));
+                    bool can_hold = GetRouteHoldToRightPress(control) &&
+                          GetRightPressCommand(control) != null &&
+                          GetRightPressCommand(control).CanExecute(GetRightPressCommandParameter(control));
 
                     bool needs_double_delay_check =
                         // press vs double press
@@ -399,7 +322,7 @@ namespace MonkeyPaste.Avalonia {
 
                     bool needs_hold_check =
                           // press vs hold
-                          (can_left_press || can_left_release) && can_hold;
+                          /*(can_left_press || can_left_release) &&*/ can_hold;
 
                     if (needs_double_delay_check ||
                         needs_hold_check) {
@@ -414,7 +337,7 @@ namespace MonkeyPaste.Avalonia {
                                     is_still_down = false;
                                     control.PointerReleased -= release_handler;
                                 };
-                                control.PointerReleased += release_handler;
+                                control.AddHandler(Control.PointerReleasedEvent, release_handler, RoutingStrategies.Tunnel);
                             }
                             DateTime this_press_dt = DateTime.Now;
                             bool was_new_press = false;
@@ -424,7 +347,7 @@ namespace MonkeyPaste.Avalonia {
                                     was_new_press = true;
                                     control.PointerPressed -= next_press_handler;
                                 };
-                                control.PointerPressed += next_press_handler;
+                                control.AddHandler(Control.PointerPressedEvent, next_press_handler, RoutingStrategies.Tunnel);
                             }
                             // to disable single vs double wait for delay if no more click
                             while (true) {
@@ -432,11 +355,15 @@ namespace MonkeyPaste.Avalonia {
                                     // double click, reject single
                                     return;
                                 }
+                                if (control.DataContext is MpIDraggableViewModel dvm && dvm.IsDragging) {
+                                    // drag, reject press
+                                    return;
+                                }
                                 if (DateTime.Now - this_press_dt > TimeSpan.FromMilliseconds(GetPointerGestureDelayMs(control))) {
                                     if (needs_hold_check && is_still_down) {
                                         // hold 
-                                        cmd = GetHoldingCommand(control);
-                                        param = GetHoldingCommandParameter(control);
+                                        cmd = GetRightPressCommand(control);
+                                        param = GetRightPressCommandParameter(control);
                                     } else {
                                         // single click
                                         cmd = GetLeftPressCommand(control);
@@ -470,14 +397,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private static void Button_Click(object sender, RoutedEventArgs e) {
-            throw new NotImplementedException();
-        }
-
         private static void Control_PointerReleased(object sender, PointerReleasedEventArgs e) {
-
-            var control = ResolveEventControl(sender, e);
-            if (control == null) {
+            if (ResolveEventControl(sender, e) is not Control control) {
                 return;
             }
             if (e.IsLeftRelease(control) &&
@@ -487,11 +408,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private static void Control_Holding(object sender, HoldingRoutedEventArgs e) {
-            // handled manually in press
+            // handled manually in press evt
             e.Handled = true;
         }
 
-        private static Control ResolveEventControl(object sender, PointerEventArgs e) {
+        private static Control ResolveEventControl(object sender, RoutedEventArgs e) {
             var control = sender as Control;
             if (control == null && e.Source == null) {
                 return null;

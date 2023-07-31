@@ -73,6 +73,8 @@
                 <TextBlock x:Name="ToolTipTextBlock"
                            FontSize="14"
                            Margin="0"
+                           MaxWidth="250"
+                           TextWrapping="WrapWithOverflow"
                            Text="{Binding ToolTipText, ElementName=ToolTipView}" />
             </DockPanel>
 

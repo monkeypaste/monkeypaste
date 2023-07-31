@@ -794,6 +794,8 @@ namespace MonkeyPaste.Avalonia {
         #region Paste Tracking
 
         private string _activePasteKeystring = null;
+        private string _activeCopyKeystring = null;
+
         private MpPortableProcessInfo _activeProcessInfo = null;
         public void InitExternalPasteTracking() {
             if (MpPrefViewModel.Instance.TrackExternalPasteHistory) {
@@ -803,26 +805,32 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private void EnableExternalPasteTracking() {
-            _activePasteKeystring = Mp.Services.PlatformShorcuts.PasteKeys;
+            //_activePasteKeystring = Mp.Services.PlatformShorcuts.PasteKeys;
             Mp.Services.ProcessWatcher.OnAppActivated += ProcessWatcher_OnAppActivated;
             OnGlobalPasteShortcutPerformed += MpAvShortcutCollectionViewModel_OnGlobalPasteShortcutPerformed;
         }
 
 
         private void DisableExternalPasteTracking() {
-            _activePasteKeystring = null;
+            //_activePasteKeystring = null;
             Mp.Services.ProcessWatcher.OnAppActivated -= ProcessWatcher_OnAppActivated;
             OnGlobalPasteShortcutPerformed -= MpAvShortcutCollectionViewModel_OnGlobalPasteShortcutPerformed;
         }
 
         private void ProcessWatcher_OnAppActivated(object sender, MpPortableProcessInfo e) {
             _activeProcessInfo = e;
-            if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e) is MpAvAppViewModel avm &&
-                avm.PasteShortcutViewModel != null &&
-                avm.PasteShortcutViewModel.HasPasteShortcut) {
-                _activePasteKeystring = avm.PasteShortcutViewModel.PasteCmdKeyString;
+            if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e) is MpAvAppViewModel avm) {
+                if (avm.PasteShortcutViewModel != null &&
+                    avm.PasteShortcutViewModel.HasShortcut) {
+                    _activePasteKeystring = avm.PasteShortcutViewModel.ShortcutCmdKeyString;
+                }
+                if (avm.CopyShortcutViewModel != null &&
+                    avm.CopyShortcutViewModel.HasShortcut) {
+                    _activeCopyKeystring = avm.CopyShortcutViewModel.ShortcutCmdKeyString;
+                }
             } else {
                 _activePasteKeystring = Mp.Services.PlatformShorcuts.PasteKeys;
+                _activeCopyKeystring = Mp.Services.PlatformShorcuts.CopyKeys;
             }
         }
 
@@ -957,7 +965,10 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
                     Dispatcher.UIThread.Post(() => {
                         Mp.Services.KeyStrokeSimulator
-                            .SimulateKeyStrokeSequenceAsync(Mp.Services.PlatformShorcuts.CopyKeys)
+                            .SimulateKeyStrokeSequenceAsync(
+                                string.IsNullOrEmpty(_activeCopyKeystring) ?
+                                    Mp.Services.PlatformShorcuts.CopyKeys :
+                                    _activeCopyKeystring)
                             .FireAndForgetSafeAsync();
                     });
                 }
@@ -970,10 +981,11 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvClipTrayViewModel.Instance.IsRightClickPasteMode) {
                     e.SuppressEvent = true;
                     Dispatcher.UIThread.Post(() => {
-                        // TODO this is hacky because mouse gestures are not formally handled
-                        // also app collection should be queried for custom paste cmd instead of this
                         Mp.Services.KeyStrokeSimulator
-                            .SimulateKeyStrokeSequenceAsync(Mp.Services.PlatformShorcuts.PasteKeys)
+                            .SimulateKeyStrokeSequenceAsync(
+                                string.IsNullOrEmpty(_activePasteKeystring) ?
+                                    Mp.Services.PlatformShorcuts.PasteKeys :
+                                    _activePasteKeystring)
                             .FireAndForgetSafeAsync();
                         //}
                     });
@@ -1342,7 +1354,8 @@ namespace MonkeyPaste.Avalonia {
                 _downChecker.Remove(dt);
             }
 
-            if (_activePasteKeystring != null &&
+            if (MpPrefViewModel.Instance.TrackExternalPasteHistory &&
+                _activePasteKeystring != null &&
                 !kc.IsModKey() &&
                 _keyboardGestureHelper.GetCurrentGesture() == _activePasteKeystring &&
                 !MpAvClipTrayViewModel.Instance.IsPasting) {

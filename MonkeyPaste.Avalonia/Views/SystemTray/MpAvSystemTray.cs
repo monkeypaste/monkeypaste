@@ -11,22 +11,36 @@ using KeyGesture = Avalonia.Input.KeyGesture;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvSystemTray {
         public static void Init() {
-            var tray_icons = CreateTrayIcons();
-            TrayIcon.SetIcons(Application.Current, tray_icons);
-
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            InitStartupTray();
         }
-
-
-        public static TrayIcons CreateTrayIcons() {
+        private static void InitActualTray() {
             var rootIcon = CreateTrayIcon();
             rootIcon.Menu = CreateNativeMenu();
 
-            var trayIcons = new TrayIcons {
-                rootIcon
+            TrayIcon.SetIcons(Application.Current, new TrayIcons { rootIcon });
+        }
+        private static void InitStartupTray() {
+            var startupIcon = new TrayIcon() {
+                ToolTipText = $"{Mp.Services.ThisAppInfo.ThisAppProductName} is loading. Please wait...",
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("HourGlassImage", typeof(WindowIcon), null, null) as WindowIcon,
+                Menu = new NativeMenu()
             };
-            return trayIcons;
+            startupIcon.Menu.Add(
+                new NativeMenuItem() {
+                    Header = "Cancel",
+                    Command = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand
+                });
+            TrayIcon.SetIcons(Application.Current, new TrayIcons { startupIcon });
         }
 
+        private static void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.StartupComplete:
+                    InitActualTray();
+                    break;
+            }
+        }
         private static TrayIcon CreateTrayIcon() {
             MpMenuItemViewModel tmivm = MpAvSystemTrayViewModel.Instance.TrayMenuItemViewModel;
             var rootIcon = new TrayIcon();

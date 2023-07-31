@@ -73,11 +73,11 @@ namespace MonkeyPaste.Avalonia {
             }
 
             ParamViews.Add(ppiv);
-            if (ppiv.DataContext is MpAvParameterViewModelBase pvmb) {
-                MpConsole.WriteLine($"param '{pvmb.ParamId}' added");
-            } else {
-                MpConsole.WriteLine($"unknown param added");
-            }
+            //if (ppiv.DataContext is MpAvParameterViewModelBase pvmb) {
+            //    MpConsole.WriteLine($"param '{pvmb.ParamId}' added");
+            //} else {
+            //    MpConsole.WriteLine($"unknown param added");
+            //}
         }
     }
 }

@@ -12,7 +12,6 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase<MpAvAppCollectionViewModel>,
         MpIHoverableViewModel,
         MpIFilterMatch,
-        MpAvIKeyGestureViewModel,
         MpIIsValueEqual<MpAvAppViewModel>
         //MpISourceItemViewModel 
         {
@@ -42,12 +41,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region MpAvIKeyGestureViewModel Implementation
-        public ObservableCollection<MpAvShortcutKeyGroupViewModel> KeyGroups =>
-           PasteShortcutViewModel.KeyGroups;
-
-        #endregion
-
         #endregion
 
         #region Properties
@@ -55,7 +48,8 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public MpAppClipboardFormatInfoCollectionViewModel ClipboardFormatInfos { get; set; }
 
-        public MpAvPasteShortcutViewModel PasteShortcutViewModel { get; set; }
+        public MpAvAppClipboardShortcutViewModel PasteShortcutViewModel { get; set; }
+        public MpAvAppClipboardShortcutViewModel CopyShortcutViewModel { get; set; }
         #endregion
 
         #region Appearance
@@ -71,6 +65,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool HasAnyShortcut =>
+            ClipboardShortcutsId > 0;
 
         // NOTE IsNew is used when adding app from dialog
         // but app already exists for add paste shortcut logic to remove when was new if canceled
@@ -170,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsSubRejected => IsRejected;
-
+        public int ClipboardShortcutsId { get; private set; }
         public MpApp App { get; set; }
 
         #endregion
@@ -183,7 +180,8 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAppViewModel(MpAvAppCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAppViewModel_PropertyChanged;
             ClipboardFormatInfos = new MpAppClipboardFormatInfoCollectionViewModel(this);
-            PasteShortcutViewModel = new MpAvPasteShortcutViewModel(this);
+            PasteShortcutViewModel = new MpAvAppClipboardShortcutViewModel(this, false);
+            CopyShortcutViewModel = new MpAvAppClipboardShortcutViewModel(this, true);
         }
 
         #endregion
@@ -199,15 +197,16 @@ namespace MonkeyPaste.Avalonia {
 
             await ClipboardFormatInfos.InitializeAsync(AppId);
 
-            MpAppPasteShortcut aps = await MpDataModelProvider.GetAppPasteShortcutAsync(AppId);
+            MpAppClipboardShortcuts aps = await MpDataModelProvider.GetAppClipboardShortcutsAsync(AppId);
+            ClipboardShortcutsId = aps == null ? 0 : aps.Id;
             await PasteShortcutViewModel.InitializeAsync(aps);
+            await CopyShortcutViewModel.InitializeAsync(aps);
 
             while (ClipboardFormatInfos.IsAnyBusy ||
-                    PasteShortcutViewModel.IsBusy) {
+                    PasteShortcutViewModel.IsBusy ||
+                    CopyShortcutViewModel.IsBusy) {
                 await Task.Delay(100);
             }
-
-            OnPropertyChanged(nameof(KeyGroups));
 
             IsBusy = false;
         }
@@ -270,7 +269,7 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
                         if (PasteShortcutViewModel != null) {
-                            PasteShortcutViewModel.OnPropertyChanged(nameof(PasteShortcutViewModel.PasteCmdKeyString));
+                            PasteShortcutViewModel.OnPropertyChanged(nameof(PasteShortcutViewModel.ShortcutCmdKeyString));
                         }
                         ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
                     }
@@ -293,7 +292,7 @@ namespace MonkeyPaste.Avalonia {
 
 
 
-        //public ICommand AssignPasteShortcutCommand => new MpCommand(
+        //public ICommand AddOrUpdateAppClipboardShortcutCommand => new MpCommand(
         //   () => {
         //       ShowAssignDialogAsync().FireAndForgetSafeAsync(this);
         //   });
