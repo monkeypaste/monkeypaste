@@ -267,13 +267,19 @@ function onLinkPointerEnter(e) {
     } else {
         link_action_text = `goto '<em>${a_elm.getAttribute('href')}</em>'`;
     }
-    //showTooltipOverlay(a_elm, `Click${mod_key_text} to ${link_action_text}`);
-    showTooltipToolbar(`Click${mod_key_text} to ${link_action_text}`);
+    if (globals.IsTooltipToolbarEnabled) {
+        showTooltipToolbar(`Click${mod_key_text} to ${link_action_text}`);
+    } else if (globals.IsTooltipOverlayEnabled) {
+        showTooltipOverlay(a_elm, 'Click to follow...'); //`Click${mod_key_text} to ${link_action_text}`);
+    }    
 }
 
 function onLinkPointerLeave(e) {
-    //hideTooltipOverlay();
-    hideTooltipToolbar();
+    if (globals.IsTooltipToolbarEnabled) {
+        hideTooltipToolbar();
+    } else if (globals.IsTooltipOverlayEnabled) {
+        hideTooltipOverlay();
+    }
 }
 
 function onLinkPopupClose(e) {

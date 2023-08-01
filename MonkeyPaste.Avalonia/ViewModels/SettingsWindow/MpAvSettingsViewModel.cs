@@ -663,7 +663,7 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = "Add Startup Clipboard",
-                                            description = "On startup the source of the clipboard will be unknown and depending on your security settings the content may come from an excluded website or application.",
+                                            description = "#warn#On startup the source of the clipboard will be unknown and depending on your security settings the content may come from an excluded website or application.",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
@@ -799,7 +799,7 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = "Reset Clipboard after Monkey Pasting",
-                                            description = "<warning/>Monkey Paste uses the system clipboard to interoperate and changes your current clipboard when pasting to an external program. This will <b>attempt</b> to restore the state of the clipboard after an external paste. Restoration cannot be guaranteed and may reduce performance or even crash Monkey Paste depending on the source of the data (looking at you windows).",
+                                            description = "#warn#Monkey Paste uses the system clipboard to interoperate and changes your current clipboard when pasting to an external program. This will <b>attempt</b> to restore the state of the clipboard after an external paste. Restoration cannot be guaranteed and may reduce performance or even crash Monkey Paste depending on the source of the data (looking at you windows).",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
@@ -1061,13 +1061,7 @@ namespace MonkeyPaste.Avalonia {
                             return;
                         }
                         // ensure rich content cb reflects webview availability
-                        if(MpAvCefNetApplication.IsCefNetLoaded) {
-                            cb.IsEnabled = true;
-                            return;
-                        }
-                        MpPrefViewModel.Instance.IsRichHtmlContentEnabled = false;
-                        cb.IsChecked = false;
-                        cb.IsEnabled = false;
+                        cb.IsEnabled = !MpPrefViewModel.Instance.IsRichHtmlContentForceDisabled;
                     }
                 }
             };

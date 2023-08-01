@@ -66,19 +66,19 @@
                     Value="0,0,30,0" />
         </Style>
 
-        <!--  USER BG COLOR  -->
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
-            <Setter Property="Background"
-                    Value="{DynamicResource ClipTileContentBackgroundBrush}" />
-        </Style>
-        <!--<Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor"
+      <!--  USER BG COLOR  -->
+      <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
+        <Setter Property="Background"
+                Value="{DynamicResource ClipTileContentBackgroundBrush}" />
+      </Style>
+      <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Background">
                 <Setter.Value>
                     <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalBgOpacity}" />
                 </Setter.Value>
             </Setter>
-        </Style>-->
+        </Style>
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
@@ -94,6 +94,7 @@
                           Classes.frozen="{Binding IsFrozen}"
                           Classes.trashed="{Binding IsTrashed}"
                           Classes.userColor="{Binding CopyItemHexColor, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                          
                           local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           local:MpAvReceivesEventsExtension.SenderFilter="{Binding EmbedHost}"
                           VerticalAlignment="Stretch"

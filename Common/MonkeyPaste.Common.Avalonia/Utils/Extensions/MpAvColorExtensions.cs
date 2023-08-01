@@ -39,7 +39,8 @@ namespace MonkeyPaste.Common.Avalonia {
             return c.ToAvColor();
         }
 
-        public static Brush ToAvBrush(this string hexOrNamedColor, string fallback = default) {
+        public static Brush ToAvBrush(this string hexOrNamedColor, string fallback = default, double force_alpha = -1) {
+            hexOrNamedColor = force_alpha < 0 ? hexOrNamedColor : hexOrNamedColor.AdjustAlpha(force_alpha);
             return new SolidColorBrush(hexOrNamedColor.ToAvColor(fallback));
         }
 

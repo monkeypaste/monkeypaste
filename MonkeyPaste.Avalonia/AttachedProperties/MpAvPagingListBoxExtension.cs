@@ -903,8 +903,9 @@ namespace MonkeyPaste.Avalonia {
 
         private static void ApplyScrollOffset(ListBox lb, double x, double y) {
             var sv = GetScrollViewer(lb);
-            if (sv.DataContext is MpIAsyncObject vm &&
-                    vm.IsBusy) {
+            if (sv == null ||
+                (sv.DataContext is MpIAsyncObject vm &&
+                    vm.IsBusy)) {
                 return;
             }
 

@@ -66,6 +66,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Init() {
+            if (ToolTipText.StartsWith("#warn#")) {
+                ToolTipText = ToolTipText.Replace("#warn#", string.Empty);
+                this.Classes.Add("warning");
+            }
+            if (ToolTipText.StartsWith("#error#")) {
+                ToolTipText = ToolTipText.Replace("#error#", string.Empty);
+                this.Classes.Add("error");
+            }
             if (ToolTip.GetTip(this) is ToolTip tt) {
                 tt.Classes.AddRange(this.Classes.Where(x => x == "warning" || x == "info" || x == "error"));
             }

@@ -89,6 +89,9 @@ namespace MonkeyPaste.Avalonia {
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error loading cefnet. ", ex);
+
+                // error loading cef, fallback to compat mode
+                MpPrefViewModel.Instance.IsRichHtmlContentForceDisabled = true;
             }
         }
 
@@ -114,11 +117,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpAvCefNetApplication() : base() {
-            //if (MpAvCefUpdater.IsUpdatePendingInstall()) {
-            //    _wasCefUpdated = MpAvCefUpdater.PerformInstall();
-            //}
-            //MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
-
             string datFileName = "icudtl.dat";
             string cefRootDir = CefFrameworkPath;
 
@@ -223,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
             //commandLine.AppendSwitchWithValue("enable-blink-features", "CSSPseudoHas");
 
             commandLine.AppendSwitch("disable-component-update");
-            commandLine.AppendSwitch("process-per-site");
+            //commandLine.AppendSwitch("process-per-site");
 
             //commandLine.AppendSwitch("disable-gpu");
             //commandLine.AppendSwitch("disable-gpu-compositing");

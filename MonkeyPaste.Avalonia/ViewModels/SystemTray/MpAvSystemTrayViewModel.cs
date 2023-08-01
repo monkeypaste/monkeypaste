@@ -138,6 +138,11 @@ namespace MonkeyPaste.Avalonia {
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ShowSettings),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
+                        new MpMenuItemViewModel() {
+                            Header = "About",
+                            IconResourceKey = "InfoImage",
+                            Command = MpAvAboutViewModel.Instance.ShowAboutWindowCommand
+                        },
 #if DEBUG && DESKTOP
                         new MpMenuItemViewModel() {
                             Header = "Show Converter DevTools",

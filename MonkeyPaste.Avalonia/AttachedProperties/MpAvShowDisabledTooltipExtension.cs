@@ -81,21 +81,19 @@ namespace MonkeyPaste.Avalonia {
                         x.Bounds.Contains(e.GetPosition(x.Parent as Visual)) &&
                         x.IsEffectivelyVisible &&
                         !x.IsEnabled);
-
-            if (disabled_child_under_pointer == null) {
-                // no disabled children under pointer, clear any tooltips shown w/ this extension
-                var disabled_childre_showing_tooltip =
+            if (disabled_child_under_pointer != null) {
+                // manually show tooltip
+                ToolTip.SetIsOpen(disabled_child_under_pointer, true);
+            }
+            var disabled_tooltips_to_hide =
                     attached_controls
                         .Where(x =>
                             ToolTip.GetIsOpen(x) &&
+                            x != disabled_child_under_pointer &&
                             !x.IsEnabled);
-                foreach (var dcst in disabled_childre_showing_tooltip) {
-                    ToolTip.SetIsOpen(dcst, false);
-                }
-                return;
+            foreach (var dcst in disabled_tooltips_to_hide) {
+                ToolTip.SetIsOpen(dcst, false);
             }
-            // manually show tooltip
-            ToolTip.SetIsOpen(disabled_child_under_pointer, true);
         }
         #endregion
 

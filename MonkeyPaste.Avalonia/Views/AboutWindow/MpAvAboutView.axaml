@@ -1,0 +1,79 @@
+<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvAboutView"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:DataType="local:MpAvAboutViewModel"
+                       x:TypeArguments="local:MpAvAboutViewModel"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="TextBlock:header">
+
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <StackPanel Orientation="Vertical"
+                Background="Silver"
+                Margin="10"
+                Spacing="10">
+        <DockPanel>
+
+            <!--  APP ICON  -->
+
+            <Border BorderThickness="3"
+                    BorderBrush="Dimgray"
+                    DockPanel.Dock="Left"
+                    Margin="0,0,10,0">
+                <Image Width="50"
+                       Height="50"
+                       Source="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            </Border>
+            <StackPanel Orientation="Vertical"
+                        DockPanel.Dock="Right"
+                        Spacing="3">
+
+                <!--  PRODUCT NAME  -->
+
+                <TextBlock Foreground="Black"
+                           Classes="header"
+                           Text="{Binding Mp.Services.ThisAppInfo.ThisAppProductName}" />
+
+                <!--  VERSION NUM  -->
+
+                <TextBlock Foreground="Black"
+                           Classes="header"
+                           Text="{Binding Mp.Services.ThisAppInfo.ThisAppProductVersion, StringFormat='Version {0}'}" />
+
+                <!--  COMPANY NAME  -->
+
+                <TextBlock Foreground="Black"
+                           Classes="header"
+                           Text="{Binding Mp.Services.ThisAppInfo.ThisAppCompanyName, StringFormat='© {0}'}" />
+
+                <!--  LEGAL DETAIL  -->
+
+                <TextBlock Foreground="Black"
+                           Classes="header"
+                           Text="All Rights Reserved" />
+
+            </StackPanel>
+
+        </DockPanel>
+        <TextBlock Text="Credits" />
+        <Border BorderThickness="1"
+                BorderBrush="Black"
+                Padding="3"
+                MaxHeight="300">
+            <ScrollViewer>
+                <TextBlock x:Name="CreditsTextBlock"
+                           local:MpAvIsHoveringExtension.IsEnabled="True"
+                           local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverCredits, Mode=TwoWay}"
+                           Classes="credits"
+                           Text="{Binding CreditsText}" />
+            </ScrollViewer>
+        </Border>
+    </StackPanel>
+</local:MpAvUserControl>

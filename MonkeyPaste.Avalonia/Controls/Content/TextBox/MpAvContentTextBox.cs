@@ -187,21 +187,11 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
             Mp.Services.ContentViewLocator.AddView(this);
-            if (DataContext is MpAvClipTileViewModel ctvm) {
-                ctvm.IsEditorLoaded = true;
-            }
             this.FontFamily = MpAvStringToFontFamilyConverter.Instance.Convert(MpPrefViewModel.Instance.DefaultEditableFontFamily, null, null, null) as FontFamily;
         }
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnDetachedFromVisualTree(e);
             Mp.Services.ContentViewLocator.RemoveView(this);
-        }
-
-        protected override void OnDataContextChanged(EventArgs e) {
-            base.OnDataContextChanged(e);
-            if (DataContext is MpAvClipTileViewModel ctvm) {
-                ctvm.IsEditorLoaded = true;
-            }
         }
 
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
@@ -218,6 +208,9 @@ namespace MonkeyPaste.Avalonia {
         private void OnFontFamilyChanged() {
             Dispatcher.UIThread.Post(async () => {
                 var tp = await this.GetVisualDescendantAsync<TextPresenter>();
+                if (tp == null) {
+                    return;
+                }
                 TextElement.SetFontFamily(tp, this.FontFamily);
             });
 

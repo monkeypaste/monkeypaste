@@ -21,7 +21,13 @@ namespace MonkeyPaste.Avalonia {
 
                         }
                     }
-                    return valStr.ToAvBitmap(scale, tint_color);
+                    try {
+                        var bmp = valStr.ToAvBitmap(scale, tint_color);
+                        return bmp;
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine($"Error converting base64 '{value}' to bmp.", ex);
+                    }
                 }
             }
             return null;

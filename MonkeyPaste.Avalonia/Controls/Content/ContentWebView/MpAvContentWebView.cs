@@ -924,6 +924,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             LoadEditorAsync().FireAndForgetSafeAsync();
+            MpConsole.WriteLine("loaded");
         }
 #else
         public override void OnNavigated(string url) {

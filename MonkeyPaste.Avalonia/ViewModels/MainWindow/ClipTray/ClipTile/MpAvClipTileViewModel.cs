@@ -246,6 +246,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
+        public MpAvClipTileViewModel SelfRef { get; private set; }
 
         public MpAvFileItemCollectionViewModel FileItemCollectionViewModel { get; private set; }
 
@@ -359,6 +360,7 @@ namespace MonkeyPaste.Avalonia {
                 return detailText;
             }
         }
+
         #endregion
 
         #region Layout
@@ -490,6 +492,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public object[] ContentTemplateParam =>
+            new object[] { CopyItemType, this };
 
         public double PinButtonAngle =>
             IsPinButtonHovering ||
@@ -630,7 +634,7 @@ namespace MonkeyPaste.Avalonia {
 
         private bool _isEditorLoaded;
         public bool IsEditorLoaded {
-            get => _isEditorLoaded;
+            get => MpPrefViewModel.Instance.IsRichHtmlContentEnabled ? _isEditorLoaded : true;
             set {
                 if (_isEditorLoaded != value) {
                     _isEditorLoaded = value;
@@ -1080,13 +1084,8 @@ namespace MonkeyPaste.Avalonia {
 
         public string CopyItemHexColor {
             get {
-                //if (CopyItem == null || string.IsNullOrEmpty(CopyItem.ItemColor)) {
-                //    if (string.IsNullOrEmpty(_curItemRandomHexColor)) {
-                //        _curItemRandomHexColor = MpColorHelpers.GetRandomHexColor();
-                //    }
-                //    return _curItemRandomHexColor;
-                //}
-                if (CopyItem == null) {
+                if (CopyItem == null ||
+                    string.IsNullOrEmpty(CopyItem.ItemColor)) {
                     return string.Empty;
                 }
                 return CopyItem.ItemColor;
@@ -1209,6 +1208,15 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(PinPlaceholderLabel));
             OnPropertyChanged(nameof(IsResizable));
 
+            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled ||
+                SelfRef == null) {
+                // NOTE in compatibility mode content template must be reselected
+                // and for overall efficiency re-setting datacontext is better than
+                // locating this tile from the view side (changing contentControl.content to id)
+                //OnPropertyChanged(nameof(ContentTemplateParam));
+                SelfRef = null;
+                SelfRef = this;
+            }
             IsBusy = false;
         }
 

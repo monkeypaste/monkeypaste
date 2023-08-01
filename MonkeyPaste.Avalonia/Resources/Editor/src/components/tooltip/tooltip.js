@@ -100,6 +100,9 @@ function hideTooltipOverlay() {
 
 
 function showTooltipToolbar(htmlStr, showTimeMs = 0) {
+	if (!globals.IsTooltipToolbarEnabled) {
+		return;
+	}
 	let tt_elm = getTooltipToolbarElement();
 	tt_elm.innerHTML = htmlStr;
 	if (tt_elm && tt_elm.firstChild && tt_elm.firstChild.nodeType === 3 ||
@@ -119,6 +122,9 @@ function showTooltipToolbar(htmlStr, showTimeMs = 0) {
 }
 
 function hideTooltipToolbar() {
+	if (!globals.IsTooltipToolbarEnabled) {
+		return;
+	}
 	getTooltipToolbarElement().style.bottom = '0px';
 	delay(getToolbarTransitionMs())
 		.then(() => {
@@ -131,11 +137,9 @@ function updateTooltipToolbarSizesAndPositions() {
 	}
 	let tttb_bottom = 0;
 	if (isShowingPasteToolbar()) {
-		//ett.classList.remove('bottom-align');
 		tttb_bottom += getPasteToolbarContainerElement().getBoundingClientRect().height;
 	}
 	if (isShowingEditTemplateToolbar()) {
-		//ett.classList.remove('bottom-align');
 		tttb_bottom += getEditTemplateToolbarContainerElement().getBoundingClientRect().height;
 	} 
 

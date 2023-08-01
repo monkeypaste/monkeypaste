@@ -19,7 +19,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public void SetLoadOnLogin(bool isLoadOnLogin) {
-            bool success = false;
+            // from https://stackoverflow.com/a/7394955/105028
+            bool success;
 
             try {
                 if (isLoadOnLogin) {
@@ -39,6 +40,7 @@ namespace MonkeyPaste.Avalonia {
                     success = td.Validate();
                 } else {
                     TaskService.Instance.RootFolder.DeleteTask(LoginLoadTaskPath);
+                    success = true;
                 }
             }
             catch (Exception ex) {

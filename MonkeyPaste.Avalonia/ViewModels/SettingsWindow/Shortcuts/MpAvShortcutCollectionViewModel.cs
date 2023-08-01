@@ -619,7 +619,7 @@ namespace MonkeyPaste.Avalonia {
                         .AllActiveItems
                         .Where(x => !x.IsAnyPlaceholder)
                         .Select(x => x.GetContentView())
-                        .Cast<MpAvContentWebView>()
+                        .OfType<MpAvContentWebView>()
                         .Where(x => x != null)
                         .ForEach(x => x.SendMessage($"updateShortcuts_ext('{EditorShortcutsMsgBase64}')"));
                 });

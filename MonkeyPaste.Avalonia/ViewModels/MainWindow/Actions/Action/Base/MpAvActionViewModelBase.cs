@@ -20,6 +20,7 @@ namespace MonkeyPaste.Avalonia {
         MpViewModelBase<MpAvTriggerCollectionViewModel>,
         MpIActionPluginComponent,
         MpITreeItemViewModel,
+        MpIDraggableViewModel,
         MpIHoverableViewModel,
         MpIPopupMenuViewModel,
         MpIContextMenuViewModel,
@@ -133,6 +134,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpIDraggableViewModel Implementation
+
+        bool MpIDraggableViewModel.IsDragging {
+            get => IsMoving;
+            set => throw new NotImplementedException();
+        }
+
+        #endregion
 
         #region MpITreeItemViewModel Implementation
 

@@ -40,6 +40,8 @@ namespace MonkeyPaste.Avalonia {
         private bool _isLayoutChanging = false;
         private object _addDataObjectContentLock = new object();
 
+
+        private MpICopyItemBuilder _copyItemBuilder = new MpAvCopyItemBuilder();
         #endregion
 
         #region Constants
@@ -150,11 +152,13 @@ namespace MonkeyPaste.Avalonia {
 #if DEBUG
                         new MpMenuItemViewModel() {
                             Header = @"Show Dev Tools",
-                            Command = ShowDevToolsCommand
+                            Command = ShowDevToolsCommand,
+                            IsVisible = MpPrefViewModel.Instance.IsRichHtmlContentEnabled
                         },
                         new MpMenuItemViewModel() {
                             Header = @"Reload",
-                            Command = ReloadSelectedItemCommand
+                            Command = ReloadSelectedItemCommand,
+                            IsVisible = MpPrefViewModel.Instance.IsRichHtmlContentEnabled
                         },
                         new MpMenuItemViewModel() { IsSeparator = true },
 #endif
@@ -1187,7 +1191,7 @@ namespace MonkeyPaste.Avalonia {
                 //    return 5;
                 //} else {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
-                    return 40;
+                    return 20;
                 }
                 return 5;
                 //}
@@ -2586,8 +2590,8 @@ namespace MonkeyPaste.Avalonia {
             _scrollOffsetY = newOffsetY;
             OnPropertyChanged(nameof(ScrollOffsetY));
         }
-        private void ForceScrollOffset(MpPoint newOffset) {
-            if ((newOffset - ScrollOffset).Length < 1) {
+        private void ForceScrollOffset(MpPoint newOffset, bool rejectByDelta = true) {
+            if (rejectByDelta && (newOffset - ScrollOffset).Length < 1) {
                 // avoid double query
                 MpConsole.WriteLine($"Force ScrollOffset reject length: {(newOffset - ScrollOffset).Length}");
                 return;
@@ -2868,7 +2872,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
 
-            MpCopyItem newCopyItem = await Mp.Services.CopyItemBuilder.BuildAsync(
+            MpCopyItem newCopyItem = await _copyItemBuilder.BuildAsync(
                 pdo: mpdo,
                 transType: MpTransactionType.Created,
                 force_ext_sources: force_ext,
@@ -3037,8 +3041,11 @@ namespace MonkeyPaste.Avalonia {
 
                 LayoutType = IsGridLayout ? MpClipTrayLayoutType.Stack : MpClipTrayLayoutType.Grid;
 
+
                 MpMessenger.SendGlobal(MpMessageType.PostTrayLayoutChange);
+
                 OnPropertyChanged(nameof(IsGridLayout));
+
             });
 
         public ICommand ScrollToHomeCommand => new MpCommand(
@@ -3412,12 +3419,6 @@ namespace MonkeyPaste.Avalonia {
                         selectedId = SelectedItem.CopyItemId;
                     }
 
-                    //for (int i = 0; i < PendingNewModels.Count; i++) {
-                    //    var ci = PendingNewModels[i];
-                    //    MpAvClipTileViewModel nctvm = await CreateOrRetrieveClipTileViewModelAsync(ci);
-                    //    ToggleTileIsPinnedCommand.Execute(nctvm);
-                    //}
-
                     // NOTE only adding most recent to not clog up pin tray, all badge will convey other added items
                     var most_recent_pending_ci = PendingNewModels.OrderByDescending(x => x.CopyDateTime).FirstOrDefault();
                     if (PendingNewModels.Where(x => x.Id != most_recent_pending_ci.Id) is IEnumerable<MpCopyItem> other_pending_cil &&
@@ -3429,12 +3430,9 @@ namespace MonkeyPaste.Avalonia {
                         all_ttvm.CopyItemIdsNeedingView.AddRange(other_pending_ciids_neeeding_view);
                     }
                     MpAvClipTileViewModel nctvm = await CreateOrRetrieveClipTileViewModelAsync(most_recent_pending_ci);
-                    await ToggleTileIsPinnedCommand.ExecuteAsync(nctvm);
+                    await PinTileCommand.ExecuteAsync(nctvm);
 
                     PendingNewModels.Clear();
-                    //while (IsAnyBusy) {
-                    //    await Task.Delay(100);
-                    //}
                     if (selectedId >= 0) {
                         var selectedVm = AllItems.FirstOrDefault(x => x.CopyItemId == selectedId);
                         if (selectedVm != null) {
@@ -3569,6 +3567,19 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
+        private MpPoint AdjustTileLocationToScrollOffset(MpPoint loc) {
+            if (IsGridLayout) {
+                // NOTE if list is somewhat scrolled into and then toggled to grid
+                // the fixed axis will still be scrolled to extent, need to reset to home
+                if (ListOrientation == Orientation.Horizontal) {
+                    loc.X = 0;
+                } else {
+                    loc.Y = 0;
+                }
+            }
+            return loc;
+        }
+
         private async Task PerformQueryAsync(object offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) {
             //MpConsole.WriteLine($"Query called. Arg: '{offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg}'");
             Dispatcher.UIThread.VerifyAccess();
@@ -3626,11 +3637,11 @@ namespace MonkeyPaste.Avalonia {
                 // sub-query of visual, data-specific or incremental offset 
 
                 if (isOffsetJump) {
-                    // sub-query to data-specific (query Idx) offset
+                    // sub-query to data-specific (query Idx) offset (for anchor query)
 
                     loadOffsetIdx = (int)offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg;
                     var loadTileRect = GetQueryTileRect(loadOffsetIdx, null);
-                    newScrollOffset = loadTileRect.Location;
+                    newScrollOffset = AdjustTileLocationToScrollOffset(loadTileRect.Location);
                 } else if (isScrollJump) {
                     // sub-query to visual (scroll position) offset 
 

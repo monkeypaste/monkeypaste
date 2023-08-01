@@ -37,6 +37,9 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (value is string valStr) {
+                if (valStr.EndsWith("add1.png")) {
+
+                }
                 //types: resource key, hex color, base64, file system path, shape name
                 var valParts = valStr.SplitNoEmpty(",");
 
@@ -90,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
                     return new MpAvStringBase64ToBitmapConverter().Convert(valStr, null, null, CultureInfo.CurrentCulture);
                 }
                 if (valStr.IsFile()) {
-                    if (valStr.IsKnownImageFile() && !isFilePathIcon) {
+                    if (valStr.IsSupportedImageFileType() && !isFilePathIcon) {
                         try {
                             using (var fs = new FileStream(valStr, FileMode.Open)) {
                                 return new Bitmap(fs);
@@ -104,6 +107,7 @@ namespace MonkeyPaste.Avalonia {
                     string appIconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(valStr);
                     return new MpAvStringBase64ToBitmapConverter().Convert(appIconBase64, null, null, CultureInfo.CurrentCulture);
                 }
+                return new MpAvStringBase64ToBitmapConverter().Convert(MpBase64Images.QuestionMark, null, scale.ToString(), CultureInfo.CurrentCulture);
             }
             return null;
 

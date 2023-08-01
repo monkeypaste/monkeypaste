@@ -54,6 +54,11 @@ namespace MonkeyPaste.Avalonia {
                             return StreamGeometry.Parse(sr.ReadToEnd());
                         }
                     }
+                    if (targetType == typeof(string)) {
+                        using (var sr = new StreamReader(asset)) {
+                            return sr.ReadToEnd();
+                        }
+                    }
                     if (targetType == null || typeof(IImage).IsAssignableFrom(targetType)) {
                         return new Bitmap(asset);
                     }

@@ -13,15 +13,17 @@ namespace MonkeyPaste.Avalonia {
             string title = "",
             string initDir = "",
             object filters = null,
-            bool resolveShortcutPath = false) {
-            var result = await ShowFileOrFolderDialogAsync(false, title, initDir, filters, resolveShortcutPath);
+            bool resolveShortcutPath = false,
+            object owner = null) {
+            var result = await ShowFileOrFolderDialogAsync(false, title, initDir, filters, resolveShortcutPath, owner);
             return result;
         }
 
         public async Task<string> ShowFolderDialogAsync(
             string title = "",
-            string initDir = "") {
-            var result = await ShowFileOrFolderDialogAsync(true, title, initDir, null);
+            string initDir = "",
+            object owner = null) {
+            var result = await ShowFileOrFolderDialogAsync(true, title, initDir, null, false, owner);
             return result;
         }
 
@@ -30,14 +32,20 @@ namespace MonkeyPaste.Avalonia {
             string title,
             string initDir,
             object filtersObj,
-            bool resolveShortcutPath = false) {
+            bool resolveShortcutPath = false,
+            object owner = null) {
+
             title ??= $"Select {(isFolder ? "Folder" : "File")}";
             IReadOnlyList<FilePickerFileType> filters = filtersObj as IReadOnlyList<FilePickerFileType> ?? (new[] { FilePickerFileTypes.All });
             var storage_provider = GetStorageProvider();
             if (storage_provider == null) {
                 return null;
             }
-            //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+            owner ??= MpAvWindowManager.ActiveWindow;
+            if (owner is MpAvMainWindow) {
+                MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+            }
+
             IStorageFolder start_location = await GetInitFolderAsync(initDir);
             IReadOnlyList<IStorageItem> result;
             if (isFolder) {
@@ -58,8 +66,9 @@ namespace MonkeyPaste.Avalonia {
                            SuggestedStartLocation = start_location
                        });
             }
-            //MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
-
+            if (owner is MpAvMainWindow) {
+                MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
+            }
             if (result.FirstOrDefault() is IStorageItem si &&
                 si.TryGetLocalPath() is string path) {
                 if (resolveShortcutPath &&

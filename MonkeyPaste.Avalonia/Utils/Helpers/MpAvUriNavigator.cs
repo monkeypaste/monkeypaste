@@ -47,14 +47,10 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (OperatingSystem.IsWindows()) {
-                Process.Start("explorer.exe", uri.AbsoluteUri);
-            } else {
-                using (var myProcess = new Process()) {
-                    myProcess.StartInfo.UseShellExecute = true;
-                    myProcess.StartInfo.FileName = uri.AbsoluteUri;
-                    myProcess.Start();
-                }
+            using (var myProcess = new Process()) {
+                myProcess.StartInfo.UseShellExecute = true;
+                myProcess.StartInfo.FileName = uri.AbsoluteUri;
+                myProcess.Start();
             }
         }
 

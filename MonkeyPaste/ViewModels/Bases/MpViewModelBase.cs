@@ -46,10 +46,6 @@ namespace MonkeyPaste {
             }
         }
 
-        public virtual MpDbModelBase Model { get; set; }
-
-        public virtual ObservableCollection<MpDbModelBase> ModelHistory { get; set; }
-
         public virtual object ParentObj { get; set; }
 
         [JsonIgnore]

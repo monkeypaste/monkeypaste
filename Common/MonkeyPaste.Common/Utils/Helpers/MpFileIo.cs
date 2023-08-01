@@ -411,9 +411,9 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static string ReadTextFromResource(string resourcePath, Assembly assembly = null) {
+        public static string ReadTextFromResource(string resourcePath, Assembly assembly) {
             try {
-                assembly = assembly == null ? Assembly.GetExecutingAssembly() : assembly;
+                assembly ??= Assembly.GetExecutingAssembly();
                 locker.AcquireReaderLock(Timeout.Infinite);
                 using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
                 using (StreamReader reader = new StreamReader(stream)) {

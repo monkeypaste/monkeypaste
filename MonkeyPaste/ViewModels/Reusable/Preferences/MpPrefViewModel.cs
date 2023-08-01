@@ -377,7 +377,19 @@ namespace MonkeyPaste {
 
         public bool IsDuplicateCheckEnabled { get; set; } = true;
 
-        public bool IsRichHtmlContentEnabled { get; set; } = true;
+        [JsonIgnore]
+        public bool IsRichHtmlContentForceDisabled { get; set; } = false;
+
+        private bool _isRichHtmlContentEnabled = true;
+        public bool IsRichHtmlContentEnabled {
+            get => IsRichHtmlContentForceDisabled ? false : _isRichHtmlContentEnabled;
+            set {
+                if (_isRichHtmlContentEnabled != value) {
+                    _isRichHtmlContentEnabled = value;
+                    OnPropertyChanged(nameof(IsRichHtmlContentEnabled));
+                }
+            }
+        }
         public bool IgnoreAppendedItems { get; set; } = true;
         public bool IsSpellCheckEnabled { get; set; } = true;
 
@@ -385,7 +397,7 @@ namespace MonkeyPaste {
         public bool IgnoreWhiteSpaceCopyItems { get; set; } = true;
         public bool ResetClipboardAfterMonkeyPaste { get; set; }
 
-        public bool AddClipboardOnStartup { get; set; } = true;
+        public bool AddClipboardOnStartup { get; set; } = false;
         public bool IsClipboardListeningOnStartup { get; set; } = true;
 
         #endregion

@@ -927,7 +927,12 @@ EDITOR_WINDOW_NAME:  'MpEditorWindow',
 IsWindowResizeUpdateEnabled:  true,
 	// #endregion
 
-	// #endregion 
+	// #endregion
+
+	// #region TOOLTIPS
+	IsTooltipToolbarEnabled: false,
+	IsTooltipOverlayEnabled: true,
+	// #endregion
 
 	// #region SVG 
 	SVG_CLASS_PREFIX: 'svg-key-',

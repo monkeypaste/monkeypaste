@@ -54,7 +54,5 @@ namespace MonkeyPaste {
 
         MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
-        MpICopyItemBuilder CopyItemBuilder { get; set; }
-
     }
 }

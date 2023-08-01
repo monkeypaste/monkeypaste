@@ -412,8 +412,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsAnyAnalysisTransaction));
         }
         private void SetTransactionViewGridLength(GridLength gl) {
-            if (Parent.GetContentView() is Control Control &&
-                    Control.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
+            if (Parent.GetContentView() is Control cv &&
+                    cv.GetVisualAncestor<MpAvClipTileView>() is MpAvClipTileView ctv &&
                     ctv.FindControl<Grid>("TileGrid") is Grid tileGrid) {
                 // setting all column 1 view to IsVisible=false doesn't decrease 
                 // the column's grid length so all other tileGrid views (column 0) 

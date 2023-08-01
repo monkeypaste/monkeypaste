@@ -694,7 +694,7 @@ namespace MonkeyPaste.Common {
             return null;
         }
 
-        public static bool IsKnownImageFile(this string str) {
+        public static bool IsSupportedImageFileType(this string str) {
             if (!str.IsFile()) {
                 return false;
             }

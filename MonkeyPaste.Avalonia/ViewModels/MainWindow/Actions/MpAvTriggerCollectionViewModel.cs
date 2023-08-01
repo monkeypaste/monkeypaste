@@ -745,6 +745,7 @@ namespace MonkeyPaste.Avalonia {
                     value: def_annotate_preset_id.ToString());
 
                 #endregion
+
             });
         public ICommand ShowTriggerSelectorMenuCommand => new MpCommand<object>(
              (args) => {

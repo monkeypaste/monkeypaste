@@ -10,6 +10,11 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         Control ITemplate<object, Control>.Build(object param) {
+            //if (param is not object[] paramParts ||
+            //    paramParts[0] is not MpCopyItemType cit ||
+            //    paramParts[1] is not MpAvClipTileViewModel ctvm) {
+            //    return null;
+            //}
             string key = "ContentWebViewTemplate";
             if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled && param is MpAvClipTileViewModel ctvm) {
                 ctvm.IsEditorLoaded = true;

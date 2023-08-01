@@ -468,6 +468,7 @@
     <None Remove="Assets\svg\text-insert-caret.svg" />
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
+    <None Remove="Resources\credits.txt" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
@@ -1197,6 +1198,9 @@
     <AvaloniaResource Include="Assets\svg\text-insert-caret.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Resources\credits.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Accents\Accents.axaml">
       
     </AvaloniaResource>
@@ -1287,6 +1291,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
       <CustomToolNamespace></CustomToolNamespace>
+    </Compile>
+    <Compile Update="Views\AboutWindow\MpAvAboutView.axaml.cs">
+      <DependentUpon>MpAvAboutView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\ExternalDropWindow\DropComplete\MpAvDropCompleteView.axaml.cs">
       <DependentUpon>MpAvDropCompleteView.axaml</DependentUpon>
@@ -1498,13 +1505,13 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.1" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.1" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.1" />
+    <PackageReference Include="Avalonia" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.2" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.1" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.1" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.2" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.1" />
     <PackageReference Include="Markdig" Version="0.31.0" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.15.1" />
@@ -1517,7 +1524,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(IsDesktop) == 'true'">
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.2" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
 

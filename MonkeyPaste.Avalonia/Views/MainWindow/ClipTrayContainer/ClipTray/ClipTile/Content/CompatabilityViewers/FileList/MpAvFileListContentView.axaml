@@ -1,0 +1,102 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:DataType="local:MpAvClipTileViewModel"
+                       x:TypeArguments="local:MpAvClipTileViewModel"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Class="MonkeyPaste.Avalonia.MpAvFileListContentView">
+    <ListBox Background="Transparent"
+             BorderThickness="0"
+             DataContext="{Binding FileItemCollectionViewModel}"
+             ItemsSource="{Binding Items}"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
+        <ListBox.Styles>
+            <Style Selector="ListBoxItem">
+                <Setter Property="MaxHeight"
+                        Value="50" />
+                <Setter Property="HorizontalAlignment"
+                        Value="Stretch" />
+                <Setter Property="VerticalContentAlignment"
+                        Value="Stretch" />
+                <Setter Property="BorderThickness"
+                        Value="1" />
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource ThemeGrayAccent3Brush}" />
+            </Style>
+            <Style Selector="ListBoxItem:nth-child(even) /template/ ContentPresenter">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent1Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style Selector="ListBoxItem:nth-child(odd) /template/ ContentPresenter">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent2Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style Selector="ListBoxItem:nth-child(even):pointerover /template/ ContentPresenter, ListBoxItem:nth-child(odd):pointerover /template/ ContentPresenter,ListBoxItem:focus-within /template/ ContentPresenter">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <SolidColorBrush Color="{DynamicResource ThemeGrayAccent3Brush}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource ThemeAccent1Brush}" />
+            </Style>
+            <Style Selector="TextBlock#PathTextBlock">
+                <Setter Property="Foreground"
+                        Value="{DynamicResource ThemeInteractiveBrush}" />
+            </Style>
+            <Style Selector="TextBlock#PathTextBlock:pointerover">
+                <Setter Property="Foreground"
+                        Value="{DynamicResource ThemeAccent1Brush}" />
+                <Setter Property="TextDecorations"
+                        Value="Underline" />
+                <Setter Property="FontWeight"
+                        Value="SemiBold" />
+                <Setter Property="Cursor"
+                        Value="Hand" />
+
+            </Style>
+        </ListBox.Styles>
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <DockPanel>
+                    <Image DockPanel.Dock="Left"
+                           Width="35"
+                           Height="35"
+                           Stretch="Uniform"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Source="{Binding Path, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    <TextBlock x:Name="PathTextBlock"
+                               IsHitTestVisible="{Binding $parent[ListBoxItem].IsSelected}"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Center"
+                               TextAlignment="Right"
+                               TextWrapping="Wrap"
+                               FontSize="16"
+                               Foreground="{DynamicResource ThemeInteractiveColor}"
+                               local:MpAvPointerCommandExtension.IsEnabled="True"
+                               local:MpAvPointerCommandExtension.LeftReleaseCommand="{Binding NavigateToFileItemCommand}"
+                               Text="{Binding PathLabel}">
+                        <ToolTip.Tip>
+                            <local:MpAvToolTipView ToolTipText="Control + Click to follow..." />
+                        </ToolTip.Tip>
+                    </TextBlock>
+
+                </DockPanel>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</local:MpAvUserControl>
