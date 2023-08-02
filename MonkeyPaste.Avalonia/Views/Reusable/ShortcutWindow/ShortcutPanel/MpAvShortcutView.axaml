@@ -57,7 +57,7 @@
     <Grid x:Name="ContainerGrid"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
-          Background="{StaticResource HitTestableTransparent}">
+          Background="{DynamicResource HitTestableTransparent}">
         <TextBlock x:Name="EmptyTextBlock"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
@@ -65,49 +65,9 @@
                    FontStyle="Oblique"
                    Foreground="White"
                    Text="{Binding EmptyText, ElementName=ShortcutView}" />
-        <ItemsControl x:Name="ShortcutListBox"
-                      Background="Transparent"
-                      BorderThickness="0"
-                      HorizontalAlignment="Center"
-                      ItemsSource="{Binding KeyGroups}"
-                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                      ScrollViewer.VerticalScrollBarVisibility="Hidden">
-            <ItemsControl.IsVisible>
-            </ItemsControl.IsVisible>
-            <ItemsControl.Resources>
-                <Thickness x:Key="ListBoxItemPadding">
-                    5,0,5,0
-                </Thickness>
-                <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
-
-            </ItemsControl.Resources>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"
-                               Background="Transparent"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid ColumnDefinitions="Auto,*">
-                        <TextBlock Grid.Column="0"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Margin="5,0"
-                                   Text="+"
-                                   IsVisible="{Binding SortIdx, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
-                        <local:MpAvShortcutKeyGroupView Grid.Column="1" />
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <local:MpAvShortcutLabel x:Name="ShortcutLabel"
+                                 HorizontalAlignment="Center"
+                                 KeyGesture="{Binding KeyGroups}" />
         <Button x:Name="RecordButton"
                 Margin="3"
                 Padding="0,2"

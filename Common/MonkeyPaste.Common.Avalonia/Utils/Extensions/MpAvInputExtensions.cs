@@ -1,4 +1,6 @@
 ﻿using Avalonia.Input;
+using SharpHook.Native;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,6 +10,27 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static KeyModifiers ToAvKeyModifiers(this MpKeyModifierFlags kmf) {
             return (KeyModifiers)kmf;
+        }
+        public static bool IsModKey(this Key key) {
+            return key.ToAvKeyModifiers() != KeyModifiers.None;
+        }
+        public static int GesturePriority(this Key kc) {
+            switch (kc) {
+                case Key.LeftCtrl:
+                case Key.RightCtrl:
+                    return 0;
+                case Key.LeftAlt:
+                case Key.RightAlt:
+                    return 1;
+                case Key.LWin:
+                case Key.RWin:
+                    return 2;
+                case Key.LeftShift:
+                case Key.RightShift:
+                    return 3;
+                default:
+                    return 4;
+            }
         }
         public static KeyModifiers ToAvKeyModifiers(this Key key) {
             switch (key) {
@@ -25,6 +48,32 @@ namespace MonkeyPaste.Common.Avalonia {
                     return KeyModifiers.Meta;
                 default:
                     return KeyModifiers.None;
+            }
+        }
+        public static Key GetUnifiedKey(this Key kc) {
+            // Default to left for mods and numpad for arrows and numbers
+            switch (kc) {
+                case Key.LeftCtrl:
+                case Key.RightCtrl:
+                    return Key.LeftCtrl;
+                case Key.LeftAlt:
+                case Key.RightAlt:
+                    return Key.LeftAlt;
+                case Key.LWin:
+                case Key.RWin:
+                    return Key.LWin;
+                case Key.LeftShift:
+                case Key.RightShift:
+                    return Key.LeftShift;
+                default:
+                    string keyStr = kc.ToString();
+                    if (keyStr.StartsWith("NumPad")) {
+                        return kc;
+                    }
+                    if (Enum.TryParse(typeof(Key), $"NumPad{keyStr.Replace("D", string.Empty)}", out object unified_numpad_kc_obj)) {
+                        return (Key)unified_numpad_kc_obj;
+                    }
+                    return kc;
             }
         }
         public static KeyModifiers ToAvKeyModifiers(this IEnumerable<IEnumerable<Key>> seq) {

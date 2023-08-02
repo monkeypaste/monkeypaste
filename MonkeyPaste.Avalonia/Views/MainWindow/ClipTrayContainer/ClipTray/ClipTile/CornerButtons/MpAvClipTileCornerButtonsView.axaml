@@ -18,6 +18,8 @@
                     Value="True" />
             <Setter Property="local:MpAvPointerCommandExtension.RoutingStrategy"
                     Value="Tunnel" />
+            <!--<Setter Property="local:MpAvPointerCommandExtension.IsEventHandled"
+                    Value="True" />-->
             <Setter Property="Padding"
                     Value="0" />
         </Style>

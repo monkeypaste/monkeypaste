@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
                 ctb.Parent is not ScrollViewer sv) {
                 return;
             }
-            sv.ScrollByPointDelta(new MpPoint(0, 0.3));
+            sv.ScrollByPointDelta(new MpPoint(0, 5));
         }
 
     }

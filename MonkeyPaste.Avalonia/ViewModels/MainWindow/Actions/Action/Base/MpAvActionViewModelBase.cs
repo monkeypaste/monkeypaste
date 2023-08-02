@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIPopupMenuViewModel,
         MpIContextMenuViewModel,
+        MpIIconResource,
         MpILabelText,
         MpIBoxViewModel,
         MpIMovableViewModel,

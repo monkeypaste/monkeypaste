@@ -5,6 +5,7 @@ namespace MonkeyPaste {
     public interface MpIDownKeyHelper {
         //int DownCount { get; }
         //bool IsDown(object key);
-        List<object> Downs { get; }
+        IReadOnlyList<object> Downs { get; }
+        void Remove(object key);
     }
 }

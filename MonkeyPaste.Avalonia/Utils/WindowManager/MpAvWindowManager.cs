@@ -69,6 +69,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static MpAvWindow LocateWindow(object dataContext) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                var result = Dispatcher.UIThread.Invoke(() => LocateWindow(dataContext));
+                return result;
+            }
             if (AllWindows.FirstOrDefault(x => x.DataContext == dataContext) is MpAvWindow w) {
                 return w;
             }

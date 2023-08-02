@@ -3,12 +3,14 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Controls.Shapes;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
@@ -559,6 +561,7 @@ namespace MonkeyPaste.Avalonia {
                         Icon = CreateIcon(mivm),
                         ItemsSource = mivm.SubItems == null ? null : mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x))
                     };
+                    mi.Classes.Add("gestureLabel");
 
                     if (mivm.Tooltip != null) {
                         // TODO tooltip screws up pointer enter or something, it works but doesn't highlight so its 
@@ -573,7 +576,7 @@ namespace MonkeyPaste.Avalonia {
                         mi.AddHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased, RoutingStrategies.Tunnel);
                     }
                     if (itemType == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
-                        mi = ApplyAnyBindings(mi, mivm);
+                        ApplyAnyBindings(mi, mivm);
                     }
                     control = mi;
                     break;
@@ -600,7 +603,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         DataContext = mivm
                     };
-
+                    control.Classes.Add("colorPalette");
                     control.PointerEntered += MenuItem_PointerEnter;
                     control.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
                     break;
@@ -719,7 +722,7 @@ namespace MonkeyPaste.Avalonia {
             return items;
         }
 
-        private static MenuItem ApplyAnyBindings(MenuItem mi, MpMenuItemViewModel mivm) {
+        private static void ApplyAnyBindings(MenuItem mi, MpMenuItemViewModel mivm) {
             if (mivm.IconSrcBindingObj != null &&
                 mi.Icon is Border icon_border) {
                 // NOTE this only handles unique case for search filter check box
@@ -762,7 +765,6 @@ namespace MonkeyPaste.Avalonia {
                         Path = mivm.CommandPath,
                     });
             }
-            return mi;
         }
         #endregion
 

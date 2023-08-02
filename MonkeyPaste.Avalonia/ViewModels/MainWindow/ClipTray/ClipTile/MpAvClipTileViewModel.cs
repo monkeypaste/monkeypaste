@@ -11,6 +11,7 @@ using Avalonia.Threading;
 using CefNet.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
         MpICloseWindowViewModel,
         MpIDraggableViewModel,
         MpILocatorItem,
+        MpIIconResource,
         MpIAsyncCollectionObject,
         MpIHighlightTextRangesInfoViewModel,
         MpIWindowHandlesClosingViewModel,

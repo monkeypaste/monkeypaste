@@ -46,8 +46,8 @@ namespace MonkeyPaste {
 
         StartupComplete,
 
-        ShortcutAssignmentStarted,
-        ShortcutAssignmentEnded,
+        ShortcutAssignmentActivated,
+        ShortcutAssignmentDeactivated,
         ShortcutRoutingProfileChanged,
 
         ItemInitialized,

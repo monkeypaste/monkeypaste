@@ -3,10 +3,12 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -418,8 +420,8 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             if (sender != e.Source &&
-                e.Source is Control c &&
-                GetIsEnabled(c)) {
+                e.Source is Control sc &&
+                sc.GetSelfAndVisualAncestors().FirstOrDefault(x => GetIsEnabled(x)) is Control c) {
                 // give source precedence (likely a child element)
                 control = c;
             }

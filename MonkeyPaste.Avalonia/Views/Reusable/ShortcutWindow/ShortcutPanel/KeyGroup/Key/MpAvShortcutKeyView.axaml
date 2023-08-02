@@ -9,21 +9,20 @@
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutKeyView">
-    <Border Grid.Column="0"
+    <Border x:Name="KeyContainer"
+            Grid.Column="0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             MinWidth="{Binding $self.Bounds.Height}"
-            Background="LightGray"
-            BorderBrush="DarkGray"
-            Margin="2"
-            Padding="3"
+            Background="{DynamicResource ThemeGrayAccent1Color}"
+            BorderBrush="{DynamicResource ThemeGrayAccent3Color}"
             BorderThickness="1"
             CornerRadius="5">
         <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Foreground="Black"
+                   Foreground="{DynamicResource ThemeInteractiveBgColor}"
                    Padding="3,0"
                    Text="{Binding KeyStr, Converter={x:Static local:MpAvEnumToKeyLiteralConverter.Instance}, ConverterParameter=label}"
-                   FontWeight="Bold" />
+                   FontWeight="SemiBold" />
     </Border>
 </local:MpAvUserControl>

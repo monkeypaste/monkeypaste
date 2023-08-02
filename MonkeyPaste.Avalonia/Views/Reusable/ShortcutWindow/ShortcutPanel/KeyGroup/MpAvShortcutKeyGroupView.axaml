@@ -11,11 +11,10 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutKeyGroupView">
     <local:MpAvUserControl.Styles>
     </local:MpAvUserControl.Styles>
-    <Border Grid.Column="0"
+    <Border x:Name="KeyGroupContainer" 
+            Grid.Column="0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="Cyan"
-            BorderBrush="Black"
             BorderThickness="1"
             Padding="5,1"
             CornerRadius="5">

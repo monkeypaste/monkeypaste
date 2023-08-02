@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 
-        private MpKeyGestureHelper _gestureHelper;
+        private MpKeyGestureHelper<KeyCode> _gestureHelper;
 
         private int _curShortcutId = 0;
         #endregion
@@ -51,6 +51,8 @@ namespace MonkeyPaste.Avalonia {
                 DataContext = scavm,
                 MinHeight = 400,
                 MinWidth = 400,
+                Height = 400,
+                Width = 400,
                 //SizeToContent = SizeToContent.WidthAndHeight,
                 ShowInTaskbar = false,
                 Topmost = true,
@@ -62,12 +64,12 @@ namespace MonkeyPaste.Avalonia {
             ascw.Classes.Add("assignWindow");
             ascw.Classes.Add("fadeIn");
 
-            ascw.Opened += (s, e) => {
-                MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentStarted);
+            ascw.Activated += (s, e) => {
+                MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentActivated);
             };
 
-            ascw.Closed += (s, e) => {
-                MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentEnded);
+            ascw.Deactivated += (s, e) => {
+                MpMessenger.SendGlobal(MpMessageType.ShortcutAssignmentDeactivated);
             };
 
 
@@ -211,7 +213,7 @@ namespace MonkeyPaste.Avalonia {
 
             await Task.Delay(1);
             _curShortcutId = curShortcutId;
-            _gestureHelper = new MpKeyGestureHelper();
+            _gestureHelper = new MpKeyGestureHelper<KeyCode>();
             KeyString = keyString;
             ShortcutDisplayName = shortcutName;
             IconResourceObj = iconResourceObj;
@@ -336,7 +338,10 @@ namespace MonkeyPaste.Avalonia {
                 if (!IsWindowActive) {
                     return;
                 }
-                AddKeyDownCommand.Execute(keyStr);
+
+                _gestureHelper.AddKeyDown(Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keyStr).First().First());
+                KeyString = _gestureHelper.GetCurrentGesture();
+                OnPropertyChanged(nameof(KeyItems));
             });
         }
         private void Instance_OnGlobalKeyReleased(object sender, string keyStr) {
@@ -344,7 +349,10 @@ namespace MonkeyPaste.Avalonia {
                 if (!IsWindowActive) {
                     return;
                 }
-                RemoveKeyDownCommand.Execute(keyStr);
+
+                _gestureHelper.RemoveKeyDown(Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keyStr).First().First());
+                KeyString = _gestureHelper.GetCurrentGesture();
+                OnPropertyChanged(nameof(KeyItems));
             });
 
         }
@@ -389,19 +397,6 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(KeyItems));
                 IsValid = Validate();
                 OnPropertyChanged(nameof(KeyString));
-            });
-        public ICommand AddKeyDownCommand => new MpCommand<string>(
-            (args) => {
-                _gestureHelper.AddKeyDown(args as string);
-                KeyString = _gestureHelper.GetCurrentGesture();
-                OnPropertyChanged(nameof(KeyItems));
-            });
-
-        public ICommand RemoveKeyDownCommand => new MpCommand<string>(
-            (args) => {
-                _gestureHelper.RemoveKeyDown(args as string);
-                KeyString = _gestureHelper.GetCurrentGesture();
-                OnPropertyChanged(nameof(KeyItems));
             });
         #endregion
     }

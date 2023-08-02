@@ -7,6 +7,7 @@ using DynamicData;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Avalonia.Utils.Extensions;
+using MonkeyPaste.Common.Plugin;
 using MonoMac.CoreVideo;
 using SharpHook;
 using SharpHook.Native;
@@ -16,6 +17,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -35,7 +37,6 @@ namespace MonkeyPaste.Avalonia {
         public static bool IS_GLOBAL_MOUSE_INPUT_ENABLED { get; set; } = true;
         public static bool IS_GLOBAL_KEYBOARD_INPUT_ENABLED { get; set; } = true;
         public static bool IS_GLOBAL_INPUT_ENABLED => IS_GLOBAL_KEYBOARD_INPUT_ENABLED || IS_GLOBAL_MOUSE_INPUT_ENABLED;
-        public static bool IS_PSEUDO_GLOBAL_INPUT_ENABLED { get; set; } = false;
         public const double MIN_GLOBAL_DRAG_DIST = 20;
 
         #endregion
@@ -44,6 +45,12 @@ namespace MonkeyPaste.Avalonia {
 
         private SimpleGlobalHook _hook;
         private CancellationTokenSource _simInputCts;
+
+
+        private MpKeyGestureHelper<KeyCode> _keyboardGestureHelper = new MpKeyGestureHelper<KeyCode>();
+        //private List<object> _downs = new List<object>();
+        //private List<Tuple<KeyCode, DateTime>> _downChecker = new List<Tuple<KeyCode, DateTime>>();
+        private MpAvShortcutViewModel _exact_match;
 
         #endregion
 
@@ -58,9 +65,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIDownKeyHelper Implementation
 
-        List<object> MpIDownKeyHelper.Downs =>
-            _downs;
-
+        IReadOnlyList<object> MpIDownKeyHelper.Downs =>
+            _keyboardGestureHelper.Downs.Cast<object>().ToList();
+        void MpIDownKeyHelper.Remove(object key) {
+            if (key is not KeyCode shkey) {
+                return;
+            }
+            _keyboardGestureHelper.RemoveKeyDown(shkey);
+        }
         #endregion
 
         #region MpIShortcutGestureLocator Implementation
@@ -86,21 +98,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIGlobalInputListener
         public void StartInputListener() {
-            if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
-                Dispatcher.UIThread.Post(() => {
-                    CreatePseudoGlobalInputHooks(MpAvMainView.Instance);
-                });
-            }
             if (IS_GLOBAL_INPUT_ENABLED) {
                 CreateGlobalInputHooks();
             }
         }
         public void StopInputListener() {
-            if (IS_PSEUDO_GLOBAL_INPUT_ENABLED) {
-                Dispatcher.UIThread.Post(() => {
-                    DisposePseudoGlobalInputHooks(MpAvMainView.Instance);
-                });
-            }
             if (IS_GLOBAL_INPUT_ENABLED) {
                 DisposeGlobalInputHooks();
             }
@@ -452,8 +454,6 @@ namespace MonkeyPaste.Avalonia {
             if (!Mp.Services.PlatformInfo.IsDesktop) {
                 IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
                 IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
-
-                IS_PSEUDO_GLOBAL_INPUT_ENABLED = false;
             }
             Items.CollectionChanged += Items_CollectionChanged;
             PropertyChanged += MpAvShortcutCollectionViewModel_PropertyChanged;
@@ -468,7 +468,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
-            _keyboardGestureHelper = new MpKeyGestureHelper();
+            _keyboardGestureHelper = new MpKeyGestureHelper<KeyCode>();
             _simInputCts = new CancellationTokenSource();
 
             await InitShortcutsAsync();
@@ -482,9 +482,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<string> CreateOrUpdateViewModelShortcutAsync(
-            MpIShortcutCommandViewModel iscvm,
-            object iconResourceObj = null) {
+        public async Task<string> CreateOrUpdateViewModelShortcutAsync(MpIShortcutCommandViewModel iscvm) {
 
             string keys = null;
             ICommand command = iscvm.ShortcutCommand;
@@ -496,7 +494,7 @@ namespace MonkeyPaste.Avalonia {
                 keys = svm.KeyString;
             }
             string title = await iscvm.ShortcutType.GetShortcutTitleAsync(iscvm);
-
+            object icon_obj = iscvm is MpIIconResource ? (iscvm as MpIIconResource).IconResourceObj : null;
             var result_tuple = await MpAvAssignShortcutViewModel.ShowAssignShortcutDialog(
                 shortcutName: title,
                 keys: keys,
@@ -506,7 +504,7 @@ namespace MonkeyPaste.Avalonia {
                     shortcutType.CanBeGlobal() ?
                         MpShortcutAssignmentType.CanBeGlobalCommand :
                         MpShortcutAssignmentType.InternalCommand,
-                iconResourceObj: iconResourceObj,
+                iconResourceObj: icon_obj,
                 owner: MpAvWindowManager.ActiveWindow);
 
             string shortcutKeyString = result_tuple == null ? null : result_tuple.Item1;
@@ -697,14 +695,13 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.MainWindowOpened:
                     IsApplicationShortcutsEnabled = true;
                     break;
-                case MpMessageType.ShortcutAssignmentStarted:
+                case MpMessageType.ShortcutAssignmentActivated:
                     IsShortcutsEnabled = false;
-                    _downs.Clear();
-                    _downChecker.Clear();
+                    //_downs.Clear();
                     _keyboardGestureHelper.ClearCurrentGesture();
 
                     break;
-                case MpMessageType.ShortcutAssignmentEnded:
+                case MpMessageType.ShortcutAssignmentDeactivated:
                     IsShortcutsEnabled = true;
                     break;
                 case MpMessageType.SettingsWindowOpened:
@@ -1050,81 +1047,90 @@ namespace MonkeyPaste.Avalonia {
 
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
-            HandleKeyDown(keyStr, e);
+            HandleGlobalKeyEvents(keyStr, true);
+            if (!IsShortcutsEnabled) {
+                return;
+            }
+
+            _keyboardGestureHelper.AddKeyDown(e.Data.KeyCode);
+            string down_gesture = _keyboardGestureHelper.GetCurrentGesture();
+            _exact_match =
+                AvailableItems
+                .FirstOrDefault(x => x.KeyString == down_gesture);
+
+            if (MpPrefViewModel.Instance.IsAutoSearchEnabled) {
+                Dispatcher.UIThread.Post(() => {
+                    /*
+                        In global key DOWN, if auto search pref enabled and no other key 
+                        (besides shift) is down and is not exact match and mw is active/open 
+                        and the up key is alpha-numeric or (control+v) (compare last) and 
+                        focus is not textbox/ autocomplete/ editable wv (will only be valid on first typed key). 
+                        Then  set searchbox to focus (should auto trigger expand) so input passes to searchbox. 
+                        If not work would need to use keytyped event or keyup and figure out the char..
+                    */
+
+                    bool can_auto_search =
+                        MpAvWindowManager.MainWindow.IsActive &&
+                        MpAvWindowManager.MainWindow.IsVisible &&
+                        !MpAvFocusManager.Instance.IsTextInputControlFocused &&
+                        _exact_match == null &&
+                        _keyboardGestureHelper.Downs.Count == 1 &&
+                        _keyboardGestureHelper.Downs.Cast<KeyCode>().All(x => x.IsTextInputKey());
+
+                    if (can_auto_search) {
+                        string text_to_pass = ((KeyCode)_keyboardGestureHelper.Downs[0]).GetKeyLiteral().ToLower();
+                        MpAvSearchBoxViewModel.Instance.BeginAutoSearchCommand.Execute(text_to_pass);
+                    }
+                });
+            }
+
+            if (_exact_match == null) {
+                return;
+            }
+            // only suppress input key
+            e.SuppressEvent = _exact_match.SuppressesKeys && !e.Data.KeyCode.IsModKey();
+            MpConsole.WriteLine($"Recognized GESTURE: '{down_gesture}' SHORTCUT: {_exact_match.ShortcutType}");
         }
 
 
-        private void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
+        private async void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
-            HandleKeyUp(keyStr, e);
-        }
 
-        #endregion
+            HandleGlobalKeyEvents(keyStr, false);
+            if (!IsShortcutsEnabled) {
+                return;
+            }
+            if (MpPrefViewModel.Instance.TrackExternalPasteHistory &&
+                _activePasteKeystring != null &&
+                !e.Data.KeyCode.IsModKey() &&
+                _keyboardGestureHelper.GetCurrentGesture() == _activePasteKeystring &&
+                !MpAvClipTrayViewModel.Instance.IsPasting) {
+                OnGlobalPasteShortcutPerformed?.Invoke(this, null);
+            }
 
-        #endregion
+            _keyboardGestureHelper.RemoveKeyDown(e.Data.KeyCode);
+            if (_exact_match == null) {
+                return;
+            }
+            if (e.Data.KeyCode.IsModKey()) {
+                // only invoke if up is input key
+                _exact_match = null;
+                return;
+            }
 
-        #region Fake-Global Input
+            // store local ref to match in case its reset during sim
+            MpAvShortcutViewModel match_to_execute = _exact_match;
 
-        private void CreatePseudoGlobalInputHooks(Control control) {
-            // mouse
-            control.PointerMoved += PseudoGlobalControl_PointerMoved;
-            control.AddHandler(Window.PointerPressedEvent, PseudoGlobalControl_PointerPressed, RoutingStrategies.Tunnel);
-            control.AddHandler(Window.PointerReleasedEvent, PseudoGlobalControl_PointerReleased, RoutingStrategies.Tunnel);
-            control.PointerWheelChanged += PseudoGlobalControl_PointerWheelChanged;
+            if (match_to_execute.RoutingType == MpRoutingType.Bubble) {
+                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
+            }
+            Dispatcher.UIThread.Invoke(() => {
+                match_to_execute.PerformShortcutCommand.Execute(null);
+            });
+            if (match_to_execute.RoutingType == MpRoutingType.Tunnel) {
+                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
+            }
 
-            // keyboard
-            control.KeyDown += PseudoGlobalControl_KeyDown;
-            control.KeyUp += PseudoGlobalControl_KeyUp;
-        }
-        private void DisposePseudoGlobalInputHooks(Control control) {
-            // mouse
-            control.PointerMoved -= PseudoGlobalControl_PointerMoved;
-            control.RemoveHandler(Window.PointerPressedEvent, PseudoGlobalControl_PointerPressed);
-            control.RemoveHandler(Window.PointerReleasedEvent, PseudoGlobalControl_PointerReleased);
-            control.PointerWheelChanged -= PseudoGlobalControl_PointerWheelChanged;
-
-            // keyboard
-            control.KeyDown -= PseudoGlobalControl_KeyDown;
-            control.KeyUp -= PseudoGlobalControl_KeyUp;
-        }
-
-        #region Mouse
-
-        private void PseudoGlobalControl_PointerPressed(object sender, PointerPressedEventArgs e) {
-            e.Handled = false;
-            HandlePointerPress(e.IsLeftDown(MpAvMainView.Instance));
-        }
-        private void PseudoGlobalControl_PointerMoved(object sender, PointerEventArgs e) {
-            // NOTE only called when global input is disabled
-            var mw_mp = e.GetClientMousePoint(MpAvMainView.Instance);
-            var gmp = VisualExtensions.PointToScreen(MpAvMainView.Instance, mw_mp.ToAvPoint()).ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
-            HandlePointerMove(gmp);
-        }
-
-        private void PseudoGlobalControl_PointerReleased(object sender, PointerReleasedEventArgs e) {
-            e.Handled = false;
-            HandlePointerReleased(GlobalIsMouseLeftButtonDown != e.IsLeftDown(MpAvMainView.Instance));
-        }
-
-
-        private void PseudoGlobalControl_PointerWheelChanged(object sender, PointerWheelEventArgs e) {
-            HandlePointerWheel(e.Delta.ToPortablePoint());
-        }
-
-        #endregion
-
-        #region Keyboard
-
-        private void PseudoGlobalControl_KeyDown(object sender, KeyEventArgs e) {
-            //string keyLiteral = MpAvInternalKeyConverter.GetKeyLiteral(e.Key);
-            string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Key } });
-            HandleKeyDown(keyStr, e);
-        }
-
-        private void PseudoGlobalControl_KeyUp(object sender, KeyEventArgs e) {
-            //string keyStr = MpAvInternalKeyConverter.GetKeyLiteral(e.Key);
-            string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Key } });
-            HandleKeyUp(keyStr, e);
         }
 
         #endregion
@@ -1246,144 +1252,11 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        private void HandleKeyDown(string keyStr, object down_e) {
-            HandleGlobalKeyEvents(keyStr, true);
-            if (!IsShortcutsEnabled) {
-                return;
-            }
-            HandleGestureRouting_Down(keyStr, down_e);
-        }
-
-        private void HandleKeyUp(string keyStr, object up_e) {
-            HandleGlobalKeyEvents(keyStr, false);
-            if (!IsShortcutsEnabled) {
-                return;
-            }
-            HandleGestureRouting_Up(keyStr, up_e).FireAndForgetSafeAsync(this);
-        }
 
 
         #region Gesture Handling
 
-        private MpKeyGestureHelper _keyboardGestureHelper;
-        private List<object> _downs = new List<object>();
-        private List<Tuple<KeyCode, DateTime>> _downChecker = new List<Tuple<KeyCode, DateTime>>();
-        private MpAvShortcutViewModel _exact_match;
 
-        private void HandleGestureRouting_Down(string keyLiteral, object down_e) {
-            //MpConsole.WriteLine($"Global key DOWN: " + keyLiteral);
-
-            if (_downChecker.Where(x => DateTime.Now - x.Item2 > TimeSpan.FromSeconds(15)) is IEnumerable<Tuple<KeyCode, DateTime>> dttl &&
-                dttl.Any()) {
-                //assumes won't be holding key down longer than 30 seconds
-                //this may give false positives if breakpoint hit & resumed with key down
-                MpConsole.WriteLine($"Orphan downs detected by time delay. Removing: {string.Join(",", dttl.Select(x => x.Item1.GetKeyLiteral()))}");
-                dttl.ToList().ForEach(x => _downs.Remove(x.Item1));
-                dttl.ToList().ForEach(x => _downChecker.Remove(x));
-            }
-            if (_downChecker.Count != _downs.Count &&
-                _downs.Cast<KeyCode>() is IEnumerable<KeyCode> dkcl &&
-                _downChecker.Select(x => x.Item1) is IEnumerable<KeyCode> dckcl) {
-                var diff = dkcl.Difference(dckcl);
-                MpConsole.WriteLine($"Orphan downs detected by count mismatch. Removing: {string.Join(",", diff.Select(x => x.GetKeyLiteral()))}");
-                diff.ToList().ForEach(x => _downs.Remove(x));
-                diff.ToList().ForEach(x => _downChecker.Remove(_downChecker.FirstOrDefault(y => y.Item1 == x)));
-            }
-
-            if (_downs.IsNullOrEmpty()) {
-                _keyboardGestureHelper.ClearCurrentGesture();
-            }
-
-            var sharp_down = down_e as KeyboardHookEventArgs;
-            KeyCode kc = sharp_down.Data.KeyCode;
-
-            if (_downs.Contains(kc.GetUnifiedKey())) {
-                // ignore repeats
-                return;
-            } else {
-                _downs.Add(kc.GetUnifiedKey());
-                _downChecker.Add(new Tuple<KeyCode, DateTime>(kc, DateTime.Now));
-            }
-
-            _keyboardGestureHelper.AddKeyDown(keyLiteral);
-            string down_gesture = _keyboardGestureHelper.GetCurrentGesture();
-            _exact_match =
-                AvailableItems
-                .FirstOrDefault(x => x.KeyString == down_gesture);
-
-            if (MpPrefViewModel.Instance.IsAutoSearchEnabled) {
-                Dispatcher.UIThread.Post(() => {
-                    /*
-                        In global key DOWN, if auto search pref enabled and no other key 
-                        (besides shift) is down and is not exact match and mw is active/open 
-                        and the up key is alpha-numeric or (control+v) (compare last) and 
-                        focus is not textbox/ autocomplete/ editable wv (will only be valid on first typed key). 
-                        Then  set searchbox to focus (should auto trigger expand) so input passes to searchbox. 
-                        If not work would need to use keytyped event or keyup and figure out the char..
-                    */
-
-                    bool can_auto_search =
-                        MpAvWindowManager.MainWindow.IsActive &&
-                        MpAvWindowManager.MainWindow.IsVisible &&
-                        !MpAvFocusManager.Instance.IsTextInputControlFocused &&
-                        _exact_match == null &&
-                        _downs.Count == 1 &&
-                        _downs.Cast<KeyCode>().All(x => x.IsTextInputKey());
-
-                    if (can_auto_search) {
-                        string text_to_pass = ((KeyCode)_downs[0]).GetKeyLiteral().ToLower();
-                        MpAvSearchBoxViewModel.Instance.BeginAutoSearchCommand.Execute(text_to_pass);
-                    }
-                });
-            }
-
-            if (_exact_match == null) {
-                return;
-            }
-            // only suppress input key
-            sharp_down.SuppressEvent = _exact_match.SuppressesKeys && !kc.IsModKey();
-            MpConsole.WriteLine($"Recognized GESTURE: '{down_gesture}' SHORTCUT: {_exact_match.ShortcutType}");
-        }
-
-        private async Task HandleGestureRouting_Up(string keyLiteral, object up_e) {
-            //MpConsole.WriteLine($"Global key UP: " + keyLiteral);
-            var sharp_up = up_e as KeyboardHookEventArgs;
-            KeyCode kc = sharp_up.Data.KeyCode;
-            _downs.Remove(kc);
-            if (_downChecker.FirstOrDefault(x => x.Item1 == kc) is Tuple<KeyCode, DateTime> dt) {
-                _downChecker.Remove(dt);
-            }
-
-            if (MpPrefViewModel.Instance.TrackExternalPasteHistory &&
-                _activePasteKeystring != null &&
-                !kc.IsModKey() &&
-                _keyboardGestureHelper.GetCurrentGesture() == _activePasteKeystring &&
-                !MpAvClipTrayViewModel.Instance.IsPasting) {
-                OnGlobalPasteShortcutPerformed?.Invoke(this, null);
-            }
-
-            _keyboardGestureHelper.RemoveKeyDown(keyLiteral);
-            if (_exact_match == null) {
-                return;
-            }
-            if (kc.IsModKey()) {
-                // only invoke if up is input key
-                _exact_match = null;
-                return;
-            }
-            // store local ref to match in case its reset during sim
-            MpAvShortcutViewModel match_to_execute = _exact_match;
-
-            if (match_to_execute.RoutingType == MpRoutingType.Bubble) {
-                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(new[] { new[] { kc }.ToList() }.ToList());
-            }
-            Dispatcher.UIThread.Invoke(() => {
-                match_to_execute.PerformShortcutCommand.Execute(null);
-            });
-            if (match_to_execute.RoutingType == MpRoutingType.Tunnel) {
-                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(new[] { new[] { kc }.ToList() }.ToList());
-            }
-        }
 
         #endregion
 

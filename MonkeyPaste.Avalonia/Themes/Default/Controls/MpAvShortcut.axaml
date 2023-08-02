@@ -40,4 +40,36 @@
         <Setter Property="IsVisible"
                 Value="True" />
     </Style>
+
+    <!--  SHORTCUT LABEL BG  -->
+    <Style Selector="local|MpAvShortcutLabel Border#KeyGroupContainer">
+        <Setter Property="Background"
+                Value="Cyan" />
+        <Setter Property="BorderBrush"
+                Value="Black" />
+    </Style>
+    <Style Selector="local|MpAvShortcutLabel.menuItemGesture  Border#KeyGroupContainer">
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector="local|MpAvShortcutLabel Border#KeyContainer">
+        <Setter Property="Margin"
+                Value="2" />
+        <Setter Property="Padding"
+                Value="3" />
+    </Style>
+    <Style Selector="local|MpAvShortcutLabel.menuItemGesture Border#KeyContainer">
+        <Setter Property="Margin"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="3,1" />
+    </Style>
+
+    <Style Selector="local|MpAvShortcutLabel.menuItemGesture TextBlock">
+        <Setter Property="FontSize"
+                Value="12" />
+    </Style>
 </Styles>

@@ -15,6 +15,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncCollectionObject,
         MpIMenuItemViewModel,
         MpIActionComponent,
+        MpIIconResource,
         MpIUserIconViewModel,
         MpIContentTypeDependant,
         MpIShortcutCommandViewModel,
@@ -23,6 +24,13 @@ namespace MonkeyPaste.Avalonia {
         MpAvIParameterCollectionViewModel {
 
         #region Interfaces
+
+        #region MpIIconResource Implementation
+
+        object MpIIconResource.IconResourceObj =>
+            IconId;
+
+        #endregion
 
         #region MpIContentTypeDependant Implementation
 

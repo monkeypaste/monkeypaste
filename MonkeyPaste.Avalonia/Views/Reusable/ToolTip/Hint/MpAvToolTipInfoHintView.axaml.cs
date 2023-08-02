@@ -66,6 +66,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Init() {
+            if (ToolTipText == null) {
+                return;
+            }
             if (ToolTipText.StartsWith("#warn#")) {
                 ToolTipText = ToolTipText.Replace("#warn#", string.Empty);
                 this.Classes.Add("warning");

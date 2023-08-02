@@ -155,7 +155,7 @@ namespace MonkeyPaste.Avalonia {
             // 2. omit failures from result to be restored after gesture
 
             // 1
-            false_downs.ForEach(x => Mp.Services.KeyDownHelper.Downs.Remove(x));
+            false_downs.ForEach(x => Mp.Services.KeyDownHelper.Remove(x));
             // 2
             false_downs.ForEach(x => downs_to_clear.Remove(x));
             return downs_to_clear;

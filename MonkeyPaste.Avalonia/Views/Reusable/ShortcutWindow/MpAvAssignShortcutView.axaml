@@ -110,8 +110,16 @@
 
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid Background="{DynamicResource ThemeGrayAccent3Color}"
-          RowDefinitions="Auto,Auto,Auto,*,Auto,Auto,50">
+    <Grid Background="{DynamicResource ThemeGrayAccent3Color}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto" MinHeight="50"/>
+        <RowDefinition Height="*" MinHeight="65"/>
+        <RowDefinition Height="Auto" MinHeight="50"/>
+        <RowDefinition Height="Auto" MinHeight="50"/>
+        <RowDefinition Height="50"/>
+      </Grid.RowDefinitions>
         <!--  HEADER ROW  -->
         <DockPanel Grid.Row="0"
                    HorizontalAlignment="Center">
@@ -181,9 +189,9 @@
                 CornerRadius="10"
                 BorderThickness="0"
                 HorizontalAlignment="Center"
+                VerticalAlignment="Stretch"
                 Padding="10"
-                Margin="20,5"
-                MinHeight="65">
+                Margin="20,5">
             <Grid IsHitTestVisible="False">
                 <local:MpAvShortcutView IsVisible="{Binding !IsEmpty}" />
                 <Border Classes="msg empty"

@@ -209,6 +209,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\Border.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMenuItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvParameterItem.axaml" />
@@ -1211,6 +1212,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\FadeWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\WelcomeWindowGrow.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvMenuItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\RadioButton.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
@@ -1420,6 +1422,9 @@
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\KeyGroup\MpAvShortcutKeyGroupView.axaml.cs">
       <DependentUpon>MpAvShortcutKeyGroupView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\MpAvShortcutLabel.axaml.cs">
+      <DependentUpon>MpAvShortcutLabel.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ShortcutWindow\ShortcutPanel\MpAvShortcutView.axaml.cs">
       <DependentUpon>MpAvShortcutView.axaml</DependentUpon>

@@ -643,7 +643,6 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
 
-
             if (NavigateUriCommand != null &&
                 IsReadOnly) {
                 var req_keys =
@@ -740,17 +739,17 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void HandleKeyDown(object sender, KeyEventArgs e) {
-            if (e.Key == Key.Space) {
-                string pre_str = Text.Substring(0, SelectionStart);
-                string post_str = Text.Substring(SelectionEnd);
-                string new_text = pre_str + " " + post_str;
-                int new_sel_start = SelectionStart + 1;
-                SetValue(TextProperty, new_text);
-                SelectionStart = new_sel_start;
-                SelectionEnd = new_sel_start;
-                e.Handled = true;
-                return;
-            }
+            //if (e.Key == Key.Space) {
+            //    string pre_str = Text.Substring(0, SelectionStart);
+            //    string post_str = Text.Substring(SelectionEnd);
+            //    string new_text = pre_str + " " + post_str;
+            //    int new_sel_start = SelectionStart + 1;
+            //    SetValue(TextProperty, new_text);
+            //    SelectionStart = new_sel_start;
+            //    SelectionEnd = new_sel_start;
+            //    e.Handled = true;
+            //    return;
+            //}
             if (e.Key == Key.Enter) {
                 // prevent avalonia from collapsing treeitem
                 e.Handled = true;
