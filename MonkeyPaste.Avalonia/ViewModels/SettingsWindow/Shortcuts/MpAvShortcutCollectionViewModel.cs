@@ -457,6 +457,7 @@ namespace MonkeyPaste.Avalonia {
             }
             Items.CollectionChanged += Items_CollectionChanged;
             PropertyChanged += MpAvShortcutCollectionViewModel_PropertyChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
 
@@ -473,7 +474,6 @@ namespace MonkeyPaste.Avalonia {
 
             await InitShortcutsAsync();
 
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
             InitExternalPasteTracking();
 
@@ -685,10 +685,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.SettingsFilterTextChanged:
                     UpdateFilteredItems();
                     break;
-                case MpMessageType.MainWindowLoadComplete: {
-                        StartInputListener();
-                        break;
-                    }
+                case MpMessageType.MainWindowLoadComplete:
+                    StartInputListener();
+                    break;
                 case MpMessageType.MainWindowClosed:
                     IsApplicationShortcutsEnabled = false;
                     break;
@@ -697,9 +696,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpMessageType.ShortcutAssignmentActivated:
                     IsShortcutsEnabled = false;
-                    //_downs.Clear();
                     _keyboardGestureHelper.ClearCurrentGesture();
-
                     break;
                 case MpMessageType.ShortcutAssignmentDeactivated:
                     IsShortcutsEnabled = true;
@@ -708,12 +705,6 @@ namespace MonkeyPaste.Avalonia {
                     Dispatcher.UIThread.Post(() => {
                         Task.WhenAll(Items.Where(x => x.IsCustom).Select(x => x.SetShortcutNameAsync())).FireAndForgetSafeAsync(this);
                     });
-                    break;
-                case MpMessageType.AppWindowActivated:
-                case MpMessageType.AppWindowDeactivated:
-                    //if (!string.IsNullOrEmpty(_gesture.PeekGestureString)) {
-                    //    MpConsole.WriteLine($"App window activation changed w/ peek gesture '{_gesture.PeekGestureString}' does it need to be cleared?");
-                    //}
                     break;
             }
         }

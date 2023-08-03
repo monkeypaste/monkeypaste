@@ -22,20 +22,8 @@ function enableReadOnly_ext_ntf() {
 	enableReadOnly(true);
 
 	let edit_dt_msg_str = null;
-	if (LastTextChangedDelta != null) {
-		let dti_msg = {
-			dataItems: [
-				{
-					format: globals.URI_LIST_FORMAT,
-					data: JSON.stringify([`${globals.LOCAL_HOST_URL}/?type=UserDevice&id=-1`])
-				}
-			]
-		};
-		let edit_dt_msg = {
-			changeDeltaJsonStr: toBase64FromJsonObj(JSON.stringify(LastTextChangedDelta)),
-			sourceDataItemsJsonStr: toBase64FromJsonObj(dti_msg),
-			transferLabel: 'Edited'
-		};
+	if (hasTextChangedDelta()) {
+		let edit_dt_msg = getLastTextChangedDataTransferMessage();
 		edit_dt_msg_str = toBase64FromJsonObj(edit_dt_msg);
 
 		// clear delta log

@@ -167,9 +167,13 @@ namespace MonkeyPaste.Common {
                 }
             }
         }
-        public static bool IsEmptyRichHtmlString(this string htmlStr) {
+        public static bool IsNullOrWhitespaceHtmlString(this string htmlStr) {
+            if (htmlStr == null) {
+                return true;
+            }
+            string pt = htmlStr.ToPlainText();
             return
-                string.IsNullOrWhiteSpace(htmlStr) ||
+                string.IsNullOrWhiteSpace(pt) ||
                 htmlStr.ToLower() == "<p><br></p>" ||
                 htmlStr.ToLower() == "<p><br/></p>";
         }

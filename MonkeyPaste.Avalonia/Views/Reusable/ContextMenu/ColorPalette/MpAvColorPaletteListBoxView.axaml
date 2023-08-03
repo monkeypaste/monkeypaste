@@ -31,13 +31,17 @@
         </ListBox.Resources>
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-                <WrapPanel MaxWidth="280"
-                           Orientation="Horizontal" />
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                      ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" />
             </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
         <ListBox.Styles>
             <Style Selector="ListBoxItem"
                    x:DataType="pcl:MpMenuItemViewModel">
+                <Setter Property="Grid.Row"
+                        Value="{Binding SortOrderIdx, ConverterParameter=row|14, Converter={x:Static local:MpAvIntToGridLocationConverter.Instance}}" />
+                <Setter Property="Grid.Column"
+                        Value="{Binding SortOrderIdx, ConverterParameter=col|14, Converter={x:Static local:MpAvIntToGridLocationConverter.Instance}}" />
                 <Setter Property="IsSelected"
                         Value="{Binding IsChecked, Mode=TwoWay}" />
                 <Setter Property="FocusAdorner"

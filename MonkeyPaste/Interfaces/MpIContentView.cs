@@ -25,9 +25,8 @@ namespace MonkeyPaste {
     }
 
 
-    public interface MpIDragSource {
+    public interface MpIDragSource : MpIDraggable {
         bool WasDragCanceled { get; set; }
-        bool IsDragging { get; set; }
         object LastPointerPressedEventArgs { get; }
         //bool IsDragging { get; set; }
         void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta);

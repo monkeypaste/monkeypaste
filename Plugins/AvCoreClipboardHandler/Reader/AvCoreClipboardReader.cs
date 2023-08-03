@@ -194,8 +194,8 @@ namespace AvCoreClipboardHandler {
                             case CoreClipboardParamType.R_Ignore_Text:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignText &&
                                     ignText) {
-                                    AddIgnoreNotification(ref nfl, format);
                                     data = null;
+                                    AddIgnoreNotification(ref nfl, format);
 
                                 } else {
                                     //nfl = new List<MpPluginUserNotificationFormat>() {
@@ -216,6 +216,7 @@ namespace AvCoreClipboardHandler {
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignImg &&
                                     ignImg) {
                                     data = null;
+                                    AddIgnoreNotification(ref nfl, format);
                                 }
                                 break;
                         }
@@ -226,7 +227,6 @@ namespace AvCoreClipboardHandler {
                             case CoreClipboardParamType.R_IgnoreAll_FileDrop:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignore_fd &&
                                     ignore_fd) {
-
                                     data = null;
                                     AddIgnoreNotification(ref nfl, format);
                                 }
@@ -271,6 +271,9 @@ namespace AvCoreClipboardHandler {
         }
 
         private static void AddIgnoreNotification(ref List<MpPluginUserNotificationFormat> nfl, string format) {
+#if !DEBUG
+            return;
+#endif
             if (nfl == null) {
                 nfl = new List<MpPluginUserNotificationFormat>();
             }

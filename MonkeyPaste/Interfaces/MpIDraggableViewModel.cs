@@ -1,5 +1,7 @@
 ﻿namespace MonkeyPaste {
-    public interface MpIDraggableViewModel : MpIViewModel {
+    public interface MpIDraggable {
         bool IsDragging { get; set; }
+    }
+    public interface MpIDraggableViewModel : MpIDraggable, MpIViewModel {
     }
 }

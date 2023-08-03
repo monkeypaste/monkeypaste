@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIDraggableViewModel Implementation
-        bool MpIDraggableViewModel.IsDragging {
+        bool MpIDraggable.IsDragging {
             get => IsDragging || IsPinTagDragging;
             set => throw new NotImplementedException();
         }

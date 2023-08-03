@@ -1,10 +1,4 @@
-﻿// #region Globals
-
-var LastTextChangedDelta = null;
-
-// #endregion Globals
-
-// #region Life Cycle
+﻿// #region Life Cycle
 
 function initHistory() {
 }
@@ -13,6 +7,27 @@ function initHistory() {
 
 // #region Getters
 
+function getLastTextChangedDataTransferMessage(label = 'Edited') {
+	if (!hasTextChangedDelta()) {
+		return null;
+	}
+	// output 'MpQuillDataTransferCompletedNotification'
+	let dti_msg = {
+		dataItems: [
+			{
+				format: globals.URI_LIST_FORMAT,
+				data: JSON.stringify([`${globals.LOCAL_HOST_URL}/?type=CopyItem&handle=${globals.ContentHandle}`])
+			}
+		]
+	};
+	let edit_dt_msg = {
+		changeDeltaJsonStr: toBase64FromJsonObj(JSON.stringify(globals.LastTextChangedDelta)),
+		sourceDataItemsJsonStr: toBase64FromJsonObj(dti_msg),
+		transferLabel: label
+	};
+	return edit_dt_msg;
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -20,6 +35,10 @@ function initHistory() {
 // #endregion Setters
 
 // #region State
+
+function hasTextChangedDelta() {
+	return globals.LastTextChangedDelta != null;
+}
 
 // #endregion State
 
@@ -48,16 +67,16 @@ function historyRedo() {
 }
 
 function addHistoryItem(delta) {
-	if (LastTextChangedDelta == null) {
-		LastTextChangedDelta = delta;
+	if (hasTextChangedDelta()) {
+		globals.LastTextChangedDelta = globals.LastTextChangedDelta.compose(delta);
 	} else {
-		LastTextChangedDelta = LastTextChangedDelta.compose(delta);
+		globals.LastTextChangedDelta = delta;
 	}
 }
 function clearLastDelta() {
 	log('Delta log cleared. It was: ');
-	log(LastTextChangedDelta);
-	LastTextChangedDelta = null;
+	log(globals.LastTextChangedDelta);
+	globals.LastTextChangedDelta = null;
 }
 // #endregion Actions
 

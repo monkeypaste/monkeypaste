@@ -21,16 +21,17 @@ function initLinkClassAttributes() {
 
 
 function loadLinkHandlers() {
-    if (globals.ContentItemType == 'FileList') {
-        globals.RequiredNavigateUriModKeys = ['Alt'];
-    } else {
-        globals.RequiredNavigateUriModKeys = [];
-    }
+    //if (globals.ContentItemType == 'FileList') {
+    //    globals.RequiredNavigateUriModKeys = ['Alt'];
+    //} else {
+    //    globals.RequiredNavigateUriModKeys = [];
+    //}
 
     let a_elms = Array.from(getEditorElement().querySelectorAll('a'));
     for (var i = 0; i < a_elms.length; i++) {
         let link_elm = a_elms[i];
-        link_elm.addEventListener('click', onLinkClick, true);
+        //link_elm.addEventListener('click', onLinkClick, true);
+        link_elm.addEventListener('pointerup', onLinkPointerUp, true);
         link_elm.addEventListener('pointerenter', onLinkPointerEnter, true);
         link_elm.addEventListener('pointerleave', onLinkPointerLeave, true);
 
@@ -75,12 +76,48 @@ function getLinkToolbarPopupTextInputElement() {
     return Array.from(link_tooltip_container_elm.querySelectorAll('input'))[0];
 }
 
+function getRequiredModKeyText() {
+    let mod_key_text = '';
+    if (globals.RequiredNavigateUriModKeys.length > 0) {
+        mod_key_text = `[+ <strong>${globals.RequiredNavigateUriModKeys.join(' ')}</strong>]`;
+    }
+    return mod_key_text;
+}
+
+function getLinkTooltipText(a_elm, includeContext = false) {
+    // NOTE omitting context to avoid long tooltips cause still haven't 
+    // found solid layout to prevent overlap/overflow issues..
+    let result = `Click ${getRequiredModKeyText()} to `;
+    if (a_elm.classList.contains('link-type-hexcolor')) {
+        if (includeContext) {
+            result += `edit '<em>${a_elm.innerHTML}</em>'...`;
+        } else {
+            result += 'edit color...';
+        }
+    } else if (a_elm.classList.contains('link-type-delete-item')) {
+        if (includeContext) {
+            let fli_text = a_elm.parentElement.parentElement.previousSibling.innerText;
+            result += `remove '<em>${fli_text}</em>'`;
+        } else {
+            result += 'remove item';
+        }
+    } else {
+        if (includeContext) {
+            result += `goto '<em>${a_elm.getAttribute('href')}</em>'...`;
+        } else {
+            result += 'follow...'
+        }
+    }
+    return result;
+}
+
 // #endregion Getters
 
 // #region Setters
 // #endregion Setters
 
 // #region State
+
 // #endregion State
 
 // #region Actions
@@ -150,7 +187,7 @@ function formatRangeAsLink(range, source = 'user') {
 
 // #region Event Handlers
 
-function onLinkClick(e) {
+function onLinkPointerUp(e) {
     if (e.currentTarget === undefined || e.currentTarget.href === undefined) {
         debugger;
         return;
@@ -254,23 +291,13 @@ function onLinkPointerEnter(e) {
         return;
     }
     let a_elm = e.currentTarget;
-    let mod_key_text = '';
-    if (globals.RequiredNavigateUriModKeys.length > 0) {
-        mod_key_text = `[+ <strong>${globals.RequiredNavigateUriModKeys.join(' ')}</strong>]`;
-    }
-    let link_action_text = '';
-    if (a_elm.classList.contains('link-type-hexcolor')) {
-        link_action_text = `edit '<em>${a_elm.innerHTML}</em>'`;
-    } else if (a_elm.classList.contains('file-list-remove')) {
-        let fli_text = a_elm.parentElement.parentElement.previousSibling.innerText;
-        link_action_text = `exclude '<em>${fli_text}</em>'`;
-    } else {
-        link_action_text = `goto '<em>${a_elm.getAttribute('href')}</em>'`;
-    }
+    
+    let link_tooltip_text = getLinkTooltipText(a_elm);
+    
     if (globals.IsTooltipToolbarEnabled) {
-        showTooltipToolbar(`Click${mod_key_text} to ${link_action_text}`);
+        showTooltipToolbar(link_tooltip_text);
     } else if (globals.IsTooltipOverlayEnabled) {
-        showTooltipOverlay(a_elm, 'Click to follow...'); //`Click${mod_key_text} to ${link_action_text}`);
+        showTooltipOverlay(a_elm, link_tooltip_text);
     }    
 }
 

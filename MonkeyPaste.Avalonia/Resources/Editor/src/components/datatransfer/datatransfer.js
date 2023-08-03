@@ -57,21 +57,9 @@ function convertDataTransferToHostDataItems(dt) {
 }
 
 function prepareDeltaLogForDataTransfer() {
-    if (!isReadOnly() && LastTextChangedDelta != null) {
+    if (!isReadOnly() && hasTextChangedDelta()) {
         // when editing log current editor state as a transaction before drop
-        let dti_msg = {
-            dataItems: [
-                {
-                    format: globals.URI_LIST_FORMAT,
-                    data: JSON.stringify([`${globals.LOCAL_HOST_URL}/?type=CopyItem&handle=${globals.ContentHandle}`])
-                }
-            ]
-        };
-        let edit_dt_msg = {
-            changeDeltaJsonStr: JSON.stringify(LastTextChangedDelta),
-            sourceDataItemsJsonStr: dti_msg,
-            transferLabel: 'Edited'
-        };
+        let edit_dt_msg = getLastTextChangedDataTransferMessage();
         onDataTransferCompleted_ntf(
             edit_dt_msg.changeDeltaJsonStr,
             edit_dt_msg.sourceDataItemsJsonStr,
@@ -214,11 +202,11 @@ function performDataTransferOnContent(
     // REPORT TRANSFER
 
     if (source_urls.length > 0) {
-        dt.setData(globals.URI_LIST_FORMAT, source_urls.join('\r\n'));
+        dt.setData(globals.URI_LIST_FORMAT, source_urls.join(envNewLine()));
     }
     let host_dt_obj = convertDataTransferToHostDataItems(dt);
     onDataTransferCompleted_ntf(
-        LastTextChangedDelta,
+        globals.LastTextChangedDelta,
         host_dt_obj,
         transferLabel);
 

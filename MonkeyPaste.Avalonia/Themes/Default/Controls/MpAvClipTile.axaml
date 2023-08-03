@@ -7,4 +7,26 @@
         <CornerRadius x:Key="TileCornerRadius">10,10,10,10</CornerRadius>
         <Thickness x:Key="TileInnerSpacing">5,5,5,5</Thickness>
     </Styles.Resources>
+
+
+    <!--  TILE BUSY OVERLAY VISIBILITY  -->
+    <Style Selector="ListBox.queryListBox > ListBoxItem Border#TileBusyOverlay"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="IsVisible">
+            <Setter.Value>
+                <MultiBinding Converter="{x:Static BoolConverters.And}"
+                              FallbackValue="True"
+                              TargetNullValue="True">
+                    <Binding Path="IsAnyBusy" />
+                    <Binding Path="!IsInPlaceRequerying"
+                             Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style Selector="ListBox.pinListBox > ListBoxItem Border#TileBusyOverlay, Window.tileWindow Border#TileBusyOverlay"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="IsVisible"
+                Value="{Binding IsAnyBusy}" />
+    </Style>
 </Styles>

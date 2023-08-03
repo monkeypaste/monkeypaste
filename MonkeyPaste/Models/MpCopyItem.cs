@@ -249,9 +249,9 @@ namespace MonkeyPaste {
                 return;
             }
 
-            if (ItemData.IsEmptyRichHtmlString()) {
+            if (ItemData.IsNullOrWhitespaceHtmlString()) {
                 // what IS this nasty shit??
-                MpDebug.Break();
+                MpDebug.Break($"Empty html write detected for item {this}", true);
                 return;
             }
             await base.WriteToDatabaseAsync();

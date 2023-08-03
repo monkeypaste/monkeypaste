@@ -214,6 +214,12 @@ const globals = {
 
 	// #endregion
 
+	// #region HISTORY
+
+	LastTextChangedDelta: null,
+
+	// #endregion
+
 	// #region HTML FRAGMENT
 
 	TableDeltaAttrbs: [
@@ -652,7 +658,7 @@ const globals = {
 
 	// #region LINKS
 	RequiredNavigateUriModKeys:  [
-		//'Control'
+		'Alt'
 	],
 
 	LinkTypes:  [

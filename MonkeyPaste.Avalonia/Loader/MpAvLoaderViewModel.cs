@@ -74,7 +74,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool IS_PARALLEL_LOADING_ENABLED =>
-            true;
+            // NOTE db create takes extra time and breaks when vm's query in parallel
+            // (this maybe a sign this needs more organization)
+            !StartupFlags.HasFlag(MpStartupFlags.Initial);
 
         public int LoadedCount { get; set; } = 0;
 

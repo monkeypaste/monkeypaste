@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        const MpUserAccountType TEST_ACCOUNT_TYPE = MpUserAccountType.Unlimited;
+        const MpUserAccountType TEST_ACCOUNT_TYPE = MpUserAccountType.Free;
         #endregion
 
         #region Statics
@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {
                 case MpUserAccountType.Free:
-                    return 100;
+                    return 5;// 100;
                 case MpUserAccountType.Standard:
                     return 1000;
                 case MpUserAccountType.Trial:

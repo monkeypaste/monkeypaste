@@ -44,6 +44,41 @@ function getTooltipToolbarlements() {
 	return Array.from(document.querySelectorAll(`[${globals.TOOLTIP_TOOLBAR_ATTRB_NAME}]`));
 }
 
+function positionTooltipOverlayLocation(targetElm, tooltipElm) {
+	const editor_rect = cleanRect(getEditorElement().getBoundingClientRect());
+	let target_rect = cleanRect(targetElm.getBoundingClientRect());
+	let tt_rect = cleanRect(tooltipElm.getBoundingClientRect());
+
+	// start with tooltip center in targets center
+	let start_loc = {
+		x: target_rect.left + (target_rect.width / 2) - (tt_rect.width / 2),
+		y: target_rect.top + (target_rect.bottom / 2) - (tt_rect.height / 2)
+	}
+	moveAbsoluteElement(tooltipElm, start_loc);
+
+	// top,right,bottom, left
+	const dirs = [{ x: 0, y: -1 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }];
+	for (var i = 0; i < dirs.length; i++) {
+		const dir = dirs[i];
+		let cur_loc = start_loc;
+		while (true) {
+			cur_loc = addPoints(cur_loc, dir);
+			moveAbsoluteElement(tooltipElm, cur_loc);
+			best_rect = cleanRect(tooltipElm.getBoundingClientRect());
+			if (!isRectOverlapOtherRect(best_rect, target_rect)) {
+				return;
+			}
+			if (!isPointInRect(editor_rect, getRectCornerByIdx(best_rect, i))) {
+				// this dir no good, rect outside editor
+				break;
+			}
+		}
+	}
+	// fallback to center above
+	start_loc.y = target_rect.top - tt_rect.height;
+	moveAbsoluteElement(tooltipElm, start_loc);
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -85,13 +120,9 @@ function showTooltipOverlay(targetElm, tooltipText) {
 	} else {
 		tt_elm.innerHTML = `<span class="tooltiptext">${tooltipText}</span>`;
 	}
-	let target_rect = targetElm.getBoundingClientRect();
 	tt_elm.classList.remove('hidden');
-	let tt_rect = tt_elm.getBoundingClientRect();
-	let tt_x = Math.max(0,target_rect.left + (target_rect.width / 2) - (tt_rect.width / 2));
-	setElementComputedStyleProp(tt_elm, 'margin-left', `${tt_x}px`);
-	let tt_y = Math.max(0,target_rect.top - tt_rect.height - 5);
-	setElementComputedStyleProp(tt_elm, 'margin-top', `${tt_y}px`);
+
+	positionTooltipOverlayLocation(targetElm, tt_elm);
 }
 
 function hideTooltipOverlay() {

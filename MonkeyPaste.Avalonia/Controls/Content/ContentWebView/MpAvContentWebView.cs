@@ -871,8 +871,6 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(MpAvContentWebView.IsContentSubSelectableProperty).Subscribe(value => OnIsContentSubSelectableChanged());
             this.GetObservable(MpAvContentWebView.IsContentFindAndReplaceVisibleProperty).Subscribe(value => OnIsContentFindOrReplaceVisibleChanged());
 
-            this.PointerPressed += MpAvCefNetWebView_PointerPressed;
-            this.AttachedToLogicalTree += MpAvCefNetWebView_AttachedToLogicalTree;
         }
 
 #if PLAT_WV
@@ -1055,10 +1053,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Control Life Cycle
-        private void MpAvCefNetWebView_AttachedToLogicalTree(object sender, LogicalTreeAttachmentEventArgs e) {
-
+        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) {
+            base.OnAttachedToLogicalTree(e);
             Mp.Services.ContentViewLocator.AddView(this);
-
 
 #if PLAT_WV
             WebView.WebMessageReceived += WebView_WebMessageReceived;
@@ -1067,7 +1064,8 @@ namespace MonkeyPaste.Avalonia {
 #endif
         }
 
-        private void MpAvCefNetWebView_PointerPressed(object sender, PointerPressedEventArgs e) {
+        protected override void OnPointerPressed(PointerPressedEventArgs e) {
+            base.OnPointerPressed(e);
             LastPointerPressedEventArgs = e;
         }
         protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e) {
@@ -1080,6 +1078,7 @@ namespace MonkeyPaste.Avalonia {
             base.OnDataContextEndUpdate();
             _locatedDateTime = DateTime.Now;
         }
+
         #endregion
 
         #region Dom Init
@@ -1296,7 +1295,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (contentChanged_ntf.itemData != null) {
-                if (contentChanged_ntf.itemData.IsEmptyRichHtmlString()) {
+                if (contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString()) {
                     // data's getting reset again
                     MpDebug.Break("data reset caught in content changed", true);
                 }

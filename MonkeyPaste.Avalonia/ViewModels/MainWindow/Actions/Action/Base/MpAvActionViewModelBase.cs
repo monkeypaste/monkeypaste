@@ -138,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIDraggableViewModel Implementation
 
-        bool MpIDraggableViewModel.IsDragging {
+        bool MpIDraggable.IsDragging {
             get => IsMoving;
             set => throw new NotImplementedException();
         }

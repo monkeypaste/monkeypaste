@@ -28,11 +28,11 @@
 
 .file-list-path {
     font-size: 14px;
+}
+.file-list-path-block {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    user-select: none;
-    /*max-width: 100px;*/
 }
 
 
@@ -51,7 +51,7 @@
     }
 
     #editor.file-list-content.sub-select .file-list-row:not(.selected):hover {
-        background-color: lightgoldenrodyellow !important;
+        background-color: var(--opthovercolor) !important;
     }
     #editor.file-list-content.sub-select .file-list-row:hover {
         border: 1.5px solid var(--hovercolor) !important;

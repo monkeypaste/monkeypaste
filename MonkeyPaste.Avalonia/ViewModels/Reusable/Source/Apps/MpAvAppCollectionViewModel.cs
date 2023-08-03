@@ -85,10 +85,7 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            //LastActiveAppViewModel = ThisAppViewModel;
-
             // wait to add activated handler until all apps at startup are syncd
-            //Mp.Services.ProcessWatcher.OnAppActivated += MpProcessManager_OnAppActivated;
 
             OnPropertyChanged(nameof(Items));
 

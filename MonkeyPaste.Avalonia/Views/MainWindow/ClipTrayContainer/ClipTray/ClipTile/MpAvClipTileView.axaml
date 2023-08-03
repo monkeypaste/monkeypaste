@@ -66,12 +66,12 @@
                     Value="0,0,30,0" />
         </Style>
 
-      <!--  USER BG COLOR  -->
-      <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
-        <Setter Property="Background"
-                Value="{DynamicResource ClipTileContentBackgroundBrush}" />
-      </Style>
-      <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor"
+        <!--  USER BG COLOR  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource ClipTileContentBackgroundBrush}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Background">
                 <Setter.Value>
@@ -94,7 +94,6 @@
                           Classes.frozen="{Binding IsFrozen}"
                           Classes.trashed="{Binding IsTrashed}"
                           Classes.userColor="{Binding CopyItemHexColor, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                          
                           local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           local:MpAvReceivesEventsExtension.SenderFilter="{Binding EmbedHost}"
                           VerticalAlignment="Stretch"
@@ -107,6 +106,11 @@
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="{StaticResource TileCornerRadius}"
                           BorderThickness="{StaticResource TileBorderThickness}">
+        <ToolTip.Tip>
+            <local:MpAvToolTipView Classes="warning"
+                                   IsVisible="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
+                                   ToolTipText="{Binding CapToolTipText}" />
+        </ToolTip.Tip>
 
         <Grid x:Name="TileGrid"
               HorizontalAlignment="Stretch"
@@ -158,6 +162,7 @@
             <Border x:Name="AccountCapOverlayContainer"
                     Grid.ColumnSpan="2"
                     Grid.RowSpan="3"
+                    IsHitTestVisible="False"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
                 <Border.IsVisible>
@@ -167,10 +172,6 @@
                         <Binding Path="IsAnyNextCapByAccount" />
                     </MultiBinding>
                 </Border.IsVisible>
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView Classes="warning"
-                                           ToolTipText="{Binding CapToolTipText}" />
-                </ToolTip.Tip>
                 <Border x:Name="AccountCapOverlay"
                         Opacity="{Binding IsHovering, ConverterParameter=0.2|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                         HorizontalAlignment="Stretch"
@@ -264,8 +265,8 @@
             </Grid>
 
 
-            <!--  BUSY OVERLAY (VISIBILITY SET IN TRAY CONTAINER)  -->
-            <Border x:Name="BusyOverlay"
+            <!--  BUSY OVERLAY (VISIBILITY SET IN MpAvClipTile theme style)  -->
+            <Border x:Name="TileBusyOverlay"
                     Grid.Row="1"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">

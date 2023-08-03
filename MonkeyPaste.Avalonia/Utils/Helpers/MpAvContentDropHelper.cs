@@ -40,7 +40,9 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpAvDataObject ToAvDataObject(this MpQuillHostDataItemsMessage hdim) {
             MpAvDataObject req_mpdo = null;
-            if (hdim != null) {
+            if (hdim != null &&
+                hdim.dataItems != null &&
+                hdim.dataItems.Any()) {
                 req_mpdo = new MpAvDataObject(hdim.dataItems.ToDictionary(x => x.format, x => (object)x.data));
             }
             return req_mpdo;

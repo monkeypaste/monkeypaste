@@ -360,9 +360,9 @@ namespace MonkeyPaste.Avalonia {
                 //}
             }
 
-            if (itemType == MpCopyItemType.Text && !string.IsNullOrEmpty(itemData) &&
-                string.IsNullOrWhiteSpace(MpRichHtmlToPlainTextConverter.Convert(itemData)) &&
-                MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems) {
+            if (MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems &&
+                itemType == MpCopyItemType.Text &&
+                itemData.IsNullOrWhitespaceHtmlString()) {
                 // if text is just whitespace and those ignored flag to ignore item
                 return null;
             }

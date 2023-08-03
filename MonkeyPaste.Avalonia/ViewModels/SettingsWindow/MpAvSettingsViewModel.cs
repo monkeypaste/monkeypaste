@@ -41,6 +41,13 @@ namespace MonkeyPaste.Avalonia {
             nameof(MpPrefViewModel.Instance.GlobalBgOpacity),
         };
 
+        private string[] _hiddenParamIds = new string[] {
+            nameof(MpPrefViewModel.Instance.AddClipboardOnStartup),
+            nameof(MpPrefViewModel.Instance.UserLanguageCode),
+            nameof(MpPrefViewModel.Instance.IsTextRightToLeft),
+            nameof(MpPrefViewModel.Instance.ShowExternalDropWidget)
+        };
+
         private Dictionary<object, Action<MpAvPluginParameterItemView>> _runtimeParamAttachActions;
         #endregion
 
@@ -486,7 +493,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.International) {
-                            IsVisible = false,
+                            //IsVisible = false,
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
@@ -965,6 +972,11 @@ namespace MonkeyPaste.Avalonia {
             // bind runtime params
 
             foreach (var fvm in Items) {
+                // hide baddies
+                fvm.PluginFormat.headless.parameters
+                    .Where(x => _hiddenParamIds.Contains(x.paramId.ToStringOrEmpty()))
+                    .ForEach(x => x.isVisible = false);
+
                 // create headless formats
                 fvm.Items = await Task.WhenAll(
                     fvm.PluginFormat.headless.parameters.Select(x =>
@@ -981,7 +993,9 @@ namespace MonkeyPaste.Avalonia {
                     .Where(x => x.ControlType == MpParameterControlType.Button)
                     .Cast<MpAvButtonParameterViewModel>()
                     .ForEach(x => x.ClickCommand = ButtonParameterClickCommand);
+
             }
+
         }
         private void InitRuntimeParams() {
 

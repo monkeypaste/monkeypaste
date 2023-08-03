@@ -102,7 +102,6 @@
 
   <ItemGroup>
     <Compile Include="Converters\MpXamStringToSyncObjectTypeConverter.cs" />
-    <Compile Include="ViewModels\Reusable\ContextMenu\MpColorPalettePopupMenuViewModel.cs" />
     <Compile Include="ViewModels\Reusable\ContextMenu\MpMenuItemViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Culture\MpCurrentCultureViewModel.cs" />
     <Compile Include="ViewModels\Reusable\Preferences\MpPrefViewModel.cs" />

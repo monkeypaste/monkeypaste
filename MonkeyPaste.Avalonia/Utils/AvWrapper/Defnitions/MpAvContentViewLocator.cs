@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.VisualTree;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +18,17 @@ namespace MonkeyPaste.Avalonia {
                 .ToList();
 
             if (result.Count == 0) {
-                return null;
+                // HACK _allItems not accurate sometimes, fallback to walk tree to find
+                if (MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                    return
+                        MpAvWindowManager.AllWindows
+                            .SelectMany(x => x.GetVisualDescendants<MpAvContentWebView>())
+                            .FirstOrDefault(x => x.BindingContext != null && x.BindingContext.CopyItemId == ciid && !x.BindingContext.IsPinPlaceholder);
+                }
+                return
+                        MpAvWindowManager.AllWindows
+                            .SelectMany(x => x.GetVisualDescendants<MpAvContentTextBox>())
+                            .FirstOrDefault(x => x.BindingContext != null && x.BindingContext.CopyItemId == ciid && !x.BindingContext.IsPinPlaceholder);
             }
             if (result.Count > 1) {
                 // is this during a pin toggle? was this item pinned?

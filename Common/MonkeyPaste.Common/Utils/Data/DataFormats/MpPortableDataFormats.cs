@@ -49,7 +49,7 @@ namespace MonkeyPaste.Common {
             // internal
             INTERNAL_SOURCE_URI_LIST_FORMAT, // maps to LinuxUriList
             
-            INTERNAL_CONTENT_HANDLE_FORMAT,
+            INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT,
             INTERNAL_CONTENT_TITLE_FORMAT,
             INTERNAL_CONTENT_ROI_FORMAT,
             INTERNAL_CONTENT_ANNOTATION_FORMAT,
@@ -85,7 +85,6 @@ namespace MonkeyPaste.Common {
 
         // Linux Formats
         public const string LinuxSourceUrl = "text/x-moz-url-priv";
-
         public const string LinuxUriList = "text/uri-list";
         public const string LinuxGnomeFiles = "x-special/gnome-copied-files";
 
@@ -109,7 +108,7 @@ namespace MonkeyPaste.Common {
 
         public const string INTERNAL_SOURCE_URI_LIST_FORMAT = LinuxUriList;
 
-        public const string INTERNAL_CONTENT_HANDLE_FORMAT = "Mp Internal Content";
+        public const string INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT = "Mp Internal Content";
         public const string INTERNAL_CONTENT_TYPE_FORMAT = "Mp Internal Content Type";
         public const string INTERNAL_CONTENT_TITLE_FORMAT = "Mp Internal Content Title";
 
@@ -134,7 +133,7 @@ namespace MonkeyPaste.Common {
 
         public static string[] InternalFormats = new string[] {
             INTERNAL_SOURCE_URI_LIST_FORMAT,
-            INTERNAL_CONTENT_HANDLE_FORMAT,
+            INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT,
             INTERNAL_CONTENT_TITLE_FORMAT,
             INTERNAL_CONTENT_ROI_FORMAT,
             INTERNAL_CONTENT_ANNOTATION_FORMAT,

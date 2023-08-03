@@ -138,13 +138,21 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // always add copyItem uri
-            ido.AddOrCreateUri(Mp.Services.SourceRefTools.ConvertToInternalUrl(ci));
+            string ci_uri = Mp.Services.SourceRefTools.ConvertToInternalUrl(ci);
+            ido.AddOrCreateUri(ci_uri);
 
             if (!isFullContentReference) {
-                ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT, ci.PublicHandle);
+                ido.Set(MpPortableDataFormats.INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT, ci.PublicHandle);
             }
             ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT, ci.ItemType.ToString());
             ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, ci.Title);
+
+            if (!ido.Contains(MpPortableDataFormats.CefAsciiUrl)) {
+                // NOTE cefnet preprocesses drop formats so only cef supported formats get passed to editor
+                // so to avoid timing issues (tracking drag item and adding it as drop source on drop but drag will be done then most likely)
+                // supply content ref as cef uri bytes
+                ido.Set(MpPortableDataFormats.CefAsciiUrl, ci_uri.ToBytesFromString());
+            }
         }
 
         public static bool ContainsContentRef(this IDataObject ido) {
@@ -165,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
             if (ido == null) {
                 return false;
             }
-            return ido.Contains(MpPortableDataFormats.INTERNAL_CONTENT_HANDLE_FORMAT);
+            return ido.Contains(MpPortableDataFormats.INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT);
         }
 
         public static async Task<MpCopyItem> ToCopyItemAsync(

@@ -33,24 +33,63 @@
                 </Animation>
             </Style.Animations>
         </Style>
+        <Style Selector="Image#SpinnerImage2[IsVisible=true]">
+            <Style.Animations>
+                <Animation Duration="0:0:1.156"
+                           IterationCount="Infinite"
+                           FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle"
+                                Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="50%">
+                        <Setter Property="RotateTransform.Angle"
+                                Value="180" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle"
+                                Value="360" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
     </UserControl.Styles>
-    <Image x:Name="SpinnerImage">
-        <Image.Resources>
-            <!--<SolidColorBrush x:Key="Brush0" Color="{Binding $parent[UserControl].Foreground}" />-->
-            <SolidColorBrush x:Key="Brush0" Color="White" />
-        </Image.Resources>
-        <Image.RenderTransform>
-            <RotateTransform />
-        </Image.RenderTransform>
-        <DrawingImage>
-            <DrawingGroup>
-                <DrawingGroup Opacity="0.2">
+    <Grid>
+        <Image x:Name="SpinnerImage">
+            <Image.Resources>
+                <SolidColorBrush x:Key="Brush0" Color="White" />
+            </Image.Resources>
+            <Image.RenderTransform>
+                <RotateTransform />
+            </Image.RenderTransform>
+            <DrawingImage>
+                <DrawingGroup>
+                    <DrawingGroup Opacity="0.2">
+                        <GeometryDrawing Brush="{DynamicResource Brush0}"
+                                         Geometry="F0 M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
+                    </DrawingGroup>
                     <GeometryDrawing Brush="{DynamicResource Brush0}"
-                                     Geometry="F0 M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
+                                     Geometry="F1 M2 12C2 6.47715 6.47715 2 12 2L12 5C8.13401 5 5 8.13401 5 12L2 12Z" />
                 </DrawingGroup>
-                <GeometryDrawing Brush="{DynamicResource Brush0}"
-                                 Geometry="F1 M2 12C2 6.47715 6.47715 2 12 2L12 5C8.13401 5 5 8.13401 5 12L2 12Z" />
-            </DrawingGroup>
-        </DrawingImage>
-    </Image>
+            </DrawingImage>
+        </Image>
+        <Image x:Name="SpinnerImage2">
+            <Image.Resources>
+                <SolidColorBrush x:Key="Brush0" Color="White" />
+            </Image.Resources>
+            <Image.RenderTransform>
+                <RotateTransform />
+            </Image.RenderTransform>
+            <DrawingImage>
+                <DrawingGroup>
+                    <DrawingGroup Opacity="0.2">
+                        <GeometryDrawing Brush="{DynamicResource Brush0}"
+                                         Geometry="F0 M12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19ZM12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" />
+                    </DrawingGroup>
+                    <GeometryDrawing Brush="{DynamicResource Brush0}"
+                                     Geometry="F1 M2 12C2 6.47715 6.47715 2 12 2L12 5C8.13401 5 5 8.13401 5 12L2 12Z" />
+                </DrawingGroup>
+            </DrawingImage>
+        </Image>
+    </Grid>
 </UserControl>

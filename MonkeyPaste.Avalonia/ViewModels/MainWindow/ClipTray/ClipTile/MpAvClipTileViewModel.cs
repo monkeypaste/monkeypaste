@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIDraggableViewModel Implementation
-        bool MpIDraggableViewModel.IsDragging {
+        bool MpIDraggable.IsDragging {
             get => IsTileDragging;
             set => IsTileDragging = value;
         }
@@ -1702,7 +1702,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                         //HasModelChanged = false;
                         //return;
-                        if (CopyItemData.IsEmptyRichHtmlString()) {
+                        if (CopyItemData.IsNullOrWhitespaceHtmlString()) {
                             // what IS this nasty shit??
                             MpDebug.Break($"Empty content write ignored", true);
 
@@ -1835,7 +1835,7 @@ namespace MonkeyPaste.Avalonia {
                 Topmost = true,
                 Opacity = 1
             };
-
+            pow.Classes.Add("tileWindow");
 
             #region Window Bindings
 

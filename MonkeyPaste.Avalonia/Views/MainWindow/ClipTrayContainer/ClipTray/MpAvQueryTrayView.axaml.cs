@@ -55,6 +55,7 @@ namespace MonkeyPaste.Avalonia {
             ctrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
             ctrlb.AddHandler(DragDrop.DropEvent, Drop);
         }
+
         #region Drop Events
 
         private void DragEnter(object sender, DragEventArgs e) {

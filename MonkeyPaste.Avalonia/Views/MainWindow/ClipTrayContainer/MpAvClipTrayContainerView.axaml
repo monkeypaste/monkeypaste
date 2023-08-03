@@ -172,26 +172,6 @@
                     Value="{Binding IsListBoxItemFocused, Mode=OneWay}" />
         </Style>
 
-        <!--  TILE BUSY OVERLAY VISIBILITY  -->
-        <Style Selector="ListBox.queryListBox > ListBoxItem Border#BusyOverlay"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="IsVisible">
-                <Setter.Value>
-                    <MultiBinding Converter="{x:Static BoolConverters.And}"
-                                  FallbackValue="True"
-                                  TargetNullValue="True">
-                        <Binding Path="IsAnyBusy" />
-                        <Binding Path="!IsInPlaceRequerying"
-                                 Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
-                    </MultiBinding>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style Selector="ListBox.pinListBox > ListBoxItem Border#BusyOverlay"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="IsVisible"
-                    Value="{Binding IsAnyBusy}" />
-        </Style>
 
 
     </local:MpAvUserControl.Styles>

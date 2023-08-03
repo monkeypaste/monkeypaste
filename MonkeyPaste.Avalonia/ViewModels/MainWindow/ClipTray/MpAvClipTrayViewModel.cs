@@ -46,6 +46,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
+        public const bool IS_ADD_STARTUP_CLIPBOARD_HIDDEN = true;
 
         public const int ADD_CONTENT_TIMEOUT_MS = 30_000;
         public const int DISABLE_READ_ONLY_DELAY_MS = 500;
@@ -1809,6 +1810,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (apply_changes) {
+                if (cap_info.ToBeTrashed_ciid > 0) {
+                    int total_before_trash = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
+                    if (total_before_trash > 6 || total_before_trash < 5) {
+                        // acct set free at 5
+                    }
+                }
                 // only after add or (un)link to trash/favorites
 
                 await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);

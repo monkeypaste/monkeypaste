@@ -253,11 +253,14 @@ namespace MonkeyPaste {
         public string unprocessedDataItemsJsonStr { get; set; }
     }
     public class MpQuillDataTransferCompletedNotification : MpJsonObject {
+        // fragment 'MpQuillDelta'
         public string changeDeltaJsonStr { get; set; }
+
+        // fragment 'MpQuillHostDataItemsMessage'
         public string sourceDataItemsJsonStr { get; set; }
-        public string transferLabel { get; set; }
         // fragment 'MpQuillEditorContentChangedMessage'
         public string contentChangedMessageFragment { get; set; }
+        public string transferLabel { get; set; }
     }
 
     public class MpQuillAppendStateChangedMessage : MpJsonObject {

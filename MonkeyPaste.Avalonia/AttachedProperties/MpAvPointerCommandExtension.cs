@@ -332,13 +332,23 @@ namespace MonkeyPaste.Avalonia {
 
                         Dispatcher.UIThread.Post(async () => {
                             bool is_still_down = true;
+                            double drag_dist = 0;
                             if (needs_hold_check) {
-                                EventHandler<PointerReleasedEventArgs> release_handler = null;
-                                is_still_down = true;
-                                release_handler = (s, e) => {
+                                MpPoint down_mp = e.GetPosition(control).ToPortablePoint();
+                                void move_handler(object s, PointerEventArgs e) {
+                                    if (!e.IsLeftDown(control)) {
+                                        is_still_down = false;
+                                        control.RemoveHandler(Control.PointerMovedEvent, move_handler);
+                                        return;
+                                    }
+                                    drag_dist = e.GetPosition(control).ToPortablePoint().Distance(down_mp);
+                                }
+                                void release_handler(object s, PointerReleasedEventArgs e) {
                                     is_still_down = false;
-                                    control.PointerReleased -= release_handler;
-                                };
+                                    control.RemoveHandler(Control.PointerReleasedEvent, release_handler);
+                                    control.RemoveHandler(Control.PointerMovedEvent, move_handler);
+                                }
+                                control.AddHandler(Control.PointerMovedEvent, move_handler, RoutingStrategies.Tunnel);
                                 control.AddHandler(Control.PointerReleasedEvent, release_handler, RoutingStrategies.Tunnel);
                             }
                             DateTime this_press_dt = DateTime.Now;
@@ -347,7 +357,7 @@ namespace MonkeyPaste.Avalonia {
                                 EventHandler<PointerPressedEventArgs> next_press_handler = null;
                                 next_press_handler = (s, e) => {
                                     was_new_press = true;
-                                    control.PointerPressed -= next_press_handler;
+                                    control.RemoveHandler(Control.PointerPressedEvent, next_press_handler);
                                 };
                                 control.AddHandler(Control.PointerPressedEvent, next_press_handler, RoutingStrategies.Tunnel);
                             }
@@ -357,12 +367,14 @@ namespace MonkeyPaste.Avalonia {
                                     // double click, reject single
                                     return;
                                 }
-                                if (control.DataContext is MpIDraggableViewModel dvm && dvm.IsDragging) {
+                                if (control.DataContext is MpIDraggable dvm && dvm.IsDragging) {
                                     // drag, reject press
                                     return;
                                 }
                                 if (DateTime.Now - this_press_dt > TimeSpan.FromMilliseconds(GetPointerGestureDelayMs(control))) {
-                                    if (needs_hold_check && is_still_down) {
+                                    if (needs_hold_check &&
+                                        is_still_down &&
+                                        drag_dist < 5) {
                                         // hold 
                                         cmd = GetRightPressCommand(control);
                                         param = GetRightPressCommandParameter(control);

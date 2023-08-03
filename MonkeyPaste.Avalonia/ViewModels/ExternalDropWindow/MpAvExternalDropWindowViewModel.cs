@@ -35,6 +35,11 @@ namespace MonkeyPaste.Avalonia {
         private MpPoint _lastGlobalMousePoint { get; set; } // debouncer
         #endregion
 
+        #region Constants
+
+        public const bool IS_DROP_WIDGET_HIDDEN = true;
+        #endregion
+
         #region Statics
         private static MpAvExternalDropWindowViewModel _instance;
         public static MpAvExternalDropWindowViewModel Instance => _instance ?? (_instance = new MpAvExternalDropWindowViewModel());
@@ -88,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
         MpPortableProcessInfo CurDropProcessInfo { get; set; }
 
         public bool CanEnableDropWidget =>
-            Mp.Services.PlatformInfo.IsDesktop;
+            Mp.Services.PlatformInfo.IsDesktop && !IS_DROP_WIDGET_HIDDEN;
         public bool IsDropWidgetEnabled =>
             CanEnableDropWidget &&
             MpPrefViewModel.Instance.ShowExternalDropWidget;

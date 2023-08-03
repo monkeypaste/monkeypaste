@@ -8,6 +8,18 @@
 
 // #region Getters
 
+function getRectTopLeft(rect) {
+    return { x: rect.left, y: rect.top };
+}
+function getRectTopRight(rect) {
+    return { x: rect.right, y: rect.top };
+}
+function getRectBottomRight(rect) {
+    return { x: rect.right, y: rect.bottom };
+}
+function getRectBottomLeft(rect) {
+    return { x: rect.left, y: rect.bottom };
+}
 function getRectSize(rect) {
     if (!isRect(rect)) {
         return { width: 0, height: 0 };
@@ -19,6 +31,23 @@ function getRectSize(rect) {
 function getRectArea(rect) {
     let rect_size = getRectSize(rect);
     return rect_size.width * rect_size.height;
+}
+
+function getRectCornerByIdx(rect, idx) {
+    if (!rect || idx < 0 || idx >= 4) {
+        return { x: 0, y: 0 };
+    }
+
+    if (idx == 0) {
+        return getRectTopLeft(rect);
+    }
+    if (idx == 1) {
+        return getRectTopRight(rect);
+    }
+    if (idx == 2) {
+        return getRectBottomRight(rect);
+    }
+    return getRectBottomLeft(rect);
 }
 
 // #endregion Getters
@@ -40,14 +69,29 @@ function isPointInRect(rect, p) {
     if (!isRect(rect) || !isPoint(p)) {
         return false;
     }
-    return p.x >= rect.left && p.x <= rect.right && p.y >= rect.top && p.y <= rect.bottom;
+    let result = p.x >= rect.left && p.x <= rect.right && p.y >= rect.top && p.y <= rect.bottom;
+    return result;
 }
 
 function isRectContainOtherRect(rect, other_rect) {
     if (!rect || !other_rect) {
         return false;
     }
-    return isPointInRect(rect, { x: other_rect.left, y: other_rect.top }) && isPointInRect(rect, { x: other_rect.right, y: other_rect.bottom });
+    let result =
+        isPointInRect(rect, { x: other_rect.left, y: other_rect.top }) &&
+        isPointInRect(rect, { x: other_rect.right, y: other_rect.bottom });
+    return result;
+}
+function isRectOverlapOtherRect(rect, other_rect) {
+    if (!rect || !other_rect) {
+        return false;
+    }
+    let result =
+        isPointInRect(rect, { x: other_rect.left, y: other_rect.top }) ||
+        isPointInRect(rect, { x: other_rect.right, y: other_rect.top }) ||
+        isPointInRect(rect, { x: other_rect.right, y: other_rect.bottom }) ||
+        isPointInRect(rect, { x: other_rect.left, y: other_rect.bottom });
+    return result;
 }
 // #endregion State
 
