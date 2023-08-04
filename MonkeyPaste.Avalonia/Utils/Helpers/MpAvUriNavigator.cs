@@ -85,8 +85,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand NavigateToUriCommand => new MpCommand<object>(
-            (args) => {
+        public ICommand NavigateToUriCommand => new MpAsyncCommand<object>(
+            async (args) => {
                 Uri uri = null;
                 if (args is Uri) {
                     uri = args as Uri;
@@ -99,7 +99,12 @@ namespace MonkeyPaste.Avalonia {
                         uri = new Uri(argStr, UriKind.Absolute);
                     }
                 }
+                if (MpAvWindowManager.MainWindow.IsActive) {
+                    MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+                }
                 NavigateToUri(uri);
+                await Task.Delay(500);
+                MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
             });
 
         public ICommand NavigateToSourceRefCommand => new MpAsyncCommand<object>(

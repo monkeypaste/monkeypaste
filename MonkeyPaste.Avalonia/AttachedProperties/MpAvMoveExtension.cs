@@ -17,6 +17,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
+        const double MIN_MOVE_DIST = 5d;
         #endregion
 
         #region Statics
@@ -295,20 +296,29 @@ namespace MonkeyPaste.Avalonia {
         private static void Control_PointerMoved(object sender, PointerEventArgs e) {
             if (sender is Control control &&
                 control.DataContext is MpAvActionViewModelBase avmb) {
-                if (!GetIsMoving(control)) {
+                if (_lastMousePosition == null ||
+                    _mouseDownPosition == null) {
+                    // pointer not pressed, ignore
                     return;
                 }
-                if (!e.IsLeftDown(control)) {
-                    FinishMove(control);
-                }
-
                 Visual relativeTo = GetRelativeTo(control) ?? control;
-                var mwmp = e.GetPosition(relativeTo).ToPortablePoint();
-
-                MpPoint delta = mwmp - _lastMousePosition;
-                Move(control, delta.X, delta.Y);
-
-                _lastMousePosition = mwmp;
+                var mw_mp = e.GetPosition(relativeTo).ToPortablePoint();
+                MpPoint delta = mw_mp - _lastMousePosition;
+                _lastMousePosition = mw_mp;
+                if (GetIsMoving(control)) {
+                    if (!e.IsLeftDown(control)) {
+                        FinishMove(control);
+                        return;
+                    }
+                    Move(control, delta.X, delta.Y);
+                    return;
+                }
+                if (mw_mp.Distance(_mouseDownPosition) >= MIN_MOVE_DIST) {
+                    // NOTE only set as moving once its actually moving (to allow hold to execute)
+                    SetIsMoving(control, true);
+                    // bring position tracking to current state (will be next move signal)
+                    _lastMousePosition = _mouseDownPosition;
+                }
             }
         }
 
@@ -334,7 +344,7 @@ namespace MonkeyPaste.Avalonia {
                 //    svm.IsSelected = true;
                 //}
                 //e.Pointer.Capture(control);
-                SetIsMoving(control, true);
+                //SetIsMoving(control, true);
                 //e.Handled = true;
             }
         }
@@ -385,6 +395,8 @@ namespace MonkeyPaste.Avalonia {
                 GetFinishMoveCommand(control) is ICommand finishMoveCmd) {
                 finishMoveCmd.Execute(GetFinishMoveCommandParameter(control));
             }
+            _lastMousePosition = null;
+            _mouseDownPosition = null;
         }
 
         #endregion

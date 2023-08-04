@@ -211,7 +211,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<bool> VerifyRejectAsync() {
+        public async Task<bool> VerifyAndApplyRejectAsync() {
             bool rejectContent = false;
 
             var clipsFromApp = await MpDataModelProvider.GetCopyItemsBySourceTypeAndIdAsync(MpTransactionSourceType.App, AppId);
@@ -219,7 +219,7 @@ namespace MonkeyPaste.Avalonia {
             if (clipsFromApp != null && clipsFromApp.Count > 0) {
                 var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
                     title: $"Remove associated clips?",
-                    message: $"Would you also like to remove all clips from '{AppName}'",
+                    message: $"Would you also like to remove all {clipsFromApp.Count()} clips from '{AppName}'",
                     iconResourceObj: IconId);
                 if (result.IsNull()) {
                     // flag as cancel so cmd will untoggle reject
@@ -278,7 +278,9 @@ namespace MonkeyPaste.Avalonia {
                     if (HasModelChanged) {
                         Task.Run(async () => {
                             await App.WriteToDatabaseAsync();
-                            HasModelChanged = false;
+                            Dispatcher.UIThread.Post(() => {
+                                HasModelChanged = false;
+                            });
                         });
                     }
 
@@ -289,14 +291,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-
-
-
-        //public ICommand AddOrUpdateAppClipboardShortcutCommand => new MpCommand(
-        //   () => {
-        //       ShowAssignDialogAsync().FireAndForgetSafeAsync(this);
-        //   });
-
+        public ICommand ToggleIsRejectedCommand => new MpAsyncCommand(
+            async () => {
+                IsRejected = !IsRejected;
+                if (IsRejected) {
+                    bool was_confirmed = await VerifyAndApplyRejectAsync();
+                    if (!was_confirmed) {
+                        // canceled from delete content msgbox
+                        IsRejected = false;
+                    }
+                }
+            });
 
         #endregion
     }

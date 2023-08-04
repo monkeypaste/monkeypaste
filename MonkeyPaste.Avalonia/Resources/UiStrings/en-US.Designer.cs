@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MonkeyPaste.Avalonia.Resources.Locales {
+namespace MonkeyPaste.Avalonia.Resources.UiStrings {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace MonkeyPaste.Avalonia.Resources.Locales {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ja_JP {
+    public class en_US {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ja_JP() {
+        internal en_US() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.Locales.ja-JP", typeof(ja_JP).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.UiStrings.en-US", typeof(en_US).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia.Resources.Locales {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,18 @@ namespace MonkeyPaste.Avalonia.Resources.Locales {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to これは英語のテストテキストです.
+        ///   Looks up a localized string similar to The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential..
         /// </summary>
-        internal static string TestText {
+        public static string ProductDescription {
+            get {
+                return ResourceManager.GetString("ProductDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is english test text.
+        /// </summary>
+        public static string TestText {
             get {
                 return ResourceManager.GetString("TestText", resourceCulture);
             }

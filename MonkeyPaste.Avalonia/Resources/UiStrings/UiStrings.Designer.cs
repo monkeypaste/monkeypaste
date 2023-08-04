@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MonkeyPaste.Avalonia.Resources.Locales {
+namespace MonkeyPaste.Avalonia {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace MonkeyPaste.Avalonia.Resources.Locales {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Resources {
+    public class UiStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal UiStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia.Resources.Locales {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.Locales.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.UiStrings.UiStrings", typeof(UiStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -84,6 +84,15 @@ namespace MonkeyPaste.Avalonia.Resources.Locales {
         public static string ProductDescription {
             get {
                 return ResourceManager.GetString("ProductDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is a test &lt;b color=&quot;green&quot;&gt;test&lt;/b&gt; &lt;em color=&quot;red&quot;&gt;&lt;b&gt;test&lt;/b&lt;/em&gt; &lt;a color=&quot;pink&quot; href=&quot;https://www.google.com/&quot;&gt;test&lt;/a&gt;.
+        /// </summary>
+        public static string Test {
+            get {
+                return ResourceManager.GetString("Test", resourceCulture);
             }
         }
     }

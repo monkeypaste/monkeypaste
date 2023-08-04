@@ -401,21 +401,6 @@ namespace MonkeyPaste.Avalonia {
                 await acsvm.ShowAssignDialogAsync();
             });
 
-        public ICommand ToggleIsRejectedCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                var avm = args as MpAvAppViewModel;
-                if (avm == null) {
-                    return;
-                }
-                avm.IsRejected = !avm.IsRejected;
-                if (avm.IsRejected) {
-                    bool was_confirmed = await avm.VerifyRejectAsync();
-                    if (!was_confirmed) {
-                        // canceled from delete content msgbox
-                        avm.IsRejected = false;
-                    }
-                }
-            });
         #endregion
     }
 }

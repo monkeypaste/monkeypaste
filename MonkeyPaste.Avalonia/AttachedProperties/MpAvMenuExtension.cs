@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.PropertyStore;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -809,7 +810,7 @@ namespace MonkeyPaste.Avalonia {
                 _cmInstance.HorizontalOffset = 0;
                 _cmInstance.VerticalOffset = 0;
             }
-            mivm = AddLeadingSeperators(mivm);
+            AddLeadingSeperators(mivm);
             if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
                 _cmInstance.ItemsSource = new[] { mivm };
             } else {
@@ -825,6 +826,9 @@ namespace MonkeyPaste.Avalonia {
                 // BUG intermittently get dc exception saying can't convert anchor dc to mi dc
                 // i think its a timing thing when right click is selecting item during cmd, 
                 // just click again i guess
+
+                // TODO? when this happens context menus opening are delayed after it
+                // maybe disposing the menu and re-initializing can prevent it?
                 MpConsole.WriteTraceLine($"Open menu exception: ", ex);
 
             }
@@ -843,11 +847,14 @@ namespace MonkeyPaste.Avalonia {
             return control.DataContext;
         }
 
-        private static MpMenuItemViewModel AddLeadingSeperators(MpMenuItemViewModel mivm) {
-            if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
-                return mivm;
+        private static void AddLeadingSeperators(MpMenuItemViewModel mivm) {
+            if (mivm.SubItems == null ||
+                mivm.SubItems.Count == 0) {
+                return;
             }
-            // select direct child wanting leading sep where there is items before it and actual previous isn't seperator
+
+            // select direct child wanting leading sep where
+            // there is items before it and actual previous isn't seperator
             var leading_sep_items =
                 mivm.SubItems
                 .Where((x, idx1) =>
@@ -863,7 +870,9 @@ namespace MonkeyPaste.Avalonia {
             foreach (var lsi in leading_sep_items) {
                 mivm.SubItems.Insert(mivm.SubItems.IndexOf(lsi), new MpMenuItemViewModel() { IsSeparator = true });
             }
-            return mivm;
+
+            // apply to children
+            mivm.SubItems.ForEach(x => AddLeadingSeperators(x));
         }
 
         #endregion

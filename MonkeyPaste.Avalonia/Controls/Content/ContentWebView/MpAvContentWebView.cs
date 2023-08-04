@@ -1297,7 +1297,7 @@ namespace MonkeyPaste.Avalonia {
             if (contentChanged_ntf.itemData != null) {
                 if (contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString()) {
                     // data's getting reset again
-                    MpDebug.Break("data reset caught in content changed", true);
+                    MpDebug.Break("data reset caught in webview process content changed");
                 }
                 BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }

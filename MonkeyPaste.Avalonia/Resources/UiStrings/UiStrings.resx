@@ -126,4 +126,7 @@
   <data name="ProductDescription" xml:space="preserve">
     <value>The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential.</value>
   </data>
+  <data name="Test" xml:space="preserve">
+    <value>This is a test &lt;b color="green"&gt;test&lt;/b&gt; &lt;em color="red"&gt;&lt;b&gt;test&lt;/b&lt;/em&gt; &lt;a color="pink" href="https://www.google.com/"&gt;test&lt;/a&gt;</value>
+  </data>
 </root>

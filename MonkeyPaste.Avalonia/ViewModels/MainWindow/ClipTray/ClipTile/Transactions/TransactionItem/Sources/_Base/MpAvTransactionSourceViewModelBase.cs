@@ -57,6 +57,7 @@ namespace MonkeyPaste.Avalonia {
                 if (TransactionSource == null) {
                     return null;
                 }
+                // BROWSE TO OPTION
                 var mivm = new MpMenuItemViewModel() {
                     ParentObj = this,
                     IconSourceObj = IconSourceObj,
@@ -73,30 +74,30 @@ namespace MonkeyPaste.Avalonia {
                     }
                 };
                 if (IsExternalSource) {
-                    mivm.SubItems.AddRange(new List<MpMenuItemViewModel>() {
-                        //new MpMenuItemViewModel() {
-                        //            Header = $"Filter by '{SourceLabel}'",
-                        //            AltNavIdx = 0,
-                        //            IconResourceKey = "FilterImage",
-                        //            Command = EnableFilterByAppCommand
-                        //        },
-                        //new MpMenuItemViewModel() {
-                        //            Header = SourceRef is MpUrl ? $"Filter by '{(SourceRef as MpUrl).UrlDomainPath}'":string.Empty,
-                        //            IsVisible = SourceRef is MpUrl,
-                        //            AltNavIdx = 0,
-                        //            IconResourceKey = "FilterImage",
-                        //            Command = EnableFilterByAppCommand,
-                        //            CommandParameter = "DOMAIN"
-                        //        },
-                        new MpMenuItemViewModel() {IsSeparator = true},
+                    // REJECT SOURCE
+                    mivm.SubItems.Add(
                         new MpMenuItemViewModel() {
-                                    Header = $"{(IsSourceRejected ? "Un-reject":"Reject")} '{SourceLabel}'",
-                                    AltNavIdx = 0,
-                                    IconResourceKey = IsSourceRejected ? "AddImage" : "NoEntryImage",
-                                    Command = ExcludeSourceCommand
-                                },
+                            HasLeadingSeperator = true,
+                            Header = $"{(IsSourceRejected ? "Un-block" : "Block")} '{SourceLabel}'",
+                            AltNavIdx = 0,
+                            IconResourceKey = IsSourceRejected ? "AddImage" : "NoEntryImage",
+                            Command = ToggleSourceRejectionCommand
+                        });
 
-                    });
+                    if (SourceRef is MpUrl url &&
+                        !MpUrlHelpers.IsUrlTopLevel(url.UrlPath)) {
+
+                        // REJECT SOURCE DOMAIN
+
+                        mivm.SubItems.Add(
+                            new MpMenuItemViewModel() {
+                                Header = $"{(url.IsDomainRejected ? "Un-block" : "Block")} Domain '{url.UrlDomainPath}'",
+                                AltNavIdx = 0,
+                                IconResourceKey = url.IsDomainRejected ? "AddImage" : "NoEntryImage",
+                                Command = ToggleSourceRejectionCommand,
+                                CommandParameter = "domain"
+                            });
+                    }
                 }
                 return mivm;
             }
@@ -267,6 +268,20 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Protected Methods
+
+        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+            if (e is not MpISourceRef updated_ref ||
+                updated_ref.SourceType != SourceType ||
+                updated_ref.SourceObjId != SourceRef.SourceObjId) {
+                return;
+            }
+            // this source was updated elsewhere
+            SourceRef = updated_ref;
+        }
+        #endregion
+
+
         #region Private Methods
         private void MpAvTransactionSourceViewModelBase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
@@ -281,26 +296,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand EnableFilterByAppCommand => new MpCommand<object>(
-            (ctvmSourceItemVm) => {
-                // TODO add query filter stuff here from source
-                //var targetCtvm = ctvmSourceItemVm as MpAvClipTileViewModel;
-                //if (targetCtvm == null) {
-                //    return;
-                //}
-
-                //MpHelpers.OpenUrl(CopyItem.Source.App.AppPath);
-                //ClearClipSelection();
-                //targetCtvm.IsSelected = true;
-                //this triggers clip tray to swap out the app icons for the filtered app
-                //MpClipTrayViewModel.Instance.FilterByAppIcon = ctvm.CopyItem.Source.PrimarySource.SourceIcon.IconImage.ImageBase64.ToBitmapSource();
-                //IsFilteringByApp = true;
-            });
-        public ICommand ExcludeSourceCommand => new MpCommand<object>(
+        public ICommand ToggleSourceRejectionCommand => new MpCommand<object>(
              (args) => {
                  if (SourceRef is MpApp app &&
                     MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppId == app.Id) is MpAvAppViewModel avm) {
-                     MpAvAppCollectionViewModel.Instance.ToggleIsRejectedCommand.Execute(avm);
+                     avm.ToggleIsRejectedCommand.Execute(null);
                      return;
                  }
                  if (SourceRef is MpUrl url &&
@@ -309,7 +309,7 @@ namespace MonkeyPaste.Avalonia {
                          // domain reject
                          uvm.ToggleIsDomainRejectedCommand.Execute(null);
                      } else {
-                         uvm.ToggleIsRejectedCommand.Execute(null);
+                         uvm.ToggleIsUrlRejectedCommand.Execute(null);
                      }
                      return;
                  }

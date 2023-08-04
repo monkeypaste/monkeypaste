@@ -251,7 +251,7 @@ namespace MonkeyPaste {
 
             if (ItemData.IsNullOrWhitespaceHtmlString()) {
                 // what IS this nasty shit??
-                MpDebug.Break($"Empty html write detected for item {this}", true);
+                MpDebug.Break($"Empty html write detected for item {this}");
                 return;
             }
             await base.WriteToDatabaseAsync();
@@ -289,12 +289,6 @@ namespace MonkeyPaste {
                 delete_tasks.AddRange(citrl.Select(x => x.DeleteFromDatabaseAsync()));
             }
 
-            if (IconId > 0) {
-                var ci_icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);
-                if (ci_icon != null) {
-                    delete_tasks.Add(ci_icon.DeleteFromDatabaseAsync());
-                }
-            }
             delete_tasks.Add(base.DeleteFromDatabaseAsync());
 
             await Task.WhenAll(delete_tasks);

@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
                                 unitType = MpParameterValueUnitType.CollectionComponentId,
                                 isRequired = true,
                                 paramId = SELECTED_TAG_PARAM_ID,
-                                description = "Triggered when content is added to the selected collection"
+                                description = "Input content is linked to the selected collection"
                             }
                         }
                     };

@@ -26,7 +26,6 @@ namespace MonkeyPaste {
         [Indexed]
         public string UrlPath { get; set; } = string.Empty;
 
-        public string UrlDomainPath { get; set; } = string.Empty;
 
         public string UrlTitle { get; set; } = string.Empty;
 
@@ -75,6 +74,11 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
+
+        public string UrlDomainPath =>
+            MpUrlHelpers.GetUrlDomain(UrlPath);
+
         #endregion
 
         #region Interfaces
@@ -110,7 +114,6 @@ namespace MonkeyPaste {
         public static async Task<MpUrl> CreateAsync(
             string urlPath = "",
             string title = "",
-            string domain = "",
             int iconId = 0,
             int appId = 0,
             bool suppressWrite = false) {
@@ -131,8 +134,7 @@ namespace MonkeyPaste {
                 UrlGuid = System.Guid.NewGuid(),
                 AppId = appId,
                 UrlPath = urlPath,
-                UrlTitle = title,
-                UrlDomainPath = domain
+                UrlTitle = title
             };
 
             newUrl.IconId = iconId;

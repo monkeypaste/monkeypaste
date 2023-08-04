@@ -35,6 +35,9 @@
                             HorizontalAlignment="Right"
                             Classes="defaultButton iconTextButton dataGridAddButton"
                             Command="{Binding AddAppCommand}">
+                        <ToolTip.Tip>
+                            <local:MpAvToolTipView ToolTipHtml="{x:Static local:UiStrings.Test}" />
+                        </ToolTip.Tip>
                         <DockPanel>
                             <Image DockPanel.Dock="Left"
                                    Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
@@ -50,7 +53,7 @@
                                 <DataGridTemplateColumn Width="30"
                                                         CanUserResize="False">
                                     <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate DataType="local:MpAvAppViewModel">
                                             <Image Width="15"
                                                    Height="15"
                                                    Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
@@ -62,7 +65,7 @@
                                                         SortMemberPath="AppName"
                                                         Width="0.5*">
                                     <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate DataType="local:MpAvAppViewModel">
                                             <Grid Classes="marqueeContainer">
                                                 <local:MpAvMarqueeTextBox EditOnFocus="False"
                                                                           DropShadowBrush="Transparent"
@@ -78,7 +81,7 @@
                                                         SortMemberPath="AppPath"
                                                         Width="0.5*">
                                     <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate DataType="local:MpAvAppViewModel">
                                             <Grid Classes="marqueeContainer">
                                                 <local:MpAvMarqueeTextBox EditOnFocus="False"
                                                                           DropShadowBrush="Transparent"
@@ -94,12 +97,10 @@
                                                         CanUserSort="True"
                                                         CanUserResize="False"
                                                         SortMemberPath="IsRejected"
-                                                        Header="Exclude">
+                                                        Header="Block?">
                                     <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <CheckBox local:MpAvPointerCommandExtension.IsEnabled="{Binding IsSelected}"
-                                                      local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
-                                                      local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding .}"
+                                        <DataTemplate DataType="local:MpAvAppViewModel">
+                                            <CheckBox Command="{Binding ToggleIsRejectedCommand}"
                                                       IsChecked="{Binding IsRejected, Mode=OneWay}" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -150,7 +151,7 @@
                             <DataGridTemplateColumn Width="30"
                                                     CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate DataType="local:MpAvUrlViewModel">
                                         <Image Width="15"
                                                Height="15"
                                                Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
@@ -162,7 +163,7 @@
                                                     SortMemberPath="UrlPath"
                                                     Width="*">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate DataType="local:MpAvUrlViewModel">
                                         <Grid Classes="marqueeContainer">
                                             <local:MpAvMarqueeTextBox EditOnFocus="False"
                                                                       DropShadowBrush="Transparent"
@@ -179,7 +180,7 @@
                                                     SortMemberPath="UrlDomainPath"
                                                     Width="Auto">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate DataType="local:MpAvUrlViewModel">
                                         <Grid Classes="marqueeContainer">
                                             <local:MpAvMarqueeTextBox EditOnFocus="False"
                                                                       DropShadowBrush="Transparent"
@@ -191,34 +192,32 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="120"
                                                     CanUserResize="False"
-                                                    SortMemberPath="IsSubRejected">
+                                                    SortMemberPath="IsUrlRejected">
 
                                 <DataGridTemplateColumn.HeaderTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal"
                                                     Spacing="5">
-                                            <TextBlock Text="Exclude Url?" />
+                                            <TextBlock Text="Block Url?" />
 
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.HeaderTemplate>
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox local:MpAvPointerCommandExtension.IsEnabled="True"
-                                                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand}"
-                                                  IsChecked="{Binding IsSubRejected, Mode=OneWay}" />
+                                    <DataTemplate DataType="local:MpAvUrlViewModel">
+                                        <CheckBox Command="{Binding ToggleIsUrlRejectedCommand}"
+                                                  IsChecked="{Binding IsUrlRejected, Mode=OneWay}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="120"
                                                     CanUserResize="False"
-                                                    SortMemberPath="IsRejected"
-                                                    Header="Exclude Domain?">
+                                                    SortMemberPath="IsDomainRejected"
+                                                    Header="Block Domain?">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox local:MpAvPointerCommandExtension.IsEnabled="True"
-                                                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsRejectedCommand}"
-                                                  IsChecked="{Binding IsRejected, Mode=OneWay}" />
+                                    <DataTemplate DataType="local:MpAvUrlViewModel">
+                                        <CheckBox Command="{Binding ToggleIsDomainRejectedCommand}"
+                                                  IsChecked="{Binding IsDomainRejected, Mode=OneWay}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

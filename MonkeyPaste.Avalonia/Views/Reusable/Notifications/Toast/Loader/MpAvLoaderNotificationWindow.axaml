@@ -140,7 +140,7 @@
             VerticalAlignment="Stretch"
             BorderThickness="7"
             BorderBrush="{DynamicResource ThemeWhiteColor}"
-            Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}">
+            Background="{DynamicResource ThemeColor}">
         <Grid x:Name="NotificationWindowContainerGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.35*" />

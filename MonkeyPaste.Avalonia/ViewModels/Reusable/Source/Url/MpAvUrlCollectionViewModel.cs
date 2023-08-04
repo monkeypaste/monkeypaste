@@ -15,7 +15,6 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvUrlCollectionViewModel _instance;
         public static MpAvUrlCollectionViewModel Instance => _instance ?? (_instance = new MpAvUrlCollectionViewModel());
 
-
         #endregion
 
         #region Properties
@@ -23,7 +22,9 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public IEnumerable<MpAvUrlViewModel> FilteredItems =>
             Items
-            .Where(x => (x as MpIFilterMatch).IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText));
+            .Where(x => (x as MpIFilterMatch).IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText))
+            .OrderBy(x => x.UrlDomainPath)
+            .ThenBy(x => x.UrlTitle);
 
         #endregion
 
@@ -76,11 +77,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsRejected(string domain) {
-            return Items.FirstOrDefault(x => x.UrlDomainPath.ToLower() == domain.ToLower() && x.IsRejected) != null;
+            return Items.FirstOrDefault(x => x.UrlDomainPath.ToLower() == domain.ToLower() && x.IsDomainRejected) != null;
         }
 
         public bool IsUrlRejected(string url) {
-            return Items.FirstOrDefault(x => x.UrlPath.ToLower() == url.ToLower() && x.IsSubRejected) != null;
+            return Items.FirstOrDefault(x => x.UrlPath.ToLower() == url.ToLower() && x.IsUrlRejected) != null;
         }
 
         public void Remove(MpAvUrlViewModel avm) {

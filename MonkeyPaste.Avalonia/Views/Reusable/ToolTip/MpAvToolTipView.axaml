@@ -15,11 +15,6 @@
     <UserControl.RenderTransform>
         <RotateTransform />
     </UserControl.RenderTransform>
-    <UserControl.Resources>
-        <sys:String x:Key="CssStyle">
-            body{foreground: black; background: khaki;border: 1.5 outset darkkhaki;}
-        </sys:String>
-    </UserControl.Resources>
     <UserControl.Styles>
         <!--  TEXT/HTML VISIBILITY  -->
         <Style Selector="Border#TooltipOuterContainer.text av|HtmlLabel#ToolTipHtmlPanel">

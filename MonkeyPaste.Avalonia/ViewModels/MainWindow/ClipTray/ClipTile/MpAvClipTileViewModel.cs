@@ -1704,7 +1704,7 @@ namespace MonkeyPaste.Avalonia {
                         //return;
                         if (CopyItemData.IsNullOrWhitespaceHtmlString()) {
                             // what IS this nasty shit??
-                            MpDebug.Break($"Empty content write ignored", true);
+                            MpDebug.Break($"Empty content write ignored");
 
                             return;
                         }

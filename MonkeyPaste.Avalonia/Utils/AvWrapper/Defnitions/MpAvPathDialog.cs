@@ -1,4 +1,6 @@
-﻿using Avalonia.Platform.Storage;
+﻿using Avalonia.Controls;
+using Avalonia.Input.GestureRecognizers;
+using Avalonia.Platform.Storage;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -34,19 +36,25 @@ namespace MonkeyPaste.Avalonia {
             object filtersObj,
             bool resolveShortcutPath = false,
             object owner = null) {
-
-            title ??= $"Select {(isFolder ? "Folder" : "File")}";
-            IReadOnlyList<FilePickerFileType> filters = filtersObj as IReadOnlyList<FilePickerFileType> ?? (new[] { FilePickerFileTypes.All });
-            var storage_provider = GetStorageProvider();
-            if (storage_provider == null) {
-                return null;
-            }
             owner ??= MpAvWindowManager.ActiveWindow;
+            if (owner is not MpAvWindow) {
+                owner = MpAvWindowManager.MainWindow;
+            }
             if (owner is MpAvMainWindow) {
                 MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
             }
+            if (owner is not TopLevel tl) {
+                return string.Empty;
+            }
+            var storage_provider = GetStorageProvider(tl);
+            if (storage_provider == null) {
+                return string.Empty;
+            }
+            title ??= $"Select {(isFolder ? "Folder" : "File")}";
+            IReadOnlyList<FilePickerFileType> filters = filtersObj as IReadOnlyList<FilePickerFileType> ?? (new[] { FilePickerFileTypes.All });
 
-            IStorageFolder start_location = await GetInitFolderAsync(initDir);
+
+            IStorageFolder start_location = await GetInitFolderAsync(initDir, tl);
             IReadOnlyList<IStorageItem> result;
             if (isFolder) {
                 result = await
@@ -79,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
-        private static async Task<IStorageFolder?> GetInitFolderAsync(string initDir) {
+        private static async Task<IStorageFolder?> GetInitFolderAsync(string initDir, TopLevel tl) {
             if (string.IsNullOrEmpty(initDir)) {
                 initDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             } else if (initDir.IsFile()) {
@@ -87,13 +95,13 @@ namespace MonkeyPaste.Avalonia {
             }
             IStorageFolder? start_location = null;
             if (!string.IsNullOrEmpty(initDir)) {
-                start_location = await GetStorageProvider().TryGetFolderFromPathAsync(initDir);
+                start_location = await GetStorageProvider(tl).TryGetFolderFromPathAsync(initDir);
             }
             return start_location;
         }
 
-        private static IStorageProvider GetStorageProvider() {
-            return MpAvWindowManager.MainWindow.StorageProvider;
+        private static IStorageProvider GetStorageProvider(TopLevel tl) {
+            return tl.StorageProvider;
         }
     }
 }

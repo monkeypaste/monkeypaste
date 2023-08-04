@@ -2446,7 +2446,6 @@ namespace MonkeyPaste.Avalonia {
 
 
             if (trashed_ctvm.IsPinned) {
-
                 bool needs_query_refresh =
                     trashed_ctvm.HasPinPlaceholder;
                 UnpinTileCommand.Execute(trashed_ctvm);
@@ -2458,6 +2457,11 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     return;
                 }
+            } else {
+                // NOTE! this is trying to fix intermittent empty content write thats been happending
+                // but SHOULD be part of query to unload that item but not sure, hard to isolate maybe 
+                // a timing thing (especially when it gets hot)
+                trashed_ctvm.TriggerUnloadedNotification(true);
             }
             // trigger in place requery to remove trashed item
             QueryCommand.Execute(string.Empty);

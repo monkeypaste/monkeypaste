@@ -70,7 +70,6 @@ namespace MonkeyPaste.Avalonia {
                                 label = "Shortcut Trigger",
                                 controlType = MpParameterControlType.ShortcutRecorder,
                                 unitType = MpParameterValueUnitType.PlainText,
-                                isRequired = true,
                                 paramId = SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID,
                                 description = "Triggered when the recorded shortcut is pressed at anytime with the current clipboard"
                             }

@@ -213,112 +213,43 @@
         </local:MpAvMarqueeTextBox>
 
         <!--  ICON  -->
+        <Button x:Name="ClipTileAppIconImageButton"
+                x:DataType="local:MpAvClipTileTransactionCollectionViewModel"
+                Grid.Column="1"
+                Margin="0,0,15,0"
+                ClipToBounds="False"
+                DataContext="{Binding TransactionCollectionViewModel}"
+                Classes="noBg noHoverBg"
+                Classes.shakeOnce="{Binding DoShake}"
+                Command="{Binding OpenTransactionPaneCommand}"
+                BorderThickness="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Padding="3">
+            <Interaction.Behaviors>
+                <local:MpAvSourceHighlightBehavior />
+            </Interaction.Behaviors>
+            <Button.RenderTransform>
+                <RotateTransform />
+            </Button.RenderTransform>
 
-        <StackPanel x:Name="SourceIconContainerPanel"
-                    Grid.Column="1"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,15,0"
-                    ClipToBounds="False">
+            <Grid>
+                <Image x:Name="ClipTileAppIconImage"
+                       IsVisible="{Binding !IsVisible, ElementName=TransBusySpinner}"
+                       IsHitTestVisible="False"
+                       Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                       Stretch="Uniform"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch" />
 
-            <!--<Ellipse x:Name="SourceMatchEllipse"
-                     IsVisible="False"
-                     StrokeThickness="1"
-                     RenderTransformOrigin="0.5,0.5"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch"
-                     Margin="0,3,13,0" />-->
-            <Button x:Name="ClipTileAppIconImageButton"
-                    x:DataType="local:MpAvClipTileTransactionCollectionViewModel"
-                    DataContext="{Binding TransactionCollectionViewModel}"
-                    Classes="noBg noHoverBg"
-                    Classes.shakeOnce="{Binding DoShake}"
-                    Command="{Binding OpenTransactionPaneCommand}"
-                    ClipToBounds="False"
-                    BorderThickness="0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Margin="0,0,0,0"
-                    Padding="3">
-                <Interaction.Behaviors>
-                    <local:MpAvSourceHighlightBehavior />
-                </Interaction.Behaviors>
-                <Button.RenderTransform>
-                    <RotateTransform />
-                </Button.RenderTransform>
-
-                <Grid>
-                    <Image x:Name="HasAnalysisBorderImage"
-                           IsHitTestVisible="False"
-                           IsVisible="{Binding IsAnyAnalysisTransaction}"
-                           Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border|orange}"
-                           Stretch="UniformToFill"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch">
-                        <Image.IsVisible>
-                            <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                <Binding Path="IsAnyAnalysisTransaction" />
-                                <Binding Path="!IsVisible"
-                                         ElementName="TransBusySpinner" />
-                            </MultiBinding>
-                        </Image.IsVisible>
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleX="{StaticResource IconBorderMaxScale}"
-                                                ScaleY="{StaticResource IconBorderMaxScale}" />
-                                <RotateTransform />
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
-                    <Image x:Name="ClipTileAppIconBorderImage"
-                           IsVisible="False"
-                           IsHitTestVisible="False"
-                           Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, ConverterParameter=border}"
-                           Stretch="UniformToFill"
-                           ClipToBounds="False"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch">
-                        <Image.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform />
-                                <RotateTransform />
-                            </TransformGroup>
-                        </Image.RenderTransform>
-                    </Image>
-                    <Image x:Name="ClipTileAppIconImage"
-                           IsVisible="{Binding !IsVisible, ElementName=TransBusySpinner}"
-                           IsHitTestVisible="False"
-                           Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
-                           Stretch="UniformToFill"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch" />
-
-                    <local:MpAvBusySpinnerView x:Name="TransBusySpinner"
-                                               IsVisible="{Binding IsBusy}"
-                                               Width="{Binding $parent.Width}"
-                                               Height="{Binding $parent.Height}"
-                                               Classes="square" />
-                </Grid>
-            </Button>
-
-            <local:MpAvOptionsButton x:Name="MobileContextOptionButton"
-                                     Margin="0,0,0,0"
-                                     Width="25"
-                                     Height="25"
-                                     VerticalAlignment="Stretch"
-                                     VerticalContentAlignment="Stretch"
-                                     Command="{Binding ShowContextMenuCommand}"
-                                     CommandParameter="{Binding $self}">
-                <local:MpAvOptionsButton.IsVisible>
-                    <MultiBinding Converter="{x:Static BoolConverters.And}">
-                        <!--<Binding Path="IsSelected" />-->
-                        <Binding Path="!IsDesktop"
-                                 Source="{x:Static local:MpAvThemeViewModel.Instance}" />
-                    </MultiBinding>
-                </local:MpAvOptionsButton.IsVisible>
-            </local:MpAvOptionsButton>
-        </StackPanel>
+                <local:MpAvBusySpinnerView x:Name="TransBusySpinner"
+                                           IsVisible="{Binding IsBusy}"
+                                           Width="{Binding $parent.Width}"
+                                           Height="{Binding $parent.Height}"
+                                           Classes="square" />
+            </Grid>
+        </Button>
     </Grid>
 </local:MpAvUserControl>

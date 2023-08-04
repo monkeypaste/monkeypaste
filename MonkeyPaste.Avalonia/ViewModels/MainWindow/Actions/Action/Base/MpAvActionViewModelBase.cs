@@ -1608,8 +1608,9 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMenuExtension.ShowMenu(
                     control: args as Control,
                     placement: PlacementMode.Right,
-                    mivm: ContextMenuViewModel,
-                    selectOnRightClick: true);
+                    mivm: ContextMenuViewModel//,
+                                              //selectOnRightClick: true
+                    );
             });
 
         public ICommand ChangeParentCommand => new MpAsyncCommand<object>(

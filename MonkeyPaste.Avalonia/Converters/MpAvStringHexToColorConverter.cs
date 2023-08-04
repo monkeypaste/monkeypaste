@@ -14,6 +14,9 @@ namespace MonkeyPaste.Avalonia {
                     var result = b.AdjustOpacity(paramVal).GetColor();
                     return result;
                 }
+                if (b.Color == null) {
+
+                }
                 return b.Color;
             }
             return null;

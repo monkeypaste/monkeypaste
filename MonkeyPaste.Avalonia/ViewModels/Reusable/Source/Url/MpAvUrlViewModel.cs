@@ -102,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsRejected {
+        public bool IsDomainRejected {
             get {
                 if (Url == null) {
                     return false;
@@ -113,13 +113,12 @@ namespace MonkeyPaste.Avalonia {
                 if (Url != null && Url.IsDomainRejected != value) {
                     Url.IsDomainRejected = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(IsRejected));
-                    OnPropertyChanged(nameof(Url));
+                    OnPropertyChanged(nameof(IsDomainRejected));
                 }
             }
         }
 
-        public bool IsSubRejected {
+        public bool IsUrlRejected {
             get {
                 if (Url == null) {
                     return false;
@@ -130,8 +129,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Url != null && Url.IsUrlRejected != value) {
                     Url.IsUrlRejected = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(IsSubRejected));
-                    OnPropertyChanged(nameof(Url));
+                    OnPropertyChanged(nameof(IsUrlRejected));
                 }
             }
         }
@@ -160,7 +158,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
         }
-        public async Task<bool> VerifyRejectAsync(bool isDomain) {
+        public async Task<bool> VerifyAndApplyRejectAsync(bool isDomain) {
             bool rejectContent = false;
 
             IEnumerable<MpCopyItem> to_delete_cil = null;
@@ -175,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
             if (to_delete_cil != null && to_delete_cil.Any()) {
                 var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
                     title: $"Remove associated clips?",
-                    message: $"Would you also like to remove all clips from '{(isDomain ? UrlDomainPath : UrlPath)}'",
+                    message: $"Would you also like to remove all {to_delete_cil.Count()} clips from '{(isDomain ? UrlDomainPath : UrlPath)}'",
                     iconResourceObj: IconId);
                 if (result.IsNull()) {
                     // flag as cancel so cmd will untoggle reject
@@ -196,18 +194,18 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpUrlViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                //case nameof(IsRejected):
-                //    if (IsRejected) {
-                //        Dispatcher.UIThread.Post(async () => { await VerifyRejectAsync(true); });
-                //    }
-                //    break;
-                //case nameof(IsSubRejected):
-                //    if (IsSubRejected) {
-                //        Dispatcher.UIThread.Post(async () => { await VerifyRejectAsync(false); });
-                //    }
-                //    break;
+                case nameof(IsDomainRejected):
+                    OnPropertyChanged(nameof(IsUrlRejected));
+                    break;
                 case nameof(HasModelChanged):
-                    Task.Run(Url.WriteToDatabaseAsync);
+                    if (HasModelChanged) {
+                        Task.Run(async () => {
+                            await Url.WriteToDatabaseAsync();
+                            Dispatcher.UIThread.Post(() => {
+                                HasModelChanged = false;
+                            });
+                        });
+                    }
                     break;
             }
         }
@@ -216,54 +214,83 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         #region Db Event Handlers
-
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
             if (e is MpUrl url) {
-                if (url.Id == UrlId) {
-                    Url = url;
-                } else if (url.UrlDomainPath.ToLower() == UrlDomainPath.ToLower()) {
-                    if (url.IsDomainRejected && !IsRejected) {
-                        //when this url's domain is rejected this url needs to know without notifying user
-                        SupressPropertyChangedNotification = true;
-                        IsRejected = true;
-                        SupressPropertyChangedNotification = false;
-                        HasModelChanged = true;
-                    } else if (!url.IsDomainRejected && IsRejected) {
-                        IsRejected = false;
-                    }
-
-                }
-
+                //if (url.Id == UrlId) {
+                //    Url = url;
+                //} 
             }
+        }
+        #endregion
+
+        #endregion
+
+        #region Private Methods
+
+        private async Task ApplyRejectStateToOtherDomainUrlsAsync(bool? urlReject, bool? domainReject, bool isSource) {
+            // NOTE since this may change multiple properties it needs to do it 
+            // in the model or weird updates happen
+
+            if (urlReject.HasValue) {
+                Url.IsUrlRejected = urlReject.Value;
+            }
+            if (domainReject.HasValue) {
+                Url.IsDomainRejected = domainReject.Value;
+            }
+            await Url.WriteToDatabaseAsync();
+            OnPropertyChanged(nameof(IsUrlRejected));
+            OnPropertyChanged(nameof(IsDomainRejected));
+            if (!isSource) {
+                return;
+            }
+
+            var other_domain_url_vml =
+                MpAvUrlCollectionViewModel.Instance.Items
+                    .Where(x => x.UrlId != UrlId && x.UrlDomainPath.ToLower() == UrlDomainPath.ToLower());
+
+            await Task.WhenAll(
+                other_domain_url_vml.Select(x =>
+                    x.ApplyRejectStateToOtherDomainUrlsAsync(
+                        urlReject: IsDomainRejected ? true : null,  // ignore implicit change if domain is not rejected
+                        domainReject: IsDomainRejected,
+                        isSource: false)));
         }
 
         #endregion
 
-        #endregion
-
         #region Commands
-        public ICommand ToggleIsRejectedCommand => new MpAsyncCommand(
+
+        public ICommand ToggleIsUrlRejectedCommand => new MpAsyncCommand(
             async () => {
-                IsSubRejected = !IsSubRejected;
-                if (IsSubRejected) {
-                    bool was_confirmed = await VerifyRejectAsync(false);
+                bool will_url_be_rejected = !IsUrlRejected;
+                bool? will_domain_be_rejected = null;
+                if (will_url_be_rejected) {
+                    bool was_confirmed = await VerifyAndApplyRejectAsync(false);
                     if (!was_confirmed) {
-                        // canceled from delete content msgbox
-                        IsSubRejected = false;
+                        // canceled 
+                        return;
                     }
+                } else if (IsDomainRejected) {
+                    // when url unrejected and domain still is, unreject domain
+                    will_domain_be_rejected = false;
                 }
+                await ApplyRejectStateToOtherDomainUrlsAsync(will_url_be_rejected, will_domain_be_rejected, true);
             });
 
         public ICommand ToggleIsDomainRejectedCommand => new MpAsyncCommand(
             async () => {
-                IsRejected = !IsRejected;
-                if (IsRejected) {
-                    bool was_confirmed = await VerifyRejectAsync(true);
+                bool will_domain_be_rejected = !IsDomainRejected;
+                bool? will_url_be_rejected = null;
+                if (will_domain_be_rejected) {
+                    bool was_confirmed = await VerifyAndApplyRejectAsync(true);
                     if (!was_confirmed) {
-                        // canceled from delete content msgbox
-                        IsRejected = false;
+                        // canceled
+                        return;
                     }
+                    // treat domain reject as implicit url reject in db
+                    will_url_be_rejected = true;
                 }
+                await ApplyRejectStateToOtherDomainUrlsAsync(will_url_be_rejected, will_domain_be_rejected, true);
             });
 
 

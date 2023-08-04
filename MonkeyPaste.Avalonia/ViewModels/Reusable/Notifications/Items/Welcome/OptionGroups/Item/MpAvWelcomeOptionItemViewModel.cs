@@ -1,6 +1,4 @@
 ﻿
-using MpResources = MonkeyPaste.Avalonia.Resources.Locales.Resources;
-
 namespace MonkeyPaste.Avalonia {
     public class MpAvWelcomeOptionItemViewModel :
         MpViewModelBase<MpAvWelcomeNotificationViewModel> {

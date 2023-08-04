@@ -36,7 +36,6 @@ namespace MonkeyPaste {
             var result = await MpUrl.CreateAsync(
                 urlPath: urlProps.FullyFormattedUriStr,
                 title: urlProps.Title,
-                domain: urlProps.DomainStr,
                 iconId: icon.Id,
                 appId: appId,
                 suppressWrite: suppressWrite);

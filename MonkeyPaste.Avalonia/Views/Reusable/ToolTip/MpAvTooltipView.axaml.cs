@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
         private MpPoint _lastMousePos;
         private bool _isMoveAttached = false;
-        private bool _isDisableAttached = false;
+        private bool _isRootStyleAttached = false;
 
         #endregion
 
@@ -127,13 +127,26 @@ namespace MonkeyPaste.Avalonia {
             IsVisible =
                 !string.IsNullOrEmpty(ToolTipText) ||
                 !string.IsNullOrEmpty(ToolTipHtml);
-
-            if (IsVisible && GetHostControl() is Control hc) {
+            if (!IsVisible) {
+                return;
+            }
+            if (GetHostControl() is Control hc) {
                 // workaround to pass tooltip type from hint to tooltip
                 if (hc.Classes.Contains("warning")) {
                     this.Classes.Add("warning");
                 } else if (hc.Classes.Contains("error")) {
                     this.Classes.Add("error");
+                }
+
+                if (!_isMoveAttached) {
+                    hc.PointerMoved += Host_control_PointerMoved;
+                    _isMoveAttached = true;
+                }
+                if (!_isRootStyleAttached &&
+                    GetPopupRoot() is PopupRoot pur) {
+                    pur.TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
+                    pur.Background = Brushes.Transparent;
+                    _isRootStyleAttached = true;
                 }
             }
         }
@@ -172,57 +185,30 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (!_isMoveAttached) {
-                hc.PointerMoved += Host_control_PointerMoved;
-                _isMoveAttached = true;
-            }
-            if (!_isDisableAttached &&
-                GetPopupRoot() is PopupRoot pur) {
-                pur.TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
-                pur.Background = Brushes.Transparent;
-                foreach (var elm in pur.GetSelfAndLogicalDescendants()) {
-                    if (elm is Control c) {
-                        //c.IsHitTestVisible = false;
-                        //c.Focusable = false;
-                        //c.IsEnabled = false;
-                    }
-                }
-                _isDisableAttached = true;
-            }
-
             if (_lastMousePos == null) {
                 _lastMousePos = e.GetScreenMousePoint(hc);
             }
             var mp = e.GetScreenMousePoint(hc);
 
-            SetToolTipOffset(hc, mp);
+            //SetToolTipOffset(hc, mp);
             _lastMousePos = mp;
         }
 
         #region Helpers
 
         private PopupRoot GetPopupRoot() {
-            var tooltip = this.GetLogicalAncestors().FirstOrDefault(x => x is ToolTip);
-            if (tooltip == null) {
+            if (this.GetLogicalAncestors().FirstOrDefault(x => x is ToolTip) is not ToolTip tooltip ||
+                tooltip.GetLogicalAncestors().FirstOrDefault(x => x is PopupRoot) is not PopupRoot pr) {
                 return null;
             }
-            var tooltip_root = tooltip.GetLogicalAncestors().FirstOrDefault(x => x is PopupRoot);
-            if (tooltip_root is PopupRoot pr) {
-                return pr;
-            }
-            return null;
-
-            //if (TopLevel.GetTopLevel(this) is PopupRoot pur) {
-            //    return pur;
-            //}
-            //return null;
+            return pr;
         }
         private Control GetHostControl() {
-            if (GetPopupRoot() is PopupRoot pr &&
-                pr.Parent is Control host_control) {
-                return host_control;
+            if (GetPopupRoot() is not PopupRoot pr ||
+                pr.Parent is not Control host_control) {
+                return null;
             }
-            return null;
+            return host_control;
         }
 
         private void SetToolTipOffset(Control hc, MpPoint mp) {
