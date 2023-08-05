@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -39,4 +39,4 @@
         <ColorView x:Name="Picker"
                    ColorSpectrumShape="Ring" />
     </DockPanel>
-</UserControl>
+</local:MpAvUserControl>

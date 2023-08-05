@@ -48,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvEditableEnumerableParameterViewModel() : this(null) { }
 
-        public MpAvEditableEnumerableParameterViewModel(MpViewModelBase parent) : base(parent) {
+        public MpAvEditableEnumerableParameterViewModel(MpAvViewModelBase parent) : base(parent) {
             Selection.SingleSelect = true;
         }
         #endregion

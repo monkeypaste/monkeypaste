@@ -23,8 +23,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuViewModel Implementation
 
-        public MpMenuItemViewModel PopupMenuViewModel =>
-            MpContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
+        public MpAvMenuItemViewModel PopupMenuViewModel =>
+            MpAvContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
                 AddContentPropertyPathCommand,
                 IsActionParameter ? null : new[] { MpContentQueryPropertyPathType.LastOutput });
 
@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvTextBoxParameterViewModel() : base(null) { }
 
-        public MpAvTextBoxParameterViewModel(MpViewModelBase parent) : base(parent) {
+        public MpAvTextBoxParameterViewModel(MpAvViewModelBase parent) : base(parent) {
             PropertyChanged += MpTextBoxParameterViewModel_PropertyChanged;
         }
 

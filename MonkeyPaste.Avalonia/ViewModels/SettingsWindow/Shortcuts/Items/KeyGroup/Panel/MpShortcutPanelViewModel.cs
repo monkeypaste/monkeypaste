@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Avalonia {
-    public class MpShortcutPanelViewModel : MpViewModelBase {
+    public class MpShortcutPanelViewModel : MpAvViewModelBase {
         #region Private Variables
 
         #endregion

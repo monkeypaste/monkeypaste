@@ -7,7 +7,7 @@ using MonkeyPaste.Common.Avalonia;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvClearTextButton : MpAvUserControl {
+    public partial class MpAvClearTextButton : MpAvUserControl<object> {
 
         #region Command Property
 

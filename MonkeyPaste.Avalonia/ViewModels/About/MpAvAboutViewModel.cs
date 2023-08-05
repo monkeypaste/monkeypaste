@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvAboutViewModel : MpViewModelBase, MpIActiveWindowViewModel, MpICloseWindowViewModel {
+    public class MpAvAboutViewModel : MpAvViewModelBase, MpIActiveWindowViewModel, MpICloseWindowViewModel {
         #region Private Variables
         #endregion
 

@@ -13,7 +13,7 @@ using System.Windows.Data;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvShortcutLabel : UserControl {
+    public partial class MpAvShortcutLabel : MpAvUserControl<object> {
 
         private CompositeDisposable _disposables = new CompositeDisposable();
 

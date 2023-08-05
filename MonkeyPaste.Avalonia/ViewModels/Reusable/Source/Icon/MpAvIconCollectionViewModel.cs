@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvIconCollectionViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpIUserColorViewModel {
         #region Private Variables
 
@@ -210,23 +210,23 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ChangeIconCommand => new MpCommand<object>(
              (args) => {
                  var controlArg = args as Control;
-                 MpMenuItemViewModel mivm = new MpMenuItemViewModel();
+                 MpAvMenuItemViewModel mivm = new MpAvMenuItemViewModel();
 
                  if (controlArg.DataContext is MpISelectableViewModel svm) {
                      svm.IsSelected = true;
                  }
 
                  if (controlArg.DataContext is MpIUserColorViewModel ucvm) {
-                     mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>() {
-                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(ucvm)
+                     mivm.SubItems = new ObservableCollection<MpAvMenuItemViewModel>() {
+                         MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel(ucvm)
                      };
                  } else if (controlArg.DataContext is MpIUserIconViewModel uivm) {
                      _currentIconViewModel = uivm;
 
-                     mivm.SubItems = new ObservableCollection<MpMenuItemViewModel>() {
-                         MpMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
-                         new MpMenuItemViewModel() { IsSeparator = true },
-                         new MpMenuItemViewModel() {
+                     mivm.SubItems = new ObservableCollection<MpAvMenuItemViewModel>() {
+                         MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
+                         new MpAvMenuItemViewModel() { IsSeparator = true },
+                         new MpAvMenuItemViewModel() {
                              Header = "Choose Image...",
                              IconResourceKey = "ImageImage",
                              Command = SelectImagePathCommand,

@@ -5,37 +5,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
-namespace MonkeyPaste {
-    public static class MpContentQueryPropertyPathHelpers {
-        public static MpMenuItemViewModel GetContentPropertyRootMenu(
+namespace MonkeyPaste.Avalonia {
+    public static class MpAvContentQueryPropertyPathHelpers {
+        public static MpAvMenuItemViewModel GetContentPropertyRootMenu(
             ICommand selectCmd,
             IEnumerable<MpContentQueryPropertyPathType> hiddenPaths = null) {
             // NOTE command must use path type as parameter or ignore
 
             hiddenPaths = hiddenPaths ?? new List<MpContentQueryPropertyPathType>();
 
-            var adv_mivm = new MpMenuItemViewModel() {
+            var adv_mivm = new MpAvMenuItemViewModel() {
                 Header = "Advanced",
                 IconResourceKey = "CogImage",
                 SubItems =
                     typeof(MpContentQueryPropertyGroupType)
                         .EnumToLabels()
                         .Skip(1)
-                        .Select((x, idx) => new MpMenuItemViewModel() {
+                        .Select((x, idx) => new MpAvMenuItemViewModel() {
                             Header = x,
                             IconResourceKey = GetGroupIconResourceKey((MpContentQueryPropertyGroupType)idx + 1),
-                            SubItems = new List<MpMenuItemViewModel>()
+                            SubItems = new List<MpAvMenuItemViewModel>()
                         }).ToList()
             };
 
-            var root_mivml = new List<MpMenuItemViewModel>();
+            var root_mivml = new List<MpAvMenuItemViewModel>();
             for (int i = 0; i < typeof(MpContentQueryPropertyPathType).Length(); i++) {
                 MpContentQueryPropertyPathType pt = (MpContentQueryPropertyPathType)i;
                 if (pt == MpContentQueryPropertyPathType.None ||
                     hiddenPaths.Contains(pt)) {
                     continue;
                 }
-                var pt_mivm = new MpMenuItemViewModel() {
+                var pt_mivm = new MpAvMenuItemViewModel() {
                     Header = pt.EnumToLabel(),
                     Command = selectCmd,
                     CommandParameter = (int)pt,
@@ -51,9 +51,9 @@ namespace MonkeyPaste {
                 }
             }
 
-            root_mivml.Add(new MpMenuItemViewModel() { IsSeparator = true });
+            root_mivml.Add(new MpAvMenuItemViewModel() { IsSeparator = true });
             root_mivml.Add(adv_mivm);
-            return new MpMenuItemViewModel() {
+            return new MpAvMenuItemViewModel() {
                 SubItems = root_mivml
             };
 

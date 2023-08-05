@@ -2,7 +2,7 @@
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvWelcomeOptionGroupViewModel : MpViewModelBase {
+    public class MpAvWelcomeOptionGroupViewModel : MpAvViewModelBase {
         public IList<MpAvWelcomeOptionItemViewModel> Items { get; set; }
 
         public string Title { get; set; }

@@ -131,7 +131,7 @@ namespace MonkeyPaste {
 
         public static async Task InitializeAsync() {
             // USER DEVICE
-            var thisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
+            var thisUserDevice = await MpDataModelProvider.GetUserDeviceByGuidAsync(Mp.Services.ThisDeviceInfo.ThisDeviceGuid);
             if (thisUserDevice == null) {
                 // reset error
                 var test = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();

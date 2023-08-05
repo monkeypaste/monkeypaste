@@ -12,7 +12,7 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
-    public partial class MpAvColorPickerView : UserControl {
+    public partial class MpAvColorPickerView : MpAvUserControl<object> {
         #region Private Variables
 
 

@@ -21,18 +21,18 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvAnalyticItemPresetViewModel PresetViewModel { get; private set; }
 
-        public override MpMenuItemViewModel ContextMenuItemViewModel {
+        public override MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
                 if (PresetViewModel == null) {
                     return null;
                 }
-                return new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
                     ParentObj = this,
                     Header =
                         MpAvDateTimeToStringConverter.Instance.Convert(Parent.TransactionDateTime, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null) as string,
                     IconSourceObj = PresetViewModel.IconId,
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
+                    SubItems = new List<MpAvMenuItemViewModel>() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Select",
                             IconSourceObj = "SlidersImage",
                             Command = PresetViewModel.Parent.SelectPresetCommand,
@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                         //        Parent.Response is MpAvAnnotationMessageViewModel amvm2 && amvm2.RootAnnotationViewModel != null ?
                         //        amvm2.RootAnnotationViewModel : null
                         //},
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "View",
                             IconSourceObj = "GraphImage",
                             IsVisible = Parent.Response is MpAvAnnotationMessageViewModel amvm && amvm.RootAnnotationViewModel != null,

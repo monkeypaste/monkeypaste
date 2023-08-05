@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvUriNavigator : MpViewModelBase {
+    public class MpAvUriNavigator : MpAvViewModelBase {
         #region Private Variables
         #endregion
 

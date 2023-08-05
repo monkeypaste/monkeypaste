@@ -3,7 +3,7 @@
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvTrayIcon {
-        public MpITrayIcon TrayIcon { get; }
+        public MpAvITrayIcon TrayIcon { get; }
 
         public MpAvTrayIcon() {
 #if MAC

@@ -14,7 +14,7 @@ using Application = Avalonia.Application;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSystemTrayViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpICloseWindowViewModel {
 
         #region Private Variables
@@ -44,17 +44,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpMenuItemViewModel TrayMenuItemViewModel {
+        public MpAvMenuItemViewModel TrayMenuItemViewModel {
             get {
-                var tmivm = new MpMenuItemViewModel() {
+                var tmivm = new MpAvMenuItemViewModel() {
                     TooltipSrcObj = this,
                     TooltipPropPath = nameof(SystemTrayTooltip),
                     IconSrcBindingObj = this,
                     IconPropPath = nameof(SystemTrayIconResourceObj),
                     CommandPath = nameof(MpAvMainWindowViewModel.Instance.ToggleShowMainWindowCommand),
                     CommandSrcObj = MpAvMainWindowViewModel.Instance,
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
+                    SubItems = new List<MpAvMenuItemViewModel>() {
+                        new MpAvMenuItemViewModel() {
                             HeaderSrcObj = MpAvMainWindowViewModel.Instance,
                             HeaderPropPath = nameof(MpAvMainWindowViewModel.Instance.ShowOrHideLabel),
                             IconSrcBindingObj = MpAvMainWindowViewModel.Instance,
@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
 
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             HeaderSrcObj = MpAvClipTrayViewModel.Instance,
                             HeaderPropPath = nameof(MpAvClipTrayViewModel.Instance.PlayOrPauseLabel),
                             IconSrcBindingObj = MpAvClipTrayViewModel.Instance,
@@ -77,11 +77,11 @@ namespace MonkeyPaste.Avalonia {
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleListenToClipboard),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Mode",
                             IconResourceKey = "RobotClawImage",
-                            SubItems = new List<MpMenuItemViewModel>() {
-                                new MpMenuItemViewModel() {
+                            SubItems = new List<MpAvMenuItemViewModel>() {
+                                new MpAvMenuItemViewModel() {
                                     Header = "Append Inline",
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
                                     IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsAppendInsertMode),
@@ -93,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
                                     InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleAppendInsertMode),
                                     InputGesturePropPath = nameof(MpAvShortcutViewModel.KeyString)
                                 },
-                                new MpMenuItemViewModel() {
+                                new MpAvMenuItemViewModel() {
                                     Header = "Append Line",
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
                                     IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsAppendLineMode),
@@ -104,8 +104,8 @@ namespace MonkeyPaste.Avalonia {
                                     InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleAppendLineMode),
                                     InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                                 },
-                                new MpMenuItemViewModel() {IsSeparator = true},
-                                new MpMenuItemViewModel() {
+                                new MpAvMenuItemViewModel() {IsSeparator = true},
+                                new MpAvMenuItemViewModel() {
                                     Header = "Auto-Copy",
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
                                     IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsAutoCopyMode),
@@ -116,7 +116,7 @@ namespace MonkeyPaste.Avalonia {
                                     InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ToggleAutoCopyMode),
                                     InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                                 },
-                                new MpMenuItemViewModel() {
+                                new MpAvMenuItemViewModel() {
                                     Header = "Right-Click Paste",
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
                                     IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsRightClickPasteMode),
@@ -129,7 +129,7 @@ namespace MonkeyPaste.Avalonia {
                                 },
                             }
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Settings",
                             IconResourceKey = "CogImage",
                             CommandSrcObj = MpAvSettingsViewModel.Instance,
@@ -138,21 +138,21 @@ namespace MonkeyPaste.Avalonia {
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ShowSettings),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "About",
                             IconResourceKey = "InfoImage",
                             Command = MpAvAboutViewModel.Instance.ShowAboutWindowCommand
                         },
 #if DEBUG && DESKTOP
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Show Converter DevTools",
                             Command = MpAvPlainHtmlConverter.Instance.ShowConverterDevTools,
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Open Cef Uri",
                             Command = NavigateToCefNetUriCommand,
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Generic Test",
                             Command = GenericTestCommand,
                         },
@@ -161,8 +161,8 @@ namespace MonkeyPaste.Avalonia {
                         //    Command = MpAvClipTrayViewModel.Instance.ShowAppendDevToolsCommand
                         //},
 #endif
-                        new MpMenuItemViewModel() {IsSeparator = true},
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {IsSeparator = true},
+                        new MpAvMenuItemViewModel() {
                             Header = "Close",
                             IconResourceKey = "SignOutImage",
                             Command = ExitApplicationCommand,
@@ -198,7 +198,7 @@ namespace MonkeyPaste.Avalonia {
                     !Mp.Services.StartupState.IsReady) {
                     return $"Please wait {Mp.Services.ThisAppInfo.ThisAppProductName} is loading...";
                 }
-                return $"[{MpPrefViewModel.Instance.UserEmail}] {Mp.Services.AccountTools.AccountStateInfo.Replace(" - ", Environment.NewLine)}";
+                return $"[{MpAvPrefViewModel.Instance.UserEmail}] {Mp.Services.AccountTools.AccountStateInfo.Replace(" - ", Environment.NewLine)}";
             }
         }
 

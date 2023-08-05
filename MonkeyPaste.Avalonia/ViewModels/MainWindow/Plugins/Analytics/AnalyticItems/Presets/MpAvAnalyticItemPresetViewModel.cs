@@ -67,8 +67,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuPicker Implementation
 
-        public MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedAnalyticItemPresetIds, bool recursive) {
-            return new MpMenuItemViewModel() {
+        public MpAvMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedAnalyticItemPresetIds, bool recursive) {
+            return new MpAvMenuItemViewModel() {
                 MenuItemId = AnalyticItemPresetId,
                 Header = Label,
                 IconId = IconId,
@@ -207,9 +207,9 @@ namespace MonkeyPaste.Avalonia {
 
         public Dictionary<object, MpAvParameterViewModelBase> ParamLookup =>
             Items.ToDictionary(x => x.ParamId, x => x);
-        public MpMenuItemViewModel ContextMenuItemViewModel {
+        public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
-                return new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
                     Header = Label,
                     Command = MpAvClipTrayViewModel.Instance.AnalyzeSelectedItemCommand,
                     CommandParameter = AnalyticItemPresetId,

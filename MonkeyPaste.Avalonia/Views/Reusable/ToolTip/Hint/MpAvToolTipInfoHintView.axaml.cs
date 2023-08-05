@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvToolTipInfoHintView : UserControl {
+    public partial class MpAvToolTipInfoHintView : MpAvUserControl<object> {
         #region ToolTipText Direct Avalonia Property
 
         private string _ToolTipText = default;

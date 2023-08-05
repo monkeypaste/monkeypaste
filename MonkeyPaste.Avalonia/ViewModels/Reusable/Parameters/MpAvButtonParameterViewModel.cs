@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvButtonParameterViewModel() : base(null) { }
 
-        public MpAvButtonParameterViewModel(MpViewModelBase parent) : base(parent) { }
+        public MpAvButtonParameterViewModel(MpAvViewModelBase parent) : base(parent) { }
 
 
         #endregion

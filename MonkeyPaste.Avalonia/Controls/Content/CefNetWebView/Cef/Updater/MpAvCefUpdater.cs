@@ -253,7 +253,7 @@ namespace MonkeyPaste.Avalonia {
 
 
     }
-    public class MpAvProgressViewModel : MpViewModelBase, IProgress<double> {
+    public class MpAvProgressViewModel : MpAvViewModelBase, IProgress<double> {
         public double Progress { get; set; }
         public MpAvProgressViewModel() : base(null) {
 

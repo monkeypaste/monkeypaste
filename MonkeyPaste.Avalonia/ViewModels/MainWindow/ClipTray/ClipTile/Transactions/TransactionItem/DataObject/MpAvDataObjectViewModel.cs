@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvDataObjectViewModel : MpViewModelBase {
+    public class MpAvDataObjectViewModel : MpAvViewModelBase {
         #region Private Variable
         #endregion
 

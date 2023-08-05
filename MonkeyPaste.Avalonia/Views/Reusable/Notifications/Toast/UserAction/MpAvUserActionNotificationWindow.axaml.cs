@@ -6,10 +6,8 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvUserActionNotificationWindow : MpAvWindow {
+    public partial class MpAvUserActionNotificationWindow : MpAvWindow<MpAvUserActionNotificationViewModel> {
 
-        public override MpAvUserActionNotificationViewModel BindingContext =>
-            DataContext as MpAvUserActionNotificationViewModel;
 
         public MpAvUserActionNotificationWindow() : base() {
             Init();
@@ -19,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Init() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             var retry_btn = this.FindControl<Button>("RetryButton");
             retry_btn.PointerReleased += Retry_btn_PointerReleased;

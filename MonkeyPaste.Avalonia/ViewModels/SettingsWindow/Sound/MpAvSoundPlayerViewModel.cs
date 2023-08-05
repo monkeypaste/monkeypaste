@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
         Error
     }
 
-    public class MpAvSoundPlayerViewModel : MpViewModelBase {
+    public class MpAvSoundPlayerViewModel : MpAvViewModelBase {
         #region Private Variables
 
         private Player _player;
@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
         public MpSoundGroupType SelectedSoundGroup { get; set; }
         public bool IsSoundEnabled =>
             IsOsSupported &&
-            MpPrefViewModel.Instance.IsSoundEnabled;
+            MpAvPrefViewModel.Instance.IsSoundEnabled;
 
         #endregion
 
@@ -100,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
                 _player = new Player();
                 await UpdateVolumeCommand.ExecuteAsync(null);
             }
-            SelectedSoundGroup = (MpSoundGroupType)MpPrefViewModel.Instance.NotificationSoundGroupIdx;
+            SelectedSoundGroup = (MpSoundGroupType)MpAvPrefViewModel.Instance.NotificationSoundGroupIdx;
 
             _soundPathLookup.Clear();
 
@@ -156,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpSoundPlayerGroupCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(SelectedItemIdx):
-                    MpPrefViewModel.Instance.NotificationSoundGroupIdx = SelectedItemIdx;
+                    MpAvPrefViewModel.Instance.NotificationSoundGroupIdx = SelectedItemIdx;
                     InitializeAsync().FireAndForgetSafeAsync(this);
                     break;
             }
@@ -206,7 +206,7 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 double new_norm_volue =
                     args == null ?
-                        MpPrefViewModel.Instance.NotificationSoundVolume :
+                        MpAvPrefViewModel.Instance.NotificationSoundVolume :
                         (double)args;
 
                 byte volume = (byte)((double)byte.MaxValue * new_norm_volue);

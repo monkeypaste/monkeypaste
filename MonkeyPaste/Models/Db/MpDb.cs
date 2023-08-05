@@ -72,6 +72,7 @@ namespace MonkeyPaste {
             bool does_default_connect = await TestDbConnectionAsync();
             return !does_default_connect;
         }
+
         public static async Task InitAsync() {
             var sw = new Stopwatch();
             sw.Start();
@@ -86,7 +87,7 @@ namespace MonkeyPaste {
             await InitTablesAsync();
 
             if (IsInitialDbCreate) {
-                await MpDefaultDataModelTools.CreateAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
+                await MpDefaultDataModelTools.CreateAsync(Mp.Services.ThisDeviceInfo.ThisDeviceGuid);
                 await CreateViewsAsync();
                 await InitDefaultDataAsync();
             } else {
@@ -427,7 +428,7 @@ namespace MonkeyPaste {
 
             if (isNewDb && allowCreate) {
                 using (File.Create(dbPath)) { }
-                MpPrefViewModel.Instance.DbCreateDateTime = new FileInfo(dbPath).CreationTimeUtc;
+                dbInfo.DbCreateDateTime = new FileInfo(dbPath).CreationTimeUtc;
             }
             string dbPass = dbInfo.DbPassword;
 
@@ -464,15 +465,8 @@ namespace MonkeyPaste {
             return success ? isNewDb : null;
         }
 
-        private static SQLiteConnectionString GetConnectionString(
-            string dbPath = "",
-            string dbPass = null) {
-            if (string.IsNullOrEmpty(dbPath)) {
-                dbPath = Mp.Services.DbInfo.DbPath;
-            }
-            if (string.IsNullOrEmpty(dbPass)) {
-                dbPass = Mp.Services.DbInfo.DbPassword;
-            }
+        private static SQLiteConnectionString GetConnectionString(string dbPath, string dbPass) {
+
             if (!dbPath.IsFile()) {
                 MpConsole.WriteLine($"Db Error cannot create connection string. Db file does not exist at '{dbPath}'");
                 return null;
@@ -525,9 +519,14 @@ namespace MonkeyPaste {
                 return;
             }
             Batteries_V2.Init();
-            //SQLitePCL.Batteries.Init();
             if (_connectionAsync == null) {
                 try {
+                    if (string.IsNullOrEmpty(dbPath)) {
+                        dbPath = Mp.Services.DbInfo.DbPath;
+                    }
+                    if (string.IsNullOrEmpty(dbPass)) {
+                        dbPass = Mp.Services.DbInfo.DbPassword;
+                    }
                     _connectionAsync = new SQLiteAsyncConnection(GetConnectionString(dbPath, dbPass));
                     MpCustomDbFunctions.AddCustomFunctions(_connectionAsync.GetConnection().Handle);
                     if (UseWAL) {
@@ -550,6 +549,13 @@ namespace MonkeyPaste {
             Batteries_V2.Init();
             if (_connection == null) {
                 try {
+
+                    if (string.IsNullOrEmpty(dbPath)) {
+                        dbPath = Mp.Services.DbInfo.DbPath;
+                    }
+                    if (string.IsNullOrEmpty(dbPass)) {
+                        dbPass = Mp.Services.DbInfo.DbPassword;
+                    }
                     _connection = new SQLiteConnection(GetConnectionString(dbPath, dbPass));
                     MpCustomDbFunctions.AddCustomFunctions(_connection.Handle);
                     if (UseWAL) {
@@ -567,7 +573,10 @@ namespace MonkeyPaste {
             if (!IsLoaded) {
                 return null;
             }
-            return string.IsNullOrEmpty(providedSourceClientGuid) ? MpPrefViewModel.Instance.ThisDeviceGuid : providedSourceClientGuid;
+            return
+                string.IsNullOrEmpty(providedSourceClientGuid) ?
+                    Mp.Services.ThisDeviceInfo.ThisDeviceGuid :
+                    providedSourceClientGuid;
         }
 
         private static async Task LogWriteAsync(MpDbLogActionType actionType, MpDbModelBase item, string sourceClientGuid, bool ignoreTracking) {
@@ -739,9 +748,9 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
         private static async Task InitDefaultDataAsync() {
             await InitDefaultTagsAsync();
-            await InitDefaultShortcutsAsync(MpPrefViewModel.Instance.InitialStartupRoutingProfileType);
+            await InitDefaultShortcutsAsync(Mp.Services.WelcomeSetupInfo.DefaultRoutingProfileType);
 #if DEBUG
-            if (MpPrefViewModel.Instance.IsInitialLoad) {
+            if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
                 await CreateTestContentAsync();
             }
 #endif
@@ -1120,7 +1129,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
         //    return 44381;
         //}
         //public static string GetThisClientGuid() {
-        //    return MpPrefViewModel.Instance.ThisDeviceGuid;
+        //    return Mp.Services.ThisDeviceInfo.ThisDeviceGuid;
         //}
         //public static string GetPrimaryLocalIp4Address() {
         //    if (!IsConnectedToNetwork()) {

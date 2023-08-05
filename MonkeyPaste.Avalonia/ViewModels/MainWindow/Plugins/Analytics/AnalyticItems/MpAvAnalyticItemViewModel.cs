@@ -72,20 +72,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpMenuItemViewModel ContextMenuItemViewModel {
+        public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
                 var subItems = Items.Where(x => !x.IsActionPreset).Select(x => x.ContextMenuItemViewModel).ToList();
                 if (subItems.Count > 0) {
-                    subItems.Add(new MpMenuItemViewModel() { IsSeparator = true });
+                    subItems.Add(new MpAvMenuItemViewModel() { IsSeparator = true });
                 }
                 subItems.Add(
-                    new MpMenuItemViewModel() {
+                    new MpAvMenuItemViewModel() {
                         IconResourceKey = Mp.Services.PlatformResource.GetResource("CogImage") as string,
                         Header = $"Manage '{Title}'",
                         Command = ManageAnalyticItemCommand,
                         CommandParameter = PluginGuid
                     });
-                return new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
                     Header = Title,
                     IconId = PluginIconId,
                     SubItems = subItems
@@ -93,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public IEnumerable<MpMenuItemViewModel> QuickActionPresetMenuItems => Items.Where(x => x.IsQuickAction).Select(x => x.ContextMenuItemViewModel);
+        public IEnumerable<MpAvMenuItemViewModel> QuickActionPresetMenuItems => Items.Where(x => x.IsQuickAction).Select(x => x.ContextMenuItemViewModel);
 
         #endregion        
 
@@ -376,7 +376,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE ignoring plugin update msgs on initial load cause its a bunch and not relevant
             var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(
                 this,
-                showMessages: !MpPrefViewModel.Instance.IsInitialLoad);
+                showMessages: !MpAvPrefViewModel.Instance.IsInitialLoad);
 
             foreach (var preset in presets) {
                 var naipvm = await CreatePresetViewModelAsync(preset);

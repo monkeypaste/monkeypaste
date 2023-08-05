@@ -1,7 +1,7 @@
 ﻿using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvMainWindowTitleMenuViewModel : MpViewModelBase {
+    public class MpAvMainWindowTitleMenuViewModel : MpAvViewModelBase {
         #region Statics
 
         private static MpAvMainWindowTitleMenuViewModel _instance;

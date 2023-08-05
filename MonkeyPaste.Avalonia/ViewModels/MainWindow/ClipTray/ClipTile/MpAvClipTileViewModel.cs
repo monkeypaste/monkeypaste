@@ -12,12 +12,14 @@ using CefNet.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
@@ -120,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContextMenuViewModel Implementation
 
-        public MpMenuItemViewModel ContextMenuViewModel =>
+        public MpAvMenuItemViewModel ContextMenuViewModel =>
             IsSelected ? Parent.ContextMenuViewModel : null;
 
         #endregion
@@ -636,7 +638,7 @@ namespace MonkeyPaste.Avalonia {
 
         private bool _isEditorLoaded;
         public bool IsEditorLoaded {
-            get => MpPrefViewModel.Instance.IsRichHtmlContentEnabled ? _isEditorLoaded : true;
+            get => MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ? _isEditorLoaded : true;
             set {
                 if (_isEditorLoaded != value) {
                     _isEditorLoaded = value;
@@ -661,7 +663,7 @@ namespace MonkeyPaste.Avalonia {
             set {
 
                 if (IsContentReadOnly != value) {
-                    if (!value && !MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                    if (!value && !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                         // this circumvents standard property changes (if user hasn't added to ignore) 
                         // so content isn't degraded in edit mode (and just to keep it simpler its on mode change not data change)
                         DisableReadOnlyInPlainTextHandlerAsync().FireAndForgetSafeAsync();
@@ -808,7 +810,7 @@ namespace MonkeyPaste.Avalonia {
         private bool _isTitleVisible = true;
         public bool IsTitleVisible {
             get {
-                if (!MpPrefViewModel.Instance.ShowContentTitles) {
+                if (!MpAvPrefViewModel.Instance.ShowContentTitles) {
                     return false;
                 }
                 if (IsAppendNotifier ||
@@ -1049,7 +1051,7 @@ namespace MonkeyPaste.Avalonia {
             }
             set {
                 if (CopyItem != null && CopyItem.ItemData != value) {
-                    if (CopyItemType != MpCopyItemType.Text && !MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                    if (CopyItemType != MpCopyItemType.Text && !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
 
                     }
                     //CopyItem.ItemData = value;
@@ -1130,6 +1132,13 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpClipTileViewModel_PropertyChanged;
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
             IsBusy = true;
+
+            //this.WhenActivated((CompositeDisposable disposables) => {
+            //    /* handle activation */
+            //    Disposable
+            //        .Create(() => { /* handle deactivation */ })
+            //        .DisposeWith(disposables);
+            //});
         }
 
         #endregion
@@ -1210,7 +1219,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(PinPlaceholderLabel));
             OnPropertyChanged(nameof(IsResizable));
 
-            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled ||
+            if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
                 SelfRef == null) {
                 // NOTE in compatibility mode content template must be reselected
                 // and for overall efficiency re-setting datacontext is better than
@@ -1391,7 +1400,7 @@ namespace MonkeyPaste.Avalonia {
                 // initialize target with all possible formats set to null
                 req_formats = MpPortableDataFormats.RegisteredFormats.ToList();
 
-            } else if (MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+            } else if (MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 // initialize target with default format for type
                 switch (CopyItemType) {
                     case MpCopyItemType.Text:

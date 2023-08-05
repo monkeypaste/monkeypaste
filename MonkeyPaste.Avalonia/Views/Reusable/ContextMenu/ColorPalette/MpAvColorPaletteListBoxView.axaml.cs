@@ -3,7 +3,7 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvColorPaletteListBoxView : MpAvUserControl<MpMenuItemViewModel> {
+    public partial class MpAvColorPaletteListBoxView : MpAvUserControl<MpAvMenuItemViewModel> {
         //Type IStyleable.StyleKey => typeof(MenuItem);
         public MpAvColorPaletteListBoxView() {
             AvaloniaXamlLoader.Load(this);

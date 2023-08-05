@@ -6,7 +6,7 @@
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:DataType="pcl:MpIPopupSelectorMenuViewModel"
+                       x:DataType="local:MpAvIPopupSelectorMenuViewModel"
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignWidth="800"

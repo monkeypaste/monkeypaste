@@ -4,7 +4,7 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvShortcutDataGridView : UserControl {
+    public partial class MpAvShortcutDataGridView : MpAvUserControl<object> {
         public MpAvShortcutDataGridView() {
             AvaloniaXamlLoader.Load(this);
         }

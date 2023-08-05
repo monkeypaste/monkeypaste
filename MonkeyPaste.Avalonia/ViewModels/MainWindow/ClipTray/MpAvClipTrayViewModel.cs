@@ -121,15 +121,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIContextMenuItemViewModel Implementation
-        public MpMenuItemViewModel ContextMenuViewModel {
+        public MpAvMenuItemViewModel ContextMenuViewModel {
             get {
                 if (SelectedItem == null) {
-                    return new MpMenuItemViewModel();
+                    return new MpAvMenuItemViewModel();
                 }
                 if (SelectedItem.IsTrashed) {
-                    return new MpMenuItemViewModel() {
-                        SubItems = new List<MpMenuItemViewModel>() {
-                            new MpMenuItemViewModel() {
+                    return new MpAvMenuItemViewModel() {
+                        SubItems = new List<MpAvMenuItemViewModel>() {
+                            new MpAvMenuItemViewModel() {
                                 Header = @"Restore",
                                 IconResourceKey =
                                     Mp.Services.AccountTools.IsContentAddPausedByAccount ?
@@ -137,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
                                         "ResetImage",
                                 Command = RestoreSelectedClipCommand,
                             },
-                            new MpMenuItemViewModel() {
+                            new MpAvMenuItemViewModel() {
                                 HasLeadingSeperator = true,
                                 Header = @"Permanently Delete",
                                 IconResourceKey = "TrashCanImage",
@@ -148,22 +148,22 @@ namespace MonkeyPaste.Avalonia {
                     };
                 }
 
-                return new MpMenuItemViewModel() {
-                    SubItems = new List<MpMenuItemViewModel>() {
+                return new MpAvMenuItemViewModel() {
+                    SubItems = new List<MpAvMenuItemViewModel>() {
 #if DEBUG
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = @"Show Dev Tools",
                             Command = ShowDevToolsCommand,
-                            IsVisible = MpPrefViewModel.Instance.IsRichHtmlContentEnabled
+                            IsVisible = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = @"Reload",
                             Command = ReloadSelectedItemCommand,
-                            IsVisible = MpPrefViewModel.Instance.IsRichHtmlContentEnabled
+                            IsVisible = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled
                         },
-                        new MpMenuItemViewModel() { IsSeparator = true },
+                        new MpAvMenuItemViewModel() { IsSeparator = true },
 #endif
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = @"Cut",
                             IconResourceKey = "ScissorsImage",
                             Command = CutSelectionFromContextMenuCommand,
@@ -171,7 +171,7 @@ namespace MonkeyPaste.Avalonia {
                             CommandParameter = true,
                             ShortcutArgs = new object[] { MpShortcutType.CutSelection },
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = @"Copy",
                             IconResourceKey = "CopyImage",
                             Command = CopySelectionFromContextMenuCommand,
@@ -181,14 +181,14 @@ namespace MonkeyPaste.Avalonia {
                         //    IsSeparator = true,
                         //    Header = "TEST"
                         //},
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Duplicate",
                             AltNavIdx = 0,
                             IconResourceKey = "DuplicateImage",
                             Command = DuplicateSelectedClipsCommand,
                             ShortcutArgs = new object[] { MpShortcutType.Duplicate },
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = @"Paste Here",
                             AltNavIdx = 6,
                             IconResourceKey = "PasteImage",
@@ -196,14 +196,14 @@ namespace MonkeyPaste.Avalonia {
                             IsVisible = false,
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = $"Paste To '{CurPasteInfoMessage.pasteButtonTooltipText}'",
                             AltNavIdx = 0,
                             IconSourceObj = CurPasteInfoMessage.pasteButtonIconBase64,
                             Command = PasteSelectedClipTileFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.PasteSelectedItems },
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             HasLeadingSeperator = true,
                             Header = @"Delete",
                             AltNavIdx = 0,
@@ -211,14 +211,14 @@ namespace MonkeyPaste.Avalonia {
                             Command = TrashSelectedClipCommand,
                             ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = @"Rename",
                             AltNavIdx = 0,
                             IconResourceKey = "RenameImage",
                             Command = EditSelectedTitleCommand,
                             ShortcutArgs = new object[] { MpShortcutType.Rename },
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = @"Edit",
                             IsVisible = !IsAutoEditEnabled,
                             AltNavIdx = 0,
@@ -226,19 +226,19 @@ namespace MonkeyPaste.Avalonia {
                             Command = EditSelectedContentCommand,
                             ShortcutArgs = new object[] { MpShortcutType.ToggleContentReadOnly },
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = @"Find and Replace...",
                             AltNavIdx = 0,
                             IconResourceKey = "SearchImage",
                             Command = EnableFindAndReplaceForSelectedItem,
                             ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
                         },
-                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel2(SelectedItem,true),
-                        new MpMenuItemViewModel() {IsSeparator = true},
+                        MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel2(SelectedItem,true),
+                        new MpAvMenuItemViewModel() {IsSeparator = true},
                         SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
-                        new MpMenuItemViewModel() {IsSeparator = true},
+                        new MpAvMenuItemViewModel() {IsSeparator = true},
                         MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.CopyItemType),
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             HasLeadingSeperator = true,
                             Header = @"Collections",
                             AltNavIdx = 0,
@@ -249,7 +249,7 @@ namespace MonkeyPaste.Avalonia {
                                     .Select(x=>x.ContentMenuItemViewModel)
                                     .ToList()
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             HasLeadingSeperator = true,
                             Header = @"Share...",
                             IconResourceKey = "ShareImage",
@@ -803,7 +803,7 @@ namespace MonkeyPaste.Avalonia {
         public IList<MpAvClipTileViewModel> InternalPinnedItems =>
             PinnedItems
             .Where(x => !x.IsWindowOpen && !x.IsAppendNotifier)
-            .Take(MpPrefViewModel.Instance.MaxPinClipCount)
+            .Take(MpAvPrefViewModel.Instance.MaxPinClipCount)
             .ToList();
 
         //public MpAvClipTileViewModel ModalClipTileViewModel { get; private set; }
@@ -1054,19 +1054,19 @@ namespace MonkeyPaste.Avalonia {
         private MpClipTrayLayoutType? _layoutType;
         public MpClipTrayLayoutType LayoutType {
             get {
-                if (MpPrefViewModel.Instance == null) {
+                if (MpAvPrefViewModel.Instance == null) {
                     return MpClipTrayLayoutType.Stack;
                 }
                 if (_layoutType == null) {
-                    _layoutType = MpPrefViewModel.Instance.ClipTrayLayoutTypeName.ToEnum<MpClipTrayLayoutType>();
+                    _layoutType = MpAvPrefViewModel.Instance.ClipTrayLayoutTypeName.ToEnum<MpClipTrayLayoutType>();
                 }
                 return _layoutType.Value;
             }
             set {
                 if (LayoutType != value) {
                     _layoutType = value;
-                    if (MpPrefViewModel.Instance != null) {
-                        MpPrefViewModel.Instance.ClipTrayLayoutTypeName = value.ToString();
+                    if (MpAvPrefViewModel.Instance != null) {
+                        MpAvPrefViewModel.Instance.ClipTrayLayoutTypeName = value.ToString();
                     }
                     OnPropertyChanged(nameof(LayoutType));
                 }
@@ -1107,7 +1107,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsAutoEditEnabled =>
-            !MpPrefViewModel.Instance.IsRichHtmlContentEnabled;
+            !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled;
 
         private Uri _editorUri;
         public Uri EditorUri {
@@ -1392,7 +1392,7 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(LayoutType));
 
-            if (IsAppPaused == MpPrefViewModel.Instance.IsClipboardListeningOnStartup) {
+            if (IsAppPaused == MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup) {
                 ToggleIsAppPausedCommand.Execute(null);
             }
 
@@ -1761,7 +1761,7 @@ namespace MonkeyPaste.Avalonia {
                     cap_msg_type = MpNotificationType.ContentCapReached;
                     cap_msg_sb.AppendLine(string.Empty);
                     if (IsAddingStartupClipboardItem) {
-                        cap_msg_sb.AppendLine($"* To prevent add on startup, uncheck '{nameof(MpPrefViewModel.Instance.AddClipboardOnStartup).ToLabel()}' or '{nameof(MpPrefViewModel.Instance.IsClipboardListeningOnStartup).ToLabel()}' ");
+                        cap_msg_sb.AppendLine($"* To prevent add on startup, uncheck '{nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup).ToLabel()}' or '{nameof(MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup).ToLabel()}' ");
                     } else {
                         cap_msg_sb.AppendLine($"* You can hide these warnings by clicking 'hide all' from the options menu above 😉");
                     }
@@ -2365,7 +2365,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(() => SetCurPasteInfoMessage(e), DispatcherPriority.Background);
         }
         private void SetCurPasteInfoMessage(MpPortableProcessInfo e) {
-            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+            if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 // no paste toolbar so ignore
                 // TODO? add plain text paste toolbar? (tip of an iceburg)
                 return;
@@ -2404,9 +2404,9 @@ namespace MonkeyPaste.Avalonia {
             bool is_change_ignored =
                 !is_startup_ido &&
                 (IsAppPaused ||
-                 (MpPrefViewModel.Instance.IgnoreInternalClipboardChanges && !is_ext_change));
+                 (MpAvPrefViewModel.Instance.IgnoreInternalClipboardChanges && !is_ext_change));
 
-            if (is_startup_ido && !is_change_ignored && !MpPrefViewModel.Instance.AddClipboardOnStartup) {
+            if (is_startup_ido && !is_change_ignored && !MpAvPrefViewModel.Instance.AddClipboardOnStartup) {
                 // ignore startup item
                 is_change_ignored = true;
             }
@@ -2417,7 +2417,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine($"IsAppPaused: {IsAppPaused}");
                 MpConsole.WriteLine($"IsThisAppActive: {MpAvWindowManager.IsAnyActive}");
                 MpConsole.WriteLine($"is_startup_ido: {is_startup_ido}");
-                MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpPrefViewModel.Instance.IgnoreInternalClipboardChanges}", false, true);
+                MpConsole.WriteLine($"IgnoreInternalClipboardChanges: {MpAvPrefViewModel.Instance.IgnoreInternalClipboardChanges}", false, true);
                 return;
             }
 
@@ -2937,7 +2937,7 @@ namespace MonkeyPaste.Avalonia {
             MpCopyItem result_ci = ci;
             if (wasAppended) {
                 MpMessenger.SendGlobal(MpMessageType.AppendBufferChanged);
-                if (MpPrefViewModel.Instance.IgnoreAppendedItems) {
+                if (MpAvPrefViewModel.Instance.IgnoreAppendedItems) {
                     // when item was appended and append items are ignored
                     // the appended item is deleted after data and sources
                     // are transferred to append host item so creating 
@@ -3941,7 +3941,7 @@ namespace MonkeyPaste.Avalonia {
                     //!MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen &&
                     //!IsAnyEditingClipTile &&
                     //!IsAnyEditingClipTitle &&
-                    !MpPrefViewModel.Instance.IsTrialExpired;
+                    !MpAvPrefViewModel.Instance.IsTrialExpired;
 
                 MpConsole.WriteLine("PasteSelectedClipTileFromShortcutCommand CanExecute: " + can_paste);
                 if (!can_paste) {
@@ -4628,7 +4628,7 @@ namespace MonkeyPaste.Avalonia {
                     } else {
                         var aci_create_sources = await MpDataModelProvider.GetSourceRefsByCopyItemTransactionIdAsync(aci_create_cit.Id);
 
-                        if (!isNew || !MpPrefViewModel.Instance.IgnoreAppendedItems) {
+                        if (!isNew || !MpAvPrefViewModel.Instance.IgnoreAppendedItems) {
                             // if item is not new or will persist include ref to it
                             // NOTE item ref is added to END to keep primary source at front
                             aci_create_sources.Add(aci);
@@ -4643,7 +4643,7 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     if (isNew &&
-                        MpPrefViewModel.Instance.IgnoreAppendedItems) {
+                        MpAvPrefViewModel.Instance.IgnoreAppendedItems) {
                         aci.DeleteFromDatabaseAsync().FireAndForgetSafeAsync();
                     }
                 });

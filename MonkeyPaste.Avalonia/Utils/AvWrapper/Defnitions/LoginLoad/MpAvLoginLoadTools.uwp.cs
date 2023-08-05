@@ -20,6 +20,10 @@ namespace MonkeyPaste.Avalonia {
         }
         public void SetLoadOnLogin(bool isLoadOnLogin) {
             // from https://stackoverflow.com/a/7394955/105028
+            if (isLoadOnLogin == IsLoadOnLoginEnabled) {
+                // nothing to do (after reset and enabled in welcome, another instance is opened since task still exists)
+                return;
+            }
             bool success;
 
             try {
@@ -48,6 +52,10 @@ namespace MonkeyPaste.Avalonia {
                 success = false;
             }
 
+            if (success) {
+                // don't ntf if no problems
+                return;
+            }
             Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
                 title: $"Result",
                 message: $"Login load {(isLoadOnLogin ? "enable" : "disable")} {(success ? "success" : "failed")}",

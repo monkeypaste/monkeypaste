@@ -174,8 +174,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpILabelText Implementation
 
-        public MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedActionIds, bool recursive) {
-            return new MpMenuItemViewModel() {
+        public MpAvMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedActionIds, bool recursive) {
+            return new MpAvMenuItemViewModel() {
                 MenuItemId = ActionId,
                 Header = Label,
                 IconSourceObj = IconResourceObj,
@@ -330,57 +330,57 @@ namespace MonkeyPaste.Avalonia {
         #region MpIContextMenuViewModel Implementation
 
         public bool IsContextMenuOpen { get; set; }
-        public MpMenuItemViewModel ContextMenuViewModel => PopupMenuViewModel;
+        public MpAvMenuItemViewModel ContextMenuViewModel => PopupMenuViewModel;
 
         #endregion
 
         #region MpIPopupMenuViewModel Implementation
 
-        public virtual MpMenuItemViewModel PopupMenuViewModel {
+        public virtual MpAvMenuItemViewModel PopupMenuViewModel {
             get {
-                IEnumerable<MpMenuItemViewModel> move_items =
-                    RootTriggerActionViewModel == this ? new MpMenuItemViewModel[] { } :
+                IEnumerable<MpAvMenuItemViewModel> move_items =
+                    RootTriggerActionViewModel == this ? new MpAvMenuItemViewModel[] { } :
                     RootTriggerActionViewModel.SelfAndAllDescendants
                                 .Where(x =>
                                         !SelfAndAllDescendants.Contains(x) &&
                                         x != ParentActionViewModel)
                                 .Select(x =>
-                                    new MpMenuItemViewModel() {
+                                    new MpAvMenuItemViewModel() {
                                         Header = x.Label,
                                         IconSourceObj = x.IconResourceObj,
                                         Command = ChangeParentCommand,
                                         CommandParameter = x.ActionId
                                     });
 
-                return new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
                     ParentObj = this,
-                    SubItems = new List<MpMenuItemViewModel>() {
-                         new MpMenuItemViewModel() {
+                    SubItems = new List<MpAvMenuItemViewModel>() {
+                         new MpAvMenuItemViewModel() {
                             Header = "Cut",
                             IconResourceKey = "ScissorsImage",
                             ShortcutArgs = new object[] { MpShortcutType.CutSelection },
                             Command = CutActionCommand
                         },
-                         new MpMenuItemViewModel() {
+                         new MpAvMenuItemViewModel() {
                             Header = "Copy",
                             IconResourceKey = "CopyImage",
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
                             Command = CopyActionCommand
                         },
-                         new MpMenuItemViewModel() {
+                         new MpAvMenuItemViewModel() {
                             Header = "Paste",
                             IconResourceKey = "PasteImage",
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
                             Command = PasteActionCommand,
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             HasLeadingSeperator = true,
                             Header = "Move",
                             IconResourceKey = "ChainImage",
                             IsVisible = move_items.Any(),
                             SubItems = move_items.ToList()
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Add",
                             HasLeadingSeperator = true,
                             IconResourceKey = "AddImage",
@@ -389,7 +389,7 @@ namespace MonkeyPaste.Avalonia {
                                 .EnumerateEnum<MpActionType>()
                                 .Where(x=>x != MpActionType.None && x != MpActionType.Trigger)
                                 .Select(x =>
-                                    new MpMenuItemViewModel() {
+                                    new MpAvMenuItemViewModel() {
                                         Header = x.EnumToLabel(),
                                         IconResourceKey = GetDefaultActionIconResourceKey(x),
                                         IconTintHexStr = MpAvActionViewModelBase.GetActionHexColor(x),
@@ -397,7 +397,7 @@ namespace MonkeyPaste.Avalonia {
                                         CommandParameter = x
                                     }).ToList()
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             HasLeadingSeperator = true,
                             Header = "Remove",
                             IconResourceKey = "DeleteImage",

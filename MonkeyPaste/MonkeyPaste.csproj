@@ -18,6 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AvaloniaXaml Remove="ViewModels\**" />
     <Compile Remove="Controls\**" />
     <Compile Remove="Converters\**" />
     <Compile Remove="Models\Db\ContentQuery\**" />
@@ -29,9 +30,7 @@
     <Compile Remove="Resources\Styles\**" />
     <Compile Remove="Selectors\**" />
     <Compile Remove="Services\**" />
-    <Compile Remove="Utils\NetworkIO\Json\**" />
-    <Compile Remove="ViewModels\Reusable\**" />
-    <Compile Remove="ViewModels\Shell\**" />
+    <Compile Remove="ViewModels\**" />
     <Compile Remove="Views\**" />
     <EmbeddedResource Remove="Controls\**" />
     <EmbeddedResource Remove="Converters\**" />
@@ -44,9 +43,7 @@
     <EmbeddedResource Remove="Resources\Styles\**" />
     <EmbeddedResource Remove="Selectors\**" />
     <EmbeddedResource Remove="Services\**" />
-    <EmbeddedResource Remove="Utils\NetworkIO\Json\**" />
-    <EmbeddedResource Remove="ViewModels\Reusable\**" />
-    <EmbeddedResource Remove="ViewModels\Shell\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
     <EmbeddedResource Remove="Views\**" />
     <None Remove="Controls\**" />
     <None Remove="Converters\**" />
@@ -59,9 +56,7 @@
     <None Remove="Resources\Styles\**" />
     <None Remove="Selectors\**" />
     <None Remove="Services\**" />
-    <None Remove="Utils\NetworkIO\Json\**" />
-    <None Remove="ViewModels\Reusable\**" />
-    <None Remove="ViewModels\Shell\**" />
+    <None Remove="ViewModels\**" />
     <None Remove="Views\**" />
     <Compile Remove="App.xaml.cs" />
     <Compile Remove="AssemblyInfo.cs" />
@@ -81,8 +76,6 @@
     <Compile Remove="Utils\MpNavigator.cs" />
     <Compile Remove="Utils\MpSingleton.cs" />
     <Compile Remove="Utils\MpXamMeasurements.cs" />
-    <Compile Remove="ViewModels\Bases\MpObservableObject.cs" />
-    <Compile Remove="ViewModels\Bases\MpViewModelBase_old.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Data\db.create" />
     <None Remove="Resources\Data\Google\client_secrets.json" />
@@ -102,10 +95,6 @@
 
   <ItemGroup>
     <Compile Include="Converters\MpXamStringToSyncObjectTypeConverter.cs" />
-    <Compile Include="ViewModels\Reusable\ContextMenu\MpMenuItemViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Culture\MpCurrentCultureViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Preferences\MpPrefViewModel.cs" />
-    <Compile Include="ViewModels\Reusable\Undo\MpAvUndoManagerViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -137,10 +126,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Icons\search.png" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Controls\MpPopupPage.xaml" />
-  </ItemGroup>
   <ItemGroup>
     <None Update="Resources\Icons\search.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -148,6 +133,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controls\" />
     <Folder Include="Utils\Helpers\Graphics\Animation\" />
   </ItemGroup>
 

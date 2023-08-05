@@ -26,9 +26,10 @@ namespace MonkeyPaste.Avalonia {
         public string DbPassword {
             get {
                 if (string.IsNullOrEmpty(_dbPassword)) {
-                    return MpPrefViewModel.Instance == null ?
-                            null :
-                            MpPrefViewModel.Instance.DbCreateDateTime.ToString();
+                    if (DbCreateDateTime == null) {
+                        DbCreateDateTime = new FileInfo(DbPath).CreationTimeUtc;
+                    }
+                    return DbCreateDateTime.ToStringOrEmpty();
                 }
                 return _dbPassword;
             }
@@ -40,5 +41,13 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool HasUserDefinedPassword =>
             !string.IsNullOrEmpty(_dbPassword);
+
+        public DateTime? DbCreateDateTime {
+            get =>
+                MpAvPrefViewModel.Instance == null ?
+                null :
+                MpAvPrefViewModel.Instance.DbCreateDateTime;
+            set => MpAvPrefViewModel.Instance.DbCreateDateTime = value;
+        }
     }
 }

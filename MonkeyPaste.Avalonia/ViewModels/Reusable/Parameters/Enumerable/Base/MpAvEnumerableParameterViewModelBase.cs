@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvEnumerableParameterViewModelBase() : this(null) { }
 
-        public MpAvEnumerableParameterViewModelBase(MpViewModelBase parent) : base(parent) {
+        public MpAvEnumerableParameterViewModelBase(MpAvViewModelBase parent) : base(parent) {
             // the `ListBox` when bound.
             Selection = new SelectionModel<MpAvEnumerableParameterValueViewModel>(Items);
             Selection.SelectionChanged += SelectionChanged;

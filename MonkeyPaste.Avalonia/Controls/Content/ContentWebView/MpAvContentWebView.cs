@@ -985,12 +985,12 @@ namespace MonkeyPaste.Avalonia {
 
         private MpQuillDefaultsRequestMessage GetDefaultsMessage() {
             return new MpQuillDefaultsRequestMessage() {
-                defaultFontFamily = MpPrefViewModel.Instance.DefaultEditableFontFamily,
-                defaultFontSize = MpPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
-                isSpellCheckEnabled = MpPrefViewModel.Instance.IsSpellCheckEnabled,
-                currentTheme = MpPrefViewModel.Instance.ThemeType != MpThemeType.Dark ? MpThemeType.Light.ToString().ToLower() : MpThemeType.Dark.ToString().ToLower(),
-                bgOpacity = MpPrefViewModel.Instance.GlobalBgOpacity,
-                maxUndo = MpPrefViewModel.Instance.MaxUndoLimit,
+                defaultFontFamily = MpAvPrefViewModel.Instance.DefaultEditableFontFamily,
+                defaultFontSize = MpAvPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
+                isSpellCheckEnabled = MpAvPrefViewModel.Instance.IsSpellCheckEnabled,
+                currentTheme = MpAvPrefViewModel.Instance.ThemeType != MpThemeType.Dark ? MpThemeType.Light.ToString().ToLower() : MpThemeType.Dark.ToString().ToLower(),
+                bgOpacity = MpAvPrefViewModel.Instance.GlobalBgOpacity,
+                maxUndo = MpAvPrefViewModel.Instance.MaxUndoLimit,
                 shortcutFragmentStr = MpAvShortcutCollectionViewModel.Instance.EditorShortcutsMsgBase64
             };
         }

@@ -2,21 +2,23 @@
 using Avalonia.Controls;
 using Avalonia.Diagnostics;
 using Avalonia.Input;
+using Avalonia.Markup.Xaml;
+using Avalonia.ReactiveUI;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
+using ReactiveUI;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using static TheArtOfDev.HtmlRenderer.Adapters.RGraphicsPath;
 
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
-    public class MpAvWindow : Window {
+    public class MpAvWindow : Window, MpIUserControl {
 
         #region Private Variables
         private const string NO_RESULT_OBJ = "sdoifjdsfjnlkwe2423";
@@ -34,6 +36,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+        void MpIUserControl.SetDataContext(object dataContext) {
+            DataContext = dataContext;
+        }
         #endregion
 
         #region Properties
@@ -79,6 +84,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpAvWindow(Window owner) : base(owner.PlatformImpl) {
+            //Owner = owner;
             Init();
         }
         #endregion
@@ -186,4 +192,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
     }
 
+
+    [DoNotNotify]
+    public class MpAvWindow<TViewModel> : MpAvWindow/*, IViewFor<TViewModel>*/ where TViewModel : class {
+        public new TViewModel BindingContext {
+            get => GetValue(DataContextProperty) as TViewModel;
+            set => SetValue(DataContextProperty, value);
+        }
+
+        public TViewModel ViewModel {
+            get => BindingContext;
+            set => BindingContext = value;
+        }
+
+        //object? IViewFor.ViewModel {
+        //    get => ViewModel;
+        //    set => ViewModel = (TViewModel)value;
+        //}
+        public MpAvWindow() : base() { }
+        public MpAvWindow(Window owner) : base(owner) { }
+    }
 }

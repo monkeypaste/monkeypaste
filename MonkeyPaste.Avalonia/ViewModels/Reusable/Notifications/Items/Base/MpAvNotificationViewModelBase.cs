@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvNotificationViewModelBase :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpIWantsTopmostWindowViewModel,
 
         MpICloseWindowViewModel,
@@ -155,22 +155,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuViewModel Implementation
 
-        public virtual MpMenuItemViewModel PopupMenuViewModel {
+        public virtual MpAvMenuItemViewModel PopupMenuViewModel {
             get {
-                return new MpMenuItemViewModel() {
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
+                    SubItems = new List<MpAvMenuItemViewModel>() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Hide",
                             IconResourceKey = "ErrorImage",
                             Command = CloseNotificationCommand
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = $"Hide all '{NotificationType.EnumToLabel()}' notifications",
                             IconResourceKey = "ClosedEyeImage",
                             Command = CheckDoNotShowAgainCommand
                         },
-                        new MpMenuItemViewModel() {IsSeparator = true, IsVisible = CanPin},
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {IsSeparator = true, IsVisible = CanPin},
+                        new MpAvMenuItemViewModel() {
                             IsVisible = CanPin,
                             Header = IsPinned ? "Unpin":"Pin",
                             IconResourceKey = IsPinned ? "PinDownImage" : "PinImage",
@@ -251,8 +251,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDoNotShowType =>
             !ForceShow &&
-            MpPrefViewModel.Instance != null &&
-            MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
+            MpAvPrefViewModel.Instance != null &&
+            MpAvPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
                     .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => Convert.ToInt32(x))
                     .Any(x => x == (int)NotificationType);
@@ -452,7 +452,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(DoNotShowAgain):
                     if (DoNotShowAgain) {
-                        MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr += NotificationId + ",";
+                        MpAvPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr += NotificationId + ",";
                         // show loop checks if DoNotShowAgain is true to hide
                     }
                     break;
@@ -477,7 +477,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ResetAllNotificationsCommand => new MpCommand(
              () => {
                  // TODO this should be moved to somewhere in preferences
-                 MpPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr = string.Empty;
+                 MpAvPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr = string.Empty;
 
              }, () => {
                  return

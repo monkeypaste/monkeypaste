@@ -283,13 +283,13 @@ namespace MonkeyPaste.Avalonia {
             DetachWindowViewModelHandlers(nw);
         }
         private static void AttachWindowViewModelHandlers(Window w) {
-            if (w.DataContext is MpViewModelBase vmb) {
+            if (w.DataContext is MpAvViewModelBase vmb) {
                 vmb.PropertyChanged += WindowViewModel_PropertyChanged;
             }
         }
 
         private static void DetachWindowViewModelHandlers(Window w) {
-            if (w.DataContext is MpViewModelBase vmb) {
+            if (w.DataContext is MpAvViewModelBase vmb) {
                 vmb.PropertyChanged -= WindowViewModel_PropertyChanged;
             }
         }

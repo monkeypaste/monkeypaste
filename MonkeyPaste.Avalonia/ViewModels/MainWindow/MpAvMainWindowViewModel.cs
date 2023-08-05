@@ -24,7 +24,7 @@ using FocusManager = Avalonia.Input.FocusManager;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvMainWindowViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpIWindowViewModel,
         MpIIsAnimatedWindowViewModel,
         MpIActiveWindowViewModel,
@@ -394,7 +394,7 @@ namespace MonkeyPaste.Avalonia {
         public string ShowOrHideIconResourceKey => IsMainWindowOpen ? "ClosedEyeImage" : "OpenEyeImage";
         public bool AnimateShowWindow =>
             Mp.Services.PlatformInfo.IsDesktop &&
-            MpPrefViewModel.Instance.AnimateMainWindow;
+            MpAvPrefViewModel.Instance.AnimateMainWindow;
         public DateTime? LastDecreasedFocusLevelDateTime { get; set; }
         public bool IsAnyItemDragging {
             get {
@@ -546,8 +546,8 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
-            MainWindowOrientationType = (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpPrefViewModel.Instance.MainWindowOrientation, false);
-            MainWindowShowBehaviorType = (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpPrefViewModel.Instance.MainWindowShowBehaviorType, false);
+            MainWindowOrientationType = (MpMainWindowOrientationType)Enum.Parse(typeof(MpMainWindowOrientationType), MpAvPrefViewModel.Instance.MainWindowOrientation, false);
+            MainWindowShowBehaviorType = (MpMainWindowShowBehaviorType)Enum.Parse(typeof(MpMainWindowShowBehaviorType), MpAvPrefViewModel.Instance.MainWindowShowBehaviorType, false);
 
             OnPropertyChanged(nameof(MainWindowScreen));
             OnPropertyChanged(nameof(IsDesktop));
@@ -647,9 +647,9 @@ namespace MonkeyPaste.Avalonia {
 
                         if (MainWindowOrientationType == MpMainWindowOrientationType.Left ||
                             MainWindowOrientationType == MpMainWindowOrientationType.Right) {
-                            MpPrefViewModel.Instance.MainWindowInitialWidth = MainWindowWidth;
+                            MpAvPrefViewModel.Instance.MainWindowInitialWidth = MainWindowWidth;
                         } else {
-                            MpPrefViewModel.Instance.MainWindowInitialHeight = MainWindowHeight;
+                            MpAvPrefViewModel.Instance.MainWindowInitialHeight = MainWindowHeight;
                         }
                         Dispatcher.UIThread.Post(async () => {
                             await Task.Delay(300);
@@ -684,11 +684,11 @@ namespace MonkeyPaste.Avalonia {
                     MpMessenger.SendGlobal(MpMessageType.MainWindowClosing);
                     break;
                 case nameof(MainWindowOrientationType):
-                    MpPrefViewModel.Instance.MainWindowOrientation = MainWindowOrientationType.ToString();
+                    MpAvPrefViewModel.Instance.MainWindowOrientation = MainWindowOrientationType.ToString();
                     OnPropertyChanged(nameof(MainWindowLayoutOrientation));
                     break;
                 case nameof(MainWindowShowBehaviorType):
-                    MpPrefViewModel.Instance.MainWindowShowBehaviorType = MainWindowShowBehaviorType.ToString();
+                    MpAvPrefViewModel.Instance.MainWindowShowBehaviorType = MainWindowShowBehaviorType.ToString();
                     break;
                 case nameof(WindowState):
                     if (WindowState == WindowState.Minimized &&
@@ -721,15 +721,15 @@ namespace MonkeyPaste.Avalonia {
                     MainWindowWidth = MainWindowScreen.WorkArea.Width;
                     if (MainWindowHeight == 0) {
                         // startup case                        
-                        if (MpPrefViewModel.Instance.MainWindowInitialHeight == 0) {
+                        if (MpAvPrefViewModel.Instance.MainWindowInitialHeight == 0) {
                             // initial setting
-                            MpPrefViewModel.Instance.MainWindowInitialHeight = MainWindowScreen.WorkArea.Height * MainWindowDefaultHorizontalHeightRatio;
+                            MpAvPrefViewModel.Instance.MainWindowInitialHeight = MainWindowScreen.WorkArea.Height * MainWindowDefaultHorizontalHeightRatio;
                         }
-                        MainWindowHeight = MpPrefViewModel.Instance.MainWindowInitialHeight;
+                        MainWindowHeight = MpAvPrefViewModel.Instance.MainWindowInitialHeight;
                     } else {
                         if (isOrientationChange) {
                             // clear initial width 
-                            MpPrefViewModel.Instance.MainWindowInitialWidth = 0;
+                            MpAvPrefViewModel.Instance.MainWindowInitialWidth = 0;
                             // reset height and call again to propagate initial height setting
                             MainWindowHeight = 0;
                             SetupMainWindowSize(false);
@@ -744,15 +744,15 @@ namespace MonkeyPaste.Avalonia {
                     MainWindowHeight = MainWindowScreen.WorkArea.Height;
                     if (MainWindowWidth == 0) {
                         // startup case                        
-                        if (MpPrefViewModel.Instance.MainWindowInitialWidth == 0) {
+                        if (MpAvPrefViewModel.Instance.MainWindowInitialWidth == 0) {
                             // initial setting
-                            MpPrefViewModel.Instance.MainWindowInitialWidth = MainWindowScreen.WorkArea.Width * MainWindowDefaultVerticalWidthRatio;
+                            MpAvPrefViewModel.Instance.MainWindowInitialWidth = MainWindowScreen.WorkArea.Width * MainWindowDefaultVerticalWidthRatio;
                         }
-                        MainWindowWidth = MpPrefViewModel.Instance.MainWindowInitialWidth;
+                        MainWindowWidth = MpAvPrefViewModel.Instance.MainWindowInitialWidth;
                     } else {
                         if (isOrientationChange) {
                             // clear initial height
-                            MpPrefViewModel.Instance.MainWindowInitialHeight = 0;
+                            MpAvPrefViewModel.Instance.MainWindowInitialHeight = 0;
                             // reset Width and call again to propagate initial width setting
                             MainWindowWidth = 0;
                             SetupMainWindowSize(false);
@@ -776,7 +776,7 @@ namespace MonkeyPaste.Avalonia {
             IsMainWindowOpening = true;
 
             if (MpAvWindowManager.MainWindow is Window w &&
-                MpPrefViewModel.Instance.ShowInTaskbar) {
+                MpAvPrefViewModel.Instance.ShowInTaskbar) {
                 w.WindowState = WindowState.Normal;
             }
             //if (HideInitialOpen) {
@@ -838,7 +838,7 @@ namespace MonkeyPaste.Avalonia {
 
             SetMainWindowRect(MainWindowClosedScreenRect);
             if (MpAvWindowManager.MainWindow is Window w &&
-                MpPrefViewModel.Instance.ShowInTaskbar) {
+                MpAvPrefViewModel.Instance.ShowInTaskbar) {
                 w.WindowState = WindowState.Minimized;
             } else {
                 App.MainView.Hide();
@@ -947,7 +947,7 @@ namespace MonkeyPaste.Avalonia {
         #region Global Pointer Event Handlers
         private void Instance_OnGlobalMouseWheelScroll(object sender, MpPoint delta) {
             Dispatcher.UIThread.Post(() => {
-                if (!MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                if (!MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
                     return;
                 }
 
@@ -1007,7 +1007,7 @@ namespace MonkeyPaste.Avalonia {
                 bool isShowingMainWindow = false;
 
                 if (!isShowingMainWindow &&
-                    MpPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
+                    MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
                     if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation != null &&
                         gmp.Distance(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation) >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST &&
                         gmp.Y <= SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT) {
@@ -1081,8 +1081,8 @@ namespace MonkeyPaste.Avalonia {
             MpAvWindowManager.MainWindow.Bind(
                 Window.ShowInTaskbarProperty,
                 new Binding() {
-                    Source = MpPrefViewModel.Instance,
-                    Path = nameof(MpPrefViewModel.Instance.ShowInTaskbar)
+                    Source = MpAvPrefViewModel.Instance,
+                    Path = nameof(MpAvPrefViewModel.Instance.ShowInTaskbar)
                 });
             bool was_loader_visible = false;
             if (MpAvWindowManager.AllWindows.FirstOrDefault(x => x is MpAvLoaderNotificationWindow) is MpAvLoaderNotificationWindow lnw &&

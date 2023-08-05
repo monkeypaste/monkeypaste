@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -10,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvAnalyticItemPresetDataGridView : MpAvUserControl<MpAvAnalyticItemViewModel> {
 
         public MpAvAnalyticItemPresetDataGridView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             this.DataContextChanged += MpAvAnalyticItemPresetDataGridView_DataContextChanged;
             if (DataContext != null) {
                 MpAvAnalyticItemPresetDataGridView_DataContextChanged(this, null);
@@ -62,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
             // wait for view to catchup ?
             await Task.Delay(300);
             if (e.NewItems != null) {
-                e.NewItems.Cast<MpViewModelBase>().Where(x => x != null).ForEach(x => x.PropertyChanged += PresetVIewModel_PropertyChanged);
+                e.NewItems.Cast<MpAvViewModelBase>().Where(x => x != null).ForEach(x => x.PropertyChanged += PresetVIewModel_PropertyChanged);
             }
             //if(e.OldItems != null) {
             //    e.OldItems.Cast<MpViewModelBase>().Where(x => x != null).ForEach(x => x.PropertyChanged -= PresetVIewModel_PropertyChanged);

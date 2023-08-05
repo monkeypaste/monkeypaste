@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (result.Count == 0) {
                 // HACK _allItems not accurate sometimes, fallback to walk tree to find
-                if (MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                if (MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                     return
                         MpAvWindowManager.AllWindows
                             .SelectMany(x => x.GetVisualDescendants<MpAvContentWebView>())

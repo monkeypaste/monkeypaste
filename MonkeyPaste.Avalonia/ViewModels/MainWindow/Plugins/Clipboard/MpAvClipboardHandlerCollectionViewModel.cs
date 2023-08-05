@@ -181,9 +181,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpMenuItemViewModel ContextMenuItemViewModel {
+        public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
-                return new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
                     Header = @"_Transform",
                     IconResourceKey = Mp.Services.PlatformResource.GetResource("ButterflyImage") as string,
                     SubItems = Items.Select(x => x.ContextMenuItemViewModel).ToList()

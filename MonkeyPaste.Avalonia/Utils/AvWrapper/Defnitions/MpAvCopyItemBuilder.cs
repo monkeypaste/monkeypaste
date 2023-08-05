@@ -154,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
             MpCopyItemType itemType,
             bool force_allow_dup,
             bool suppressWrite) {
-            if (MpPrefViewModel.Instance.IsDuplicateCheckEnabled &&
+            if (MpAvPrefViewModel.Instance.IsDuplicateCheckEnabled &&
                 !force_allow_dup &&
                 !suppressWrite) {
                 MpCopyItem dupCheck = null;
@@ -348,7 +348,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                         // handle special case that item is an image drop from browser (tested on chrome in windows)
 
-                    } else if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+                    } else if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                         //plain text mode, just use plain text for now
                         itemData = itemData.ToPlainText();
                     }
@@ -360,7 +360,7 @@ namespace MonkeyPaste.Avalonia {
                 //}
             }
 
-            if (MpPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems &&
+            if (MpAvPrefViewModel.Instance.IgnoreWhiteSpaceCopyItems &&
                 itemType == MpCopyItemType.Text &&
                 itemData.IsNullOrWhitespaceHtmlString()) {
                 // if text is just whitespace and those ignored flag to ignore item

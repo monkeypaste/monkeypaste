@@ -13,15 +13,11 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvHandledClipboardFormatsItemPresetDataGridView : MpAvUserControl<MpAvClipboardHandlerItemViewModel> {
         public MpAvHandledClipboardFormatsItemPresetDataGridView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             this.DataContextChanged += MpAvAnalyticItemPresetDataGridView_DataContextChanged;
             if (DataContext != null) {
                 MpAvAnalyticItemPresetDataGridView_DataContextChanged(this, null);
             }
-        }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
         private void MpAvAnalyticItemPresetDataGridView_DataContextChanged(object sender, EventArgs e) {
             if (BindingContext == null) {
@@ -72,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
             // wait for view to catchup ?
             await Task.Delay(300);
             if (e.NewItems != null) {
-                e.NewItems.Cast<MpViewModelBase>().Where(x => x != null).ForEach(x => x.PropertyChanged += PresetVIewModel_PropertyChanged);
+                e.NewItems.Cast<MpAvViewModelBase>().Where(x => x != null).ForEach(x => x.PropertyChanged += PresetVIewModel_PropertyChanged);
             }
             //if(e.OldItems != null) {
             //    e.OldItems.Cast<MpViewModelBase>().Where(x => x != null).ForEach(x => x.PropertyChanged -= PresetVIewModel_PropertyChanged);

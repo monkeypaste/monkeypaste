@@ -187,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
             Mp.Services.ContentViewLocator.AddView(this);
-            this.FontFamily = MpAvStringToFontFamilyConverter.Instance.Convert(MpPrefViewModel.Instance.DefaultEditableFontFamily, null, null, null) as FontFamily;
+            this.FontFamily = MpAvStringToFontFamilyConverter.Instance.Convert(MpAvPrefViewModel.Instance.DefaultEditableFontFamily, null, null, null) as FontFamily;
         }
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnDetachedFromVisualTree(e);

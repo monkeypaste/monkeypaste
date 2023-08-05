@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -12,7 +12,7 @@
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
              Background="Transparent">
-    <UserControl.Styles>
+    <local:MpAvUserControl.Styles>
         <Style Selector="Image#SpinnerImage[IsVisible=true]">
             <Style.Animations>
                 <Animation Duration="0:0:2"
@@ -53,7 +53,7 @@
                 </Animation>
             </Style.Animations>
         </Style>
-    </UserControl.Styles>
+    </local:MpAvUserControl.Styles>
     <Grid>
         <Image x:Name="SpinnerImage">
             <Image.Resources>
@@ -92,4 +92,4 @@
             </DrawingImage>
         </Image>
     </Grid>
-</UserControl>
+</local:MpAvUserControl>

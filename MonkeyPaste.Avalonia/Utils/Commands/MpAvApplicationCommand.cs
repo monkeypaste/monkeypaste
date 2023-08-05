@@ -6,7 +6,7 @@ using System;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvApplicationCommand : MpViewModelBase {
+    public class MpAvApplicationCommand : MpAvViewModelBase {
         #region Private Variables
         #endregion
 

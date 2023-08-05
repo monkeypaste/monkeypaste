@@ -64,7 +64,7 @@ namespace MonkeyPaste {
                 return;
             }
             if (string.IsNullOrEmpty(sourceClientGuid)) {
-                sourceClientGuid = MpPrefViewModel.Instance.ThisDeviceGuid;
+                sourceClientGuid = Mp.Services.ThisDeviceInfo.ThisDeviceGuid;
             }
             if (string.IsNullOrEmpty(Guid)) {
                 Guid = System.Guid.NewGuid().ToString();
@@ -89,14 +89,14 @@ namespace MonkeyPaste {
             if (IsSyncing) {
                 await WriteToDatabaseAsync(SyncingWithDeviceGuid, false, true);
             } else {
-                await WriteToDatabaseAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
+                await WriteToDatabaseAsync(Mp.Services.ThisDeviceInfo.ThisDeviceGuid);
             }
         }
         public virtual async Task WriteToDatabaseAsync(bool ignoreTracking = false, bool ignoreSyncing = false) {
             if (IsSyncing) {
                 await WriteToDatabaseAsync(SyncingWithDeviceGuid, ignoreTracking, ignoreSyncing);
             } else {
-                await WriteToDatabaseAsync(MpPrefViewModel.Instance.ThisDeviceGuid, ignoreTracking, ignoreSyncing);
+                await WriteToDatabaseAsync(Mp.Services.ThisDeviceInfo.ThisDeviceGuid, ignoreTracking, ignoreSyncing);
             }
         }
 
@@ -123,7 +123,7 @@ namespace MonkeyPaste {
             if (IsSyncing) {
                 await DeleteFromDatabaseAsync(SyncingWithDeviceGuid, false, true);
             } else {
-                await DeleteFromDatabaseAsync(MpPrefViewModel.Instance.ThisDeviceGuid);
+                await DeleteFromDatabaseAsync(Mp.Services.ThisDeviceInfo.ThisDeviceGuid);
             }
         }
 

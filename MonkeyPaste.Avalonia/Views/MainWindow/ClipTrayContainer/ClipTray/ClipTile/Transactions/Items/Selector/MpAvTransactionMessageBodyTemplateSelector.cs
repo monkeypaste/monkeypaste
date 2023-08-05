@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool Match(object data) {
-            return data is MpViewModelBase;
+            return data is MpAvViewModelBase;
         }
     }
 }

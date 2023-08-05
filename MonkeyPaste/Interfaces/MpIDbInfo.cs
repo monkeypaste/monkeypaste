@@ -1,4 +1,6 @@
-﻿namespace MonkeyPaste {
+﻿using System;
+
+namespace MonkeyPaste {
     public interface MpIDbInfo {
         string DbExtension { get; }
         string DbFileName { get; }
@@ -6,6 +8,8 @@
         string DbPath { get; }
         string DbPassword { get; set; }
         bool HasUserDefinedPassword { get; }
+
+        DateTime? DbCreateDateTime { get; set; }
     }
 
 }

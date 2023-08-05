@@ -76,8 +76,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuViewModel Implementation
 
-        public MpMenuItemViewModel PopupMenuViewModel =>
-            MpContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
+        public MpAvMenuItemViewModel PopupMenuViewModel =>
+            MpAvContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
                 AddContentPropertyPathCommand,
                 IsActionParameter ? null : new[] { MpContentQueryPropertyPathType.LastOutput });
 

@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAvPluginBrowserViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpICloseWindowViewModel,
         MpIWantsTopmostWindowViewModel {
         #region Private Variables
@@ -173,10 +173,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task AddOrUpdateRecentFilterTextsAsync(string st) {
-            while (MpPrefViewModel.Instance == null) {
+            while (MpAvPrefViewModel.Instance == null) {
                 await Task.Delay(100);
             }
-            RecentPluginSearches = await MpPrefViewModel.Instance.AddOrUpdateAutoCompleteTextAsync(nameof(MpPrefViewModel.Instance.RecentPluginSearchTexts), st);
+            RecentPluginSearches = await MpAvPrefViewModel.Instance.AddOrUpdateAutoCompleteTextAsync(nameof(MpAvPrefViewModel.Instance.RecentPluginSearchTexts), st);
         }
 
         private async Task<IEnumerable<MpManifestFormat>> GetRemoteManifests() {

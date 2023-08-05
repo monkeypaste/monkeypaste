@@ -94,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
                     _iconBase64 = ivm.IconBase64;
                 }
                 if (_iconBase64 == null) {
-                    if (MpPrefViewModel.Instance.ThemeType == MpThemeType.Dark) {
+                    if (MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Dark) {
                         _iconBase64 = MpBase64Images.MissingFile_white;
                     } else {
                         _iconBase64 = MpBase64Images.MissingFile;

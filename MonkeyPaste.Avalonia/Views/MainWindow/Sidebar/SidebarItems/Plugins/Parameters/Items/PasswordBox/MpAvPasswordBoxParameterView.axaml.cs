@@ -1,11 +1,12 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvPasswordBoxParameterView : MpAvUserControl<MpAvTextBoxParameterViewModel> {
         public MpAvPasswordBoxParameterView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             var pwd_tb = this.FindControl<TextBox>("PasswordTextBox");
 
             this.AddHandler(PointerPressedEvent, MpAvPasswordBoxParameterView_PointerPressed, RoutingStrategies.Tunnel);

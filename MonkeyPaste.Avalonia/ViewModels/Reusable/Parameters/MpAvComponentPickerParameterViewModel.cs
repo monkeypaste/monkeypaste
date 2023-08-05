@@ -17,20 +17,20 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvComponentPickerParameterViewModel :
         MpAvParameterViewModelBase,
-        MpIPopupSelectorMenuViewModel {
+        MpAvIPopupSelectorMenuViewModel {
         #region Private Variables
 
         #endregion
 
-        #region MpIPopupSelectorMenuViewModel Implementation
+        #region MpAvIPopupSelectorMenuViewModel Implementation
 
         public bool IsOpen { get; set; }
-        public MpMenuItemViewModel PopupMenu {
+        public MpAvMenuItemViewModel PopupMenu {
             get {
                 if (Selector == this) {
                     return ComponentPicker == null ? null : ComponentPicker.GetMenu(SelectComponentCommand, null, new int[] { ComponentId }, true);
                 }
-                if (Selector is MpMenuItemHostViewModel mihvm) {
+                if (Selector is MpAvMenuItemHostViewModel mihvm) {
                     return mihvm.PopupMenu;
                 }
                 return null;
@@ -55,12 +55,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpMenuItemViewModel SelectedComponentMenuItemViewModel {
+        public MpAvMenuItemViewModel SelectedComponentMenuItemViewModel {
             get {
                 if (Selector == this) {
                     return SelectedComponentPicker == null ? null : SelectedComponentPicker.GetMenu(null, null, new List<int>() { }, false);
                 }
-                if (Selector is MpMenuItemHostViewModel mihvm) {
+                if (Selector is MpAvMenuItemHostViewModel mihvm) {
                     return mihvm.FindItemByIdentifier((MpContentQueryPropertyPathType)ComponentId, null);
                 }
                 return null;
@@ -68,13 +68,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private MpIPopupSelectorMenuViewModel _selector;
-        public MpIPopupSelectorMenuViewModel Selector {
+        private MpAvIPopupSelectorMenuViewModel _selector;
+        public MpAvIPopupSelectorMenuViewModel Selector {
             get {
                 if (ComponentType == MpSelectableComponentType.ContentPropertyPath) {
                     if (_selector == null) {
-                        _selector = new MpMenuItemHostViewModel(
-                            MpContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
+                        _selector = new MpAvMenuItemHostViewModel(
+                            MpAvContentQueryPropertyPathHelpers.GetContentPropertyRootMenu(
                                 SelectComponentCommand,
                                 IsActionParameter ? null : new[] { MpContentQueryPropertyPathType.LastOutput }),
                             (MpContentQueryPropertyPathType)ComponentId);
@@ -168,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvComponentPickerParameterViewModel() : base(null) { }
 
-        public MpAvComponentPickerParameterViewModel(MpViewModelBase parent) : base(parent) { }
+        public MpAvComponentPickerParameterViewModel(MpAvViewModelBase parent) : base(parent) { }
 
         public override async Task InitializeAsync(MpParameterValue aipv) {
             IsBusy = true;

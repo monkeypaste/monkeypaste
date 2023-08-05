@@ -16,7 +16,7 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvZoomBorder : UserControl, MpIOverrideRender {
+    public class MpAvZoomBorder : MpAvUserControl<object>, MpIOverrideRender {
         // from https://stackoverflow.com/a/6782715/105028
         #region Private Variables
         private DispatcherTimer _render_timer = null;

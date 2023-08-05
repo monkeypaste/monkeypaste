@@ -4,12 +4,9 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvPluginSelectorView : UserControl {
+    public partial class MpAvPluginSelectorView : MpAvUserControl<object> {
 
         public MpAvPluginSelectorView() {
-            InitializeComponent();
-        }
-        private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
     }

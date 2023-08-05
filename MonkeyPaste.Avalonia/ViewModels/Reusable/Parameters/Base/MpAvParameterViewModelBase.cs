@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvParameterViewModelBase :
-        MpViewModelBase<MpViewModelBase>,
+        MpViewModelBase<MpAvViewModelBase>,
         MpITreeItemViewModel,
         MpIFilterMatch,
         MpIAsyncCollectionObject,
@@ -467,7 +467,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvParameterViewModelBase() : this(null) { }
 
         //public MpAvParameterViewModelBase(MpIParameterHostViewModel parent) : this(parent as MpViewModelBase) { }
-        public MpAvParameterViewModelBase(MpViewModelBase parent) : base(parent) {
+        public MpAvParameterViewModelBase(MpAvViewModelBase parent) : base(parent) {
             PropertyChanged += MpAnalyticItemParameterViewModel_PropertyChanged;
 
         }

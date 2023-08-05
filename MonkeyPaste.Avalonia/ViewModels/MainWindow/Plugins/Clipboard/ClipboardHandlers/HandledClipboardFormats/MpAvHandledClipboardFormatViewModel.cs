@@ -205,7 +205,7 @@ namespace MonkeyPaste.Avalonia {
                 if (PluginFormat == null) {
                     return false;
                 }
-                return PluginFormat.guid == MpPrefViewModel.Instance.CoreClipboardHandlerGuid;
+                return PluginFormat.guid == MpAvPrefViewModel.Instance.CoreClipboardHandlerGuid;
             }
         }
         public string Title {

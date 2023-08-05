@@ -87,7 +87,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         private MpAvNotificationWindowManager() {
-            MpConsole.WriteLine("ntf windowmanager ctor called");
             _positioner = new MpAvNotificationPositioner();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }

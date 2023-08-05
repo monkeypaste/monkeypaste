@@ -10,7 +10,7 @@ using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvDropCompleteView : UserControl {
+    public partial class MpAvDropCompleteView : MpAvUserControl<object> {
 
         public MpAvDropCompleteView() {
             AvaloniaXamlLoader.Load(this);

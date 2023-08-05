@@ -12,33 +12,40 @@ using PropertyChanged;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Threading;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
-    public partial class MpAvToolTipView : UserControl {
+    public partial class MpAvToolTipView : MpAvUserControl<object> {
         #region Private Variables
 
         private MpPoint _lastMousePos;
-        private bool _isMoveAttached = false;
-        private bool _isRootStyleAttached = false;
+        //private bool _isMoveAttached = false;
+        //private bool _isRootStyleAttached = false;
+
+        //private DateTime? _lastExitDt = null;
+        //private DispatcherTimer _leaveTimer;
 
         #endregion
 
         #region Statics
 
+        private static string[] _InputMatchers = new string[] {
+            @"</a>"
+        };
         static MpAvToolTipView() {
-            ToolTipTextProperty.Changed.AddClassHandler<Control>((s, e) => {
-                if (s is MpAvToolTipView ttv) {
-                    ttv.Init();
-                }
-            });
-            ToolTipHtmlProperty.Changed.AddClassHandler<Control>((s, e) => {
-                if (s is MpAvToolTipView ttv) {
-                    ttv.Init();
-                }
-            });
+            //ToolTipTextProperty.Changed.AddClassHandler<Control>((s, e) => {
+            //    if (s is MpAvToolTipView ttv) {
+            //        ttv.Init();
+            //    }
+            //});
+            //ToolTipHtmlProperty.Changed.AddClassHandler<Control>((s, e) => {
+            //    if (s is MpAvToolTipView ttv) {
+            //        ttv.Init();
+            //    }
+            //});
         }
 
         #endregion
@@ -111,77 +118,99 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion 
 
+        public bool HasText =>
+            !string.IsNullOrEmpty(ToolTipText) ||
+                !string.IsNullOrEmpty(ToolTipHtml);
 
         #endregion
+
         public MpAvToolTipView() {
             AvaloniaXamlLoader.Load(this);
 
-            this.AttachedToVisualTree += MpAvTooltipView_AttachedToVisualTree;
-            this.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
-            if (MpAvWindowManager.MainWindow != null) {
-                MpAvWindowManager.MainWindow.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnVisibleChanged());
-            }
+            this.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged(this));
         }
 
-        public void Init() {
-            IsVisible =
-                !string.IsNullOrEmpty(ToolTipText) ||
-                !string.IsNullOrEmpty(ToolTipHtml);
-            if (!IsVisible) {
+
+        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) {
+            base.OnAttachedToLogicalTree(e);
+
+            if (TopLevel.GetTopLevel(this) is not TopLevel tl) {
                 return;
             }
-            if (GetHostControl() is Control hc) {
-                // workaround to pass tooltip type from hint to tooltip
-                if (hc.Classes.Contains("warning")) {
-                    this.Classes.Add("warning");
-                } else if (hc.Classes.Contains("error")) {
-                    this.Classes.Add("error");
-                }
 
-                if (!_isMoveAttached) {
-                    hc.PointerMoved += Host_control_PointerMoved;
-                    _isMoveAttached = true;
-                }
-                if (!_isRootStyleAttached &&
-                    GetPopupRoot() is PopupRoot pur) {
-                    pur.TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
-                    pur.Background = Brushes.Transparent;
-                    _isRootStyleAttached = true;
-                }
+            tl.TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
+            tl.Background = Brushes.Transparent;
+
+            if (tl.Parent is not Control hc) {
+                return;
             }
+            hc.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged(hc));
+            if (TopLevel.GetTopLevel(hc) is TopLevel host_tl) {
+                host_tl.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged(host_tl));
+            }
+            // workaround to pass tooltip type from hint to tooltip
+            if (hc.Classes.Contains("warning")) {
+                this.Classes.Add("warning");
+            } else if (hc.Classes.Contains("error")) {
+                this.Classes.Add("error");
+            }
+
+            hc.PointerMoved += HostControl_PointerMoved;
+
+            hc.PointerEntered += HostOrThis_PointerEntered;
+            hc.PointerExited += HostOrThis_PointerExited;
+
+            this.PointerEntered += HostOrThis_PointerEntered;
+            this.PointerExited += HostOrThis_PointerExited;
         }
 
-        private void OnVisibleChanged() {
+        private void OnVisibleChanged(Control changedControl) {
             _lastMousePos = null;
-            if (!IsVisible) {
+            if (changedControl == this &&
+                TopLevel.GetTopLevel(this) is PopupRoot tt_pur) {
+                if (!IsVisible) {
+                    tt_pur.IsVisible = false;
+                    tt_pur.Hide();
+                }
                 return;
             }
-            Init();
-            if (MpAvWindowManager.MainWindow != null &&
-                !MpAvWindowManager.MainWindow.IsVisible) {
-                // workaround for bug where tooltips don't hide when mw hides
-                IsVisible = false;
-            }
-            if (!IsVisible && GetPopupRoot() is PopupRoot pur) {
-                pur.IsVisible = false;
-                pur.Hide();
+
+            if (changedControl != this) {
+                // host control or host window vis change
+                if (!changedControl.IsVisible) {
+                    IsVisible = false;
+                    return;
+                }
             }
         }
 
-        private void MpAvTooltipView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
-            Init();
+        private void HostOrThis_PointerEntered(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            if (sender is not Control c) {
+                return;
+            }
+            //_lastExitDt = null;
+
+        }
+        private void HostOrThis_PointerExited(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            if (sender is not Control c) {
+                return;
+            }
         }
 
-        private void Host_control_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            var hc = GetHostControl();
 
-            if (hc == null) {
+        private void HostControl_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            if (!HasInputControl()) {
+                // only do move animation if non-input tooltip
+                return;
+            }
+
+            if (sender is not Control hc) {
                 _lastMousePos = null;
                 return;
             }
 
             if (!IsVisible) {
-                hc.PointerMoved -= Host_control_PointerMoved;
+                hc.PointerMoved -= HostControl_PointerMoved;
                 return;
             }
 
@@ -189,8 +218,6 @@ namespace MonkeyPaste.Avalonia {
                 _lastMousePos = e.GetScreenMousePoint(hc);
             }
             var mp = e.GetScreenMousePoint(hc);
-
-            //SetToolTipOffset(hc, mp);
             _lastMousePos = mp;
         }
 
@@ -242,6 +269,13 @@ namespace MonkeyPaste.Avalonia {
             var newOffset = new_vector - hc_vector;
             ToolTip.SetHorizontalOffset(hc, newOffset.X);
             ToolTip.SetVerticalOffset(hc, newOffset.Y);
+        }
+
+        private bool HasInputControl() {
+            if (ToolTipHtml == null) {
+                return false;
+            }
+            return _InputMatchers.Any(x => ToolTipHtml.ToLower().Contains(x));
         }
 
         #endregion

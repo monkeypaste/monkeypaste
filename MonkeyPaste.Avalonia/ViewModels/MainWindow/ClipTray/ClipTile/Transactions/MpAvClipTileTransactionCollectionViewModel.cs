@@ -41,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContextMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel ContextMenuViewModel {
+        public MpAvMenuItemViewModel ContextMenuViewModel {
             get {
                 // NOTE this tries to show menu of all unique souces
                 // ordered by their most recent trans
@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
                         .OrderBy(x => SortedTransactions.IndexOf(SortedTransactions.FirstOrDefault(y => y.HasSource(x))))
                         .ToList();
 
-                List<MpMenuItemViewModel> cmil = new List<MpMenuItemViewModel>();
+                List<MpAvMenuItemViewModel> cmil = new List<MpAvMenuItemViewModel>();
                 foreach (var source_ref in distinct_sources) {
                     // find all pertinent msgs for this source ordered by trans dt
 
@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
 
                     if (analysis_mil.Any()) {
                         // insert seperator between source and messages
-                        source_mi.SubItems.Insert(0, new MpMenuItemViewModel() { IsSeparator = true });
+                        source_mi.SubItems.Insert(0, new MpAvMenuItemViewModel() { IsSeparator = true });
                     }
 
                     // insert msgs (header is trans dt)
@@ -97,12 +97,12 @@ namespace MonkeyPaste.Avalonia {
                     // no transactions to show, something must be wrong
                     // to avoid weird menu layout show stub item
                     cmil.Add(
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             IconResourceKey = "QuestionMarkImage",
                             Header = "Odd, nothing available. Something must be wrong 😕"
                         });
                 }
-                return new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
                     Header = "Sources",
                     IconResourceKey = "EggImage",
                     SubItems = cmil
@@ -629,7 +629,7 @@ namespace MonkeyPaste.Avalonia {
 
                 await OpenTransactionPaneCommand.ExecuteAsync(null);
 
-                if (to_select_tnvm is MpViewModelBase to_select_vmb) {
+                if (to_select_tnvm is MpAvViewModelBase to_select_vmb) {
                     // walk up dc tree and select self and all ancestors up to this collection
                     var cur_to_select = to_select_vmb;
                     while (true) {
@@ -646,7 +646,7 @@ namespace MonkeyPaste.Avalonia {
                         } else {
                             MpDebug.Break("what kinda node is it?");
                         }
-                        cur_to_select = cur_to_select.ParentObj as MpViewModelBase;
+                        cur_to_select = cur_to_select.ParentObj as MpAvViewModelBase;
                     }
                 }
 

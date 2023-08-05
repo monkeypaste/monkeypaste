@@ -11,16 +11,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-        private MpMenuItemViewModel _mivm;
-        public MpMenuItemViewModel MenuItemViewModel {
+        private MpAvMenuItemViewModel _mivm;
+        public MpAvMenuItemViewModel MenuItemViewModel {
             get {
                 if (IsSeperator) {
-                    return new MpMenuItemViewModel() {
+                    return new MpAvMenuItemViewModel() {
                         IsSeparator = true
                     };
                 }
                 if (_mivm == null) {
-                    _mivm = new MpMenuItemViewModel() {
+                    _mivm = new MpAvMenuItemViewModel() {
                         IsCheckedSrcObj = this,
                         IsCheckedPropPath = nameof(IsChecked),
                         //CommandSrcObj = this,
@@ -85,10 +85,10 @@ namespace MonkeyPaste.Avalonia {
             _filterType = filterType;
             Label = label;
             PreferenceName = prefName;
-            if (MpPrefViewModel.Instance[PreferenceName] == null) {
+            if (MpAvPrefViewModel.Instance[PreferenceName] == null) {
                 IsChecked = false;
             } else {
-                IsChecked = (bool)MpPrefViewModel.Instance[PreferenceName];
+                IsChecked = (bool)MpAvPrefViewModel.Instance[PreferenceName];
             }
 
         }
@@ -106,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(ToggleIsCheckedCommand));
                     OnPropertyChanged(nameof(MenuItemViewModel));
                     Parent.OnPropertyChanged(nameof(Parent.PopupMenuViewModel));
-                    MpPrefViewModel.Instance[PreferenceName] = IsChecked;
+                    MpAvPrefViewModel.Instance[PreferenceName] = IsChecked;
                     break;
             }
         }

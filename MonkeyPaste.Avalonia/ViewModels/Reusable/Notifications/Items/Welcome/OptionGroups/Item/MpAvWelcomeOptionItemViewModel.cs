@@ -1,4 +1,7 @@
 ﻿
+using MonkeyPaste.Common;
+using System.Windows.Input;
+
 namespace MonkeyPaste.Avalonia {
     public class MpAvWelcomeOptionItemViewModel :
         MpViewModelBase<MpAvWelcomeNotificationViewModel> {
@@ -25,5 +28,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
+        public ICommand ToggleOptionCommand => new MpCommand(
+            () => {
+                IsChecked = !IsChecked;
+            });
     }
 }

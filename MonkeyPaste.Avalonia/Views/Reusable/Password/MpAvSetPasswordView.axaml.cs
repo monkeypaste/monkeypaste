@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvSetPasswordView : UserControl {
+    public partial class MpAvSetPasswordView : MpAvUserControl<object> {
         #region Properties
 
         #region ConfirmedPassword AvaloniaProperty

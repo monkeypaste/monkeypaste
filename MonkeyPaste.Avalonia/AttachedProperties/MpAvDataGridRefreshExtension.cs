@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
                 // work around for shortcut grid since shortcutview's datacontext is the collection itself 
                 // so check parent
                 pdg = _enabledGrids
-                    .FirstOrDefault(x => x.DataContext is IEnumerable<MpViewModelBase> dcl && dcl.Any() && dcl.FirstOrDefault().ParentObj == dataContext);
+                    .FirstOrDefault(x => x.DataContext is IEnumerable<MpAvViewModelBase> dcl && dcl.Any() && dcl.FirstOrDefault().ParentObj == dataContext);
                 if (pdg == null) {
 
                     return;

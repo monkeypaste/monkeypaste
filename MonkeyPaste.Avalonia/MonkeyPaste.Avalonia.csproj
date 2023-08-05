@@ -8,7 +8,7 @@
      <LangVersion>$(DefaultLangVersion)</LangVersion>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
     <Platforms>$(DefaultPlatforms)</Platforms>
-     <!--<AvaloniaNameGeneratorIsEnabled>false</AvaloniaNameGeneratorIsEnabled>-->
+     <!--<AvaloniaNameGeneratorIsEnabled>true</AvaloniaNameGeneratorIsEnabled>-->
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
      <!--<UseMauiEssentials>true</UseMauiEssentials>-->
   </PropertyGroup>
@@ -1510,14 +1510,14 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.999-cibuild0036218-beta" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.999-cibuild0036218-beta" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.999-cibuild0036218-beta" />
+    <PackageReference Include="Avalonia" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.2" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.999-cibuild0036218-beta" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.999-cibuild0036218-beta" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.999-cibuild0036218-beta" />
-    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.2" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.2" />
     <PackageReference Include="Markdig" Version="0.32.0" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.15.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
@@ -1529,7 +1529,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(IsDesktop) == 'true'">
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.999-cibuild0036218-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.2" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
 

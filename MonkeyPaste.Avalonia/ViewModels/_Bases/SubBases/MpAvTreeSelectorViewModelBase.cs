@@ -5,7 +5,7 @@ namespace MonkeyPaste.Avalonia {
     public abstract class MpAvTreeSelectorViewModelBase<P, C> :
         MpAvSelectorViewModelBase<P, C>, MpITreeItemViewModel
         where P : class
-        where C : MpViewModelBase, MpISelectableViewModel, MpITreeItemViewModel {
+        where C : MpAvViewModelBase, MpISelectableViewModel, MpITreeItemViewModel {
 
         #region MpITreeItemViewModel Implementation
 

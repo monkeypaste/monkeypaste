@@ -38,6 +38,7 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvMainView Instance => _instance;
         public static async Task Init() {
             await Task.Delay(1);
+
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 var mw = new MpAvMainWindow();
 
@@ -56,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
                     // huh?
                     MpDebug.Break();
                 } else {
-                    if (!MpPrefViewModel.Instance.ShowInTaskSwitcher) {
+                    if (!MpAvPrefViewModel.Instance.ShowInTaskSwitcher) {
                         if (OperatingSystem.IsWindows()) {
                             MpAvToolWindow_Win32.InitToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
                         } else {

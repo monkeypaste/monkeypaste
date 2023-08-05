@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvFilterMenuViewModel :
-        MpViewModelBase {
+        MpAvViewModelBase {
         #region Statics
 
         private static MpAvFilterMenuViewModel _instance;

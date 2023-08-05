@@ -1,5 +1,5 @@
-﻿namespace MonkeyPaste {
-    public interface MpITrayIcon {
+﻿namespace MonkeyPaste.Avalonia {
+    public interface MpAvITrayIcon {
         /// <summary>
         /// Gets or sets the icon for the notify icon. Either a file system path
         /// or a <c>resm:</c> manifest resource path can be specified.
@@ -14,7 +14,7 @@
         /// <summary>
         /// Gets or sets the context- (right-click)-menu for the notify icon.
         /// </summary>
-        public MpMenuItemViewModel ContextMenuItemViewModel { get; }
+        public MpAvMenuItemViewModel ContextMenuItemViewModel { get; }
 
         /// <summary>
         /// Gets or sets if the notify icon is visible in the 

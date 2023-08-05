@@ -96,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
                 return "ObjectImage";
             }
         }
-        public MpMenuItemViewModel ContextMenuItemViewModel =>
+        public MpAvMenuItemViewModel ContextMenuItemViewModel =>
             null;
         public bool IsAnyBusy =>
             IsBusy || Items.Any(x => x.IsAnyBusy);

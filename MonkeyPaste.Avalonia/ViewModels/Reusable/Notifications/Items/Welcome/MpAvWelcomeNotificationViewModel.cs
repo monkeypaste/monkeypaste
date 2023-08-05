@@ -50,6 +50,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public MpAvWelcomeOptionGroupViewModel GreetingViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel AccountViewModel { get; set; }
+        public MpAvWelcomeOptionGroupViewModel LoginLoadViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel GestureProfilesViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel ScrollWheelBehaviorViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel DbPasswordViewModel { get; set; }
@@ -61,6 +62,7 @@ namespace MonkeyPaste.Avalonia {
                     _items = new[] {
                         GreetingViewModel,
                         AccountViewModel,
+                        LoginLoadViewModel,
                         GestureProfilesViewModel,
                         ScrollWheelBehaviorViewModel,
                         DbPasswordViewModel
@@ -195,18 +197,31 @@ namespace MonkeyPaste.Avalonia {
                 }
             };
 
+            LoginLoadViewModel = new MpAvWelcomeOptionGroupViewModel() {
+                Title = "Load On Login?",
+                Caption = "To get the most use out of MonkeyPaste loading automatically when you log in is a good idea. But, that's entirely up to you.",
+                Items = new[] {
+                    new MpAvWelcomeOptionItemViewModel(this,null) {
+                        IsChecked = true,
+                        IconSourceObj = "UserImage",
+                        LabelText = "Enable",
+                        DescriptionText = "MonkeyPaste will only load when this user account is logged in."
+                    }
+                }
+            };
+
             GestureProfilesViewModel = new MpAvWelcomeOptionGroupViewModel() {
                 Title = "Shortcuts",
                 Caption = "Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings->Shortcuts' menu.",
                 Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,0) {
-                        IsChecked = MpPrefViewModel.Instance.InitialStartupRoutingProfileType == MpShortcutRoutingProfileType.Internal,
+                        IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Internal,
                         IconSourceObj = "PrivateImage",
                         LabelText = MpShortcutRoutingProfileType.Internal.ToString(),
                         DescriptionText = "No global shortcuts will be enabled by default."
                     },
                     new MpAvWelcomeOptionItemViewModel(this,1) {
-                        IsChecked = MpPrefViewModel.Instance.InitialStartupRoutingProfileType != MpShortcutRoutingProfileType.Internal,
+                        IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType != MpShortcutRoutingProfileType.Internal,
                         IconSourceObj = "GlobeImage",
                         LabelText = MpShortcutRoutingProfileType.Global.ToString(),
                         DescriptionText = "MonkeyPaste's clipboard shortcuts will be available in all applications."
@@ -218,13 +233,13 @@ namespace MonkeyPaste.Avalonia {
                 Caption = "When enabled, a scroll gesture at the top of the screen will reveal MonkeyPaste.",
                 Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,0) {
-                        IsChecked = !MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
+                        IsChecked = !MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
                         IconSourceObj = "CloseWindowImage",
                         LabelText = "Disabled",
                         DescriptionText = "Left-clicking the taskbar icon will still open MonkeyPaste."
                     },
                     new MpAvWelcomeOptionItemViewModel(this,1) {
-                        IsChecked = MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
+                        IsChecked = MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
                         IconSourceObj = "AppFrameImage",
                         LabelText = "Enabled",
                         DescriptionText = "More window preferences are available from the 'Settings->Preferences->Window' menu."
@@ -253,17 +268,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void FinishWelcomeSetup() {
             IsWelcomeDone = true;
-
-            // SHORTCUT PROFILE
-            MpPrefViewModel.Instance.InitialStartupRoutingProfileType =
-                GestureProfilesViewModel.Items.Any(x => x.IsChecked && (int)x.OptionId == 1) ?
-                    MpShortcutRoutingProfileType.Global :
-                    MpShortcutRoutingProfileType.Internal;
-
-            // SCROLL-TO-SHOW
-            MpPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta =
-                ScrollWheelBehaviorViewModel.Items.Any(x => x.IsChecked && (int)x.OptionId == 1);
-
             // ACCOUNT TYPE
 
             MpUserAccountType acct_type = MpUserAccountType.Free;
@@ -274,6 +278,22 @@ namespace MonkeyPaste.Avalonia {
             }
 
             Mp.Services.AccountTools.SetAccountType(acct_type);
+
+            // LOGIN LOAD
+            bool loadOnLogin =
+                LoginLoadViewModel.Items.FirstOrDefault().IsChecked;
+            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
+            MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
+
+            // SHORTCUT PROFILE
+            MpAvPrefViewModel.Instance.DefaultRoutingProfileType =
+                GestureProfilesViewModel.Items.Any(x => x.IsChecked && (int)x.OptionId == 1) ?
+                    MpShortcutRoutingProfileType.Global :
+                    MpShortcutRoutingProfileType.Internal;
+
+            // SCROLL-TO-SHOW
+            MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta =
+                ScrollWheelBehaviorViewModel.Items.Any(x => x.IsChecked && (int)x.OptionId == 1);
 
             // DB PASSWORD
             if (!IsDbPasswordIgnored) {

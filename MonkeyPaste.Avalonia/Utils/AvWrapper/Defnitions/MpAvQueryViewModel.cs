@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvQueryViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpIQueryResultProvider,
         MpIJsonObject,
         MpIQueryInfo {
@@ -203,7 +203,6 @@ namespace MonkeyPaste.Avalonia {
 
         private MpAvQueryViewModel() {
             _pageTools = new MpQueryPageTools();
-            PropertyChanged += MpAvQueryInfoViewModel_PropertyChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
@@ -245,12 +244,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void MpAvQueryInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if (SupressPropertyChangedNotification) {
-                MpConsole.WriteLine("Hey! QueryInfo still receives suppressed property changes");
-                return;
-            }
-        }
 
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {

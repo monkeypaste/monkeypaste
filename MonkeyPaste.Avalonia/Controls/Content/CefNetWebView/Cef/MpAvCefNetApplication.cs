@@ -91,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteTraceLine($"Error loading cefnet. ", ex);
 
                 // error loading cef, fallback to compat mode
-                MpPrefViewModel.Instance.IsRichHtmlContentForceDisabled = true;
+                MpAvPrefViewModel.Instance.IsRichHtmlContentForceDisabled = true;
             }
         }
 

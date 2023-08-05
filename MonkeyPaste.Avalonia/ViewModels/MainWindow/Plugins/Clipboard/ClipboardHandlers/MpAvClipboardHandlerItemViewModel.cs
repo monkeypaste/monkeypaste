@@ -52,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel ContextMenuItemViewModel { get; }
+        public MpAvMenuItemViewModel ContextMenuItemViewModel { get; }
 
         #endregion
 

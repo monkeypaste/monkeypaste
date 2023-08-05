@@ -18,7 +18,7 @@ using System.Windows.Input;
 using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSearchBoxViewModel : MpViewModelBase,
+    public class MpAvSearchBoxViewModel : MpAvViewModelBase,
         MpIExpandableViewModel,
         MpIHighlightTextRangesInfoViewModel {
         #region Private Variables
@@ -265,10 +265,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task AddOrUpdateRecentSearchTextsAsync(string st) {
-            while (MpPrefViewModel.Instance == null) {
+            while (MpAvPrefViewModel.Instance == null) {
                 await Task.Delay(100);
             }
-            RecentSearchTexts = await MpPrefViewModel.Instance.AddOrUpdateAutoCompleteTextAsync(nameof(MpPrefViewModel.Instance.RecentSearchTexts), st);
+            RecentSearchTexts = await MpAvPrefViewModel.Instance.AddOrUpdateAutoCompleteTextAsync(nameof(MpAvPrefViewModel.Instance.RecentSearchTexts), st);
         }
 
         private async Task WaitForUnexpandAsync() {

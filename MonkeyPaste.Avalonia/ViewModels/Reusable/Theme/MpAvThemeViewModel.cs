@@ -29,18 +29,18 @@ namespace MonkeyPaste.Avalonia {
     };
 
     public class MpAvThemeViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpICloseWindowViewModel {
 
         #region Private Variable
 
         private string[] _themePrefPropNames = new string[] {
-                nameof(MpPrefViewModel.Instance.DefaultReadOnlyFontFamily),
-                nameof(MpPrefViewModel.Instance.DefaultEditableFontFamily),
-                nameof(MpPrefViewModel.Instance.DefaultFontSize),
-                nameof(MpPrefViewModel.Instance.GlobalBgOpacity),
-                nameof(MpPrefViewModel.Instance.ThemeColor),
-                nameof(MpPrefViewModel.Instance.ThemeTypeName)
+                nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
+                nameof(MpAvPrefViewModel.Instance.DefaultEditableFontFamily),
+                nameof(MpAvPrefViewModel.Instance.DefaultFontSize),
+                nameof(MpAvPrefViewModel.Instance.GlobalBgOpacity),
+                nameof(MpAvPrefViewModel.Instance.ThemeColor),
+                nameof(MpAvPrefViewModel.Instance.ThemeTypeName)
             };
 
         private string[] _colorImageFileNames = new string[] {
@@ -254,7 +254,7 @@ namespace MonkeyPaste.Avalonia {
             if (!this.HasProperty(prefName)) {
                 return;
             }
-            this.SetPropertyValue(prefName, MpPrefViewModel.Instance.GetPropertyValue(prefName));
+            this.SetPropertyValue(prefName, MpAvPrefViewModel.Instance.GetPropertyValue(prefName));
         }
 
         private T GetThemeValue<T>(MpThemeResourceKey trk) {
@@ -354,8 +354,8 @@ namespace MonkeyPaste.Avalonia {
             // 24: default button bg h(h-240, S=15, V=95) (comp5)
             // 25: default button bg h(h-240, S=15, V=65) (comp5bg)
 
-            var tt = MpPrefViewModel.Instance.ThemeType;
-            string hex = MpPrefViewModel.Instance.ThemeColor;
+            var tt = MpAvPrefViewModel.Instance.ThemeType;
+            string hex = MpAvPrefViewModel.Instance.ThemeColor;
             // prepass selected color to get decent chroma
             // V >= 50, S >= 50
             hex.ToPortableColor().ColorToHsv(out double preh, out double pres, out double prev);

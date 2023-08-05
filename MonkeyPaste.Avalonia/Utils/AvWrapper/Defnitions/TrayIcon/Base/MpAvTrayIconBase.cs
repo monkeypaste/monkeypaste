@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvTrayIconBase : MpITrayIcon {
+    public abstract class MpAvTrayIconBase : MpAvITrayIcon {
         public MpAvTrayIconBase() {
         }
 
@@ -14,25 +14,25 @@ namespace MonkeyPaste.Avalonia {
 
         public string ToolTipText => "Monkey Paste";
 
-        public MpMenuItemViewModel ContextMenuItemViewModel {
+        public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
-                return new MpMenuItemViewModel() {
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
+                    SubItems = new List<MpAvMenuItemViewModel>() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Settings"
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Test",
-                            SubItems = new List<MpMenuItemViewModel>() {
-                                new MpMenuItemViewModel() {
+                            SubItems = new List<MpAvMenuItemViewModel>() {
+                                new MpAvMenuItemViewModel() {
                                     Header = "Sub Test 1"
                                 },
-                                new MpMenuItemViewModel() {
+                                new MpAvMenuItemViewModel() {
                                     Header = "Sub Test 2"
                                 }
                             }
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Exit",
                             Command = ExitCommand
                         }

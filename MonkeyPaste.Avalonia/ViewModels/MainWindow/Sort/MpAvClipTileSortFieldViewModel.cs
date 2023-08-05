@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileSortFieldViewModel :
-        MpViewModelBase {
+        MpAvViewModelBase {
         #region Statics
         private static MpAvClipTileSortFieldViewModel _instance;
         public static MpAvClipTileSortFieldViewModel Instance => _instance ?? (_instance = new MpAvClipTileSortFieldViewModel());

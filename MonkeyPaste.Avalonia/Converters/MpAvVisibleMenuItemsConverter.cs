@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvVisibleMenuItemsConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            if (value is IList<MpMenuItemViewModel> sil) {
+            if (value is IList<MpAvMenuItemViewModel> sil) {
                 return sil.Where(x => x.IsVisible);
             }
             return null;

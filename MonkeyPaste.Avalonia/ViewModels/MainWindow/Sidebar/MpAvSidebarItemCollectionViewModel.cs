@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSidebarItemCollectionViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpIAnimatedSizeViewModel {
         #region Private Variable
         #endregion

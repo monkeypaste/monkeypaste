@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvLoaderNotificationWindow : MpAvWindow {
+    public partial class MpAvLoaderNotificationWindow : MpAvWindow<MpAvLoaderNotificationViewModel> {
 
-        public override MpAvLoaderNotificationViewModel BindingContext =>
-            DataContext as MpAvLoaderNotificationViewModel;
         public MpAvLoaderNotificationWindow() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             this.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnIsVisibleChanged());
         }

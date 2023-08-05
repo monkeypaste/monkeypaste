@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSettingsFrameViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpILabelTextViewModel,
         MpIIconResource,
         MpISelectableViewModel,
@@ -215,7 +215,7 @@ namespace MonkeyPaste.Avalonia {
                             //while (MpPrefViewModel.Instance.IsSaving) {
                             //    await Task.Delay(100);
                             //}
-                            MpPrefViewModel.Instance.SetPropertyValue(pvm.ParamId.ToString(), pvm.CurrentTypedValue);
+                            MpAvPrefViewModel.Instance.SetPropertyValue(pvm.ParamId.ToString(), pvm.CurrentTypedValue);
                         }
                         IsBusy = false;
                     });

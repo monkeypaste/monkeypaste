@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,10 +8,10 @@
              d:DesignWidth="800"
              d:DesignHeight="450"
              x:Class="MonkeyPaste.Avalonia.MpAvAppModeFlyoutView">
-    <UserControl.Resources>
+    <local:MpAvUserControl.Resources>
         <sys:Double x:Key="ButtonSize">50</sys:Double>
-    </UserControl.Resources>
-    <UserControl.Styles>
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
         <Style Selector="ToggleButton">
             <Setter Property="BorderThickness"
                     Value="1" />
@@ -67,7 +67,7 @@
             <Setter Property="VerticalAlignment"
                     Value="Stretch" />
         </Style>
-    </UserControl.Styles>
+    </local:MpAvUserControl.Styles>
     <StackPanel Orientation="{Binding MainWindowLayoutOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}">
 
         <!--  AUTO COPY  -->
@@ -112,4 +112,4 @@
         </ToggleButton>
         <!--</Grid>-->
     </StackPanel>
-</UserControl>
+</local:MpAvUserControl>

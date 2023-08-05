@@ -9,7 +9,7 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvAppModeFlyoutView : UserControl {
+    public partial class MpAvAppModeFlyoutView : MpAvUserControl<object> {
         public MpAvAppModeFlyoutView() {
             AvaloniaXamlLoader.Load(this);
             //this.AttachedToVisualTree += MpAvAppModeFlyoutView_AttachedToVisualTree;

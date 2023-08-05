@@ -26,6 +26,12 @@ namespace MonkeyPaste.Avalonia {
         public const string MULTI_TOUCH_ARG = "multitouch";
         public const string LOGIN_LOAD_ARG = "loginload";
 
+        public const bool IS_SINGLE_INSTANCE_ENABLED =
+#if DESKTOP
+                true;
+#else
+                false;
+#endif
         #endregion
 
         #region Statics

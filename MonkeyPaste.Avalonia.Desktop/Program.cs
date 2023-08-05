@@ -2,6 +2,8 @@ using Avalonia;
 using MonkeyPaste.Common;
 using System;
 using Avalonia.Logging;
+using Avalonia.ReactiveUI;
+using System.IO;
 #if CEF_WV
 using CefNet;
 
@@ -20,13 +22,18 @@ namespace MonkeyPaste.Avalonia {
             try {
                 MpConsole.Init();
 
+                //if (App.IS_SINGLE_INSTANCE_ENABLED) {
+                //    if (!EnableSingleInstance()) {
+                //        return;
+                //    }
+                //}
+
 #if CEF_WV
                 MpAvCefNetApplication.ResetCefNetLogging();
 #endif
                 App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(App.Args);
-                //.StartWithCefNetApplicationLifetime(App.Args);
             }
             catch (Exception e) {
                 // here we can work with the exception, for example add it to our log file
@@ -44,19 +51,42 @@ namespace MonkeyPaste.Avalonia {
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
                 .UsePlatformDetect()
+                //.UseReactiveUI()
 #if PLAT_WV
                 .UseDesktopWebView()
 #endif
-            //.With(new Win32PlatformOptions { UseWgl = true })
-            //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
-            //.With(new Win32PlatformOptions {
-            //    UseWgl = true,
-            //    AllowEglInitialization = true
-            //})
-            //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
-            //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
-            //.With(new AvaloniaNativePlatformOptions { UseGpu = false })
-            .LogToTrace()//LogEventLevel.Verbose)
-            ;
+                //.With(new Win32PlatformOptions { UseWgl = true })
+                //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
+                //.With(new Win32PlatformOptions {
+                //    UseWgl = true,
+                //    AllowEglInitialization = true
+                //})
+                //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
+                //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
+                //.With(new AvaloniaNativePlatformOptions { UseGpu = false })
+                .LogToTrace()//LogEventLevel.Verbose)
+                ;
+
+        static FileStream? _lockFile;
+        private static bool EnableSingleInstance() {
+
+
+            string app_dir =
+#if DEBUG
+                "MonkeyPaste_DEBUG";
+#else
+                "MonkeyPaste";
+#endif
+            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), app_dir);
+            Directory.CreateDirectory(dir);
+            try {
+                _lockFile = File.Open(Path.Combine(dir, ".lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                _lockFile.Lock(0, _lockFile.Length);
+                return true;
+            }
+            catch {
+                return false;
+            }
+        }
     }
 }

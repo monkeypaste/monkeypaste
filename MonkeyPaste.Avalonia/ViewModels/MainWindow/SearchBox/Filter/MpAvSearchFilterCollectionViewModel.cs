@@ -18,11 +18,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuViewModel Implementation
 
-        private MpMenuItemViewModel _pmivm;
-        public MpMenuItemViewModel PopupMenuViewModel {
+        private MpAvMenuItemViewModel _pmivm;
+        public MpAvMenuItemViewModel PopupMenuViewModel {
             get {
                 if (_pmivm == null) {
-                    _pmivm = new MpMenuItemViewModel() {
+                    _pmivm = new MpAvMenuItemViewModel() {
                         ParentObj = this,
                         SubItems = Filters.Select(x => x.MenuItemViewModel).ToList()
                     };
@@ -46,32 +46,32 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvSearchFilterViewModel(
                             this,
                             "Content",
-                            nameof(MpPrefViewModel.Instance.SearchByContent),
+                            nameof(MpAvPrefViewModel.Instance.SearchByContent),
                             MpContentQueryBitFlags.Content),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Title",
-                            nameof(MpPrefViewModel.Instance.SearchByTitle),
+                            nameof(MpAvPrefViewModel.Instance.SearchByTitle),
                             MpContentQueryBitFlags.Title),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Url",
-                            nameof(MpPrefViewModel.Instance.SearchBySourceUrl),
+                            nameof(MpAvPrefViewModel.Instance.SearchBySourceUrl),
                             MpContentQueryBitFlags.Url),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Url Title",
-                            nameof(MpPrefViewModel.Instance.SearchByUrlTitle),
+                            nameof(MpAvPrefViewModel.Instance.SearchByUrlTitle),
                             MpContentQueryBitFlags.UrlTitle),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Application Path",
-                            nameof(MpPrefViewModel.Instance.SearchByProcessName),
+                            nameof(MpAvPrefViewModel.Instance.SearchByProcessName),
                             MpContentQueryBitFlags.AppPath),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Application Name",
-                            nameof(MpPrefViewModel.Instance.SearchByApplicationName),
+                            nameof(MpAvPrefViewModel.Instance.SearchByApplicationName),
                             MpContentQueryBitFlags.AppName),
                         //new MpSearchFilterViewModel(
                         //    this,
@@ -81,39 +81,39 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvSearchFilterViewModel(
                             this,
                             "Annotations",
-                            nameof(MpPrefViewModel.Instance.SearchByAnnotation),
+                            nameof(MpAvPrefViewModel.Instance.SearchByAnnotation),
                             MpContentQueryBitFlags.Annotations),
                         new MpAvSearchFilterViewModel(this,true),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Text Type",
-                            nameof(MpPrefViewModel.Instance.SearchByTextType),
+                            nameof(MpAvPrefViewModel.Instance.SearchByTextType),
                             MpContentQueryBitFlags.TextType),
                         new MpAvSearchFilterViewModel(
                             this,
                             "File Type",
-                            nameof(MpPrefViewModel.Instance.SearchByFileType),
+                            nameof(MpAvPrefViewModel.Instance.SearchByFileType),
                             MpContentQueryBitFlags.FileType),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Image Type",
-                            nameof(MpPrefViewModel.Instance.SearchByImageType),
+                            nameof(MpAvPrefViewModel.Instance.SearchByImageType),
                             MpContentQueryBitFlags.ImageType),
                         new MpAvSearchFilterViewModel(this,true),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Case Sensitive",
-                            nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive),
+                            nameof(MpAvPrefViewModel.Instance.SearchByIsCaseSensitive),
                             MpContentQueryBitFlags.CaseSensitive),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Whole Word",
-                            nameof(MpPrefViewModel.Instance.SearchByWholeWord),
+                            nameof(MpAvPrefViewModel.Instance.SearchByWholeWord),
                             MpContentQueryBitFlags.WholeWord),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Regular Expression",
-                            nameof(MpPrefViewModel.Instance.SearchByRegex),
+                            nameof(MpAvPrefViewModel.Instance.SearchByRegex),
                             MpContentQueryBitFlags.Regex)
                     };
                 }
@@ -209,8 +209,8 @@ namespace MonkeyPaste.Avalonia {
             bool needsUpdate = false;
             if (change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.Regex)) {
                 // checking regex disables case and whole word, unchecking reenables
-                var case_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByIsCaseSensitive));
-                var whole_word_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByWholeWord));
+                var case_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpAvPrefViewModel.Instance.SearchByIsCaseSensitive));
+                var whole_word_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpAvPrefViewModel.Instance.SearchByWholeWord));
 
                 if (change_fvm.IsChecked.IsTrue()) {
                     case_filter.IsChecked = false;
@@ -229,9 +229,9 @@ namespace MonkeyPaste.Avalonia {
                 change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.ImageType) ||
                 change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.FileType))) {
                 // when last content type is unchecked reenable all content types
-                var text_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByTextType));
-                var image_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByImageType));
-                var file_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpPrefViewModel.Instance.SearchByFileType));
+                var text_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpAvPrefViewModel.Instance.SearchByTextType));
+                var image_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpAvPrefViewModel.Instance.SearchByImageType));
+                var file_type_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpAvPrefViewModel.Instance.SearchByFileType));
 
                 if (text_type_filter.IsChecked.IsFalse() &&
                     image_type_filter.IsChecked.IsFalse() &&

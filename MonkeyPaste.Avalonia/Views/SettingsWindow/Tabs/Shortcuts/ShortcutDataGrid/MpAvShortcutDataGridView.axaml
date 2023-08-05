@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,10 +9,10 @@
              xmlns:local="using:MonkeyPaste.Avalonia"
              xmlns:pcl="using:MonkeyPaste"
              x:Class="MonkeyPaste.Avalonia.MpAvShortcutDataGridView">
-    <UserControl.Resources>
+    <local:MpAvUserControl.Resources>
 
-    </UserControl.Resources>
-    <UserControl.Styles>
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
         <!--  RESET/DELETE BUTTON  -->
 
         <Style Selector="Button#ResetOrDeleteButton">
@@ -42,7 +42,7 @@
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
-    </UserControl.Styles>
+    </local:MpAvUserControl.Styles>
     <local:MpAvClipBorder Classes="filterDataGridContainer">
         <Grid>
             <DataGrid x:Name="ShortcutDatagrid"
@@ -163,4 +163,4 @@
         </Grid>
 
     </local:MpAvClipBorder>
-</UserControl>
+</local:MpAvUserControl>

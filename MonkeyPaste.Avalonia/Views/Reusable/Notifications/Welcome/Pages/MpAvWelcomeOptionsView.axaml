@@ -76,7 +76,8 @@
                                  Height="230"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center"
-                                 IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                 Command="{Binding ToggleOptionCommand}"
+                                 IsChecked="{Binding IsChecked, Mode=OneWay}"
                                  local:MpAvIsHoveringExtension.IsEnabled="True"
                                  local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
                         <DockPanel HorizontalAlignment="Stretch"

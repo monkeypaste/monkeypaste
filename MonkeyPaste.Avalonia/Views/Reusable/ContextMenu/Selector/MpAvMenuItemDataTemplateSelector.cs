@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string GetTemplateName(object param) {
             string keyStr = string.Empty;
-            if (param is MpMenuItemViewModel cmivm) {
+            if (param is MpAvMenuItemViewModel cmivm) {
                 keyStr = cmivm.ContentTemplateName;
             }
             return keyStr;
@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool Match(object data) {
-            return data is MpMenuItemViewModel;
+            return data is MpAvMenuItemViewModel;
         }
     }
 }

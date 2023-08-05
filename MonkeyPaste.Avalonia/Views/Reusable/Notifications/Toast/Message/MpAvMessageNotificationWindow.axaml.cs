@@ -5,15 +5,14 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvMessageNotificationWindow : MpAvWindow {
+    public partial class MpAvMessageNotificationWindow : MpAvWindow<MpAvMessageNotificationViewModel> {
         #region Private Variables
         #endregion
 
 
 
-        public override MpAvMessageNotificationViewModel BindingContext => DataContext as MpAvMessageNotificationViewModel;
         public MpAvMessageNotificationWindow() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
 
     }

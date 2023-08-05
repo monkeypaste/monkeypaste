@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCustomColorChooserViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpICustomColorChooserMenuAsync,
         MpICloseWindowViewModel,
         MpIWantsTopmostWindowViewModel {

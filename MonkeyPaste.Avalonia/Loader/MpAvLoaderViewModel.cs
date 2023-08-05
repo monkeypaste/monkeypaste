@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvLoaderViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpIStartupState,
         MpIProgressLoaderViewModel {
         #region Private Variables
@@ -108,12 +108,12 @@ namespace MonkeyPaste.Avalonia {
 
             await Mp.InitAsync(new MpAvWrapper(this));
 
-            if (MpPrefViewModel.Instance != null) {
-                if (MpPrefViewModel.Instance.LastStartupDateTime == null) {
+            if (MpAvPrefViewModel.Instance != null) {
+                if (MpAvPrefViewModel.Instance.LastStartupDateTime == null) {
                     StartupFlags |= MpStartupFlags.Initial;
                 }
-                MpPrefViewModel.Instance.LastStartupDateTime = MpPrefViewModel.Instance.StartupDateTime;
-                MpPrefViewModel.Instance.StartupDateTime = startup_datetime;
+                MpAvPrefViewModel.Instance.LastStartupDateTime = MpAvPrefViewModel.Instance.StartupDateTime;
+                MpAvPrefViewModel.Instance.StartupDateTime = startup_datetime;
 
                 MpAvThemeViewModel.Instance.SyncThemePrefs();
             }

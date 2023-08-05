@@ -52,19 +52,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIMenuItemViewModel Implementation
 
-        public MpMenuItemViewModel ContextMenuItemViewModel {
+        public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
                 if (TransactionSource == null) {
                     return null;
                 }
                 // BROWSE TO OPTION
-                var mivm = new MpMenuItemViewModel() {
+                var mivm = new MpAvMenuItemViewModel() {
                     ParentObj = this,
                     IconSourceObj = IconSourceObj,
                     Header = SourceLabel,
                     Tooltip = MpAvDateTimeToStringConverter.Instance.Convert(SourcedDateTimeUtc, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null),
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
+                    SubItems = new List<MpAvMenuItemViewModel>() {
+                        new MpAvMenuItemViewModel() {
                             Header = $"Browse to '{SourceLabel}'",
                             IconResourceKey = IsExternalSource ? SourceUri.StartsWith("http") ? "WebImage":"FolderImage" : "NewWindowImage",
                             AltNavIdx = 5,
@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IsExternalSource) {
                     // REJECT SOURCE
                     mivm.SubItems.Add(
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             HasLeadingSeperator = true,
                             Header = $"{(IsSourceRejected ? "Un-block" : "Block")} '{SourceLabel}'",
                             AltNavIdx = 0,
@@ -90,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
                         // REJECT SOURCE DOMAIN
 
                         mivm.SubItems.Add(
-                            new MpMenuItemViewModel() {
+                            new MpAvMenuItemViewModel() {
                                 Header = $"{(url.IsDomainRejected ? "Un-block" : "Block")} Domain '{url.UrlDomainPath}'",
                                 AltNavIdx = 0,
                                 IconResourceKey = url.IsDomainRejected ? "AddImage" : "NoEntryImage",

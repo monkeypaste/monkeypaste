@@ -786,7 +786,7 @@ namespace MonkeyPaste.Avalonia {
 
         private MpPortableProcessInfo _activeProcessInfo = null;
         public void InitExternalPasteTracking() {
-            if (MpPrefViewModel.Instance.TrackExternalPasteHistory) {
+            if (MpAvPrefViewModel.Instance.TrackExternalPasteHistory) {
                 EnableExternalPasteTracking();
             } else {
                 DisableExternalPasteTracking();
@@ -1049,7 +1049,7 @@ namespace MonkeyPaste.Avalonia {
                 AvailableItems
                 .FirstOrDefault(x => x.KeyString == down_gesture);
 
-            if (MpPrefViewModel.Instance.IsAutoSearchEnabled) {
+            if (MpAvPrefViewModel.Instance.IsAutoSearchEnabled) {
                 Dispatcher.UIThread.Post(() => {
                     /*
                         In global key DOWN, if auto search pref enabled and no other key 
@@ -1091,7 +1091,7 @@ namespace MonkeyPaste.Avalonia {
             if (!IsShortcutsEnabled) {
                 return;
             }
-            if (MpPrefViewModel.Instance.TrackExternalPasteHistory &&
+            if (MpAvPrefViewModel.Instance.TrackExternalPasteHistory &&
                 _activePasteKeystring != null &&
                 !e.Data.KeyCode.IsModKey() &&
                 _keyboardGestureHelper.GetCurrentGesture() == _activePasteKeystring &&
@@ -1315,7 +1315,7 @@ namespace MonkeyPaste.Avalonia {
             });
 
         public ICommand ResetAllShortcutsCommand => new MpAsyncCommand(async () => {
-            var drpt = MpPrefViewModel.Instance.InitialStartupRoutingProfileType;
+            var drpt = MpAvPrefViewModel.Instance.DefaultRoutingProfileType;
             bool result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                 title: "Confirm",
                 message: "Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.",

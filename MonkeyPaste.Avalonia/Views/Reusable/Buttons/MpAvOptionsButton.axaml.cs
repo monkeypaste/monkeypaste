@@ -7,7 +7,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
-    public partial class MpAvOptionsButton : UserControl {
+    public partial class MpAvOptionsButton : MpAvUserControl<object> {
         #region Overrides
 
         #endregion
@@ -58,9 +58,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         public MpAvOptionsButton() {
-            InitializeComponent();
-        }
-        private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
     }

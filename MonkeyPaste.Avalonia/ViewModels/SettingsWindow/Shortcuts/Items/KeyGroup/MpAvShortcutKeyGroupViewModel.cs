@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvShortcutKeyGroupViewModel : MpViewModelBase {
+    public class MpAvShortcutKeyGroupViewModel : MpAvViewModelBase {
         #region Properties
 
         #region View Models

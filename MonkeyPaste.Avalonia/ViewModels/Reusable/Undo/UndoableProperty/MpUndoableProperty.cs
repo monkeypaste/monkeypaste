@@ -1,8 +1,8 @@
-﻿namespace MonkeyPaste {
+﻿namespace MonkeyPaste.Avalonia {
     /// <summary>
     /// This class encapsulates a single undoable property.
     /// </summary>
-    public class MpUndoableProperty : MpViewModelBase, MpIUndoRedo {
+    public class MpUndoableProperty : MpAvViewModelBase, MpIUndoRedo {
         #region Member
         private object _oldValue;
         private object _newValue;

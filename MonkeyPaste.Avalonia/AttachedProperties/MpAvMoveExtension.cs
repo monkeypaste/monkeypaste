@@ -250,7 +250,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (control.DataContext is not MpIBoxViewModel adivm ||
-                control.DataContext is not MpViewModelBase vmb ||
+                control.DataContext is not MpAvViewModelBase vmb ||
                 vmb.ParentObj is not MpIDesignerSettingsViewModel dsvm) {
                 return;
             }

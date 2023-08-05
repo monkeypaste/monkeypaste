@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvCheckBoxParameterViewModel() : base(null) { }
 
-        public MpAvCheckBoxParameterViewModel(MpViewModelBase parent) : base(parent) { }
+        public MpAvCheckBoxParameterViewModel(MpAvViewModelBase parent) : base(parent) { }
 
 
         #endregion

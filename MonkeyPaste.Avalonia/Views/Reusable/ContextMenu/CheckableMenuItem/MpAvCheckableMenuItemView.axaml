@@ -4,7 +4,7 @@
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:local="using:MonkeyPaste.Avalonia"
           xmlns:pcl="using:MonkeyPaste"
-          x:DataType="pcl:MpMenuItemViewModel"
+          x:DataType="local:MpAvMenuItemViewModel"
           x:CompileBindings="True"
           mc:Ignorable="d"
           d:DesignWidth="800"
@@ -12,7 +12,7 @@
           x:Class="MonkeyPaste.Avalonia.MpAvCheckableMenuItemView">
     <MenuItem.Styles>
         <Style Selector="MenuItem"
-               x:DataType="pcl:MpMenuItemViewModel">
+               x:DataType="local:MpAvMenuItemViewModel">
             <Setter Property="Icon">
                 <Template>
                     <CheckBox x:Name="MenuItemCheckBox"
@@ -22,7 +22,7 @@
                               IsChecked="{Binding IsChecked, Mode=TwoWay}">
                         <CheckBox.Styles>
                             <Style Selector="CheckBox /template/ ContentPresenter"
-                                   x:DataType="pcl:MpMenuItemViewModel">
+                                   x:DataType="local:MpAvMenuItemViewModel">
                                 <Setter Property="Background"
                                         Value="{Binding IconHexStr, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}" />
                             </Style>

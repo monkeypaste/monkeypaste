@@ -17,7 +17,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTriggerCollectionViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpIPopupMenuViewModel,
         MpIAsyncCollectionObject,
         MpICloseWindowViewModel,
@@ -54,15 +54,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuViewModel Implementation
         bool MpIPopupMenuViewModel.IsPopupMenuOpen { get; set; }
-        public MpMenuItemViewModel PopupMenuViewModel {
+        public MpAvMenuItemViewModel PopupMenuViewModel {
             get {
-                return new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
                     SubItems =
                                 typeof(MpTriggerType)
                                 .EnumerateEnum<MpTriggerType>()
                                 .Where(x => x != MpTriggerType.None)
                                 .Select(x =>
-                                    new MpMenuItemViewModel() {
+                                    new MpAvMenuItemViewModel() {
                                         Header = x.EnumToLabel(),
                                         IconResourceKey = MpAvActionViewModelBase.GetDefaultActionIconResourceKey(x),
                                         IconTintHexStr = MpAvActionViewModelBase.GetActionHexColor(MpActionType.Trigger, x),
@@ -731,7 +731,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvAnalyticItemCollectionViewModel
                     .Instance
                     .AllPresets
-                    .FirstOrDefault(x => x.PresetGuid == MpPrefViewModel.Instance.CoreAnnotatorDefaultPresetGuid) is MpAvAnalyticItemPresetViewModel aipvm) {
+                    .FirstOrDefault(x => x.PresetGuid == MpAvPrefViewModel.Instance.CoreAnnotatorDefaultPresetGuid) is MpAvAnalyticItemPresetViewModel aipvm) {
                     def_annotate_preset_id = aipvm.AnalyticItemPresetId;
                 }
                 if (def_annotate_preset_id == 0) {

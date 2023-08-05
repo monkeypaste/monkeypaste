@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Avalonia {
-    public class MpAvShortcutKeyViewModel : MpViewModelBase {
+    public class MpAvShortcutKeyViewModel : MpAvViewModelBase {
         #region Properties
 
         public string KeyStr { get; set; }

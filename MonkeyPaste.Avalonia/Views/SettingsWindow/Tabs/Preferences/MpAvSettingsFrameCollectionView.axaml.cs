@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvSettingsFrameCollectionView : UserControl {
+    public partial class MpAvSettingsFrameCollectionView : MpAvUserControl<object> {
         public MpAvSettingsFrameCollectionView() {
             AvaloniaXamlLoader.Load(this);
         }

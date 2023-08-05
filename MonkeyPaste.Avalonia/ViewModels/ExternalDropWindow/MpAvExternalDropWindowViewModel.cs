@@ -18,7 +18,7 @@ using static SQLite.SQLite3;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvExternalDropWindowViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpICloseWindowViewModel,
         MpIWantsTopmostWindowViewModel,
         MpIHoverableViewModel {
@@ -96,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.PlatformInfo.IsDesktop && !IS_DROP_WIDGET_HIDDEN;
         public bool IsDropWidgetEnabled =>
             CanEnableDropWidget &&
-            MpPrefViewModel.Instance.ShowExternalDropWidget;
+            MpAvPrefViewModel.Instance.ShowExternalDropWidget;
 
         public bool HasUserToggledAnyHandlers { get; set; } = false;
         public double TotalRememberWaitTimeS =>
@@ -523,7 +523,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleIsDropWidgetEnabledCommand => new MpCommand(
             () => {
-                MpPrefViewModel.Instance.ShowExternalDropWidget = !MpPrefViewModel.Instance.ShowExternalDropWidget;
+                MpAvPrefViewModel.Instance.ShowExternalDropWidget = !MpAvPrefViewModel.Instance.ShowExternalDropWidget;
                 OnPropertyChanged(nameof(IsDropWidgetEnabled));
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
                     title: "MODE CHANGED",

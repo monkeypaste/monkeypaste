@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 //using Xamarin.Forms;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvLoaderItemViewModel : MpViewModelBase {
+    public class MpAvLoaderItemViewModel : MpAvViewModelBase {
         public object ItemArg { get; set; }
         public Type ItemType { get; set; }
         public string Label { get; set; }

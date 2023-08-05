@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private static TrayIcon CreateTrayIcon() {
-            MpMenuItemViewModel tmivm = MpAvSystemTrayViewModel.Instance.TrayMenuItemViewModel;
+            MpAvMenuItemViewModel tmivm = MpAvSystemTrayViewModel.Instance.TrayMenuItemViewModel;
             var rootIcon = new TrayIcon();
 
             // IS ENABLED
@@ -124,7 +124,7 @@ namespace MonkeyPaste.Avalonia {
             return nm;
         }
 
-        private static NativeMenuItem CreateMenuItem(MpMenuItemViewModel mivm) {
+        private static NativeMenuItem CreateMenuItem(MpAvMenuItemViewModel mivm) {
             var nmi = CreateMenuItem(
                 header: mivm.IsSeparator ? "-" : mivm.Header,
                 headerSrcObj: mivm.HeaderSrcObj,

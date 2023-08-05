@@ -28,10 +28,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuPicker Implementation
 
-        public MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedAnalyticItemPresetIds, bool recursive) {
-            return new MpMenuItemViewModel() {
+        public MpAvMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedAnalyticItemPresetIds, bool recursive) {
+            return new MpAvMenuItemViewModel() {
                 SubItems = Items.Select(x =>
-                new MpMenuItemViewModel() {
+                new MpAvMenuItemViewModel() {
                     Header = x.Title,
                     IconId = x.PluginIconId,
                     SubItems = x.Items.Select(y => y.GetMenu(cmd, cmdArg, selectedAnalyticItemPresetIds, recursive)).ToList()
@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public MpMenuItemViewModel ContextMenuItemViewModel {
+        public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
                 MpCopyItemType contentType = MpAvClipTrayViewModel.Instance.SelectedItem == null ?
                     MpCopyItemType.None : MpAvClipTrayViewModel.Instance.SelectedItem.CopyItemType;
@@ -234,18 +234,18 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public MpMenuItemViewModel GetContentContextMenuItem(MpCopyItemType contentType) {
+        public MpAvMenuItemViewModel GetContentContextMenuItem(MpCopyItemType contentType) {
             var availItems = Items.Where(x => x.IsContentTypeValid(contentType));
-            List<MpMenuItemViewModel> sub_items = availItems.SelectMany(x => x.QuickActionPresetMenuItems).ToList();
+            List<MpAvMenuItemViewModel> sub_items = availItems.SelectMany(x => x.QuickActionPresetMenuItems).ToList();
             if (sub_items.Count > 0) {
-                sub_items.Add(new MpMenuItemViewModel() { IsSeparator = true });
+                sub_items.Add(new MpAvMenuItemViewModel() { IsSeparator = true });
             }
             if (availItems.Count() > 0) {
 
                 sub_items.AddRange(availItems.Select(x => x.ContextMenuItemViewModel));
             }
 
-            return new MpMenuItemViewModel() {
+            return new MpAvMenuItemViewModel() {
                 Header = @"Analyze",
                 AltNavIdx = 0,
                 IconResourceKey = Mp.Services.PlatformResource.GetResource("BrainImage") as string,
@@ -305,7 +305,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 var core_aipvm = AllPresets
-                    .FirstOrDefault(x => x.PresetGuid == MpPrefViewModel.Instance.CoreAnnotatorDefaultPresetGuid);
+                    .FirstOrDefault(x => x.PresetGuid == MpAvPrefViewModel.Instance.CoreAnnotatorDefaultPresetGuid);
 
                 if (core_aipvm == null) {
                     return;

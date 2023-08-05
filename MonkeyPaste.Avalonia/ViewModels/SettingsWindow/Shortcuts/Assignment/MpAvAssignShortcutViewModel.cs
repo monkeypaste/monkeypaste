@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAvAssignShortcutViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpIWantsTopmostWindowViewModel,
         MpIActiveWindowViewModel,
         MpICloseWindowViewModel,

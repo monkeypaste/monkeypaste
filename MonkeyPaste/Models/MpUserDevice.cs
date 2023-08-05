@@ -110,7 +110,7 @@ namespace MonkeyPaste {
                 if (UserDeviceGuid == null) {
                     return false;
                 }
-                return UserDeviceGuid.ToString() == MpPrefViewModel.Instance.ThisDeviceGuid;
+                return UserDeviceGuid.ToString() == Mp.Services.ThisDeviceInfo.ThisDeviceGuid;
             }
         }
 

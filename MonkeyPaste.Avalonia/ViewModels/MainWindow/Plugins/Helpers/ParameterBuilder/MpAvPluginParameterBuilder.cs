@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginParameterBuilder {
         public static async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(
-            MpViewModelBase parent,
+            MpAvViewModelBase parent,
             MpParameterFormat pf) {
             var result = await CreateParameterViewModelAsync_internal(pf.controlType, null, parent);
             return result;
@@ -24,14 +24,14 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             controlType = param.controlType;
-            var result = await CreateParameterViewModelAsync_internal(controlType, aipv, host as MpViewModelBase);
+            var result = await CreateParameterViewModelAsync_internal(controlType, aipv, host as MpAvViewModelBase);
             return result;
         }
 
         private static async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync_internal(
             MpParameterControlType controlType,
             MpParameterValue aipv,
-            MpViewModelBase parent) {
+            MpAvViewModelBase parent) {
             MpAvParameterViewModelBase naipvm = null;
 
 

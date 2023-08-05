@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvUserDeviceCollectionViewModel : MpViewModelBase {
+    public class MpAvUserDeviceCollectionViewModel : MpAvViewModelBase {
         #region Private Variable
         #endregion
 

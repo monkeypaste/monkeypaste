@@ -8,7 +8,7 @@ using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileSortDirectionViewModel :
-        MpViewModelBase,
+        MpAvViewModelBase,
         MpIExpandableViewModel {
         #region Private Variables
 

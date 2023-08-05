@@ -5,14 +5,8 @@ using PropertyChanged;
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
-    public partial class MpAvBusySpinnerView : UserControl {
-        #region Private Variables
-
-        #endregion
+    public partial class MpAvBusySpinnerView : MpAvUserControl<object> {
         public MpAvBusySpinnerView() {
-            InitializeComponent();
-        }
-        private void InitializeComponent() {
             AvaloniaXamlLoader.Load(this);
         }
     }

@@ -70,8 +70,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuPicker Implementation
 
-        public MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedTagIds, bool recursive) {
-            return new MpMenuItemViewModel() {
+        public MpAvMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedTagIds, bool recursive) {
+            return new MpAvMenuItemViewModel() {
                 Header = TagName,
                 Command = cmd,
                 CommandParameter = TagId,
@@ -153,9 +153,9 @@ namespace MonkeyPaste.Avalonia {
         #region MpIContextMenuItemViewModel Implementation
 
         //content menu item
-        public MpMenuItemViewModel ContentMenuItemViewModel {
+        public MpAvMenuItemViewModel ContentMenuItemViewModel {
             get {
-                return new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
                     Header = TagName,
                     Command = ToggleLinkToSelectedClipTileCommand,
                     IsChecked = IsLinkedToSelectedClipTile,
@@ -168,18 +168,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpMenuItemViewModel ContextMenuViewModel {
+        public MpAvMenuItemViewModel ContextMenuViewModel {
             get {
-                return new MpMenuItemViewModel() {
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
+                    SubItems = new List<MpAvMenuItemViewModel>() {
+                        new MpAvMenuItemViewModel() {
                             IsVisible = !IsTagReadOnly,
                             Header = "Rename",
                             AltNavIdx = 0,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
                             Command = RenameTagCommand,
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             IsVisible = CanHotkey,
                             Header = "Assign Hotkey",
                             AltNavIdx = 0,
@@ -188,7 +188,7 @@ namespace MonkeyPaste.Avalonia {
                             CommandParameter = this,
                             ShortcutArgs = new object[] { MpShortcutType.SelectTag, this },
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             IsVisible = CanPin,
                             Header = IsModelPinned ? "Unpin" : "Pin",
                             AltNavIdx = 0,
@@ -197,21 +197,21 @@ namespace MonkeyPaste.Avalonia {
                             CommandParameter = this
                         },
 
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             IsVisible = IsTrashTag,
                             Header = "Permanently Delete All",
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("DeleteImage") as string,
                             Command = Parent.EmptyTrashCommand
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             IsVisible = IsTrashTag,
                             HasLeadingSeperator = true,
                             Header = "Restore All",
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("ResetImage") as string,
                             Command = Parent.RestoreAllTrashCommand
                         },
-                        MpMenuItemViewModel.GetColorPalleteMenuItemViewModel2(this,true),
-                        new MpMenuItemViewModel() {
+                        MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel2(this,true),
+                        new MpAvMenuItemViewModel() {
                             IsVisible = !IsTagReadOnly,
                             HasLeadingSeperator = true,
                             Header = "Delete",
@@ -228,7 +228,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopUpMenuViewModel Implementation
 
-        MpMenuItemViewModel MpIPopupMenuViewModel.PopupMenuViewModel => ContentMenuItemViewModel;
+        MpAvMenuItemViewModel MpIPopupMenuViewModel.PopupMenuViewModel => ContentMenuItemViewModel;
         bool MpIPopupMenuViewModel.IsPopupMenuOpen {
             get => IsContextMenuOpen;
             set => IsContextMenuOpen = value;
@@ -279,21 +279,21 @@ namespace MonkeyPaste.Avalonia {
             Items.OrderBy(x => x.TreeSortIdx)
             .ToList();
 
-        public MpMenuItemViewModel AddChildPopupMenuItemViewModel {
+        public MpAvMenuItemViewModel AddChildPopupMenuItemViewModel {
             get {
                 if (!IsGroupTag ||
                     IsCollectionsTag) {
                     return null;
                 }
-                return new MpMenuItemViewModel() {
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
+                    SubItems = new List<MpAvMenuItemViewModel>() {
+                        new MpAvMenuItemViewModel() {
                             IconSourceObj = "FolderImage",
                             Header = "Group",
                             Command = AddNewChildTagCommand,
                             CommandParameter = MpTagType.Group
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             IconSourceObj = "BinocularsTiltedImage",
                             Header = "Search",
                             Command = AddNewChildTagCommand,
@@ -1561,7 +1561,7 @@ namespace MonkeyPaste.Avalonia {
                 //}
 
                 //Parent.IsSelecting = true;
-                var child_mivm = new MpMenuItemViewModel() {
+                var child_mivm = new MpAvMenuItemViewModel() {
                     ParentObj = this,
                     SubItems = Items.Select(x => x.GetMenu(x.SelectThisTagCommand, null, new[] { Parent.SelectedItemId }, true)).ToList()
                 };

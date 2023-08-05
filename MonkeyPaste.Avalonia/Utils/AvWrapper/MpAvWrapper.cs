@@ -41,6 +41,9 @@ namespace MonkeyPaste.Avalonia {
         public MpIShortcutGestureLocator ShortcutGestureLocator { get; set; }
 
         #endregion 
+        public MpISslInfo SslInfo { get; set; }
+        public MpIWelcomeSetupInfo WelcomeSetupInfo { get; set; }
+        public MpIUserDeviceInfo ThisDeviceInfo { get; set; }
 
         public MpINotificationBuilder NotificationBuilder { get; set; }
         public MpILoadOnLoginTools LoadOnLoginTools { get; set; }
@@ -114,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpConsole.WriteLine($"Storage Dir: '{PlatformInfo.StorageDir}'");
             MpConsole.WriteLine($"Executing Dir: '{PlatformInfo.ExecutingDir}'");
-            string prefPath = Path.Combine(PlatformInfo.StorageDir, MpPrefViewModel.PREF_FILE_NAME);
+            string prefPath = Path.Combine(PlatformInfo.StorageDir, MpAvPrefViewModel.PREF_FILE_NAME);
 
             DbInfo = new MpAvDbInfo();
             if (App.HasStartupArg(App.BACKUP_DATA_ARG)) {
@@ -131,13 +134,16 @@ namespace MonkeyPaste.Avalonia {
 
                 MpFileIo.DeleteFileOrDirectory(MpPluginLoader.PluginManifestBackupFolderPath);
                 MpFileIo.DeleteFile(prefPath);
-                MpFileIo.DeleteFile($"{prefPath}.{MpPrefViewModel.PREF_BACKUP_PATH_EXT}");
+                MpFileIo.DeleteFile($"{prefPath}.{MpAvPrefViewModel.PREF_BACKUP_PATH_EXT}");
 
                 MpConsole.WriteLine("All data successfully deleted.");
             }
 
-            await MpPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
+            await MpAvPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
+            SslInfo = MpAvPrefViewModel.Instance;
+            WelcomeSetupInfo = MpAvPrefViewModel.Instance;
+            ThisDeviceInfo = MpAvPrefViewModel.Instance;
             ContentViewLocator = new MpAvContentViewLocator();
             ShareTools = new MpAvShare();
             NotificationBuilder = new MpAvNotificationBuilder();
@@ -145,7 +151,7 @@ namespace MonkeyPaste.Avalonia {
             AccountTools = new MpAvAccountTools();
             ColorQueryTools = new MpAvColorQueryTools();
             NativePathDialog = new MpAvPathDialog();
-            UserProvidedFileExts = MpPrefViewModel.Instance;
+            UserProvidedFileExts = MpAvPrefViewModel.Instance;
             Query = MpAvQueryViewModel.Parse(string.Empty);//MpPrefViewModel.Instance.LastQueryInfoJson);
             ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
             KeyConverter = new MpAvKeyConverter();

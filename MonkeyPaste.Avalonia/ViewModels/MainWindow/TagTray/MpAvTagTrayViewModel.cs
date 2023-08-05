@@ -52,9 +52,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPopupMenuPicker Implementation
 
-        public MpMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedTagIds, bool recursive) {
+        public MpAvMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedTagIds, bool recursive) {
             // used for component parameter picker
-            return new MpMenuItemViewModel() {
+            return new MpAvMenuItemViewModel() {
                 SubItems =
                     RootLinkableItems
                         .Select(x => x.GetMenu(cmd, cmdArg, selectedTagIds, recursive)).ToList()
@@ -166,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
             Items.FirstOrDefault(x => x.TagId == DEFAULT_SELECTED_TAG_ID);
         public MpAvTagTileViewModel LastSelectedActiveItem =>
             Items
-            .Where(x => x.IsNotGroupTag && x.LastSelectedDateTime > MpPrefViewModel.Instance.StartupDateTime)
+            .Where(x => x.IsNotGroupTag && x.LastSelectedDateTime > MpAvPrefViewModel.Instance.StartupDateTime)
             .OrderByDescending(x => x.LastSelectedDateTime)
             .FirstOrDefault();
 
@@ -342,18 +342,18 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void SetNextTrashCleanupDate() {
-            switch (MpPrefViewModel.Instance.TrashCleanupModeType) {
+            switch (MpAvPrefViewModel.Instance.TrashCleanupModeType) {
                 case MpTrashCleanupModeType.Daily:
-                    MpPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.Now + TimeSpan.FromDays(1);
+                    MpAvPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.Now + TimeSpan.FromDays(1);
                     break;
                 case MpTrashCleanupModeType.Weekly:
-                    MpPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.Now + TimeSpan.FromDays(7);
+                    MpAvPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.Now + TimeSpan.FromDays(7);
                     break;
                 case MpTrashCleanupModeType.Monthly:
-                    MpPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.Now + TimeSpan.FromDays(30);
+                    MpAvPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.Now + TimeSpan.FromDays(30);
                     break;
                 case MpTrashCleanupModeType.Never:
-                    MpPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.MaxValue;
+                    MpAvPrefViewModel.Instance.NextTrashEmptyDateTime = DateTime.MaxValue;
                     break;
             }
         }
@@ -415,7 +415,7 @@ namespace MonkeyPaste.Avalonia {
                     SelectedItem.IsSortDescending = MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending;
                     break;
                 case MpMessageType.MainWindowLoadComplete:
-                    if (DateTime.Now >= MpPrefViewModel.Instance.NextTrashEmptyDateTime) {
+                    if (DateTime.Now >= MpAvPrefViewModel.Instance.NextTrashEmptyDateTime) {
                         Dispatcher.UIThread.Post(async () => {
                             await Task.Delay(3_000);
                             EmptyTrashCommand.Execute(null);

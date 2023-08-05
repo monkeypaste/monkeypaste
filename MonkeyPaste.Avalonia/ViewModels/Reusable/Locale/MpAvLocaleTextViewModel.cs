@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Avalonia {
-    public class MpAvLocaleTextViewModel : MpViewModelBase {
+    public class MpAvLocaleTextViewModel : MpAvViewModelBase {
         #region Private Variables
         #endregion
 

@@ -1,4 +1,4 @@
-<UserControl x:Class="MonkeyPaste.Avalonia.MpAvDropCompleteView"
+<local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvDropCompleteView"
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,7 +11,7 @@
              d:DesignHeight="450"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
-    <UserControl.Styles>
+    <local:MpAvUserControl.Styles>
         <Style Selector="Button#DoNotRememberDropInfoButton /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="Crimson" />
@@ -37,7 +37,7 @@
             <Setter Property="Foreground"
                     Value="Gold" />
         </Style>
-    </UserControl.Styles>
+    </local:MpAvUserControl.Styles>
     <Grid x:Name="DropCompleteGrid"
           Background="DimGray"
           HorizontalAlignment="Stretch"
@@ -132,4 +132,4 @@
             </Grid>
         </Button>
     </Grid>
-</UserControl>
+</local:MpAvUserControl>

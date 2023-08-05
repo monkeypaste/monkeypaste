@@ -7,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileTitleView : MpAvUserControl<MpAvClipTileViewModel> {
 
         public MpAvClipTileTitleView() {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             var sb = this.FindControl<Button>("ClipTileAppIconImageButton");
             sb.AddHandler(Button.PointerPressedEvent, Sb_PointerPressed, RoutingStrategies.Tunnel);
         }
@@ -17,10 +17,6 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.GetContentView() is MpIContentView cv) {
                 cv.ShowDevTools();
             }
-        }
-
-        private void InitializeComponent() {
-            AvaloniaXamlLoader.Load(this);
         }
     }
 }

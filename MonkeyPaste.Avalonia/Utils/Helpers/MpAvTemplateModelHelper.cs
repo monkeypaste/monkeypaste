@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task AddUpdateOrDeleteTemplateAsync(int notifier_ciid, MpTextTemplate tt, bool isDelete) {
-            if (!MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
+            if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 MpConsole.WriteLine($"Template Model change ignored for '{tt}'. Rich Content disabled");
                 return;
             }

@@ -7,8 +7,8 @@
                        d:DesignHeight="450"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="pcl:MpMenuItemViewModel"
-                       x:DataType="pcl:MpMenuItemViewModel"
+                       x:TypeArguments="local:MpAvMenuItemViewModel"
+                       x:DataType="local:MpAvMenuItemViewModel"
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvColorPaletteListBoxView">
     <ListBox x:Name="ColorPaletteListBox"
@@ -37,7 +37,7 @@
         </ListBox.ItemsPanel>
         <ListBox.Styles>
             <Style Selector="ListBoxItem"
-                   x:DataType="pcl:MpMenuItemViewModel">
+                   x:DataType="local:MpAvMenuItemViewModel">
                 <Setter Property="Grid.Row"
                         Value="{Binding SortOrderIdx, ConverterParameter=row|14, Converter={x:Static local:MpAvIntToGridLocationConverter.Instance}}" />
                 <Setter Property="Grid.Column"
@@ -69,7 +69,7 @@
                         BorderThickness="0"
                         Command="{Binding Command}"
                         CommandParameter="{Binding CommandParameter}"
-                        x:DataType="pcl:MpMenuItemViewModel">
+                        x:DataType="local:MpAvMenuItemViewModel">
                     <Border Width="15"
                             Height="15"
                             Padding="0"

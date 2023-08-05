@@ -4,41 +4,12 @@
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:DataType="pcl:MpMenuItemViewModel"
+                       x:DataType="local:MpAvMenuItemViewModel"
                        x:CompileBindings="True"
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvDefaultMenuItemView">
-    <!--<local:MpAvUserControl.Styles>
-        <Style Selector="local|MpAvUserControl">
-            <Setter Property="Icon">
-                <Template>
-                    <Image HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch"
-                           Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </Template>
-            </Setter>
-            <Setter Property="Header"
-                    Value="{Binding Header}" />
-            <Setter Property="Items"
-                    Value="{Binding SubItems}" />
-            <Setter Property="Command"
-                    Value="{Binding Command}" />
-            <Setter Property="CommandParameter"
-                    Value="{Binding CommandParameter}" />
-    -->
-    <!--<Setter Property="InputGesture"
-                    Value="{Binding InputGestureText}" />-->
-    <!--
-            <Setter Property="IsVisible"
-                    Value="{Binding IsVisible}" />
-        </Style>
-        <Style Selector="local:MpAvUserControl:pointerover">
-            <Setter Property="Background"
-                    Value="LightBlue" />
-        </Style>
-    </local:MpAvUserControl.Styles>-->
     <StackPanel Orientation="Horizontal">
         <Image Width="20"
                Height="20"

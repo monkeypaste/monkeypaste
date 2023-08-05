@@ -78,11 +78,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public override MpMenuItemViewModel PopupMenuViewModel {
+        public override MpAvMenuItemViewModel PopupMenuViewModel {
             get {
-                return new MpMenuItemViewModel() {
-                    SubItems = new List<MpMenuItemViewModel>() {
-                        new MpMenuItemViewModel() {
+                return new MpAvMenuItemViewModel() {
+                    SubItems = new List<MpAvMenuItemViewModel>() {
+                        new MpAvMenuItemViewModel() {
                             Header = "Add",
                             IconResourceKey = "AddImage",
                             SubItems =
@@ -90,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
                                 .EnumerateEnum<MpActionType>()
                                 .Where(x=>x != MpActionType.None && x != MpActionType.Trigger)
                                 .Select(x =>
-                                    new MpMenuItemViewModel() {
+                                    new MpAvMenuItemViewModel() {
                                         Header = x.EnumToLabel(),
                                         IconResourceKey = GetDefaultActionIconResourceKey(x),
                                         IconTintHexStr = MpAvActionViewModelBase.GetActionHexColor(x),
@@ -98,10 +98,10 @@ namespace MonkeyPaste.Avalonia {
                                         CommandParameter = x
                                     }).ToList()
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             IsSeparator = true
                         },
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {
                             Header = ToggleEnableOrDisableLabel,
                             IconBorderHexColor = MpSystemColors.Transparent,
                             //IconHexStr = IsAllValid ? ToggleEnableOrDisableResourceKey : null,
@@ -111,8 +111,8 @@ namespace MonkeyPaste.Avalonia {
                             IconCornerRadius = IsAllValid ? 20 : 0,
                             Command = ToggleTriggerEnabledCommand,
                         },
-                        new MpMenuItemViewModel() {IsSeparator = true},
-                        new MpMenuItemViewModel() {
+                        new MpAvMenuItemViewModel() {IsSeparator = true},
+                        new MpAvMenuItemViewModel() {
                             Header = "Remove",
                             IconResourceKey = "DeleteImage",
                             Command = DeleteThisActionCommand

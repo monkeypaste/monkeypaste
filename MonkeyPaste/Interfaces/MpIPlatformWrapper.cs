@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
+
+        MpISslInfo SslInfo { get; set; }
+        MpIWelcomeSetupInfo WelcomeSetupInfo { get; set; }
+        MpIUserDeviceInfo ThisDeviceInfo { get; set; }
         MpIShare ShareTools { get; set; }
         MpINotificationBuilder NotificationBuilder { get; set; }
         MpIShutdownTools ShutdownHelper { get; set; }

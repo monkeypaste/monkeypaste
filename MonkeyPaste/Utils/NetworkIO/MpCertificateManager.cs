@@ -21,10 +21,10 @@ namespace MonkeyPaste {
 
         [Obsolete]
         public MpCertificateManager() {
-            if (DateTime.UtcNow > MpPrefViewModel.Instance.SslCertExpirationDateTime) {
+            if (DateTime.UtcNow > Mp.Services.SslInfo.SslCertExpirationDateTime) {
                 CreateCertificate();
             }
-            _cert = LoadCertificate(MpPrefViewModel.Instance.SyncCertPath);
+            _cert = LoadCertificate(Mp.Services.SslInfo.SyncCertPath);
 
             if (_cert == null) {
                 MpConsole.WriteTraceLine(@"Error could not load sync certificate");
@@ -33,13 +33,13 @@ namespace MonkeyPaste {
 
         [Obsolete]
         private void CreateCertificate() {
-            AsymmetricKeyParameter caPrivKey = GenerateCACertificate(MpPrefViewModel.Instance.SslCASubject);
+            AsymmetricKeyParameter caPrivKey = GenerateCACertificate(Mp.Services.SslInfo.SslCASubject);
 
-            var cert = GenerateSelfSignedCertificate(MpPrefViewModel.Instance.SslCertSubject, MpPrefViewModel.Instance.SslCASubject, caPrivKey);
+            var cert = GenerateSelfSignedCertificate(Mp.Services.SslInfo.SslCertSubject, Mp.Services.SslInfo.SslCASubject, caPrivKey);
 
-            MpPrefViewModel.Instance.SslPublicKey = cert.GetPublicKeyString();
+            Mp.Services.SslInfo.SslPublicKey = cert.GetPublicKeyString();
 
-            SaveCertificate(MpPrefViewModel.Instance.SyncCertPath, cert);
+            SaveCertificate(Mp.Services.SslInfo.SyncCertPath, cert);
         }
 
         [Obsolete]
@@ -108,7 +108,7 @@ namespace MonkeyPaste {
             //var x509 = new X509Certificate2(certificate.GetEncoded(),string.Empty);
 
             // Add CA certificate to Root store
-            SaveCertificate(MpPrefViewModel.Instance.SyncCaPath, certificate);
+            SaveCertificate(Mp.Services.SslInfo.SyncCaPath, certificate);
 
             return issuerKeyPair.Private;
         }
@@ -147,7 +147,7 @@ namespace MonkeyPaste {
             var notBefore = DateTime.UtcNow.Date;
             var notAfter = notBefore.AddYears(2);
 
-            MpPrefViewModel.Instance.SslCertExpirationDateTime = notAfter;
+            Mp.Services.SslInfo.SslCertExpirationDateTime = notAfter;
 
             certificateGenerator.SetNotBefore(notBefore);
             certificateGenerator.SetNotAfter(notAfter);

@@ -196,16 +196,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region ForcedMenuItemViewModel AvaloniaProperty
-        public static MpMenuItemViewModel GetForcedMenuItemViewModel(AvaloniaObject obj) {
+        public static MpAvMenuItemViewModel GetForcedMenuItemViewModel(AvaloniaObject obj) {
             return obj.GetValue(ForcedMenuItemViewModelProperty);
         }
 
-        public static void SetForcedMenuItemViewModel(AvaloniaObject obj, MpMenuItemViewModel value) {
+        public static void SetForcedMenuItemViewModel(AvaloniaObject obj, MpAvMenuItemViewModel value) {
             obj.SetValue(ForcedMenuItemViewModelProperty, value);
         }
 
-        public static readonly AttachedProperty<MpMenuItemViewModel> ForcedMenuItemViewModelProperty =
-            AvaloniaProperty.RegisterAttached<object, Control, MpMenuItemViewModel>(
+        public static readonly AttachedProperty<MpAvMenuItemViewModel> ForcedMenuItemViewModelProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, MpAvMenuItemViewModel>(
                 "ForcedMenuItemViewModel",
                 null);
 
@@ -302,11 +302,11 @@ namespace MonkeyPaste.Avalonia {
             }
             var control = sender as Control;
             object dc = GetControlDataContext(control);
-            MpMenuItemViewModel mivm = null;
+            MpAvMenuItemViewModel mivm = null;
             if (dc is MpIContextMenuViewModel cmvm) {
                 mivm = cmvm.ContextMenuViewModel;
             }
-            if (GetForcedMenuItemViewModel(control) is MpMenuItemViewModel fmivm) {
+            if (GetForcedMenuItemViewModel(control) is MpAvMenuItemViewModel fmivm) {
                 // used when host vm has multiple context menus
                 mivm = fmivm;
             }
@@ -359,7 +359,7 @@ namespace MonkeyPaste.Avalonia {
 
             // LOCATE MENU
 
-            MpMenuItemViewModel mivm = null;
+            MpAvMenuItemViewModel mivm = null;
 
             if (e.IsLeftPress(control) && !GetSuppressMenuLeftClick(control)) {
                 if (e.ClickCount == 2 && GetDoubleClickCommand(control) != null) {
@@ -373,7 +373,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            if (GetForcedMenuItemViewModel(control) is MpMenuItemViewModel fmivm) {
+            if (GetForcedMenuItemViewModel(control) is MpAvMenuItemViewModel fmivm) {
                 // used when host vm has multiple context menus
                 mivm = fmivm;
             }
@@ -410,13 +410,13 @@ namespace MonkeyPaste.Avalonia {
             if (mi == null) {
                 return;
             }
-            MpMenuItemViewModel mivm = mi.DataContext as MpMenuItemViewModel;
+            MpAvMenuItemViewModel mivm = mi.DataContext as MpAvMenuItemViewModel;
             if (mivm == null) {
                 return;
             }
 
             bool hide_on_click = GetHideOnClick(_cmInstance.PlacementTarget);
-            if (mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
+            if (mivm.ContentTemplateName == MpAvMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
 
                 mivm.Command?.Execute(mivm.CommandParameter);
                 e.Handled = true;
@@ -452,7 +452,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void MenuItem_PointerEnter(object sender, PointerEventArgs e) {
-            if (e.Source is MenuItem mi && mi.DataContext is MpMenuItemViewModel mivm) {
+            if (e.Source is MenuItem mi && mi.DataContext is MpAvMenuItemViewModel mivm) {
                 var _hoverMenuItemBrush = Mp.Services.PlatformResource.GetResource("MenuFlyoutItemBackgroundPointerOver") as IBrush;
                 var _hoverMenuItemPresenterBrush = Mp.Services.PlatformResource.GetResource("MenuFlyoutPresenterBackground") as IBrush;
 
@@ -461,7 +461,7 @@ namespace MonkeyPaste.Avalonia {
                     // loop through open sub-menu items and close ones not in entered item tree
                     var cmil = GetChildMenuItems(osmi);
                     var pmil = GetParentMenuItems(mi);
-                    if (cmil.Select(x => x.DataContext).Cast<MpMenuItemViewModel>().All(x => x != mivm)) {
+                    if (cmil.Select(x => x.DataContext).Cast<MpAvMenuItemViewModel>().All(x => x != mivm)) {
                         osmi.Close();
                         osmi.Background = Brushes.Transparent;
                         var ccl = osmi.GetVisualDescendants<Control>();
@@ -540,7 +540,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #region Helpers
 
-        private static Control CreateMenuItem(MpMenuItemViewModel mivm) {
+        private static Control CreateMenuItem(MpAvMenuItemViewModel mivm) {
             Control control = null;
             string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
             KeyGesture inputGesture = null;
@@ -550,8 +550,8 @@ namespace MonkeyPaste.Avalonia {
             }
 
             switch (itemType) {
-                case MpMenuItemViewModel.DEFAULT_TEMPLATE_NAME:
-                case MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME:
+                case MpAvMenuItemViewModel.DEFAULT_TEMPLATE_NAME:
+                case MpAvMenuItemViewModel.CHECKABLE_TEMPLATE_NAME:
                     var mi = new MenuItem() {
                         Header = mivm.Header,
                         Command = mivm.Command,
@@ -576,12 +576,12 @@ namespace MonkeyPaste.Avalonia {
                     if ((mi.Command != null && mivm.IsEnabled) || !GetHideOnClick(_cmInstance.PlacementTarget)) {
                         mi.AddHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased, RoutingStrategies.Tunnel);
                     }
-                    if (itemType == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
+                    if (itemType == MpAvMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
                         ApplyAnyBindings(mi, mivm);
                     }
                     control = mi;
                     break;
-                case MpMenuItemViewModel.SEPERATOR_TEMPLATE_NAME:
+                case MpAvMenuItemViewModel.SEPERATOR_TEMPLATE_NAME:
                     //control = new MenuItem() {
                     //    Icon = mivm.Header,
                     //    Header = "-",
@@ -597,7 +597,7 @@ namespace MonkeyPaste.Avalonia {
                         };
                     }
                     break;
-                case MpMenuItemViewModel.COLOR_PALETTE_TEMPLATE_NAME:
+                case MpAvMenuItemViewModel.COLOR_PALETTE_TEMPLATE_NAME:
                     control = new MenuItem() {
                         Header = new MpAvColorPaletteListBoxView() {
                             DataContext = mivm
@@ -613,8 +613,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public static object CreateIcon(MpMenuItemViewModel mivm) {
-            if (mivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
+        public static object CreateIcon(MpAvMenuItemViewModel mivm) {
+            if (mivm.ContentTemplateName == MpAvMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
                 return CreateCheckableIcon(mivm);
             }
             if (mivm.IconSourceObj == null) {
@@ -626,7 +626,7 @@ namespace MonkeyPaste.Avalonia {
             };
             if (string.IsNullOrEmpty(mivm.IconTintHexStr)) {
                 //
-                if (MpPrefViewModel.Instance.ThemeType != MpThemeType.Dark ||
+                if (MpAvPrefViewModel.Instance.ThemeType != MpThemeType.Dark ||
                     MpAvThemeViewModel.Instance.IsColoredImageResource(mivm.IconSourceObj)) {
                     iconImg.Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(mivm.IconSourceObj, null, null, null) as Bitmap;
                 } else {
@@ -644,7 +644,7 @@ namespace MonkeyPaste.Avalonia {
             iconBorder.Child = iconImg;
             return iconBorder;
         }
-        private static object CreateCheckableIcon(MpMenuItemViewModel mivm) {
+        private static object CreateCheckableIcon(MpAvMenuItemViewModel mivm) {
             var pi = new PathIcon() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
@@ -658,7 +658,7 @@ namespace MonkeyPaste.Avalonia {
             iconBorder.Child = pi;
             return iconBorder;
         }
-        private static Border GetIconBorder(MpMenuItemViewModel mivm) {
+        private static Border GetIconBorder(MpAvMenuItemViewModel mivm) {
             var ib = new Border() {
                 //HorizontalAlignment = HorizontalAlignment.Center,
                 //VerticalAlignment = VerticalAlignment.Center,
@@ -723,7 +723,7 @@ namespace MonkeyPaste.Avalonia {
             return items;
         }
 
-        private static void ApplyAnyBindings(MenuItem mi, MpMenuItemViewModel mivm) {
+        private static void ApplyAnyBindings(MenuItem mi, MpAvMenuItemViewModel mivm) {
             if (mivm.IconSrcBindingObj != null &&
                 mi.Icon is Border icon_border) {
                 // NOTE this only handles unique case for search filter check box
@@ -775,7 +775,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static void ShowMenu(
             Control control,
-            MpMenuItemViewModel mivm,
+            MpAvMenuItemViewModel mivm,
             MpPoint offset = null,
             PlacementMode placement = PlacementMode.Pointer,
             bool hideOnClick = true,
@@ -837,7 +837,7 @@ namespace MonkeyPaste.Avalonia {
         #region Helpers
 
         private static object GetControlDataContext(Control control) {
-            if (GetForcedMenuItemViewModel(control) is MpMenuItemViewModel mivm &&
+            if (GetForcedMenuItemViewModel(control) is MpAvMenuItemViewModel mivm &&
                 mivm.ParentObj is object forceDc) {
                 return forceDc;
             }
@@ -847,7 +847,7 @@ namespace MonkeyPaste.Avalonia {
             return control.DataContext;
         }
 
-        private static void AddLeadingSeperators(MpMenuItemViewModel mivm) {
+        private static void AddLeadingSeperators(MpAvMenuItemViewModel mivm) {
             if (mivm.SubItems == null ||
                 mivm.SubItems.Count == 0) {
                 return;
@@ -863,12 +863,12 @@ namespace MonkeyPaste.Avalonia {
                     mivm.SubItems
                     .Where((y, idx2) => idx2 < idx1 && y.IsVisible)
                     .OrderByDescending(y => mivm.SubItems.IndexOf(y))
-                    .FirstOrDefault() is MpMenuItemViewModel actual_prev_mivm &&
+                    .FirstOrDefault() is MpAvMenuItemViewModel actual_prev_mivm &&
                     !actual_prev_mivm.IsSeparator)
                 .ToList();
 
             foreach (var lsi in leading_sep_items) {
-                mivm.SubItems.Insert(mivm.SubItems.IndexOf(lsi), new MpMenuItemViewModel() { IsSeparator = true });
+                mivm.SubItems.Insert(mivm.SubItems.IndexOf(lsi), new MpAvMenuItemViewModel() { IsSeparator = true });
             }
 
             // apply to children

@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvShortcutRecorderParameterViewModel() : base(null) { }
 
-        public MpAvShortcutRecorderParameterViewModel(MpViewModelBase parent) : base(parent) {
+        public MpAvShortcutRecorderParameterViewModel(MpAvViewModelBase parent) : base(parent) {
             PropertyChanged += MpAvShortcutRecorderParameterViewModel_PropertyChanged;
         }
 
