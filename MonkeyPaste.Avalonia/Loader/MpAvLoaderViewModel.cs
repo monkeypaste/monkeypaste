@@ -166,7 +166,6 @@ namespace MonkeyPaste.Avalonia {
                     //new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
                     new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
                     //new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger"),
-                    new MpAvLoaderItemViewModel(typeof(MpTempFileManager),"Temp File Manager"),
                     new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),"Supported Clipboard Formats",Mp.Services.DataObjectRegistrar),
                     new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),

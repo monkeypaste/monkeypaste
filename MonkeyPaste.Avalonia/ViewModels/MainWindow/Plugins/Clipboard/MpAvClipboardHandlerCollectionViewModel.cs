@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncCollectionObject,
         MpIAsyncComboBoxViewModel,
         MpIClipboardFormatDataHandlers,
-        MpIPlatformDataObjectHelperAsync { //
+        MpIPlatformDataObjectTools { //
 
         #region Constants
 
@@ -100,16 +100,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIPlatformDataObjectHelperAsync Implementation
 
-        bool MpIPlatformDataObjectHelperAsync.IsOleBusy => IsBusy;
+        bool MpIPlatformDataObjectTools.IsOleBusy => IsBusy;
 
-        async Task MpIPlatformDataObjectHelperAsync.WriteToClipboardAsync(object idoObj, bool ignoreClipboardChange) {
-            if (idoObj.ToDataObject() is not IDataObject ido) {
-                return;
-            }
-            await WriteClipboardOrDropObjectAsync(ido, true, ignoreClipboardChange);
+        async Task MpIPlatformDataObjectTools.WriteToClipboardAsync(object idoObj, bool ignoreClipboardChange) {
+            MpDebug.Assert(idoObj is IDataObject, $"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
+            await WriteClipboardOrDropObjectAsync(idoObj as IDataObject, true, ignoreClipboardChange);
         }
 
-        async Task<object> MpIPlatformDataObjectHelperAsync.ReadClipboardAsync(bool ignorePlugins) {
+        async Task<object> MpIPlatformDataObjectTools.ReadClipboardAsync(bool ignorePlugins) {
             MpPortableProcessInfo cb_pi = null;
             if (!ignorePlugins &&
                 Mp.Services.ProcessWatcher.LastProcessInfo is MpPortableProcessInfo ppi) {
@@ -124,35 +122,33 @@ namespace MonkeyPaste.Avalonia {
             return avdo;
         }
 
-        async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObjectAsync(object idoObj) {
-            if (idoObj.ToDataObject() is not IDataObject ido) {
-                return null;
-            }
+        async Task<object> MpIPlatformDataObjectTools.ReadDragDropDataObjectAsync(object idoObj) {
+            MpDebug.Assert(idoObj is IDataObject, $"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
             MpPortableProcessInfo drag_pi = null;
             if (Mp.Services.DragProcessWatcher.DragProcess is MpPortableProcessInfo ppi) {
                 // grab active process info to improve accuracy
                 drag_pi = ppi;
             }
-            var avdo = await ReadClipboardOrDropObjectAsync(ido);
+            var avdo = await ReadClipboardOrDropObjectAsync(idoObj as IDataObject);
             if (drag_pi != null) {
                 avdo.Set(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, drag_pi.Clone());
             }
             return avdo;
         }
-        async Task<object> MpIPlatformDataObjectHelperAsync.ProcessDragDropDataObjectAsync(object idoObj) {
-            if (idoObj.ToDataObject() is not IDataObject ido) {
-                return null;
-            }
-
-            var result = await WriteClipboardOrDropObjectAsync(ido, false, false);
+        async Task<object> MpIPlatformDataObjectTools.ProcessDragDropDataObjectAsync(object idoObj) {
+            MpDebug.Assert(idoObj is IDataObject, $"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
+            var result = await WriteClipboardOrDropObjectAsync(idoObj as IDataObject, false, false);
             return result;
         }
-        async Task MpIPlatformDataObjectHelperAsync.UpdateDragDropDataObjectAsync(object source, object target) {
+        async Task MpIPlatformDataObjectTools.UpdateDragDropDataObjectAsync(object source, object target) {
             // NOTE this is called during a drag drop when user toggles a format preset
             // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
             // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
-            if (source.ToDataObject() is IDataObject sido &&
-                target.ToDataObject() is IDataObject tido) {
+
+            MpDebug.Assert(source is IDataObject, $"source idoObj must be IDataObject. Is '{source.GetType()}'");
+            MpDebug.Assert(target is IDataObject, $"target idoObj must be IDataObject. Is '{target.GetType()}'");
+            if (source is IDataObject sido &&
+                target is IDataObject tido) {
                 var source_clone = sido.Clone();
                 var temp = await WriteClipboardOrDropObjectAsync(source_clone, false, false);
                 if (temp is IDataObject temp_ido) {

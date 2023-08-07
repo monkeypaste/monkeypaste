@@ -387,13 +387,16 @@ namespace MonkeyPaste.Common {
         }
 
         public static string ReadTextFromFileOrResource(string fileOrResourcePath, Assembly assembly = null) {
-            if (File.Exists(fileOrResourcePath)) {
+            if (fileOrResourcePath.IsFile()) {
                 return ReadTextFromFile(fileOrResourcePath);
             }
             return ReadTextFromResource(fileOrResourcePath, assembly);
         }
 
         public static string ReadTextFromFile(string filePath) {
+            if (!filePath.IsFile()) {
+                return string.Empty;
+            }
             try {
                 locker.AcquireReaderLock(Timeout.Infinite);
                 using (StreamReader f = new StreamReader(filePath)) {

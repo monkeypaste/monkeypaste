@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
-    public interface MpIPlatformDataObjectHelperAsync {
+    public interface MpIPlatformDataObjectTools {
         bool IsOleBusy { get; }
         Task<object> ReadDragDropDataObjectAsync(object idoObj);
         Task<object> ProcessDragDropDataObjectAsync(object idoObj);

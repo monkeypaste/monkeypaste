@@ -54,6 +54,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvIReloadableContentWebView,
         MpAvIWebViewBindingResponseHandler {
 
+
         #region Private Variables
         private object _sendMessageLock = new object();
         private string _contentScreenShotBase64_ntf { get; set; }
@@ -200,15 +201,14 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDragging {
             get {
-                if (BindingContext == null) {
-                    return false;
+                if (BindingContext is MpIDraggable dr) {
+                    return dr.IsDragging;
                 }
-                return BindingContext.IsTileDragging;
+                return false;
             }
             set {
-                if (IsDragging != value &&
-                    BindingContext != null) {
-                    BindingContext.IsTileDragging = value;
+                if (BindingContext is MpIDraggable dr) {
+                    dr.IsDragging = value;
                 }
             }
         }
@@ -782,7 +782,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpEditorBindingFunctionType.getClipboardDataTransferObject:
                     var cb_dtObjReq = MpJsonConverter.DeserializeObject<MpQuillEditorClipboardDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
-                    var cb_ido = await Mp.Services.DataObjectHelperAsync.ReadClipboardAsync(false) as IDataObject;
+                    var cb_ido = await Mp.Services.DataObjectTools.ReadClipboardAsync(false) as IDataObject;
                     var cb_dtObjResp = cb_ido.ToQuillDataItemsMessage();
                     getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(cb_dtObjResp);
                     break;
@@ -792,7 +792,7 @@ namespace MonkeyPaste.Avalonia {
                     var unprocessed_drag_avdo = drag_hdo.ToAvDataObject();
 
                     var processed_drag_avdo = await Mp.Services
-                        .DataObjectHelperAsync.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
+                        .DataObjectTools.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
 
                     var processed_drag_hdo = processed_drag_avdo.ToQuillDataItemsMessage();
                     getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(processed_drag_hdo);
@@ -1311,7 +1311,7 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(async () => {
                     // sync append item to current clipboard
                     var append_mpdo = await GetDataObjectAsync(null, false, true);
-                    await Mp.Services.DataObjectHelperAsync
+                    await Mp.Services.DataObjectTools
                         .WriteToClipboardAsync(append_mpdo, true);
                     MpConsole.WriteLine($"Clipboard updated with append data. Plain Text: ");
                     if (append_mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {

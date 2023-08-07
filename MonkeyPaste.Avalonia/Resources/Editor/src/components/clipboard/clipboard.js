@@ -333,7 +333,7 @@ function isImageFormat(lwc_format) {
 function isFileListFormat(lwc_format) {
     // NOTE files aren't in dataTransfer.items so no mime type equivalent
     const result =
-        lwc_format == 'filenames';
+        lwc_format == 'files';
     return result;
 }
 

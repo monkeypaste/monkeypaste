@@ -111,15 +111,19 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid Background="{DynamicResource ThemeGrayAccent3Color}">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto" MinHeight="50"/>
-        <RowDefinition Height="*" MinHeight="65"/>
-        <RowDefinition Height="Auto" MinHeight="50"/>
-        <RowDefinition Height="Auto" MinHeight="50"/>
-        <RowDefinition Height="50"/>
-      </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"
+                           MinHeight="50" />
+            <RowDefinition Height="*"
+                           MinHeight="70" />
+            <RowDefinition Height="Auto"
+                           MinHeight="50" />
+            <RowDefinition Height="Auto"
+                           MinHeight="50" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
         <!--  HEADER ROW  -->
         <DockPanel Grid.Row="0"
                    HorizontalAlignment="Center">

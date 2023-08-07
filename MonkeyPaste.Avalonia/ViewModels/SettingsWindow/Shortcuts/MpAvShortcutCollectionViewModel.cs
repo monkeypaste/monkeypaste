@@ -953,11 +953,10 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvClipTrayViewModel.Instance.IsAutoCopyMode) {
                     Dispatcher.UIThread.Post(() => {
                         Mp.Services.KeyStrokeSimulator
-                            .SimulateKeyStrokeSequenceAsync(
+                            .SimulateKeyStrokeSequence(
                                 string.IsNullOrEmpty(_activeCopyKeystring) ?
                                     Mp.Services.PlatformShorcuts.CopyKeys :
-                                    _activeCopyKeystring)
-                            .FireAndForgetSafeAsync();
+                                    _activeCopyKeystring);
                     });
                 }
                 return;
@@ -970,12 +969,10 @@ namespace MonkeyPaste.Avalonia {
                     e.SuppressEvent = true;
                     Dispatcher.UIThread.Post(() => {
                         Mp.Services.KeyStrokeSimulator
-                            .SimulateKeyStrokeSequenceAsync(
+                            .SimulateKeyStrokeSequence(
                                 string.IsNullOrEmpty(_activePasteKeystring) ?
                                     Mp.Services.PlatformShorcuts.PasteKeys :
-                                    _activePasteKeystring)
-                            .FireAndForgetSafeAsync();
-                        //}
+                                    _activePasteKeystring);
                     });
                 }
                 return;
@@ -1113,13 +1110,13 @@ namespace MonkeyPaste.Avalonia {
             MpAvShortcutViewModel match_to_execute = _exact_match;
 
             if (match_to_execute.RoutingType == MpRoutingType.Bubble) {
-                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
+                Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
             }
             Dispatcher.UIThread.Invoke(() => {
                 match_to_execute.PerformShortcutCommand.Execute(null);
             });
             if (match_to_execute.RoutingType == MpRoutingType.Tunnel) {
-                await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
+                Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
             }
 
         }

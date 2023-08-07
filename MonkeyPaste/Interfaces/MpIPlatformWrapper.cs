@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,6 +7,7 @@ namespace MonkeyPaste {
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
 
+        MpIExternalPasteHandler ExternalPasteHandler { get; set; }
         MpISslInfo SslInfo { get; set; }
         MpIWelcomeSetupInfo WelcomeSetupInfo { get; set; }
         MpIUserDeviceInfo ThisDeviceInfo { get; set; }
@@ -46,7 +48,7 @@ namespace MonkeyPaste {
         MpIDragProcessWatcher DragProcessWatcher { get; set; }
         MpIDropProcessWatcher DropProcessWatcher { get; set; }
         MpIContextMenuCloser ContextMenuCloser { get; set; }
-        MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
+        MpIPlatformDataObjectTools DataObjectTools { get; set; }
 
 
         MpIClipboardMonitor ClipboardMonitor { get; set; }

@@ -197,10 +197,17 @@ function updateEditorSizesAndPositions() {
 
 function selectAll() {	
 	setDocSelection(0, getDocLength(), 'api');
+	//if (globals.ContentItemType == 'FileList') {
+	//	selectAllFileItems();
+	//}
 }
 
 function deselectAll(forceCaretDocIdx = 0) {
 	setDocSelection(forceCaretDocIdx, 0, 'api');
+
+	//if (globals.ContentItemType == 'FileList') {
+	//	deselectAllFileItems();
+	//}
 }
 
 function focusEditor() {

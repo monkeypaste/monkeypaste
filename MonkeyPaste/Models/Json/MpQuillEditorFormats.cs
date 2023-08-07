@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections.Generic;

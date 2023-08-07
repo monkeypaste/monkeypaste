@@ -1,6 +1,7 @@
 ﻿using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using MonkeyPaste.Common.Plugin;
 using System;
 using System.Diagnostics;
 

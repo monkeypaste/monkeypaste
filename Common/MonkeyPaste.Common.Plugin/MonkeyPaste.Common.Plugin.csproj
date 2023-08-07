@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Formats\Components\Clipboard\" />
     <Folder Include="Formats\Components\Contact\" />
     <Folder Include="Formats\Components\Content\Action\Trigger\" />
@@ -33,7 +29,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.15.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
 
 </Project>

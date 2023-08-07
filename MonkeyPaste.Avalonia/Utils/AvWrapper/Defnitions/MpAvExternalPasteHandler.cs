@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
 
         async Task<bool> MpIExternalPasteHandler.PasteDataObjectAsync(
             MpPortableDataObject mpdo,
-            MpPortableProcessInfo processInfo, bool fromKeyboard) {
+            MpPortableProcessInfo processInfo) {
             if (processInfo == null) {
                 // shouldn't happen
                 //MpDebug.Break();
@@ -57,13 +57,11 @@ namespace MonkeyPaste.Avalonia {
             string pasteCmd = Mp.Services.PlatformShorcuts.PasteKeys;
             var custom_paste_app_vm =
                 MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(processInfo);
-            //MpAvAppCollectionViewModel.Instance.Items.FirstOrDefault(x => x.AppPath.ToLower() == processInfo.ProcessPath.ToLower() && x.PasteShortcutViewModel != null);
-
             if (custom_paste_app_vm != null && custom_paste_app_vm.PasteShortcutViewModel.HasShortcut) {
                 pasteCmd = custom_paste_app_vm.PasteShortcutViewModel.ShortcutCmdKeyString;
             }
 
-            bool success = await PasteDataObjectAsync_internal_async(mpdo.ToAvDataObject(), pasteToHandle, pasteCmd, fromKeyboard);
+            bool success = await PasteDataObjectAsync_internal_async(mpdo.ToAvDataObject(), pasteToHandle, pasteCmd);
             return success;
         }
 
@@ -71,8 +69,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task<bool> PasteDataObjectAsync_internal_async(
             MpAvDataObject avdo,
             IntPtr pasteToHandle,
-            string pasteCmdKeyString,
-            bool fromKeyboard) {
+            string pasteCmdKeyString) {
             if (pasteToHandle == IntPtr.Zero) {
                 // somethings terribly wrong_lastInternalProcessInfo
                 MpDebug.Break();
@@ -80,32 +77,38 @@ namespace MonkeyPaste.Avalonia {
             }
             MpConsole.WriteLine("Pasting to process: " + pasteToHandle);
 
+            // STORE PREVIOUS CLIPBOARD (IF RESTORE REQ'D)
+
+            MpPortableDataObject last_mpdo_to_restore =
+                MpAvPrefViewModel.Instance.ResetClipboardAfterMonkeyPaste ?
+                    Mp.Services.ClipboardMonitor.LastClipboardDataObject : null;
+
 
             // SET CLIPBOARD
 
-            await Mp.Services.DataObjectHelperAsync.WriteToClipboardAsync(avdo, true);
+            await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
 
             // ACTIVATE TARGET
-            if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
-                IntPtr lastActive = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
-                if (!MpAvMainWindowViewModel.Instance.IsMainWindowLocked) {
-                    MpAvMainWindowViewModel.Instance.FinishMainWindowHide();
-                }
-
-                // } //else if (MpAvAppendNotificationWindow.Instance != null &&
-                // IntPtr lastActive = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
-                //MpAvNotificationWindowManager.Instance.HideNotification(MpAppendNotificationViewModel.Instance);
-            } else {
-                // assume target is active (if was start process info needs to be activated earlier)
-            }
+            bool set_active_success = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle) == pasteToHandle;
+            //if (MpAvWindowManager.IsAnyActive) {
+            //    // NOTE this maybe only a windows req' where this app must be active to change active
+            //    // details here https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow#remarks
+            //    //bool set_ac = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
+            //    //if (!MpAvMainWindowViewModel.Instance.IsMainWindowLocked) {
+            //    //    MpAvMainWindowViewModel.Instance.FinishMainWindowHide();
+            //    //}
+            //} else {
+            //    // assume target is active (if was start process info needs to be activated earlier)
+            //}
 
             // SIMULATE PASTE CMD
-            await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(pasteCmdKeyString, fromKeyboard);
+            bool sim_input_success = Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(pasteCmdKeyString);
 
-            //await Task.Delay(300);
-
-            //MpPlatformWrapper.Services.ClipboardMonitor.IgnoreClipboardChanges = false;
-            return true;
+            // RESTORE PREVIOUS CLIPBOARD
+            if (last_mpdo_to_restore != null) {
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(last_mpdo_to_restore, true);
+            }
+            return set_active_success && sim_input_success;
         }
 
         #endregion

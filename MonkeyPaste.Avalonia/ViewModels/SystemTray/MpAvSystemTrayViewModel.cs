@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Threading;
@@ -293,11 +294,14 @@ namespace MonkeyPaste.Avalonia {
 
                 w.ShowChild();
             });
-
+        private INotificationManager? _notificationManager;
+        private INotificationManager NotificationManager => _notificationManager
+            ??= new WindowNotificationManager(TopLevel.GetTopLevel(MpAvWindowManager.MainWindow)!);
         public ICommand GenericTestCommand => new MpAsyncCommand(
             async () => {
                 //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
-                await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
+                //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
+                NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
             });
         #endregion
     }

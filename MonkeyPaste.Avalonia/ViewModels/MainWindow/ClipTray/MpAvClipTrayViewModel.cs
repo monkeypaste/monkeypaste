@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -70,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIContentBuilder Implementation
 
         public async Task<MpCopyItem> BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy) {
-            MpAvDataObject mpdo = await Mp.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(avOrPortableDataObject) as MpAvDataObject;
+            MpAvDataObject mpdo = await Mp.Services.DataObjectTools.ReadDragDropDataObjectAsync(avOrPortableDataObject) as MpAvDataObject;
 
             if (mpdo == null) {
                 return null;
@@ -3000,8 +3001,7 @@ namespace MonkeyPaste.Avalonia {
                 pi = Mp.Services.ProcessWatcher.LastProcessInfo;
 
                 // NOTE paste success is very crude, false positive is likely
-                bool fromKeyboard = pasteSource == MpPasteSourceType.Hotkey || pasteSource == MpPasteSourceType.Shortcut;
-                bool success = await Mp.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi, fromKeyboard);
+                bool success = await Mp.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi);
                 if (success) {
                     MpMessenger.SendGlobal(MpMessageType.ContentPasted);
                 } else {
@@ -3018,8 +3018,7 @@ namespace MonkeyPaste.Avalonia {
             string keys = isCut ?
             Mp.Services.PlatformShorcuts.CutKeys : Mp.Services.PlatformShorcuts.CopyKeys;
 
-            await Mp.Services.KeyStrokeSimulator
-            .SimulateKeyStrokeSequenceAsync(keys);
+            Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(keys);
         }
 
         #endregion
@@ -3193,7 +3192,7 @@ namespace MonkeyPaste.Avalonia {
                      // create temp tile w/ model ref
                      var temp_ctvm = await CreateClipTileViewModelAsync(ctvm_to_pin.CopyItem);
                      // unload query tile
-                     query_ctvm_to_pin.TriggerUnloadedNotification(false, false);
+                     query_ctvm_to_pin.TriggerUnloadedNotification(false, false, true);
                      //await query_ctvm_to_pin.InitializeAsync(null, query_ctvm_to_pin.QueryOffsetIdx);
                      // use temp tile to pin
                      ctvm_to_pin = temp_ctvm;
@@ -3935,15 +3934,30 @@ namespace MonkeyPaste.Avalonia {
                 PasteClipTileAsync(SelectedItem, MpPasteSourceType.Shortcut).FireAndForgetSafeAsync();
             },
             (args) => {
+
                 bool can_paste =
                     SelectedItem != null &&
-                    SelectedItem.IsHostWindowActive &&
-                    //!MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused &&
-                    //!MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen &&
-                    //!IsAnyEditingClipTile &&
-                    //!IsAnyEditingClipTitle &&
-                    !MpAvPrefViewModel.Instance.IsTrialExpired;
+                    SelectedItem.IsHostWindowActive;// &&
+                                                    //!MpAvMainWindowViewModel.Instance.IsAnyMainWindowTextBoxFocused &&
+                                                    //!MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen &&
+                                                    //!IsAnyEditingClipTile &&
+                                                    //!IsAnyEditingClipTitle &&;
 
+                if (!can_paste &&
+                SelectedItem == null &&
+                    AllItems
+                    .Where(x => x.LastDeselectedDateTime.HasValue)
+                    .OrderByDescending(x => x.LastDeselectedDateTime.Value)
+                    .FirstOrDefault() is MpAvClipTileViewModel last_deselected_ctvm) {
+                    // HACK since shortcut is ctrl enter
+                    last_deselected_ctvm.IsSelected = true;
+                    if (SelectedItem == last_deselected_ctvm) {
+                        MpConsole.WriteLine($"ctrl+enter hack successfull for tile '{last_deselected_ctvm}'");
+                        can_paste = true;
+                    } else {
+                        MpConsole.WriteLine($"ctrl+enter hack failed for tile '{last_deselected_ctvm}'");
+                    }
+                }
                 MpConsole.WriteLine("PasteSelectedClipTileFromShortcutCommand CanExecute: " + can_paste);
                 if (!can_paste) {
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
@@ -3970,8 +3984,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand PasteHereFromContextMenuCommand => new MpCommand<object>(
             (args) => {
                 Mp.Services.KeyStrokeSimulator
-                .SimulateKeyStrokeSequenceAsync(Mp.Services.PlatformShorcuts.PasteKeys)
-                .FireAndForgetSafeAsync(this);
+                .SimulateKeyStrokeSequence(Mp.Services.PlatformShorcuts.PasteKeys);
             },
             (args) => {
                 return SelectedItem != null && SelectedItem.IsSubSelectionEnabled;
@@ -3997,7 +4010,7 @@ namespace MonkeyPaste.Avalonia {
 
                 // NOTE even though re-creating paste object here the copy item
                 // builder should recognize it as a duplicate and use original (just created)
-                var mpdo = await Mp.Services.DataObjectHelperAsync.ReadClipboardAsync(false);
+                var mpdo = await Mp.Services.DataObjectTools.ReadClipboardAsync(false);
 
                 SelectedItem.RequestPastePortableDataObject(mpdo);
             }, () => {

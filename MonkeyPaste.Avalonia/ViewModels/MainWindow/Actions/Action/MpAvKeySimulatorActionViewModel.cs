@@ -109,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
 
             var actionInput = GetInput(arg);
 
-            await Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequenceAsync(KeyString);
+            Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(KeyString);
 
             await base.PerformActionAsync(actionInput);
         }

@@ -352,13 +352,13 @@ namespace MonkeyPaste.Common {
                 return string.Format($"{totalYears} years ago");
             }
             if (totalMonths >= 1 && totalWeeks >= 4) {
-                return string.Format($"{(totalMonths == 1 ? "Last" : totalMonths.ToString())} month{(totalMonths == 1 ? string.Empty : "s ago")}");
+                return string.Format($"{(totalMonths == 1 ? "Last" : totalMonths)} month{(totalMonths == 1 ? string.Empty : "s ago")}");
             }
             if (totalWeeks >= 1) {
-                return string.Format($"{(totalWeeks == 1 ? "Last" : totalWeeks.ToString())} week{(totalWeeks == 1 ? string.Empty : "s ago")}");
+                return string.Format($"{(totalWeeks == 1 ? "Last" : totalWeeks)} week{(totalWeeks == 1 ? string.Empty : "s ago")}");
             }
             if (totalDays >= 1) {
-                return string.Format($"{(totalDays == 1 ? "Yesterday" : totalDays.ToString())} {(totalDays == 1 ? string.Empty : "days ago")}");
+                return string.Format($"{(totalDays == 1 ? "Yesterday" : totalDays)} {(totalDays == 1 ? string.Empty : "days ago")}");
             }
             if (totalHours >= 1) {
                 return string.Format($"{totalHours} hour{(totalHours == 1 ? string.Empty : "s")} ago");
@@ -389,19 +389,19 @@ namespace MonkeyPaste.Common {
 
             string out_str = string.Empty;
             if (totalDays >= 1) {
-                out_str += string.Format($"{totalDays.ToString()} Day{(totalDays > 1 ? "s" : "")} ");
+                out_str += string.Format($"{totalDays} Day{(totalDays > 1 ? "s" : "")} ");
             }
             if (totalHours >= 1) {
-                out_str += string.Format($"{totalHours.ToString()} Hour{(totalHours > 1 ? "s" : "")} ");
+                out_str += string.Format($"{totalHours} Hour{(totalHours > 1 ? "s" : "")} ");
             }
             if (totalMinutes >= 1) {
-                out_str += string.Format($"{totalMinutes.ToString()} Min{(totalMinutes > 1 ? "s" : "")} ");
+                out_str += string.Format($"{totalMinutes} Min{(totalMinutes > 1 ? "s" : "")} ");
             }
             if (totalSeconds >= 1) {
-                out_str += string.Format($"{totalSeconds.ToString()} Sec{(totalSeconds > 1 ? "s" : "")} ");
+                out_str += string.Format($"{totalSeconds} Sec{(totalSeconds > 1 ? "s" : "")} ");
             }
             if (totalMilliseconds >= 1) {
-                out_str += string.Format($"{totalMilliseconds.ToString()} Ms ");
+                out_str += string.Format($"{totalMilliseconds} Ms ");
             }
             return out_str;
         }

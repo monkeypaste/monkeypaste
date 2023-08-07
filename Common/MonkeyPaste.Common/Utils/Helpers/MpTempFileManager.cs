@@ -1,77 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
     public static class MpTempFileManager {
+        private static object _tempLock = new object();
         private static string _lastTempListFileName = @"temps.txt";
-        //private static bool _isLoaded = false;
+        private static bool _isLoaded;
 
+        private static StreamWriter _tempListStream;
         public static string TempFilePath {
             get {
-                return Path.Combine(Directory.GetCurrentDirectory(), _lastTempListFileName);
+                return Path.Combine(MpCommonTools.Services.PlatformInfo.StorageDir, _lastTempListFileName);
             }
         }
 
         private static List<string> _tempFileList = new List<string>();
 
-        public static void Init() {
-            //if (_isLoaded) {
-            //    return;
-            //}
-
-            //try {
-            //    // since app shutdown cannot effectively be caught every time on start
-            //    // check if temp file list existed and log file and remove all temps
-            //    if (File.Exists(TempFilePath)) {
-            //        //string[] lastTempFileList = MpFileIo.ReadTextFromFile(TempFilePath).Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-
-            //        //string msg = "Warning! Do you want to delete these? " + Environment.NewLine + string.Join(Environment.NewLine, lastTempFileList);
-
-            //        //MpConsole.WriteLine(msg);
-            //        //var result = MpPlatformWrapper.Services.NativeMessageBox.ShowOkCancelMessageBox("Temp File Manager", msg);
-            //        //if (result) {
-            //        //    foreach (var lastTempFileToDelete in lastTempFileList) {
-            //        //        if (File.Exists(lastTempFileToDelete)) {
-            //        //            File.Delete(lastTempFileToDelete);
-            //        //        }
-            //        //    }
-            //        //}
-            //        File.Delete(TempFilePath);
-            //    }
-
-            //    _isLoaded = true;
-            //}
-            //catch (Exception ex) {
-            //    MpConsole.WriteTraceLine(@"Could not read or delete temp file at path: " + TempFilePath);
-            //    MpConsole.WriteTraceLine(@"With Exception: " + ex);
-            //}
-        }
-
         public static void Shutdown() {
-            //MpDebug.Break("check temp files here before shutdown", true);
-            //foreach (string tfp in _tempFileList) {
-            //    if (File.Exists(tfp)) {
-            //        try {
-            //            File.Delete(tfp);
-            //        }
-            //        catch (Exception ex) {
-            //            MpConsole.WriteTraceLine("MainwindowViewModel Dispose error deleteing temp file '" + tfp + "' with exception:", ex);
-            //        }
-            //    }
-            //}
+            DeleteAll();
+
+            if (_tempListStream == null) {
+                return;
+            }
+
+            _tempListStream.Dispose();
+            _tempListStream = null;
         }
 
         public static void AddTempFilePath(string filePathToAppend) {
-            //if (!_isLoaded) {
-            //    Init();
-            //}
-            //if (!_tempFileList.Contains(filePathToAppend)) {
-            //    _tempFileList.Add(filePathToAppend);
-            //    MpFileIo.AppendTextToFile(TempFilePath, filePathToAppend);
-            //}
+            try {
+                lock (_tempLock) {
+                    if (_tempListStream == null) {
+                        // first call / init
+                        _tempFileList = MpFileIo.ReadTextFromFile(TempFilePath).SplitNoEmpty(Environment.NewLine).ToList();
+                        DeleteAll();
+                        _tempListStream = new StreamWriter(File.Create(TempFilePath));
+                    }
+                    _tempListStream.WriteLine(filePathToAppend);
+                    _tempListStream.Flush();
+                }
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Temporary file manager shutdown error.", ex);
+            }
+            if (_tempFileList.Contains(filePathToAppend)) {
+                return;
+            }
 
+            _tempFileList.Add(filePathToAppend);
+        }
+
+        private static void DeleteAll() {
+            try {
+                _tempFileList.Union(new[] { TempFilePath }).Where(x => x.IsFileOrDirectory()).ForEach(x => MpFileIo.DeleteFileOrDirectory(x));
+                MpConsole.WriteLine("Temp files deleted: ");
+                _tempFileList.ForEach(x => MpConsole.WriteLine(x));
+                _tempFileList.Clear();
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Temporary file manager shutdown error.", ex);
+            }
         }
     }
 }

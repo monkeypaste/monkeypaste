@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvClipTileViewModel : MpViewModelBase<MpAvClipTrayViewModel>,
         MpIConditionalSelectableViewModel,
         MpICloseWindowViewModel,
-        MpIDraggableViewModel,
+        MpIDraggable,
         MpILocatorItem,
         MpIIconResource,
         MpIAsyncCollectionObject,
@@ -230,6 +230,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public DateTime LastSelectedDateTime { get; set; }
+        public DateTime? LastDeselectedDateTime { get; set; }
 
 
         #endregion
@@ -1331,7 +1332,7 @@ namespace MonkeyPaste.Avalonia {
             return hexColors;
         }
 
-        public void TriggerUnloadedNotification(bool removeQueryItem, bool clearPersistentProps = true) {
+        public void TriggerUnloadedNotification(bool removeQueryItem, bool clearPersistentProps = true, bool unloadAsPlaceholder = false) {
             if (clearPersistentProps && !IsPinPlaceholder) {
                 MpAvPersistentClipTilePropertiesHelper.RemoveProps(CopyItemId);
             } else {
@@ -1342,7 +1343,7 @@ namespace MonkeyPaste.Avalonia {
                 // query item deleted
                 Parent.QueryItems.Where(x => x.QueryOffsetIdx > QueryOffsetIdx).ForEach(x => x.UpdateQueryOffset(x.QueryOffsetIdx - 1));
             }
-            PinPlaceholderCopyItemId = 0;
+            PinPlaceholderCopyItemId = unloadAsPlaceholder ? CopyItemId : 0;
             CopyItem = null;
             UpdateQueryOffset(-1);
             OnPropertyChanged(nameof(IsPlaceholder));
@@ -1584,6 +1585,7 @@ namespace MonkeyPaste.Avalonia {
                             Parent.StoreSelectionState(this);
                         }
                     } else {
+                        LastDeselectedDateTime = DateTime.Now;
                         if (IsContentReadOnly) {
                             if (IsSubSelectionEnabled) {
                                 DisableSubSelectionCommand.Execute(null);
@@ -2150,7 +2152,7 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
                     return;
                 }
-                await Mp.Services.DataObjectHelperAsync.WriteToClipboardAsync(mpdo, true);
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(mpdo, true);
 
                 // wait extra for cb watcher to know about data
                 //await Task.Delay(300);

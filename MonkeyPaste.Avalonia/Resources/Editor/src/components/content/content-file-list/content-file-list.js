@@ -64,18 +64,16 @@ function getDecodedFileListContentText(encoded_text) {
 	return encoded_text;
 }
 
-function getFileListContentData(isForOle) {
-	let paths_str = '';
-	const sel_idxs = isForOle && getSelectedFileItemIdxs().length > 0 ? getSelectedFileItemIdxs() : null;
+function getFileListContentData(selectedOnly) {
+	let paths = [];
+	const sel_idxs = selectedOnly && getSelectedFileItemIdxs().length > 0 ? getSelectedFileItemIdxs() : null;
 	for (var i = 0; i < globals.FileListItems.length; i++) {
 		if (sel_idxs && !sel_idxs.includes(i)) {
 			continue;
 		}
-		paths_str += globals.FileListItems[i].filePath;
-		if (i < globals.FileListItems.length - 1) {
-			paths_str += globals.DefaultCsvProps.RowSeparator;
-		}
+		paths.push(globals.FileListItems[i].filePath);
 	}
+	let paths_str = paths.join(envNewLine());
 	return paths_str;
 }
 
@@ -210,7 +208,7 @@ function formatFilePathDisplayValue(fp) {
 }
 
 
-function convertFileListContentToFormats(isForOle, formats) {
+function convertFileListContentToFormats(selectionOnly, formats) {
 	// NOTE (at least currently) selection is ignored for file items
 	let items = [];
 	for (var i = 0; i < formats.length; i++) {
@@ -224,7 +222,7 @@ function convertFileListContentToFormats(isForOle, formats) {
 				data = createHtmlClipboardFragment(data);
 			}
 		} else if (isPlainTextFormat(lwc_format)) {
-			data = getFileListContentData(isForOle);
+			data = getFileListContentData(selectionOnly);
 		} else if (isImageFormat(lwc_format)) {
 			// BUG this ignores selected items cause its confusing and won't really be needed
 
@@ -236,18 +234,16 @@ function convertFileListContentToFormats(isForOle, formats) {
 				});
 			data = globals.PLACEHOLDER_DATAOBJECT_TEXT;
 		} else if (isCsvFormat(lwc_format)) {
-			data = getFileListContentData(isForOle).split(globals.DefaultCsvProps.RowSeparator).join(',');
-		} else if (lwc_format == 'filenames' ||
-					lwc_format == 'filedrop') {
+			data = getFileListContentData(selectionOnly).split(globals.DefaultCsvProps.RowSeparator).join(',');
+		} else if (isFileListFormat(lwc_format)) {
 			// need to provide if partial selection and text is not included
-			// only send idx's to avoid converting uri's in host
-			data = getFileListContentData(isForOle);
+			data = getFileListContentData(selectionOnly);
 		}
 		if (!data || data == '') {
 			continue;
 		}
 		let item = {
-			format: lwc_format,
+			format: formats[i],
 			data: data
 		};
 		items.push(item);
@@ -340,6 +336,22 @@ function excludeRowByAnchorElement(a_elm) {
 	//createFileList();
 
 	//onContentChanged_ntf();
+}
+
+function selectAllFileItems() {
+	const fli_elms = getFileListRowElements();
+	for (var i = 0; i < fli_elms.length; i++) {
+		const fli_elm = fli_elms[i];
+		fli_elm.classList.add('selected');
+	}
+}
+
+function deselectAllFileItems() {
+	const fli_elms = getFileListRowElements();
+	for (var i = 0; i < fli_elms.length; i++) {
+		const fli_elm = fli_elms[i];
+		fli_elm.classList.add('selected');
+	}
 }
 // #endregion Actions
 

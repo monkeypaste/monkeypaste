@@ -130,7 +130,7 @@ function convertImageContentToFormats(isForOle, formats) {
 			continue;
 		}
 		let item = {
-			format: lwc_format,
+			format: formats[i],
 			data: data
 		};
 		items.push(item);

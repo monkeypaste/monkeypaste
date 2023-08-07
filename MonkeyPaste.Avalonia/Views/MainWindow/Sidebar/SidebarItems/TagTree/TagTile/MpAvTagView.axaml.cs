@@ -219,7 +219,7 @@ namespace MonkeyPaste.Avalonia {
             IDataObject processed_drop_data =
                 is_tag_drop ?
                 null :
-                 await Mp.Services.DataObjectHelperAsync.ReadDragDropDataObjectAsync(e.Data) as IDataObject;
+                 await Mp.Services.DataObjectTools.ReadDragDropDataObjectAsync(e.Data) as IDataObject;
 
             Dispatcher.UIThread.Post(async () => {
                 if (e.DragEffects == DragDropEffects.None) {

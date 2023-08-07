@@ -17,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvTagTileViewModel :
         MpAvTreeSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>,
         MpIBadgeCountViewModel,
-        MpIDraggableViewModel,
+        MpIDraggable,
         MpIHoverableViewModel,
         MpIConditionalSelectableViewModel,
         MpIShortcutCommandViewModel,

@@ -54,8 +54,7 @@ namespace MonkeyPaste.Avalonia {
             nameof(SslPrivateKey),
             nameof(SslPublicKey),
             nameof(SslCertExpirationDateTime),
-            nameof(SyncPort),
-            nameof(IsTrialExpired)
+            nameof(SyncPort)
         };
         #endregion
 
@@ -480,12 +479,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Sync
         public int SyncPort { get; set; } = 11000;
-        #endregion
-
-        #region Account
-
-        public bool IsTrialExpired { get; set; }
-
         #endregion
 
         #region Search Filters

@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         private DispatcherTimer _render_timer = null;
 
-        private MpPoint mp_start;
+        private MpPoint _last_mp;
 
         private const int _RENDER_INTERVAL_MS = 50;
 
@@ -267,13 +267,13 @@ namespace MonkeyPaste.Avalonia {
                 acvm.HasModelChanged = true;
             }
         }
-        public void TranslateOrigin(double x, double y) {
+        public void TranslateOrigin(double deltaX, double deltaY) {
             if (DesignerItem == null) {
                 return;
             }
             // NOTE to be used by DesignerItem Drop Behavior
-            DesignerItem.TranslateOffsetX -= x;
-            DesignerItem.TranslateOffsetY -= y;
+            DesignerItem.TranslateOffsetX -= deltaX;
+            DesignerItem.TranslateOffsetY -= deltaY;
         }
 
         #endregion
@@ -356,7 +356,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void child_PreviewMouseLeftButtonDown(object sender, PointerPressedEventArgs e) {
             if (Child != null && !MpAvMoveExtension.IsAnyMoving) {
-                mp_start = e.GetPosition(this).ToPortablePoint();
+                _last_mp = e.GetPosition(this).ToPortablePoint();
                 e.Pointer.Capture(this);
                 if (e.Pointer.Captured != this) {
                     var capturer = e.Pointer.Captured;
@@ -385,11 +385,11 @@ namespace MonkeyPaste.Avalonia {
         private void child_MouseMove(object sender, PointerEventArgs e) {
             if (Child != null) {
                 if (IsTranslating) {
-                    //var tt = GetTranslateTransform(Child);
                     var mp = e.GetPosition(this).ToPortablePoint();
-                    var v = mp_start - mp;
+                    var v = _last_mp - mp;
                     TranslateOrigin(v.X, v.Y);
-                    mp_start = mp;
+                    Dispatcher.UIThread.Post(InvalidateVisual);
+                    _last_mp = mp;
                 }
             }
         }

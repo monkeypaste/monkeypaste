@@ -49,6 +49,7 @@ namespace MonkeyPaste.Common.Plugin {
         string ParamId { get; }
         string Value { get; }
     }
+
     public class MpParameterFormat : MpJsonObject, MpIParamterValueProvider {
         #region Interfaces
 

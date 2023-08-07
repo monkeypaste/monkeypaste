@@ -150,12 +150,6 @@ namespace MonkeyPaste.Common.Plugin {
         #endregion
 
         public MpImageAnnotationNodeFormat() : base() { }
-        public MpImageAnnotationNodeFormat(MpRect rect) {
-            left = rect.Left;
-            top = rect.Top;
-            right = rect.Right;
-            bottom = rect.Bottom;
-        }
 
         public override string ToString() {
             return $"left: {left} top: {top} right: {right} bottom: {bottom}";

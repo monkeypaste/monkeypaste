@@ -252,7 +252,7 @@ namespace MonkeyPaste.Avalonia {
             }
             e.Handled = GetIsDropHandled(tb);
             var processed_drag_avdo = await Mp.Services
-                       .DataObjectHelperAsync.ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
+                       .DataObjectTools.ReadDragDropDataObjectAsync(e.Data) as MpAvDataObject;
             Dispatcher.UIThread.Post(() => {
                 string drop_text = processed_drag_avdo.GetData(MpPortableDataFormats.Text) as string;
                 int drop_idx = tb.CaretIndex;

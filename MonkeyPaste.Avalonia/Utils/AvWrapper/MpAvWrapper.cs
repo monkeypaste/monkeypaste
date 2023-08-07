@@ -78,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIContextMenuCloser ContextMenuCloser { get; set; }
         public MpIStringTools StringTools { get; set; }
         public MpIPlatformInfo PlatformInfo { get; set; }
-        public MpIPlatformDataObjectHelperAsync DataObjectHelperAsync { get; set; }
+        public MpIPlatformDataObjectTools DataObjectTools { get; set; }
         public MpIPlatformMessageBox PlatformMessageBox { get; set; }
 
         public MpIClipboardMonitor ClipboardMonitor { get; set; }
@@ -176,7 +176,7 @@ namespace MonkeyPaste.Avalonia {
             MainThreadMarshal = new MpAvMainThreadMarshal();
             StringTools = new MpAvStringTools();
             PlatformMessageBox = new MpAvMessageBox();
-            DataObjectHelperAsync = MpAvClipboardHandlerCollectionViewModel.Instance;
+            DataObjectTools = MpAvClipboardHandlerCollectionViewModel.Instance;
             ExternalPasteHandler = MpAvExternalPasteHandler.Instance;
 
             ClipboardMonitor = new MpAvClipboardWatcher();

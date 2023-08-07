@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             Dispatcher.UIThread.Post(async () => {
-                var de = DragDropEffects.Move | DragDropEffects.Copy;
+                var de = DragDropEffects.Copy;// | DragDropEffects.Move;
                 await MpAvContentDragHelper.StartDragAsync(ds, de);
 
                 browser.Host.DragSourceEndedAt(0, 0, CefDragOperationsMask.None);
