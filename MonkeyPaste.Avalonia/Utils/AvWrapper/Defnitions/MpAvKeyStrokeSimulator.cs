@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<bool> SimulateKeyStrokeSequenceAsync(
             string keystr, bool restoreDownState = true) {
             var seq = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keystr);
-            bool success = await SimulateKeyStrokeSequenceAsync(seq);
+            bool success = await SimulateKeyStrokeSequenceAsync(seq, restoreDownState);
             return success;
         }
 
@@ -88,21 +88,24 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
 
-            IEnumerable<KeyCode> to_restore = null;
-
+            // NOTE this is simplifying gesture to non-sequence since seq currently invalid
+            KeyCode[] to_press = filtered_gesture.SelectMany(x => x).Distinct().ToArray();
+            KeyCode[] to_hide = null;
             if (restoreDownState) {
-                to_restore = ClearDownState(filtered_gesture.SelectMany(x => x).Distinct());
+                to_hide = Mp.Services.KeyDownHelper.Downs.Cast<KeyCode>().ToArray();
             }
 
-            foreach (var combo in filtered_gesture) {
-                combo.ForEach(y => SimulateKey(y, true));
-                await Task.Delay(_HOLD_DELAY_MS);
-                combo.ForEach(y => SimulateKey(y, false));
-                await Task.Delay(_RELEASE_DELAY_MS);
-            }
-            if (restoreDownState) {
-                RestoreDownState(to_restore);
-            }
+            // temporarily release cur downs (Hide) not in this gesture
+            SimulateKeys(to_hide, false);
+
+            // press needed downs for this gesture
+            SimulateKeys(to_press, true);
+
+            // release needed downs for this gesture
+            SimulateKeys(to_press, false);
+
+            //restore hidden downs before this gesture
+            SimulateKeys(to_hide, true);
             MpConsole.WriteLine($"Key Gesture '{gesture_label}' successfully simulated. ");
             return true;
 
@@ -127,6 +130,15 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+        private void SimulateKeys(KeyCode[] keys, bool isDown) {
+            if (keys == null || keys.Length == 0) {
+                return;
+            }
+            for (int i = 0; i < keys.Length; i++) {
+                UioHookResult result = SimulateKey(keys[i], isDown);
+                MpDebug.Assert(result == UioHookResult.Success, "check log for key sim error");
+            }
+        }
         private UioHookResult SimulateKey(KeyCode key, bool isDown) {
             MpConsole.WriteLine($"SIM {(isDown ? "DOWN" : "UP")}: {key}");
 
@@ -148,6 +160,7 @@ namespace MonkeyPaste.Avalonia {
             // 'Control' will be returned to down when physical maybe upped, either way it shouldn't be simulated
             // or phys/sim will create mismatch until its pressed again
 
+            // find down keys not ignored (ignored is what needs to be simulated)
             List<KeyCode> downs_to_clear = Mp.Services.KeyDownHelper.Downs.Cast<KeyCode>().Where(x => !ignoredKeys.Contains(x)).ToList();
             var false_downs = downs_to_clear.Where(x => SimulateKey(x, false) != UioHookResult.Success).ToList();
             // when up can't be simulated (pretty sure) that means the keyboard doesn't think its down so:
@@ -155,9 +168,12 @@ namespace MonkeyPaste.Avalonia {
             // 2. omit failures from result to be restored after gesture
 
             // 1
-            false_downs.ForEach(x => Mp.Services.KeyDownHelper.Remove(x));
+            //false_downs.ForEach(x => Mp.Services.KeyDownHelper.Remove(x));
             // 2
-            false_downs.ForEach(x => downs_to_clear.Remove(x));
+            //false_downs.ForEach(x => downs_to_clear.Remove(x));
+            if (false_downs.Any()) {
+
+            }
             return downs_to_clear;
         }
 

@@ -149,7 +149,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvDataObject avdo = null;
             MpAvClipTileViewModel ctvm = tb.GetSelfOrAncestorDataContext<MpAvClipTileViewModel>();
             if (ctvm != null) {
-                avdo = new MpAvDataObject(ctvm.CopyItem.ToPortableDataObject(true, true));
+                avdo = new MpAvDataObject(ctvm.CopyItem.ToAvDataObject(true, true));
                 ctvm.IsTileDragging = true;
             } else {
                 avdo = new MpAvDataObject(MpPortableDataFormats.Text, tb.Text);

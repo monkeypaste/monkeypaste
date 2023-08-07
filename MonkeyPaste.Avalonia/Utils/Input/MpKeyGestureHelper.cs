@@ -26,6 +26,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IsKeyUnificationEnabled { get; set; } = true;
 
         public bool IsKeyRepeatIgnored { get; set; } = true;
+
+        public bool ResetAfterGesture { get; set; }
         #endregion
 
         #region Constructors
@@ -42,7 +44,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (!string.IsNullOrEmpty(_finalGesture)) {
+            if (!string.IsNullOrEmpty(_finalGesture) && ResetAfterGesture) {
                 Reset();
             }
             ValidateDown(key);
@@ -67,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string GetCurrentGesture() {
-            if (!string.IsNullOrEmpty(_finalGesture)) {
+            if (ResetAfterGesture && !string.IsNullOrEmpty(_finalGesture)) {
                 return _finalGesture;
             }
             return ToLiteral(_downs);

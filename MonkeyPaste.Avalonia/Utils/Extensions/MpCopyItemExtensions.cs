@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -7,35 +8,35 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste.Avalonia {
     public static class MpCopyItemExtensions {
-        public static MpPortableDataObject ToPortableDataObject(
+        public static MpAvDataObject ToAvDataObject(
             this MpCopyItem ci,
             bool includeSelfRef = false,
             bool includeTitle = false) {
             if (ci == null) {
-                return new MpPortableDataObject();
+                return new MpAvDataObject();
             }
-            var pdo = new MpPortableDataObject();
+            var avdo = new MpAvDataObject();
             switch (ci.ItemType) {
                 case MpCopyItemType.Text:
-                    pdo.SetData(MpPortableDataFormats.CefHtml, ci.ItemData);
-                    pdo.SetData(MpPortableDataFormats.Text, ci.ItemData.ToPlainText("html"));
+                    avdo.SetData(MpPortableDataFormats.CefHtml, ci.ItemData);
+                    avdo.SetData(MpPortableDataFormats.Text, ci.ItemData.ToPlainText("html"));
                     break;
                 case MpCopyItemType.Image:
-                    pdo.SetData(MpPortableDataFormats.AvPNG, ci.ItemData.ToBytesFromBase64String());
+                    avdo.SetData(MpPortableDataFormats.AvPNG, ci.ItemData.ToBytesFromBase64String());
                     break;
                 case MpCopyItemType.FileList:
-                    pdo.SetData(MpPortableDataFormats.AvFileNames, ci.ItemData.SplitNoEmpty(Environment.NewLine));
+                    avdo.SetData(MpPortableDataFormats.AvFileNames, ci.ItemData.SplitNoEmpty(Environment.NewLine));
                     break;
             }
             if (includeSelfRef) {
-                pdo.SetData(MpPortableDataFormats.CefAsciiUrl, Mp.Services.SourceRefTools.ToUrlAsciiBytes(ci));
+                avdo.SetData(MpPortableDataFormats.CefAsciiUrl, Mp.Services.SourceRefTools.ToUrlAsciiBytes(ci));
             }
             if (includeTitle) {
-                pdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, ci.Title);
+                avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, ci.Title);
             }
-            return pdo;
+            return avdo;
         }
 
         public static string[] GetDefaultFilePaths(this MpCopyItem ci, string dir = "", string ext = "", bool isFragment = false) {

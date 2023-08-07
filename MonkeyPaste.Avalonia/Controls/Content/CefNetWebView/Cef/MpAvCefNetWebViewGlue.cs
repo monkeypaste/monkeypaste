@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
         /// <returns>Return false to abort the drag operation or true to handle the drag operation.</returns>
         /// 
         protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
-            if (browser.Host.Client.GetWebView() is not MpIDragSource ds ||
+            if (browser.Host.Client.GetWebView() is not MpAvIDragSource ds ||
                 ds is not MpIContentView cv ||
                 !cv.IsContentLoaded) {
 

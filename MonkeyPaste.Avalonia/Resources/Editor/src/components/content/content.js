@@ -351,15 +351,15 @@ function canDisableReadOnly() {
 
 // #region Actions
 
-function convertContentToFormats(isForOle, formats) {
+function convertContentToFormats(selectionOnly, formats) {
 	updateQuill();
 	let items = null;
 	if (globals.ContentItemType == 'Text') {
-		items = convertTextContentToFormats(isForOle, formats);
+		items = convertTextContentToFormats(selectionOnly, formats);
 	} else if (globals.ContentItemType == 'FileList') {
-		items = convertFileListContentToFormats(isForOle, formats);
+		items = convertFileListContentToFormats(selectionOnly, formats);
 	} else if (globals.ContentItemType == 'Image') {
-		items = convertImageContentToFormats(isForOle, formats);
+		items = convertImageContentToFormats(selectionOnly, formats);
 	}
 	return items;
 }

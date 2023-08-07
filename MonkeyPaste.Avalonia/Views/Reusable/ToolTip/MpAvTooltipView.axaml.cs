@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
@@ -12,6 +13,7 @@ using PropertyChanged;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 using TheArtOfDev.HtmlRenderer.Avalonia;
 
@@ -22,11 +24,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private MpPoint _lastMousePos;
-        //private bool _isMoveAttached = false;
-        //private bool _isRootStyleAttached = false;
+        private DateTime? _lastEnterDt = null;
 
-        //private DateTime? _lastExitDt = null;
-        //private DispatcherTimer _leaveTimer;
+        const int WAIT_TO_HIDE_INPUT_TOOLTIP_MS = 1_000;
 
         #endregion
 
@@ -126,27 +126,23 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvToolTipView() {
             AvaloniaXamlLoader.Load(this);
-
-            this.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged(this));
         }
 
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnAttachedToVisualTree(e);
 
-        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e) {
-            base.OnAttachedToLogicalTree(e);
-
-            if (TopLevel.GetTopLevel(this) is not TopLevel tl) {
+            if (e.Root is not TopLevel tl) {
                 return;
             }
-
             tl.TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
             tl.Background = Brushes.Transparent;
 
             if (tl.Parent is not Control hc) {
                 return;
             }
-            hc.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged(hc));
+            hc.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnHostOrHostTopLevelVisibleChanged(hc));
             if (TopLevel.GetTopLevel(hc) is TopLevel host_tl) {
-                host_tl.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnVisibleChanged(host_tl));
+                host_tl.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnHostOrHostTopLevelVisibleChanged(host_tl));
             }
             // workaround to pass tooltip type from hint to tooltip
             if (hc.Classes.Contains("warning")) {
@@ -155,51 +151,91 @@ namespace MonkeyPaste.Avalonia {
                 this.Classes.Add("error");
             }
 
-            hc.PointerMoved += HostControl_PointerMoved;
-
+            //hc.PointerMoved += HostControl_PointerMoved;
             hc.PointerEntered += HostOrThis_PointerEntered;
             hc.PointerExited += HostOrThis_PointerExited;
-
-            this.PointerEntered += HostOrThis_PointerEntered;
-            this.PointerExited += HostOrThis_PointerExited;
         }
-
-        private void OnVisibleChanged(Control changedControl) {
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e) {
+            base.OnDetachedFromVisualTree(e);
             _lastMousePos = null;
-            if (changedControl == this &&
-                TopLevel.GetTopLevel(this) is PopupRoot tt_pur) {
-                if (!IsVisible) {
-                    tt_pur.IsVisible = false;
-                    tt_pur.Hide();
+            _lastEnterDt = null;
+        }
+
+        protected override void OnPointerEntered(PointerEventArgs e) {
+            base.OnPointerEntered(e);
+            HostOrThis_PointerEntered(this, e);
+        }
+        protected override void OnPointerExited(PointerEventArgs e) {
+            base.OnPointerExited(e);
+            HostOrThis_PointerExited(this, e);
+        }
+
+        private void OnHostOrHostTopLevelVisibleChanged(Control changedControl) {
+            // only used to hide tooltip if it or its toplevel are hidden/detached
+            if (GetHostControl() is not Control hc ||
+                hc.IsEffectivelyVisible) {
+                return;
+            }
+
+            ToolTip.SetIsOpen(GetHostControl(), false);
+        }
+
+        private async void HostOrThis_PointerEntered(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            Control hc = null;
+            if (sender == this) {
+                hc = GetHostControl();
+            } else {
+                hc = sender as Control;
+            }
+            if (hc == null) {
+                return;
+            }
+            if (!HasInputControl()) {
+                // only freeze input tooltips
+                if (sender == this) {
+                    ToolTip.SetIsOpen(hc, true);
                 }
                 return;
             }
-
-            if (changedControl != this) {
-                // host control or host window vis change
-                if (!changedControl.IsVisible) {
-                    IsVisible = false;
-                    return;
-                }
-            }
-        }
-
-        private void HostOrThis_PointerEntered(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            if (sender is not Control c) {
+            _lastEnterDt = DateTime.Now;
+            if (sender == this) {
+                // not host control enter
                 return;
             }
-            //_lastExitDt = null;
-
-        }
-        private void HostOrThis_PointerExited(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            if (sender is not Control c) {
+            int delay_ms = ToolTip.GetShowDelay(hc);
+            await Task.Delay(delay_ms);
+            if (_lastEnterDt == null) {
                 return;
+            }
+            ToolTip.SetIsOpen(hc, true);
+        }
+        private async void HostOrThis_PointerExited(object sender, global::Avalonia.Input.PointerEventArgs e) {
+            if (!HasInputControl()) {
+                // only freeze input tooltips
+                return;
+            }
+            Control hc = null;
+            if (sender == this) {
+                hc = GetHostControl();
+            } else {
+                hc = sender as Control;
+            }
+            if (hc == null) {
+                return;
+            }
+            // override default tooltip behavior and keep visible
+            ToolTip.SetIsOpen(hc, true);
+            _lastEnterDt = null;
+            await Task.Delay(WAIT_TO_HIDE_INPUT_TOOLTIP_MS);
+            if (_lastEnterDt == null) {
+                // no new pointer enter after delay so hide
+                ToolTip.SetIsOpen(hc, false);
             }
         }
 
 
         private void HostControl_PointerMoved(object sender, global::Avalonia.Input.PointerEventArgs e) {
-            if (!HasInputControl()) {
+            if (HasInputControl()) {
                 // only do move animation if non-input tooltip
                 return;
             }
@@ -209,52 +245,32 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (!IsVisible) {
-                hc.PointerMoved -= HostControl_PointerMoved;
-                return;
-            }
-
             if (_lastMousePos == null) {
                 _lastMousePos = e.GetScreenMousePoint(hc);
             }
             var mp = e.GetScreenMousePoint(hc);
+            SetToolTipOffset(hc, mp - _lastMousePos, mp);
             _lastMousePos = mp;
         }
 
         #region Helpers
 
-        private PopupRoot GetPopupRoot() {
-            if (this.GetLogicalAncestors().FirstOrDefault(x => x is ToolTip) is not ToolTip tooltip ||
-                tooltip.GetLogicalAncestors().FirstOrDefault(x => x is PopupRoot) is not PopupRoot pr) {
-                return null;
-            }
-            return pr;
-        }
         private Control GetHostControl() {
-            if (GetPopupRoot() is not PopupRoot pr ||
-                pr.Parent is not Control host_control) {
+            if (TopLevel.GetTopLevel(this) is not TopLevel tl ||
+                tl.Parent is not Control host_control) {
                 return null;
             }
             return host_control;
         }
 
-        private void SetToolTipOffset(Control hc, MpPoint mp) {
-            if (hc == null) {
-                return;
-            }
-
-            var diff = mp - _lastMousePos;
-            var w = GetPopupRoot();
-
-            if (w == null) {
-                // occuring in plugin preset icon popup menu (when window)
-                var test = hc.GetVisualAncestors();
-                MpDebug.Break();
+        private void SetToolTipOffset(Control hc, MpPoint diff, MpPoint scr_mp) {
+            if (hc == null ||
+                TopLevel.GetTopLevel(this) is not PopupRoot pur) {
                 return;
             }
 
             double pd = 1;// w.PlatformImpl.DesktopScaling;
-            MpRect mw_screen_rect = w.Screens.ScreenFromBounds(w.Bounds.ToPortableRect().ToAvPixelRect(pd)).Bounds.ToPortableRect(pd);
+            MpRect mw_screen_rect = pur.Screens.ScreenFromBounds(pur.Bounds.ToPortableRect().ToAvPixelRect(pd)).Bounds.ToPortableRect(pd);
 
             var screen_centroid = mw_screen_rect.Centroid();
             var hc_centroid = hc.PointToScreen(hc.Bounds.ToPortableRect().Centroid().ToAvPoint()).ToPortablePoint(pd);
@@ -267,8 +283,16 @@ namespace MonkeyPaste.Avalonia {
 
             var new_vector = (hc_vector.Normalized * tt_dist) + diff;
             var newOffset = new_vector - hc_vector;
-            ToolTip.SetHorizontalOffset(hc, newOffset.X);
-            ToolTip.SetVerticalOffset(hc, newOffset.Y);
+
+            var pur_scr_bounds = pur.Bounds.ToPortableRect();
+            pur_scr_bounds.TranslateOrigin(null, true);
+            if (pur_scr_bounds.Contains(scr_mp)) {
+
+            } else {
+                ToolTip.SetHorizontalOffset(hc, newOffset.X);
+                ToolTip.SetVerticalOffset(hc, newOffset.Y);
+            }
+
         }
 
         private bool HasInputControl() {

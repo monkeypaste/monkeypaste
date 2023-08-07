@@ -47,6 +47,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvNativeWebViewHost,
 #endif
         MpIContentView,
+        MpAvIDragSource,
         MpAvIResizableControl,
         MpAvIDomStateAwareWebView,
         MpAvIAsyncJsEvalWebView,
@@ -195,7 +196,7 @@ namespace MonkeyPaste.Avalonia {
             return BindingContext.GetOleFormats(true);
         }
 
-        public object LastPointerPressedEventArgs { get; private set; }
+        public PointerEventArgs LastPointerPressedEventArgs { get; private set; }
 
         public bool IsDragging {
             get {
@@ -215,7 +216,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta) {
             if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => (this as MpIDragSource).NotifyModKeyStateChanged(ctrl, alt, shift, esc, meta));
+                Dispatcher.UIThread.Post(() => (this as MpAvIDragSource).NotifyModKeyStateChanged(ctrl, alt, shift, esc, meta));
                 return;
             }
             var modKeyMsg = new MpQuillModifierKeysNotification() {
@@ -228,7 +229,7 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"updateModifierKeysFromHost_ext('{modKeyMsg.SerializeJsonObjectToBase64()}')");
         }
 
-        public async Task<MpPortableDataObject> GetDataObjectAsync(
+        public async Task<MpAvDataObject> GetDataObjectAsync(
             string[] formats = null,
             bool use_placeholders = true,
             bool ignore_selection = false) {
@@ -247,7 +248,7 @@ namespace MonkeyPaste.Avalonia {
 
             var contentDataReq = new MpQuillContentDataObjectRequestMessage() {
                 // 'forOle' not the best name 
-                forOle = !ignore_selection
+                selectionOnly = !ignore_selection
             };
 
             // NOTE when file is on clipboard pasting into tile removes all other formats besides file

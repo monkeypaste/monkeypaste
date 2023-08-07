@@ -213,7 +213,7 @@ namespace MonkeyPaste.Avalonia {
 
             await Task.Delay(1);
             _curShortcutId = curShortcutId;
-            _gestureHelper = new MpKeyGestureHelper<KeyCode>();
+            _gestureHelper = new MpKeyGestureHelper<KeyCode>() { ResetAfterGesture = true };
             KeyString = keyString;
             ShortcutDisplayName = shortcutName;
             IconResourceObj = iconResourceObj;

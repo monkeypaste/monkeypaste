@@ -1,5 +1,6 @@
 ﻿//using MonkeyPaste.Common.Wpf;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -62,13 +63,13 @@ namespace MonkeyPaste.Avalonia {
                 pasteCmd = custom_paste_app_vm.PasteShortcutViewModel.ShortcutCmdKeyString;
             }
 
-            bool success = await PasteDataObjectAsync_internal_async(mpdo, pasteToHandle, pasteCmd, fromKeyboard);
+            bool success = await PasteDataObjectAsync_internal_async(mpdo.ToAvDataObject(), pasteToHandle, pasteCmd, fromKeyboard);
             return success;
         }
 
         #endregion
         private async Task<bool> PasteDataObjectAsync_internal_async(
-            MpPortableDataObject mpdo,
+            MpAvDataObject avdo,
             IntPtr pasteToHandle,
             string pasteCmdKeyString,
             bool fromKeyboard) {
@@ -82,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
 
             // SET CLIPBOARD
 
-            await Mp.Services.DataObjectHelperAsync.WriteToClipboardAsync(mpdo, true);
+            await Mp.Services.DataObjectHelperAsync.WriteToClipboardAsync(avdo, true);
 
             // ACTIVATE TARGET
             if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {

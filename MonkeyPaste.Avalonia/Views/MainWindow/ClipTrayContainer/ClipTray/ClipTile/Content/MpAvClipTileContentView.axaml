@@ -12,37 +12,32 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTileContentView">
-    <Grid HorizontalAlignment="Stretch"
-          VerticalAlignment="Stretch">
-        <Border x:Name="ClipTileContainerBorder"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch">
-            <ContentControl x:Name="ClipTileContentControl"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            Padding="5"
-                            Content="{Binding SelfRef}">
-                <ContentControl.DataTemplates>
-                    <local:MpAvClipTileContentDataTemplateSelector>
-                        <DataTemplate x:Key="ContentWebViewTemplate"
-                                      DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvContentWebViewContainer />
-                        </DataTemplate>
-                        <DataTemplate x:Key="PlainTextTemplate"
-                                      DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvPlainTextContentView />
-                        </DataTemplate>
-                        <DataTemplate x:Key="ImageTemplate"
-                                      DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvImageContentView />
-                        </DataTemplate>
-                        <DataTemplate x:Key="FileListTemplate"
-                                      DataType="local:MpAvClipTileViewModel">
-                            <local:MpAvFileListContentView />
-                        </DataTemplate>
-                    </local:MpAvClipTileContentDataTemplateSelector>
-                </ContentControl.DataTemplates>
-            </ContentControl>
-        </Border>
-    </Grid>
+    <local:MpAvUserControl.Styles>
+        
+    </local:MpAvUserControl.Styles>
+    <ContentControl x:Name="ClipTileContentControl"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Content="{Binding SelfRef}">
+        <ContentControl.DataTemplates>
+            <local:MpAvClipTileContentDataTemplateSelector>
+                <DataTemplate x:Key="ContentWebViewTemplate"
+                              DataType="local:MpAvClipTileViewModel">
+                    <local:MpAvContentWebViewContainer />
+                </DataTemplate>
+                <DataTemplate x:Key="PlainTextTemplate"
+                              DataType="local:MpAvClipTileViewModel">
+                    <local:MpAvPlainTextContentView />
+                </DataTemplate>
+                <DataTemplate x:Key="ImageTemplate"
+                              DataType="local:MpAvClipTileViewModel">
+                    <local:MpAvImageContentView />
+                </DataTemplate>
+                <DataTemplate x:Key="FileListTemplate"
+                              DataType="local:MpAvClipTileViewModel">
+                    <local:MpAvFileListContentView />
+                </DataTemplate>
+            </local:MpAvClipTileContentDataTemplateSelector>
+        </ContentControl.DataTemplates>
+    </ContentControl>
 </local:MpAvUserControl>

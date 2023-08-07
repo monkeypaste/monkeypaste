@@ -234,8 +234,8 @@
             <Border.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="IsExpanded" />
-                    <Binding Path="!IsCriteriaWindowOpen"  />
-                    <Binding Path="IsAdvSearchActive"  />
+                    <Binding Path="!IsCriteriaWindowOpen" />
+                    <Binding Path="IsAdvSearchActive" />
                 </MultiBinding>
             </Border.IsVisible>
             <local:MpAvSearchCriteriaListBoxView x:Name="SearchCriteriaView"

@@ -16,6 +16,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Converters
 
+        public static IDataObject ToDataObject(this object idoObj) {
+            IDataObject ido = idoObj as IDataObject;
+            if (ido == null && idoObj is MpPortableDataObject mpdo) {
+                ido = mpdo.ToAvDataObject();
+            }
+            return ido;
+        }
+        public static MpAvDataObject ToAvDataObject(this MpPortableDataObject mpdo) {
+            if (mpdo is MpAvDataObject avdo) {
+                return avdo;
+            }
+            return new MpAvDataObject(mpdo);
+        }
         public static MpAvDataObject ToPlatformDataObject(this IDataObject ido) {
             if (ido is MpAvDataObject ido_mpdo) {
                 return ido_mpdo;

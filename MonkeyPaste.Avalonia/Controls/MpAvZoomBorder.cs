@@ -25,6 +25,9 @@ namespace MonkeyPaste.Avalonia {
 
         private const int _RENDER_INTERVAL_MS = 50;
 
+        private double? _lastScale;
+        private Point? _lastScaleOrigin;
+
         #endregion
 
         #region Statics
@@ -200,6 +203,14 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constructors
+        public MpAvZoomBorder() : base() {
+            this.GestureRecognizers.Add(new PinchGestureRecognizer());
+            this.AddHandler(Gestures.PinchEvent, MpAvZoomBorder_Pinch);
+        }
+
+        #endregion
+
         #region Public Methods
 
         public override void Render(DrawingContext ctx) {
@@ -228,7 +239,7 @@ namespace MonkeyPaste.Avalonia {
             DesignerItem.TranslateOffsetY = 0;
         }
 
-        public void Zoom(double scaleDelta, MpPoint relative_anchor) {
+        public void Zoom(double scaleDelta, Point relative_anchor) {
             if (DesignerItem == null) {
                 return;
             }
@@ -316,6 +327,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        #region Gesture Handlers
+
+        private void MpAvZoomBorder_Pinch(object sender, PinchEventArgs e) {
+            MpConsole.WriteLine($"Pinch Scale: {e.Scale} Scale Origin: {e.ScaleOrigin}");
+            if (_lastScale == null && _lastScaleOrigin == null) {
+                _lastScale = e.Scale;
+                _lastScaleOrigin = e.ScaleOrigin;
+                return;
+            }
+
+            Zoom(e.Scale - _lastScale.Value, e.ScaleOrigin - _lastScaleOrigin.Value);
+
+            _lastScale = e.Scale;
+            _lastScaleOrigin = e.ScaleOrigin;
+        }
+        #endregion
+
         #region Child Events
 
         private void child_MouseWheel(object sender, PointerWheelEventArgs e) {
@@ -323,7 +351,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             double zoom = e.Delta.Y > 0 ? .2 : -.2;
-            Zoom(zoom, e.GetPosition(Child).ToPortablePoint());
+            Zoom(zoom, e.GetPosition(Child));
         }
 
         private void child_PreviewMouseLeftButtonDown(object sender, PointerPressedEventArgs e) {
@@ -488,7 +516,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants.OrderBy(x => x.DesignerZIndex)) {
-                DrawActionShadow(dc, avm);
+                //DrawActionShadow(dc, avm);
 
                 var pavm = avm.ParentActionViewModel;
                 if (pavm == null) {
@@ -509,27 +537,27 @@ namespace MonkeyPaste.Avalonia {
                 DrawArrow(dc, head, tail, end_adjust, borderBrush, fillBrush);
             }
 
-            var total_rect = MpRect.Empty;
-            MpRect total_rect2 = null;
-            foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants.OrderBy(x => x.DesignerZIndex)) {
-                if (GetActionShape(avm) is Shape s &&
-                    s.GetVisualAncestor<ListBoxItem>() is ListBoxItem lbi &&
-                    s.GetVisualAncestor<ListBox>() is ListBox lb) {
-                    MpRect cur_rect = s.Bounds.ToPortableRect();
-                    var new_origin = s.TranslatePoint(new Point(), lb).Value.ToPortablePoint();
-                    cur_rect.Move(new_origin);
-                    total_rect = total_rect.Union(cur_rect);
-                    //dc.DrawRectangle(new Pen(Brushes.Cyan), cur_rect.ToAvRect());
+            //var total_rect = MpRect.Empty;
+            //MpRect total_rect2 = null;
+            //foreach (MpAvActionViewModelBase avm in tavm.SelfAndAllDescendants.OrderBy(x => x.DesignerZIndex)) {
+            //    if (GetActionShape(avm) is Shape s &&
+            //        s.GetVisualAncestor<ListBoxItem>() is ListBoxItem lbi &&
+            //        s.GetVisualAncestor<ListBox>() is ListBox lb) {
+            //        MpRect cur_rect = s.Bounds.ToPortableRect();
+            //        var new_origin = s.TranslatePoint(new Point(), lb).Value.ToPortablePoint();
+            //        cur_rect.Move(new_origin);
+            //        total_rect = total_rect.Union(cur_rect);
+            //        //dc.DrawRectangle(new Pen(Brushes.Cyan), cur_rect.ToAvRect());
 
-                    MpRect cur_rect2 = s.Bounds.ToPortableRect();
-                    var new_origin2 = s.TranslatePoint(new Point(), this).Value.ToPortablePoint();
-                    cur_rect2.Move(new_origin2);
-                    total_rect2 = total_rect2.Union(cur_rect2);
-                    //dc.DrawRectangle(new Pen(Brushes.Orange), cur_rect2.ToAvRect());
-                }
-            }
+            //        MpRect cur_rect2 = s.Bounds.ToPortableRect();
+            //        var new_origin2 = s.TranslatePoint(new Point(), this).Value.ToPortablePoint();
+            //        cur_rect2.Move(new_origin2);
+            //        total_rect2 = total_rect2.Union(cur_rect2);
+            //        //dc.DrawRectangle(new Pen(Brushes.Orange), cur_rect2.ToAvRect());
+            //    }
+            //}
 
-            var total_rect3 = MpAvTriggerCollectionViewModel.Instance.DesignerItemsRect;
+            //var total_rect3 = MpAvTriggerCollectionViewModel.Instance.DesignerItemsRect;
             // dc.DrawRectangle(new Pen(Brushes.White), total_rect.ToAvRect());
             //dc.DrawRectangle(new Pen(Brushes.Yellow), total_rect2.ToAvRect());
             //dc.DrawRectangle(new Pen(Brushes.Red), total_rect3.ToAvRect());

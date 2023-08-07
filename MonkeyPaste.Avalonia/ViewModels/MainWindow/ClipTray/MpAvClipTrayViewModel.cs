@@ -2958,7 +2958,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private readonly object _pasteLockObj = new object();
-        private async Task PasteClipTileAsync(MpAvClipTileViewModel ctvm, bool fromKeyboard = false) {
+        private async Task PasteClipTileAsync(MpAvClipTileViewModel ctvm, MpPasteSourceType pasteSource) {
             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
             if (IsPasting) {
                 try {
@@ -2983,13 +2983,13 @@ namespace MonkeyPaste.Avalonia {
             var cv = ctvm.GetContentView();
             if (cv == null) {
                 if (ctvm.CopyItem != null) {
-                    mpdo = ctvm.CopyItem.ToPortableDataObject();
+                    mpdo = ctvm.CopyItem.ToAvDataObject();
                 }
-            } else if (cv is MpIDragSource ds) {
+            } else if (cv is MpAvIDragSource ds) {
                 mpdo = await ds.GetDataObjectAsync(
                     formats: ctvm.GetOleFormats(false),
                     use_placeholders: false,
-                    ignore_selection: false);
+                    ignore_selection: pasteSource == MpPasteSourceType.Hotkey);
             }
 
             MpPortableProcessInfo pi = null;
@@ -3000,6 +3000,7 @@ namespace MonkeyPaste.Avalonia {
                 pi = Mp.Services.ProcessWatcher.LastProcessInfo;
 
                 // NOTE paste success is very crude, false positive is likely
+                bool fromKeyboard = pasteSource == MpPasteSourceType.Hotkey || pasteSource == MpPasteSourceType.Shortcut;
                 bool success = await Mp.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi, fromKeyboard);
                 if (success) {
                     MpMessenger.SendGlobal(MpMessageType.ContentPasted);
@@ -3405,7 +3406,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 IsBusy = true;
 
-                await AddItemFromDataObjectAsync(SelectedItem.CopyItem.ToPortableDataObject());
+                await AddItemFromDataObjectAsync(SelectedItem.CopyItem.ToAvDataObject());
 
                 IsBusy = false;
             }, () => SelectedItem != null);
@@ -3931,7 +3932,7 @@ namespace MonkeyPaste.Avalonia {
                 if (args is bool) {
                     fromEditorButton = (bool)args;
                 }
-                PasteClipTileAsync(SelectedItem, true).FireAndForgetSafeAsync();
+                PasteClipTileAsync(SelectedItem, MpPasteSourceType.Shortcut).FireAndForgetSafeAsync();
             },
             (args) => {
                 bool can_paste =
@@ -3960,7 +3961,7 @@ namespace MonkeyPaste.Avalonia {
                 if (args is bool) {
                     fromEditorButton = (bool)args;
                 }
-                PasteClipTileAsync(SelectedItem).FireAndForgetSafeAsync();
+                PasteClipTileAsync(SelectedItem, MpPasteSourceType.ContextMenu).FireAndForgetSafeAsync();
             },
             (args) => {
                 return SelectedItem != null;
@@ -3978,7 +3979,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PasteFromClipTilePasteButtonCommand => new MpCommand<object>(
             (args) => {
-                PasteClipTileAsync(args as MpAvClipTileViewModel).FireAndForgetSafeAsync();
+                PasteClipTileAsync(args as MpAvClipTileViewModel, MpPasteSourceType.PasteButton).FireAndForgetSafeAsync();
             },
             (args) => {
                 if (args is MpAvClipTileViewModel ctvm) {
@@ -4044,7 +4045,7 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                 }
-                PasteClipTileAsync(ctvm, true).FireAndForgetSafeAsync(this);
+                PasteClipTileAsync(ctvm, MpPasteSourceType.Hotkey).FireAndForgetSafeAsync(this);
             },
             (args) => {
                 return args is int || args is string;

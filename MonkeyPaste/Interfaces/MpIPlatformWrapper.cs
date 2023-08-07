@@ -31,7 +31,6 @@ namespace MonkeyPaste {
         MpIFocusMonitor FocusMonitor { get; set; }
         MpIDbInfo DbInfo { get; set; }
         MpIQueryResultProvider Query { get; set; }
-
         MpIContentQueryPage ContentQueryTools { get; set; }
         MpITagQueryTools TagQueryTools { get; set; }
         MpIApplicationCommandManager AppCommandManager { get; set; }

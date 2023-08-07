@@ -103,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
         bool MpIPlatformDataObjectHelperAsync.IsOleBusy => IsBusy;
 
         async Task MpIPlatformDataObjectHelperAsync.WriteToClipboardAsync(object idoObj, bool ignoreClipboardChange) {
-            if (idoObj is not IDataObject ido) {
+            if (idoObj.ToDataObject() is not IDataObject ido) {
                 return;
             }
             await WriteClipboardOrDropObjectAsync(ido, true, ignoreClipboardChange);
@@ -125,7 +125,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         async Task<object> MpIPlatformDataObjectHelperAsync.ReadDragDropDataObjectAsync(object idoObj) {
-            if (idoObj is not IDataObject ido) {
+            if (idoObj.ToDataObject() is not IDataObject ido) {
                 return null;
             }
             MpPortableProcessInfo drag_pi = null;
@@ -140,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
             return avdo;
         }
         async Task<object> MpIPlatformDataObjectHelperAsync.ProcessDragDropDataObjectAsync(object idoObj) {
-            if (idoObj is not IDataObject ido) {
+            if (idoObj.ToDataObject() is not IDataObject ido) {
                 return null;
             }
 
@@ -151,8 +151,8 @@ namespace MonkeyPaste.Avalonia {
             // NOTE this is called during a drag drop when user toggles a format preset
             // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
             // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
-            if (source is IDataObject sido &&
-                target is IDataObject tido) {
+            if (source.ToDataObject() is IDataObject sido &&
+                target.ToDataObject() is IDataObject tido) {
                 var source_clone = sido.Clone();
                 var temp = await WriteClipboardOrDropObjectAsync(source_clone, false, false);
                 if (temp is IDataObject temp_ido) {
@@ -454,7 +454,7 @@ namespace MonkeyPaste.Avalonia {
             return mpdo;
         }
 
-        private async Task<object> WriteClipboardOrDropObjectAsync(IDataObject ido, bool writeToClipboard, bool ignoreClipboardChange) {
+        private async Task<MpAvDataObject> WriteClipboardOrDropObjectAsync(IDataObject ido, bool writeToClipboard, bool ignoreClipboardChange) {
             await WaitForBusyAsync();
 
             bool was_cb_monitoring = Mp.Services.ClipboardMonitor.IsMonitoring;

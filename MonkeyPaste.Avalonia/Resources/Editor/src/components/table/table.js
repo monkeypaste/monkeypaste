@@ -98,17 +98,17 @@ function getTableElementRect(table_elm) {
     return cleanRect(tbody_elm.getBoundingClientRect());
 }
 
-function getTablesCsv(format, csvProps, isForOle = false) {
+function getTablesCsv(format, csvProps, selectionOnly = false) {
     // NOTE there should only be 1 table typically but keeping all table stuff scaled for N
     // get list of all tables csv
-    let table_csvl = getTableElements().map(x => getTableCsv(x, format, csvProps, isForOle));
+    let table_csvl = getTableElements().map(x => getTableCsv(x, format, csvProps, selectionOnly));
 
     // merge csv's w/ row sep
     csvProps = !csvProps ? globals.DefaultCsvProps : csvProps;
     return table_csvl.join(csvProps.RowSeparator);
 }
 
-function getTableCsv(table_elm, format, csvProps, isForOle = false) {
+function getTableCsv(table_elm, format, csvProps, selectionOnly = false) {
     if (!table_elm) {
         return '';
     }
@@ -168,7 +168,7 @@ function getTableCsv(table_elm, format, csvProps, isForOle = false) {
             } else if (isPlainTextFormat(format) || isCsvFormat(format)) {
                 let cell_range = getElementDocRange(cell);
 
-                let cell_text = getText(cell_range, isForOle).trim(); // remove new line ending
+                let cell_text = getText(cell_range, selectionOnly).trim(); // remove new line ending
                 row_str += cell_text;
             }
         }

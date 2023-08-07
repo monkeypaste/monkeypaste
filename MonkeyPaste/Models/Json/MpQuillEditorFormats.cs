@@ -83,7 +83,7 @@ namespace MonkeyPaste {
     public class MpQuillContentDataObjectRequestMessage : MpJsonObject {
         public List<string> formats { get; set; }
 
-        public bool forOle { get; set; }
+        public bool selectionOnly { get; set; }
     }
 
     public class MpQuillContentScreenShotNotificationMessage : MpJsonObject {

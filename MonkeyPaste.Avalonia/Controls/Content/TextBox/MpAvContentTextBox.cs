@@ -128,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<MpPortableDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false) {
             if (BindingContext == null ||
                 BindingContext.IsPlaceholder ||
-                BindingContext.CopyItem.ToPortableDataObject(true, true) is not MpPortableDataObject mpdo ||
+                BindingContext.CopyItem.ToAvDataObject(true, true) is not MpPortableDataObject mpdo ||
                 mpdo.DataFormatLookup == null) {
                 return null;
             }

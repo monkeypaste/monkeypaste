@@ -77,10 +77,6 @@
                     Value="{Binding BoundWidth}" />
             <Setter Property="Height"
                     Value="{Binding BoundHeight}" />
-            <!--<Setter Property="IsHitTestVisible"
-                    Value="{Binding !HasScrollVelocity, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />-->
-            <!--<Setter Property="IsHitTestVisible"
-                    Value="{Binding !IsTouchScrolling, Source={x:Static local:MpAvClipTrayViewModel.Instance}}" />-->
             <Setter Property="IsHitTestVisible">
                 <Setter.Value>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -92,6 +88,17 @@
                 </Setter.Value>
             </Setter>
         </Style>
+      
+      <!--  TILE BACKGROUND COLOR  -->
+      
+        <!--<Style Selector="local|MpAvClipTileView"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{Binding CopyItemHexColor, ConverterParameter=tilebg, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                </Setter.Value>
+            </Setter>
+        </Style>-->
 
         <!--  TILE BORDER TRANSITIONS  -->
 

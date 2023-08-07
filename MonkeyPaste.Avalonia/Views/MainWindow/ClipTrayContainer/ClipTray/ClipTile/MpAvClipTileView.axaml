@@ -66,6 +66,24 @@
                     Value="0,0,30,0" />
         </Style>
 
+        <!--  CONTENT PADDING  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder ContentControl#ClipTileContentControl">
+            <Setter Property="Padding"
+                    Value="5" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout ContentControl#ClipTileContentControl, local|MpAvClipBorder#ClipTileContainerBorder:not(.contentReadOnly) ContentControl#ClipTileContentControl">
+            <Setter Property="Padding"
+                    Value="0" />
+        </Style>
+        <!--  TILE BORDER  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
+            <Setter Property="BorderThickness"
+                    Value="{StaticResource TileBorderThickness}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout">
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
         <!--  USER BG COLOR  -->
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
             <Setter Property="Background"
@@ -84,11 +102,13 @@
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
+                          Classes.popout="{Binding IsWindowOpen}"
                           Classes.transOpen="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen}"
                           Classes.hasVertContentScroll="{Binding IsVerticalScrollbarVisibile}"
                           Classes.implicitHover="{Binding IsImplicitHover}"
                           Classes.TileHover="{Binding IsHovering}"
                           Classes.CanResize="{Binding CanResize}"
+                          Classes.contentReadOnly="{Binding IsContentReadOnly}"
                           Classes.IsResizing="{Binding IsResizing}"
                           Classes.IsAnyBusy="{Binding IsAnyBusy}"
                           Classes.frozen="{Binding IsFrozen}"
@@ -104,8 +124,7 @@
                           local:MpAvPointerCommandExtension.RightPressCommandParameter="{Binding $self}"
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                          CornerRadius="{StaticResource TileCornerRadius}"
-                          BorderThickness="{StaticResource TileBorderThickness}">
+                          CornerRadius="{StaticResource TileCornerRadius}">
         <ToolTip.Tip>
             <local:MpAvToolTipView Classes="warning"
                                    IsVisible="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"

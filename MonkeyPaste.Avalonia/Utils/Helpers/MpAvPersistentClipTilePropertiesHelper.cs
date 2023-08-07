@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSelected { get; set; }
 
         public bool IsPinPlaceholder { get; set; }
-
+        public bool IsSubSelectable { get; set; }
         public bool IsTitleReadOnly { get; set; } = true;
         public bool IsContentReadOnly { get; set; } = true;
         public bool IsTransactionPaneOpen { get; set; }
@@ -27,6 +27,7 @@ namespace MonkeyPaste.Avalonia {
             //false :
             //QueryOffsetIdx < 0 ||
             IsTransactionPaneOpen ||
+            IsSubSelectable ||
             !string.IsNullOrEmpty(SelectedTransNodeGuid) ||
             SubSelectionState != null ||
             IsTileDragging ||
@@ -151,6 +152,25 @@ namespace MonkeyPaste.Avalonia {
 
         public static bool IsPersistentTileContentEditable_ById(int ciid, int idx) {
             return GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp && !pp.IsContentReadOnly;
+        }
+
+        #endregion
+
+        #region IsSubSelectable
+        public static void AddPersistentIsSubSelectableTile_ById(int ciid, int idx) {
+            if (GetProps(ciid, true, idx) is MpAvPersistentClipTileProperties pp) {
+                pp.IsSubSelectable = true;
+            }
+        }
+        public static void RemovePersistentIsSubSelectableTile_ById(int ciid, int idx) {
+            if (GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp) {
+                pp.IsSubSelectable = false;
+                CleanupProps();
+            }
+        }
+
+        public static bool IsPersistentIsSubSelectable_ById(int ciid, int idx) {
+            return GetProps(ciid, false, idx) is MpAvPersistentClipTileProperties pp && pp.IsSubSelectable;
         }
 
         #endregion

@@ -766,8 +766,8 @@ function isPointInRange(p, range) {
 
 // #region Actions
 
-function convertTextContentToFormats(isForOle, formats) {
-	let sel = isForOle ? getDocSelection(isForOle) : { index: 0, length: getDocLength() };
+function convertTextContentToFormats(selectionOnly, formats) {
+	let sel = selectionOnly ? getDocSelection(true) : { index: 0, length: getDocLength() };
 	let items = [];
 	for (var i = 0; i < formats.length; i++) {
 		let lwc_format = formats[i].toLowerCase();
@@ -775,7 +775,7 @@ function convertTextContentToFormats(isForOle, formats) {
 		if (isHtmlFormat(lwc_format)) {
 			if (isContentATable()) {
 				// make sure to get whole table when no sub-selection
-				data = isForOle && (isAllSelected() || isNoneSelected()) ? globals.quill.root.innerHTML : getHtml2(sel);
+				data = selectionOnly && (isAllSelected() || isNoneSelected()) ? globals.quill.root.innerHTML : getHtml2(sel);
 			} else {
 				data = getHtml(sel);
 				if (lwc_format == 'html format') {
@@ -786,15 +786,15 @@ function convertTextContentToFormats(isForOle, formats) {
 			
 		} else if (isPlainTextFormat(lwc_format)) {
 			if (isContentATable()) {
-				data = getTablesCsv(lwc_format, null, isForOle);
+				data = getTablesCsv(lwc_format, null, selectionOnly);
 			} else {
-				data = getText(sel, isForOle);
+				data = getText(sel, selectionOnly);
 			}
-			if (isForOle && isDocEndInRange(sel)) {
+			if (selectionOnly && isDocEndInRange(sel)) {
 				data = trimQuillTrailingLineEndFromText(data);
 			}
 		} else if (isCsvFormat(lwc_format) && isContentATable()) {
-			data = getTablesCsv(lwc_format, null, isForOle);
+			data = getTablesCsv(lwc_format, null, selectionOnly);
 		} else if (isImageFormat(lwc_format)) {
 			// trigger async screenshot notification where host needs 
 			// to null and wait for value to avoid async issues

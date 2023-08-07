@@ -5,7 +5,7 @@ function contentDataObjectRequest_ext_ntf(contentReqMsgStr_base64) {
 
 	log('contentRequest_ext: ' + contentReqMsgStr_base64);
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
-	let items = convertContentToFormats(req.forOle, req.formats);
+	let items = convertContentToFormats(req.selectionOnly, req.formats);
 	let respObj = {
 		dataItems: items,
 		isAllContent: isAllSelected(),

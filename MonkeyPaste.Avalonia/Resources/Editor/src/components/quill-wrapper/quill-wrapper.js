@@ -54,11 +54,11 @@ function getSelectedText(encodeTemplates = false) {
 	return getText(selection, encodeTemplates);
 }
 
-function getText(range, for_ole = false) {
+function getText(range, selectionOnly = false) {
 	//updateQuill();
 	range = range == null ? { index: 0, length: getDocLength() } : range;
 	let text = '';
-	if (globals.IsLoaded && for_ole) {
+	if (globals.IsLoaded && selectionOnly) {
 		let encoded_text = getEncodedContentText(range);
 		text = getDecodedContentText(encoded_text);
 	} else {

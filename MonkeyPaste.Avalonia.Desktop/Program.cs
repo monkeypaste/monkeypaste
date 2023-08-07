@@ -20,13 +20,9 @@ namespace MonkeyPaste.Avalonia {
         [STAThread]
         public static void Main(string[] args) {
             try {
+
                 MpConsole.Init();
 
-                //if (App.IS_SINGLE_INSTANCE_ENABLED) {
-                //    if (!EnableSingleInstance()) {
-                //        return;
-                //    }
-                //}
 
 #if CEF_WV
                 MpAvCefNetApplication.ResetCefNetLogging();
@@ -67,26 +63,6 @@ namespace MonkeyPaste.Avalonia {
                 .LogToTrace()//LogEventLevel.Verbose)
                 ;
 
-        static FileStream? _lockFile;
-        private static bool EnableSingleInstance() {
 
-
-            string app_dir =
-#if DEBUG
-                "MonkeyPaste_DEBUG";
-#else
-                "MonkeyPaste";
-#endif
-            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), app_dir);
-            Directory.CreateDirectory(dir);
-            try {
-                _lockFile = File.Open(Path.Combine(dir, ".lock"), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-                _lockFile.Lock(0, _lockFile.Length);
-                return true;
-            }
-            catch {
-                return false;
-            }
-        }
     }
 }

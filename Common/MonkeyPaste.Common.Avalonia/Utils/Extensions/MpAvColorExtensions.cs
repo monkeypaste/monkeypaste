@@ -34,8 +34,8 @@ namespace MonkeyPaste.Common.Avalonia {
             MpDebug.Break("Unsupported brush type for color");
             return MpColorHelpers.GetRandomHexColor().ToAvColor();
         }
-        public static Color ToAvColor(this string hexOrNamedColor, string fallback = default) {
-            var c = new MpColor(hexOrNamedColor, fallback);
+        public static Color ToAvColor(this string hexOrNamedColor, string fallback = default, byte forceAlpha = default) {
+            var c = new MpColor(hexOrNamedColor, fallback, forceAlpha);
             return c.ToAvColor();
         }
 

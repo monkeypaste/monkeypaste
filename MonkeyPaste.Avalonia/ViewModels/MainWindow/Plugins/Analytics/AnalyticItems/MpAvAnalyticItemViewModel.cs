@@ -376,7 +376,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE ignoring plugin update msgs on initial load cause its a bunch and not relevant
             var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(
                 this,
-                showMessages: !MpAvPrefViewModel.Instance.IsInitialLoad);
+                showMessages: !Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial));
 
             foreach (var preset in presets) {
                 var naipvm = await CreatePresetViewModelAsync(preset);

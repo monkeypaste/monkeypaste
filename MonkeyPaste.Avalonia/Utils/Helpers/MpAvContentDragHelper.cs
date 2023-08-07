@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
     public static class MpAvContentDragHelper {
         #region Private Variables
 
-        private static MpIDragSource _dragSource;
+        private static MpAvIDragSource _dragSource;
 
         #endregion
 
@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public static async Task StartDragAsync(
-            MpIDragSource dragSource,
+            MpAvIDragSource dragSource,
             DragDropEffects allowedEffects) {
             if (dragSource == null || dragSource.LastPointerPressedEventArgs is not PointerPressedEventArgs ppe_args) {
                 MpDebug.Break($"Content drag error. Must provide pointer press event to start drag.");

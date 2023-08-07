@@ -186,6 +186,19 @@ namespace MonkeyPaste.Avalonia {
                     uri_strings.Select(x => Mp.Services.SourceRefTools.FetchOrCreateSourceAsync(x)));
                 refs.AddRange(list_refs);
             }
+            if (avdo.TryGetData<string>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out string pi_str) &&
+                !string.IsNullOrWhiteSpace(pi_str)) {
+                try {
+                    var ppi = MpJsonConverter.DeserializeObject<MpPortableProcessInfo>(pi_str);
+                    var ppi_app_ref = await FetchOrCreateAppRefAsync(ppi);
+                    if (ppi_app_ref != null) {
+                        refs.Add(ppi_app_ref);
+                    }
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error deserializing process info str '{pi_str}'.", ex);
+                }
+            }
 
             if (refs.Count == 0 || forceExtSources) {
                 // external ole create
@@ -200,7 +213,8 @@ namespace MonkeyPaste.Avalonia {
                 var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
                 refs.Add(this_app);
             }
-            return refs;
+            // only return non-null, unique refs
+            return refs.Where(x => x != null).DistinctBy(x => new { x.SourceType, x.SourceObjId });
         }
 
         private async Task<IEnumerable<MpISourceRef>> GatherExternalSourceRefsAsync(MpAvDataObject avdo) {

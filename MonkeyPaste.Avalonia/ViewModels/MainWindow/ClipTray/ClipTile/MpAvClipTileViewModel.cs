@@ -1188,15 +1188,6 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            if (IsPlaceholder) {
-                BoundWidth = 0;
-                BoundHeight = 0;
-            } else {
-                double w = MinWidth;
-                double h = MinHeight;
-                BoundWidth = w;
-                BoundHeight = h;
-            }
             UpdateQueryOffset(queryOffset);
             RestorePersistentState();
 
@@ -1626,8 +1617,11 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.CanTouchScroll));
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
-                    if (!IsSubSelectionEnabled) {
+                    if (IsSubSelectionEnabled) {
+                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsSubSelectableTile_ById(CopyItemId, QueryOffsetIdx);
+                    } else {
                         MpAvMainWindowViewModel.Instance.LastDecreasedFocusLevelDateTime = DateTime.Now;
+                        MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsSubSelectableTile_ById(CopyItemId, QueryOffsetIdx);
                     }
 
                     break;
@@ -1842,7 +1836,8 @@ namespace MonkeyPaste.Avalonia {
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
                 Content = new MpAvClipTileView(),
                 Topmost = true,
-                Opacity = 1
+                Opacity = 1,
+                CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
             };
             pow.Classes.Add("tileWindow");
 
@@ -2002,36 +1997,33 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void RestorePersistentState() {
-
-            if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueWidth_ById(CopyItemId, QueryOffsetIdx, out double uw)) {
-                if (Math.Abs(uw - BoundWidth) < 1 || !IsResizerEnabled) {
-                    // i think this is a bug when tile goes from placeholder to active it thinks it has
-                    // a unique size
-                    MpAvPersistentClipTilePropertiesHelper.RemoveUniqueWidth_ById(CopyItemId, QueryOffsetIdx);
-                } else {
-                    BoundWidth = uw;
-                }
-            }
-            if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueHeight_ById(CopyItemId, QueryOffsetIdx, out double uh)) {
-                if (Math.Abs(uh - BoundHeight) < 1 || !IsResizerEnabled) {
-                    // i think this is a bug when tile goes from placeholder to active it thinks it has
-                    // a unique size
-                    MpAvPersistentClipTilePropertiesHelper.RemoveUniqueHeight_ById(CopyItemId, QueryOffsetIdx);
-                } else {
-                    BoundHeight = uh;
-                }
+            if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueWidth_ById(CopyItemId, QueryOffsetIdx, out double uw) &&
+                Math.Abs(uw - BoundWidth) >= 1 && IsResizerEnabled) {
+                BoundWidth = uw;
+            } else {
+                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueWidth_ById(CopyItemId, QueryOffsetIdx);
+                BoundWidth = IsPlaceholder ? 0 : MinWidth;
             }
 
-            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId, QueryOffsetIdx)) {
-                IsTitleReadOnly = false;
+            if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueHeight_ById(CopyItemId, QueryOffsetIdx, out double uh) &&
+                Math.Abs(uh - BoundHeight) >= 1 && IsResizerEnabled) {
+                BoundHeight = uh;
+            } else {
+                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueHeight_ById(CopyItemId, QueryOffsetIdx);
+                BoundHeight = IsPlaceholder ? 0 : MinHeight;
             }
-            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(CopyItemId, QueryOffsetIdx)) {
-                if (IsResizerEnabled) {
-                    IsContentReadOnly = false;
-                } else {
-                    MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);
-                }
+
+            IsTitleReadOnly = !MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId, QueryOffsetIdx);
+
+            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(CopyItemId, QueryOffsetIdx) &&
+                IsResizerEnabled) {
+                IsContentReadOnly = false;
+            } else {
+                MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);
+                IsContentReadOnly = true;
             }
+
+            IsSubSelectionEnabled = MpAvPersistentClipTilePropertiesHelper.IsPersistentIsSubSelectable_ById(CopyItemId, QueryOffsetIdx);
         }
         #endregion
 
@@ -2146,7 +2138,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CopyToClipboardCommand => new MpAsyncCommand(
             async () => {
                 //IsBusy = true;
-                var ds = GetContentView() as MpIDragSource;
+                var ds = GetContentView() as MpAvIDragSource;
                 if (ds == null) {
                     MpDebug.Break();
                     return;
