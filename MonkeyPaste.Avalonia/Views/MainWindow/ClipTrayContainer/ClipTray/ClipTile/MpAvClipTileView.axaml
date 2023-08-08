@@ -97,6 +97,25 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="ToolTip.Tip"
+                    Value="{x:Null}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.capTooltip:not(.drag)"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+
+                  <Template>
+                    <local:MpAvToolTipView Classes="warning"
+                                           IsVisible="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
+                                           ToolTipText="{Binding CapToolTipText}" />
+                  </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
@@ -113,6 +132,8 @@
                           Classes.IsAnyBusy="{Binding IsAnyBusy}"
                           Classes.frozen="{Binding IsFrozen}"
                           Classes.trashed="{Binding IsTrashed}"
+                          Classes.drag="{Binding IsTileDragging}"
+                          Classes.capTooltip="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
                           Classes.userColor="{Binding CopyItemHexColor, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                           local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           local:MpAvReceivesEventsExtension.SenderFilter="{Binding EmbedHost}"
@@ -125,11 +146,11 @@
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="{StaticResource TileCornerRadius}">
-        <ToolTip.Tip>
+        <!--<ToolTip.Tip>
             <local:MpAvToolTipView Classes="warning"
                                    IsVisible="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
                                    ToolTipText="{Binding CapToolTipText}" />
-        </ToolTip.Tip>
+        </ToolTip.Tip>-->
 
         <Grid x:Name="TileGrid"
               HorizontalAlignment="Stretch"

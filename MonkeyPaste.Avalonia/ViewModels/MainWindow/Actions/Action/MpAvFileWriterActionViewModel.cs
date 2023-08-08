@@ -141,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
             if (actionInput.CopyItem.ItemType == MpCopyItemType.FileList) {
                 fl = actionInput.CopyItem.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter).ToList();
             } else {
-                string ci_fp = await actionInput.CopyItem.ItemData.ToFileAsync(
+                string ci_fp = actionInput.CopyItem.ItemData.ToFile(
                                 forceNamePrefix: actionInput.CopyItem.Title,
                                 forceExt: actionInput.CopyItem.ItemType == MpCopyItemType.Image ? "png" : "txt",
                                 isTemporary: true);

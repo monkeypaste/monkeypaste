@@ -51,7 +51,7 @@ namespace AvCoreClipboardHandler {
                 object data = null;
                 if (needs_pseudo_file && write_format == MpPortableDataFormats.AvFileNames) {
                     // called last 
-                    data = await PreProcessFileFormatAsync(write_output);
+                    data = PreProcessFileFormat(write_output);
                 } else {
                     data = write_output.Get(write_format);
                 }
@@ -206,7 +206,7 @@ namespace AvCoreClipboardHandler {
         #region Private Methods
 
         #region File Pre-Processor
-        private static async Task<object> PreProcessFileFormatAsync(IDataObject ido) {
+        private static object PreProcessFileFormat(IDataObject ido) {
 
             string fn = null;
             if (ido.TryGetData<string>(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, out string title)) {
@@ -262,7 +262,7 @@ namespace AvCoreClipboardHandler {
             if (string.IsNullOrEmpty(data_to_write) || string.IsNullOrEmpty(fe)) {
                 return null;
             }
-            string output_path = await data_to_write.ToFileAsync(
+            string output_path = data_to_write.ToFile(
                                 forceNamePrefix: fn,
                                 forceExt: fe,
                                 isTemporary: true);

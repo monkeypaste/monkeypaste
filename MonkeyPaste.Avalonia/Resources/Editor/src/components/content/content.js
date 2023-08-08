@@ -120,7 +120,8 @@ function loadContent(
 	}
 
 	try {
-		onContentLoaded_ntf(getContentAsMessage());
+		let msg = getContentAsMessage();
+		onContentLoaded_ntf(msg);
 	} catch (ex) {
 		onException_ntf('error creating load item resp, sending empty', ex);
 		onContentLoaded_ntf('');

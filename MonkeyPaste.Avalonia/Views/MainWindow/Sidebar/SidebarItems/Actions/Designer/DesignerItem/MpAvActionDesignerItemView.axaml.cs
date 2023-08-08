@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
             bool is_valid = IsDropValid(e.Data);
             e.DragEffects =
                 is_valid ?
-                    DragDropEffects.Move : DragDropEffects.None;
+                    /*DragDropEffects.Move*/DragDropEffects.Copy : DragDropEffects.None;
             //MpConsole.WriteLine($"[DragOver] TagTile: '{e.DragEffects}'");
 
         }
@@ -65,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
 
             e.DragEffects =
                 is_valid ?
-                    DragDropEffects.Move : DragDropEffects.None;
+                    /*DragDropEffects.Move*/DragDropEffects.Copy : DragDropEffects.None;
 
             if (e.DragEffects == DragDropEffects.None) {
                 ResetDrop();

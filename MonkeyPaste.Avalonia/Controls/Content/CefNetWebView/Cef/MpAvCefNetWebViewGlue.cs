@@ -1,17 +1,21 @@
 ﻿#if DESKTOP
 
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CefNet;
 using CefNet.Avalonia;
 using CefNet.Internal;
-using System.Windows.Controls;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
+using System.Linq;
+using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetWebViewGlue : AvaloniaWebViewGlue {
-
-        public MpAvCefNetWebViewGlue(WebView view) : base(view) {
-        }
+        public MpAvCefNetWebViewGlue(WebView view) : base(view) { }
         //
         // Summary:
         //     Called when the browser component is requesting focus. Return false to allow
@@ -26,6 +30,9 @@ namespace MonkeyPaste.Avalonia {
         // Returns:
         //     Return false to allow the focus to be set or true to cancel setting the focus.
         protected override bool OnSetFocus(CefBrowser browser, CefFocusSource source) {
+            //if (source == CefFocusSource.Navigation)
+            //    return true;
+            //return false;
             return false;
 
             //if (source == CefFocusSource.Navigation) {
@@ -33,10 +40,6 @@ namespace MonkeyPaste.Avalonia {
             //}
 
             //return true;
-        }
-
-        protected override bool OnCursorChange(CefBrowser browser, nint cursorHandle, CefCursorType type, CefCursorInfo customCursorInfo) {
-            return base.OnCursorChange(browser, cursorHandle, type, customCursorInfo);
         }
 
         /// <summary>
@@ -54,6 +57,7 @@ namespace MonkeyPaste.Avalonia {
         /// 
         protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
             if (browser.Host.Client.GetWebView() is not MpAvIDragSource ds ||
+                ds is not Control c ||
                 ds is not MpIContentView cv ||
                 !cv.IsContentLoaded) {
 
@@ -62,12 +66,21 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             Dispatcher.UIThread.Post(async () => {
+                allowedOps = CefDragOperationsMask.Copy;
                 var de = DragDropEffects.Copy;// | DragDropEffects.Move;
                 await MpAvContentDragHelper.StartDragAsync(ds, de);
+
+                //ds.IsDragging = true;
+                //var sil = new[] { await (TopLevel.GetTopLevel(c))!.StorageProvider.TryGetFileFromPathAsync(Assembly.GetEntryAssembly()?.GetModules().FirstOrDefault()?.FullyQualifiedName) };
+                //var mpdo = new DataObject();
+                //mpdo.Set(MpPortableDataFormats.AvFileNames, sil);
+                //var result = await DragDrop.DoDragDrop(ds.LastPointerPressedEventArgs, mpdo, de);
+                //ds.IsDragging = false;
 
                 browser.Host.DragSourceEndedAt(0, 0, CefDragOperationsMask.None);
                 browser.Host.DragSourceSystemDragEnded();
             });
+
             return true;
         }
         protected override void UpdateDragCursor(CefBrowser browser, CefDragOperationsMask operation) {

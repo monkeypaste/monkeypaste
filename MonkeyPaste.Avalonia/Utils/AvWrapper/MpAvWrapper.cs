@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Startup Set Services 
-
+        public MpITempFileManager TempFileManager { get; set; }
         public MpIShutdownTools ShutdownHelper { get; set; }
         public MpIContentBuilder ContentBuilder { get; set; }
 
@@ -141,6 +141,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpAvPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
+            TempFileManager = new MpAvTempFileManager();
             SslInfo = MpAvPrefViewModel.Instance;
             WelcomeSetupInfo = MpAvPrefViewModel.Instance;
             ThisDeviceInfo = MpAvPrefViewModel.Instance;

@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
             }
             var avdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_PARAMETER_VALUE_FORMAT, epvvm);
 
-            var result = await DragDrop.DoDragDrop(e, avdo, DragDropEffects.Move | DragDropEffects.Copy);
+            var result = await DragDrop.DoDragDrop(e, avdo, /*DragDropEffects.Move | */DragDropEffects.Copy);
         }
     }
 }

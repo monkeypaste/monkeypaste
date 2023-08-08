@@ -298,8 +298,17 @@ function updateSelectionColors() {
 	// return sel for performance
 	return sel;
 }
+function selectAll() {
+	setDocSelection(0, getDocLength(), 'api');
+	if (globals.ContentItemType == 'FileList') {
+		selectAllFileItems();
+	}
+}
 
 function resetSelection() {
+	if (globals.ContentItemType == 'FileList') {
+		deselectAllFileItems();
+	}
 	globals.LastSelRange = null;
 	globals.CurSelRange = null;
 	globals.SelectionOnMouseDown = null;

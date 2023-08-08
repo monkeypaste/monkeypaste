@@ -18,6 +18,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Reflection;
+using Avalonia.Platform.Storage;
 #if DESKTOP
 
 
@@ -317,14 +319,6 @@ namespace MonkeyPaste.Avalonia {
                 if (use_placeholders) {
                     avdo.SetData(MpPortableDataFormats.AvFileNames, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
                 } else {
-                    //string ctvm_fp = await ctvm.CopyItemData.ToFileAsync(
-                    //            forceNamePrefix: ctvm.CopyItemTitle,
-                    //            forceExt: ctvm.CopyItemType == MpCopyItemType.Image ? "png" : "txt",
-                    //            isTemporary: true);
-                    //avdo.SetData(
-                    //    MpPortableDataFormats.AvFileNames,
-                    //    new[] { ctvm_fp });
-
                     // NOTE presumes Text is txt and Image is png
                     // get unique pseudo-file path for whole or partial content
                     bool is_fragment = ctvm.CopyItemType == MpCopyItemType.Text && !contentDataResp.isAllContent ? true : false;
@@ -333,7 +327,7 @@ namespace MonkeyPaste.Avalonia {
                     avdo.SetData(
                         MpPortableDataFormats.AvFileNames,
                         new[] { ctvm_fp });
-                    ctvm_data.ToFileAsync(forcePath: ctvm_fp).FireAndForgetSafeAsync();
+                    ctvm_data.ToFile(forcePath: ctvm_fp);
                 }
             }
 
@@ -1060,11 +1054,10 @@ namespace MonkeyPaste.Avalonia {
 
 #if PLAT_WV
             WebView.WebMessageReceived += WebView_WebMessageReceived;
-            WebView.NavigationCompleted += WebView_NavigationCompleted;
+            WebView.NavigationCompleted += WebView_NavigationCompleted
             //Content = WebView;
 #endif
         }
-
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);
             LastPointerPressedEventArgs = e;
@@ -1280,8 +1273,16 @@ namespace MonkeyPaste.Avalonia {
 
             if (contentChanged_ntf == null) {
                 // shouldn't be null
-                MpDebug.Break();
+                MpDebug.Break($"Content changed resp was null");
                 return;
+            }
+
+            if (contentChanged_ntf.itemData != null) {
+                if (contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString()) {
+                    // data's getting reset again
+                    MpDebug.Break("data reset caught in webview process content changed", !MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED);
+                }
+                BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
             if (!string.IsNullOrWhiteSpace(contentChanged_ntf.dataTransferCompletedRespFragment) &&
                 MpJsonConverter.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(contentChanged_ntf.dataTransferCompletedRespFragment) is
@@ -1295,13 +1296,6 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.CopyItemSize2 = contentChanged_ntf.itemSize2;
             }
 
-            if (contentChanged_ntf.itemData != null) {
-                if (contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString()) {
-                    // data's getting reset again
-                    MpDebug.Break("data reset caught in webview process content changed");
-                }
-                BindingContext.CopyItemData = contentChanged_ntf.itemData;
-            }
             BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
             BindingContext.HasEditableTable = contentChanged_ntf.hasEditableTable;
             BindingContext.ActualContentHeight = contentChanged_ntf.contentHeight;

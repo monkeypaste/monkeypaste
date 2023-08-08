@@ -36,7 +36,6 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
 
             this.AttachedToVisualTree += MpAvQueryTrayView_AttachedToVisualTree;
-            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
 
         }
 
@@ -54,6 +53,7 @@ namespace MonkeyPaste.Avalonia {
             ctrlb.AddHandler(DragDrop.DragOverEvent, DragOver);
             ctrlb.AddHandler(DragDrop.DragLeaveEvent, DragLeave);
             ctrlb.AddHandler(DragDrop.DropEvent, Drop);
+            MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
         }
 
         #region Drop Events

@@ -85,6 +85,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static string GetKeyLiteral(this KeyCode key) {
+            if (key == KeyCode.VcUndefined) {
+                // BUG this came up during a paste shortly after unlocking hd box closed
+                // also explorer process wasn't activating before pasting
+                return string.Empty;
+            }
             if (key == KeyCode.VcLeftShift || key == KeyCode.VcRightShift) {
                 return MpInputConstants.SHIFT_KEY_LITERAL;
             }

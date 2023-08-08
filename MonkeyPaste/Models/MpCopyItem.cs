@@ -13,6 +13,10 @@ namespace MonkeyPaste {
         MpISyncableDbObject,
         MpISourceRef,
         MpILabelText {
+        #region Constants
+        public const bool IS_EMPTY_HTML_CHECK_ENABLED = false;
+        #endregion
+
         #region Statics
 
         public static string FileItemSplitter {
@@ -251,7 +255,7 @@ namespace MonkeyPaste {
 
             if (ItemData.IsNullOrWhitespaceHtmlString()) {
                 // what IS this nasty shit??
-                MpDebug.Break($"Empty html write detected for item {this}");
+                MpDebug.Break($"Empty html write detected for item {this}", !MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED);
                 return;
             }
             await base.WriteToDatabaseAsync();

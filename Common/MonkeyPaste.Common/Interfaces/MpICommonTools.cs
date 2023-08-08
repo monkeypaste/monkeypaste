@@ -1,5 +1,6 @@
 ﻿namespace MonkeyPaste.Common {
     public interface MpICommonTools {
+        MpITempFileManager TempFileManager { get; set; }
         MpIGlobalInputListener GlobalInputListener { get; set; }
         MpIProcessWatcher ProcessWatcher { get; set; }
         MpIExternalPasteHandler ExternalPasteHandler { get; set; }

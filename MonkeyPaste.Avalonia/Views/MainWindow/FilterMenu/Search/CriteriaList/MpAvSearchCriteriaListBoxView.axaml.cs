@@ -49,14 +49,14 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"Drag Over");
 
             e.Handled = true;
-            e.DragEffects = DragDropEffects.None;
             if (!e.Data.Contains(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT)) {
+                e.DragEffects = DragDropEffects.None;
                 ResetDragOvers();
                 return;
             }
             MpAvSearchCriteriaItemViewModel drag_vm = e.Data.Get(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT) as MpAvSearchCriteriaItemViewModel;
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
-            e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
+            e.DragEffects = DragDropEffects.Copy;// is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
 
             var sclb = this.FindControl<ListBox>("SearchCriteriaListBox");
             sclb.AutoScrollItemsControl(e);

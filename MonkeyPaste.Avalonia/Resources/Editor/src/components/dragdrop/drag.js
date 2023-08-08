@@ -86,7 +86,7 @@ function onDragStart(e) {
     e.stopPropagation();
 
     if (globals.ContentItemType == 'Text') {
-        e.dataTransfer.effectAllowed = 'copyMove';
+        e.dataTransfer.effectAllowed = 'copy';// 'copyMove';
     } else if (globals.ContentItemType == 'FileList') {
         e.dataTransfer.effectAllowed = 'copy';
     } else if (globals.ContentItemType == 'Image') {

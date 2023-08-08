@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        public static IDataObject DragDataObject { get; private set; }
+        public static IDataObject DragDataObject { get; set; }
 
         public static IDataObject SourceDataObject { get; private set; }
 
@@ -38,11 +38,7 @@ namespace MonkeyPaste.Avalonia {
                 await Dispatcher.UIThread.InvokeAsync(() => StartDragAsync(dragSource, allowedEffects));
                 return;
             }
-
-            ResetDragState();
-            HookDragEvents();
-
-            _dragSource = dragSource;
+            StartDrag(dragSource);
 
             dragSource.IsDragging = true;
             // wait for source data
@@ -126,14 +122,6 @@ namespace MonkeyPaste.Avalonia {
                 temp_ido.CopyTo(DragDataObject);
                 await ddo.MapAllPseudoFormatsAsync();
                 MpConsole.WriteLine("DragDataObject updated");
-
-                //var phl = DragDataObject.GetPlaceholderFormats();
-                //MpConsole.WriteLine($"Placeholder formats: {string.Join(",", phl)}");
-                //if (DragDataObject.TryGetData(MpPortableDataFormats.AvFileNames, out IEnumerable<string> fnl)) {
-                //    MpConsole.WriteLine($"dnd obj updated. target fns:");
-                //    fnl.ForEach(x => MpConsole.WriteLine(x));
-                //}
-
             }
         }
         #endregion
@@ -146,9 +134,6 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.ClipboardPresetsChanged:
                     ApplyClipboardPresetOrSourceUpdateToDragDataAsync().FireAndForgetSafeAsync();
                     break;
-                    //case MpMessageType.ItemDragEnd:
-                    //    ResetDragState();
-                    //    break;
             }
         }
 
@@ -184,14 +169,18 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
+        private static void StartDrag(MpAvIDragSource ds) {
+            ResetDragState();
+            HookDragEvents();
+            _dragSource = ds;
+        }
+
         private static void FinishDrag(DragDropEffects? dropEffect) {
             if (_dragSource != null) {
                 _dragSource.IsDragging = false;
             }
             ResetDragState();
             MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
-
-
         }
         private static void ResetDragState() {
             UnhookDragEvents();

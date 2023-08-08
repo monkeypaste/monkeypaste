@@ -631,7 +631,10 @@ namespace MonkeyPaste.Avalonia {
                     // mw is always open screen rect
                     // mw opacity mask is always open screen rect
                     // mwcg is what is animated so it hides outside current screen workarea
-                    App.MainView.SetPosition(MainWindowOpenedScreenRect.Location, MainWindowScreen.Scaling);
+                    if (App.MainView is not MpIMainView mv) {
+                        break;
+                    }
+                    mv.SetPosition(MainWindowOpenedScreenRect.Location, MainWindowScreen.Scaling);
 
                     //MpAvMainView.Instance.Width = MainWindowOpenedScreenRect.Width;
                     //MpAvMainView.Instance.Height = MainWindowOpenedScreenRect.Height;

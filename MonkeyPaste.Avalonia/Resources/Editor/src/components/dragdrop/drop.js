@@ -130,7 +130,7 @@ function processEffectAllowed(e) {
     if (isDragCopy() || effect_str == 'copy') {
         effect_str = 'copy';
     } else if (isDragCut()) {
-        effect_str = 'move';
+        effect_str = 'copy';// 'move';
     } else {
         effect_str = 'none';
     }

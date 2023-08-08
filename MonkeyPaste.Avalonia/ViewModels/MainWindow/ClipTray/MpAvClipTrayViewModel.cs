@@ -3004,6 +3004,7 @@ namespace MonkeyPaste.Avalonia {
                 bool success = await Mp.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi);
                 if (success) {
                     MpMessenger.SendGlobal(MpMessageType.ContentPasted);
+
                 } else {
                     // clear pi to ignore paste history
                     pi = null;

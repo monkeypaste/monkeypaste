@@ -118,7 +118,7 @@ function disableReadOnly_ext() {
 
 function enableSubSelection_ext(enableSubSelMsgBase64Str) {
 	// input 'MpQuillPasteButtonInfoMessage'
-	const paste_info_req_obj = toJsonObjFromBase64Str(enableSubSelMsgBase64Str);
+	let paste_info_req_obj = toJsonObjFromBase64Str(enableSubSelMsgBase64Str);
 	enableSubSelection(true, paste_info_req_obj);
 }
 

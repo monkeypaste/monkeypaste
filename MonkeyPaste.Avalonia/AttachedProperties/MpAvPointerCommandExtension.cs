@@ -190,7 +190,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> RouteHoldToRightPressProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
                 "RouteHoldToRightPress",
-                true);
+                false);
 
         #endregion
 

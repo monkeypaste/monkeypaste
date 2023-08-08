@@ -4,6 +4,7 @@ using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -11,6 +12,7 @@ using Org.BouncyCastle.Crypto.Fpe;
 using PropertyChanged;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -55,21 +57,9 @@ namespace MonkeyPaste.Avalonia {
                 (BindingContext != null && !BindingContext.IsTagNameReadOnly)) {
                 return;
             }
-            //if (!BindingContext.IsSelected) {
-            // ignore drag check when not selected, 
-            // to pass input to select tag
-            // }
-            //bool ended = false;
+
             this.DragCheckAndStart(e,
                 start: async (start_e) => {
-                    //while (Mp.Services.Query.IsQuerying) {
-                    //    // wait for tag selection to finish 
-                    //    if (ended) {
-                    //        // was just a click
-                    //        return;
-                    //    }
-                    //    await Task.Delay(50);
-                    //}
 
                     // HACK since preview8 drag source datacontext becomes null after dnd so storing to finsih up
                     MpAvTagTileViewModel dc = BindingContext;
@@ -91,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
                         BindingContext.IsDragging = false;
                         BindingContext.IsPinTagDragging = false;
                     }
-                    MpConsole.WriteLine($"Tag Tile Drop Result: '{result}'");
+                    //MpConsole.WriteLine($"Tag Tile Drop Result: '{result}'");
                 },
                 move: null,
                 end: (end_e) => {

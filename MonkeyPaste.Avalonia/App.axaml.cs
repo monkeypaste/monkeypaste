@@ -70,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 MpAvCefNetApplication.ShutdownCefNet();
             }
-            MpTempFileManager.Shutdown();
+            Mp.Services.TempFileManager.Shutdown();
             MpConsole.ShutdownLog();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
                 lifetime.Shutdown();

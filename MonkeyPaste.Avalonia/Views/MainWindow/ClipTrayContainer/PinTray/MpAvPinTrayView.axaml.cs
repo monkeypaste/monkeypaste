@@ -98,13 +98,14 @@ namespace MonkeyPaste.Avalonia {
             bool is_copy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
             bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
             //MpConsole.WriteLine("[DragOver] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
-            e.DragEffects = DragDropEffects.None;
+
             if (is_drop_valid) {
-                e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
+                e.DragEffects = DragDropEffects.Copy;// is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
                 MpLine dropLine = CreateDropLine(drop_idx, is_copy);
                 DrawAdorner(dropLine);
             } else {
                 ClearAdorner();
+                e.DragEffects = DragDropEffects.None;
             }
         }
         private void DragLeave(object sender, DragEventArgs e) {
@@ -123,14 +124,14 @@ namespace MonkeyPaste.Avalonia {
             bool is_drop_valid = IsDropValid(e.Data, drop_idx, is_copy);
             // MpConsole.WriteLine("[Drop] PinTrayListBox DropIdx: " + drop_idx + " IsCopy: " + is_copy + " IsValid: " + is_drop_valid);
 
-            e.DragEffects = DragDropEffects.None;
             if (!is_drop_valid) {
+                e.DragEffects = DragDropEffects.None;
                 ResetDrop();
                 return;
             }
             BindingContext.IsPinTrayBusy = true;
 
-            e.DragEffects = is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
+            e.DragEffects = DragDropEffects.Copy;// is_copy ? DragDropEffects.Copy : DragDropEffects.Move;
 
             // NOTE need to use processed/output data object, avdo becomes disposed
             var mpdo = await

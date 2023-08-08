@@ -45,6 +45,7 @@ body {
     /*white-space: pre-wrap;*/
 }
 
+
 ::selection {
     background-color: var(--selbgcolor);
     color: var(--selfgcolor);

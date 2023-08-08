@@ -144,28 +144,17 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            //tb.DragCheckAndStart(e,
-            //    start: async (start_e) => {
-            MpAvDataObject avdo = null;
-            MpAvClipTileViewModel ctvm = tb.GetSelfOrAncestorDataContext<MpAvClipTileViewModel>();
-            if (ctvm != null) {
-                avdo = new MpAvDataObject(ctvm.CopyItem.ToAvDataObject(true, true));
-                ctvm.IsTileDragging = true;
-            } else {
-                avdo = new MpAvDataObject(MpPortableDataFormats.Text, tb.Text);
-            }
+            MpAvDataObject avdo = new MpAvDataObject();
+            //e.Handled = true;
 
             if (tb.SelectionLength() > 0) {
                 avdo.SetData(MpPortableDataFormats.Text, tb.Text.Substring(tb.LiteralSelectionStart(), tb.SelectionLength()));
+            } else {
+                avdo.SetData(MpPortableDataFormats.Text, tb.Text);
             }
             SetIsDragging(attached_control, true);
             var result = await DragDrop.DoDragDrop(e, avdo, DragDropEffects.Copy);
             SetIsDragging(attached_control, false);
-
-            if (ctvm != null) {
-                ctvm.IsTileDragging = false;
-            }
-            //});
         }
 
 
