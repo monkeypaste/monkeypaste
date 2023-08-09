@@ -1,7 +1,7 @@
 ﻿// #region Life Cycle
 
 function initDrag() {
-    globals.DragItemElms = [getEditorContainerElement(), getDragOverlayElement()];
+    globals.DragItemElms = [getEditorContainerElement()/*, getDragOverlayElement()*/];
     for (var i = 0; i < globals.DragItemElms.length; i++) {
         let item = globals.DragItemElms[i];
         item.addEventListener('dragstart', onDragStart, true);
@@ -33,19 +33,19 @@ function isDragging() {
 // #region Actions
 
 function enableDragOverlay() {
-    getDragOverlayElement().classList.remove('no-hit-test');
-    getDragOverlayElement().classList.add('hit-testable');
-    getDragOverlayElement().setAttribute('draggable', true);
+    //getDragOverlayElement().classList.remove('no-hit-test');
+    //getDragOverlayElement().classList.add('hit-testable');
+    //getDragOverlayElement().setAttribute('draggable', true);
 
-    getEditorContainerElement().setAttribute('draggable', false);
+    //getEditorContainerElement().setAttribute('draggable', false);
 }
 
 function disableDragOverlay() {
-    getDragOverlayElement().classList.add('no-hit-test');
-    getDragOverlayElement().classList.remove('hit-testable');
-    getDragOverlayElement().setAttribute('draggable', false);
+    //getDragOverlayElement().classList.add('no-hit-test');
+    //getDragOverlayElement().classList.remove('hit-testable');
+    //getDragOverlayElement().setAttribute('draggable', false);
 
-    getEditorContainerElement().setAttribute('draggable', true);
+    //getEditorContainerElement().setAttribute('draggable', true);
 }
 
 // #endregion Actions

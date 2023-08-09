@@ -29,16 +29,22 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region MpIActionComponent Implementation
-
-        public void RegisterActionComponent(MpIInvokableAction mvm) {
+        void MpIActionComponent.RegisterActionComponent(MpIInvokableAction mvm) {
+            if (OnClipboardChanged.HasInvoker(mvm)) {
+                return;
+            }
             OnClipboardChanged += mvm.OnActionInvoked;
-            MpConsole.WriteLine($"ClipboardWatcher Registered {mvm.Label} trigger");
+            MpConsole.WriteLine($"{nameof(OnClipboardChanged)} Registered {mvm.Label}");
         }
 
-        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+        void MpIActionComponent.UnregisterActionComponent(MpIInvokableAction mvm) {
+            if (!OnClipboardChanged.HasInvoker(mvm)) {
+                return;
+            }
             OnClipboardChanged -= mvm.OnActionInvoked;
-            MpConsole.WriteLine($"ClipboardWatcher {mvm.Label} Unregistered from ClipboardWatcher");
+            MpConsole.WriteLine($"{nameof(OnClipboardChanged)} Unregistered {mvm.Label}");
         }
+
         #endregion
 
         #endregion

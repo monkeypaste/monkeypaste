@@ -12,6 +12,7 @@
                        x:CompileBindings="True"
                        x:Class="MonkeyPaste.Avalonia.MpAvColorPaletteListBoxView">
     <ListBox x:Name="ColorPaletteListBox"
+             ClipToBounds="False"
              Margin="0"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
@@ -46,6 +47,8 @@
                         Value="{Binding IsChecked, Mode=TwoWay}" />
                 <Setter Property="FocusAdorner"
                         Value="{x:Null}" />
+                <Setter Property="ClipToBounds"
+                        Value="False" />
                 <Setter Property="HorizontalContentAlignment"
                         Value="Left" />
                 <Setter Property="VerticalContentAlignment"

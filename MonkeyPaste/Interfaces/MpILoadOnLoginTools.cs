@@ -1,6 +1,6 @@
 ﻿namespace MonkeyPaste {
     public interface MpILoadOnLoginTools {
         bool IsLoadOnLoginEnabled { get; }
-        void SetLoadOnLogin(bool isLoadOnLogin);
+        void SetLoadOnLogin(bool isLoadOnLogin, bool silent = false);
     }
 }

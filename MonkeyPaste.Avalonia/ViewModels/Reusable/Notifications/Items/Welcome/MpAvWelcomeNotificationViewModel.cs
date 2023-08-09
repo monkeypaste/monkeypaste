@@ -12,12 +12,12 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpWelcomePageType {
-        Welcome,
+        Greeting,
         Account,
-        Shortcuts,
+        LoginLoad,
+        GestureProfile,
         ScrollWheel,
         DbPassword
-        //Security,
     }
     public class MpAvWelcomeNotificationViewModel :
         MpAvNotificationViewModelBase {
@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
                         GestureProfilesViewModel,
                         ScrollWheelBehaviorViewModel,
                         DbPasswordViewModel
-                    };
+                    }.OrderBy(x => (int)x.WelcomePageType).ToArray();
                 }
                 return _items;
             }
@@ -96,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
         public int CurPageIdx =>
             (int)CurPageType;
 
-        public MpWelcomePageType CurPageType { get; set; } = MpWelcomePageType.Welcome;
+        public MpWelcomePageType CurPageType { get; set; } = MpWelcomePageType.Greeting;
 
         public bool CanSelectPrevious =>
             (int)CurPageType > 0;
@@ -123,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvWelcomeNotificationViewModel() : base() {
             MpDebug.Assert(_instance == null, "Only 1 welcome vm should be created");
             _instance = this;
-            MpConsole.WriteLine("Welcome vm created");
+            MpConsole.WriteLine("Greeting vm created");
             InitWelcomeItems();
         }
 
@@ -160,7 +160,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void InitWelcomeItems() {
-            GreetingViewModel = new MpAvWelcomeOptionGroupViewModel() {
+            GreetingViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.Greeting) {
                 Title = "Welcome",
                 SplashIconSourceObj = "AppImage",
                 Caption = "Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.",
@@ -169,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
             int free_tcap = Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Free);
             int standard_ccap = Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Standard);
             // TODO add pricing & capacity values as item description
-            AccountViewModel = new MpAvWelcomeOptionGroupViewModel() {
+            AccountViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.Account) {
                 Title = "Subscription",
                 Caption = "No features are limited by subscription, only storage capacity and can be changed at anytime. ",
                 Items = new[] {
@@ -197,7 +197,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             };
 
-            LoginLoadViewModel = new MpAvWelcomeOptionGroupViewModel() {
+            LoginLoadViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.LoginLoad) {
                 Title = "Load On Login?",
                 Caption = "To get the most use out of MonkeyPaste loading automatically when you log in is a good idea. But, that's entirely up to you.",
                 Items = new[] {
@@ -210,9 +210,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             };
 
-            GestureProfilesViewModel = new MpAvWelcomeOptionGroupViewModel() {
-                Title = "Shortcuts",
-                Caption = "Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings->Shortcuts' menu.",
+            GestureProfilesViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.GestureProfile) {
+                Title = "GestureProfile",
+                Caption = "Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings->GestureProfile' menu.",
                 Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,0) {
                         IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Internal,
@@ -228,7 +228,7 @@ namespace MonkeyPaste.Avalonia {
                     },
                 }
             };
-            ScrollWheelBehaviorViewModel = new MpAvWelcomeOptionGroupViewModel() {
+            ScrollWheelBehaviorViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.ScrollWheel) {
                 Title = "Scroll-to-Open",
                 Caption = "When enabled, a scroll gesture at the top of the screen will reveal MonkeyPaste.",
                 Items = new[] {
@@ -247,7 +247,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             };
 
-            DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel() {
+            DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.DbPassword) {
                 Title = "Password",
                 SplashIconSourceObj = "LockImage",
                 Caption = "Your privacy is important and clipboard data can be very personal. Storage is always encrypted but you can set a password that will be required in case your device is stolen or someone else is using your device.",
@@ -255,6 +255,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private async Task BeginWelcomeSetupAsync() {
             IsWelcomeDone = false;
+            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(false);
             bool is_pwd_already_set = await MpDb.CheckIsUserPasswordSetAsync();
             if (is_pwd_already_set) {
                 // this is not initial startup, user has reset ntf
@@ -280,10 +281,10 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.AccountTools.SetAccountType(acct_type);
 
             // LOGIN LOAD
-            bool loadOnLogin =
-                LoginLoadViewModel.Items.FirstOrDefault().IsChecked;
-            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
-            MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
+            //bool loadOnLogin =
+            //    LoginLoadViewModel.Items.FirstOrDefault().IsChecked;
+            //Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
+            //MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
 
             // SHORTCUT PROFILE
             MpAvPrefViewModel.Instance.DefaultRoutingProfileType =

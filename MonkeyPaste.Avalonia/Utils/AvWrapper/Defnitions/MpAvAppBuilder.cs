@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -16,10 +17,19 @@ namespace MonkeyPaste.Avalonia {
             string processPath = pi.ProcessPath;
             string appName = pi.ApplicationName;
             string iconBase64 = pi.MainWindowIconBase64;
+            string args =
+                pi.ArgumentList != null && pi.ArgumentList.Any() ?
+                    string.Join(" ", pi.ArgumentList) :
+                    null;
 
             if (!processPath.IsFile()) {
                 MpDebug.Break($"Invalid process path detected '{processPath}'");
                 return null;
+            }
+            var dupApp = await MpDataModelProvider.GetAppByMembersAsync(processPath, args, MpDefaultDataModelTools.ThisUserDeviceId);
+            if (dupApp != null) {
+                dupApp.WasDupOnCreate = true;
+                return dupApp;
             }
 
             // GET APP ICON
@@ -34,9 +44,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var icon = await Mp.Services.IconBuilder.CreateAsync(iconBase64);
-
-            string args = pi.ArgumentList == null || pi.ArgumentList.Count == 0 ?
-                null : string.Join(Environment.NewLine, pi.ArgumentList);
 
             var app = await MpApp.CreateAsync(
                 appPath: processPath,

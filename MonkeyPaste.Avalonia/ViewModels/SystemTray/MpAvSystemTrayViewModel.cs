@@ -164,9 +164,10 @@ namespace MonkeyPaste.Avalonia {
 #endif
                         new MpAvMenuItemViewModel() {IsSeparator = true},
                         new MpAvMenuItemViewModel() {
-                            Header = "Close",
+                            Header = "Quit",
                             IconResourceKey = "SignOutImage",
                             Command = ExitApplicationCommand,
+                            CommandParameter = "systray menu click",
                             //ShortcutArgs = new object[] { MpShortcutType.ExitApplication },
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ExitApplication),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
@@ -250,9 +251,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand ExitApplicationCommand => new MpCommand(
-            () => {
-                Mp.Services.ShutdownHelper.ShutdownApp("systray cmd");
+        public ICommand ExitApplicationCommand => new MpCommand<object>(
+            (args) => {
+                Mp.Services.ShutdownHelper.ShutdownApp($"systray cmd - '{args.ToStringOrEmpty("no detail (likely quit cmd) ")}'");
             });
 
         public ICommand NavigateToCefNetUriCommand => new MpAsyncCommand(
@@ -294,14 +295,14 @@ namespace MonkeyPaste.Avalonia {
 
                 w.ShowChild();
             });
-        private INotificationManager? _notificationManager;
-        private INotificationManager NotificationManager => _notificationManager
-            ??= new WindowNotificationManager(TopLevel.GetTopLevel(MpAvWindowManager.MainWindow)!);
+        //private INotificationManager? _notificationManager;
+        //private INotificationManager NotificationManager => _notificationManager
+        //    ??= new WindowNotificationManager(TopLevel.GetTopLevel(MpAvWindowManager.MainWindow)!);
         public ICommand GenericTestCommand => new MpAsyncCommand(
             async () => {
                 //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
-                NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
+                //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
             });
         #endregion
     }

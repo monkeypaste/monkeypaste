@@ -78,7 +78,7 @@
                            Stretch="Uniform"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
-                           Source="{Binding Path, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                           Source="{Binding Path, Converter={x:Static local:MpAvStringFileOrFolderPathToBitmapConverter.Instance}}" />
                     <TextBlock x:Name="PathTextBlock"
                                IsHitTestVisible="{Binding $parent[ListBoxItem].IsSelected}"
                                HorizontalAlignment="Stretch"

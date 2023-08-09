@@ -14,7 +14,6 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIAsyncCollectionObject,
         MpIMenuItemViewModel,
-        MpIActionComponent,
         MpIIconResource,
         MpIUserIconViewModel,
         MpIContentTypeDependant,
@@ -78,20 +77,6 @@ namespace MonkeyPaste.Avalonia {
             };
         }
 
-        #endregion
-
-        #region MpIActionComponent Implementation
-
-        void MpIActionComponent.RegisterActionComponent(MpIInvokableAction mvm) {
-            Parent.OnAnalysisCompleted += mvm.OnActionInvoked;
-            MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} Registered {mvm.Label} matcher");
-        }
-
-
-        void MpIActionComponent.UnregisterActionComponent(MpIInvokableAction mvm) {
-            Parent.OnAnalysisCompleted -= mvm.OnActionInvoked;
-            MpConsole.WriteLine($"Analyzer {Parent.Title}-{Label} unregistered {mvm.Label} matcher");
-        }
         #endregion
 
         #region MpISelectableViewModel Implementation
@@ -439,6 +424,7 @@ namespace MonkeyPaste.Avalonia {
             Items.CollectionChanged += Items_CollectionChanged;
         }
 
+
         #endregion
 
         #region Public Methods
@@ -600,6 +586,7 @@ namespace MonkeyPaste.Avalonia {
                 pcvm.OnPropertyChanged(nameof(pcvm.Items));
             }
         }
+
         public virtual async Task<MpParameterFormat> DeferredCreateParameterModel(MpParameterFormat aip) {
             //used to load remote content and called from CreateParameterViewModel in preset
             await Task.Delay(1);

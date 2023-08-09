@@ -34,7 +34,7 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvWelcomeNotificationViewModel WelcomeViewModel { get; } = new MpAvWelcomeNotificationViewModel {
             NotificationFormat = new MpNotificationFormat() {
                 NotificationType = MpNotificationType.Welcome,
-                Title = "Welcome",
+                Title = "Greeting",
                 Body = "Body"
             }
         };

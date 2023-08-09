@@ -16,7 +16,7 @@
             <Style Selector="Button:not(.empty) Image"
                    x:DataType="local:MpAvFileChooserParameterViewModel">
                 <Setter Property="Source"
-                        Value="{Binding CurrentValue, ConverterParameter=pathIcon, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        Value="{Binding CurrentValue, Converter={x:Static local:MpAvStringFileOrFolderPathToBitmapConverter.Instance}}" />
             </Style>
             <Style Selector="Button.empty Image"
                    x:DataType="local:MpAvFileChooserParameterViewModel">

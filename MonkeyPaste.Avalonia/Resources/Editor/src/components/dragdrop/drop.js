@@ -1,7 +1,7 @@
 ﻿
 // #region Life Cycle
 function initDrop() {
-    globals.DropItemElms = [getEditorContainerElement(), getDragOverlayElement()];
+    globals.DropItemElms = [getEditorContainerElement()/*, getDragOverlayElement()*/];
 
     for (var i = 0; i < globals.DropItemElms.length; i++) {
         let item = globals.DropItemElms[i];
@@ -79,6 +79,7 @@ function rejectDrop(e) {
     globals.DropIdx = -1;
     if (!isNullOrUndefined(e.dataTransfer)) {
         e.dataTransfer.dropEffect = 'none';
+        log('drop rejected (effect=none)');
     }
     drawOverlay();
     return false;
@@ -156,8 +157,8 @@ function onDragEnter(e) {
         // NOTE called on every element drag enters, only need once
         return false;
     }
-    if (globals.ContentItemType != 'Text') {
-        return false; 
+    if (!isValidDataTransfer(e.dataTransfer)) {
+        return rejectDrop(e); 
     }
 
     globals.CurDropTargetElm = e.target;
@@ -205,30 +206,25 @@ function onDragOver(e) {
             onDragEnter(e);
         }
     }
-    if (e.target.id == 'dragOverlay') {
-        //debugger;
-        log('warning! drop target is dragOverlay element. pretty sure it shouldnt be...');
+    //if (e.target.id == 'dragOverlay') {
+    //    //debugger;
+    //    //log('warning! drop target is dragOverlay element. pretty sure it shouldnt be...');
+    //}
+
+    // VALIDATE 
+
+    if (!e || !isValidDataTransfer(e.dataTransfer)) {
+        return rejectDrop(e);
     }
+
+
     // DEBOUNCE (my own type but word comes from https://css-tricks.com/debouncing-throttling-explained-examples/)
     let can_proceed = canDebounceDragOverProceed();
     if (!can_proceed) {
         return false;
     }
 
-    // VALIDATE (EXTERNAL)
-
-    let is_valid = false;
-    for (var i = 0; i < e.dataTransfer.types.length; i++) {
-        let dt_type = e.dataTransfer.types[i];
-        if (globals.AllowedDropTypes.includes(dt_type)) {
-            is_valid = true;
-            break;
-        }
-    }
-
-    if (!is_valid) {
-        return rejectDrop(e);
-    }
+    
 
 
     // DROP EFFECT

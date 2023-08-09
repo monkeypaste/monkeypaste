@@ -37,6 +37,13 @@ namespace MonkeyPaste.Avalonia {
             string.Empty;
 
         #endregion
+        #region State
+        protected override MpIActionComponent TriggerComponent =>
+            Mp.Services.ClipboardMonitor;
+
+
+        #endregion
+
         #region Model
 
         #endregion
@@ -51,16 +58,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-
-        protected override void EnableTrigger() {
-            Mp.Services.ClipboardMonitor.RegisterActionComponent(this);
-            Mp.Services.ClipboardMonitor.StartMonitor(false);
-        }
-
-        protected override void DisableTrigger() {
-            Mp.Services.ClipboardMonitor.UnregisterActionComponent(this);
-            Mp.Services.ClipboardMonitor.StopMonitor();
-        }
 
         protected override bool ValidateStartAction(object arg) {
             bool can_start = base.ValidateStartAction(arg);

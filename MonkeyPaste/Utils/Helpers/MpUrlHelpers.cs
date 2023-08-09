@@ -28,7 +28,7 @@ namespace MonkeyPaste {
 
         public const int MAX_DOT_NET_URL_LENGTH = 65519;
 
-        public static async Task<MpUrlProperties> DiscoverUrlProperties(string url = "") {
+        public static async Task<MpUrlProperties> DiscoverUrlPropertiesAsync(string url = "") {
             if (string.IsNullOrWhiteSpace(url)) {
                 return null;
             }
@@ -59,7 +59,7 @@ namespace MonkeyPaste {
 
             if (string.IsNullOrEmpty(url_props.IconBase64) ||
                 url_props.IconBase64.Equals(MpBase64Images.UnknownFavIcon)) {
-                url_props.IconBase64 = MpBase64Images.AppIcon;
+                url_props.IconBase64 = null;// MpBase64Images.AppIcon;
             }
             if (string.IsNullOrEmpty(url_props.Title) &&
                 !string.IsNullOrEmpty(url_props.Source)) {
@@ -189,13 +189,18 @@ namespace MonkeyPaste {
             //domainInfo.SubDomain = "sub";
             //domainInfo.TLD = "co.uk";
             //returns protocol prefixed domain url text
-            var domainInfo = _domainParser.Parse(uri);
-            string domain = domainInfo.RegistrableDomain;
+            try {
+                var domainInfo = _domainParser.Parse(uri);
+                string domain = domainInfo.RegistrableDomain;
 
-            if (_domainParser.IsValidDomain(domain)) {
-                return domain;
+                if (_domainParser.IsValidDomain(domain)) {
+                    return domain;
+                }
+                MpDebug.Break($"what's wrong with this domain? '{domain}'");
             }
-            MpDebug.Break($"what's wrong with this domain? '{domain}'");
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error resolving domain from url '{url}'.", ex);
+            }
             return string.Empty;
         }
 

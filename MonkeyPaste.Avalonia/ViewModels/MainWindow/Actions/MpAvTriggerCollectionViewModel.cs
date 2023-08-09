@@ -556,31 +556,6 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsGridVisible));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActionDesignerVisible)));
                     OnPropertyChanged(nameof(Items));
-
-                    if (SelectedTrigger == null &&
-                        MpAvSidebarItemCollectionViewModel.Instance.LastSelectedItem == this) {
-                        //MpAvSidebarItemCollectionViewModel.Instance.LastSelectedItem = null;
-                        //MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(null);
-                        //MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(this);
-                        //MpAvSidebarItemCollectionViewModel.Instance.LastSelectedItem = this;
-                        //MpAvMainView.Instance.UpdateContentLayout();
-
-                        //MpAvSidebarItemCollectionViewModel.Instance.OnPropertyChanged(nameof(MpAvSidebarItemCollectionViewModel.Instance.LastSelectedItem));
-
-                        //var cc = MpAvMainView.Instance.Find<ContentControl>("SelectedSidebarContentControl");
-                        //var blah = cc.GetVisualDescendant<MpAvParameterCollectionView>();
-                        //cc.ApplyTemplate();
-                        //if (cc != null) {
-                        //    var test = cc.DataContext == this;
-
-                        //    Dispatcher.UIThread.Post(async () => {
-                        //        await Task.Delay(300);
-                        //        cc.Content = null;
-                        //        cc.Content = this;
-                        //    });
-                        //}
-
-                    }
                     break;
             }
         }
@@ -661,8 +636,6 @@ namespace MonkeyPaste.Avalonia {
                 Topmost = true,
                 DataContext = this,
                 Padding = new Thickness(10),
-                //Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeCompliment2Color.ToString())
-                //Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString())
                 Background = Brushes.DimGray
             };
             dw.Classes.Add("fadeIn");
@@ -671,8 +644,7 @@ namespace MonkeyPaste.Avalonia {
                 new Binding() {
                     Source = this,
                     Path = nameof(FocusActionName),
-                    StringFormat = "Trigger Designer '{0}'",
-                    Converter = MpAvStringToWindowTitleConverter.Instance
+                    StringFormat = "Trigger Designer '{0}'".ToWindowTitleText()
                 });
 
             //dw.Bind(

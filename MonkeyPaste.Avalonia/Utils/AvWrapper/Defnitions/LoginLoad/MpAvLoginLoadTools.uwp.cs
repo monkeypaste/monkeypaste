@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
         }
-        public void SetLoadOnLogin(bool isLoadOnLogin) {
+        public void SetLoadOnLogin(bool isLoadOnLogin, bool silent = false) {
             // from https://stackoverflow.com/a/7394955/105028
             if (isLoadOnLogin == IsLoadOnLoginEnabled) {
                 // nothing to do (after reset and enabled in welcome, another instance is opened since task still exists)
@@ -28,20 +28,21 @@ namespace MonkeyPaste.Avalonia {
 
             try {
                 if (isLoadOnLogin) {
+                    // delete any existing task (mainly for debugging)
+                    SetLoadOnLogin(false, true);
                     // Create a new task definition and assign properties
                     TaskDefinition td = TaskService.Instance.NewTask();
                     td.RegistrationInfo.Description = $"Loads {Mp.Services.ThisAppInfo.ThisAppProductName} on login";
 
                     // Create a trigger that will fire the task at this time every other day
                     string userId = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
-                    td.Triggers.Add(new LogonTrigger { UserId = userId });
+                    td.Triggers.Add(new LogonTrigger { UserId = userId, Delay = TimeSpan.FromSeconds(3) });
 
-                    // Create an action that will launch Notepad whenever the trigger fires
                     td.Actions.Add(new ExecAction(Mp.Services.PlatformInfo.ExecutingPath, App.LOGIN_LOAD_ARG));
 
                     // Register the task in the root folder
                     var task = TaskService.Instance.RootFolder.RegisterTaskDefinition(LoginLoadTaskPath, td);
-                    success = td.Validate();
+                    success = true;
                 } else {
                     TaskService.Instance.RootFolder.DeleteTask(LoginLoadTaskPath);
                     success = true;
@@ -52,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
                 success = false;
             }
 
-            if (success) {
+            if (success || silent) {
                 // don't ntf if no problems
                 return;
             }

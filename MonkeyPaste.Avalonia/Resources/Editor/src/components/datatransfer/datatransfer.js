@@ -4,6 +4,13 @@
 // #endregion Life Cycle
 
 // #region Getters
+
+function getAllowedDataTransferTypes(contentType) {
+    if (contentType == 'Image') {
+        return [];
+    }
+    return ['text/plain', 'text/html', 'application/json', 'files', 'text', 'html format']
+}
 // #endregion Getters
 
 // #region Setters
@@ -12,6 +19,18 @@
 
 // #region State
 
+function isValidDataTransfer(dt) {
+    if (!dt || !Array.isArray(dt.types)) {
+        return false;
+    }
+    for (var i = 0; i < dt.types.length; i++) {
+        let dt_type = dt.types[i];
+        if (getAllowedDataTransferTypes(globals.ContentItemType).includes(dt_type.toLowerCase())) {
+            return true;
+        }
+    }
+    return false;
+}
 // #endregion State
 
 // #region Actions

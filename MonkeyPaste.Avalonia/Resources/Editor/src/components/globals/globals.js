@@ -251,7 +251,7 @@ const globals = {
 
 	AllowedEffects:  ['copy', 'copyLink', 'copyMove', 'link', 'linkMove', 'move', 'all'],
 
-	AllowedDropTypes:  ['text/plain', 'text/html', 'application/json', 'files'],
+	AllowedDropTypes:  ['text/plain', 'text/html', 'application/json', 'files', 'text','html format'],
 
 	CurDropTargetElm:  null,
 

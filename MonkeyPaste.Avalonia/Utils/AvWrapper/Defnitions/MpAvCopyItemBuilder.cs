@@ -302,6 +302,11 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteTraceLine("clipboard data is not known format");
             }
 
+            string itemPlainText = null;
+            if (mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {
+                itemPlainText = pt;
+            }
+
             string delta = null;
 
             // POST-PROCESS (TEXT ONLY)
@@ -313,7 +318,10 @@ namespace MonkeyPaste.Avalonia {
                     inputTextFormat = "text";
                 }
 
-                MpAvRichHtmlConvertResult htmlClipboardData = await MpAvPlainHtmlConverter.Instance.ConvertAsync(itemData, inputTextFormat);
+                MpAvRichHtmlConvertResult htmlClipboardData = await MpAvPlainHtmlConverter.Instance.ConvertAsync(
+                    itemData,
+                    inputTextFormat,
+                    itemPlainText);
 
                 //if (MpPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 if (htmlClipboardData == null) {

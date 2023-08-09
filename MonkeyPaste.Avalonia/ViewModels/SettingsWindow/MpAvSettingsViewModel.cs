@@ -937,7 +937,7 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ResetShortcuts.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            label = "App Shortcuts",
+                                            label = "App GestureProfile",
                                             description = "All application shortcuts will be reset to their default key gestures.",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {

@@ -84,6 +84,7 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
         protected override void UpdateDragCursor(CefBrowser browser, CefDragOperationsMask operation) {
+            MpConsole.WriteLine($"Drag cursor set to '{operation}'");
             base.UpdateDragCursor(browser, operation);
         }
 

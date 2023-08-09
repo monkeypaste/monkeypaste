@@ -23,6 +23,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Statics
+
+        static MpAvFileSystemWatcher _fsWatcher = new MpAvFileSystemWatcher();
+
+        #endregion
+
         #region Interfaces
 
         #region MpIFileSystemEventHandler Implementation
@@ -137,6 +143,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        protected override MpIActionComponent TriggerComponent =>
+            _fsWatcher;
+
         #endregion
 
         #region Model
@@ -210,14 +219,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-
-        protected override void EnableTrigger() {
-            MpAvFileSystemWatcher.Instance.RegisterActionComponent(this);
-        }
-
-        protected override void DisableTrigger() {
-            MpAvFileSystemWatcher.Instance.UnregisterActionComponent(this);
-        }
 
         protected override async Task ValidateActionAsync() {
             await base.ValidateActionAsync();

@@ -97,6 +97,13 @@ namespace MonkeyPaste.Avalonia {
             "Content Added - Triggered when content of the selected type is added";
 
         #endregion
+
+        #region State
+        protected override MpIActionComponent TriggerComponent =>
+            MpAvClipTrayViewModel.Instance;
+
+        #endregion
+
         #region Model
 
         public MpCopyItemType AddedContentType {
@@ -146,14 +153,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-
-        protected override void EnableTrigger() {
-            MpAvClipTrayViewModel.Instance.RegisterActionComponent(this);
-        }
-
-        protected override void DisableTrigger() {
-            MpAvClipTrayViewModel.Instance.UnregisterActionComponent(this);
-        }
 
         protected override bool ValidateStartAction(object arg) {
             if (!base.ValidateStartAction(arg)) {

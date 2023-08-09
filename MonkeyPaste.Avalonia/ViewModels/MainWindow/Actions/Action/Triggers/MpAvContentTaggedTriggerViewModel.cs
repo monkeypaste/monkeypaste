@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,6 +46,12 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvTagTileViewModel SelectedTag =>
             MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.TagId == TagId);
+
+        #endregion
+
+        #region State
+        protected override MpIActionComponent TriggerComponent =>
+            SelectedTag;
 
         #endregion
 
@@ -115,19 +122,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override void EnableTrigger() {
-            if (SelectedTag == null) {
-                return;
-            }
-            SelectedTag.RegisterActionComponent(this);
-        }
-
-        protected override void DisableTrigger() {
-            if (SelectedTag == null) {
-                return;
-            }
-            SelectedTag.UnregisterActionComponent(this);
-        }
         #endregion
 
         #region Private Methods

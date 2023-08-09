@@ -77,6 +77,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE db create takes extra time and breaks when vm's query in parallel
             // (this maybe a sign this needs more organization)
             !StartupFlags.HasFlag(MpStartupFlags.Initial);
+        //false;
 
         public int LoadedCount { get; set; } = 0;
 
@@ -157,6 +158,8 @@ namespace MonkeyPaste.Avalonia {
             BaseItems.AddRange(new[] {
                 new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"),
                 new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), "System Tray"),
+                new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
+                new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
             }.ToList());
 #endif
 
@@ -164,10 +167,10 @@ namespace MonkeyPaste.Avalonia {
                new List<MpAvLoaderItemViewModel>() {
                     //new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
+                    //new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
                     //new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger"),
                     new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),"Supported Clipboard Formats",Mp.Services.DataObjectRegistrar),
-                    new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
+                    //new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
                     new MpAvLoaderItemViewModel(typeof(MpPluginLoader), "Plugins"),
                     new MpAvLoaderItemViewModel(typeof(MpAvSoundPlayerViewModel), "Sound Player"),
@@ -188,7 +191,7 @@ namespace MonkeyPaste.Avalonia {
                     //new MpAvLoaderItemViewModel(typeof(MpDataModelProvider), "Querying"),
                     new MpAvLoaderItemViewModel(typeof(MpAvTriggerCollectionViewModel), "Triggers"),
                     new MpAvLoaderItemViewModel(typeof(MpAvExternalDropWindowViewModel), "Drop Widget"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvShortcutCollectionViewModel), "Shortcuts"),
+                    new MpAvLoaderItemViewModel(typeof(MpAvShortcutCollectionViewModel), "GestureProfile"),
                });
 
             if (Mp.Services.PlatformInfo.IsDesktop) {

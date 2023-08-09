@@ -4,6 +4,7 @@ using System;
 using Avalonia.Logging;
 using Avalonia.ReactiveUI;
 using System.IO;
+using Avalonia.Controls;
 #if CEF_WV
 using CefNet;
 
@@ -29,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
                 App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(App.Args);
+                .StartWithClassicDesktopLifetime(App.Args, ShutdownMode.OnExplicitShutdown);
             }
             catch (Exception e) {
                 // here we can work with the exception, for example add it to our log file

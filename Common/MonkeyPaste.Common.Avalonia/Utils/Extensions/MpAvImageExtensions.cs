@@ -15,6 +15,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static Bitmap? ToAvBitmap(this string base64Str, double scale = 1.0, string tint_hex_color = "") {
             if (!base64Str.IsStringBase64()) {
+
                 return null;
             }
             try {

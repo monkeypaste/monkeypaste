@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!string.IsNullOrEmpty(result)) {
                     CurrentValue = result;
                 }
-
+                OnPropertyChanged(nameof(CurrentValue));
                 //MpAvMainWindowViewModel.Instance.IsAnyDialogOpen = false;
             });
 

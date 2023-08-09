@@ -29,7 +29,8 @@ namespace MonkeyPaste.Avalonia {
             startupIcon.Menu.Add(
                 new NativeMenuItem() {
                     Header = "Cancel",
-                    Command = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand
+                    Command = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand,
+                    CommandParameter = "systray cancel click"
                 });
             TrayIcon.SetIcons(Application.Current, new TrayIcons { startupIcon });
         }

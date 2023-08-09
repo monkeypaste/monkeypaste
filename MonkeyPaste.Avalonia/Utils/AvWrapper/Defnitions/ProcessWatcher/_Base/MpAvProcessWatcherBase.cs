@@ -35,14 +35,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIActionComponent Implementation
 
-        public void RegisterActionComponent(MpIInvokableAction mvm) {
+        void MpIActionComponent.RegisterActionComponent(MpIInvokableAction mvm) {
+            if (OnAppActivated.HasInvoker(mvm)) {
+                return;
+            }
             OnAppActivated += mvm.OnActionInvoked;
-            MpConsole.WriteLine($"ProcessWatcher Registered {mvm.Label} trigger");
+            MpConsole.WriteLine($"{nameof(OnAppActivated)} Registered {mvm.Label}");
         }
 
-        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+        void MpIActionComponent.UnregisterActionComponent(MpIInvokableAction mvm) {
+            if (!OnAppActivated.HasInvoker(mvm)) {
+                return;
+            }
             OnAppActivated -= mvm.OnActionInvoked;
-            MpConsole.WriteLine($"Trigger {mvm.Label} Unregistered from ProcessWatcher");
+            MpConsole.WriteLine($"{nameof(OnAppActivated)} Unregistered {mvm.Label}");
         }
         #endregion
 
@@ -212,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
                 // ignore inner-process window changes not relevant for this event
                 return;
             }
-            MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo}");
+            MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.MainWindowTitle}");
             OnAppActivated?.Invoke(this, LastProcessInfo);
         }
 

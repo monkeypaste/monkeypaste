@@ -1,4 +1,5 @@
 ﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -106,8 +107,9 @@ namespace MonkeyPaste.Avalonia {
             "Shortcut Triggered - when the recorded shortcut is pressed at anytime with the current clipboard";
 
         #endregion
-
         #region State
+        protected override MpIActionComponent TriggerComponent =>
+            ShortcutViewModel;
 
         public override bool AllowNullArg =>
             true;
@@ -169,6 +171,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
+
+        #region Db Handlers
         protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
             if (e is MpShortcut s &&
                 //ShortcutId == 0 && 
@@ -199,6 +203,9 @@ namespace MonkeyPaste.Avalonia {
                 Task.Run(ValidateActionAsync);
             }
         }
+
+        #endregion
+
         protected override async Task ValidateActionAsync() {
             await base.ValidateActionAsync();
             //if (!IsValid) {
@@ -229,17 +236,10 @@ namespace MonkeyPaste.Avalonia {
             if (ShortcutViewModel == null) {
                 return;
             }
-            ShortcutViewModel.RegisterActionComponent(this);
+            TriggerComponent.RegisterActionComponent(this);
 
             // NOTE nothing to enable
             // invoke is handled by shortcut listener and invokeCmd.CanExec
-        }
-
-        protected override void DisableTrigger() {
-            if (ShortcutViewModel == null) {
-                return;
-            }
-            ShortcutViewModel.UnregisterActionComponent(this);
         }
 
         protected override bool ValidateStartAction(object arg) {

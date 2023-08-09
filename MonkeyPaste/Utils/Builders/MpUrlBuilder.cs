@@ -23,20 +23,25 @@ namespace MonkeyPaste {
                 return null;
             }
 
-            var urlProps = await MpUrlHelpers.DiscoverUrlProperties(url);
+            var urlProps = await MpUrlHelpers.DiscoverUrlPropertiesAsync(url);
             if (urlProps == null) {
                 return null;
             }
 
-            MpIcon icon = await Mp.Services.IconBuilder.CreateAsync(
+            int icon_id = 0;
+            if (!string.IsNullOrEmpty(urlProps.IconBase64)) {
+                MpIcon icon = await Mp.Services.IconBuilder.CreateAsync(
                     iconBase64: urlProps.IconBase64,
                     suppressWrite: suppressWrite);
-
+                if (icon != null) {
+                    icon_id = icon.Id;
+                }
+            }
 
             var result = await MpUrl.CreateAsync(
                 urlPath: urlProps.FullyFormattedUriStr,
                 title: urlProps.Title,
-                iconId: icon.Id,
+                iconId: icon_id,
                 appId: appId,
                 suppressWrite: suppressWrite);
 

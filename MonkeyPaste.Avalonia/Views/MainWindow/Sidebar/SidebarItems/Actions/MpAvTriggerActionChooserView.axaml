@@ -164,16 +164,16 @@
                 </Border>
 
                 <GridSplitter x:Name="ActionPropertyDesignerHorizontalModeSplitter"
-                              IsVisible="{Binding IsHorizontal}"
+                              IsVisible="False"
                               Classes="vertical"
                               HorizontalAlignment="Right"
                               VerticalAlignment="Stretch">
-                    <GridSplitter.IsVisible>
+                    <!--<GridSplitter.IsVisible>
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="IsHorizontal" />
                             <Binding Path="IsWindowOpen" />
                         </MultiBinding>
-                    </GridSplitter.IsVisible>
+                    </GridSplitter.IsVisible>-->
                 </GridSplitter>
 
                 <!--  SELECTED TRIGGER DESIGNER COLUMN  -->

@@ -169,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        protected virtual MpIActionComponent TriggerComponent { get; }
         public bool IsAllValid =>
             IsValid && AllDescendants.All(x => x.IsValid);
 
@@ -228,8 +228,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected abstract void EnableTrigger();
-        protected abstract void DisableTrigger();
+        protected virtual void EnableTrigger() {
+            if (TriggerComponent == null) {
+                return;
+            }
+            TriggerComponent.RegisterActionComponent(this);
+        }
+        protected virtual void DisableTrigger() {
+            if (TriggerComponent == null) {
+                return;
+            }
+            TriggerComponent.UnregisterActionComponent(this);
+        }
 
 
         protected virtual async Task ShowUserEnableChangeNotification() {

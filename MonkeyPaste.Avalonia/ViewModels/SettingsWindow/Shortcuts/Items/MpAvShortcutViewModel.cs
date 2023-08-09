@@ -26,16 +26,20 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIActionComponent Implementation
-        public void RegisterActionComponent(MpIInvokableAction mvm) {
-            //by design this only can occur for shortcuts with a selected item as its context
-
+        void MpIActionComponent.RegisterActionComponent(MpIInvokableAction mvm) {
+            if (OnShortcutExecuted.HasInvoker(mvm)) {
+                return;
+            }
             OnShortcutExecuted += mvm.OnActionInvoked;
-            MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
+            MpConsole.WriteLine($"{nameof(OnShortcutExecuted)} Registered {mvm.Label}");
         }
 
-        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+        void MpIActionComponent.UnregisterActionComponent(MpIInvokableAction mvm) {
+            if (!OnShortcutExecuted.HasInvoker(mvm)) {
+                return;
+            }
             OnShortcutExecuted -= mvm.OnActionInvoked;
-            MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnShortcutExecuted");
+            MpConsole.WriteLine($"{nameof(OnShortcutExecuted)} Unregistered {mvm.Label}");
         }
         #endregion
 
@@ -96,8 +100,9 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool HasInvoker =>
-            OnShortcutExecuted != null &&
-            OnShortcutExecuted.GetInvocationList().Length > 0;
+            //OnShortcutExecuted != null &&
+            //OnShortcutExecuted.GetInvocationList().Length > 0;
+            OnShortcutExecuted.HasInvokers();
         public bool IsEditorShortcut =>
             ShortcutType.IsEditorShortcut();
 

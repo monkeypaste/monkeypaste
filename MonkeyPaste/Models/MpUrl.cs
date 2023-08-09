@@ -134,7 +134,8 @@ namespace MonkeyPaste {
                 UrlGuid = System.Guid.NewGuid(),
                 AppId = appId,
                 UrlPath = urlPath,
-                UrlTitle = title
+                UrlTitle = title,
+                IconId = iconId
             };
 
             newUrl.IconId = iconId;

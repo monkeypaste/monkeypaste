@@ -29,6 +29,11 @@
     color: var(--defcontentfgcolor);
 }
 
+#editor.no-select > .ql-editor {
+    user-select: none;
+    pointer-events: none;
+}
+
 
 .show-scrollbars {
     overflow: auto !important;
@@ -40,12 +45,12 @@
 }
 
 .no-select {
-    user-select: none;
     cursor: default;
     width: 100%;
     height: 100%;
     text-decoration: none;
-    pointer-events: none;
+    /*user-select: none;*/
+    /*pointer-events: none;*/
 }
     .no-select > .ql-editor {
         overflow: hidden;

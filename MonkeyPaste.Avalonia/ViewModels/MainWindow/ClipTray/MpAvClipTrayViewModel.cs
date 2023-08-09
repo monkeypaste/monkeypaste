@@ -71,7 +71,11 @@ namespace MonkeyPaste.Avalonia {
         #region MpIContentBuilder Implementation
 
         public async Task<MpCopyItem> BuildFromDataObjectAsync(object avOrPortableDataObject, bool is_copy) {
-            MpAvDataObject mpdo = await Mp.Services.DataObjectTools.ReadDragDropDataObjectAsync(avOrPortableDataObject) as MpAvDataObject;
+            IDataObject ido = avOrPortableDataObject as IDataObject;
+            if (ido == null && avOrPortableDataObject.ToDataObject() is IDataObject cnvIdo) {
+                ido = cnvIdo;
+            }
+            MpAvDataObject mpdo = await Mp.Services.DataObjectTools.ReadDragDropDataObjectAsync(ido) as MpAvDataObject;
 
             if (mpdo == null) {
                 return null;
@@ -781,16 +785,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIActionComponent Implementation
 
-        public void RegisterActionComponent(MpIInvokableAction mvm) {
+        void MpIActionComponent.RegisterActionComponent(MpIInvokableAction mvm) {
+            if (OnCopyItemAdd.HasInvoker(mvm)) {
+                return;
+            }
             OnCopyItemAdd += mvm.OnActionInvoked;
-            MpConsole.WriteLine($"ClipTray Registered {mvm.Label} matcher");
+            MpConsole.WriteLine($"{nameof(OnCopyItemAdd)} Registered {mvm.Label}");
         }
 
-        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+        void MpIActionComponent.UnregisterActionComponent(MpIInvokableAction mvm) {
+            if (!OnCopyItemAdd.HasInvoker(mvm)) {
+                return;
+            }
             OnCopyItemAdd -= mvm.OnActionInvoked;
-            MpConsole.WriteLine($"Matcher {mvm.Label} Unregistered from OnCopyItemAdded");
+            MpConsole.WriteLine($"{nameof(OnCopyItemAdd)} Unregistered {mvm.Label}");
         }
-
         #endregion
 
         #endregion

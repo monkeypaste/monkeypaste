@@ -213,7 +213,7 @@
                     </MultiBinding>
                 </Border.IsVisible>
                 <Border x:Name="AccountCapOverlay"
-                        Opacity="{Binding IsHovering, ConverterParameter=0.2|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                        Opacity="{Binding IsHovering, ConverterParameter=0.15|0.7, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                     <Border.Transitions>

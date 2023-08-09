@@ -12,7 +12,6 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvWelcomeWindow : MpAvWindow<MpAvWelcomeNotificationViewModel> {
-
         public MpAvWelcomeWindow() {
             InitializeComponent();
             var mb = this.FindControl<Button>("MinimizeButton");
@@ -21,8 +20,12 @@ namespace MonkeyPaste.Avalonia {
                     w.WindowState = WindowState.Minimized;
                 }
             };
+            int show_count = 0;
             this.GetObservable(IsVisibleProperty).Subscribe(value => {
-
+                if (IsVisible) {
+                    show_count++;
+                    MpDebug.Assert(show_count < 2, "welcome only once");
+                }
             });
             this.Opened += MpAvWelcomeWindow_Opened;
         }

@@ -11,7 +11,6 @@ namespace MonkeyPaste.Avalonia {
         MpIActionComponent {
         #region Private Variables
 
-        private List<FileSystemWatcher> _watchers = new List<FileSystemWatcher>();
         private Dictionary<FileSystemWatcher, List<MpIFileSystemEventHandler>> _handlerLookup = new Dictionary<FileSystemWatcher, List<MpIFileSystemEventHandler>>();
 
         #endregion
@@ -20,17 +19,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIActionComponent Implementation
 
-
-        public void RegisterActionComponent(MpIInvokableAction mvm) {
+        void MpIActionComponent.RegisterActionComponent(MpIInvokableAction mvm) {
+            if (_handlerLookup.Any(x => x.Value.Contains(mvm as MpIFileSystemEventHandler))) {
+                return;
+            }
             var fstvm = mvm as MpAvFolderWatcherTriggerViewModel;
             AddWatcher(fstvm.FolderPath, fstvm);
-            MpConsole.WriteLine($"FileSystemWatcher Registered {mvm.Label} matcher");
+            MpConsole.WriteLine($"{GetType()} Registered {mvm.Label}");
         }
 
-        public void UnregisterActionComponent(MpIInvokableAction mvm) {
+        void MpIActionComponent.UnregisterActionComponent(MpIInvokableAction mvm) {
+            if (!_handlerLookup.Any(x => x.Value.Contains(mvm as MpIFileSystemEventHandler))) {
+                return;
+            }
             var fstvm = mvm as MpAvFolderWatcherTriggerViewModel;
             RemoveWatcher(fstvm.FolderPath);
-            MpConsole.WriteLine($"FileSystemWatcher Unregistered {mvm.Label} matcher");
+            MpConsole.WriteLine($"{GetType()} Unregistered {mvm.Label}");
         }
 
         #endregion
@@ -39,17 +43,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        private static MpAvFileSystemWatcher _instance;
-        public static MpAvFileSystemWatcher Instance => _instance ?? (_instance = new MpAvFileSystemWatcher());
 
-
-        public MpAvFileSystemWatcher() {
-
-        }
+        public MpAvFileSystemWatcher() { }
 
         public async Task InitAsync() {
             await Task.Delay(1);
-            _watchers.Clear();
             _handlerLookup.Clear();
         }
 
@@ -57,18 +55,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public bool AddWatcher(string path, MpIFileSystemEventHandler handler = null) {
+        public bool AddWatcher(string path, MpIFileSystemEventHandler handler) {
             if (!path.IsFileOrDirectory()) {
                 return false;
             }
-            FileSystemWatcher watcher = _watchers.FirstOrDefault(x => x.Path.ToLower() == path.ToLower());
-
-            if (watcher == null) {
-                watcher = new FileSystemWatcher(path);
-                _watchers.Add(watcher);
-            } else {
+            if (_handlerLookup.Select(x => x.Key).FirstOrDefault(x => x.Path.ToLower() == path.ToLower())
+                is FileSystemWatcher existing_watcher) {
+                _handlerLookup[existing_watcher].Add(handler);
                 return true;
             }
+            FileSystemWatcher watcher = new FileSystemWatcher(path);
+            _handlerLookup.Add(watcher, new[] { handler }.ToList());
 
             watcher.NotifyFilter = watcher.NotifyFilter
                                  //| NotifyFilters.Attributes
@@ -103,11 +100,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool RemoveWatcher(string path) {
-            FileSystemWatcher watcher = _watchers.FirstOrDefault(x => x.Path.ToLower() == path.ToLower());
+            FileSystemWatcher watcher = _handlerLookup.Select(x => x.Key).FirstOrDefault(x => x.Path.ToLower() == path.ToLower());
             if (watcher == null) {
                 return false;
             }
-            _watchers.Remove(watcher);
+            _handlerLookup.Remove(watcher);
 
             watcher.Changed -= OnChanged;
             watcher.Created -= OnCreated;
@@ -171,7 +168,8 @@ namespace MonkeyPaste.Avalonia {
         protected virtual void Dispose(bool disposing) {
             // Release unmanaged memory
             if (disposing) {
-                _watchers.ForEach(x => RemoveWatcher(x.Path));
+                _handlerLookup.Select(x => x.Key).ForEach(x => RemoveWatcher(x.Path));
+                _handlerLookup.Clear();
             }
         }
 

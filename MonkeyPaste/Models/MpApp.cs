@@ -27,7 +27,12 @@ namespace MonkeyPaste {
 
         public string AppName { get; set; } = string.Empty;
 
-        public string Arguments { get; set; } = string.Empty;
+        // NOTE args should never be null in db to avoid compare mismatches
+        private string _arguments;
+        public string Arguments {
+            get => _arguments;
+            set => _arguments = value == null ? string.Empty : value;
+        }
 
         [Column("IsAppRejected")]
         public int IsRejectedVal { get; set; } = 0;
@@ -97,7 +102,7 @@ namespace MonkeyPaste {
         public static async Task<MpApp> CreateAsync(
             string appPath = "",
             string appName = "",
-            string arguments = null,
+            string arguments = "",
             int iconId = 0,
             int appUserDeviceId = 0,
             string guid = "",

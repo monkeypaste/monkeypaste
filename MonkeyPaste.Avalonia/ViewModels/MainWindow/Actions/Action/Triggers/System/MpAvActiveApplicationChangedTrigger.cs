@@ -74,6 +74,13 @@ namespace MonkeyPaste.Avalonia {
             string.Empty;
 
         #endregion
+
+        #region State
+        protected override MpIActionComponent TriggerComponent =>
+            Mp.Services.ProcessWatcher;
+
+
+        #endregion
         #region Model
 
         public IEnumerable<string> IgnoredProcesses {
@@ -114,22 +121,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected override void EnableTrigger() {
-            Mp.Services.ProcessWatcher.RegisterActionComponent(this);
-            if (Mp.Services.ProcessWatcher.IsWatching) {
-                return;
-            }
-
-        }
-
-        protected override void DisableTrigger() {
-            Mp.Services.ProcessWatcher.UnregisterActionComponent(this);
-
-            if (!Mp.Services.ProcessWatcher.IsWatching) {
-                return;
-            }
-            Mp.Services.ProcessWatcher.StopWatcher();
-        }
 
         public override async Task PerformActionAsync(object arg) {
             if (!base.ValidateStartAction(arg)) {

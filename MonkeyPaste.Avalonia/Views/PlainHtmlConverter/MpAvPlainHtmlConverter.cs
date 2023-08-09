@@ -69,6 +69,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<MpAvRichHtmlConvertResult> ConvertAsync(
             string inputStr,
             string inputFormatType,
+            string verifyStr = null,
             MpCsvFormatProperties csvProps = null) {
             string htmlDataStr = inputStr;
             if (htmlDataStr == null) {
@@ -85,12 +86,31 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 result = ConvertWithFallback(htmlDataStr);
             }
+            VerifyConversion(result, verifyStr);
+
             return result;
         }
 
         #endregion
 
         #region Private Methods
+        private void VerifyConversion(MpAvRichHtmlConvertResult result, string verifyStr) {
+            if (verifyStr != null &&
+                result != null &&
+                result.RichHtml != null) {
+                string html_pt = result.RichHtml.ToPlainText("html");
+                if (html_pt.Length != verifyStr.Length) {
+                    // conversion error, fallback to plain text
+                    MpConsole.WriteLine($"Html Conversion error! Output len: {html_pt.Length} Verify len: {verifyStr.Length}", true);
+                    MpConsole.WriteLine("Verify:");
+                    MpConsole.WriteLine(verifyStr);
+                    MpConsole.WriteLine("Conversion:");
+                    MpConsole.WriteLine(html_pt);
+                    MpConsole.WriteLine("Falling back to plain text", false, true);
+                    result.RichHtml = verifyStr.Replace(Environment.NewLine, IsWebViewConverterAvailable ? "<br>" : Environment.NewLine);
+                }
+            }
+        }
         private async Task CreateWebViewConverterAsync() {
             IsBusy = true;
             if (OperatingSystem.IsBrowser()) {
