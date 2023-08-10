@@ -280,7 +280,7 @@ namespace MonkeyPaste.Common {
                 return string.Empty;
             }
             if (str.EndsWith(Environment.NewLine)) {
-                return str.Substring(0, str.Length - 1);
+                return str.Substring(0, str.Length - Environment.NewLine.Length);
             }
             return str;
         }

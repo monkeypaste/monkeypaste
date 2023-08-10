@@ -99,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
                 result != null &&
                 result.RichHtml != null) {
                 string html_pt = result.RichHtml.ToPlainText("html");
-                if (html_pt.Length != verifyStr.Length) {
+                if (html_pt.TrimTrailingLineEnding().Length != verifyStr.Length) {
                     // conversion error, fallback to plain text
                     MpConsole.WriteLine($"Html Conversion error! Output len: {html_pt.Length} Verify len: {verifyStr.Length}", true);
                     MpConsole.WriteLine("Verify:");

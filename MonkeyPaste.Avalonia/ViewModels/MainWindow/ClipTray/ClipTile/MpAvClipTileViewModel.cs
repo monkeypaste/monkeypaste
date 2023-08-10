@@ -1838,13 +1838,18 @@ namespace MonkeyPaste.Avalonia {
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
                 Content = new MpAvClipTileView(),
                 Topmost = true,
-                Background = Brushes.Transparent,
                 CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
             };
             pow.Classes.Add("tileWindow");
 
             #region Window Bindings
 
+            pow.Bind(
+                Window.BackgroundProperty,
+                new Binding() {
+                    Source = pow.Content,
+                    Path = nameof(MpAvClipTileView.Background)
+                });
             pow.Bind(
                 Window.WindowStateProperty,
                 new Binding() {
