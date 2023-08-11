@@ -845,4 +845,5 @@ function toTitleCase(str) {
 function moveAbsoluteElement(elm, p) {
     setElementComputedStyleProp(elm, 'margin-left', `${p.x}px`);
     setElementComputedStyleProp(elm, 'margin-top', `${p.y}px`);
+    return cleanRect(elm.getBoundingClientRect());
 }

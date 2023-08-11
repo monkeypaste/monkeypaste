@@ -44,7 +44,6 @@ namespace MonkeyPaste.Avalonia {
         MpIHoverableViewModel,
         MpIResizableViewModel,
         MpITextContentViewModel,
-        MpIAppendTitleViewModel,
         MpIContextMenuViewModel {
 
         #region Private Variables
@@ -124,19 +123,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvMenuItemViewModel ContextMenuViewModel =>
             IsSelected ? Parent.ContextMenuViewModel : null;
-
-        #endregion
-
-        #region MpIAppendTitleViewModel Implementation
-
-        public string AppendTitle {
-            get {
-                if (!IsAppendNotifier || Parent == null || !Parent.IsAnyAppendMode) {
-                    return string.Empty;
-                }
-                return $"Append [{(Parent.IsAppendLineMode ? "Line" : "Inline")}] - {CopyItemTitle}";
-            }
-        }
 
         #endregion
 
@@ -1838,18 +1824,15 @@ namespace MonkeyPaste.Avalonia {
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
                 Content = new MpAvClipTileView(),
                 Topmost = true,
+                Background = Brushes.Transparent,
                 CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
             };
             pow.Classes.Add("tileWindow");
+            pow.Classes.Add("fadeIn");
+            pow.Classes.Add("fadeOut");
 
             #region Window Bindings
 
-            pow.Bind(
-                Window.BackgroundProperty,
-                new Binding() {
-                    Source = pow.Content,
-                    Path = nameof(MpAvClipTileView.Background)
-                });
             pow.Bind(
                 Window.WindowStateProperty,
                 new Binding() {

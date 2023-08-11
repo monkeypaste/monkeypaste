@@ -16,11 +16,12 @@ function initDrop() {
 
 // #region Getters
 
-function getDropBlockState(doc_idx, mp, isShiftDown) {
+function getDropBlockState(doc_idx, mp, isShiftDown) {    
     if (doc_idx < 0) {
         return false;
     }
-    if (isShiftDown) {
+    const can_inline = globals.ContentItemType == 'Text';
+    if (isShiftDown && can_inline) {
         return 'split';
     }
 
@@ -40,7 +41,7 @@ function getDropBlockState(doc_idx, mp, isShiftDown) {
     let is_post_block_drop =
         Math.abs(mp.y - caret_line.y2) < block_threshold ||
         mp.y > caret_line.y2;
-    if (is_post_block_drop) {
+    if (is_post_block_drop || !can_inline) {
         return 'post';
     }
     return 'inline';
@@ -84,8 +85,6 @@ function rejectDrop(e) {
     drawOverlay();
     return false;
 }
-
-
 function resetDrop(fromHost, wasLeave, wasCancel) {
     if (wasCancel) {
         onDragEnd_ntf(fromHost, true);
@@ -166,11 +165,11 @@ function onDragEnter(e) {
 
     onDragEnter_ntf();
     log('drag enter');
+    startAutoScroll();
+
     for (var i = 0; i < globals.DropItemElms.length; i++) {
         globals.DropItemElms[i].classList.add('drop');
     }
-    startAutoScroll();
-
     // store state before drop starts so the right state is restored 
     if (!isDragging()) {
         if (isSubSelectionEnabled()) {
@@ -349,7 +348,11 @@ function onDrop(e) {
     var source_range = null;
     if (isDragging() &&
         dropEffect.toLowerCase().includes('move')) {
-        source_range = getDocSelection();
+        if (globals.ContentItemType == 'FileList') {
+            source_range = getSelectedFileItemIdxs();
+        } else {
+            source_range = getDocSelection();
+        }
     }
     var drop_range = {
         index: globals.DropIdx,
@@ -365,7 +368,7 @@ function onDrop(e) {
 
             // PERFORM DROP TRANSACTION    
 
-            performDataTransferOnContent(processed_dt, drop_range, source_range, drop_insert_source, 'Dropped');
+            performDataTransferOnContent(processed_dt, source_range, drop_range, drop_insert_source, 'Dropped');
 
             // RESET
 

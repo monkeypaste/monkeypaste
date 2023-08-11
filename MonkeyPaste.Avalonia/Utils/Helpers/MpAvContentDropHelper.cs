@@ -44,7 +44,6 @@ namespace MonkeyPaste.Avalonia {
                 hdim.dataItems != null &&
                 hdim.dataItems.Any()) {
                 req_mpdo = new MpAvDataObject(hdim.dataItems.ToDictionary(x => x.format, x => (object)x.data));
-
             }
             return req_mpdo;
         }

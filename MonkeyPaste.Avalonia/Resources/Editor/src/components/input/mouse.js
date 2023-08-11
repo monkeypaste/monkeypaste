@@ -124,6 +124,10 @@ function onWindowDoubleClick(e) {
 }
 
 function onWindowContextMenu(e) {
+	if (!isRunningInHost()) {
+		e.handled = false;
+		return;
+	}
 	if (rejectTableContextMenu(e)) {
 		e.preventDefault();
 		e.stopPropagation();

@@ -295,7 +295,7 @@ function onLinkPointerEnter(e) {
     let link_tooltip_text = getLinkTooltipText(a_elm);
     
     if (globals.IsTooltipToolbarEnabled) {
-        showTooltipToolbar(link_tooltip_text);
+        showTooltipToolbar(a_elm, link_tooltip_text);
     } else if (globals.IsTooltipOverlayEnabled) {
         showTooltipOverlay(a_elm, link_tooltip_text);
     }    

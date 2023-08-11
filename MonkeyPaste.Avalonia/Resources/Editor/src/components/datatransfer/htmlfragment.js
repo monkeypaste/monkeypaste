@@ -18,7 +18,10 @@
 
 function isHtmlClipboardFragment(dataStr) {
     // TODO need to check common browser html clipboard formats this is only for Chrome on Windows
-    if (!dataStr.startsWith("Version:") || !dataStr.includes("StartHTML:") || !dataStr.includes("EndHTML:")) {
+    if (!isString(dataStr) ||
+        !dataStr.startsWith("Version:") ||
+        !dataStr.includes("StartHTML:") ||
+        !dataStr.includes("EndHTML:")) {
         return false;
     }
     return true;
@@ -28,6 +31,19 @@ function isHtmlClipboardFragment(dataStr) {
 
 // #region Actions
 
+function getDataTransferHtml(dt) {
+    let dt_html_str = null;
+    let dt_html_source = null;
+    if (dt.types.includes('html format')) {
+        // prefer system html format to get sourceurl (on windows)
+        dt_html_str = b64_to_utf8(dt.getData('html format'));
+    } else if (dt.types.includes('text/html')) {
+        dt_html_str = dt.getData('text/html');
+    }
+    let result = parseHtmlFromHtmlClipboardFragment(dt_html_str);
+    return result;
+}
+
 function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
     // PARSE URL
 
@@ -35,6 +51,9 @@ function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
         sourceUrl: '',
         html: cbDataStr
     };
+    if (!isHtmlClipboardFragment(cbDataStr)) {
+        return cbData;
+    }
     let sourceUrlToken = 'SourceURL:';
     let source_url_start_idx = cbDataStr.indexOf(sourceUrlToken) + sourceUrlToken.length;
     if (source_url_start_idx >= 0) {

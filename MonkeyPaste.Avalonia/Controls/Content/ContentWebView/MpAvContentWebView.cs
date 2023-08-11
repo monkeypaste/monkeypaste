@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Reflection;
 using Avalonia.Platform.Storage;
+using AvToolTip = Avalonia.Controls.ToolTip;
+using TheArtOfDev.HtmlRenderer.Avalonia;
 #if DESKTOP
 
 
@@ -480,6 +482,28 @@ namespace MonkeyPaste.Avalonia {
                         BindingContext.IsVerticalScrollbarVisibile = scrollbarVisibleMsg.isScrollBarYVisible;
                     }
                     break;
+
+                case MpEditorBindingFunctionType.notifyShowToolTip:
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillShowToolTipNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillShowToolTipNotification showToolTipNtf) {
+                        if (showToolTipNtf.isVisible && !IsDragging) {
+                            var tt = AvToolTip.GetTip(this) as MpAvToolTipView;
+                            if (tt == null) {
+                                tt = new MpAvToolTipView();
+                                AvToolTip.SetTip(this, tt);
+                            }
+                            tt.ToolTipHtml = showToolTipNtf.tooltipHtml;
+                            AvToolTip.SetHorizontalOffset(this, showToolTipNtf.anchorX);
+                            AvToolTip.SetHorizontalOffset(this, showToolTipNtf.anchorY);
+                            AvToolTip.SetPlacement(this, PlacementMode.Pointer);
+                            AvToolTip.SetIsOpen(this, true);
+                        } else {
+                            AvToolTip.SetIsOpen(this, false);
+                            AvToolTip.SetTip(this, null);
+                        }
+
+                    }
+                    break;
                 #endregion
 
                 #region SELECTION
@@ -560,6 +584,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpEditorBindingFunctionType.notifyDropCompleted:
+
                     BindingContext.IsDropOverTile = false;
                     BindingContext.IsSelected = true;
                     //MpAvClipTrayViewModel.Instance.SelectedItem = BindingContext;
@@ -783,8 +808,29 @@ namespace MonkeyPaste.Avalonia {
                 case MpEditorBindingFunctionType.getDragDataTransferObject:
                     var drag_dtObjReq = MpJsonConverter.DeserializeObject<MpQuillEditorDragDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
                     var drag_hdo = MpJsonConverter.DeserializeBase64Object<MpQuillHostDataItemsMessage>(drag_dtObjReq.unprocessedDataItemsJsonStr);
+
                     var unprocessed_drag_avdo = drag_hdo.ToAvDataObject();
 
+                    if (BindingContext.CopyItemType == MpCopyItemType.FileList &&
+                        unprocessed_drag_avdo.TryGetData(MpPortableDataFormats.AvFileNames, out object fn_obj)) {
+                        // NOTE for file drops files are converted to fragment and dropped like append handling
+                        if (fn_obj is IEnumerable<string> fnl) {
+                            var fl_frag = new MpQuillFileListDataFragment() {
+                                fileItems = fnl.Select(x => new MpQuillFileListItemDataFragmentMessage() {
+                                    filePath = Uri.UnescapeDataString(x),
+                                    fileIconBase64 =
+                                        x.IsFileOrDirectory() ?
+                                            ((Bitmap)MpAvStringFileOrFolderPathToBitmapConverter.Instance.Convert(Uri.UnescapeDataString(x), null, null, null)).ToBase64String() :
+                                            MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Dark ?
+                                                MpBase64Images.MissingFile_white :
+                                                MpBase64Images.MissingFile
+                                }).ToList()
+                            };
+                            unprocessed_drag_avdo.SetData(MpPortableDataFormats.INTERNAL_FILE_LIST_FRAGMENT_FORMAT, fl_frag.SerializeJsonObjectToBase64());
+                        } else {
+                            MpDebug.Break($"unhandled file obj type {fn_obj.GetType()}");
+                        }
+                    }
                     var processed_drag_avdo = await Mp.Services
                         .DataObjectTools.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
 

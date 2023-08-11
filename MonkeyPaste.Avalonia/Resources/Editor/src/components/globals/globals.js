@@ -27,7 +27,7 @@ const globals = {
 	BlockTags: ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote', 'pre'],
 	
 	IgnoreNextSelectionChange: false,
-	SuppressTextChangedNtf: false,
+	SuppressContentChangedNtf: false,
 	EditorTheme: 'light',
 	IsToolbarsLoaded: false,
 	// #endregion
@@ -211,6 +211,7 @@ const globals = {
 	HTML_FORMAT:  'text/html',
 	HTML_FRAGMENT_FORMAT:  'html format',
 	TEXT_FORMAT:  'text/plain',
+	FILE_ITEM_FRAGMENT_FORMAT:  'mp internal file list fragment format',
 
 	// #endregion
 

@@ -15,5 +15,5 @@
     .drop > .ql-editor {
         /* NOTE only temporary, adjusted to actual width after layout update in auto scroll*/
         width: 808080px;
-        height: inherit !important;
+        height: 808080px !important;
     }

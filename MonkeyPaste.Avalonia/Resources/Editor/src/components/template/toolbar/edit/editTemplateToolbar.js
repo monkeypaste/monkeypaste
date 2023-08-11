@@ -195,12 +195,12 @@ function onTemplateNameChanged(e) {
 
 function onTemplateNameTextAreaGotFocus() {
     // NOTE noticable performance lag when editing template names so only ntf when complete
-    globals.SuppressTextChangedNtf = true;
+    globals.SuppressContentChangedNtf = true;
     getEditTemplateNameTextAreaElement().addEventListener('keydown', onTemplateNameTextAreaKeyDown, true);
 }
 
 function onTemplateNameTextAreaLostFocus() {
-    globals.SuppressTextChangedNtf = false;
+    globals.SuppressContentChangedNtf = false;
     getEditTemplateNameTextAreaElement().removeEventListener('keydown', onTemplateNameTextAreaKeyDown);
 }
 

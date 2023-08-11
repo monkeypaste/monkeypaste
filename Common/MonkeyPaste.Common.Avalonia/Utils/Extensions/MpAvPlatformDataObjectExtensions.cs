@@ -8,10 +8,11 @@ using System.Linq;
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvPlatformDataObjectExtensions {
         public static IEnumerable<string> GetAllDataFormats(this IDataObject ido) {
-            if (ido == null) {
+            if (ido == null ||
+                ido.GetDataFormats() is not IEnumerable<string> dfl) {
                 return new string[] { };
             }
-            List<string> formats = ido.GetDataFormats().ToList();
+            List<string> formats = dfl.ToList();
             if (ido.GetFiles() is IEnumerable<object> fps) {
                 // only inlcude file names if present
                 if (fps.Count() > 0) {

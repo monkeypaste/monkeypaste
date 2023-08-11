@@ -988,7 +988,7 @@ function updateLocalTemplatesFromDb() {
             let all_local_defs = getTemplateDefs();
             let db_defs_to_update = all_shared_defs.filter(x => all_local_defs.every(y => y.templateGuid != x.templateGuid));
 
-            globals.SuppressTextChangedNtf = true;
+            globals.SuppressContentChangedNtf = true;
 
             for (var i = 0; i < db_defs_to_update.length; i++) {
                 let db_def = db_defs_to_update[i];
@@ -1002,7 +1002,7 @@ function updateLocalTemplatesFromDb() {
                 setTemplateData(local_def.templateGuid, db_def.templateData);
 			}
 
-            globals.SuppressTextChangedNtf = false;
+            globals.SuppressContentChangedNtf = false;
 
             if (db_defs_to_update.length > 0) {
                 onContentChanged_ntf();

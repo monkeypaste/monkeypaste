@@ -7,6 +7,7 @@ function initTooltip() {
 		const htt_elm = hover_tt_elms[i];
 		htt_elm.addEventListener('pointerenter', (e) => {
 			showTooltipOverlay(e.currentTarget);
+
 		});
 		htt_elm.addEventListener('pointerleave', (e) => {
 			hideTooltipOverlay();
@@ -17,7 +18,7 @@ function initTooltip() {
 	for (var i = 0; i < toolbar_tt_elms.length; i++) {
 		const ttt_elm = toolbar_tt_elms[i];
 		ttt_elm.addEventListener('pointerenter', (e) => {
-			showTooltipToolbar(e.currentTarget.getAttribute(globals.TOOLTIP_TOOLBAR_ATTRB_NAME));
+			showTooltipToolbar(e.currentTarget, e.currentTarget.getAttribute(globals.TOOLTIP_TOOLBAR_ATTRB_NAME));
 		});
 		ttt_elm.addEventListener('pointerleave', (e) => {
 			hideTooltipToolbar();
@@ -44,40 +45,6 @@ function getTooltipToolbarlements() {
 	return Array.from(document.querySelectorAll(`[${globals.TOOLTIP_TOOLBAR_ATTRB_NAME}]`));
 }
 
-function positionTooltipOverlayLocation(targetElm, tooltipElm) {
-	const editor_rect = cleanRect(getEditorElement().getBoundingClientRect());
-	let target_rect = cleanRect(targetElm.getBoundingClientRect());
-	let tt_rect = cleanRect(tooltipElm.getBoundingClientRect());
-
-	// start with tooltip center in targets center
-	let start_loc = {
-		x: target_rect.left + (target_rect.width / 2) - (tt_rect.width / 2),
-		y: target_rect.top + (target_rect.bottom / 2) - (tt_rect.height / 2)
-	}
-	moveAbsoluteElement(tooltipElm, start_loc);
-
-	// top,right,bottom, left
-	const dirs = [{ x: 0, y: -1 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }];
-	for (var i = 0; i < dirs.length; i++) {
-		const dir = dirs[i];
-		let cur_loc = start_loc;
-		while (true) {
-			cur_loc = addPoints(cur_loc, dir);
-			moveAbsoluteElement(tooltipElm, cur_loc);
-			best_rect = cleanRect(tooltipElm.getBoundingClientRect());
-			if (!isRectOverlapOtherRect(best_rect, target_rect)) {
-				return;
-			}
-			if (!isPointInRect(editor_rect, getRectCornerByIdx(best_rect, i))) {
-				// this dir no good, rect outside editor
-				break;
-			}
-		}
-	}
-	// fallback to center above
-	start_loc.y = target_rect.top - tt_rect.height;
-	moveAbsoluteElement(tooltipElm, start_loc);
-}
 
 // #endregion Getters
 
@@ -112,8 +79,13 @@ function showTooltipOverlay(targetElm, tooltipText) {
 		// don't show empty tooltip
 		return;
 	}
-	tooltipText = decodeStringWithShortcut(tooltipText);
+	if (isRunningInHost()) {
+		let target_loc = getRectCenter(cleanRect(targetElm.getBoundingClientRect()));
+		onShowToolTip_ntf(true, target_loc, tooltipText, parseShortcutText(tooltipText));
+		return;
+	}
 
+	tooltipText = decodeStringWithShortcut(tooltipText);
 	let tt_elm = getTooltipOverlayElement();
 	if (is_html) {
 		tt_elm.innerHTML = tooltipText;
@@ -126,11 +98,19 @@ function showTooltipOverlay(targetElm, tooltipText) {
 }
 
 function hideTooltipOverlay() {
+	if (isRunningInHost()) {
+		onShowToolTip_ntf(false);
+		return;
+	}
 	getTooltipOverlayElement().classList.add('hidden');
 }
 
 
-function showTooltipToolbar(htmlStr, showTimeMs = 0) {
+function showTooltipToolbar(targetElm, htmlStr, showTimeMs = 0) {
+	if (isRunningInHost()) {
+		onShowToolTip_ntf(true, getRectCenter(cleanRect(targetElm.getBoundingClientRect())), htmlStr);
+		return;
+	}
 	if (!globals.IsTooltipToolbarEnabled) {
 		return;
 	}
@@ -153,6 +133,10 @@ function showTooltipToolbar(htmlStr, showTimeMs = 0) {
 }
 
 function hideTooltipToolbar() {
+	if (isRunningInHost()) {
+		onShowToolTip_ntf(false);
+		return;
+	}
 	if (!globals.IsTooltipToolbarEnabled) {
 		return;
 	}
@@ -176,6 +160,43 @@ function updateTooltipToolbarSizesAndPositions() {
 
 	const tttb_elm = getTooltipToolbarElement();
 	tttb_elm.style.bottom = `${tttb_bottom}px`;
+}
+
+
+function positionTooltipOverlayLocation(targetElm, tooltipElm) {
+	const editor_rect = cleanRect(getEditorElement().getBoundingClientRect());
+	let target_rect = cleanRect(targetElm.getBoundingClientRect());
+	let tt_rect = cleanRect(tooltipElm.getBoundingClientRect());
+
+	// start with tooltip center in targets center
+	let start_loc = {
+		x: target_rect.left + (target_rect.width / 2) - (tt_rect.width / 2),
+		y: target_rect.top + (target_rect.bottom / 2) - (tt_rect.height / 2)
+	}
+
+	tt_rect = moveAbsoluteElement(tooltipElm, start_loc);
+
+
+	// top,right,bottom, left
+	const dirs = [{ x: 0, y: -1 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }];
+	for (var i = 0; i < dirs.length; i++) {
+		const dir = dirs[i];
+		let cur_loc = start_loc;
+		while (true) {
+			cur_loc = addPoints(cur_loc, dir);
+			best_rect = moveAbsoluteElement(tooltipElm, cur_loc);
+			if (!isRectOverlapOtherRect(best_rect, target_rect)) {
+				return;
+			}
+			if (!isPointInRect(editor_rect, getRectCornerByIdx(best_rect, i))) {
+				// this dir no good, rect outside editor
+				break;
+			}
+		}
+	}
+	// fallback to center above
+	start_loc.y = target_rect.top - tt_rect.height;
+	moveAbsoluteElement(tooltipElm, start_loc);
 }
 // #endregion Actions
 

@@ -2,7 +2,7 @@
 
 function initMain_ext(initMsgStr_base64) {
 	// input 'MpQuillInitMainRequestMessage'
-	log('initMain_ext: ' + initMsgStr_base64);
+	//log('initMain_ext: ' + initMsgStr_base64);
 	let initMsgObj = toJsonObjFromBase64Str(initMsgStr_base64);
 	if (!initMsgObj) {
 		log('init error, request null. ignoring');
@@ -19,7 +19,7 @@ function initDefaults_ext(defaultsMsgStr_base64) {
 
 function loadContent_ext(loadContentMsgStr_base64) {
 	// input 'MpQuillLoadContentRequestMessage'
-	log('loadContent_ext: ' + loadContentMsgStr_base64);
+	//log('loadContent_ext: ' + loadContentMsgStr_base64);
 
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 

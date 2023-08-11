@@ -398,7 +398,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 
 	loadLinkHandlers();
 
-	let suppress_text_change_ntf = globals.SuppressTextChangedNtf;
+	let suppress_text_change_ntf = globals.SuppressContentChangedNtf;
 
 	if (globals.IsLoaded &&
 		!suppress_text_change_ntf &&		

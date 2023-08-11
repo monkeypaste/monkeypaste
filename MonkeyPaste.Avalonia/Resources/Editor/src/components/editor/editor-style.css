@@ -40,6 +40,10 @@
     scroll-behavior: smooth;
 }
 
+    .show-scrollbars > .ql-editor {
+        overflow: hidden;
+    }
+
 .hide-scrollbars {
     overflow: hidden !important;
 }

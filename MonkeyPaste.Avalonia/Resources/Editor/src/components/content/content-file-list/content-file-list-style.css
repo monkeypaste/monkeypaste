@@ -34,8 +34,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-
+    
     #editor.file-list-content tr {
         background-color: transparent;
     }

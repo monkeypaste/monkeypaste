@@ -47,8 +47,7 @@ namespace MonkeyPaste.Common {
             //CefUnicodeUrl,
 
             // internal
-            INTERNAL_SOURCE_URI_LIST_FORMAT, // maps to LinuxUriList
-            
+            INTERNAL_SOURCE_URI_LIST_FORMAT, // maps to LinuxUriList            
             INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT,
             INTERNAL_CONTENT_TITLE_FORMAT,
             INTERNAL_CONTENT_ROI_FORMAT,
@@ -59,7 +58,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_TAG_ITEM_FORMAT,
             INTERNAL_CONTENT_TYPE_FORMAT,
             INTERNAL_ACTION_ITEM_FORMAT,
-            INTERNAL_PROCESS_INFO_FORMAT
+            INTERNAL_PROCESS_INFO_FORMAT,
+            INTERNAL_FILE_LIST_FRAGMENT_FORMAT
         };
 
         private static Dictionary<int, MpPortableDataFormat> _formatLookup = new Dictionary<int, MpPortableDataFormat>();
@@ -121,6 +121,7 @@ namespace MonkeyPaste.Common {
         public const string INTERNAL_ACTION_ITEM_FORMAT = "Mp Internal Action Item";
         public const string INTERNAL_PARAMETER_VALUE_FORMAT = "Mp Internal Parameter Value";
         public const string INTERNAL_PROCESS_INFO_FORMAT = "Mp Internal Process Info";
+        public const string INTERNAL_FILE_LIST_FRAGMENT_FORMAT = "Mp Internal File List Fragment Format";
 
 
         // NOTE data object is not registered and only used to merge data objects
@@ -145,7 +146,8 @@ namespace MonkeyPaste.Common {
             INTERNAL_CONTENT_TYPE_FORMAT,
             INTERNAL_ACTION_ITEM_FORMAT,
             INTERNAL_PROCESS_INFO_FORMAT,
-            INTERNAL_PARAMETER_VALUE_FORMAT
+            INTERNAL_PARAMETER_VALUE_FORMAT,
+            INTERNAL_FILE_LIST_FRAGMENT_FORMAT
         };
         #endregion
 

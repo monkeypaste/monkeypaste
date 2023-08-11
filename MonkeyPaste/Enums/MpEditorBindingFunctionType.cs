@@ -15,6 +15,7 @@
 
 
         // one-way *_ntf notifications
+        notifyShowToolTip,
         notifyDocSelectionChanged,
         notifyContentChanged,
         notifySubSelectionEnabledChanged,

@@ -271,7 +271,8 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is not MpISourceRef updated_ref ||
+            if (SourceRef == null ||
+                e is not MpISourceRef updated_ref ||
                 updated_ref.SourceType != SourceType ||
                 updated_ref.SourceObjId != SourceRef.SourceObjId) {
                 return;

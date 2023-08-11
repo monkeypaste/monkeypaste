@@ -77,6 +77,17 @@ function getFileListContentData(selectedOnly) {
 	return paths_str;
 }
 
+function getFileListItemIdxContainingDocIdx(docIdx) {
+	for (var i = 0; i < getFileCount(); i++) {
+		let fli_range = getFileListItemDocRange(i);
+		if (isDocIdxInRange(docIdx, fli_range)) {
+			return i;
+		}
+	}
+	// when out of range assume its lasst item
+	return getFileCount() - 1;
+}
+
 function getFileListItemDocRange(fliIdx) {
 	const doc_len = getDocLength();
 	let fli_doc_range = null;
@@ -259,12 +270,26 @@ function addFileEventHandlers() {
 	}
 }
 
-function appendFileListContentData(data) {
-	// input 'MpQuillFileListDataFragment'
-	const append_doc_range = getAppendDocRange();
-	const append_cell = getTableCellAtDocIdx(append_doc_range.index);
+function transferFileListContent(data_or_dt, source_fli_row_idxs, dest_doc_range, sel_transfer) {
+	// input 'MpQuillFileListDataFragment' or DataTransfer
+
+	// LOCATE FRAGMENT
+
+	let data =
+		isString(data_or_dt) ?
+			data_or_dt :
+			data_or_dt.getData(globals.FILE_ITEM_FRAGMENT_FORMAT);
+
+	if (!isString(data)) {
+		log('no file fragment to transfer, ignoring');
+		return;
+	}
+
+	// RESOLVE INSERT IDX
+
+	const append_cell = getTableCellAtDocIdx(dest_doc_range.index);
 	let insert_idx = -1;
-	if (append_doc_range.mode == 'pre') {
+	if (dest_doc_range.mode == 'pre') {
 		if (globals.IsAppendManualMode) {
 			insert_idx = append_cell[0];
 		} else {
@@ -273,6 +298,9 @@ function appendFileListContentData(data) {
 	} else {
 		insert_idx = append_cell[0] + 1;
 	}
+
+	// INSERT FRAGMENT FILES
+
 	const cur_sel_idxs = getSelectedFileItemIdxs();
 	let updated_sel_idxs = [];
 	let append_items = toJsonObjFromBase64Str(data).fileItems;
@@ -300,8 +328,57 @@ function appendFileListContentData(data) {
 		}
 	}
 
+	// REMOVE SOURCES (NON-APPEND)
+
+	if (Array.isArray(source_fli_row_idxs) &&
+		source_fli_row_idxs.length > 0) {
+		// adj source rows
+		for (var i = 0; i < source_fli_row_idxs.length; i++) {
+			if (source_fli_row_idxs[i] <= insert_idx) {
+				continue;
+			}
+			source_fli_row_idxs[i] += append_items.length;
+		}
+
+		// recreate updated_items w/o sources
+		let final_items = [];
+		for (var i = 0; i < updated_items.length; i++) {
+			if (source_fli_row_idxs.includes(i)) {
+				//omit source item
+				continue;
+			}
+			final_items.push(updated_items[i]);
+		}
+		updated_items = final_items;
+	}
+
+	// SET TO SELECT (NON-APPEND)
+	if (!isAnyAppendEnabled()) {
+		// for non-append sel new items
+		updated_sel_idxs = [];
+		for (var i = 0; i < updated_items.length; i++) {
+			if (append_items.includes(updated_items[i])) {
+				updated_sel_idxs.push(i);
+			}
+		}
+	}
+
 	loadFileListContent(toBase64FromJsonObj({ fileItems: updated_items }));
 	updated_sel_idxs.forEach(x => getFileListRowElements()[x].classList.add('selected'));
+
+
+	let append_range = {
+		index: getFileListItemDocRange(updated_sel_idxs[0]).index
+	};
+	let last_range = getFileListItemDocRange(updated_sel_idxs[updated_sel_idxs.length - 1]);
+	append_range.length = last_range.index + last_range.length;
+	return append_range;
+}
+
+function appendFileListContentData(data) {
+	const append_doc_range = getAppendDocRange();
+
+	transferFileListContent(data, null, append_doc_range, 'user');
 
 	scrollToAppendIdx();
 	onContentChanged_ntf();

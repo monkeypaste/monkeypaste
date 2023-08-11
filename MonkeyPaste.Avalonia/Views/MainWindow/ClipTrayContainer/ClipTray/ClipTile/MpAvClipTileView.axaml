@@ -67,14 +67,14 @@
         </Style>
 
         <!--  CONTENT PADDING  -->
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder ContentControl#ClipTileContentControl">
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.compatMode ContentControl#ClipTileContentControl">
             <Setter Property="Padding"
                     Value="5" />
         </Style>
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout ContentControl#ClipTileContentControl, local|MpAvClipBorder#ClipTileContainerBorder:not(.contentReadOnly) ContentControl#ClipTileContentControl">
+        <!--<Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout ContentControl#ClipTileContentControl, local|MpAvClipBorder#ClipTileContainerBorder:not(.contentReadOnly) ContentControl#ClipTileContentControl">
             <Setter Property="Padding"
                     Value="0" />
-        </Style>
+        </Style>-->
         <!--  TILE BORDER  -->
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
             <Setter Property="BorderThickness"
@@ -89,6 +89,11 @@
             <Setter Property="Background"
                     Value="{DynamicResource ClipTileContentBackgroundBrush}" />
         </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout">
+            <Setter Property="Background"
+                    Value="{DynamicResource ModalClipTileContentBackgroundBrush}" />
+        </Style>
+
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Background">
@@ -97,6 +102,16 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.userColor.popout"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--  CAP TOOLTIP ATTACH (PREVENTS DND BUG)  -->
 
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder"
                x:DataType="local:MpAvClipTileViewModel">
@@ -107,12 +122,29 @@
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView Classes="warning"
+                                               IsVisible="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
+                                               ToolTipText="{Binding CapToolTipText}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-                  <Template>
-                    <local:MpAvToolTipView Classes="warning"
-                                           IsVisible="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
-                                           ToolTipText="{Binding CapToolTipText}" />
-                  </Template>
+        <!--  DETAIL TOOLTIP ATTACH (PREVENTS Empty tooltip)  -->
+
+        <Style Selector="Grid#DetailContainerGrid"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="ToolTip.Tip"
+                    Value="{x:Null}" />
+        </Style>
+        <Style Selector="Grid#DetailContainerGrid.detailTooltip"
+               x:DataType="local:MpAvClipTileViewModel">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{Binding DetailTooltipText}" />
+                    </Template>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -128,13 +160,14 @@
                           Classes.TileHover="{Binding IsHovering}"
                           Classes.CanResize="{Binding CanResize}"
                           Classes.contentReadOnly="{Binding IsContentReadOnly}"
-                          Classes.IsResizing="{Binding IsResizing}"
-                          Classes.IsAnyBusy="{Binding IsAnyBusy}"
+                          Classes.resize="{Binding IsResizing}"
+                          Classes.busy="{Binding IsAnyBusy}"
                           Classes.frozen="{Binding IsFrozen}"
                           Classes.trashed="{Binding IsTrashed}"
                           Classes.drag="{Binding IsTileDragging}"
                           Classes.capTooltip="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
                           Classes.userColor="{Binding CopyItemHexColor, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                          Classes.compatMode="{Binding !IsRichHtmlContentEnabled, Source={x:Static local:MpAvPrefViewModel.Instance}}"
                           local:MpAvReceivesEventsExtension.IsEnabled="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           local:MpAvReceivesEventsExtension.SenderFilter="{Binding EmbedHost}"
                           VerticalAlignment="Stretch"
@@ -146,11 +179,6 @@
                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
                           CornerRadius="{StaticResource TileCornerRadius}">
-        <!--<ToolTip.Tip>
-            <local:MpAvToolTipView Classes="warning"
-                                   IsVisible="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
-                                   ToolTipText="{Binding CapToolTipText}" />
-        </ToolTip.Tip>-->
 
         <Grid x:Name="TileGrid"
               HorizontalAlignment="Stretch"
@@ -179,6 +207,7 @@
                     </ColumnDefinition.MaxWidth>
                 </ColumnDefinition>
             </Grid.ColumnDefinitions>
+
             <!--  TITLE  -->
 
             <local:MpAvClipTileTitleView x:Name="TileTitleView"
@@ -226,7 +255,7 @@
                         <SolidColorBrush Color="Black" Opacity="0.2" />
                     </Border.Background>
                     <Image Stretch="UniformToFill"
-                           Classes.shake="{Binding IsHovering}"
+                           Classes.shakeslow="{Binding IsHovering}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Width="50"
@@ -335,6 +364,7 @@
                   Height="15"
                   Background="{Binding BorderBrush, ElementName=ClipTileContainerBorder}"
                   Classes.subselect="{Binding IsSubSelectionEnabled}"
+                  Classes.detailTooltip="{Binding DetailTooltipText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                   IsVisible="{Binding IsCornerButtonsVisible}"
                   local:MpAvIsHoveringExtension.IsEnabled="True"
                   local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverDetailGrid, Mode=TwoWay}"
@@ -349,9 +379,6 @@
                                                        Duration="0:0:0.1" />
                     </Transitions>
                 </Grid.Transitions>
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{Binding DetailTooltipText}" />
-                </ToolTip.Tip>
                 <TextBlock x:Name="DetailTextBlock"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Bottom"
@@ -361,7 +388,7 @@
                            FontSize="10"
                            Margin="0,0,0,1"
                            TextAlignment="Center"
-                           Foreground="Black"
+                           Foreground="{Binding BorderBrush, ElementName=ClipTileContainerBorder, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                            IsHitTestVisible="False"
                            Text="{Binding DetailText}">
                 </TextBlock>

@@ -16,7 +16,7 @@
 
         <!--  BUSY CURSOR  -->
 
-        <Style Selector="Grid#ClipTrayContainerGrid:not(.iprqBusy) local|MpAvClipBorder#ClipTileContainerBorder.IsAnyBusy">
+        <Style Selector="Grid#ClipTrayContainerGrid:not(.iprqBusy) local|MpAvClipBorder#ClipTileContainerBorder.busy">
             <Setter Property="Cursor"
                     Value="Wait" />
         </Style>
@@ -88,17 +88,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-      
-      <!--  TILE BACKGROUND COLOR  -->
-      
-        <!--<Style Selector="local|MpAvClipTileView"
-               x:DataType="local:MpAvClipTileViewModel">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <SolidColorBrush Color="{Binding CopyItemHexColor, ConverterParameter=tilebg, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalBgOpacity}" />
-                </Setter.Value>
-            </Setter>
-        </Style>-->
+
 
         <!--  TILE BORDER TRANSITIONS  -->
 
@@ -157,14 +147,14 @@
         </Style>
 
         <!--  DEFAULT RESIZE  -->
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.IsResizing"
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.resize"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
                     Value="{StaticResource ThemeAccent4BgColor}" />
         </Style>
 
         <!--  HOVER RESIZE  -->
-        <Style Selector="ListBox.clipTileListBox > ListBoxItem:selected:pointerover local|MpAvClipBorder#ClipTileContainerBorder.CanResize:not(.IsResizing)"
+        <Style Selector="ListBox.clipTileListBox > ListBoxItem:selected:pointerover local|MpAvClipBorder#ClipTileContainerBorder.CanResize:not(.resize)"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
                     Value="{StaticResource ThemeAccent4Color}" />

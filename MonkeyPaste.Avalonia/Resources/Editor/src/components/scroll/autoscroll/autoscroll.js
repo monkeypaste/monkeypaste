@@ -25,16 +25,18 @@ function isAutoScrolling() {
 // #region Actions
 
 function startAutoScroll() {
-    //globals.AutoScrolledOffset
-    // drop class makes .ql-editor huge so no wrapping this finds actual max width and sets so won't overscroll...
+    // .drop class makes .ql-editor huge so no wrapping 
+    // this finds actual max width and sets so won't overscroll...
     let actual_content_width = 0;
-    //let max_y = 0;
+    let actual_content_height = 0;
     let lines = getLineCount();
     for (var i = 0; i < lines; i++) {
         let line_rect = getLineRect(i, false);
         actual_content_width = Math.max(actual_content_width, line_rect.width);
-        //max_y = Math.max(max_y, line_rect.height);
-    }
+        if (i == lines - 1) {
+            actual_content_height = line_rect.bottom;
+        }
+    } 
     let editor_elm = getEditorElement();
     let adjusted_editor_width = editor_elm.getBoundingClientRect().width;
 
@@ -48,7 +50,11 @@ function startAutoScroll() {
         adjusted_editor_width = container_width;
     }
 
-    editor_elm.style.width = adjusted_editor_width + 'px';
+    let container_height = getEditorContainerElement().getBoundingClientRect().height;
+    let adjusted_editor_height = Math.max(actual_content_height, container_height);
+
+    editor_elm.style.width = `${adjusted_editor_width}px`;
+    editor_elm.style.height = `${adjusted_editor_height}px`;
 
     scrollDocRangeIntoView(getDocSelection());
 

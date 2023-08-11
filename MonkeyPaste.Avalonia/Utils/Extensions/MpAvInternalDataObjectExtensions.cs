@@ -91,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
                 if (uril_str.StartsWith("[") &&
                     MpJsonConverter.DeserializeObject<List<string>>(uril_str) is List<string> urilist) {
                     // uri's maybe a json array if from editor
-                    uril_str = string.Join("\r\n", urilist);
+                    uril_str = string.Join(Environment.NewLine, urilist);
                 }
                 uris = uril_str.SplitByLineBreak().ToList();
             }
@@ -99,12 +99,12 @@ namespace MonkeyPaste.Avalonia {
 
             if (uris == null || !uris.Any()) {
                 // what type were the uris? or why is the format available?
-                MpDebug.Break("broken uri format detected");
+                //MpDebug.Break("broken uri format detected");
                 return false;
             }
             var bad_uris = uris.Where(x => !Uri.IsWellFormedUriString(x, UriKind.Absolute));
             if (bad_uris.Any()) {
-                MpDebug.Break("improper uri format detected, check bad_uris");
+                //MpDebug.Break("improper uri format detected, check bad_uris");
                 return false;
             }
             return true;

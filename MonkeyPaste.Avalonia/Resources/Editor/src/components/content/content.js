@@ -352,6 +352,18 @@ function canDisableReadOnly() {
 
 // #region Actions
 
+function transferContent(dt, source_doc_range, dest_doc_range, source) {
+	let result = null;
+	switch (globals.ContentItemType) {
+		case 'Text':
+			result = transferTextContent(dt, source_doc_range, dest_doc_range, source);
+			break;
+		case 'FileList':
+			result = transferFileListContent(dt, source_doc_range, dest_doc_range, source);
+			break;
+	}
+	return result;
+}
 function convertContentToFormats(selectionOnly, formats) {
 	updateQuill();
 	let items = null;

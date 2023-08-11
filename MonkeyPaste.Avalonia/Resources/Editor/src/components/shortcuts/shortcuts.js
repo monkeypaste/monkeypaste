@@ -13,20 +13,30 @@ function initShortcuts(shortcutBase64MsgStr) {
     for (var i = 0; i < globals.SHORTCUT_TYPES.length; i++) {
         let st = globals.SHORTCUT_TYPES[i];
 
-        let keys = '';
+        //let keys = '';
+        //if (shortcut_items && Array.isArray(shortcut_items)) {
+        //    let shortcut_item = shortcut_items.find(x => x.shortcutType == st);
+        //    if (shortcut_item) {
+        //        keys = `<em class="option-keys">${shortcut_item.keys}</em>`;
+        //    }
+        //}
+        //globals.ShortcutKeysLookup[st] = keys;
         if (shortcut_items && Array.isArray(shortcut_items)) {
             let shortcut_item = shortcut_items.find(x => x.shortcutType == st);
             if (shortcut_item) {
-                keys = `<em class="option-keys">${shortcut_item.keys}</em>`;
+                globals.ShortcutKeysLookup[st] = shortcut_item.keys;
             }
         }
-        globals.ShortcutKeysLookup[st] = keys;
     }   
 
 }
 // #endregion Life Cycle
 
 // #region Getters
+
+function getShortcutHtml(shortcutText) {
+    return `<em class="option-keys">${shortcutText}</em>`;
+}
 
 // #endregion Getters
 
@@ -39,6 +49,27 @@ function initShortcuts(shortcutBase64MsgStr) {
 // #endregion State
 
 // #region Actions
+
+function parseShortcutText(str) {
+    // NOTE this presumes theres only 1 shortcut
+    // example: 'This is a tooltip command $$ShortcutTypeName$$'
+    // returns ShortcutTypeGestureText
+    if (!isString(str)) {
+        return '';
+    }
+    let str_parts = str.split(globals.SHORTCUT_STR_TOKEN);
+    for (var i = 0; i < str_parts.length; i++) {
+        if (i % 2 == 0) {
+            continue;
+        }
+
+        let str_part = str_parts[i];
+        if (globals.ShortcutKeysLookup[str_part] !== undefined) {
+            return globals.ShortcutKeysLookup[str_part];
+        }
+    }
+    return '';
+}
 
 function decodeStringWithShortcut(str) {
     // example: 'This is a tooltip command $$ShortcutTypeName$$'

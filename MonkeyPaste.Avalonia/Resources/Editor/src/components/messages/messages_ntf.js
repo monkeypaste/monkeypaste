@@ -35,6 +35,19 @@ function onReadOnlyChanged_ntf(isReadOnly) {
 	}
 }
 
+function onShowToolTip_ntf(is_visible, anchor_p, tt_html, gesture_text) {
+	// output 'MpQuillShowToolTipNotification'
+	let msg = {
+		tooltipHtml: tt_html,
+		gestureText: gesture_text,
+		anchorX: anchor_p ? anchor_p.x : 0,
+		anchorY: anchor_p ? anchor_p.y : 0,
+		isVisible: is_visible
+	};
+	let msgStr = toBase64FromJsonObj(msg);
+	sendMessage('notifyShowToolTip', msgStr);
+}
+
 function onContentChanged_ntf() {
 	// output 'MpQuillEditorContentChangedMessage'
 	let msgStr = toBase64FromJsonObj(getContentAsMessage());

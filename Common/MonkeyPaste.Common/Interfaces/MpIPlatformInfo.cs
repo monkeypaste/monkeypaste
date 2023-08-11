@@ -9,7 +9,7 @@
         string ExecutableName { get; }
         string ExecutingDir { get; }
         string ExecutingPath { get; }
-
+        string RoamingStorageDir { get; }
         string StorageDir { get; }
         bool IsDesktop { get; }
         bool IsMobile { get; }

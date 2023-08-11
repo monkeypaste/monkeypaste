@@ -6,8 +6,12 @@
 // #region Getters
 
 function getAllowedDataTransferTypes(contentType) {
+    // NOTE this returns lower case format names
     if (contentType == 'Image') {
         return [];
+    }
+    if (contentType == 'FileList') {
+        return ['files'];
     }
     return ['text/plain', 'text/html', 'application/json', 'files', 'text', 'html format']
 }
@@ -55,19 +59,24 @@ function convertDataTransferToHostDataItems(dt) {
     let host_dimobj = {
         dataItems: [],
         effectAllowed: dt.effectAllowed
-    };
+    }; 
     for (var i = 0; i < dt.types.length; i++) {
-        let dataStr = dt.getData(dt.types[i]);
-        if (!isString(dt.types[i])) {
-            dataStr = JSON.stringify(dataStr);
-        }
-        let hostFormat = dt.types[i];
-        if (hostFormat.toLowerCase() == 'files') {
-            //debugger;
-            hostFormat = 'Files';
+        let dataStr = null;
+        if (dt.types[i].toLowerCase() == 'files') {
+            if (dt.types[i] == 'files') {
+                log('still have format lower case issue!');
+                throw new DOMException('still have format lower case issue!');
+            }
+            // NOTE cef encodes spaces in file names so fix em
+            dataStr = Array.from(dt.files).map(x => x.name).join(envNewLine());
+        } else {
+            dataStr = dt.getData(dt.types[i]);
+            if (!isString(dt.types[i])) {
+                dataStr = JSON.stringify(dataStr);
+            }
         }
         let di = {
-            format: hostFormat,
+            format: dt.types[i],
             data: dataStr
         };
         host_dimobj.dataItems.push(di);
@@ -87,37 +96,12 @@ function prepareDeltaLogForDataTransfer() {
     clearLastDelta();
 }
 
-function prepareDestDocRangeForDataTransfer(dest_doc_range, drop_insert_source) {
-    dest_doc_range.mode = dest_doc_range.mode === undefined ? 'inline' : dest_doc_range.mode;
-    switch (dest_doc_range.mode) {
-        case 'split':
-            insertText(dest_doc_range.index, '\n', drop_insert_source);
-            insertText(dest_doc_range.index, '\n', drop_insert_source);
-            dest_doc_range.index += 1;
-            break;
-        case 'pre':
-            dest_doc_range.index = 0;
-            insertText(dest_doc_range.index, '\n', drop_insert_source);
-            break;
-        case 'post':
-            dest_doc_range.index = getLineEndDocIdx(dest_doc_range.index);
-            if (dest_doc_range.index < getDocLength() - 1) {
-                // ignore new line for last line since it already is a new line
-                insertText(dest_doc_range.index, '\n', drop_insert_source);
-                dest_doc_range.index += 1;
-            }
-            break;
-        case 'inline':
-        default:
-            break;
-    }
-    return dest_doc_range;
-}
+
 
 function performDataTransferOnContent(
     dt,
-    dest_doc_range,
     source_doc_range,
+    dest_doc_range,
     source = 'api',
     transferLabel = '') {
     // called on paste, drop and append
@@ -126,10 +110,10 @@ function performDataTransferOnContent(
         return;
     }
 
-    let wasTextChangeSuppressed = globals.SuppressTextChangedNtf;
-    if (!globals.SuppressTextChangedNtf) {
+    let wasTextChangeSuppressed = globals.SuppressContentChangedNtf;
+    if (!globals.SuppressContentChangedNtf) {
         // NOTE don't unflag textchange ntf if currently set (should be wrapped somewhere) only flag if needed
-        globals.SuppressTextChangedNtf = true;
+        globals.SuppressContentChangedNtf = true;
     }
 
     // REFRESH DELTA LOG
@@ -148,22 +132,11 @@ function performDataTransferOnContent(
         }
     } 
 
-    // DECODE HTML & URL FRAGMENT SOURCE (IF AVAILABLE)    
+    // CHECK FOR URL FRAGMENT SOURCE (IF AVAILABLE)
 
-    let dt_html_str = null;
-    if (dt.types.includes('html format')) {
-        // prefer system html format to get sourceurl (on windows)
-        dt_html_str = b64_to_utf8(dt.getData('html format'));
-    } else if (dt.types.includes('text/html')) {
-        dt_html_str = dt.getData('text/html');
-    }
-
-    if (dt_html_str != null && isHtmlClipboardFragment(dt_html_str)) {
-        let cb_frag = parseHtmlFromHtmlClipboardFragment(dt_html_str);
-        dt_html_str = cb_frag.html;
-        if (!isNullOrEmpty(cb_frag.sourceUrl)) {
-            source_urls.push(cb_frag.sourceUrl);
-        }
+    let dt_html_data = getDataTransferHtml(dt);
+    if (dt_html_data && isString(dt_html_data.sourceUrl)) {
+        source_urls.push(dt_html_data.sourceUrl);
     }
 
     // CHECK FOR INTERNAL URL SOURCE (internally deprecated but needed on linux (maybe mac too))
@@ -177,46 +150,9 @@ function performDataTransferOnContent(
         }        
     }
 
-    // PREPARE DROP RANGE
-
-    dest_doc_range = prepareDestDocRangeForDataTransfer(dest_doc_range, source);
-
-    // PRE TRANSFER DEFS
-
-    let pre_doc_length = getDocLength();
-
     // PERFORM TRANSFER
 
-    if (!isNullOrEmpty(dt_html_str)) {
-        let dt_html_delta = convertHtmlToDelta(dt_html_str);
-        dt_html_delta = decodeHtmlEntitiesInDeltaInserts(dt_html_delta);
-        insertDelta(dest_doc_range, dt_html_delta, source);
-    } else if (dt.types.includes('text/plain')) {
-        let dt_pt_str = dt.getData('text/plain');
-        setTextInRange(dest_doc_range, dt_pt_str, source, true);
-    }
-
-    let dt_length_diff = getDocLength() - pre_doc_length;
-
-    // REMOVE SOURCE
-
-    if (source_doc_range) {
-        if (dest_doc_range.index < source_doc_range.index) {
-            // when drop is before drag sel adjust drag range from added drop length
-            source_doc_range.index += dt_length_diff;
-        } else {
-            // adjust doc diff for removed source for removed drag length
-            dest_doc_range.index -= source_doc_range.length;
-        }
-        setTextInRange(source_doc_range, '', source);
-    }
-
-    // SELECT DEST
-
-    var dt_range = dest_doc_range;
-    dt_range.length += dt_length_diff;
-    setDocSelection(dt_range.index, dt_range.length);
-
+    let dt_range = transferContent(dt, source_doc_range, dest_doc_range, source);
 
     // REPORT TRANSFER
 
@@ -241,7 +177,7 @@ function performDataTransferOnContent(
     clearLastDelta()
 
     if (wasTextChangeSuppressed) {
-        globals.SuppressTextChangedNtf = false;
+        globals.SuppressContentChangedNtf = false;
     }
 
 }

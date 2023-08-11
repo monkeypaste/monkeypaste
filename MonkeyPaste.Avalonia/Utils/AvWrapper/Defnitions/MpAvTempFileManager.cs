@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
         private List<string> _tempFileList = new List<string>();
 
         public void Init() {
-
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
@@ -62,6 +62,35 @@ namespace MonkeyPaste.Avalonia {
             }
 
             _tempFileList.Add(filePathToAppend);
+        }
+
+        public void RemoveLastTempFilePath() {
+            if (_tempFileList == null ||
+                !_tempFileList.Any()) {
+                return;
+            }
+
+            MpDebug.Assert(_tempListStream != null, "Remove temp path should only happen after startup or after a path was added");
+            string path = _tempFileList.Last();
+            if (path == default) {
+                // path not found ignore
+                return;
+            }
+            // remove pending temp file to be deleted from list
+            _tempFileList.Remove(path);
+
+            // reset temp storage file w/o removed path
+            try {
+                lock (_tempLock) {
+                    _tempListStream.Dispose();
+                    _tempListStream = new StreamWriter(File.Create(TempFilePath));
+                    _tempListStream.Write(string.Join(Environment.NewLine, _tempFileList));
+                    _tempListStream.Flush();
+                }
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Temporary file manager shutdown error.", ex);
+            }
         }
 
         public void DeleteAll() {

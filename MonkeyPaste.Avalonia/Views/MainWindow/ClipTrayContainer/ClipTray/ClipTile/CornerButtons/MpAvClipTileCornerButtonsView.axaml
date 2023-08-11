@@ -60,12 +60,8 @@
 
         <!--  BUTTON ICONS TINT  -->
 
-        <Style Selector=":is(Button).cornerButton.top Image">
-            <Setter Property="local:MpAvImageTintExtension.Tint"
-                    Value="{DynamicResource ThemeInteractiveBgColor}" />
-        </Style>
 
-        <Style Selector=":is(Button).cornerButton.bottom Image">
+        <Style Selector=":is(Button).cornerButton Image">
             <Setter Property="local:MpAvImageTintExtension.Tint"
                     Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
@@ -86,6 +82,7 @@
         </Style>
 
         <!--  TL PIN IMAGE  -->
+      
         <Style Selector="ToggleButton#PinTileButton">
             <Setter Property="RotateTransform.Angle"
                     Value="0" />

@@ -54,6 +54,14 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (data is string portablePathStr) {
                     // convert portable single line-separated string to enumerable of strings for avalonia
                     data = portablePathStr.SplitNoEmpty(Environment.NewLine);
+                    //if (portablePathStr.SplitNoEmpty(Environment.NewLine) is string[] fpl &&
+                    //    fpl.Any() && Uri.IsWellFormedUriString(fpl.First(), UriKind.Absolute)) {
+                    //    // path uri from cef so convert to local path
+                    //    data = fpl
+                    //        .Where(x => Uri.IsWellFormedUriString(x, UriKind.Absolute))
+                    //        .Select(x => new Uri(x, UriKind.Absolute).LocalPath)
+                    //        .ToArray();
+                    //}
 
                 }
             } else if ((format == MpPortableDataFormats.AvHtml_bytes || format == MpPortableDataFormats.AvRtf_bytes) && data is string portableDecodedFormattedTextStr) {

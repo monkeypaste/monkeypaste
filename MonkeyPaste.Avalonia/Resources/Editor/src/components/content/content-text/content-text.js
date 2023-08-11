@@ -816,14 +816,85 @@ function convertTextContentToFormats(selectionOnly, formats) {
 	return items;
 }
 
+function transferTextContent(dt, source_doc_range, dest_doc_range, source) {
+	// PREPARE DROP RANGE
 
+	dest_doc_range = prepareDestDocRangeForDataTransfer(dest_doc_range, source);
+
+	// PRE TRANSFER DEFS
+
+	let pre_doc_length = getDocLength();
+
+    // PERFORM TRANSFER
+
+	let dt_html_str = getDataTransferHtml(dt).html;
+	if (isString(dt_html_str)) {
+		let dt_html_delta = convertHtmlToDelta(dt_html_str);
+		dt_html_delta = decodeHtmlEntitiesInDeltaInserts(dt_html_delta);
+		insertDelta(dest_doc_range, dt_html_delta, source);
+	} else if (dt.types.includes('text/plain')) {
+		let dt_pt_str = dt.getData('text/plain');
+		setTextInRange(dest_doc_range, dt_pt_str, source, true);
+	}
+
+	let dt_length_diff = getDocLength() - pre_doc_length;
+
+	// REMOVE SOURCE (DND MOVE OR CB CUT)
+
+	if (source_doc_range) {
+		if (dest_doc_range.index < source_doc_range.index) {
+			// when drop is before drag sel adjust drag range from added drop length
+			source_doc_range.index += dt_length_diff;
+		} else {
+			// adjust doc diff for removed source for removed drag length
+			dest_doc_range.index -= source_doc_range.length;
+		}
+		setTextInRange(source_doc_range, '', source);
+	}
+
+
+	// SELECT DEST
+
+	var dt_range = dest_doc_range;
+	dt_range.length += dt_length_diff;
+	setDocSelection(dt_range.index, dt_range.length);
+
+	return dt_range;
+}
+
+function prepareDestDocRangeForDataTransfer(dest_doc_range, drop_insert_source) {
+	dest_doc_range.mode = dest_doc_range.mode === undefined ? 'inline' : dest_doc_range.mode;
+	switch (dest_doc_range.mode) {
+		case 'split':
+			insertText(dest_doc_range.index, '\n', drop_insert_source);
+			insertText(dest_doc_range.index, '\n', drop_insert_source);
+			dest_doc_range.index += 1;
+			break;
+		case 'pre':
+			dest_doc_range.index = 0;
+			insertText(dest_doc_range.index, '\n', drop_insert_source);
+			break;
+		case 'post':
+			dest_doc_range.index = getLineEndDocIdx(dest_doc_range.index);
+			if (dest_doc_range.index < getDocLength() - 1) {
+				// ignore new line for last line since it already is a new line
+				insertText(dest_doc_range.index, '\n', drop_insert_source);
+				dest_doc_range.index += 1;
+			}
+			break;
+		case 'inline':
+		default:
+			break;
+	}
+	return dest_doc_range;
+}
 function appendTextContentData(data) {
 	data = data == null ? '' : data;
 	const append_range = getAppendDocRange();
 	let dt = new DataTransfer();
 	// NOTE since data is result of ci builder it will always be html
 	dt.setData('text/html', data);	
-	performDataTransferOnContent(dt, append_range, null, 'api', 'Appended');
+	performDataTransferOnContent(dt, null, append_range, 'api', 'Appended');
 	scrollToAppendIdx();
 
 	onContentChanged_ntf();

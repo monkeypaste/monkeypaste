@@ -50,6 +50,13 @@ function getRectCornerByIdx(rect, idx) {
     return getRectBottomLeft(rect);
 }
 
+function getRectCenter(rect) {
+    return {
+        x: rect.left + (rect.width / 2),
+        y: rect.top + (rect.height / 2)
+    };
+}
+
 // #endregion Getters
 
 // #region Setters

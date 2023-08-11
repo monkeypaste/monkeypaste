@@ -385,6 +385,7 @@ function onCopy(e) {
 
 function onPaste(e) {
     if (!isRunningOnHost()) {
+        e.handled = false;
         return;
     }
     // NOTE if cut/copy was internal and all supported formats set,
@@ -397,7 +398,7 @@ function onPaste(e) {
 
     getClipboardDataTransferObjectAsync_get()
         .then((result) => {
-            performDataTransferOnContent(result, cur_paste_sel,null,'api','Pasted');
+            performDataTransferOnContent(result, null, cur_paste_sel,'api','Pasted');
     });
 }
 

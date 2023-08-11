@@ -271,7 +271,7 @@ function onCustomTagAttributes(op) {
 	if (op.attributes.size !== undefined) {
 		// FONT SIZE (NOT UNIQUE)
 		let font_size_class = `ql-size-${op.attributes.size.split('px')[0]}`;
-		log('class added: ' + font_size_class);
+		//log('class added: ' + font_size_class);
 		//classes.push(font_size_class);
 	}
 	if (op.attributes.list !== undefined) {

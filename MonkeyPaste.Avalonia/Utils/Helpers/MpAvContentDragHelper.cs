@@ -58,8 +58,18 @@ namespace MonkeyPaste.Avalonia {
 
             // signal drag start in sub-ui task
             var result = await DragDrop.DoDragDrop(ppe_args, DragDataObject, allowedEffects);
-
             MpConsole.WriteLine($"Content drop effect: '{result}'");
+
+            if (((dragSource as Control).DataContext as MpAvClipTileViewModel).CopyItemType != MpCopyItemType.FileList &&
+                        result != DragDropEffects.None &&
+                        MpAvClipTrayViewModel.Instance.AllActiveItems.FirstOrDefault(x => x.IsDropOverTile)
+                            is MpAvClipTileViewModel drop_ctvm &&
+                            drop_ctvm.CopyItemType == MpCopyItemType.FileList) {
+                // source: non-file item
+                // target: file
+                // preserve temp file created
+                Mp.Services.TempFileManager.RemoveLastTempFilePath();
+            }
             // wait for possible dragEnd.wasCanceled == true msg
             await Task.Delay(300);
             if (result == DragDropEffects.None ||
@@ -82,9 +92,12 @@ namespace MonkeyPaste.Avalonia {
                     drop_app_url = await Mp.Services.SourceRefTools.FetchOrCreateAppRefUrlAsync(drop_pi);
                 }
                 if (drop_app_url == null) {
+                    // (SHOULD BE) internal drop
                     drop_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(
                         MpAvAppCollectionViewModel.Instance.ThisAppViewModel.App);
                 }
+
+
                 // report drop transaction
                 Mp.Services.TransactionBuilder.ReportTransactionAsync(
                             copyItemId: ctvm.CopyItemId,

@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetApplication : CefNetApplication {
@@ -226,7 +227,7 @@ namespace MonkeyPaste.Avalonia {
             //commandLine.AppendSwitch("in-process-gpu");
 
             commandLine.AppendSwitch("disable-component-update");
-            commandLine.AppendSwitch("process-per-site");
+            //commandLine.AppendSwitch("process-per-site");
             if (OperatingSystem.IsLinux()) {
                 commandLine.AppendSwitch("no-zygote");
                 commandLine.AppendSwitch("no-sandbox");
