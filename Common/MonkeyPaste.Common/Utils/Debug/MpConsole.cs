@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 
 namespace MonkeyPaste.Common {
@@ -12,11 +13,11 @@ namespace MonkeyPaste.Common {
     public static class MpConsole {
         #region Private Variables
         private static bool _canLogToFile = true;
-        private static bool _hasInitialized = false;
         private static StreamWriter _logStream;
         #endregion
 
         #region Properties
+        public static bool HasInitialized { get; private set; } = false;
 
         public static double MaxLogFileSizeInMegaBytes = 3.25;
 
@@ -30,20 +31,21 @@ namespace MonkeyPaste.Common {
         #region Public Methods
 
         public static void Init() {
-            if (_hasInitialized) {
+            if (HasInitialized) {
                 return;
             }
-            _hasInitialized = true;
+            if (MpFileIo.IsFileInUse(LogFilePath)) {
+                return;
+            }
+            HasInitialized = true;
             if (!LogToFile) {
                 return;
             }
             try {
-                bool in_use = MpFileIo.IsFileInUse(LogFilePath);
-                MpDebug.Assert(!in_use, "Close log file");
                 if (File.Exists(LogFilePath)) {
                     File.Delete(LogFilePath);
                 }
-                _logStream = new StreamWriter(File.Create(LogFilePath));
+                _logStream = new StreamWriter(File.Open(LogFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None));
             }
             catch (Exception ex) {
                 _canLogToFile = false;

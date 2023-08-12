@@ -153,7 +153,7 @@ namespace MonkeyPaste.Avalonia {
                 avdo.SetData(MpPortableDataFormats.Text, tb.Text);
             }
             SetIsDragging(attached_control, true);
-            var result = await DragDrop.DoDragDrop(e, avdo, DragDropEffects.Copy);
+            var result = await MpAvDoDragDropWrapper.DoDragDropAsync(attached_control.DataContext, e, avdo, DragDropEffects.Copy);
             SetIsDragging(attached_control, false);
         }
 

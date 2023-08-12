@@ -56,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
         /// <returns>Return false to abort the drag operation or true to handle the drag operation.</returns>
         /// 
         protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
-            if (browser.Host.Client.GetWebView() is not MpAvIDragSource ds ||
+            if (browser.Host.Client.GetWebView() is not MpAvIContentWebViewDragSource ds ||
                 ds is not Control c ||
                 ds is not MpIContentView cv ||
                 !cv.IsContentLoaded) {
@@ -68,14 +68,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => {
                 allowedOps = CefDragOperationsMask.Copy;
                 var de = DragDropEffects.Copy;// | DragDropEffects.Move;
-                await MpAvContentDragHelper.StartDragAsync(ds, de);
-
-                //ds.IsDragging = true;
-                //var sil = new[] { await (TopLevel.GetTopLevel(c))!.StorageProvider.TryGetFileFromPathAsync(Assembly.GetEntryAssembly()?.GetModules().FirstOrDefault()?.FullyQualifiedName) };
-                //var mpdo = new DataObject();
-                //mpdo.Set(MpPortableDataFormats.AvFileNames, sil);
-                //var result = await DragDrop.DoDragDrop(ds.LastPointerPressedEventArgs, mpdo, de);
-                //ds.IsDragging = false;
+                await MpAvContentWebViewDragHelper.StartDragAsync(ds, de);
 
                 browser.Host.DragSourceEndedAt(0, 0, CefDragOperationsMask.None);
                 browser.Host.DragSourceSystemDragEnded();

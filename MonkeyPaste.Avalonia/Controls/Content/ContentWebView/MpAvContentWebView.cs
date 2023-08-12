@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvNativeWebViewHost,
 #endif
         MpIContentView,
-        MpAvIDragSource,
+        MpAvIContentWebViewDragSource,
         MpAvIResizableControl,
         MpAvIDomStateAwareWebView,
         MpAvIAsyncJsEvalWebView,
@@ -71,20 +71,10 @@ namespace MonkeyPaste.Avalonia {
         private MpQuillEditorContentChangedMessage _lastReadOnlyEnabledFromHostResp = null;
         private MpQuillEditorSelectionStateMessage _lastEditorSelectionStateMessage = null;
 
-        private string[] _noStateReqMessages = new string[] {
-            "initMain_ext"
-        };
-
-        private string[] _initOnlyMessages = new string[] {
-            "loadContent_ext"
-        };
 
         #endregion
 
         #region Constants
-
-        public const string BLANK_URL = "about:blank";
-        public const string APPEND_NOTIFIER_URL_PARAMS = "append_notifier=true";
         #endregion
 
         #region Statics
@@ -220,7 +210,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta) {
             if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => (this as MpAvIDragSource).NotifyModKeyStateChanged(ctrl, alt, shift, esc, meta));
+                Dispatcher.UIThread.Post(() => NotifyModKeyStateChanged(ctrl, alt, shift, esc, meta));
                 return;
             }
             var modKeyMsg = new MpQuillModifierKeysNotification() {
@@ -235,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpAvDataObject> GetDataObjectAsync(
             string[] formats = null,
-            bool use_placeholders = true,
+            bool use_placeholders = false,
             bool ignore_selection = false) {
             if (BindingContext == null ||
                 BindingContext.IsAnyPlaceholder) {
@@ -493,8 +483,8 @@ namespace MonkeyPaste.Avalonia {
                                 AvToolTip.SetTip(this, tt);
                             }
                             tt.ToolTipHtml = showToolTipNtf.tooltipHtml;
-                            AvToolTip.SetHorizontalOffset(this, showToolTipNtf.anchorX);
-                            AvToolTip.SetHorizontalOffset(this, showToolTipNtf.anchorY);
+                            //AvToolTip.SetHorizontalOffset(this, showToolTipNtf.anchorX);
+                            //AvToolTip.SetHorizontalOffset(this, showToolTipNtf.anchorY);
                             AvToolTip.SetPlacement(this, PlacementMode.Pointer);
                             AvToolTip.SetIsOpen(this, true);
                         } else {
@@ -806,33 +796,43 @@ namespace MonkeyPaste.Avalonia {
                     getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(cb_dtObjResp);
                     break;
                 case MpEditorBindingFunctionType.getDragDataTransferObject:
-                    var drag_dtObjReq = MpJsonConverter.DeserializeObject<MpQuillEditorDragDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
-                    var drag_hdo = MpJsonConverter.DeserializeBase64Object<MpQuillHostDataItemsMessage>(drag_dtObjReq.unprocessedDataItemsJsonStr);
+                    // NOTE to avoid data object limitations of letting cef handle dnd when internal drag, 
+                    // use full object to perform actual drop. Otherwise its only used for drag effect.
+                    // If dnd was passive (simulating all drop events via messages) it would be asynchronous 
+                    // which has lots of thread access issues
 
-                    var unprocessed_drag_avdo = drag_hdo.ToAvDataObject();
+                    IDataObject processed_drag_avdo = MpAvDoDragDropWrapper.DragDataObject;
+                    if (processed_drag_avdo == null) {
+                        // external drag, use data from webview
+                        var drag_dtObjReq = MpJsonConverter.DeserializeObject<MpQuillEditorDragDataObjectRequestNotification>(getReq.reqMsgFragmentJsonStr);
+                        var drag_hdo = MpJsonConverter.DeserializeBase64Object<MpQuillHostDataItemsMessage>(drag_dtObjReq.unprocessedDataItemsJsonStr);
 
-                    if (BindingContext.CopyItemType == MpCopyItemType.FileList &&
-                        unprocessed_drag_avdo.TryGetData(MpPortableDataFormats.AvFileNames, out object fn_obj)) {
-                        // NOTE for file drops files are converted to fragment and dropped like append handling
-                        if (fn_obj is IEnumerable<string> fnl) {
-                            var fl_frag = new MpQuillFileListDataFragment() {
-                                fileItems = fnl.Select(x => new MpQuillFileListItemDataFragmentMessage() {
-                                    filePath = Uri.UnescapeDataString(x),
-                                    fileIconBase64 =
-                                        x.IsFileOrDirectory() ?
-                                            ((Bitmap)MpAvStringFileOrFolderPathToBitmapConverter.Instance.Convert(Uri.UnescapeDataString(x), null, null, null)).ToBase64String() :
-                                            MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Dark ?
-                                                MpBase64Images.MissingFile_white :
-                                                MpBase64Images.MissingFile
-                                }).ToList()
-                            };
-                            unprocessed_drag_avdo.SetData(MpPortableDataFormats.INTERNAL_FILE_LIST_FRAGMENT_FORMAT, fl_frag.SerializeJsonObjectToBase64());
-                        } else {
-                            MpDebug.Break($"unhandled file obj type {fn_obj.GetType()}");
+                        var unprocessed_drag_avdo = drag_hdo.ToAvDataObject();
+
+                        if (BindingContext.CopyItemType == MpCopyItemType.FileList &&
+                            unprocessed_drag_avdo.TryGetData(MpPortableDataFormats.AvFileNames, out object fn_obj)) {
+                            // NOTE for file drops files are converted to fragment and dropped like append handling
+                            if (fn_obj is IEnumerable<string> fnl) {
+                                var fl_frag = new MpQuillFileListDataFragment() {
+                                    fileItems = fnl.Select(x => new MpQuillFileListItemDataFragmentMessage() {
+                                        filePath = Uri.UnescapeDataString(x),
+                                        fileIconBase64 =
+                                            x.IsFileOrDirectory() ?
+                                                ((Bitmap)MpAvStringFileOrFolderPathToBitmapConverter.Instance.Convert(Uri.UnescapeDataString(x), null, null, null)).ToBase64String() :
+                                                MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Dark ?
+                                                    MpBase64Images.MissingFile_white :
+                                                    MpBase64Images.MissingFile
+                                    }).ToList()
+                                };
+                                unprocessed_drag_avdo.SetData(MpPortableDataFormats.INTERNAL_FILE_LIST_FRAGMENT_FORMAT, fl_frag.SerializeJsonObjectToBase64());
+                            } else {
+                                MpDebug.Break($"unhandled file obj type {fn_obj.GetType()}");
+                            }
                         }
+                        processed_drag_avdo = await Mp.Services
+                            .DataObjectTools.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
                     }
-                    var processed_drag_avdo = await Mp.Services
-                        .DataObjectTools.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
+
 
                     var processed_drag_hdo = processed_drag_avdo.ToQuillDataItemsMessage();
                     getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(processed_drag_hdo);
@@ -959,7 +959,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnNavigated(NavigatedEventArgs e) {
             base.OnNavigated(e);
-            if (e.Url == BLANK_URL) {
+            if (MpUrlHelpers.IsBlankUrl(e.Url)) {
                 return;
             }
             LoadEditorAsync().FireAndForgetSafeAsync();
@@ -1511,7 +1511,7 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext == null ||
                 !IsEditorLoaded ||
                 !IsContentReadOnly ||
-                MpAvContentDragHelper.DragDataObject != null) {
+                MpAvContentWebViewDragHelper.DragDataObject != null) {
                 return;
             }
 

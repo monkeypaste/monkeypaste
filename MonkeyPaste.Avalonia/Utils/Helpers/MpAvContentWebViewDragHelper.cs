@@ -10,10 +10,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public static class MpAvContentDragHelper {
+    public static class MpAvContentWebViewDragHelper {
         #region Private Variables
 
-        private static MpAvIDragSource _dragSource;
+        private static MpAvIContentWebViewDragSource _dragSource;
 
         #endregion
 
@@ -28,9 +28,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public static async Task StartDragAsync(
-            MpAvIDragSource dragSource,
+            MpAvIContentWebViewDragSource dragSource,
             DragDropEffects allowedEffects) {
-            if (dragSource == null || dragSource.LastPointerPressedEventArgs is not PointerPressedEventArgs ppe_args) {
+            if (dragSource == null ||
+                dragSource is not Control c ||
+                c.DataContext is not MpAvClipTileViewModel drag_ctvm ||
+                dragSource.LastPointerPressedEventArgs is not PointerPressedEventArgs ppe_args) {
                 MpDebug.Break($"Content drag error. Must provide pointer press event to start drag.");
                 return;
             }
@@ -57,19 +60,9 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
 
             // signal drag start in sub-ui task
-            var result = await DragDrop.DoDragDrop(ppe_args, DragDataObject, allowedEffects);
+            var result = await MpAvDoDragDropWrapper.DoDragDropAsync(drag_ctvm, ppe_args, DragDataObject, allowedEffects);
             MpConsole.WriteLine($"Content drop effect: '{result}'");
 
-            if (((dragSource as Control).DataContext as MpAvClipTileViewModel).CopyItemType != MpCopyItemType.FileList &&
-                        result != DragDropEffects.None &&
-                        MpAvClipTrayViewModel.Instance.AllActiveItems.FirstOrDefault(x => x.IsDropOverTile)
-                            is MpAvClipTileViewModel drop_ctvm &&
-                            drop_ctvm.CopyItemType == MpCopyItemType.FileList) {
-                // source: non-file item
-                // target: file
-                // preserve temp file created
-                Mp.Services.TempFileManager.RemoveLastTempFilePath();
-            }
             // wait for possible dragEnd.wasCanceled == true msg
             await Task.Delay(300);
             if (result == DragDropEffects.None ||
@@ -182,7 +175,7 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        private static void StartDrag(MpAvIDragSource ds) {
+        private static void StartDrag(MpAvIContentWebViewDragSource ds) {
             ResetDragState();
             HookDragEvents();
             _dragSource = ds;

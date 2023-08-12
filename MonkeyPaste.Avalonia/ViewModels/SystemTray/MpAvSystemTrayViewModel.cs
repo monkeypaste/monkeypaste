@@ -300,6 +300,7 @@ namespace MonkeyPaste.Avalonia {
         //    ??= new WindowNotificationManager(TopLevel.GetTopLevel(MpAvWindowManager.MainWindow)!);
         public ICommand GenericTestCommand => new MpAsyncCommand(
             async () => {
+                await Task.Delay(1);
                 //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
                 //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));

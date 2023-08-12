@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
 
             var mpdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT, BindingContext);
-            var result = await DragDrop.DoDragDrop(e, mpdo, /*DragDropEffects.Move | */DragDropEffects.Copy);
+            var result = await MpAvDoDragDropWrapper.DoDragDropAsync(BindingContext, e, mpdo, /*DragDropEffects.Move | */DragDropEffects.Copy);
 
             if (BindingContext == null) {
                 dc.IsDragging = false;

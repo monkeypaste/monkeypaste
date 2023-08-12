@@ -40,7 +40,7 @@ namespace AvCoreClipboardHandler {
                         MpConsole.WriteLine("Retry attempts reached, failed");
                         return null;
                     }
-                    var retry_result = await ProcessReadRequestAsync(request, retryCount--);
+                    var retry_result = await ProcessReadRequestAsync(request, --retryCount);
                     return retry_result;
                 }
 

@@ -4,12 +4,14 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.VisualTree;
+using HtmlAgilityPack;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static SQLite.SQLite3;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlainHtmlConverter :
@@ -66,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task<MpAvRichHtmlConvertResult> ConvertAsync(
+        public async Task<MpAvRichHtmlContentConverterResult> ConvertAsync(
             string inputStr,
             string inputFormatType,
             string verifyStr = null,
@@ -80,25 +82,25 @@ namespace MonkeyPaste.Avalonia {
                 htmlDataStr = htmlDataStr.ToRichHtmlText(MpPortableDataFormats.WinRtf);
                 inputFormatType = "rtf2html";
             }
-            MpAvRichHtmlConvertResult result;
+            MpAvRichHtmlContentConverterResult result;
             if (IsWebViewConverterAvailable) {
                 result = await ConvertWithWebViewAsync(inputFormatType, htmlDataStr, csvProps);
             } else {
                 result = ConvertWithFallback(htmlDataStr);
             }
-            VerifyConversion(result, verifyStr);
 
-            return result;
+
+            return await FinishHtmlConversionAsync(result, verifyStr);
         }
 
         #endregion
 
         #region Private Methods
-        private void VerifyConversion(MpAvRichHtmlConvertResult result, string verifyStr) {
+        private bool VerifyConversion(MpAvRichHtmlContentConverterResult result, string verifyStr) {
             if (verifyStr != null &&
                 result != null &&
-                result.RichHtml != null) {
-                string html_pt = result.RichHtml.ToPlainText("html");
+                result.OutputData != null) {
+                string html_pt = result.OutputData.ToPlainText("html");
                 if (html_pt.TrimTrailingLineEnding().Length != verifyStr.Length) {
                     // conversion error, fallback to plain text
                     MpConsole.WriteLine($"Html Conversion error! Output len: {html_pt.Length} Verify len: {verifyStr.Length}", true);
@@ -107,9 +109,51 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine("Conversion:");
                     MpConsole.WriteLine(html_pt);
                     MpConsole.WriteLine("Falling back to plain text", false, true);
-                    result.RichHtml = verifyStr.Replace(Environment.NewLine, IsWebViewConverterAvailable ? "<br>" : Environment.NewLine);
+                    result.DeterminedFormat = MpPortableDataFormats.Text;
+                    result.OutputData = verifyStr.Replace(Environment.NewLine, IsWebViewConverterAvailable ? "<br>" : Environment.NewLine);
+                    return false;
                 }
             }
+            return true;
+        }
+
+        private async Task<MpAvRichHtmlContentConverterResult> FinishHtmlConversionAsync(MpAvRichHtmlContentConverterResult cr, string verifyStr) {
+            if (cr == null ||
+                string.IsNullOrWhiteSpace(cr.InputHtml) ||
+                cr.DeterminedFormat != MpPortableDataFormats.CefHtml) {
+                return cr;
+            }
+            var html_doc = new HtmlDocument();
+            html_doc.LoadHtml(cr.InputHtml);
+            if (html_doc.DocumentNode != null &&
+                html_doc.DocumentNode.FirstChild.Name == "img" &&
+                html_doc.DocumentNode.FirstChild.GetAttributeValue("src", string.Empty) is string src_str &&
+                !string.IsNullOrWhiteSpace(src_str)) {
+                string img_base64 = null;
+
+                if (src_str.ToLower().StartsWith("data:image/")) {
+                    string src_data_str = src_str.Substring("data:image/".Length);
+                    if (src_data_str.ToLower().StartsWith("svg")) {
+                        MpDebug.Break($"Need to handle svg img src.");
+                    } else {
+                        img_base64 = src_data_str.Split(",")[1];
+                    }
+                } else if (Uri.IsWellFormedUriString(src_str, UriKind.Absolute)) {
+                    // TODO could fallback to relative uri by combining source url...
+                    byte[] img_bytes = await MpFileIo.ReadBytesFromUriAsync(src_str);
+                    img_base64 = img_bytes.ToBase64String();
+                }
+                if (!img_base64.IsStringBase64()) {
+                    MpDebug.Assert(img_base64 == null, $"What went wrong parsing img html: '{src_str}'");
+                    return cr;
+                }
+                cr.DeterminedFormat = MpPortableDataFormats.AvPNG;
+                cr.OutputData = img_base64;
+            }
+            if (cr.DeterminedFormat == MpPortableDataFormats.CefHtml) {
+                VerifyConversion(cr, verifyStr);
+            }
+            return cr;
         }
         private async Task CreateWebViewConverterAsync() {
             IsBusy = true;
@@ -158,12 +202,12 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        private MpAvRichHtmlConvertResult ConvertWithFallback(string htmlDataStr) {
-            var result = MpAvRichHtmlConvertResult.Parse(htmlDataStr.ToString());
+        private MpAvRichHtmlContentConverterResult ConvertWithFallback(string htmlDataStr) {
+            var result = MpAvRichHtmlContentConverterResult.Parse(htmlDataStr.ToString());
             return result;
         }
 
-        private async Task<MpAvRichHtmlConvertResult> ConvertWithWebViewAsync(
+        private async Task<MpAvRichHtmlContentConverterResult> ConvertWithWebViewAsync(
             string inputFormatType,
             string htmlDataStr,
             MpCsvFormatProperties csvProps = null) {
@@ -205,9 +249,9 @@ namespace MonkeyPaste.Avalonia {
             ConverterWebView.LastPlainHtmlResp = null;
             MpConsole.WriteLine($"{(resp.success ? "[SUCCESS]" : "[FAILED]")}Content Conversion Complete. Total Time {sw.ElapsedMilliseconds}ms");
             if (resp.success) {
-                return new MpAvRichHtmlConvertResult() {
+                return new MpAvRichHtmlContentConverterResult() {
                     InputHtml = resp.html.ToStringFromBase64(),
-                    RichHtml = resp.quillHtml.ToStringFromBase64(),
+                    OutputData = resp.quillHtml.ToStringFromBase64(),
                     Delta = resp.quillDelta.ToStringFromBase64(),
                     SourceUrl = resp.sourceUrl
                 };

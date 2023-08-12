@@ -16,7 +16,7 @@ namespace MonkeyPaste {
 
     public class MpUrlProperties {
         public string Title { get; set; }
-        public string IconBase64 { get; set; }
+        public string FavIconBase64 { get; set; }
 
         public string FullyFormattedUriStr { get; set; }
 
@@ -39,27 +39,27 @@ namespace MonkeyPaste {
 
             //url_props.IconBase64 = await GetUrlFavIconAsync(url_props.FullyFormattedUriStr);
             string formatted_url = url_props.FullyFormattedUriStr;
-            url_props.IconBase64 = string.Empty;
+            url_props.FavIconBase64 = string.Empty;
             if (Uri.IsWellFormedUriString(formatted_url, UriKind.Absolute)) {
                 var uri = new Uri(formatted_url, UriKind.Absolute);
-                url_props.IconBase64 = await GetDomainFavIcon1(uri.Host);
-                if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.IconBase64)) {
-                    url_props.IconBase64 = await GetDomainFavIcon2(formatted_url);
-                    if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.IconBase64)) {
+                url_props.FavIconBase64 = await GetDomainFavIcon1(uri.Host);
+                if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.FavIconBase64)) {
+                    url_props.FavIconBase64 = await GetDomainFavIcon2(formatted_url);
+                    if (!Mp.Services.IconBuilder.IsStringBase64Image(url_props.FavIconBase64)) {
                         // NOTE #3 uses html not url
                         var result_tuple = await GetDomainFavIcon3(url_props.Source);
                         if (result_tuple != null &&
                             Mp.Services.IconBuilder.IsStringBase64Image(result_tuple.Item1)) {
-                            url_props.IconBase64 = result_tuple.Item1;
+                            url_props.FavIconBase64 = result_tuple.Item1;
                             url_props.Title = result_tuple.Item2;
                         }
                     }
                 }
             }
 
-            if (string.IsNullOrEmpty(url_props.IconBase64) ||
-                url_props.IconBase64.Equals(MpBase64Images.UnknownFavIcon)) {
-                url_props.IconBase64 = null;// MpBase64Images.AppIcon;
+            if (string.IsNullOrEmpty(url_props.FavIconBase64) ||
+                url_props.FavIconBase64.Equals(MpBase64Images.UnknownFavIcon)) {
+                url_props.FavIconBase64 = null;// MpBase64Images.AppIcon;
             }
             if (string.IsNullOrEmpty(url_props.Title) &&
                 !string.IsNullOrEmpty(url_props.Source)) {
@@ -67,6 +67,14 @@ namespace MonkeyPaste {
             }
 
             return url_props;
+        }
+
+        public static bool IsBlankUrl(string url) {
+            if (string.IsNullOrEmpty(url)) {
+                return false;
+            }
+            string url_lwc = url.ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
+            return url_lwc.StartsWith("about:blank");
         }
         private static string GetFullyFormattedUrl(string str) {
             // reading linux moz url source pads every character of url w/ empty character

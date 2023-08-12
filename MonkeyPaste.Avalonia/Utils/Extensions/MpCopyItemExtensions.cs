@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
                     return ci.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter);
             }
             dir = string.IsNullOrEmpty(dir) ? Path.GetTempPath() : dir;
-            return new[] { MpFileIo.GetUniqueFileOrDirectoryName(dir, $"{ci.Title}{(isFragment ? "-Fragment" : string.Empty)}.{ext}") };
+            return new[] { MpFileIo.GetUniqueFileOrDirectoryName(dir, $"{ci.Title}{(isFragment ? "-Part" : string.Empty)}.{ext}") };
         }
 
         public static MpQuillDelta ToDelta(this MpCopyItem ci) {

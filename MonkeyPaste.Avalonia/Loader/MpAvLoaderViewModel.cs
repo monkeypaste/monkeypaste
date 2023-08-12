@@ -74,9 +74,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         public bool IS_PARALLEL_LOADING_ENABLED =>
-            // NOTE db create takes extra time and breaks when vm's query in parallel
-            // (this maybe a sign this needs more organization)
-            !StartupFlags.HasFlag(MpStartupFlags.Initial);
+        // NOTE db create takes extra time and breaks when vm's query in parallel
+        // (this maybe a sign this needs more organization)
+        !StartupFlags.HasFlag(MpStartupFlags.Initial);
         //false;
 
         public int LoadedCount { get; set; } = 0;
@@ -156,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
         private void CreateLoaderItems() {
 #if DESKTOP
             BaseItems.AddRange(new[] {
-                new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"),
+                //new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"),
                 new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), "System Tray"),
                 new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
                 new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
@@ -172,6 +172,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),"Supported Clipboard Formats",Mp.Services.DataObjectRegistrar),
                     //new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
+                    new MpAvLoaderItemViewModel(typeof(MpAvTempFileManager), "Temporary Files"),
                     new MpAvLoaderItemViewModel(typeof(MpPluginLoader), "Plugins"),
                     new MpAvLoaderItemViewModel(typeof(MpAvSoundPlayerViewModel), "Sound Player"),
                     new MpAvLoaderItemViewModel(typeof(MpAvIconCollectionViewModel), "Icons"),

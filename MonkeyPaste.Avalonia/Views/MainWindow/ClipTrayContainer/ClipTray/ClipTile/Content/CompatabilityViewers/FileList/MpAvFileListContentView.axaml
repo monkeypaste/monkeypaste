@@ -11,6 +11,7 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvFileListContentView">
     <ListBox Background="Transparent"
+             DragDrop.AllowDrop="{Binding CanDrop}"
              BorderThickness="0"
              DataContext="{Binding FileItemCollectionViewModel}"
              ItemsSource="{Binding Items}"

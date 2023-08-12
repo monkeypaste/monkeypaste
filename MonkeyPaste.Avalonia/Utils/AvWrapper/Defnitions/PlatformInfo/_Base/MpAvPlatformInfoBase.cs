@@ -58,8 +58,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public virtual string RoamingStorageDir =>
-            Path.Combine(StorageDir, "roaming_data");
 
         public virtual string OsShortName {
             get {

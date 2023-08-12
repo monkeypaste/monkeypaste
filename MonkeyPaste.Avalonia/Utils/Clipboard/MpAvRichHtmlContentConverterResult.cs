@@ -4,22 +4,26 @@ using MonkeyPaste.Common;
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvRichHtmlConvertResult {
+    public class MpAvRichHtmlContentConverterResult {
 
         public string Version { get; private set; }
         public string SourceUrl { get; set; }
 
         public string InputHtml { get; set; }
-        public string RichHtml { get; set; }
+        public string OutputData { get; set; }
         public string Delta { get; set; }
 
+        public string DeterminedFormat { get; set; } = MpPortableDataFormats.CefHtml;
 
-        public static MpAvRichHtmlConvertResult Parse(string htmlClipboardData) {
+
+
+        public static MpAvRichHtmlContentConverterResult Parse(string htmlClipboardData) {
             // NOTE only used as fallback when not using cef
 
-            var hcd = new MpAvRichHtmlConvertResult();
+            var hcd = new MpAvRichHtmlContentConverterResult();
 
             if (ParseHtmlFragmentForPlainHtml(htmlClipboardData) is string plain_html &&
                 !string.IsNullOrEmpty(plain_html)) {
@@ -27,45 +31,18 @@ namespace MonkeyPaste.Avalonia {
                 // BUG if plain html is set and quill is later loaded setHtml won't parse it correctly
                 // (theres escape issues once in js and it just doesn't follow same conversion flow and its annoying, pointless to change) without using dangerouslyPaste
                 // which makes problems w/ templates and since this is plain text mode there's no need to keep html anyways so downsample to plain text
-                hcd.RichHtml = MpAvContentDataConverter.Instance.Convert(plain_html, null, "plaintext", null) as string;
+                hcd.OutputData = MpAvContentDataConverter.Instance.Convert(plain_html, null, "plaintext", null) as string;
             } else {
                 // must not be html fragment
                 hcd.InputHtml = htmlClipboardData;
-                hcd.RichHtml = htmlClipboardData;
+                hcd.OutputData = htmlClipboardData;
             }
             hcd.SourceUrl = ParseHtmlFragmentForSourceUrl(htmlClipboardData);
             return hcd;
         }
 
 
-        public static string FindSourceUrl(MpPortableDataObject mpdo) {
-            string html_clipboard_fragment = null;
-            string html_str = null;
-            if (mpdo.ContainsData(MpPortableDataFormats.LinuxSourceUrl) &&
-                       mpdo.GetData(MpPortableDataFormats.LinuxSourceUrl) is byte[] url_bytes &&
-                       url_bytes.ToDecodedString(Encoding.ASCII, true) is string source_url_str) {
-                // on linux html is not in fragment format like windows and firefox supports this format
-                // but chrome doesn't
-                return source_url_str;
-            }
-            if (mpdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
-                        mpdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
-                        htmlBytes.ToDecodedString() is string avhtmlStr) {
-
-                // HTML
-                html_clipboard_fragment = avhtmlStr;
-            }
-            if (mpdo.ContainsData(MpPortableDataFormats.CefHtml) &&
-                mpdo.GetData(MpPortableDataFormats.CefHtml) is string cefhtmlStr) {
-                html_str = cefhtmlStr;
-            }
-            if (string.IsNullOrWhiteSpace(html_clipboard_fragment)) {
-                return null;
-            }
-            return ParseHtmlFragmentForSourceUrl(html_clipboard_fragment);
-        }
-
-        private static string ParseHtmlFragmentForPlainHtml(string htmlClipboardData) {
+        public static string ParseHtmlFragmentForPlainHtml(string htmlClipboardData) {
             string htmlStartToken = @"<!--StartFragment-->";
             string htmlEndToken = @"<!--EndFragment-->";
 
@@ -82,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
-        private static string ParseHtmlFragmentForSourceUrl(string htmlFragStr) {
+        public static string ParseHtmlFragmentForSourceUrl(string htmlFragStr) {
             string sourceUrlToken = "SourceURL:";
             if (htmlFragStr.Contains(sourceUrlToken)) {
                 int source_url_start_idx = htmlFragStr.IndexOf(sourceUrlToken) + sourceUrlToken.Length;

@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return false;
         }
-        public async Task<MpISourceRef> FetchOrCreateSourceAsync(string sourceUrl) {
+        public async Task<MpISourceRef> FetchOrCreateSourceAsync(string sourceUrl, object arg = null) {
             if (Uri.IsWellFormedUriString(sourceUrl, UriKind.Absolute)) {
                 if (Uri.TryCreate(sourceUrl, UriKind.Absolute, out Uri uri) && uri.IsFile) {
                     // this SHOULD be an executable file path but not checking 
@@ -61,7 +61,11 @@ namespace MonkeyPaste.Avalonia {
                 ref_tuple.Item1 == MpTransactionSourceType.None ||
                 ref_tuple.Item2 < 1) {
                 // add or fetch external url
-                var url = await Mp.Services.UrlBuilder.CreateAsync(sourceUrl);
+                MpDebug.Assert(arg is int && (int)arg > 0, $"New Url '{sourceUrl}' needs app id", true);
+                if (arg is not int appId) {
+                    return null;
+                }
+                var url = await Mp.Services.UrlBuilder.CreateAsync(sourceUrl, appId);
                 return url;
             }
 
@@ -149,7 +153,9 @@ namespace MonkeyPaste.Avalonia {
             }
             var sources = new List<MpTransactionSource>();
             foreach (var source_ref in transactionSources) {
-
+                if (source_ref == null) {
+                    continue;
+                }
                 var cis = await MpTransactionSource.CreateAsync(
                     transactionId: copyItemTransactionId,
                     sourceObjId: source_ref.SourceObjId,
@@ -161,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
             return sources;
         }
 
-        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj, bool forceExtSources = false) {
+        public async Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj) {
             MpAvDataObject avdo = null;
             if (mpOrAvDataObj is IDataObject ido) {
                 avdo = ido.ToPlatformDataObject();
@@ -170,59 +176,45 @@ namespace MonkeyPaste.Avalonia {
                 avdo = new MpAvDataObject();
             }
 
-            List<MpISourceRef> refs = new List<MpISourceRef>();
-            if (avdo.TryGetData(MpPortableDataFormats.CefAsciiUrl, out byte[] urlBytes) &&
-                urlBytes.ToDecodedString(Encoding.ASCII, true) is string urlRef &&
-                Uri.IsWellFormedUriString(urlRef, UriKind.Absolute)) {
+            var ext_refs = await GatherExternalSourceRefsAsync(avdo);
+            List<MpISourceRef> refs = ext_refs == null ?
+                    new List<MpISourceRef>() :
+                    ext_refs.ToList();
 
-                MpISourceRef sr = await Mp.Services.SourceRefTools.FetchOrCreateSourceAsync(urlRef);
-                if (sr != null) {
-                    // occurs on sub-selection drop onto pintray or tag
-                    refs.Add(sr);
-                }
-            }
             if (avdo.TryGetUriList(out List<string> uri_strings)) {
-                var list_refs = await Task.WhenAll(
-                    uri_strings.Select(x => Mp.Services.SourceRefTools.FetchOrCreateSourceAsync(x)));
-                refs.AddRange(list_refs);
-            }
-            if (avdo.TryGetData<string>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out string pi_str) &&
-                !string.IsNullOrWhiteSpace(pi_str)) {
-                try {
-                    var ppi = MpJsonConverter.DeserializeObject<MpPortableProcessInfo>(pi_str);
-                    var ppi_app_ref = await FetchOrCreateAppRefAsync(ppi);
-                    if (ppi_app_ref != null) {
-                        refs.Add(ppi_app_ref);
-                    }
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error deserializing process info str '{pi_str}'.", ex);
-                }
+                var list_refs = await Task.WhenAll(uri_strings.Select(x => FetchOrCreateSourceAsync(x)));
+                refs.AddRange(list_refs.Where(x => x != null));
             }
 
-            if (refs.Count == 0 || forceExtSources) {
-                // external ole create
-                var ext_refs = await GatherExternalSourceRefsAsync(avdo);
-                if (ext_refs != null && ext_refs.Count() > 0) {
-                    // NOTE ensure ext is in front so if url is present it is written first
-                    refs.InsertRange(0, ext_refs);
-                }
-            }
             if (refs.Count == 0) {
                 // fallback
                 var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
                 refs.Add(this_app);
             }
             // only return non-null, unique refs
-            return refs.Where(x => x != null).DistinctBy(x => new { x.SourceType, x.SourceObjId });
+            return
+                refs
+                .Where(x => x != null)
+                .DistinctBy(x => new { x.SourceType, x.SourceObjId })
+                .OrderByDescending(x => x.Priority);
         }
 
         private async Task<IEnumerable<MpISourceRef>> GatherExternalSourceRefsAsync(MpAvDataObject avdo) {
-            MpPortableProcessInfo last_pinfo =
-                avdo.ContainsData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) ?
-                    avdo.GetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) as MpPortableProcessInfo :
-                    Mp.Services.ProcessWatcher.LastProcessInfo;
+            MpPortableProcessInfo last_pinfo = null;
+            if (avdo.TryGetData<string>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out string pi_str) &&
+                !string.IsNullOrWhiteSpace(pi_str)) {
+                last_pinfo = MpJsonConverter.DeserializeObject<MpPortableProcessInfo>(pi_str);
+            }
+            if (last_pinfo == null &&
+                avdo.TryGetData<MpPortableProcessInfo>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out var pi)) {
+                last_pinfo = pi;
+            }
 
+            if (last_pinfo == null) {
+                // no direct external source available
+                return null;
+            }
+            MpApp app = await FetchOrCreateAppRefAsync(last_pinfo);
             //if(OperatingSystem.IsLinux()) {
             //    // this maybe temporary but linux not following process watching convention because its SLOW
             //    string exe_path = MpX11ShellHelpers.GetExeWithArgsToExePath(MpPlatformWrapper.Services.ProcessWatcher.LastProcessPath);
@@ -230,18 +222,14 @@ namespace MonkeyPaste.Avalonia {
             //} else {
             //    app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(MpPlatformWrapper.Services.ProcessWatcher.LastHandle);
             //}
-            if (last_pinfo == null) {
-                // no direct external source available
-                return null;
-            }
-            var app = await Mp.Services.AppBuilder.CreateAsync(last_pinfo);
 
             MpUrl url = null;
-            string source_url = MpAvRichHtmlConvertResult.FindSourceUrl(avdo);
-            if (!string.IsNullOrWhiteSpace(source_url)) {
-                url = await Mp.Services.UrlBuilder.CreateAsync(
-                    url: source_url,
-                    appId: app == null ? 0 : app.Id);
+
+            string source_url = FindSourceUrl(avdo);
+            if (!string.IsNullOrWhiteSpace(source_url) &&
+                Uri.IsWellFormedUriString(source_url, UriKind.Absolute) &&
+                app != null) {
+                url = await FetchOrCreateSourceAsync(source_url, app.Id) as MpUrl;
             }
 
             List<MpISourceRef> ext_refs = new List<MpISourceRef>();
@@ -253,6 +241,36 @@ namespace MonkeyPaste.Avalonia {
                 ext_refs.Add(app);
             }
             return ext_refs;
+        }
+        private string FindSourceUrl(MpPortableDataObject avdo) {
+            string cb_html_or_fragment = null;
+            if (avdo.ContainsData(MpPortableDataFormats.LinuxSourceUrl) &&
+                       avdo.GetData(MpPortableDataFormats.LinuxSourceUrl) is byte[] url_bytes &&
+                       url_bytes.ToDecodedString(Encoding.ASCII, true) is string source_url_str) {
+                // on linux html is not in fragment format like windows and firefox supports this format
+                // but chrome doesn't
+                return source_url_str;
+            }
+            if (avdo.TryGetData(MpPortableDataFormats.CefAsciiUrl, out byte[] urlBytes) &&
+                urlBytes.ToDecodedString(Encoding.ASCII, true) is string urlRef) {
+                return urlRef;
+            }
+            if (avdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
+                        avdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
+                        htmlBytes.ToDecodedString() is string avhtmlStr) {
+
+                // HTML
+                cb_html_or_fragment = avhtmlStr;
+            }
+            if (string.IsNullOrEmpty(cb_html_or_fragment) &&
+                avdo.ContainsData(MpPortableDataFormats.CefHtml) &&
+                avdo.GetData(MpPortableDataFormats.CefHtml) is string cefhtmlStr) {
+                cb_html_or_fragment = cefhtmlStr;
+            }
+            if (string.IsNullOrWhiteSpace(cb_html_or_fragment)) {
+                return null;
+            }
+            return MpAvRichHtmlContentConverterResult.ParseHtmlFragmentForSourceUrl(cb_html_or_fragment);
         }
 
 

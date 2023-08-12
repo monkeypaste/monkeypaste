@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
                     BindingContext.IsPinTagDragging = IsPinTrayTagView();
 
                     var mpdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT, BindingContext);
-                    var result = await DragDrop.DoDragDrop(e, mpdo, DragDropEffects.Link | DragDropEffects.Copy);
+                    var result = await MpAvDoDragDropWrapper.DoDragDropAsync(BindingContext, e, mpdo, DragDropEffects.Link | DragDropEffects.Copy);
 
                     if (BindingContext == null) {
                         dc.IsDragging = false;

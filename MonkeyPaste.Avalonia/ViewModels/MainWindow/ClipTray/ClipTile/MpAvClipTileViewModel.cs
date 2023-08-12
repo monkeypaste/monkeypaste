@@ -483,6 +483,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool CanDrop {
+            get {
+                if (MpAvDoDragDropWrapper.DragDataObject == null) {
+                    return true;
+                }
+                if (CopyItemType == MpCopyItemType.Text) {
+                    return true;
+                }
+                if (CopyItemType == MpCopyItemType.FileList &&
+                    MpAvDoDragDropWrapper.Source == this) {
+                    return true;
+                }
+                return false;
+            }
+        }
         public object[] ContentTemplateParam =>
             new object[] { CopyItemType, this };
 
@@ -2128,7 +2143,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CopyToClipboardCommand => new MpAsyncCommand(
             async () => {
                 //IsBusy = true;
-                var ds = GetContentView() as MpAvIDragSource;
+                var ds = GetContentView() as MpAvIContentDragSource;
                 if (ds == null) {
                     MpDebug.Break();
                     return;

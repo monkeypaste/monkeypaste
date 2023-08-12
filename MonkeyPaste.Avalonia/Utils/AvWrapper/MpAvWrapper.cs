@@ -89,8 +89,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
-        public MpICopyItemBuilder CopyItemBuilder { get; set; }
-
         #endregion
 
         #endregion

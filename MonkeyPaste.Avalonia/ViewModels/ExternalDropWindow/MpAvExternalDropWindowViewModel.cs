@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDragObjectInitializing {
             get {
-                var dobj = MpAvContentDragHelper.DragDataObject;
+                var dobj = MpAvContentWebViewDragHelper.DragDataObject;
                 if (dobj == null) {
                     return false;
                 }
@@ -123,10 +123,10 @@ namespace MonkeyPaste.Avalonia {
 
         public string DragInfo {
             get {
-                if (MpAvContentDragHelper.DragDataObject == null) {
+                if (MpAvContentWebViewDragHelper.DragDataObject == null) {
                     return "NO DRAG OBJECT";
                 }
-                return MpAvContentDragHelper.DragDataObject.ToString();
+                return MpAvContentWebViewDragHelper.DragDataObject.ToString();
             }
         }
         #endregion
@@ -134,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
         #region Model
 
         public IDataObject DragDataObject =>
-            MpAvContentDragHelper.DragDataObject;
+            MpAvContentWebViewDragHelper.DragDataObject;
 
         #endregion
 

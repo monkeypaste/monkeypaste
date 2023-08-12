@@ -400,7 +400,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (MpAvTagTrayViewModel.Instance.IsAnyDragging ||
                     MpAvTagTrayViewModel.Instance.IsAnyPinTagDragging ||
-                    MpAvContentDragHelper.IsDragging ||
+                    MpAvContentWebViewDragHelper.IsDragging ||
                     IsMainWindowOrientationDragging) {
                     return true;
                 }

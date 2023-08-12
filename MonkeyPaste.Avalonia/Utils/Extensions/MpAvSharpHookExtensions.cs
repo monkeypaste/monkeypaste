@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using SharpHook;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
@@ -52,9 +53,48 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public static bool IsTextInputKey(this KeyCode kc) {
-            // NOTE this assumes all control keys literal's are longer than 1 character
-            return kc.GetKeyLiteral().Length == 1;
+        public static bool IsAlphaNumeric(this KeyCode kc) {
+            switch (kc) {
+                case KeyCode.Vc0:
+                case KeyCode.Vc1:
+                case KeyCode.Vc2:
+                case KeyCode.Vc3:
+                case KeyCode.Vc4:
+                case KeyCode.Vc5:
+                case KeyCode.Vc6:
+                case KeyCode.Vc7:
+                case KeyCode.Vc8:
+                case KeyCode.Vc9:
+                case KeyCode.VcA:
+                case KeyCode.VcB:
+                case KeyCode.VcC:
+                case KeyCode.VcD:
+                case KeyCode.VcE:
+                case KeyCode.VcF:
+                case KeyCode.VcG:
+                case KeyCode.VcH:
+                case KeyCode.VcI:
+                case KeyCode.VcJ:
+                case KeyCode.VcK:
+                case KeyCode.VcL:
+                case KeyCode.VcM:
+                case KeyCode.VcN:
+                case KeyCode.VcO:
+                case KeyCode.VcP:
+                case KeyCode.VcQ:
+                case KeyCode.VcR:
+                case KeyCode.VcS:
+                case KeyCode.VcT:
+                case KeyCode.VcU:
+                case KeyCode.VcV:
+                case KeyCode.VcW:
+                case KeyCode.VcX:
+                case KeyCode.VcY:
+                case KeyCode.VcZ:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         public static KeyCode GetUnifiedKey(this KeyCode kc) {
@@ -127,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
             if (key == KeyCode.VcSemicolon) {
                 return ";";
             }
-            if (key == KeyCode.VcBackquote) {
+            if (key == KeyCode.VcBackQuote) {
                 return "`";
             }
             if (key == KeyCode.VcQuote) {
@@ -142,7 +182,7 @@ namespace MonkeyPaste.Avalonia {
             if (key == KeyCode.VcComma) {
                 return ",";
             }
-            if (key == KeyCode.VcBackSlash) {
+            if (key == KeyCode.VcBackslash) {
                 return @"/";
             }
             if (key == KeyCode.VcPeriod) {
@@ -183,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
                 return KeyCode.VcSemicolon;
             }
             if (lks == "`") {
-                return KeyCode.VcBackquote;
+                return KeyCode.VcBackQuote;
             }
             if (lks == "'") {
                 return KeyCode.VcQuote;
@@ -198,7 +238,7 @@ namespace MonkeyPaste.Avalonia {
                 return KeyCode.VcComma;
             }
             if (lks == @"/") {
-                return KeyCode.VcBackSlash;
+                return KeyCode.VcBackslash;
             }
             if (lks == ".") {
                 return KeyCode.VcPeriod;
@@ -223,8 +263,13 @@ namespace MonkeyPaste.Avalonia {
                keyCodeObj is KeyCode keyCode) {
                 return keyCode;
             }
-            MpConsole.WriteLine($"Unhandled global key literal '{lks}'");
-            return KeyCode.CharUndefined;
+            string err_msg = $"Unhandled global key literal '{lks}'";
+#if DEBUG
+            throw new MpException(err_msg);
+#else
+            MpConsole.WriteLine(err_msg);
+            return KeyCode.VcUndefined;
+#endif
         }
         public static bool IsSameKey(this KeyCode kc, KeyCode okc, bool unify_mods) {
             if (kc == okc) {

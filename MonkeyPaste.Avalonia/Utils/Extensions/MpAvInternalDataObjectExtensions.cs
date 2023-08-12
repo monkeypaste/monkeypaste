@@ -53,7 +53,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Source Refs
 
-        public static void AddOrCreateUri(this IDataObject ido, string uri) {
+        public static void AddOrUpdateUri(this IDataObject ido, string uri) {
             if (string.IsNullOrWhiteSpace(uri)) {
                 throw new Exception("Uri must be non-whitespace");
             }
@@ -152,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
 
             // always add copyItem uri
             string ci_uri = Mp.Services.SourceRefTools.ConvertToInternalUrl(ci);
-            ido.AddOrCreateUri(ci_uri);
+            ido.AddOrUpdateUri(ci_uri);
 
             if (!isFullContentReference) {
                 ido.Set(MpPortableDataFormats.INTERNAL_PARTIAL_CONTENT_VIEW_HANDLE_FORMAT, ci.PublicHandle);

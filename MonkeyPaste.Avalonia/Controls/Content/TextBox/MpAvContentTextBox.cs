@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvContentTextBox :
         TextBox,
         MpITextDocumentContainer,
+        MpAvIContentDragSource,
         MpIContentView {
         #region Private Variables
 
@@ -116,30 +117,22 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public bool WasDragCanceled { get; set; } = false;
 
-        public object LastPointerPressedEventArgs { get; private set; }
-
-        public void NotifyModKeyStateChanged(bool ctrl, bool alt, bool shift, bool esc, bool meta) {
-            return;
-        }
-
-
-        public async Task<MpPortableDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = true, bool ignore_selection = false) {
+        public async Task<MpAvDataObject> GetDataObjectAsync(string[] formats = null, bool use_placeholders = false, bool ignore_selection = false) {
             if (BindingContext == null ||
                 BindingContext.IsPlaceholder ||
-                BindingContext.CopyItem.ToAvDataObject(true, true) is not MpPortableDataObject mpdo ||
-                mpdo.DataFormatLookup == null) {
+                BindingContext.CopyItem.ToAvDataObject(true, true) is not MpAvDataObject avdo ||
+                avdo.DataFormatLookup == null) {
                 return null;
             }
             if (!ignore_selection &&
                 SelectionEnd - SelectionStart is int sel_len &&
                 sel_len > 0) {
                 // only use selection if range is selected
-                mpdo.SetData(MpPortableDataFormats.Text, this.Text.Substring(SelectionStart, sel_len));
+                avdo.SetData(MpPortableDataFormats.Text, this.Text.Substring(SelectionStart, sel_len));
             }
             await Task.Delay(1);
-            return new MpAvDataObject(mpdo);
+            return new MpAvDataObject(avdo);
         }
         public string[] GetDragFormats() {
             if (DataContext is not MpAvClipTileViewModel ctvm) {
@@ -199,7 +192,6 @@ namespace MonkeyPaste.Avalonia {
                 e.Handled = true;
                 return;
             }
-            LastPointerPressedEventArgs = e;
             base.OnPointerPressed(e);
         }
         #endregion

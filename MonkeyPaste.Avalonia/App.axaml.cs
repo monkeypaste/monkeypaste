@@ -154,9 +154,6 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void Startup(object sender, ControlledApplicationLifetimeStartupEventArgs e) {
-            if (!EnableSingleInstance()) {
-                return;
-            }
             FrameworkInitialized?.Invoke(this, EventArgs.Empty);
         }
 

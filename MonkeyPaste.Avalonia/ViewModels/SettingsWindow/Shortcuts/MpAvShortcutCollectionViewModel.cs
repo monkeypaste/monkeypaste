@@ -1034,13 +1034,13 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
+            _keyboardGestureHelper.AddKeyDown(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
             HandleGlobalKeyEvents(keyStr, true);
             if (!IsShortcutsEnabled) {
                 return;
             }
 
-            _keyboardGestureHelper.AddKeyDown(e.Data.KeyCode);
             string down_gesture = _keyboardGestureHelper.GetCurrentGesture();
             _exact_match =
                 AvailableItems
@@ -1062,11 +1062,11 @@ namespace MonkeyPaste.Avalonia {
                         MpAvWindowManager.MainWindow.IsVisible &&
                         !MpAvFocusManager.Instance.IsTextInputControlFocused &&
                         _exact_match == null &&
-                        _keyboardGestureHelper.Downs.Count == 1 &&
-                        _keyboardGestureHelper.Downs.Cast<KeyCode>().All(x => x.IsTextInputKey());
+                        Mp.Services.KeyDownHelper.Downs.Count == 1 &&
+                        e.Data.KeyCode.IsAlphaNumeric();
 
                     if (can_auto_search) {
-                        string text_to_pass = ((KeyCode)_keyboardGestureHelper.Downs[0]).GetKeyLiteral().ToLower();
+                        string text_to_pass = ((KeyCode)Mp.Services.KeyDownHelper.Downs[0]).GetKeyLiteral().ToLower();
                         MpAvSearchBoxViewModel.Instance.BeginAutoSearchCommand.Execute(text_to_pass);
                     }
                 });
@@ -1081,7 +1081,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private async void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
+        private void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
+            _keyboardGestureHelper.RemoveKeyDown(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
 
             HandleGlobalKeyEvents(keyStr, false);
@@ -1096,7 +1097,6 @@ namespace MonkeyPaste.Avalonia {
                 OnGlobalPasteShortcutPerformed?.Invoke(this, null);
             }
 
-            _keyboardGestureHelper.RemoveKeyDown(e.Data.KeyCode);
             if (_exact_match == null) {
                 return;
             }

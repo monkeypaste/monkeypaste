@@ -19,6 +19,8 @@ namespace MonkeyPaste.Avalonia {
         private Timer messagePump;
         private const int messagePumpDelay = 10;
         private bool _wasCefUpdated = false;
+
+        private static MpIPlatformInfo _pinfo = new MpAvPlatformInfo_desktop();
         #endregion
 
         #region Constants
@@ -37,9 +39,9 @@ namespace MonkeyPaste.Avalonia {
             Path.Combine(Directory.GetCurrentDirectory(), "debug.log");
 
         public static string CefFrameworkFolderName =>
-            $"cef_{Mp.Services.PlatformInfo.OsShortName}";
+            $"cef_{_pinfo.OsShortName}";
         public static string CefRootPath =>
-            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "cef");
+            Path.Combine(_pinfo.ExecutingDir, "cef");
 
 
         public static string CefTempUpdateFolderPath =>
@@ -83,8 +85,13 @@ namespace MonkeyPaste.Avalonia {
         #region Events
 
         #endregion
-        public static void Init() {
+        public static void Init(bool disable = false) {
+            if (disable) {
+                MpAvPrefViewModel.Instance.IsRichHtmlContentForceDisabled = true;
+                return;
+            }
             try {
+                ResetCefNetLogging();
                 _ = new MpAvCefNetApplication();
                 IsCefNetLoaded = true;
             }
@@ -197,7 +204,6 @@ namespace MonkeyPaste.Avalonia {
             // Console.WriteLine(commandLine.CommandLineString);
             //
             //commandLine.AppendSwitchWithValue("proxy-server", "127.0.0.1:8888");
-
             //commandLine.AppendSwitch("ignore-certificate-errors");
             //commandLine.AppendSwitchWithValue("remote-debugging-port", "9222");
 
@@ -222,12 +228,15 @@ namespace MonkeyPaste.Avalonia {
             //commandLine.AppendSwitchWithValue("enable-blink-features", "CSSPseudoHas");
 
 
-            //commandLine.AppendSwitch("disable-gpu");
-            //commandLine.AppendSwitch("disable-gpu-compositing");
-            //commandLine.AppendSwitch("in-process-gpu");
+            commandLine.AppendSwitch("disable-gpu");
+            commandLine.AppendSwitch("disable-gpu-compositing");
+            commandLine.AppendSwitch("in-process-gpu");
 
             commandLine.AppendSwitch("disable-component-update");
             //commandLine.AppendSwitch("process-per-site");
+
+            // NOTE this seemed to fix network crash restart exception
+            //commandLine.AppendSwitchWithValue("password-store", "basic");
             if (OperatingSystem.IsLinux()) {
                 commandLine.AppendSwitch("no-zygote");
                 commandLine.AppendSwitch("no-sandbox");

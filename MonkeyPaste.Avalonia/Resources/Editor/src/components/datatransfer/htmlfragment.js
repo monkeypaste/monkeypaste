@@ -100,7 +100,7 @@ function createHtmlClipboardFragment(htmlStr) {
     let num_str = '0000000000';
     let pre_fragment_str = '<!--StartFragment-->';
     let post_fragment_str = '<!--EndFragment-->';
-    let sourceUrl = `${globals.LOCAL_HOST_URL}?type=CopyItem&handle=${globals.ContentHandle}`;
+    let sourceUrl = `${globals.LOCAL_HOST_DOMAIN}?type=CopyItem&handle=${globals.ContentHandle}`;
     let join_str = envNewLine();
 
     let fragment_parts = [

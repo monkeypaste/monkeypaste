@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpISourceRefTools {
         Task<List<MpTransactionSource>> AddTransactionSourcesAsync(int copyItemTransactionId, IEnumerable<MpISourceRef> transactionSources);
-        Task<MpISourceRef> FetchOrCreateSourceAsync(string uri);
+        Task<MpISourceRef> FetchOrCreateSourceAsync(string uri, object arg = null);
 
         string ParseRefArgs(string ref_url);
-        Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj, bool forceExtSources = false);
+        Task<IEnumerable<MpISourceRef>> GatherSourceRefsAsync(object mpOrAvDataObj);
         bool IsAnySourceRejected(IEnumerable<MpISourceRef> refs);
         string ConvertToInternalUrl(MpISourceRef sr);
         string ConvertToInternalUrl(MpTransactionSourceType sourceType, int sourceId);

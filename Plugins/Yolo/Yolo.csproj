@@ -122,13 +122,13 @@
     <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
     <Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
   </Target>
-  <Import Project="..\..\packages\FastYolo.12.0.4\build\FastYolo.targets" Condition="Exists('..\..\packages\FastYolo.12.0.4\build\FastYolo.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\FastYolo.12.0.4\build\FastYolo.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\FastYolo.12.0.4\build\FastYolo.targets'))" />
     <Error Condition="!Exists('..\..\packages\Microsoft.ML.OnnxRuntime.Managed.1.15.1\build\netstandard2.0\Microsoft.ML.OnnxRuntime.Managed.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.ML.OnnxRuntime.Managed.1.15.1\build\netstandard2.0\Microsoft.ML.OnnxRuntime.Managed.targets'))" />
+    <Error Condition="!Exists('..\..\packages\FastYolo.12.0.4\build\FastYolo.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\FastYolo.12.0.4\build\FastYolo.targets'))" />
   </Target>
   <Import Project="..\..\packages\Microsoft.ML.OnnxRuntime.Managed.1.15.1\build\netstandard2.0\Microsoft.ML.OnnxRuntime.Managed.targets" Condition="Exists('..\..\packages\Microsoft.ML.OnnxRuntime.Managed.1.15.1\build\netstandard2.0\Microsoft.ML.OnnxRuntime.Managed.targets')" />
+  <Import Project="..\..\packages\FastYolo.12.0.4\build\FastYolo.targets" Condition="Exists('..\..\packages\FastYolo.12.0.4\build\FastYolo.targets')" />
 </Project>

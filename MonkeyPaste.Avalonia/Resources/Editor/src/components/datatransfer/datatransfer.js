@@ -15,6 +15,7 @@ function getAllowedDataTransferTypes(contentType) {
     }
     return ['text/plain', 'text/html', 'application/json', 'files', 'text', 'html format']
 }
+
 // #endregion Getters
 
 // #region Setters
@@ -22,6 +23,21 @@ function getAllowedDataTransferTypes(contentType) {
 // #endregion Setters
 
 // #region State
+
+function isInternalDataTransfer(dt) {
+    if (!dt || 
+        typeof dt.getData !== 'function') {
+        return false;
+    }
+    const dt_url_data = dt.getData(globals.URL_DATA_FORMAT);
+    const test = dt.getData('UniformResourceLocator');
+    if (!isString(dt_url_data)) {
+        return false;
+    }
+    const is_internal = dt_url_data.toLowerCase().startsWith(globals.LOCAL_HOST_DOMAIN);
+    log('drop url: ' + dt_url_data);
+    return is_internal;
+}
 
 function isValidDataTransfer(dt) {
     if (!dt || !Array.isArray(dt.types)) {

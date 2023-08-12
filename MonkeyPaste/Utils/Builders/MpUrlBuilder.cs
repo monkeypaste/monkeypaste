@@ -17,6 +17,10 @@ namespace MonkeyPaste {
             if (string.IsNullOrWhiteSpace(url)) {
                 return null;
             }
+            if (MpUrlHelpers.IsBlankUrl(url)) {
+                MpConsole.WriteLine($"Blank url '{url}' rejected.");
+                return null;
+            }
 
             if (Mp.Services.SourceRefTools.IsInternalUrl(url)) {
                 MpDebug.Break($"Should not be adding internal urls, check stack and fix case");
@@ -29,9 +33,9 @@ namespace MonkeyPaste {
             }
 
             int icon_id = 0;
-            if (!string.IsNullOrEmpty(urlProps.IconBase64)) {
+            if (!string.IsNullOrEmpty(urlProps.FavIconBase64)) {
                 MpIcon icon = await Mp.Services.IconBuilder.CreateAsync(
-                    iconBase64: urlProps.IconBase64,
+                    iconBase64: urlProps.FavIconBase64,
                     suppressWrite: suppressWrite);
                 if (icon != null) {
                     icon_id = icon.Id;

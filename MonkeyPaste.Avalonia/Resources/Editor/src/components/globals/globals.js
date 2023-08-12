@@ -205,7 +205,7 @@ const globals = {
 
 	// #region DATA TRANSFER
 
-	LOCAL_HOST_URL:  'https://localhost',
+	LOCAL_HOST_DOMAIN:  'https://localhost',
 	URL_DATA_FORMAT:  "uniformresourcelocator",
 	URI_LIST_FORMAT:  'text/uri-list',
 	HTML_FORMAT:  'text/html',

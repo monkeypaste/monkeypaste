@@ -21,16 +21,18 @@ namespace MonkeyPaste.Avalonia {
         [STAThread]
         public static void Main(string[] args) {
             try {
-
+                if (MpFileIo.IsFileInUse(MpConsole.LogFilePath) && !MpConsole.HasInitialized) {
+                    return;
+                }
                 MpConsole.Init();
 
 
 #if CEF_WV
-                MpAvCefNetApplication.ResetCefNetLogging();
+                MpAvCefNetApplication.Init();
 #endif
                 App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(App.Args, ShutdownMode.OnExplicitShutdown);
+                .StartWithClassicDesktopLifetime(args);
             }
             catch (Exception e) {
                 // here we can work with the exception, for example add it to our log file
@@ -40,7 +42,11 @@ namespace MonkeyPaste.Avalonia {
                 // This block is optional. 
                 // Use the finally-block if you need to clean things up or similar
                 //Log.CloseAndFlush();
-                Mp.Services.ShutdownHelper.ShutdownApp("TopLevel exception");
+                if (Mp.Services != null &&
+                    Mp.Services.ShutdownHelper != null) {
+                    Mp.Services.ShutdownHelper.ShutdownApp("TopLevel exception");
+                }
+
             }
         }
 
@@ -61,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
                 //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
                 //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
                 //.With(new AvaloniaNativePlatformOptions { UseGpu = false })
-                .LogToTrace()//LogEventLevel.Verbose)
+                .LogToTrace()// LogEventLevel.Verbose)
                 ;
 
 

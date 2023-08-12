@@ -16,7 +16,9 @@ namespace MonkeyPaste.Avalonia {
             //    return null;
             //}
             string key = "ContentWebViewTemplate";
-            if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled && param is MpAvClipTileViewModel ctvm) {
+            if ((!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
+                 !MpAvCefNetApplication.IsCefNetLoaded) &&
+                param is MpAvClipTileViewModel ctvm) {
                 ctvm.IsEditorLoaded = true;
                 switch (ctvm.CopyItemType) {
                     default:

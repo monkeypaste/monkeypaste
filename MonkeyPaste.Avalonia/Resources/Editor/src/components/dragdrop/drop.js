@@ -196,19 +196,15 @@ function onDragOver(e) {
     
 
     if (!isDropping()) {
-        if (isDragging()) {
-            // IsDropping won't be set to true when its dragOverlay ie. can't drop whole tile on itself.
-            log('onDragOver called but not dropping, returning false');
-            return rejectDrop(e);
+        //if (isDragging()) {
+        //    // IsDropping won't be set to true when its dragOverlay ie. can't drop whole tile on itself.
+        //    log('onDragOver called but not dropping, returning false');
+        //    return rejectDrop(e);
 
-        } else {
+        //} else {
             onDragEnter(e);
-        }
+        //}
     }
-    //if (e.target.id == 'dragOverlay') {
-    //    //debugger;
-    //    //log('warning! drop target is dragOverlay element. pretty sure it shouldnt be...');
-    //}
 
     // VALIDATE 
 
@@ -237,6 +233,13 @@ function onDragOver(e) {
     if (processEffectAllowed(e) == 'none') {
         return rejectDrop(e);
     }  
+
+    if (globals.ContentItemType == 'FileList' &&
+        isDragging() &&
+        isDragCopy()) {
+        // reject file item copy self drop
+        return rejectDrop(e);
+    }
 
     // DROP IDX
 

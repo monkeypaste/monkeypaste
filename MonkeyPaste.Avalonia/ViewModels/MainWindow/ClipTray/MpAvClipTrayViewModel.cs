@@ -42,14 +42,19 @@ namespace MonkeyPaste.Avalonia {
         private object _addDataObjectContentLock = new object();
 
 
-        private MpICopyItemBuilder _copyItemBuilder = new MpAvCopyItemBuilder();
+        private MpAvCopyItemBuilder _copyItemBuilder = new MpAvCopyItemBuilder();
         #endregion
 
         #region Constants
 
         public const bool IS_ADD_STARTUP_CLIPBOARD_HIDDEN = true;
 
-        public const int ADD_CONTENT_TIMEOUT_MS = 30_000;
+        public const int ADD_CONTENT_TIMEOUT_MS =
+#if DEBUG
+            30_000_000;
+#else
+            30_000;
+#endif
         public const int DISABLE_READ_ONLY_DELAY_MS = 500;
         public const double MAX_TILE_SIZE_CONTAINER_PAD = 50;
         public const double MIN_SIZE_ZOOM_FACTOR_COEFF = (double)1 / (double)7;
@@ -1692,6 +1697,8 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 MpMessenger.SendGlobal(MpMessageType.DropOverTraysEnd);
             }
+            // make sure file
+            AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.CanDrop)));
         }
 
         public MpSize GetCurrentDefaultPinTrayRatio() {
@@ -2433,7 +2440,7 @@ namespace MonkeyPaste.Avalonia {
 
             Dispatcher.UIThread.Post(async () => {
                 IsAddingStartupClipboardItem = is_startup_ido;
-                await AddItemFromDataObjectAsync(mpdo);
+                await AddItemFromDataObjectAsync(mpdo as MpAvDataObject);
                 IsAddingStartupClipboardItem = false;
             });
         }
@@ -2854,7 +2861,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        private async Task<MpCopyItem> AddItemFromDataObjectAsync(MpPortableDataObject mpdo, bool is_copy = false) {
+        private async Task<MpCopyItem> AddItemFromDataObjectAsync(MpAvDataObject avdo, bool is_copy = false) {
             try {
                 await MpFifoAsyncQueue.WaitByConditionAsync(
                 lockObj: _addDataObjectContentLock,
@@ -2879,24 +2886,17 @@ namespace MonkeyPaste.Avalonia {
             IsAddingClipboardItem = true;
             if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                 MpConsole.WriteLine($"Add content blocked, acct capped. Ensuring accuracy...");
-                await ProcessAccountCapsAsync(MpAccountCapCheckType.AddBlock, mpdo);
+                await ProcessAccountCapsAsync(MpAccountCapCheckType.AddBlock, avdo);
                 if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                     MpConsole.WriteLine($"Add content blocked confirmed.");
                     IsAddingClipboardItem = false;
                     return null;
                 }
             }
-            bool force_ext = true;
-            if (mpdo is IDataObject ido) {
-                // should always be avdo but trying to keep portable interfaces...
-                force_ext = !ido.ContainsContentRef();
-            }
-
 
             MpCopyItem newCopyItem = await _copyItemBuilder.BuildAsync(
-                pdo: mpdo,
+                avdo: avdo,
                 transType: MpTransactionType.Created,
-                force_ext_sources: force_ext,
                 force_allow_dup: is_copy);
 
             MpCopyItem processed_result = await AddUpdateOrAppendCopyItemAsync(newCopyItem);
@@ -2995,7 +2995,7 @@ namespace MonkeyPaste.Avalonia {
                 if (ctvm.CopyItem != null) {
                     mpdo = ctvm.CopyItem.ToAvDataObject();
                 }
-            } else if (cv is MpAvIDragSource ds) {
+            } else if (cv is MpAvIContentDragSource ds) {
                 mpdo = await ds.GetDataObjectAsync(
                     formats: ctvm.GetOleFormats(false),
                     use_placeholders: false,
@@ -3024,7 +3024,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
             await CleanupAfterPasteAsync(ctvm, pi, mpdo);
         }
-        private async Task CutOrCopySelectionAsync(bool isCut) {
+        private void CutOrCopySelection(bool isCut) {
             string keys = isCut ?
             Mp.Services.PlatformShorcuts.CutKeys : Mp.Services.PlatformShorcuts.CopyKeys;
 
@@ -3921,7 +3921,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand CutSelectionFromContextMenuCommand => new MpCommand<object>(
             (args) => {
-                CutOrCopySelectionAsync(true).FireAndForgetSafeAsync(this);
+                CutOrCopySelection(true);
             },
             (args) => {
                 return SelectedItem != null && SelectedItem.IsSubSelectionEnabled;
@@ -3929,7 +3929,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand CopySelectionFromContextMenuCommand => new MpCommand<object>(
             (args) => {
-                CutOrCopySelectionAsync(false).FireAndForgetSafeAsync(this);
+                CutOrCopySelection(false);
             },
             (args) => {
                 return SelectedItem != null;

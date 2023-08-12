@@ -46,14 +46,14 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.0" />
+    <PackageReference Include="Avalonia" Version="11.0.3" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.15.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
-    <PackageReference Include="SharpHook" Version="4.2.1" />
+    <PackageReference Include="SharpHook" Version="5.0.0" />
   </ItemGroup>
   
   <ItemGroup Condition="$(IsDesktop) == 'true'">
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.0" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.3" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">    

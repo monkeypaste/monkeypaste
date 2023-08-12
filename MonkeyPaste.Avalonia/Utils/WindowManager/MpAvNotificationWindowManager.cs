@@ -102,15 +102,18 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindow nw = null;
                 var layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
                 switch (layoutType) {
-                    case MpNotificationLayoutType.Loader:
-                        nw = new MpAvLoaderNotificationWindow() {
-                            DataContext = nvmb
-                        };
-                        break;
                     case MpNotificationLayoutType.Welcome:
                         nw = new MpAvWelcomeWindow() {
                             DataContext = nvmb
                         };
+                        break;
+                    case MpNotificationLayoutType.Loader:
+                        nw = new MpAvLoaderNotificationWindow() {
+                            DataContext = nvmb
+                        };
+                        if (Mp.Services.PlatformInfo.IsDesktop) {
+                            App.Current.SetMainWindow(nw);
+                        }
                         break;
                     case MpNotificationLayoutType.ErrorWithOption:
                     case MpNotificationLayoutType.UserAction:
@@ -179,7 +182,9 @@ namespace MonkeyPaste.Avalonia {
                 // flag ntf activating to prevent mw hide 
                 MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
             }
-            if (nw is MpAvMessageNotificationWindow) {
+            if (nw.WindowStartupLocation != WindowStartupLocation.CenterScreen &&
+                nw.WindowStartupLocation != WindowStartupLocation.CenterOwner //nw is MpAvMessageNotificationWindow
+                ) {
                 MpIPlatformScreenInfo primaryScreen = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary);
                 if (primaryScreen != null) {
                     // since msgs slide out and window positioning is handled after opening (to account for its size)
