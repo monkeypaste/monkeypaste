@@ -128,22 +128,20 @@ function onAddOrUpdateTemplate_ntf(t) {
 	sendMessage('notifyAddOrUpdateTemplate', msgStr);
 }
 
-function onException_ntf(exMsg, exUrl, exLine, exCol, exErrorObj) {
+function onException_ntf(ex_label,ex_msg) {
 	// output 'MpQuillExceptionMessage'
-
+	if (!isRunningInHost()) {
+		debugger;
+	}
 	log('');
 	log('exception! ');
-	log('Msg: ' + exMsg);
-	log('URL: ' + exUrl);
-	log('Line: ' + exLine);
+	log('Label: ' + ex_label);
+	log(ex_msg);
 	log('');
 
 	let msg = {
-		msg: exMsg,
-		url: exUrl,
-		lineNum: exLine,
-		colNum: exCol,
-		errorObjJsonStr: JSON.stringify(exErrorObj)
+		label: ex_label,
+		msg: ex_msg
 	};
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyException', msgStr);

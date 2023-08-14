@@ -9,6 +9,9 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvShortcutView : MpAvUserControl<MpAvIKeyGestureViewModel> {
+        #region Privates
+
+        #endregion
         #region Properties
 
         #region EmptyText Property
@@ -74,6 +77,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        Control rb =>
+            this.FindControl<Control>("RecordButton");
+        Control sclb =>
+            this.FindControl<Control>("ShortcutLabel");
         public bool CanRecord =>
             RecordCommand != null &&
             RecordCommand.CanExecute(RecordCommandParameter);
@@ -84,7 +91,6 @@ namespace MonkeyPaste.Avalonia {
             this.PointerEntered += MpAvShortcutView_PointerEntered;
             this.PointerExited += MpAvShortcutView_PointerExited;
 
-            var rb = this.FindControl<Control>("RecordButton");
             rb.AddHandler(PointerReleasedEvent, Rb_PointerPressed, RoutingStrategies.Tunnel);
         }
 
@@ -93,12 +99,12 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             RecordCommand.Execute(RecordCommandParameter);
+
+            sclb.IsVisible = true;
+            rb.IsVisible = false;
         }
 
         private void MpAvShortcutView_PointerExited(object sender, global::Avalonia.Input.PointerEventArgs e) {
-
-            var sclb = this.FindControl<Control>("ShortcutLabel");
-            var rb = this.FindControl<Control>("RecordButton");
             if (!CanRecord) {
                 return;
             }
@@ -110,8 +116,7 @@ namespace MonkeyPaste.Avalonia {
             if (!CanRecord) {
                 return;
             }
-            var sclb = this.FindControl<Control>("ShortcutLabel");
-            var rb = this.FindControl<Control>("RecordButton");
+
             sclb.IsVisible = false;
             rb.IsVisible = true;
         }

@@ -3,7 +3,6 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -135,13 +134,15 @@ namespace MonkeyPaste.Avalonia {
             if (title == null) {
                 return;
             }
+            var sub_titles = new List<string>();
             if (isCopy) {
-                title += " (Copy)";
+                sub_titles.Add("Copy");
             }
             if (!isFullContentReference) {
-                // give priority to fragment 
-                // since c
-                title += " [Part]";
+                sub_titles.Add("Part");
+            }
+            if (sub_titles.Any()) {
+                title += $"-{string.Join("-", sub_titles)}";
             }
             ido.Set(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, title);
         }

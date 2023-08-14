@@ -1075,7 +1075,7 @@ namespace MonkeyPaste.Avalonia {
                             return;
                         }
                         // ensure rich content cb reflects webview availability
-                        cb.IsEnabled = !MpAvPrefViewModel.Instance.IsRichHtmlContentForceDisabled;
+                        cb.IsEnabled = MpAvCefNetApplication.IsCefNetLoaded;
                     }
                 }
             };

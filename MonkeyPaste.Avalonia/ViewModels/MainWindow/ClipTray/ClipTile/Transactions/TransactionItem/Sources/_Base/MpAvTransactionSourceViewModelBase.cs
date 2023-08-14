@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public virtual string LabelText =>
            SourceRef == null ?
-                "Unlabled Source Ref" :
+                "Unlabled SourceControl Ref" :
                 string.IsNullOrEmpty(SourceRef.LabelText) ?
                     "Untitled" :
                     SourceRef.LabelText;

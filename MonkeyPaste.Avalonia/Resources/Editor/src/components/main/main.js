@@ -33,7 +33,7 @@ function initMain(initObj) {
 			log('Main Initialized.(Content)');
 		}	
 	} catch (ex) {
-		onException_ntf('init error',ex);
+		onException_ntf('init error', ex);
 	}
 
 	onInitComplete_ntf();

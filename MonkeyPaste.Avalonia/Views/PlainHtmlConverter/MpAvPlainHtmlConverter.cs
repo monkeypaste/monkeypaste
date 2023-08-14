@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.VisualTree;
 using HtmlAgilityPack;
@@ -11,7 +10,6 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using static SQLite.SQLite3;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlainHtmlConverter :
@@ -71,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task<MpAvRichHtmlContentConverterResult> ConvertAsync(
             string inputStr,
             string inputFormatType,
-            string verifyStr = null,
+            string verifyText = null,
             MpCsvFormatProperties csvProps = null) {
             string htmlDataStr = inputStr;
             if (htmlDataStr == null) {
@@ -84,38 +82,18 @@ namespace MonkeyPaste.Avalonia {
             }
             MpAvRichHtmlContentConverterResult result;
             if (IsWebViewConverterAvailable) {
-                result = await ConvertWithWebViewAsync(inputFormatType, htmlDataStr, csvProps);
+                result = await ConvertWithWebViewAsync(inputFormatType, htmlDataStr, verifyText, csvProps);
             } else {
-                result = ConvertWithFallback(htmlDataStr);
+                result = ConvertWithFallback(htmlDataStr, verifyText);
             }
 
 
-            return await FinishHtmlConversionAsync(result, verifyStr);
+            return await FinishHtmlConversionAsync(result, verifyText);
         }
 
         #endregion
 
         #region Private Methods
-        private bool VerifyConversion(MpAvRichHtmlContentConverterResult result, string verifyStr) {
-            if (verifyStr != null &&
-                result != null &&
-                result.OutputData != null) {
-                string html_pt = result.OutputData.ToPlainText("html");
-                if (html_pt.TrimTrailingLineEnding().Length != verifyStr.Length) {
-                    // conversion error, fallback to plain text
-                    MpConsole.WriteLine($"Html Conversion error! Output len: {html_pt.Length} Verify len: {verifyStr.Length}", true);
-                    MpConsole.WriteLine("Verify:");
-                    MpConsole.WriteLine(verifyStr);
-                    MpConsole.WriteLine("Conversion:");
-                    MpConsole.WriteLine(html_pt);
-                    MpConsole.WriteLine("Falling back to plain text", false, true);
-                    result.DeterminedFormat = MpPortableDataFormats.Text;
-                    result.OutputData = verifyStr.Replace(Environment.NewLine, IsWebViewConverterAvailable ? "<br>" : Environment.NewLine);
-                    return false;
-                }
-            }
-            return true;
-        }
 
         private async Task<MpAvRichHtmlContentConverterResult> FinishHtmlConversionAsync(MpAvRichHtmlContentConverterResult cr, string verifyStr) {
             if (cr == null ||
@@ -149,9 +127,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 cr.DeterminedFormat = MpPortableDataFormats.AvPNG;
                 cr.OutputData = img_base64;
-            }
-            if (cr.DeterminedFormat == MpPortableDataFormats.CefHtml) {
-                VerifyConversion(cr, verifyStr);
             }
             return cr;
         }
@@ -202,7 +177,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        private MpAvRichHtmlContentConverterResult ConvertWithFallback(string htmlDataStr) {
+        private MpAvRichHtmlContentConverterResult ConvertWithFallback(string htmlDataStr, string verifyText) {
             var result = MpAvRichHtmlContentConverterResult.Parse(htmlDataStr.ToString());
             return result;
         }
@@ -210,10 +185,11 @@ namespace MonkeyPaste.Avalonia {
         private async Task<MpAvRichHtmlContentConverterResult> ConvertWithWebViewAsync(
             string inputFormatType,
             string htmlDataStr,
+            string verifyPlainText,
             MpCsvFormatProperties csvProps = null) {
             if (!IsWebViewConverterAvailable) {
                 MpDebug.Break($"Convert from webview called before available");
-                return ConvertWithFallback(htmlDataStr);
+                return ConvertWithFallback(htmlDataStr, verifyPlainText);
             }
             if (inputFormatType == "csv") {
                 htmlDataStr = htmlDataStr.CsvStrToRichHtmlTable(csvProps);
@@ -231,6 +207,7 @@ namespace MonkeyPaste.Avalonia {
             var req = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() {
                 data = htmlDataStr,
                 dataFormatType = inputFormatType,
+                verifyText = verifyPlainText,
                 isBase64 = true
             };
 

@@ -81,11 +81,11 @@
         <!--  WARNINGS  -->
         <Style Selector="Border.msg.warning">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeCompliment1DarkColor}" />
+                    Value="{DynamicResource ThemeCompliment1Color}" />
         </Style>
         <Style Selector="Border.msg.warning TextBlock">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeWhiteColor}" />
+                    Value="{DynamicResource ThemeBlackColor}" />
         </Style>
         <Style Selector="Border.msg.warning Image">
             <Setter Property="Source"
@@ -110,20 +110,17 @@
 
         </Style>
     </local:MpAvUserControl.Styles>
-    <Grid Background="{DynamicResource ThemeGrayAccent3Color}">
-        <Grid.RowDefinitions>
+    <StackPanel Background="{DynamicResource ThemeGrayAccent3Color}">
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto"
-                           MinHeight="50" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*"
                            MinHeight="70" />
-            <RowDefinition Height="Auto"
-                           MinHeight="50" />
-            <RowDefinition Height="Auto"
-                           MinHeight="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="50" />
-        </Grid.RowDefinitions>
+        </Grid.RowDefinitions>-->
         <!--  HEADER ROW  -->
         <DockPanel Grid.Row="0"
                    HorizontalAlignment="Center">
@@ -175,30 +172,34 @@
         </DockPanel>
 
         <!--  GLOBAL HINT SUB-ROW  -->
-        <DockPanel Grid.Row="2"
-                   IsVisible="{Binding IsGlobal}"
-                   HorizontalAlignment="Center">
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    Spacing="5"
+                    IsVisible="{Binding IsGlobal}"
+                    HorizontalAlignment="Center">
             <local:MpAvToolTipInfoHintView Classes="warning"
+                                           VerticalAlignment="Center"
                                            ToolTipText="This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications." />
             <TextBlock FontSize="16"
-                       Margin="10,5"
+                       VerticalAlignment="Center"
                        Foreground="{DynamicResource ThemeInteractiveColor}"
                        FontWeight="SemiBold"
                        Text="Global" />
 
-        </DockPanel>
+        </StackPanel>
 
         <!--  GESTURE VIEW  -->
         <Border Grid.Row="3"
+                Height="70"
                 CornerRadius="10"
-                BorderThickness="0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Stretch"
+                Classes="msg"
                 Padding="10"
                 Margin="20,5">
             <Grid IsHitTestVisible="False">
                 <local:MpAvShortcutView IsVisible="{Binding !IsEmpty}" />
-                <Border Classes="msg empty"
+                <Border Classes="empty"
                         IsVisible="{Binding IsEmpty}">
                     <TextBlock Text="Press any key to record..." />
                 </Border>
@@ -228,13 +229,14 @@
         <!--  DIALOG BUTTONS  -->
 
         <DockPanel Grid.Row="6"
-                   Margin="20,0,20,0"
+                   Height="50"
+                   Margin="20,10"
                    HorizontalAlignment="Stretch"
                    VerticalAlignment="Bottom">
             <DockPanel.Styles>
                 <Style Selector="Button">
                     <Setter Property="Margin"
-                            Value="10" />
+                            Value="10,0" />
                     <Setter Property="Padding"
                             Value="5,3" />
                     <Setter Property="Width"
@@ -263,6 +265,6 @@
                     Content="{Binding ClearButtonLabel}"
                     IsVisible="{Binding ClearButtonLabel, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
         </DockPanel>
-    </Grid>
+    </StackPanel>
     <!--</StackPanel>-->
 </local:MpAvUserControl>

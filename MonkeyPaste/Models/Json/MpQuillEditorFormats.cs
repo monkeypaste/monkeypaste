@@ -1,6 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -151,6 +149,7 @@ namespace MonkeyPaste {
 
     public class MpQuillConvertPlainHtmlToQuillHtmlRequestMessage : MpJsonObject {
         public string data { get; set; }
+        public string verifyText { get; set; }
         public string dataFormatType { get; set; }
         public bool isBase64 { get; set; }
     }
@@ -175,15 +174,10 @@ namespace MonkeyPaste {
 
 
     public class MpQuillExceptionMessage : MpJsonObject {
-        public string url { get; set; }
+        public string label { get; set; }
         public string msg { get; set; }
-
-        public int lineNum { get; set; }
-        public int colNum { get; set; }
-
-        public string errorObjJsonStr { get; set; }
         public override string ToString() {
-            return $"JS Exception. Line: {lineNum} Col: {colNum} Url:'{url}' Msg: '{msg}' ErrorObj: '{errorObjJsonStr.ToPrettyPrintJson()}'";
+            return $"JS Exception[{label}]: '{msg}' ";
         }
     }
     public class MpQuillFileListDataFragment : MpJsonObject {

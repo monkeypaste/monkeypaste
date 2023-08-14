@@ -6,15 +6,10 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using Avalonia.Threading;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -36,9 +31,7 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
         private static MpAvMainView _instance;
         public static MpAvMainView Instance => _instance;
-        public static async Task Init() {
-            await Task.Delay(1);
-
+        public static void Init() {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 var mw = new MpAvMainWindow();
 
@@ -46,28 +39,13 @@ namespace MonkeyPaste.Avalonia {
                     _instance = mv;
                 }
                 if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-                    var loader_window = desktop.MainWindow;
                     desktop.MainWindow = mw;
-                    //if (loader_window != null) {
-                    //    loader_window.Close();
-                    //}
                 }
-                //MpAvWindowManager.MainWindow = mw;
-                if (MpAvWindowManager.MainWindow == null) {
-                    // huh?
-                    MpDebug.Break();
-                } else {
-                    if (!MpAvPrefViewModel.Instance.ShowInTaskSwitcher) {
-                        if (OperatingSystem.IsWindows()) {
-                            MpAvToolWindow_Win32.InitToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
-                        } else {
-                            // TODO or error, not sure if mac/linux supports
-                        }
+                if (!MpAvPrefViewModel.Instance.ShowInTaskSwitcher) {
+                    if (OperatingSystem.IsWindows()) {
+                        MpAvToolWindow_Win32.InitToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
                     }
-
                 }
-
-                //mw.DataContext = MpAvMainWindowViewModel.Instance;
             } else {
                 if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime lifetime) {
                     _instance = lifetime.MainView as MpAvMainView;
@@ -75,7 +53,6 @@ namespace MonkeyPaste.Avalonia {
                     //await MpAvMainWindowViewModel.Instance.InitializeAsync();
                 }
             }
-            //DataContext = MpAvMainWindowViewModel.Instance;
         }
 
         #endregion

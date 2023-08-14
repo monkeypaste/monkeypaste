@@ -132,39 +132,43 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private static void Window_DataContextChanged(object sender, EventArgs e) {
-            if (sender is Window w) {
-                AttachWindowViewModelHandlers(w);
+            if (sender is not MpAvWindow w) {
+                return;
             }
+
+            AttachWindowViewModelHandlers(w);
         }
 
         private static void Window_Activated(object sender, EventArgs e) {
-            if (sender is Window w) {
-                MpMessenger.SendGlobal(MpMessageType.AppWindowActivated);
+            if (sender is not MpAvWindow w) {
+                return;
+            }
+            MpMessenger.SendGlobal(MpMessageType.AppWindowActivated);
 
-                if (w.DataContext is MpIActiveWindowViewModel awvm) {
-                    awvm.IsWindowActive = true;
-                }
-                if (w.DataContext is MpIIsAnimatedWindowViewModel adwvm &&
-                    adwvm.IsAnimated && !adwvm.IsComplete && !adwvm.IsAnimating) {
-                    w.Topmost = true;
-                    ShowWhileAnimatingAsync(w).FireAndForgetSafeAsync();
-                }
+            if (w.DataContext is MpIActiveWindowViewModel awvm) {
+                awvm.IsWindowActive = true;
+            }
+            if (w.DataContext is MpIIsAnimatedWindowViewModel adwvm &&
+                adwvm.IsAnimated && !adwvm.IsComplete && !adwvm.IsAnimating) {
+                w.Topmost = true;
+                ShowWhileAnimatingAsync(w).FireAndForgetSafeAsync();
             }
         }
         private static void Window_Deactivated(object sender, EventArgs e) {
-            if (sender is Window w) {
-                MpMessenger.SendGlobal(MpMessageType.AppWindowDeactivated);
+            if (sender is not MpAvWindow w) {
+                return;
+            }
+            MpMessenger.SendGlobal(MpMessageType.AppWindowDeactivated);
 
-                if (w.DataContext is MpIActiveWindowViewModel awvm) {
-                    awvm.IsWindowActive = false;
-                }
-                if (w.DataContext is MpIIsAnimatedWindowViewModel adwvm &&
-                    adwvm.IsAnimated && !adwvm.IsComplete && !adwvm.IsAnimating) {
-                    ShowWhileAnimatingAsync(w).FireAndForgetSafeAsync();
-                } else {
-                    UpdateTopmost();
-                    StartChildLifecycleChangeDelay(w);
-                }
+            if (w.DataContext is MpIActiveWindowViewModel awvm) {
+                awvm.IsWindowActive = false;
+            }
+            if (w.DataContext is MpIIsAnimatedWindowViewModel adwvm &&
+                adwvm.IsAnimated && !adwvm.IsComplete && !adwvm.IsAnimating) {
+                ShowWhileAnimatingAsync(w).FireAndForgetSafeAsync();
+            } else {
+                UpdateTopmost();
+                StartChildLifecycleChangeDelay(w);
             }
         }
         private static void Window_Opened(object sender, System.EventArgs e) {
@@ -332,41 +336,42 @@ namespace MonkeyPaste.Avalonia {
 
 
         private static void UpdateTopmost() {
-            Dispatcher.UIThread.Post(() => {
-                if (AllWindows.Any(x => x is MpIIsAnimatedWindowViewModel && (x as MpIIsAnimatedWindowViewModel).IsAnimating)) {
-                    // ignore update while animating out
-                    return;
-                }
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(UpdateTopmost);
+                return;
+            }
+            if (AllWindows.Any(x => x is MpIIsAnimatedWindowViewModel && (x as MpIIsAnimatedWindowViewModel).IsAnimating)) {
+                // ignore update while animating out
+                return;
+            }
 
-                // NOTE only update unowned windows because modal ntf
+            // NOTE only update unowned windows because modal ntf
 
-                // get non-minimzed windows wanting topmost ordered by least priority
-                var priority_ordered_topmost_wl = AllWindows
-                    .Where(x => x.Owner == null && x.WantsTopmost && x.WindowState != WindowState.Minimized)
-                    .OrderBy(x => (int)x.BindingContext.WindowType);
+            // get non-minimzed windows wanting topmost ordered by least priority
+            var priority_ordered_topmost_wl = AllWindows
+                .Where(x => x.Owner == null && x.WantsTopmost && x.WindowState != WindowState.Minimized)
+                .OrderBy(x => x.IsActive)
+                .ThenBy(x => (int)x.BindingContext.WindowType);
 
-                // activate windows wanting top most for lowest to highest priority
-                priority_ordered_topmost_wl
-                    .ForEach(x => x.Topmost = true);
-
-
-                //priority_ordered_topmost_wl
-                //    .ForEach((x, idx) => x.Topmost = idx == 0);
-            });
+            // activate windows wanting top most for lowest to highest priority
+            priority_ordered_topmost_wl
+                //.ForEach((x, idx) => x.Topmost = idx == 0);
+                .ForEach(x => x.Topmost = true);
         }
 
 
         private static async Task ShowWhileAnimatingAsync(Window w) {
-            if (w.DataContext is MpIIsAnimatedWindowViewModel adwvm) {
-                adwvm.IsAnimating = true;
-                w.Show();
-
-                while (adwvm.IsComplete) {
-                    await Task.Delay(100);
-                }
-                adwvm.IsAnimating = false;
-                UpdateTopmost();
+            if (w.DataContext is not MpIIsAnimatedWindowViewModel adwvm) {
+                return;
             }
+            adwvm.IsAnimating = true;
+            w.Show();
+
+            while (adwvm.IsComplete) {
+                await Task.Delay(100);
+            }
+            adwvm.IsAnimating = false;
+            UpdateTopmost();
         }
 
         private static void StartChildLifecycleChangeDelay(Window w) {
@@ -379,68 +384,6 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
             });
         }
-
-
-        #region Helper Extensions
-
-        private static bool IsSelfOrDescendantWindowWantTopmost(this MpAvWindow w) {
-            if (w == null) {
-                return false;
-            }
-            if (w.WantsTopmost) {
-                return true;
-            }
-            return
-                AllWindows
-                .Where(x => x.Owner == w)
-                .Any(x => x.IsSelfOrDescendantWindowWantTopmost());
-        }
-
-        public static void SetTopmostForSelfAndAllDescendants(this MpAvWindow w, bool is_topmost) {
-            if (w == null) {
-                return;
-            }
-            if (is_topmost) {
-                if (w.WantsTopmost) {
-                    w.Topmost = true;
-                }
-            } else {
-                w.GetDescendantWindows(true).ForEach(x => x.Topmost = false);
-            }
-
-        }
-
-        private static int GetWindowOwnerDepth(this Window w) {
-            int depth = 0;
-            if (w == null) {
-                return depth;
-            }
-            while (true) {
-                w = w.Owner as Window;
-                if (w == null) {
-                    break;
-                }
-                depth++;
-            }
-            return depth;
-        }
-
-        private static IEnumerable<MpAvWindow> GetDescendantWindows(this MpAvWindow w, bool include_self = true) {
-            List<MpAvWindow> wl = new List<MpAvWindow>();
-            if (w == null) {
-                return wl;
-            }
-            if (include_self) {
-                wl.Add(w);
-            }
-
-            foreach (var cw in AllWindows.Where(x => x.Owner == w)) {
-                wl.AddRange(cw.GetDescendantWindows(true));
-            }
-            return wl.Distinct();
-        }
-        #endregion
-
         #endregion
 
         #endregion

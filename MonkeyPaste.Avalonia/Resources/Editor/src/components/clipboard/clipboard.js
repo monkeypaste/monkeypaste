@@ -10,6 +10,7 @@ function initClipboard() {
 }
 
 function initAllMatchers() {
+    initLineBreakMatcher();
     initWhitespaceMatcher();
 
     if (isPlainHtmlConverter()) {
@@ -22,7 +23,6 @@ function initAllMatchers() {
     initFontSizeMatcher();
     initCheckableListMatcher();
     initTemplateMatcher();
-
 }
 
 
@@ -71,6 +71,25 @@ function initWhitespaceMatcher() {
         // this fixes whitespace issues 
         if(node.data.match(/[^\n\S]|\t/)) {
             return new Delta().insert(node.data);
+        }
+        return delta;
+    });    
+}
+
+function initLineBreakMatcher() {
+    if (Quill === undefined) {
+        /// host load error case
+        debugger;
+    }
+    let Delta = Quill.imports.delta;
+
+    globals.quill.clipboard.addMatcher(Node.TEXT_NODE, function (node, delta) {
+        if (node.data.includes(`\n`) ||
+            node.data.includes(`\r\n`)) {
+
+            let fixed_breaks = node.data.replace(`\r\n`, `\n`);
+            //debugger;
+            return new Delta().insert(fixed_breaks);
         }
         return delta;
     });    

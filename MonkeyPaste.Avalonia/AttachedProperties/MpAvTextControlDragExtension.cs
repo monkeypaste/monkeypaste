@@ -4,15 +4,9 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Media;
-using Avalonia.Media.TextFormatting;
-using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using Org.BouncyCastle.Crypto.Signers;
-using System;
-using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvTextControlDragExtension {
@@ -153,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
                 avdo.SetData(MpPortableDataFormats.Text, tb.Text);
             }
             SetIsDragging(attached_control, true);
-            var result = await MpAvDoDragDropWrapper.DoDragDropAsync(attached_control.DataContext, e, avdo, DragDropEffects.Copy);
+            var result = await MpAvDoDragDropWrapper.DoDragDropAsync(attached_control, e, avdo, DragDropEffects.Copy);
             SetIsDragging(attached_control, false);
         }
 

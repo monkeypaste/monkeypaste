@@ -1,18 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using Org.BouncyCastle.Crypto.Fpe;
 using PropertyChanged;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -71,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
                     BindingContext.IsPinTagDragging = IsPinTrayTagView();
 
                     var mpdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT, BindingContext);
-                    var result = await MpAvDoDragDropWrapper.DoDragDropAsync(BindingContext, e, mpdo, DragDropEffects.Link | DragDropEffects.Copy);
+                    var result = await MpAvDoDragDropWrapper.DoDragDropAsync(dragButton, e, mpdo, DragDropEffects.Link | DragDropEffects.Copy);
 
                     if (BindingContext == null) {
                         dc.IsDragging = false;

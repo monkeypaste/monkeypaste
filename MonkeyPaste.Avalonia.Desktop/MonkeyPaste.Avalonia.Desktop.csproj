@@ -52,16 +52,9 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\cefnet11\CefNet\CefNet.Avalonia\CefNet.Avalonia.csproj" />
+    <ProjectReference Include="..\cefnet11\CefNet\CefNet\CefNet.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
     <ProjectReference Include="..\_build\_build.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="CefNet">
-      <HintPath>$(CefNetLibDir)</HintPath>
-    </Reference>
-    <Reference Include="CefNet.Avalonia">
-      <HintPath>$(CefNetAvLibDir)</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>

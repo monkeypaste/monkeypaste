@@ -930,7 +930,7 @@ namespace MonkeyPaste.Avalonia {
                         values = new List<MpPluginParameterValueFormat>() {
                             new MpPluginParameterValueFormat() {
                                 isDefault = true,
-                                value = "Source"
+                                value = "SourceControl"
                             },
                             new MpPluginParameterValueFormat() {
                                 value = "Output"

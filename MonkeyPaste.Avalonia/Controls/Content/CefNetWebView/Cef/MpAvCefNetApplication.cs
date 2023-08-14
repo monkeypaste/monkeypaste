@@ -6,10 +6,8 @@ using MonkeyPaste.Common;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetApplication : CefNetApplication {
@@ -85,11 +83,7 @@ namespace MonkeyPaste.Avalonia {
         #region Events
 
         #endregion
-        public static void Init(bool disable = false) {
-            if (disable) {
-                MpAvPrefViewModel.Instance.IsRichHtmlContentForceDisabled = true;
-                return;
-            }
+        public static void Init() {
             try {
                 ResetCefNetLogging();
                 _ = new MpAvCefNetApplication();
@@ -97,9 +91,6 @@ namespace MonkeyPaste.Avalonia {
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error loading cefnet. ", ex);
-
-                // error loading cef, fallback to compat mode
-                MpAvPrefViewModel.Instance.IsRichHtmlContentForceDisabled = true;
             }
         }
 
@@ -176,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
 
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
-            settings.LogSeverity = CefLogSeverity.Warning;
+            settings.LogSeverity = CefLogSeverity.Verbose;
 
             App.FrameworkShutdown += App_FrameworkShutdown;
 
@@ -210,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
             //enable-devtools-experiments
             //commandLine.AppendSwitch("enable-devtools-experiments");
 
-            //e.CommandLine.AppendSwitchWithValue("user-agent", "Mozilla/5.0 (Windows 10.0) WebKa/" + DateTime.UtcNow.Ticks);
+            //commandLine.AppendSwitchWithValue("user-agent", "Mozilla/5.0 (Windows 10.0) WebKa/" + DateTime.UtcNow.Ticks);
 
             //double scale;
             //if (App.Desktop == null || MpAvWindowManager.MainWindow == null) {
@@ -232,6 +223,7 @@ namespace MonkeyPaste.Avalonia {
             commandLine.AppendSwitch("disable-gpu-compositing");
             commandLine.AppendSwitch("in-process-gpu");
 
+            commandLine.AppendSwitch("no-proxy-server");
             commandLine.AppendSwitch("disable-component-update");
             //commandLine.AppendSwitch("process-per-site");
 

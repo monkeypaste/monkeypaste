@@ -39,6 +39,7 @@ function enableReadOnly_ext_ntf() {
 
 function convertPlainHtml_ext_ntf(convertPlainHtmlReqMsgBase64Str) {
 	// input 'MpQuillConvertPlainHtmlToQuillHtmlRequestMessage'
+	// input 'MpQuillConvertPlainHtmlToQuillHtmlRequestMessage'
 	// output 'MpQuillConvertPlainHtmlToQuillHtmlResponseMessage'
 	let respObj = null;
 	try {
@@ -57,14 +58,14 @@ function convertPlainHtml_ext_ntf(convertPlainHtmlReqMsgBase64Str) {
 			plainHtml = req.data;
 		}
 
-		let is_html_cb_data = isHtmlClipboardFragment(plainHtml);
+		let is_html_cb_data = isHtmlClipboardFormat(plainHtml);
 		if (is_html_cb_data) {
 			// html is just plain html when coming from internal copy,cut, or drop 
 			let cbData = parseHtmlFromHtmlClipboardFragment(plainHtml);
 			plainHtml = cbData.html;
 			url = cbData.sourceUrl;
 		}
-		let convert_result = convertPlainHtml(plainHtml, req.dataFormatType);
+		let convert_result = convertPlainHtml(plainHtml, req.dataFormatType, req.verifyText);
 
 		respObj = {
 			html: toBase64FromJsonObj(plainHtml),

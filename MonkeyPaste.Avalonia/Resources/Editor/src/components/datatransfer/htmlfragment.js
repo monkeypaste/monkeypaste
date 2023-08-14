@@ -16,7 +16,15 @@
 
 // #region State
 
-function isHtmlClipboardFragment(dataStr) {
+function containsHtmlClipboardFragment(dataStr) {
+    if (!isString(dataStr) ||
+        !dataStr.includes("<!--StartFragment-->") ||
+        !dataStr.includes("<!--EndFragment-->")) {
+        return false;
+    }
+    return true;
+}
+function isHtmlClipboardFormat(dataStr) {
     // TODO need to check common browser html clipboard formats this is only for Chrome on Windows
     if (!isString(dataStr) ||
         !dataStr.startsWith("Version:") ||
@@ -51,7 +59,11 @@ function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
         sourceUrl: '',
         html: cbDataStr
     };
-    if (!isHtmlClipboardFragment(cbDataStr)) {
+    if (!isHtmlClipboardFormat(cbDataStr)) {
+        if (containsHtmlClipboardFragment(cbDataStr)) {
+            // NOTE this shouldn't really happen but in case fragment wasn't parsed
+            cbData.html = cleanHtmlForFragmentMarkers(cbDataStr);
+        }
         return cbData;
     }
     let sourceUrlToken = 'SourceURL:';
@@ -67,18 +79,29 @@ function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
     }
 
     // PARSE HTML
-
-    let htmlStartToken = '<!--StartFragment-->';
-    let htmlEndToken = '<!--EndFragment-->';
-
-    let html_start_idx = cbDataStr.indexOf(htmlStartToken) + htmlStartToken.length;
-    if (html_start_idx >= 0) {
-        let html_end_idx = cbDataStr.indexOf(htmlEndToken);
-        let html_length = html_end_idx - html_start_idx;
-        cbData.html = substringByLength(cbDataStr, html_start_idx, html_length);
+    if (containsHtmlClipboardFragment(cbDataStr)) {
+        cbData.html = cleanHtmlForFragmentMarkers(cbDataStr);
     }
 
     return cbData;
+}
+
+
+function cleanHtmlForFragmentMarkers(htmlStr) {
+    // NOTE reading raw clipboard format html (at least from chrome on windows)
+    // has line breaks at opening/closing of <body> tag which get picked up
+    // so this pulls inner fragment out which will not have those
+    let htmlStartToken = '<!--StartFragment-->';
+    let htmlEndToken = '<!--EndFragment-->';
+    const frag_start_idx = htmlStr.indexOf(htmlStartToken);
+    if (frag_start_idx >= 0) {
+        let html_start_idx = frag_start_idx + htmlStartToken.length;
+        let html_end_idx = htmlStr.indexOf(htmlEndToken);
+        let html_length = html_end_idx - html_start_idx;
+        return substringByLength(htmlStr, html_start_idx, html_length);
+    }
+
+    return htmlStr;
 }
 
 function createHtmlClipboardFragment(htmlStr) {

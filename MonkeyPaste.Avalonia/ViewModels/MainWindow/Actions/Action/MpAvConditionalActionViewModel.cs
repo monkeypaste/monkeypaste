@@ -138,11 +138,11 @@ namespace MonkeyPaste.Avalonia {
                         return ComparePropertyPathType.ToString();
                     case MpContentQueryPropertyPathType.AppName:
                     case MpContentQueryPropertyPathType.AppPath:
-                        return string.Format(@"Source.App.{0}", ComparePropertyPathType.ToString());
+                        return string.Format(@"SourceControl.App.{0}", ComparePropertyPathType.ToString());
                     case MpContentQueryPropertyPathType.UrlPath:
                     case MpContentQueryPropertyPathType.UrlTitle:
                     case MpContentQueryPropertyPathType.UrlDomainPath:
-                        return string.Format(@"Source.App.{0}", ComparePropertyPathType.ToString());
+                        return string.Format(@"SourceControl.App.{0}", ComparePropertyPathType.ToString());
                 }
                 return string.Empty;
             }

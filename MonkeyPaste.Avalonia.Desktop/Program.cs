@@ -1,12 +1,8 @@
 using Avalonia;
+using CefNet;
 using MonkeyPaste.Common;
 using System;
-using Avalonia.Logging;
-using Avalonia.ReactiveUI;
-using System.IO;
-using Avalonia.Controls;
 #if CEF_WV
-using CefNet;
 
 #elif PLAT_WV
 using Avalonia.WebView.Desktop;
@@ -21,10 +17,10 @@ namespace MonkeyPaste.Avalonia {
         [STAThread]
         public static void Main(string[] args) {
             try {
-                if (MpFileIo.IsFileInUse(MpConsole.LogFilePath) && !MpConsole.HasInitialized) {
-                    return;
-                }
-                MpConsole.Init();
+                //if (MpFileIo.IsFileInUse(MpConsole.LogFilePath) && !MpConsole.HasInitialized) {
+                //    return;
+                //}
+                //MpConsole.Init();
 
 
 #if CEF_WV
@@ -32,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
                 App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args);
+                .StartWithCefNetApplicationLifetime(App.Args);
             }
             catch (Exception e) {
                 // here we can work with the exception, for example add it to our log file

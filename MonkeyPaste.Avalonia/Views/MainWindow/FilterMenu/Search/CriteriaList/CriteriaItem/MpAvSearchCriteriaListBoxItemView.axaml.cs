@@ -1,13 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System;
-using System.Diagnostics;
-using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     /// <summary>
@@ -33,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
             MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
 
             var mpdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_SEARCH_CRITERIA_ITEM_FORMAT, BindingContext);
-            var result = await MpAvDoDragDropWrapper.DoDragDropAsync(BindingContext, e, mpdo, /*DragDropEffects.Move | */DragDropEffects.Copy);
+            var result = await MpAvDoDragDropWrapper.DoDragDropAsync(dragButton, e, mpdo, /*DragDropEffects.Move | */DragDropEffects.Copy);
 
             if (BindingContext == null) {
                 dc.IsDragging = false;

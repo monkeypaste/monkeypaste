@@ -49,12 +49,12 @@
                     Value="{DynamicResource ThemeInteractiveBrush}" />
         </Style>
 
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.TileHover Grid#PinPlaceholderOverlay Image">
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover Grid#PinPlaceholderOverlay Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeAccent1Color, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
 
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.TileHover Grid#PinPlaceholderOverlay TextBlock">
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover Grid#PinPlaceholderOverlay TextBlock">
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeAccent1Brush}" />
         </Style>
@@ -157,7 +157,8 @@
                           Classes.transOpen="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen}"
                           Classes.hasVertContentScroll="{Binding IsVerticalScrollbarVisibile}"
                           Classes.implicitHover="{Binding IsImplicitHover}"
-                          Classes.TileHover="{Binding IsHovering}"
+                          Classes.hover="{Binding IsHovering}"
+                          Classes.sel="{Binding IsSelected}"
                           Classes.CanResize="{Binding CanResize}"
                           Classes.contentReadOnly="{Binding IsContentReadOnly}"
                           Classes.resize="{Binding IsResizing}"

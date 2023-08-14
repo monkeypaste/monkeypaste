@@ -8,7 +8,6 @@
         <Thickness x:Key="TileInnerSpacing">5,5,5,5</Thickness>
     </Styles.Resources>
 
-
     <!--  TILE BUSY OVERLAY VISIBILITY  -->
     <Style Selector="ListBox.queryListBox > ListBoxItem Border#TileBusyOverlay"
            x:DataType="local:MpAvClipTileViewModel">
@@ -24,9 +23,69 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style Selector="ListBox.pinListBox > ListBoxItem Border#TileBusyOverlay, Window.tileWindow Border#TileBusyOverlay"
+    <Style Selector="Border#TileBusyOverlay"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="IsVisible"
                 Value="{Binding IsAnyBusy}" />
+    </Style>
+
+    <!--  TILE BORDER TRANSITIONS  -->
+
+    <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="BorderBrush"
+                                 Duration="0:0:0.2" />
+            </Transitions>
+        </Setter>
+        <Setter Property="BorderBrush"
+                Value="{StaticResource ThemeNoAccentColor}" />
+    </Style>
+
+    <!--  TILE BORDERS  -->
+
+
+    <!--  HOVER UNSELECTED  -->
+    <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover:not(.sel):not(.frozen)"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource ThemeAccent1Color}" />
+    </Style>
+
+    <!--  DEFAULT SELECTED  -->
+    <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.sel:not(.frozen):not(.implicitHover)"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource ThemeAccent2Color}" />
+    </Style>
+
+    <!--  TRASHED SELECTED  -->
+    <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.sel.trashed"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource ThemeAccent5BgColor}" />
+    </Style>
+
+
+    <!--  HOVER SELECTED  -->
+    <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover.sel:not(.frozen)"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource ThemeAccent3Color}" />
+    </Style>
+
+    <!--  DEFAULT RESIZE  -->
+    <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.resize"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource ThemeAccent4BgColor}" />
+    </Style>
+
+    <!--  HOVER RESIZE  -->
+    <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.sel.hover.CanResize:not(.resize)"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="BorderBrush"
+                Value="{StaticResource ThemeAccent4Color}" />
     </Style>
 </Styles>

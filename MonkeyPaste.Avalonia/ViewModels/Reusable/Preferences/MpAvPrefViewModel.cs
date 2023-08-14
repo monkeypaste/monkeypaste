@@ -379,12 +379,10 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsDuplicateCheckEnabled { get; set; } = true;
 
-        [JsonIgnore]
-        public bool IsRichHtmlContentForceDisabled { get; set; } = false;
 
         private bool _isRichHtmlContentEnabled = true;
         public bool IsRichHtmlContentEnabled {
-            get => IsRichHtmlContentForceDisabled ? false : _isRichHtmlContentEnabled;
+            get => !MpAvCefNetApplication.IsCefNetLoaded ? false : _isRichHtmlContentEnabled;
             set {
                 if (_isRichHtmlContentEnabled != value) {
                     _isRichHtmlContentEnabled = value;

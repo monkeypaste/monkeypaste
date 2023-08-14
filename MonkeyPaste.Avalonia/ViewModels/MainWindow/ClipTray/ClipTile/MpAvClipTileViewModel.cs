@@ -1,28 +1,18 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Platform;
 using Avalonia.Threading;
-using CefNet.Avalonia;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -492,7 +482,8 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
                 if (CopyItemType == MpCopyItemType.FileList &&
-                    MpAvDoDragDropWrapper.Source == this) {
+                    MpAvDoDragDropWrapper.SourceControl != null &&
+                    MpAvDoDragDropWrapper.SourceControl.DataContext == this) {
                     return true;
                 }
                 return false;
@@ -746,25 +737,12 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanEdit =>
             IsTextItem;
-        public bool IsListBoxItemFocused { get; set; } = false;
         public bool IsTitleFocused { get; set; } = false;
 
         public bool IsFocusWithin {
             get {
                 if (Mp.Services.FocusMonitor.FocusElement is Control c) {
-                    //return
-                    //   c.GetVisualAncestors<Control>()
-                    //   .Any(x =>
-                    //       x.DataContext is MpAvClipTileViewModel &&
-                    //       (x.DataContext as MpAvClipTileViewModel).CopyItemId == CopyItemId);
-
-                    if (c.DataContext is MpAvClipTileViewModel ctvm && ctvm.CopyItemId == CopyItemId) {
-                        // HACK not getting equality from delete by shortcut for item in trash
-                        return true;
-                    }
-                    return
-                        c.GetVisualAncestors<Control>()
-                        .Any(x => x.DataContext == this);
+                    return c.GetSelfOrAncestorDataContext<MpAvClipTileViewModel>() == this;
                 }
                 return false;
             }
@@ -1388,6 +1366,8 @@ namespace MonkeyPaste.Avalonia {
             List<string> req_formats = new() {
                 MpPortableDataFormats.Text,
                 MpPortableDataFormats.AvFileNames,
+                MpPortableDataFormats.AvHtml_bytes,
+                MpPortableDataFormats.CefHtml,
             };
             if (isDnd && MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled) {
                 // initialize target with all possible formats set to null
@@ -1838,13 +1818,13 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
                 Content = new MpAvClipTileView(),
-                Topmost = true,
+                //Topmost = true,
                 Background = Brushes.Transparent,
                 CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
             };
-            pow.Classes.Add("tileWindow");
-            pow.Classes.Add("fadeIn");
-            pow.Classes.Add("fadeOut");
+            //pow.Classes.Add("tileWindow");
+            //pow.Classes.Add("fadeIn");
+            //pow.Classes.Add("fadeOut");
 
             #region Window Bindings
 
@@ -1870,18 +1850,6 @@ namespace MonkeyPaste.Avalonia {
                     Path = nameof(CopyItemTitle),
                     Converter = MpAvStringToWindowTitleConverter.Instance
                 });
-
-            //pow.Bind(
-            //    Window.BackgroundProperty,
-            //    new Binding() {
-            //        Source = this,
-            //        Path = nameof(CopyItemHexColor),
-            //        Mode = BindingMode.OneWay,
-            //        Converter = MpAvStringHexToBrushConverter.Instance,
-            //        ConverterParameter = "1",
-            //        TargetNullValue = MpSystemColors.darkviolet,
-            //        FallbackValue = MpSystemColors.darkviolet
-            //    });
 
             if (pow.Content is Control c) {
                 // BUG hover doesn't work binding to window

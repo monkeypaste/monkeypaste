@@ -532,6 +532,27 @@ const HtmlEntitiesLookup = [
     [`<`, `&lt;`]
 ];
 
+function getFirstDifferenceIdx(a, b) {
+    if (!a || !b) {
+        return -1;
+    }
+
+    let idx = 0;
+    while (true) {
+        if (idx >= a.length || idx >= b.length) {
+            if (a.length != b.length) {
+                return idx;
+            }
+            return -1;
+        }
+        if (a[idx] == b[idx]) {
+            idx++;
+            continue;
+        }
+        return idx;
+    }
+}
+
 function getStringDifference(a, b) {
     var i = 0;
     var j = 0;
@@ -846,4 +867,17 @@ function moveAbsoluteElement(elm, p) {
     setElementComputedStyleProp(elm, 'margin-left', `${p.x}px`);
     setElementComputedStyleProp(elm, 'margin-top', `${p.y}px`);
     return cleanRect(elm.getBoundingClientRect());
+}
+
+function toAscii(str) {
+    let result = '';
+    for (var i = 0; i < str.length; i++) {
+        let codePoint = str.charCodeAt(i);
+        if (codePoint > 127) {
+            result += String.fromCharCode(codePoint & 0x7F);
+        } else {
+            result += String.fromCharCode(codePoint);
+        }
+    }
+    return result;
 }

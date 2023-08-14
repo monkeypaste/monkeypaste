@@ -153,6 +153,31 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             Url = url;
 
+            if (IconId == 0 &&
+                !Mp.Services.StartupState.IsPlatformLoaded) {
+                _ = Task.Run(async () => {
+                    // NOTE run in bg not to slow down startup more...
+                    // very edge case here of copying html on a page that was loaded
+                    // with internet than subsequently went offline when added here
+                    // so try it again on startup 
+                    var url_props = await MpUrlHelpers.DiscoverUrlPropertiesAsync(UrlPath);
+                    if (url_props != null &&
+                        !string.IsNullOrEmpty(url_props.FavIconBase64)) {
+                        var icon = await Mp.Services.IconBuilder.CreateAsync(url_props.FavIconBase64);
+                        if (icon != null) {
+                            // update model directly since multiple properties
+                            Url.IconId = icon.Id;
+                            Url.UrlTitle = url_props.Title;
+                            await Url.WriteToDatabaseAsync();
+                            Dispatcher.UIThread.Post(() => {
+                                OnPropertyChanged(nameof(UrlTitle));
+                                OnPropertyChanged(nameof(IconId));
+                            })
+
+                        }
+                    }
+                });
+            }
             OnPropertyChanged(nameof(IconId));
             await Task.Delay(1);
 

@@ -1,15 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
-using Avalonia.Media;
 using Avalonia.Threading;
-using CefNet;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonoMac.Foundation;
-using Org.BouncyCastle.Utilities.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,8 +14,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
-using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -1309,17 +1302,11 @@ namespace MonkeyPaste.Avalonia {
         public bool IsSubQuerying { get; set; } = false;
         public int SparseLoadMoreRemaining { get; set; }
 
-        public MpQuillPasteButtonInfoMessage CurPasteInfoMessage { get; private set; }
+        public MpQuillPasteButtonInfoMessage CurPasteInfoMessage { get; private set; } = new MpQuillPasteButtonInfoMessage();
 
         #region Drag Drop
         public bool IsAnyDropOverTrays { get; private set; }
-        //public bool IsAnyTileDragging => 
-        //    AllItems.Any(x => x.IsTileDragging) || 
-        //    (MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels.Count > 0 &&
-        //     MpAvPersistentClipTilePropertiesHelper.IsPersistentTileDraggingEditable_ById(
-        //         MpAvPersistentClipTilePropertiesHelper.PersistentSelectedModels[0].Id));
 
-        //public bool IsExternalDragOverClipTrayContainer { get; set; }
         public bool IsDragOverPinTray { get; set; }
         public bool IsDragOverQueryTray { get; set; }
 
@@ -1346,7 +1333,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyEditingClipTitle => AllItems.Any(x => !x.IsTitleReadOnly);
 
         public bool IsAnyEditingClipTile => AllItems.Any(x => !x.IsContentReadOnly);
-
 
 
         public bool IsAnyTilePinned => PinnedItems.Count > 0;
@@ -1735,7 +1721,7 @@ namespace MonkeyPaste.Avalonia {
 
             string last_cap_info = Mp.Services.AccountTools.LastCapInfo.ToString();
             var cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync();
-            MpConsole.WriteLine($"Account cap refreshed. Source: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
+            MpConsole.WriteLine($"Account cap refreshed. SourceControl: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
             MpConsole.WriteLine(cap_info.ToString(), false, true);
 
             MpUserAccountType account_type = Mp.Services.AccountTools.CurrentAccountType;
@@ -2922,7 +2908,7 @@ namespace MonkeyPaste.Avalonia {
                 await ci.WriteToDatabaseAsync();
 
                 if (MpAvTagTrayViewModel.Instance.TrashedCopyItemIds.Contains(ci.Id)) {
-                    MpAvTagTrayViewModel.Instance.TrashTagViewModel.UnlinkCopyItemCommand.Execute(ci.Id);
+                    await MpAvTagTrayViewModel.Instance.TrashTagViewModel.UnlinkCopyItemCommand.ExecuteAsync(ci.Id);
                     MpConsole.WriteLine($"Duplicate item '{ci.Title}' unlinked from trash");
                 }
             } else {
@@ -3908,11 +3894,12 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 bool canCopy =
                     SelectedItem != null &&
-                    SelectedItem.IsListBoxItemFocused &&
+                    SelectedItem.IsFocusWithin &&
                     SelectedItem.IsHostWindowActive;
                 MpConsole.WriteLine("CopySelectedClipFromShortcutCommand CanExecute: " + canCopy);
                 if (!canCopy) {
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
+                    MpConsole.WriteLine("IsFocusWithin: " + (SelectedItem == null ? "NO" : SelectedItem.IsFocusWithin.ToString()));
                     MpConsole.WriteLine("IsHostWindowActive: " + (SelectedItem == null ? "NO" : SelectedItem.IsHostWindowActive.ToString()));
                 }
                 return canCopy;

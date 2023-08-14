@@ -5,7 +5,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
@@ -18,10 +17,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using System.Reflection;
-using Avalonia.Platform.Storage;
 using AvToolTip = Avalonia.Controls.ToolTip;
-using TheArtOfDev.HtmlRenderer.Avalonia;
 #if DESKTOP
 
 
@@ -32,6 +28,7 @@ using AvaloniaWebView;
 using CefNet;
 using CefNet.Avalonia;
 using CefNet.Internal;
+//using WebViewControl.Avalonia;
 #endif
 
 #endif
@@ -939,19 +936,6 @@ namespace MonkeyPaste.Avalonia {
             base.Dispose(disposing);
         }
 
-        private void MpAvCefNetWebView_CreateWindow(object sender, CreateWindowEventArgs e) {
-            if (TopLevel.GetTopLevel(this) is Window w &&
-                w.TryGetPlatformHandle() is IPlatformHandle platformHandle) {
-
-                if (platformHandle is IMacOSTopLevelPlatformHandle macOSHandle) {
-                    e.WindowInfo.SetAsWindowless(macOSHandle.GetNSWindowRetained());
-                } else {
-                    e.WindowInfo.SetAsWindowless(platformHandle.Handle);
-                }
-            }
-
-            e.Client = this.Client;
-        }
         protected override void OnBrowserCreated(EventArgs e) {
             base.OnBrowserCreated(e);
             Navigate(Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath());

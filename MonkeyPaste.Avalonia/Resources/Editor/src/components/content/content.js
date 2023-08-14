@@ -116,14 +116,14 @@ function loadContent(
 		}
 
 	} catch (ex) {
-		onException_ntf('error loading item', ex);
+		onException_ntf('error loading item ', ex);
 	}
 
 	try {
 		let msg = getContentAsMessage();
 		onContentLoaded_ntf(msg);
 	} catch (ex) {
-		onException_ntf('error creating load item resp, sending empty', ex);
+		onException_ntf('error creating load item resp, sending empty ', ex);
 		onContentLoaded_ntf('');
 	}
 

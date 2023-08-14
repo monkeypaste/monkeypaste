@@ -4,9 +4,6 @@ using Avalonia.Input;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -31,8 +28,8 @@ namespace MonkeyPaste.Avalonia {
             MpAvIContentWebViewDragSource dragSource,
             DragDropEffects allowedEffects) {
             if (dragSource == null ||
-                dragSource is not Control c ||
-                c.DataContext is not MpAvClipTileViewModel drag_ctvm ||
+                dragSource is not Control drag_control ||
+                drag_control.DataContext is not MpAvClipTileViewModel drag_ctvm ||
                 dragSource.LastPointerPressedEventArgs is not PointerPressedEventArgs ppe_args) {
                 MpDebug.Break($"Content drag error. Must provide pointer press event to start drag.");
                 return;
@@ -60,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal(MpMessageType.ItemDragBegin);
 
             // signal drag start in sub-ui task
-            var result = await MpAvDoDragDropWrapper.DoDragDropAsync(drag_ctvm, ppe_args, DragDataObject, allowedEffects);
+            var result = await MpAvDoDragDropWrapper.DoDragDropAsync(drag_control, ppe_args, DragDataObject, allowedEffects);
             MpConsole.WriteLine($"Content drop effect: '{result}'");
 
             // wait for possible dragEnd.wasCanceled == true msg

@@ -41,7 +41,7 @@
 }
 
     .show-scrollbars > .ql-editor {
-        overflow: hidden;
+        overflow: hidden !important;
     }
 
 .hide-scrollbars {

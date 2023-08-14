@@ -1,10 +1,8 @@
 ﻿
 using Avalonia.Controls;
-using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
@@ -49,11 +47,9 @@ namespace MonkeyPaste.Avalonia {
             await scavm.InitializeAsync(shortcutName, keys, curShortcutId, assignmentType, iconResourceObj);
             var ascw = new MpAvWindow() {
                 DataContext = scavm,
-                MinHeight = 400,
                 MinWidth = 400,
-                Height = 400,
                 Width = 400,
-                //SizeToContent = SizeToContent.WidthAndHeight,
+                SizeToContent = SizeToContent.Height,
                 ShowInTaskbar = false,
                 Topmost = true,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -377,12 +373,8 @@ namespace MonkeyPaste.Avalonia {
                 return IsValid;
             });
 
-        public ICommand CancelCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                if (DuplicatedShortcutViewModel != null) {
-                    DuplicatedShortcutViewModel.KeyString = string.Empty;
-                    await DuplicatedShortcutViewModel.Shortcut.WriteToDatabaseAsync();
-                }
+        public ICommand CancelCommand => new MpCommand<object>(
+            (args) => {
                 if (args is Control c &&
                     c.GetVisualRoot() is MpAvWindow w) {
                     w.DialogResult = false;

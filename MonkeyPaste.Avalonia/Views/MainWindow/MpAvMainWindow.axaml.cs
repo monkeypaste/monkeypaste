@@ -1,15 +1,7 @@
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Input;
-using Avalonia.Layout;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIMainView : MpIHasSettableDataContext {

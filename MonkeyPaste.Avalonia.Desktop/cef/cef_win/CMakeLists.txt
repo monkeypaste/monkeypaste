@@ -48,7 +48,7 @@
 #     libgtk3.0-dev     (required by the cefclient target only)
 #
 # - MacOS requirements:
-#   Xcode 12.2 to 13.0 building on MacOS 10.15.4 (Catalina) or newer. Only
+#   Xcode 12.2 to 13.4 building on MacOS 10.15.4 (Catalina) or newer. Only
 #   64-bit builds are supported. The Xcode command-line tools must also be
 #   installed. Newer Xcode versions may not have been been tested and are not
 #   recommended.
@@ -234,3 +234,22 @@ endif()
 
 # Display configuration settings.
 PRINT_CEF_CONFIG()
+
+
+#
+# Define the API documentation target.
+#
+
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+  add_custom_target(apidocs ALL
+    # Generate documentation in the docs/html directory.
+    COMMAND "${DOXYGEN_EXECUTABLE}" Doxyfile
+    # Write a docs/index.html file.
+    COMMAND ${CMAKE_COMMAND} -E echo "<html><head><meta http-equiv=\"refresh\" content=\"0;URL='html/index.html'\"/></head></html>" > docs/index.html
+    WORKING_DIRECTORY "${CEF_ROOT}"
+    COMMENT "Generating API documentation with Doxygen..."
+    VERBATIM )
+else()
+  message(WARNING "Doxygen must be installed to generate API documentation.")
+endif()

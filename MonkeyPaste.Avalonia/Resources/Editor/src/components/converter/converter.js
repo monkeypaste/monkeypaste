@@ -33,119 +33,68 @@ function isPlainHtmlConverter() {
 // #endregion State
 
 // #region Actions
-function convertPlainHtml(dataStr, formatType, bgOpacity = 0.0) {
+function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	if (!globals.IsConverterLoaded) {
 		log('convertPlainHtml error! converter not initialized, returning null');
 		return null;
 	}
 	const DO_VALIDATE = true;
 
+	const html_str = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr),'text/html').body.innerHTML;
 	log("Converting This Plain Html:");
-	log(dataStr);
+	log(html_str);
 
 	setRootHtml('');
 	updateQuill();
 
-	let qhtml = '';
-	let formatted_delta = '';
-	let iconBase64 = '';
-	let base_line_text = '';
-
 	if (formatType == 'text') {
-		base_line_text = dataStr;
-		let encoded_pt = encodeHtmlSpecialEntitiesFromPlainText(dataStr);
+		let encoded_pt = encodeHtmlSpecialEntitiesFromPlainText(html_str);
 		insertText(0, encoded_pt, 'silent');
-	} else {
-		if (DO_VALIDATE) {
-			base_line_text = globals.DomParser.parseFromString(dataStr, 'text/html').body.innerText;
-		}
-		
-		let htmlStr = dataStr;// fixPlainHtmlColorContrast(dataStr, bgOpacity);
-		//htmlStr = swapPreForDivTags(htmlStr);
-		//htmlStr = encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr);
-		insertHtml(0,htmlStr,'user');
+	} else {		
+		insertHtml(0, html_str,'user');
 	}
 	updateQuill();
+
+	let output_html = '';
 	if (isTableInDocument()) {
 		// delta-to-html doesn't convert tables
-		qhtml = getHtml2();
 		// better table throws exception setting html so don't test table
-
+		output_html = getHtml2();
 	} else {
-		qhtml = getHtml2();
-		if (!isRunningOnHost()) {
-			// just for testing html conversion
-			//setRootHtml(qhtml);
-			//setRootHtml('');
-			//insertHtml(0, qhtml, 'user');
-		}
+		output_html = getHtml();
 	}
-	if (qhtml == '') {
+	if (isNullOrWhiteSpace(output_html)) {
 		// fallback and use delta2html, i think its a problem when there's only 1 block and content was plain text
-		qhtml = getHtml();
+		output_html = getHtml();
 	}
 
-	if (DO_VALIDATE) {
-		const converted_text = trimQuillTrailingLineEndFromText(globals.DomParser.parseFromString(qhtml, 'text/html').body.innerText);
-		const diff = getStringDifference(base_line_text, converted_text);
-		if (converted_text.length == base_line_text.length) {
+	if (DO_VALIDATE && verifyText != null) {
+		const converted_text = toAscii(trimQuillTrailingLineEndFromText(getText()));
+		verifyText = toAscii(verifyText.replaceAll(`\r\n`, `\n`));
+		const diff_idx = getFirstDifferenceIdx(verifyText, converted_text);
+		if (diff_idx < 0) {
 			log('conversion validate: PASSED');
 		} else {
 			log('conversion validate: FAILED');
-			log('first diff: ' + diff);
-			log('base length: ' + base_line_text.length);
+			log('first diff_idx: ' + diff_idx);
+			log('base length: ' + verifyText.length);
 			log('converted length: ' + converted_text.length);
 			log('base text:')
-			log(base_line_text);
+			log(verifyText);
 			log('converted text:');
 			log(converted_text);
-			onException_ntf('conversion error');
+			onException_ntf('conversion error.');
+			output_html = verifyText;
 		}
 	}
-	formatted_delta = convertHtmlToDelta(qhtml);
-	//else if (formatType == 'rtf2html') {
-	//	formatted_delta = convertHtmlToDelta(dataStr);
-	//	setContents(formatted_delta);
-	//	qhtml = getHtml(false);
-	//	//qhtml = forceHtmlBgOpacity(qhtml, bgOpacity);
-
-	//	//formatted_delta = convertHtmlToDelta(qhtml);
-	//	//setRootHtml(qhtml);
-	//}
-	//else if (formatType == 'html') {
-	//	//iconBase64 = locateFaviconBase64(dataStr);
-
-	//	// NOTE this maybe only necessary on windows
-	//	//qhtml = fixHtmlBug1(qhtml);
-	//	//qhtml = removeUnicode(qhtml);
-	//	//qhtml = fixUnicode(qhtml);
-
-	//	setRootHtml(dataStr);
-	//	//dataStr = encodeHtmlSpecialEntitiesFromHtmlDoc(dataStr);
-	//	//insertHtml(0, dataStr, 'user', false);
-	//	formatted_delta = forceDeltaBgOpacity(getDelta(), bgOpacity);
-	//	setContents(formatted_delta);
-	//	if (isTableInDocument()) {
-	//		// delta-to-html doesn't convert tables 
-	//		qhtml = getHtml2();
-	//		// better table throws exception setting html so don't test table
-
-	//	} else {
-	//		qhtml = getHtml();
-	//		if (!isRunningOnHost()) {
-	//			// just for testing html conversion
-	//			setRootHtml(qhtml);
-	//		}
-			
-	//	}
-	//}
-	
+	let output_delta = convertHtmlToDelta(output_html);
+		
 	log('');
 	log('RichHtml: ');
-	log(qhtml);
+	log(output_html);
 	return {
-		html: qhtml,
-		delta: formatted_delta,
+		html: output_html,
+		delta: output_delta,
 		//icon: iconBase64
 	};
 }
