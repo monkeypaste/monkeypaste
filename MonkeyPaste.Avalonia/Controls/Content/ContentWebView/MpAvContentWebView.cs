@@ -1073,6 +1073,11 @@ namespace MonkeyPaste.Avalonia {
                 loadContentMsg.selectionFragment = sel_state.SerializeJsonObjectToBase64();
             }
 
+            if (MpAvPersistentClipTilePropertiesHelper
+                .IsPersistentIsSubSelectable_ById(BindingContext.CopyItemId, BindingContext.QueryOffsetIdx)) {
+                loadContentMsg.pasteButtonInfoFragment = MpAvClipTrayViewModel.Instance.CurPasteInfoMessage.SerializeJsonObjectToBase64();
+            }
+
             return loadContentMsg;
         }
         #endregion
@@ -1279,6 +1284,7 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"loadContent_ext('{msgStr}')");
         }
 
+        private int _appendCount = 0;
         private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
             if (!IsEditorInitialized) {
                 // BUG load stalls on reload while editing waiting for initialzing...
@@ -1301,6 +1307,12 @@ namespace MonkeyPaste.Avalonia {
             _lastLoadedContentHandle = BindingContext.PublicHandle;
             IsEditorLoaded = true;
 
+            if (BindingContext.IsAppendNotifier &&
+                BindingContext.AppendCount == 0) {
+                // don't set clipboard to append buffer until somethings actually appended
+                // so it loads quicker
+                return;
+            }
             if (contentChanged_ntf == null) {
                 // shouldn't be null
                 MpDebug.Break($"Content changed resp was null");
@@ -1345,7 +1357,6 @@ namespace MonkeyPaste.Avalonia {
                     }
                 });
             }
-            //IsEditorLoaded = true;
         }
 
         private void ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {

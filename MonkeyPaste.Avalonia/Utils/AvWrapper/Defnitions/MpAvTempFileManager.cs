@@ -1,10 +1,8 @@
-﻿using Avalonia.Input;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTempFileManager : MpITempFileManager {
@@ -19,9 +17,19 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private List<string> _tempFileList = new List<string>();
-
+        public MpAvTempFileManager() {
+            Init();
+        }
         public void Init() {
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+
+            if (_tempListStream == null) {
+                // first call / init
+                string temps_text = MpFileIo.ReadTextFromFile(TempFilePath);
+                _tempFileList = temps_text.SplitNoEmpty(Environment.NewLine).ToList();
+                DeleteAll();
+                _tempListStream = new StreamWriter(File.Create(TempFilePath));
+            }
         }
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
@@ -45,12 +53,6 @@ namespace MonkeyPaste.Avalonia {
         public void AddTempFilePath(string filePathToAppend) {
             try {
                 lock (_tempLock) {
-                    if (_tempListStream == null) {
-                        // first call / init
-                        _tempFileList = MpFileIo.ReadTextFromFile(TempFilePath).SplitNoEmpty(Environment.NewLine).ToList();
-                        DeleteAll();
-                        _tempListStream = new StreamWriter(File.Create(TempFilePath));
-                    }
                     _tempListStream.WriteLine(filePathToAppend);
                     _tempListStream.Flush();
                 }
@@ -67,9 +69,16 @@ namespace MonkeyPaste.Avalonia {
 
         public void DeleteAll() {
             try {
-                _tempFileList.Union(new[] { TempFilePath }).Where(x => x.IsFileOrDirectory()).ForEach(x => MpFileIo.DeleteFileOrDirectory(x));
+                var to_delete_paths = _tempFileList.Where(x => x.IsFileOrDirectory()).ToList();
+                if (_tempListStream == null) {
+                    // this stream should only be null during init and temp file shouldn't be deleted/reset on init
+                    to_delete_paths.Add(TempFilePath);
+                }
                 MpConsole.WriteLine("Temp files deleted: ");
-                _tempFileList.ForEach(x => MpConsole.WriteLine(x));
+                foreach (var to_delete_path in to_delete_paths) {
+                    bool success = MpFileIo.DeleteFileOrDirectory(to_delete_path);
+                    MpConsole.WriteLine($"{(success ? "SUCCESS" : "FAILED")} '{to_delete_path}'");
+                }
                 _tempFileList.Clear();
             }
             catch (Exception ex) {

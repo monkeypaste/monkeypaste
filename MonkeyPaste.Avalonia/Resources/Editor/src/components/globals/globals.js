@@ -1,4 +1,4 @@
-const globals = {
+var globals = {
 
 	// #region ENV
 	WindowsEnv: 'Windows',
@@ -286,18 +286,7 @@ const globals = {
 
 	CurFindReplaceDocRangesRects:  null,
 
-	DefaultFindReplaceInputState:  {
-		searchText: '',
-		replaceText: '',
-		isReplace: false,
-		isCaseSensitive: false,
-		isWholeWordMatch: false,
-		useRegEx: false
-	},
-
 	LastFindReplaceInputState:  null,
-
-	IsFindReplaceInactive:  true,
 
 	Searches:  null,
 	// #endregion
@@ -983,7 +972,10 @@ IsWindowResizeUpdateEnabled:  true,
 		'stop': `<svg fill="#000000" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path d="M5.92 24.096q0 0.832 0.576 1.408t1.44 0.608h16.128q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-16.128q-0.832 0-1.44 0.576t-0.576 1.44v16.16z"></path></g></svg>`,
 		'pause': `<svg fill="#000000"      viewBox="0 0 32 32"      version="1.1"      xmlns="http://www.w3.org/2000/svg"> 	<g stroke-width="0"></g> 	<g stroke-linecap="round" 	   stroke-linejoin="round"></g> 	<g> 		<path d="M5.92 24.096q0 0.832 0.576 1.408t1.44 0.608h4.032q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-4.032q-0.832 0-1.44 0.576t-0.576 1.44v16.16zM18.016 24.096q0 0.832 0.608 1.408t1.408 0.608h4.032q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-4.032q-0.832 0-1.408 0.576t-0.608 1.44v16.16z"></path> 	</g> </svg>`,
 		'sign-out': `<svg fill="#000000" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><polyline points="6 15 3 12 6 9" style="fill: none; stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></polyline><line x1="3" y1="12" x2="17" y2="12" style="fill: none; stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></line><path d="M10,8V5a1,1,0,0,1,1-1h9a1,1,0,0,1,1,1V19a1,1,0,0,1-1,1H11a1,1,0,0,1-1-1V16" style="fill: none; stroke: #000000; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>`,
-		'check': `<svg viewBox="0 0 24 24"      fill="none"      xmlns="http://www.w3.org/2000/svg"> 	<g stroke-width="0"></g> 	<g stroke-linecap="round" 	   stroke-linejoin="round"></g> 	<g> 		<g> 			<path d="M4 12L8.94975 16.9497L19.5572 6.34326" 			      stroke="#3bfd21" 			      stroke-width="2" 			      stroke-linecap="round" 			      stroke-linejoin="round"></path> 		</g> 	</g> </svg>`
+		'check': `<svg viewBox="0 0 24 24"      fill="none"      xmlns="http://www.w3.org/2000/svg"> 	<g stroke-width="0"></g> 	<g stroke-linecap="round" 	   stroke-linejoin="round"></g> 	<g> 		<g> 			<path d="M4 12L8.94975 16.9497L19.5572 6.34326" 			      stroke="#3bfd21" 			      stroke-width="2" 			      stroke-linecap="round" 			      stroke-linejoin="round"></path> 		</g> 	</g> </svg>`,
+		'bold': `<svg viewBox="0 0 18 18"> <path class="ql-stroke" d="M5,4H9.5A2.5,2.5,0,0,1,12,6.5v0A2.5,2.5,0,0,1,9.5,9H5A0,0,0,0,1,5,9V4A0,0,0,0,1,5,4Z"></path> <path class="ql-stroke" d="M5,9h5.5A2.5,2.5,0,0,1,13,11.5v0A2.5,2.5,0,0,1,10.5,14H5a0,0,0,0,1,0,0V9A0,0,0,0,1,5,9Z"></path> </svg>`,
+		'italic': `<svg viewBox="0 0 18 18"> <line class="ql-stroke" x1="7" x2="13" y1="4" y2="4"></line> <line class="ql-stroke" x1="5" x2="11" y1="14" y2="14"></line> <line class="ql-stroke" x1="8" x2="10" y1="14" y2="4"></line> </svg>`,
+		'delete2': `<svg viewBox="0 0 1024 1024">	<g stroke-width="0"></g>	<g class="ql-stroke"		stroke-linecap="round"	   stroke-linejoin="round"></g>	<g>		<path  class="ql-stroke" d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8 36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z"		      fill=""></path>		<path class="ql-stroke" d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z"		      fill=""></path>		<path class="ql-stroke" d="M328 340.8l32-31.2 348 348-32 32z"		      fill=""></path>	</g></svg>`,
 	}
 	// #endregion 
 }

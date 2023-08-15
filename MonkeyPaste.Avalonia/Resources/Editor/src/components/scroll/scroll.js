@@ -68,6 +68,9 @@ function isAnyHorizontalScrollBarVisible() {
     let scroll_elms = getScrollableElements();
     for (var i = 0; i < scroll_elms.length; i++) {
         let scroll_elm = scroll_elms[i];
+        if (!scroll_elm || scroll_elm.scrollWidth === undefined || scroll_elm.clientWidth == undefined) {
+            continue;
+        }
         if (scroll_elm.scrollWidth > scroll_elm.clientWidth) {
             return true;
         }

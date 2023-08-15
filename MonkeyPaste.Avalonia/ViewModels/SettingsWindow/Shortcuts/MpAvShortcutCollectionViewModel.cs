@@ -1,28 +1,18 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
+﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using DynamicData;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Avalonia.Utils.Extensions;
 using MonkeyPaste.Common.Plugin;
-using MonoMac.CoreVideo;
 using SharpHook;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using FocusManager = Avalonia.Input.FocusManager;
-using KeyEventArgs = Avalonia.Input.KeyEventArgs;
 
 
 namespace MonkeyPaste.Avalonia {
@@ -44,12 +34,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private SimpleGlobalHook _hook;
-        private CancellationTokenSource _simInputCts;
 
 
         private MpKeyGestureHelper<KeyCode> _keyboardGestureHelper = new MpKeyGestureHelper<KeyCode>();
-        //private List<object> _downs = new List<object>();
-        //private List<Tuple<KeyCode, DateTime>> _downChecker = new List<Tuple<KeyCode, DateTime>>();
         private MpAvShortcutViewModel _exact_match;
 
         #endregion
@@ -67,12 +54,7 @@ namespace MonkeyPaste.Avalonia {
 
         IReadOnlyList<object> MpIDownKeyHelper.Downs =>
             _keyboardGestureHelper.Downs.Cast<object>().ToList();
-        void MpIDownKeyHelper.Remove(object key) {
-            if (key is not KeyCode shkey) {
-                return;
-            }
-            _keyboardGestureHelper.RemoveKeyDown(shkey);
-        }
+
         #endregion
 
         #region MpIShortcutGestureLocator Implementation
@@ -469,12 +451,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
-            _keyboardGestureHelper = new MpKeyGestureHelper<KeyCode>();
-            _simInputCts = new CancellationTokenSource();
-
             await InitShortcutsAsync();
-
-
             InitExternalPasteTracking();
 
             UpdateRoutingProfileCommand.Execute(null);

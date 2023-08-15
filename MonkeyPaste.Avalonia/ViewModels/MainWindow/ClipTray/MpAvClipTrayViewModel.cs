@@ -4457,6 +4457,8 @@ namespace MonkeyPaste.Avalonia {
             if (append_ctvm == null) {
                 return;
             }
+            // NOTE reset append count to speed up initial load (to ignore processing initial content change)
+            append_ctvm.AppendCount = 0;
             await PinTileCommand.ExecuteAsync(new object[] { append_ctvm, MpPinType.Append, appendType });
         }
 
@@ -4735,6 +4737,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand AppendDataCommand => new MpCommand<object>(
             (args) => {
                 AppendClipTileViewModel.IsWindowOpen = true;
+                AppendClipTileViewModel.AppendCount++;
                 if (AppendClipTileViewModel.GetContentView() is MpAvContentWebView wv) {
                     wv.ProcessAppendStateChangedMessage(GetAppendStateMessage(args as string), "command");
                 }

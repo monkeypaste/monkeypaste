@@ -470,6 +470,8 @@
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
     <None Remove="Resources\credits.txt" />
+    <None Remove="resources\editor\src\components\bold\bold.js" />
+    <None Remove="Resources\Editor\src\components\italic\italic.js" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
@@ -1262,6 +1264,7 @@
   
   <ItemGroup>
     <Folder Include="Resources\Dictionaries\" />
+    <Folder Include="Resources\Editor\src\components\bold\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />
@@ -1492,8 +1495,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\cefnet11\CefNet\CefNet.Avalonia\CefNet.Avalonia.csproj" />
-    <ProjectReference Include="..\cefnet11\CefNet\CefNet\CefNet.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
@@ -1606,6 +1607,21 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CefNet">
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
+    </Reference>
+    <Reference Include="CefNet.Avalonia">
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Resources\Editor\src\components\italic\italic.js">
+      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

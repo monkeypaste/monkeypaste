@@ -601,6 +601,7 @@ namespace MonkeyPaste.Avalonia {
         //}
 
         #region State
+        public int AppendCount { get; set; } = 0;
         public bool IsAppendNotifier { get; set; }
 
         public bool WasCloseAppendWindowConfirmed { get; set; }
@@ -1818,7 +1819,6 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
                 Content = new MpAvClipTileView(),
-                //Topmost = true,
                 Background = Brushes.Transparent,
                 CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
             };
@@ -1910,13 +1910,13 @@ namespace MonkeyPaste.Avalonia {
                 e.Cancel = true;
                 pow.IsHitTestVisible = false;
                 Dispatcher.UIThread.Post(async () => {
-
                     var result = await
                         Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: "Confirm",
                             message: "Are you sure you want to finish appending?",
                             iconResourceObj: "QuestionMarkImage",
-                            owner: pow);
+                            owner: pow,
+                            ntfType: MpNotificationType.ConfirmEndAppend);
                     if (result) {
                         // allow close
                         WasCloseAppendWindowConfirmed = true;

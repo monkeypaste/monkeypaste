@@ -172,7 +172,7 @@ namespace MonkeyPaste.Avalonia {
                             Dispatcher.UIThread.Post(() => {
                                 OnPropertyChanged(nameof(UrlTitle));
                                 OnPropertyChanged(nameof(IconId));
-                            })
+                            });
 
                         }
                     }

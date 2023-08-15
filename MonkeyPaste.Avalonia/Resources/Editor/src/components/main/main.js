@@ -214,6 +214,8 @@ function updateAllSelectionDependantElements() {
 	updateCreateTemplateToolbarButtonToSelection();
 	updateFontColorToolbarItemsToSelection();
 	updateTablesSizesAndPositions();
+	updateBoldToolbarButtonToSelection();
+	updateItalicToolbarButtonToSelection();
 }
 
 function updateAllSizeAndPositions() {

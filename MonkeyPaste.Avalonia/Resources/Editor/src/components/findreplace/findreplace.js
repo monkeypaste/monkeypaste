@@ -3,16 +3,12 @@
 // #region Life Cycle
 
 function initFindReplaceToolbar() {
-
 	addClickOrKeyClickEventListener(getFindReplaceEditorToolbarButton(), onFindReplaceToolbarButtonClick);
-	getFindReplaceEditorToolbarButton().innerHTML = getSvgHtml('findreplace')
 
-	getIsFindInputElement().addEventListener('change', onFindOrReplaceRadioChange);
 	getIsReplaceInputElement().addEventListener('change', onFindOrReplaceRadioChange);
 
 	getFindInputElement().addEventListener('keypress', onFindReplaceFindInputKeyDown);
-
-	addClickOrKeyClickEventListener(getFindReplaceCloseButtonElement(), onFindReplaceCloseButtonClick);
+	getFindInputElement().addEventListener('input', onFindReplaceFindInputTextInput);
 
 	addClickOrKeyClickEventListener(getFindReplaceNextButton(), onFindReplaceNextButtonClick);
 	addClickOrKeyClickEventListener(getFindReplacePreviousButton(), onFindReplacePreviousButtonClick);
@@ -73,10 +69,6 @@ function getFindInputElement() {
 	return document.getElementById('findInput');
 }
 
-function getIsFindInputElement() {
-	return document.getElementById('isFindInput');
-}
-
 function getIsReplaceInputElement() {
 	return document.getElementById('isReplaceInput');
 }
@@ -122,9 +114,6 @@ function getFindReplaceToolbarHeight() {
 	return getFindReplaceToolbarElement().getBoundingClientRect().height;
 }
 
-function getFindReplaceCloseButtonElement() {
-	return document.getElementById('closeFindReplaceToolbarButton');
-}
 
 function getFindReplaceInputState() {	
 	return {
@@ -134,6 +123,17 @@ function getFindReplaceInputState() {
 		isCaseSensitive: getIsCaseSensitiveInputElement().checked,
 		isWholeWordMatch: getIsWholeWordInputElement().checked,
 		useRegEx: getUseRegExInputElement().checked
+	};
+}
+
+function getDefaultFindReplaceInputState() {	
+	return {
+		searchText: '',
+		replaceText: '',
+		isReplace: false,
+		isCaseSensitive: false,
+		isWholeWordMatch: false,
+		useRegEx: false
 	};
 }
 
@@ -148,7 +148,6 @@ function setFindReplaceInputState(inputState) {
 	}
 
 	getIsReplaceInputElement().checked = inputState.isReplace;
-	getIsFindInputElement().checked = !inputState.isReplace;
 
 	getIsCaseSensitiveInputElement().checked = inputState.isCaseMatch;
 	getIsWholeWordInputElement().checked = inputState.isWholeWordMatch;
@@ -159,11 +158,26 @@ function setFindReplaceInputState(inputState) {
 
 	toggleFindOrReplace();
 }
-
+function setFindReplaceToolbarButtonToggleState(isToggled) {
+	let fr_svg_path_elms = Array.from(getFindReplaceEditorToolbarButton().querySelectorAll('path'));
+	fr_svg_path_elms.forEach(x => isToggled ? x.classList.add('toggled') : x.classList.remove('toggled'));
+}
 // #endregion Setters
 
 // #region State
 
+function hasLocalSearchText() {
+	return !isNullOrEmpty(getFindInputElement().value);
+}
+
+function isAnySearchState() {
+	if (isGlobalSearchState() ||
+		hasLocalSearchText() ||
+		globals.CurFindReplaceDocRanges != null) {
+		return true;
+	}
+	return false; 
+}
 function isGlobalSearchState() {
 	return globals.Searches != null;
 }
@@ -178,17 +192,6 @@ function isShowingFindTab() {
 
 function isShowingReplaceTab() {
 	return !getReplaceInputElement().classList.contains('hidden');
-}
-
-function isFindReplaceActive() {
-	if (!isShowingFindReplaceToolbar()) {
-		return false;
-	}
-	if (globals.quill.hasFocus()) {
-		return false;
-	}
-	// do other toolbar focuses matter here?
-	return true;
 }
 
 function isFindReplaceStateChanged() {
@@ -222,6 +225,10 @@ function isFindReplaceStateChanged() {
 	return false;
 }
 
+function isFindReplaceActive() {
+	let is_active = Array.from(getFindReplaceEditorToolbarButton().querySelectorAll('path'))[0].classList.contains('toggled');
+	return is_active;
+}
 // #endregion State
 
 // #region Actions
@@ -230,8 +237,9 @@ function showFindReplaceToolbar(fromHost = false) {
 	activateFindReplace();
 
 	getFindReplaceToolbarElement().classList.remove('hidden');
+	setFindReplaceToolbarButtonToggleState(true);
 
-	let inputState = globals.LastFindReplaceInputState ? globals.LastFindReplaceInputState : globals.DefaultFindReplaceInputState;
+	let inputState = globals.LastFindReplaceInputState || getDefaultFindReplaceInputState();
 	globals.LastFindReplaceInputState = null;
 
 	if (isNullOrEmpty(inputState.searchText)) {
@@ -279,8 +287,6 @@ function updateFindReplaceToolbarSizesAndPositions() {
 }
 
 function resetFindReplaceResults() {
-	CurFindReplaceSearchText = null;
-
 	globals.CurFindReplaceDocRanges = null;
 	globals.CurFindReplaceDocRangeIdx = -1;
 
@@ -289,7 +295,7 @@ function resetFindReplaceResults() {
 }
 
 function resetFindReplaceInput() {
-	setFindReplaceInputState(globals.DefaultFindReplaceInputState);
+	setFindReplaceInputState(getDefaultFindReplaceInputState());
 }
 
 function resetFindReplaceToolbar() {
@@ -355,6 +361,9 @@ function processSearch(searchObj) {
 }
 
 function populateFindReplaceResults() {
+	if (!isAnySearchState()) {
+		return;
+	}
 	// CLEAR
 	resetFindReplaceResults();
 
@@ -441,7 +450,7 @@ function updateFindReplaceRangeRects() {
 }
 
 function applyRangeRectStyle(isActive, range_rect) {
-	range_rect.fill = isActive && !globals.IsFindReplaceInactive ?
+	range_rect.fill = isActive && isFindReplaceActive() ?
 		getActiveMatchRangeBgColor() : getInactiveMatchRangeBgColor();
 	range_rect.fillOpacity = getMatchRangeBgOpacity();
 	range_rect.strokeWidth = 0;
@@ -486,13 +495,17 @@ function navigateFindReplaceResults(dir) {
 	//drawOverlay();
 }
 
-function deactivateFindReplace() {
-	globals.IsFindReplaceInactive = true;
-	drawOverlay();
+function deactivateFindReplace(redraw = true) {
+	setFindReplaceToolbarButtonToggleState(false);
+	if (redraw) {
+		drawOverlay();
+	}	
 }
-function activateFindReplace() {
-	globals.IsFindReplaceInactive = false;
-	drawOverlay();
+function activateFindReplace(redraw = true) {
+	setFindReplaceToolbarButtonToggleState(true);
+	if (redraw) {
+		drawOverlay();
+	}
 }
 
 // #endregion Actions
@@ -503,6 +516,9 @@ function onFindReplaceFindInputKeyDown(e) {
 	if (e.key != 'Enter') {
 		return;
 	}
+	populateFindReplaceResults();
+}
+function onFindReplaceFindInputTextInput(e) {
 	populateFindReplaceResults();
 }
 
@@ -516,10 +532,6 @@ function onFindReplaceToolbarButtonClick(e) {
 
 function onFindOrReplaceRadioChange(e) {
 	toggleFindOrReplace();
-}
-
-function onFindReplaceCloseButtonClick(e) {
-	hideFindReplaceToolbar();
 }
 
 function onFindReplaceNextButtonClick(e) {

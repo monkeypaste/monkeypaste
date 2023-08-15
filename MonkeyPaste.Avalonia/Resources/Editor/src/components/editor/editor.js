@@ -397,6 +397,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	}
 
 	loadLinkHandlers();
+	populateFindReplaceResults();
 
 	let suppress_text_change_ntf = globals.SuppressContentChangedNtf;
 

@@ -204,6 +204,9 @@
     <script defer src="src/components/list/bullets/ordered/orderedlist.js"></script>
     <script defer src="src/components/list/bullets/disc/disclist.js"></script>
 
+    <script defer src="src/components/bold/bold.js"></script>
+    <script defer src="src/components/italic/italic.js"></script>
+
     <script defer src="src/components/common/toolbar/commonToolbar.js"></script>
 
     <script defer src="src/components/font/fontFamilyLookup.js"></script>
@@ -303,10 +306,10 @@
         <div class="toolbar-separator"></div>
 
         <!-- BOLD -->
-        <button class="ql-bold"></button>
+        <button id="boldToolbarButton" class="svg-key-bold svg-no-defaults" svg-classes="no-fill"></button>
 
         <!-- ITALIC-->
-        <button class="ql-italic"></button>
+        <button id="italicToolbarButton" class="svg-key-italic svg-no-defaults"></button>
 
         <div class="toolbar-separator"></div>
 
@@ -370,39 +373,35 @@
 
         <div class="toolbar-separator"></div>
         <!-- FIND/REPLACE -->
-        <button id="findReplaceToolbarButton" class="right-align"></button>
+        <button id="findReplaceToolbarButton" class="right-align svg-key-findreplace svg-no-defaults" svg-classes="svg-icon ql-fill"></button>
     </div>
 
     <!-- FIND/REPLACE TOOLBAR -->
     <div id="findReplaceToolbar" class="top-align hidden">
         <form>
-            <label for="findInput">Find:</label>
-            <input type="text" id="findInput" name="findInput" spellcheck="false">
+            <label for="findInput">Find:</label><br />
+            <input type="text" id="findInput" name="findInput" spellcheck="false"><br />
 
-            <input type="radio" id="isFindInput" name="findOrReplace">
-            <label for="isFindInput">Find</label>
-            <input type="radio" id="isReplaceInput" name="findOrReplace">
+            <input type="checkbox" id="isReplaceInput" name="findOrReplace">
             <label for="isReplaceInput">Replace</label><br>
+            <label for="replaceInput" id="replaceInputLabel" class="is-replace">Replace:</label><br class="is-replace" />
+            <input type="text" id="replaceInput" name="replaceInput" class="is-replace"><br class="is-replace" />
 
-            <label for="replaceInput" id="replaceInputLabel" class="is-replace">Replace:</label>
-            <input type="text" id="replaceInput" name="replaceInput" class="is-replace"><br />
+            <div class="matchOptContainer">
+                <input type="checkbox" id="matchCaseInput" name="matchCaseInput">
+                <label for="matchCaseInput"> Match Case</label><br>
 
-            <input type="checkbox" id="matchCaseInput" name="matchCaseInput">
-            <label for="matchCaseInput"> Match Case</label><br>
+                <input type="checkbox" id="wholeWordInput" name="wholeWordInput">
+                <label for="wholeWordInput"> Whole Word</label><br>
 
-            <input type="checkbox" id="wholeWordInput" name="wholeWordInput">
-            <label for="wholeWordInput"> Whole Word</label><br>
+                <input type="checkbox" id="useRegexInput" name="useRegexInput">
+                <label for="useRegexInput"> Regular Expression</label><br>
+            </div>
 
-            <input type="checkbox" id="useRegexInput" name="useRegexInput">
-            <label for="useRegexInput"> Regular Expression</label>
-        </form>
-        <div id="findReplaceButtonContainer" class="right-align">
-            <button id="closeFindReplaceToolbarButton">X</button>
-            <button id="findReplacePreviousButton" type="button">
-                <i></i>
+
+            <button id="findReplacePreviousButton" type="button" class="svg-key-arrow-left svg-no-defaults">
             </button>
-            <button id="findReplaceNextButton" type="button">
-                <i></i>
+            <button id="findReplaceNextButton" type="button" class="svg-key-arrow-right svg-no-defaults">
             </button>
             <button id="replaceButton" type="button" class="is-replace">
                 Replace
@@ -410,7 +409,8 @@
             <button id="replaceAllButton" type="button" class="is-replace">
                 Replace All
             </button>
-        </div>
+        </form>
+
         <div class="resizer resizer-b"></div>
     </div>
 

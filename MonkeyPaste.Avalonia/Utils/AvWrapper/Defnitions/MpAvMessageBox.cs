@@ -1,6 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -30,9 +28,15 @@ namespace MonkeyPaste.Avalonia {
                                     anchor: anchor,
                                     owner: owner);
         }
-        public async Task<bool> ShowOkCancelMessageBoxAsync(string title, string message, object anchor = null, object iconResourceObj = null, object owner = null) {
+        public async Task<bool> ShowOkCancelMessageBoxAsync(
+            string title,
+            string message,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null,
+            MpNotificationType ntfType = MpNotificationType.ModalOkCancelMessageBox) {
             var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
-                                    notificationType: MpNotificationType.ModalOkCancelMessageBox,
+                                    notificationType: ntfType,
                                     title: title,
                                     body: message,
                                     iconSourceObj: iconResourceObj,
@@ -44,6 +48,14 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (result != MpNotificationDialogResultType.Cancel) {
+                if (ntfType != MpNotificationType.ModalOkCancelMessageBox) {
+                    // non-default ok/cancel box
+                    if (result == MpNotificationDialogResultType.Dismiss ||
+                        result == MpNotificationDialogResultType.DoNotShow) {
+                        // user chose to ignore this confirm ie always confirm
+                        return true;
+                    }
+                }
                 // result type mismatch
                 MpDebug.Break();
             }

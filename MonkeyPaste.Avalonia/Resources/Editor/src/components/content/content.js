@@ -63,13 +63,9 @@ function loadContent(
 
 			resetContent();
 			resetAnnotations();
-		}
-		 
+		}		 
 
-		if (!globals.IsFindReplaceInactive) {
-			log('activated findreplace detected during load, deactivating...');
-		}
-		globals.IsFindReplaceInactive = true;
+		deactivateFindReplace(false);
 
 		loadContentData(contentData);
 
@@ -88,6 +84,12 @@ function loadContent(
 			} else {
 				disableReadOnly(true);
 			}
+		}
+
+		if (is_reload && append_state == null) {
+			// handle special case where query tile append ended
+			// so its append state is cleared (was only enabled before popout triggered)
+			updateAppendModeState(null, true);
 		}
 		
 		if (globals.ContentItemType != 'Text') {

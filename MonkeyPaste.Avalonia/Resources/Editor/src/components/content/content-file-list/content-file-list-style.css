@@ -25,6 +25,9 @@
     text-align: center;
     font-weight: bold;
 }
+a.file-list-remove::after {
+    content: "x";
+}
 
 .file-list-path {
     font-size: 14px;

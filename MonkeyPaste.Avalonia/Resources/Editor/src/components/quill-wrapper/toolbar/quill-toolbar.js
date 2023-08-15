@@ -56,6 +56,8 @@ function initEditorToolbar() {
 	initTable();
 	initLists();
 	initLinks();
+	initBold();
+	initItalic();
 	initAlignEditorToolbarButton();
 	initFontColorToolbarItems();
 

@@ -170,7 +170,6 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),"Supported Clipboard Formats",Mp.Services.DataObjectRegistrar),
                     //new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvTempFileManager), "Temporary Files"),
                     new MpAvLoaderItemViewModel(typeof(MpPluginLoader), "Plugins"),
                     new MpAvLoaderItemViewModel(typeof(MpAvSoundPlayerViewModel), "Sound Player"),
                     new MpAvLoaderItemViewModel(typeof(MpAvIconCollectionViewModel), "Icons"),

@@ -5,17 +5,12 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
-using Avalonia.Media.Transformation;
-using Avalonia.ReactiveUI;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -830,6 +825,7 @@ namespace MonkeyPaste.Avalonia {
             if (sender is DispatcherTimer timer &&
                timer.Tag is ListBox lb &&
                GetScrollViewer(lb) is ScrollViewer sv) {
+                return;
                 if (sv.DataContext is MpAvViewModelBase vm &&
                     vm.IsBusy) {
                     return;

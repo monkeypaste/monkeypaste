@@ -2,12 +2,23 @@
     stroke: var(--editortoolbarbuttoncolor) !important;
     stroke-width: 1px !important;
 }
+.ql-stroke.toggled {
+    stroke: var(--optselectcolor) !important;
+}
+
 .ql-picker-label {
     color: var(--editortoolbarbuttoncolor) !important;
 }
 
 .ql-fill, .ql-path {
     fill: var(--editortoolbarbuttoncolor) !important;
+}
+.ql-fill.toggled, .ql-path.toggled {
+    fill: var(--optselectcolor) !important;
+}
+
+.no-fill {
+    fill: transparent !important;
 }
 
 .disabled .ql-stroke, .disabled .ql-path {

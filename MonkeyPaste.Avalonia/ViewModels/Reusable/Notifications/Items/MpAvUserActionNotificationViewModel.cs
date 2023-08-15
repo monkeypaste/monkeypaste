@@ -1,6 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
             NotificationType == MpNotificationType.TrashCapReached ||
             NotificationType == MpNotificationType.ContentAddBlockedByAccount ||
             NotificationType == MpNotificationType.ContentRestoreBlockedByAccount ||
+            NotificationType == MpNotificationType.ConfirmEndAppend ||
             NotificationType == MpNotificationType.ModalContentFormatDegradation;
 
         public bool IsFixing { get; set; } = false;

@@ -3,7 +3,7 @@ function contentDataObjectRequest_ext_ntf(contentReqMsgStr_base64) {
 	// input 'MpQuillContentDataObjectRequestMessage'
 	// output 'MpQuillContentDataObjectResponseMessage' (with 'MpQuillHostDataItemFragment' items)
 
-	log('contentRequest_ext: ' + contentReqMsgStr_base64);
+	log('contentDataObjectRequest_ext_ntf: ' + contentReqMsgStr_base64);
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
 	let items = convertContentToFormats(req.selectionOnly, req.formats);
 	let respObj = {

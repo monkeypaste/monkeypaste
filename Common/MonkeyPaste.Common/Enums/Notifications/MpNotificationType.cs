@@ -47,6 +47,8 @@
         ModalTextBoxOkCancelMessageBox,
         ModalProgressCancelMessageBox,
 
+        ConfirmEndAppend,
+
         // Plugin Wrapper 
         PluginResponseMessage,
         PluginResponseError,
