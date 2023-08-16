@@ -559,6 +559,16 @@ function limitSelLines() {
     }
 }
 
+function fixTableHistory(delta, oldDelta) {
+    // BUG when table create is undone the column editor
+    // isn't removed and the event handlers are broken
+
+    // NOTE 
+    if (!isTableInDocument() && getTableColumnEditorContainerElement() != null) {
+        getBetterTableModule().hideTableTools();
+    }
+}
+
 // #endregion Actions
 
 // #region Event Handlers

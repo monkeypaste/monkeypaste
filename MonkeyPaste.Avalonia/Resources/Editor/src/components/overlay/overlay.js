@@ -184,8 +184,23 @@ function drawTextSelection(ctx) {
     let sel_bg_color = getTextSelectionBgColor();
     let sel_fg_color = getTextSelectionFgColor();
 
+    if (!isEditorFocused() &&
+        isSubSelectionEnabled() &&
+        globals.CurSelRange &&
+        globals.ContentItemType != 'Image') {
+        // draw inactive selection
+        let sel_rects = getRangeRects(globals.CurSelRange);
+        for (var i = 0; i < sel_rects.length; i++) {
+            let cur_sel_rect = sel_rects[i];
+            cur_sel_rect.fill = getTextSelectionInactiveBgColor(); 
+            cur_sel_rect.fillOpacity = getMatchRangeBgOpacity(); 
+            cur_sel_rect.strokeWidth = 0;
+            drawRect(ctx, cur_sel_rect);
+		}
+    }
 
     if (globals.CurFindReplaceDocRangesRects) {
+        // draw search/find/replace highlighting
         let scroll_y = getEditorContainerElement().scrollTop;
         let scroll_x = getEditorContainerElement().scrollLeft;
 
@@ -199,11 +214,7 @@ function drawTextSelection(ctx) {
                 is_active = true;
             }
             adj_rect = applyRangeRectStyle(is_active, adj_rect);
-            //adj_rect.left -= scroll_x;
-            //adj_rect.right -= scroll_x;
-            //adj_rect.top -= scroll_y;
-            //adj_rect.bottom -= scroll_y;
-            drawRect(ctx, adj_rect);//, cur_bg_color, sel_fg_color, 0.5, 125 / 255);
+            drawRect(ctx, adj_rect);
         }
     } 
 

@@ -26,20 +26,12 @@
         Background="Transparent"
         Title="">
     <Window.Resources>
-        <LinearGradientBrush x:Key="OuterGradientBrush"
-                             SpreadMethod="Repeat"
-                             TransformOrigin="50%,50%"
-                             StartPoint="0%,0%"
-                             EndPoint="100%,100%">
+        <LinearGradientBrush x:Key="OuterGradientBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
             <LinearGradientBrush.GradientStops>
-                <GradientStop Offset="0"
-                              Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <GradientStop Offset="0.36"
-                              Color="{DynamicResource ThemeInteractiveColor}" />
-                <GradientStop Offset="0.77"
-                              Color="{DynamicResource ThemeInteractiveColor}" />
-                <GradientStop Offset="1"
-                              Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <GradientStop Offset="0" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <GradientStop Offset="0.36" Color="{DynamicResource ThemeInteractiveColor}" />
+                <GradientStop Offset="0.77" Color="{DynamicResource ThemeInteractiveColor}" />
+                <GradientStop Offset="1" Color="{DynamicResource ThemeInteractiveBgColor}" />
 
 
                 <!--<GradientStop Offset="0"
@@ -67,18 +59,12 @@
             </LinearGradientBrush.Transform>
         </LinearGradientBrush>
 
-        <LinearGradientBrush x:Key="ShineBrush"
-                             StartPoint="0%,0%"
-                             EndPoint="100%,0%">
+        <LinearGradientBrush x:Key="ShineBrush" StartPoint="0%,0%" EndPoint="100%,0%">
             <LinearGradientBrush.GradientStops>
-                <GradientStop Offset="0"
-                              Color="Transparent" />
-                <GradientStop Offset="0.3"
-                              Color="White" />
-                <GradientStop Offset="0.6"
-                              Color="White" />
-                <GradientStop Offset="1"
-                              Color="Transparent" />
+                <GradientStop Offset="0" Color="Transparent" />
+                <GradientStop Offset="0.3" Color="White" />
+                <GradientStop Offset="0.6" Color="White" />
+                <GradientStop Offset="1" Color="Transparent" />
             </LinearGradientBrush.GradientStops>
         </LinearGradientBrush>
     </Window.Resources>

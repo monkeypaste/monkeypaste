@@ -13,3 +13,7 @@
     max-width: 155px;
     max-height: 170px !important;
 }
+
+#createTableToolbarButtonLabel.ql-picker-label {
+    border-color: transparent;
+} 

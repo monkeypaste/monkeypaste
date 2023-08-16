@@ -137,10 +137,10 @@ namespace MonkeyPaste.Avalonia {
                             MpShortcutType.ToggleAppendPreMode,
                             MpAvClipTrayViewModel.Instance.ToggleAppendPreModeCommand
                         },
-                        {
-                            MpShortcutType.ToggleAppendManualMode,
-                            MpAvClipTrayViewModel.Instance.ToggleAppendManualModeCommand
-                        },
+                        //{
+                        //    MpShortcutType.ToggleAppendManualMode,
+                        //    MpAvClipTrayViewModel.Instance.ToggleAppendManualModeCommand
+                        //},
                         {
                             MpShortcutType.ToggleAppendPaused,
                             MpAvClipTrayViewModel.Instance.ToggleAppendPausedCommand

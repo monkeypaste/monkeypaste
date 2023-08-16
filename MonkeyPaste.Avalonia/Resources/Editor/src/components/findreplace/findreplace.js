@@ -5,7 +5,7 @@
 function initFindReplaceToolbar() {
 	addClickOrKeyClickEventListener(getFindReplaceEditorToolbarButton(), onFindReplaceToolbarButtonClick);
 
-	getIsReplaceInputElement().addEventListener('change', onFindOrReplaceRadioChange);
+	getIsReplaceInputElement().addEventListener('change', onFindOrReplaceInputChange);
 
 	getFindInputElement().addEventListener('keypress', onFindReplaceFindInputKeyDown);
 	getFindInputElement().addEventListener('input', onFindReplaceFindInputTextInput);
@@ -16,8 +16,11 @@ function initFindReplaceToolbar() {
 	addClickOrKeyClickEventListener(getFindReplaceReplaceAllButton(), onFindReplaceReplaceAllButtonClick);
 	addClickOrKeyClickEventListener(getFindReplaceReplaceButton(), onFindReplaceReplaceButtonClick);
 
+	getWrapAroundInputElement().addEventListener('change', updateFindReplaceElementStates);
+	getInSelectionInputElement().addEventListener('change', onFindReplaceInSelectionInput);
+
 	initFindReplaceIcons();
-	enableResize(getFindReplaceToolbarElement());
+	enableResize(getFindReplaceContainerElement());
 }
 
 function initFindReplaceIcons() {
@@ -80,6 +83,12 @@ function getIsCaseSensitiveInputElement() {
 function getIsWholeWordInputElement() {
 	return document.getElementById('wholeWordInput');
 }
+function getWrapAroundInputElement() {
+	return document.getElementById('wrapFindInput');
+}
+function getInSelectionInputElement() {
+	return document.getElementById('selOnlyFindInput');
+}
 
 function getUseRegExInputElement() {
 	return document.getElementById('useRegexInput');
@@ -106,12 +115,12 @@ function getFindReplaceReplaceAllButton() {
 	return document.getElementById('replaceAllButton');
 }
 
-function getFindReplaceToolbarElement() {
-	return document.getElementById('findReplaceToolbar');
+function getFindReplaceContainerElement() {
+	return document.getElementById('findReplaceContainer');
 }
 
 function getFindReplaceToolbarHeight() {
-	return getFindReplaceToolbarElement().getBoundingClientRect().height;
+	return getFindReplaceContainerElement().getBoundingClientRect().height;
 }
 
 
@@ -122,7 +131,9 @@ function getFindReplaceInputState() {
 		isReplace: getIsReplaceInputElement().checked,
 		isCaseSensitive: getIsCaseSensitiveInputElement().checked,
 		isWholeWordMatch: getIsWholeWordInputElement().checked,
-		useRegEx: getUseRegExInputElement().checked
+		useRegEx: getUseRegExInputElement().checked,
+		wrapAround: getWrapAroundInputElement().checked,
+		inSelection: getInSelectionInputElement().checked
 	};
 }
 
@@ -133,7 +144,8 @@ function getDefaultFindReplaceInputState() {
 		isReplace: false,
 		isCaseSensitive: false,
 		isWholeWordMatch: false,
-		useRegEx: false
+		useRegEx: false,
+		wrapAround: true,
 	};
 }
 
@@ -152,6 +164,8 @@ function setFindReplaceInputState(inputState) {
 	getIsCaseSensitiveInputElement().checked = inputState.isCaseMatch;
 	getIsWholeWordInputElement().checked = inputState.isWholeWordMatch;
 	getUseRegExInputElement().checked = inputState.useRegEx;
+	getWrapAroundInputElement().checked = inputState.wrapAround;
+	getInSelectionInputElement().checked = inputState.inSelection;
 
 	getFindInputElement().value = inputState.searchText;
 	getReplaceInputElement().value = inputState.replaceText;
@@ -170,6 +184,14 @@ function hasLocalSearchText() {
 	return !isNullOrEmpty(getFindInputElement().value);
 }
 
+function hasFindMatches() {
+	if (globals.CurFindReplaceDocRanges != null &&
+		globals.CurFindReplaceDocRanges.length > 0) {
+		return true;
+	}
+	return false;
+}
+
 function isAnySearchState() {
 	if (isGlobalSearchState() ||
 		hasLocalSearchText() ||
@@ -183,7 +205,7 @@ function isGlobalSearchState() {
 }
 
 function isShowingFindReplaceToolbar() {
-	return !getFindReplaceToolbarElement().classList.contains('hidden');
+	return !getFindReplaceContainerElement().classList.contains('hidden');
 }
 
 function isShowingFindTab() {
@@ -236,7 +258,7 @@ function isFindReplaceActive() {
 function showFindReplaceToolbar(fromHost = false) {
 	activateFindReplace();
 
-	getFindReplaceToolbarElement().classList.remove('hidden');
+	getFindReplaceContainerElement().classList.remove('hidden');
 	setFindReplaceToolbarButtonToggleState(true);
 
 	let inputState = globals.LastFindReplaceInputState || getDefaultFindReplaceInputState();
@@ -250,6 +272,7 @@ function showFindReplaceToolbar(fromHost = false) {
 	}
 
 	setFindReplaceInputState(inputState);
+	updateFindReplaceElementStates();
 
 	updateAllElements();
 
@@ -260,7 +283,7 @@ function showFindReplaceToolbar(fromHost = false) {
 
 function hideFindReplaceToolbar(fromHost = false) {
 	deactivateFindReplace();
-	getFindReplaceToolbarElement().classList.add('hidden');
+	getFindReplaceContainerElement().classList.add('hidden');
 	resetFindReplaceResults();
 	updateAllElements();
 
@@ -270,7 +293,7 @@ function hideFindReplaceToolbar(fromHost = false) {
 }
 
 function toggleFindOrReplace() {
-	Array.from(getFindReplaceToolbarElement().getElementsByClassName('is-replace')).forEach(x => {
+	Array.from(getFindReplaceContainerElement().getElementsByClassName('is-replace')).forEach(x => {
 		if (getIsReplaceInputElement().checked) {
 			x.classList.remove('hidden');
 		} else {
@@ -282,7 +305,7 @@ function toggleFindOrReplace() {
 function updateFindReplaceToolbarSizesAndPositions() {
 	if (isShowingFindReplaceToolbar()) {
 		let et_bottom = getEditorToolbarElement().getBoundingClientRect().bottom;
-		getFindReplaceToolbarElement().style.top = et_bottom + 'px';
+		getFindReplaceContainerElement().style.top = et_bottom + 'px';
 	}
 }
 
@@ -343,14 +366,22 @@ function processSearch(searchObj) {
 		updateFindReplaceRangeRects();
 		return;
 	}
+	let sel = getInSelectionInputElement().checked ? getDocSelection() : null;
 
 	let dirty_ranges_with_match_text = queryText(
-		trimQuillTrailingLineEndFromText(getText()),
+		trimQuillTrailingLineEndFromText(getText(sel)),
 		searchObj.searchText,
 		searchObj.isCaseSensitive,
 		searchObj.isWholeWordMatch,
 		searchObj.useRegEx,
 		searchObj.matchType);
+
+	if (sel) {
+		// adjust ranges by sel offset
+		for (var i = 0; i < dirty_ranges_with_match_text.length; i++) {
+			dirty_ranges_with_match_text[i].index += sel.index;
+		}
+	}
 
 	if (globals.CurFindReplaceDocRanges == null) {
 		globals.CurFindReplaceDocRanges = [];
@@ -404,6 +435,8 @@ function populateFindReplaceResults() {
 		globals.CurFindReplaceDocRanges = [];
 	}
 	updateFindReplaceRangeRects();
+
+	updateFindReplaceElementStates();
 	
 	navigateFindReplaceResults(0);
 }
@@ -447,6 +480,31 @@ function updateFindReplaceRangeRects() {
 		}
 	}
 	drawOverlay();
+}
+
+function updateFindReplaceElementStates() {
+	const has_matches = hasFindMatches();
+
+	Array.from(getFindReplaceContainerElement().querySelectorAll('input[type=text]'))
+		.forEach(x => has_matches ? x.classList.remove('invalid') : x.classList.add('invalid'));
+	Array.from(getFindReplaceContainerElement().querySelectorAll('button'))
+		.forEach(x => has_matches ? x.classList.remove('disabled') : x.classList.add('disabled'));
+
+	if (!has_matches) {
+		return;
+	}
+	const wrap_nav = getFindReplaceInputState().wrapAround;
+
+	const is_prev_disabled = !wrap_nav && globals.CurFindReplaceDocRangeIdx == 0;
+	const is_nav_tail = !wrap_nav && globals.CurFindReplaceDocRanges && globals.CurFindReplaceDocRangeIdx == globals.CurFindReplaceDocRanges.length - 1;
+
+	is_prev_disabled ?
+		getFindReplacePreviousButton().classList.add('disabled') :
+		getFindReplacePreviousButton().classList.remove('disabled');
+
+	is_nav_tail ?
+		getFindReplaceNextButton().classList.add('disabled') :
+		getFindReplaceNextButton().classList.remove('disabled');
 }
 
 function applyRangeRectStyle(isActive, range_rect) {
@@ -522,6 +580,15 @@ function onFindReplaceFindInputTextInput(e) {
 	populateFindReplaceResults();
 }
 
+function onFindReplaceInSelectionInput(e) {
+	if (getInSelectionInputElement().checked) {
+		getEditorElement().addEventListener('mouseup', populateFindReplaceResults);
+	} else {
+		getEditorElement().removeEventListener('mouseup', populateFindReplaceResults);
+	}
+	populateFindReplaceResults();
+}
+
 function onFindReplaceToolbarButtonClick(e) {
 	if (isShowingFindReplaceToolbar()) {
 		hideFindReplaceToolbar();
@@ -530,16 +597,22 @@ function onFindReplaceToolbarButtonClick(e) {
 	}
 }
 
-function onFindOrReplaceRadioChange(e) {
+function onFindOrReplaceInputChange(e) {
+	updateFindReplaceElementStates();
 	toggleFindOrReplace();
+}
+function onWrapAroundInputChange(e) {
+	updateFindReplaceElementStates();
 }
 
 function onFindReplaceNextButtonClick(e) {
 	navigateFindReplaceResults(1);
+	updateFindReplaceElementStates();
 }
 
 function onFindReplacePreviousButtonClick(e) {
 	navigateFindReplaceResults(-1);
+	updateFindReplaceElementStates();
 }
 function onFindReplaceReplaceButtonClick(e) {
 	replaceFindResultIdx(globals.CurFindReplaceDocRangeIdx);

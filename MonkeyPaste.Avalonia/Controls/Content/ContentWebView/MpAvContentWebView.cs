@@ -1272,7 +1272,10 @@ namespace MonkeyPaste.Avalonia {
                 // wait for initMain - onInitComplete_ntf
                 await Task.Delay(100);
             }
-
+            if (BindingContext == null) {
+                // unloaded
+                return;
+            }
             while (BindingContext.FileItemCollectionViewModel.IsAnyBusy) {
                 // wait for file icons to populate from ctvm.Init
                 await Task.Delay(100);
@@ -1284,7 +1287,6 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"loadContent_ext('{msgStr}')");
         }
 
-        private int _appendCount = 0;
         private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
             if (!IsEditorInitialized) {
                 // BUG load stalls on reload while editing waiting for initialzing...

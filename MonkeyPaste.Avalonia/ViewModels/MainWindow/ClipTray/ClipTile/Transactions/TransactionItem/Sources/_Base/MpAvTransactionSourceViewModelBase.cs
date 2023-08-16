@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
                 if (SourceRef is MpIIconResource dbi && dbi.IconResourceObj != null) {
                     return dbi.IconResourceObj;
                 }
-                return MpDefaultDataModelTools.ThisAppIconId;
+                return MpBase64Images.QuestionMark;
             }
         }
         public virtual string LabelText =>

@@ -11,38 +11,35 @@ function initEditorToolbarQuillOptions(quillOptions, toolbarId) {
 		toolbar: toolbarId
 	};
 
-	//if (UseBetterTable) {
-		if (quillBetterTable === undefined || Quill === undefined) {
-			/// host load error case
-			debugger;
-		}
+	if (quillBetterTable === undefined || Quill === undefined) {
+		/// host load error case
+		debugger;
+	}
 
-		Quill.register({ "modules/better-table": quillBetterTable }, true);
-		//quillOptions.modules.toolbar.container.push([{ "Table-Input": registerTables() }]);
-		//quillOptions.modules.toolbar.handlers = {
-		//	"Table-Input": () => {
-		//		return;
-		//	}
-		//};
-		quillOptions.modules['better-table'] = {
-			operationMenu: {
-				items: {
-					unmergeCells: {
-						text: "Unmerge cells"
-					}
-				},
-				color: {
-					colors: globals.ContentColors,//["green", "red", "yellow", "blue", "white"],
-					text: "Background Color:"
+	Quill.register({ "modules/better-table": quillBetterTable }, true);
+	quillOptions.modules['better-table'] = {
+		operationMenu: {
+			items: {
+				unmergeCells: {
+					text: "Unmerge cells"
 				}
+			},
+			color: {
+				colors: globals.ContentColors,//["green", "red", "yellow", "blue", "white"],
+				text: "Background Color:"
 			}
-		};
-		quillOptions.modules.keyboard = {
-			bindings: quillBetterTable.keyboardBindings
-		};
-	//} else if (UseQuill2) {
-	//	quillOptions.modules.table = true;
-	//}
+		}
+	};
+
+	//quillOptions.modules.toolbar.push([{ "Table-Input": registerTables() }]);
+	//quillOptions.modules.toolbar.handlers = {
+	//	"Table-Input": () => {
+	//		return;
+	//	}
+	//};
+	quillOptions.modules.keyboard = {
+		bindings: quillBetterTable.keyboardBindings
+	};
 
 	return quillOptions;
 }
@@ -58,6 +55,7 @@ function initEditorToolbar() {
 	initLinks();
 	initBold();
 	initItalic();
+	initFormatPaint();
 	initAlignEditorToolbarButton();
 	initFontColorToolbarItems();
 

@@ -2,20 +2,31 @@
     stroke: var(--editortoolbarbuttoncolor) !important;
     stroke-width: 1px !important;
 }
-.ql-stroke.toggled {
+
+.ql-fill, .ql-path {
+    fill: var(--editortoolbarbuttoncolor) !important;
+}
+
+.ql-stroke.locked {
+    stroke: var(--insertselectcolor) !important;
+}
+
+.ql-fill.locked, .ql-path.locked {
+    fill: var(--insertselectcolor) !important;
+}
+.ql-stroke.toggled:not(.locked) {
     stroke: var(--optselectcolor) !important;
+}
+
+.ql-fill.toggled:not(.locked), .ql-path.toggled:not(.locked) {
+    fill: var(--optselectcolor) !important;
 }
 
 .ql-picker-label {
     color: var(--editortoolbarbuttoncolor) !important;
 }
 
-.ql-fill, .ql-path {
-    fill: var(--editortoolbarbuttoncolor) !important;
-}
-.ql-fill.toggled, .ql-path.toggled {
-    fill: var(--optselectcolor) !important;
-}
+
 
 .no-fill {
     fill: transparent !important;

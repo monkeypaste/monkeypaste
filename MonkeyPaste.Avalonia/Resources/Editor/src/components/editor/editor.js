@@ -390,7 +390,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	if (!globals.IsLoaded) {
 		return;
 	}
-	addHistoryItem(delta);
+	addHistoryItem(delta, oldDelta);
 
 	if (!globals.IsTemplatePaddingAfterTextChange) {
 		updateTemplatesAfterTextChanged();

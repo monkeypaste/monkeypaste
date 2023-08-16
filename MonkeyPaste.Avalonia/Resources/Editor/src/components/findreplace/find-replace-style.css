@@ -1,4 +1,4 @@
-﻿#findReplaceToolbar {
+﻿#findReplaceContainer {
     width: 100%;
     overflow: auto;
     display: flex;
@@ -6,7 +6,7 @@
     font-size: 16px;
 }
 
-    #findReplaceToolbar button {
+    #findReplaceContainer button {
         padding: 5px;
         max-width: unset;
         max-height: 30px;
@@ -14,24 +14,26 @@
         vertical-align: middle;
     }
     
-    #findReplaceToolbar .matchOptContainer {
-        margin: 10px;
+    #findReplaceContainer .matchOptContainer {
+        margin: 0;
     }
     
-    #findReplaceToolbar form {
+    #findReplaceContainer form {
         margin: 5px;
         padding: 5px;
     }
 
-        #findReplaceToolbar form label {
+        #findReplaceContainer form label {
             user-select: none;
         }
-        #findReplaceToolbar input {
+        #findReplaceContainer input {
             margin: 5px 0px;
         }
 
-        #findReplaceToolbar input[type=text] {
+        #findReplaceContainer input[type=text] {
             padding: 5px;
             border-radius: 5px;
             width: 300px;
+            outline: none;
         }
+

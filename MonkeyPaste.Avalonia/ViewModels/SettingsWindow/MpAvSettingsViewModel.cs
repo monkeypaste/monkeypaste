@@ -1,24 +1,18 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
-using Avalonia.Media.Fonts;
-using Avalonia.Platform;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using MonoMac.ObjCRuntime;
-using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -34,6 +28,7 @@ namespace MonkeyPaste.Avalonia {
         private string[] _reinitContentParams = new string[] {
             nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
             nameof(MpAvPrefViewModel.Instance.DefaultEditableFontFamily),
+            nameof(MpAvPrefViewModel.Instance.IsAppendWithDestinationFormattingEnabled),
             nameof(MpAvPrefViewModel.Instance.DefaultFontSize),
             nameof(MpAvPrefViewModel.Instance.IsSpellCheckEnabled),
             nameof(MpAvPrefViewModel.Instance.ThemeTypeName),
@@ -798,6 +793,18 @@ namespace MonkeyPaste.Avalonia {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
                                                     value = MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled.ToString()
+                                                }
+                                            }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.IsAppendWithDestinationFormattingEnabled),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Append with destination formatting",
+                                            values = new List<MpPluginParameterValueFormat>() {
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = true,
+                                                    value = MpAvPrefViewModel.Instance.IsAppendWithDestinationFormattingEnabled.ToString()
                                                 }
                                             }
                                         },

@@ -5,8 +5,6 @@ using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 #if PLAT_WV
@@ -70,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 MpAvCefNetApplication.ShutdownCefNet();
             }
-            Mp.Services.TempFileManager.Shutdown();
+
             MpConsole.ShutdownLog();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
                 lifetime.Shutdown();

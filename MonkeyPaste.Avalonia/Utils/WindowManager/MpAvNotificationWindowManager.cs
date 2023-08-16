@@ -8,7 +8,6 @@ using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -185,12 +184,13 @@ namespace MonkeyPaste.Avalonia {
             if (nw.WindowStartupLocation != WindowStartupLocation.CenterScreen &&
                 nw.WindowStartupLocation != WindowStartupLocation.CenterOwner //nw is MpAvMessageNotificationWindow
                 ) {
-                MpIPlatformScreenInfo primaryScreen = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary);
-                if (primaryScreen != null) {
-                    // since msgs slide out and window positioning is handled after opening (to account for its size)
-                    // messages need to start off screen or it will blink when first shown
-                    nw.Position = primaryScreen.Bounds.BottomRight.ToAvPixelPoint(primaryScreen.Scaling);
-                }
+                //MpIPlatformScreenInfo primaryScreen = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary);
+                //if (primaryScreen != null) {
+                //    // since msgs slide out and window positioning is handled after opening (to account for its size)
+                //    // messages need to start off screen or it will blink when first shown
+                //    nw.Position = primaryScreen.Bounds.BottomRight.ToAvPixelPoint(primaryScreen.Scaling);
+                //}
+                nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
             }
             try {
                 if (nvmb.Owner is Window ow) {

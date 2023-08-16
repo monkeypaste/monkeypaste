@@ -38,7 +38,7 @@ function setOptKeys(opt, idx) {
     } else if (idx == globals.AppendLineOptIdx) {
         keys = globals.ShortcutKeysLookup['ToggleAppendLineMode'];
     } else if (idx == globals.ManualOptIdx) {
-        keys = globals.ShortcutKeysLookup['ToggleAppendManualMode'];
+        //keys = globals.ShortcutKeysLookup['ToggleAppendManualMode'];
     } else if (idx == globals.DoneOptIdx) {
         if (globals.IsAppendLineMode) {
             keys = globals.ShortcutKeysLookup['ToggleAppendLineMode'];

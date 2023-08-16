@@ -141,12 +141,19 @@
                     </MultiBinding>
                 </Button.IsVisible>
                 <Grid>
-                    <Image IsVisible="{Binding !IsPinTrayBusy}" />
+                    <Image IsVisible="{Binding !IsVisible, ElementName=PinTrayBusySpinner}" />
 
-                    <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
+                    <local:MpAvBusySpinnerView x:Name="PinTrayBusySpinner"
+                                               HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch"
-                                               Cursor="Wait"
-                                               IsVisible="{Binding IsPinTrayBusy}" />
+                                               Cursor="Wait">
+                        <local:MpAvBusySpinnerView.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                                <Binding Path="IsPinTrayBusy" />
+                                <Binding Path="IsAddingClipboardItem" />
+                            </MultiBinding>
+                        </local:MpAvBusySpinnerView.IsVisible>
+                    </local:MpAvBusySpinnerView>
                 </Grid>
             </Button>
         </Grid>

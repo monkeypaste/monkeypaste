@@ -228,7 +228,12 @@ function updateAppendModeState(req, fromHost) {
 	let is_resuming = globals.IsAppendPaused && !req.isAppendPaused;
 	let is_pausing = !globals.IsAppendPaused && req.isAppendPaused;
 	let is_pre_changing = globals.IsAppendPreMode != req.isAppendPreMode;
-	let is_manual_changing = globals.IsAppendManualMode != req.isAppendManualMode;
+	// NOTE manual mode update from host was disabled cause the state keeps getting enabled somehow
+	// I think its an async msg problem, the design is supposed to only have 1 append state flag changed
+	// at a time so host/editor stays in sync but something weird happens w/ hosts manual setting overriding
+	// when it changes here. Also having a hotkey for it is confusing cause its not global like the others so 
+	// just leaving it to a UI flag which HIDES whatever the problem is (i donn't know whats wrong)
+	let is_manual_changing = globals.IsAppendManualMode != req.isAppendManualMode && !fromHost;
 
 	let is_appending_data = !isNullOrEmpty(req.appendData);
 
@@ -284,6 +289,10 @@ function updateAppendModeState(req, fromHost) {
 	}
 	if (is_appending_data) {
 		appendContentData(req.appendData);
+	}
+
+	if (fromhost) {
+		globals.IsAppendWIthDestFormattingEnabled = req.isAppendWIthDestFormattingEnabled;
 	}
 }
 

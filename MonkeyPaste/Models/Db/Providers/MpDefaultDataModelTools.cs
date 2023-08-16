@@ -1,6 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -21,10 +19,10 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public static int ThisAppIconId { get; private set; }
-        public static int ThisAppIconDbImageId { get; private set; }
-        public static int ThisAppId { get; private set; }
-        public static int ThisOsFileManagerAppId { get; private set; }
+        public static int UnknownIconId => 1;
+        public static int UnknownIconDbImageId => 1;
+        public static int ThisAppIconId => 2;
+        public static int ThisAppId => 1;
 
         #endregion
 
@@ -43,38 +41,25 @@ namespace MonkeyPaste {
             }
             await MpDb.CreateTableAsync<MpUserDevice>();
 
-            MpUserDevice this_device = await MpDataModelProvider.GetUserDeviceByMembersAsync(osInfo.OsMachineName, osInfo.OsType);
-            if (this_device == null) {
+            MpUserDevice thisDevice = await MpDataModelProvider.GetUserDeviceByMembersAsync(osInfo.OsMachineName, osInfo.OsType);
+            if (thisDevice == null) {
                 // maybe user changed machine name so fallback and query just by device type
-                this_device = await MpDataModelProvider.GetUserDeviceByMembersAsync(null, osInfo.OsType);
-                if (this_device == null) {
+                thisDevice = await MpDataModelProvider.GetUserDeviceByMembersAsync(null, osInfo.OsType);
+                if (thisDevice == null) {
                     // reset error
                     MpDebug.Break();
                     return null;
                 }
             }
-            ThisUserDeviceGuid = this_device.Guid;
-            ThisUserDeviceId = this_device.Id;
+            ThisUserDeviceGuid = thisDevice.Guid;
+            ThisUserDeviceId = thisDevice.Id;
 
             await MpDb.CreateTableAsync<MpApp>();
 
             string thisAppPath = osInfo.ExecutingPath;
-            var this_app = await MpDataModelProvider.GetAppByMembersAsync(thisAppPath, string.Empty, this_device.Id);
-            if (this_app == null) {
-                // reset error
-                MpDebug.Break();
-            }
-            ThisAppId = this_app.Id;
+            var thisApp = await MpDataModelProvider.GetAppByMembersAsync(thisAppPath, string.Empty, thisDevice.Id);
+            MpDebug.Assert(thisApp != null && thisApp.Id == ThisAppId, $"ThisApp should be id={ThisAppId}");
 
-
-            if (osInfo.IsDesktop) {
-                var this_os_file_manager = await MpDataModelProvider.GetAppByMembersAsync(osInfo.OsFileManagerPath, string.Empty, this_device.Id);
-                if (this_os_file_manager == null) {
-                    // reset error
-                    MpDebug.Break();
-                }
-                ThisOsFileManagerAppId = this_os_file_manager.Id;
-            }
 
             await MpDb.CreateTableAsync<MpCopyItem>();
 
@@ -85,6 +70,13 @@ namespace MonkeyPaste {
 
         public static async Task CreateAsync(string thisDeviceGuid) {
             // NOTE on initial startup 
+
+            // Unknown Icon
+
+            var unknownAppIcon = await MpIcon.CreateAsync(MpBase64Images.QuestionMark);
+
+            MpDebug.Assert(unknownAppIcon != null && unknownAppIcon.Id == UnknownIconId, $"Unknown icon should be id={UnknownIconId}");
+            MpDebug.Assert(unknownAppIcon != null && unknownAppIcon.IconImageId == UnknownIconDbImageId, $"Unknown icon IMAGE should be id={UnknownIconDbImageId}");
 
             // User
             var new_user = await MpUser.CreateAsync(
@@ -103,11 +95,11 @@ namespace MonkeyPaste {
 
             ThisUserDeviceId = thisDevice.Id;
             ThisUserDeviceGuid = thisDevice.Guid;
-            // Icon
+            // This Icon
 
             var thisAppIcon = await MpIcon.CreateAsync(MpBase64Images.AppIcon);
+            MpDebug.Assert(thisAppIcon != null && thisAppIcon.Id == ThisAppIconId, $"ThisAppIcon should be id={ThisAppIconId}");
 
-            ThisAppIconId = thisAppIcon.Id;
 
             // This App
 
@@ -116,17 +108,7 @@ namespace MonkeyPaste {
                 appPath: Mp.Services.PlatformInfo.ExecutingPath,
                 appName: thisAppName,
                 iconId: thisAppIcon.Id);
-
-            ThisAppId = thisApp.Id;
-
-            if (Mp.Services.PlatformInfo.IsDesktop) {
-                // OS App
-                var osApp = await MpApp.CreateAsync(
-                    appPath: Mp.Services.PlatformInfo.OsFileManagerPath,
-                    appName: Mp.Services.PlatformInfo.OsFileManagerName);
-                ThisOsFileManagerAppId = osApp.Id;
-            }
-
+            MpDebug.Assert(thisApp != null && thisApp.Id == ThisAppId, $"ThisApp should be id={ThisAppId}");
         }
 
         public static async Task InitializeAsync() {
@@ -142,30 +124,14 @@ namespace MonkeyPaste {
 
             // THIS APP
 
-            var this_app = await MpDataModelProvider.GetAppByMembersAsync(Mp.Services.PlatformInfo.ExecutingPath, string.Empty, ThisUserDeviceId);
-            if (this_app == null) {
-                // reset error
-                MpDebug.Break();
-            }
-            ThisAppId = this_app.Id;
-
-            if (Mp.Services.PlatformInfo.IsDesktop) {
-                // OS APP
-
-                var osApp = await MpDataModelProvider.GetAppByMembersAsync(
-                    Mp.Services.PlatformInfo.OsFileManagerPath,
-                    string.Empty,
-                    ThisUserDeviceId);
-                ThisOsFileManagerAppId = osApp.Id;
-            }
+            var thisApp = await MpDataModelProvider.GetAppByMembersAsync(Mp.Services.PlatformInfo.ExecutingPath, string.Empty, ThisUserDeviceId);
+            MpDebug.Assert(thisApp != null && thisApp.Id == ThisAppId, $"ThisApp should be id={ThisAppId}");
 
 
-            // ICON
+            // THIS ICON
 
-            var thisAppIcon = await MpDataModelProvider.GetItemAsync<MpIcon>(ThisAppId);
-            ThisAppIconId = thisAppIcon.Id;
-            ThisAppIconDbImageId = thisAppIcon.IconImageId;
-
+            var thisAppIcon = await MpDataModelProvider.GetItemAsync<MpIcon>(ThisAppIconId);
+            MpDebug.Assert(thisAppIcon != null && thisAppIcon.Id == ThisAppIconId, $"ThisAppIcon should be id={ThisAppIconId}");
         }
 
         #endregion

@@ -21,6 +21,13 @@
     return os;
 }
 
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+function escapeReplacement(string) {
+    return string.replace(/\$/g, '$$$$');
+}
+
 function distinct(arr) {
     if (isNullOrUndefined(arr)) {
         return [];
@@ -97,10 +104,11 @@ function queryText(pt, search_text, case_sensitive, whole_word, use_regex, match
     let flags = 'g';
     if (!case_sensitive) {
         flags += 'i';
-	}
+    }
+    let esc_search_text = escapeRegExp(search_text);
 
     if (use_regex) {
-        regex = new RegExp(search_text, flags);
+        regex = new RegExp(esc_search_text, flags);
     } else {
         let pre_match_str = '';
         let post_match_str = '';
@@ -117,7 +125,8 @@ function queryText(pt, search_text, case_sensitive, whole_word, use_regex, match
             flags += 'm';
         }
         let word_str = whole_word ? '\\b' : '';
-        regex = new RegExp(`${pre_match_str}${word_str}${search_text}${word_str}${post_match_str}`, flags);
+        let pattern = `${pre_match_str}${word_str}${esc_search_text}${word_str}${post_match_str}`;
+        regex = new RegExp(pattern, flags);
     }
     let match_ranges = [];
     var result;

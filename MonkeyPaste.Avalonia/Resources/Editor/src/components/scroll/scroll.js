@@ -58,6 +58,9 @@ function isAnyVerticalScrollBarVisible() {
     let scroll_elms = getScrollableElements();
     for (var i = 0; i < scroll_elms.length; i++) {
         let scroll_elm = scroll_elms[i];
+        if (!scroll_elm || scroll_elm.scrollHeight === undefined || scroll_elm.clientHeight == undefined) {
+            continue;
+        }
         if (scroll_elm.scrollHeight > scroll_elm.clientHeight) {
             return true;
         }

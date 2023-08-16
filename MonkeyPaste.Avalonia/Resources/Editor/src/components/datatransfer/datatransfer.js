@@ -151,7 +151,7 @@ function performDataTransferOnContent(
     // CHECK FOR URL FRAGMENT SOURCE (IF AVAILABLE)
 
     let dt_html_data = getDataTransferHtml(dt);
-    if (dt_html_data && isString(dt_html_data.sourceUrl)) {
+    if (dt_html_data && !isNullOrWhiteSpace(dt_html_data.sourceUrl)) {
         source_urls.push(dt_html_data.sourceUrl);
     }
 

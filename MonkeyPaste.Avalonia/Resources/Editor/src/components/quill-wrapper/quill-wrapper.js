@@ -15,19 +15,18 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 		//allowReadOnlyEdits: true,
 		theme: "snow",
 		formula: true,
-		preserveWhiteSpace: true,
 		history: {
 			delay: 1000,
 			userOnly: false,
 			maxStack: globals.MaxUndoLimit < 0 ? Number.MAX_SAFE_INTEGER : globals.MaxUndoLimit
 		},
-		syntax: true,
 		modules: {
 			toolbar: toolbarId,
-			//table: !UseBetterTable,
-			//htmlEditButton: {
-			//	syntax: true
-			//}
+			//syntax: {
+			//	highlight: highlightCode,
+			//	interval: 100
+			//},
+			syntax: true
 		}
 	}
 
@@ -232,6 +231,24 @@ function insertHtml(docIdx, htmlStr, source = 'api', decodeTemplates = true) {
 		loadTemplates();
 		unparentTemplatesAfterHtmlInsert()
 	}
+}
+
+function setEditorHtml(htmlStr, source = 'api', decodeTemplates = true) {
+	// NOTE this works around when setRootHtml to blank it DOES NOT go blank
+	// when insert is called it has that stupid newline as the document so it'll tack on 
+	// an extra beyond what everything already accounts for
+	setRootHtml('');
+	insertHtml(0, htmlStr, source, decodeTemplates);
+	deleteText({ index: getDocLength() - 1, length: 1 }, source);
+}
+
+function setEditorText(text, source = 'api', decodeTemplates = true) {
+	// NOTE this works around when setRootHtml to blank it DOES NOT go blank
+	// when insert is called it has that stupid newline as the document so it'll tack on 
+	// an extra beyond what everything already accounts for
+	setRootHtml('');
+	insertText(0, text, source, decodeTemplates);
+	deleteText({ index: getDocLength() - 1, length: 1 }, source);
 }
 
 function insertContent(docIdx, data, forcePlainText = false) {

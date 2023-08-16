@@ -19,16 +19,23 @@ function getTextSelectionFgColor() {
 function getTextSelectionBgColor() {
 	return getElementComputedStyleProp(document.body, '--selbgcolor');
 }
+function getTextSelectionInactiveBgColor() {
+	return getElementComputedStyleProp(document.body, '--inactiveselbgcolor');
+}
 function getCaretColor() {
 	//return getEditorElement().style.caretColor;
 	return getElementComputedStyleProp(document.body, '--caretcolor');
+}
+
+function getDocAsRange() {
+	return { index: 0, length: getDocLength() };
 }
 
 function getDocSelection(isForPaste = false) {
 	let doc_sel = convertDomRangeToDocRange(getDomFocusRange());
 
 	if (isForPaste && (!doc_sel || (doc_sel && doc_sel.length == 0))) {
-		return { index: 0, length: getDocLength() };
+		return getDocAsRange();
 	}
 	return doc_sel;
 }

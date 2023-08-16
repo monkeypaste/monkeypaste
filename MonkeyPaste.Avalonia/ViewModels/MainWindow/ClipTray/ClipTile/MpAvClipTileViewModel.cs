@@ -1058,7 +1058,7 @@ namespace MonkeyPaste.Avalonia {
                     return FileItemCollectionViewModel.Items.FirstOrDefault().IconBase64;
                 }
                 if (CopyItemIconId == 0) {
-                    return MpDefaultDataModelTools.ThisAppIconId;
+                    return MpBase64Images.QuestionMark;
                 }
                 return CopyItemIconId;
                 //return TransactionCollectionViewModel.CreateTransaction == null ?
@@ -1190,6 +1190,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsPinned));
             OnPropertyChanged(nameof(PinPlaceholderLabel));
             OnPropertyChanged(nameof(IsResizable));
+            OnPropertyChanged(nameof(IsTrashed));
 
             if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
                 SelfRef == null) {

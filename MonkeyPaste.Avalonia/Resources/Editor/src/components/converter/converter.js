@@ -8,7 +8,6 @@ function initPlainHtmlConverter() {
 	initClipboard();
 	getEditorElement().classList.add('ql-editor-converter');
 
-
 	globals.IsConverterLoaded = true;
 	setEditorIsLoaded(true);
 
@@ -44,14 +43,12 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	log("Converting This Plain Html:");
 	log(html_str);
 
-	setRootHtml('');
-	updateQuill();
 
 	if (formatType == 'text') {
 		let encoded_pt = encodeHtmlSpecialEntitiesFromPlainText(html_str);
-		insertText(0, encoded_pt, 'silent');
-	} else {		
-		insertHtml(0, html_str,'user');
+		setEditorText(encoded_pt, 'user');
+	} else {
+		setEditorHtml(html_str, 'user');
 	}
 	updateQuill();
 

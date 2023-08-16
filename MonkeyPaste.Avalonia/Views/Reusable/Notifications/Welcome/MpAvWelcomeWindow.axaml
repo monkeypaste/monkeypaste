@@ -93,7 +93,7 @@
                                          DataContext="{Binding}"
                                          Content="{Binding CurPageIdx}">
                 <TransitioningContentControl.PageTransition>
-                    <PageSlide Duration="0:00:00.250" />
+                    <CrossFade Duration="0:00:00.250"  />
                 </TransitioningContentControl.PageTransition>
                 <TransitioningContentControl.DataTemplates>
                     <local:MpAvWelcomeContentTemplateSelector>

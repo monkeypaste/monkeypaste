@@ -471,6 +471,7 @@
     <None Remove="CefNet.Avalonia" />
     <None Remove="Resources\credits.txt" />
     <None Remove="resources\editor\src\components\bold\bold.js" />
+    <None Remove="resources\editor\src\components\formatpaint\formatPainter.js" />
     <None Remove="Resources\Editor\src\components\italic\italic.js" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
@@ -1265,6 +1266,7 @@
   <ItemGroup>
     <Folder Include="Resources\Dictionaries\" />
     <Folder Include="Resources\Editor\src\components\bold\" />
+    <Folder Include="Resources\Editor\src\components\formatPaint\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />

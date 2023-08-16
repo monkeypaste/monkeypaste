@@ -3,10 +3,6 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpCopyItemExtensions {
@@ -52,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpCopyItemType.FileList:
                     return ci.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter);
             }
-            dir = string.IsNullOrEmpty(dir) ? Path.GetTempPath() : dir;
+            dir = string.IsNullOrEmpty(dir) ? MpFileIo.GetThisAppRandomTempDir() : dir;
             return new[] { MpFileIo.GetUniqueFileOrDirectoryName(dir, $"{ci.Title}{(isFragment ? "-Part" : string.Empty)}.{ext}") };
         }
 

@@ -1,13 +1,10 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
 
-        MpIExternalPasteHandler ExternalPasteHandler { get; set; }
         MpISslInfo SslInfo { get; set; }
         MpIWelcomeSetupInfo WelcomeSetupInfo { get; set; }
         MpIUserDeviceInfo ThisDeviceInfo { get; set; }

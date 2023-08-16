@@ -1,9 +1,6 @@
-﻿using Avalonia;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System;
 using System.IO;
-using System.Linq;
-using System.Security.Principal;
 //using Avalonia.Win32;
 using System.Threading.Tasks;
 
@@ -27,7 +24,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Startup Set Services 
-        public MpITempFileManager TempFileManager { get; set; }
         public MpIShutdownTools ShutdownHelper { get; set; }
         public MpIContentBuilder ContentBuilder { get; set; }
 
@@ -139,7 +135,6 @@ namespace MonkeyPaste.Avalonia {
 
             await MpAvPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
-            TempFileManager = new MpAvTempFileManager();
             SslInfo = MpAvPrefViewModel.Instance;
             WelcomeSetupInfo = MpAvPrefViewModel.Instance;
             ThisDeviceInfo = MpAvPrefViewModel.Instance;

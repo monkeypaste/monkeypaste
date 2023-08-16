@@ -11,6 +11,7 @@ body {
     --editortoolbarsepbgcolor: silver;
     --editortoolbarbuttoncolor: dimgray;
     --defcontentfgcolor: black;
+    --inactiveselbgcolor: honeydew;
     --selbgcolor: lightblue;
     --selfgcolor: black;
     --inactivematchbgcolor: yellow;
@@ -22,6 +23,7 @@ body {
     --focuscolor: red;
     --selectedcolor: lime;
     --insertselectcolor: darkorange;
+    --invalidcolor: crimson;
     --editableopacity: 0.5;
     --defaultopacity: 0.0;
     --highlightopacity: 0.5;
@@ -54,6 +56,10 @@ body {
 
 .hidden {
     display: none !important;
+}
+
+.invalid, .invalid:focus, .invalid:focus-within, .in:valid:focus-visible {
+    border-color: var(--invalidcolor) !important;
 }
 
 .invisible {

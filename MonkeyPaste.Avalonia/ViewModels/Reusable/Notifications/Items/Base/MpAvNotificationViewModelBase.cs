@@ -250,8 +250,8 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool CanMoveWindow =>
-            IsModal;
-        public List<Type> RejectedMoveControlTypes { get; set; }
+            true;
+        public List<Type> RejectedMoveControlTypes { get; set; } // defaults to button,textbox in ext
 
         public bool IsDoNotShowType =>
             !ForceShow &&

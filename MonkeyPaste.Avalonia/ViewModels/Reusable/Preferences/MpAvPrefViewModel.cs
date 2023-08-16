@@ -10,10 +10,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpTrashCleanupModeType {
@@ -392,6 +390,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool IgnoreAppendedItems { get; set; } = true;
         public bool IsSpellCheckEnabled { get; set; } = true;
+        public bool IsAppendWithDestinationFormattingEnabled { get; set; } = true;
 
         public bool IgnoreInternalClipboardChanges { get; set; } = true;
         public bool IgnoreWhiteSpaceCopyItems { get; set; } = true;

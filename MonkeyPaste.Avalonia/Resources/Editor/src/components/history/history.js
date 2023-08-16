@@ -66,12 +66,13 @@ function historyRedo() {
 	}
 }
 
-function addHistoryItem(delta) {
+function addHistoryItem(delta, oldDelta) {
 	if (hasTextChangedDelta()) {
 		globals.LastTextChangedDelta = globals.LastTextChangedDelta.compose(delta);
 	} else {
 		globals.LastTextChangedDelta = delta;
 	}
+	fixTableHistory(delta, oldDelta);
 }
 function clearLastDelta() {
 	log('Delta log cleared. It was: ');

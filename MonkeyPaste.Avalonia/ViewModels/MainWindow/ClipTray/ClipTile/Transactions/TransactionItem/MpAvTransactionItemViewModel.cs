@@ -4,12 +4,10 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -53,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Sources.Count() > 0) {
                     return Sources.OrderBy(x => x.SourcedDateTimeUtc).FirstOrDefault().IconSourceObj;
                 }
-                return MpDefaultDataModelTools.ThisAppIconId;
+                return MpBase64Images.QuestionMark;
             }
         }
 

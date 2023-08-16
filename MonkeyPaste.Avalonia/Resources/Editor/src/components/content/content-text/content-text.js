@@ -828,7 +828,12 @@ function transferTextContent(dt, source_doc_range, dest_doc_range, source) {
     // PERFORM TRANSFER
 
 	let dt_html_str = getDataTransferHtml(dt).html;
-	if (isString(dt_html_str)) {
+
+	// ignore html for append when dest formating pref is enabled
+	const can_transfer_formatted_content =
+		!isAnyAppendEnabled() ||
+		!globals.IsAppendWIthDestFormattingEnabled;
+	if (isString(dt_html_str) && can_transfer_formatted_content) {
 		let dt_html_delta = convertHtmlToDelta(dt_html_str);
 		dt_html_delta = decodeHtmlEntitiesInDeltaInserts(dt_html_delta);
 		insertDelta(dest_doc_range, dt_html_delta, source);

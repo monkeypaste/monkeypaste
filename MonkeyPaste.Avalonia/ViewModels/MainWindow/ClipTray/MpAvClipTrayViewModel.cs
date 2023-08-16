@@ -4404,6 +4404,7 @@ namespace MonkeyPaste.Avalonia {
                 isAppendManualMode = IsAppendManualMode,
                 isAppendPaused = IsAppendPaused,
                 isAppendPreMode = IsAppendPreMode,
+                isAppendWIthDestFormattingEnabled = MpAvPrefViewModel.Instance.IsAppendWithDestinationFormattingEnabled,
                 appendData = data
             };
         }
@@ -4550,6 +4551,8 @@ namespace MonkeyPaste.Avalonia {
             }
             if (isManualMode) {
                 amf |= MpAppendModeFlags.Manual;
+            } else {
+                amf ^= MpAppendModeFlags.Manual;
             }
             bool was_append_already_enabled = IsAnyAppendMode;
             // NOTE update is silent here

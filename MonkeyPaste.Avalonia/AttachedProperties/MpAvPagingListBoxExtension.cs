@@ -825,7 +825,6 @@ namespace MonkeyPaste.Avalonia {
             if (sender is DispatcherTimer timer &&
                timer.Tag is ListBox lb &&
                GetScrollViewer(lb) is ScrollViewer sv) {
-                return;
                 if (sv.DataContext is MpAvViewModelBase vm &&
                     vm.IsBusy) {
                     return;

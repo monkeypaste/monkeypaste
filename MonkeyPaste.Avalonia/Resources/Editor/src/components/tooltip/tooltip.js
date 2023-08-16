@@ -168,35 +168,38 @@ function positionTooltipOverlayLocation(targetElm, tooltipElm) {
 	let target_rect = cleanRect(targetElm.getBoundingClientRect());
 	let tt_rect = cleanRect(tooltipElm.getBoundingClientRect());
 
-	// start with tooltip center in targets center
+	// start with tooltip bottom center of targets 
 	let start_loc = {
 		x: target_rect.left + (target_rect.width / 2) - (tt_rect.width / 2),
-		y: target_rect.top + (target_rect.bottom / 2) - (tt_rect.height / 2)
+		y: target_rect.bottom + 10
 	}
 
 	tt_rect = moveAbsoluteElement(tooltipElm, start_loc);
 
 
-	// top,right,bottom, left
-	const dirs = [{ x: 0, y: -1 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }];
-	for (var i = 0; i < dirs.length; i++) {
-		const dir = dirs[i];
-		let cur_loc = start_loc;
-		while (true) {
-			cur_loc = addPoints(cur_loc, dir);
-			best_rect = moveAbsoluteElement(tooltipElm, cur_loc);
-			if (!isRectOverlapOtherRect(best_rect, target_rect)) {
-				return;
-			}
-			if (!isPointInRect(editor_rect, getRectCornerByIdx(best_rect, i))) {
-				// this dir no good, rect outside editor
-				break;
-			}
-		}
-	}
+	// top,right,bottom, left,
+	//let best_rect = tt_rect;
+	//const dirs = [{ x: 0, y: -1, dir: 'top' }, { x: 1, y: 0, dir: 'right' },{ x: 0, y: 1, dir: 'bottom' }, { x: -1, y: 0, dir: 'left' }];
+	//for (var i = 0; i < dirs.length; i++) {
+	//	const dir = dirs[i];
+	//	let cur_loc = start_loc;
+	//	while (true) {
+	//		cur_loc = addPoints(cur_loc, dir);
+	//		best_rect = moveAbsoluteElement(tooltipElm, cur_loc);
+	//		if (!isRectOverlapOtherRect(best_rect, target_rect)) {
+	//			return;
+	//		}
+	//		if (!isPointInRect(editor_rect, getRectCornerByIdx(best_rect, i))) {
+	//			// this dir no good, rect outside editor
+	//			break;
+	//		}
+			
+	//	}
+	//}
+	//tt_rect = best_rect;
 	// fallback to center above
-	start_loc.y = target_rect.top - tt_rect.height;
-	moveAbsoluteElement(tooltipElm, start_loc);
+	//start_loc.y = target_rect.top - tt_rect.height;
+	//moveAbsoluteElement(tooltipElm, start_loc);
 }
 // #endregion Actions
 

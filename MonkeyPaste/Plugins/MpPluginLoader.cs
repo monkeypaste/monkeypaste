@@ -3,14 +3,12 @@ using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using static SQLite.SQLite3;
 
 namespace MonkeyPaste {
     public static class MpPluginLoader {
@@ -115,7 +113,7 @@ namespace MonkeyPaste {
             if (original_dir.IsFile()) {
                 // delete plugin folder
                 string dir_to_backup = Path.GetDirectoryName(original_dir);
-                backup_path = Path.Combine(Path.GetTempPath(), Path.GetFileName(dir_to_backup));
+                backup_path = Path.Combine(MpFileIo.GetThisAppTempDir(), Path.GetFileName(dir_to_backup));
 
                 try {
                     MpFileIo.CopyDirectory(dir_to_backup, backup_path, true, true);

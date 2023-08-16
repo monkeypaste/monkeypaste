@@ -64,19 +64,21 @@ var globals = {
 
 	// #region ANNOTATIONS
 	RootAnnotations: [],
-	SelectedAnnotationGuid:  null,
+	SelectedAnnotationGuid: null,
 	HoverAnnotationGuid: null,
 	// #endregion 
 
 	// #region APPEND
-	IsAppendInsertMode:  false,
-	IsAppendLineMode:  false,
+	IsAppendInsertMode: false,
+	IsAppendLineMode: false,
 
-	IsAppendManualMode:  false,
-	IsAppendPreMode:  false,
-	IsAppendPaused:  false,
+	IsAppendManualMode: false,
+	IsAppendPreMode: false,
+	IsAppendPaused: false,
 
-	FixedAppendIdx:  -1,
+	IsAppendWIthDestFormattingEnabled: true,
+
+	FixedAppendIdx: -1,
 	// #endregion
 
 	// #region CLIPBOARD
@@ -212,6 +214,12 @@ var globals = {
 	HTML_FRAGMENT_FORMAT:  'html format',
 	TEXT_FORMAT:  'text/plain',
 	FILE_ITEM_FRAGMENT_FORMAT:  'mp internal file list fragment format',
+
+	// #endregion
+
+	// #region FORMAT PAIN
+
+	CurPaintFormat: null,
 
 	// #endregion
 
@@ -795,8 +803,7 @@ var globals = {
 		'ToggleAppendInsertMode',
 		'ToggleAppendLineMode',
 		'ToggleAppendPreMode',
-		'ToggleAppendPaused',
-		'ToggleAppendManualMode'
+		'ToggleAppendPaused'
 	],
 
 	ShortcutKeysLookup:  {},
@@ -976,6 +983,7 @@ IsWindowResizeUpdateEnabled:  true,
 		'bold': `<svg viewBox="0 0 18 18"> <path class="ql-stroke" d="M5,4H9.5A2.5,2.5,0,0,1,12,6.5v0A2.5,2.5,0,0,1,9.5,9H5A0,0,0,0,1,5,9V4A0,0,0,0,1,5,4Z"></path> <path class="ql-stroke" d="M5,9h5.5A2.5,2.5,0,0,1,13,11.5v0A2.5,2.5,0,0,1,10.5,14H5a0,0,0,0,1,0,0V9A0,0,0,0,1,5,9Z"></path> </svg>`,
 		'italic': `<svg viewBox="0 0 18 18"> <line class="ql-stroke" x1="7" x2="13" y1="4" y2="4"></line> <line class="ql-stroke" x1="5" x2="11" y1="14" y2="14"></line> <line class="ql-stroke" x1="8" x2="10" y1="14" y2="4"></line> </svg>`,
 		'delete2': `<svg viewBox="0 0 1024 1024">	<g stroke-width="0"></g>	<g class="ql-stroke"		stroke-linecap="round"	   stroke-linejoin="round"></g>	<g>		<path  class="ql-stroke" d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8 36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z"		      fill=""></path>		<path class="ql-stroke" d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z"		      fill=""></path>		<path class="ql-stroke" d="M328 340.8l32-31.2 348 348-32 32z"		      fill=""></path>	</g></svg>`,
+		'paintbrush': `<svg viewBox="0 0 256 256">	<g class="ql-stroke"	   stroke-width="0"></g>	<g class="ql-stroke"	   stroke-linecap="round"	   stroke-linejoin="round"></g>	<g class="ql-stroke">		<path class="ql-stroke ql-fill"			  d="M230.627,25.37207a32.03909,32.03909,0,0,0-45.2539,0c-.10254.10156-.20117.207-.29785.31348L130.17383,86.85938l-9.20313-9.20313a24.00066,24.00066,0,0,0-33.9414,0L10.34277,154.34277a8.00122,8.00122,0,0,0,0,11.31446l80,80a8.00181,8.00181,0,0,0,11.31446,0l76.68652-76.68653a24.00066,24.00066,0,0,0,0-33.9414l-9.20313-9.20215L230.31445,70.9248c.10645-.09668.21192-.19531.31348-.29785A32.03761,32.03761,0,0,0,230.627,25.37207ZM96,228.68652,81.87842,214.56494l25.53467-25.53369A8.00053,8.00053,0,0,0,96.09863,177.7168L70.564,203.25049,53.87842,186.56494l25.53467-25.53369A8.00053,8.00053,0,0,0,68.09863,149.7168L42.564,175.25049,27.31348,160,72,115.31445,140.68555,184Z"></path>	</g></svg>`
 	}
 	// #endregion 
 }

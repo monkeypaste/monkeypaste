@@ -51,7 +51,6 @@
         ShowSettings,
         TogglePinned,
         OpenInWindow,
-        ToggleAppendManualMode,
         PermanentlyDelete,
         // CUT-OFF 
         MAX_APP_SHORTCUT,
