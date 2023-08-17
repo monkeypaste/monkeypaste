@@ -17,7 +17,7 @@
   
   <!-- MANUALLY SET PROPERTIES-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>BROWSER</BuildOs>
   </PropertyGroup>
 
   <!-- DEFAULT PROPERTIES-->

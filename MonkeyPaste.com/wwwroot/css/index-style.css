@@ -1,0 +1,271 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+body {
+    position: relative;
+    padding: 0 150px;
+    font-family: 'Segoe UI';
+    line-height: 145%;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;      
+    --headerbgcolor: rgb(34, 153, 40);
+    --mainbgcolor:  rgb(147, 175, 107);
+    --headercolor: white;
+    --buttonbgcolor: olive;
+    --buttoncolor: palegoldenrod;
+    --logolightcolor: #ffbd59;
+    --logodarkcolor: #7b5813;
+    --swirlshadow: saddlebrown;
+    --footercolor: var(--logolightcolor);
+    --footerbgcolor: var(--logodarkcolor);
+}
+
+/*#region THEMES */
+
+.multicolorbg {
+    background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+            linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+            linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+}
+.solidbg {
+    background-color: var(--mainbgcolor);
+}
+
+.singlegradbg {
+    background: linear-gradient(185deg, var(--headerbgcolor), var(--mainbgcolor) 15.71%);
+}
+/*#endregion*/
+
+/*#region COMMON */
+
+.common-button {
+    padding: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    vertical-align: middle;
+    border-radius: 5px;
+    color: var(--buttoncolor);
+    background-color: var(--buttonbgcolor);
+}
+
+.common-button:hover {
+    background-color: var(--buttoncolor);
+    color: var(--buttonbgcolor);
+}
+
+/*#endregion*/
+
+/*#region HEADER*/
+
+/*#region SWIRLS*/
+
+/* from https://www.shapedivider.app/ */
+
+/* flip:yes invert:no height: 160px width: 114 */
+
+.swirl1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    z-index: -1;
+}
+
+.swirl1 svg {
+    position: relative;
+    display: block;
+    width: calc(114% + 1.3px);
+    height: 160px;
+    transform: rotateY(180deg);
+    filter: drop-shadow(3px 3px 1px var(--swirlshadow));
+}
+
+.swirl1 .shape-fill {
+    fill: var(--headerbgcolor);
+}
+/*#endregion */
+
+/*#region LOGO*/
+
+.mp-logo { 
+    user-select: none;
+    display: flex;
+    margin-top: 10px;
+    vertical-align: top;
+    transform: translate(-5px, -8px);
+}
+.mp-logo .title {
+    display: block;
+    margin-top: 3px;
+    margin-left: 10px;
+    line-height: 0.8;
+    font-size: 60px;
+    font-weight: 500;
+}
+
+
+.mp-logo .span1 {
+    color: var(--logodarkcolor);
+    letter-spacing: -5;
+}
+
+.mp-logo .span2 {
+    color: var(--logolightcolor);
+    letter-spacing: -2;
+    font-weight: 770 ;
+}
+
+.monkey {
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+    filter: drop-shadow(0px 0px 6px white);
+    content: url('../images/monkey.png');
+}
+.mp-logo:hover .monkey {
+    /* animation: wink 0.5s linear forwards; */
+    content: url('../images/monkeywink.png');
+}
+
+
+/*#region WINK */
+@keyframes wink {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-15deg);
+    }
+}
+/*#endregion*/
+/*#endregion*/
+
+body > header {
+    margin-top: 50px;
+    width: 100%;
+    height: 80px;
+    transition: all .3s ease;
+    letter-spacing: 0.05em;
+}
+
+.nav-container {
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+}
+
+.nav-list {
+    justify-content: flex-end;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    font-size: 16px;
+    list-style: none;
+    column-gap: 20px;
+}
+
+.nav-list-item {
+    display: inline-block;
+}
+
+.nav-list-item .common-button {
+    color: var(--headercolor);
+    background-color: unset;
+}
+
+.nav-list-item .common-button:hover {
+    background-color: var(--headercolor);
+    color: var(--headerbgcolor);
+}
+
+/*#endregion*/
+
+/*#region MAIN*/
+
+main > hr {
+    border-width: 1px;
+    border-style: solid;
+    border-image: linear-gradient(to right, transparent, gray, transparent) 1;
+}
+
+main > section > div {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+main > section > div > header {
+    max-width: 50%;
+    margin-top: 10%;
+    margin-right: 15%;
+}
+
+main > section > div.swap > header {
+    margin-right: unset;
+    margin-left: 15%;
+}
+
+main > section > div > header > h1 {
+    font-size: 3.125rem;
+    font-weight: 700;
+    line-height: 0.8080;
+    letter-spacing: -0.8px;
+    margin-bottom: 1rem;
+}
+main > section > div > header > p {
+    font-size: 1.25rem;
+    line-height: 1.33;
+    letter-spacing: -0.3px;
+    margin-bottom: 2rem;
+    margin-right: 1rem;
+}
+
+main > section > div > img {
+    max-width: 50%;
+    height: auto;
+    max-height: 500px;
+}
+
+/*#region BILLBOARD*/
+
+div.billboard-container {
+    margin-bottom: 100px;
+}
+
+div.devices {
+    display: inline-block;
+}
+/*#endregion*/
+
+/*#region FEATURE */
+
+/*#endregion*/
+
+/*#endregion*/
+
+/*#region FOOTER*/
+
+footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    padding: 10px 5px;
+    color: var(--footercolor);
+    background: linear-gradient(180deg, dimgray, var(--footerbgcolor) 10.71%);
+}
+/*#endregion*/

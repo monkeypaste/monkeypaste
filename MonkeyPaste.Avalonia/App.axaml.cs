@@ -64,11 +64,10 @@ namespace MonkeyPaste.Avalonia {
             }
             _isShuttingDown = true;
             MpConsole.WriteLine($"App shutdown called. Args: '{args.ToStringOrEmpty("NULL")}'");
+#if DESKTOP
 
-            if (Mp.Services.PlatformInfo.IsDesktop) {
-                MpAvCefNetApplication.ShutdownCefNet();
-            }
-
+            MpAvCefNetApplication.ShutdownCefNet();
+#endif
             MpConsole.ShutdownLog();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
                 lifetime.Shutdown();

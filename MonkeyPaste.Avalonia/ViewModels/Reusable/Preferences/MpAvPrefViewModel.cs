@@ -380,7 +380,12 @@ namespace MonkeyPaste.Avalonia {
 
         private bool _isRichHtmlContentEnabled = true;
         public bool IsRichHtmlContentEnabled {
-            get => !MpAvCefNetApplication.IsCefNetLoaded ? false : _isRichHtmlContentEnabled;
+            get =>
+#if DESKTOP
+                !MpAvCefNetApplication.IsCefNetLoaded ? false : _isRichHtmlContentEnabled;
+#else
+                _isRichHtmlContentEnabled;
+#endif
             set {
                 if (_isRichHtmlContentEnabled != value) {
                     _isRichHtmlContentEnabled = value;

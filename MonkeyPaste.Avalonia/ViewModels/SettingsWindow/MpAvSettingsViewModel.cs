@@ -1078,11 +1078,15 @@ namespace MonkeyPaste.Avalonia {
                 {
                     nameof(MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled),
                     (piv) => {
+                        
+#if DESKTOP
                         if(piv.GetVisualDescendant<CheckBox>() is not CheckBox cb) {
                             return;
                         }
-                        // ensure rich content cb reflects webview availability
-                        cb.IsEnabled = MpAvCefNetApplication.IsCefNetLoaded;
+
+                		// ensure rich content cb reflects webview availability
+                        cb.IsEnabled = MpAvCefNetApplication.IsCefNetLoaded;  
+#endif
                     }
                 }
             };

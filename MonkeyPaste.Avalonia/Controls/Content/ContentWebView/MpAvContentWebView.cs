@@ -952,7 +952,7 @@ namespace MonkeyPaste.Avalonia {
 #else
         public override void OnNavigated(string url) {
             base.OnNavigated(url);
-            if (url == BLANK_URL) {
+            if (MpUrlHelpers.IsBlankUrl(url)) {
                 return;
             }
             LoadEditorAsync().FireAndForgetSafeAsync();
