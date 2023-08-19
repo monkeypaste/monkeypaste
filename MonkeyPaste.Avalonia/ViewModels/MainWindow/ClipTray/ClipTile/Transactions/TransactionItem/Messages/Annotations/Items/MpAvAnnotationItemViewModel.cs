@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
         string Guid { get; }
     }
     public class MpAvAnnotationItemViewModel :
-        MpViewModelBase<MpAvAnnotationMessageViewModel>,
+        MpAvViewModelBase<MpAvAnnotationMessageViewModel>,
         MpAvITransactionNodeViewModel,
         MpIHaveGuid,
         MpIClampedValue {

@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
         Response
     }
     public class MpAvTransactionItemViewModel :
-        MpViewModelBase<MpAvClipTileTransactionCollectionViewModel>,
+        MpAvViewModelBase<MpAvClipTileTransactionCollectionViewModel>,
         MpAvITransactionNodeViewModel {
         #region Private Variables
         private bool _isBringingIntoView = false;

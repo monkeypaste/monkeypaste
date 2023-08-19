@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Avalonia {
-    public abstract class MpAvActionOutputViewModel : MpViewModelBase<MpAvActionViewModelBase> {
+    public abstract class MpAvActionOutputViewModel : MpAvViewModelBase<MpAvActionViewModelBase> {
         #region Properties
 
         #endregion

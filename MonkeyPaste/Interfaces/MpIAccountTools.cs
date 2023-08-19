@@ -25,6 +25,7 @@ namespace MonkeyPaste {
         MpContentCapInfo LastCapInfo { get; }
         int GetContentCapacity(MpUserAccountType acctType);
         int GetTrashCapacity(MpUserAccountType acctType);
+        decimal GetAccountRate(MpUserAccountType acctType, bool isMonthly);
         MpUserAccountType CurrentAccountType { get; }
         void SetAccountType(MpUserAccountType newType);
 

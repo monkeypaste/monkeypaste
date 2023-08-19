@@ -881,6 +881,8 @@ namespace MonkeyPaste.Avalonia {
                     _hook.KeyReleased += Hook_KeyReleased;
                 }
 
+            } else if (_hook.IsRunning) {
+                return;
             }
 
             _hook.RunAsync();
@@ -1023,7 +1025,8 @@ namespace MonkeyPaste.Avalonia {
                 AvailableItems
                 .FirstOrDefault(x => x.KeyString == down_gesture);
 
-            if (MpAvPrefViewModel.Instance.IsAutoSearchEnabled) {
+            if (MpAvPrefViewModel.Instance.IsAutoSearchEnabled &&
+                Mp.Services.StartupState.IsReady) {
                 Dispatcher.UIThread.Post(() => {
                     /*
                         In global key DOWN, if auto search pref enabled and no other key 

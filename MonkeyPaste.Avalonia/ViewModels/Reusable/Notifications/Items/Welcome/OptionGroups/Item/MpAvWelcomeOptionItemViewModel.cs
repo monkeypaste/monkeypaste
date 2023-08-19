@@ -1,10 +1,11 @@
 ﻿
+using Avalonia.Controls;
 using MonkeyPaste.Common;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWelcomeOptionItemViewModel :
-        MpViewModelBase<MpAvWelcomeNotificationViewModel> {
+        MpAvViewModelBase<MpAvWelcomeNotificationViewModel> {
         public bool IsHovering { get; set; }
         public bool IsChecked { get; set; }
 
@@ -29,9 +30,33 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public ICommand ToggleOptionCommand => new MpCommand(
-            () => {
+        public ICommand ToggleOptionCommand => new MpCommand<object>(
+            (args) => {
                 IsChecked = !IsChecked;
+            },
+            (args) => {
+                if (IsChecked) {
+                    return false;
+                }
+                if (!Parent.IS_PASSIVE_GESTURE_TOGGLE_ENABLED) {
+                    return true;
+                }
+                if (Parent != null &&
+                    OptionId is int optVal &&
+                    args is Control &&
+                    (Parent.CurPageType == MpWelcomePageType.ScrollWheel ||
+                    Parent.CurPageType == MpWelcomePageType.DragToOpen)) {
+                    if (optVal == 0 && IsChecked) {
+                        return false;
+                    }
+                    if (optVal == 1 && IsChecked) {
+                        return false;
+                    }
+                    // these options are enabled passively so if cmd arg is the view
+                    // its coming from ui which should be ignored
+                    //return false;
+                }
+                return true;
             });
     }
 }

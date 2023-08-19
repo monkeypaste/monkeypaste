@@ -129,4 +129,121 @@
   <data name="Test" xml:space="preserve">
     <value>This is a test &lt;b color="green"&gt;test&lt;/b&gt; &lt;em color="red"&gt;&lt;b&gt;test&lt;/b&lt;/em&gt; &lt;a color="pink" href="https://www.google.com/"&gt;test&lt;/a&gt;</value>
   </data>
+  <data name="WelcomeAccountCaption" xml:space="preserve">
+    <value>No features are limited by subscription, only storage capacity and can be changed at anytime.</value>
+  </data>
+  <data name="WelcomeAccountDescription1" xml:space="preserve">
+    <value>Restore your existing account..</value>
+  </data>
+  <data name="WelcomeAccountDescription2" xml:space="preserve">
+    <value>Content and archive is limited to {0} and {1} clips respectively. No syncing capabilities are enabled. More info here.</value>
+  </data>
+  <data name="WelcomeAccountDescription3" xml:space="preserve">
+    <value>{0}{1}/{0}{2} (monthly/annually) {4} Content is limited to {3} clips with an unlimited archive and syncing across all devices. More info here.</value>
+  </data>
+  <data name="WelcomeAccountDescription4" xml:space="preserve">
+    <value>{0}{1}/{0}{2} (monthly/annually) {3} Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices. More info here.</value>
+  </data>
+  <data name="WelcomeAccountLabel1" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="WelcomeAccountLabel2" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="WelcomeAccountLabel3" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="WelcomeAccountLabel4" xml:space="preserve">
+    <value>Unlimited</value>
+  </data>
+  <data name="WelcomeAccountTitle" xml:space="preserve">
+    <value>Subscription</value>
+  </data>
+  <data name="WelcomeDbPasswordCaption" xml:space="preserve">
+    <value>Your privacy is important and clipboard data can be very personal. Storage is always encrypted but you can set a password that will be required in case your device is stolen or someone else is using your device.</value>
+  </data>
+  <data name="WelcomeDbPasswordTitle" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="WelcomeDragToOpenCaption" xml:space="preserve">
+    <value>When enabled, dragging from any application to the top of the screen will reveal MonkeyPaste to easily drop content into MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
+    <value>Enabling the 'lock' in the top left of the main window will still allow dropping into MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
+    <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
+  </data>
+  <data name="WelcomeDragToOpenGestureLabel" xml:space="preserve">
+    <value>Drag Here</value>
+  </data>
+  <data name="WelcomeDragToOpenLabel1" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="WelcomeDragToOpenLabel2" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="WelcomeDragToOpenTitle" xml:space="preserve">
+    <value>Drag-to-Open</value>
+  </data>
+  <data name="WelcomeGestureProfileCaption" xml:space="preserve">
+    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings-&gt;GestureProfile' menu.</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
+    <value>MonkeyPaste's clipboard shortcuts will be available in all applications.</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
+    <value>Internal</value>
+  </data>
+  <data name="WelcomeGestureProfileLabel2" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="WelcomeGestureProfileTitle" xml:space="preserve">
+    <value>Gesture Profile</value>
+  </data>
+  <data name="WelcomeGreetingCaption" xml:space="preserve">
+    <value>Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeGreetingTitle" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="WelcomeLoginLoadCaption" xml:space="preserve">
+    <value>To get the most use out of MonkeyPaste loading automatically when you log in is a good idea. But, that's entirely up to you.</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
+    <value>MonkeyPaste will only load when this user account is logged in, not for other users.</value>
+  </data>
+  <data name="WelcomeLoginLoadLabel1" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="WelcomeLoginLoadTitle" xml:space="preserve">
+    <value>Load On Login?</value>
+  </data>
+  <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
+    <value>When enabled, a scroll gesture at the top of the screen will reveal MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
+    <value>Left-clicking the taskbar icon will still open MonkeyPaste.</value>
+  </data>
+  <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
+    <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
+  </data>
+  <data name="WelcomeScrollToOpenGestureCompleteLabel" xml:space="preserve">
+    <value>Easy Right?</value>
+  </data>
+  <data name="WelcomeScrollToOpenGestureLabel" xml:space="preserve">
+    <value>Scroll Here</value>
+  </data>
+  <data name="WelcomeScrollToOpenLabel1" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="WelcomeScrollToOpenLabel2" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
+    <value>Scroll-to-Open</value>
+  </data>
 </root>

@@ -81,6 +81,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvEnumerableParameterValueViewModel :
-        MpViewModelBase<MpAvEnumerableParameterViewModelBase>,
+        MpAvViewModelBase<MpAvEnumerableParameterViewModelBase>,
         MpIPopupMenuViewModel,
         MpIContentQueryTextBoxViewModel {
         #region Private Variables

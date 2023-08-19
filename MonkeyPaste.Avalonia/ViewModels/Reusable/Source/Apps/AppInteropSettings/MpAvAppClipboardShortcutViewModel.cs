@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppClipboardShortcutViewModel :
-        MpViewModelBase<MpAvAppViewModel>,
+        MpAvViewModelBase<MpAvAppViewModel>,
         MpAvIKeyGestureViewModel {
 
         #region Interfaces

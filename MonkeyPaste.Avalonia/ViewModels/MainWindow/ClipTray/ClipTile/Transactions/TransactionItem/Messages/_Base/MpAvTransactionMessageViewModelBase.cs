@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
         Response
     }
     public abstract class MpAvTransactionMessageViewModelBase :
-        MpViewModelBase<MpAvTransactionItemViewModel>,
+        MpAvViewModelBase<MpAvTransactionItemViewModel>,
         MpAvITransactionNodeViewModel {
 
         #region Interfaces

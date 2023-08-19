@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPluginItemViewModel :
-        MpViewModelBase<MpAvPluginBrowserViewModel>,
+        MpAvViewModelBase<MpAvPluginBrowserViewModel>,
         //MpISelectableViewModel,
         MpIHoverableViewModel {
         #region Private Variables

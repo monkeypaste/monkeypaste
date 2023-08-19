@@ -95,5 +95,356 @@ namespace MonkeyPaste.Avalonia {
                 return ResourceManager.GetString("Test", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No features are limited by subscription, only storage capacity and can be changed at anytime..
+        /// </summary>
+        public static string WelcomeAccountCaption {
+            get {
+                return ResourceManager.GetString("WelcomeAccountCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore your existing account...
+        /// </summary>
+        public static string WelcomeAccountDescription1 {
+            get {
+                return ResourceManager.GetString("WelcomeAccountDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content and archive is limited to {0} and {1} clips respectively. No syncing capabilities are enabled. More info here..
+        /// </summary>
+        public static string WelcomeAccountDescription2 {
+            get {
+                return ResourceManager.GetString("WelcomeAccountDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}{1}/{0}{2} (monthly/annually) {4} Content is limited to {3} clips with an unlimited archive and syncing across all devices. More info here..
+        /// </summary>
+        public static string WelcomeAccountDescription3 {
+            get {
+                return ResourceManager.GetString("WelcomeAccountDescription3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}{1}/{0}{2} (monthly/annually) {3} Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices. More info here..
+        /// </summary>
+        public static string WelcomeAccountDescription4 {
+            get {
+                return ResourceManager.GetString("WelcomeAccountDescription4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        public static string WelcomeAccountLabel1 {
+            get {
+                return ResourceManager.GetString("WelcomeAccountLabel1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Free.
+        /// </summary>
+        public static string WelcomeAccountLabel2 {
+            get {
+                return ResourceManager.GetString("WelcomeAccountLabel2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard.
+        /// </summary>
+        public static string WelcomeAccountLabel3 {
+            get {
+                return ResourceManager.GetString("WelcomeAccountLabel3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlimited.
+        /// </summary>
+        public static string WelcomeAccountLabel4 {
+            get {
+                return ResourceManager.GetString("WelcomeAccountLabel4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subscription.
+        /// </summary>
+        public static string WelcomeAccountTitle {
+            get {
+                return ResourceManager.GetString("WelcomeAccountTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your privacy is important and clipboard data can be very personal. Storage is always encrypted but you can set a password that will be required in case your device is stolen or someone else is using your device..
+        /// </summary>
+        public static string WelcomeDbPasswordCaption {
+            get {
+                return ResourceManager.GetString("WelcomeDbPasswordCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string WelcomeDbPasswordTitle {
+            get {
+                return ResourceManager.GetString("WelcomeDbPasswordTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled, dragging from any application to the top of the screen will reveal MonkeyPaste to easily drop content into MonkeyPaste..
+        /// </summary>
+        public static string WelcomeDragToOpenCaption {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabling the &apos;lock&apos; in the top left of the main window will still allow dropping into MonkeyPaste..
+        /// </summary>
+        public static string WelcomeDragToOpenDescription1 {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More window preferences are available from the &apos;Settings-&gt;Preferences-&gt;Window&apos; menu..
+        /// </summary>
+        public static string WelcomeDragToOpenDescription2 {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drag Here.
+        /// </summary>
+        public static string WelcomeDragToOpenGestureLabel {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenGestureLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        public static string WelcomeDragToOpenLabel1 {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenLabel1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        public static string WelcomeDragToOpenLabel2 {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenLabel2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drag-to-Open.
+        /// </summary>
+        public static string WelcomeDragToOpenTitle {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keyboard shortcuts can be reviewed or changed at anytime from the &apos;Settings-&gt;GestureProfile&apos; menu..
+        /// </summary>
+        public static string WelcomeGestureProfileCaption {
+            get {
+                return ResourceManager.GetString("WelcomeGestureProfileCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal.
+        /// </summary>
+        public static string WelcomeGestureProfileDescription1 {
+            get {
+                return ResourceManager.GetString("WelcomeGestureProfileDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MonkeyPaste&apos;s clipboard shortcuts will be available in all applications..
+        /// </summary>
+        public static string WelcomeGestureProfileDescription2 {
+            get {
+                return ResourceManager.GetString("WelcomeGestureProfileDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal.
+        /// </summary>
+        public static string WelcomeGestureProfileLabel1 {
+            get {
+                return ResourceManager.GetString("WelcomeGestureProfileLabel1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global.
+        /// </summary>
+        public static string WelcomeGestureProfileLabel2 {
+            get {
+                return ResourceManager.GetString("WelcomeGestureProfileLabel2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gesture Profile.
+        /// </summary>
+        public static string WelcomeGestureProfileTitle {
+            get {
+                return ResourceManager.GetString("WelcomeGestureProfileTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hey! Let&apos;s setup a few things to improve your overall experience with MonkeyPaste..
+        /// </summary>
+        public static string WelcomeGreetingCaption {
+            get {
+                return ResourceManager.GetString("WelcomeGreetingCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome.
+        /// </summary>
+        public static string WelcomeGreetingTitle {
+            get {
+                return ResourceManager.GetString("WelcomeGreetingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To get the most use out of MonkeyPaste loading automatically when you log in is a good idea. But, that&apos;s entirely up to you..
+        /// </summary>
+        public static string WelcomeLoginLoadCaption {
+            get {
+                return ResourceManager.GetString("WelcomeLoginLoadCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MonkeyPaste will only load when this user account is logged in, not for other users..
+        /// </summary>
+        public static string WelcomeLoginLoadDescription1 {
+            get {
+                return ResourceManager.GetString("WelcomeLoginLoadDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable.
+        /// </summary>
+        public static string WelcomeLoginLoadLabel1 {
+            get {
+                return ResourceManager.GetString("WelcomeLoginLoadLabel1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load On Login?.
+        /// </summary>
+        public static string WelcomeLoginLoadTitle {
+            get {
+                return ResourceManager.GetString("WelcomeLoginLoadTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When enabled, a scroll gesture at the top of the screen will reveal MonkeyPaste..
+        /// </summary>
+        public static string WelcomeScrollToOpenCaption {
+            get {
+                return ResourceManager.GetString("WelcomeScrollToOpenCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Left-clicking the taskbar icon will still open MonkeyPaste..
+        /// </summary>
+        public static string WelcomeScrollToOpenDescription1 {
+            get {
+                return ResourceManager.GetString("WelcomeScrollToOpenDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More window preferences are available from the &apos;Settings-&gt;Preferences-&gt;Window&apos; menu..
+        /// </summary>
+        public static string WelcomeScrollToOpenDescription2 {
+            get {
+                return ResourceManager.GetString("WelcomeScrollToOpenDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Easy Right?.
+        /// </summary>
+        public static string WelcomeScrollToOpenGestureCompleteLabel {
+            get {
+                return ResourceManager.GetString("WelcomeScrollToOpenGestureCompleteLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll Here.
+        /// </summary>
+        public static string WelcomeScrollToOpenGestureLabel {
+            get {
+                return ResourceManager.GetString("WelcomeScrollToOpenGestureLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        public static string WelcomeScrollToOpenLabel1 {
+            get {
+                return ResourceManager.GetString("WelcomeScrollToOpenLabel1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        public static string WelcomeScrollToOpenLabel2 {
+            get {
+                return ResourceManager.GetString("WelcomeScrollToOpenLabel2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll-to-Open.
+        /// </summary>
+        public static string WelcomeScrollToOpenTitle {
+            get {
+                return ResourceManager.GetString("WelcomeScrollToOpenTitle", resourceCulture);
+            }
+        }
     }
 }

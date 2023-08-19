@@ -76,7 +76,7 @@
                                  Height="230"
                                  HorizontalContentAlignment="Center"
                                  VerticalContentAlignment="Center"
-                                 Command="{Binding ToggleOptionCommand}"
+                                 Click="MpAvWelcomeOptionsView_Click"
                                  IsChecked="{Binding IsChecked, Mode=OneWay}"
                                  local:MpAvIsHoveringExtension.IsEnabled="True"
                                  local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">

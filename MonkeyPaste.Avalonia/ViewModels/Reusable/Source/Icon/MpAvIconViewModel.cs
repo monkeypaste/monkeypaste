@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvIconViewModel :
-        MpViewModelBase<MpAvIconCollectionViewModel> {
+        MpAvViewModelBase<MpAvIconCollectionViewModel> {
         #region Properties
 
         #region Appearance

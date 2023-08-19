@@ -1283,16 +1283,6 @@
   
   
   <ItemGroup>
-    <Compile Update="Resources\UiStrings\ja-JP.Designer.cs">
-      <DependentUpon>ja-JP.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\UiStrings\en-US.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>en-US.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\UiStrings\UiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -1415,6 +1405,12 @@
     </Compile>
     <Compile Update="Views\Reusable\Notifications\Welcome\Pages\MpAvWelcomeOptionsView.axaml.cs">
       <DependentUpon>MpAvWelcomeOptionsView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Notifications\Welcome\PointerGesture\MpAvDragToOpenGestureView.axaml.cs">
+      <DependentUpon>MpAvDragToOpenGestureView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Notifications\Welcome\PointerGesture\MpAvScrollToOpenGestureView.axaml.cs">
+      <DependentUpon>MpAvScrollToOpenGestureView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Password\MpAvSetPasswordView.axaml.cs">
       <DependentUpon>MpAvSetPasswordView.axaml</DependentUpon>
@@ -1627,14 +1623,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\UiStrings\ja-JP.resx">
-      <LastGenOutput>ja-JP.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\UiStrings\en-US.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>en-US.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\UiStrings\UiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>

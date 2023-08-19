@@ -263,7 +263,6 @@ footer {
     left: 0;
     bottom: 0;
     right: 0;
-    width: 100%;
     padding: 10px 5px;
     color: var(--footercolor);
     background: linear-gradient(180deg, dimgray, var(--footerbgcolor) 10.71%);

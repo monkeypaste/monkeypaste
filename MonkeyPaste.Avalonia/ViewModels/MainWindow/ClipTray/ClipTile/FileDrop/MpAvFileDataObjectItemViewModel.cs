@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvFileDataObjectItemViewModel : MpViewModelBase<MpAvFileItemCollectionViewModel>,
+    public class MpAvFileDataObjectItemViewModel : MpAvViewModelBase<MpAvFileItemCollectionViewModel>,
         MpISelectableViewModel,
         MpIHoverableViewModel {
 

@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchCriteriaOptionViewModel :
-        MpViewModelBase<MpAvSearchCriteriaOptionViewModel>,
+        MpAvViewModelBase<MpAvSearchCriteriaOptionViewModel>,
         MpISliderViewModel,
         MpITreeItemViewModel,
         MpIHoverableViewModel {

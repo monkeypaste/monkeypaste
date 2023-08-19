@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPluginDependencyViewModel :
-        MpViewModelBase<MpAvPluginItemViewModel>,
+        MpAvViewModelBase<MpAvPluginItemViewModel>,
         MpILabelTextViewModel,
         MpITreeItemViewModel {
         #region Private Variables

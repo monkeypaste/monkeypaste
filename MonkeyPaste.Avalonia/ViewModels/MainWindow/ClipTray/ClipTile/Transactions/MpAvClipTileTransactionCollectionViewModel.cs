@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAvClipTileTransactionCollectionViewModel :
-        MpViewModelBase<MpAvClipTileViewModel>,
+        MpAvViewModelBase<MpAvClipTileViewModel>,
         MpIAnimatedSizeViewModel,
         MpIContextMenuViewModel {
         #region Private Variables

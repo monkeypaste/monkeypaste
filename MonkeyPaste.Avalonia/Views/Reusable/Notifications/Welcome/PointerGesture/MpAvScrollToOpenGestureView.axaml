@@ -1,0 +1,181 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvScrollToOpenGestureViewModel"
+                       x:Class="MonkeyPaste.Avalonia.MpAvScrollToOpenGestureView"
+                       mc:Ignorable="d"
+                       d:DesignWidth="400"
+                       d:DesignHeight="300">
+    <local:MpAvUserControl.Resources>
+        <SolidColorBrush x:Key="OffBrush"
+                         Color="Red"
+                         Opacity="0" />
+        <SolidColorBrush x:Key="OnBrush"
+                         Color="Red"
+                         Opacity="1" />
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Border#ContainerBorder">
+            <Style.Animations>
+                <Animation Duration="0:0:1"
+                           IterationCount="Infinite"
+                           PlaybackDirection="Alternate">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="BorderBrush"
+                                Value="{StaticResource OnBrush}" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity"
+                                Value="{StaticResource OffBrush}" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <Style Selector="Border#ScrollMarkerContainer">
+            <Style.Animations>
+                <Animation Duration="0:0:1"
+                           IterationCount="Infinite"
+                           PlaybackDirection="Alternate">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="TranslateTransform.Y"
+                                Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="TranslateTransform.Y"
+                                Value="20" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <Style Selector="Border#PlaceholderWindow">
+            <Setter Property="Canvas.Top"
+                    Value="{Binding Bounds.Bottom, ElementName=ContainerBorder}" />
+        </Style>
+
+        <Style Selector="Border#PlaceholderWindow.show">
+            <Setter Property="Height">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                  ConverterParameter="/">
+                        <Binding Path="Bounds.Height"
+                                 ElementName="ContainerBorder" />
+                        <Binding>
+                            <Binding.Source>
+                                <sys:Double>3</sys:Double>
+                            </Binding.Source>
+                        </Binding>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Style.Animations>
+                <Animation Duration="0:0:1"
+                           Easing="BounceEaseIn">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Canvas.Top"
+                                Value="{Binding Bounds.Bottom, ElementName=ContainerBorder}" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Canvas.Top">
+                            <Setter.Value>
+                                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                              ConverterParameter="-">
+                                    <Binding Path="Bounds.Height"
+                                             ElementName="ContainerBorder" />
+                                    <Binding Path="Bounds.Height" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Border x:Name="ContainerBorder"
+            BorderThickness="0,5,0,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+        <Canvas>
+            <!--  SCROLL MARKER  -->
+            <Border x:Name="ScrollMarkerContainer"
+                    Canvas.Top="0">
+                <Border.RenderTransform>
+                    <TranslateTransform />
+                </Border.RenderTransform>
+                <Canvas.Left>
+                    <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
+                                  ConverterParameter="/">
+                        <Binding Path="Bounds.Width"
+                                 ElementName="ContainerBorder" />
+                        <Binding>
+                            <Binding.Source>
+                                <sys:Double>2</sys:Double>
+                            </Binding.Source>
+                        </Binding>
+                    </MultiBinding>
+                </Canvas.Left>
+                <StackPanel Orientation="Vertical"
+                            ClipToBounds="False"
+                            RenderTransform="translateY(-20px)">
+
+                    <!--  MARKER ARROW  -->
+
+                    <Image Source="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}"
+                           Width="100"
+                           Height="100" />
+
+                    <!--  MARKER LABEL  -->
+
+                    <TextBlock Width="100"
+                               HorizontalAlignment="Center"
+                               ClipToBounds="False"
+                               TextAlignment="Center"
+                               FontSize="24"
+                               Foreground="White"
+                               FontStyle="Oblique"
+                               RenderTransform="translateX(-10px) translateY(-20px)"
+                               Text="{x:Static local:UiStrings.WelcomeScrollToOpenGestureLabel}" />
+                </StackPanel>
+            </Border>
+
+            <!--  PLACEHOLDER WINDOW  -->
+
+            <Border x:Name="PlaceholderWindow"
+                    Width="{Binding $parent.Bounds.Width}"
+                    IsVisible="{Binding IsPlaceholderMainWindowVisible}"
+                    Classes.show="{Binding DoShow}"
+                    Canvas.Left="0"
+                    Background="{DynamicResource ClipTrayBgColor}">
+
+                <!--  PLACEHOLDER INFO  -->
+
+                <Grid ColumnDefinitions="Auto,*,Auto"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center">
+
+
+                    <Image Grid.Column="0"
+                           Width="50"
+                           Height="50"
+                           Source="{Binding Source={StaticResource BananaImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    <TextBlock Grid.Column="1"
+                               FontSize="42"
+                               Foreground="White"
+                               FontWeight="SemiBold"
+                               FontStyle="Oblique"
+                               TextAlignment="Center"
+                               Text="{x:Static local:UiStrings.WelcomeScrollToOpenGestureCompleteLabel}" />
+
+                    <Image Grid.Column="2"
+                           Width="50"
+                           Height="50"
+                           Source="{Binding Source={StaticResource BananaImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                </Grid>
+            </Border>
+        </Canvas>
+    </Border>
+</local:MpAvUserControl>

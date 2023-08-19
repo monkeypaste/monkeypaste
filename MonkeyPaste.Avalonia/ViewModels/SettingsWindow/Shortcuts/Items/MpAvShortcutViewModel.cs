@@ -16,7 +16,7 @@ using Key = Avalonia.Input.Key;
 
 namespace MonkeyPaste.Avalonia {
 
-    public class MpAvShortcutViewModel : MpViewModelBase<MpAvShortcutCollectionViewModel>,
+    public class MpAvShortcutViewModel : MpAvViewModelBase<MpAvShortcutCollectionViewModel>,
         MpIActionComponent,
         MpIFilterMatch,
         MpIShortcutCommandViewModel,

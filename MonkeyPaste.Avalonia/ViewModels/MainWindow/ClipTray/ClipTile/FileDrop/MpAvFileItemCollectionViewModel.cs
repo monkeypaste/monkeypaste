@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvFileItemCollectionViewModel : MpViewModelBase<MpAvClipTileViewModel> {
+    public class MpAvFileItemCollectionViewModel : MpAvViewModelBase<MpAvClipTileViewModel> {
         #region Statics
 
         public static async Task<string> CreateFileListEditorFragment(MpCopyItem ci) {

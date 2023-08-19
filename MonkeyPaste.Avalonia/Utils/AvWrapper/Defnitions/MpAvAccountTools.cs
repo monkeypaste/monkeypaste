@@ -1,8 +1,5 @@
-﻿
-using MonkeyPaste.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.AccessControl;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -82,6 +79,24 @@ namespace MonkeyPaste.Avalonia {
                 default:
                 case MpUserAccountType.None:
                     return 0;
+            }
+        }
+
+        public decimal GetAccountRate(MpUserAccountType acctType, bool isMonthly) {
+            // TODO This probably needs to be async and query server
+            // TODO2 rates will need to be converted to appropriate currency
+
+            switch (acctType) {
+                case MpUserAccountType.Trial:
+                case MpUserAccountType.Free:
+                case MpUserAccountType.Admin:
+                case MpUserAccountType.None:
+                default:
+                    return 0;
+                case MpUserAccountType.Standard:
+                    return isMonthly ? 0.99m : 9.99m;
+                case MpUserAccountType.Unlimited:
+                    return isMonthly ? 2.99m : 29.99m;
             }
         }
 

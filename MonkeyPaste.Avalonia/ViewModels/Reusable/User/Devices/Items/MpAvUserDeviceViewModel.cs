@@ -3,7 +3,7 @@
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvUserDeviceViewModel : MpViewModelBase<MpAvUserDeviceCollectionViewModel> {
+    public class MpAvUserDeviceViewModel : MpAvViewModelBase<MpAvUserDeviceCollectionViewModel> {
         #region Private Variable
         #endregion
 

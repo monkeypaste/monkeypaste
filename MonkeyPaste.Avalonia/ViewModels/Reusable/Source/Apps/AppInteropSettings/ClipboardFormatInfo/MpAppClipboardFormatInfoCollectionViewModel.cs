@@ -8,7 +8,7 @@ using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAppClipboardFormatInfoCollectionViewModel :
-        MpViewModelBase<MpAvAppViewModel> {
+        MpAvViewModelBase<MpAvAppViewModel> {
         #region Private Variables
 
         //private static readonly MpClipboardFormatType[] _DefaultFormats = new MpClipboardFormatType[] {

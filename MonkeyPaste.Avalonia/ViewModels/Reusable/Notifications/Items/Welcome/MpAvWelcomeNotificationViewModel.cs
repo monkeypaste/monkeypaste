@@ -1,13 +1,9 @@
-﻿using Avalonia.Controls;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -17,6 +13,7 @@ namespace MonkeyPaste.Avalonia {
         LoginLoad,
         GestureProfile,
         ScrollWheel,
+        DragToOpen,
         DbPassword
     }
     public class MpAvWelcomeNotificationViewModel :
@@ -26,6 +23,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
         private const string PRE_ESTABLISHED_USER_DB_PWD_TEXT = "<^&user has already set a password^&>";
+
+        public bool IS_PASSIVE_GESTURE_TOGGLE_ENABLED = true;
         #endregion
 
         #region Statics
@@ -53,7 +52,10 @@ namespace MonkeyPaste.Avalonia {
         public MpAvWelcomeOptionGroupViewModel LoginLoadViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel GestureProfilesViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel ScrollWheelBehaviorViewModel { get; set; }
+        public MpAvWelcomeOptionGroupViewModel DragToOpenBehaviorViewModel { get; set; }
         public MpAvWelcomeOptionGroupViewModel DbPasswordViewModel { get; set; }
+
+        public MpAvPointerGestureWindowViewModel CurPointerGestureWindowViewModel { get; set; }
 
         private MpAvWelcomeOptionGroupViewModel[] _items;
         public MpAvWelcomeOptionGroupViewModel[] Items {
@@ -65,6 +67,7 @@ namespace MonkeyPaste.Avalonia {
                         LoginLoadViewModel,
                         GestureProfilesViewModel,
                         ScrollWheelBehaviorViewModel,
+                        DragToOpenBehaviorViewModel,
                         DbPasswordViewModel
                     }.OrderBy(x => (int)x.WelcomePageType).ToArray();
                 }
@@ -153,6 +156,49 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(CurPageIdx):
                     OnPropertyChanged(nameof(CurOptGroupViewModel));
                     break;
+                case nameof(CurPageType):
+                    if (!IS_PASSIVE_GESTURE_TOGGLE_ENABLED) {
+                        break;
+                    }
+                    if (CurPageType != MpWelcomePageType.ScrollWheel &&
+                        CurPageType != MpWelcomePageType.DragToOpen &&
+                        CurPointerGestureWindowViewModel != null) {
+                        CurPointerGestureWindowViewModel.IsWindowOpen = false;
+                        CurPointerGestureWindowViewModel = null;
+                    }
+                    switch (CurPageType) {
+                        case MpWelcomePageType.Account:
+                            var test = Mp.Services.AccountTools;
+                            var sel_acct_vm = AccountViewModel.Items.FirstOrDefault(x => x.IsChecked);
+                            if (sel_acct_vm.OptionId == null) {
+                                // TODO show login/restore thing here
+
+                                return;
+                            }
+                            // TODO when not free, trigger platform subscription stuff here
+                            break;
+                        case MpWelcomePageType.ScrollWheel:
+                        case MpWelcomePageType.DragToOpen:
+                            if (CurPointerGestureWindowViewModel != null) {
+                                CurPointerGestureWindowViewModel.IsWindowOpen = false;
+                            }
+
+                            CurPointerGestureWindowViewModel =
+                                CurPageType == MpWelcomePageType.ScrollWheel ?
+                                    new MpAvScrollToOpenGestureViewModel(CurOptGroupViewModel.Items[1]) :
+                                    new MpAvDragToOpenGestureViewModel(CurOptGroupViewModel.Items[1]);
+
+                            if (!CurOptGroupViewModel.WasVisited) {
+                                // for first visit set to disabled
+                                CurOptGroupViewModel.Items[0].IsChecked = true;
+                                CurOptGroupViewModel.Items[1].IsChecked = false;
+                            }
+                            CurPointerGestureWindowViewModel.ShowGestureWindowCommand.Execute(null);
+                            break;
+                    }
+
+                    CurOptGroupViewModel.WasVisited = true;
+                    break;
             }
         }
 
@@ -160,97 +206,131 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void InitWelcomeItems() {
-            GreetingViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.Greeting) {
-                Title = "Welcome",
+            GreetingViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.Greeting) {
                 SplashIconSourceObj = "AppImage",
-                Caption = "Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.",
+                Title = UiStrings.WelcomeGreetingTitle,
+                Caption = UiStrings.WelcomeGreetingCaption,
             };
-            int free_ccap = Mp.Services.AccountTools.GetContentCapacity(MpUserAccountType.Free);
-            int free_tcap = Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Free);
-            int standard_ccap = Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Standard);
-            // TODO add pricing & capacity values as item description
-            AccountViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.Account) {
-                Title = "Subscription",
-                Caption = "No features are limited by subscription, only storage capacity and can be changed at anytime. ",
+
+            AccountViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.Account) {
+                Title = UiStrings.WelcomeAccountTitle,
+                Caption = UiStrings.WelcomeAccountCaption,
                 Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,null) {
                         IconSourceObj = "LoginImage",
-                        LabelText = "Restore",
-                        DescriptionText = "Restore your existing account.."
+                        LabelText = UiStrings.WelcomeAccountLabel1,
+                        DescriptionText = UiStrings.WelcomeAccountDescription1
                     },
                     new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Free) {
                         IconSourceObj = "StarOutlineImage",
-                        LabelText = "Free",
-                        DescriptionText = $"Content and archive is limited to {free_ccap} and {free_tcap} clips respectively. No syncing capabilities are enabled. More info here."
+                        LabelText = UiStrings.WelcomeAccountLabel2,
+                        DescriptionText =
+                            string.Format(
+                                UiStrings.WelcomeAccountDescription2,
+                                Mp.Services.AccountTools.GetContentCapacity(MpUserAccountType.Free),
+                                Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Free))
                     },
                     new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Standard) {
                         IconSourceObj = "StarYellowImage",
-                        LabelText = "Standard",
-                        DescriptionText = $"$0.99/$9.99 (monthly/annually) {Environment.NewLine} Content is limited to {standard_ccap} clips with an unlimited archive and syncing across all devices. More info here."
+                        LabelText = UiStrings.WelcomeAccountLabel3,
+                        DescriptionText =
+                            string.Format(
+                                UiStrings.WelcomeAccountDescription3,
+                                new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID).CurrencySymbol,
+                                Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Standard,true),
+                                Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Standard,false),
+                                Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Standard),
+                                Environment.NewLine)
                     },
                     new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Unlimited) {
                         IsChecked = true,
                         IconSourceObj = "TrophyImage",
-                        LabelText = "Unlimited",
-                        DescriptionText = $"$2.99/$29.99 (monthly/annually) {Environment.NewLine} Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices. More info here."
+                        LabelText = UiStrings.WelcomeAccountLabel4,
+                        DescriptionText =
+                            string.Format(
+                                UiStrings.WelcomeAccountDescription4,
+                                new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID).CurrencySymbol,
+                                Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Unlimited,true),
+                                Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Unlimited,false),
+                                Environment.NewLine)
                     },
                 }
             };
 
-            LoginLoadViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.LoginLoad) {
-                Title = "Load On Login?",
-                Caption = "To get the most use out of MonkeyPaste loading automatically when you log in is a good idea. But, that's entirely up to you.",
+            LoginLoadViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.LoginLoad) {
+                Title = UiStrings.WelcomeLoginLoadTitle,
+                Caption = UiStrings.WelcomeLoginLoadCaption,
                 Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,null) {
                         IsChecked = true,
                         IconSourceObj = "UserImage",
-                        LabelText = "Enable",
-                        DescriptionText = "MonkeyPaste will only load when this user account is logged in."
+                        LabelText = UiStrings.WelcomeLoginLoadLabel1,
+                        DescriptionText = UiStrings.WelcomeLoginLoadDescription1
                     }
                 }
             };
 
-            GestureProfilesViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.GestureProfile) {
-                Title = "GestureProfile",
-                Caption = "Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings->GestureProfile' menu.",
+            GestureProfilesViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.GestureProfile) {
+                Title = UiStrings.WelcomeGestureProfileTitle,
+                Caption = UiStrings.WelcomeGestureProfileCaption,
                 Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,0) {
                         IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Internal,
                         IconSourceObj = "PrivateImage",
-                        LabelText = MpShortcutRoutingProfileType.Internal.ToString(),
-                        DescriptionText = "No global shortcuts will be enabled by default."
+                        LabelText = UiStrings.WelcomeGestureProfileLabel1,
+                        DescriptionText = UiStrings.WelcomeGestureProfileDescription1
                     },
                     new MpAvWelcomeOptionItemViewModel(this,1) {
                         IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType != MpShortcutRoutingProfileType.Internal,
                         IconSourceObj = "GlobeImage",
-                        LabelText = MpShortcutRoutingProfileType.Global.ToString(),
-                        DescriptionText = "MonkeyPaste's clipboard shortcuts will be available in all applications."
+                        LabelText = UiStrings.WelcomeGestureProfileLabel2,
+                        DescriptionText = UiStrings.WelcomeGestureProfileDescription2
                     },
                 }
             };
-            ScrollWheelBehaviorViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.ScrollWheel) {
-                Title = "Scroll-to-Open",
-                Caption = "When enabled, a scroll gesture at the top of the screen will reveal MonkeyPaste.",
+
+            ScrollWheelBehaviorViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.ScrollWheel) {
+                Title = UiStrings.WelcomeScrollToOpenTitle,
+                Caption = UiStrings.WelcomeScrollToOpenCaption,
                 Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,0) {
                         IsChecked = !MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
                         IconSourceObj = "CloseWindowImage",
-                        LabelText = "Disabled",
-                        DescriptionText = "Left-clicking the taskbar icon will still open MonkeyPaste."
+                        LabelText = UiStrings.WelcomeScrollToOpenLabel1,
+                        DescriptionText = UiStrings.WelcomeScrollToOpenDescription1
                     },
                     new MpAvWelcomeOptionItemViewModel(this,1) {
                         IsChecked = MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
                         IconSourceObj = "AppFrameImage",
-                        LabelText = "Enabled",
-                        DescriptionText = "More window preferences are available from the 'Settings->Preferences->Window' menu."
+                        LabelText = UiStrings.WelcomeScrollToOpenLabel2,
+                        DescriptionText = UiStrings.WelcomeScrollToOpenDescription2
                     }
                 }
             };
 
-            DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel(MpWelcomePageType.DbPassword) {
-                Title = "Password",
+            DragToOpenBehaviorViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.DragToOpen) {
+                Title = UiStrings.WelcomeDragToOpenTitle,
+                Caption = UiStrings.WelcomeDragToOpenCaption,
+                Items = new[] {
+                    new MpAvWelcomeOptionItemViewModel(this,0) {
+                        IsChecked = !MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
+                        IconSourceObj = "CloseWindowImage",
+                        LabelText = UiStrings.WelcomeDragToOpenLabel1,
+                        DescriptionText = UiStrings.WelcomeDragToOpenDescription1
+                    },
+                    new MpAvWelcomeOptionItemViewModel(this,1) {
+                        IsChecked = MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
+                        IconSourceObj = "AppFrameImage",
+                        LabelText = UiStrings.WelcomeDragToOpenLabel2,
+                        DescriptionText = UiStrings.WelcomeDragToOpenDescription2
+                    }
+                }
+            };
+
+            DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.DbPassword) {
                 SplashIconSourceObj = "LockImage",
-                Caption = "Your privacy is important and clipboard data can be very personal. Storage is always encrypted but you can set a password that will be required in case your device is stolen or someone else is using your device.",
+                Title = UiStrings.WelcomeDbPasswordTitle,
+                Caption = UiStrings.WelcomeDbPasswordCaption,
             };
         }
         private async Task BeginWelcomeSetupAsync() {
@@ -269,6 +349,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void FinishWelcomeSetup() {
             IsWelcomeDone = true;
+            if (CurPointerGestureWindowViewModel != null) {
+                CurPointerGestureWindowViewModel.DetachGestureHandlers();
+            }
+
             // ACCOUNT TYPE
 
             MpUserAccountType acct_type = MpUserAccountType.Free;
@@ -281,10 +365,10 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.AccountTools.SetAccountType(acct_type);
 
             // LOGIN LOAD
-            //bool loadOnLogin =
-            //    LoginLoadViewModel.Items.FirstOrDefault().IsChecked;
-            //Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
-            //MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
+            bool loadOnLogin =
+                LoginLoadViewModel.Items.FirstOrDefault().IsChecked;
+            Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
+            MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
 
             // SHORTCUT PROFILE
             MpAvPrefViewModel.Instance.DefaultRoutingProfileType =
@@ -292,9 +376,24 @@ namespace MonkeyPaste.Avalonia {
                     MpShortcutRoutingProfileType.Global :
                     MpShortcutRoutingProfileType.Internal;
 
-            // SCROLL-TO-SHOW
-            MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta =
+            // SCROLL-TO-OPEN
+            if (ScrollWheelBehaviorViewModel.WasVisited) {
+                MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta =
                 ScrollWheelBehaviorViewModel.Items.Any(x => x.IsChecked && (int)x.OptionId == 1);
+            } else {
+                // when skipped, default to true
+                MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta = true;
+            }
+
+
+            // DRAG-TO-SHOW
+            if (DragToOpenBehaviorViewModel.WasVisited) {
+                MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop =
+                    DragToOpenBehaviorViewModel.Items.Any(x => x.IsChecked && (int)x.OptionId == 1);
+            } else {
+                // when skipped default to true
+                MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop = true;
+            }
 
             // DB PASSWORD
             if (!IsDbPasswordIgnored) {
@@ -304,19 +403,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand SelectNextPageCommand => new MpAsyncCommand(
-            async () => {
-                await Task.Delay(1);
-                if (CurPageType == MpWelcomePageType.Account) {
-                    var test = Mp.Services.AccountTools;
-                    var sel_acct_vm = AccountViewModel.Items.FirstOrDefault(x => x.IsChecked);
-                    if (sel_acct_vm.OptionId == null) {
-                        // TODO show login/restore thing here
-
-                        return;
-                    }
-                    // TODO when not free, trigger platform subscription stuff here
-                }
+        public ICommand SelectNextPageCommand => new MpCommand(
+            () => {
                 CurPageType = (MpWelcomePageType)((int)CurPageType + 1);
             },
             () => {

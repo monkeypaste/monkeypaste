@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchFilterCollectionViewModel :
-        MpViewModelBase<MpAvSearchBoxViewModel>,
+        MpAvViewModelBase<MpAvSearchBoxViewModel>,
         MpIPopupMenuViewModel {
         #region Private Variables
 

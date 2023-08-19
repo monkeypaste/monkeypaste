@@ -2,7 +2,7 @@
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSearchFilterViewModel : MpViewModelBase<MpAvSearchFilterCollectionViewModel> {
+    public class MpAvSearchFilterViewModel : MpAvViewModelBase<MpAvSearchFilterCollectionViewModel> {
         #region Private Variables
 
         private MpContentQueryBitFlags _filterType = MpContentQueryBitFlags.None;

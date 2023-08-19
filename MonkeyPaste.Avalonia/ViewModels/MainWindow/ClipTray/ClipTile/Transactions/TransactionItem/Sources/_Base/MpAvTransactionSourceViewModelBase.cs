@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTransactionSourceViewModel :
-        MpViewModelBase<MpAvTransactionItemViewModel>,
+        MpAvViewModelBase<MpAvTransactionItemViewModel>,
         MpAvITransactionNodeViewModel {
 
         #region Interfaces

@@ -3,8 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Input;
-using Avalonia.Input.GestureRecognizers;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -12,14 +10,10 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -48,6 +42,22 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvMainWindowViewModel _instance;
 
         public static MpAvMainWindowViewModel Instance => _instance ?? (_instance = new MpAvMainWindowViewModel());
+
+        public static bool CanDragOpen() {
+            var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            return
+                MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation != null &&
+                gmp.Distance(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation) >=
+                    MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST &&
+                gmp.Y <= SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT;
+        }
+
+        public static bool CanScrollOpen() {
+            return
+                MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
+                MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y <=
+                    SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT;
+        }
         #endregion
 
         #region Interfaces
@@ -786,11 +796,15 @@ namespace MonkeyPaste.Avalonia {
             // app started from login, initial show is transparent/nohtt
             // shows splash loader and loaded msg by default but user can hide
             if (IsMainWindowInitiallyOpening) {
+#if WINDOWS
                 MpAvToolWindow_Win32.SetAsNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
+#endif
                 MpAvWindowManager.MainWindow.Opacity = 0;
                 IsMainWindowInHiddenLoadState = true;
             } else if (IsMainWindowInHiddenLoadState) {
+#if WINDOWS
                 MpAvToolWindow_Win32.RemoveNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
+#endif
                 MpAvWindowManager.MainWindow.Opacity = 1;
                 IsMainWindowInHiddenLoadState = false;
             }
@@ -959,8 +973,7 @@ namespace MonkeyPaste.Avalonia {
                      Mp.Services.StartupState.IsCoreLoaded;
 
                 if (!IsMainWindowOpening && is_core_loaded) {
-                    if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
-                             MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y <= SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT) {
+                    if (CanScrollOpen()) {
                         // show mw on top edge scroll flick
                         ShowMainWindowCommand.Execute(null);
                     }
@@ -1011,9 +1024,8 @@ namespace MonkeyPaste.Avalonia {
 
                 if (!isShowingMainWindow &&
                     MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop) {
-                    if (MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation != null &&
-                        gmp.Distance(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation) >= MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST &&
-                        gmp.Y <= SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT) {
+
+                    if (CanDragOpen()) {
                         // show mw during dnd and user drags to top of screen (when pref set)
                         ShowMainWindowCommand.Execute(null);
                     }

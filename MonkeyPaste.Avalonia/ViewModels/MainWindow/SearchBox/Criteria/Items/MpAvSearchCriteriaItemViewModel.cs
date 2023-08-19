@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchCriteriaItemViewModel :
-        MpViewModelBase<MpAvSearchCriteriaItemCollectionViewModel>,
+        MpAvViewModelBase<MpAvSearchCriteriaItemCollectionViewModel>,
         MpIQueryInfo {
         #region Private Variables       
 

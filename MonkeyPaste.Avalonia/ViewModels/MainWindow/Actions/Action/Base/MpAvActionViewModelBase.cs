@@ -17,7 +17,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
 
     public abstract class MpAvActionViewModelBase :
-        MpViewModelBase<MpAvTriggerCollectionViewModel>,
+        MpAvViewModelBase<MpAvTriggerCollectionViewModel>,
         MpIActionPluginComponent,
         MpITreeItemViewModel,
         MpIDraggable,

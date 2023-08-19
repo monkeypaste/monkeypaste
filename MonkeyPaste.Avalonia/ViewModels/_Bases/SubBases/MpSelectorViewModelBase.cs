@@ -6,7 +6,7 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
 
     public abstract class MpSelectorViewModelBase<P, C> :
-        MpViewModelBase<P>,
+        MpAvViewModelBase<P>,
         MpISelectorViewModel
         where P : class
         where C : class, MpISelectableViewModel {

@@ -17,7 +17,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvAppCollectionViewModel :
-        MpViewModelBase<MpAvAppViewModel> {
+        MpAvViewModelBase<MpAvAppViewModel> {
         #region Private Variables
         #endregion
 

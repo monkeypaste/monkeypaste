@@ -11,7 +11,8 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvMultiDoubleMathConverter Instance = new();
 
         public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture) {
-            if (values != null) {
+            if (values != null &&
+                values.All(x => !x.IsUnsetValue())) {
                 string[] ops;
                 if (parameter is string paramStr) {
                     ops = paramStr.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);

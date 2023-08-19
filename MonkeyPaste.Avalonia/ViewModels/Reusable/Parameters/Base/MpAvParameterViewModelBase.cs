@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvParameterViewModelBase :
-        MpViewModelBase<MpAvViewModelBase>,
+        MpAvViewModelBase<MpAvViewModelBase>,
         MpITreeItemViewModel,
         MpIFilterMatch,
         MpIAsyncCollectionObject,

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAppClipboardFormatInfoViewModel :
-        MpViewModelBase<MpAppClipboardFormatInfoCollectionViewModel>,
+        MpAvViewModelBase<MpAppClipboardFormatInfoCollectionViewModel>,
         MpISelectableViewModel {
 
         #region Properties

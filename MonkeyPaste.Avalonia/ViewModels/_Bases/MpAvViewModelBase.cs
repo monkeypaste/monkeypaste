@@ -1,12 +1,8 @@
 ﻿using MonkeyPaste.Common;
 using Newtonsoft.Json;
-using ReactiveUI;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Reactive.Disposables;
 using System.Runtime.CompilerServices;
 
 namespace MonkeyPaste.Avalonia {
@@ -225,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
     }
 
-    public abstract class MpViewModelBase<P> : MpAvViewModelBase where P : class {
+    public abstract class MpAvViewModelBase<P> : MpAvViewModelBase where P : class {
         #region Private Variables
         #endregion
 
@@ -253,7 +249,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        protected MpViewModelBase(P parent) : base(parent) {
+        protected MpAvViewModelBase(P parent) : base(parent) {
             Parent = parent;
         }
 

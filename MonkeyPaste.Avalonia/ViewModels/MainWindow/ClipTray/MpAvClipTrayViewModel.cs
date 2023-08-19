@@ -18,7 +18,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvClipTrayViewModel :
-        MpViewModelBase<MpAvClipTileViewModel>,
+        MpAvViewModelBase<MpAvClipTileViewModel>,
         MpIContentBuilder,
         MpIAsyncCollectionObject,
         MpIPagingScrollViewerViewModel,

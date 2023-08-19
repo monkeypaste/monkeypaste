@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppViewModel :
-        MpViewModelBase<MpAvAppCollectionViewModel>,
+        MpAvViewModelBase<MpAvAppCollectionViewModel>,
         MpIHoverableViewModel,
         MpIFilterMatch,
         MpIIsValueEqual<MpAvAppViewModel>
