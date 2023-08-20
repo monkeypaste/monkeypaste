@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
         private const string PRE_ESTABLISHED_USER_DB_PWD_TEXT = "<^&user has already set a password^&>";
 
-        public bool IS_PASSIVE_GESTURE_TOGGLE_ENABLED = true;
+        public bool IS_PASSIVE_GESTURE_TOGGLE_ENABLED = false;
         #endregion
 
         #region Statics

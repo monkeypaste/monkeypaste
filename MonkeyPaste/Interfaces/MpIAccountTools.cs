@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpContentCapInfo {
-        public const string NEXT_TRASH_IMG_RESOURCE_KEY = "GhostImage";
-        public const string NEXT_REMOVE_IMG_RESOURCE_KEY = "SkullImage";
+        public const string NEXT_TRASH_IMG_RESOURCE_KEY = "RecycleBinImage";
+        public const string NEXT_REMOVE_IMG_RESOURCE_KEY = "TrashCanImage";
         public const string ADD_BLOCKED_RESOURCE_KEY = "LockImage";
 
         public int ToBeTrashed_ciid { get; set; }

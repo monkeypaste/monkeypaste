@@ -261,7 +261,7 @@
                            VerticalAlignment="Center"
                            Width="50"
                            Height="50"
-                           Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
+                           Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}">
                         <Image.RenderTransform>
                             <RotateTransform />
                         </Image.RenderTransform>

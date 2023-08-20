@@ -85,6 +85,16 @@ namespace MonkeyPaste {
 
             await InitTablesAsync();
 
+            //await MpTestDataBuilder.CreateImportsTestContentAsync(
+            //    db_path: Mp.Services.DbInfo.DbPath,
+            //    content_count: 10,
+            //    link_count: 5);
+            //content_count: 1_000_000,
+            //link_count: 150,
+            //parent_tag_count: 3,
+            //child_tag_count: 3,
+            //sub_child_tag_count: 2);
+
             if (IsInitialDbCreate) {
                 await MpDefaultDataModelTools.CreateAsync(Mp.Services.ThisDeviceInfo.ThisDeviceGuid);
                 await CreateViewsAsync();
@@ -750,7 +760,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             await InitDefaultShortcutsAsync(Mp.Services.WelcomeSetupInfo.DefaultRoutingProfileType);
 #if DEBUG
             if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
-                await CreateTestContentAsync();
+                await MpTestDataBuilder.CreateTestContentAsync();
             }
 #endif
             MpConsole.WriteLine(@"Created all default tables");
@@ -940,74 +950,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
             await InitDefaultShortcutsAsync(routingProfile);
         }
-        public static async Task CreateTestContentAsync(int content_count = 0, int link_count = 0) {
-            if (content_count == 0) {
-                return;
-            }
-            // create test link tags
 
-            var test_tag_1 = await MpTag.CreateAsync(
-                tagName: "TEST_1",
-                treeSortIdx: 1,
-                parentTagId: MpTag.CollectionsTagId,
-                tagType: MpTagType.Link);
-
-            var test_tag_2 = await MpTag.CreateAsync(
-                tagName: "TEST_1_1",
-                treeSortIdx: 0,
-                parentTagId: test_tag_1.Id,
-                tagType: MpTagType.Link);
-
-            var test_tag_3 = await MpTag.CreateAsync(
-                tagName: "TEST_1_2",
-                treeSortIdx: 0,
-                parentTagId: test_tag_1.Id,
-                tagType: MpTagType.Link);
-
-            var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
-            string this_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(this_app);
-
-
-            int[] test_tag_ids = new int[] { test_tag_1.Id, test_tag_2.Id, test_tag_3.Id };
-            int[] link_idxs = MpRandom.GetUniqueRandomInts(0, content_count - 1, link_count);
-
-            async Task CreateTestItemAsync(int i) {
-                //string data = $"<p>This is test {i + 1}.</p><p>{System.Guid.NewGuid()}</p>";
-                string data = $"<p><span style=\"color:#ffffff\">This&nbsp;is&nbsp;test&nbsp;{i + 1}.</span><br/><span style=\"color:#ffffff\">{System.Guid.NewGuid()}</span></p>";
-
-                var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, data);
-                var dobj = await MpDataObject.CreateAsync(pdo: mpdo);
-                var ci = await MpCopyItem.CreateAsync(
-                    data: data,
-                    itemType: MpCopyItemType.Text,
-                    title: $"Test {i + 1}",
-                    dataObjectId: dobj.Id);
-
-                await Mp.Services.TransactionBuilder.ReportTransactionAsync(
-                    copyItemId: ci.Id,
-                    reqType: MpJsonMessageFormatType.DataObject,
-                    respType: MpJsonMessageFormatType.Delta,
-                    transType: MpTransactionType.Created,
-                    ref_uris: new[] { this_app_url });
-
-                if (link_idxs.Contains(i)) {
-                    await MpCopyItemTag.CreateAsync(
-                        tagId: test_tag_ids[MpRandom.Rand.Next(test_tag_ids.Length)],
-                        copyItemId: ci.Id);
-                }
-                if (i % 100 == 0) {
-                    MpConsole.WriteLine($"{content_count - i} Test Items Remaining");
-                }
-            }
-            var sw = Stopwatch.StartNew();
-            for (int i = 0; i < content_count; i++) {
-                await CreateTestItemAsync(i);
-            }
-            //var tasks = Enumerable.Range(0, content_count).Select(x => CreateTestItemAsync(x));
-            //await Task.WhenAll(tasks);
-            sw.Stop();
-            MpConsole.WriteLine($"Total ms: {sw.ElapsedMilliseconds} Time per item: {sw.ElapsedMilliseconds / content_count}");
-        }
         private static async Task InitDefaultShortcutsAsync(MpShortcutRoutingProfileType routingProfile) {
             MpRoutingType mw_routing = routingProfile.GetProfileBasedRoutingType(MpShortcutType.ToggleMainWindow);
             MpRoutingType globalRouting = routingProfile.GetProfileBasedRoutingType(MpShortcutType.ToggleListenToClipboard);

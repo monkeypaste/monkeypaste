@@ -2,7 +2,6 @@
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace MonkeyPaste {
     public enum MpContentSortType {
@@ -262,7 +261,7 @@ namespace MonkeyPaste {
                 case MpContentQueryBitFlags.Url:
                     return "UrlPath";
                 case MpContentQueryBitFlags.Annotations:
-                    return "ItemMetaData";
+                    return nameof(MpCopyItem.ItemMetaData);
                 case MpContentQueryBitFlags.Created:
                 case MpContentQueryBitFlags.Dropped:
                 case MpContentQueryBitFlags.Dragged:

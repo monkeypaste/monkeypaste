@@ -2,6 +2,9 @@ using Avalonia;
 using CefNet;
 using MonkeyPaste.Common;
 using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 #if CEF_WV
 
 #elif PLAT_WV
@@ -16,6 +19,14 @@ namespace MonkeyPaste.Avalonia {
 
         [STAThread]
         public static void Main(string[] args) {
+            if (args.Contains("--wait-for-attach")) {
+                Console.WriteLine("Attach debugger and use 'Set next statement'");
+                while (true) {
+                    Thread.Sleep(100);
+                    if (Debugger.IsAttached)
+                        break;
+                }
+            }
             try {
                 //if (MpFileIo.IsFileInUse(MpConsole.LogFilePath) && !MpConsole.HasInitialized) {
                 //    return;

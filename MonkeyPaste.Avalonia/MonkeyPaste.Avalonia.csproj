@@ -391,6 +391,7 @@
     <None Remove="Assets\Images\question.png" />
     <None Remove="Assets\Images\questionmark.png" />
     <None Remove="Assets\Images\quilldelta.png" />
+    <None Remove="Assets\Images\recyclebin.png" />
     <None Remove="Assets\Images\Remove.png" />
     <None Remove="Assets\Images\rename.png" />
     <None Remove="Assets\Images\replace.png" />
@@ -604,6 +605,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\private.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\recyclebin.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\resize_backup2\doubleSidedArrow.png">
