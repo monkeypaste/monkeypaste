@@ -1,7 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using System.Management;
@@ -164,18 +162,22 @@ namespace MonkeyPaste.Avalonia {
             }
             return base.GetProcess(handleIdOrTitle);
         }
+        private Func<IntPtr, string>[] _getProcessMeths;
         protected override string GetProcessPath(IntPtr hWnd) {
             if (hWnd == IntPtr.Zero) {
                 return string.Empty;
             }
-            var getMeths = new Func<IntPtr, string>[] {
-                GetProcessPath1,
-                GetProcessPath2,
-                GetProcessPath3,
-                GetProcessPath4,
-            };
+            if (_getProcessMeths == null) {
+                _getProcessMeths = new Func<IntPtr, string>[] {
+                    GetProcessPath3,
+                    GetProcessPath4,
+                    GetProcessPath1,
+                    GetProcessPath2,
+                };
+            }
 
-            foreach (var (getMeth, meth_idx) in getMeths.WithIndex()) {
+
+            foreach (var (getMeth, meth_idx) in _getProcessMeths.WithIndex()) {
                 try {
                     string process_path = getMeth(hWnd);
                     if (process_path.IsFile()) {
@@ -188,7 +190,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"GetProcessPath error on method #{getMeths.IndexOf(getMeth)}.", ex);
+                    MpConsole.WriteTraceLine($"GetProcessPath error on method #{_getProcessMeths.IndexOf(getMeth)}.", ex);
                 }
             }
 

@@ -56,7 +56,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	if (isTableInDocument()) {
 		// delta-to-html doesn't convert tables
 		// better table throws exception setting html so don't test table
-		output_html = getHtml2();
+		output_html = getHtmlWithTables();
 	} else {
 		output_html = getHtml();
 	}

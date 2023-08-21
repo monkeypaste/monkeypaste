@@ -154,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
                 if (temp is IDataObject temp_ido) {
 
                     temp_ido.CopyTo(tido);
-                    if (tido.TryGetData(MpPortableDataFormats.AvFileNames, out IEnumerable<string> fnl)) {
+                    if (tido.TryGetData(MpPortableDataFormats.AvFiles, out IEnumerable<string> fnl)) {
                         MpConsole.WriteLine($"dnd obj updated. target fns:");
                         fnl.ForEach(x => MpConsole.WriteLine(x));
                     }

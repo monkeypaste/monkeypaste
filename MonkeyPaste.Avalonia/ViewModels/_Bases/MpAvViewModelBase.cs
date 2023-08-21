@@ -122,7 +122,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-        protected void NotifyModelChanged(object model, string changedPropName, object newVal) {
+        protected virtual void NotifyModelChanged(object model, string changedPropName, object newVal) {
             object oldVal = model.GetPropertyValue(changedPropName);
             if (oldVal == newVal) {
                 // probably an error, property didn't change

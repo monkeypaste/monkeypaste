@@ -189,7 +189,7 @@ function drawTextSelection(ctx) {
         globals.CurSelRange &&
         globals.ContentItemType != 'Image') {
         // draw inactive selection
-        let sel_rects = getRangeRects(globals.CurSelRange);
+        let sel_rects = getRangeRects(globals.CurSelRange,true,true,false);
         for (var i = 0; i < sel_rects.length; i++) {
             let cur_sel_rect = sel_rects[i];
             cur_sel_rect.fill = getTextSelectionInactiveBgColor(); 

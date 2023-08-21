@@ -50,7 +50,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 // will cause error for sometypes
                 return;
             }
-            if (format == MpPortableDataFormats.AvFileNames) {
+            if (format == MpPortableDataFormats.AvFiles) {
                 if (data is string portablePathStr) {
                     // convert portable single line-separated string to enumerable of strings for avalonia
                     data = portablePathStr.SplitNoEmpty(Environment.NewLine);
@@ -113,20 +113,20 @@ namespace MonkeyPaste.Common.Avalonia {
             if (OperatingSystem.IsLinux()) {
                 // TODO this should only be for gnome based linux
 
-                if (ContainsData(MpPortableDataFormats.AvFileNames) &&
+                if (ContainsData(MpPortableDataFormats.AvFiles) &&
                     !ContainsData(MpPortableDataFormats.LinuxGnomeFiles) &&
-                    GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<string> files &&
+                    GetData(MpPortableDataFormats.AvFiles) is IEnumerable<string> files &&
                     string.Join(Environment.NewLine, files) is string av_files_str) {
                     // ensure cef style text is in formats
                     SetData(MpPortableDataFormats.LinuxGnomeFiles, av_files_str);
                 }
                 if (ContainsData(MpPortableDataFormats.LinuxGnomeFiles) &&
-                    !ContainsData(MpPortableDataFormats.AvFileNames) &&
+                    !ContainsData(MpPortableDataFormats.AvFiles) &&
                     GetData(MpPortableDataFormats.LinuxGnomeFiles) is string gn_files_str &&
                     gn_files_str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries) is IEnumerable<string> gn_files
                     ) {
                     // ensure avalonia style text is in formats
-                    SetData(MpPortableDataFormats.AvFileNames, gn_files);
+                    SetData(MpPortableDataFormats.AvFiles, gn_files);
                 }
             } else if (OperatingSystem.IsWindows()) {
                 //if (ContainsData(MpPortableDataFormats.AvPNG) &&
@@ -153,7 +153,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 //}
             }
 
-            if (TryGetData(MpPortableDataFormats.AvFileNames, out object fn_obj)) {
+            if (TryGetData(MpPortableDataFormats.AvFiles, out object fn_obj)) {
                 IEnumerable<string> fpl = null;
                 if (fn_obj is IEnumerable<string>) {
                     fpl = fn_obj as IEnumerable<string>;
@@ -165,7 +165,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (fpl != null) {
 
                     var av_fpl = await fpl.ToAvFilesObjectAsync();
-                    SetData(MpPortableDataFormats.AvFileNames, av_fpl);
+                    SetData(MpPortableDataFormats.AvFiles, av_fpl);
                 }
             }
             // TODO should add unicode, oem, etc. here for greater compatibility

@@ -1,7 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -278,6 +277,11 @@ namespace MonkeyPaste {
             return result.ToList();
         }
 
+        public static async Task<List<MpCopyItem>> GetCopyItemByCheckSumAsync(string checkSum) {
+            string query = "select * from MpCopyItem where ContentCheckSum=?";
+            var result = await MpDb.QueryAsync<MpCopyItem>(query, checkSum);
+            return result;
+        }
         public static async Task<MpCopyItem> GetCopyItemByDataAsync(string text) {
             string query = "select * from MpCopyItem where ItemData=?";
             var result = await MpDb.QueryAsync<MpCopyItem>(query, text);

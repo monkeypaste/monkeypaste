@@ -42,7 +42,7 @@ function getTextContentData() {
 	let qhtml = '';
 	if (isContentATable()) {
 		// NOTE delta-to-html will loose tables. This probably means this will loose templates
-		qhtml = getHtml2();
+		qhtml = getHtmlWithTables();
 	} else {
 		qhtml = getHtml();
 	}
@@ -775,7 +775,7 @@ function convertTextContentToFormats(selectionOnly, formats) {
 		if (isHtmlFormat(lwc_format)) {
 			if (isContentATable()) {
 				// make sure to get whole table when no sub-selection
-				data = selectionOnly && (isAllSelected() || isNoneSelected()) ? globals.quill.root.innerHTML : getHtml2(sel);
+				data = selectionOnly && (isAllSelected() || isNoneSelected()) ? globals.quill.root.innerHTML : getHtmlWithTables(sel);
 			} else {
 				data = getHtml(sel);
 				if (lwc_format == 'html format') {

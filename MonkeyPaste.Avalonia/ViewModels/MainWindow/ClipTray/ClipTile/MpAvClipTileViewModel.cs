@@ -314,8 +314,8 @@ namespace MonkeyPaste.Avalonia {
                 switch ((MpCopyItemDetailType)SelectedDetailIdx) {
                     //created
                     case MpCopyItemDetailType.DateTimeCreated:
-                        DetailTooltipText = MpAvDateTimeToStringConverter.Instance.Convert(CopyItemCreatedDateTime, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null) as string;
-                        detailText = "Copied " + CopyItemCreatedDateTime.ToReadableTimeSpan();
+                        DetailTooltipText = MpAvDateTimeToStringConverter.Instance.Convert(CopyDateTime, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null) as string;
+                        detailText = "Copied " + CopyDateTime.ToReadableTimeSpan();
                         break;
                     case MpCopyItemDetailType.DataSize:
                         switch (CopyItemType) {
@@ -473,6 +473,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        bool IsContentChangeModelChange { get; set; }
         public bool CanDrop {
             get {
                 if (MpAvDoDragDropWrapper.DragDataObject == null) {
@@ -564,6 +565,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsOverDetailGrid { get; set; }
         public bool IsHovering { get; set; }
+        public bool IsContentHovering { get; set; }
 
         public bool IsPlaceholderForThisPinnedItemHovering =>
             PlaceholderForThisPinnedItem != null &&
@@ -892,12 +894,19 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public DateTime CopyItemCreatedDateTime {
+        public DateTime CopyDateTime {
             get {
                 if (CopyItem == null) {
                     return DateTime.MinValue;
                 }
                 return CopyItem.CopyDateTime;
+            }
+            set {
+                if (CopyDateTime != value) {
+                    CopyItem.CopyDateTime = value;
+                    HasModelChanged = true;
+                    OnPropertyChanged(nameof(CopyDateTime));
+                }
             }
         }
 
@@ -1367,7 +1376,7 @@ namespace MonkeyPaste.Avalonia {
         public string[] GetOleFormats(bool isDnd) {
             List<string> req_formats = new() {
                 MpPortableDataFormats.Text,
-                MpPortableDataFormats.AvFileNames,
+                MpPortableDataFormats.AvFiles,
                 MpPortableDataFormats.AvHtml_bytes,
                 MpPortableDataFormats.CefHtml,
             };
@@ -1499,6 +1508,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
+        protected override void NotifyModelChanged(object model, string changedPropName, object newVal) {
+            if (changedPropName == nameof(CopyItem.ItemData)) {
+                // NOTE this is always unset with HasModelChanged and used to reduce processing (maybe unnecessary but just seems safer)
+                IsContentChangeModelChange = true;
+            }
+            base.NotifyModelChanged(model, changedPropName, newVal);
+        }
         #region DB Overrides
         #endregion
 
@@ -1714,11 +1730,12 @@ namespace MonkeyPaste.Avalonia {
                         //    return;
                         //}
                         Task.Run(async () => {
-                            await CopyItem.WriteToDatabaseAsync();
+                            await CopyItem.WriteToDatabaseAsync(IsContentChangeModelChange);
                             Dispatcher.UIThread.Post(() => {
                                 // BUG i think this is a preview5 bug
                                 // something w/ WeakEvent has no obj ref
                                 // so set this back on ui thread
+                                IsContentChangeModelChange = false;
                                 HasModelChanged = false;
 
                             });

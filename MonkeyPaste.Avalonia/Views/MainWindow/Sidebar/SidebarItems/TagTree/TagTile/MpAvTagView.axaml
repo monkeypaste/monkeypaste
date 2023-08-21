@@ -62,9 +62,28 @@
         </Style>
 
         <!--  COUNT BORDER  -->
+
         <Style Selector="Border#TagNameBorder.isselected Border#TagCountContainer">
             <Setter Property="BoxShadow"
                     Value="1 1 3 black" />
+        </Style>
+
+        <!--  COUNT TOOLTIP  -->
+
+        <Style Selector="Border#TagCountContainer">
+            <Setter Property="ToolTip.Tip"
+                    Value="{x:Null}" />
+        </Style>
+
+        <Style Selector="Border#TagNameBorder.bigVal.linkTag:not(.drag) Border#TagCountContainer, Border#TagNameBorder.activeTag.bigVal.queryTag:not(.drag) Border#TagCountContainer"
+               x:DataType="local:MpAvTagTileViewModel">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{Binding TagClipCount, StringFormat='{}{0:#,0} items'}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!--  PSEUDO TAG COUNT PLACEHOLDER IMAGE  -->
@@ -116,6 +135,7 @@
 
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TagViewContainerGrid"
+          Classes.bigVal=""
           local:MpAvIsHoveringExtension.IsEnabled="True"
           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
           local:MpAvPointerCommandExtension.IsEnabled="True"
@@ -145,6 +165,9 @@
                 Classes.dragover_invalid="{Binding !IsContentDragOverTagValid}"
                 Classes.contextfocus="{Binding IsContextMenuOpen}"
                 Classes.activeTag="{Binding IsActiveTag}"
+                Classes.bigVal="{Binding TagClipCount, ConverterParameter=gt|4, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}"
+                Classes.linkTag="{Binding IsLinkTag}"
+                Classes.queryTag="{Binding IsQueryTag}"
                 BorderThickness="1.5">
 
             <Border.Transitions>
@@ -156,14 +179,14 @@
 
             <Grid VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <!--  Tag Count Box  -->
                 <Border x:Name="TagCountContainer"
                         CornerRadius="5"
                         Grid.Column="0"
-                        MinWidth="{Binding $self.Bounds.Height}"
+                        MinWidth="35"
                         MinHeight="20"
                         Margin="1"
                         Padding="4,1"
@@ -174,9 +197,11 @@
                         <TextBlock x:Name="TagCountTextBlock"
                                    Background="Transparent"
                                    VerticalAlignment="Stretch"
-                                   HorizontalAlignment="Center"
+                                   HorizontalAlignment="Stretch"
                                    TextAlignment="Center"
-                                   Text="{Binding TagClipCount, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
+                                   FontWeight="SemiBold"
+                                   Padding="3,0"
+                                   Text="{Binding TagClipCount, ConverterParameter=abbr, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
                                    Foreground="{Binding $parent[Border].BorderBrush}">
                             <TextBlock.IsVisible>
                                 <MultiBinding Converter="{x:Static BoolConverters.And}">

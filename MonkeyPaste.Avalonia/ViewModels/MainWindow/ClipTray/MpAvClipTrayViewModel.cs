@@ -485,6 +485,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 // TODO? giving item scroll priority maybe better by checking if content exceeds visible boundaries here
                 if ((HoverItem.IsAnyScrollbarVisible && HoverItem.IsSubSelectionEnabled) ||
+                    (HoverItem.IsAnyScrollbarVisible && HoverItem.IsContentHovering) ||
                     HoverItem.TransactionCollectionViewModel.IsTransactionPaneOpen) {
                     // when tray is not scrolling (is still) and mouse is over sub-selectable item keep tray scroll frozen
                     return false;
@@ -2902,6 +2903,7 @@ namespace MonkeyPaste.Avalonia {
             if (ci.WasDupOnCreate) {
                 //item is a duplicate
                 MpConsole.WriteLine("Duplicate item detected, incrementing copy count and updating copydatetime");
+
                 ci.CopyCount++;
                 // reseting CopyDateTime will move item to top of recent list
                 ci.CopyDateTime = DateTime.Now;
@@ -2926,7 +2928,13 @@ namespace MonkeyPaste.Avalonia {
                 if (!wasAppended && PendingNewModels.All(x => x.Id != ci.Id)) {
                     PendingNewModels.Add(ci);
                 }
-            } else if (PendingNewModels.All(x => x.Id != ci.Id)) {
+            } else if (PendingNewModels.FirstOrDefault(x => x.Id == ci.Id) is
+                        MpCopyItem existing_pending_ci) {
+                // when thi item is already pending remove old pending
+                // since this has most accurate info
+                PendingNewModels.Remove(existing_pending_ci);
+                PendingNewModels.Add(ci);
+            } else {
                 PendingNewModels.Add(ci);
             }
 

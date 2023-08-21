@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
-using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -10,12 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using System.Windows.Input;
-using FocusManager = Avalonia.Input.FocusManager;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchBoxViewModel : MpAvViewModelBase,
@@ -106,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
+        public bool IsAutoCompleteOpen { get; set; }
         public bool IsSearching { get; set; }
 
         public bool HasText => SearchText.Length > 0;
@@ -238,6 +234,9 @@ namespace MonkeyPaste.Avalonia {
                     if (IsExpanded && MpAvMainWindowViewModel.Instance.IsVerticalOrientation &&
                            MpAvClipTileSortDirectionViewModel.Instance.IsExpanded) {
                         MpAvClipTileSortDirectionViewModel.Instance.IsExpanded = false;
+                    }
+                    if (!IsExpanded) {
+                        IsAutoCompleteOpen = false;
                     }
                     var expanded_changed_sw = Stopwatch.StartNew();
 

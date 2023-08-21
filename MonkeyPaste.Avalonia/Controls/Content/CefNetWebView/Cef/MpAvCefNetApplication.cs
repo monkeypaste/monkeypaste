@@ -167,7 +167,7 @@ namespace MonkeyPaste.Avalonia {
 
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
-            settings.LogSeverity = CefLogSeverity.Verbose;
+            settings.LogSeverity = CefLogSeverity.Error;
 
             App.FrameworkShutdown += App_FrameworkShutdown;
 
@@ -225,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
 
             commandLine.AppendSwitch("no-proxy-server");
             commandLine.AppendSwitch("disable-component-update");
-            //commandLine.AppendSwitch("process-per-site");
+            commandLine.AppendSwitch("process-per-site");
 
             // NOTE this seemed to fix network crash restart exception
             //commandLine.AppendSwitchWithValue("password-store", "basic");

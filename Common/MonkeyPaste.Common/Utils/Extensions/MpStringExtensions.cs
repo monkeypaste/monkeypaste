@@ -4,25 +4,28 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
 using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Common {
     public static class MpStringExtensions {
         #region Private Variables
 
         private static List<string> _resourceNames;
+        private static (string, int)[] _abbreviatedIntLookup = new (string, int)[] {
+            ("B",1_000_000_000),
+            ("M",1_000_000),
+            ("K",1000),
+        };
 
         #endregion
 
@@ -81,6 +84,29 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Converters
+
+        public static string ToCommaSeperatedIntString(this int value) {
+            return $"{value:n}";
+        }
+        public static string ToCommaSeperatedDoubleString(this double value) {
+            return $"{value:n}";
+        }
+        public static string ToAbbreviatedIntString(this int value, int maxDigits = 4) {
+            string valStr = value.ToString();
+            if (valStr.Length <= maxDigits) {
+                return valStr;
+            }
+            for (int i = 0; i < _abbreviatedIntLookup.Length; i++) {
+                var ail_tup = _abbreviatedIntLookup[i];
+                int abbr_value = value / ail_tup.Item2;
+                if (Math.Abs(abbr_value) < 1) {
+                    continue;
+                }
+                return $"{abbr_value}{ail_tup.Item1}";
+            }
+            MpDebug.Break($"Value {value} is larger than max abbrv lookup (billion)");
+            return "...";
+        }
 
         public static string ToStringOrDefault(this object obj) {
             return obj == null ? default : obj.ToString();
@@ -430,13 +456,13 @@ namespace MonkeyPaste.Common {
         }
 
 
-        public static string CheckSum(this string str) {
-            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
-                string hash = BitConverter.ToString(
-                    md5.ComputeHash(
-                        Encoding.UTF8.GetBytes(str))).Replace("-", String.Empty);
-                return hash;
-            }
+        public static string CheckSum(this string str, Encoding enc = default) {
+            using MD5 md5 = MD5.Create();
+            string hash =
+                BitConverter.ToString(
+                    md5.ComputeHash(str.ToStringOrEmpty().ToBytesFromString(enc)))
+                .Replace("-", string.Empty);
+            return hash;
         }
         public static string ToBase64String(this byte[] bytes) {
             if (bytes == null) {

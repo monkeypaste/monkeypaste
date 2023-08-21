@@ -10,6 +10,7 @@ namespace MonkeyPaste {
     public class MpCopyItem :
         MpDbModelBase,
         MpISyncableDbObject,
+        MpIIsValueEqual<MpCopyItem>,
         MpISourceRef,
         MpILabelText {
         #region Constants
@@ -24,6 +25,24 @@ namespace MonkeyPaste {
                 return Environment.NewLine;
             }
         }
+
+        public static string GetContentCheckSum(string content) {
+            return content.CheckSum();
+        }
+        #endregion
+
+        #region Interfaces
+
+        #region MpIIsFuzzyValueEqual Implementation
+
+        public bool IsValueEqual(MpCopyItem other) {
+            if (other == null) {
+                return false;
+            }
+            return ContentCheckSum == other.ContentCheckSum;
+        }
+
+        #endregion
 
         #endregion
 
@@ -46,7 +65,6 @@ namespace MonkeyPaste {
 
         public DateTime LastCapRelatedDateTime { get; set; }
 
-        [Indexed]
         public string ItemData { get; set; } = string.Empty;
 
         [Column("fk_MpIconId")]
@@ -69,6 +87,9 @@ namespace MonkeyPaste {
         // Files: 1/2 = bytes/count
         public int ItemSize1 { get; set; }
         public int ItemSize2 { get; set; }
+
+        [Indexed]
+        public string ContentCheckSum { get; set; }
         #endregion
 
         #region Properties
@@ -150,7 +171,7 @@ namespace MonkeyPaste {
                 IconId = iconId
             };
             if (!suppressWrite) {
-                await newCopyItem.WriteToDatabaseAsync();
+                await newCopyItem.WriteToDatabaseAsync(true);
                 if (newCopyItem.Id == 0) {
                     // didn't write, must be empty data
                     return null;
@@ -158,110 +179,22 @@ namespace MonkeyPaste {
             }
             return newCopyItem;
         }
-
-        #endregion
-
-        [Ignore]
-        public int ManualSortIdx { get; set; }
-
         [Ignore]
         public bool IgnoreDb { get; set; } = false;
 
+        #endregion
+
+        #region Constructors
         public MpCopyItem() : base() { }
+        #endregion
 
-        public override string ToString() {
-            return $"{Title} Id:{Id}";
+        #region Public Methods
+
+        public async Task WriteToDatabaseAsync(bool isContentChangeWrite) {
+            await WriteToDb_internal(isContentChangeWrite);
         }
-
-        public async Task UpdateDataObject() {
-            switch (ItemType) {
-                case MpCopyItemType.Image:
-                    // TODO could use computer vision analytics here to get content/meta information
-
-                    return;
-                case MpCopyItemType.FileList:
-                    // account for file item remove, dnd drop and append into file item
-                    // Current Files is ItemData split by new line
-                    var fpl = ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter);
-
-                    // get current file list entries
-                    var doi_fpl = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.AvFileNames);
-                    var to_remove = doi_fpl.Where(x => !fpl.Contains(x.ItemData));
-                    var to_add = fpl.Where(x => doi_fpl.All(y => y.ItemData != x));
-
-                    if (to_remove.Any()) {
-                        await Task.WhenAll(to_remove.Select(x => x.DeleteFromDatabaseAsync()));
-                        to_remove.ForEach(x => MpConsole.WriteLine($"FileItem '{x.ItemData}' REMOVED from Copy Item '{Title}'"));
-                    }
-                    if (to_add.Any()) {
-                        // added file entries w/o icons
-                        var added_doil = await Task.WhenAll<MpDataObjectItem>(
-                            to_add.Select(x =>
-                                MpDataObjectItem.CreateAsync(
-                                    dataObjectId: DataObjectId,
-                                    itemFormat: MpPortableDataFormats.AvFileNames,
-                                    itemData: x)));
-
-                        foreach (var added_doi in added_doil) {
-                            if (added_doi.ItemData.IsFileOrDirectory()) {
-                                // use file system icon if available
-                                string fp_icon_base64_str = Mp.Services.IconBuilder.GetPathIconBase64(added_doi.ItemData);
-                                var fp_icon = await Mp.Services.IconBuilder.CreateAsync(fp_icon_base64_str);
-                                added_doi.ItemDataIconId = fp_icon.Id;
-                            } else {
-                                var doi_matches = await MpDataModelProvider.GetDataObjectItemsForFormatByDataAsync(MpPortableDataFormats.AvFileNames, added_doi.ItemData);
-                                if (doi_matches.Any()) {
-                                    // if item was imported use icon from imported doi
-                                    added_doi.ItemDataIconId = doi_matches.FirstOrDefault().ItemDataIconId;
-                                } else {
-                                    // missing file
-                                    var fp_icon = await Mp.Services.IconBuilder.CreateAsync(MpBase64Images.MissingFile);
-                                    added_doi.ItemDataIconId = fp_icon.Id;
-                                }
-                            }
-                            MpDebug.Assert(added_doi.ItemDataIconId != 0, "FileItem Icon create error");
-                        }
-                        // update added items w/ there icons
-                        await Task.WhenAll(added_doil.Select(x => x.WriteToDatabaseAsync()));
-
-                        to_add.ForEach(x => MpConsole.WriteLine($"FileItem '{x}' ADDED to Copy Item '{Title}'"));
-                    }
-                    return;
-                case MpCopyItemType.Text:
-                    string searchable_text = ItemData.ToPlainText("html");
-                    var doil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.Text);
-                    if (doil.Count == 0) {
-                        doil.Add(new MpDataObjectItem() {
-                            DataObjectId = DataObjectId,
-                            ItemFormat = MpPortableDataFormats.Text
-                        });
-                    }
-                    if (doil.Count > 1) {
-                        // (currently) there should only be 1 entry
-                        MpDebug.Break();
-                    }
-                    doil[0].ItemData = searchable_text;
-                    await doil[0].WriteToDatabaseAsync();
-                    return;
-            }
-        }
-
         public override async Task WriteToDatabaseAsync() {
-            if (IgnoreDb) {
-                MpConsole.WriteLine($"Db write for '{ToString()}' was ignored");
-                return;
-            }
-
-            if (ItemData.IsNullOrWhitespaceHtmlString()) {
-                // what IS this nasty shit??
-                MpDebug.Break($"Empty html write detected for item {this}", !MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED);
-                return;
-            }
-            MpDebug.Assert(IconId != MpDefaultDataModelTools.ThisAppIconId, $"This should be unknown icon id");
-            await base.WriteToDatabaseAsync();
-
-
-            _ = Task.Run(UpdateDataObject);
+            await WriteToDb_internal(false);
         }
 
         public override async Task DeleteFromDatabaseAsync() {
@@ -436,8 +369,142 @@ namespace MonkeyPaste {
             return newCopyItem;
         }
 
+
+        #endregion
+        public override string ToString() {
+            return $"{Title} Id:{Id}";
+        }
         #endregion
 
+        #region Protected Methods
+        #endregion
+
+        #region Private Methods
+
+        private async Task WriteToDb_internal(bool isContentChangeWrite) {
+            if (IgnoreDb) {
+                MpConsole.WriteLine($"Db write for '{ToString()}' was ignored");
+                return;
+            }
+
+            if (ItemData.IsNullOrWhitespaceHtmlString()) {
+                // what IS this nasty shit??
+                MpDebug.Break($"Empty html write detected for item {this}", !MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED);
+                return;
+            }
+            MpDebug.Assert(IconId != MpDefaultDataModelTools.ThisAppIconId, $"This should be unknown icon id");
+            await base.WriteToDatabaseAsync();
+
+
+            _ = Task.Run(() => UpdateDataObjectAsync(isContentChangeWrite));
+        }
+        private async Task UpdateDataObjectAsync(bool isContentChangeWrite) {
+            switch (ItemType) {
+                case MpCopyItemType.Image:
+                    // TODO could use computer vision analytics here to get content/meta information
+                    if (isContentChangeWrite) {
+                        UpdateContentCheckSum(ItemData);
+                    }
+                    return;
+                case MpCopyItemType.FileList:
+                    if (isContentChangeWrite) {
+                        UpdateContentCheckSum(ItemData);
+                    }
+                    // update file plain text (fire and foreget, not needed later)
+                    var fl_texts = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.Text);
+                    MpDebug.Assert(fl_texts.Count <= 1, $"There should only be 1 text entry for file dataObj, there is {fl_texts.Count}");
+
+                    MpDataObjectItem doi_fl_text = fl_texts.FirstOrDefault();
+                    if (doi_fl_text == null) {
+                        doi_fl_text = new MpDataObjectItem() {
+                            DataObjectId = DataObjectId,
+                            ItemFormat = MpPortableDataFormats.Text
+                        };
+                    }
+                    doi_fl_text.ItemData = ItemData;
+                    doi_fl_text.WriteToDatabaseAsync().FireAndForgetSafeAsync();
+
+                    // account for file item remove, dnd drop and append into file item
+                    // Current Files is ItemData split by new line
+
+                    var fpl = ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter);
+
+                    // get current file list entries
+                    var doi_fpl = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.AvFiles);
+                    var to_remove = doi_fpl.Where(x => !fpl.Contains(x.ItemData));
+                    var to_add = fpl.Where(x => doi_fpl.All(y => y.ItemData != x));
+
+                    if (to_remove.Any()) {
+                        await Task.WhenAll(to_remove.Select(x => x.DeleteFromDatabaseAsync()));
+                        to_remove.ForEach(x => MpConsole.WriteLine($"FileItem '{x.ItemData}' REMOVED from Copy Item '{Title}'"));
+                    }
+                    if (to_add.Any()) {
+                        // added file entries w/o icons
+                        var added_doil = await Task.WhenAll<MpDataObjectItem>(
+                            to_add.Select(x =>
+                                MpDataObjectItem.CreateAsync(
+                                    dataObjectId: DataObjectId,
+                                    itemFormat: MpPortableDataFormats.AvFiles,
+                                    itemData: x)));
+
+                        foreach (var added_doi in added_doil) {
+                            if (added_doi.ItemData.IsFileOrDirectory()) {
+                                // use file system icon if available
+                                string fp_icon_base64_str = Mp.Services.IconBuilder.GetPathIconBase64(added_doi.ItemData);
+                                var fp_icon = await Mp.Services.IconBuilder.CreateAsync(fp_icon_base64_str);
+                                added_doi.ItemDataIconId = fp_icon.Id;
+                            } else {
+                                var doi_matches = await MpDataModelProvider.GetDataObjectItemsForFormatByDataAsync(MpPortableDataFormats.AvFiles, added_doi.ItemData);
+                                if (doi_matches.Any()) {
+                                    // if item was imported use icon from imported doi
+                                    added_doi.ItemDataIconId = doi_matches.FirstOrDefault().ItemDataIconId;
+                                } else {
+                                    // missing file
+                                    var fp_icon = await Mp.Services.IconBuilder.CreateAsync(MpBase64Images.MissingFile);
+                                    added_doi.ItemDataIconId = fp_icon.Id;
+                                }
+                            }
+                            MpDebug.Assert(added_doi.ItemDataIconId != 0, "FileItem Icon create error");
+                        }
+                        // update added items w/ there icons
+                        await Task.WhenAll(added_doil.Select(x => x.WriteToDatabaseAsync()));
+
+                        to_add.ForEach(x => MpConsole.WriteLine($"FileItem '{x}' ADDED to Copy Item '{Title}'"));
+                    }
+                    return;
+                case MpCopyItemType.Text:
+                    string searchable_text = ItemData.ToPlainText("html");
+                    var doil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.Text);
+                    if (doil.Count == 0) {
+                        doil.Add(new MpDataObjectItem() {
+                            DataObjectId = DataObjectId,
+                            ItemFormat = MpPortableDataFormats.Text
+                        });
+                    }
+                    MpDebug.Assert(doil.Count == 1, $"There should only be 1 text entry for dataobj but there are {doil.Count}");
+                    if (isContentChangeWrite) {
+                        UpdateContentCheckSum(searchable_text);
+                    }
+                    doil[0].ItemData = searchable_text;
+                    await doil[0].WriteToDatabaseAsync();
+                    return;
+            }
+        }
+
+        private void UpdateContentCheckSum(string checkSumSource) {
+            _ = Task.Run(async () => {
+                // NOTE this is always handled in bg, its not used in view
+                string newCheckSum = GetContentCheckSum(checkSumSource);
+                if (ContentCheckSum == newCheckSum) {
+                    // no change ignore
+                    return;
+                }
+                MpConsole.WriteLine($"Tile '{this}' checksum updated. From '{ContentCheckSum}' to '{newCheckSum}'");
+                ContentCheckSum = newCheckSum;
+                await WriteToDatabaseAsync();
+            });
+        }
+        #endregion
 
     }
 

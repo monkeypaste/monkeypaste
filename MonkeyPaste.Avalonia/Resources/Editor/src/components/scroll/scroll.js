@@ -100,6 +100,9 @@ function scrollToSelState(selStateOrRangeObj) {
     getEditorContainerElement().scrollTop = parseFloat(selStateOrRangeObj.scrollTop);
 
 }
+function scrollToEditorLoc(x, y) {
+    getEditorContainerElement().scrollTo(x, y);
+}
 function scrollDocRangeIntoView(docRange, opts) {
     // opts as bool = alignToTop
     // opts as obj = behavior (smooth|instant|auto), block (*start*|center|end|nearest), inline (start|center|end|*nearest*)
@@ -110,46 +113,10 @@ function scrollDocRangeIntoView(docRange, opts) {
     const end_elm = getElementAtDocIdx(Math.min(getDocLength()-1,docRange.index + docRange.length), true);
 
     start_elm.scrollIntoView(isNullOrUndefined(opts) ? def_start_opts : opts);
-    end_elm.scrollIntoView(isNullOrUndefined(opts) ? def_end_opts : opts);
-
-    //let dom_range = convertDocRangeToDomRange(docRange);
-    //let scroll_elm = dom_range.endContainer;
-    //if (!scroll_elm) {
-    //    scroll_elm = dom_range.startContainer;
-    //    if (!scroll_elm) {
-    //        log('error scrolling to doc range: ' + docRange);
-    //        return;
-    //    }
-    //}
-    //if (scroll_elm.nodeType === 3) {
-    //    //let docRange_rects = getRangeRects(docRange);
-    //    //if (!docRange_rects || docRange_rects.length == 0) {
-    //    //    scroll_elm = scroll_elm.parentNode;
-    //    //} else {
-    //    //    // clear scroll elm to disable element scroll and scroll manually by rect
-    //    //    scroll_elm = null;
-    //    //    getEditorContainerElement().scrollTop = docRange_rects[0].bottom;
-    //    //}
-    //    scroll_elm = scroll_elm.parentNode;
-    //}
-    //if (scroll_elm) {
-    //    scroll_elm.scrollIntoView(false);
-    //}
-
-    ////getEditorContainerElement().scrollLeft += extraX;
-    ////getEditorContainerElement().scrollTop += extraY;
-
-    ////let new_scroll_x = extraX;
-    ////let new_scroll_y = extraY;
-
-    ////let docRange_rects = getRangeRects(docRange);
-    ////if (!docRange_rects || docRange_rects.length == 0) {
-    ////    log('scroll to range error, no rects found for range: ' + docRange);
-    ////    return;
-    ////}
-    ////new_scroll_y += docRange_rects[docRange_rects.length - 1].bottom;
-    ////// ignoring x for now...
-    ////getEditorContainerElement().scrollTop = new_scroll_y;
+    if (docRange.length > 0) {
+        // NOTE for big (multiline spans for example) don't include end 
+        end_elm.scrollIntoView(isNullOrUndefined(opts) ? def_end_opts : opts);
+    }
 }
 
 function showElementScrollbars(elm) {

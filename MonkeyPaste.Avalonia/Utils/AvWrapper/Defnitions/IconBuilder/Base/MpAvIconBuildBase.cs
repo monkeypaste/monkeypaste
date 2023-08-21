@@ -1,5 +1,4 @@
-﻿using Avalonia.Media.Imaging;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;

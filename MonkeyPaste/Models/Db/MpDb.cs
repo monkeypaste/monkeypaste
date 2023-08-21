@@ -85,24 +85,23 @@ namespace MonkeyPaste {
 
             await InitTablesAsync();
 
-            //await MpTestDataBuilder.CreateImportsTestContentAsync(
-            //    db_path: Mp.Services.DbInfo.DbPath,
-            //    content_count: 10,
-            //    link_count: 5);
-            //content_count: 1_000_000,
-            //link_count: 150,
-            //parent_tag_count: 3,
-            //child_tag_count: 3,
-            //sub_child_tag_count: 2);
-
             if (IsInitialDbCreate) {
                 await MpDefaultDataModelTools.CreateAsync(Mp.Services.ThisDeviceInfo.ThisDeviceGuid);
                 await CreateViewsAsync();
                 await InitDefaultDataAsync();
+
+
             } else {
                 await MpDefaultDataModelTools.InitializeAsync();
             }
-
+            //await MpTestDataBuilder.CreateImportsTestContentAsync(
+            //       db_path: Mp.Services.DbInfo.DbPath,
+            //       content_count: 100_000,
+            //       big_count: 20,
+            //       link_count: 150,
+            //       parent_tag_count: 3,
+            //       child_tag_count: 3,
+            //       sub_child_tag_count: 2);
             IsLoaded = true;
 
             sw.Stop();

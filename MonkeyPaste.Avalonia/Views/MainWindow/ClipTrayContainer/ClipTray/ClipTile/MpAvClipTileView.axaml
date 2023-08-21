@@ -98,7 +98,8 @@
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Background">
                 <Setter.Value>
-                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalBgOpacity}" />
+                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}"
+                                     Opacity="{DynamicResource GlobalBgOpacity}" />
                 </Setter.Value>
             </Setter>
         </Style>
@@ -106,7 +107,8 @@
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Background">
                 <Setter.Value>
-                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}"
+                                     Opacity="{DynamicResource GlobalInteractiveOpacity}" />
                 </Setter.Value>
             </Setter>
         </Style>
@@ -224,6 +226,8 @@
                                            Grid.RowSpan="2"
                                            Opacity="{Binding IsPinPlaceholder, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                                            IsEnabled="{Binding !IsFrozen}"
+                                           local:MpAvIsHoveringExtension.IsEnabled="True"
+                                           local:MpAvIsHoveringExtension.IsHovering="{Binding IsContentHovering, Mode=TwoWay}"
                                            HorizontalAlignment="Stretch"
                                            VerticalAlignment="Stretch" />
 
@@ -243,7 +247,7 @@
                     </MultiBinding>
                 </Border.IsVisible>
                 <Border x:Name="AccountCapOverlay"
-                        Opacity="{Binding IsHovering, ConverterParameter=0.15|0.7, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                        Opacity="{Binding IsHovering, ConverterParameter=0.15|0.4, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch">
                     <Border.Transitions>
@@ -253,7 +257,8 @@
                         </Transitions>
                     </Border.Transitions>
                     <Border.Background>
-                        <SolidColorBrush Color="Black" Opacity="0.2" />
+                        <SolidColorBrush Color="Black"
+                                         Opacity="0.2" />
                     </Border.Background>
                     <Image Stretch="UniformToFill"
                            Classes.shakeslow="{Binding IsHovering}"
@@ -281,7 +286,8 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
                 <Grid.Background>
-                    <SolidColorBrush Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="0.6" />
+                    <SolidColorBrush Color="{DynamicResource ThemeInteractiveBgColor}"
+                                     Opacity="0.6" />
                 </Grid.Background>
                 <Grid.Transitions>
                     <Transitions>
@@ -391,8 +397,7 @@
                            TextAlignment="Center"
                            Foreground="{Binding BorderBrush, ElementName=ClipTileContainerBorder, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                            IsHitTestVisible="False"
-                           Text="{Binding DetailText}">
-                </TextBlock>
+                           Text="{Binding DetailText}" />
             </Grid>
 
             <!--  CORNER BUTTONS  -->

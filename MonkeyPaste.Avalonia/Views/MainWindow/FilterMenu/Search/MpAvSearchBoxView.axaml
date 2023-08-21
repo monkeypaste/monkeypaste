@@ -351,24 +351,25 @@
                     <!--  SEARCH AUTOCOMPLETE BOX  -->
 
                     <AutoCompleteBox x:Name="SearchBox"
-                                               TabIndex="1"
-                                               VerticalAlignment="Stretch"
-                                               HorizontalAlignment="Stretch"
-                                               Cursor="IBeam"
-                                               local:MpAvDropExtension.IsEnabled="True"
-                                               local:MpAvDelayedTextChangedExtension.IsEnabled="True"
-                                               local:MpAvDelayedTextChangedExtension.DelayMs="500"
-                                               local:MpAvDelayedTextChangedExtension.Text="{Binding SearchText, Mode=TwoWay}"
-                                               Watermark="Search..."
-                                               FontSize="14"
-                                               Background="Transparent"
-                                               IsTextCompletionEnabled="False"
-                                               MinimumPrefixLength="0"
-                                               MinimumPopulateDelay="0.25"
-                                               ItemsSource="{Binding RecentSearchTexts}"
-                                               BorderThickness="0"
-                                               Padding="0"
-                                               Margin="5,0">
+                                     IsDropDownOpen="{Binding IsAutoCompleteOpen, Mode=TwoWay}"
+                                     TabIndex="1"
+                                     VerticalAlignment="Stretch"
+                                     HorizontalAlignment="Stretch"
+                                     Cursor="IBeam"
+                                     local:MpAvDropExtension.IsEnabled="True"
+                                     local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                     local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                     local:MpAvDelayedTextChangedExtension.Text="{Binding SearchText, Mode=TwoWay}"
+                                     Watermark="Search..."
+                                     FontSize="14"
+                                     Background="Transparent"
+                                     IsTextCompletionEnabled="False"
+                                     MinimumPrefixLength="0"
+                                     MinimumPopulateDelay="0.25"
+                                     ItemsSource="{Binding RecentSearchTexts}"
+                                     BorderThickness="0"
+                                     Padding="0"
+                                     Margin="5,0">
                         <AutoCompleteBox.IsVisible>
                             <MultiBinding Converter="{x:Static BoolConverters.Or}">
                                 <Binding Path="IsExpandAnimating" />

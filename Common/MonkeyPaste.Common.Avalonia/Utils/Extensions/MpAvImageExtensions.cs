@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 //using MonkeyPaste.Common.Wpf;
 
@@ -15,22 +14,11 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static Bitmap? ToAvBitmap(this string base64Str, double scale = 1.0, string tint_hex_color = "") {
             if (!base64Str.IsStringBase64()) {
-
                 return null;
             }
             try {
                 var bytes = Convert.FromBase64String(base64Str);
-                var bmp = bytes.ToAvBitmap();
-                if (bmp == null) {
-                    return null;
-                }
-                if (!string.IsNullOrEmpty(tint_hex_color)) {
-                    bmp = bmp.Tint(tint_hex_color);
-                }
-                if (scale == 1.0) {
-                    return bmp;
-                }
-                return bmp.Scale(new MpSize(scale, scale));
+                return bytes.ToAvBitmap(scale, tint_hex_color);
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error converting '{base64Str}' to bitmap.", ex);
@@ -38,10 +26,20 @@ namespace MonkeyPaste.Common.Avalonia {
             return null;
         }
 
-        public static Bitmap ToAvBitmap(this byte[] bytes) {
+        public static Bitmap ToAvBitmap(this byte[] bytes, double scale = 1.0, string tint_hex_color = "") {
             using (var stream = new MemoryStream(bytes)) {
                 try {
-                    return new Bitmap(stream);
+                    var bmp = new Bitmap(stream);
+                    if (bmp == null) {
+                        return null;
+                    }
+                    if (!string.IsNullOrEmpty(tint_hex_color)) {
+                        bmp = bmp.Tint(tint_hex_color);
+                    }
+                    if (scale == 1.0) {
+                        return bmp;
+                    }
+                    return bmp.Scale(new MpSize(scale, scale));
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine("Error creating bitmap from bytes ", ex);

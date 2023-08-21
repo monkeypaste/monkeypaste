@@ -49,7 +49,7 @@ namespace AvCoreClipboardHandler {
 
             foreach (var write_format in writeFormats) {
                 object data = null;
-                if (needs_pseudo_file && write_format == MpPortableDataFormats.AvFileNames) {
+                if (needs_pseudo_file && write_format == MpPortableDataFormats.AvFiles) {
                     // called last 
                     data = PreProcessFileFormat(write_output);
                 } else {
@@ -89,7 +89,7 @@ namespace AvCoreClipboardHandler {
 
                     }
                     //
-                    if (avdo.TryGetData(MpPortableDataFormats.AvFileNames, out object fpl_obj)) {
+                    if (avdo.TryGetData(MpPortableDataFormats.AvFiles, out object fpl_obj)) {
                         IEnumerable<string> fpl = null;
                         if (fpl_obj is IEnumerable<string>) {
                             fpl = fpl_obj as IEnumerable<string>;
@@ -100,7 +100,7 @@ namespace AvCoreClipboardHandler {
                         }
                         if (fpl != null) {
                             var av_fpl = await fpl.ToAvFilesObjectAsync();
-                            avdo.SetData(MpPortableDataFormats.AvFileNames, av_fpl);
+                            avdo.SetData(MpPortableDataFormats.AvFiles, av_fpl);
                         }
                     }
                 }
@@ -169,7 +169,7 @@ namespace AvCoreClipboardHandler {
                                 break;
                         }
                         break;
-                    case MpPortableDataFormats.AvFileNames:
+                    case MpPortableDataFormats.AvFiles:
                         switch (paramType) {
                             case CoreClipboardParamType.W_IgnoreAll_FileDrop:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignFiles &&
@@ -269,7 +269,7 @@ namespace AvCoreClipboardHandler {
             return new[] { output_path };
         }
         private static int GetWriterPriority(string format) {
-            if (format == MpPortableDataFormats.AvFileNames) {
+            if (format == MpPortableDataFormats.AvFiles) {
                 // process files last
                 return int.MaxValue;
             }

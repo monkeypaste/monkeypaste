@@ -125,7 +125,7 @@
                      RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="0"
-                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=0, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
+                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|0, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Collection Tree" />
             </ToolTip.Tip>
@@ -168,7 +168,7 @@
                      RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="1"
-                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=1, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
+                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|1, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
 
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Clipboard Handlers" />
@@ -182,7 +182,7 @@
                      RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="2"
-                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=2, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
+                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|2, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
 
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Analyze" />
@@ -196,7 +196,7 @@
                      RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"
                      CommandParameter="3"
-                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=3, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntToBoolConverter.Instance}}">
+                     IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|3, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
 
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="Actions" />

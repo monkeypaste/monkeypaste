@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
                     avdo.SetData(MpPortableDataFormats.AvPNG, ci.ItemData.ToBytesFromBase64String());
                     break;
                 case MpCopyItemType.FileList:
-                    avdo.SetData(MpPortableDataFormats.AvFileNames, ci.ItemData.SplitNoEmpty(Environment.NewLine));
+                    avdo.SetData(MpPortableDataFormats.AvFiles, ci.ItemData.SplitNoEmpty(Environment.NewLine));
                     break;
             }
             if (includeSelfRef) {
@@ -79,14 +79,14 @@ namespace MonkeyPaste.Avalonia {
             return deltaObj;
         }
 
-        public static string ToDefaultDataFormat(this MpCopyItemType itemType) {
+        public static string ToCompatibilityDataFormat(this MpCopyItemType itemType) {
             switch (itemType) {
                 case MpCopyItemType.Text:
                     return MpPortableDataFormats.Text;
                 case MpCopyItemType.Image:
                     return MpPortableDataFormats.AvPNG;
                 case MpCopyItemType.FileList:
-                    return MpPortableDataFormats.AvFileNames;
+                    return MpPortableDataFormats.AvFiles;
             }
             return string.Empty;
         }

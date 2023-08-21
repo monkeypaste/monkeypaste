@@ -50,9 +50,11 @@ function loadContent(
 
 		let sel_to_restore = sel_state;
 
-		if (is_reload && !sel_to_restore) {
-			// when content is reloaded, any selection will be lost so save to restore
+		if (is_reload && !sel_to_restore && !searches) {
+			// NOTE1 when content is reloaded, any selection will be lost so save to restore before reloading
 			// but rely on host req state cause content is reloading a couple times (shouldn't) during unpin
+
+			// NOTE2 ignore sel state if this is a reload while search is active or cur highlight maybe be out of view
 			sel_to_restore = getDocSelection();
 		} 
 		if (!is_reload) {
@@ -103,19 +105,19 @@ function loadContent(
 			loadAnnotations(annotationsJsonStr);
 		}
 
-		loadFindReplace(searches);
-
-
 		updateAllElements();
 		updateQuill();
 
+		loadFindReplace(searches);
+
 		if (sel_to_restore != null) {
+			log('restoring selection: ' + JSON.stringify(sel_to_restore));
 			// only set sel before component updates do scroll after
 			sel_to_restore = cleanDocRange(sel_to_restore);
 			setDocSelection(sel_to_restore.index, sel_to_restore.length, 'silent');
 
 			scrollToSelState(sel_to_restore);
-		}
+		} 
 
 	} catch (ex) {
 		onException_ntf('error loading item ', ex);

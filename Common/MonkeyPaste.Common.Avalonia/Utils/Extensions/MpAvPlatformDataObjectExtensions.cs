@@ -16,11 +16,11 @@ namespace MonkeyPaste.Common.Avalonia {
             if (ido.GetFiles() is IEnumerable<object> fps) {
                 // only inlcude file names if present
                 if (fps.Count() > 0) {
-                    if (!formats.Contains(MpPortableDataFormats.AvFileNames)) {
-                        formats.Add(MpPortableDataFormats.AvFileNames);
+                    if (!formats.Contains(MpPortableDataFormats.AvFiles)) {
+                        formats.Add(MpPortableDataFormats.AvFiles);
                     }
                 } else {
-                    formats.Remove(MpPortableDataFormats.AvFileNames);
+                    formats.Remove(MpPortableDataFormats.AvFiles);
                 }
 
             }
@@ -29,7 +29,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static IEnumerable<string> GetFilesAsPaths(this IDataObject dataObject) {
-            return (dataObject.Get(MpPortableDataFormats.AvFileNames) as IEnumerable<string>)
+            return (dataObject.Get(MpPortableDataFormats.AvFiles) as IEnumerable<string>)
                 ?? dataObject.GetFiles()?
                 .Select(f => f.TryGetLocalPath())
                 .Where(p => !string.IsNullOrEmpty(p))
@@ -43,7 +43,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (ido.Get(format) is object obj) {
                 return obj;
             }
-            if (format != MpPortableDataFormats.AvFileNames) {
+            if (format != MpPortableDataFormats.AvFiles) {
                 return null;
             }
             if (ido.GetFiles() is IEnumerable<object> fpl &&
@@ -123,7 +123,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 case MpPortableDataFormats.AvPNG:
                 case MpPortableDataFormats.CefAsciiUrl:
                     return MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString();
-                case MpPortableDataFormats.AvFileNames:
+                case MpPortableDataFormats.AvFiles:
                 case MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT:
                     return new string[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT };
                 default:

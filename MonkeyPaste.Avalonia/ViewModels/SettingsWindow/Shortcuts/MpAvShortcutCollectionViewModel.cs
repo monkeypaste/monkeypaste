@@ -1027,11 +1027,10 @@ namespace MonkeyPaste.Avalonia {
 
             if (MpAvPrefViewModel.Instance.IsAutoSearchEnabled &&
                 Mp.Services.StartupState.IsReady) {
-                Dispatcher.UIThread.Post(() => {
+                bool was_auto_search_attempt = Dispatcher.UIThread.Invoke(() => {
                     /*
                         In global key DOWN, if auto search pref enabled and no other key 
-                        (besides shift) is down and is not exact match and mw is active/open 
-                        and the up key is alpha-numeric or (control+v) (compare last) and 
+                        is down and is not exact match and mw is active/open and 
                         focus is not textbox/ autocomplete/ editable wv (will only be valid on first typed key). 
                         Then  set searchbox to focus (should auto trigger expand) so input passes to searchbox. 
                         If not work would need to use keytyped event or keyup and figure out the char..
@@ -1049,7 +1048,16 @@ namespace MonkeyPaste.Avalonia {
                         string text_to_pass = ((KeyCode)Mp.Services.KeyDownHelper.Downs[0]).GetKeyLiteral().ToLower();
                         MpAvSearchBoxViewModel.Instance.BeginAutoSearchCommand.Execute(text_to_pass);
                     }
+                    return can_auto_search;
                 });
+                if (was_auto_search_attempt) {
+                    // BUG this is an attempt to get rid of orphan downs that randomly popup
+                    // maybe related to focus or something 
+                    _exact_match = null;
+                    _keyboardGestureHelper.RemoveKeyDown(e.Data.KeyCode);
+                    MpConsole.WriteLine($"removing down cause auto search was attempted. down key: '{e.Data.KeyCode}'");
+                    return;
+                }
             }
 
             if (_exact_match == null) {

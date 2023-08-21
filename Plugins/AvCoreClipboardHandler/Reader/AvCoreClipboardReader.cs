@@ -102,7 +102,7 @@ namespace AvCoreClipboardHandler {
                 //Util.CloseClipboard();
 
             } else {
-                if (format == MpPortableDataFormats.AvFileNames) {
+                if (format == MpPortableDataFormats.AvFiles) {
                     if (avdo.GetFilesAsPaths() is IEnumerable<string> paths &&
                         paths.Any()) {
                         format_data = paths;
@@ -222,7 +222,7 @@ namespace AvCoreClipboardHandler {
                         }
                         break;
 
-                    case MpPortableDataFormats.AvFileNames:
+                    case MpPortableDataFormats.AvFiles:
                         switch (paramType) {
                             case CoreClipboardParamType.R_IgnoreAll_FileDrop:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignore_fd &&

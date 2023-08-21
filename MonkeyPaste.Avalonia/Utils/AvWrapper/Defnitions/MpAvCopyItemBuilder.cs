@@ -1,13 +1,10 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using CefNet;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -153,36 +150,41 @@ namespace MonkeyPaste.Avalonia {
             MpCopyItemType itemType,
             bool force_allow_dup,
             bool suppressWrite) {
-            if (MpAvPrefViewModel.Instance.IsDuplicateCheckEnabled &&
-                !force_allow_dup &&
-                !suppressWrite) {
-                MpCopyItem dupCheck = null;
-                string data = null;
-                if (!avdo.TryGetData<string>(itemType.ToDefaultDataFormat(), out data)) {
-                    // only need to fallback to avdo for file item to get file names (when from ext data)
-                    if (!avdo.TryGetData<string>(itemType.ToDefaultDataFormat(), out data)) {
-                        return null;
-                    }
-                }
-                if (itemType == MpCopyItemType.Text) {
-                    // TODO should not need to do this
-                    // but from bugs converting html and special entity encoding use plain text for dup check
-                    var matches = await MpDataModelProvider.GetDataObjectItemsForFormatByDataAsync(MpPortableDataFormats.Text, data);
-                    if (matches.FirstOrDefault() is MpDataObjectItem dup_text_doi) {
-                        dupCheck = await MpDataModelProvider.GetCopyItemByDataObjectIdAsync(dup_text_doi.DataObjectId);
-                    }
-
-                } else {
-                    dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(data);
-                }
-
-                if (dupCheck != null) {
-                    MpConsole.WriteLine($"Duplicate item detected, returning original id:'{dupCheck.Id}'");
-                    dupCheck.WasDupOnCreate = true;
-                    return dupCheck;
-                }
+            if (!MpAvPrefViewModel.Instance.IsDuplicateCheckEnabled ||
+                force_allow_dup ||
+                suppressWrite) {
+                return null;
             }
-            return null;
+            string compare_data;
+            if (!avdo.TryGetData<string>(itemType.ToCompatibilityDataFormat(), out compare_data)) {
+                return null;
+            }
+            var dups = await MpDataModelProvider.GetCopyItemByCheckSumAsync(MpCopyItem.GetContentCheckSum(compare_data));
+            if (dups.Count > 1) {
+                MpConsole.WriteLine($"Warning! multiple dups detected. There should only be 1 or dup check was disabled and later re-enabled. Returning most recent by cap datetime...");
+            }
+            if (dups.OrderByDescending(x => x.CopyDateTime).FirstOrDefault() is not MpCopyItem dupCheck) {
+                return null;
+            }
+
+            //if (itemType == MpCopyItemType.Text) {
+            //    // TODO should not need to do this
+            //    // but from bugs converting html and special entity encoding use plain text for dup check
+            //    var matches = await MpDataModelProvider.GetDataObjectItemsForFormatByDataAsync(MpPortableDataFormats.Text, compare_data);
+            //    if (matches.FirstOrDefault() is MpDataObjectItem dup_text_doi) {
+            //        dupCheck = await MpDataModelProvider.GetCopyItemByDataObjectIdAsync(dup_text_doi.DataObjectId);
+            //    }
+
+            //} else {
+            //    dupCheck = await MpDataModelProvider.GetCopyItemByDataAsync(compare_data);
+            //}
+            //if(dupCheck == null) {
+            //    return null;
+            //}
+
+            MpConsole.WriteLine($"Duplicate item detected, returning original id:'{dupCheck.Id}'");
+            dupCheck.WasDupOnCreate = true;
+            return dupCheck;
         }
         private async Task<Tuple<MpCopyItemType, string, string>> DecodeContentDataAsync(MpAvDataObject avdo) {
             string inputTextFormat = null;
@@ -194,23 +196,23 @@ namespace MonkeyPaste.Avalonia {
                     MpCopyItemType.None :
                     avdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT).ToEnum<MpCopyItemType>();
 
-            if (avdo.ContainsData(MpPortableDataFormats.AvFileNames) &&
+            if (avdo.ContainsData(MpPortableDataFormats.AvFiles) &&
                 (sourceType == MpCopyItemType.None || sourceType == MpCopyItemType.FileList) // don't let internal temp files get priority 
                 ) {
 
                 // FILES
 
                 string fl_str = null;
-                if (avdo.GetData(MpPortableDataFormats.AvFileNames) is byte[] fileBytes) {
+                if (avdo.GetData(MpPortableDataFormats.AvFiles) is byte[] fileBytes) {
                     fl_str = fileBytes.ToDecodedString();
-                } else if (avdo.GetData(MpPortableDataFormats.AvFileNames) is string fileStr) {
+                } else if (avdo.GetData(MpPortableDataFormats.AvFiles) is string fileStr) {
                     fl_str = fileStr;
-                } else if (avdo.GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<string> paths) {
+                } else if (avdo.GetData(MpPortableDataFormats.AvFiles) is IEnumerable<string> paths) {
                     fl_str = string.Join(Environment.NewLine, paths);
-                } else if (avdo.GetData(MpPortableDataFormats.AvFileNames) is IEnumerable<IStorageItem> sil) {
+                } else if (avdo.GetData(MpPortableDataFormats.AvFiles) is IEnumerable<IStorageItem> sil) {
                     fl_str = string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath()).Where(x => !string.IsNullOrEmpty(x)));
                 } else {
-                    var fl_data = avdo.GetData(MpPortableDataFormats.AvFileNames);
+                    var fl_data = avdo.GetData(MpPortableDataFormats.AvFiles);
                     // what type is it? string[]?
                     MpDebug.Break();
                 }
@@ -304,7 +306,7 @@ namespace MonkeyPaste.Avalonia {
                 itemType = MpCopyItemType.Text;
                 itemData = oemStr;
             } else {
-                MpConsole.WriteTraceLine("clipboard data is not known format");
+                MpConsole.WriteTraceLine("clipboard compare_data is not known format");
             }
 
             string itemPlainText = null;
@@ -419,7 +421,7 @@ namespace MonkeyPaste.Avalonia {
                     if (!string.IsNullOrEmpty(files_text_base64)) {
                         string files_text = files_text_base64.ToStringFromBase64();
                         MpConsole.WriteLine("Got file text: " + files_text);
-                        avdo.SetData(MpPortableDataFormats.AvFileNames, files_text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+                        avdo.SetData(MpPortableDataFormats.AvFiles, files_text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
                     }
 
                 } else {

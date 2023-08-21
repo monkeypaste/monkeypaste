@@ -1472,7 +1472,7 @@ namespace MonkeyPaste.Avalonia {
                 // when mw open assume user will select item before issuing cmd,
                 // if none selected grab most recent pinned item as fallback
                 if (ctrvm.SelectedItem == null) {
-                    var newest_ctvm = ctrvm.PinnedItems.OrderByDescending(x => x.CopyItemCreatedDateTime).FirstOrDefault();
+                    var newest_ctvm = ctrvm.PinnedItems.OrderByDescending(x => x.CopyDateTime).FirstOrDefault();
                     if (newest_ctvm != null) {
                         ci = newest_ctvm.CopyItem;
                     }

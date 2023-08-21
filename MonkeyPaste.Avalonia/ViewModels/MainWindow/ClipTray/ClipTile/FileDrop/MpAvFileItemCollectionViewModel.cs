@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            var ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(ci.DataObjectId, MpPortableDataFormats.AvFileNames);
+            var ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(ci.DataObjectId, MpPortableDataFormats.AvFiles);
             if (ci.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter) is string[] fpl) {
                 // NOTE presuming text format returned from editor on content change is the current order of file items
                 // sort paths by text order

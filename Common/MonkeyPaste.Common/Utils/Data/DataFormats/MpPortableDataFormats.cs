@@ -1,6 +1,5 @@
 ﻿
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MonkeyPaste.Common {
@@ -35,7 +34,7 @@ namespace MonkeyPaste.Common {
 
             AvRtf_bytes,
             AvHtml_bytes,
-            AvFileNames,
+            AvFiles,
             AvPNG,
 
             // cef
@@ -93,7 +92,7 @@ namespace MonkeyPaste.Common {
         public const string AvCsv = "Csv";
         public const string AvRtf_bytes = "Rich Text Format";
         public const string AvHtml_bytes = "HTML Format";
-        public const string AvFileNames = "Files";
+        public const string AvFiles = "Files";
         public const string AvPNG = "PNG";
 
         // Cef Formats

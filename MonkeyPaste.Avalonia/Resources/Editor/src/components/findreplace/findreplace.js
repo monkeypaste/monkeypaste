@@ -536,14 +536,19 @@ function navigateFindReplaceResults(dir) {
 	}
 
 	let cur_doc_range = globals.CurFindReplaceDocRanges[globals.CurFindReplaceDocRangeIdx];
-	let cur_dom_range = convertDocRangeToDomRange(cur_doc_range);
-	if (cur_dom_range && cur_dom_range.startContainer) {
-		if (cur_dom_range.startContainer.nodeType === 3) {
-			cur_dom_range.startContainer.parentNode.scrollIntoView();
-		} else {
-			cur_dom_range.startContainer.scrollIntoView();
-		}
+	if (cur_doc_range) {
+		let cur_doc_range_head_rect = getRangeRects({ index: cur_doc_range.index, length: 0 }, true, true, false)[0];
+		scrollToEditorLoc(cur_doc_range_head_rect.left, cur_doc_range_head_rect.top);
 	}
+	//let cur_dom_range = convertDocRangeToDomRange(cur_doc_range);
+	//if (cur_dom_range && cur_dom_range.startContainer) {
+		//if (cur_dom_range.startContainer.nodeType === 3) {
+		//	cur_dom_range.startContainer.parentNode.scrollIntoView();
+		//} else {
+		//	cur_dom_range.startContainer.scrollIntoView();
+		//}
+	//}
+
 	//let cur_doc_range_scroll_offset = getDocRangeScrollOffset(cur_doc_range);
 	//scrollEditorTop(cur_doc_range_scroll_offset.top);
 

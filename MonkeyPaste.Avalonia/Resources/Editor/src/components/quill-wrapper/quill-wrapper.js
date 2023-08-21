@@ -98,7 +98,7 @@ function getSelectedHtml() {
 	return sel_html;
 }
 
-function getHtml2(sel) {
+function getHtmlWithTables(sel) {
 	sel = cleanDocRange(sel);
 	let dom_range = convertDocRangeToDomRange(sel);
 	if (dom_range) {

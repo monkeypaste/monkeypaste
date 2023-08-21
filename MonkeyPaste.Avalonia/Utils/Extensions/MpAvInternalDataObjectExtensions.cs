@@ -42,7 +42,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void CreatePseudoFileEntry(this IDataObject ido) {
-            if (ido.GetAllDataFormats().Contains(MpPortableDataFormats.AvFileNames)) {
+            if (ido.GetAllDataFormats().Contains(MpPortableDataFormats.AvFiles)) {
                 // file exists, ignore pseudo file
                 return;
             }
