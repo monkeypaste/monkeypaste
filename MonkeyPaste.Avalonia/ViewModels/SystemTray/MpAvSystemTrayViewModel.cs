@@ -1,9 +1,6 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.Threading;
 using CefNet.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -11,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Application = Avalonia.Application;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSystemTrayViewModel :
@@ -300,7 +296,8 @@ namespace MonkeyPaste.Avalonia {
         //    ??= new WindowNotificationManager(TopLevel.GetTopLevel(MpAvWindowManager.MainWindow)!);
         public ICommand GenericTestCommand => new MpAsyncCommand(
             async () => {
-                await Task.Delay(1);
+                //await Task.Delay(1);
+                await MpDb.PerformDbOptimizationAsync();
                 //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
                 //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));

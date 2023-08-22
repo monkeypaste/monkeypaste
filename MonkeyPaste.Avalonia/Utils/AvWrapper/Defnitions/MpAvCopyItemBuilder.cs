@@ -374,7 +374,7 @@ namespace MonkeyPaste.Avalonia {
                 default_title = avdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT) as string;
             }
             if (string.IsNullOrEmpty(default_title)) {
-                default_title = $"{itemType}{(_LastAddId)}";
+                default_title = $"{itemType}{(_LastAddId.ToCommaSeperatedIntString())}";
             }
             return default_title;
         }

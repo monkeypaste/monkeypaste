@@ -214,14 +214,12 @@
 
         <!--  ICON  -->
         <Button x:Name="ClipTileAppIconImageButton"
-                x:DataType="local:MpAvClipTileTransactionCollectionViewModel"
                 Grid.Column="1"
                 Margin="0,0,15,0"
                 ClipToBounds="False"
-                DataContext="{Binding TransactionCollectionViewModel}"
                 Classes="noBg noHoverBg"
-                Classes.shakeOnce="{Binding DoShake}"
-                Command="{Binding OpenTransactionPaneCommand}"
+                Classes.shakeOnce="{Binding TransactionCollectionViewModel.DoShake}"
+                Command="{Binding TransactionCollectionViewModel.OpenTransactionPaneCommand}"
                 BorderThickness="0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Stretch"
@@ -239,16 +237,22 @@
                 <Image x:Name="ClipTileAppIconImage"
                        IsVisible="{Binding !IsVisible, ElementName=TransBusySpinner}"
                        IsHitTestVisible="False"
-                       Source="{Binding CreateTransaction.IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                        Stretch="Uniform"
                        HorizontalAlignment="Stretch"
                        VerticalAlignment="Stretch" />
 
                 <local:MpAvBusySpinnerView x:Name="TransBusySpinner"
-                                           IsVisible="{Binding IsBusy}"
                                            Width="{Binding $parent.Width}"
                                            Height="{Binding $parent.Height}"
-                                           Classes="square" />
+                                           Classes="square">
+                    <local:MpAvBusySpinnerView.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="!IsBusy" />
+                            <Binding Path="TransactionCollectionViewModel.IsBusy" />
+                        </MultiBinding>
+                    </local:MpAvBusySpinnerView.IsVisible>
+                </local:MpAvBusySpinnerView>
             </Grid>
         </Button>
     </Grid>

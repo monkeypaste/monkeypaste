@@ -361,6 +361,9 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE to work around login failures or no selection, just default to free i guess
                 acct_type = sel_acct_type;
             }
+#if DEBUG
+            MpAvPrefViewModel.Instance.TestAccountType = acct_type;
+#endif
 
             Mp.Services.AccountTools.SetAccountType(acct_type);
 

@@ -161,6 +161,9 @@ namespace MonkeyPaste.Avalonia {
             var pin_tray_ratio = MpAvClipTrayViewModel.Instance.GetCurrentDefaultPinTrayRatio();
             mwtg.RowDefinitions.Clear();
             mwtg.ColumnDefinitions.Clear();
+            double gs_fixed_length = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
+            double dbl_gs_fixed_length = gs_fixed_length * 2;
+
             if (mwvm.IsHorizontalOrientation) {
                 // HORIZONTAL
 
@@ -210,14 +213,13 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetColumn(sbgs, 1);
                 sbgs.Height = double.NaN;
                 sbgs.VerticalAlignment = VerticalAlignment.Stretch;
-                sbgs.Width = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
+                sbgs.Width = gs_fixed_length;
                 sbgs.HorizontalAlignment = HorizontalAlignment.Right;
                 sbgs.ResizeDirection = GridResizeDirection.Columns;
 
                 // cliptray container border
                 Grid.SetRow(ctrcb, 1);
                 Grid.SetColumn(ctrcb, 2);
-
 
                 // cliptraycontainer column definitions (horizontal)
                 ctrcv_cg.RowDefinitions.Clear();
@@ -253,17 +255,17 @@ namespace MonkeyPaste.Avalonia {
 
                 // pin tray listbox padding (horizontal) for head/tail drop adorners
                 if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
-                    ctrcv_ptr_lb.Padding = new Thickness(10, 0, 10, 0);
+                    ctrcv_ptr_lb.Padding = new Thickness(dbl_gs_fixed_length, 0, dbl_gs_fixed_length, 0);
                 } else {
                     ctrcv_ptr_lb.Padding = new Thickness();
                 }
                 // add margin for grid splitter size so boxshadow is symmetrical
-                ctrcv_ptrv.Margin = new Thickness(0, 0, 5, 0);
+                ctrcv_ptrv.Margin = new Thickness(0, 0, gs_fixed_length, 0);
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Right;
                 ctrcv_gs.VerticalAlignment = VerticalAlignment.Stretch;
-                ctrcv_gs.Width = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
+                ctrcv_gs.Width = gs_fixed_length;
                 ctrcv_gs.Height = double.NaN;
                 ctrcv_gs.ResizeDirection = GridResizeDirection.Columns;
                 ctrcv_gs.Cursor = new Cursor(StandardCursorType.SizeWestEast);
@@ -326,7 +328,7 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetRow(sbgs, 1);
                 Grid.SetRowSpan(sbgs, 1);
                 Grid.SetColumn(sbgs, 0);
-                sbgs.Height = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
+                sbgs.Height = gs_fixed_length;
                 sbgs.Width = double.NaN;
                 sbgs.VerticalAlignment = VerticalAlignment.Top;
                 sbgs.HorizontalAlignment = HorizontalAlignment.Stretch;
@@ -336,7 +338,6 @@ namespace MonkeyPaste.Avalonia {
                 Grid.SetRow(sbbg, 2);
                 Grid.SetRowSpan(sbbg, 1);
                 Grid.SetColumn(sbbg, 0);
-
 
                 // cliptraycontainer column definitions (vertical)
                 ctrcv_cg.ColumnDefinitions.Clear();
@@ -371,19 +372,19 @@ namespace MonkeyPaste.Avalonia {
                 };
 
                 if (MpAvClipTrayViewModel.Instance.IsAnyTilePinned) {
-                    ctrcv_ptr_lb.Padding = new Thickness(10, 10, 10, 10);
+                    ctrcv_ptr_lb.Padding = new Thickness(dbl_gs_fixed_length, dbl_gs_fixed_length, dbl_gs_fixed_length, dbl_gs_fixed_length);
                 } else {
                     ctrcv_ptr_lb.Padding = new Thickness();
                 }
 
                 // add margin for grid splitter size so boxshadow is symmetrical
-                ctrcv_ptrv.Margin = new Thickness(0, 0, 0, 5);
+                ctrcv_ptrv.Margin = new Thickness(0, 0, 0, gs_fixed_length);
 
                 // clip/pin tray grid splitter
                 ctrcv_gs.HorizontalAlignment = HorizontalAlignment.Stretch;
                 ctrcv_gs.VerticalAlignment = VerticalAlignment.Bottom;
                 ctrcv_gs.Width = double.NaN;
-                ctrcv_gs.Height = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
+                ctrcv_gs.Height = gs_fixed_length;
                 ctrcv_gs.ResizeDirection = GridResizeDirection.Rows;
                 ctrcv_gs.Cursor = new Cursor(StandardCursorType.SizeNorthSouth);
 

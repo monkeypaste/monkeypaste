@@ -509,6 +509,8 @@ namespace MonkeyPaste.Avalonia {
            CopyItem == null &&
            !IsPinPlaceholder;
 
+        public bool IsPreviewPlaceholder { get; set; }
+
         public bool IsAnyPlaceholder =>
             IsPlaceholder ||
             IsPinPlaceholder;
@@ -716,7 +718,8 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
 
-                if (TransactionCollectionViewModel.IsAnyBusy) {
+                if (TransactionCollectionViewModel.IsTransactionPaneOpen &&
+                    TransactionCollectionViewModel.IsAnyBusy) {
                     return true;
                 }
                 if (IsAppendNotifier) {
@@ -1164,7 +1167,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 // normal tile (or placeholder)
                 PinPlaceholderCopyItemId = 0;
-
+                IsPreviewPlaceholder = false;
                 // NOTE FileItems are init'd before ciid is set so Items are busy when WebView is loading content
                 FileItemCollectionViewModel.InitializeAsync(ci).FireAndForgetSafeAsync(this);
 
@@ -1200,6 +1203,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(PinPlaceholderLabel));
             OnPropertyChanged(nameof(IsResizable));
             OnPropertyChanged(nameof(IsTrashed));
+            OnPropertyChanged(nameof(IsSelected));
+            OnPropertyChanged(nameof(IsImplicitHover));
 
             if (!MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled ||
                 SelfRef == null) {
@@ -1595,10 +1600,9 @@ namespace MonkeyPaste.Avalonia {
                     Parent.NotifySelectionChanged();
                     break;
                 case nameof(CopyItem):
-                    if (CopyItem == null) {
-                        break;
-                    }
-                    OnPropertyChanged(nameof(CopyItemData));
+                    OnPropertyChanged(nameof(IsPlaceholder));
+                    break;
+                case nameof(PinPlaceholderCopyItemId):
                     OnPropertyChanged(nameof(IsPlaceholder));
                     break;
                 case nameof(IsPinned):
@@ -1791,20 +1795,20 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     TransactionCollectionViewModel.OnPropertyChanged(nameof(TransactionCollectionViewModel.MaxWidth));
-                    Parent.UpdateTileRectCommand.Execute(new object[] { Next, this });
+                    Parent.UpdateTileLocationCommand.Execute(Next);
                     break;
                 case nameof(TrayX):
                 case nameof(TrayY):
                     if (Next == null) {
                         break;
                     }
-                    Parent.UpdateTileRectCommand.Execute(new object[] { Next, this });
+                    Parent.UpdateTileLocationCommand.Execute(Next);
                     break;
                 case nameof(QueryOffsetIdx):
                     if (IsPlaceholder) {
                         break;
                     }
-                    Parent.UpdateTileRectCommand.Execute(new object[] { this, Prev });
+                    Parent.UpdateTileLocationCommand.Execute(this);
                     break;
                 case nameof(IsWindowOpen):
                     break;
@@ -1993,7 +1997,7 @@ namespace MonkeyPaste.Avalonia {
                 BoundWidth = uw;
             } else {
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueWidth_ById(CopyItemId, QueryOffsetIdx);
-                BoundWidth = IsPlaceholder ? 0 : MinWidth;
+                BoundWidth = !IsPreviewPlaceholder ? MinWidth : 0;
             }
 
             if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueHeight_ById(CopyItemId, QueryOffsetIdx, out double uh) &&
@@ -2001,7 +2005,7 @@ namespace MonkeyPaste.Avalonia {
                 BoundHeight = uh;
             } else {
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueHeight_ById(CopyItemId, QueryOffsetIdx);
-                BoundHeight = IsPlaceholder ? 0 : MinHeight;
+                BoundHeight = !IsPreviewPlaceholder ? MinHeight : 0;
             }
 
             IsTitleReadOnly = !MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId, QueryOffsetIdx);

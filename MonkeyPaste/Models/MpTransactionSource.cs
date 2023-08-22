@@ -30,16 +30,20 @@ namespace MonkeyPaste {
 
 
         [Column("fk_MpCopyItemTransactionId")]
+        [Indexed]
         public int TransactionId { get; set; }
 
         [Column("e_MpTransactionSourceType")]
+        [Indexed]
         public string SourceTypeStr { get; set; }
 
         [Column("fk_SourceObjId")]
+        [Indexed]
         public int SourceObjId { get; set; }
 
         //public string SourceArgs { get; set; }
 
+        [Indexed]
         public DateTime TransactionDateTime { get; set; }
         #endregion
 

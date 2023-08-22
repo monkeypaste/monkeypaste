@@ -55,6 +55,7 @@
                     <MultiBinding Converter="{x:Static local:MpAvMultiBoolToDoubleConverter.Instance}"
                                   ConverterParameter="And|0|1">
                         <Binding Path="IsPlaceholder" />
+                        <Binding Path="!IsPreviewPlaceholder" />
                         <Binding Path="!IsInPlaceRequerying"
                                  Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
                     </MultiBinding>

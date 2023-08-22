@@ -1,5 +1,4 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -7,7 +6,6 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -593,7 +591,11 @@ namespace MonkeyPaste.Avalonia {
                 //// only wait for executeAsync calls
                 //return;
             }, (args) => {
-                return Parent != null && Parent.IsWindowOpen && !IsTransactionPaneOpen && VisibleTransactions.Any();
+                return
+                    Parent != null &&
+                    Parent.IsWindowOpen &&
+                    !IsTransactionPaneOpen &&
+                    VisibleTransactions.Any();
             });
 
         public MpIAsyncCommand<object> SelectChildCommand => new MpAsyncCommand<object>(

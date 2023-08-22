@@ -58,6 +58,7 @@ namespace MonkeyPaste {
         public int TransactionUserDeviceId { get; set; }
 
         public DateTime? AppliedDateTime { get; set; } = null;
+        [Indexed]
         public DateTime TransactionDateTime { get; set; }
 
         #endregion

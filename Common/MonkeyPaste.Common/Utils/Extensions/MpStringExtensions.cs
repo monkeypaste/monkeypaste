@@ -86,7 +86,7 @@ namespace MonkeyPaste.Common {
         #region Converters
 
         public static string ToCommaSeperatedIntString(this int value) {
-            return $"{value:n}";
+            return $"{value:n0}";
         }
         public static string ToCommaSeperatedDoubleString(this double value) {
             return $"{value:n}";

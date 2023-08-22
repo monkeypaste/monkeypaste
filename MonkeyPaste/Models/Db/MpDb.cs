@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -18,6 +19,8 @@ namespace MonkeyPaste {
         private static object _rdLock = new object();
         private static SQLiteAsyncConnection _connectionAsync;
         private static SQLiteConnection _connection;
+
+        private static Timer _analyzeTimer;
 
         #endregion
 
@@ -59,19 +62,6 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public static async Task<bool> CheckIsUserPasswordSetAsync() {
-            if (!Mp.Services.DbInfo.DbPath.IsFile()) {
-                return false;
-            }
-            if (Mp.Services.DbInfo.HasUserDefinedPassword) {
-                return true;
-            }
-
-            // if password is set Test should fail with default pwd
-            bool does_default_connect = await TestDbConnectionAsync();
-            return !does_default_connect;
-        }
-
         public static async Task InitAsync() {
             var sw = new Stopwatch();
             sw.Start();
@@ -90,24 +80,43 @@ namespace MonkeyPaste {
                 await CreateViewsAsync();
                 await InitDefaultDataAsync();
 
-
+                await MpTestDataBuilder.CreateImportsTestContentAsync(
+                       db_path: Mp.Services.DbInfo.DbPath,
+                       pwd: Mp.Services.DbInfo.DbPassword,
+                       content_count: 100_000,
+                       big_count: 20,
+                       link_count: 150,
+                       parent_tag_count: 3,
+                       child_tag_count: 3,
+                       sub_child_tag_count: 2);
             } else {
                 await MpDefaultDataModelTools.InitializeAsync();
             }
-            //await MpTestDataBuilder.CreateImportsTestContentAsync(
-            //       db_path: Mp.Services.DbInfo.DbPath,
-            //       content_count: 100_000,
-            //       big_count: 20,
-            //       link_count: 150,
-            //       parent_tag_count: 3,
-            //       child_tag_count: 3,
-            //       sub_child_tag_count: 2);
+
+
             IsLoaded = true;
 
             sw.Stop();
             MpConsole.WriteLine($"Db loading: {sw.ElapsedMilliseconds} ms");
         }
 
+        public static async Task PerformDbOptimizationAsync() {
+            await _connectionAsync.ExecuteAsync("PRAGMA analysis_limit=1000;");
+            await _connectionAsync.ExecuteAsync("PRAGMA optimize;");
+        }
+
+        public static async Task<bool> CheckIsUserPasswordSetAsync() {
+            if (!Mp.Services.DbInfo.DbPath.IsFile()) {
+                return false;
+            }
+            if (Mp.Services.DbInfo.HasUserDefinedPassword) {
+                return true;
+            }
+
+            // if password is set Test should fail with default pwd
+            bool does_default_connect = await TestDbConnectionAsync();
+            return !does_default_connect;
+        }
         public static string GetParameterizedQueryString(string query, object[] args) {
             if (args == null || args.Length == 0) {
                 return query;
@@ -442,8 +451,8 @@ namespace MonkeyPaste {
 
             await CreateConnectionAsync(dbPath);
 
-            bool success = await TestDbConnectionAsync();
-            if (!success) {
+            bool connect_success = await TestDbConnectionAsync();
+            if (!connect_success) {
                 int curAttemptNum = 0;
                 int maxAttempts = 3;
                 while (curAttemptNum < maxAttempts) {
@@ -456,8 +465,8 @@ namespace MonkeyPaste {
                     await _connectionAsync.CloseAsync();
                     _connectionAsync = null;
                     await CreateConnectionAsync(dbPath);
-                    success = await TestDbConnectionAsync();
-                    if (success) {
+                    connect_success = await TestDbConnectionAsync();
+                    if (connect_success) {
                         break;
                     }
                     // wait for pw box to hide (so new one doesn't reposition)
@@ -470,7 +479,29 @@ namespace MonkeyPaste {
 #if DEBUG
             MpConsole.WriteLine($"Db Password: '{dbPass}'");
 #endif
-            return success ? isNewDb : null;
+            bool? success = connect_success ? isNewDb : null;
+            if (success.IsTrue()) {
+                await InitDbSettingsAsync();
+            }
+            return success;
+        }
+
+        private static async Task InitDbSettingsAsync() {
+            string[] settings = new string[] {
+                $"pragma journal_mode = WAL;",
+                $"pragma synchronous = normal;",
+                $"pragma temp_store = memory;",
+                $"pragma mmap_size = 30000000000;",
+                $"pragma page_size = 32768;"
+            };
+            for (int i = 0; i < settings.Length; i++) {
+                try {
+                    await _connectionAsync.ExecuteAsync(settings[i]);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error setting db pref: '{settings[i]}'.", ex);
+                }
+            }
         }
 
         private static SQLiteConnectionString GetConnectionString(string dbPath, string dbPass) {
@@ -526,6 +557,7 @@ namespace MonkeyPaste {
             if (_connectionAsync != null) {
                 return;
             }
+
             Batteries_V2.Init();
             if (_connectionAsync == null) {
                 try {
@@ -545,8 +577,11 @@ namespace MonkeyPaste {
                     MpConsole.WriteTraceLine($"Db Error creating async connection", ex);
                 }
             }
+
+            //await InitDbSettingsAsync();
             MpConsole.WriteLine($"Db Async WAL: {(UseWAL ? "ENABLED" : "DISABLED")}");
         }
+
         private static void CreateConnection(
             string dbPath = "",
             string dbPass = null) {
@@ -772,7 +807,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             var default_tags = new object[] {
                 // guid,name,color,treeIdx,pinIdx,track,sync,parentId,type
                 new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "Collections", MpSystemColors.lemonchiffon2, 1,-1, tracked,synced, 0, MpTagType.Group},
-                new object[] { "287140cc-2f9a-4bc6-a88d-c5b836f1a340", "All", MpSystemColors.blue1, 0,-1, tracked,synced, MpTag.FiltersTagId, MpTagType.Link},
+                new object[] { "287140cc-2f9a-4bc6-a88d-c5b836f1a340", "All", MpSystemColors.blue1, 0,1, tracked,synced, MpTag.FiltersTagId, MpTagType.Link},
                 new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", MpSystemColors.yellow1, 1,-1,tracked,synced, MpTag.CollectionsTagId, MpTagType.Link},
                 new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", "Filters", MpSystemColors.forestgreen, 0,-1,tracked,synced, 0, MpTagType.Group},
                 new object[] { "70db0f5c-a717-4bca-af2f-a7581aecc24d", "Trash", MpSystemColors.lightsalmon1, 2,-1,tracked,synced, 0, MpTagType.Link},

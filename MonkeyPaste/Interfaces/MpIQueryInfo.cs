@@ -14,7 +14,7 @@ namespace MonkeyPaste {
         bool IsQuerying { get; }
         bool CanRequery { get; }
         public int TotalAvailableItemsInQuery { get; }
-        Task<List<MpCopyItem>> FetchPageAsync(int offset, int limit);
+        Task<List<int>> FetchPageIdsAsync(int offset, int limit);
         Task QueryForTotalCountAsync(bool isRequery);
 
         Task<int> FetchItemOffsetIdxAsync(int ciid);

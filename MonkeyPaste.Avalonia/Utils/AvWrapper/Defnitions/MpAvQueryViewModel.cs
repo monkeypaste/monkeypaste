@@ -3,8 +3,6 @@ using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -95,8 +93,8 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-        public async Task<List<MpCopyItem>> FetchPageAsync(int offset, int limit) {
-            var items = await MpContentQuery.FetchItemsAsync(this, offset, limit, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+        public async Task<List<int>> FetchPageIdsAsync(int offset, int limit) {
+            var items = await MpContentQuery.FetchItemIdsAsync(this, offset, limit, Mp.Services.ContentQueryTools.GetOmittedContentIds());
             return items;
         }
         public async Task<int> FetchItemOffsetIdxAsync(int ciid) {

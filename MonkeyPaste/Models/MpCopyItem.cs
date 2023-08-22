@@ -58,13 +58,16 @@ namespace MonkeyPaste {
 
         public string Title { get; set; } = string.Empty;
 
+        [Indexed]
         [Column("e_MpCopyItemType")]
         public string ItemTypeName { get; set; } = MpCopyItemType.None.ToString();
 
+        [Indexed]
         public DateTime CopyDateTime { get; set; }
 
         public DateTime LastCapRelatedDateTime { get; set; }
 
+        [Indexed]
         public string ItemData { get; set; } = string.Empty;
 
         [Column("fk_MpIconId")]
@@ -80,7 +83,7 @@ namespace MonkeyPaste {
         [Column("HexColor")]
         public string ItemColor { get; set; } = string.Empty;
 
-        public string ItemMetaData { get; set; }
+        public string ItemMetaData { get; set; } = string.Empty;
 
         // Text: 1/2 = chars/lines
         // Image: 1/2 = width/height

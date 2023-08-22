@@ -1,8 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,13 +16,13 @@ namespace MonkeyPaste {
             return (int)result;
         }
 
-        public static async Task<List<MpCopyItem>> FetchItemsAsync(
+        public static async Task<List<int>> FetchItemIdsAsync(
             MpIQueryInfo head_qi,
             int offset,
             int limit,
             IEnumerable<int> idsToOmit) {
             object result = await PeformQueryAsync_internal(head_qi, offset, limit, idsToOmit, false);
-            return result as List<MpCopyItem>;
+            return result as List<int>;
         }
         public static async Task<int> FetchItemOffsetAsync(
             MpIQueryInfo head_qi,
@@ -110,16 +108,18 @@ namespace MonkeyPaste {
                 return total_count;
             }
 
+            // item fetch
+            //string inner_query = $"SELECT RootId,{head_qi.GetSortField()} FROM ({sb}) {orderBy_clause}";
+            //string fetch_query = $"SELECT * FROM MpCopyItem WHERE pk_MpCopyItemId IN (SELECT DISTINCT RootId FROM ({inner_query})) {orderBy_clause} LIMIT {limit} OFFSET {offset}";
+
+            // id fetch
             string inner_query = $"SELECT RootId,{head_qi.GetSortField()} FROM ({sb}) {orderBy_clause}";
-            string fetch_query = $"SELECT * FROM MpCopyItem WHERE pk_MpCopyItemId IN (SELECT DISTINCT RootId FROM ({inner_query})) {orderBy_clause} LIMIT {limit} OFFSET {offset}";
+            string fetch_query = $"SELECT DISTINCT RootId FROM ({inner_query}) LIMIT {limit} OFFSET {offset}";
+
             var args = sub_queries.SelectMany(x => x.Item3).ToArray();
             MpConsole.WriteLine($"Fetch Query: ");
             MpConsole.WriteLine(MpDb.GetParameterizedQueryString(fetch_query, args));
-            var result = await MpDb.QueryAsync<MpCopyItem>(fetch_query, args);
-
-            //string query = $"SELECT RootId FROM({sb})";
-            //var result = await MpDb.QueryScalarsAsync<int>(query, sub_queries.SelectMany(x => x.Item3).ToArray());
-            //return result.Where(x => !ci_idsToOmit.Contains(x)).Distinct().ToList();
+            var result = await MpDb.QueryScalarsAsync<int>(fetch_query, args);
             return result;
         }
 

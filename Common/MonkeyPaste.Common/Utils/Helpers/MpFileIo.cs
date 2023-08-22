@@ -21,6 +21,22 @@ namespace MonkeyPaste.Common {
             return uri.AbsolutePath;
         }
 
+        public static string ToDirectory(this string path, bool replaceIfExists, bool createUniqueIfExists) {
+            MpDebug.Assert(!(replaceIfExists && createUniqueIfExists), "Only 1 flag can be true", false, true);
+            if (path.IsDirectory()) {
+                if (replaceIfExists) {
+                    Directory.Delete(path, true);
+                } else if (createUniqueIfExists) {
+                    path = GetUniqueFileOrDirectoryName(Directory.GetParent(path).FullName, Path.GetDirectoryName(path));
+                } else {
+                    // nothing to do
+                    return path;
+                }
+            }
+            var result = Directory.CreateDirectory(path);
+            return result.FullName;
+        }
+
         public static string ToFile(
             this string fileData,
             string forcePath = "",

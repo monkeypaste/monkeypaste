@@ -32,6 +32,12 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIAccountTools Implementation
+        public void Init() {
+#if DEBUG
+            SetAccountType(MpAvPrefViewModel.Instance.TestAccountType);
+#endif
+        }
+
         public string AccountStateInfo {
             get {
                 if (CurrentAccountType == MpUserAccountType.Unlimited) {
@@ -189,6 +195,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
+        public MpAvAccountTools() {
+            Init();
+        }
         #endregion
 
         #region Protected Methods
