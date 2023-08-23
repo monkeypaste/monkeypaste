@@ -15,8 +15,9 @@ namespace MonkeyPaste {
 
         [Column("fk_MpDataObjectId")]
         public int DataObjectId { get; set; }
+        [Indexed]
         public string ItemFormat { get; set; }
-
+        [Indexed]
         public string ItemData { get; set; }
 
         [Column("fk_MpIconId")]

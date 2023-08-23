@@ -706,10 +706,18 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
                 if (!IsAnyPlaceholder && !IsEditorLoaded) {
-                    if (_contentView == null && GetContentView() is MpIContentView cv) {
-                        // BUG pinning editable tile, content never loads
-                        // maybe the msg handle check is rejecting the load?
-                        cv.LoadContentAsync().FireAndForgetSafeAsync(this);
+                    if (GetContentView() is MpIContentView cv) {
+                        if (cv.IsViewInitialized) {
+                            cv.LoadContentAsync().FireAndForgetSafeAsync(this);
+                        } else {
+                            Dispatcher.UIThread.Post(async () => {
+                                if (cv is MpAvContentWebView cwv) {
+                                    await cwv.LoadEditorAsync();
+                                    await cwv.LoadContentAsync();
+                                    OnPropertyChanged(nameof(IsAnyBusy));
+                                }
+                            });
+                        }
                     }
                     return true;
                 }

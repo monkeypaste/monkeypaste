@@ -93,7 +93,7 @@
                                          DataContext="{Binding}"
                                          Content="{Binding CurPageIdx}">
                 <TransitioningContentControl.PageTransition>
-                    <CrossFade Duration="0:00:00.250"  />
+                    <CrossFade Duration="0:00:00.250" />
                 </TransitioningContentControl.PageTransition>
                 <TransitioningContentControl.DataTemplates>
                     <local:MpAvWelcomeContentTemplateSelector>
@@ -125,12 +125,26 @@
                     </local:MpAvWelcomeContentTemplateSelector>
                 </TransitioningContentControl.DataTemplates>
             </TransitioningContentControl>
-
+            
             <!--  WIZARD NAV  -->
             <Grid Grid.Row="2">
+                <Grid.Resources>
+                    <SolidColorBrush x:Key="ButtonForeground">White</SolidColorBrush>
+                    <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
+                    <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
+                </Grid.Resources>
                 <Button HorizontalAlignment="Left"
                         Classes="navButton"
                         Command="{Binding SkipWelcomeCommand}">
+                    <Button.Resources>
+                        <SolidColorBrush x:Key="ButtonBackground">Gold</SolidColorBrush>
+                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Gold</SolidColorBrush>
+                        <SolidColorBrush x:Key="ButtonBackgroundPressed">Gold</SolidColorBrush>
+
+                      <SolidColorBrush x:Key="ButtonForeground">Black</SolidColorBrush>
+                      <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
+                      <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
+                    </Button.Resources>
                     <TextBlock Text="Skip" />
                 </Button>
                 <StackPanel Orientation="Horizontal"
@@ -138,11 +152,18 @@
                     <Button Margin="0,0,5,0"
                             Classes="defaultButton textOnlyButton navButton"
                             Command="{Binding SelectPrevPageCommand}">
+
                         <TextBlock Text="Previous" />
                     </Button>
                     <Button Classes="defaultButton textOnlyButton navButton"
                             IsVisible="{Binding !IsVisible, ElementName=FinishButton}"
                             Command="{Binding SelectNextPageCommand}">
+
+                        <Button.Resources>
+                            <SolidColorBrush x:Key="ButtonBackground">Blue</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Blue</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPressed">Blue</SolidColorBrush>
+                        </Button.Resources>
                         <TextBlock Text="Next" />
                     </Button>
 
@@ -151,6 +172,12 @@
                             Classes="defaultButton textOnlyButton navButton"
                             IsVisible="{Binding CanFinish}"
                             Command="{Binding FinishWelcomeCommand}">
+
+                        <Button.Resources>
+                            <SolidColorBrush x:Key="ButtonBackground">Green</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Green</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPressed">Green</SolidColorBrush>
+                        </Button.Resources>
                         <TextBlock Text="Done" />
                     </Button>
                 </StackPanel>

@@ -10,9 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpPluginBrowserTabType {
@@ -202,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("JigsawImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeGrayAccent3Color.ToString()),
+                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeColor.ToString()),
                 Content = new MpAvPluginBrowserView(),
                 Topmost = true
             };

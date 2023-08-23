@@ -1413,6 +1413,9 @@
     <Compile Update="Views\Reusable\Notifications\Welcome\PointerGesture\MpAvDragToOpenGestureView.axaml.cs">
       <DependentUpon>MpAvDragToOpenGestureView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Reusable\Notifications\Welcome\PointerGesture\MpAvFakeWindowView.axaml.cs">
+      <DependentUpon>MpAvFakeWindowView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Reusable\Notifications\Welcome\PointerGesture\MpAvScrollToOpenGestureView.axaml.cs">
       <DependentUpon>MpAvScrollToOpenGestureView.axaml</DependentUpon>
     </Compile>
@@ -1505,13 +1508,13 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.3" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.3" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.3" />
+    <PackageReference Include="Avalonia" Version="11.0.4" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.4" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.4" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.3" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.3" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.3" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.4" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.4" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.4" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.2" />
     <PackageReference Include="Markdig" Version="0.32.0" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.15.1" />
@@ -1524,7 +1527,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(IsDesktop) == 'true'">
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.3" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.4" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
 

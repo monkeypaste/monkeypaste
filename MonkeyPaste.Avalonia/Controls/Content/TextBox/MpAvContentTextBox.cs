@@ -4,14 +4,11 @@ using Avalonia.Controls.Documents;
 using Avalonia.Controls.Presenters;
 using Avalonia.Input;
 using Avalonia.Media;
-using Avalonia.Styling;
 using Avalonia.Threading;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -55,7 +52,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIContentView Implementation
-
+        bool MpIContentView.IsViewInitialized =>
+            IsInitialized;
         public bool IsContentLoaded =>
             IsInitialized && BindingContext != null;
         public bool IsSubSelectable =>

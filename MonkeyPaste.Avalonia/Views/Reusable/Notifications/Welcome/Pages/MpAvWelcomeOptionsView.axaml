@@ -66,37 +66,39 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <RadioButton Classes="defaultButton gestureButton effectTrans"
-                                 Theme="{StaticResource SwitchlessRadioButton}"
-                                 GroupName="GestureProfile"
-                                 CornerRadius="7"
-                                 Margin="15"
-                                 Padding="15,15,15,5"
-                                 Width="200"
-                                 Height="230"
-                                 HorizontalContentAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Click="MpAvWelcomeOptionsView_Click"
-                                 IsChecked="{Binding IsChecked, Mode=OneWay}"
-                                 local:MpAvIsHoveringExtension.IsEnabled="True"
-                                 local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
-                        <DockPanel HorizontalAlignment="Stretch"
-                                   VerticalAlignment="Stretch">
-                            <TextBlock DockPanel.Dock="Bottom"
-                                       HorizontalAlignment="Stretch"
-                                       VerticalAlignment="Bottom"
-                                       TextAlignment="Center"
-                                       FontSize="20"
+                    <Grid local:MpAvIsHoveringExtension.IsEnabled="True"
+                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+                        <RadioButton Classes="defaultButton gestureButton effectTrans"
+                                     Theme="{StaticResource SwitchlessRadioButton}"
+                                     GroupName="GestureProfile"
+                                     CornerRadius="7"
+                                     Margin="15"
+                                     Padding="15,15,15,5"
+                                     Width="200"
+                                     Height="230"
+                                     HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     IsHitTestVisible="{Binding IsHitTestable}"
+                                     Command="{Binding ToggleOptionCommand}"
+                                     IsChecked="{Binding IsChecked, Mode=OneWay}">
+                            <DockPanel HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch">
+                                <TextBlock DockPanel.Dock="Bottom"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Bottom"
+                                           TextAlignment="Center"
+                                           FontSize="20"
+                                           Classes="effectTrans"
+                                           Text="{Binding LabelText}" />
+                                <Image Width="160"
+                                       Height="160"
+                                       Margin="0,0,0,10"
+                                       Stretch="UniformToFill"
                                        Classes="effectTrans"
-                                       Text="{Binding LabelText}" />
-                            <Image Width="160"
-                                   Height="160"
-                                   Margin="0,0,0,10"
-                                   Stretch="UniformToFill"
-                                   Classes="effectTrans"
-                                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                        </DockPanel>
-                    </RadioButton>
+                                       Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            </DockPanel>
+                        </RadioButton>
+                    </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

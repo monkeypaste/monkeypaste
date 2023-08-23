@@ -1,6 +1,4 @@
-﻿
-using Avalonia.Controls;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -14,6 +12,26 @@ namespace MonkeyPaste.Avalonia {
 
         public string LabelText { get; set; }
         public string DescriptionText { get; set; }
+
+        public bool IsHitTestable {
+            get {
+                if (Parent != null &&
+                   (Parent.CurPageType == MpWelcomePageType.ScrollWheel ||
+                    Parent.CurPageType == MpWelcomePageType.DragToOpen) &&
+                    OptionId is int optVal && optVal == 1 &&
+                    !IsChecked) {
+                    // disable passive enabling
+                    return false;
+                }
+                if (Parent != null &&
+                    Parent.CurOptGroupViewModel.Items.Count > 1 &&
+                    IsChecked) {
+                    // disable untoggling a multi radio 
+                    return false;
+                }
+                return true;
+            }
+        }
         public MpAvWelcomeOptionItemViewModel() : base(null) { }
         public MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel parent, object optId) : base(parent) {
             PropertyChanged += MpAvGestureProfileItemViewModel_PropertyChanged;
@@ -26,6 +44,7 @@ namespace MonkeyPaste.Avalonia {
                     if (Parent != null) {
                         Parent.OnPropertyChanged(nameof(Parent.HoverItem));
                     }
+                    OnPropertyChanged(nameof(IsHitTestable));
                     break;
             }
         }
@@ -33,30 +52,6 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ToggleOptionCommand => new MpCommand<object>(
             (args) => {
                 IsChecked = !IsChecked;
-            },
-            (args) => {
-                if (IsChecked) {
-                    return false;
-                }
-                if (!Parent.IS_PASSIVE_GESTURE_TOGGLE_ENABLED) {
-                    return true;
-                }
-                if (Parent != null &&
-                    OptionId is int optVal &&
-                    args is Control &&
-                    (Parent.CurPageType == MpWelcomePageType.ScrollWheel ||
-                    Parent.CurPageType == MpWelcomePageType.DragToOpen)) {
-                    if (optVal == 0 && IsChecked) {
-                        return false;
-                    }
-                    if (optVal == 1 && IsChecked) {
-                        return false;
-                    }
-                    // these options are enabled passively so if cmd arg is the view
-                    // its coming from ui which should be ignored
-                    //return false;
-                }
-                return true;
             });
     }
 }

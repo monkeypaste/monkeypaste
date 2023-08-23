@@ -42,6 +42,7 @@ namespace MonkeyPaste {
     }
     public interface MpIContentView :
         MpIHasDataContext, MpIHasDevTools, MpIRecyclableLocatorItem, MpIJsonMessenger {
+        bool IsViewInitialized { get; }
         bool IsContentLoaded { get; }
         bool IsSubSelectable { get; }
         Task LoadContentAsync(bool isSearchEnabled = true);

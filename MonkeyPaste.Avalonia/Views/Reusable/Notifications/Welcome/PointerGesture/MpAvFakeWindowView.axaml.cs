@@ -3,9 +3,10 @@ using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public partial class MpAvWelcomeOptionsView : MpAvUserControl<MpAvWelcomeOptionGroupViewModel> {
-        public MpAvWelcomeOptionsView() : base() {
+    public partial class MpAvFakeWindowView : MpAvUserControl<MpAvScrollToOpenGestureViewModel> {
+        public MpAvFakeWindowView() : base() {
             AvaloniaXamlLoader.Load(this);
         }
+
     }
 }

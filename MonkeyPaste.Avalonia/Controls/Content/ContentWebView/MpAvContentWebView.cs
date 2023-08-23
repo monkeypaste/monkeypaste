@@ -132,6 +132,9 @@ namespace MonkeyPaste.Avalonia {
         DateTime? MpIRecyclableLocatorItem.LocatedDateTime { get; set; }
         #endregion
 
+        bool MpIContentView.IsViewInitialized =>
+            IsEditorInitialized;
+
         bool MpIContentView.IsContentLoaded =>
             IsEditorLoaded;
         void MpIHasDevTools.ShowDevTools() =>
@@ -388,6 +391,7 @@ namespace MonkeyPaste.Avalonia {
                 notificationType != MpEditorBindingFunctionType.notifyDomLoaded &&
                 notificationType != MpEditorBindingFunctionType.notifyInitComplete) {
                 // converter doesn't have data context but needs to notify dom loaded which doesn't need it
+                MpDebug.Assert(this is MpAvPlainHtmlConverterWebView, "Shouldn't happen, editor never loads. Maybe need to block until data context set?");
                 return;
             }
             MpJsonObject ntf = null;
@@ -900,6 +904,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvContentWebView() : base() {
+            InitialUrl = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
             this.GetObservable(MpAvContentWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged());
 
             this.GetObservable(MpAvContentWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());
@@ -938,7 +943,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnBrowserCreated(EventArgs e) {
             base.OnBrowserCreated(e);
-            Navigate(Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath());
+            //Navigate(Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath());
         }
 
         protected override void OnNavigated(NavigatedEventArgs e) {
@@ -947,7 +952,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             LoadEditorAsync().FireAndForgetSafeAsync();
-            MpConsole.WriteLine("loaded");
         }
 #else
         public override void OnNavigated(string url) {
@@ -1146,7 +1150,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
 
-        private async Task LoadEditorAsync() {
+        public async Task LoadEditorAsync() {
             Dispatcher.UIThread.VerifyAccess();
 
 #if CEF_WV

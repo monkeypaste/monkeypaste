@@ -83,7 +83,7 @@ namespace MonkeyPaste {
                 await MpTestDataBuilder.CreateImportsTestContentAsync(
                        db_path: Mp.Services.DbInfo.DbPath,
                        pwd: Mp.Services.DbInfo.DbPassword,
-                       content_count: 100_000,
+                       content_count: 1_000_000,
                        big_count: 20,
                        link_count: 150,
                        parent_tag_count: 3,
@@ -792,11 +792,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
         private static async Task InitDefaultDataAsync() {
             await InitDefaultTagsAsync();
             await InitDefaultShortcutsAsync(Mp.Services.WelcomeSetupInfo.DefaultRoutingProfileType);
-#if DEBUG
-            if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
-                await MpTestDataBuilder.CreateTestContentAsync();
-            }
-#endif
+
             MpConsole.WriteLine(@"Created all default tables");
         }
 

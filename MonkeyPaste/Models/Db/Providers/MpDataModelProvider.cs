@@ -60,6 +60,13 @@ namespace MonkeyPaste {
 
         #region Last RowId Query
 
+        public static int GetLastRowId<T>() where T : new() {
+            string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
+            string pk_name = $"pk_{table_name}Id";
+            string query = $"select rowid from {table_name} order by rowid desc limit 1";
+            var result = MpDb.QueryScalar<int>(query);
+            return result;
+        }
         public static async Task<int> GetLastRowIdAsync<T>() where T : new() {
             string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
             string pk_name = $"pk_{table_name}Id";

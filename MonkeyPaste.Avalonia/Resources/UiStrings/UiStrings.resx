@@ -175,7 +175,7 @@
     <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
   </data>
   <data name="WelcomeDragToOpenGestureLabel" xml:space="preserve">
-    <value>Drag Here</value>
+    <value>Drag Up Here</value>
   </data>
   <data name="WelcomeDragToOpenLabel1" xml:space="preserve">
     <value>Disabled</value>
@@ -235,7 +235,7 @@
     <value>Easy Right?</value>
   </data>
   <data name="WelcomeScrollToOpenGestureLabel" xml:space="preserve">
-    <value>Scroll Here</value>
+    <value>Scroll Up Here!</value>
   </data>
   <data name="WelcomeScrollToOpenLabel1" xml:space="preserve">
     <value>Disabled</value>

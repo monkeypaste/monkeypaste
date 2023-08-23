@@ -1540,39 +1540,33 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            MpRect pad_rect = MpRect.Empty;
-            if (ctvm.IsQueryItem) {
-                double gs_fixed_length = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
-                double pad = gs_fixed_length * 2;
-                // tray splitter isn't being accounted for when obstructing view
-                // so set use its size for padding
-                if (ListOrientation == Orientation.Horizontal) {
-                    pad_rect.Left = pad;
-                } else {
-                    pad_rect.Top = pad;
-                }
-            }
-            MpRect svr = new MpRect(0, 0, ObservedQueryTrayScreenWidth, ObservedQueryTrayScreenHeight);
-            MpRect ctvm_rect = ctvm.ScreenRect;
+            // Only query items from here
+            double pad_origin = MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength;
+            double pad_extent = ScrollBarFixedAxisSize;
+            MpRect svr = new MpRect(
+                pad_origin,
+                pad_origin,
+                ObservedQueryTrayScreenWidth - pad_extent,
+                ObservedQueryTrayScreenHeight - pad_extent);
 
+            MpRect ctvm_rect = ctvm.ScreenRect;
             MpPoint delta_scroll_offset = new MpPoint();
-            //if (DefaultScrollOrientation == Orientation.Horizontal) {
+
             if (ctvm_rect.Left < svr.Left) {
                 //item is outside on left
-                delta_scroll_offset.X = ctvm_rect.Left - svr.Left - pad_rect.Left;
+                delta_scroll_offset.X = ctvm_rect.Left - svr.Left;
             } else if (ctvm_rect.Right > svr.Right) {
                 //item is outside on right
-                delta_scroll_offset.X = ctvm_rect.Right - svr.Right + pad_rect.Right;
+                delta_scroll_offset.X = ctvm_rect.Right - svr.Right;
             }
-            //} else {
+
             if (ctvm_rect.Top < svr.Top) {
                 //item is outside above
-                delta_scroll_offset.Y = ctvm_rect.Top - svr.Top - pad_rect.Top;
+                delta_scroll_offset.Y = ctvm_rect.Top - svr.Top;
             } else if (ctvm_rect.Bottom > svr.Bottom) {
                 //item is outside below
-                delta_scroll_offset.Y = ctvm_rect.Bottom - svr.Bottom + pad_rect.Bottom;
+                delta_scroll_offset.Y = ctvm_rect.Bottom - svr.Bottom;
             }
-            //}
 
             var target_offset = ScrollOffset + delta_scroll_offset;
             ScrollVelocity = MpPoint.Zero;

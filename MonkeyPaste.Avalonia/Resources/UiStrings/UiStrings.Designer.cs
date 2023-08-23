@@ -232,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drag Here.
+        ///   Looks up a localized string similar to Drag Up Here.
         /// </summary>
         public static string WelcomeDragToOpenGestureLabel {
             get {
@@ -412,7 +412,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scroll Here.
+        ///   Looks up a localized string similar to Scroll Up Here!.
         /// </summary>
         public static string WelcomeScrollToOpenGestureLabel {
             get {

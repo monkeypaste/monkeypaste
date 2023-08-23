@@ -51,6 +51,9 @@ namespace MonkeyPaste.Avalonia {
         public MpPointGestureType GestureType { get; }
         #endregion
 
+        public double MaxWindowY =>
+            130;
+
         #region Appearance
         #endregion
 
@@ -82,12 +85,11 @@ namespace MonkeyPaste.Avalonia {
             var gw = new MpAvWindow() {
                 DataContext = this,
                 Topmost = true,
-                Content = GestureType == MpPointGestureType.ScrollToOpen ? new MpAvScrollToOpenGestureView() : new MpAvDragToOpenGestureView(),
                 Position = new PixelPoint(),
                 Width = ss.Width,
-                Height = ss.Height,
+                Height = MaxWindowY,
                 Background = Brushes.Transparent,//new SolidColorBrush() { Color = Colors.Orange, Opacity = 0.3 },
-                WindowState = WindowState.FullScreen,
+                WindowState = WindowState.Normal,
                 CanResize = false,
                 ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome,
                 ExtendClientAreaToDecorationsHint = true,
@@ -97,7 +99,16 @@ namespace MonkeyPaste.Avalonia {
                 WindowStartupLocation = WindowStartupLocation.Manual,
                 ShowInTaskbar = false,
             };
+
+            gw.Opened += Gw_Opened;
             return gw;
+        }
+
+        private void Gw_Opened(object sender, System.EventArgs e) {
+            if (sender is not Window w) {
+                return;
+            }
+            w.Position = new PixelPoint();
         }
         #endregion
 

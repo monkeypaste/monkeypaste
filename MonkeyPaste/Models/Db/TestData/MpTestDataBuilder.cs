@@ -1,7 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,34 +30,26 @@ namespace MonkeyPaste {
             var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
             string this_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(this_app);
 
-            string eoc = '\t'.ToString();
+            string eoc = "|";// '\t'.ToString();
             string eol = Environment.NewLine;
 
-            // NOTE this assumes NO content exists so first ciid will be 1
+            var table_types = new Type[] {
+                typeof(MpTag),
+                typeof(MpCopyItemTag),
+                typeof(MpCopyItem),
+                typeof(MpCopyItemTransaction),
+                typeof(MpTransactionSource),
+                typeof(MpDataObject),
+                typeof(MpDataObjectItem)
+            };
 
-            // Tables:
-            // MpTag
-            // MpCopyItemTag
-            // MpCopyItem
-            // MpCopyItemTransaction
-            // MpTransactionSource
-            // MpDataObject
-            // MpDataObjectItem
-
-            var t_sb = new StringBuilder();
-            var cit_sb = new StringBuilder();
-            var ci_sb = new StringBuilder();
-            var citr_sb = new StringBuilder();
-            var ts_sb = new StringBuilder();
-            var do_sb = new StringBuilder();
-            var doi_sb = new StringBuilder();
-
-            int last_tid = await MpDataModelProvider.GetLastRowIdAsync<MpTag>();
-            int cur_tag_id = last_tid;
-            List<int> test_tag_ids = new List<int>();
+            var tables = table_types.ToDictionary(x => x, x => new MpImportTable(x));
+            var tt = tables[typeof(MpTag)];
+            int first_tag_id = tt.LastRowId + 1;
             for (int i = 0; i < parent_tag_count; i++) {
-                int ptid = ++cur_tag_id;
-                t_sb.AppendLine(
+
+                int ptid = tt.LastRowId + 1;
+                tt.AddRow(
                     string.Join(eoc,
                     ptid,
                     MpTag.CollectionsTagId,
@@ -71,8 +62,8 @@ namespace MonkeyPaste {
                     MpContentSortType.CopyDateTime,
                     true));
                 for (int j = 0; j < child_tag_count; j++) {
-                    int ctid = ++cur_tag_id;
-                    t_sb.AppendLine(
+                    int ctid = tt.LastRowId + 1;
+                    tt.AddRow(
                         string.Join(eoc,
                             ctid,
                             ptid,
@@ -85,8 +76,8 @@ namespace MonkeyPaste {
                             MpContentSortType.CopyDateTime,
                             true));
                     for (int k = 0; k < sub_child_tag_count; k++) {
-                        int sctid = ++cur_tag_id;
-                        t_sb.AppendLine(
+                        int sctid = tt.LastRowId + 1;
+                        tt.AddRow(
                             string.Join(eoc,
                                 sctid,
                                 ctid,
@@ -98,45 +89,48 @@ namespace MonkeyPaste {
                                 $"TEST_{i}_{j}_{k}",
                                 MpContentSortType.CopyDateTime,
                                 true));
-                        test_tag_ids.Add(sctid);
                     }
-                    test_tag_ids.Add(ctid);
                 }
-                test_tag_ids.Add(ptid);
             }
-
+            var test_tag_ids = Enumerable.Range(first_tag_id, parent_tag_count * child_tag_count * sub_child_tag_count).ToList();
             Dictionary<int, int> test_tag_count_lookup = test_tag_ids.ToDictionary(x => x, x => 0);
             int[] link_idxs = MpRandom.GetUniqueRandomInts(1, content_count, link_count);
             int[] big_idxs = MpRandom.GetUniqueRandomInts(1, content_count, big_count);
 
-            int cit_count = 0;
-
             for (int i = 1; i <= content_count; i++) {
+                int citid = tables[typeof(MpCopyItemTag)].LastRowId + 1;
+                int ciid = tables[typeof(MpCopyItem)].LastRowId + 1;
+                int citrid = tables[typeof(MpCopyItemTransaction)].LastRowId + 1;
+                int doid = tables[typeof(MpDataObject)].LastRowId + 1;
+                int doiid = tables[typeof(MpDataObjectItem)].LastRowId + 1;
+                int tsid = tables[typeof(MpTransactionSource)].LastRowId + 1;
+
                 if (link_idxs.Contains(i)) {
                     int tidx = MpRandom.Rand.Next(test_tag_ids.Count);
-                    cit_sb.AppendLine(
+                    tables[typeof(MpCopyItemTag)].AddRow(
                         string.Join(eoc,
-                        ++cit_count,
-                        Guid.NewGuid(),
-                        test_tag_ids[tidx],
-                        i,
-                        test_tag_count_lookup[test_tag_ids[tidx]]++));
+                            citid,
+                            Guid.NewGuid(),
+                            test_tag_ids[tidx],
+                            ciid,
+                            test_tag_count_lookup[test_tag_ids[tidx]]++,
+                            DateTime.Now.Ticks));
                 }
                 Guid contentGuid = Guid.NewGuid();
                 bool is_big = big_idxs.Contains(i);
                 string test_pt = GetTestItemText(i, contentGuid, is_big);
 
-                ci_sb.AppendLine(
+                tables[typeof(MpCopyItem)].AddRow(
                     string.Join(eoc,
-                        i,
+                        ciid,
                         Guid.NewGuid(),
-                        $"Test{i.ToCommaSeperatedIntString()}",
+                        $"Test_{ciid.ToCommaSeperatedIntString()}",
                         MpCopyItemType.Text,
                         DateTime.Now.Ticks,
                         DateTime.Now.Ticks,
-                        GetTestItemHtml(i, contentGuid, is_big),
+                        GetTestItemHtml(ciid, contentGuid, is_big),
                         MpDefaultDataModelTools.UnknownIconId,
-                        i,
+                        doid,
                         1,
                         0,
                         string.Empty,
@@ -145,11 +139,11 @@ namespace MonkeyPaste {
                         6,
                         MpCopyItem.GetContentCheckSum(test_pt)));
 
-                citr_sb.AppendLine(
+                tables[typeof(MpCopyItemTransaction)].AddRow(
                     string.Join(eoc,
-                        i,
+                        citrid,
                         Guid.NewGuid(),
-                        i,
+                        ciid,
                         MpTransactionType.Created,
                         MpJsonMessageFormatType.DataObject,
                         string.Empty,
@@ -159,39 +153,29 @@ namespace MonkeyPaste {
                         DateTime.Now.Ticks,
                         DateTime.Now.Ticks));
 
-                ts_sb.AppendLine(
+                tables[typeof(MpTransactionSource)].AddRow(
                     string.Join(eoc,
-                        i,
+                        tsid,
                         Guid.NewGuid(),
-                        i,
+                        citrid,
                         MpTransactionSourceType.App,
                         MpDefaultDataModelTools.ThisAppId,
                         DateTime.Now.Ticks));
 
-                do_sb.AppendLine(
+                tables[typeof(MpDataObject)].AddRow(
                     string.Join(eoc,
-                        i,
+                        doid,
                         Guid.NewGuid()));
 
-                doi_sb.AppendLine(
+                tables[typeof(MpDataObjectItem)].AddRow(
                     string.Join(eoc,
-                        i,
+                        doiid,
                         Guid.NewGuid(),
-                        i,
+                        doid,
                         MpPortableDataFormats.Text,
                         test_pt,
                         0));
             }
-
-            var output_lookup = new List<Tuple<string, StringBuilder>>() {
-                new Tuple<string, StringBuilder>(nameof(MpTag), t_sb),
-                new Tuple<string, StringBuilder>(nameof(MpCopyItemTag),cit_sb),
-                new Tuple<string, StringBuilder>(nameof(MpCopyItem),ci_sb),
-                new Tuple<string, StringBuilder>(nameof(MpCopyItemTransaction),citr_sb),
-                new Tuple<string, StringBuilder>(nameof(MpTransactionSource),ts_sb),
-                new Tuple<string, StringBuilder>(nameof(MpDataObject),do_sb),
-                new Tuple<string, StringBuilder>(nameof(MpDataObjectItem),doi_sb),
-            };
 
             string import_dir_name = $"import_{content_count}";
             string import_dir_path = Path.Combine(Path.GetDirectoryName(db_path), import_dir_name);
@@ -202,118 +186,28 @@ namespace MonkeyPaste {
                 imports_sb.AppendLine($"PRAGMA key = '{pwd}';");
             }
             imports_sb.AppendLine($".explain off");
-            imports_sb.AppendLine($".headers on");
-            imports_sb.AppendLine(@$".separator {eoc} {eol}");
-            foreach (var output_tup in output_lookup) {
-                string table_name = output_tup.Item1;
+            imports_sb.AppendLine($".bail on");
+            imports_sb.AppendLine(@$".separator {eoc}");
+            foreach (var it in tables.Select(x => x.Value)) {
+                string table_name = it.TableType.Name;
                 string table_import_file_name = $"{table_name}_{content_count}.csv";
                 string table_import_file_path = Path.Combine(import_dir_path, table_import_file_name);
-                MpFileIo.WriteTextToFile(table_import_file_path, output_tup.Item2.ToString().Replace(Environment.NewLine, eol), false);
+                MpFileIo.WriteTextToFile(table_import_file_path, it.OutputCsv.Replace(Environment.NewLine, eol), false);
                 string batch_stmt = $".import {table_import_file_name} {table_name}";
                 imports_sb.AppendLine(batch_stmt);
             }
             string imports_file_name = "imports.sql";
             string imports_file_path = MpFileIo.WriteTextToFile(Path.Combine(import_dir_path, imports_file_name), imports_sb.ToString(), false);
 
-            string batch_script_text = $"sqlite3 '..\\{Path.GetFileName(db_path)}' < {imports_file_path}";
+            string batch_script_text = $"sqlite3 ..\\{Path.GetFileName(db_path)} < {imports_file_name}";
             string batch_file_name = "batch_import.bat";
             string batch_file_path = MpFileIo.WriteTextToFile(Path.Combine(import_dir_path, batch_file_name), batch_script_text, false);
+
+            //var processInfo = new ProcessStartInfo("cmd.exe", "/c " + batch_file_name);
+            //processInfo.UseShellExecute = false;
+            //processInfo.WorkingDirectory = import_dir_path;
+            //Process.Start(processInfo);
             MpDebug.Break($"batch file for {content_count} items created at path '{batch_file_path}'");
-        }
-
-
-        public static async Task CreateTestContentAsync(
-            int content_count = 0,
-            int big_count = 0,
-            int link_count = 0,
-            int parent_tag_count = 1,
-            int child_tag_count = 2,
-            int sub_child_tag_count = 0) {
-            if (content_count == 0) {
-                return;
-            }
-            MpDebug.Assert(big_count <= content_count, $"Big must be lte to content count");
-            MpDebug.Assert(content_count >= link_count, $"Link Count must be lte to content count");
-            if (link_count > 0) {
-                MpDebug.Assert(parent_tag_count > 0, $"Must have at least 1 parent tag to add link to");
-            }
-
-            Mp.Services.AccountTools.SetAccountType(MpUserAccountType.Unlimited);
-            // create test link tags
-
-            var this_app = await MpDataModelProvider.GetItemAsync<MpApp>(MpDefaultDataModelTools.ThisAppId);
-            string this_app_url = Mp.Services.SourceRefTools.ConvertToInternalUrl(this_app);
-
-
-            int[] test_tag_ids = await CreateTestLinkTagsAsync(parent_tag_count, child_tag_count, sub_child_tag_count);
-            int[] link_idxs = MpRandom.GetUniqueRandomInts(0, content_count - 1, link_count);
-
-            async Task CreateTestItemAsync(int i) {
-                Guid contentGuid = Guid.NewGuid();
-                string data = GetTestItemHtml(i, contentGuid, false);
-
-                var mpdo = new MpPortableDataObject(MpPortableDataFormats.Text, GetTestItemText(i, contentGuid, false));
-                var dobj = await MpDataObject.CreateAsync(pdo: mpdo);
-                var ci = await MpCopyItem.CreateAsync(
-                    data: data,
-                    itemType: MpCopyItemType.Text,
-                    title: $"Test {i + 1}",
-                    dataObjectId: dobj.Id);
-
-                await Mp.Services.TransactionBuilder.ReportTransactionAsync(
-                    copyItemId: ci.Id,
-                    reqType: MpJsonMessageFormatType.DataObject,
-                    respType: MpJsonMessageFormatType.Delta,
-                    transType: MpTransactionType.Created,
-                    ref_uris: new[] { this_app_url });
-
-                if (link_idxs.Contains(i)) {
-                    await MpCopyItemTag.CreateAsync(
-                        tagId: test_tag_ids[MpRandom.Rand.Next(test_tag_ids.Length)],
-                        copyItemId: ci.Id);
-                }
-                if (i % 100 == 0) {
-                    MpConsole.WriteLine($"{content_count - i} Test Items Remaining");
-                }
-            }
-            var sw = Stopwatch.StartNew();
-            for (int i = 0; i < content_count; i++) {
-                await CreateTestItemAsync(i);
-            }
-            //var tasks = Enumerable.Range(0, content_count).Select(x => CreateTestItemAsync(x));
-            //await Task.WhenAll(tasks);
-            sw.Stop();
-            MpConsole.WriteLine($"Total ms: {sw.ElapsedMilliseconds} Time per item: {sw.ElapsedMilliseconds / content_count}");
-        }
-        private static async Task<int[]> CreateTestLinkTagsAsync(int parent_count, int child_count, int sub_child_count) {
-            // NOTE Total tags will be parent * chlid * sub_child
-
-            List<int> tag_ids = new List<int>();
-            for (int i = 0; i < parent_count; i++) {
-                var parent_t = await MpTag.CreateAsync(
-                    tagName: $"TEST_{i}",
-                    treeSortIdx: i,
-                    parentTagId: MpTag.CollectionsTagId,
-                    tagType: MpTagType.Link);
-                for (int j = 0; j < child_count; j++) {
-                    var child_t = await MpTag.CreateAsync(
-                        tagName: $"TEST_{i}_{j}",
-                        treeSortIdx: j,
-                        parentTagId: parent_t.Id,
-                        tagType: MpTagType.Link);
-                    for (int k = 0; k < sub_child_count; k++) {
-                        var sub_child_t = await MpTag.CreateAsync(
-                            tagName: $"TEST_{i}_{j}_{k}",
-                            treeSortIdx: k,
-                            parentTagId: child_t.Id,
-                            tagType: MpTagType.Link);
-                        tag_ids.Add(sub_child_t.Id);
-                    }
-                    tag_ids.Add(child_t.Id);
-                }
-                tag_ids.Add(parent_t.Id);
-            }
-            return tag_ids.ToArray();
         }
 
         private static string GetTestItemText(int i, Guid contentGuid, bool isBig) {
@@ -331,5 +225,27 @@ namespace MonkeyPaste {
 
             return string.Format(template_html, i, contentGuid);
         }
+    }
+
+    internal class MpImportTable {
+        private StringBuilder sb = new StringBuilder();
+        public Type TableType { get; }
+
+        public int LastRowId { get; set; }
+        public string OutputCsv =>
+            sb.ToString();
+        public MpImportTable(Type tableType) {
+            TableType = tableType;
+            var mi = typeof(MpDataModelProvider).GetMethods().FirstOrDefault(x => x.Name == nameof(MpDataModelProvider.GetLastRowId));
+            if (mi.GetGenericMethodDefinition().MakeGenericMethod(TableType).Invoke(this, null) is int last_row_id) {
+                LastRowId = last_row_id;
+            }
+        }
+
+        public void AddRow(string row) {
+            sb.AppendLine(row);
+            LastRowId++;
+        }
+
     }
 }

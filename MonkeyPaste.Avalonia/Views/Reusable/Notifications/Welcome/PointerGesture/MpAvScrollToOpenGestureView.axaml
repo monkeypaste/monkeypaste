@@ -20,7 +20,7 @@
     <local:MpAvUserControl.Styles>
         <Style Selector="Border#ContainerBorder">
             <Style.Animations>
-                <Animation Duration="0:0:1"
+                <Animation Duration="0:0:0.3"
                            IterationCount="Infinite"
                            PlaybackDirection="Alternate">
                     <KeyFrame Cue="0%">
@@ -37,7 +37,7 @@
 
         <Style Selector="Border#ScrollMarkerContainer">
             <Style.Animations>
-                <Animation Duration="0:0:1"
+                <Animation Duration="0:0:0.3"
                            IterationCount="Infinite"
                            PlaybackDirection="Alternate">
                     <KeyFrame Cue="0%">
@@ -51,55 +51,13 @@
                 </Animation>
             </Style.Animations>
         </Style>
-
-        <Style Selector="Border#PlaceholderWindow">
-            <Setter Property="Canvas.Top"
-                    Value="{Binding Bounds.Bottom, ElementName=ContainerBorder}" />
-        </Style>
-
-        <Style Selector="Border#PlaceholderWindow.show">
-            <Setter Property="Height">
-                <Setter.Value>
-                    <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
-                                  ConverterParameter="/">
-                        <Binding Path="Bounds.Height"
-                                 ElementName="ContainerBorder" />
-                        <Binding>
-                            <Binding.Source>
-                                <sys:Double>3</sys:Double>
-                            </Binding.Source>
-                        </Binding>
-                    </MultiBinding>
-                </Setter.Value>
-            </Setter>
-            <Style.Animations>
-                <Animation Duration="0:0:1"
-                           Easing="BounceEaseIn">
-                    <KeyFrame Cue="0%">
-                        <Setter Property="Canvas.Top"
-                                Value="{Binding Bounds.Bottom, ElementName=ContainerBorder}" />
-                    </KeyFrame>
-                    <KeyFrame Cue="100%">
-                        <Setter Property="Canvas.Top">
-                            <Setter.Value>
-                                <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
-                                              ConverterParameter="-">
-                                    <Binding Path="Bounds.Height"
-                                             ElementName="ContainerBorder" />
-                                    <Binding Path="Bounds.Height" />
-                                </MultiBinding>
-                            </Setter.Value>
-                        </Setter>
-                    </KeyFrame>
-                </Animation>
-            </Style.Animations>
-        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="ContainerBorder"
             BorderThickness="0,5,0,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-        <Canvas>
+        <Canvas HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
             <!--  SCROLL MARKER  -->
             <Border x:Name="ScrollMarkerContainer"
                     Canvas.Top="0">
@@ -137,44 +95,10 @@
                                FontSize="24"
                                Foreground="White"
                                FontStyle="Oblique"
+                               Effect="drop-shadow(0 0 25 black)"
                                RenderTransform="translateX(-10px) translateY(-20px)"
                                Text="{x:Static local:UiStrings.WelcomeScrollToOpenGestureLabel}" />
                 </StackPanel>
-            </Border>
-
-            <!--  PLACEHOLDER WINDOW  -->
-
-            <Border x:Name="PlaceholderWindow"
-                    Width="{Binding $parent.Bounds.Width}"
-                    IsVisible="{Binding IsPlaceholderMainWindowVisible}"
-                    Classes.show="{Binding DoShow}"
-                    Canvas.Left="0"
-                    Background="{DynamicResource ClipTrayBgColor}">
-
-                <!--  PLACEHOLDER INFO  -->
-
-                <Grid ColumnDefinitions="Auto,*,Auto"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center">
-
-
-                    <Image Grid.Column="0"
-                           Width="50"
-                           Height="50"
-                           Source="{Binding Source={StaticResource BananaImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                    <TextBlock Grid.Column="1"
-                               FontSize="42"
-                               Foreground="White"
-                               FontWeight="SemiBold"
-                               FontStyle="Oblique"
-                               TextAlignment="Center"
-                               Text="{x:Static local:UiStrings.WelcomeScrollToOpenGestureCompleteLabel}" />
-
-                    <Image Grid.Column="2"
-                           Width="50"
-                           Height="50"
-                           Source="{Binding Source={StaticResource BananaImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </Grid>
             </Border>
         </Canvas>
     </Border>

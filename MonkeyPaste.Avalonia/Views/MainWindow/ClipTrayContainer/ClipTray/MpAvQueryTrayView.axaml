@@ -110,7 +110,7 @@
             <local:MpAvPagingScrollViewer x:Name="ClipTrayScrollViewer"
                                           HorizontalScrollBarVisibility="{Binding IsQueryHorizontalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
                                           VerticalScrollBarVisibility="{Binding IsQueryVerticalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
-                                          IsScrollInertiaEnabled="True"
+                                          IsScrollInertiaEnabled="False"
                                           HorizontalAlignment="Left"
                                           VerticalAlignment="Top"
                                           AllowAutoHide="True"

@@ -19,7 +19,7 @@
             <Setter Property="Padding"
                     Value="5" />
             <Setter Property="BorderThickness"
-                    Value="1" />
+                    Value="0.5" />
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeInteractiveColor}" />
             <Setter Property="HorizontalAlignment"
@@ -27,13 +27,13 @@
             <Setter Property="HorizontalContentAlignment"
                     Value="Stretch" />
         </Style>
-        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(even)">
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(odd) /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeGrayAccent1Color}" />
+                    Value="{DynamicResource ThemeCompliment3Color}" />
         </Style>
-        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(odd)">
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(even) /template/ ContentPresenter">
             <Setter Property="Background"
-                    Value="{DynamicResource ThemeGrayAccent2Color}" />
+                    Value="{DynamicResource ThemeCompliment3DarkColor}" />
         </Style>
         <Style Selector="TextBlock.detailLabel">
             <Setter Property="FontWeight"
@@ -102,7 +102,7 @@
                   Grid.ColumnSpan="3"
                   ItemsSource="{Binding Tabs}"
                   SelectedIndex="{Binding SelectedTabIdx, Mode=TwoWay}"
-                  HorizontalAlignment="Stretch"
+                  HorizontalAlignment="Center"
                   VerticalAlignment="Top" />
 
         <!--  FILTER  -->
@@ -117,31 +117,32 @@
                         Spacing="10">
                 <!--  FILTER BOX  -->
 
-                <local:MpAvClipBorder x:Name="FilterContainer"
+                <!--<local:MpAvClipBorder x:Name="FilterContainer"
                                       BorderBrush="{DynamicResource ThemeInteractiveColor}"
-                                      CornerRadius="5">
-                    <AutoCompleteBox x:Name="FilterPluginBox"
-                                     VerticalAlignment="Stretch"
-                                     HorizontalAlignment="Stretch"
-                                     Padding="5,3,0,0"
-                                     local:MpAvDropExtension.IsEnabled="True"
-                                     local:MpAvDelayedTextChangedExtension.IsEnabled="True"
-                                     local:MpAvDelayedTextChangedExtension.DelayMs="500"
-                                     local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Mode=TwoWay}"
-                                     Width="150"
-                                     Height="30"
-                                     Watermark="Search..."
-                                     FontSize="14"
-                                     IsTextCompletionEnabled="False"
-                                     MinimumPrefixLength="0"
-                                     MinimumPopulateDelay="0.25"
-                                     ItemsSource="{Binding RecentPluginSearches}">
-                        <!--<AutoCompleteBox.Resources>
+                                      CornerRadius="5">-->
+                <AutoCompleteBox x:Name="FilterPluginBox"
+                                 VerticalAlignment="Stretch"
+                                 HorizontalAlignment="Stretch"
+                                 Padding="5,3,0,0"
+                                 Background="{DynamicResource ThemeInteractiveBgColor}"
+                                 local:MpAvDropExtension.IsEnabled="True"
+                                 local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                 local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                 local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Mode=TwoWay}"
+                                 Width="150"
+                                 Height="30"
+                                 Watermark="Search..."
+                                 FontSize="14"
+                                 IsTextCompletionEnabled="False"
+                                 MinimumPrefixLength="0"
+                                 MinimumPopulateDelay="0.25"
+                                 ItemsSource="{Binding RecentPluginSearches}">
+                    <!--<AutoCompleteBox.Resources>
                             <SolidColorBrush x:Key="TextControlBorderBrush">Transparent</SolidColorBrush>
                             <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
                         </AutoCompleteBox.Resources>-->
-                    </AutoCompleteBox>
-                </local:MpAvClipBorder>
+                </AutoCompleteBox>
+                <!--</local:MpAvClipBorder>-->
 
                 <!--  REFRESH BUTTON  -->
                 <Button x:Name="RefreshFilterButton"
@@ -182,7 +183,8 @@
         <!--  PLUGIN LIST  -->
         <ListBox x:Name="PluginSelectorListBox"
                  Margin="5,5,0,5"
-                 BorderThickness="1"
+                 CornerRadius="5"
+                 BorderThickness="0.5"
                  Background="Transparent"
                  BorderBrush="{DynamicResource ThemeInteractiveColor}"
                  Grid.Row="2"
@@ -269,7 +271,13 @@
         <Border x:Name="SelectedPluginOuterContainer"
                 Grid.Row="2"
                 Grid.Column="2"
+                CornerRadius="5"
+                Margin="10,0,0,0"
                 IsVisible="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+            <Border.Background>
+                <SolidColorBrush Color="{DynamicResource ThemeInteractiveBgColor}"
+                                 Opacity="0.15" />
+            </Border.Background>
             <Border.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="!IsVisible"
@@ -284,7 +292,7 @@
                 <Grid x:Name="SelectedPluginContainer"
                       RowDefinitions="50,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
                       ColumnDefinitions="200,*"
-                      Margin="10,3">
+                      Margin="10,10,20,10">
 
                     <!--  SELECTED HEADER  -->
                     <DockPanel Grid.Row="0"

@@ -6,6 +6,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Avalonia.Utils.Extensions;
 using MonkeyPaste.Common.Plugin;
 using SharpHook;
+using SharpHook.Logging;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
@@ -863,29 +864,36 @@ namespace MonkeyPaste.Avalonia {
             if (_hook == null) {
                 _hook = new SimpleGlobalHook();
 
-                if (IS_GLOBAL_MOUSE_INPUT_ENABLED) {
-                    _hook.MouseWheel += Hook_MouseWheel;
-
-                    _hook.MouseMoved += Hook_MouseMoved;
-
-                    _hook.MousePressed += Hook_MousePressed;
-                    _hook.MouseReleased += Hook_MouseReleased;
-
-                    _hook.MouseClicked += Hook_MouseClicked;
-
-                    _hook.MouseDragged += Hook_MouseDragged;
-                }
-
                 if (IS_GLOBAL_KEYBOARD_INPUT_ENABLED) {
                     _hook.KeyPressed += Hook_KeyPressed;
                     _hook.KeyReleased += Hook_KeyReleased;
+                    _hook.KeyTyped += Hook_KeyTyped;
                 }
+
+                if (IS_GLOBAL_MOUSE_INPUT_ENABLED) {
+                    _hook.MouseWheel += Hook_MouseWheel;
+                    _hook.MouseMoved += Hook_MouseMoved;
+                    _hook.MousePressed += Hook_MousePressed;
+                    _hook.MouseReleased += Hook_MouseReleased;
+                    _hook.MouseClicked += Hook_MouseClicked;
+                    _hook.MouseDragged += Hook_MouseDragged;
+                }
+
+                var logSource = LogSource.Register(minLevel: LogLevel.Debug);
+                logSource.MessageLogged += OnMessageLogged;
+
+                void OnMessageLogged(object? sender, LogEventArgs e) =>
+                    MpConsole.WriteLine($" [HOOK LOG] {e.LogEntry.FullText}");
 
             } else if (_hook.IsRunning) {
                 return;
             }
 
             _hook.RunAsync();
+        }
+
+        private void Hook_KeyTyped(object sender, KeyboardHookEventArgs e) {
+            return;
         }
 
         private void DisposeGlobalInputHooks() {
@@ -1013,6 +1021,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
+            if (IgnoreDebug(true)) {
+                return;
+            }
             _keyboardGestureHelper.AddKeyDown(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
             HandleGlobalKeyEvents(keyStr, true);
@@ -1026,6 +1037,8 @@ namespace MonkeyPaste.Avalonia {
                 .FirstOrDefault(x => x.KeyString == down_gesture);
 
             if (MpAvPrefViewModel.Instance.IsAutoSearchEnabled &&
+                MpAvWindowManager.MainWindow != null &&
+                MpAvWindowManager.MainWindow.IsActive &&
                 Mp.Services.StartupState.IsReady) {
                 bool was_auto_search_attempt = Dispatcher.UIThread.Invoke(() => {
                     /*
@@ -1070,6 +1083,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
+            if (IgnoreDebug(false)) {
+                return;
+            }
             _keyboardGestureHelper.RemoveKeyDown(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
 
@@ -1109,6 +1125,16 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
+        private bool IgnoreDebug(bool isDown) {
+#if !DEBUG
+            return false;
+#endif
+            if (Mp.Services.ProcessWatcher.LastProcessInfo == null ||
+                !Mp.Services.ProcessWatcher.LastProcessInfo.ProcessPath.Contains("devenv.exe")) {
+                return false;
+            }
+            return true;
+        }
         #endregion
 
         #endregion

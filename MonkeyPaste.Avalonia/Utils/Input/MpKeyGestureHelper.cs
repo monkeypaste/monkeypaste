@@ -15,6 +15,8 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         private List<Tuple<T, DateTime>> _downChecker = new List<Tuple<T, DateTime>>();
+        private List<T> _downsSinceIdle = new List<T>();
+
         private List<T> _downs = new List<T>();
         private string _finalGesture = string.Empty;
 
@@ -44,28 +46,33 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (!string.IsNullOrEmpty(_finalGesture) && ResetAfterGesture) {
+            if (ResetAfterGesture && !string.IsNullOrEmpty(_finalGesture)) {
                 Reset();
+            }
+
+            if (!ResetAfterGesture && _downs.Count == 0) {
+                _downsSinceIdle.Clear();
             }
             ValidateDown(key);
 
             _downs.Add(key);
+            _downsSinceIdle.Add(key);
         }
 
-        public void RemoveKeyDown(T key) {
+        public bool RemoveKeyDown(T key) {
             key = ResolveKey(key);
 
             ValidateUp(key);
 
             string cur_gesture = ToLiteral(_downs);
 
-            _downs.Remove(key);
+            bool removed = _downs.Remove(key);
 
             if (!IsModifierKey(key)) {
-                // when modifier goes up or nothing else is down that's the end of the sequence no matter what
+                // when input key goes up that's the end of the sequence
                 _finalGesture = cur_gesture;
-                return;
             }
+            return removed;
         }
 
         public string GetCurrentGesture() {
@@ -119,6 +126,7 @@ namespace MonkeyPaste.Avalonia {
             _finalGesture = string.Empty;
             _downs.Clear();
             _downChecker.Clear();
+            _downsSinceIdle.Clear();
         }
 
         private void ValidateDown(T key) {
@@ -127,7 +135,12 @@ namespace MonkeyPaste.Avalonia {
                 dttl.Any()) {
                 //assumes won't be holding key down longer than 30 seconds
                 //this may give false positives if breakpoint hit & resumed with key down
-                sb.AppendLine($"Orphan downs detected by time delay. Removing: {string.Join(",", dttl.Select(x => ToLiteral(x.Item1)))}");
+                sb.AppendLine($"Orphan downs detected by time delay. Removing:");
+                dttl.ForEach(x => sb.AppendLine($"'{ToLiteral(x.Item1)}'"));
+                sb.AppendLine("Downs since idle:");
+                _downsSinceIdle.ForEach(x => sb.AppendLine($"'{ToLiteral(x)}'"));
+
+
                 dttl.ToList().ForEach(x => _downs.Remove(x.Item1));
                 dttl.ToList().ForEach(x => _downChecker.Remove(x));
                 ClearCurrentGesture();
