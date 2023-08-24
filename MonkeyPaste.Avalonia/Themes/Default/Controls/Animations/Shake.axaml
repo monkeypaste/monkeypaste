@@ -28,6 +28,31 @@
         </Style.Animations>
     </Style>
 
+    <Style Selector="Image.shakerev">
+        <Style.Animations>
+            <Animation Duration="0:0:0.5"
+                       FillMode="Backward"
+                       IterationCount="Infinite">
+                <KeyFrame Cue="0%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="0" />
+                </KeyFrame>
+                <KeyFrame Cue="33%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="-7.5" />
+                </KeyFrame>
+                <KeyFrame Cue="66%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="7.5" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="RotateTransform.Angle"
+                            Value="0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+
     <Style Selector="Image.shakeslow">
         <Style.Animations>
             <Animation Duration="0:0:2.0"

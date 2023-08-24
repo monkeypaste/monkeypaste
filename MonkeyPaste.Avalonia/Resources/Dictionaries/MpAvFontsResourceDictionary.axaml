@@ -1,0 +1,6 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <FontFamily x:Key="NunitoFont">avares://MonkeyPaste.Avalonia/Assets/Fonts/Nunito/#Nunito</FontFamily>
+    <FontFamily x:Key="HabaneroFont">avares://MonkeyPaste.Avalonia/Assets/Fonts/Habanero/Habanero.ttf#Habanero</FontFamily>
+</ResourceDictionary>

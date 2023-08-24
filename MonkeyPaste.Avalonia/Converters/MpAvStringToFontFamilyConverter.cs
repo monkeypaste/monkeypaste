@@ -4,6 +4,7 @@ using Avalonia.Media;
 using MonkeyPaste.Common;
 using System;
 using System.Globalization;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringToFontFamilyConverter : IValueConverter {
@@ -15,8 +16,8 @@ namespace MonkeyPaste.Avalonia {
                 value = Mp.Services.PlatformResource.GetResource(dre.ResourceKey.ToString()) as string;
             }
             if (value is string valueStr && !string.IsNullOrEmpty(valueStr)) {
-                if (valueStr != "Segoe UI") {
-
+                if (MpAvThemeViewModel.Instance.CustomFontFamilyNames.Contains(valueStr)) {
+                    return Mp.Services.PlatformResource.GetResource<FontFamily>($"{valueStr}Font");
                 }
                 try {
                     var ff = new FontFamily(valueStr);

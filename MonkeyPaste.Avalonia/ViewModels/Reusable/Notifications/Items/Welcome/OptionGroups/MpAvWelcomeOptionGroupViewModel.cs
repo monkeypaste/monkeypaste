@@ -10,6 +10,10 @@ namespace MonkeyPaste.Avalonia {
         public object SplashIconSourceObj { get; set; }
         public bool WasVisited { get; set; }
 
+        public bool IsGestureGroup =>
+            WelcomePageType == MpWelcomePageType.ScrollWheel ||
+            WelcomePageType == MpWelcomePageType.DragToOpen;
+
         public MpAvWelcomeOptionGroupViewModel() : this(null) { }
         public MpAvWelcomeOptionGroupViewModel(MpAvWelcomeNotificationViewModel parent) : base(parent) { }
         public MpAvWelcomeOptionGroupViewModel(MpAvWelcomeNotificationViewModel parent, MpWelcomePageType pageType) : this(parent) {

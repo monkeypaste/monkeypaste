@@ -79,12 +79,23 @@ namespace MonkeyPaste.Avalonia {
             CurOptGroupViewModel == null || CurOptGroupViewModel.Items == null ?
                 null :
                 CurOptGroupViewModel.Items.FirstOrDefault(x => x.IsHovering);
+
+        public MpAvWelcomeOptionItemViewModel CheckedItem =>
+            CurOptGroupViewModel == null || CurOptGroupViewModel.Items == null ?
+                null :
+                CurOptGroupViewModel.Items.FirstOrDefault(x => x.IsChecked);
+
+        public MpAvWelcomeOptionItemViewModel PrimaryItem =>
+            HoverItem == null ? CheckedItem : HoverItem;
         public MpAvWelcomeOptionGroupViewModel CurOptGroupViewModel =>
             Items[CurPageIdx];
 
         #endregion
 
         #region State
+
+        public bool IsPrimaryChecked =>
+            PrimaryItem == CheckedItem;
         public bool IsDbPasswordValid { get; set; } = true;
         public bool IsDbPasswordProvided =>
             IsDbPasswordValid && !string.IsNullOrEmpty(DbPassword);
@@ -108,7 +119,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanFinish =>
             (int)CurPageType + 1 >= typeof(MpWelcomePageType).Length();
-
         #endregion
 
         #region Appearance
@@ -156,16 +166,18 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(CurPageIdx):
                     OnPropertyChanged(nameof(CurOptGroupViewModel));
                     break;
+                case nameof(PrimaryItem):
+                    OnPropertyChanged(nameof(IsPrimaryChecked));
+                    break;
                 case nameof(CurPageType):
                     if (!IS_PASSIVE_GESTURE_TOGGLE_ENABLED) {
                         break;
                     }
-                    if (CurPageType != MpWelcomePageType.ScrollWheel &&
-                        CurPageType != MpWelcomePageType.DragToOpen &&
-                        CurPointerGestureWindowViewModel != null) {
-                        CurPointerGestureWindowViewModel.IsWindowOpen = false;
-                        CurPointerGestureWindowViewModel = null;
+                    // close/reset gesture vm
+                    if (CurPointerGestureWindowViewModel != null) {
+                        CurPointerGestureWindowViewModel.Destroy();
                     }
+                    CurPointerGestureWindowViewModel = null;
                     switch (CurPageType) {
                         case MpWelcomePageType.Account:
                             var test = Mp.Services.AccountTools;
@@ -179,19 +191,15 @@ namespace MonkeyPaste.Avalonia {
                             break;
                         case MpWelcomePageType.ScrollWheel:
                         case MpWelcomePageType.DragToOpen:
-                            if (CurPointerGestureWindowViewModel != null) {
-                                CurPointerGestureWindowViewModel.IsWindowOpen = false;
-                            }
 
                             CurPointerGestureWindowViewModel =
                                 CurPageType == MpWelcomePageType.ScrollWheel ?
-                                    new MpAvScrollToOpenGestureViewModel(CurOptGroupViewModel.Items[1]) :
-                                    new MpAvDragToOpenGestureViewModel(CurOptGroupViewModel.Items[1]);
+                                    new MpAvPointerGestureWindowViewModel(CurOptGroupViewModel.Items.First(), MpPointGestureType.ScrollToOpen) :
+                                    new MpAvPointerGestureWindowViewModel(CurOptGroupViewModel.Items.First(), MpPointGestureType.DragToOpen);
 
                             if (!CurOptGroupViewModel.WasVisited) {
-                                // for first visit set to disabled
-                                CurOptGroupViewModel.Items[0].IsChecked = true;
-                                CurOptGroupViewModel.Items[1].IsChecked = false;
+                                // for first visit set to unchecked
+                                CurOptGroupViewModel.Items.First().IsChecked = false;
                             }
                             CurPointerGestureWindowViewModel.ShowGestureWindowCommand.Execute(null);
                             break;
@@ -274,17 +282,14 @@ namespace MonkeyPaste.Avalonia {
                 Title = UiStrings.WelcomeGestureProfileTitle,
                 Caption = UiStrings.WelcomeGestureProfileCaption,
                 Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,0) {
-                        IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Internal,
-                        IconSourceObj = "PrivateImage",
-                        LabelText = UiStrings.WelcomeGestureProfileLabel1,
-                        DescriptionText = UiStrings.WelcomeGestureProfileDescription1
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,1) {
+                    new MpAvWelcomeOptionItemViewModel(this,null) {
                         IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType != MpShortcutRoutingProfileType.Internal,
-                        IconSourceObj = "GlobeImage",
-                        LabelText = UiStrings.WelcomeGestureProfileLabel2,
-                        DescriptionText = UiStrings.WelcomeGestureProfileDescription2
+                        UncheckedIconSourceObj = "PrivateImage",
+                        CheckedIconSourceObj = "GlobeImage",
+                        CheckedLabelText = UiStrings.WelcomeGestureProfileLabel2,
+                        CheckedDescriptionText = UiStrings.WelcomeGestureProfileDescription2,
+                        UncheckedLabelText = UiStrings.WelcomeGestureProfileLabel1,
+                        UncheckedDescriptionText = UiStrings.WelcomeGestureProfileDescription1
                     },
                 }
             };
@@ -293,17 +298,14 @@ namespace MonkeyPaste.Avalonia {
                 Title = UiStrings.WelcomeScrollToOpenTitle,
                 Caption = UiStrings.WelcomeScrollToOpenCaption,
                 Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,0) {
-                        IsChecked = !MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
-                        IconSourceObj = "CloseWindowImage",
-                        LabelText = UiStrings.WelcomeScrollToOpenLabel1,
-                        DescriptionText = UiStrings.WelcomeScrollToOpenDescription1
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,1) {
+                    new MpAvWelcomeOptionItemViewModel(this,null) {
                         IsChecked = MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
-                        IconSourceObj = "AppFrameImage",
-                        LabelText = UiStrings.WelcomeScrollToOpenLabel2,
-                        DescriptionText = UiStrings.WelcomeScrollToOpenDescription2
+                        UncheckedIconSourceObj = "CloseWindowImage",
+                        CheckedIconSourceObj = "AppFrameImage",
+                        CheckedLabelText = UiStrings.WelcomeScrollToOpenLabel2,
+                        CheckedDescriptionText = UiStrings.WelcomeScrollToOpenDescription2,
+                        UncheckedLabelText = UiStrings.WelcomeScrollToOpenLabel1,
+                        UncheckedDescriptionText = UiStrings.WelcomeScrollToOpenDescription1
                     }
                 }
             };
@@ -312,17 +314,14 @@ namespace MonkeyPaste.Avalonia {
                 Title = UiStrings.WelcomeDragToOpenTitle,
                 Caption = UiStrings.WelcomeDragToOpenCaption,
                 Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,0) {
-                        IsChecked = !MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
-                        IconSourceObj = "CloseWindowImage",
-                        LabelText = UiStrings.WelcomeDragToOpenLabel1,
-                        DescriptionText = UiStrings.WelcomeDragToOpenDescription1
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,1) {
+                    new MpAvWelcomeOptionItemViewModel(this,null) {
                         IsChecked = MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
-                        IconSourceObj = "AppFrameImage",
-                        LabelText = UiStrings.WelcomeDragToOpenLabel2,
-                        DescriptionText = UiStrings.WelcomeDragToOpenDescription2
+                        UncheckedIconSourceObj = "CloseWindowImage",
+                        CheckedIconSourceObj = "AppFrameImage",
+                        CheckedLabelText = UiStrings.WelcomeDragToOpenLabel2,
+                        CheckedDescriptionText = UiStrings.WelcomeDragToOpenDescription2,
+                        UncheckedLabelText = UiStrings.WelcomeDragToOpenLabel1,
+                        UncheckedDescriptionText = UiStrings.WelcomeDragToOpenDescription1
                     }
                 }
             };
@@ -350,7 +349,7 @@ namespace MonkeyPaste.Avalonia {
         private void FinishWelcomeSetup() {
             IsWelcomeDone = true;
             if (CurPointerGestureWindowViewModel != null) {
-                CurPointerGestureWindowViewModel.DetachGestureHandlers();
+                CurPointerGestureWindowViewModel.Destroy();
             }
 
             // ACCOUNT TYPE
@@ -361,6 +360,7 @@ namespace MonkeyPaste.Avalonia {
                 // NOTE to work around login failures or no selection, just default to free i guess
                 acct_type = sel_acct_type;
             }
+
 #if DEBUG
             MpAvPrefViewModel.Instance.TestAccountType = acct_type;
 #endif
@@ -375,14 +375,14 @@ namespace MonkeyPaste.Avalonia {
 
             // SHORTCUT PROFILE
             MpAvPrefViewModel.Instance.DefaultRoutingProfileType =
-                GestureProfilesViewModel.Items.Any(x => x.IsChecked && (int)x.OptionId == 1) ?
+                GestureProfilesViewModel.Items.FirstOrDefault().IsChecked ?
                     MpShortcutRoutingProfileType.Global :
                     MpShortcutRoutingProfileType.Internal;
 
             // SCROLL-TO-OPEN
             if (ScrollWheelBehaviorViewModel.WasVisited) {
                 MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta =
-                ScrollWheelBehaviorViewModel.Items.Any(x => x.IsChecked && (int)x.OptionId == 1);
+                    ScrollWheelBehaviorViewModel.Items.FirstOrDefault().IsChecked;
             } else {
                 // when skipped, default to true
                 MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta = true;
@@ -392,7 +392,7 @@ namespace MonkeyPaste.Avalonia {
             // DRAG-TO-SHOW
             if (DragToOpenBehaviorViewModel.WasVisited) {
                 MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop =
-                    DragToOpenBehaviorViewModel.Items.Any(x => x.IsChecked && (int)x.OptionId == 1);
+                    DragToOpenBehaviorViewModel.Items.FirstOrDefault().IsChecked;
             } else {
                 // when skipped default to true
                 MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop = true;

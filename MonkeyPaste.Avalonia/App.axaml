@@ -9,6 +9,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Resources/Dictionaries/MpAvFontsResourceDictionary.axaml" />
                 <ResourceInclude Source="/Resources/Dictionaries/MpAvImageResourceDictionary.axaml" />
                 <ResourceInclude Source="/Resources/Dictionaries/MpAvIconResourceDictionary.axaml" />
                 <ResourceInclude Source="/Resources/Dictionaries/MpAvSvgResourceDictionary.axaml" />

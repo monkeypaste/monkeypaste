@@ -251,7 +251,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanMoveWindow =>
             true;
-        public List<Type> RejectedMoveControlTypes { get; set; } // defaults to button,textbox in ext
+        public virtual List<Type> RejectedMoveControlTypes { get; set; } // defaults to button,textbox in ext
 
         public bool IsDoNotShowType =>
             !ForceShow &&

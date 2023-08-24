@@ -1,0 +1,32 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources />
+
+    <!--  ROUNDING  -->
+    <Style Selector=":is(Control)">
+        <Setter Property="UseLayoutRounding"
+                Value="True" />
+    </Style>
+
+    <!--  TOOLTIP PLACEMENT  -->
+
+    <Style Selector=":is(Control)">
+        <Setter Property="ToolTip.Placement"
+                Value="Pointer" />
+    </Style>
+
+    <Style Selector=":is(Control).square">
+        <Setter Property="Width"
+                Value="{Binding $self.Bounds.Height}" />
+    </Style>
+    <Style Selector=":is(Control).squareByHeight">
+        <Setter Property="Width"
+                Value="{Binding $self.Bounds.Height}" />
+    </Style>
+    <Style Selector=":is(Control).squareByWidth">
+        <Setter Property="Height"
+                Value="{Binding $self.Bounds.Width}" />
+    </Style>
+</Styles>

@@ -43,20 +43,23 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpAvMainWindowViewModel Instance => _instance ?? (_instance = new MpAvMainWindowViewModel());
 
+        public static bool IsPointerInTopEdgeZone() {
+            return
+                MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
+                MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y <=
+                    SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT;
+        }
         public static bool CanDragOpen() {
             var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
             return
                 MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation != null &&
                 gmp.Distance(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLeftButtonDownLocation) >=
                     MpAvShortcutCollectionViewModel.MIN_GLOBAL_DRAG_DIST &&
-                gmp.Y <= SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT;
+                IsPointerInTopEdgeZone();
         }
 
         public static bool CanScrollOpen() {
-            return
-                MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation != null &&
-                MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.Y <=
-                    SHOW_MAIN_WINDOW_MOUSE_HIT_ZONE_HEIGHT;
+            return IsPointerInTopEdgeZone();
         }
         #endregion
 

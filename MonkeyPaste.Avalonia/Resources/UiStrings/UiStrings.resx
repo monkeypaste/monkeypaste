@@ -174,8 +174,8 @@
   <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
     <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
   </data>
-  <data name="WelcomeDragToOpenGestureLabel" xml:space="preserve">
-    <value>Drag Up Here</value>
+  <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
+    <value>Drag Bananas Up Here!</value>
   </data>
   <data name="WelcomeDragToOpenLabel1" xml:space="preserve">
     <value>Disabled</value>
@@ -231,10 +231,10 @@
   <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
     <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
   </data>
-  <data name="WelcomeScrollToOpenGestureCompleteLabel" xml:space="preserve">
+  <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
     <value>Easy Right?</value>
   </data>
-  <data name="WelcomeScrollToOpenGestureLabel" xml:space="preserve">
+  <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
     <value>Scroll Up Here!</value>
   </data>
   <data name="WelcomeScrollToOpenLabel1" xml:space="preserve">
@@ -245,5 +245,17 @@
   </data>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Scroll-to-Open</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
+    <value>MonkeyPaste is fully integrated with Drag-and-Drop to and from the application.</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel" xml:space="preserve">
+    <value>Easy RIght?</value>
+  </data>
+  <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
+    <value>This way MonkeyPaste can be accessed without a click or even batting an eye 👀</value>
+  </data>
+  <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
+    <value>Drag Me!</value>
   </data>
 </root>

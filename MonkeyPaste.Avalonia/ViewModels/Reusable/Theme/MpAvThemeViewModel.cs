@@ -4,11 +4,9 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonoMac.CoreImage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -82,6 +80,7 @@ namespace MonkeyPaste.Avalonia {
             "yandexicon.png",
         };
 
+
         #endregion
 
         #region Constants
@@ -112,16 +111,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region Appearance
-
-        #region Fixed Resources
-
-        public int ShakeDurMs =>
-            500;
-
-        public int FocusPulseDurMs =>
-            3_000;
-
-        #endregion
 
         public double GlobalBgOpacity {
             get => GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity);
@@ -184,6 +173,15 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.PlatformInfo != null &&
             Mp.Services.PlatformInfo.IsBrowser;
 
+        public int ShakeDurMs =>
+            500;
+
+        public int FocusPulseDurMs =>
+            3_000;
+        public string[] CustomFontFamilyNames => new string[] {
+                "Habanero",
+                "Nunito"
+            };
         #endregion
 
         #endregion

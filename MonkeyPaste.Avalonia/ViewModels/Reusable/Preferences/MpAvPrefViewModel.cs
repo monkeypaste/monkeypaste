@@ -336,7 +336,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool AnimateMainWindow { get; set; } = true;
 
-        public string DefaultReadOnlyFontFamily { get; set; } = "Segoe UI";
+        public string DefaultReadOnlyFontFamily { get; set; } = "Nunito";
         public string DefaultEditableFontFamily { get; set; } = "Arial";
         public int DefaultFontSize { get; set; } = 12;
 

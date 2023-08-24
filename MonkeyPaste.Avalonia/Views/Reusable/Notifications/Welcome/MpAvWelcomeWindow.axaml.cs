@@ -1,4 +1,7 @@
 using Avalonia.Controls;
+using Avalonia.Input;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
@@ -14,6 +17,12 @@ namespace MonkeyPaste.Avalonia {
                 }
             };
         }
+
+
+        private async void DragImage_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
+            _ = await MpAvDoDragDropWrapper.DoDragDropAsync(sender as Control, e, new MpAvDataObject(MpPortableDataFormats.Text, "Mmm, freshly dragged bananas"), DragDropEffects.Copy | DragDropEffects.Move);
+        }
+
     }
 
 }

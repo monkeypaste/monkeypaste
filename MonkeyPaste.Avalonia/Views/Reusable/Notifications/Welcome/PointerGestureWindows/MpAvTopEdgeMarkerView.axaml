@@ -4,8 +4,8 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
-                       x:TypeArguments="local:MpAvScrollToOpenGestureViewModel"
-                       x:Class="MonkeyPaste.Avalonia.MpAvScrollToOpenGestureView"
+                       x:TypeArguments="local:MpAvPointerGestureWindowViewModel"
+                       x:Class="MonkeyPaste.Avalonia.MpAvTopEdgeMarkerView"
                        mc:Ignorable="d"
                        d:DesignWidth="400"
                        d:DesignHeight="300">
@@ -16,16 +16,22 @@
         <SolidColorBrush x:Key="OnBrush"
                          Color="Red"
                          Opacity="1" />
+        <SolidColorBrush x:Key="OnZoneBrush"
+                         Color="Red"
+                         Opacity="1" />
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
-        <Style Selector="Border#ContainerBorder">
+        <!--  TOP LINE BLINK ANIM  -->
+        <Style Selector="Border#ContainerBorder"
+               x:DataType="local:MpAvPointerGestureWindowViewModel">
             <Style.Animations>
                 <Animation Duration="0:0:0.3"
+                           Easing="ElasticEaseInOut"
                            IterationCount="Infinite"
                            PlaybackDirection="Alternate">
                     <KeyFrame Cue="0%">
                         <Setter Property="BorderBrush"
-                                Value="{StaticResource OnBrush}" />
+                                Value="{Binding EdgeBrush}" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
                         <Setter Property="Opacity"
@@ -35,6 +41,7 @@
             </Style.Animations>
         </Style>
 
+        <!--  MARKER BOUNCE ANIM  -->
         <Style Selector="Border#ScrollMarkerContainer">
             <Style.Animations>
                 <Animation Duration="0:0:0.3"
@@ -46,11 +53,12 @@
                     </KeyFrame>
                     <KeyFrame Cue="100%">
                         <Setter Property="TranslateTransform.Y"
-                                Value="20" />
+                                Value="-20" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
         </Style>
+
     </local:MpAvUserControl.Styles>
     <Border x:Name="ContainerBorder"
             BorderThickness="0,5,0,0"
@@ -58,37 +66,23 @@
             VerticalAlignment="Stretch">
         <Canvas HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
-            <!--  SCROLL MARKER  -->
+            <!--  MARKER  -->
             <Border x:Name="ScrollMarkerContainer"
+                    ClipToBounds="False"
                     Canvas.Top="0">
                 <Border.RenderTransform>
                     <TranslateTransform />
                 </Border.RenderTransform>
-                <Canvas.Left>
-                    <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
-                                  ConverterParameter="/">
-                        <Binding Path="Bounds.Width"
-                                 ElementName="ContainerBorder" />
-                        <Binding>
-                            <Binding.Source>
-                                <sys:Double>2</sys:Double>
-                            </Binding.Source>
-                        </Binding>
-                    </MultiBinding>
-                </Canvas.Left>
-                <StackPanel Orientation="Vertical"
-                            ClipToBounds="False"
-                            RenderTransform="translateY(-20px)">
-
+                <StackPanel Orientation="Vertical">
                     <!--  MARKER ARROW  -->
 
                     <Image Source="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}"
+                           HorizontalAlignment="Center"
                            Width="100"
                            Height="100" />
-
                     <!--  MARKER LABEL  -->
 
-                    <TextBlock Width="100"
+                    <TextBlock x:Name="MarkerTextBlock"
                                HorizontalAlignment="Center"
                                ClipToBounds="False"
                                TextAlignment="Center"
@@ -96,8 +90,7 @@
                                Foreground="White"
                                FontStyle="Oblique"
                                Effect="drop-shadow(0 0 25 black)"
-                               RenderTransform="translateX(-10px) translateY(-20px)"
-                               Text="{x:Static local:UiStrings.WelcomeScrollToOpenGestureLabel}" />
+                               Text="{Binding MarkerLabel}" />
                 </StackPanel>
             </Border>
         </Canvas>

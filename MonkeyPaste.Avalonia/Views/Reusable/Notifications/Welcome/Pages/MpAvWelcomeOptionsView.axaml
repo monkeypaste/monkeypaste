@@ -1,12 +1,14 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        x:TypeArguments="local:MpAvWelcomeOptionGroupViewModel"
                        x:Class="MonkeyPaste.Avalonia.MpAvWelcomeOptionsView"
                        mc:Ignorable="d"
+                       ClipToBounds="False"
                        d:DesignWidth="400"
                        d:DesignHeight="300">
     <local:MpAvUserControl.Styles>
@@ -32,9 +34,21 @@
             <Setter Property="Effect"
                     Value="drop-shadow(0 0 3 black)" />
         </Style>
+
+        <!--  CAPTION COLOR  -->
+        <Style Selector="TransitioningContentControl#CaptionContainer TextBlock">
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+        <Style Selector="TransitioningContentControl#CaptionContainer.checked TextBlock.description">
+            <Setter Property="Foreground"
+                    Value="RoyalBlue" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <StackPanel Orientation="Vertical"
-                Spacing="20">
+                Spacing="20"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
 
         <!--  SPLASH IMAGE  -->
 
@@ -66,8 +80,11 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid local:MpAvIsHoveringExtension.IsEnabled="True"
-                          local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+                    <Border local:MpAvIsHoveringExtension.IsEnabled="True"
+                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                            Classes="rejectWindowMove"
+                            IsHitTestVisible="True"
+                            Background="{StaticResource HitTestableTransparent}">
                         <RadioButton Classes="defaultButton gestureButton effectTrans"
                                      Theme="{StaticResource SwitchlessRadioButton}"
                                      GroupName="GestureProfile"
@@ -88,35 +105,34 @@
                                            VerticalAlignment="Bottom"
                                            TextAlignment="Center"
                                            FontSize="20"
-                                           Classes="effectTrans"
                                            Text="{Binding LabelText}" />
                                 <Image Width="160"
                                        Height="160"
                                        Margin="0,0,0,10"
                                        Stretch="UniformToFill"
-                                       Classes="effectTrans"
                                        Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                             </DockPanel>
                         </RadioButton>
-                    </Grid>
+                    </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
         <!--  GESTURE CAPTION  -->
 
-        <TransitioningContentControl DockPanel.Dock="Bottom"
-                                     MinHeight="120"
+        <TransitioningContentControl x:Name="CaptionContainer"
+                                     DockPanel.Dock="Bottom"
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Top"
-                                     Content="{Binding HoverItem, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}">
+                                     MinHeight="120"
+                                     Classes.checked="{Binding IsPrimaryChecked, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}"
+                                     Content="{Binding PrimaryItem, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}">
             <TransitioningContentControl.PageTransition>
                 <CrossFade Duration="0:00:00.500" />
             </TransitioningContentControl.PageTransition>
             <TransitioningContentControl.ContentTemplate>
                 <DataTemplate>
                     <TextBlock Classes="description"
-                               Foreground="White"
                                Text="{Binding DescriptionText}" />
                 </DataTemplate>
             </TransitioningContentControl.ContentTemplate>

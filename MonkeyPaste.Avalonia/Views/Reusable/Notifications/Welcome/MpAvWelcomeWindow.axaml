@@ -3,6 +3,7 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                  xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
                   xmlns:local="using:MonkeyPaste.Avalonia"
                   xmlns:pcl="using:MonkeyPaste"
                   Classes="fadeOut welcomeGrow"
@@ -13,6 +14,38 @@
                   SizeToContent="Manual"
                   SystemDecorations="None">
     <local:MpAvWindow.Styles>
+        <!--  WINDOW BUTTON  -->
+        <Style Selector="Button.windowButton">
+            <Setter Property="Width"
+                    Value="50" />
+            <Setter Property="Height"
+                    Value="50" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+        </Style>
+
+        <Style Selector="Button.windowButton Border">
+            <Setter Property="Width"
+                    Value="20" />
+            <Setter Property="Height"
+                    Value="5" />
+            <Setter Property="CornerRadius"
+                    Value="5" />
+            <Setter Property="Background"
+                    Value="DimGray" />
+        </Style>
+
+        <Style Selector="Button.windowButton:not(.close):pointerover Border">
+            <Setter Property="Background"
+                    Value="White" />
+        </Style>
+
+        <Style Selector="Button.windowButton.close:pointerover Border">
+            <Setter Property="Background"
+                    Value="Crimson" />
+        </Style>
 
         <!--  NAV BUTTONS  -->
 
@@ -37,20 +70,33 @@
                     Value="Top" />
             <Setter Property="TextAlignment"
                     Value="Center" />
-            <Setter Property="MaxWidth"
+            <Setter Property="Width"
                     Value="500" />
             <Setter Property="TextWrapping"
                     Value="WrapWithOverflow" />
         </Style>
 
-
     </local:MpAvWindow.Styles>
-    <Border Background="Silver"
+    <Border BoxShadow="inset 0 0 5 5 #46000000"
             CornerRadius="10"
             BorderBrush="White"
             BorderThickness="5"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
+        <Border.Background>
+            <RadialGradientBrush Center="0.0,0.0" GradientOrigin="0.0,0.0" Radius="0.5">
+                <RadialGradientBrush.Transform>
+                    <TransformGroup>
+                        <ScaleTransform />
+                        <RotateTransform />
+                    </TransformGroup>
+                </RadialGradientBrush.Transform>
+                <RadialGradientBrush.GradientStops>
+                    <GradientStop Color="WhiteSmoke" Offset="0" />
+                    <GradientStop Color="Silver" Offset="1" />
+                </RadialGradientBrush.GradientStops>
+            </RadialGradientBrush>
+        </Border.Background>
 
         <Grid RowDefinitions="100,*,50"
               Margin="10"
@@ -65,23 +111,29 @@
                        HorizontalAlignment="Stretch"
                        VerticalAlignment="Center"
                        TextAlignment="Center"
-                       FontSize="42"
+                       FontSize="60"
                        Foreground="DimGray"
                        Text="{Binding Title}" />
 
-            <Button x:Name="MinimizeButton"
-                    Grid.Row="0"
-                    Classes="outline outlineOver noBg noHoverBg"
-                    CornerRadius="7"
-                    Padding="10"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top">
-                <Border Width="30"
-                        Height="5"
-                        CornerRadius="5"
-                        Background="DimGray" />
 
-            </Button>
+            <!--  WINDOW BUTTONS  -->
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top">
+                <Button x:Name="MinimizeButton"
+                        Classes="outline outlineOver noBg noHoverBg noBorder noHoverBorder windowButton">
+                    <Border />
+                </Button>
+                <Button x:Name="CloseButton"
+                        Command="{Binding ExitApplicationCommand, Source={x:Static local:MpAvSystemTrayViewModel.Instance}}"
+                        Classes="outline outlineOver noBg noHoverBg noBorder noHoverBorder windowButton close">
+                    <Grid>
+                        <Border RenderTransform="rotate(-45deg)" />
+                        <Border RenderTransform="rotate(45deg)" />
+                    </Grid>
+                </Button>
+            </StackPanel>
 
             <!--  CONTENT  -->
 
@@ -97,11 +149,45 @@
                 </TransitioningContentControl.PageTransition>
                 <TransitioningContentControl.DataTemplates>
                     <local:MpAvWelcomeContentTemplateSelector>
+                        <!--  DRAG TO OPEN (RADIOS W/ DRAG ITEM)  -->
+                        <DataTemplate x:Key="DragToOpenTemplate"
+                                      x:DataType="local:MpAvWelcomeNotificationViewModel">
+                            <Grid ColumnDefinitions="0.5*,0.5*">
+                                <local:MpAvWelcomeOptionsView Grid.Column="0"
+                                                              HorizontalContentAlignment="Center"
+                                                              VerticalContentAlignment="Center" />
+                                <Border Grid.Column="1"
+                                        BorderThickness="1"
+                                        CornerRadius="10"
+                                        BorderBrush="White"
+                                        Padding="5">
+                                    <StackPanel Orientation="Vertical"
+                                                Spacing="5">
+                                        <Image x:Name="DragImage"
+                                               PointerPressed="DragImage_PointerPressed"
+                                               Classes="shake squareByHeight"
+                                               VerticalAlignment="Stretch"
+                                               Source="{Binding Source={StaticResource BananaImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
+                                            <Image.RenderTransform>
+                                                <RotateTransform />
+                                            </Image.RenderTransform>
+                                        </Image>
+                                        <TextBlock Text="{x:Static local:UiStrings.WelcomeDragToOpenDragSourceLabel}"
+                                                   Classes="description"
+                                                   FontSize="16" />
+
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                        <!--  DEFAULT RADIO BUTTONS  -->
                         <DataTemplate x:Key="OptionsTemplate"
                                       x:DataType="local:MpAvWelcomeNotificationViewModel">
                             <local:MpAvWelcomeOptionsView HorizontalContentAlignment="Center"
                                                           VerticalContentAlignment="Center" />
                         </DataTemplate>
+                        <!--  DB PASSWORD  -->
+
                         <DataTemplate x:Key="DbPasswordTemplate"
                                       x:DataType="local:MpAvWelcomeNotificationViewModel">
                             <Grid RowDefinitions="Auto,Auto"
@@ -125,7 +211,7 @@
                     </local:MpAvWelcomeContentTemplateSelector>
                 </TransitioningContentControl.DataTemplates>
             </TransitioningContentControl>
-            
+
             <!--  WIZARD NAV  -->
             <Grid Grid.Row="2">
                 <Grid.Resources>
@@ -138,12 +224,12 @@
                         Command="{Binding SkipWelcomeCommand}">
                     <Button.Resources>
                         <SolidColorBrush x:Key="ButtonBackground">Gold</SolidColorBrush>
-                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Gold</SolidColorBrush>
-                        <SolidColorBrush x:Key="ButtonBackgroundPressed">Gold</SolidColorBrush>
+                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Yellow</SolidColorBrush>
+                        <SolidColorBrush x:Key="ButtonBackgroundPressed">White</SolidColorBrush>
 
-                      <SolidColorBrush x:Key="ButtonForeground">Black</SolidColorBrush>
-                      <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
-                      <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
+                        <SolidColorBrush x:Key="ButtonForeground">Black</SolidColorBrush>
+                        <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
+                        <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                     </Button.Resources>
                     <TextBlock Text="Skip" />
                 </Button>
@@ -161,8 +247,11 @@
 
                         <Button.Resources>
                             <SolidColorBrush x:Key="ButtonBackground">Blue</SolidColorBrush>
-                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Blue</SolidColorBrush>
-                            <SolidColorBrush x:Key="ButtonBackgroundPressed">Blue</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">LightSkyBlue</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPressed">White</SolidColorBrush>
+
+                            <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                         </Button.Resources>
                         <TextBlock Text="Next" />
                     </Button>
@@ -175,8 +264,11 @@
 
                         <Button.Resources>
                             <SolidColorBrush x:Key="ButtonBackground">Green</SolidColorBrush>
-                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Green</SolidColorBrush>
-                            <SolidColorBrush x:Key="ButtonBackgroundPressed">Green</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Lime</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPressed">White</SolidColorBrush>
+
+                            <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                         </Button.Resources>
                         <TextBlock Text="Done" />
                     </Button>

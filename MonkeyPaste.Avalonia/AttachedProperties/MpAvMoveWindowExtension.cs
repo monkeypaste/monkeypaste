@@ -1,17 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvMoveWindowExtension {
@@ -148,6 +142,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static bool IsWindowMoveRejected(Control attached_control, Visual v) {
+            if (v.Classes.Contains("rejectWindowMove")) {
+                return true;
+            }
             if (GetRejectedControlTypeNames(attached_control) is not string rejectTypesStr ||
                 rejectTypesStr.Split("|") is not string[] rejectTypesStrParts) {
                 return false;

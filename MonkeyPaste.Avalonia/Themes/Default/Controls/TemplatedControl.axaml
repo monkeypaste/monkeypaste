@@ -2,19 +2,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
-    <Styles.Resources>
-    </Styles.Resources>
-    <Style Selector=":is(TemplatedControl)">
-        <Setter Property="UseLayoutRounding"
-                Value="True" />
-    </Style>
     <!--  FONT THEME  -->
-
 
     <Style Selector=":is(TemplatedControl):not(:is(TextBox)[IsReadOnly=false]):not(.fontFamilyOverride)">
         <Setter Property="FontFamily"
                 Value="{Binding Source={DynamicResource DefaultReadOnlyFontFamily}, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
     </Style>
+    <!--  NO BG  -->
     <Style Selector=":is(TemplatedControl).noBg /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="Transparent" />
@@ -24,23 +18,13 @@
                 Value="Transparent" />
     </Style>
 
-    <Style Selector=":is(TemplatedControl).square">
-        <Setter Property="Width"
-                Value="{Binding $self.Bounds.Height}" />
-    </Style>
-    <Style Selector=":is(TemplatedControl).squareByHeight">
-        <Setter Property="Width"
-                Value="{Binding $self.Bounds.Height}" />
-    </Style>
-    <Style Selector=":is(TemplatedControl).squareByWidth">
-        <Setter Property="Height"
-                Value="{Binding $self.Bounds.Width}" />
-    </Style>
-
     <Style Selector=":is(TemplatedControl).noBg">
         <Setter Property="Background"
                 Value="Transparent" />
     </Style>
+
+    <!--  NO BORDER  -->
+
     <Style Selector=":is(TemplatedControl).noBorder">
         <Setter Property="BorderBrush"
                 Value="Transparent" />
@@ -53,10 +37,5 @@
     <Style Selector=":is(TemplatedControl):pointerover.noBorder /template/ ContentPresenter">
         <Setter Property="BorderBrush"
                 Value="Transparent" />
-    </Style>
-
-    <Style Selector=":is(TemplatedControl)">
-        <Setter Property="ToolTip.Placement"
-                Value="Pointer" />
     </Style>
 </Styles>

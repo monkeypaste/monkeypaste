@@ -9,15 +9,27 @@ namespace MonkeyPaste.Avalonia {
         public Dictionary<string, IDataTemplate> AvailableTemplates { get; } = new Dictionary<string, IDataTemplate>();
 
         Control ITemplate<object, Control>.Build(object param) {
-            if (param is int wptIdx && ((MpWelcomePageType)wptIdx) is MpWelcomePageType wpt &&
-                wpt == MpWelcomePageType.DbPassword) {
-                if (AvailableTemplates["DbPasswordTemplate"].Build(param) is Control pc) {
-                    pc.DataContext = MpAvWelcomeNotificationViewModel.Instance;
-                    return pc;
-                }
+            if (param is not int wptIdx) {
+                return null;
             }
-            if (AvailableTemplates["OptionsTemplate"].Build(param) is Control c) {
-                c.DataContext = MpAvWelcomeNotificationViewModel.Instance.CurOptGroupViewModel;
+            string key;
+            object dc;
+            switch ((MpWelcomePageType)wptIdx) {
+                case MpWelcomePageType.DbPassword:
+                    key = "DbPasswordTemplate";
+                    dc = MpAvWelcomeNotificationViewModel.Instance;
+                    break;
+                case MpWelcomePageType.DragToOpen:
+                    key = "DragToOpenTemplate";
+                    dc = MpAvWelcomeNotificationViewModel.Instance.CurOptGroupViewModel;
+                    break;
+                default:
+                    key = "OptionsTemplate";
+                    dc = MpAvWelcomeNotificationViewModel.Instance.CurOptGroupViewModel;
+                    break;
+            }
+            if (AvailableTemplates[key].Build(param) is Control c) {
+                c.DataContext = dc;
                 return c;
             }
             return null;

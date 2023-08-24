@@ -202,6 +202,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBoxItem.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Control.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Label.axaml" />
@@ -235,6 +236,26 @@
     <None Remove="Assets\Cursors\copy.png" />
     <None Remove="Assets\Cursors\hand_closed.png" />
     <None Remove="Assets\Cursors\hand_open.png" />
+    <None Remove="Assets\Fonts\Habanero\Habanero.otf" />
+    <None Remove="Assets\Fonts\Habanero\Habanero.ttf" />
+    <None Remove="Assets\Fonts\Nunito\Nunito-Italic-VariableFont_wght.ttf" />
+    <None Remove="Assets\Fonts\Nunito\Nunito-VariableFont_wght.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-Black.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-BlackItalic.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-Bold.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-BoldItalic.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-ExtraBold.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-ExtraBoldItalic.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-ExtraLight.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-ExtraLightItalic.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-Italic.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-Light.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-LightItalic.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-Medium.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-MediumItalic.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-Regular.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-SemiBold.ttf" />
+    <None Remove="Assets\Fonts\Nunito\static\Nunito-SemiBoldItalic.ttf" />
     <None Remove="Assets\Icons\cog.ico" />
     <None Remove="Assets\Icons\monkey.ico" />
     <None Remove="Assets\Icons\monkey_old.ico" />
@@ -529,6 +550,66 @@
     <None Remove="Settings.settings" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Include="Assets\Fonts\Habanero\Habanero.otf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Habanero\Habanero.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\Nunito-Italic-VariableFont_wght.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\Nunito-VariableFont_wght.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Black.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-BlackItalic.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Bold.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-BoldItalic.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-ExtraBold.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-ExtraBoldItalic.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-ExtraLight.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-ExtraLightItalic.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Italic.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Light.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-LightItalic.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Medium.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-MediumItalic.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-SemiBold.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Fonts\Nunito\static\Nunito-SemiBoldItalic.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\appframe.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -1229,6 +1310,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\MpAvParameterItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvShortcut.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Control.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
@@ -1268,7 +1350,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Resources\Dictionaries\" />
     <Folder Include="Resources\Editor\src\components\bold\" />
     <Folder Include="Resources\Editor\src\components\formatPaint\" />
     <Folder Include="Themes\Default\Assets\" />
@@ -1410,14 +1491,14 @@
     <Compile Update="Views\Reusable\Notifications\Welcome\Pages\MpAvWelcomeOptionsView.axaml.cs">
       <DependentUpon>MpAvWelcomeOptionsView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\Notifications\Welcome\PointerGesture\MpAvDragToOpenGestureView.axaml.cs">
-      <DependentUpon>MpAvDragToOpenGestureView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Reusable\Notifications\Welcome\PointerGesture\MpAvFakeWindowView.axaml.cs">
+    <Compile Update="Views\Reusable\Notifications\Welcome\PointerGestureWindows\MpAvFakeWindowView.axaml.cs">
       <DependentUpon>MpAvFakeWindowView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\Notifications\Welcome\PointerGesture\MpAvScrollToOpenGestureView.axaml.cs">
-      <DependentUpon>MpAvScrollToOpenGestureView.axaml</DependentUpon>
+    <Compile Update="Views\Reusable\Notifications\Welcome\PointerGestureWindows\MpAvTopEdgeMarkerView.axaml.cs">
+      <DependentUpon>MpAvTopEdgeMarkerView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Notifications\Welcome\PointerGestureWindows\MpAvTopEdgeMarkerView.axaml.cs">
+      <DependentUpon>MpAvTopEdgeMarkerView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Password\MpAvSetPasswordView.axaml.cs">
       <DependentUpon>MpAvSetPasswordView.axaml</DependentUpon>

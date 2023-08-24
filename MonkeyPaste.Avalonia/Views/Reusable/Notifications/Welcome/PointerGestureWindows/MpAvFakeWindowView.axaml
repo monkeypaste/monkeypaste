@@ -1,0 +1,102 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:TypeArguments="local:MpAvPointerGestureWindowViewModel"
+                       x:Class="MonkeyPaste.Avalonia.MpAvFakeWindowView"
+                       mc:Ignorable="d"
+                       d:DesignWidth="400"
+                       d:DesignHeight="300">
+    <local:MpAvUserControl.Styles>
+        <!--  SHOW/HIDE ANIMATION  -->
+        <Style Selector="Border#PlaceholderWindow.show"
+               x:DataType="local:MpAvPointerGestureWindowViewModel">
+            <Style.Animations>
+                <Animation Duration="0:0:1"
+                           FillMode="Forward"
+                           Easing="BounceEaseIn">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Canvas.Top"
+                                Value="{Binding FakeWindowStartTop}" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Canvas.Top"
+                                Value="{Binding FakeWindowEndTop}" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <Style Selector="Border#PlaceholderWindow.hide"
+               x:DataType="local:MpAvPointerGestureWindowViewModel">
+            <Style.Animations>
+                <Animation Duration="0:0:1"
+                           FillMode="Forward"
+                           Easing="BounceEaseIn">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Canvas.Top"
+                                Value="{Binding FakeWindowEndTop}" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Canvas.Top"
+                                Value="{Binding FakeWindowStartTop}" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Canvas HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+        <Border x:Name="PlaceholderWindow"
+                Width="{Binding $parent.Bounds.Width}"
+                Height="{Binding $parent.Bounds.Height}"
+                Background="{DynamicResource ClipTrayBgColor}">
+            <Viewbox Stretch="Uniform"
+                     HorizontalAlignment="Center"
+                     StretchDirection="Both"
+                     Margin="30,10">
+                <StackPanel Orientation="Vertical"
+                            HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal"
+                                Spacing="10">
+                        <Image Classes="shake"
+                               Width="50"
+                               Height="50"
+                               VerticalAlignment="Center"
+                               Source="{Binding Source={StaticResource BananaImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
+                            <Image.RenderTransform>
+                                <RotateTransform />
+                            </Image.RenderTransform>
+                        </Image>
+                        <TextBlock x:Name="FakeWindowLabel"
+                                   FontSize="42"
+                                   Foreground="White"
+                                   FontWeight="SemiBold"
+                                   FontStyle="Oblique"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Stretch"
+                                   Text="{Binding FakeWindowLabel}" />
+
+                        <Image Classes="shakerev"
+                               Width="50"
+                               Height="50"
+                               VerticalAlignment="Center"
+                               Source="{Binding Source={StaticResource BananaImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
+                            <Image.RenderTransform>
+                                <RotateTransform />
+                            </Image.RenderTransform>
+                        </Image>
+                    </StackPanel>
+                    <TextBlock x:Name="FakeWindowDetail"
+                               MaxWidth="200"
+                               FontSize="10"
+                               TextAlignment="Center"
+                               TextWrapping="WrapWithOverflow"
+                               Foreground="#FF6250"
+                               Text="{Binding FakeWindowDetail}" />
+                </StackPanel>
+            </Viewbox>
+        </Border>
+    </Canvas>
+</local:MpAvUserControl>

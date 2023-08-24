@@ -232,11 +232,29 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drag Up Here.
+        ///   Looks up a localized string similar to Drag Me!.
         /// </summary>
-        public static string WelcomeDragToOpenGestureLabel {
+        public static string WelcomeDragToOpenDragSourceLabel {
             get {
-                return ResourceManager.GetString("WelcomeDragToOpenGestureLabel", resourceCulture);
+                return ResourceManager.GetString("WelcomeDragToOpenDragSourceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MonkeyPaste is fully integrated with Drag-and-Drop to and from the application..
+        /// </summary>
+        public static string WelcomeDragToOpenFakeWindowDetail {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenFakeWindowDetail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Easy RIght?.
+        /// </summary>
+        public static string WelcomeDragToOpenFakeWindowLabel {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenFakeWindowLabel", resourceCulture);
             }
         }
         
@@ -255,6 +273,15 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeDragToOpenLabel2 {
             get {
                 return ResourceManager.GetString("WelcomeDragToOpenLabel2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drag Bananas Up Here!.
+        /// </summary>
+        public static string WelcomeDragToOpenMarkerLabel {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenMarkerLabel", resourceCulture);
             }
         }
         
@@ -403,20 +430,20 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Easy Right?.
+        ///   Looks up a localized string similar to This way MonkeyPaste can be accessed without a click or even batting an eye 👀.
         /// </summary>
-        public static string WelcomeScrollToOpenGestureCompleteLabel {
+        public static string WelcomeScrollToOpenFakeWindowDetail {
             get {
-                return ResourceManager.GetString("WelcomeScrollToOpenGestureCompleteLabel", resourceCulture);
+                return ResourceManager.GetString("WelcomeScrollToOpenFakeWindowDetail", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scroll Up Here!.
+        ///   Looks up a localized string similar to Easy Right?.
         /// </summary>
-        public static string WelcomeScrollToOpenGestureLabel {
+        public static string WelcomeScrollToOpenFakeWindowLabel {
             get {
-                return ResourceManager.GetString("WelcomeScrollToOpenGestureLabel", resourceCulture);
+                return ResourceManager.GetString("WelcomeScrollToOpenFakeWindowLabel", resourceCulture);
             }
         }
         
@@ -435,6 +462,15 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeScrollToOpenLabel2 {
             get {
                 return ResourceManager.GetString("WelcomeScrollToOpenLabel2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll Up Here!.
+        /// </summary>
+        public static string WelcomeScrollToOpenMarkerLabel {
+            get {
+                return ResourceManager.GetString("WelcomeScrollToOpenMarkerLabel", resourceCulture);
             }
         }
         
