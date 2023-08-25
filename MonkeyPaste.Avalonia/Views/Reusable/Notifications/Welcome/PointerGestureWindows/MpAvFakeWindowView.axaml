@@ -1,10 +1,11 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
-                       x:TypeArguments="local:MpAvPointerGestureWindowViewModel"
+                       x:TypeArguments="local:MpAvFakeWindowViewModel"
                        x:Class="MonkeyPaste.Avalonia.MpAvFakeWindowView"
                        mc:Ignorable="d"
                        d:DesignWidth="400"
@@ -12,7 +13,7 @@
     <local:MpAvUserControl.Styles>
         <!--  SHOW/HIDE ANIMATION  -->
         <Style Selector="Border#PlaceholderWindow.show"
-               x:DataType="local:MpAvPointerGestureWindowViewModel">
+               x:DataType="local:MpAvFakeWindowViewModel">
             <Style.Animations>
                 <Animation Duration="0:0:1"
                            FillMode="Forward"
@@ -29,7 +30,7 @@
             </Style.Animations>
         </Style>
         <Style Selector="Border#PlaceholderWindow.hide"
-               x:DataType="local:MpAvPointerGestureWindowViewModel">
+               x:DataType="local:MpAvFakeWindowViewModel">
             <Style.Animations>
                 <Animation Duration="0:0:1"
                            FillMode="Forward"
@@ -51,6 +52,9 @@
         <Border x:Name="PlaceholderWindow"
                 Width="{Binding $parent.Bounds.Width}"
                 Height="{Binding $parent.Bounds.Height}"
+                Classes.show="{Binding FakeWindowState, ConverterParameter=Open, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                Classes.hide="{Binding FakeWindowState, ConverterParameter=Close, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                Canvas.Top="{Binding FakeWindowActualTop, Mode=OneWayToSource}"
                 Background="{DynamicResource ClipTrayBgColor}">
             <Viewbox Stretch="Uniform"
                      HorizontalAlignment="Center"
@@ -88,13 +92,20 @@
                             </Image.RenderTransform>
                         </Image>
                     </StackPanel>
-                    <TextBlock x:Name="FakeWindowDetail"
+                    <!--<TextBlock x:Name="FakeWindowDetail"
                                MaxWidth="200"
                                FontSize="10"
                                TextAlignment="Center"
                                TextWrapping="WrapWithOverflow"
                                Foreground="#FF6250"
-                               Text="{Binding FakeWindowDetail}" />
+                               Text="{Binding FakeWindowDetail}" />-->
+
+                    <!--<av:HtmlLabel x:Name="FakeWindowDetail"
+                                  local:MpAvHtmlStylerExtension.IsEnabled="True"
+                                  local:MpAvHtmlStylerExtension.DefaultColor="#FF6250"
+                                  local:MpAvHtmlStylerExtension.DefaultFontSize="10"
+                                  AutoSize="True"
+                                  Text="{Binding FakeWindowDetail}" />-->
                 </StackPanel>
             </Viewbox>
         </Border>

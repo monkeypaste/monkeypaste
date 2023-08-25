@@ -14,12 +14,16 @@
                   SizeToContent="Manual"
                   SystemDecorations="None">
     <local:MpAvWindow.Styles>
-        <!--  WINDOW BUTTON  -->
+        <!--  WINDOW BUTTONS  -->
+        <Style Selector="StackPanel#WindowButtonPanel">
+            <Setter Property="RenderTransform"
+                    Value="translateX(7px) translateY(-10px)" />
+        </Style>
         <Style Selector="Button.windowButton">
             <Setter Property="Width"
-                    Value="50" />
+                    Value="35" />
             <Setter Property="Height"
-                    Value="50" />
+                    Value="35" />
             <Setter Property="HorizontalContentAlignment"
                     Value="Center" />
             <Setter Property="VerticalContentAlignment"
@@ -76,6 +80,22 @@
                     Value="WrapWithOverflow" />
         </Style>
 
+        <!--  OPT MARKERS  -->
+        <Style Selector="Border#OptMarker">
+            <Setter Property="Background"
+                    Value="Black" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+        </Style>
+        <Style Selector="Border#OptMarker:pointerover">
+            <Setter Property="Background"
+                    Value="Yellow" />
+        </Style>
+        <Style Selector="Border#OptMarker.isselected">
+            <Setter Property="Background"
+                    Value="Orange" />
+        </Style>
+
     </local:MpAvWindow.Styles>
     <Border BoxShadow="inset 0 0 5 5 #46000000"
             CornerRadius="10"
@@ -98,7 +118,7 @@
             </RadialGradientBrush>
         </Border.Background>
 
-        <Grid RowDefinitions="100,*,50"
+        <Grid RowDefinitions="100,*,20,50"
               Margin="10"
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
@@ -117,7 +137,8 @@
 
 
             <!--  WINDOW BUTTONS  -->
-            <StackPanel Grid.Row="0"
+            <StackPanel x:Name="WindowButtonPanel"
+                        Grid.Row="0"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Top">
@@ -149,37 +170,6 @@
                 </TransitioningContentControl.PageTransition>
                 <TransitioningContentControl.DataTemplates>
                     <local:MpAvWelcomeContentTemplateSelector>
-                        <!--  DRAG TO OPEN (RADIOS W/ DRAG ITEM)  -->
-                        <DataTemplate x:Key="DragToOpenTemplate"
-                                      x:DataType="local:MpAvWelcomeNotificationViewModel">
-                            <Grid ColumnDefinitions="0.5*,0.5*">
-                                <local:MpAvWelcomeOptionsView Grid.Column="0"
-                                                              HorizontalContentAlignment="Center"
-                                                              VerticalContentAlignment="Center" />
-                                <Border Grid.Column="1"
-                                        BorderThickness="1"
-                                        CornerRadius="10"
-                                        BorderBrush="White"
-                                        Padding="5">
-                                    <StackPanel Orientation="Vertical"
-                                                Spacing="5">
-                                        <Image x:Name="DragImage"
-                                               PointerPressed="DragImage_PointerPressed"
-                                               Classes="shake squareByHeight"
-                                               VerticalAlignment="Stretch"
-                                               Source="{Binding Source={StaticResource BananaImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
-                                            <Image.RenderTransform>
-                                                <RotateTransform />
-                                            </Image.RenderTransform>
-                                        </Image>
-                                        <TextBlock Text="{x:Static local:UiStrings.WelcomeDragToOpenDragSourceLabel}"
-                                                   Classes="description"
-                                                   FontSize="16" />
-
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
                         <!--  DEFAULT RADIO BUTTONS  -->
                         <DataTemplate x:Key="OptionsTemplate"
                                       x:DataType="local:MpAvWelcomeNotificationViewModel">
@@ -213,7 +203,7 @@
             </TransitioningContentControl>
 
             <!--  WIZARD NAV  -->
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="3">
                 <Grid.Resources>
                     <SolidColorBrush x:Key="ButtonForeground">White</SolidColorBrush>
                     <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
@@ -233,6 +223,37 @@
                     </Button.Resources>
                     <TextBlock Text="Skip" />
                 </Button>
+
+                <!--  PROGRESS MARKERS  -->
+                <ItemsControl ItemsSource="{Binding Items}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border x:Name="OptMarker"
+                                    Width="10"
+                                    Height="10"
+                                    Margin="0,0,5,0"
+                                    CornerRadius="5"
+                                    Classes="rejectWindowMove"
+                                    Classes.isselected="{Binding IsSelected}"
+                                    local:MpAvPointerCommandExtension.IsEnabled="True"
+                                    local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel"
+                                    local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ProgressMarkerClickCommand}">
+                                <ToolTip.Tip>
+                                    <local:MpAvToolTipView ToolTipText="{Binding Title}" />
+                                </ToolTip.Tip>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!--  NEXT/PREV BUTTONS  -->
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right">
                     <Button Margin="0,0,5,0"

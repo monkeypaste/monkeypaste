@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
             Parent != null &&
             (Parent.CurPageType == MpWelcomePageType.ScrollWheel ||
                     Parent.CurPageType == MpWelcomePageType.DragToOpen);
+
         public bool IsMultiRadioItem =>
             Parent != null &&
             Parent.CurOptGroupViewModel.Items.Count > 1;
@@ -36,12 +37,12 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return false;
                 }
-                if (IsGestureItem) {
-                    // NOTE assumes gesture is 1 item
-                    // allow click uncheck
-                    // disable click check
-                    return IsChecked;
-                }
+                //if (IsGestureItem) {
+                //    // NOTE assumes gesture is 1 item
+                //    // allow click uncheck
+                //    // disable click check
+                //    return IsChecked;
+                //}
                 if (IsMultiRadioItem) {
                     // disable unchecking checked
                     return !IsChecked;
@@ -175,6 +176,7 @@ namespace MonkeyPaste.Avalonia {
                     CheckOptionCommand.Execute(args);
                 }
             });
+
         #endregion
 
 

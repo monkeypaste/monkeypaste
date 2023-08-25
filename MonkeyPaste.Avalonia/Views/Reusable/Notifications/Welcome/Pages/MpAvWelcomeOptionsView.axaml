@@ -44,6 +44,70 @@
             <Setter Property="Foreground"
                     Value="RoyalBlue" />
         </Style>
+
+        <!--  TRY GESTURE BUTTON  -->
+        <Style Selector="Button.try"
+               x:DataType="local:MpAvWelcomeNotificationViewModel">
+            <Setter Property="MinWidth"
+                    Value="150" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="CornerRadius"
+                    Value="10" />
+            <Setter Property="BorderBrush"
+                    Value="White" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Padding"
+                    Value="10,20" />
+        </Style>
+        <Style Selector="Border.try"
+               x:DataType="local:MpAvWelcomeNotificationViewModel">
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="CornerRadius"
+                    Value="10" />
+            <Setter Property="BorderBrush"
+                    Value="White" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Padding"
+                    Value="10,3" />
+        </Style>
+
+        <Style Selector=":is(Button).try TextBlock, Border.try TextBlock"
+               x:DataType="local:MpAvWelcomeNotificationViewModel">
+            <Setter Property="DockPanel.Dock"
+                    Value="Bottom" />
+            <Setter Property="FontSize"
+                    Value="16" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+        </Style>
+
+        <Style Selector=":is(Button).try Image, Border.try Image"
+               x:DataType="local:MpAvWelcomeNotificationViewModel">
+            <Setter Property="Width"
+                    Value="30" />
+            <Setter Property="Height"
+                    Value="30" />
+            <Setter Property="Margin"
+                    Value="10" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+        </Style>
+
+        <Style Selector=":is(Button).try Image"
+               x:DataType="local:MpAvWelcomeNotificationViewModel">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource BellImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <StackPanel Orientation="Vertical"
                 Spacing="20"
@@ -68,56 +132,96 @@
                    Text="{Binding Caption}" />
 
 
-        <!--  OPTION BUTTONS  -->
-        <ItemsControl DockPanel.Dock="Top"
-                      ItemsSource="{Binding Items}"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border local:MpAvIsHoveringExtension.IsEnabled="True"
-                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                            Classes="rejectWindowMove"
-                            IsHitTestVisible="True"
-                            Background="{StaticResource HitTestableTransparent}">
-                        <RadioButton Classes="defaultButton gestureButton effectTrans"
-                                     Theme="{StaticResource SwitchlessRadioButton}"
-                                     GroupName="GestureProfile"
-                                     CornerRadius="7"
-                                     Margin="15"
-                                     Padding="15,15,15,5"
-                                     Width="200"
-                                     Height="230"
-                                     HorizontalContentAlignment="Center"
-                                     VerticalContentAlignment="Center"
-                                     IsHitTestVisible="{Binding IsHitTestable}"
-                                     Command="{Binding ToggleOptionCommand}"
-                                     IsChecked="{Binding IsChecked, Mode=OneWay}">
-                            <DockPanel HorizontalAlignment="Stretch"
-                                       VerticalAlignment="Stretch">
-                                <TextBlock DockPanel.Dock="Bottom"
-                                           HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Bottom"
-                                           TextAlignment="Center"
-                                           FontSize="20"
-                                           Text="{Binding LabelText}" />
-                                <Image Width="160"
-                                       Height="160"
-                                       Margin="0,0,0,10"
-                                       Stretch="UniformToFill"
-                                       Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                            </DockPanel>
-                        </RadioButton>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="50">
+            <!--  OPTION BUTTONS  -->
+            <ItemsControl DockPanel.Dock="Top"
+                          ItemsSource="{Binding Items}"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border local:MpAvIsHoveringExtension.IsEnabled="True"
+                                local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                Classes="rejectWindowMove"
+                                IsHitTestVisible="True"
+                                Background="{StaticResource HitTestableTransparent}">
+                            <RadioButton Classes="defaultButton gestureButton effectTrans"
+                                         Theme="{StaticResource SwitchlessRadioButton}"
+                                         GroupName="GestureProfile"
+                                         CornerRadius="7"
+                                         Margin="15"
+                                         Padding="15,15,15,5"
+                                         Width="200"
+                                         Height="230"
+                                         HorizontalContentAlignment="Center"
+                                         VerticalContentAlignment="Center"
+                                         IsHitTestVisible="{Binding IsHitTestable}"
+                                         Command="{Binding ToggleOptionCommand}"
+                                         IsChecked="{Binding IsChecked, Mode=OneWay}">
+                                <DockPanel HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch">
+                                    <TextBlock DockPanel.Dock="Bottom"
+                                               HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Bottom"
+                                               TextAlignment="Center"
+                                               FontSize="20"
+                                               Text="{Binding LabelText}" />
+                                    <Image Width="160"
+                                           Height="160"
+                                           Margin="0,0,0,10"
+                                           Stretch="UniformToFill"
+                                           Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                </DockPanel>
+                            </RadioButton>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
+            <!--  TRY GESTURE BUTTON  -->
+            <ToggleButton IsVisible="{Binding IsGestureGroup}"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Center"
+                          IsChecked="{Binding IsGestureDemoOpen, Mode=OneWay, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}"
+                          Command="{Binding ToggleGestureDemoCommand, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}"
+                          Classes="try">
+                <DockPanel>
+                    <TextBlock Text="{x:Static local:UiStrings.WelcomeScrollToOpenTryButtonLabel}" />
+                    <Image />
+                </DockPanel>
+            </ToggleButton>
+            <Border Classes="try">
+                <Border.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="IsGestureGroup" />
+                        <Binding Path="IsGestureDemoOpen"
+                                 Source="{x:Static local:MpAvWelcomeNotificationViewModel.Instance}" />
+                        <Binding Path="WelcomePageType"
+                                 ConverterParameter="DragToOpen"
+                                 Converter="{x:Static local:MpAvEnumToBoolConverter.Instance}" />
+                    </MultiBinding>
+                </Border.IsVisible>
+                <DockPanel>
+                    <TextBlock Text="{x:Static local:UiStrings.WelcomeDragToOpenDragSourceLabel}" />
+                    <Image x:Name="DragImage"
+                           PointerPressed="DragImage_PointerPressed"
+                           Classes="shake"
+                           Source="{Binding Source={StaticResource BananaImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}">
+                        <Image.RenderTransform>
+                            <RotateTransform />
+                        </Image.RenderTransform>
+                    </Image>
+                </DockPanel>
+            </Border>
+        </StackPanel>
         <!--  GESTURE CAPTION  -->
 
         <TransitioningContentControl x:Name="CaptionContainer"

@@ -25,16 +25,31 @@
         <Style Selector="Border#ContainerBorder"
                x:DataType="local:MpAvPointerGestureWindowViewModel">
             <Style.Animations>
-                <Animation Duration="0:0:0.3"
-                           Easing="ElasticEaseInOut"
-                           IterationCount="Infinite"
-                           PlaybackDirection="Alternate">
+                <Animation Duration="0:0:1.0"
+                           IterationCount="Infinite">
                     <KeyFrame Cue="0%">
+                        <Setter Property="BorderBrush"
+                                Value="{StaticResource OffBrush}" />
+                    </KeyFrame>
+                    <KeyFrame Cue="10%">
                         <Setter Property="BorderBrush"
                                 Value="{Binding EdgeBrush}" />
                     </KeyFrame>
+                    <KeyFrame Cue="20%">
+                        <Setter Property="BorderBrush"
+                                Value="{StaticResource OffBrush}" />
+                    </KeyFrame>
+                    <KeyFrame Cue="30%">
+                        <Setter Property="BorderBrush"
+                                Value="{Binding EdgeBrush}" />
+                    </KeyFrame>
+                    <KeyFrame Cue="40%">
+                        <Setter Property="BorderBrush"
+                                Value="{StaticResource OffBrush}" />
+                    </KeyFrame>
+
                     <KeyFrame Cue="100%">
-                        <Setter Property="Opacity"
+                        <Setter Property="BorderBrush"
                                 Value="{StaticResource OffBrush}" />
                     </KeyFrame>
                 </Animation>

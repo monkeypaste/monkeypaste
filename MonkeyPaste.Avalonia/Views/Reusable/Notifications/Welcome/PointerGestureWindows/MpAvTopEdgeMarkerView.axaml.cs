@@ -1,8 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using PropertyChanged;
-
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvTopEdgeMarkerView : MpAvUserControl<MpAvPointerGestureWindowViewModel> {
@@ -12,6 +12,16 @@ namespace MonkeyPaste.Avalonia {
 
             var marker = this.FindControl<Control>("ScrollMarkerContainer");
             marker.EffectiveViewportChanged += MpAvTopEdgeMarkerView_EffectiveViewportChanged;
+
+            InitDnd();
+        }
+
+        private void InitDnd() {
+            DragDrop.SetAllowDrop(this, true);
+            this.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
+        }
+        private void MpAvTopEdgeMarkerView_DragOver(object sender, DragEventArgs e) {
+            BindingContext.FakeWindowViewModel.ToggleFakeWindowCommand.Execute(null);
         }
 
         private void MpAvTopEdgeMarkerView_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {

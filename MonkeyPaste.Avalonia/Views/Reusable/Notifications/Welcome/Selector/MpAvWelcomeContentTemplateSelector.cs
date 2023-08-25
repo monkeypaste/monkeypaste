@@ -13,19 +13,22 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             string key;
-            object dc;
+            object dc = MpAvWelcomeNotificationViewModel.Instance.CurOptGroupViewModel;
             switch ((MpWelcomePageType)wptIdx) {
                 case MpWelcomePageType.DbPassword:
                     key = "DbPasswordTemplate";
                     dc = MpAvWelcomeNotificationViewModel.Instance;
                     break;
-                case MpWelcomePageType.DragToOpen:
-                    key = "DragToOpenTemplate";
-                    dc = MpAvWelcomeNotificationViewModel.Instance.CurOptGroupViewModel;
-                    break;
+                //case MpWelcomePageType.DragToOpen:
+                //    key = "DragToOpenTemplate";
+                //    dc = MpAvWelcomeNotificationViewModel.Instance;
+                //    break;
+                //case MpWelcomePageType.ScrollWheel:
+                //    key = "ScrollToOpenTemplate";
+                //    dc = MpAvWelcomeNotificationViewModel.Instance;
+                //    break;
                 default:
                     key = "OptionsTemplate";
-                    dc = MpAvWelcomeNotificationViewModel.Instance.CurOptGroupViewModel;
                     break;
             }
             if (AvailableTemplates[key].Build(param) is Control c) {

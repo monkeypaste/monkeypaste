@@ -280,6 +280,7 @@
     <None Remove="Assets\Images\banana.png" />
     <None Remove="Assets\Images\bananabw.png" />
     <None Remove="Assets\Images\beaker.png" />
+    <None Remove="Assets\Images\bell.png" />
     <None Remove="Assets\Images\bingIcon.png" />
     <None Remove="Assets\Images\binoculars.png" />
     <None Remove="Assets\Images\binocularstilted.png" />
@@ -620,6 +621,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\bananabw.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\bell.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\boxcorners.png">

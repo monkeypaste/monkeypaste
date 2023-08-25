@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Overrides
         protected override void OnClosed(EventArgs e) {
             base.OnClosed(e);
-            Mp.Services.ShutdownHelper.ShutdownApp("MainWindow Closed");
+            Mp.Services.ShutdownHelper.ShutdownApp("MainWindow Close");
         }
         #endregion
 

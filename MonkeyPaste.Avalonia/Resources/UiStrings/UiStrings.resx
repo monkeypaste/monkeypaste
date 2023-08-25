@@ -247,15 +247,21 @@
     <value>Scroll-to-Open</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>MonkeyPaste is fully integrated with Drag-and-Drop to and from the application.</value>
+    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop to and from the application.&lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowLabel" xml:space="preserve">
     <value>Easy RIght?</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>This way MonkeyPaste can be accessed without a click or even batting an eye 👀</value>
+    <value>&lt;p align="center"&gt;This way, MonkeyPaste can be accessed&lt;br&gt; &lt;span color="red"&gt;without a click&lt;/span&gt; or even &lt;span color="red"&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
     <value>Drag Me!</value>
+  </data>
+  <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
+    <value>Try it out!</value>
+  </data>
+  <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
+    <value>Try it out!</value>
   </data>
 </root>

@@ -241,7 +241,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MonkeyPaste is fully integrated with Drag-and-Drop to and from the application..
+        ///   Looks up a localized string similar to &lt;p align=&quot;center&quot;&gt;MonkeyPaste is &lt;span color=&quot;red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop to and from the application.&lt;/p&gt;.
         /// </summary>
         public static string WelcomeDragToOpenFakeWindowDetail {
             get {
@@ -291,6 +291,15 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeDragToOpenTitle {
             get {
                 return ResourceManager.GetString("WelcomeDragToOpenTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Try it out!.
+        /// </summary>
+        public static string WelcomeDragToOpenTryButtonLabel {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenTryButtonLabel", resourceCulture);
             }
         }
         
@@ -430,7 +439,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This way MonkeyPaste can be accessed without a click or even batting an eye 👀.
+        ///   Looks up a localized string similar to &lt;p align=&quot;center&quot;&gt;This way, MonkeyPaste can be accessed&lt;br&gt; &lt;span color=&quot;red&quot;&gt;without a click&lt;/span&gt; or even &lt;span color=&quot;red&quot;&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;.
         /// </summary>
         public static string WelcomeScrollToOpenFakeWindowDetail {
             get {
@@ -480,6 +489,15 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeScrollToOpenTitle {
             get {
                 return ResourceManager.GetString("WelcomeScrollToOpenTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Try it out!.
+        /// </summary>
+        public static string WelcomeScrollToOpenTryButtonLabel {
+            get {
+                return ResourceManager.GetString("WelcomeScrollToOpenTryButtonLabel", resourceCulture);
             }
         }
     }

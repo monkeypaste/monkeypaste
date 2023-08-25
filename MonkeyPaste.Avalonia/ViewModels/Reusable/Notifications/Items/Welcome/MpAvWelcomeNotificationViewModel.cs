@@ -94,6 +94,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsGestureDemoOpen { get; set; }
         public bool IsPrimaryChecked =>
             PrimaryItem == CheckedItem;
         public bool IsDbPasswordValid { get; set; } = true;
@@ -173,11 +174,9 @@ namespace MonkeyPaste.Avalonia {
                     if (!IS_PASSIVE_GESTURE_TOGGLE_ENABLED) {
                         break;
                     }
-                    // close/reset gesture vm
-                    if (CurPointerGestureWindowViewModel != null) {
-                        CurPointerGestureWindowViewModel.Destroy();
-                    }
-                    CurPointerGestureWindowViewModel = null;
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
+                    CurOptGroupViewModel.OnPropertyChanged(nameof(CurOptGroupViewModel.IsGestureGroup));
+                    CloseGestureDemo();
                     switch (CurPageType) {
                         case MpWelcomePageType.Account:
                             var test = Mp.Services.AccountTools;
@@ -192,16 +191,6 @@ namespace MonkeyPaste.Avalonia {
                         case MpWelcomePageType.ScrollWheel:
                         case MpWelcomePageType.DragToOpen:
 
-                            CurPointerGestureWindowViewModel =
-                                CurPageType == MpWelcomePageType.ScrollWheel ?
-                                    new MpAvPointerGestureWindowViewModel(CurOptGroupViewModel.Items.First(), MpPointGestureType.ScrollToOpen) :
-                                    new MpAvPointerGestureWindowViewModel(CurOptGroupViewModel.Items.First(), MpPointGestureType.DragToOpen);
-
-                            if (!CurOptGroupViewModel.WasVisited) {
-                                // for first visit set to unchecked
-                                CurOptGroupViewModel.Items.First().IsChecked = false;
-                            }
-                            CurPointerGestureWindowViewModel.ShowGestureWindowCommand.Execute(null);
                             break;
                     }
 
@@ -403,6 +392,16 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.DbInfo.DbPassword = DbPassword;
             }
         }
+
+        private void CloseGestureDemo() {
+
+            IsGestureDemoOpen = false;
+            // close/reset gesture vm
+            if (CurPointerGestureWindowViewModel != null) {
+                CurPointerGestureWindowViewModel.Destroy();
+            }
+            CurPointerGestureWindowViewModel = null;
+        }
         #endregion
 
         #region Commands
@@ -421,6 +420,14 @@ namespace MonkeyPaste.Avalonia {
                 return CanSelectPrevious;
             });
 
+        public ICommand SelectPageByMarkerCommand => new MpCommand<object>(
+            (args) => {
+                if (args is not MpWelcomePageType wpt) {
+                    return;
+                }
+                CurPageType = wpt;
+            });
+
         public ICommand SkipWelcomeCommand => new MpCommand(
             () => {
                 FinishWelcomeSetup();
@@ -434,6 +441,27 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
                 return CanFinish;
+            });
+
+
+        public ICommand ToggleGestureDemoCommand => new MpCommand(
+            () => {
+                if (IsGestureDemoOpen) {
+                    CloseGestureDemo();
+                    return;
+                }
+                IsGestureDemoOpen = true;
+
+                CurPointerGestureWindowViewModel =
+                    CurPageType == MpWelcomePageType.ScrollWheel ?
+                        new MpAvPointerGestureWindowViewModel(CurOptGroupViewModel.Items.First(), MpPointGestureType.ScrollToOpen) :
+                        new MpAvPointerGestureWindowViewModel(CurOptGroupViewModel.Items.First(), MpPointGestureType.DragToOpen);
+
+                if (!CurOptGroupViewModel.WasVisited) {
+                    // for first visit set to unchecked
+                    CurOptGroupViewModel.Items.First().IsChecked = false;
+                }
+                CurPointerGestureWindowViewModel.ShowGestureWindowCommand.Execute(null);
             });
 
         #endregion

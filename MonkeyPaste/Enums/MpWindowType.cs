@@ -6,6 +6,8 @@
         PopOut,
         Append,
         Toast,
-        Modal
+        Modal,
+        Modal2,
+        Modal3
     }
 }
