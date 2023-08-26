@@ -26,6 +26,7 @@
     <Product>$(ApplicationName)</Product>
     <Authors>$(ApplicationAuthor)</Authors>
     <AssemblyVersion>$(ApplicationVersion)</AssemblyVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="monkey.ico" />
