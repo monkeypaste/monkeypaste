@@ -106,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore your existing account...
+        ///   Looks up a localized string similar to Restore your existing account....
         /// </summary>
         public static string WelcomeAccountDescription1 {
             get {
@@ -115,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Content and archive is limited to {0} and {1} clips respectively. No syncing capabilities are enabled. More info here..
+        ///   Looks up a localized string similar to Content and archive is limited to {0} and {1} clips respectively. No syncing capabilities are enabled..
         /// </summary>
         public static string WelcomeAccountDescription2 {
             get {
@@ -124,7 +124,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}{1}/{0}{2} (monthly/annually) {4} Content is limited to {3} clips with an unlimited archive and syncing across all devices. More info here..
+        ///   Looks up a localized string similar to {0}{1}/{0}{2} (monthly/annually) {4} Content is limited to {3} clips with an unlimited archive and syncing across all devices. .
         /// </summary>
         public static string WelcomeAccountDescription3 {
             get {
@@ -133,7 +133,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}{1}/{0}{2} (monthly/annually) {3} Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices. More info here..
+        ///   Looks up a localized string similar to {0}{1}/{0}{2} (monthly/annually) {3} Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices..
         /// </summary>
         public static string WelcomeAccountDescription4 {
             get {
@@ -304,7 +304,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keyboard shortcuts can be reviewed or changed at anytime from the &apos;Settings-&gt;GestureProfile&apos; menu..
+        ///   Looks up a localized string similar to Keyboard shortcuts can be reviewed or changed at anytime from the &apos;Settings-&gt;Shortcuts&apos; menu..
         /// </summary>
         public static string WelcomeGestureProfileCaption {
             get {
@@ -358,7 +358,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hey! Let&apos;s setup a few things to improve your overall experience with MonkeyPaste..
+        ///   Looks up a localized string similar to Let&apos;s setup a few things to improve your overall experience with MonkeyPaste..
         /// </summary>
         public static string WelcomeGreetingCaption {
             get {
@@ -367,7 +367,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome.
+        ///   Looks up a localized string similar to Hey!.
         /// </summary>
         public static string WelcomeGreetingTitle {
             get {
@@ -376,7 +376,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To get the most use out of MonkeyPaste loading automatically when you log in is a good idea. But, that&apos;s entirely up to you..
+        ///   Looks up a localized string similar to To get the most use out of MonkeyPaste, loading automatically when you log in is a good idea. But, that&apos;s entirely up to you..
         /// </summary>
         public static string WelcomeLoginLoadCaption {
             get {

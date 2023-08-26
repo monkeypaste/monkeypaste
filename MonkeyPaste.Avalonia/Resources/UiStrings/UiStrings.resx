@@ -133,16 +133,16 @@
     <value>No features are limited by subscription, only storage capacity and can be changed at anytime.</value>
   </data>
   <data name="WelcomeAccountDescription1" xml:space="preserve">
-    <value>Restore your existing account..</value>
+    <value>Restore your existing account...</value>
   </data>
   <data name="WelcomeAccountDescription2" xml:space="preserve">
-    <value>Content and archive is limited to {0} and {1} clips respectively. No syncing capabilities are enabled. More info here.</value>
+    <value>Content and archive is limited to {0} and {1} clips respectively. No syncing capabilities are enabled.</value>
   </data>
   <data name="WelcomeAccountDescription3" xml:space="preserve">
-    <value>{0}{1}/{0}{2} (monthly/annually) {4} Content is limited to {3} clips with an unlimited archive and syncing across all devices. More info here.</value>
+    <value>{0}{1}/{0}{2} (monthly/annually) {4} Content is limited to {3} clips with an unlimited archive and syncing across all devices. </value>
   </data>
   <data name="WelcomeAccountDescription4" xml:space="preserve">
-    <value>{0}{1}/{0}{2} (monthly/annually) {3} Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices. More info here.</value>
+    <value>{0}{1}/{0}{2} (monthly/annually) {3} Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices.</value>
   </data>
   <data name="WelcomeAccountLabel1" xml:space="preserve">
     <value>Restore</value>
@@ -187,7 +187,7 @@
     <value>Drag-to-Open</value>
   </data>
   <data name="WelcomeGestureProfileCaption" xml:space="preserve">
-    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings-&gt;GestureProfile' menu.</value>
+    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings-&gt;Shortcuts' menu.</value>
   </data>
   <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
     <value>Internal</value>
@@ -205,13 +205,13 @@
     <value>Gesture Profile</value>
   </data>
   <data name="WelcomeGreetingCaption" xml:space="preserve">
-    <value>Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.</value>
+    <value>Let's setup a few things to improve your overall experience with MonkeyPaste.</value>
   </data>
   <data name="WelcomeGreetingTitle" xml:space="preserve">
-    <value>Welcome</value>
+    <value>Hey!</value>
   </data>
   <data name="WelcomeLoginLoadCaption" xml:space="preserve">
-    <value>To get the most use out of MonkeyPaste loading automatically when you log in is a good idea. But, that's entirely up to you.</value>
+    <value>To get the most use out of MonkeyPaste, loading automatically when you log in is a good idea. But, that's entirely up to you.</value>
   </data>
   <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
     <value>MonkeyPaste will only load when this user account is logged in, not for other users.</value>

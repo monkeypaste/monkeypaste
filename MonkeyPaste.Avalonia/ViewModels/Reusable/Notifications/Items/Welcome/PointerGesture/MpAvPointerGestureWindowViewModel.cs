@@ -157,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
             return gw;
         }
         public void CheckForGesture() {
-            if (!IsGesturing) {
+            if (!IsGesturing || FakeWindowViewModel.FakeWindowState == MpFakeWindowState.Open) {
                 return;
             }
 

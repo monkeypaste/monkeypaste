@@ -80,15 +80,6 @@ namespace MonkeyPaste {
                 await CreateViewsAsync();
                 await InitDefaultDataAsync();
 
-                await MpTestDataBuilder.CreateImportsTestContentAsync(
-                       db_path: Mp.Services.DbInfo.DbPath,
-                       pwd: Mp.Services.DbInfo.DbPassword,
-                       content_count: 1_000_000,
-                       big_count: 20,
-                       link_count: 150,
-                       parent_tag_count: 3,
-                       child_tag_count: 3,
-                       sub_child_tag_count: 2);
             } else {
                 await MpDefaultDataModelTools.InitializeAsync();
             }
@@ -101,8 +92,10 @@ namespace MonkeyPaste {
         }
 
         public static async Task PerformDbOptimizationAsync() {
-            await _connectionAsync.ExecuteAsync("PRAGMA analysis_limit=1000;");
-            await _connectionAsync.ExecuteAsync("PRAGMA optimize;");
+            await Task.Delay(1);
+            ExecuteCommand<string>("PRAGMA analysis_limit=1000;");
+            ExecuteCommand<string>("PRAGMA optimize;");
+            MpConsole.WriteLine($"Db optimization completed.");
         }
 
         public static async Task<bool> CheckIsUserPasswordSetAsync() {
@@ -408,6 +401,14 @@ namespace MonkeyPaste {
 
         #region Sync Query
 
+        public static T ExecuteCommand<T>(string cmdText, params object[] args) {
+            if (_connection == null) {
+                CreateConnection();
+            }
+            var cmd = _connection.CreateCommand(cmdText, args);//use db.CreateCommand
+            var result = cmd.ExecuteScalar<T>();//execute the command
+            return result;
+        }
         public static List<T> Query<T>(string query, params object[] args) where T : new() {
             if (_connection == null) {
                 CreateConnection();
@@ -487,14 +488,14 @@ namespace MonkeyPaste {
         }
 
         private static async Task InitDbSettingsAsync() {
-            string[] settings = new string[] {
-                $"pragma journal_mode = WAL;",
+            var settings = new List<string>() {
                 $"pragma synchronous = normal;",
                 $"pragma temp_store = memory;",
                 $"pragma mmap_size = 30000000000;",
                 $"pragma page_size = 32768;"
             };
-            for (int i = 0; i < settings.Length; i++) {
+
+            for (int i = 0; i < settings.Count; i++) {
                 try {
                     await _connectionAsync.ExecuteAsync(settings[i]);
                 }
@@ -577,8 +578,6 @@ namespace MonkeyPaste {
                     MpConsole.WriteTraceLine($"Db Error creating async connection", ex);
                 }
             }
-
-            //await InitDbSettingsAsync();
             MpConsole.WriteLine($"Db Async WAL: {(UseWAL ? "ENABLED" : "DISABLED")}");
         }
 

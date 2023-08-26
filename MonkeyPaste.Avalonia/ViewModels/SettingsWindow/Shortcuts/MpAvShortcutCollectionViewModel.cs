@@ -25,6 +25,7 @@ namespace MonkeyPaste.Avalonia {
         MpIDndUserCancelNotifier {
 
         #region Statics
+        public static bool IS_GLOBAL_INPUT_LOGGING_ENABLED { get; set; } = false;
         public static bool IS_GLOBAL_MOUSE_INPUT_ENABLED { get; set; } = true;
         public static bool IS_GLOBAL_KEYBOARD_INPUT_ENABLED { get; set; } = true;
         public static bool IS_GLOBAL_INPUT_ENABLED => IS_GLOBAL_KEYBOARD_INPUT_ENABLED || IS_GLOBAL_MOUSE_INPUT_ENABLED;
@@ -878,12 +879,13 @@ namespace MonkeyPaste.Avalonia {
                     _hook.MouseClicked += Hook_MouseClicked;
                     _hook.MouseDragged += Hook_MouseDragged;
                 }
+                if (IS_GLOBAL_INPUT_LOGGING_ENABLED) {
+                    var logSource = LogSource.Register(minLevel: LogLevel.Debug);
+                    logSource.MessageLogged += OnMessageLogged;
 
-                var logSource = LogSource.Register(minLevel: LogLevel.Debug);
-                logSource.MessageLogged += OnMessageLogged;
-
-                void OnMessageLogged(object? sender, LogEventArgs e) =>
-                    MpConsole.WriteLine($" [HOOK LOG] {e.LogEntry.FullText}");
+                    void OnMessageLogged(object? sender, LogEventArgs e) =>
+                        MpConsole.WriteLine($" [HOOK LOG] {e.LogEntry.FullText}");
+                }
 
             } else if (_hook.IsRunning) {
                 return;

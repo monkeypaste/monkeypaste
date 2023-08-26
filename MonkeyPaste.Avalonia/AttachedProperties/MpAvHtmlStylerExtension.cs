@@ -183,7 +183,9 @@ namespace MonkeyPaste.Avalonia {
             switch (GetHtmlStyleType(hc)) {
                 default:
                     return string.Format(
-                        @"* { color: {0}; font: {1}px {2}; }",
+@"* {{ color: {0}; font: {1}px {2}; }}
+a:link {{ text-decoration: none; }}
+a:hover {{ text-decoration: underline; }}",
                         GetDefaultColor(hc),
                         GetDefaultFontSize(hc),
                         MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily);

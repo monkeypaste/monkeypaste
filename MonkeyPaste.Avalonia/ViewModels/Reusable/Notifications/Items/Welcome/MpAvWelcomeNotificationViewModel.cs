@@ -24,7 +24,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
         private const string PRE_ESTABLISHED_USER_DB_PWD_TEXT = "<^&user has already set a password^&>";
 
-        public bool IS_PASSIVE_GESTURE_TOGGLE_ENABLED = true;
         #endregion
 
         #region Statics
@@ -93,7 +92,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public override bool WantsTopmost =>
+            false;
+        //CurOptGroupViewModel == null ||
+        //!CurOptGroupViewModel.IsGestureGroup;
         public bool IsGestureDemoOpen { get; set; }
         public bool IsPrimaryChecked =>
             PrimaryItem == CheckedItem;
@@ -171,9 +173,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsPrimaryChecked));
                     break;
                 case nameof(CurPageType):
-                    if (!IS_PASSIVE_GESTURE_TOGGLE_ENABLED) {
-                        break;
-                    }
+                    OnPropertyChanged(nameof(WantsTopmost));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     CurOptGroupViewModel.OnPropertyChanged(nameof(CurOptGroupViewModel.IsGestureGroup));
                     CloseGestureDemo();
@@ -208,7 +208,10 @@ namespace MonkeyPaste.Avalonia {
                 Title = UiStrings.WelcomeGreetingTitle,
                 Caption = UiStrings.WelcomeGreetingCaption,
             };
-
+            string account_help_url = @"https://www.monkeypaste.com/help#recycling";
+            string monthly_color = MpSystemColors.yellowgreen.RemoveHexAlpha();
+            string yearly_color = MpSystemColors.olivedrab.RemoveHexAlpha();
+            string line_break = Environment.NewLine;
             AccountViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.Account) {
                 Title = UiStrings.WelcomeAccountTitle,
                 Caption = UiStrings.WelcomeAccountCaption,
@@ -225,7 +228,8 @@ namespace MonkeyPaste.Avalonia {
                             string.Format(
                                 UiStrings.WelcomeAccountDescription2,
                                 Mp.Services.AccountTools.GetContentCapacity(MpUserAccountType.Free),
-                                Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Free))
+                                Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Free),
+                                account_help_url)
                     },
                     new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Standard) {
                         IconSourceObj = "StarYellowImage",
@@ -237,7 +241,10 @@ namespace MonkeyPaste.Avalonia {
                                 Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Standard,true),
                                 Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Standard,false),
                                 Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Standard),
-                                Environment.NewLine)
+                                line_break,
+                                account_help_url,
+                                monthly_color,
+                                yearly_color)
                     },
                     new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Unlimited) {
                         IsChecked = true,
@@ -249,7 +256,10 @@ namespace MonkeyPaste.Avalonia {
                                 new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID).CurrencySymbol,
                                 Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Unlimited,true),
                                 Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Unlimited,false),
-                                Environment.NewLine)
+                                line_break,
+                                account_help_url,
+                                monthly_color,
+                                yearly_color)
                     },
                 }
             };
@@ -289,8 +299,7 @@ namespace MonkeyPaste.Avalonia {
                 Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,null) {
                         IsChecked = MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
-                        UncheckedIconSourceObj = "CloseWindowImage",
-                        CheckedIconSourceObj = "AppFrameImage",
+                        IconSourceObj = "MouseWheelImage",
                         CheckedLabelText = UiStrings.WelcomeScrollToOpenLabel2,
                         CheckedDescriptionText = UiStrings.WelcomeScrollToOpenDescription2,
                         UncheckedLabelText = UiStrings.WelcomeScrollToOpenLabel1,

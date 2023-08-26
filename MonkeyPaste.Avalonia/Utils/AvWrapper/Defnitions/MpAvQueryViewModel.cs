@@ -12,7 +12,8 @@ namespace MonkeyPaste.Avalonia {
         MpIJsonObject,
         MpIQueryInfo {
         #region Private Variables
-
+        [JsonIgnore]
+        private int _requeryCount = 0;
         [JsonIgnore]
         private bool _isRestoringValues = false;
         [JsonIgnore]
@@ -22,6 +23,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+
+        const int OPTIMIZE_PER_REQUERY_COUNT = 5;
+
+        #endregion
         #region Statics
 
         public static MpIQueryResultProvider Parse(string lastQueryInfoStr) {
@@ -87,9 +93,17 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task QueryForTotalCountAsync(bool isRequery) {
-            //MpConsole.WriteLine("total count called");
             int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
             _pageTools.SetTotalCount(total_count);
+
+            if (isRequery) {
+                _requeryCount++;
+                if (_requeryCount % OPTIMIZE_PER_REQUERY_COUNT == 0) {
+                    // this is to improve db perf.
+                    // see https://www.sqlite.org/pragma.html#pragma_optimize
+                    MpDb.PerformDbOptimizationAsync().FireAndForgetSafeAsync();
+                }
+            }
 
         }
 

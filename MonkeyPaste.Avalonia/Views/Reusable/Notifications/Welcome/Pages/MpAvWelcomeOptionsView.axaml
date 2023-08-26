@@ -198,7 +198,7 @@
                     <Image />
                 </DockPanel>
             </ToggleButton>
-            <Border Classes="try">
+            <Border Classes="try rejectWindowMove">
                 <Border.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                         <Binding Path="IsGestureGroup" />

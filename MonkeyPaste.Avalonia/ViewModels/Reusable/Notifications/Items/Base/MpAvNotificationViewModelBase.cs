@@ -142,7 +142,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIWantsTopmostWindowViewModel Implementation
 
-        public bool WantsTopmost =>
+        public virtual bool WantsTopmost =>
             true;
 
         #endregion

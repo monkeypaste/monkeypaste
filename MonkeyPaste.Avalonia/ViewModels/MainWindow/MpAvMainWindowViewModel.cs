@@ -871,12 +871,6 @@ namespace MonkeyPaste.Avalonia {
             // open 
             double zeta = 0.22d;
             double omega = 25;
-            //if(MpAvSearchBoxViewModel.Instance.HasText) {
-            //    var st_parts = MpAvSearchBoxViewModel.Instance.SearchText.Split(",");
-            //    zeta = double.Parse(st_parts[0]);
-            //    omega = double.Parse(st_parts[1]);
-            //}
-            //MainWindowScreenRect = startRect;
             double[] x = new double[] { MainWindowLeft, MainWindowTop, MainWindowRight, MainWindowBottom };
             double[] xt = endRect.Sides;
             double[] v = new double[4];

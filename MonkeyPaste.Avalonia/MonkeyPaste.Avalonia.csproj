@@ -6,6 +6,7 @@
     <TrimMode>copyused</TrimMode>
     <WarningLevel>4</WarningLevel>
      <LangVersion>$(DefaultLangVersion)</LangVersion>
+     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
     <Platforms>$(DefaultPlatforms)</Platforms>
      <!--<AvaloniaNameGeneratorIsEnabled>true</AvaloniaNameGeneratorIsEnabled>-->
@@ -398,6 +399,7 @@
     <None Remove="Assets\Images\mouseleftclick.png" />
     <None Remove="Assets\Images\mousenoneclick.png" />
     <None Remove="Assets\Images\mouserightclick.png" />
+    <None Remove="Assets\Images\mousewheel.png" />
     <None Remove="Assets\Images\newwindow.png" />
     <None Remove="Assets\Images\noentry.png" />
     <None Remove="Assets\Images\object.png" />
@@ -555,7 +557,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Fonts\Habanero\Habanero.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Fonts\Nunito\Nunito-Italic-VariableFont_wght.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -678,6 +680,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\mousefilledbase.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\mousewheel.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\object.png">
@@ -1666,23 +1671,6 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
   </ItemGroup>
 
-  <!--<ItemGroup>
-    <Content Include="Resources\Editor\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>-->
-  
-  <!--<ItemGroup>
-    <EditorSourceDir Include="Resources\Editor\**\*.*" />
-  </ItemGroup>
-  <Copy
-      SourceFiles="@(EditorSourceDir)"
-      DestinationFolder="$(MainTargetDir)\%(RecursiveDir)"
-      SkipUnchangedFiles="true"
-      OverwriteReadOnlyFiles="true"
-      Retries="3"
-      RetryDelayMilliseconds="300"/>-->
-
   <ItemGroup>
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
   </ItemGroup>
@@ -1737,7 +1725,7 @@
      Turns off reference assembly generation 
      See: https://learn.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies
      -->
-     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+     <!--<ProduceReferenceAssembly>false</ProduceReferenceAssembly>-->
 </PropertyGroup>
   <PropertyGroup>
   <!-- Makes the TypeScript compilation task a no-op -->

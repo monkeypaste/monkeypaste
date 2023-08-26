@@ -3,8 +3,12 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpFakeWindowState {
@@ -171,10 +175,12 @@ namespace MonkeyPaste.Avalonia {
             fmw.Position = FakeWindowScreenRect.Position;
             fmw.Width = FakeWindowSize.Width;
             fmw.Height = FakeWindowSize.Height;
-            if (fmw.Content is MpAvFakeWindowView fwv &&
-                fwv.FindControl<Border>("PlaceholderWindow") is Border fwv_panel) {
-                Canvas.SetTop(fwv_panel, FakeWindowStartTop);
-            } // check actual top is bound correct
+            FakeWindowActualTop = FakeWindowStartTop;
+
+            //if (fmw.Content is MpAvFakeWindowView fwv &&
+            //    fwv.FindControl<Border>("PlaceholderWindow") is Border fwv_panel) {
+            //    Canvas.SetTop(fwv_panel, FakeWindowStartTop);
+            //} // check actual top is bound correct
             return fmw;
         }
 
@@ -185,6 +191,56 @@ namespace MonkeyPaste.Avalonia {
             ToggleFakeWindowCommand.Execute(null);
         }
 
+        DispatcherTimer _animationTimer;
+        private async Task AnimateMainWindowAsync(double finalTop) {
+            // close 0.12 20
+            // open 
+            double zeta = 0.22d;
+            double omega = 25;
+            double[] x = new double[] { FakeWindowActualTop };
+            double[] xt = new double[] { finalTop };
+            double[] v = new double[1];
+            double min_done_v = 0.5d;// 0.9d;
+            bool isDone = false;
+            DateTime prevTime = DateTime.Now;
+            if (_animationTimer == null) {
+                _animationTimer = new DispatcherTimer();
+                _animationTimer.Interval = TimeSpan.FromMilliseconds(1000d / 60d);
+            }
+            EventHandler tick = (s, e) => {
+                var curTime = DateTime.Now;
+                double dt = (curTime - prevTime).TotalMilliseconds / 1000.0d;
+                prevTime = curTime;
+                for (int i = 0; i < x.Length; i++) {
+                    MpAnimationHelpers.Spring(ref x[i], ref v[i], xt[i], dt, zeta, omega);
+                }
+                bool is_v_zero = v.All(x => Math.Abs(x) <= min_done_v);
+
+                if (is_v_zero) {
+                    // consider done when all v's are pretty low or canceled
+                    isDone = true;
+                    _animationTimer.Stop();
+                    return;
+                }
+                //SetMainWindowRect(new MpRect(x));
+                FakeWindowActualTop = x[0];
+
+            };
+
+            _animationTimer.Tick += tick;
+            _animationTimer.Start();
+
+            var timeout_sw = Stopwatch.StartNew();
+            while (!isDone) {
+                await Task.Delay(5);
+                if (timeout_sw.ElapsedMilliseconds >= 2000) {
+                    isDone = true;
+                }
+            }
+            _animationTimer.Stop();
+            _animationTimer.Tick -= tick;
+            FakeWindowActualTop = finalTop;
+        }
         #endregion
 
         #region Commands
@@ -199,9 +255,11 @@ namespace MonkeyPaste.Avalonia {
                     case MpFakeWindowState.None:
                     case MpFakeWindowState.Close:
                         FakeWindowState = MpFakeWindowState.Open;
+                        AnimateMainWindowAsync(FakeWindowEndTop).FireAndForgetSafeAsync();
                         break;
                     case MpFakeWindowState.Open:
                         FakeWindowState = MpFakeWindowState.Close;
+                        AnimateMainWindowAsync(FakeWindowStartTop).FireAndForgetSafeAsync();
                         break;
                 }
 

@@ -10,14 +10,21 @@
                        mc:Ignorable="d"
                        d:DesignWidth="400"
                        d:DesignHeight="300">
+    <UserControl.Resources>
+        <SpringEasing x:Key="SpringEasing"
+                      Mass="1"
+                      Stiffness="2000"
+                      Damping="20"
+                      InitialVelocity="0" />
+    </UserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  SHOW/HIDE ANIMATION  -->
         <Style Selector="Border#PlaceholderWindow.show"
                x:DataType="local:MpAvFakeWindowViewModel">
             <Style.Animations>
-                <Animation Duration="0:0:1"
+                <Animation Duration="0:0:1.0"
                            FillMode="Forward"
-                           Easing="BounceEaseIn">
+                           Easing="{DynamicResource SpringEasing}">
                     <KeyFrame Cue="0%">
                         <Setter Property="Canvas.Top"
                                 Value="{Binding FakeWindowStartTop}" />
@@ -34,7 +41,7 @@
             <Style.Animations>
                 <Animation Duration="0:0:1"
                            FillMode="Forward"
-                           Easing="BounceEaseIn">
+                           Easing="{DynamicResource SpringEasing}">
                     <KeyFrame Cue="0%">
                         <Setter Property="Canvas.Top"
                                 Value="{Binding FakeWindowEndTop}" />
@@ -49,12 +56,14 @@
     </local:MpAvUserControl.Styles>
     <Canvas HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
+        <!--
+            Classes.show="{Binding FakeWindowState, ConverterParameter=Open, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+            Classes.hide="{Binding FakeWindowState, ConverterParameter=Close, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+        -->
         <Border x:Name="PlaceholderWindow"
                 Width="{Binding $parent.Bounds.Width}"
                 Height="{Binding $parent.Bounds.Height}"
-                Classes.show="{Binding FakeWindowState, ConverterParameter=Open, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-                Classes.hide="{Binding FakeWindowState, ConverterParameter=Close, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-                Canvas.Top="{Binding FakeWindowActualTop, Mode=OneWayToSource}"
+                Canvas.Top="{Binding FakeWindowActualTop, Mode=TwoWay}"
                 Background="{DynamicResource ClipTrayBgColor}">
             <Viewbox Stretch="Uniform"
                      HorizontalAlignment="Center"

@@ -34,7 +34,7 @@
                     <Setter Property="Width"
                             Value="1000" />
                     <Setter Property="Height"
-                            Value="600" />
+                            Value="650" />
                 </KeyFrame>
             </Animation>
         </Style.Animations>

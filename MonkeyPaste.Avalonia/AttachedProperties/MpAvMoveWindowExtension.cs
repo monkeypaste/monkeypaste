@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -123,7 +124,9 @@ namespace MonkeyPaste.Avalonia {
         private static void Control_PointerMoved(object sender, PointerEventArgs e) {
             if (!_downPos.HasValue ||
                 sender is not Control attached_control ||
+                !e.IsLeftDown(attached_control) ||
                 TopLevel.GetTopLevel(attached_control) is not Window w) {
+                _downPos = null;
                 return;
             }
 
