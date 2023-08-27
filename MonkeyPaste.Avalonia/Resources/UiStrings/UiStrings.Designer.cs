@@ -61,6 +61,60 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No results available..
+        /// </summary>
+        public static string CommonEmptyListText {
+            get {
+                return ResourceManager.GetString("CommonEmptyListText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string CommonNoneLabel {
+            get {
+                return ResourceManager.GetString("CommonNoneLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string CommonNtfConfirmTitle {
+            get {
+                return ResourceManager.GetString("CommonNtfConfirmTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string CommonRefreshTooltip {
+            get {
+                return ResourceManager.GetString("CommonRefreshTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search....
+        /// </summary>
+        public static string CommonSearchWatermark {
+            get {
+                return ResourceManager.GetString("CommonSearchWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string CommonSettingsTitle {
+            get {
+                return ResourceManager.GetString("CommonSettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All interop shortcuts (those useful outside of MonkeyPaste) are enabled by default. Pressing Caps Lock (without any other key) will show or hide the interface at anytime (not currently supported on Linux).
         /// </summary>
         public static string GestureProfileGlobal {
@@ -79,11 +133,164 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Credits:.
+        /// </summary>
+        public static string PluginBrowserCreditsLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserCreditsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dependencies:.
+        /// </summary>
+        public static string PluginBrowserDependenciesLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserDependenciesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description:.
+        /// </summary>
+        public static string PluginBrowserDescriptionLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserDescriptionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Donate:.
+        /// </summary>
+        public static string PluginBrowserDonateLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserDonateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install.
+        /// </summary>
+        public static string PluginBrowserInstallLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserInstallLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License:.
+        /// </summary>
+        public static string PluginBrowserLicenseLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserLicenseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove &apos;{0}&apos; and all its presets and shortcuts?.
+        /// </summary>
+        public static string PluginBrowserNtfUninstallMsg {
+            get {
+                return ResourceManager.GetString("PluginBrowserNtfUninstallMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project URL:.
+        /// </summary>
+        public static string PluginBrowserProjectUrlLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserProjectUrlLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Published:.
+        /// </summary>
+        public static string PluginBrowserPublishedLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserPublishedLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read Me:.
+        /// </summary>
+        public static string PluginBrowserReadMeLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserReadMeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report Abuse:.
+        /// </summary>
+        public static string PluginBrowserReportAbuseLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserReportAbuseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags:.
+        /// </summary>
+        public static string PluginBrowserTagsLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserTagsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstall.
+        /// </summary>
+        public static string PluginBrowserUninstallLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserUninstallLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update:.
+        /// </summary>
+        public static string PluginBrowserUpdateLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserUpdateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version:.
+        /// </summary>
+        public static string PluginBrowserVersionLabel {
+            get {
+                return ResourceManager.GetString("PluginBrowserVersionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential..
         /// </summary>
         public static string ProductDescription {
             get {
                 return ResourceManager.GetString("ProductDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; has no results..
+        /// </summary>
+        public static string QueryTrayEmptyText {
+            get {
+                return ResourceManager.GetString("QueryTrayEmptyText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No selection..
+        /// </summary>
+        public static string QueryTrayNoSelection {
+            get {
+                return ResourceManager.GetString("QueryTrayNoSelection", resourceCulture);
             }
         }
         

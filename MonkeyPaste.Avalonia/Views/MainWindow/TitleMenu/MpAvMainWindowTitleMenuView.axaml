@@ -140,7 +140,7 @@
                           IsChecked="{Binding IsWindowOpen, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=OneWay}"
                           ToolTip.ShowDelay="500">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Settings"
+                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonSettingsTitle}"
                                            InputGestureText="{Binding ., ConverterParameter=ShowSettings, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                 </ToolTip.Tip>
                 <PathIcon Data="{StaticResource CogSvg}" />
@@ -171,8 +171,7 @@
             </Button.RenderTransform>
             <Image HorizontalAlignment="Stretch"
                    VerticalAlignment="Stretch"
-                   Margin="5,0">
-            </Image>
+                   Margin="5,0" />
         </Button>
 
         <!--  RIGHT  -->
@@ -180,9 +179,9 @@
         <StackPanel x:Name="RightStackPanel"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">
-          
+
             <!--  Zoom Factor Slider  -->
-          
+
             <Grid x:Name="ZoomSliderContainerGrid"
                   IsVisible="False"
                   Background="{StaticResource HitTestableTransparent}"
@@ -218,9 +217,9 @@
                     </Button>
                 </Canvas>
             </Grid>
-          
+
             <!--  Layout Toggle Button  -->
-          
+
             <ToggleButton x:Name="GridLayoutToggleButton"
                           Classes="noBg noHoverBg noBorder"
                           Command="{Binding ToggleLayoutTypeCommand, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"

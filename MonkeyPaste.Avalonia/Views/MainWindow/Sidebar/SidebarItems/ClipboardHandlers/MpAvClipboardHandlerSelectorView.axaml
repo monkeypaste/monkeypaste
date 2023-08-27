@@ -97,7 +97,7 @@
                         DataContext="{Binding SelectedPresetViewModel}">
                     <StackPanel Orientation="Vertical">
                         <Label Classes="h1"
-                               Content="Settings" />
+                               Content="{x:Static local:UiStrings.CommonSettingsTitle}" />
                         <Border Classes="labelUnderline" />
 
                         <TransitioningContentControl Content="{Binding}">

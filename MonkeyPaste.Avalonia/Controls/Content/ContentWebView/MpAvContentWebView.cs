@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
         private object _sendMessageLock = new object();
         private string _contentScreenShotBase64_ntf { get; set; }
 
-        private string _lastLoadedContentHandle = null;
+        //private string _lastLoadedContentHandle = null;
 
         private DateTime? _locatedDateTime;
 
@@ -409,6 +409,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpEditorBindingFunctionType.notifyLoadComplete:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillEditorContentChangedMessage loadComplete_ntf) {
+                        //_lastLoadedContentHandle = contentHandle
                         IsEditorLoaded = true;
                         ProcessContentChangedMessage(loadComplete_ntf);
                     }
@@ -1302,15 +1303,14 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            bool is_reload = BindingContext.PublicHandle == _lastLoadedContentHandle;
+            //bool is_reload = BindingContext.PublicHandle == _lastLoadedContentHandle;
 
-            if (BindingContext.PublicHandle != _lastContentHandle.ToStringOrEmpty() &&
-                _lastContentHandle != null) {
-                var resp_vm = MpAvClipTrayViewModel.Instance.AllItems.FirstOrDefault(x => x.PublicHandle == _lastContentHandle);
-                MpDebug.Break($"Editor/Vm id mismatch for msg 'LoadCOntent'. should be {BindingContext.CopyItemId} but received {(resp_vm == null ? $"unknown (unloaded, handle '{_lastContentHandle}')" : resp_vm)}", true);
-                return;
-            }
-            _lastLoadedContentHandle = BindingContext.PublicHandle;
+            //if (!is_reload &&
+            //    _lastContentHandle != null) {
+            //    MpConsole.WriteLine($"Editor/Vm id mismatch for msg 'LoadCOntent'. should be {BindingContext.CopyItemId} but received {(resp_vm == null ? $"unknown (unloaded, handle '{_lastContentHandle}')" : resp_vm)}", true);
+            //    await LoadContentAsync();
+            //}
+            //_lastLoadedContentHandle = BindingContext.PublicHandle;
             IsEditorLoaded = true;
 
             if (BindingContext.IsAppendNotifier &&

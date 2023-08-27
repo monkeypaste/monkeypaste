@@ -705,22 +705,22 @@ namespace MonkeyPaste.Avalonia {
                 if (IsBusy) {
                     return true;
                 }
-                if (!IsAnyPlaceholder && !IsEditorLoaded) {
-                    if (GetContentView() is MpIContentView cv) {
-                        if (cv.IsViewInitialized) {
-                            cv.LoadContentAsync().FireAndForgetSafeAsync(this);
-                        } else {
-                            Dispatcher.UIThread.Post(async () => {
-                                if (cv is MpAvContentWebView cwv) {
-                                    await cwv.LoadEditorAsync();
-                                    await cwv.LoadContentAsync();
-                                    OnPropertyChanged(nameof(IsAnyBusy));
-                                }
-                            });
-                        }
-                    }
-                    return true;
-                }
+                //if (!IsAnyPlaceholder && !IsEditorLoaded && (!IsQueryItem || (IsQueryItem && IsAnyQueryCornerVisible))) {
+                //    //if (GetContentView() is MpIContentView cv) {
+                //    //    if (cv.IsViewInitialized) {
+                //    //        cv.LoadContentAsync().FireAndForgetSafeAsync(this);
+                //    //    } else {
+                //    //        Dispatcher.UIThread.Post(async () => {
+                //    //            if (cv is MpAvContentWebView cwv) {
+                //    //                await cwv.LoadEditorAsync();
+                //    //                await cwv.LoadContentAsync();
+                //    //                OnPropertyChanged(nameof(IsAnyBusy));
+                //    //            }
+                //    //        });
+                //    //    }
+                //    //}
+                //    return true;
+                //}
 
                 if (FileItemCollectionViewModel != null && FileItemCollectionViewModel.IsAnyBusy) {
                     return true;
@@ -1942,7 +1942,7 @@ namespace MonkeyPaste.Avalonia {
                 Dispatcher.UIThread.Post(async () => {
                     var result = await
                         Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                            title: "Confirm",
+                            title: UiStrings.CommonNtfConfirmTitle,
                             message: "Are you sure you want to finish appending?",
                             iconResourceObj: "QuestionMarkImage",
                             owner: pow,

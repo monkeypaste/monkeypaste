@@ -492,7 +492,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand RestoreAllTrashCommand => new MpAsyncCommand(
             async () => {
                 var confirm_result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                    title: "Confirm",
+                    title: UiStrings.CommonNtfConfirmTitle,
                     message: $"Are you sure you want to restore all {TrashedCopyItemIds.Count} item(s)?",
                     owner: MpAvWindowManager.MainWindow,
                     iconResourceObj: "WarningImage");
@@ -531,7 +531,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand EmptyTrashCommand => new MpAsyncCommand(
             async () => {
                 var confirm_result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                    title: "Confirm",
+                    title: UiStrings.CommonNtfConfirmTitle,
                     message: $"Are you sure you want to permanently delete all {TrashedCopyItemIds.Count} item(s)?",
                     owner: MpAvWindowManager.MainWindow,
                     iconResourceObj: "WarningImage");

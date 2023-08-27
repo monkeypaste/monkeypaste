@@ -156,10 +156,6 @@
 
         <!--  AUTOCOMPLETE BOX  -->
 
-        <Style Selector="AutoCompleteBox /template/ TextBox#PART_TextBox">
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center" />
-        </Style>
         <Style Selector="AutoCompleteBox:focus-within /template/ TextBox#PART_TextBox /template/ Border#PART_BorderElement">
             <Setter Property="BorderBrush"
                     Value="Transparent" />
@@ -360,7 +356,7 @@
                                      local:MpAvDelayedTextChangedExtension.IsEnabled="True"
                                      local:MpAvDelayedTextChangedExtension.DelayMs="500"
                                      local:MpAvDelayedTextChangedExtension.Text="{Binding SearchText, Mode=TwoWay}"
-                                     Watermark="Search..."
+                                     Watermark="{x:Static local:UiStrings.CommonSearchWatermark}"
                                      FontSize="14"
                                      Background="Transparent"
                                      IsTextCompletionEnabled="False"

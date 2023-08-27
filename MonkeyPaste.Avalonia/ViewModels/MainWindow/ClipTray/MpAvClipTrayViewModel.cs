@@ -1105,11 +1105,11 @@ namespace MonkeyPaste.Avalonia {
                     tag_name = "Untitled";
                 } else {
                     if (MpAvTagTrayViewModel.Instance.LastSelectedActiveItem == null) {
-                        return "No selection.";
+                        return UiStrings.QueryTrayNoSelection;
                     }
                     tag_name = MpAvTagTrayViewModel.Instance.LastSelectedActiveItem.TagName;
                 }
-                return $"'{tag_name}' has no results.";
+                return string.Format(UiStrings.QueryTrayEmptyText, tag_name);
             }
         }
 

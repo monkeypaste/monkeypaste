@@ -73,20 +73,27 @@ namespace MonkeyPaste.Common.Avalonia {
             int fileAttributeFlag,
             uint flags) {
 #if WINDOWS
-            const int ILD_TRANSPARENT = 1;
-            var shinfo = new WinApi.SHFILEINFO();
-            var retval = WinApi.SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
-            if (retval == 0) {
-                // This occurs from a COM exception likely from the AddTileThread so in this case just return the app icon handle
+            try {
+                const int ILD_TRANSPARENT = 1;
+                var shinfo = new WinApi.SHFILEINFO();
+                var retval = WinApi.SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
+                if (retval == 0) {
+                    // This occurs from a COM exception likely from the AddTileThread so in this case just return the app icon handle
+                    return IntPtr.Zero;
+                }
+
+                var iconIndex = shinfo.iIcon;
+                var iImageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
+
+                _ = WinApi.SHGetImageList((int)iconsize, ref iImageListGuid, out WinApi.IImageList iml);
+                var hIcon = IntPtr.Zero;
+                _ = iml.GetIcon(iconIndex, ILD_TRANSPARENT, ref hIcon);
+                return hIcon;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error retrieving icon handle from path '{filepath}'.", ex);
                 return IntPtr.Zero;
             }
-            var iconIndex = shinfo.iIcon;
-            var iImageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
-
-            _ = WinApi.SHGetImageList((int)iconsize, ref iImageListGuid, out WinApi.IImageList iml);
-            var hIcon = IntPtr.Zero;
-            _ = iml.GetIcon(iconIndex, ILD_TRANSPARENT, ref hIcon);
-            return hIcon;
 #else
             return IntPtr.Zero;
 #endif

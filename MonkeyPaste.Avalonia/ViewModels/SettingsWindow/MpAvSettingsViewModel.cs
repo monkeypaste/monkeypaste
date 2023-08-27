@@ -131,6 +131,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+
         public bool IsTabButtonVisible0 { get; set; } = true;
         public bool IsTabButtonVisible1 { get; set; } = true;
         public bool IsTabButtonVisible2 { get; set; } = true;
@@ -1154,7 +1155,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Width = 1000,
                 Height = 500,
-                Title = "Settings".ToWindowTitleText(),
+                Title = UiStrings.CommonSettingsTitle.ToWindowTitleText(),
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 DataContext = this,
@@ -1421,7 +1422,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 var result = await Mp.Services.PlatformMessageBox
                 .ShowOkCancelMessageBoxAsync(
-                    title: "Confirm",
+                    title: UiStrings.CommonNtfConfirmTitle,
                     message: "Are you sure you want to reset all preferences? This action cannot be undone. *Some Settings will not update until restart",
                     iconResourceObj: "WarningImage",
                     owner: MpAvWindowManager.LocateWindow(this));
@@ -1565,7 +1566,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                     case MpRuntimePrefParamType.ClearDbPassword: {
                             var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                                title: "Confirm",
+                                title: UiStrings.CommonNtfConfirmTitle,
                                 message: "Are you sure you want to reset your password?",
                                 iconResourceObj: "QuestionMarkImage");
                             if (!result) {
@@ -1577,7 +1578,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                     case MpRuntimePrefParamType.ResetNtf: {
                             var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                            title: "Confirm",
+                            title: UiStrings.CommonNtfConfirmTitle,
                             message: "Are you sure you want to reset all notifications?",
                             iconResourceObj: "QuestionMarkImage");
                             if (!result) {
@@ -1589,7 +1590,7 @@ namespace MonkeyPaste.Avalonia {
 
                     case MpRuntimePrefParamType.ResetPluginCache: {
                             var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                            title: "Confirm",
+                            title: UiStrings.CommonNtfConfirmTitle,
                             message: "Are you sure you want to reset all plugins to defaults?",
                             iconResourceObj: "QuestionMarkImage");
                             if (!result) {

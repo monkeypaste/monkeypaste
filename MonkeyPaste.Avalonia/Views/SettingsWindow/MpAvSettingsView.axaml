@@ -18,9 +18,15 @@
         <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Stretch</HorizontalAlignment>
         <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush">Transparent</SolidColorBrush>
         <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{DynamicResource ThemeWhiteColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="{DynamicResource ThemeWhiteColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderChevronForeground" Color="{DynamicResource ThemeWhiteColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderForeground"
+                         Color="{DynamicResource ThemeWhiteColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBorderBrush"
+                         Color="{DynamicResource ThemeWhiteColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderChevronForeground"
+                         Color="{DynamicResource ThemeWhiteColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
     </local:MpAvUserControl.Resources>
 
@@ -44,8 +50,8 @@
                     Value="2.5" />
             <Setter Property="BorderBrush"
                     Value="Transparent" />
-            <Setter Property="BoxShadow"
-                    Value="inset 0 0 15 0 black" />
+            <!--<Setter Property="BoxShadow"
+                    Value="inset 0 0 15 0 black" />-->
         </Style>
         <Style Selector="RadioButton.tab:unchecked /template/ ContentPresenter">
             <Setter Property="Background"
@@ -54,8 +60,8 @@
         <Style Selector="RadioButton.tab:unchecked:pointerover /template/ ContentPresenter">
             <Setter Property="Background"
                     Value="{DynamicResource ThemeAccent1Color}" />
-            <Setter Property="BoxShadow"
-                    Value="inset 0 0 15 0 white" />
+            <!--<Setter Property="BoxShadow"
+                    Value="inset 0 0 15 0 white" />-->
         </Style>
         <Style Selector="RadioButton.tab.omitted">
             <Setter Property="Cursor"
@@ -127,11 +133,11 @@
             <Setter Property="HorizontalAlignment"
                     Value="Center" />
             <Setter Property="FontWeight"
-                    Value="Medium" />
+                    Value="SemiBold" />
             <Setter Property="Margin"
                     Value="5" />
             <Setter Property="FontSize"
-                    Value="16" />
+                    Value="18" />
         </Style>
         <Style Selector="Button.footer">
             <Setter Property="HorizontalContentAlignment"
@@ -378,14 +384,16 @@
                     Value="10,5" />
             <Setter Property="Background">
                 <Setter.Value>
-                    <SolidColorBrush Color="Black" Opacity="0.05" />
+                    <SolidColorBrush Color="Black"
+                                     Opacity="0.05" />
                 </Setter.Value>
             </Setter>
         </Style>
         <Style Selector="local|MpAvSettingsFrameView:pointerover,local|MpAvSettingsFrameView:focus-within">
             <Setter Property="Background">
                 <Setter.Value>
-                    <SolidColorBrush Color="White" Opacity="0.05" />
+                    <SolidColorBrush Color="White"
+                                     Opacity="0.05" />
                 </Setter.Value>
             </Setter>
         </Style>
@@ -473,7 +481,7 @@
                          Classes="tab fade"
                          IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"
                          Command="{Binding SelectTabCommand}"
-                         CommandParameter="5">
+                         CommandParameter="4">
                 <DockPanel>
                     <Label Content="Help" />
                     <Image Source="{Binding Source={StaticResource QuestionMarkImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
@@ -501,7 +509,7 @@
                                      VerticalAlignment="Stretch"
                                      BorderThickness="0"
                                      Margin="0"
-                                     Padding="10,5,0,0"
+                                     Padding="10,0,0,0"
                                      IsTextCompletionEnabled="False"
                                      MinimumPrefixLength="0"
                                      MinimumPopulateDelay="0.25"

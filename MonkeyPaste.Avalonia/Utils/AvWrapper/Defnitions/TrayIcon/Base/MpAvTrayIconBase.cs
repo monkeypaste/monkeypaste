@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
                 return new MpAvMenuItemViewModel() {
                     SubItems = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {
-                            Header = "Settings"
+                            Header = UiStrings.CommonSettingsTitle
                         },
                         new MpAvMenuItemViewModel() {
                             Header = "Test",

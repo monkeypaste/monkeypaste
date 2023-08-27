@@ -1,0 +1,1 @@
+Placeholder readme for MonkeyPaste google contact fetcher

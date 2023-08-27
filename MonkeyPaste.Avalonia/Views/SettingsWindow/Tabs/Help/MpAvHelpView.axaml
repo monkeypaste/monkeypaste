@@ -7,11 +7,14 @@
                        d:DesignHeight="750"
                        xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvSettingsViewModel"
                        x:DataType="local:MpAvSettingsViewModel"
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvHelpView">
-    <Grid />
+    <cefnet:WebView HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    InitialUrl="https://npp-user-manual.org/docs/session/" />
 </local:MpAvUserControl>

@@ -20,12 +20,27 @@
     <BuildOs>WINDOWS</BuildOs>
   </PropertyGroup>
 
-  <!-- DEFAULT PROPERTIES-->
-  
+  <!-- SYSTEM PROPERTIES -->
+
   <PropertyGroup>
     <DefaultLangVersion>11.0</DefaultLangVersion>
+    <Nullable>disable</Nullable>
+    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+    <DefineConstants>$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+
+  <!-- CUSTOM PROPERTIES -->
+
+  <PropertyGroup>
     <IsDesktop>false</IsDesktop>
     <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
+    <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <StorageDir>$(StorageDir)_DEBUG</StorageDir>
   </PropertyGroup>
   
   <!-- DYNAMIC PROPERTIES-->
@@ -78,19 +93,15 @@
   <PropertyGroup Condition="$(IsDesktop) == 'true'">
   </PropertyGroup>
   
+  
   <PropertyGroup>
     <MainProjectDir>$(SolutionDir)\$(MainProjectName)</MainProjectDir>
     <MainTargetDir>$(MainProjectDir)\bin\$(Configuration)\$(MainTargetFramework)</MainTargetDir>
     <PluginSourceDir>$(SolutionDir)\Plugins</PluginSourceDir>
     <DeclarativePluginBaseDir>$(PluginSourceDir)\DeclarativePlugins\DeclarativeBase</DeclarativePluginBaseDir>
-    <PluginTargetDir>$(MainTargetDir)\Plugins</PluginTargetDir>
+    <PluginTargetDir>$(StorageDir)\Plugins</PluginTargetDir>
     <UiProjectDir>$(SolutionDir)\MonkeyPaste.Avalonia</UiProjectDir>
     <CefNetLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.dll</CefNetLibDir>
     <CefNetAvLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.Avalonia.dll</CefNetAvLibDir>
-  </PropertyGroup>
-
-
-  <PropertyGroup>
-    <Nullable>disable</Nullable>
   </PropertyGroup>
 </Project>

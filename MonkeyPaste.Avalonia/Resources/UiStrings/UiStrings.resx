@@ -264,4 +264,73 @@
   <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
     <value>Try it out!</value>
   </data>
+  <data name="CommonEmptyListText" xml:space="preserve">
+    <value>No results available.</value>
+  </data>
+  <data name="CommonNtfConfirmTitle" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="CommonRefreshTooltip" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="CommonSearchWatermark" xml:space="preserve">
+    <value>Search...</value>
+  </data>
+  <data name="CommonSettingsTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
+    <value>Dependencies:</value>
+  </data>
+  <data name="PluginBrowserInstallLabel" xml:space="preserve">
+    <value>Install</value>
+  </data>
+  <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
+    <value>Are you sure you want to remove '{0}' and all its presets and shortcuts?</value>
+  </data>
+  <data name="PluginBrowserUninstallLabel" xml:space="preserve">
+    <value>Uninstall</value>
+  </data>
+  <data name="QueryTrayEmptyText" xml:space="preserve">
+    <value>'{0}' has no results.</value>
+  </data>
+  <data name="QueryTrayNoSelection" xml:space="preserve">
+    <value>No selection.</value>
+  </data>
+  <data name="CommonNoneLabel" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="PluginBrowserCreditsLabel" xml:space="preserve">
+    <value>Credits:</value>
+  </data>
+  <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
+    <value>Description:</value>
+  </data>
+  <data name="PluginBrowserDonateLabel" xml:space="preserve">
+    <value>Donate:</value>
+  </data>
+  <data name="PluginBrowserLicenseLabel" xml:space="preserve">
+    <value>License:</value>
+  </data>
+  <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
+    <value>Project URL:</value>
+  </data>
+  <data name="PluginBrowserPublishedLabel" xml:space="preserve">
+    <value>Published:</value>
+  </data>
+  <data name="PluginBrowserReadMeLabel" xml:space="preserve">
+    <value>Read Me:</value>
+  </data>
+  <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
+    <value>Report Abuse:</value>
+  </data>
+  <data name="PluginBrowserTagsLabel" xml:space="preserve">
+    <value>Tags:</value>
+  </data>
+  <data name="PluginBrowserUpdateLabel" xml:space="preserve">
+    <value>Update:</value>
+  </data>
+  <data name="PluginBrowserVersionLabel" xml:space="preserve">
+    <value>Version:</value>
+  </data>
 </root>

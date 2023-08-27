@@ -174,36 +174,34 @@ namespace MonkeyPaste {
 
             // TYPES
 
-            if (!qf.HasFlag(MpContentQueryBitFlags.TextType) &&
-               !qf.HasFlag(MpContentQueryBitFlags.ImageType) &&
-               !qf.HasFlag(MpContentQueryBitFlags.FileType)) {
-                // NOTE this only can occur in adv search from ui validation in simple
-                // so when no types are selected treat as all or there'll be no results
-                qf |= MpContentQueryBitFlags.TextType |
-                    MpContentQueryBitFlags.ImageType |
-                    MpContentQueryBitFlags.FileType;
+            bool has_all_types = qf.HasAllFlags(MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType);
+            bool has_no_types = !qf.HasAnyFlag(MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType);
+            if (has_all_types || has_no_types) {
+                // when all types or no types no need to add to where clause, fetch is 5x faster without it
+            } else {
+
+                if (qf.HasFlag(MpContentQueryBitFlags.TextType)) {
+                    types.Add("e_MpCopyItemType=?");
+                    argList.Add(MpCopyItemType.Text.ToString());
+                }
+                if (qf.HasFlag(MpContentQueryBitFlags.ImageType)) {
+                    types.Add("e_MpCopyItemType=?");
+                    argList.Add(MpCopyItemType.Image.ToString());
+                }
+                if (qf.HasFlag(MpContentQueryBitFlags.FileType)) {
+                    types.Add("e_MpCopyItemType=?");
+                    argList.Add(MpCopyItemType.FileList.ToString());
+                }
             }
 
-            if (qf.HasFlag(MpContentQueryBitFlags.TextType)) {
-                types.Add("e_MpCopyItemType=?");
-                argList.Add(MpCopyItemType.Text.ToString());
-            }
-            if (qf.HasFlag(MpContentQueryBitFlags.ImageType)) {
-                types.Add("e_MpCopyItemType=?");
-                argList.Add(MpCopyItemType.Image.ToString());
-            }
-            if (qf.HasFlag(MpContentQueryBitFlags.FileType)) {
-                types.Add("e_MpCopyItemType=?");
-                argList.Add(MpCopyItemType.FileList.ToString());
-            }
 
             // WHERE
 
-            string whereClause = string.Empty;
+            StringBuilder where_sb = null;
             if (tagIds != null && !tagIds.Contains(MpTag.AllTagId)) {
 
-                whereClause = AddWhereCondition(
-                    whereClause,
+                AddWhereCondition(
+                    where_sb,
                     @$"RootId IN 
                         (SELECT DISTINCT pk_MpCopyItemId FROM MpCopyItem WHERE pk_MpCopyItemId IN 
 		                    (SELECT fk_MpCopyItemId FROM MpCopyItemTag WHERE fk_MpTagId IN 
@@ -213,13 +211,13 @@ namespace MonkeyPaste {
             bool isAdvanced = qi.QueryType == MpQueryType.Advanced;
             if (arg_filters.Count > 0) {
                 string filter_op = isAdvanced ? " AND " : " OR ";
-                whereClause = AddWhereCondition(whereClause, @$"({string.Join(filter_op, arg_filters.Select(x => x.Item1))})");
+                AddWhereCondition(where_sb, @$"({string.Join(filter_op, arg_filters.Select(x => x.Item1))})");
             }
             if (types.Count > 0) {
-                whereClause = AddWhereCondition(whereClause, @$"({string.Join(" OR ", types)})");
+                AddWhereCondition(where_sb, @$"({string.Join(" OR ", types)})");
             }
             if (ci_idsToOmit != null && ci_idsToOmit.Any()) {
-                whereClause = AddWhereCondition(whereClause, $"({string.Join(" AND ", ci_idsToOmit.Select(x => $"RootId != {x}"))})");
+                AddWhereCondition(where_sb, $"({string.Join(" AND ", ci_idsToOmit.Select(x => $"RootId != {x}"))})");
             }
 
             // SELECT GEN
@@ -229,20 +227,22 @@ namespace MonkeyPaste {
                 selectClause = "DISTINCT " + selectClause;
             }
 
-            string query = @$"SELECT {selectClause} FROM MpContentQueryView WHERE {whereClause}";
+            string wherePart = where_sb == null ? string.Empty : $"WHERE {where_sb.ToString()}";
+
+            string query = @$"SELECT {selectClause} FROM MpContentQueryView {wherePart}";
             args = argList.ToArray();
             return query;
         }
 
         #region Helpers
 
-        private static string AddWhereCondition(string whereClause, string condition) {
-            if (string.IsNullOrEmpty(whereClause)) {
-                whereClause = condition;
+        private static void AddWhereCondition(StringBuilder where_sb, string condition) {
+            if (where_sb == null) {
+                where_sb = new StringBuilder();
             } else {
-                whereClause = @$"{whereClause} AND {condition}";
+                condition = @$" AND {condition}";
             }
-            return whereClause;
+            where_sb.Append(condition);
         }
 
         private static List<Tuple<string, List<object>>> GetParameterizedFilters(MpIQueryInfo qi) {

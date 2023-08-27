@@ -11,21 +11,21 @@ namespace MonkeyPaste.Avalonia {
         Control ITemplate<object, Control>.Build(object param) {
             string key = null;
             if (param is int tabId) {
-                switch (tabId) {
+                switch ((MpSettingsTabType)tabId) {
                     default:
-                    case 0:
+                    case MpSettingsTabType.Account:
                         key = "AccountTemplate";
                         break;
-                    case 1:
+                    case MpSettingsTabType.Preferences:
                         key = "PreferencesTemplate";
                         break;
-                    case 2:
+                    case MpSettingsTabType.Security:
                         key = "SecurityTemplate";
                         break;
-                    case 3:
+                    case MpSettingsTabType.Shortcuts:
                         key = "ShortcutsTemplate";
                         break;
-                    case 4:
+                    case MpSettingsTabType.Help:
                         key = "HelpTemplate";
                         break;
                 }

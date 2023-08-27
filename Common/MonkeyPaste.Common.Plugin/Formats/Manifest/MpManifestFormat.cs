@@ -45,6 +45,7 @@ namespace MonkeyPaste.Common.Plugin {
         #region Properties
         public string title { get; set; } = string.Empty;
         public string description { get; set; } = string.Empty;
+        public string language { get; set; } = string.Empty;
         public string version { get; set; } = string.Empty;
         public string credits { get; set; } = string.Empty;
         public string licenseUrl { get; set; } = string.Empty;

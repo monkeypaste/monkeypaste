@@ -127,7 +127,7 @@ namespace MonkeyPaste.Avalonia {
                             }
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = "Settings",
+                            Header = UiStrings.CommonSettingsTitle,
                             IconResourceKey = "CogImage",
                             CommandSrcObj = MpAvSettingsViewModel.Instance,
                             CommandPath = nameof(MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand),

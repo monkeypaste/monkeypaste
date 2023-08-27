@@ -198,6 +198,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Defaults.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Fade.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Shake.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\AutoCompleteBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\CheckBox.axaml" />
@@ -1309,6 +1310,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\FadeWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\WelcomeWindowGrow.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\AutoCompleteBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMenuItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\RadioButton.axaml" />
@@ -1710,38 +1712,10 @@
     </EmbeddedResource>
   </ItemGroup>
   
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <!--<Exec Command="xcopy /s /D /Y  &quot;$(SolutionDir)MonkeyPaste\Resources\*&quot; &quot;$(TargetDir)\Resources&quot;" />
-    <ItemGroup>
-        <MySourceFiles Include="$(ProjectDir)Resources\**\*.*" />
-    </ItemGroup>
-        <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(TargetDir)%(RecursiveDir)%(Filename)%(Extension)" />-->
-  </Target>
-
-  <Target Name="_CollectWatchItems" />
-  
-  <PropertyGroup>
-     <!-- 
-     Turns off reference assembly generation 
-     See: https://learn.microsoft.com/en-us/dotnet/standard/assembly/reference-assemblies
-     -->
-     <!--<ProduceReferenceAssembly>false</ProduceReferenceAssembly>-->
-</PropertyGroup>
   <PropertyGroup>
   <!-- Makes the TypeScript compilation task a no-op -->
   <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    
 </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DefineConstants>$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DefineConstants>$(DefineConstants)</DefineConstants>
-  </PropertyGroup>
 </Project>

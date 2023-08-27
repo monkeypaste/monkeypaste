@@ -1,26 +1,11 @@
-* {
-    margin: 0px;
-    padding: 0px;
-}
+
 body {
     position: relative;
     padding: 0 150px;
-    font-family: 'Segoe UI';
     line-height: 145%;
-    -webkit-font-smoothing: antialiased;
     display: flex;
     flex-direction: column;
     min-height: 100vh;      
-    --headerbgcolor: rgb(34, 153, 40);
-    --mainbgcolor:  rgb(147, 175, 107);
-    --headercolor: white;
-    --buttonbgcolor: olive;
-    --buttoncolor: palegoldenrod;
-    --logolightcolor: #ffbd59;
-    --logodarkcolor: #7b5813;
-    --swirlshadow: saddlebrown;
-    --footercolor: var(--logolightcolor);
-    --footerbgcolor: var(--logodarkcolor);
 }
 
 /*#region THEMES */
@@ -125,11 +110,11 @@ body {
     height: 100px;
     margin-top: 10px;
     filter: drop-shadow(0px 0px 6px white);
-    content: url('../images/monkey.png');
+    content: url('../_images/monkey.png');
 }
 .mp-logo:hover .monkey {
     /* animation: wink 0.5s linear forwards; */
-    content: url('../images/monkeywink.png');
+    content: url('../_images/monkeywink.png');
 }
 
 
@@ -254,17 +239,4 @@ div.devices {
 
 /*#endregion*/
 
-/*#endregion*/
-
-/*#region FOOTER*/
-
-footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    padding: 10px 5px;
-    color: var(--footercolor);
-    background: linear-gradient(180deg, dimgray, var(--footerbgcolor) 10.71%);
-}
 /*#endregion*/

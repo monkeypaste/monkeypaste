@@ -1316,7 +1316,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 bool confirm = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                    title: "Confirm",
+                    title: UiStrings.CommonNtfConfirmTitle,
                     message: $"Are you sure you want to change your shortcut routing profile to '{srpt}'",
                     iconResourceObj: "WarningImage");
                 if (!confirm) {
@@ -1330,7 +1330,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ResetAllShortcutsCommand => new MpAsyncCommand(async () => {
             var drpt = MpAvPrefViewModel.Instance.DefaultRoutingProfileType;
             bool result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                title: "Confirm",
+                title: UiStrings.CommonNtfConfirmTitle,
                 message: "Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.",
                 iconResourceObj: "WarningImage");
             if (!result) {

@@ -17,24 +17,44 @@
         <!--  SELECTOR LISTBOX ITEM  -->
         <Style Selector="ListBox#PluginSelectorListBox ListBoxItem">
             <Setter Property="Padding"
-                    Value="5" />
+                    Value="0" />
+            <Setter Property="Margin"
+                    Value="0" />
             <Setter Property="BorderThickness"
-                    Value="0.5" />
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeInteractiveColor}" />
+                    Value="0" />
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="HorizontalContentAlignment"
                     Value="Stretch" />
         </Style>
-        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(odd) /template/ ContentPresenter">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeCompliment3Color}" />
+
+        <Style Selector="Border#PluginBrowserItemContainer">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
-        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(even) /template/ ContentPresenter">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeCompliment3DarkColor}" />
+
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:pointerover Border#PluginBrowserItemContainer">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
+
+
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(odd) Border#PluginBrowserItemContainer">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment5Color}" />
+        </Style>
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:nth-child(even) Border#PluginBrowserItemContainer">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment5LighterColor}" />
+        </Style>
+
+        <Style Selector="ListBox#PluginSelectorListBox ListBoxItem:selected Border#PluginBrowserItemContainer">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeCompliment5DarkColor}" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent2Color}" />
+        </Style>
+
         <Style Selector="TextBlock.detailLabel">
             <Setter Property="FontWeight"
                     Value="SemiBold" />
@@ -91,39 +111,25 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="PluginRootContainer"
-          RowDefinitions="Auto,Auto,*"
+          RowDefinitions="Auto,*"
           ColumnDefinitions="0.5*,1,0.5*"
           Margin="10">
 
-        <!--  TABS  -->
-
-        <TabStrip x:Name="PluginTabStrip"
-                  Grid.Row="0"
-                  Grid.ColumnSpan="3"
-                  ItemsSource="{Binding Tabs}"
-                  SelectedIndex="{Binding SelectedTabIdx, Mode=TwoWay}"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Top" />
-
         <!--  FILTER  -->
-        <DockPanel x:Name="PluginFilterOuterContainer"
-                   Grid.Row="1"
-                   Grid.ColumnSpan="3"
-                   LastChildFill="False">
+        <Grid x:Name="PluginHeaderContainer"
+              Grid.Row="0"
+              Grid.ColumnSpan="3">
             <StackPanel x:Name="PluginFilterBoxContainer"
-                        DockPanel.Dock="Left"
                         Orientation="Horizontal"
-                        Margin="5"
-                        Spacing="10">
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Margin="5">
                 <!--  FILTER BOX  -->
 
-                <!--<local:MpAvClipBorder x:Name="FilterContainer"
-                                      BorderBrush="{DynamicResource ThemeInteractiveColor}"
-                                      CornerRadius="5">-->
                 <AutoCompleteBox x:Name="FilterPluginBox"
                                  VerticalAlignment="Stretch"
                                  HorizontalAlignment="Stretch"
-                                 Padding="5,3,0,0"
+                                 Padding="5,0,0,0"
                                  Background="{DynamicResource ThemeInteractiveBgColor}"
                                  local:MpAvDropExtension.IsEnabled="True"
                                  local:MpAvDelayedTextChangedExtension.IsEnabled="True"
@@ -131,18 +137,12 @@
                                  local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Mode=TwoWay}"
                                  Width="150"
                                  Height="30"
-                                 Watermark="Search..."
+                                 Watermark="{x:Static local:UiStrings.CommonSearchWatermark}"
                                  FontSize="14"
                                  IsTextCompletionEnabled="False"
                                  MinimumPrefixLength="0"
                                  MinimumPopulateDelay="0.25"
-                                 ItemsSource="{Binding RecentPluginSearches}">
-                    <!--<AutoCompleteBox.Resources>
-                            <SolidColorBrush x:Key="TextControlBorderBrush">Transparent</SolidColorBrush>
-                            <SolidColorBrush x:Key="TextControlBorderBrushFocused">Transparent</SolidColorBrush>
-                        </AutoCompleteBox.Resources>-->
-                </AutoCompleteBox>
-                <!--</local:MpAvClipBorder>-->
+                                 ItemsSource="{Binding RecentPluginSearches}" />
 
                 <!--  REFRESH BUTTON  -->
                 <Button x:Name="RefreshFilterButton"
@@ -152,7 +152,7 @@
                         IsEnabled="{Binding !IsBusy}"
                         Command="{Binding PerformFilterCommand}">
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="Refresh" />
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonRefreshTooltip}" />
                     </ToolTip.Tip>
                     <Grid>
                         <Image IsVisible="{Binding $parent.IsEnabled}"
@@ -164,21 +164,28 @@
                 </Button>
             </StackPanel>
 
+
+            <!--  TABS  -->
+
+            <TabStrip x:Name="PluginTabStrip"
+                      Grid.Column="1"
+                      ItemsSource="{Binding Tabs}"
+                      SelectedIndex="{Binding SelectedTabIdx, Mode=TwoWay}"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center" />
             <!--  BROWSER CONFIG BUTTON  -->
             <Button x:Name="OpenSettingsButton"
-                    DockPanel.Dock="Right"
-                    VerticalAlignment="Stretch"
-                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Right"
                     Classes="defaultButton noBg noHoverBg outline outlineOver square"
                     Command="{Binding ShowSettingsWindowCommand, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
                     CommandParameter="2">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Settings" />
+                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonSettingsTitle}" />
                 </ToolTip.Tip>
                 <Image Source="{Binding ., Source={StaticResource CogImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
-
             </Button>
-        </DockPanel>
+        </Grid>
 
         <!--  PLUGIN LIST  -->
         <ListBox x:Name="PluginSelectorListBox"
@@ -187,49 +194,58 @@
                  BorderThickness="0.5"
                  Background="Transparent"
                  BorderBrush="{DynamicResource ThemeInteractiveColor}"
-                 Grid.Row="2"
+                 Grid.Row="1"
                  Grid.Column="0"
                  ItemsSource="{Binding Items}"
                  SelectionMode="AlwaysSelected"
                  Selection="{Binding Selection}">
             <ListBox.ItemTemplate>
                 <DataTemplate x:DataType="local:MpAvPluginItemViewModel">
-                    <Grid x:Name="PluginBrowserItemContainer"
-                          HorizontalAlignment="Stretch"
-                          RowDefinitions="30,60"
-                          ColumnDefinitions="50,*">
-                        <!--  PLUGIN ICON  -->
-                        <Image x:Name="PluginIcon"
-                               Grid.Row="0"
-                               Grid.RowSpan="2"
-                               Grid.Column="0"
-                               Margin="5"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Top"
-                               Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
-
-                        <!--  PLUGIN TITLE  -->
-                        <TextBlock x:Name="PluginTitleBlock"
+                    <Border x:Name="PluginBrowserItemContainer"
+                            Padding="5"
+                            BorderThickness="2"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                        <Grid RowDefinitions="30,60"
+                              ColumnDefinitions="50,*">
+                            <!--  PLUGIN ICON  -->
+                            <Image x:Name="PluginIcon"
                                    Grid.Row="0"
-                                   Grid.Column="1"
-                                   FontSize="18"
-                                   FontWeight="SemiBold"
-                                   TextWrapping="NoWrap"
-                                   Text="{Binding PluginTitle}" />
+                                   Grid.RowSpan="2"
+                                   Grid.Column="0"
+                                   Margin="5"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Top"
+                                   Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
 
-                        <!--  PLUGIN DESCRIPTION  -->
-                        <TextBlock x:Name="PluginDescriptionBlock"
-                                   Grid.Row="1"
-                                   Grid.Column="1"
-                                   FontSize="12"
-                                   TextWrapping="WrapWithOverflow"
-                                   Text="{Binding PluginDescription}" />
-                    </Grid>
+                            <!--  PLUGIN TITLE  -->
+                            <TextBlock x:Name="PluginTitleBlock"
+                                       Grid.Row="0"
+                                       Grid.Column="1"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       TextWrapping="NoWrap"
+                                       Text="{Binding PluginTitle}" />
+
+                            <!--  PLUGIN DESCRIPTION  -->
+                            <TextBlock x:Name="PluginDescriptionBlock"
+                                       Grid.Row="1"
+                                       Grid.Column="1"
+                                       FontSize="12"
+                                       TextWrapping="WrapWithOverflow"
+                                       Text="{Binding PluginDescription}" />
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel />
+                    <!--
+                        BUG virtualizing messes layout up but not many plugins atm so fix later
+                        see https://github.com/AvaloniaUI/Avalonia/issues/12464
+                    -->
+                    <!--<VirtualizingStackPanel />-->
+                    <StackPanel />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
@@ -237,7 +253,7 @@
         <!--  BROWSE BUSY OVERLAY  -->
 
         <local:MpAvBusySpinnerView x:Name="SelectorBusyContainer"
-                                   Grid.Row="2"
+                                   Grid.Row="1"
                                    Grid.Column="0"
                                    Width="30"
                                    Height="30"
@@ -246,7 +262,7 @@
                                    IsVisible="{Binding IsBusy}" />
         <!--  EMPTY LIST OVERLAY  -->
         <TextBlock x:Name="EmptPluginListTextBlock"
-                   Grid.Row="2"
+                   Grid.Row="1"
                    Grid.Column="0"
                    IsVisible="{Binding IsBusy}"
                    HorizontalAlignment="Center"
@@ -254,7 +270,7 @@
                    TextAlignment="Center"
                    TextWrapping="Wrap"
                    FontSize="24"
-                   Text="No Results Available"
+                   Text="{x:Static local:UiStrings.CommonEmptyListText}"
                    Classes="disabled">
             <TextBlock.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -269,7 +285,7 @@
         <!--  SELECTED PLUGIN VIEW  -->
 
         <Border x:Name="SelectedPluginOuterContainer"
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.Column="2"
                 CornerRadius="5"
                 Margin="10,0,0,0"
@@ -301,7 +317,8 @@
                         <!--  PLUGIN ICON  -->
                         <Image x:Name="SelectedPluginIcon"
                                DockPanel.Dock="Left"
-                               Classes="square"
+                               Width="40"
+                               Height="40"
                                Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
 
                         <!--  PLUGIN TITLE  -->
@@ -341,7 +358,7 @@
                                 Command="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                                 CommandParameter="{Binding PluginDonateUri}"
                                 IsVisible="{Binding PluginDonateUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                            <TextBlock Text="Donate" />
+                            <TextBlock Text="{x:Static local:UiStrings.PluginBrowserDonateLabel}" />
                         </Button>
                     </StackPanel>
 
@@ -355,7 +372,7 @@
                         <Grid>
 
                             <TextBlock IsVisible="{Binding !IsBusy}"
-                                       Text="Update" />
+                                       Text="{x:Static local:UiStrings.PluginBrowserUpdateLabel}" />
                             <local:MpAvBusySpinnerView Width="15"
                                                        Height="15"
                                                        IsVisible="{Binding IsBusy}"
@@ -366,7 +383,7 @@
 
                     <!--  DESCRIPTION  -->
                     <TextBlock Grid.Row="3"
-                               Text="Description"
+                               Text="{x:Static local:UiStrings.PluginBrowserDescriptionLabel}"
                                Classes="detailLabel" />
                     <TextBlock Grid.Row="4"
                                Grid.ColumnSpan="2"
@@ -377,7 +394,7 @@
                     <TextBlock Grid.Row="5"
                                Grid.Column="0"
                                Classes="detailLabel"
-                               Text="Version:" />
+                               Text="{x:Static local:UiStrings.PluginBrowserVersionLabel}" />
                     <TextBlock Grid.Row="5"
                                Grid.Column="1"
                                Classes="detailInfo"
@@ -387,7 +404,7 @@
                     <TextBlock Grid.Row="6"
                                Grid.Column="0"
                                Classes="detailLabel"
-                               Text="Credits:" />
+                               Text="{x:Static local:UiStrings.PluginBrowserCreditsLabel}" />
                     <TextBlock Grid.Row="6"
                                Grid.Column="1"
                                Classes="detailInfo"
@@ -397,11 +414,11 @@
                     <TextBlock Grid.Row="7"
                                Grid.Column="0"
                                Classes="detailLabel"
-                               Text="License:" />
+                               Text="{x:Static local:UiStrings.PluginBrowserLicenseLabel}" />
                     <local:MpAvMarqueeTextBox Grid.Row="7"
                                               Grid.Column="1"
                                               Classes="detailInfo"
-                                              Text="*License Link*"
+                                              Text="{Binding PluginLicenseUrl, Converter={x:Static local:MpAvStringUrlToComponentPartConverter.Instance}, Mode=OneWay}"
                                               NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                                               NavigateUriCommandParameter="{Binding PluginLicenseUrl}" />
 
@@ -409,7 +426,7 @@
                     <TextBlock Grid.Row="8"
                                Grid.Column="0"
                                Classes="detailLabel"
-                               Text="Published:" />
+                               Text="{x:Static local:UiStrings.PluginBrowserPublishedLabel}" />
                     <TextBlock Grid.Row="8"
                                Grid.Column="1"
                                Classes="detailInfo"
@@ -419,7 +436,7 @@
                     <TextBlock Grid.Row="9"
                                Grid.Column="0"
                                Classes="detailLabel"
-                               Text="Project URL:" />
+                               Text="{x:Static local:UiStrings.PluginBrowserProjectUrlLabel}" />
                     <local:MpAvMarqueeTextBox Grid.Row="9"
                                               Grid.Column="1"
                                               Classes="detailInfo"
@@ -431,7 +448,7 @@
                     <TextBlock Grid.Row="10"
                                Grid.Column="0"
                                Classes="detailLabel"
-                               Text="Report Abuse:" />
+                               Text="{x:Static local:UiStrings.PluginBrowserReportAbuseLabel}" />
                     <local:MpAvMarqueeTextBox Grid.Row="10"
                                               Grid.Column="1"
                                               Classes="detailInfo"
@@ -443,7 +460,7 @@
                     <TextBlock Grid.Row="11"
                                Grid.Column="0"
                                Classes="detailLabel"
-                               Text="Tags:" />
+                               Text="{x:Static local:UiStrings.PluginBrowserTagsLabel}" />
                     <TextBlock Grid.Row="11"
                                Grid.Column="1"
                                Classes="detailInfo"
@@ -469,7 +486,7 @@
                     <TextBlock Grid.Row="13"
                                Grid.Column="0"
                                Classes="detailLabel"
-                               Text="Read Me:" />
+                               Text="{x:Static local:UiStrings.PluginBrowserReadMeLabel}" />
                     <av:HtmlPanel Grid.Row="14"
                                   Grid.Column="1"
                                   Text="{Binding ReadMeMarkDownText, Converter={x:Static local:MpAvStringMarkDownToHtmlConverter.Instance}}" />
@@ -480,7 +497,7 @@
 
         <!--  SELECTED BUSY SPINNER  -->
         <local:MpAvBusySpinnerView x:Name="DetailBusyContainer"
-                                   Grid.Row="2"
+                                   Grid.Row="1"
                                    Grid.Column="2"
                                    Width="30"
                                    Height="30"
@@ -492,7 +509,7 @@
 
         <!--  LIST/DETAIL SPLITTER  -->
         <GridSplitter x:Name="ListDetailSplitter"
-                      Grid.Row="2"
+                      Grid.Row="1"
                       Grid.Column="1"
                       Width="1"
                       Background="Transparent"

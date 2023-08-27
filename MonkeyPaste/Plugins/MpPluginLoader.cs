@@ -19,7 +19,7 @@ namespace MonkeyPaste {
         #region Constants
 
         public const string PLUG_FOLDER_NAME = "Plugins";
-        public const string MANIFEST_BACKUP_FOLDER_NAME = "Cache";
+        public const string MANIFEST_BACKUP_FOLDER_NAME = ".cache";
 
         #endregion
 
@@ -27,9 +27,9 @@ namespace MonkeyPaste {
         public static Dictionary<string, MpPluginFormat> Plugins { get; set; } = new Dictionary<string, MpPluginFormat>();
 
         public static string PluginRootFolderPath =>
-            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, PLUG_FOLDER_NAME);
+            Path.Combine(Mp.Services.PlatformInfo.StorageDir, PLUG_FOLDER_NAME);
         public static string PluginManifestBackupFolderPath =>
-            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, MANIFEST_BACKUP_FOLDER_NAME);
+            Path.Combine(PluginRootFolderPath, MANIFEST_BACKUP_FOLDER_NAME);
         #endregion
 
         #region Public Methods

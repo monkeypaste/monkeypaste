@@ -3,7 +3,6 @@ using MonkeyPaste.Common;
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvPlatformInfoBase : MpIPlatformInfo {
@@ -153,6 +152,15 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public virtual string EditorPath {
+            get {
+                if (OperatingSystem.IsBrowser()) {
+                    return Path.Combine("Editor", "index.html");
+                }
+                return Path.Combine(ExecutingDir, "Resources", "Editor", "index.html");
+            }
+        }
+
+        public virtual string HelpPath {
             get {
                 if (OperatingSystem.IsBrowser()) {
                     return Path.Combine("Editor", "index.html");

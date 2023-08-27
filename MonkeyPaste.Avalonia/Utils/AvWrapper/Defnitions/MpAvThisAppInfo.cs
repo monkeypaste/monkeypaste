@@ -6,6 +6,7 @@ using System.Reflection;
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvThisAppInfo : MpIThisAppInfo {
+        // NOTE make sure Directory.build.props Application* props match these
         public string ThisAppCompanyName =>
 
             FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).CompanyName;
