@@ -565,7 +565,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Let&apos;s setup a few things to improve your overall experience with MonkeyPaste..
+        ///   Looks up a localized string similar to Hey! Let&apos;s setup a few things to improve your overall experience with MonkeyPaste..
         /// </summary>
         public static string WelcomeGreetingCaption {
             get {
@@ -574,7 +574,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hey!.
+        ///   Looks up a localized string similar to Welcome.
         /// </summary>
         public static string WelcomeGreetingTitle {
             get {

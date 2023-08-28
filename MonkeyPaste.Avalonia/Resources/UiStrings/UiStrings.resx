@@ -205,10 +205,10 @@
     <value>Gesture Profile</value>
   </data>
   <data name="WelcomeGreetingCaption" xml:space="preserve">
-    <value>Let's setup a few things to improve your overall experience with MonkeyPaste.</value>
+    <value>Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.</value>
   </data>
   <data name="WelcomeGreetingTitle" xml:space="preserve">
-    <value>Hey!</value>
+    <value>Welcome</value>
   </data>
   <data name="WelcomeLoginLoadCaption" xml:space="preserve">
     <value>To get the most use out of MonkeyPaste, loading automatically when you log in is a good idea. But, that's entirely up to you.</value>

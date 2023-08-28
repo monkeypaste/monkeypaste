@@ -103,5 +103,6 @@
     <UiProjectDir>$(SolutionDir)\MonkeyPaste.Avalonia</UiProjectDir>
     <CefNetLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.dll</CefNetLibDir>
     <CefNetAvLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.Avalonia.dll</CefNetAvLibDir>
+    <WebsiteRootDir>$(SolutionDir)\MonkeyPaste.com</WebsiteRootDir>
   </PropertyGroup>
 </Project>
