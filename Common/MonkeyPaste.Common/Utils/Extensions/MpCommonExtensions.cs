@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -615,7 +613,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsUnsetValue(this object obj) {
-            return obj.ToString().Contains("DependencyProperty.UnsetValue");
+            return obj == null || obj.ToString().Contains("DependencyProperty.UnsetValue");
         }
         public static DateTime ToDateTime(this double unixTimeStamp) {
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

@@ -243,7 +243,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.CopyItemType),
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeperator = true,
-                            Header = @"Collections",
+                            Header = @"Tags",
                             AltNavIdx = 0,
                             IconResourceKey = "PinToCollectionImage",
                             SubItems =

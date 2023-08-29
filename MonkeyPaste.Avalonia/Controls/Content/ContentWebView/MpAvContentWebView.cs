@@ -1326,11 +1326,14 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (contentChanged_ntf.itemData != null) {
-                if (contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString()) {
+                bool is_empty = contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString();
+                if (is_empty && MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED) {
                     // data's getting reset again
-                    MpDebug.Break("data reset caught in webview process content changed", !MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED);
+                    MpDebug.Break("data reset caught in webview process content changed. ignoring update");
+                } else {
+
+                    BindingContext.CopyItemData = contentChanged_ntf.itemData;
                 }
-                BindingContext.CopyItemData = contentChanged_ntf.itemData;
             }
             if (!string.IsNullOrWhiteSpace(contentChanged_ntf.dataTransferCompletedRespFragment) &&
                 MpJsonConverter.DeserializeBase64Object<MpQuillDataTransferCompletedNotification>(contentChanged_ntf.dataTransferCompletedRespFragment) is

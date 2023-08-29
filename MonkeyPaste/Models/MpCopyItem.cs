@@ -14,7 +14,7 @@ namespace MonkeyPaste {
         MpISourceRef,
         MpILabelText {
         #region Constants
-        public const bool IS_EMPTY_HTML_CHECK_ENABLED = false;
+        public const bool IS_EMPTY_HTML_CHECK_ENABLED = true;
         #endregion
 
         #region Statics

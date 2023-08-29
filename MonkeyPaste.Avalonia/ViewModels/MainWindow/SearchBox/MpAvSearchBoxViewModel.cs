@@ -230,6 +230,13 @@ namespace MonkeyPaste.Avalonia {
                     }
 #endif
                     break;
+                case nameof(IsAutoCompleteOpen):
+                    if (IsAutoCompleteOpen) {
+                        if (!IsExpanded || IsExpandAnimating) {
+                            IsAutoCompleteOpen = false;
+                        }
+                    }
+                    break;
                 case nameof(IsExpanded):
                     if (IsExpanded && MpAvMainWindowViewModel.Instance.IsVerticalOrientation &&
                            MpAvClipTileSortDirectionViewModel.Instance.IsExpanded) {

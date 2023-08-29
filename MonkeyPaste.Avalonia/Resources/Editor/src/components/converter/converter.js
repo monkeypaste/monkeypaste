@@ -39,15 +39,14 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	}
 	const DO_VALIDATE = true;
 
-	const html_str = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr),'text/html').body.innerHTML;
-	log("Converting This Plain Html:");
-	log(html_str);
+	log("Converting '" + formatType + "'. The data is: ");
+	log(dataStr);
 
 
 	if (formatType == 'text') {
-		let encoded_pt = encodeHtmlSpecialEntitiesFromPlainText(html_str);
-		setEditorText(encoded_pt, 'user');
+		setEditorText(dataStr, 'user');
 	} else {
+		const html_str = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr), 'text/html').body.innerHTML;
 		setEditorHtml(html_str, 'user');
 	}
 	updateQuill();

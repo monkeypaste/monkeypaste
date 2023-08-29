@@ -174,6 +174,28 @@ namespace MonkeyPaste {
 
             // TYPES
 
+            //if (!qf.HasFlag(MpContentQueryBitFlags.TextType) &&
+            //   !qf.HasFlag(MpContentQueryBitFlags.ImageType) &&
+            //   !qf.HasFlag(MpContentQueryBitFlags.FileType)) {
+            //    // NOTE this only can occur in adv search from ui validation in simple
+            //    // so when no types are selected treat as all or there'll be no results
+            //    qf |= MpContentQueryBitFlags.TextType |
+            //        MpContentQueryBitFlags.ImageType |
+            //        MpContentQueryBitFlags.FileType;
+            //}
+
+            //if (qf.HasFlag(MpContentQueryBitFlags.TextType)) {
+            //    types.Add("e_MpCopyItemType=?");
+            //    argList.Add(MpCopyItemType.Text.ToString());
+            //}
+            //if (qf.HasFlag(MpContentQueryBitFlags.ImageType)) {
+            //    types.Add("e_MpCopyItemType=?");
+            //    argList.Add(MpCopyItemType.Image.ToString());
+            //}
+            //if (qf.HasFlag(MpContentQueryBitFlags.FileType)) {
+            //    types.Add("e_MpCopyItemType=?");
+            //    argList.Add(MpCopyItemType.FileList.ToString());
+            //}
             bool has_all_types = qf.HasAllFlags(MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType);
             bool has_no_types = !qf.HasAnyFlag(MpContentQueryBitFlags.TextType | MpContentQueryBitFlags.ImageType | MpContentQueryBitFlags.FileType);
             if (has_all_types || has_no_types) {
@@ -194,14 +216,13 @@ namespace MonkeyPaste {
                 }
             }
 
-
             // WHERE
 
-            StringBuilder where_sb = null;
+            string whereClause = string.Empty;
             if (tagIds != null && !tagIds.Contains(MpTag.AllTagId)) {
 
-                AddWhereCondition(
-                    where_sb,
+                whereClause = AddWhereCondition(
+                    whereClause,
                     @$"RootId IN 
                         (SELECT DISTINCT pk_MpCopyItemId FROM MpCopyItem WHERE pk_MpCopyItemId IN 
 		                    (SELECT fk_MpCopyItemId FROM MpCopyItemTag WHERE fk_MpTagId IN 
@@ -211,13 +232,13 @@ namespace MonkeyPaste {
             bool isAdvanced = qi.QueryType == MpQueryType.Advanced;
             if (arg_filters.Count > 0) {
                 string filter_op = isAdvanced ? " AND " : " OR ";
-                AddWhereCondition(where_sb, @$"({string.Join(filter_op, arg_filters.Select(x => x.Item1))})");
+                whereClause = AddWhereCondition(whereClause, @$"({string.Join(filter_op, arg_filters.Select(x => x.Item1))})");
             }
             if (types.Count > 0) {
-                AddWhereCondition(where_sb, @$"({string.Join(" OR ", types)})");
+                whereClause = AddWhereCondition(whereClause, @$"({string.Join(" OR ", types)})");
             }
             if (ci_idsToOmit != null && ci_idsToOmit.Any()) {
-                AddWhereCondition(where_sb, $"({string.Join(" AND ", ci_idsToOmit.Select(x => $"RootId != {x}"))})");
+                whereClause = AddWhereCondition(whereClause, $"({string.Join(" AND ", ci_idsToOmit.Select(x => $"RootId != {x}"))})");
             }
 
             // SELECT GEN
@@ -227,8 +248,7 @@ namespace MonkeyPaste {
                 selectClause = "DISTINCT " + selectClause;
             }
 
-            string wherePart = where_sb == null ? string.Empty : $"WHERE {where_sb.ToString()}";
-
+            string wherePart = string.IsNullOrEmpty(whereClause) ? string.Empty : $"WHERE {whereClause}";
             string query = @$"SELECT {selectClause} FROM MpContentQueryView {wherePart}";
             args = argList.ToArray();
             return query;
@@ -236,13 +256,13 @@ namespace MonkeyPaste {
 
         #region Helpers
 
-        private static void AddWhereCondition(StringBuilder where_sb, string condition) {
-            if (where_sb == null) {
-                where_sb = new StringBuilder();
+        private static string AddWhereCondition(string whereClause, string condition) {
+            if (string.IsNullOrEmpty(whereClause)) {
+                whereClause = condition;
             } else {
-                condition = @$" AND {condition}";
+                whereClause = @$"{whereClause} AND {condition}";
             }
-            where_sb.Append(condition);
+            return whereClause;
         }
 
         private static List<Tuple<string, List<object>>> GetParameterizedFilters(MpIQueryInfo qi) {

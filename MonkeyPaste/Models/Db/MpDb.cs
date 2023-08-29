@@ -482,7 +482,7 @@ namespace MonkeyPaste {
 #endif
             bool? success = connect_success ? isNewDb : null;
             if (success.IsTrue()) {
-                await InitDbSettingsAsync();
+                //await InitDbSettingsAsync();
             }
             return success;
         }
@@ -801,7 +801,7 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
 
             var default_tags = new object[] {
                 // guid,name,color,treeIdx,pinIdx,track,sync,parentId,type
-                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "Collections", MpSystemColors.lemonchiffon2, 1,-1, tracked,synced, 0, MpTagType.Group},
+                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", "Tags", MpSystemColors.lemonchiffon2, 1,-1, tracked,synced, 0, MpTagType.Group},
                 new object[] { "287140cc-2f9a-4bc6-a88d-c5b836f1a340", "All", MpSystemColors.blue1, 0,1, tracked,synced, MpTag.FiltersTagId, MpTagType.Link},
                 new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", "Favorites", MpSystemColors.yellow1, 1,-1,tracked,synced, MpTag.CollectionsTagId, MpTagType.Link},
                 new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", "Filters", MpSystemColors.forestgreen, 0,-1,tracked,synced, 0, MpTagType.Group},
