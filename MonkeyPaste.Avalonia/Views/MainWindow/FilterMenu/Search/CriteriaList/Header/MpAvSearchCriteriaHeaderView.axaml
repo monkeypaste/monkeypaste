@@ -11,8 +11,7 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <local:MpAvUserControl.Styles>
-    </local:MpAvUserControl.Styles>
+    <local:MpAvUserControl.Styles />
     <DockPanel LastChildFill="False">
         <StackPanel DockPanel.Dock="Left"
                     Orientation="Horizontal"
@@ -29,7 +28,7 @@
                     IsEnabled="{Binding !IsQuerying, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                     Command="{Binding RefreshSearchCommand}">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Refresh" />
+                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SearchCriteriaHeadeRefreshTooltipText}" />
                 </ToolTip.Tip>
                 <Grid>
                     <Image IsVisible="{Binding $parent.IsEnabled}"
@@ -39,18 +38,24 @@
                                                VerticalAlignment="Stretch" />
                 </Grid>
             </Button>
-            <!--  New BUTTON  -->
+
+            <!--  DUPLICATE BUTTON  -->
+
             <Button x:Name="DuplicateAdvSearchButton"
                     Classes="defaultButton textOnlyButton outline outlineOver"
                     IsVisible="{Binding IsSavedQuery}"
                     Command="{Binding DuplicateQueryCommand}">
-                <TextBlock Text="Duplicate..." />
+                <DockPanel>
+                    <Image DockPanel.Dock="Left"
+                           Source="{Binding Source={StaticResource CopyImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    <TextBlock Text="{x:Static local:UiStrings.SearchCriteriaHeaderDuplicateButtonLabel}" />
+                </DockPanel>
             </Button>
 
             <!--  SAVE BUTTON  -->
 
             <Button x:Name="SaveAdvSearchButton"
-                    Classes="defaultButton textOnlyButton outline outlineOver alterOnly"
+                    Classes="defaultButton alterOnly"
                     Command="{Binding SaveQueryCommand}">
                 <Button.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -58,20 +63,25 @@
                         <Binding Path="CanAlter" />
                     </MultiBinding>
                 </Button.IsVisible>
-                <TextBlock Text="Save" />
+                <DockPanel>
+                    <Image DockPanel.Dock="Left"
+                           Source="{Binding Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    <TextBlock Text="{x:Static local:UiStrings.SearchCriteriaHeaderSaveButtonLabel}" />
+                </DockPanel>
             </Button>
-            <!--  ADVANCED SEARCH TOGGLE BUTTON  -->
+
+            <!--  DELETE BUTTON  -->
 
             <Button x:Name="DeleteAdvSearchButton"
-                    Margin="5,5,5,5"
-                    BorderThickness="0"
-                    VerticalAlignment="Stretch"
-                    HorizontalAlignment="Center"
+                    Classes="defaultButton alterOnly"
                     IsVisible="{Binding IsPendingQuery}"
-                    Width="{Binding $self.Bounds.Height}"
-                    Classes="noBg noHoverBg addRemoveBtn outline"
                     Command="{Binding RejectPendingCriteriaItemsCommand}">
-                <Image Source="{Binding ., Source={StaticResource MinusImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+
+                <DockPanel>
+                    <Image DockPanel.Dock="Left"
+                           Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    <TextBlock Text="{x:Static local:UiStrings.SearchCriteriaHeaderDismissButtonLabel}" />
+                </DockPanel>
             </Button>
 
             <!--  POP OUT WINDOW BUTTON  -->
@@ -82,7 +92,7 @@
                     Command="{Binding OpenCriteriaWindowCommand}">
                 <ToolTip.Tip>
                     <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                           ToolTipText="Open In Window" />
+                                           ToolTipText="{x:Static local:UiStrings.SearchCriteriaHeadePopoutTooltipText}" />
                 </ToolTip.Tip>
                 <Image Width="25"
                        Height="25"

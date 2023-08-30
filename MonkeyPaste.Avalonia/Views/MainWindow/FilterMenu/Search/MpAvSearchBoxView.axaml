@@ -41,24 +41,7 @@
             <Setter Property="Opacity"
                     Value="1" />
         </Style>
-        <!--<Style Selector="Grid#SearchContainerGrid.hidePlus ToggleButton#ConvertToAdvancedSearchToggleButton">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="Width"
-                                      Duration="{StaticResource FilterExpandTimeSpan}" />
-                    <ThicknessTransition Property="Margin"
-                                         Duration="{StaticResource FilterExpandTimeSpan}" />
-                    <DoubleTransition Property="Opacity"
-                                      Duration="{StaticResource FilterExpandTimeSpan}" />
-                </Transitions>
-            </Setter>
-            <Setter Property="Width"
-                    Value="0" />
-            <Setter Property="Margin"
-                    Value="0" />
-            <Setter Property="Opacity"
-                    Value="0" />
-        </Style>-->
+
         <Style Selector="Grid#SearchContainerGrid.hidePlus ToggleButton#ConvertToAdvancedSearchToggleButton">
             <Setter Property="Width"
                     Value="0" />
@@ -173,7 +156,7 @@
 
         <!--  CONVERT SIMPLE/ TOGGLE EXPAND ADV BUTTON  -->
         <!--  UNCHECKED  -->
-        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.saved):not(.popout) Image">
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.active):not(.popout) Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource PlusSolidImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
         </Style>
@@ -184,7 +167,7 @@
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource CloseWindowImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
         </Style>
-        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.popout).saved Image">
+        <Style Selector="ToggleButton#ConvertToAdvancedSearchToggleButton:unchecked:not(.popout).active Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource EdgeArrowDownImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
         </Style>
@@ -400,7 +383,7 @@
                       IsChecked="{Binding IsExpanded, Mode=TwoWay, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
                       Classes="noBg noHoverBg outlineOver"
                       Classes.popout="{Binding IsCriteriaWindowOpen, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}"
-                      Classes.saved="{Binding IsSavedQuery, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
+                      Classes.active="{Binding IsAdvSearchActive, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView ToolTipText="{Binding ExpandTooltipText}" />
             </ToolTip.Tip>

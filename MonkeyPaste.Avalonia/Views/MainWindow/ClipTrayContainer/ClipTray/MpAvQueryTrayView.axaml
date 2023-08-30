@@ -188,24 +188,19 @@
 
         <!--  EMPTY OVERLAY  -->
 
-        <Border x:Name="QueryTrayEmptyContainer"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                IsHitTestVisible="False"
-                IsVisible="{Binding IsQueryEmpty}"
-                Grid.Row="1"
-                Background="Transparent">
-            <Border.IsVisible>
+        <TextBlock Grid.Row="1"
+                   Text="{Binding EmptyQueryTrayText}"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Center"
+                   Classes="disabled emptyTrayText">
+            <TextBlock.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-
-                    <Binding Path="IsQueryEmpty"/>
-                    <Binding Path="!IsVisible" ElementName="QueryTrayBusyOuterBorder" />
+                    <Binding Path="IsQueryEmpty" />
+                    <Binding Path="!IsVisible"
+                             ElementName="QueryTrayBusyOuterBorder" />
                 </MultiBinding>
-            </Border.IsVisible>
-            <TextBlock Text="{Binding EmptyQueryTrayText}"
-                       Classes="disabled emptyTrayText" />
-        </Border>
-
+            </TextBlock.IsVisible>
+        </TextBlock>
 
         <!--  ADVANCED SEARCH  -->
         <Border x:Name="AdvancedSearchContainerBorder"

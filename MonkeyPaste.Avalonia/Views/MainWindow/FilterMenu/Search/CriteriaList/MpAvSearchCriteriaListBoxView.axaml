@@ -30,11 +30,11 @@
     <local:MpAvUserControl.Styles>
 
         <!--  ALTER ONLY  -->
-        <Style Selector=":is(Control).alterOnly">
+        <Style Selector="DockPanel#SearchCriteriaContainer:not(.alterable) :is(Control).alterOnly">
             <Setter Property="local:MpAvShowDisabledTooltipExtension.ShowOnDisabled"
                     Value="True" />
             <Setter Property="IsEnabled"
-                    Value="{Binding CanAlter, Source={x:Static local:MpAvSearchCriteriaItemCollectionViewModel.Instance}}" />
+                    Value="False" />
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
@@ -45,7 +45,7 @@
             </Setter>
         </Style>
 
-        <Style Selector="local|MpAvSearchCriteriaHeaderView :is(Control).alterOnly">
+        <Style Selector="DockPanel#SearchCriteriaContainer:not(.alterable) local|MpAvSearchCriteriaHeaderView :is(Control).alterOnly">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
@@ -184,14 +184,6 @@
                     Value="{StaticResource CriteriaOptionMinWidth}" />
         </Style>
 
-        <Style Selector="TextBox:pointerover">
-            <!--<Setter Property="BorderBrush"
-                    Value="Black" />-->
-        </Style>
-        <Style Selector="TextBox:not(.valid)">
-            <!--<Setter Property="BorderBrush"
-                    Value="Red" />-->
-        </Style>
         <Style Selector="TextBox.valid /template/ local|MpAvToolTipView">
             <Setter Property="IsVisible"
                     Value="False" />
@@ -256,14 +248,6 @@
                  VerticalAlignment="Stretch"
                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
-            <!--<ListBox.Resources>
-                <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
-            </ListBox.Resources>-->
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid HorizontalAlignment="Stretch"

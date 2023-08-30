@@ -333,4 +333,19 @@
   <data name="PluginBrowserVersionLabel" xml:space="preserve">
     <value>Version:</value>
   </data>
+  <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
+    <value>Open in Window</value>
+  </data>
+  <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
+    <value>Dismiss</value>
+  </data>
+  <data name="SearchCriteriaHeaderDuplicateButtonLabel" xml:space="preserve">
+    <value>Duplicate...</value>
+  </data>
+  <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="SearchCriteriaHeaderSaveButtonLabel" xml:space="preserve">
+    <value>Save</value>
+  </data>
 </root>

@@ -1,14 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -236,6 +233,7 @@ namespace MonkeyPaste.Avalonia {
             if (IsSavedQuery) {
                 Mp.Services.Query.NotifyQueryChanged(true);
             }
+            RefreshProperties();
         }
 
         public async Task<MpAvSearchCriteriaItemViewModel> CreateCriteriaItemViewModelAsync(MpSearchCriteriaItem sci) {
@@ -319,12 +317,21 @@ namespace MonkeyPaste.Avalonia {
         }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             MpMessenger.SendGlobal(MpMessageType.SearchCriteriaItemsChanged);
+            RefreshProperties();
+
+            UpdateCriteriaSortOrderAsync().FireAndForgetSafeAsync(this);
+        }
+
+        private void RefreshProperties() {
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(SortedItems));
             OnPropertyChanged(nameof(HasCriteriaItems));
             OnPropertyChanged(nameof(HasSearchChanged));
-
-            UpdateCriteriaSortOrderAsync().FireAndForgetSafeAsync(this);
+            OnPropertyChanged(nameof(SortedItems));
+            OnPropertyChanged(nameof(IsAdvSearchActive));
+            OnPropertyChanged(nameof(SelectedItem));
+            OnPropertyChanged(nameof(IsCriteriaWindowOpen));
+            OnPropertyChanged(nameof(IsPendingQuery));
         }
 
         private Tuple<int, int>[] GetCurrentSearchItemSaveCheckState() {
@@ -349,7 +356,6 @@ namespace MonkeyPaste.Avalonia {
                 double delta_open_height = DefaultCriteriaRowHeight * default_visible_row_count;
 
                 //MpAvResizeExtension.ResizeByDelta(MpAvSearchCriteriaListBoxView.Instance, 0, delta_open_height, false);
-                OnPropertyChanged(nameof(IsPendingQuery));
                 Items.ForEach(x => x.Items.ForEach(y => y.OnPropertyChanged(nameof(y.SelectedItemIdx))));
             } else {
                 if (IsPendingQuery && IsAllCriteriaEmpty && !IsCriteriaWindowOpen) {
@@ -359,6 +365,7 @@ namespace MonkeyPaste.Avalonia {
                 //MpAvResizeExtension.ResizeByDelta(MpAvMainView.Instance, 0, delta_close_height, false);                    
 
             }
+            RefreshProperties();
         }
         private async Task UpdateCriteriaSortOrderAsync(bool fromModel = false) {
             if (fromModel) {
@@ -502,11 +509,11 @@ namespace MonkeyPaste.Avalonia {
                 return IsPendingQuery;
             });
 
-        public MpIAsyncCommand RejectPendingCriteriaItemsCommand => new MpAsyncCommand(
+        public ICommand RejectPendingCriteriaItemsCommand => new MpAsyncCommand(
             async () => {
                 await InitializeAsync(0, false);
-                //IsExpanded = false;
-            }, () => IsPendingQuery, this, new[] { this });
+                IsExpanded = false;
+            });
 
         public ICommand SelectAdvancedSearchCommand => new MpCommand<object>(
             (args) => {
@@ -516,7 +523,6 @@ namespace MonkeyPaste.Avalonia {
                 if (args is int tagId) {
                     queryTagId = tagId;
                 }
-                //IsExpanded = false;
 
                 // NOTE since query takes have no linked content
                 // but are the selected tag treat search as from
@@ -547,7 +553,6 @@ namespace MonkeyPaste.Avalonia {
                     IsExpanded = true;
                 }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
-                    Items.ForEach(x => x.LogPropertyChangedEvents = true);
                     var _criteriaWindow = new MpAvWindow() {
                         SizeToContent = SizeToContent.Manual,
                         Width = 1100,
@@ -571,18 +576,6 @@ namespace MonkeyPaste.Avalonia {
                             FallbackValue = "Search Criteria 'Untitled'",
                             Converter = MpAvStringToWindowTitleConverter.Instance
                         });
-
-                    //_criteriaWindow.Bind(
-                    //    Window.BackgroundProperty,
-                    //    new Binding() {
-                    //        Source = this,
-                    //        Path = nameof(CurrentTagHexColor),
-                    //        Mode = BindingMode.OneWay,
-                    //        Converter = MpAvStringHexToBrushConverter.Instance,
-                    //        TargetNullValue = MpSystemColors.darkviolet,
-                    //        FallbackValue = MpSystemColors.darkviolet
-                    //    });
-                    //IsCriteriaWindowOpen = true;
                     _criteriaWindow.ShowChild();
                 } else {
                     // Some kinda view nav here
@@ -592,7 +585,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(IsCriteriaWindowOpen));
             }, (args) => {
                 return !IsCriteriaWindowOpen;
-            }, new[] { this });
+            });
 
         public ICommand RefreshSearchCommand => new MpCommand(
             () => {

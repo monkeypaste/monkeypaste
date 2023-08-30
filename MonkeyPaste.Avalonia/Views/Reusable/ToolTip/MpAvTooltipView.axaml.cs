@@ -2,20 +2,14 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using Avalonia.Styling;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Threading;
-using TheArtOfDev.HtmlRenderer.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -188,6 +182,10 @@ namespace MonkeyPaste.Avalonia {
                 hc = sender as Control;
             }
             if (hc == null) {
+                return;
+            }
+            if (!HasText) {
+                ToolTip.SetIsOpen(hc, false);
                 return;
             }
             if (!HasInputControl()) {

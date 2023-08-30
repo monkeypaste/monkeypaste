@@ -295,6 +295,51 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open in Window.
+        /// </summary>
+        public static string SearchCriteriaHeadePopoutTooltipText {
+            get {
+                return ResourceManager.GetString("SearchCriteriaHeadePopoutTooltipText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dismiss.
+        /// </summary>
+        public static string SearchCriteriaHeaderDismissButtonLabel {
+            get {
+                return ResourceManager.GetString("SearchCriteriaHeaderDismissButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate....
+        /// </summary>
+        public static string SearchCriteriaHeaderDuplicateButtonLabel {
+            get {
+                return ResourceManager.GetString("SearchCriteriaHeaderDuplicateButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string SearchCriteriaHeadeRefreshTooltipText {
+            get {
+                return ResourceManager.GetString("SearchCriteriaHeadeRefreshTooltipText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string SearchCriteriaHeaderSaveButtonLabel {
+            get {
+                return ResourceManager.GetString("SearchCriteriaHeaderSaveButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is a test &lt;b color=&quot;green&quot;&gt;test&lt;/b&gt; &lt;em color=&quot;red&quot;&gt;&lt;b&gt;test&lt;/b&lt;/em&gt; &lt;a color=&quot;pink&quot; href=&quot;https://www.google.com/&quot;&gt;test&lt;/a&gt;.
         /// </summary>
         public static string Test {

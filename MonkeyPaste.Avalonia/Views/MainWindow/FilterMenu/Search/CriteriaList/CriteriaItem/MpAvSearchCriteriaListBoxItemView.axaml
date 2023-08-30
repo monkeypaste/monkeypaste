@@ -16,7 +16,7 @@
         <!--  RE-ORDER BUTTONS  -->
         <Style Selector="Button#CriteriaDragButton Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource LinesX2HorizImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding Source={StaticResource LinesX2HorizImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeBlack}" />
         </Style>
         <Style Selector="Button#CriteriaDragButton:pointerover Image">
             <Setter Property="Source"
@@ -32,14 +32,6 @@
             <!--  NOTE important cause outerlistbox selector pulls these items for some reason  -->
             <Setter Property="BorderThickness"
                     Value="0" />
-        </Style>
-
-        <Style Selector="ListBox.optionsList > ListBoxItem:not(:selected):not(:nth-child(1)):not(:nth-last-child(1))">
-            <!--  NOTE  -->
-            <!--<Setter Property="IsHitTestVisible"
-                    Value="False" />
-            <Setter Property="IsVisible"
-                    Value="False" />-->
         </Style>
 
         <!--  INDENT  -->
@@ -78,21 +70,15 @@
             </Image>
         </Button>
 
-        <!--<StackPanel Grid.Column="1"
-                    Orientation="Vertical">-->
-
-
         <!--  SEARCH CRITERIA ITEM CONTAINER  -->
 
         <DockPanel Grid.Column="1"
-                   LastChildFill="True"
                    Classes.indented="{Binding IsJoinPanelVisible}">
 
             <!--  JOIN CRITERIA ITEM HEADER  -->
 
             <DockPanel DockPanel.Dock="Top"
                        HorizontalAlignment="Left"
-                       RenderTransform="translateX(-30px)"
                        IsVisible="{Binding IsJoinPanelVisible}">
                 <TextBlock DockPanel.Dock="Right"
                            FontWeight="SemiBold"
