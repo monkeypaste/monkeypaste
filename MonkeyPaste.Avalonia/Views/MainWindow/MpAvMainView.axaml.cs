@@ -154,6 +154,7 @@ namespace MonkeyPaste.Avalonia {
             var ctrcv_cg = ctrcv.FindControl<Grid>("ClipTrayContainerGrid");
             var ctrcv_ptrv = ctrcv.FindControl<MpAvPinTrayView>("PinTrayView");
             var ctrcv_ptr_lb = ctrcv_ptrv.FindControl<ListBox>("PinTrayListBox");
+            var ctrcv_ptr_cg = ctrcv_ptrv.FindControl<Border>("PinTrayContainerBorder").Child as Grid;
             var ctrcv_gs = ctrcv.FindControl<GridSplitter>("ClipTraySplitter");
             var ctrcv_ctrv = ctrcv.FindControl<MpAvQueryTrayView>("ClipTrayView");
             var ctrcv_ctrv_cg = ctrcv_ctrv.FindControl<Grid>("QueryTrayContainerGrid");
@@ -402,6 +403,10 @@ namespace MonkeyPaste.Avalonia {
             UpdateTitleLayout();
             //UpdateResizerLayout();
             mwtg.InvalidateAll();
+
+            // NOTE this is trying to fix empty message centering...
+            ctrcv_ctrv_cg.InvalidateAll();
+            ctrcv_ptr_cg.InvalidateAll();
         }
 
         private void UpdateTitleLayout() {

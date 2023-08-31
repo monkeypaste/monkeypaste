@@ -298,9 +298,9 @@ namespace MonkeyPaste.Avalonia {
                 PinnedItemForThisPlaceholder.CopyItemTitle;
         public string CapToolTipText =>
             IsNextTrashedByAccount ?
-                "Next to trash! Upgrade to avoid 👍" :
+                UiStrings.AccountNextTrashToolTipText :
                 IsNextRemovedByAccount ?
-                    "Next to remove! Upgrade to avoid 👍" :
+                    UiStrings.AccountNextRemoveToolTipText :
             string.Empty;
 
         public int[] TitleLayerZIndexes { get; private set; } = Enumerable.Range(1, 3).ToArray();
@@ -315,25 +315,24 @@ namespace MonkeyPaste.Avalonia {
                     //created
                     case MpCopyItemDetailType.DateTimeCreated:
                         DetailTooltipText = MpAvDateTimeToStringConverter.Instance.Convert(CopyDateTime, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null) as string;
-                        detailText = "Copied " + CopyDateTime.ToReadableTimeSpan();
+                        detailText = string.Format(UiStrings.ClipTileDetailCreated, CopyDateTime.ToReadableTimeSpan());
                         break;
                     case MpCopyItemDetailType.DataSize:
                         switch (CopyItemType) {
                             case MpCopyItemType.Image:
-                                detailText = $"({CopyItemSize1}px) | ({CopyItemSize2}px)";
+                                detailText = string.Format(UiStrings.ClipTileDetailDimImage, CopyItemSize1, CopyItemSize2);
                                 break;
                             case MpCopyItemType.Text:
-                                detailText = $"{CopyItemSize1} chars | {CopyItemSize2} lines";
+                                detailText = string.Format(UiStrings.ClipTileDetailDimText, CopyItemSize1, CopyItemSize2);
                                 break;
                             case MpCopyItemType.FileList:
-
-                                detailText = $"{CopyItemSize1} files | {CopyItemSize2} MBs";
+                                detailText = string.Format(UiStrings.ClipTileDetailDimFiles, CopyItemSize1, CopyItemSize2);
                                 break;
                         }
                         break;
                     //# copies/# pastes
                     case MpCopyItemDetailType.UsageStats:
-                        detailText = $"{CopyCount} copies | {PasteCount} pastes";
+                        detailText = string.Format(UiStrings.ClipTileDetailDimFiles, CopyCount, PasteCount);
                         break;
                     default:
                         break;

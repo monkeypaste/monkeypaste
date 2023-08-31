@@ -55,11 +55,11 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if ((int)st < (int)MpShortcutType.MAX_APP_SHORTCUT) {
-                return st.EnumToLabel();
+                return st.EnumToUiString();
             }
             if (arg == null) {
                 MpDebug.Break("Error should have vm");
-                return st.EnumToLabel();
+                return st.EnumToUiString();
             }
             string template = string.Empty;
             string title_arg = string.Empty;

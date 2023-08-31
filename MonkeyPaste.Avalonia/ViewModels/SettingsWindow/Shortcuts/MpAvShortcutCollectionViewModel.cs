@@ -894,9 +894,6 @@ namespace MonkeyPaste.Avalonia {
             _hook.RunAsync();
         }
 
-        private void Hook_KeyTyped(object sender, KeyboardHookEventArgs e) {
-            return;
-        }
 
         private void DisposeGlobalInputHooks() {
             if (_hook != null) {
@@ -1028,7 +1025,7 @@ namespace MonkeyPaste.Avalonia {
             }
             _keyboardGestureHelper.AddKeyDown(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
-            HandleGlobalKeyEvents(keyStr, true);
+            Dispatcher.UIThread.Post(() => HandleGlobalKeyEvents(keyStr, true));
             if (!IsShortcutsEnabled) {
                 return;
             }
@@ -1085,13 +1082,24 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
+            HandleReleaseOrTyped(e, true);
+        }
+
+        private void Hook_KeyTyped(object sender, KeyboardHookEventArgs e) {
+            HandleReleaseOrTyped(e, false);
+        }
+
+        private void HandleReleaseOrTyped(KeyboardHookEventArgs e, bool isRelease) {
             if (IgnoreDebug(false)) {
                 return;
             }
-            _keyboardGestureHelper.RemoveKeyDown(e.Data.KeyCode);
+            bool was_down = _keyboardGestureHelper.RemoveKeyDown(e.Data.KeyCode);
+            if (!was_down) {
+                // NOTE typed receives up before release for input keys
+                return;
+            }
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
-
-            HandleGlobalKeyEvents(keyStr, false);
+            Dispatcher.UIThread.Post(() => HandleGlobalKeyEvents(keyStr, false));
             if (!IsShortcutsEnabled) {
                 return;
             }
@@ -1124,18 +1132,19 @@ namespace MonkeyPaste.Avalonia {
             if (match_to_execute.RoutingType == MpRoutingType.Tunnel) {
                 Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
             }
-
         }
-
         private bool IgnoreDebug(bool isDown) {
-#if !DEBUG
+#if DEBUG
+            //if (Mp.Services.ProcessWatcher.LastProcessInfo == null ||
+            //    !Mp.Services.ProcessWatcher.LastProcessInfo.ProcessPath.Contains("devenv.exe")) {
+            //    return false;
+            //}
+            //return true;
+            return false;
+#else
             return false;
 #endif
-            if (Mp.Services.ProcessWatcher.LastProcessInfo == null ||
-                !Mp.Services.ProcessWatcher.LastProcessInfo.ProcessPath.Contains("devenv.exe")) {
-                return false;
-            }
-            return true;
+
         }
         #endregion
 
@@ -1217,10 +1226,6 @@ namespace MonkeyPaste.Avalonia {
         #region Keyboard
 
         private void HandleGlobalKeyEvents(string keyStr, bool isDown) {
-            if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => HandleGlobalKeyEvents(keyStr, isDown));
-                return;
-            }
             if (string.IsNullOrEmpty(keyStr)) {
                 // what key is this with no string val?
                 MpDebug.Break();

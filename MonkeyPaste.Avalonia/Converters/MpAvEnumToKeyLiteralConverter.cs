@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
                 if (kl.FirstOrDefault() is IEnumerable<string> kl2 &&
                     kl2.FirstOrDefault() is string kl3) {
                     if (parameter is string paramStr && paramStr == "label") {
-                        kl3 = kl3.ToLabel();
+                        kl3 = kl3.ToProperCase();
                     }
                     return kl3;
                 }

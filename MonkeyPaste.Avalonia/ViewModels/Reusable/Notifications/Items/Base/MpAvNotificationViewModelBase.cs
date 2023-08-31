@@ -169,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
                             Command = CloseNotificationCommand
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = $"Hide all '{NotificationType.EnumToLabel()}' notifications",
+                            Header = $"Hide all '{NotificationType.EnumToUiString()}' notifications",
                             IconResourceKey = "ClosedEyeImage",
                             Command = CheckDoNotShowAgainCommand
                         },

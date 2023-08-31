@@ -1,24 +1,19 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace ComputerVision {
     public class ComputerVisionPlugin : MpIAnalyzeAsyncComponent {
-        // Add your Computer Vision subscription key and endpoint
-        static string subscriptionKey = "b455280a2c66456e926b66a1e6656ce3";
-        static string endpoint = "https://mp-azure-cognitive-services-resource-instance.cognitiveservices.azure.com/";
-
         public async Task<MpAnalyzerPluginResponseFormat> AnalyzeAsync(MpAnalyzerPluginRequestFormat req) {
+            string subscriptionKey = req.GetRequestParamStringValue(5);
+            string endpoint = req.GetRequestParamStringValue(6);
+
             string url_query = string.Empty;
             var features = req.GetRequestParamStringListValue(2);
             if (features.Count > 0) {
@@ -414,7 +409,7 @@ namespace ComputerVision {
                     new MpAnnotationNodeFormat() {
                         type = "ImageType",
                         label = "Clip Art Type",
-                        body = ((ImageClipArtType)it.clipArtType).EnumToLabel()
+                        body = ((ImageClipArtType)it.clipArtType).EnumToProperCase()
                     },
                     new MpAnnotationNodeFormat() {
                         type = "ImageType",

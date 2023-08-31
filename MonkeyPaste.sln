@@ -1194,6 +1194,8 @@ Global
 		{BF5BAF65-1B25-4DE8-A2BA-7B9DCC365E25} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_AutoCreateNewLanguageFiles = True
+		RESX_RemoveEmptyEntries = False
 		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
 	EndGlobalSection
 EndGlobal

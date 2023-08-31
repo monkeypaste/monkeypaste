@@ -133,6 +133,10 @@ namespace MonkeyPaste.Avalonia {
             var sb = new StringBuilder();
             if (_downChecker.Where(x => DateTime.Now - x.Item2 > TimeSpan.FromSeconds(15)) is IEnumerable<Tuple<T, DateTime>> dttl &&
                 dttl.Any()) {
+                if (dttl.Where(x => string.IsNullOrEmpty(ToLiteral(x.Item1))).Select(x => x.Item1) is IEnumerable<T> emptyLiterals &&
+                    emptyLiterals.Any()) {
+                    MpDebug.Break($"What keys does it think these are?");
+                }
                 //assumes won't be holding key down longer than 30 seconds
                 //this may give false positives if breakpoint hit & resumed with key down
                 sb.AppendLine($"Orphan downs detected by time delay. Removing:");

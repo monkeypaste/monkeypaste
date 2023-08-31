@@ -45,7 +45,7 @@ namespace MonkeyPaste.Avalonia {
                         // TODO need to query clipboard plugins for custom formats here and have all available
                         continue;
                     }
-                    _availableFormatTypes.Add(cft.EnumToLabel());
+                    _availableFormatTypes.Add(cft.EnumToUiString());
                 }
                 return _availableFormatTypes;
             }

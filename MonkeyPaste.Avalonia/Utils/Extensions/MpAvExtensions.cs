@@ -4,7 +4,6 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -76,8 +75,8 @@ namespace MonkeyPaste.Avalonia {
             return Path.Combine(path_parts.ToArray());
         }
 
-        #endregion
 
+        #endregion
 
         #region Text Search
 

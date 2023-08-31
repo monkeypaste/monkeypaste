@@ -928,9 +928,6 @@ namespace MonkeyPaste.Avalonia {
                     if (IsSelected) {
                         LastSelectedDateTime = DateTime.Now;
 
-                        //if (!IsExpanded) {
-                        //    IsExpanded = true;
-                        //}
                         if (IsQueryTag) {
                             MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending = IsSortDescending;
                             MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = SortType;
@@ -947,6 +944,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     if (!IsGroupTag) {
                         UpdateClipCountAsync().FireAndForgetSafeAsync(this);
+                    }
+                    if (Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.LastSelectedActiveItem));
                     }
                     break;
                 case nameof(IsTagNameTextBoxFocused):
@@ -1610,7 +1610,7 @@ namespace MonkeyPaste.Avalonia {
                     var cloned_tag = await Tag.CloneDbModelAsync();
                     cloned_tag.ParentTagId = temp_parent_vm.TagId;
                     // append 'Copy' to title
-                    cloned_tag.TagName += " Copy";
+                    cloned_tag.TagName = string.Format(UiStrings.CommonTitledCopyTitleText, cloned_tag.TagName);
                     // clear pin idx
                     cloned_tag.PinSortIdx = -1;
                     // reset clones treeIdx to tail 

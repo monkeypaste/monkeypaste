@@ -85,7 +85,7 @@ namespace MonkeyPaste.Avalonia {
                 body = string.Empty;
             }
             if (string.IsNullOrEmpty(title)) {
-                title = notificationType.EnumToLabel();
+                title = notificationType.EnumToUiString();
             }
 
             MpNotificationFormat nf = new MpNotificationFormat() {

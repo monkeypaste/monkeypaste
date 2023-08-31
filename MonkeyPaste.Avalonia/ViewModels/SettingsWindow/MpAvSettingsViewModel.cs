@@ -228,10 +228,10 @@ namespace MonkeyPaste.Avalonia {
                                             label = "Status",
                                             values =
                                                 Enum.GetNames(typeof(MpUserAccountType))
-                                                .Select(x=> new MpPluginParameterValueFormat() {
+                                                .Select((x,idx)=> new MpPluginParameterValueFormat() {
                                                     isDefault = Mp.Services.AccountTools.CurrentAccountType.ToString() == x,
                                                     value = x,
-                                                    label = x.ToLabel()
+                                                    label = x.ToEnum<MpUserAccountType>().EnumToUiString()
                                                 }).ToList()
                                         },
                                     }
@@ -883,10 +883,10 @@ namespace MonkeyPaste.Avalonia {
                                             description = Mp.Services.PlatformResource.GetResource<string>("RoutingProfileInfoHtml"),
                                             values =
                                                 Enum.GetNames(typeof(MpShortcutRoutingProfileType))
-                                                .Select(x=> new MpPluginParameterValueFormat() {
+                                                .Select((x,idx)=> new MpPluginParameterValueFormat() {
                                                     isDefault = MpAvShortcutCollectionViewModel.Instance.RoutingProfileType.ToString() == x,
-                                                    value = x,
-                                                    label = x.ToLabel()
+                                                    value = x, // NOTE!!
+                                                    label = x.ToEnum<MpShortcutRoutingProfileType>().EnumToUiString()
                                                 }).ToList()
                                         }
                                     }

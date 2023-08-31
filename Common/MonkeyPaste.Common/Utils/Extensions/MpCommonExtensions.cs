@@ -375,14 +375,14 @@ namespace MonkeyPaste.Common {
             return Enum.GetNames(e).Length;
         }
 
-        public static string[] EnumToLabels(this Type e, string noneText = "", bool hideFirst = false, string spaceStr = " ") {
+        public static string[] EnumerateEnumToUiStrings(this Type e, string noneText = "", bool hideFirst = false, string spaceStr = " ") {
             if (e == null || !e.IsEnum) {
                 return new string[] { };
             }
 
             var names = Enum.GetNames(e);
             for (int i = hideFirst ? 1 : 0; i < names.Length; i++) {
-                names[i] = names[i].ToLabel(noneText, spaceStr);
+                names[i] = names[i].ToProperCase(noneText, spaceStr);
             }
             return names;
         }
@@ -397,23 +397,12 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static string EnumToName<TValue>(this TValue value, string noneText = "None")
-            where TValue : Enum {
-            string valStr = value.ToString();
-            var valParts = valStr.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries);
 
-            return valParts[valParts.Length - 1];
-        }
-
-        public static string EnumToLabel<TValue>(this TValue value, string noneText = "")
+        public static string EnumToProperCase<TValue>(this TValue value, string noneText = "")
             where TValue : Enum {
 
-            return value.EnumToName(noneText).ToLabel(noneText);
+            return value.ToString().ToProperCase(noneText);
         }
-
-        public static int EnumToInt<TValue>(this TValue value)
-            where TValue : Enum => Convert.ToInt32(value);
-
 
         public static bool HasAllFlags<T>(this T value, T flags) where T : Enum {
             if (Enum.GetUnderlyingType(typeof(T)) == typeof(byte)) {
@@ -422,15 +411,15 @@ namespace MonkeyPaste.Common {
                 return (byteValue & byteFlags) == byteFlags;
             } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(short)) {
                 var shortValue = Convert.ToInt16(value);
-                var shortFlags = Convert.ToInt16(value);
+                var shortFlags = Convert.ToInt16(flags);
                 return (shortValue & shortFlags) == shortFlags;
             } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(int)) {
                 var intValue = Convert.ToInt32(value);
-                var intFlags = Convert.ToInt32(value);
+                var intFlags = Convert.ToInt32(flags);
                 return (intValue & intFlags) == intFlags;
             } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(long)) {
                 var longValue = Convert.ToInt64(value);
-                var longFlags = Convert.ToInt64(value);
+                var longFlags = Convert.ToInt64(flags);
                 return (longValue & longFlags) == longFlags;
             } else
                 throw new NotSupportedException("Enum with size of " + Unsafe.SizeOf<T>() + " are not supported");
@@ -442,15 +431,15 @@ namespace MonkeyPaste.Common {
                 return (byteValue & byteFlags) != 0;
             } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(short)) {
                 var shortValue = Convert.ToInt16(value);
-                var shortFlags = Convert.ToInt16(value);
+                var shortFlags = Convert.ToInt16(flags);
                 return (shortValue & shortFlags) != 0;
             } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(int)) {
                 var intValue = Convert.ToInt32(value);
-                var intFlags = Convert.ToInt32(value);
+                var intFlags = Convert.ToInt32(flags);
                 return (intValue & intFlags) != 0;
             } else if (Enum.GetUnderlyingType(typeof(T)) == typeof(long)) {
                 var longValue = Convert.ToInt64(value);
-                var longFlags = Convert.ToInt64(value);
+                var longFlags = Convert.ToInt64(flags);
                 return (longValue & longFlags) != 0;
             } else
                 throw new NotSupportedException("Enum with size of " + Unsafe.SizeOf<T>() + " are not supported");

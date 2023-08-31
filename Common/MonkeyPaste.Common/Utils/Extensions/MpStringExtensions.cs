@@ -327,7 +327,7 @@ namespace MonkeyPaste.Common {
 
             return _resourceNames.Contains(text.ToLower());
         }
-        public static bool isCapitalCaseChar(char let) {
+        public static bool IsCapitalCaseChar(char let) {
             if (let == default) {
                 return false;
             }
@@ -337,7 +337,7 @@ namespace MonkeyPaste.Common {
             return false;
         }
 
-        public static bool isLowerCaseChar(char let) {
+        public static bool IsLowerCaseChar(char let) {
             if (let == default) {
                 return false;
             }
@@ -347,14 +347,14 @@ namespace MonkeyPaste.Common {
             return false;
         }
 
-        public static string ToLabel(this string titleCaseStr, string noneText = "", string spaceStr = " ") {
+        public static string ToProperCase(this string titleCaseStr, string noneText = "", string spaceStr = " ") {
             // TODO when automating UI language need to parameterize low vs up case logic
             //Converts 'ThisIsALabel" to 'This Is A Label'
             string outStr = string.Empty;
             for (int i = 0; i < titleCaseStr.Length; i++) {
                 if (i > 0 &&
-                    (isLowerCaseChar(titleCaseStr[i - 1]) && isCapitalCaseChar(titleCaseStr[i]) ||
-                    isCapitalCaseChar(titleCaseStr[i - 1]) && isCapitalCaseChar(titleCaseStr[i]))) {
+                    (IsLowerCaseChar(titleCaseStr[i - 1]) && IsCapitalCaseChar(titleCaseStr[i]) ||
+                    IsCapitalCaseChar(titleCaseStr[i - 1]) && IsCapitalCaseChar(titleCaseStr[i]))) {
                     outStr += spaceStr;
                 }
                 outStr += titleCaseStr[i];

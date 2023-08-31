@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<string> Tabs {
             get {
                 if (_tabs == null) {
-                    _tabs = new ObservableCollection<string>(typeof(MpPluginBrowserTabType).EnumToLabels());
+                    _tabs = new ObservableCollection<string>(typeof(MpPluginBrowserTabType).EnumToUiStrings());
                 }
                 return _tabs;
             }

@@ -128,6 +128,28 @@
             "value": "{ItemData}"
           }
         ]
+      },
+      {
+        "label": "Subscription Key",
+        "description": "Your Azure Computer Vision API Key. Sign up for free at https://azure.microsoft.com/en-us/free/",
+        "controlType": "TextBox",
+        "unitType": "PlainText",
+        "isRequired": true,
+        "isVisible": true,
+        "paramId": 5,
+        "isExecuteParameter": true,
+        "isSharedValue": true
+      },
+      {
+        "label": "Region",
+        "description": "The region associated with your Azure Computer Vision account",
+        "controlType": "TextBox",
+        "unitType": "PlainText",
+        "isRequired": false,
+        "isVisible": true,
+        "paramId": 6,
+        "isExecuteParameter": true,
+        "isSharedValue": true
       }
     ]
   }

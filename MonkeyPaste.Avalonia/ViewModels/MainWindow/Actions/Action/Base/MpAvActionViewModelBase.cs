@@ -1,7 +1,5 @@
 ﻿
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -9,7 +7,6 @@ using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -356,32 +353,32 @@ namespace MonkeyPaste.Avalonia {
                     ParentObj = this,
                     SubItems = new List<MpAvMenuItemViewModel>() {
                          new MpAvMenuItemViewModel() {
-                            Header = "Cut",
+                            Header = UiStrings.CommonCutOpLabel,
                             IconResourceKey = "ScissorsImage",
                             ShortcutArgs = new object[] { MpShortcutType.CutSelection },
                             Command = CutActionCommand
                         },
                          new MpAvMenuItemViewModel() {
-                            Header = "Copy",
+                            Header = UiStrings.CommonCopyOpLabel,
                             IconResourceKey = "CopyImage",
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
                             Command = CopyActionCommand
                         },
                          new MpAvMenuItemViewModel() {
-                            Header = "Paste",
+                            Header = UiStrings.CommonPasteOpLabel,
                             IconResourceKey = "PasteImage",
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
                             Command = PasteActionCommand,
                         },
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeperator = true,
-                            Header = "Move",
+                            Header = UiStrings.ActionMoveLabel,
                             IconResourceKey = "ChainImage",
                             IsVisible = move_items.Any(),
                             SubItems = move_items.ToList()
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = "Add",
+                            Header = UiStrings.CommonAddLabel,
                             HasLeadingSeperator = true,
                             IconResourceKey = "AddImage",
                             SubItems =
@@ -390,9 +387,9 @@ namespace MonkeyPaste.Avalonia {
                                 .Where(x=>x != MpActionType.None && x != MpActionType.Trigger)
                                 .Select(x =>
                                     new MpAvMenuItemViewModel() {
-                                        Header = x.EnumToLabel(),
+                                        Header = x.EnumToUiString(),
                                         IconResourceKey = GetDefaultActionIconResourceKey(x),
-                                        IconTintHexStr = MpAvActionViewModelBase.GetActionHexColor(x),
+                                        IconTintHexStr = GetActionHexColor(x),
                                         Command = AddChildActionCommand,
                                         CommandParameter = x
                                     }).ToList()
@@ -802,7 +799,7 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 if (string.IsNullOrEmpty(Action.Label)) {
-                    return ActionType.EnumToLabel();
+                    return ActionType.EnumToUiString();
                 }
                 return Action.Label;
             }

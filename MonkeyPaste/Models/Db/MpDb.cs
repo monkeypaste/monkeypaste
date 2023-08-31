@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -19,8 +18,6 @@ namespace MonkeyPaste {
         private static object _rdLock = new object();
         private static SQLiteAsyncConnection _connectionAsync;
         private static SQLiteConnection _connection;
-
-        private static Timer _analyzeTimer;
 
         #endregion
 

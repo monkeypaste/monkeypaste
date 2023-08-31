@@ -161,7 +161,7 @@
                 </local:MpAvToolTipView>
             </ToolTip.Tip>
             <!--<PathIcon />-->
-            <Image Margin="10" />
+            <Image Margin="5" />
         </Button>
     </Grid>
 </local:MpAvUserControl>

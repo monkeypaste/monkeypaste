@@ -337,7 +337,7 @@ namespace MonkeyPaste.Avalonia {
                     continue;
                 }
                 var pdt_vm = new MpAvPluginDependencyViewModel(this) {
-                    LabelText = pdt.EnumToLabel(),
+                    LabelText = pdt.EnumToUiString(),
                     ParentTreeItem = RootDependencyViewModel
                 };
                 foreach (var pdt_dep in pdt_deps) {

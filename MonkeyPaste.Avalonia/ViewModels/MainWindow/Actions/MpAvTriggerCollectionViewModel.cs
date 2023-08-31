@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
                                 .Where(x => x != MpTriggerType.None)
                                 .Select(x =>
                                     new MpAvMenuItemViewModel() {
-                                        Header = x.EnumToLabel(),
+                                        Header = x.EnumToUiString(),
                                         IconResourceKey = MpAvActionViewModelBase.GetDefaultActionIconResourceKey(x),
                                         IconTintHexStr = MpAvActionViewModelBase.GetActionHexColor(MpActionType.Trigger, x),
                                         Command = AddTriggerCommand,

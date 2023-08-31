@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
@@ -10,8 +9,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
-using FocusManager = Avalonia.Input.FocusManager;
 using Key = Avalonia.Input.Key;
 
 namespace MonkeyPaste.Avalonia {
@@ -89,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (_routingTypes == null) {
                     _routingTypes = new ObservableCollection<string>(
-                        typeof(MpRoutingType).EnumToLabels());
+                        typeof(MpRoutingType).EnumToUiStrings());
                 }
                 return _routingTypes;
             }

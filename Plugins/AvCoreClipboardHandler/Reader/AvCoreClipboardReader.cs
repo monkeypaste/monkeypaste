@@ -1,11 +1,8 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
+﻿using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using System.Diagnostics;
 using System.Text;
 
 namespace AvCoreClipboardHandler {
@@ -271,9 +268,7 @@ namespace AvCoreClipboardHandler {
         }
 
         private static void AddIgnoreNotification(ref List<MpPluginUserNotificationFormat> nfl, string format) {
-#if !DEBUG
-            return;
-#endif
+#if DEBUG
             if (nfl == null) {
                 nfl = new List<MpPluginUserNotificationFormat>();
             }
@@ -282,6 +277,9 @@ namespace AvCoreClipboardHandler {
                 "Format Ignored",
                 $"{format} Format is flagged as 'ignored'",
                 "CoreClipboardWriter"));
+#else
+            return;
+#endif
         }
         #endregion
     }

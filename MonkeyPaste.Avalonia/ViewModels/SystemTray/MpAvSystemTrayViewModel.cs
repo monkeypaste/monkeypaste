@@ -6,6 +6,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -297,10 +298,11 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand => new MpAsyncCommand(
             async () => {
                 //await Task.Delay(1);
-                await MpTestDataBuilder.CreateTestDataAsync();
+                //await MpTestDataBuilder.CreateTestDataAsync();
                 //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
                 //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
+                string result = MpAvEnumToUiStringResourceConverter.CreateAll(Path.Combine(Mp.Services.PlatformInfo.StorageDir, "EnumUiStrings.resx"));
             });
         #endregion
     }

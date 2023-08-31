@@ -1,0 +1,14 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+  <!-- FIXES SCROLL STUTTER WHEN ATTACHED TO VIEW -->
+    <Style Selector="local|MpAvTagTreeView, local|MpAvTagTreeView :is(Control)">
+        <Setter Property="ScrollViewer.BringIntoViewOnFocusChange"
+                Value="False" />
+        <Setter Property="ScrollViewer.IsScrollChainingEnabled"
+                Value="False" />
+        <Setter Property="ScrollViewer.IsScrollInertiaEnabled"
+                Value="False" />
+    </Style>
+</Styles>

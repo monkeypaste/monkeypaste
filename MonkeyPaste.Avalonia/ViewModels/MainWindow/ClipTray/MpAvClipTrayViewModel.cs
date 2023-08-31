@@ -1772,11 +1772,7 @@ namespace MonkeyPaste.Avalonia {
                     apply_changes = true;
                     cap_msg_type = MpNotificationType.ContentCapReached;
                     cap_msg_sb.AppendLine(string.Empty);
-                    if (IsAddingStartupClipboardItem) {
-                        cap_msg_sb.AppendLine($"* To prevent add on startup, uncheck '{nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup).ToLabel()}' or '{nameof(MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup).ToLabel()}' ");
-                    } else {
-                        cap_msg_sb.AppendLine($"* You can hide these warnings by clicking 'hide all' from the options menu above 😉");
-                    }
+                    cap_msg_sb.AppendLine($"* You can hide these warnings by clicking 'hide all' from the options menu above 🤎");
                 }
 
             } else if (source == MpAccountCapCheckType.AddBlock || source == MpAccountCapCheckType.RestoreBlock) {

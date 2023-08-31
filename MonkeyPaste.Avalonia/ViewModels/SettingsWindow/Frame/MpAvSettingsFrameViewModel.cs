@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpILabelTextViewModel Implementation
         public string LabelText =>
-            FrameType.EnumToLabel();
+            FrameType.EnumToUiString();
 
         #endregion
 

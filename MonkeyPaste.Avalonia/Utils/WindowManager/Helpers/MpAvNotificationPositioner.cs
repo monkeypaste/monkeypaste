@@ -4,7 +4,6 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -171,7 +170,7 @@ namespace MonkeyPaste.Avalonia {
 
             int offsetY = (int)
                 _windows
-                    .Where(x => _windows.IndexOf(x) < _windows.IndexOf(w))
+                    .Where(x => _windows.IndexOf(x) < _windows.IndexOf(w) && x is not MpAvWelcomeWindow)
                     .Sum(x => (GetWindowSize(x).Height + pad) * primaryScreen.Scaling);
             w_y -= offsetY;
 

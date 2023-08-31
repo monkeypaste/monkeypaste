@@ -4,7 +4,6 @@ using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -21,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const string DEFAULT_OPTION_LABEL = " - Please Select - ";
+        public static string DEFAULT_OPTION_LABEL = UiStrings.SearchCriteriaDefaultOptionLabel;
 
         #endregion
 
@@ -197,7 +196,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_joinTypeLabels == null) {
                     _joinTypeLabels = new ObservableCollection<string>(
                         typeof(MpNextJoinOptionType)
-                        .EnumToLabels()
+                        .EnumToUiStrings()
                         .Skip(1));
                 }
                 return _joinTypeLabels;
@@ -215,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
             rovm.IsSelected = true;
             rovm.UnitType = MpSearchCriteriaUnitFlags.Enumerable;
             rovm.Items.Clear();
-            string[] labels = typeof(MpRootOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpRootOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, rovm);
@@ -258,7 +257,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Content/TypeSpecific/Text
 
             var tovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpTextOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpTextOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -296,7 +295,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Clips/Type Specific/Image/Dimension/*/
 
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpNumberOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpNumberOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -325,7 +324,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Content/TypeSpecific/Image/Color
 
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpColorOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpColorOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -358,7 +357,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Content/TypeSpecific/Image/Dimensions
 
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpDimensionOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpDimensionOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -383,7 +382,7 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetImageContentOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
             // PATH: /Root/Content/TypeSpecific/Image
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpImageOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpImageOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -409,7 +408,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Content/TypeSpecific/File/Kind
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpFileOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpFileOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 MpFileOptionType fot = (MpFileOptionType)i;
@@ -439,7 +438,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Content/TypeSpecific/File
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpFileContentOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpFileContentOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -473,7 +472,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Content/TypeSpecific
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpContentTypeOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpContentTypeOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -506,7 +505,7 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvSearchCriteriaOptionViewModel> GetContentOptionViewModel(MpAvSearchCriteriaOptionViewModel parent) {
             // PATH: /Root/Content
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpContentOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpContentOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -555,7 +554,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/ContentType
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpContentTypeOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpContentTypeOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -640,7 +639,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Source/App
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpAppOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpAppOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -668,7 +667,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Source/Website
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpWebsiteOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpWebsiteOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -702,7 +701,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/Source
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpSourcesOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpSourcesOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -736,7 +735,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/DateOrTime
 
             var iovml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpTransactionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpTransactionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -758,7 +757,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/DateOrTime/Pasted
 
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpDateTimeOptionType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpDateTimeOptionType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var ovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -798,7 +797,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/DateOrTime/Pasted/Before
 
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpDateBeforeUnitType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpDateBeforeUnitType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -852,7 +851,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/DateOrTime/Pasted/After
 
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpDateAfterUnitType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpDateAfterUnitType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);
@@ -902,7 +901,7 @@ namespace MonkeyPaste.Avalonia {
             // PATH: /Root/DateOrTime/Pasted/WithinLast
 
             var novml = new List<MpAvSearchCriteriaOptionViewModel>();
-            string[] labels = typeof(MpTimeSpanWithinUnitType).EnumToLabels(DEFAULT_OPTION_LABEL);
+            string[] labels = typeof(MpTimeSpanWithinUnitType).EnumToUiStrings(DEFAULT_OPTION_LABEL);
 
             for (int i = 0; i < labels.Length; i++) {
                 var tovm = new MpAvSearchCriteriaOptionViewModel(this, parent);

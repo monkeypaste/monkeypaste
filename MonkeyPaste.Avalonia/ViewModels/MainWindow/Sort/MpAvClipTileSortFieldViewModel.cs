@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Common;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace MonkeyPaste.Avalonia {
@@ -25,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_sortLabels == null) {
                     _sortLabels = new ObservableCollection<string>(
                         typeof(MpContentSortType)
-                        .EnumToLabels());
+                        .EnumToUiStrings());
                 }
                 return _sortLabels;
             }

@@ -233,11 +233,8 @@
         "paramId": 10,
         "isRequired": true,
         "isVisible": false,
-        "values": [
-          {
-            "value": "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"
-          }
-        ]
+        "isExecuteParameter": true,
+        "isSharedValue": true
       }
     ]
   }

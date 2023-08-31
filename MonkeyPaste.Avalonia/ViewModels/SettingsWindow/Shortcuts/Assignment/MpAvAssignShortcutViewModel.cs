@@ -115,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (_routingTypes == null) {
                     _routingTypes = new ObservableCollection<string>(
-                        typeof(MpRoutingType).EnumToLabels(hideFirst: true));
+                        typeof(MpRoutingType).EnumToUiStrings(hideFirst: true));
                 }
                 return _routingTypes;
             }

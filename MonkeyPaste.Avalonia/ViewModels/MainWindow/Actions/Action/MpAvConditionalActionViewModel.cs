@@ -3,7 +3,6 @@
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -74,10 +73,10 @@ namespace MonkeyPaste.Avalonia {
                                 values =
                                     typeof(MpComparisonOperatorType)
                                     .GetEnumNames()
-                                    .Select(x=>
+                                    .Select((x,idx)=>
                                         new MpPluginParameterValueFormat() {
-                                            label = x.ToLabel(),
-                                            value = x
+                                            label = x.ToEnum<MpComparisonOperatorType>().EnumToUiString(),
+                                            value = x // NOTE!! 
                                         }
                                     ).ToList()
                             },new MpParameterFormat() {

@@ -77,14 +77,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void ShowDevTools() {
-#if !DEBUG
-            return;
-#endif
+#if DEBUG
             // focus this control so its the dev tools focus
             this.Focus();
             MpConsole.WriteLine($"Showing dev tools with gesture '{MpAvWindow.DefaultDevToolOptions.Gesture.ToString()}'");
             Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(MpAvWindow.DefaultDevToolOptions.Gesture.ToString());
-
+#endif
         }
 
         public void SendMessage(string msgJsonBase64Str) {

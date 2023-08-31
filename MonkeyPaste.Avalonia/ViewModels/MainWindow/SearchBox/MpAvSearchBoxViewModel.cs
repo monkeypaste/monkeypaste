@@ -74,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
 
+
                 if (Mp.Services.FocusMonitor.FocusElement is Control c && (
                     c.TryGetSelfOrAncestorDataContext<MpAvSearchBoxViewModel>(out _) ||
                     c.TryGetSelfOrAncestorDataContext<MpAvSearchCriteriaItemCollectionViewModel>(out _))) {
@@ -278,7 +279,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task WaitForUnexpandAsync() {
-            //DateTime? no_focus_start_dt = null;
             while (true) {
                 if (!IsExpanded) {
                     return;
@@ -287,6 +287,7 @@ namespace MonkeyPaste.Avalonia {
                     IsMultipleMatches ||
                     IsDragExpanded ||
                     SearchFilterCollectionViewModel.IsPopupMenuOpen ||
+                    MpAvSearchCriteriaItemCollectionViewModel.Instance.IsCriteriaWindowOpen ||
                     (MpAvSearchCriteriaItemCollectionViewModel.Instance.IsExpanded &&
                      !MpAvSearchCriteriaItemCollectionViewModel.Instance.IsCriteriaWindowOpen)) {
                     await Task.Delay(1000);

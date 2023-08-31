@@ -91,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
                                 .Where(x=>x != MpActionType.None && x != MpActionType.Trigger)
                                 .Select(x =>
                                     new MpAvMenuItemViewModel() {
-                                        Header = x.EnumToLabel(),
+                                        Header = x.EnumToUiString(),
                                         IconResourceKey = GetDefaultActionIconResourceKey(x),
                                         IconTintHexStr = MpAvActionViewModelBase.GetActionHexColor(x),
                                         Command = AddChildActionCommand,
