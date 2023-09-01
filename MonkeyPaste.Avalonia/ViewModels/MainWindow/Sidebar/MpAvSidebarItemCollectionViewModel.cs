@@ -111,6 +111,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        bool HasSetStartupSelection { get; set; } = false;
         #endregion
 
         #endregion
@@ -221,6 +222,14 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(MouseModeFlyoutPlacement));
                     OnPropertyChanged(nameof(MouseModeHorizontalOffset));
                     OnPropertyChanged(nameof(MouseModeVerticalOffset));
+                    break;
+                case MpMessageType.MainWindowOpened:
+                    if (MpAvMainWindowViewModel.Instance.IsMainWindowInHiddenLoadState ||
+                        HasSetStartupSelection) {
+                        break;
+                    }
+                    SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
+                    HasSetStartupSelection = true;
                     break;
             }
         }

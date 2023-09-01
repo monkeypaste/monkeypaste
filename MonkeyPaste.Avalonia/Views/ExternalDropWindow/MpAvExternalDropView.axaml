@@ -40,6 +40,9 @@
             <Grid ColumnDefinitions="0.5*,0.5*"
                   Grid.Row="0"
                   HorizontalAlignment="Center">
+              
+              <!-- TARGET APP ICON -->
+              
                 <Image Grid.Column="0"
                        Margin="10"
                        Height="30"
@@ -48,6 +51,9 @@
                        Width="{Binding $self.Bounds.Height}"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Stretch" />
+
+              <!-- TARGET APP NAME -->
+              
                 <TextBlock x:Name="FinishDropTextBlock"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
@@ -59,6 +65,9 @@
                            Text="{Binding DropAppName}" />
 
             </Grid>
+
+          <!-- HIDE WIDGET BUTTON (SHOULD BE HIDDEN WHEN NOT WITHIN DROP WIZARD) -->
+          
             <Button x:Name="HideDropMenuBorder"
                     Classes="noBg noHoverBg square"
                     local:MpAvDropExtension.IsEnabled="True"

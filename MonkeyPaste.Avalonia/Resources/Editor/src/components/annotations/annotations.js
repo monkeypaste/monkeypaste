@@ -66,7 +66,7 @@ function getAnnotationRect(ann, actual_size) {
 
 	let ann_rect = cleanRect(ann);
 	// scale to editor
-	actual_size = actual_size == null ? { width: globals.ContentImageWidth, height: globals.ContentImageHeight } : actual_size;
+	actual_size = actual_size == null ? { width: globals.ContentImageNaturalWidth, height: globals.ContentImageNaturalHeight } : actual_size;
 
 	let xr = getContentWidth() / actual_size.width;
 	let yr = getContentHeight() / actual_size.height;

@@ -418,7 +418,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Shortcuts
-        public bool ShowExternalDropWidget { get; set; } = false;
+        public bool IsDropWidgetEnabled { get; set; } = false;
 
         public bool ShowMainWindowOnDragToScreenTop { get; set; } = true;
         public bool DoShowMainWindowWithMouseEdgeAndScrollDelta { get; set; } = true;

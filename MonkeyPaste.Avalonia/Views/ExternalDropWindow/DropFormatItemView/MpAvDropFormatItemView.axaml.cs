@@ -12,6 +12,12 @@ namespace MonkeyPaste.Avalonia {
         public MpAvDropFormatItemView() {
             AvaloniaXamlLoader.Load(this);
 
+            InitDnd();
+        }
+
+        #region Drop
+
+        private void InitDnd() {
             DragDrop.SetAllowDrop(this, true);
             this.AddHandler(DragDrop.DragEnterEvent, DragEnter);
             this.AddHandler(DragDrop.DragOverEvent, DragOver);
@@ -20,8 +26,6 @@ namespace MonkeyPaste.Avalonia {
 
             this.GetVisualDescendants<Control>(false).ForEach(x => DragDrop.SetAllowDrop(x, false));
         }
-
-        #region Drop
 
         #region Drop Events
 

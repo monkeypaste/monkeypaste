@@ -17,9 +17,9 @@ function initDefaults_ext(defaultsMsgStr_base64) {
 	initDefaults(defaults_obj);
 }
 
-function loadContent_ext(loadContentMsgStr_base64) {
+async function loadContentAsync_ext(loadContentMsgStr_base64) {
 	// input 'MpQuillLoadContentRequestMessage'
-	//log('loadContent_ext: ' + loadContentMsgStr_base64);
+	//log('loadContentAsync_ext: ' + loadContentMsgStr_base64);
 
 	let req = toJsonObjFromBase64Str(loadContentMsgStr_base64);
 
@@ -44,7 +44,7 @@ function loadContent_ext(loadContentMsgStr_base64) {
 		paste_button_info = toJsonObjFromBase64Str(req.pasteButtonInfoFragment);
 	}
 
-	loadContent(
+	await loadContentAsync(
 		req.isReadOnly,
 		req.isSubSelectionEnabled,
 		req.contentHandle,
@@ -78,7 +78,7 @@ function contentChanged_ext(contentChangedMsgStr_base64) {
 	log('incoming: ');
 	log(msg.itemData);
 	log('');
-	loadContentData(msg.itemData);
+	loadContentDataAsync(msg.itemData);
 }
 
 function hostIsFocusedChanged_ext(hostIsFocusedMsgStr_base64) {

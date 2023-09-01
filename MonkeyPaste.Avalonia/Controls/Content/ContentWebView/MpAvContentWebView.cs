@@ -1289,7 +1289,7 @@ namespace MonkeyPaste.Avalonia {
             var loadContentMsg = GetLoadContentMessage(isSearchEnabled);
             string msgStr = loadContentMsg.SerializeJsonObjectToBase64();
 
-            SendMessage($"loadContent_ext('{msgStr}')");
+            SendMessage($"loadContentAsync_ext('{msgStr}')");
         }
 
         private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {

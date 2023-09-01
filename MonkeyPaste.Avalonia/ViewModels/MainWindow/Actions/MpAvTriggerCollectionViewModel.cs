@@ -1,16 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -420,7 +417,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Items));
 
             // restore all blocks until core fully loaded (needs to wait to attach shortcuts or any other later loaded components)
-            //RestoreAllEnabledAsync().FireAndForgetSafeAsync();
+            RestoreAllEnabledAsync().FireAndForgetSafeAsync();
 
             if (Items.Count() > 0) {
                 // select most recent action

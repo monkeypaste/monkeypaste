@@ -367,16 +367,16 @@
     <value>Copied {0}</value>
   </data>
   <data name="ClipTileDetailDimFiles" xml:space="preserve">
-    <value>({0} files | {1} MBs</value>
+    <value>{0} files | {1} MBs</value>
   </data>
   <data name="ClipTileDetailDimImage" xml:space="preserve">
     <value>{0} x {1} px</value>
   </data>
   <data name="ClipTileDetailDimText" xml:space="preserve">
-    <value>({0} chars | {1} lines</value>
+    <value>{0} chars | {1} lines</value>
   </data>
   <data name="ClipTileDetailUsage" xml:space="preserve">
-    <value>({0} copies | {1} pastes</value>
+    <value>{0} copies | {1} pastes</value>
   </data>
   <data name="ActionMoveLabel" xml:space="preserve">
     <value>Move</value>

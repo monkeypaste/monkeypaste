@@ -1,30 +1,35 @@
 
 // #region Life Cycle
-function loadImageContent(itemDataStr) {
+async function loadImageContentAsync(itemDataStr, annotationsJsonStr) {
 	// itemData must remain base64 image string
 	hideAllToolbars();
 	enableReadOnly();
 	disableSubSelection();
 
-	globals.ContentImageWidth = -1;
-	globals.ContentImageHeight = -1;
+	globals.ContentImageNaturalWidth = -1;
+	globals.ContentImageNaturalHeight = -1;
 
 	let img = document.createElement('img');
 	img.classList.add('content-image');
-	img.setAttribute('src', `data:image/png;base64,${itemDataStr}`);	
+	img.setAttribute('src', `data:image/png;base64,${itemDataStr}`);
+	img.onload = function (e) {
+		globals.ContentImageNaturalWidth = img.naturalWidth;
+		globals.ContentImageNaturalHeight = img.naturalHeight;
+	}
 
 	let p = document.createElement('p');
 	p.classList.add('ql-align-center');
 	p.appendChild(img);
 
-	//let img_html = `<p class="ql-align-center"><img src="data:image/png;base64,${itemDataStr}"></p>`;
-	//setRootHtml(img_html);
 	setRootHtml('');
 	getEditorElement().replaceChild(p, getEditorElement().firstChild);
 
 	globals.ContentClassAttrb.add(getEditorElement().firstChild.firstChild, 'image');
 	updateImageContentSizeAndPosition();
-
+	updateQuill();
+	while (!isContentImageDimsSet()) {
+		await delay(100);
+	}
 }
 // #endregion Life Cycle
 
@@ -39,39 +44,18 @@ function getContentImageElement() {
 }
 
 function getImageContentWidth() {
-	if (globals.ContentImageWidth < 0) {
+	if (globals.ContentImageNaturalWidth < 0) {
 		log('WARNING! image size not populated, using fallback width...');
 		return getContentWidth();
 	}
-	return globals.ContentImageWidth;
+	return globals.ContentImageNaturalWidth;
 }
 function getImageContentHeight() {
-	if (globals.ContentImageHeight < 0) {
+	if (globals.ContentImageNaturalHeight < 0) {
 		log('WARNING! image size not populated, using fallback height...');
 		return getContentHeight();
 	}
-	return globals.ContentImageHeight;
-}
-
-function populateContentImageDataSize(annotationsJsonStr, is_reload) {
-	if (globals.ContentImageWidth >= 0 &&
-		globals.ContentImageHeight >= 0) {
-		log('image size already populated, ignoring request');
-		return;
-	}
-
-	globals.ContentImageWidth = 0;
-	globals.ContentImageHeight = 0;
-
-	let tmp = document.createElement('img');
-	tmp.onload = function (e) {
-		globals.ContentImageWidth = tmp.width;
-		globals.ContentImageHeight = tmp.height;
-
-		loadAnnotations(annotationsJsonStr);
-		log('img size w: ' + globals.ContentImageWidth + ' h: ' + globals.ContentImageHeight);
-	}
-	tmp.setAttribute('src', 'data:image/png;base64,' + getContentData());
+	return globals.ContentImageNaturalHeight;
 }
 
 function getImageContentData() {
@@ -90,6 +74,7 @@ function getEncodedImageContentText() {
 function getDecodedImageContentText(encoded_text) {
 	return encoded_text;
 }
+
 // #endregion Getters
 
 // #region Setters
@@ -99,8 +84,16 @@ function getDecodedImageContentText(encoded_text) {
 // #region State
 
 function resetContentImage() {
-	globals.ContentImageWidth = -1;
-	globals.ContentImageHeight = -1;
+	globals.ContentImageNaturalWidth = -1;
+	globals.ContentImageNaturalHeight = -1;
+}
+
+function isContentImageDimsSet() {
+	if (globals.ContentImageNaturalWidth > 0 &&
+		globals.ContentImageNaturalHeight > 0) {
+		return true;
+	}
+	return false;
 }
 
 // #endregion State

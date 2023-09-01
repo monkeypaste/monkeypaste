@@ -1,19 +1,15 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using static SQLite.SQLite3;
 
 
 namespace MonkeyPaste.Avalonia {
@@ -37,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const bool IS_DROP_WIDGET_HIDDEN = true;
+        public const bool IS_DROP_WIDGET_HIDDEN = false;
         #endregion
 
         #region Statics
@@ -71,9 +67,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-
-        public MpAvAppViewModel DropAppViewModel { get; set; }
-
         #endregion
 
         #region Appearance
@@ -90,13 +83,19 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        MpPortableProcessInfo CurDropProcessInfo { get; set; }
 
         public bool CanEnableDropWidget =>
             Mp.Services.PlatformInfo.IsDesktop && !IS_DROP_WIDGET_HIDDEN;
-        public bool IsDropWidgetEnabled =>
-            CanEnableDropWidget &&
-            MpAvPrefViewModel.Instance.ShowExternalDropWidget;
+
+        public bool IsDropWidgetEnabled {
+            get => MpAvPrefViewModel.Instance.IsDropWidgetEnabled;
+            private set {
+                if (MpAvPrefViewModel.Instance.IsDropWidgetEnabled != value) {
+                    MpAvPrefViewModel.Instance.IsDropWidgetEnabled = value;
+                    OnPropertyChanged(nameof(IsDropWidgetEnabled));
+                }
+            }
+        }
 
         public bool HasUserToggledAnyHandlers { get; set; } = false;
         public double TotalRememberWaitTimeS =>
@@ -132,10 +131,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Model
-
-        public IDataObject DragDataObject =>
-            MpAvContentWebViewDragHelper.DragDataObject;
-
+        MpPortableProcessInfo CurDropProcessInfo { get; set; }
         #endregion
 
         #endregion
@@ -273,8 +269,6 @@ namespace MonkeyPaste.Avalonia {
             }
             _curDropTargetTimer.Start();
         }
-
-
         private void StopDropTargetListener() {
             if (_curDropTargetTimer == null) {
                 return;
@@ -283,7 +277,6 @@ namespace MonkeyPaste.Avalonia {
             _lastGlobalMousePoint = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
 
         }
-
         private void _curDropTargetTimer_Tick(object sender, EventArgs e) {
             if (!Dispatcher.UIThread.CheckAccess()) {
                 Dispatcher.UIThread.Post(() => _curDropTargetTimer_Tick(sender, e));
@@ -523,8 +516,8 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ToggleIsDropWidgetEnabledCommand => new MpCommand(
             () => {
-                MpAvPrefViewModel.Instance.ShowExternalDropWidget = !MpAvPrefViewModel.Instance.ShowExternalDropWidget;
-                OnPropertyChanged(nameof(IsDropWidgetEnabled));
+                IsDropWidgetEnabled = !IsDropWidgetEnabled;
+
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
                     title: "MODE CHANGED",
                     body: $"Drop Wizard: {(IsDropWidgetEnabled ? "ON" : "OFF")}",

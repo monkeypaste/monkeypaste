@@ -44,6 +44,7 @@
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <AvaloniaXaml Remove="Controls\Content\TextElement\**" />
     <AvaloniaXaml Remove="Interfaces\Content\**" />
+    <AvaloniaXaml Remove="Resources\UiStrings\Baselines\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -76,6 +77,7 @@
     <Compile Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Compile Remove="Controls\Content\TextElement\**" />
     <Compile Remove="Interfaces\Content\**" />
+    <Compile Remove="Resources\UiStrings\Baselines\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -108,6 +110,7 @@
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <EmbeddedResource Remove="Controls\Content\TextElement\**" />
     <EmbeddedResource Remove="Interfaces\Content\**" />
+    <EmbeddedResource Remove="Resources\UiStrings\Baselines\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -141,6 +144,7 @@
     <None Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <None Remove="Controls\Content\TextElement\**" />
     <None Remove="Interfaces\Content\**" />
+    <None Remove="Resources\UiStrings\Baselines\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -172,6 +176,7 @@
     <Page Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Page Remove="Controls\Content\TextElement\**" />
     <Page Remove="Interfaces\Content\**" />
+    <Page Remove="Resources\UiStrings\Baselines\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -1381,16 +1386,6 @@
   
   
   <ItemGroup>
-    <Compile Update="Resources\UiStrings\Baselines\EnumUiStrings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>EnumUiStrings.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\UiStrings\Baselines\UiStrings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>UiStrings.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\UiStrings\EnumUiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -1711,24 +1706,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Resources\UiStrings\Baselines\EnumUiStrings.resx" />
-    <EmbeddedResource Remove="Resources\UiStrings\Baselines\UiStrings.resx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Resources\UiStrings\Baselines\EnumUiStrings.resx">
-      <CustomToolNamespace></CustomToolNamespace>
-      <LastGenOutput>EnumUiStrings.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </None>
-    <None Include="Resources\UiStrings\Baselines\UiStrings.resx">
-      <CustomToolNamespace></CustomToolNamespace>
-      <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="CefNet">
       <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
     </Reference>
@@ -1748,6 +1725,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumUiStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\UiStrings\test.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -1757,6 +1735,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   

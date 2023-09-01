@@ -332,7 +332,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     //# copies/# pastes
                     case MpCopyItemDetailType.UsageStats:
-                        detailText = string.Format(UiStrings.ClipTileDetailDimFiles, CopyCount, PasteCount);
+                        detailText = string.Format(UiStrings.ClipTileDetailUsage, CopyCount, PasteCount);
                         break;
                     default:
                         break;
@@ -507,8 +507,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPlaceholder =>
            CopyItem == null &&
            !IsPinPlaceholder;
-
-        public bool IsPreviewPlaceholder { get; set; }
 
         public bool IsAnyPlaceholder =>
             IsPlaceholder ||
@@ -1174,7 +1172,6 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 // normal tile (or placeholder)
                 PinPlaceholderCopyItemId = 0;
-                IsPreviewPlaceholder = false;
                 // NOTE FileItems are init'd before ciid is set so Items are busy when WebView is loading content
                 FileItemCollectionViewModel.InitializeAsync(ci).FireAndForgetSafeAsync(this);
 
@@ -2004,7 +2001,7 @@ namespace MonkeyPaste.Avalonia {
                 BoundWidth = uw;
             } else {
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueWidth_ById(CopyItemId, QueryOffsetIdx);
-                BoundWidth = !IsPreviewPlaceholder ? MinWidth : 0;
+                BoundWidth = MinWidth;
             }
 
             if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueHeight_ById(CopyItemId, QueryOffsetIdx, out double uh) &&
@@ -2012,7 +2009,7 @@ namespace MonkeyPaste.Avalonia {
                 BoundHeight = uh;
             } else {
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueHeight_ById(CopyItemId, QueryOffsetIdx);
-                BoundHeight = !IsPreviewPlaceholder ? MinHeight : 0;
+                BoundHeight = MinHeight;
             }
 
             IsTitleReadOnly = !MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId, QueryOffsetIdx);

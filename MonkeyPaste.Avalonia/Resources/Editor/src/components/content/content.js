@@ -14,7 +14,7 @@
 
 // #region Life Cycle
 
-function loadContent(
+async function loadContentAsync(
 	isContentReadOnly,
 	isContentSubSelectionEnabled,
 	contentHandle,
@@ -69,7 +69,7 @@ function loadContent(
 
 		deactivateFindReplace(false);
 
-		loadContentData(contentData);
+		await loadContentDataAsync(contentData);
 
 		updateQuill();
 		if (!is_reload) {
@@ -98,12 +98,12 @@ function loadContent(
 			globals.quill.enable(false);
 		}
 
-		if (globals.ContentItemType == 'Image') {
-			// NOTE pass annotations so load after image dimensions are known
-			populateContentImageDataSize(annotationsJsonStr);
-		} else {
+		//if (globals.ContentItemType == 'Image') {
+		//	// NOTE pass annotations so load after image dimensions are known
+		//	populateContentImageDataSize(annotationsJsonStr);
+		//} else {
 			loadAnnotations(annotationsJsonStr);
-		}
+		//}
 
 		updateAllElements();
 		updateQuill();
@@ -394,12 +394,12 @@ function appendContentData(data) {
 	}
 }
 
-function loadContentData(contentData) {
+async function loadContentDataAsync(contentData) {
 	// enusre globals.IsLoaded is false so msg'ing doesn't get clogged up
 	setEditorIsLoaded(false);
 
 	if (globals.ContentItemType == 'Image') {
-		loadImageContent(contentData);
+		await loadImageContentAsync(contentData);
 	} else if (globals.ContentItemType == 'FileList') {
 		loadFileListContent(contentData);
 	} else if (globals.ContentItemType == 'Text') {

@@ -39,8 +39,7 @@ namespace MonkeyPaste.Avalonia {
         private string[] _hiddenParamIds = new string[] {
             nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup),
             nameof(MpAvPrefViewModel.Instance.UserLanguageCode),
-            nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft),
-            nameof(MpAvPrefViewModel.Instance.ShowExternalDropWidget)
+            nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft)
         };
 
         private Dictionary<object, Action<MpAvPluginParameterItemView>> _runtimeParamAttachActions;
@@ -842,19 +841,6 @@ namespace MonkeyPaste.Avalonia {
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.ShowExternalDropWidget),
-                                            description = "The drop widget is a floating menu showing while drag and dropping out of Monkey Paste that allows on-demand format conversion onto your drop target by hovering on or off of currently available formats. <b>Be aware conversion may not be an acceptable format for the target application so do not select 'YES' and remember the settings!</b>",
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Drop Widget",
-                                            values =new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpAvPrefViewModel.Instance.ShowExternalDropWidget.ToString()
-                                                },
-                                            }
-                                        },
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop),
                                             description = "This helps fluidly allow dropping data into Monkey paste from another application without extra fumbling with window placement by dragging data to the top of the screen which will activate Monkey Paste and allow drop.",

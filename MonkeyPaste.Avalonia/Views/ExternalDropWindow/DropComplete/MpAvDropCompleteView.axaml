@@ -1,16 +1,16 @@
 <local:MpAvUserControl x:Class="MonkeyPaste.Avalonia.MpAvDropCompleteView"
-             xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:local="using:MonkeyPaste.Avalonia"
-             x:DataType="local:MpAvExternalDropWindowViewModel"
-             mc:Ignorable="d"
-             d:DesignWidth="800"
-             d:DesignHeight="450"
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch">
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:DataType="local:MpAvExternalDropWindowViewModel"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch">
     <local:MpAvUserControl.Styles>
         <Style Selector="Button#DoNotRememberDropInfoButton /template/ ContentPresenter">
             <Setter Property="Background"
@@ -44,6 +44,9 @@
           VerticalAlignment="Stretch"
           RowDefinitions="Auto,100,50"
           ColumnDefinitions="0.5*,0.5*">
+
+        <!--  REMEMBER LABEL  -->
+
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
                    Grid.ColumnSpan="2"
@@ -53,9 +56,11 @@
                    HorizontalAlignment="Stretch"
                    VerticalAlignment="Stretch"
                    TextAlignment="Center"
-                   TextWrapping="WrapWithOverflow">
-            Remember Drop Settings For:
-        </TextBlock>
+                   TextWrapping="WrapWithOverflow"
+                   Text="Remember Drop Settings For:" />
+
+        <!--  TARGET APP ICON  -->
+
         <Image Grid.Row="1"
                Grid.Column="0"
                Margin="10"
@@ -64,6 +69,9 @@
                Width="{Binding $self.Bounds.Height}"
                HorizontalAlignment="Right"
                VerticalAlignment="Stretch" />
+
+        <!--  TARGET APP NAME  -->
+
         <TextBlock x:Name="FinishDropTextBlock"
                    Grid.Row="1"
                    Grid.Column="1"
@@ -75,6 +83,9 @@
                    FontSize="16"
                    Foreground="White"
                    Text="{Binding DropAppName}" />
+
+        <!--  FORGET BUTTON (NO)  -->
+
         <Button x:Name="DoNotRememberDropInfoButton"
                 Grid.Row="2"
                 Grid.Column="0"
@@ -86,8 +97,14 @@
                 VerticalContentAlignment="Center"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
+            <Button.Resources>
+                <Thickness x:Key="ButtonPadding">0,0,0,0</Thickness>
+            </Button.Resources>
             <TextBlock Text="NO" />
         </Button>
+
+        <!--  REMEMBER BUTTON (YES)  -->
+
         <Button x:Name="RememberDropInfoButton"
                 Grid.Row="2"
                 Grid.Column="1"
@@ -96,8 +113,14 @@
                 VerticalContentAlignment="Stretch"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
+            <Button.Resources>
+                <Thickness x:Key="ButtonPadding">0,0,0,0</Thickness>
+            </Button.Resources>
             <Grid HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
+
+                <!--  AUTO YES PROGRESS RECT  -->
+
                 <Rectangle x:Name="RememberTimeRectangle"
                            Fill="Lime"
                            HorizontalAlignment="Left"

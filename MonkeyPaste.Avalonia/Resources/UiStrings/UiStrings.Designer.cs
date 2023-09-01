@@ -124,7 +124,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ({0} files | {1} MBs.
+        ///   Looks up a localized string similar to {0} files | {1} MBs.
         /// </summary>
         public static string ClipTileDetailDimFiles {
             get {
@@ -142,7 +142,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ({0} chars | {1} lines.
+        ///   Looks up a localized string similar to {0} chars | {1} lines.
         /// </summary>
         public static string ClipTileDetailDimText {
             get {
@@ -151,7 +151,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ({0} copies | {1} pastes.
+        ///   Looks up a localized string similar to {0} copies | {1} pastes.
         /// </summary>
         public static string ClipTileDetailUsage {
             get {

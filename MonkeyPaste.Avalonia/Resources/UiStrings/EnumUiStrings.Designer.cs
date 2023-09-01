@@ -376,6 +376,60 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Annotation.
+        /// </summary>
+        public static string MpContentOptionType_Annotation {
+            get {
+                return ResourceManager.GetString("MpContentOptionType_Annotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color.
+        /// </summary>
+        public static string MpContentOptionType_Color {
+            get {
+                return ResourceManager.GetString("MpContentOptionType_Color", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content.
+        /// </summary>
+        public static string MpContentOptionType_Content {
+            get {
+                return ResourceManager.GetString("MpContentOptionType_Content", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string MpContentOptionType_None {
+            get {
+                return ResourceManager.GetString("MpContentOptionType_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string MpContentOptionType_Title {
+            get {
+                return ResourceManager.GetString("MpContentOptionType_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type Specific.
+        /// </summary>
+        public static string MpContentOptionType_TypeSpecific {
+            get {
+                return ResourceManager.GetString("MpContentOptionType_TypeSpecific", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to App.
         /// </summary>
         public static string MpContentQueryPropertyGroupType_App {
@@ -1875,6 +1929,42 @@ namespace MonkeyPaste.Avalonia {
         public static string MpSettingsFrameType_Window {
             get {
                 return ResourceManager.GetString("MpSettingsFrameType_Window", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string MpShortcutRoutingProfileType_Custom {
+            get {
+                return ResourceManager.GetString("MpShortcutRoutingProfileType_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global.
+        /// </summary>
+        public static string MpShortcutRoutingProfileType_Global {
+            get {
+                return ResourceManager.GetString("MpShortcutRoutingProfileType_Global", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal.
+        /// </summary>
+        public static string MpShortcutRoutingProfileType_Internal {
+            get {
+                return ResourceManager.GetString("MpShortcutRoutingProfileType_Internal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string MpShortcutRoutingProfileType_None {
+            get {
+                return ResourceManager.GetString("MpShortcutRoutingProfileType_None", resourceCulture);
             }
         }
         

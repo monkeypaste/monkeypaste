@@ -151,17 +151,11 @@
             </Setter>
         </Style>
 
-        <!--  PREVIEW PLACEHOLDER  -->
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.preview Grid#TileGrid">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
-                          Classes.preview="{Binding IsPreviewPlaceholder}"
                           Classes.popout="{Binding IsWindowOpen}"
                           Classes.transOpen="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen}"
                           Classes.hasVertContentScroll="{Binding IsVerticalScrollbarVisibile}"
