@@ -4,9 +4,11 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAppClipboardFormatInfoViewModel :
-        MpAvViewModelBase<MpAppClipboardFormatInfoCollectionViewModel>,
-        MpISelectableViewModel {
+    public class MpAvAppOleFormatInfoViewModel :
+        MpAvViewModelBase<MpAvAppOleFormatInfoCollectionViewModel> {
+
+        #region Interfaces
+        #endregion
 
         #region Properties
 
@@ -67,34 +69,32 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public string ClipboardFormat {
+        public string FormatName {
             get {
-                if (AppClipboardFormatInfo == null) {
+                if (AppOleFormatInfo == null) {
                     return string.Empty;
                 }
-                return AppClipboardFormatInfo.FormatType;
+                return AppOleFormatInfo.FormatName;
             }
             set {
-                if (ClipboardFormat != value) {
-                    AppClipboardFormatInfo.FormatType = value;
+                if (FormatName != value) {
+                    AppOleFormatInfo.FormatName = value;
                     HasModelChanged = true;
-                    OnPropertyChanged(nameof(ClipboardFormat));
+                    OnPropertyChanged(nameof(FormatName));
                 }
             }
         }
 
-
-
         public string FormatInfo {
             get {
-                if (AppClipboardFormatInfo == null) {
+                if (AppOleFormatInfo == null) {
                     return string.Empty;
                 }
-                return AppClipboardFormatInfo.FormatInfo;
+                return AppOleFormatInfo.FormatInfo;
             }
             set {
                 if (FormatInfo != value) {
-                    AppClipboardFormatInfo.FormatInfo = value;
+                    AppOleFormatInfo.FormatInfo = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(FormatInfo));
                 }
@@ -103,59 +103,59 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IgnoreFormat {
             get {
-                if (AppClipboardFormatInfo == null) {
+                if (AppOleFormatInfo == null) {
                     return false;
                 }
-                return AppClipboardFormatInfo.IgnoreFormat;
+                return AppOleFormatInfo.IgnoreFormat;
             }
             set {
                 if (IgnoreFormat != value) {
-                    AppClipboardFormatInfo.IgnoreFormat = value;
+                    AppOleFormatInfo.IgnoreFormat = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(IgnoreFormat));
                 }
             }
         }
 
-        public int AppInteropSettingId {
+        public int AppOleInfoId {
             get {
-                if (AppClipboardFormatInfo == null) {
+                if (AppOleFormatInfo == null) {
                     return 0;
                 }
-                return AppClipboardFormatInfo.Id;
+                return AppOleFormatInfo.Id;
             }
         }
 
         public int AppId {
             get {
-                if (AppClipboardFormatInfo == null) {
+                if (AppOleFormatInfo == null) {
                     return 0;
                 }
-                return AppClipboardFormatInfo.AppId;
+                return AppOleFormatInfo.AppId;
             }
         }
 
-        public MpAppClipboardFormatInfo AppClipboardFormatInfo { get; set; }
+        public MpAppOleFormatInfo AppOleFormatInfo { get; set; }
 
         #endregion
 
         #endregion
 
         #region Constructors
-        public MpAppClipboardFormatInfoViewModel() : base(null) { }
+        public MpAvAppOleFormatInfoViewModel() : base(null) { }
 
-        public MpAppClipboardFormatInfoViewModel(MpAppClipboardFormatInfoCollectionViewModel parent) : base(parent) {
+        public MpAvAppOleFormatInfoViewModel(MpAvAppOleFormatInfoCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAppClipboardFormatInfoViewModel_PropertyChanged;
         }
 
         #endregion
 
         #region Public Methods
-        public async Task InitializeAsync(MpAppClipboardFormatInfo ais) {
+        public async Task InitializeAsync(MpAppOleFormatInfo ais) {
             IsBusy = true;
 
             await Task.Delay(1);
-            AppClipboardFormatInfo = ais;
+            AppOleFormatInfo = ais;
 
             IsBusy = false;
         }
@@ -173,8 +173,9 @@ namespace MonkeyPaste.Avalonia {
                             break;
                         }
                         Task.Run(async () => {
-                            await AppClipboardFormatInfo.WriteToDatabaseAsync();
+                            await AppOleFormatInfo.WriteToDatabaseAsync();
                             HasModelChanged = false;
+
                         });
                     }
                     break;
@@ -214,6 +215,7 @@ namespace MonkeyPaste.Avalonia {
                     return MpCopyItemType.None;
             }
         }
+
         #endregion
     }
 }

@@ -195,11 +195,11 @@ namespace MonkeyPaste {
 
         #endregion MpApp
 
-        #region MpAppInteropSetting 
+        #region MpAppOleFormatInfo 
 
-        public static async Task<List<MpAppClipboardFormatInfo>> GetAppClipboardFormatInfosByAppIdAsync(int appId) {
-            string query = $"select * from MpAppClipboardFormatInfo where fk_MpAppId=?";
-            var result = await MpDb.QueryAsync<MpAppClipboardFormatInfo>(query, appId);
+        public static async Task<List<MpAppOleFormatInfo>> GetAppOleFormatInfosByAppIdAsync(int appId) {
+            string query = $"select * from MpAppOleFormatInfo where fk_MpAppId=?";
+            var result = await MpDb.QueryAsync<MpAppOleFormatInfo>(query, appId);
             return result;
         }
 

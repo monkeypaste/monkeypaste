@@ -10,7 +10,7 @@
                        mc:Ignorable="d"
                        d:DesignWidth="800"
                        d:DesignHeight="450"
-                       x:Class="MonkeyPaste.Avalonia.MpAvDropFormatItemView">
+                       x:Class="MonkeyPaste.Avalonia.MpAvOleFormatItemView">
     <local:MpAvUserControl.Styles>
         <!--<Style Selector="Border#OuterBorder.itemEnabled.itemAvailable">-->
         <Style Selector="Border#OuterBorder.itemEnabled">
@@ -28,15 +28,19 @@
         </Style>-->
     </local:MpAvUserControl.Styles>
     <!--  Classes.itemAvailable="{Binding IsFormatOnSourceDragObject}"  -->
-    <Border x:Name="OuterBorder"
-            Classes.itemEnabled="{Binding IsEnabled}"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Width="65"
-            Height="65"
-            Background="Transparent"
-            CornerRadius="5"
-            BorderThickness="1">
+    <ToggleButton x:Name="OuterBorder"
+                  local:MpAvDropExtension.IsEnabled="True"
+                  local:MpAvDropExtension.DropEffects="Link"
+                  local:MpAvDropExtension.DragEnterCommand="{Binding TogglePresetIsEnabledCommand}"
+                  local:MpAvDropExtension.DragEnterCommandParameter="{Binding $self}"
+                  IsChecked="{Binding IsEnabled, Mode=OneWay}"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Width="65"
+                  Height="65"
+                  Background="Transparent"
+                  CornerRadius="5"
+                  BorderThickness="1">
         <Grid HorizontalAlignment="Stretch"
               IsHitTestVisible="False"
               DragDrop.AllowDrop="False"
@@ -64,5 +68,5 @@
                        FontSize="12"
                        Text="{Binding Parent.Title}" />
         </Grid>
-    </Border>
+    </ToggleButton>
 </local:MpAvUserControl>

@@ -6,7 +6,6 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -344,7 +343,13 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-
+        public MpAvClipboardFormatPresetViewModel FindFormatPreset(string pluginGuid, string formatName, bool isReader) {
+            return
+                AllPresets.FirstOrDefault(x =>
+                    x.Parent.PluginGuid == pluginGuid &&
+                    x.IsReader == isReader &&
+                    x.ClipboardFormat.clipboardName.ToLower() == formatName.ToLower());
+        }
 
         #endregion
 

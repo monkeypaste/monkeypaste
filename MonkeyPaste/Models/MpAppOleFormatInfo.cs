@@ -4,19 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpAppClipboardFormatInfo : MpDbModelBase {
+    public class MpAppOleFormatInfo : MpDbModelBase {
         [PrimaryKey, AutoIncrement]
-        [Column("pk_MpAppClipboardFormatInfoId")]
+        [Column("pk_MpAppOleFormatInfoId")]
         public override int Id { get; set; }
 
-        [Column("MpAppClipboardFormatInfoGuid")]
+        [Column("MpAppOleFormatInfoGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
 
 
-        public string FormatType { get; set; }
+        public string FormatName { get; set; }
 
         public string FormatInfo { get; set; }
 
@@ -31,7 +31,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public Guid AppClipboardFormatInfoGuid {
+        public Guid AppOleFormatInfoGuid {
             get {
                 if (string.IsNullOrEmpty(Guid)) {
                     return System.Guid.Empty;
@@ -43,7 +43,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static async Task<MpAppClipboardFormatInfo> CreateAsync(
+        public static async Task<MpAppOleFormatInfo> CreateAsync(
             int appId = 0,
             string format = "",
             string formatInfo = "",
@@ -55,9 +55,9 @@ namespace MonkeyPaste {
             if (appId == 0) {
                 throw new Exception("Must have app id");
             }
-            var dupCheck = await MpDataModelProvider.GetAppClipboardFormatInfosByAppIdAsync(appId);
-            if (dupCheck.Any(x => x.FormatType.ToLower() == format.ToLower())) {
-                var dup = dupCheck.FirstOrDefault(x => x.FormatType.ToLower() == format.ToLower());
+            var dupCheck = await MpDataModelProvider.GetAppOleFormatInfosByAppIdAsync(appId);
+            if (dupCheck.Any(x => x.FormatName.ToLower() == format.ToLower())) {
+                var dup = dupCheck.FirstOrDefault(x => x.FormatName.ToLower() == format.ToLower());
                 dup.WasDupOnCreate = true;
                 dup.FormatInfo = formatInfo;
                 dup.IgnoreFormat = ignoreFormat;
@@ -66,10 +66,10 @@ namespace MonkeyPaste {
                 }
                 return dup;
             }
-            var ais = new MpAppClipboardFormatInfo() {
-                AppClipboardFormatInfoGuid = System.Guid.NewGuid(),
+            var ais = new MpAppOleFormatInfo() {
+                AppOleFormatInfoGuid = System.Guid.NewGuid(),
                 AppId = appId,
-                FormatType = format,
+                FormatName = format,
                 FormatInfo = formatInfo,
                 IgnoreFormat = ignoreFormat
             };
@@ -77,7 +77,7 @@ namespace MonkeyPaste {
             await ais.WriteToDatabaseAsync();
             return ais;
         }
-        public MpAppClipboardFormatInfo() { }
+        public MpAppOleFormatInfo() { }
 
     }
 }

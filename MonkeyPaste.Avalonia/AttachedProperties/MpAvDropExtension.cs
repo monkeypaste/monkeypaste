@@ -1,14 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
-using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Media;
-using Avalonia.Media.TextFormatting;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using Org.BouncyCastle.Crypto.Signers;
 using System.Linq;
 using System.Windows.Input;
 
@@ -133,6 +128,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+
+        #region DropEffects AvaloniaProperty
+        public static DragDropEffects GetDropEffects(AvaloniaObject obj) {
+            return obj.GetValue(DropEffectsProperty);
+        }
+
+        public static void SetDropEffects(AvaloniaObject obj, DragDropEffects value) {
+            obj.SetValue(DropEffectsProperty, value);
+        }
+
+        public static readonly AttachedProperty<DragDropEffects> DropEffectsProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, DragDropEffects>(
+                "DropEffects", DragDropEffects.None);
+
+        #endregion
+
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -202,10 +213,10 @@ namespace MonkeyPaste.Avalonia {
             if (GetDragEnterCommand(c) is ICommand cmd) {
                 cmd.Execute(GetDragEnterCommandParameter(c));
             }
+            e.DragEffects = e.DragEffects & GetAttachedControlDropEffects(c, e);
             if (FindTextBox(c) is not TextBox tb) {
                 return;
             }
-            e.DragEffects = GetTextControlDropEffects(c, e);
             if (e.DragEffects == DragDropEffects.None) {
                 return;
             }
@@ -218,15 +229,16 @@ namespace MonkeyPaste.Avalonia {
             if (sender is not Control c) {
                 return;
             }
-            if (FindTextBox(c) is not TextBox tb) {
-                return;
-            }
-            e.DragEffects = GetTextControlDropEffects(c, e);
+
+            e.DragEffects = e.DragEffects & GetAttachedControlDropEffects(c, e);
             if (e.DragEffects == DragDropEffects.None) {
                 return;
             }
 
             // override criteria sorting
+            if (FindTextBox(c) is not TextBox tb) {
+                return;
+            }
             e.Handled = GetIsDragOverHandled(tb);
 
             UpdateTextControlDropPosition(tb, e);
@@ -274,6 +286,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Drop Helpers
 
+        private static DragDropEffects GetAttachedControlDropEffects(Control attached_control, DragEventArgs e) {
+            if (GetDropEffects(attached_control) is DragDropEffects dde &&
+                dde != DragDropEffects.None) {
+                return dde;
+            }
+            return GetTextControlDropEffects(attached_control, e);
+        }
         private static DragDropEffects GetTextControlDropEffects(Control attached_control, DragEventArgs e) {
             if (MpAvTextControlDragExtension.GetIsDragging(attached_control)) {
                 return DragDropEffects.None;

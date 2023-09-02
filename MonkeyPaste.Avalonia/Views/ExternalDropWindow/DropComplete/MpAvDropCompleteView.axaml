@@ -98,6 +98,7 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
             <Button.Resources>
+                <CornerRadius x:Key="ControlCornerRadius">0,0,0,0</CornerRadius>
                 <Thickness x:Key="ButtonPadding">0,0,0,0</Thickness>
             </Button.Resources>
             <TextBlock Text="NO" />
@@ -114,6 +115,7 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
             <Button.Resources>
+                <CornerRadius x:Key="ControlCornerRadius">0,0,0,0</CornerRadius>
                 <Thickness x:Key="ButtonPadding">0,0,0,0</Thickness>
             </Button.Resources>
             <Grid HorizontalAlignment="Stretch"

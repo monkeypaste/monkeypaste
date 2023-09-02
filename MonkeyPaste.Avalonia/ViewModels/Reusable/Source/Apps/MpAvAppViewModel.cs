@@ -2,7 +2,6 @@
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -12,9 +11,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvViewModelBase<MpAvAppCollectionViewModel>,
         MpIHoverableViewModel,
         MpIFilterMatch,
-        MpIIsValueEqual<MpAvAppViewModel>
-        //MpISourceItemViewModel 
-        {
+        MpIIsValueEqual<MpAvAppViewModel> {
         #region Interfaces
 
         #region MpIFilterMatch Implementation
@@ -46,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public MpAppClipboardFormatInfoCollectionViewModel ClipboardFormatInfos { get; set; }
+        public MpAvAppOleFormatInfoCollectionViewModel OleFormatInfos { get; set; }
 
         public MpAvAppClipboardShortcutViewModel PasteShortcutViewModel { get; set; }
         public MpAvAppClipboardShortcutViewModel CopyShortcutViewModel { get; set; }
@@ -89,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsHovering { get; set; }
 
-        public bool IsAnyBusy => IsBusy || ClipboardFormatInfos.IsBusy;
+        public bool IsAnyBusy => IsBusy || OleFormatInfos.IsBusy;
 
         #endregion
 
@@ -179,7 +176,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvAppViewModel(MpAvAppCollectionViewModel parent) : base(parent) {
             PropertyChanged += MpAppViewModel_PropertyChanged;
-            ClipboardFormatInfos = new MpAppClipboardFormatInfoCollectionViewModel(this);
+            OleFormatInfos = new MpAvAppOleFormatInfoCollectionViewModel(this);
             PasteShortcutViewModel = new MpAvAppClipboardShortcutViewModel(this, false);
             CopyShortcutViewModel = new MpAvAppClipboardShortcutViewModel(this, true);
         }
@@ -195,14 +192,14 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(IconId));
 
-            await ClipboardFormatInfos.InitializeAsync(AppId);
+            await OleFormatInfos.InitializeAsync(AppId);
 
             MpAppClipboardShortcuts aps = await MpDataModelProvider.GetAppClipboardShortcutsAsync(AppId);
             ClipboardShortcutsId = aps == null ? 0 : aps.Id;
             await PasteShortcutViewModel.InitializeAsync(aps);
             await CopyShortcutViewModel.InitializeAsync(aps);
 
-            while (ClipboardFormatInfos.IsAnyBusy ||
+            while (OleFormatInfos.IsAnyBusy ||
                     PasteShortcutViewModel.IsBusy ||
                     CopyShortcutViewModel.IsBusy) {
                 await Task.Delay(100);
@@ -267,11 +264,11 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(IsSelected):
                     if (IsSelected) {
-                        ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
+                        OleFormatInfos.OnPropertyChanged(nameof(OleFormatInfos.Items));
                         if (PasteShortcutViewModel != null) {
                             PasteShortcutViewModel.OnPropertyChanged(nameof(PasteShortcutViewModel.ShortcutCmdKeyString));
                         }
-                        ClipboardFormatInfos.OnPropertyChanged(nameof(ClipboardFormatInfos.Items));
+                        OleFormatInfos.OnPropertyChanged(nameof(OleFormatInfos.Items));
                     }
                     break;
                 case nameof(HasModelChanged):
@@ -302,6 +299,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             });
+
+
 
         #endregion
     }

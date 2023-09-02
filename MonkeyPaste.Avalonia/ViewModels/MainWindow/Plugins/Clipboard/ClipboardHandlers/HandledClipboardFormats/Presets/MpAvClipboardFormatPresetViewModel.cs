@@ -3,7 +3,6 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -407,10 +406,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpClipboardFormatPresetViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsEnabled):
-                    //MpConsole.WriteLine($"Format '{ClipboardFormat.clipboardName}': {IsEnabled}");
-                    // this msg is used by dnd helper to update current drag dataobject if dnd in process
-                    MpMessenger.SendGlobal(MpMessageType.ClipboardPresetsChanged);
+                case nameof(IsEnabled): {
+                        // this msg is used by dnd helper to update current drag dataobject if dnd in progress
+                        MpMessenger.SendGlobal(MpMessageType.ClipboardPresetsChanged);
+                    }
                     break;
                 case nameof(HasModelChanged):
                     if (HasModelChanged && IsAllValid) {
@@ -430,6 +429,7 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsEnabled = !IsEnabled;
             });
+
         #endregion
     }
 }

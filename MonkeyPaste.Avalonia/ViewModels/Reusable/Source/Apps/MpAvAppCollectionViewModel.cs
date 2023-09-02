@@ -2,14 +2,11 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -112,12 +109,12 @@ namespace MonkeyPaste.Avalonia {
             return Items.FirstOrDefault(x => x.AppPath.ToLower() == processPath.ToLower() && x.IsRejected) != null;
         }
 
-        public MpAppClipboardFormatInfoCollectionViewModel GetInteropSettingByAppId(int appId) {
+        public MpAvAppOleFormatInfoCollectionViewModel GetInteropSettingByAppId(int appId) {
             var aivm = Items.FirstOrDefault(x => x.AppId == appId);
             if (aivm == null) {
                 return null;
             }
-            return aivm.ClipboardFormatInfos;
+            return aivm.OleFormatInfos;
         }
 
         public MpAvAppViewModel GetAppByProcessInfo(MpPortableProcessInfo ppi) {
@@ -183,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedItem):
                     if (SelectedItem != null) {
                         SelectedItem.OnPropertyChanged(nameof(SelectedItem.IconId));
-                        SelectedItem.ClipboardFormatInfos.OnPropertyChanged(nameof(SelectedItem.ClipboardFormatInfos.Items));
+                        SelectedItem.OleFormatInfos.OnPropertyChanged(nameof(SelectedItem.OleFormatInfos.Items));
                     }
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     break;

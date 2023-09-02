@@ -11,9 +11,7 @@
                        d:DesignHeight="450"
                        DragDrop.AllowDrop="True"
                        HorizontalAlignment="Stretch"
-                       VerticalAlignment="Stretch"
-                       local:MpAvIsHoveringExtension.IsEnabled="True"
-                       local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+                       VerticalAlignment="Stretch">
     <local:MpAvUserControl.Styles>
         <!--<Style Selector="Border#DropMenuBorderContainer.dragInit ListBox#DropItemListBox">
             <Setter Property="Opacity"
@@ -32,28 +30,29 @@
             BorderThickness="1"
             BorderBrush="Black">
         <Border.Background>
-            <SolidColorBrush Color="DimGray" Opacity="0.85" />
+            <SolidColorBrush Color="DimGray"
+                             Opacity="0.85" />
         </Border.Background>
         <Grid HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch"
               RowDefinitions="Auto,*">
-            <Grid ColumnDefinitions="0.5*,0.5*"
-                  Grid.Row="0"
-                  HorizontalAlignment="Center">
-              
-              <!-- TARGET APP ICON -->
-              
-                <Image Grid.Column="0"
-                       Margin="10"
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal"
+                        Margin="10"
+                        Spacing="5"
+                        HorizontalAlignment="Center">
+
+                <!--  TARGET APP ICON  -->
+
+                <Image Classes="squareByHeight"
                        Height="30"
                        Source="{Binding DropAppIconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                        Stretch="UniformToFill"
-                       Width="{Binding $self.Bounds.Height}"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Stretch" />
 
-              <!-- TARGET APP NAME -->
-              
+                <!--  TARGET APP NAME  -->
+
                 <TextBlock x:Name="FinishDropTextBlock"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
@@ -64,10 +63,10 @@
                            Foreground="White"
                            Text="{Binding DropAppName}" />
 
-            </Grid>
+            </StackPanel>
 
-          <!-- HIDE WIDGET BUTTON (SHOULD BE HIDDEN WHEN NOT WITHIN DROP WIZARD) -->
-          
+            <!--  HIDE WIDGET BUTTON (SHOULD BE HIDDEN WHEN NOT WITHIN DROP WIZARD)  -->
+
             <Button x:Name="HideDropMenuBorder"
                     Classes="noBg noHoverBg square"
                     local:MpAvDropExtension.IsEnabled="True"
@@ -80,10 +79,6 @@
                     Margin="3"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top">
-
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="{Binding DragInfo}" />
-                </ToolTip.Tip>
                 <Image Source="{Binding Source={StaticResource CloseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </Button>
             <ListBox x:Name="DropItemListBox"
@@ -105,9 +100,9 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <local:MpAvDropFormatItemView Classes="square"
-                                                      HorizontalAlignment="Stretch"
-                                                      VerticalAlignment="Stretch" />
+                        <local:MpAvOleFormatItemView Classes="square"
+                                                     HorizontalAlignment="Stretch"
+                                                     VerticalAlignment="Stretch" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
@@ -115,7 +110,7 @@
                     Grid.RowSpan="2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    IsVisible="{Binding IsDragObjectInitializing}">
+                    IsVisible="{Binding IsTransferInitializing}">
                 <local:MpAvBusySpinnerView HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
                                            Width="70"

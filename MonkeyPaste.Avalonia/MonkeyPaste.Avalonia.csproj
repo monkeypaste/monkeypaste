@@ -1408,8 +1408,8 @@
     <Compile Update="Views\ExternalDropWindow\DropComplete\MpAvDropCompleteView.axaml.cs">
       <DependentUpon>MpAvDropCompleteView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\ExternalDropWindow\DropFormatItemView\MpAvDropFormatItemView.axaml.cs">
-      <DependentUpon>MpAvDropFormatItemView.axaml</DependentUpon>
+    <Compile Update="Views\ExternalDropWindow\DropFormatItemView\MpAvOleFormatItemView.axaml.cs">
+      <DependentUpon>MpAvOleFormatItemView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\ExternalDropWindow\MpAvExternalDropView.axaml.cs">
       <DependentUpon>MpAvExternalDropView.axaml</DependentUpon>
@@ -1560,9 +1560,6 @@
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Help\MpAvHelpView.axaml.cs">
       <DependentUpon>MpAvHelpView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\SettingsWindow\Tabs\Interop\MpAvInteropView.axaml.cs">
-      <DependentUpon>MpAvInteropView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Preferences\Item\MpAvSettingsFrameView.axaml.cs">
       <DependentUpon>MpAvSettingsFrameView.axaml</DependentUpon>
