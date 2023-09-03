@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 
 namespace MonkeyPaste.Common {
     public class MpPortableProcessInfo {
@@ -14,6 +12,10 @@ namespace MonkeyPaste.Common {
 
         public List<string> ArgumentList { get; set; } = new List<string>();
 
+        public MpPortableProcessInfo(string path) {
+            MpDebug.Assert(path.IsFile(), $"Bad path! '{path}'");
+            ProcessPath = path;
+        }
         public bool IsThisAppProcess() {
             return MpCommonTools.Services.ProcessWatcher.IsProcessPathEqual(Handle, MpCommonTools.Services.ProcessWatcher.ThisAppProcessInfo.Handle);
         }

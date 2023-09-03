@@ -302,19 +302,7 @@ namespace MonkeyPaste.Avalonia {
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
                 //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
 
-                if (MpAvClipTrayViewModel.Instance.SelectedItem is MpAvClipTileViewModel ctvm &&
-                    ctvm.GetContentView() is Control cv &&
-                    Mp.Services.ProcessWatcher.LastProcessInfo is MpPortableProcessInfo pi) {
-                    MpAvAppViewModel avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(pi);
-                    if (avm == null) {
-                        var app = await Mp.Services.SourceRefTools.FetchOrCreateAppRefAsync(pi);
-                        while (avm == null) {
-                            await Task.Delay(100);
-                            avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(pi);
-                        }
-                    }
-                    avm.OleFormatInfos.ShowAppFormatFlyoutMenuCommand.Execute(cv);
-                }
+
             });
         #endregion
     }

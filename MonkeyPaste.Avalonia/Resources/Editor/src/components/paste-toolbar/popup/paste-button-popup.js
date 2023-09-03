@@ -8,6 +8,7 @@ function initPastePopup() {
     hidePasteButtonExpander();
 }
 
+
 // #endregion Life Cycle
 
 // #region Getters
@@ -15,14 +16,92 @@ function initPastePopup() {
 function getPasteButtonPopupExpanderElement() {
     return document.getElementById('pasteButtonPopupExpander');
 }
-function getPasteButtonPopupExpanderLabelElement() {
-    return document.getElementById('pasteButtonPopupExpanderLabel');
-}
 
-function getPastePopupExpanderButtonInnerHtml() {
-    return isPastePopupExpanded() ? "&#9650;" : "&#9660;";
-}
 
+async function getPastePopupMenuItemsDataAsync() {
+    let mil = [];
+    if (isPasteInfoAvailable()) {
+        // NOTE adding empty submenu here
+        let format_root_mi = {
+            label: globals.PasteButtonFormatsLabel,
+            id: 'formats',
+            icon: 'fontfg',
+            submenu: []
+        };
+        let result = await getAppPasteInfoFromDbAsync_get();
+        let items = result && result.infoItems ? result.infoItems : [];
+        for (var i = 0; i < items.length; i++) {
+            // create format item 
+            let resp_format_mi = items[i];
+            let format_mi = {
+                label: resp_format_mi.header,
+                id: resp_format_mi.guid,
+                icon: resp_format_mi.iconBase64,
+                isIconBase64: true,
+                // NOTE give format w/ enabled preset lighter bg to show it has an enabled child
+                itemBgColor: resp_format_mi.subItems.filter(x=>x.isEnabled) != null ?
+                    getElementComputedStyleProp(document.body, '--inactiveselbgcolor') :
+                    'transparent'
+            };
+            format_mi.submenu = [];
+            for (var j = 0; j < resp_format_mi.subItems.length; j++) {
+                // create preset item
+
+                let resp_preset_mi = resp_format_mi.subItems[j];
+                let preset_mi = {
+                    label: resp_preset_mi.header,
+                    id: resp_preset_mi.guid,
+                    icon: resp_preset_mi.iconBase64,
+                    isIconBase64: true,
+                    isEnabled: resp_preset_mi.isEnabled,
+                    itemBgColor: resp_preset_mi.isEnabled ?
+                        getElementComputedStyleProp(document.body, '--selbgcolor') :
+                        'transparent'
+                };
+                format_mi.submenu.push(preset_mi);
+            }
+            format_mi.submenu.push({ separator: true });
+
+            // create manage format item
+            format_mi.submenu.push(
+                {
+                    icon: 'cog',
+                    label: 'Manage...',
+                    iconFgColor: getElementComputedStyleProp(document.body, '--editortoolbarbuttoncolor'),
+                }
+            );
+
+            // add handlers to all submenu items
+            for (var k = 0; k < format_mi.subItems.length; k++) {
+                format_mi.subItems[k].action = function (option, contextMenuIndex, optionIndex) {
+                    onPastePopupFormatMenuItemClick(format_mi.subItems[k].id);
+                }
+            }
+            format_root_mi.submenu.push(format_mi);
+        }
+
+        if (format_root_mi.submenu.length > 0) {
+            mil.push(format_root_mi);
+        }
+        
+    }
+    if (isAnyAppendEnabled()) {
+        return mil;
+    }
+    if (mil.length > 0) {
+        mil.push({ separator: true });
+    }
+    let append_begin_mi = {
+        label: globals.PasteButtonAppendBeginLabel,
+        id: 'appendBegin',
+        icon: 'append-outline'
+    };
+    append_begin_mi.action = function (option, contextMenuIndex, optionIndex) {
+        onPastePopupMenuOptionClick(append_begin_mi);
+    };
+    mil.push(append_begin_mi);
+    return mil;
+}
 // #endregion Getters
 
 // #region Setters
@@ -57,44 +136,6 @@ function setOptKeys(opt, idx) {
 
 // #region State
 
-function isPopupOptIdxIgnored(opt_idx) {
-    if (opt_idx == globals.StartOptIdx) {
-        if (isAnyAppendEnabled()) {
-            return true;
-        }
-        return false;
-    }
-
-    if (globals.IsAppendLineMode && opt_idx == globals.AppendLineOptIdx) {
-        return true;
-    }
-    if (globals.IsAppendInsertMode && opt_idx == globals.AppendInsertOptIdx) {
-        return true;
-    }
-    if (globals.IsAppendPreMode && opt_idx == globals.AppendPreIdx) {
-        return true;
-    }
-    if (!globals.IsAppendPreMode && opt_idx == globals.AppendPostIdx) {
-        return true;
-    }
-    if (!isAnyAppendEnabled()) {
-        return true;
-    }
-    if (globals.ContentItemType == 'Text') {
-        return false;
-    }
-    if (!isAnyAppendEnabled() &&
-         opt_idx == globals.AppendLineOptIdx) {
-        // show enable
-        return false;
-    }
-    if (isAnyAppendEnabled() &&
-        opt_idx == globals.DoneOptIdx) {
-        // always show done if enabled
-        return false;
-    }
-    return opt_idx < globals.MinFileListOptIdx;
-}
 
 function isPastePopupExpanded() {
     return getPasteButtonPopupExpanderElement().classList.contains('expanded');
@@ -104,72 +145,60 @@ function isPastePopupExpanded() {
 
 // #region Actions
 
+function preparePastePopupMenuItem(ppmio, i) {
+    if (ppmio.separator !== undefined) {
+        return ppmio;
+    }
+    ppmio = setOptKeys(ppmio, i);
+    if (!ppmio.subItems || (Array.isArray(ppmio.subItems) && ppmio.subItems.length == 0)) {
+        if (ppmio.id == 'formats') {
+            // empty formats, hide it
+            return null;
+        }
+        // this should only be the case for begin append..
+        ppmio.action = function (option, contextMenuIndex, optionIndex) {
+            onPastePopupMenuOptionClick(ppmio);
+        };
+    }
+    return ppmio;
+}
 function showPasteButtonExpander() {
     window.addEventListener('mousedown', onPastePopupExpandedTempWindowClick, true);
 
     let exp_elm = getPasteButtonPopupExpanderElement();
-    exp_elm.classList.add('expanded');
-
-    getPasteButtonPopupExpanderLabelElement().innerHTML = getPastePopupExpanderButtonInnerHtml();
-    let cm = [];
-    for (var i = 0; i < globals.PastePopupMenuOptions.length; i++) {
-        if (isPopupOptIdxIgnored(i)) {
-            continue;
-        }
-        let ppmio = globals.PastePopupMenuOptions[i];
-        if (ppmio.separator === undefined) {
-            ppmio = setOptKeys(ppmio, i);
-            ppmio.action = function (option, contextMenuIndex, optionIndex) {
-                onPastePopupMenuOptionClick(globals.PastePopupMenuOptions.indexOf(option));
-            };
-            let checked = false;
-            if (globals.IsAppendLineMode && i == globals.AppendLineOptIdx) {
-                checked = true;
-            }
-            if (globals.IsAppendInsertMode && i == globals.AppendInsertOptIdx) {
-                checked = true;
-            }
-            if (globals.IsAppendManualMode && i == globals.ManualOptIdx) {
-                checked = true;
-            }
-            if (globals.IsAppendPreMode && i == globals.AppendPreIdx) {
-                checked = true;
-            }
-            if (!globals.IsAppendPreMode && i == globals.AppendPostIdx) {
-                checked = true;
-            }
-            if (checked) {
-                ppmio.itemBgColor = 'darkturquoise';
-            } else {
-                delete ppmio.itemBgColor;
-            }
-        }
-        //if (!isAnyAppendEnabled()) {
-        //    if (i >= globals.AppendInsertOptIdx) {
-        //        continue;
-        //    } else {
-        //        ppmio.label = 'Stack Mode';
-        //    }
-        //}
-        cm.push(ppmio);
-    }
-    superCm.destroyMenu();
-
+    exp_elm.classList.add('expanded'); 
     let exp_elm_rect = exp_elm.getBoundingClientRect();
     let x = exp_elm_rect.left;
     let y = exp_elm_rect.top;
-    superCm.createMenu(cm, { pageX: x, pageY: y });
-
+    superCm.destroyMenu();
+    let spinner_mil = [
+        {
+            icon: 'spinner',
+            iconFgColor: 'dimgray',
+            iconClassList: ['rotate'],
+            label: 'Loading...'
+        }
+    ];
+    superCm.createMenu(spinner_mil, { pageX: x, pageY: y });
     let cm_elm = Array.from(document.getElementsByClassName('context-menu'))[0];
     y -= cm_elm.getBoundingClientRect().height;
     setElementComputedStyleProp(cm_elm, 'top', `${y}px`);
+
+    getPastePopupMenuItemsDataAsync()
+        .then((result) => {
+            result = result ? result : [];
+            superCm.destroyMenu();
+            superCm.createMenu(result, { pageX: x, pageY: y });
+        });
 }
 
 function hidePasteButtonExpander() {
     window.removeEventListener('mousedown', onPastePopupExpandedTempWindowClick, true);
     getPasteButtonPopupExpanderElement().classList.remove('expanded');
     superCm.destroyMenu();
-    getPasteButtonPopupExpanderLabelElement().innerHTML = getPastePopupExpanderButtonInnerHtml();
+
+    // finish doesn't always need to be called but blindly calling keeps state simpler 
+    finishPasteInfoQueryRequest();
 }
 
 function togglePasteButtonExpander() {
@@ -190,44 +219,20 @@ function onPasteButtonExpanderClickOrKeyDown(e) {
     togglePasteButtonExpander();
 }
 
-function onPastePopupMenuOptionClick(optIdx) {
-    log('clicked append mode idx: ' + optIdx);
-    if (optIdx == globals.AppendLineOptIdx) {
-        if (globals.IsAppendLineMode) {
-            //disableAppendMode(false);
-        } else {
-            enableAppendMode(true);
-        }
-    } else if (optIdx == globals.AppendInsertOptIdx) {
-        if (globals.IsAppendInsertMode) {
-            //disableAppendMode(false);
-        } else {
-            enableAppendMode(false);
-        }
-    } else if (optIdx == globals.ManualOptIdx) {
-        if (globals.IsAppendManualMode) {
-            disableAppendManualMode(false);
-        } else {
-            enableAppendManualMode(false);
-        }
-    } else if (optIdx == globals.AppendPreIdx) {
-        if (!globals.IsAppendPreMode) {
-            enablePreAppend(false);
-        } else if (globals.ContentItemType == 'FileList') {
-            disableAppendMode(false);
-        }
-    } else if (optIdx == globals.AppendPostIdx) {
-        if (globals.IsAppendPreMode) {
-            disablePreAppend(false);
-        } else if (globals.ContentItemType == 'FileList') {
-            disableAppendMode(false);
-        }
-    } else if (optIdx == globals.DoneOptIdx) {
-        disableAppendMode(false);
-    } else if (optIdx == globals.StartOptIdx) {
-        enableAppendMode(true);
-    }
+function onPastePopupMenuOptionClick(ppmio) {
     hidePasteButtonExpander();
+    if (!ppmio || ppmio.id === undefined) {
+        return;
+    }
+    if (ppmio.id == 'appendBegin') {
+        enableAppendMode(true);
+        return;
+    }
+    if (ppmio.id == 'formats') {
+
+        return;
+    }
+    log('unknown paste menu item clicked. id: ' + ppmio.id);
 }
 
 function onPastePopupExpandedTempWindowClick(e) {
@@ -238,5 +243,10 @@ function onPastePopupExpandedTempWindowClick(e) {
         return;
     }
     hidePasteButtonExpander();
+}
+
+function onPastePopupFormatMenuItemClick(pluginOrPresetGuid) {
+    onPasteInfoItemClicked_ntf(pluginOrPresetGuid);
+
 }
 // #endregion Event Handlers

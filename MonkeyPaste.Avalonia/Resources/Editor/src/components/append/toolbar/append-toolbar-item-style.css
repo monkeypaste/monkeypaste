@@ -1,13 +1,62 @@
-#pasteAppendPauseAppendButton {
-    background-color: transparent !important;
-    margin: 0 3px 0 0 !important;    
-    padding: 2px 0 0 0 !important;
-    border-width: 0 !important;
-    border-color: transparent !important;
+﻿
+#pasteAppendToolbarContainer {
+    background-color: var(--editableeditorbgcolor_opaque);
+    display: inline-flex;
+    border-radius: var(--commonborderradius);
+    border-width: 1px;
+    border-color: white;
+    text-align: center;
+    font-size: 12px;
+    transition: 0.5s;
+    align-items: center;
 }
-#pasteAppendPauseAppendButton .svg-icon {
+    #pasteAppendToolbarContainer .toolbar-separator
+    {
+        background-color: var(--editortoolbarbuttoncolor);
+        height: 20px;
+        margin: 5px 0;
+    }
+
+    #pasteAppendToolbarContainer button:hover path
+    {
+        fill: var(--hovercolor) !important;
+    }
+
+#pasteAppendToolbarContainer button {
+    background-color: transparent !important;
+    border-width: 0 !important;
+    border-color: silver !important;
+    border-radius: 3px;
+    display: flex;
+    padding: 0 !important;
+}
+
+#pasteAppendToggleManualButton.enabled {
+    background-color: darkturquoise !important;
+}
+
+#pasteAppendPauseAppendButton.enabled path {
+    fill: red !important;
+}
+#pasteAppendPauseAppendButton.enabled:hover path {
+    fill: salmon !important;
+}
+
+#pasteAppendToolbarContainer .svg-icon {
     margin: 0px !important;    
 }
-#pasteAppendPauseAppendButton:hover path {
-    fill: dimgray !important;    
+
+#editor.file-list-content .append-inline-elm {
+    display: none;
+}
+
+#pasteAppendPauseAppendButton.enabled:not(:hover) {
+    animation: blink 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+
+@keyframes blink {
+
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
 }

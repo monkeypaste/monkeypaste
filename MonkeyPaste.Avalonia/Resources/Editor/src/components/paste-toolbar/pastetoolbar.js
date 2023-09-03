@@ -55,6 +55,10 @@ function getPasteToolbarHeight() {
 // #endregion Setters
 
 // #region State
+function isPasteInfoAvailable() {
+    let is_available = globals.LastRecvdPasteInfoMsgObj != null;
+    return is_available;
+}
 
 function isPastePopupAvailable() {
     let result = globals.ContentItemType != 'Image';
@@ -115,10 +119,24 @@ function hidePasteToolbar() {
 }
 
 function updatePasteButtonInfo(pasteButtonInfoObj) {
+    // NOTE always track info updates with last recvd, 
+    // so button is as accurate as possible
+    globals.LastRecvdPasteInfoMsgObj = pasteButtonInfoObj;
+
     let paste_icon_elm = getPasteButtonElement().children[0];
     let new_paste_icon_elm = null;
     let new_paste_icon_base64 = pasteButtonInfoObj ? pasteButtonInfoObj.pasteButtonIconBase64 : null;
     let new_paste_tooltip = pasteButtonInfoObj ? pasteButtonInfoObj.pasteButtonTooltipText : 'Unknown';
+    let new_paste_info_id = pasteButtonInfoObj ? pasteButtonInfoObj.infoId : null;
+
+    if (globals.IsCurPasteInfoUpdateInProgress &&
+        new_paste_info_id != globals.CurPasteInfoId) {
+            // custom paste info edit in progress, ignore info update until
+        // paste pop up closes.
+        log('paste info locked on id ' + globals.CurPasteInfoId + ' ignoring new' + new_paste_info_id);
+        return;
+    }
+    globals.CurPasteInfoId = new_paste_info_id;
 
     if (isNullOrEmpty(new_paste_icon_base64)) {
         // TODO maybe use nice question mark icon for fallback instead
@@ -133,6 +151,18 @@ function updatePasteButtonInfo(pasteButtonInfoObj) {
     getPasteButtonElement().setAttribute('hover-tooltip', `Paste to: <em><i class="paste-tooltip-suffix">${new_paste_tooltip}</i></em>`);
 
     log('paste button updated. tooltip set to: ' + new_paste_tooltip);
+}
+
+function startPasteInfoQueryRequest() {
+    // called right before host get req
+    globals.IsCurPasteInfoUpdateInProgress = true;
+}
+function finishPasteInfoQueryRequest() {
+    // called when paste popup is closed, which no matter
+    // will end paste info locking
+    globals.IsCurPasteInfoUpdateInProgress = false;
+    // use last recvd paste info to update, should be fine if theres no change
+    updatePasteButtonInfo(globals.LastRecvdPasteInfoMsgObj);
 }
 
 // #endregion Actions

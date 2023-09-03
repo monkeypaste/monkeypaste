@@ -23,6 +23,28 @@ async function getAllSharedTemplatesFromDbAsync_get() {
     return all_non_input_templates;
 }
 
+async function getAppPasteInfoFromDbAsync_get() {
+    // output 'MpQuillPasteInfoRequestMessage'
+    let info_items = [];
+    // NOTE this flag is used so when this editor receives new paste info msg
+    // (like when active app changes) it will stay locked to the request and
+    // coordinate using the infoId
+
+    startPasteInfoQueryRequest();
+    if (isRunningOnHost()) {
+        // NOTE passing cur infoId since this is async to help
+        // keep editor w/ actual active process info
+        let req = {
+            infoId: globals.CurPasteInfoId
+        };
+        info_items = await processGetRequestAsync('getAppPasteInfoFromDb', JSON.stringify(req));
+    } else {
+
+        await delay(1000);
+    }
+    return info_items;
+}
+
 async function getMessageBoxResultAsync_get(_title,_msg,_dialogType,_iconResourceObj) {
     // output 'MpQuillShowDialogRequestMessage'
     // input 'MpQuillShowDialogResponseMessage'

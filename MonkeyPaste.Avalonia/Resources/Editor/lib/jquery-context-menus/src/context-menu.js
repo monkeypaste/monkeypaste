@@ -196,7 +196,11 @@ window.superCm = (function (msie) {
 					// font-awesome icon
 					iconElm.addClass(opt.icon);
 				} else {
-					iconElm.html(getSvgHtml(opt.icon));
+					if (opt.isIconBase64 !== undefined) {
+						iconElm.html(`<img class="context-menu-icon-img" src="data:image/png;base64,${opt.isIconBase64}">`);
+					} else {
+						iconElm.html(getSvgHtml(opt.icon));
+					}
 				}
 
 				if (opt.itemBgColor !== undefined) {

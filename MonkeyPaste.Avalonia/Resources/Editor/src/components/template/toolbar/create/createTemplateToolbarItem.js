@@ -159,6 +159,7 @@ function showTemplateToolbarContextMenu() {
                         },
                     }
                 });
+                tmi.submenu = [];
 
                 if (allTemplateDefsForType.length > 0) {
                     tmi.submenu.push({ separator: true });
@@ -172,7 +173,7 @@ function showTemplateToolbarContextMenu() {
                             createTemplateFromDropDown(null, tmi.label.toLowerCase(), allTemplateDefs);
                         },
                     }
-                )
+                );
                 cm.push(tmi);
             }
             superCm.destroyMenu();

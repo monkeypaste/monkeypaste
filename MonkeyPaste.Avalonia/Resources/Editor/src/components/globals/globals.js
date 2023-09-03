@@ -1,42 +1,4 @@
 var globals = {
-
-	// #region ENV
-	WindowsEnv: 'Windows',
-	IosEnv: 'Ios',
-	AndroidEnv: 'Android',
-	MacEnv: 'Mac',
-	LinuxEnv: 'Linux',
-	WebEnv: 'Web',
-	UknownEnv: 'Unknown',
-	EnvName: "",
-	// #endregion 
-
-	// #region MAIN
-	IsLoaded: false,
-	DomParser: new DOMParser(),
-	DomSerializer: new XMLSerializer(),
-	IsDebug: true,
-	IsTesting: false,
-	IsSpellCheckEnabled: false,
-	MaxUndoLimit: -1,
-	// #endregion 
-
-	// #region EDITOR
-	DefaultEditorWidth: 1200,
-	InlineTags: ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'],
-	BlockTags: ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote', 'pre'],
-	
-	IgnoreNextSelectionChange: false,
-	SuppressContentChangedNtf: false,
-	EditorTheme: 'light',
-	IsToolbarsLoaded: false,
-	// #endregion
-
-	// #region QUILL
-	quill: null,
-
-	// #endregion
-
 	// #region ALIGN
 	AlignOptionItems: [
 		{
@@ -79,6 +41,18 @@ var globals = {
 	IsAppendWIthDestFormattingEnabled: true,
 
 	FixedAppendIdx: -1,
+
+	AppendPauseLineColor: 'gold',
+
+	AppendLineModeLabel: 'Block',
+	AppendInlineModeLabel: 'Inline',
+	AppendManualModeLabel: 'Manual',
+	AppendNonManualModeLabel: 'Extent',
+	AppendPreLabel: 'Before',
+	AppendPostLabel: 'After',
+	AppendPauseLabel: 'Pause appending to clipboard',
+	AppendResumeLabel: 'Resume appending to clipboard',
+	AppendCloseLabel: 'Finish appending',
 	// #endregion
 
 	// #region CLIPBOARD
@@ -200,6 +174,29 @@ var globals = {
 
 	// #endregion
 
+	// #region CONTENT
+
+	CONTENT_CLASS_PREFIX: 'content',
+	ContentClassAttrb: null,
+	ContentHandle: null,
+	ContentItemType: 'Text',
+	ContentId: 0,
+
+	// #region TEXT
+	// #endregion
+
+	// #region FILE LIST
+	FileListClassAttrb: null,
+	FileListItems: [],
+	// #endregion
+
+	// #region IMAGE
+	ContentImageWidth: -1,
+	ContentImageHeight: -1,
+	// #endregion
+
+	// #endregion
+
 	// #region CONVERTER
 	IsConverterLoaded: false,
 
@@ -215,6 +212,58 @@ var globals = {
 	TEXT_FORMAT:  'text/plain',
 	FILE_ITEM_FRAGMENT_FORMAT:  'mp internal file list fragment format',
 
+	// #endregion
+
+	// #region DND
+
+	// #region DEBOUNCER
+	LastDebouncedMouseLoc: null,
+	LastDragOverDateTime: null,
+	// #endregion
+
+	// #region DRAG
+	MIN_DRAG_DIST: 10,
+	WasNoSelectBeforeDragStart: false,
+	CurDragTargetElm: null,
+	DragItemElms: [],
+	// #endregion
+
+	// #region DROP
+	DropIdx: -1,
+
+	AllowedEffects: ['copy', 'copyLink', 'copyMove', 'link', 'linkMove', 'move', 'all'],
+
+	AllowedDropTypes: ['text/plain', 'text/html', 'application/json', 'files', 'text', 'html format'],
+
+	CurDropTargetElm: null,
+
+	DropItemElms: [],
+	DropMoveLineColor: 'red',
+	DropCopyLineColor: 'green',
+
+	// #endregion
+	// #endregion
+
+	// #region EDITOR
+	DefaultEditorWidth: 1200,
+	InlineTags: ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'],
+	BlockTags: ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote', 'pre'],
+
+	IgnoreNextSelectionChange: false,
+	SuppressContentChangedNtf: false,
+	EditorTheme: 'light',
+	IsToolbarsLoaded: false,
+	// #endregion
+
+	// #region ENV
+	WindowsEnv: 'Windows',
+	IosEnv: 'Ios',
+	AndroidEnv: 'Android',
+	MacEnv: 'Mac',
+	LinuxEnv: 'Linux',
+	WebEnv: 'Web',
+	UknownEnv: 'Unknown',
+	EnvName: "",
 	// #endregion
 
 	// #region FORMAT PAIN
@@ -239,50 +288,6 @@ var globals = {
 		'colspan'
 	],
 
-	// #endregion
-
-	// #region DND
-
-	// #region DEBOUNCER
-	LastDebouncedMouseLoc: null,
-	LastDragOverDateTime: null,
-	// #endregion
-
-	// #region DRAG
-	MIN_DRAG_DIST:  10,
-	WasNoSelectBeforeDragStart:  false,
-	CurDragTargetElm:  null,
-	DragItemElms:  [],
-	// #endregion
-
-	// #region DROP
-	DropIdx:  -1,
-
-	AllowedEffects:  ['copy', 'copyLink', 'copyMove', 'link', 'linkMove', 'move', 'all'],
-
-	AllowedDropTypes:  ['text/plain', 'text/html', 'application/json', 'files', 'text','html format'],
-
-	CurDropTargetElm:  null,
-
-	DropItemElms: [],
-	DropMoveLineColor: 'red',
-	DropCopyLineColor: 'green',
-	// #endregion
-	// #endregion
-
-	// #region SELECTION
-
-	DefaultSelectionBgColor: 'lightblue',
-	DefaultSelectionFgColor: 'black',
-	DefaultCaretColor: 'black',
-	SubSelCaretColor: 'red',
-	DragSelBgColor: 'salmon',
-	DragFormatedSelFgColor: 'orange',
-	DragCopySelBgColor: 'green',
-	LastSelRange: null,
-	CurSelRange: { index: 0, length: 0 },
-	CurSelRects: null,
-	SelectionOnMouseDown: null,
 	// #endregion
 
 	// #region FIND/REPLACE
@@ -631,29 +636,6 @@ var globals = {
 	// #endregion
 	// #endregion
 
-	// #region CONTENT
-
-	CONTENT_CLASS_PREFIX: 'content',
-	ContentClassAttrb: null,
-	ContentHandle: null,
-	ContentItemType: 'Text',
-	ContentId: 0,
-
-	// #region TEXT
-	// #endregion
-
-	// #region FILE LIST
-	FileListClassAttrb: null,
-	FileListItems: [],
-	// #endregion
-
-	// #region IMAGE
-	ContentImageWidth: -1,
-	ContentImageHeight: -1,
-	// #endregion
-
-	// #endregion
-
 	// #region LINKS
 	RequiredNavigateUriModKeys:  [
 		'Alt'
@@ -699,6 +681,16 @@ var globals = {
 
 	// #endregion
 
+	// #region MAIN
+	IsLoaded: false,
+	DomParser: new DOMParser(),
+	DomSerializer: new XMLSerializer(),
+	IsDebug: true,
+	IsTesting: false,
+	IsSpellCheckEnabled: false,
+	MaxUndoLimit: -1,
+	// #endregion
+
 	// #region MESSAGES
 	PendingGetResponses: [],
 	// #endregion
@@ -716,62 +708,40 @@ var globals = {
 	// #region PASTE
 
 	// #region PASTE BUTTON POPUP
-	PastePopupMenuOptions:  [
-		{
-			label: 'Block',
-			icon: 'append-outline'
-		},
-		{
-			label: 'Inline',
-			icon: 'insert-outline'
-		},
-		{
-			separator: true
-		},
-		{
-			label: 'Before',
-			icon: 'arrow-left'
-		},
-		{
-			label: 'After',
-			icon: 'arrow-right'
-		},
-		{
-			separator: true
-		},
-		{
-			label: 'Manual',
-			icon: 'text-insert-caret-outline'
-		},
-		{
-			separator: true
-		},
-		{
-			label: 'Done',
-			icon: 'sign-out'
-		},
-		{
-			label: 'Stack Mode',
-			icon: 'append-outline'
-		}
-	],
 
-
-	AppendLineOptIdx:  0,
-	AppendInsertOptIdx:  1,
-	AppendPreIdx:  3,
-	AppendPostIdx:  4,
-	ManualOptIdx:  6,
-	DoneOptIdx:  8,
-	StartOptIdx:  9,
+	PasteButtonFormatsLabel: 'Formats',
+	PasteButtonAppendBeginLabel: 'Append...',
 
 	// #endregion
 
 	// #region PASTE TOOLBAR
 
-	MIN_TOOLBAR_HEIGHT:  65,
+	MIN_TOOLBAR_HEIGHT: 65,
+	CurPasteInfoId: null,
+	IsCurPasteInfoUpdateInProgress: false,
+	LastRecvdPasteInfoMsgObj: null,
 	// #endregion
 
+	// #endregion
+
+	// #region QUILL
+	quill: null,
+
+	// #endregion
+
+	// #region SELECTION
+
+	DefaultSelectionBgColor: 'lightblue',
+	DefaultSelectionFgColor: 'black',
+	DefaultCaretColor: 'black',
+	SubSelCaretColor: 'red',
+	DragSelBgColor: 'salmon',
+	DragFormatedSelFgColor: 'orange',
+	DragCopySelBgColor: 'green',
+	LastSelRange: null,
+	CurSelRange: { index: 0, length: 0 },
+	CurSelRects: null,
+	SelectionOnMouseDown: null,
 	// #endregion
 
 	// #region SCROLL
@@ -797,7 +767,7 @@ var globals = {
 	// #endregion
 
 	// #region SHORTCUTS
-	SHORTCUT_STR_TOKEN:  '$$',
+	SHORTCUT_STR_TOKEN:  '##',
 
 	SHORTCUT_TYPES:  [
 		'ToggleAppendInsertMode',
@@ -983,7 +953,12 @@ IsWindowResizeUpdateEnabled:  true,
 		'bold': `<svg viewBox="0 0 18 18"> <path class="ql-stroke" d="M5,4H9.5A2.5,2.5,0,0,1,12,6.5v0A2.5,2.5,0,0,1,9.5,9H5A0,0,0,0,1,5,9V4A0,0,0,0,1,5,4Z"></path> <path class="ql-stroke" d="M5,9h5.5A2.5,2.5,0,0,1,13,11.5v0A2.5,2.5,0,0,1,10.5,14H5a0,0,0,0,1,0,0V9A0,0,0,0,1,5,9Z"></path> </svg>`,
 		'italic': `<svg viewBox="0 0 18 18"> <line class="ql-stroke" x1="7" x2="13" y1="4" y2="4"></line> <line class="ql-stroke" x1="5" x2="11" y1="14" y2="14"></line> <line class="ql-stroke" x1="8" x2="10" y1="14" y2="4"></line> </svg>`,
 		'delete2': `<svg viewBox="0 0 1024 1024">	<g stroke-width="0"></g>	<g class="ql-stroke"		stroke-linecap="round"	   stroke-linejoin="round"></g>	<g>		<path  class="ql-stroke" d="M512 897.6c-108 0-209.6-42.4-285.6-118.4-76-76-118.4-177.6-118.4-285.6 0-108 42.4-209.6 118.4-285.6 76-76 177.6-118.4 285.6-118.4 108 0 209.6 42.4 285.6 118.4 157.6 157.6 157.6 413.6 0 571.2-76 76-177.6 118.4-285.6 118.4z m0-760c-95.2 0-184.8 36.8-252 104-67.2 67.2-104 156.8-104 252s36.8 184.8 104 252c67.2 67.2 156.8 104 252 104 95.2 0 184.8-36.8 252-104 139.2-139.2 139.2-364.8 0-504-67.2-67.2-156.8-104-252-104z"		      fill=""></path>		<path class="ql-stroke" d="M707.872 329.392L348.096 689.16l-31.68-31.68 359.776-359.768z"		      fill=""></path>		<path class="ql-stroke" d="M328 340.8l32-31.2 348 348-32 32z"		      fill=""></path>	</g></svg>`,
-		'paintbrush': `<svg viewBox="0 0 256 256">	<g class="ql-stroke"	   stroke-width="0"></g>	<g class="ql-stroke"	   stroke-linecap="round"	   stroke-linejoin="round"></g>	<g class="ql-stroke">		<path class="ql-stroke ql-fill"			  d="M230.627,25.37207a32.03909,32.03909,0,0,0-45.2539,0c-.10254.10156-.20117.207-.29785.31348L130.17383,86.85938l-9.20313-9.20313a24.00066,24.00066,0,0,0-33.9414,0L10.34277,154.34277a8.00122,8.00122,0,0,0,0,11.31446l80,80a8.00181,8.00181,0,0,0,11.31446,0l76.68652-76.68653a24.00066,24.00066,0,0,0,0-33.9414l-9.20313-9.20215L230.31445,70.9248c.10645-.09668.21192-.19531.31348-.29785A32.03761,32.03761,0,0,0,230.627,25.37207ZM96,228.68652,81.87842,214.56494l25.53467-25.53369A8.00053,8.00053,0,0,0,96.09863,177.7168L70.564,203.25049,53.87842,186.56494l25.53467-25.53369A8.00053,8.00053,0,0,0,68.09863,149.7168L42.564,175.25049,27.31348,160,72,115.31445,140.68555,184Z"></path>	</g></svg>`
+		'paintbrush': `<svg viewBox="0 0 256 256">	<g class="ql-stroke"	   stroke-width="0"></g>	<g class="ql-stroke"	   stroke-linecap="round"	   stroke-linejoin="round"></g>	<g class="ql-stroke">		<path class="ql-stroke ql-fill"			  d="M230.627,25.37207a32.03909,32.03909,0,0,0-45.2539,0c-.10254.10156-.20117.207-.29785.31348L130.17383,86.85938l-9.20313-9.20313a24.00066,24.00066,0,0,0-33.9414,0L10.34277,154.34277a8.00122,8.00122,0,0,0,0,11.31446l80,80a8.00181,8.00181,0,0,0,11.31446,0l76.68652-76.68653a24.00066,24.00066,0,0,0,0-33.9414l-9.20313-9.20215L230.31445,70.9248c.10645-.09668.21192-.19531.31348-.29785A32.03761,32.03761,0,0,0,230.627,25.37207ZM96,228.68652,81.87842,214.56494l25.53467-25.53369A8.00053,8.00053,0,0,0,96.09863,177.7168L70.564,203.25049,53.87842,186.56494l25.53467-25.53369A8.00053,8.00053,0,0,0,68.09863,149.7168L42.564,175.25049,27.31348,160,72,115.31445,140.68555,184Z"></path>	</g></svg>`,
+		'paragraph': `<svg viewBox="0 0 24 24" fill="none"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path fill-rule="evenodd" clip-rule="evenodd" d="M4 9C4 6.79086 5.79086 5 8 5H11H16H19C19.5523 5 20 5.44772 20 6C20 6.55228 19.5523 7 19 7H17V19C17 19.5523 16.5523 20 16 20C15.4477 20 15 19.5523 15 19V7H12V19C12 19.5523 11.5523 20 11 20C10.4477 20 10 19.5523 10 19V13H8C5.79086 13 4 11.2091 4 9ZM10 11V7H8C6.89543 7 6 7.89543 6 9C6 10.1046 6.89543 11 8 11H10Z" fill="#000000"></path></g></svg>`,
+		'scope': `<svg fill="#000000" viewBox="0 0 56 56"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path d="M 1.6349 29.6579 L 6.3092 29.6579 C 7.1152 40.3421 15.6810 48.9309 26.3422 49.7369 L 26.3422 54.3421 C 26.3422 55.2632 27.0560 56 27.9770 56 C 28.9211 56 29.6349 55.2632 29.6349 54.3421 L 29.6349 49.7369 C 40.2961 48.9309 48.8621 40.3421 49.6676 29.6579 L 54.3423 29.6579 C 55.2633 29.6579 55.9999 28.9210 55.9999 28 C 55.9999 27.0790 55.2633 26.3651 54.3423 26.3651 L 49.6676 26.3651 C 48.8621 15.6809 40.2961 7.0921 29.6349 6.2862 L 29.6349 1.6579 C 29.6349 .7368 28.9211 -2.9976e-15 27.9770 -2.9976021664879227e-15 C 27.0560 -2.9976e-15 26.3422 .7368 26.3422 1.6578829473684213 L 26.3422 6.2862 C 15.6810 7.0921 7.1152 15.6809 6.3092 26.3651 L 1.6349 26.3651 C .7139 26.3651 .1 27.0790 .1 28 C .1 28.9210 .7139 29.6579 1.6349 29.6579 Z M 27.9770 18.9046 C 28.9211 18.9046 29.6349 18.1678 29.6349 17.2467 L 29.6349 10.0395 C 38.2928 10.8224 45.0164 17.6151 45.7766 26.3651 L 38.7534 26.3651 C 37.8323 26.3651 37.0954 27.0790 37.0954 28 C 37.0954 28.9210 37.8323 29.6579 38.7534 29.6579 L 45.7766 29.6579 C 45.0164 38.3849 38.2928 45.1776 29.6349 45.9605 L 29.6349 38.7533 C 29.6349 37.8322 28.9211 37.1185 27.9770 37.1185 C 27.0560 37.1185 26.3422 37.8322 26.3422 38.7533 L 26.3422 45.9605 C 17.6842 45.1776 10.9606 38.3849 10.2007 29.6579 L 17.2238 29.6579 C 18.1448 29.6579 18.8816 28.9210 18.8816 28 C 18.8816 27.0790 18.1448 26.3651 17.2238 26.3651 L 10.2007 26.3651 C 10.9606 17.6151 17.6842 10.8224 26.3422 10.0395 L 26.3422 17.2467 C 26.3422 18.1678 27.0560 18.9046 27.9770 18.9046 Z"></path></g></svg>`,
+		'triangle-up': `<svg viewBox="0 0 512 512" fill="#000000"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g fill="#000000" transform="translate(32.000000, 42.666667)"><path d="M246.312928,5.62892705 C252.927596,9.40873724 258.409564,14.8907053 262.189374,21.5053731 L444.667042,340.84129 C456.358134,361.300701 449.250007,387.363834 428.790595,399.054926 C422.34376,402.738832 415.04715,404.676552 407.622001,404.676552 L42.6666667,404.676552 C19.1025173,404.676552 7.10542736e-15,385.574034 7.10542736e-15,362.009885 C7.10542736e-15,354.584736 1.93772021,347.288125 5.62162594,340.84129 L188.099293,21.5053731 C199.790385,1.04596203 225.853517,-6.06216498 246.312928,5.62892705 Z" id="Combined-Shape"></path></g></g></g></svg>`,
+		'triangle-down': `<svg viewBox="0 0 512 512" fill="#000000" transform="matrix(1, 0, 0, -1, 0, 0)"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g fill="#000000" transform="translate(32.000000, 42.666667)"><path d="M246.312928,5.62892705 C252.927596,9.40873724 258.409564,14.8907053 262.189374,21.5053731 L444.667042,340.84129 C456.358134,361.300701 449.250007,387.363834 428.790595,399.054926 C422.34376,402.738832 415.04715,404.676552 407.622001,404.676552 L42.6666667,404.676552 C19.1025173,404.676552 7.10542736e-15,385.574034 7.10542736e-15,362.009885 C7.10542736e-15,354.584736 1.93772021,347.288125 5.62162594,340.84129 L188.099293,21.5053731 C199.790385,1.04596203 225.853517,-6.06216498 246.312928,5.62892705 Z" id="Combined-Shape"></path></g></g></g></svg>`,
+		'cog': `<svg fill="#000000" viewBox="0 0 32 32"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path d="M25.995 19.068h-1.324c-0.215 0.779-0.523 1.518-0.918 2.203l1.224 1.223c0.783 0.783 0.783 2.053 0 2.836l-0.709 0.709c-0.783 0.783-2.053 0.783-2.836 0l-1.232-1.231c-0.683 0.389-1.419 0.692-2.194 0.903v1.284c0 1.107-0.897 2.005-2.005 2.005h-1.002c-1.107 0-2.006-0.897-2.006-2.005v-1.284c-0.774-0.211-1.511-0.515-2.194-0.903l-1.231 1.231c-0.782 0.783-2.052 0.783-2.835 0l-0.71-0.709c-0.783-0.783-0.783-2.053 0-2.836l1.224-1.223c-0.395-0.686-0.703-1.424-0.919-2.203h-1.323c-1.108 0-2.005-0.897-2.005-2.004v-1.003c0-1.107 0.897-2.005 2.005-2.005h1.308c0.207-0.771 0.503-1.505 0.887-2.186l-1.177-1.176c-0.783-0.783-0.783-2.053 0-2.836l0.709-0.708c0.783-0.783 2.053-0.783 2.835 0l1.153 1.153c0.706-0.411 1.468-0.731 2.272-0.95v-1.348c0.001-1.108 0.9-2.005 2.007-2.005h1.002c1.107 0 2.005 0.897 2.005 2.005v1.347c0.806 0.22 1.567 0.54 2.272 0.951l1.153-1.153c0.783-0.783 2.053-0.783 2.836 0l0.709 0.708c0.783 0.783 0.783 2.053 0 2.836l-1.176 1.176c0.384 0.681 0.68 1.415 0.888 2.187h1.308c1.107 0 2.005 0.898 2.005 2.005v1.003c-0.001 1.106-0.898 2.003-2.006 2.003zM15.5 11.080c-3.045 0-5.514 2.469-5.514 5.514s2.469 5.514 5.514 5.514 5.514-2.469 5.514-5.514-2.469-5.514-5.514-5.514zM15.5 19.037c-1.384 0-2.507-1.121-2.507-2.506 0-1.384 1.123-2.506 2.507-2.506s2.506 1.122 2.506 2.506c0 1.385-1.122 2.506-2.506 2.506z"></path></g></svg>`
 	}
 	// #endregion 
 }

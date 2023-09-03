@@ -208,7 +208,10 @@ textarea:placeholder-shown {
 .context-menu-option.icon-only {
     padding: 1px 5px 1px 5px !important;
 }
-
+.context-menu-icon-img {
+    width: 20px;
+    height: 20px;
+}
 .option-text, .context-menu-submenu:after {
     color: var(--editortoolbarbuttoncolor);
 }

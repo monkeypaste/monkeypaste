@@ -2368,8 +2368,12 @@ namespace MonkeyPaste.Avalonia {
             if (e != null) {
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
                     pasteButtonTooltipText = string.IsNullOrEmpty(e.ApplicationName) ? e.MainWindowTitle : e.ApplicationName,
-                    pasteButtonIconBase64 = e.MainWindowIconBase64
+                    pasteButtonIconBase64 = e.MainWindowIconBase64,
+                    infoId = e.ProcessPath
                 };
+                if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e) is MpAvAppViewModel avm) {
+                    CurPasteInfoMessage.isFormatDefault = avm.OleFormatInfos.IsEmpty;
+                }
             } else {
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage();
             }

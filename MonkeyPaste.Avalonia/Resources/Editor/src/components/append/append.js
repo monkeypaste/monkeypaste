@@ -100,7 +100,7 @@ function enableAppendMode(isAppendLine, fromHost = false) {
 		enableSubSelection();
 	}	
 
-	updatePasteAppendToolbarLabel();
+	updatePasteAppendToolbar();
 
 	scrollToAppendIdx();
 
@@ -123,7 +123,7 @@ function disableAppendMode(fromHost = false) {
 	disablePauseAppend(false);
 
 	getEditorElement().classList.remove('append');
-	updatePasteAppendToolbarLabel();
+	updatePasteAppendToolbar();
 
 	if (isReadOnly()) {
 		disableSubSelection();
@@ -140,7 +140,6 @@ function enableAppendManualMode(fromHost = false) {
 	let did_manual_mode_change = !globals.IsAppendManualMode;
 
 	globals.IsAppendManualMode = true;
-	updatePasteAppendToolbarLabel();
 	scrollToAppendIdx();
 
 	drawOverlay();
@@ -148,13 +147,13 @@ function enableAppendManualMode(fromHost = false) {
 	if (!fromHost && did_manual_mode_change) {
 		onAppendStateChanged_ntf();
 	}
+	updatePasteAppendToolbar();
 }
 
 function disableAppendManualMode(fromHost = false) {
 	let did_manual_mode_change = globals.IsAppendManualMode;
 	globals.IsAppendManualMode = false;
 
-	updatePasteAppendToolbarLabel();
 
 	if (isAnyAppendEnabled()) {
 		setDocSelection(getAppendDocRange());
@@ -167,38 +166,39 @@ function disableAppendManualMode(fromHost = false) {
 	if (!fromHost && did_manual_mode_change) {
 		onAppendStateChanged_ntf();
 	}
+	updatePasteAppendToolbar();
 }
 
 function enablePauseAppend(fromHost = false) {
 	const did_pause_append_change = !globals.IsAppendPaused;
 	globals.IsAppendPaused = true;
-	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('play');
 
 	if (!fromHost && did_pause_append_change) {
 		onAppendStateChanged_ntf();
 	}
+	updatePasteAppendToolbar();
 }
 
 function disablePauseAppend(fromHost = false) {
 	const did_pause_append_change = globals.IsAppendPaused;
 	globals.IsAppendPaused = false;
-	getPasteAppendPauseAppendButtonElement().innerHTML = getSvgHtml('pause');
 
 	if (!fromHost && did_pause_append_change) {
 		onAppendStateChanged_ntf();
 		// trigger content change to refresh clipboard to append buffer
 		onContentChanged_ntf();
 	}
+	updatePasteAppendToolbar();
 }
 
 function enablePreAppend(fromHost = false) {
 	const did_pre_append_change = !globals.IsAppendPreMode;
 	globals.IsAppendPreMode = true;
 	globals.FixedAppendIdx = getDocSelection().index;
-
 	if (!fromHost && did_pre_append_change) {
 		onAppendStateChanged_ntf();
 	}
+	updatePasteAppendToolbar();
 }
 
 function disablePreAppend(fromHost = false) {
@@ -209,6 +209,7 @@ function disablePreAppend(fromHost = false) {
 	if (!fromHost && did_pre_append_change) {
 		onAppendStateChanged_ntf();
 	}
+	updatePasteAppendToolbar();
 }
 // #endregion State
 

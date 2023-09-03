@@ -87,6 +87,45 @@ namespace MonkeyPaste.Avalonia {
             return aisvm;
         }
 
+        public async Task<MpAvAppOleFormatInfoViewModel> GetOrCreateOleFormatInfoViewModelAsync(
+            MpAvClipboardFormatPresetViewModel cfpvm, bool ignoreFormat) {
+            MpAvAppOleFormatInfoViewModel aofivm;
+            if (GetAppOleFormatInfoByFormatPrset(cfpvm) is MpAvAppOleFormatInfoViewModel cur_aofivm) {
+                aofivm = cur_aofivm;
+            } else {
+                // New item
+
+                // NOTE ignoreFormat ignored for create, update after (but before adding)
+                // TODO this and drop widget save preset do same thing, should combine...
+                MpAppOleFormatInfo new_aofi = await MpAppOleFormatInfo.CreateAsync(
+                        appId: Parent.AppId,
+                        format: cfpvm.ClipboardFormat.clipboardName,
+                        formatInfo: cfpvm.GetPresetParamJson());
+                aofivm = await CreateAppClipboardFormatViewModel(new_aofi);
+
+                if (Items == null) {
+                    Items = new ObservableCollection<MpAvAppOleFormatInfoViewModel>();
+                }
+                Items.Add(aofivm);
+            }
+            aofivm.IgnoreFormat = ignoreFormat;
+            while (aofivm.HasModelChanged) { await Task.Delay(100); }
+
+
+            return aofivm;
+
+        }
+        public bool IsFormatEnabled(MpAvClipboardFormatPresetViewModel cfpvm) {
+            if (cfpvm == null) {
+                return false;
+            }
+            if (GetAppOleFormatInfoByFormatPrset(cfpvm) is not MpAvAppOleFormatInfoViewModel aofivm) {
+                // no custom formats set, use default
+                return cfpvm.IsEnabled;
+            }
+
+            return !aofivm.IgnoreFormat;
+        }
         #endregion
 
         #region Protected Methods
@@ -145,46 +184,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return Items.FirstOrDefault(x => x.FormatName.ToLower() == cfpvm.ClipboardFormat.clipboardName);
         }
-        private bool IsFormatEnabled(MpAvClipboardFormatPresetViewModel cfpvm) {
-            if (cfpvm == null) {
-                return false;
-            }
-            if (GetAppOleFormatInfoByFormatPrset(cfpvm) is not MpAvAppOleFormatInfoViewModel aofivm) {
-                // no custom formats set, use default
-                return cfpvm.IsEnabled;
-            }
 
-            return !aofivm.IgnoreFormat;
-        }
-
-        private async Task<MpAvAppOleFormatInfoViewModel> GetOrCreateOleFormatInfoViewModelAsync(
-            MpAvClipboardFormatPresetViewModel cfpvm, bool ignoreFormat) {
-            MpAvAppOleFormatInfoViewModel aofivm = null;
-            if (GetAppOleFormatInfoByFormatPrset(cfpvm) is MpAvAppOleFormatInfoViewModel cur_aofivm) {
-                aofivm = cur_aofivm;
-            } else {
-                // New item
-
-                // NOTE ignoreFormat ignored for create, update after (but before adding)
-                // TODO this and drop widget save preset do same thing, should combine...
-                MpAppOleFormatInfo new_aofi = await MpAppOleFormatInfo.CreateAsync(
-                        appId: Parent.AppId,
-                        format: cfpvm.ClipboardFormat.clipboardName,
-                        formatInfo: cfpvm.GetPresetParamJson());
-                aofivm = await CreateAppClipboardFormatViewModel(new_aofi);
-
-                if (Items == null) {
-                    Items = new ObservableCollection<MpAvAppOleFormatInfoViewModel>();
-                }
-                Items.Add(aofivm);
-            }
-            aofivm.IgnoreFormat = true;
-            while (aofivm.HasModelChanged) { await Task.Delay(100); }
-
-
-            return aofivm;
-
-        }
 
         private async Task CheckInfosAndResetIfDefaultAsync() {
             if (IsEmpty) {
@@ -223,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
                 bool will_be_enabled = !IsFormatEnabled(cfpvm);
 
                 await GetOrCreateOleFormatInfoViewModelAsync(cfpvm, will_be_enabled);
-                await CheckInfosAndResetIfDefaultAsync();
+                //await CheckInfosAndResetIfDefaultAsync();
             });
 
         public ICommand ShowAppFormatFlyoutMenuCommand => new MpCommand<object>(

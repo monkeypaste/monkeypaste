@@ -52,7 +52,7 @@ function getShortcutHtml(shortcutText) {
 
 function parseShortcutText(str) {
     // NOTE this presumes theres only 1 shortcut
-    // example: 'This is a tooltip command $$ShortcutTypeName$$'
+    // example: 'This is a tooltip command ##ShortcutTypeName##'
     // returns ShortcutTypeGestureText
     if (!isString(str)) {
         return '';
@@ -72,7 +72,7 @@ function parseShortcutText(str) {
 }
 
 function decodeStringWithShortcut(str) {
-    // example: 'This is a tooltip command $$ShortcutTypeName$$'
+    // example: 'This is a tooltip command ##ShortcutTypeName##'
     if (!isString(str)) {
         return str;
     }

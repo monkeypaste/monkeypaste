@@ -634,6 +634,15 @@ namespace MonkeyPaste.Avalonia {
 
                 #endregion
 
+                #region PASTE INFO
+                case MpEditorBindingFunctionType.notifyPasteInfoItemClicked:
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillPasteInfoItemClickedNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillPasteInfoItemClickedNotification pasteInfoClickedMsg) {
+
+                    }
+                    break;
+                #endregion
+
                 #region WINDOW ACTIONS
 
                 case MpEditorBindingFunctionType.notifyShowCustomColorPicker:
@@ -742,6 +751,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpEditorBindingFunctionType.getDragDataTransferObject:
                 case MpEditorBindingFunctionType.getClipboardDataTransferObject:
                 case MpEditorBindingFunctionType.getAllSharedTemplatesFromDb:
+                case MpEditorBindingFunctionType.getAppPasteInfoFromDb:
                 case MpEditorBindingFunctionType.getContactsFromFetcher:
                 case MpEditorBindingFunctionType.getMessageBoxResult:
                     HandleBindingGetRequest(notificationType, msgJsonBase64Str).FireAndForgetSafeAsync(ctvm);
@@ -763,6 +773,15 @@ namespace MonkeyPaste.Avalonia {
                     var tl = await MpDataModelProvider.GetTextTemplatesByType(templateReq.templateTypes.Select(x => x.ToEnum<MpTextTemplateType>()));
 
                     getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(tl);
+                    break;
+
+                case MpEditorBindingFunctionType.getAppPasteInfoFromDb:
+                    var pasteInfoReq = MpJsonConverter.DeserializeObject<MpQuillPasteInfoRequestMessage>(getReq.reqMsgFragmentJsonStr);
+                    MpDebug.Assert(pasteInfoReq.infoId.IsFile(), $"Need to be careful if args are on process path or editor is requesting invalid/emptuy process info");
+                    var resp = MpAvAppCollectionViewModel.Instance
+                        .GetPasteInfosByProcessInfo(new MpPortableProcessInfo(pasteInfoReq.infoId));
+
+                    getResp.responseFragmentJsonStr = MpJsonConverter.SerializeObject(resp);
                     break;
 
                 case MpEditorBindingFunctionType.getContactsFromFetcher:

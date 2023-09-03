@@ -68,7 +68,6 @@
 
     <link href="src/components/findreplace/find-replace-style.css" rel="stylesheet" />
 
-    <link href="src/components/append/append-style.css" rel="stylesheet" />
     <link href="src/components/append/toolbar/append-toolbar-item-style.css" rel="stylesheet" />
 
     <link href="src/components/table/table-style.css" rel="stylesheet" />
@@ -543,11 +542,30 @@
             <!-- APPEND MANUAL LABEL -->
             <span id="pasteAppendIsManualToolbarLabel" class="hidden">MANUAL</span>
             <!-- APPEND STATE CONTAINER -->
-            <div id="pasteAppendToolbarLabelContainer">
-                <!-- APPEND MODE LABEL -->
-                <span id="pasteAppendToolbarLabel"></span>
+            <div id="pasteAppendToolbarContainer">
+
+                <!-- APPEND INSERT BUTTON --> 
+
+                <button id="pasteAppendToggleInlineButton" class="svg-key-paragraph append-inline-elm" hover-tooltip="Block ##ToggleAppendLineMode##"></button>
+                <div class="toolbar-separator append-inline-elm"></div>
+
+                <!-- APPEND MANUAL BUTTON -->
+
+                <button id="pasteAppendToggleManualButton" class="svg-key-scope" hover-tooltip="Manual"></button>
+                <div class="toolbar-separator"></div>
+
+                <!-- APPEND BEFORE BUTTON -->
+
+                <button id="pasteAppendToggleBeforeButton" class="svg-key-triangle-down" hover-tooltip="Before ##ToggleAppendPreMode##"></button>
+                <div class="toolbar-separator"></div>
+
                 <!-- APPEND PAUSED BUTTON -->
-                <button id="pasteAppendPauseAppendButton" hover-tooltip="Pause clipboard accumulation $$ToggleAppendPaused$$"><i></i></button>
+
+                <button id="pasteAppendPauseAppendButton" class="svg-key-pause" hover-tooltip="Pause clipboard accumulation ##ToggleAppendPaused##"></button>
+                <div class="toolbar-separator"></div>
+
+                <!-- APPEND END BUTTON -->
+                <button id="pasteAppendStopAppendButton" hover-tooltip="Finish append" class="svg-key-stop"></button>
             </div>
 
             <!-- PASTE BUTTON -->
@@ -560,7 +578,7 @@
             <!-- PASTE BUTTON POPUP -->
             <button id="pasteButtonPopupExpander"
                     tabindex="7">
-                <span id="pasteButtonPopupExpanderLabel"></span>
+                <span class="expander-arrow"></span>
             </button>
         </div>
     </div>

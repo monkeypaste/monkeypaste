@@ -253,6 +253,10 @@ function drawAppendNotifierPreview(ctx, color, thickness = 1.0, line_style = [5,
     let render_lines = getPreviewLines(getAppendDocRange().index, block_state, false);
     // NOTE drawing on flip of caret blink
     let append_color = globals.CaretBlinkOffColor != null ? color : 'transparent';
+    if (globals.IsAppendPaused) {
+        // when paused show unblinking line
+        append_color = globals.AppendPauseLineColor;
+    }
     for (var i = 0; i < render_lines.length; i++) {
         let line = render_lines[i];
         drawLine(ctx, line, append_color, thickness, line_style)

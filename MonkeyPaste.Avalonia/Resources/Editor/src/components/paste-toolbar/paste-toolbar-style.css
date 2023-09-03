@@ -83,3 +83,9 @@ body.popOut #pasteToolbar {
     color: dimgray;
 }
 
+#pasteButtonPopupExpander .expander-arrow:after {
+    content: "▼";
+}
+#pasteButtonPopupExpander.expanded .expander-arrow:after {
+    content: "▲";
+}

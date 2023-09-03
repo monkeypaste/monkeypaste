@@ -82,6 +82,12 @@ namespace MonkeyPaste.Avalonia {
             return ivm;
         }
 
+        public string GetIconBase64ByIconId(int iconId, string fallback = "") {
+            if (IconViewModels.FirstOrDefault(x => x.IconId == iconId) is MpAvIconViewModel ivm) {
+                return ivm.IconBase64;
+            }
+            return fallback;
+        }
         #endregion
 
         #region Protected Methods

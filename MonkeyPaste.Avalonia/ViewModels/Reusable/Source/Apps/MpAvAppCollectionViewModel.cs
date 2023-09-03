@@ -128,6 +128,67 @@ namespace MonkeyPaste.Avalonia {
                 x.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId);
         }
 
+        public async Task ProcessAppPasteInfoClickedAsync(MpPortableProcessInfo ppi, string clickedPluginOrPresetGuid) {
+
+            if (MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
+                .Select(x => x.Parent)
+                .Distinct()
+                .FirstOrDefault(x => x.PluginGuid == clickedPluginOrPresetGuid)
+                is MpAvHandledClipboardFormatViewModel hcfvm) {
+
+                hcfvm.ManageClipboardHandlerCommand.Execute(null);
+                return;
+            }
+
+            if (MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
+                .FirstOrDefault(x => x.PresetGuid == clickedPluginOrPresetGuid)
+                is MpAvClipboardFormatPresetViewModel cfpvm) {
+
+                MpAvAppViewModel avm = GetAppByProcessInfo(ppi);
+                if (avm == null) {
+                    var app = await Mp.Services.AppBuilder.CreateAsync(ppi);
+                    while (avm == null) {
+                        await Task.Delay(100);
+                        avm = GetAppByProcessInfo(ppi);
+                    }
+                    while (avm.IsAnyBusy) { await Task.Delay(100); }
+                }
+                await avm.OleFormatInfos.ToggleFormatEnabledCommand.ExecuteAsync(cfpvm);
+                return;
+            }
+        }
+
+        public MpQuillPasteInfoResponseMessage GetPasteInfosByProcessInfo(MpPortableProcessInfo ppi) {
+            MpAvAppViewModel avm = GetAppByProcessInfo(ppi);
+            MpQuillPasteInfoResponseMessage resp = new MpQuillPasteInfoResponseMessage() {
+                infoItems =
+                    MpAvClipboardHandlerCollectionViewModel.Instance
+                        .AllAvailableWriterPresets
+                        .Select(x => x.Parent)
+                        .Distinct()
+                        .Select(x => new MpQuillPasteInfoItemFragment() {
+                            guid = x.PluginGuid,
+                            header = x.Title,
+                            iconBase64 = MpAvIconCollectionViewModel.Instance.GetIconBase64ByIconId(x.HandledFormatIconId),
+                            subItems =
+                                x.Items
+                                    .Select(y => new MpQuillPasteInfoItemFragment() {
+                                        guid = y.PresetGuid,
+                                        header = y.Label,
+                                        iconBase64 = MpAvIconCollectionViewModel.Instance.GetIconBase64ByIconId(y.IconId),
+                                        isEnabled =
+                                            // NOTE when process is unknown or has no info, show default
+                                            // NOTE2 when process is known and HAS infos, only reflect its info no default
+                                            avm == null || avm.OleFormatInfos.IsEmpty ?
+                                                y.IsEnabled :
+                                                avm.OleFormatInfos.IsFormatEnabled(y)
+                                    }).ToList()
+                        }).ToList()
+            };
+            return resp;
+        }
+
+
         #endregion
 
         #region Protected Methods
