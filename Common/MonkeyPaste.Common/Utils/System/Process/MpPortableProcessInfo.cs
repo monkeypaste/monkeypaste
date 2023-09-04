@@ -12,6 +12,7 @@ namespace MonkeyPaste.Common {
 
         public List<string> ArgumentList { get; set; } = new List<string>();
 
+        public MpPortableProcessInfo() { }
         public MpPortableProcessInfo(string path) {
             MpDebug.Assert(path.IsFile(), $"Bad path! '{path}'");
             ProcessPath = path;

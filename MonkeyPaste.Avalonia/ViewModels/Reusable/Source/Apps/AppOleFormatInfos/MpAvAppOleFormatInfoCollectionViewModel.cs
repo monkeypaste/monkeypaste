@@ -1,15 +1,9 @@
-﻿using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Cursor = Avalonia.Input.Cursor;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppOleFormatInfoCollectionViewModel :
@@ -32,6 +26,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool HasCustomInfo =>
+            !IsEmpty;
         public bool IsEmpty =>
             Items == null || Items.Count == 0;
 
@@ -87,44 +84,27 @@ namespace MonkeyPaste.Avalonia {
             return aisvm;
         }
 
-        public async Task<MpAvAppOleFormatInfoViewModel> GetOrCreateOleFormatInfoViewModelAsync(
-            MpAvClipboardFormatPresetViewModel cfpvm, bool ignoreFormat) {
-            MpAvAppOleFormatInfoViewModel aofivm;
-            if (GetAppOleFormatInfoByFormatPrset(cfpvm) is MpAvAppOleFormatInfoViewModel cur_aofivm) {
-                aofivm = cur_aofivm;
-            } else {
-                // New item
+        public async Task<MpAvAppOleFormatInfoViewModel> CreateOleFormatInfoViewModelByPresetAsync(MpAvClipboardFormatPresetViewModel cfpvm) {
 
-                // NOTE ignoreFormat ignored for create, update after (but before adding)
-                // TODO this and drop widget save preset do same thing, should combine...
-                MpAppOleFormatInfo new_aofi = await MpAppOleFormatInfo.CreateAsync(
-                        appId: Parent.AppId,
-                        format: cfpvm.ClipboardFormat.clipboardName,
-                        formatInfo: cfpvm.GetPresetParamJson());
-                aofivm = await CreateAppClipboardFormatViewModel(new_aofi);
+            // NOTE ignoreFormat ignored for create, update after (but before adding)
+            // TODO this and drop widget save preset do same thing, should combine...
+            MpAppOleFormatInfo new_aofi = await MpAppOleFormatInfo.CreateAsync(
+                    appId: Parent.AppId,
+                    format: cfpvm.ClipboardFormat.clipboardName,
+                    formatInfo: cfpvm.GetPresetParamJson(),
+                    writerPresetId: cfpvm.PresetId);
 
-                if (Items == null) {
-                    Items = new ObservableCollection<MpAvAppOleFormatInfoViewModel>();
-                }
-                Items.Add(aofivm);
+            var aofivm = await CreateAppClipboardFormatViewModel(new_aofi);
+
+            while (aofivm == null) {
+                await Task.Delay(100);
+                aofivm = GetAppOleFormatInfoByFormatPreset(cfpvm);
             }
-            aofivm.IgnoreFormat = ignoreFormat;
-            while (aofivm.HasModelChanged) { await Task.Delay(100); }
-
-
             return aofivm;
 
         }
-        public bool IsFormatEnabled(MpAvClipboardFormatPresetViewModel cfpvm) {
-            if (cfpvm == null) {
-                return false;
-            }
-            if (GetAppOleFormatInfoByFormatPrset(cfpvm) is not MpAvAppOleFormatInfoViewModel aofivm) {
-                // no custom formats set, use default
-                return cfpvm.IsEnabled;
-            }
-
-            return !aofivm.IgnoreFormat;
+        public bool IsFormatEnabledByPreset(MpAvClipboardFormatPresetViewModel cfpvm) {
+            return GetAppOleFormatInfoByFormatPreset(cfpvm) != null;
         }
         #endregion
 
@@ -177,12 +157,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private MpAvAppOleFormatInfoViewModel GetAppOleFormatInfoByFormatPrset(MpAvClipboardFormatPresetViewModel cfpvm) {
+        public MpAvAppOleFormatInfoViewModel GetAppOleFormatInfoByFormatPreset(MpAvClipboardFormatPresetViewModel cfpvm) {
             if (cfpvm == null ||
                 Items == null) {
                 return null;
             }
-            return Items.FirstOrDefault(x => x.FormatName.ToLower() == cfpvm.ClipboardFormat.clipboardName);
+            return Items.FirstOrDefault(x => x.WriterPresetId == cfpvm.PresetId);
         }
 
 
@@ -220,44 +200,13 @@ namespace MonkeyPaste.Avalonia {
                 if (args is not MpAvClipboardFormatPresetViewModel cfpvm) {
                     return;
                 }
-                bool will_be_enabled = !IsFormatEnabled(cfpvm);
-
-                await GetOrCreateOleFormatInfoViewModelAsync(cfpvm, will_be_enabled);
-                //await CheckInfosAndResetIfDefaultAsync();
+                if (GetAppOleFormatInfoByFormatPreset(cfpvm) is MpAvAppOleFormatInfoViewModel aofivm) {
+                    await aofivm.AppOleFormatInfo.DeleteFromDatabaseAsync();
+                } else {
+                    await CreateOleFormatInfoViewModelByPresetAsync(cfpvm);
+                }
             });
 
-        public ICommand ShowAppFormatFlyoutMenuCommand => new MpCommand<object>(
-            (args) => {
-                var appFlyout = new MenuFlyout() {
-                    ItemsSource =
-                        MpAvClipboardHandlerCollectionViewModel.Instance.SortedAvailableEnabledWriters
-                        .Select(x =>
-                            new MenuItem() {
-                                Cursor = new Cursor(StandardCursorType.Hand),
-                                Background = IsFormatEnabled(x) ?
-                                    Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeAccent5BgColor.ToString()) :
-                                    Brushes.Transparent,
-                                Icon = new Image() {
-                                    Width = 20,
-                                    Height = 20,
-                                    Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(x.IconId, null, null, null) as Bitmap
-                                },
-                                Header = x.Parent.Title,
-                                Command = ToggleFormatEnabledCommand,
-                                CommandParameter = x
-                            }).ToList()
-                };
-                Control anchor_control = args as Control;
-                MpPoint anchor_offset = null;
-                if (anchor_control == null && args is object[] argParts) {
-                    anchor_control = argParts[0] as Control;
-                    anchor_offset = argParts[1] as MpPoint;
-                }
-                Flyout.SetAttachedFlyout(anchor_control, appFlyout);
-                if (anchor_offset != null) {
-                }
-                Flyout.ShowAttachedFlyout(anchor_control);
-            });
         #endregion
     }
 }

@@ -6,7 +6,6 @@
         getDragDataTransferObject,
         getContactsFromFetcher,
         getMessageBoxResult,
-        getAppPasteInfoFromDb,
 
         // two-way (host as source) *_ext_ntf requests
         notifySelectionState,
@@ -47,6 +46,6 @@
         notifyAnnotationSelected,
         notifyShowDebugger,
         notifyScrollBarVisibilityChanged,
-        notifyPasteInfoItemClicked
+        notifyPasteInfoFormatsClicked
     }
 }

@@ -1,6 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -13,48 +12,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
-
-        public bool IsCustomFormatSelected => SelectedFormatType == "Custom";
-
-        public bool IsFileListTypeSelected => SelectedClipboardFormatContentType == MpCopyItemType.FileList;
-
-        public bool IsAddNewFileTypeSelected => SelectedFileType == "add new...";
-
-        public string SelectedFormatType { get; set; }
-
-        public string SelectedFileType { get; set; }
-        public ObservableCollection<string> AvailableFileTypes {
-            get {
-                // TODO this should be populated from Clipboard Colllection
-                return new ObservableCollection<string>() {
-                    "",
-                    ".txt",
-                    ".rtf",
-                    ".bmp",
-                    ".png",
-                    "default",
-                    "add new..."
-                };
-            }
-        }
-
-        public ObservableCollection<string> AvailableFormatTypes {
-            get {
-                ObservableCollection<string> _availableFormatTypes = new ObservableCollection<string>();
-                for (int i = 0; i < Enum.GetNames(typeof(MpClipboardFormatType)).Length; i++) {
-                    var cft = (MpClipboardFormatType)i;
-                    if (cft == MpClipboardFormatType.Custom) {
-                        // TODO need to query clipboard plugins for custom formats here and have all available
-                        continue;
-                    }
-                    _availableFormatTypes.Add(cft.EnumToUiString());
-                }
-                return _availableFormatTypes;
-            }
-        }
-
-        public MpCopyItemType SelectedClipboardFormatContentType { get; set; }
-
         #endregion
 
         #region Appearance
@@ -117,12 +74,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public int AppOleInfoId {
+
+        public int WriterPresetId {
             get {
                 if (AppOleFormatInfo == null) {
                     return 0;
                 }
-                return AppOleFormatInfo.Id;
+                return AppOleFormatInfo.WriterPresetId;
             }
         }
 
@@ -135,6 +93,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public int AppOleInfoId {
+            get {
+                if (AppOleFormatInfo == null) {
+                    return 0;
+                }
+                return AppOleFormatInfo.Id;
+            }
+        }
         public MpAppOleFormatInfo AppOleFormatInfo { get; set; }
 
         #endregion
@@ -184,38 +150,8 @@ namespace MonkeyPaste.Avalonia {
                         LastSelectedDateTime = DateTime.Now;
                     }
                     break;
-                case nameof(SelectedClipboardFormatContentType):
-                    OnPropertyChanged(nameof(AvailableFormatTypes));
-                    OnPropertyChanged(nameof(IsFileListTypeSelected));
-                    OnPropertyChanged(nameof(IsCustomFormatSelected));
-                    break;
-                case nameof(SelectedFormatType):
-                    OnPropertyChanged(nameof(IsFileListTypeSelected));
-                    OnPropertyChanged(nameof(IsCustomFormatSelected));
-
-                    break;
             }
         }
-
-        private MpCopyItemType GetFormatContentType(MpClipboardFormatType cft) {
-            switch (cft) {
-                case MpClipboardFormatType.Text:
-                case MpClipboardFormatType.Rtf:
-                case MpClipboardFormatType.OemText:
-                case MpClipboardFormatType.UnicodeText:
-                case MpClipboardFormatType.Html:
-                case MpClipboardFormatType.Csv:
-                    return MpCopyItemType.Text;
-                case MpClipboardFormatType.Custom:
-                case MpClipboardFormatType.FileDrop:
-                    return MpCopyItemType.FileList;
-                case MpClipboardFormatType.Bitmap:
-                    return MpCopyItemType.Image;
-                default:
-                    return MpCopyItemType.None;
-            }
-        }
-
         #endregion
     }
 }

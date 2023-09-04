@@ -361,24 +361,7 @@ namespace MonkeyPaste {
         public string infoId { get; set; }
         public bool isFormatDefault { get; set; } = true;
     }
-    public class MpQuillPasteInfoRequestMessage : MpJsonObject {
-        public string infoId { get; set; }
-    }
-
-    public class MpQuillPasteInfoResponseMessage : MpJsonObject {
-        public List<MpQuillPasteInfoItemFragment> infoItems { get; set; }
-
-    }
-    public class MpQuillPasteInfoItemFragment : MpJsonObject {
-        public string guid { get; set; }
-        public string iconBase64 { get; set; }
-        public string header { get; set; }
-        public bool isEnabled { get; set; }
-        public List<MpQuillPasteInfoItemFragment> subItems { get; set; }
-    }
-
-    public class MpQuillPasteInfoItemClickedNotification : MpJsonObject {
-        public string clickedGuid { get; set; }
+    public class MpQuillPasteInfoFormatsClickedNotification : MpJsonObject {
         public string infoId { get; set; }
     }
 }

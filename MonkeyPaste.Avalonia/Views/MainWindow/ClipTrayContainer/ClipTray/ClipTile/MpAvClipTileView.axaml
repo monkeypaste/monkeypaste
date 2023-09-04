@@ -21,6 +21,13 @@
     </Interaction.Behaviors>
     <local:MpAvUserControl.Styles>
 
+        <!--  TRASH OR DELETE OPACITY (hides clunky state changes)  -->
+
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.trashOrDeleting">
+            <Setter Property="Opacity"
+                    Value="0" />
+        </Style>
+
         <!--  DETAIL COLOR  -->
 
         <Style Selector="Grid#DetailContainerGrid[IsVisible=false]">
@@ -71,10 +78,7 @@
             <Setter Property="Padding"
                     Value="5" />
         </Style>
-        <!--<Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.popout ContentControl#ClipTileContentControl, local|MpAvClipBorder#ClipTileContainerBorder:not(.contentReadOnly) ContentControl#ClipTileContentControl">
-            <Setter Property="Padding"
-                    Value="0" />
-        </Style>-->
+
         <!--  TILE BORDER  -->
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder">
             <Setter Property="BorderThickness"
@@ -156,6 +160,7 @@
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
+                          Classes.trashOrDeleting="{Binding IsTrashOrDeleting}"
                           Classes.popout="{Binding IsWindowOpen}"
                           Classes.transOpen="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen}"
                           Classes.hasVertContentScroll="{Binding IsVerticalScrollbarVisibile}"

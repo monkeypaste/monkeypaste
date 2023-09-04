@@ -118,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
 
             // clone source or processing will overwrite original data (so drop widget changes have no affect)
             var source_clone = SourceDataObject.Clone();
-            var temp = await Mp.Services.DataObjectTools.ProcessDragDropDataObjectAsync(source_clone);
+            var temp = await Mp.Services.DataObjectTools.ProcessDragDropDataObjectAsync(source_clone, null);
             if (temp is IDataObject temp_ido &&
                 DragDataObject is MpAvDataObject ddo) {
                 // update actual drag ido while retaining its ref (must be same as in StartDrag)

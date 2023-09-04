@@ -148,6 +148,7 @@ namespace MonkeyPaste.Common.Avalonia {
                     size.Width *= ar;
                 }
             }
+            // FIX SCALE ISSUE
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
             bmpSrc = bmpSrc.Resize(size);
             var pixels = GetPixels(bmpSrc);

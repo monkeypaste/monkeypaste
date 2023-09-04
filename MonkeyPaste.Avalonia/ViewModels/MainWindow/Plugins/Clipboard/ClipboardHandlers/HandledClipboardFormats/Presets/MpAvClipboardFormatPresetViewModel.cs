@@ -425,9 +425,31 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand TogglePresetIsEnabledCommand => new MpCommand(
-            () => {
-                IsEnabled = !IsEnabled;
+        public MpIAsyncCommand<object> TogglePresetIsEnabledCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (args == null) {
+                    IsEnabled = !IsEnabled;
+                    return;
+                }
+                MpAvAppViewModel avm = args as MpAvAppViewModel;
+                if (avm == null &&
+                    args is MpPortableProcessInfo pi) {
+                    var app = await Mp.Services.AppBuilder.CreateAsync(pi);
+                    while (avm == null) {
+                        await Task.Delay(100);
+                        avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(pi);
+                    }
+                    while (avm.IsAnyBusy) { await Task.Delay(100); }
+                }
+                MpDebug.Assert(avm != null, $"Error toggling preset for arg '{args}'");
+                if (avm.OleFormatInfos.GetAppOleFormatInfoByFormatPreset(this) is MpAvAppOleFormatInfoViewModel aofivm) {
+                    // format exists, remove
+                    await aofivm.AppOleFormatInfo.DeleteFromDatabaseAsync();
+                    while (avm.IsAnyBusy) { await Task.Delay(100); }
+                } else {
+                    await avm.OleFormatInfos.CreateOleFormatInfoViewModelByPresetAsync(this);
+                }
+
             });
 
         #endregion

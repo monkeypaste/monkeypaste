@@ -7,7 +7,9 @@ using MonkeyPaste.Common.Wpf;
 #endif
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvStringExtensions {
-
+        public static string ToHtmlImageDoc(this string imgBase64) {
+            return $"<html><head></head><body><img src=\"data:image/png;base64,{imgBase64}\"></body></html>";
+        }
         public static bool IsAvResourceString(this string str) {
             if (str.IsNullOrEmpty()) {
                 return false;

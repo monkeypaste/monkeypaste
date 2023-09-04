@@ -158,35 +158,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpQuillPasteInfoResponseMessage GetPasteInfosByProcessInfo(MpPortableProcessInfo ppi) {
-            MpAvAppViewModel avm = GetAppByProcessInfo(ppi);
-            MpQuillPasteInfoResponseMessage resp = new MpQuillPasteInfoResponseMessage() {
-                infoItems =
-                    MpAvClipboardHandlerCollectionViewModel.Instance
-                        .AllAvailableWriterPresets
-                        .Select(x => x.Parent)
-                        .Distinct()
-                        .Select(x => new MpQuillPasteInfoItemFragment() {
-                            guid = x.PluginGuid,
-                            header = x.Title,
-                            iconBase64 = MpAvIconCollectionViewModel.Instance.GetIconBase64ByIconId(x.HandledFormatIconId),
-                            subItems =
-                                x.Items
-                                    .Select(y => new MpQuillPasteInfoItemFragment() {
-                                        guid = y.PresetGuid,
-                                        header = y.Label,
-                                        iconBase64 = MpAvIconCollectionViewModel.Instance.GetIconBase64ByIconId(y.IconId),
-                                        isEnabled =
-                                            // NOTE when process is unknown or has no info, show default
-                                            // NOTE2 when process is known and HAS infos, only reflect its info no default
-                                            avm == null || avm.OleFormatInfos.IsEmpty ?
-                                                y.IsEnabled :
-                                                avm.OleFormatInfos.IsFormatEnabled(y)
-                                    }).ToList()
-                        }).ToList()
-            };
-            return resp;
-        }
+
 
 
         #endregion
@@ -288,36 +260,6 @@ namespace MonkeyPaste.Avalonia {
             MpDebug.Assert(dups == null, "Dup apps found");
         }
 
-        //private async void MpProcessManager_OnAppActivated(object sender, MpPortableProcessInfo e) {
-        //    // if app is unknown add it
-        //    // TODO device logic
-        //    while (IsBusy) {
-        //        await Task.Delay(100);
-        //    }
-        //    Dispatcher.UIThread.Post(async () => {
-        //        var avm = GetAppByProcessInfo(e); //Items.FirstOrDefault(x => x.AppPath.ToLower() == e.ProcessPath.ToLower());
-
-        //        if (avm == null) {
-        //            // unknown app activated add like in registration
-        //            var new_app = await Mp.Services.AppBuilder.CreateAsync(e);
-        //            if (new_app == null) {
-        //                MpConsole.WriteLine("Warning! Unknown app activated, ignoring it. Should we add a default unknownAppId? What would the process path be?");
-        //                return;
-        //            }
-        //            var sw = Stopwatch.StartNew();
-        //            while (true) {
-        //                avm = GetAppByProcessInfo(e);
-        //                if (avm != null) {
-        //                    break;
-        //                }
-        //                await Task.Delay(100);
-        //                MpDebug.Assert(sw.ElapsedMilliseconds < 10_000, $"Activating app error for process '{e}'");
-        //            }
-        //        }
-        //        LastActiveAppViewModel = avm;
-        //    });
-        //}
-
         private async Task<MpAvAppViewModel> AddOrSelectAppFromFileDialogAsync() {
             string appPath = await Mp.Services.NativePathDialog.ShowFileDialogAsync(
                     title: "Select application path",
@@ -343,6 +285,62 @@ namespace MonkeyPaste.Avalonia {
                         iconResourceObj: "WarningImage");
             }
             return avm;
+        }
+
+        private MpAvMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo(MpPortableProcessInfo ppi) {
+            MpAvAppViewModel avm = GetAppByProcessInfo(ppi);
+
+            MpAvMenuItemViewModel CreatePresetMenuItem(MpAvClipboardFormatPresetViewModel y) {
+                // NOTE when process is unknown or has no info, show default
+                // NOTE2 when process is known and HAS infos, only reflect its info no default
+                bool enabled = avm == null || avm.OleFormatInfos.IsEmpty ?
+                                                y.IsEnabled :
+                                                avm.OleFormatInfos.IsFormatEnabledByPreset(y);
+                return new MpAvMenuItemViewModel() {
+                    Identifier = y.PresetGuid,
+                    Header = y.Label,
+                    IconSourceObj = y.IconId,
+                    IsChecked = enabled,
+                    Command = y.TogglePresetIsEnabledCommand,
+                    CommandParameter = avm == null ? ppi : avm
+                };
+            }
+
+            MpAvMenuItemViewModel CreateFormatMenuItem(MpAvHandledClipboardFormatViewModel x) {
+                return new MpAvMenuItemViewModel() {
+                    Identifier = x.PluginGuid,
+                    Header = x.Title,
+                    IconSourceObj = x.HandledFormatIconId,
+                    SubItems =
+                        x.Items
+                        .OrderBy(x => x.SortOrderIdx)
+                        .Select(y => CreatePresetMenuItem(y)).ToList()
+                };
+            }
+
+            // get primary formats
+            List<MpAvMenuItemViewModel> mil =
+                MpAvClipboardHandlerCollectionViewModel.Instance
+                        .AllAvailableWriterPresets
+                        .Select(x => x.Parent)
+                        .Where(x => x.IsPrimaryFormat)
+                        .Distinct()
+                        .OrderBy(x => x.Title)
+                        .Select(x => CreateFormatMenuItem(x)).ToList();
+
+            // create non-primary item container
+
+            mil.Add(new MpAvMenuItemViewModel() {
+                Header = "More...",
+                SubItems = MpAvClipboardHandlerCollectionViewModel.Instance
+                        .AllAvailableWriterPresets
+                        .Select(x => x.Parent)
+                        .Where(x => !x.IsPrimaryFormat)
+                        .Distinct()
+                        .OrderBy(x => x.Title)
+                        .Select(x => CreateFormatMenuItem(x)).ToList()
+            });
+            return new MpAvMenuItemViewModel() { SubItems = mil };
         }
         #endregion
 
@@ -459,6 +457,15 @@ namespace MonkeyPaste.Avalonia {
                 await acsvm.ShowAssignDialogAsync();
             });
 
+        public ICommand ShowAppFormatFlyoutMenuCommand => new MpCommand<object>(
+            (args) => {
+                if (args is not object[] argParts ||
+                    argParts[0] is not Control c ||
+                    argParts[1] is not MpPortableProcessInfo pi) {
+                    return;
+                }
+                MpAvMenuExtension.ShowMenu(c, GetPasteInfoMenuItemsByProcessInfo(pi), hideOnClick: false);
+            });
         #endregion
     }
 }

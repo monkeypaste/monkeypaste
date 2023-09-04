@@ -2,6 +2,7 @@
                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
                        x:TypeArguments="local:MpAvClipTrayViewModel"
@@ -12,8 +13,21 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipTrayContainerView">
+    <local:MpAvUserControl.Resources>
+        <sys:TimeSpan x:Key="TileFadeTimeSpan">
+            0:0:0.5
+        </sys:TimeSpan>
+    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
-
+        <!--  TILE OPACITY TRANSITION  -->
+        <Style Selector="ListBox.clipTilListBox > ListBoxItem">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity"
+                                      Duration="{StaticResource TileFadeTimeSpan}" />
+                </Transitions>
+            </Setter>
+        </Style>
         <!--  BUSY CURSOR  -->
 
         <Style Selector="Grid#ClipTrayContainerGrid:not(.iprqBusy) local|MpAvClipBorder#ClipTileContainerBorder.busy">

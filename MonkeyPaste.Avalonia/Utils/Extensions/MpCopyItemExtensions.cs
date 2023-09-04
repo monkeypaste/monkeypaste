@@ -9,22 +9,62 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvDataObject ToAvDataObject(
             this MpCopyItem ci,
             bool includeSelfRef = false,
-            bool includeTitle = false) {
+            bool includeTitle = false,
+            string[] forceFormats = null) {
             if (ci == null) {
                 return new MpAvDataObject();
             }
             var avdo = new MpAvDataObject();
-            switch (ci.ItemType) {
-                case MpCopyItemType.Text:
-                    avdo.SetData(MpPortableDataFormats.CefHtml, ci.ItemData);
-                    avdo.SetData(MpPortableDataFormats.Text, ci.ItemData.ToPlainText("html"));
-                    break;
-                case MpCopyItemType.Image:
-                    avdo.SetData(MpPortableDataFormats.AvPNG, ci.ItemData.ToBytesFromBase64String());
-                    break;
-                case MpCopyItemType.FileList:
-                    avdo.SetData(MpPortableDataFormats.AvFiles, ci.ItemData.SplitNoEmpty(Environment.NewLine));
-                    break;
+            if (forceFormats == null) {
+                switch (ci.ItemType) {
+                    case MpCopyItemType.Text:
+                        avdo.SetData(MpPortableDataFormats.CefHtml, ci.ItemData);
+                        avdo.SetData(MpPortableDataFormats.Text, ci.ItemData.ToPlainText("html"));
+                        break;
+                    case MpCopyItemType.Image:
+                        avdo.SetData(MpPortableDataFormats.AvPNG, ci.ItemData.ToBytesFromBase64String());
+                        break;
+                    case MpCopyItemType.FileList:
+                        avdo.SetData(MpPortableDataFormats.AvFiles, ci.ItemData.SplitNoEmpty(Environment.NewLine));
+                        break;
+                }
+            } else {
+                foreach (var format in forceFormats) {
+                    object data = null;
+                    switch (ci.ItemType) {
+                        case MpCopyItemType.Text:
+                            switch (format) {
+                                case MpPortableDataFormats.CefHtml:
+                                    data = ci.ItemData;
+                                    break;
+                                case MpPortableDataFormats.Text:
+                                    data = ci.ItemData.ToPlainText("html");
+                                    break;
+                            }
+                            break;
+                        case MpCopyItemType.Image:
+                            switch (format) {
+                                case MpPortableDataFormats.CefHtml:
+                                    data = ci.ItemData.ToHtmlImageDoc();
+                                    break;
+                                case MpPortableDataFormats.Text:
+                                    data = ci.ItemData.ToBytesFromBase64String();
+                                    break;
+                            }
+                            break;
+                        case MpCopyItemType.FileList:
+                            switch (format) {
+                                case MpPortableDataFormats.AvFiles:
+                                    data = ci.ItemData.SplitNoEmpty(Environment.NewLine);
+                                    break;
+                            }
+                            break;
+                    }
+                    if (data == null) {
+                        continue;
+                    }
+                    avdo.SetData(format, data);
+                }
             }
             if (includeSelfRef) {
                 avdo.SetData(MpPortableDataFormats.CefAsciiUrl, Mp.Services.SourceRefTools.ToUrlAsciiBytes(ci));

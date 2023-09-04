@@ -503,8 +503,11 @@
     <None Remove="CefNet.Avalonia" />
     <None Remove="Resources\credits.txt" />
     <None Remove="resources\editor\src\components\bold\bold.js" />
+    <None Remove="Resources\Editor\src\components\context-menu-wrapper\context-menu-wrapper-style.css" />
+    <None Remove="resources\editor\src\components\context-menu-wrapper\context-menu-wrapper.js" />
     <None Remove="resources\editor\src\components\formatpaint\formatPainter.js" />
     <None Remove="Resources\Editor\src\components\italic\italic.js" />
+    <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
@@ -1712,7 +1715,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Resources\Editor\src\components\context-menu-wrapper\context-menu-wrapper-style.css">
+      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
+    </Content>
     <Content Update="Resources\Editor\src\components\italic\italic.js">
+      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
+    </Content>
+    <Content Update="Resources\Editor\src\components\svg\svg-style.css">
       <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
     </Content>
   </ItemGroup>

@@ -1645,7 +1645,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CopyActionCommand => new MpAsyncCommand(
             async () => {
                 var avdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT, ActionId);
-                await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true, null);
                 MpConsole.WriteLine("Copied action avdo: ");
                 MpConsole.WriteLine(avdo.ToString());
             });
@@ -1657,7 +1657,7 @@ namespace MonkeyPaste.Avalonia {
 
                 await Parent.DeleteActionCommand.ExecuteAsync(new object[] { this, true });
                 var avdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT, unwritten_action_clone.SerializeJsonObject());
-                await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true, null);
                 MpConsole.WriteLine("Cut action avdo: ");
                 MpConsole.WriteLine(avdo.ToString());
 

@@ -1,7 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -171,6 +170,11 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+
+        public bool IsPrimaryFormat =>
+            HandledFormat == MpPortableDataFormats.Text ||
+            HandledFormat == MpPortableDataFormats.AvPNG ||
+            HandledFormat == MpPortableDataFormats.AvFiles;
 
         public virtual bool IsLoaded => Items.Count > 0 && Items[0].Items.Count > 0;
 

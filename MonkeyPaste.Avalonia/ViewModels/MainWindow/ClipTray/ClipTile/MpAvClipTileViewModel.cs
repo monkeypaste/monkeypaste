@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using ReactiveUI;
 using System;
@@ -615,6 +616,10 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public bool IsTrashing { get; set; }
+        public bool IsDeleting { get; set; }
+        public bool IsTrashOrDeleting =>
+            IsTrashing || IsDeleting;
         public bool IsFinalClosingState { get; set; }
         //public string AnnotationsJsonStr { get; set; }
         public bool CanShowContextMenu { get; set; } = true;
@@ -1382,7 +1387,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string[] GetOleFormats(bool isDnd) {
+        public MpAvDataObject GetDataObjectByModel(bool isDnd, MpPortableProcessInfo target_pi) {
+            // TODO need to figure out this flow w/ app paste infos...
+            return CopyItem.ToAvDataObject(forceFormats: GetOleFormats(isDnd, target_pi));
+        }
+
+        public static List<string> GetDefaultOleFormats(MpCopyItemType itemTypem, bool isDnd) {
             List<string> req_formats = new() {
                 MpPortableDataFormats.Text,
                 MpPortableDataFormats.AvFiles,
@@ -1395,7 +1405,7 @@ namespace MonkeyPaste.Avalonia {
 
             } else if (MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled) {
                 // initialize target with default format for type
-                switch (CopyItemType) {
+                switch (itemTypem) {
                     case MpCopyItemType.Text:
                         break;
                     case MpCopyItemType.Image:
@@ -1404,6 +1414,17 @@ namespace MonkeyPaste.Avalonia {
                     case MpCopyItemType.FileList:
                         break;
                 }
+            }
+            return req_formats;
+        }
+        public string[] GetOleFormats(bool isDnd, MpPortableProcessInfo target_pi = null) {
+            List<string> req_formats = GetDefaultOleFormats(CopyItemType, isDnd);
+            if (target_pi != null &&
+                MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(target_pi)
+                    is MpAvAppViewModel avm &&
+               !avm.OleFormatInfos.IsEmpty) {
+                // override item type defaults and return formats by app 
+                return avm.OleFormatInfos.Items.Select(x => x.FormatName).ToArray();
             }
             return req_formats.ToArray();
         }
@@ -1834,6 +1855,10 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsFrozen):
                     OnPropertyChanged(nameof(IsResizerEnabled));
                     break;
+                case nameof(IsTrashing):
+                case nameof(IsDeleting):
+                    OnPropertyChanged(nameof(IsTrashOrDeleting));
+                    break;
             }
         }
 
@@ -2149,7 +2174,7 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
                     return;
                 }
-                await Mp.Services.DataObjectTools.WriteToClipboardAsync(mpdo, true);
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(mpdo, true, null);
 
                 // wait extra for cb watcher to know about data
                 //await Task.Delay(300);

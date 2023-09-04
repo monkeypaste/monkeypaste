@@ -12,36 +12,23 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvQueryTrayView">
-    <local:MpAvUserControl.Resources>
-        <sys:TimeSpan x:Key="TileFadeTimeSpan">
-            0:0:0.5
-        </sys:TimeSpan>
-    </local:MpAvUserControl.Resources>
+
     <local:MpAvUserControl.Styles>
 
 
         <!--  Requery tile opacity  -->
 
         <Style Selector="ListBox.queryListBox.notrequerying > ListBoxItem">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="Opacity"
-                                      Duration="{StaticResource TileFadeTimeSpan}" />
-                </Transitions>
-            </Setter>
             <Setter Property="Opacity"
                     Value="1" />
         </Style>
         <Style Selector="ListBox.queryListBox.requerying > ListBoxItem">
-            <Setter Property="Transitions">
-                <Transitions>
-                    <DoubleTransition Property="Opacity"
-                                      Duration="{StaticResource TileFadeTimeSpan}" />
-                </Transitions>
-            </Setter>
             <Setter Property="Opacity"
                     Value="0" />
         </Style>
+
+        <!--  TILE POSIITONING/VISIBILITY  -->
+      
         <Style Selector="ListBox.queryListBox > ListBoxItem"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Canvas.Left"

@@ -252,14 +252,13 @@ function onInternalContextMenuCanBeShownChanged_ntf(canBeShown) {
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyInternalContextMenuCanBeShownChanged', msgStr);
 }
-function onPasteInfoItemClicked_ntf(guid) {
-	// output 'MpQuillPasteInfoItemClickedNotification'
+function onPasteInfoFormatsClicked_ntf(pasteInfoGuid) {
+	// output 'MpQuillPasteInfoFormatsClickedNotification'
 	let msg = {
-		clickedGuid: guid,
-		infoId: globals.CurPasteInfoId
+		infoId: pasteInfoGuid
 	};
 	let msgStr = toBase64FromJsonObj(msg);
-	sendMessage('notifyPasteInfoItemClicked', msgStr);
+	sendMessage('notifyPasteInfoFormatsClicked', msgStr);
 }
 
 function onShowDebugger_ntf(debugReason, breakAfterSend) {

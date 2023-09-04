@@ -15,6 +15,8 @@ namespace MonkeyPaste {
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
 
+        [Column("fk_MpPluginPresetId")]
+        public int WriterPresetId { get; set; }
 
         public string FormatName { get; set; }
 
@@ -47,6 +49,7 @@ namespace MonkeyPaste {
             int appId = 0,
             string format = "",
             string formatInfo = "",
+            int writerPresetId = 0,
             bool ignoreFormat = false,
             bool suppressWrite = false) {
             if (string.IsNullOrEmpty(format)) {
@@ -61,6 +64,7 @@ namespace MonkeyPaste {
                 dup.WasDupOnCreate = true;
                 dup.FormatInfo = formatInfo;
                 dup.IgnoreFormat = ignoreFormat;
+                dup.WriterPresetId = writerPresetId;
                 if (!suppressWrite) {
                     await dup.WriteToDatabaseAsync();
                 }
@@ -71,7 +75,8 @@ namespace MonkeyPaste {
                 AppId = appId,
                 FormatName = format,
                 FormatInfo = formatInfo,
-                IgnoreFormat = ignoreFormat
+                IgnoreFormat = ignoreFormat,
+                WriterPresetId = writerPresetId
             };
 
             await ais.WriteToDatabaseAsync();

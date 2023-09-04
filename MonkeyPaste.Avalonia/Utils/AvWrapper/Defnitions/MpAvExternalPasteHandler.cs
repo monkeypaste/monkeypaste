@@ -2,7 +2,6 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -49,19 +48,19 @@ namespace MonkeyPaste.Avalonia {
 
             IntPtr pasteToHandle = processInfo.Handle;
 
-            if (processInfo is MpPortableStartProcessInfo startProcessInfo) {
-                // TODO put ProcessAutomator stuff here 
-                // NOTE needs to have non-zero handle when complete
-            }
-
             string pasteCmd = Mp.Services.PlatformShorcuts.PasteKeys;
-            var custom_paste_app_vm =
-                MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(processInfo);
-            if (custom_paste_app_vm != null && custom_paste_app_vm.PasteShortcutViewModel.HasShortcut) {
-                pasteCmd = custom_paste_app_vm.PasteShortcutViewModel.ShortcutCmdKeyString;
+            int[] writer_preset_ids = null;
+            if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(processInfo)
+                    is MpAvAppViewModel app_vm) {
+                if (app_vm.PasteShortcutViewModel.HasShortcut) {
+                    pasteCmd = app_vm.PasteShortcutViewModel.ShortcutCmdKeyString;
+                }
+                if (app_vm.OleFormatInfos.HasCustomInfo) {
+                    writer_preset_ids = app_vm.OleFormatInfos.Items.Select(x => x.WriterPresetId).ToArray();
+                }
             }
 
-            bool success = await PasteDataObjectAsync_internal_async(mpdo.ToAvDataObject(), pasteToHandle, pasteCmd);
+            bool success = await PasteDataObjectAsync_internal_async(mpdo.ToAvDataObject(), pasteToHandle, pasteCmd, writer_preset_ids);
             return success;
         }
 
@@ -69,7 +68,8 @@ namespace MonkeyPaste.Avalonia {
         private async Task<bool> PasteDataObjectAsync_internal_async(
             MpAvDataObject avdo,
             IntPtr pasteToHandle,
-            string pasteCmdKeyString) {
+            string pasteCmdKeyString,
+            int[] custom_writer_preset_ids = null) {
             if (pasteToHandle == IntPtr.Zero) {
                 // somethings terribly wrong_lastInternalProcessInfo
                 MpDebug.Break();
@@ -86,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
 
             // SET CLIPBOARD
 
-            await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
+            await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true, null);
 
             // ACTIVATE TARGET
             bool set_active_success = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle) == pasteToHandle;
@@ -106,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
 
             // RESTORE PREVIOUS CLIPBOARD
             if (last_mpdo_to_restore != null) {
-                await Mp.Services.DataObjectTools.WriteToClipboardAsync(last_mpdo_to_restore, true);
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(last_mpdo_to_restore, true, null);
             }
             return set_active_success && sim_input_success;
         }

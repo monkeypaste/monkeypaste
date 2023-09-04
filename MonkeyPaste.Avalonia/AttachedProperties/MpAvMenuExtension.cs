@@ -535,7 +535,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #region Helpers
 
-        private static Control CreateMenuItem(MpAvMenuItemViewModel mivm) {
+        public static Control CreateMenuItem(MpAvMenuItemViewModel mivm) {
             Control control = null;
             string itemType = new MpAvMenuItemDataTemplateSelector().GetTemplateName(mivm);
             KeyGesture inputGesture = null;

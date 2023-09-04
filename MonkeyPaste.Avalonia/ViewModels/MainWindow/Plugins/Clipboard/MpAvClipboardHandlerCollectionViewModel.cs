@@ -101,9 +101,9 @@ namespace MonkeyPaste.Avalonia {
 
         bool MpIPlatformDataObjectTools.IsOleBusy => IsBusy;
 
-        async Task MpIPlatformDataObjectTools.WriteToClipboardAsync(object idoObj, bool ignoreClipboardChange) {
+        async Task MpIPlatformDataObjectTools.WriteToClipboardAsync(object idoObj, bool ignoreClipboardChange, int[] force_writer_preset_ids) {
             MpDebug.Assert(idoObj is IDataObject, $"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
-            await WriteClipboardOrDropObjectAsync(idoObj as IDataObject, true, ignoreClipboardChange);
+            await WriteClipboardOrDropObjectAsync(idoObj as IDataObject, true, ignoreClipboardChange, force_writer_preset_ids);
         }
 
         async Task<object> MpIPlatformDataObjectTools.ReadClipboardAsync(bool ignorePlugins) {
@@ -134,12 +134,12 @@ namespace MonkeyPaste.Avalonia {
             }
             return avdo;
         }
-        async Task<object> MpIPlatformDataObjectTools.ProcessDragDropDataObjectAsync(object idoObj) {
+        async Task<object> MpIPlatformDataObjectTools.ProcessDragDropDataObjectAsync(object idoObj, int[] force_writer_preset_ids) {
             MpDebug.Assert(idoObj is IDataObject, $"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
-            var result = await WriteClipboardOrDropObjectAsync(idoObj as IDataObject, false, false);
+            var result = await WriteClipboardOrDropObjectAsync(idoObj as IDataObject, false, false, force_writer_preset_ids);
             return result;
         }
-        async Task MpIPlatformDataObjectTools.UpdateDragDropDataObjectAsync(object source, object target) {
+        async Task MpIPlatformDataObjectTools.UpdateDragDropDataObjectAsync(object source, object target, int[] force_writer_preset_ids) {
             // NOTE this is called during a drag drop when user toggles a format preset
             // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
             // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
@@ -149,7 +149,7 @@ namespace MonkeyPaste.Avalonia {
             if (source is IDataObject sido &&
                 target is IDataObject tido) {
                 var source_clone = sido.Clone();
-                var temp = await WriteClipboardOrDropObjectAsync(source_clone, false, false);
+                var temp = await WriteClipboardOrDropObjectAsync(source_clone, false, false, force_writer_preset_ids);
                 if (temp is IDataObject temp_ido) {
 
                     temp_ido.CopyTo(tido);
@@ -219,12 +219,6 @@ namespace MonkeyPaste.Avalonia {
             .Select(x => x.Parent.ClipboardPluginComponent)
             .Distinct()
             .Cast<MpIClipboardReaderComponent>();
-
-        public IEnumerable<MpIClipboardWriterComponent> EnabledWriterComponents =>
-            EnabledWriters
-            .Select(x => x.Parent.ClipboardPluginComponent)
-            .Distinct()
-            .Cast<MpIClipboardWriterComponent>();
 
         public MpAvClipboardFormatPresetViewModel SelectedPresetViewModel {
             get {
@@ -351,6 +345,7 @@ namespace MonkeyPaste.Avalonia {
                     x.ClipboardFormat.clipboardName.ToLower() == formatName.ToLower());
         }
 
+
         #endregion
 
         #region Private Methods
@@ -455,7 +450,11 @@ namespace MonkeyPaste.Avalonia {
             return mpdo;
         }
 
-        private async Task<MpAvDataObject> WriteClipboardOrDropObjectAsync(IDataObject ido, bool writeToClipboard, bool ignoreClipboardChange) {
+        private async Task<MpAvDataObject> WriteClipboardOrDropObjectAsync(
+            IDataObject ido,
+            bool writeToClipboard,
+            bool ignoreClipboardChange,
+            int[] force_writer_preset_ids) {
             await WaitForBusyAsync();
 
             bool was_cb_monitoring = Mp.Services.ClipboardMonitor.IsMonitoring;
@@ -463,11 +462,22 @@ namespace MonkeyPaste.Avalonia {
                 was_cb_monitoring) {
                 Mp.Services.ClipboardMonitor.StopMonitor();
             }
+            IEnumerable<MpAvClipboardFormatPresetViewModel> writer_presets =
+                force_writer_preset_ids == null ?
+                    EnabledWriters :
+                    AllAvailableWriterPresets.Where(x => force_writer_preset_ids.Contains(x.PresetId));
+
+            IEnumerable<MpIClipboardWriterComponent> writer_components =
+                writer_presets
+                    .Select(x => x.Parent.ClipboardPluginComponent)
+                    .Distinct()
+                    .Cast<MpIClipboardWriterComponent>();
+
             // pre-pass data object and remove disabled formats
             var formatsToRemove =
                 ido.GetAllDataFormats()
                 .Where(x => !MpPortableDataFormats.InternalFormats.Contains(x))
-                .Where(x => EnabledWriters.All(y => y.ClipboardFormat.clipboardName != x))
+                .Where(x => writer_presets.All(y => y.ClipboardFormat.clipboardName != x))
                 .Select(x => x);
 
             if (formatsToRemove.Any()) {
@@ -477,18 +487,18 @@ namespace MonkeyPaste.Avalonia {
 
             var dobj = new MpAvDataObject();
 
-            foreach (var write_component in EnabledWriterComponents) {
+            foreach (var write_component in writer_components) {
                 var write_request = new MpClipboardWriterRequest() {
                     data = ido,
                     writeToClipboard = writeToClipboard,
                     writeFormats =
-                        EnabledWriters
+                        writer_presets
                             .Where(x => x.Parent.ClipboardPluginComponent == write_component)
                             .Select(x => x.Parent.HandledFormat)
                             .Distinct()
                             .ToList(),
                     items =
-                        EnabledWriters
+                        writer_presets
                             .Where(x => x.Parent.ClipboardPluginComponent == write_component)
                             .SelectMany(x => x.Items
                                 .Select(y => new MpParameterRequestItemFormat(y.ParamId, y.CurrentValue)))
