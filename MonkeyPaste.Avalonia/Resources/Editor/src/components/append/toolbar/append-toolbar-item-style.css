@@ -46,10 +46,6 @@
     margin: 0px !important;    
 }
 
-#editor.file-list-content .append-inline-elm {
-    display: none;
-}
-
 #pasteAppendPauseAppendButton.enabled:not(:hover) {
     animation: blink 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
 }

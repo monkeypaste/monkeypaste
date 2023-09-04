@@ -35,15 +35,7 @@ function getPasteAppendPauseAppendButtonElement() {
 function getPasteAppendStopAppendButtonElement() {
 	return document.getElementById('pasteAppendStopAppendButton');
 }
-//function getPasteAppendIsManualToolbarLabelElement() {
-//	return document.getElementById('pasteAppendIsManualToolbarLabel');
-//}
-//function getPasteAppendToolbarPopupButtonElement() {
-//	return document.getElementById('pasteAppendPopupMenuButton');
-//}
-//function getPasteAppendToolbarLabelElement() {
-//	return document.getElementById('pasteAppendToolbarLabel');
-//}
+
 // #endregion Getters
 
 // #region Setters
@@ -65,6 +57,12 @@ function attachAppendButtonHandlers() {
 
 	addClickOrKeyClickEventListener(getPasteAppendPauseAppendButtonElement(), onPauseAppendButtonClickOrKey);
 	addClickOrKeyClickEventListener(getPasteAppendStopAppendButtonElement(), onStopAppendButtonClickOrKey);
+
+	if (globals.ContentItemType == 'FileList') {
+		getPasteAppendToggleInlineButtonElement().classList.add('disabled');
+	} else {
+		getPasteAppendToggleInlineButtonElement().classList.remove('disabled');
+	}
 }
 
 function createAppendButtonLookup() {
@@ -107,17 +105,22 @@ function createAppendButtonLookup() {
 		],
 		[
 			globals.IsAppendPaused,
-			getPasteAppendPauseAppendButtonElement(),
+			getPasteAppendPauseAppendButtonElement(),			
+			[
+				'pause',
+				`${globals.AppendPauseLabel}`
+			],
 			[
 				'play',
 				`${globals.AppendResumeLabel}`
 			],
-			[
-				'pause',
-				`${globals.AppendPauseLabel}`
-			]
 		],
 	];
+	if (globals.ContentItemType == 'FileList') {
+		// NOTE file list is block-only, ensure
+		// item0 always shows paragraph thing
+		globals.AppendButtonLookup[0][0] = false;
+	}
 }
 
 function showPasteAppendToolbar() {
@@ -180,6 +183,10 @@ function onStopAppendButtonClickOrKey(e) {
 }
 
 function onAppendToggleInlineButtonClickOrKey(e) {
+	if (globals.ContentItemType == 'FileList') {
+		// ignore click on file item
+		return;
+	}
 	e.currentTarget.classList.toggle('enabled');
 
 	let is_line = !e.currentTarget.classList.contains('enabled');

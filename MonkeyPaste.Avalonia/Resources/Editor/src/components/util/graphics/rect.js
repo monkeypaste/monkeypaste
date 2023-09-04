@@ -7,7 +7,26 @@
 // #endregion Life Cycle
 
 // #region Getters
-
+function getRectCornerByName(rect, cornerName) {
+    // format (top|bottom)-(left|right)
+    let corner_parts = cornerName.split('-');
+    let corner_y = getRectEdgeByName(rect,corner_parts[0]);
+    let corner_x = getRectEdgeByName(rect,corner_parts[1]);
+    return { x: corner_x, y: corner_y };
+}
+function getRectEdgeByName(rect, edgeName) {
+    switch (edgeName) {
+        default:
+        case 'left':
+            return rect.left;
+        case 'top':
+            return rect.top;
+        case 'right':
+            return rect.right;
+        case 'bottom':
+            return rect.bottom;
+    }
+}
 function getRectTopLeft(rect) {
     return { x: rect.left, y: rect.top };
 }

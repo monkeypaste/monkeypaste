@@ -151,22 +151,6 @@ button {
     }
 
 
-.svg-icon {
-    width: 18px;
-    height: 18px;
-    margin-right: 3px;
-}
-
-/* ENDLESS ROTATE */
-.rotate {
-    animation: rotate 1.5s linear infinite;
-}
-
-@keyframes rotate {
-    to {
-        transform: rotate(360deg);
-    }
-}
 input:placeholder-shown, 
 textarea:placeholder-shown {
   text-overflow: ellipsis;
@@ -178,8 +162,10 @@ textarea:placeholder-shown {
 .contrast-bg {
     color: inherit !important;
     background: inherit;
-    -webkit-background-clip: text;
-    background-clip: text;
+    /*-webkit-background-clip: text;*/
+    /*background-clip: text;*/
+    -webkit-background-clip: content-box;
+    background-clip: content-box;
     filter: invert(1) grayscale(1);
     -webkit-filter: invert(1) grayscale(1);
     /* mix-blend-mode: difference;*/
@@ -187,45 +173,6 @@ textarea:placeholder-shown {
 
 .unavailable-text {
     text-decoration: line-through;
-}
-
-/* override superCm so they aren't so tall */
-.context-menu {
-    background-color: var(--editortoolbarbgcolor);
-    border-color: var(--editortoolbarsepbgcolor);
-}
-.context-menu-separator {
-    padding: 0 !important;
-}
-
-.context-menu-option {
-    color: var(--editortoolbarbuttoncolor);
-    padding: 1px 30px 1px 15px !important;
-    display: flex;
-    align-items: center;
-}
-
-.context-menu-option.icon-only {
-    padding: 1px 5px 1px 5px !important;
-}
-.context-menu-icon-img {
-    width: 20px;
-    height: 20px;
-}
-.option-text, .context-menu-submenu:after {
-    color: var(--editortoolbarbuttoncolor);
-}
-
-.context-menu-option:has(.option-keys) {
-    padding-right: 15px !important;
-}
-.context-menu-option:has(.option-keys) .option-text {
-    min-width: 100px;
-}
-.option-keys {
-    font-style: italic;
-    font-size: 10px;
-    color: silver;
 }
 
 

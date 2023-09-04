@@ -118,20 +118,12 @@ function showTemplateToolbarContextMenu() {
         return;
     }
 
-    var tb = getCreateTemplateToolbarButton();
-    let tb_rect = tb.getBoundingClientRect();
-    let x = tb_rect.left;
-    let y = tb_rect.bottom;
+    var tb_elm = getCreateTemplateToolbarButton();
+    let anchor_corner = 'bottom-left';
+    let menu_anchor_corner = 'top-left';
+    let offset = { x: 0, y: 5 };
+    showContextMenu(tb_elm, getBusySpinnerMenuItem(), anchor_corner, menu_anchor_corner, offset.x, offset.y);
 
-    let spinner_mil = [
-        {
-            icon: 'spinner',
-            iconFgColor: 'dimgray',
-            iconClassList: ['rotate'],
-            label: 'Loading...'
-        }
-    ];
-    superCm.createMenu(spinner_mil, { pageX: x, pageY: y });
     getAllSharedTemplatesFromDbAsync_get()
         .then((result) => {
             result = result ? result : [];
@@ -176,8 +168,10 @@ function showTemplateToolbarContextMenu() {
                 );
                 cm.push(tmi);
             }
-            superCm.destroyMenu();
-            superCm.createMenu(cm, { pageX: x, pageY: y });
+
+            cm[1].classes = 'partial-selected';
+            cm[1].submenu[0].classes = 'selected';
+            showContextMenu(tb_elm, cm, anchor_corner, menu_anchor_corner, offset.x, offset.y);
         });
 }
 

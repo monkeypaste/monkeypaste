@@ -197,7 +197,7 @@ window.superCm = (function (msie) {
 					iconElm.addClass(opt.icon);
 				} else {
 					if (opt.isIconBase64 !== undefined) {
-						iconElm.html(`<img class="context-menu-icon-img" src="data:image/png;base64,${opt.isIconBase64}">`);
+						iconElm.html(`<img class="context-menu-icon-img" src="data:image/png;base64,${opt.icon}">`);
 					} else {
 						iconElm.html(getSvgHtml(opt.icon));
 					}

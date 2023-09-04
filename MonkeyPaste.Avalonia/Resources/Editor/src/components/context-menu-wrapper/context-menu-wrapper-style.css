@@ -1,0 +1,77 @@
+
+/* override superCm so they aren't so tall */
+.context-menu {
+    background-color: var(--editortoolbarbgcolor);
+    border-color: var(--editortoolbarsepbgcolor);
+}
+.context-menu-submenu {
+    display: flex;
+}
+.context-menu-separator {
+    padding: 0 !important;
+}
+
+.context-menu-option {
+    color: var(--editortoolbarbuttoncolor);
+    padding: 1px 30px 1px 15px !important;
+    display: flex;
+    align-items: center;
+}
+
+.context-menu-submenu.partial-selected {
+    color: var(--editortoolbarbgcolor);
+    background-color: var(--opthovercolor);
+}
+
+.context-menu-option.selected {
+    color: var(--editortoolbarbgcolor);
+    background-color: var(--optselectcolor);
+}
+
+
+.context-menu-option.icon-only {
+    padding: 1px 5px 1px 5px !important;
+}
+.context-menu-icon-img {
+    width: 20px;
+    height: 20px;
+}
+
+.option-text, .context-menu-submenu:after {
+    color: var(--editortoolbarbuttoncolor);
+}
+.context-menu-submenu.partial-selected .option-text, 
+.context-menu-submenu.partial-selected:after {
+    color: var(--editortoolbarbgcolor);
+}
+.context-menu-option.selected .option-text, 
+.context-menu-submenu.selected:after {
+    color: var(--editortoolbarbgcolor);
+}
+
+.context-menu-option:has(.option-keys) {
+    padding-right: 15px !important;
+}
+.context-menu-option .option-text {
+    max-width: 100px;
+    text-overflow: ellipsis;
+}
+.context-menu-option:has(.option-keys) .option-text {
+    min-width: 100px;
+}
+.option-keys {
+    font-style: italic;
+    font-size: 10px;
+    color: silver;
+}
+
+/* ENDLESS ROTATE */
+.rotate {
+    animation: rotate 1.5s linear infinite;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
