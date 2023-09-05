@@ -364,6 +364,7 @@
     <None Remove="Assets\Images\frame_grip.png" />
     <None Remove="Assets\Images\frame_grip_org.png" />
     <None Remove="Assets\Images\ghost.png" />
+    <None Remove="Assets\Images\glasses.png" />
     <None Remove="Assets\Images\global.png" />
     <None Remove="Assets\Images\googleIcon.png" />
     <None Remove="Assets\Images\google_signin.png" />
@@ -413,6 +414,7 @@
     <None Remove="Assets\Images\open.png" />
     <None Remove="Assets\Images\paste.png" />
     <None Remove="Assets\Images\pause.png" />
+    <None Remove="Assets\Images\pen.png" />
     <None Remove="Assets\Images\pin.png" />
     <None Remove="Assets\Images\plaintext.png" />
     <None Remove="Assets\Images\play.png" />
@@ -668,6 +670,9 @@
     <AvaloniaResource Include="Assets\Images\ghost.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\glasses.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\graph.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -699,6 +704,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\open.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\pen.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\plaintext.png">

@@ -9,16 +9,17 @@ function initPasteToolbar() {
 
     //enableResize(getPasteToolbarContainerElement());
 
+    initPasteAppendToolbarItems();
     initPasteButton();
     initPasteTemplateToolbarItems();
 }
 
 function initPasteButton() {
     addClickOrKeyClickEventListener(getPasteButtonElement(), onPasteButtonClickOrKeyDown);
+    addClickOrKeyClickEventListener(getPasteButtonPopupExpanderElement(), onPasteButtonExpanderClickOrKeyDown);
 
-    updatePasteButtonInfo(null);    
 
-    initPastePopup();
+    updatePasteButtonInfo(null);   
 }
 
 function loadPasteButton() {
@@ -33,6 +34,9 @@ function loadPasteButton() {
 
 // #region Getters
 
+function getPasteButtonPopupExpanderElement() {
+    return document.getElementById('pasteButtonPopupExpander');
+}
 function getPasteToolbarContainerElement() {
     return document.getElementById('pasteToolbar');
 }
@@ -55,6 +59,10 @@ function getPasteToolbarHeight() {
 // #endregion Setters
 
 // #region State
+
+function isPastePopupExpanded() {
+    return getPasteButtonPopupExpanderElement().classList.contains('expanded');
+}
 function isPasteInfoAvailable() {
     let is_available = globals.LastRecvdPasteInfoMsgObj != null;
     return is_available;
@@ -165,6 +173,24 @@ function finishPasteInfoQueryRequest() {
     updatePasteButtonInfo(globals.LastRecvdPasteInfoMsgObj);
 }
 
+function unexpandPasteButton(fromHost = false) {
+    getPasteButtonPopupExpanderElement().classList.remove('expanded');
+    if (fromHost) {
+        return;
+    }
+    onPasteInfoFormatsClicked_ntf(globals.CurPasteInfoId, false);
+}
+function expandPasteButton(fromHost = false) {
+    getPasteButtonPopupExpanderElement().classList.add('expanded');
+    if (fromHost) {
+        return;
+    }
+
+    let offset = getRectCornerByName(
+        cleanRect(getPasteButtonPopupExpanderElement().getBoundingClientRect()),
+        'top-right');
+    onPasteInfoFormatsClicked_ntf(globals.CurPasteInfoId, true, offset.x,offset.y);
+}
 // #endregion Actions
 
 // #region Event Handlers
@@ -175,5 +201,13 @@ function onPasteButtonClickOrKeyDown(e) {
         alert(getText(getDocSelection(true), true));
     }
     onPasteRequest_ntf();
+}
+
+function onPasteButtonExpanderClickOrKeyDown(e) {
+    if (isPastePopupExpanded()) {
+        unexpandPasteButton(false);
+    } else {
+        expandPasteButton(false);
+    }
 }
 // #endregion Event Handlers

@@ -75,6 +75,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region HideOnClickHandler AvaloniaProperty
+        public static Func<object, bool> GetHideOnClickHandler(AvaloniaObject obj) {
+            return obj.GetValue(HideOnClickHandlerProperty);
+        }
+
+        public static void SetHideOnClickHandler(AvaloniaObject obj, Func<object, bool> value) {
+            obj.SetValue(HideOnClickHandlerProperty, value);
+        }
+
+        public static readonly AttachedProperty<Func<object, bool>> HideOnClickHandlerProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, Func<object, bool>>(
+                "HideOnClickHandler",
+                null);
+
+        #endregion
+
         #region IsOpen AvaloniaProperty
         public static bool GetIsOpen(AvaloniaObject obj) {
             return obj.GetValue(IsOpenProperty);
@@ -394,7 +410,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private static void MenuItem_PointerReleased(object sender, PointerReleasedEventArgs e) {
+        private static void MenuItem_PointerPressed(object sender, PointerPressedEventArgs e) {
             MenuItem mi = null;
             if (e.Source is Visual sourceVisual &&
                 sourceVisual.GetVisualAncestor<MenuItem>() is MenuItem smi) {
@@ -402,47 +418,25 @@ namespace MonkeyPaste.Avalonia {
             } else if (sender is MenuItem sender_mi) {
                 mi = sender_mi;
             }
-            if (mi == null) {
+            if (mi == null ||
+                mi.DataContext is not MpAvMenuItemViewModel mivm) {
                 return;
             }
-            MpAvMenuItemViewModel mivm = mi.DataContext as MpAvMenuItemViewModel;
-            if (mivm == null) {
-                return;
-            }
+            mivm.Command?.Execute(mivm.CommandParameter);
 
             bool hide_on_click = GetHideOnClick(_cmInstance.PlacementTarget);
-            if (mivm.ContentTemplateName == MpAvMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
-
-                mivm.Command?.Execute(mivm.CommandParameter);
-                e.Handled = true;
-                if (!hide_on_click) {
-                    //mivm.IsChecked = mivm.IsChecked.DefaultToggleValue(true);
-                    //var self_ancestor_mil = GetParentMenuItems(mi, true)
-                    //            .Where(x => x.DataContext is MpMenuItemViewModel pmivm && pmivm.ContentTemplateName == MpMenuItemViewModel.CHECKABLE_TEMPLATE_NAME);
-
-                    //foreach (var cur_mi in self_ancestor_mil) {
-                    //    var cur_mi_mivm = cur_mi.DataContext as MpMenuItemViewModel;
-                    //    bool? is_cur_mi_checked = false;
-                    //    if (cur_mi_mivm.IsChecked.IsTrue()) {
-                    //        is_cur_mi_checked = true;
-                    //    } else if (cur_mi_mivm.SubItems != null && cur_mi_mivm.SubItems.Count > 0) {
-                    //        is_cur_mi_checked = cur_mi_mivm.SubItems.Any(x => x.IsChecked.IsTrueOrNull()) ? null : false;
-                    //    }
-                    //    cur_mi_mivm.IsChecked = is_cur_mi_checked;
-                    //    cur_mi.Icon = null;
-                    //    cur_mi.Icon = CreateCheckableIcon(cur_mi_mivm);
-                    //}
-                    _isCloseHandled = true;
-                }
-            } else {
-                e.Handled = false;
-                // NOTE hide_on_click only matters for checkbox templates
-                hide_on_click = true;
+            if (GetHideOnClickHandler(_cmInstance.PlacementTarget) is Func<object, bool> hideHandler) {
+                hide_on_click = hideHandler.Invoke(mi);
             }
 
+            _isCloseHandled = !hide_on_click;
             if (hide_on_click) {
                 Mp.Services.ContextMenuCloser.CloseMenu();
             }
+            e.Handled = true;
+        }
+        private static void MenuItem_PointerReleased(object sender, PointerReleasedEventArgs e) {
+
 
         }
 
@@ -494,6 +488,13 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private static void MenuItem_PointerEnteredOrExitedItem(object sender, RoutedEventArgs e) {
+            if (sender is not Control c ||
+                c.GetVisualAncestor<MenuItem>() is not MenuItem mi) {
+                return;
+            }
+            UpdateMenuItemBgColor(mi);
+        }
         private static void MenuItem_SubmenuOpened(object sender, RoutedEventArgs e) {
             // NOTE when child menu opens to left of parent (on windows at least)
             // child doesn't overlap parent and pointer leave is triggered and 
@@ -521,15 +522,18 @@ namespace MonkeyPaste.Avalonia {
                 //var new_offset =
                 //    //first_child_v.PointToScreen(first_child_v.Bounds.TopLeft).ToPortablePoint(first_child_v.VisualPixelDensity()) + 
                 //    new MpPoint(x_diff + 5 - (first_child_v.Bounds.Width * first_child_v.VisualPixelDensity()), 0);
-                if (first_child_tl is PopupRoot pr) {
+                if (first_child_tl is PopupRoot pr &&
+                pr.Parent is Popup pu) {
                     //pr.ConfigurePosition(
                     //    parent_tl,
                     //    _cmInstance.Placement,
                     //    new_offset.ToAvPoint());
 
                     //pr.RenderTransform = new TranslateTransform(x_diff + 5, 0);
-                    pr.Width += x_diff + 5;
-                    pr.InvalidateVisual();
+                    //pr.Width += x_diff + 5;
+                    //pr.InvalidateVisual();
+                    pu.HorizontalOffset += 20;
+                    //pu.RenderTransform = new TranslateTransform(20, 0);
                 }
             });
         }
@@ -557,6 +561,9 @@ namespace MonkeyPaste.Avalonia {
                         Icon = CreateIcon(mivm),
                         ItemsSource = mivm.SubItems == null ? null : mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x))
                     };
+
+                    UpdateMenuItemBgColor(mi);
+
                     mi.Classes.Add("gestureLabel");
 
                     if (mivm.Tooltip != null) {
@@ -565,10 +572,14 @@ namespace MonkeyPaste.Avalonia {
                         //ToolTip.SetTip(mi, new MpAvToolTipView() { ToolTipText = mivm.Tooltip.ToString() });
                     }
 
+                    mi.PointerEnteredItem += MenuItem_PointerEnteredOrExitedItem;
+                    mi.PointerExitedItem += MenuItem_PointerEnteredOrExitedItem;
+
                     mi.PointerEntered += MenuItem_PointerEnter;
                     mi.DetachedFromVisualTree += MenuItem_DetachedFromVisualTree;
                     mi.SubmenuOpened += MenuItem_SubmenuOpened;
                     if ((mi.Command != null && mivm.IsEnabled) || !GetHideOnClick(_cmInstance.PlacementTarget)) {
+                        mi.AddHandler(Control.PointerPressedEvent, MenuItem_PointerPressed, RoutingStrategies.Tunnel);
                         mi.AddHandler(Control.PointerReleasedEvent, MenuItem_PointerReleased, RoutingStrategies.Tunnel);
                     }
                     if (itemType == MpAvMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
@@ -607,7 +618,21 @@ namespace MonkeyPaste.Avalonia {
             return control;
         }
 
+        private static void UpdateMenuItemBgColor(MenuItem mi) {
+            if (mi.DataContext is not MpAvMenuItemViewModel mivm) {
+                return;
+            }
+            if (mivm.IsCheckable) {
+                mi.Background = mivm.IsChecked.IsTrue() ?
+                mivm.CheckedItemBgColor :
+                mivm.UncheckedItemBgColor == null ?
+                    Brushes.Transparent :
+                    mivm.UncheckedItemBgColor;
+            } else if (mivm.ItemBgColor != null) {
+                mi.Background = mivm.ItemBgColor;
+            }
 
+        }
         public static object CreateIcon(MpAvMenuItemViewModel mivm) {
             if (mivm.ContentTemplateName == MpAvMenuItemViewModel.CHECKABLE_TEMPLATE_NAME) {
                 return CreateCheckableIcon(mivm);
@@ -639,8 +664,8 @@ namespace MonkeyPaste.Avalonia {
             iconBorder.Child = iconImg;
             return iconBorder;
         }
-        private static object CreateCheckableIcon(MpAvMenuItemViewModel mivm) {
-            var pi = new PathIcon() {
+        private static PathIcon GetCheckPathIcon(MpAvMenuItemViewModel mivm) {
+            return new PathIcon() {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 Width = mivm.CheckResourceKey == "CheckSvg" ? 15 : 7,
@@ -649,14 +674,32 @@ namespace MonkeyPaste.Avalonia {
                 Data = Mp.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry,
                 Foreground = mivm.IconHexStr.ToContrastForegoundColor().ToAvBrush()
             };
+        }
+        private static object CreateCheckableIcon(MpAvMenuItemViewModel mivm) {
+            var pi = GetCheckPathIcon(mivm);
             var iconBorder = GetIconBorder(mivm);
             iconBorder.Child = pi;
             return iconBorder;
         }
+        public static void SetCheck(MenuItem mi, bool? newVal) {
+            if (mi.DataContext is not MpAvMenuItemViewModel mivm) {
+                return;
+            }
+            mivm.IsChecked = newVal;
+            if (mi.GetVisualDescendant<PathIcon>() is PathIcon pi &&
+                pi.Parent is Border parent_border &&
+                GetCheckPathIcon(mivm) is PathIcon new_pi) {
+                //pi.Width = new_pi.Width;
+                //pi.Height = new_pi.Height;
+                //pi.Foreground = new_pi.Foreground;
+                //pi.Data = Mp.Services.PlatformResource.GetResource(mivm.CheckResourceKey) as StreamGeometry;
+                //parent_border.Child = new_pi;
+                mi.Icon = CreateCheckableIcon(mivm);
+                mi.InvalidateVisual();
+            }
+        }
         private static Border GetIconBorder(MpAvMenuItemViewModel mivm) {
             var ib = new Border() {
-                //HorizontalAlignment = HorizontalAlignment.Center,
-                //VerticalAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
                 MinWidth = mivm.IconMinWidth,
@@ -774,6 +817,7 @@ namespace MonkeyPaste.Avalonia {
             MpPoint offset = null,
             PlacementMode placement = PlacementMode.Pointer,
             bool hideOnClick = true,
+            Func<object, bool> hideOnClickHandler = default,
             bool selectOnRightClick = false,
             PopupAnchor anchor = PopupAnchor.None) {
             _cmInstance.Close();
@@ -789,6 +833,7 @@ namespace MonkeyPaste.Avalonia {
             _cmInstance.HorizontalOffset = 0;
             _cmInstance.VerticalOffset = 0;
 
+            SetHideOnClickHandler(control, hideOnClickHandler);
             SetHideOnClick(control, hideOnClick);
             SetSelectOnRightClick(control, selectOnRightClick);
 

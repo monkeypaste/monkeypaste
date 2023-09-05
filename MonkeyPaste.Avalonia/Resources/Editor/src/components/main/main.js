@@ -265,7 +265,6 @@ function hideAllPopups() {
 	hideColorPaletteMenu();
 	hideCreateTemplateToolbarContextMenu();
 	hideCreateTableContextMenu();
-	hidePasteButtonExpander();
 	hideEditorAlignMenu();
 }
 // #endregion Actions

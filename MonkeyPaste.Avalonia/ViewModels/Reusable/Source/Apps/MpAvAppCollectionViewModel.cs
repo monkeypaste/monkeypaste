@@ -1,9 +1,11 @@
-﻿
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Primitives.PopupPositioning;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -127,39 +129,6 @@ namespace MonkeyPaste.Avalonia {
                 x.AppPath.ToLower() == ppi.ProcessPath.ToLower() &&
                 x.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId);
         }
-
-        public async Task ProcessAppPasteInfoClickedAsync(MpPortableProcessInfo ppi, string clickedPluginOrPresetGuid) {
-
-            if (MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
-                .Select(x => x.Parent)
-                .Distinct()
-                .FirstOrDefault(x => x.PluginGuid == clickedPluginOrPresetGuid)
-                is MpAvHandledClipboardFormatViewModel hcfvm) {
-
-                hcfvm.ManageClipboardHandlerCommand.Execute(null);
-                return;
-            }
-
-            if (MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
-                .FirstOrDefault(x => x.PresetGuid == clickedPluginOrPresetGuid)
-                is MpAvClipboardFormatPresetViewModel cfpvm) {
-
-                MpAvAppViewModel avm = GetAppByProcessInfo(ppi);
-                if (avm == null) {
-                    var app = await Mp.Services.AppBuilder.CreateAsync(ppi);
-                    while (avm == null) {
-                        await Task.Delay(100);
-                        avm = GetAppByProcessInfo(ppi);
-                    }
-                    while (avm.IsAnyBusy) { await Task.Delay(100); }
-                }
-                await avm.OleFormatInfos.ToggleFormatEnabledCommand.ExecuteAsync(cfpvm);
-                return;
-            }
-        }
-
-
-
 
         #endregion
 
@@ -288,59 +257,169 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpAvMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo(MpPortableProcessInfo ppi) {
+            IBrush enabled_brush =
+                Mp.Services.PlatformResource
+                .GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString())
+                .AdjustOpacity(0.3);
+
+            IBrush contains_enabled_brush =
+                Mp.Services.PlatformResource
+                .GetResource<IBrush>(MpThemeResourceKey.ThemeAccent4Color.ToString())
+                .AdjustOpacity(0.3);
+
             MpAvAppViewModel avm = GetAppByProcessInfo(ppi);
 
-            MpAvMenuItemViewModel CreatePresetMenuItem(MpAvClipboardFormatPresetViewModel y) {
+            bool IsPresetEnabled(MpAvClipboardFormatPresetViewModel y, MpAvAppViewModel avm) {
+                if (avm == null) {
+                    return y.IsEnabled;
+                }
+                return avm.OleFormatInfos.IsFormatEnabledByPreset(y);
+            }
+
+            bool IsPluginContainEnabled(MpAvClipboardHandlerItemViewModel handler_plugin, string format, bool isReader, MpAvAppViewModel avm) {
+                var plugin_reader_or_writer_presets_by_format =
+                    handler_plugin.Items.Where(x => x.IsReader == isReader && x.HandledFormat == format).SelectMany(x => x.Items);
+                if (avm == null) {
+                    return plugin_reader_or_writer_presets_by_format.Any(x => x.IsEnabled);
+                }
+                return plugin_reader_or_writer_presets_by_format.Any(x => avm.OleFormatInfos.IsFormatEnabledByPreset(x));
+            }
+
+            bool IsFormatContainEnabled(string format, bool isReader, MpAvAppViewModel avm) {
+                var all_reader_or_writer_presets_by_format =
+                    MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets
+                    .Where(x => x.IsReader == isReader && x.ClipboardFormat.clipboardName == format);
+
+                if (avm == null) {
+                    return all_reader_or_writer_presets_by_format.Any(x => x.IsEnabled);
+                }
+                return all_reader_or_writer_presets_by_format.Any(x => avm.OleFormatInfos.IsFormatEnabledByPreset(x));
+            }
+
+            MpAvMenuItemViewModel GetPresetMenuItem(MpAvClipboardFormatPresetViewModel y) {
                 // NOTE when process is unknown or has no info, show default
                 // NOTE2 when process is known and HAS infos, only reflect its info no default
-                bool enabled = avm == null || avm.OleFormatInfos.IsEmpty ?
-                                                y.IsEnabled :
-                                                avm.OleFormatInfos.IsFormatEnabledByPreset(y);
+
                 return new MpAvMenuItemViewModel() {
-                    Identifier = y.PresetGuid,
+                    Identifier = y,
                     Header = y.Label,
-                    IconSourceObj = y.IconId,
-                    IsChecked = enabled,
+                    //IconSourceObj = y.IconId,
+                    //CheckedItemBgColor = enabled_brush,
+                    IconBorderHexColor = MpSystemColors.Black,
+                    IsCheckable = true,
+                    IsChecked = IsPresetEnabled(y, avm),
                     Command = y.TogglePresetIsEnabledCommand,
                     CommandParameter = avm == null ? ppi : avm
                 };
             }
 
-            MpAvMenuItemViewModel CreateFormatMenuItem(MpAvHandledClipboardFormatViewModel x) {
-                return new MpAvMenuItemViewModel() {
-                    Identifier = x.PluginGuid,
-                    Header = x.Title,
-                    IconSourceObj = x.HandledFormatIconId,
-                    SubItems =
-                        x.Items
-                        .OrderBy(x => x.SortOrderIdx)
-                        .Select(y => CreatePresetMenuItem(y)).ToList()
-                };
+            List<MpAvMenuItemViewModel> GetPluginPresets(bool isReader, MpAvHandledClipboardFormatViewModel hcfvm) {
+                var plugin_presets = hcfvm.Items.Where(x => x.IsReader == isReader).OrderBy(x => x.Label);
+
+                var plugin_presets_results = plugin_presets.Select(x => GetPresetMenuItem(x)).ToList();
+                plugin_presets_results.Add(new MpAvMenuItemViewModel() {
+                    HasLeadingSeperator = true,
+                    IconSourceObj = "CogImage",
+                    Header = "Manage...",
+                    Command = hcfvm.ManageClipboardHandlerCommand
+                });
+                return plugin_presets_results;
             }
 
-            // get primary formats
-            List<MpAvMenuItemViewModel> mil =
-                MpAvClipboardHandlerCollectionViewModel.Instance
-                        .AllAvailableWriterPresets
-                        .Select(x => x.Parent)
-                        .Where(x => x.IsPrimaryFormat)
-                        .Distinct()
-                        .OrderBy(x => x.Title)
-                        .Select(x => CreateFormatMenuItem(x)).ToList();
+            List<MpAvMenuItemViewModel> GetPluginsTree(bool isReader, string format) {
+                var presets = MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets.Where(x => x.IsReader == isReader && x.ClipboardFormat.clipboardName == format);
+                var plugins = presets
+                    .Select(x => x.Parent.Parent)
+                    .Distinct()
+                    .OrderBy(x => x.HandlerName)
+                    .Select(x => new MpAvMenuItemViewModel() {
+                        Identifier = x,
+                        TagObj = isReader,
+                        //IconSourceObj = x.PluginIconId,
+                        //ItemBgColor = IsPluginContainEnabled(x, format, isReader, avm) ? contains_enabled_brush : Brushes.Transparent,
+                        IsCheckable = true,
+                        IsChecked = IsPluginContainEnabled(x, format, isReader, avm) ? null : false,
+                        IconBorderHexColor = MpSystemColors.Black,
+                        Header = x.HandlerName,
+                        SubItems = GetPluginPresets(isReader, x.Items.FirstOrDefault(x => x.IsReader == isReader && x.HandledFormat == format))
+                    }).ToList();
+                return plugins;
+            }
 
-            // create non-primary item container
+            List<MpAvMenuItemViewModel> GetFormatsTree(bool isReader) {
+                var presets = MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets.Where(x => x.IsReader == isReader);
 
-            mil.Add(new MpAvMenuItemViewModel() {
-                Header = "More...",
-                SubItems = MpAvClipboardHandlerCollectionViewModel.Instance
-                        .AllAvailableWriterPresets
-                        .Select(x => x.Parent)
-                        .Where(x => !x.IsPrimaryFormat)
-                        .Distinct()
-                        .OrderBy(x => x.Title)
-                        .Select(x => CreateFormatMenuItem(x)).ToList()
-            });
-            return new MpAvMenuItemViewModel() { SubItems = mil };
+                var formats = presets
+                    .Select(x => x.ClipboardFormat.clipboardName)
+                    .Distinct()
+                    .OrderBy(x => x);
+
+                var flat_formats = formats
+                        .Select(x => new MpAvMenuItemViewModel() {
+                            TagObj = presets.FirstOrDefault(y => y.ClipboardFormat.clipboardName == x).Parent.IsPrimaryFormat,
+                            //IconSourceObj = presets.FirstOrDefault(y => y.ClipboardFormat.clipboardName == x).IconId,
+                            //ItemBgColor = IsFormatContainEnabled(x, isReader, avm) ? contains_enabled_brush : Brushes.Transparent,
+                            Header = x,
+                            IconBorderHexColor = MpSystemColors.Black,
+                            IsCheckable = true,
+                            IsChecked = IsFormatContainEnabled(x, isReader, avm) ? null : false,
+                            SubItems = GetPluginsTree(isReader, x)
+                        }).ToList();
+
+                //var more_mi = new MpAvMenuItemViewModel() {
+                //    IconResourceKey = "PlusSolidImage",
+                //    IconTintHexStr = Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent1Color.ToString()),
+                //    Header = "More...",
+                //    ItemBgColor = flat_formats.Where(x => ((bool)x.TagObj) == false).Any(x => IsFormatContainEnabled(x.Header, isReader, avm)) ?
+                //        contains_enabled_brush : Brushes.Transparent,
+                //    SubItems = flat_formats.Where(x => ((bool)x.TagObj) == false).ToList()
+                //};
+                //return flat_formats
+                //        .Where(x => (bool)x.TagObj)
+                //        .Union(new[] { more_mi }).ToList();
+                return flat_formats;
+            }
+
+            /*
+            Structure 
+
+            Readers
+            |__Text
+                |__<Plugin Name>
+                    |__<Preset Name>
+                    |__Manage..
+            |__Image
+            |__Files
+            |__More...
+
+            Writers
+            |__Text
+                |__<Plugin Name>
+                    |__<Preset Name>
+                    |__Manage..
+            |__Image
+            |__Files
+            |__More...
+            */
+            var readers = GetFormatsTree(true);
+            var writers = GetFormatsTree(false);
+            return new MpAvMenuItemViewModel() {
+                SubItems = new List<MpAvMenuItemViewModel>() {
+                    new MpAvMenuItemViewModel() {
+                        IconResourceKey = "GlassesImage",
+                        IconTintHexStr = MpSystemColors.mintcream,
+                        Header = "Readers",
+                        SubItems = readers
+                    },
+                    new MpAvMenuItemViewModel() {
+                        HasLeadingSeperator = true,
+                        IconResourceKey = "PenImage",
+                        IconTintHexStr = MpSystemColors.peachpuff3,
+                        Header = "Writers",
+                        SubItems = writers
+                    },
+                }
+            };
         }
         #endregion
 
@@ -457,14 +536,60 @@ namespace MonkeyPaste.Avalonia {
                 await acsvm.ShowAssignDialogAsync();
             });
 
-        public ICommand ShowAppFormatFlyoutMenuCommand => new MpCommand<object>(
+        public ICommand ShowAppPresetsContextMenuCommand => new MpCommand<object>(
             (args) => {
                 if (args is not object[] argParts ||
                     argParts[0] is not Control c ||
-                    argParts[1] is not MpPortableProcessInfo pi) {
+                    argParts[2] is not MpPoint offset//c_rel_offset ||
+                                                     //c.TranslatePoint(c_rel_offset.ToAvPoint(), TopLevel.GetTopLevel(c)).Value.ToPortablePoint()
+                                                     //    is not MpPoint offset
+                        ) {
                     return;
                 }
-                MpAvMenuExtension.ShowMenu(c, GetPasteInfoMenuItemsByProcessInfo(pi), hideOnClick: false);
+                // NOTE pi is null when unknown active app
+                var pi = argParts[1] as MpPortableProcessInfo;
+
+                void _cmInstance_MenuClosed(object sender, RoutedEventArgs e) {
+                    if (c.DataContext is MpAvClipTileViewModel ctvm &&
+                        ctvm.GetContentView() is MpAvContentWebView cwv) {
+                        cwv.SendMessage("unexpandPasteButtonPopup_ext()");
+                    }
+                    MpAvContextMenuView.Instance.Closed -= _cmInstance_MenuClosed;
+                }
+
+                bool HideOnClickHandler(object arg) {
+                    if (arg is not MenuItem mi ||
+                        mi.DataContext is not MpAvMenuItemViewModel mivm) {
+
+                        // not preset click so allow hide
+                        return true;
+                    }
+                    if (mivm.Identifier is string clicked_format) {
+                        if (mivm.IsChecked.IsTrueOrNull()) {
+                            // disable all format presets here
+                        }
+                    } else if (mivm.Identifier is MpAvHandledClipboardFormatViewModel hcbvm &&
+                                mivm.TagObj is bool isReader) {
+                        if (mivm.IsChecked.IsTrueOrNull()) {
+                            // disable all plugin presets here
+                        }
+                    } else if (mivm.Identifier is MpAvClipboardFormatPresetViewModel cfpvm) {
+                        // toggle preset and update parents
+                        bool new_checked = !mivm.IsChecked.IsTrue();
+                        MpAvMenuExtension.SetCheck(mi, new_checked);
+
+                    }
+                    return false;
+                }
+
+                MpAvContextMenuView.Instance.Closed += _cmInstance_MenuClosed;
+                MpAvMenuExtension.ShowMenu(
+                    control: c,
+                    placement: PlacementMode.TopEdgeAlignedLeft,
+                    anchor: PopupAnchor.BottomRight,
+                    offset: offset,
+                    mivm: GetPasteInfoMenuItemsByProcessInfo(pi),
+                    hideOnClickHandler: HideOnClickHandler);
             });
         #endregion
     }

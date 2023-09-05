@@ -197,7 +197,6 @@
     <script defer src="src/components/content/content-image/content-image.js"></script>
     <script defer src="src/components/annotations/annotations.js"></script>
     <script defer src="src/components/paste-toolbar/pastetoolbar.js"></script>
-    <script defer src="src/components/paste-toolbar/popup/paste-button-popup.js"></script>
     <!--<script defer src="src/components/content/ext-content-source-blot/ext-content-source-blot.js"></script>-->
 
     <script defer src="src/components/list/list.js"></script>
@@ -545,11 +544,13 @@
             <!-- APPEND MANUAL LABEL -->
             <span id="pasteAppendIsManualToolbarLabel" class="hidden">MANUAL</span>
             <!-- APPEND STATE CONTAINER -->
-            <div id="pasteAppendToolbarContainer">
+            <div id="pasteAppendToolbarContainer" class="hover-border">
+                <!-- APPEND BEGIN BUTTON -->
+                <button id="pasteAppendBeginButton" class="svg-key-stack unexpanded-only" hover-tooltip="Append ##ToggleAppendLineMode##"></button>
+                <div class="toolbar-separator unexpanded-only"></div>
+                <!-- APPEND INSERT BUTTON -->
 
-                <!-- APPEND INSERT BUTTON --> 
-
-                <button id="pasteAppendToggleInlineButton" class="svg-key-paragraph append-inline-elm" hover-tooltip="Block ##ToggleAppendLineMode##"></button>
+                <button id="pasteAppendToggleInlineButton" class="svg-key-paragraph" hover-tooltip="Block ##ToggleAppendLineMode##"></button>
                 <div class="toolbar-separator"></div>
 
                 <!-- APPEND MANUAL BUTTON -->
@@ -573,6 +574,7 @@
 
             <!-- PASTE BUTTON -->
             <button id="pasteButton"
+                    class="hover-border"
                     tabindex="6"
                     hover-tooltip="Paste">
                 <i></i><span>Paste</span>
@@ -580,6 +582,7 @@
             <!--<div class="toolbar-separator"></div>-->
             <!-- PASTE BUTTON POPUP -->
             <button id="pasteButtonPopupExpander"
+                    class="hover-border"
                     tabindex="7">
                 <span class="expander-arrow"></span>
             </button>

@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
 
         }
         public bool IsFormatEnabledByPreset(MpAvClipboardFormatPresetViewModel cfpvm) {
-            return GetAppOleFormatInfoByFormatPreset(cfpvm) != null;
+            return IsEmpty ? cfpvm.IsEnabled : GetAppOleFormatInfoByFormatPreset(cfpvm) != null;
         }
         #endregion
 

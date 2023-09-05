@@ -249,6 +249,10 @@ function dragEventFromHost_ext(dragEnterMsgBase64Str) {
 	}	
 }
 
+function unexpandPasteButtonPopup_ext() {
+	unexpandPasteButton(true);
+}
+
 function updateShortcuts_ext(shortcutsMsgBase64Str) {
 	// input 'MpQuillEditorShortcutKeystringMessage'
 	initShortcuts(shortcutsMsgBase64Str);

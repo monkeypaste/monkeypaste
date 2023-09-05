@@ -15,6 +15,10 @@ function initPasteAppendToolbarItems() {
 
 // #region Getters
 
+function getPasteAppendBeginButtonElement() {
+	return document.getElementById('pasteAppendBeginButton');
+}
+
 function getPasteAppendToolbarContainerElement() {
 	return document.getElementById('pasteAppendToolbarContainer');
 }
@@ -44,13 +48,11 @@ function getPasteAppendStopAppendButtonElement() {
 
 // #region State
 
-function isPasteAppendToolbarLabelContainerVisible() {
-	return !getPasteAppendToolbarContainerElement().classList.contains('hidden');
-}
 // #endregion State
 
 // #region Actions
 function attachAppendButtonHandlers() {
+	addClickOrKeyClickEventListener(getPasteAppendBeginButtonElement(), onAppendBeginButtonClickOrKey);
 	addClickOrKeyClickEventListener(getPasteAppendToggleInlineButtonElement(), onAppendToggleInlineButtonClickOrKey);
 	addClickOrKeyClickEventListener(getPasteAppendToggleManualButtonElement(), onAppendToggleManualButtonClickOrKey);
 	addClickOrKeyClickEventListener(getPasteAppendToggleBeforeButtonElement(), onAppendToggleBeforeButtonClickOrKey);
@@ -124,11 +126,13 @@ function createAppendButtonLookup() {
 }
 
 function showPasteAppendToolbar() {
-	getPasteAppendToolbarContainerElement().classList.remove('hidden');
+	getPasteAppendToolbarContainerElement().classList.add('expanded');
+	getPasteAppendToolbarContainerElement().classList.remove('hover-border');
 }
 
 function hidePasteAppendToolbar() {
-	getPasteAppendToolbarContainerElement().classList.add('hidden');
+	getPasteAppendToolbarContainerElement().classList.remove('expanded');
+	getPasteAppendToolbarContainerElement().classList.add('hover-border'); 
 }
 function updatePasteAppendToolbar() {
 	if (!isAnyAppendEnabled()) {
@@ -182,6 +186,10 @@ function onStopAppendButtonClickOrKey(e) {
 	disableAppendMode(false);
 }
 
+function onAppendBeginButtonClickOrKey(e) {
+	showPasteAppendToolbar();
+	enableAppendMode(true, false);
+}
 function onAppendToggleInlineButtonClickOrKey(e) {
 	if (globals.ContentItemType == 'FileList') {
 		// ignore click on file item

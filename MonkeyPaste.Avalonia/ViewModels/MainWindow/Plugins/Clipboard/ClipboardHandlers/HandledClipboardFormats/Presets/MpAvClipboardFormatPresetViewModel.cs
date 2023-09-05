@@ -431,6 +431,7 @@ namespace MonkeyPaste.Avalonia {
                     IsEnabled = !IsEnabled;
                     return;
                 }
+                bool cur_def_enabled = IsEnabled;
                 MpAvAppViewModel avm = args as MpAvAppViewModel;
                 if (avm == null &&
                     args is MpPortableProcessInfo pi) {
@@ -442,6 +443,14 @@ namespace MonkeyPaste.Avalonia {
                     while (avm.IsAnyBusy) { await Task.Delay(100); }
                 }
                 MpDebug.Assert(avm != null, $"Error toggling preset for arg '{args}'");
+                if (avm.OleFormatInfos.IsEmpty) {
+                    // initial custom preset, before toggling create snapshot of defaults to use for toggling
+                    await Task.WhenAll(
+                        MpAvClipboardHandlerCollectionViewModel.Instance.EnabledWriters
+                        .Select(x => avm.OleFormatInfos.CreateOleFormatInfoViewModelByPresetAsync(x)));
+                    while (avm.IsAnyBusy) { await Task.Delay(100); }
+                }
+
                 if (avm.OleFormatInfos.GetAppOleFormatInfoByFormatPreset(this) is MpAvAppOleFormatInfoViewModel aofivm) {
                     // format exists, remove
                     await aofivm.AppOleFormatInfo.DeleteFromDatabaseAsync();

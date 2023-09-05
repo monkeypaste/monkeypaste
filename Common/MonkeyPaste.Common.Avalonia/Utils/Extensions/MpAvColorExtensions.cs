@@ -1,9 +1,7 @@
 ﻿using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
-using MonkeyPaste.Common.Plugin;
 using System;
-using System.Diagnostics;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvColorExtensions {
@@ -125,8 +123,10 @@ namespace MonkeyPaste.Common.Avalonia {
         }
         public static IBrush AdjustOpacity(this IBrush brush, double opacity) {
             if (brush is SolidColorBrush scb) {
-                scb.Color = scb.Color.AdjustOpacity(opacity);
-                return scb;
+                return new SolidColorBrush() {
+                    Color = scb.Color,
+                    Opacity = opacity
+                };
             }
             // warning, not solid color brush
             MpDebug.Break();

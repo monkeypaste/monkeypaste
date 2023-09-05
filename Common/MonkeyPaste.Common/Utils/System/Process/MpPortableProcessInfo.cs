@@ -12,11 +12,13 @@ namespace MonkeyPaste.Common {
 
         public List<string> ArgumentList { get; set; } = new List<string>();
 
-        public MpPortableProcessInfo() { }
-        public MpPortableProcessInfo(string path) {
-            MpDebug.Assert(path.IsFile(), $"Bad path! '{path}'");
-            ProcessPath = path;
+        public static MpPortableProcessInfo Create(string path) {
+            if (path.IsFile()) {
+                return new MpPortableProcessInfo() { ProcessPath = path };
+            }
+            return null;
         }
+        public MpPortableProcessInfo() { }
         public bool IsThisAppProcess() {
             return MpCommonTools.Services.ProcessWatcher.IsProcessPathEqual(Handle, MpCommonTools.Services.ProcessWatcher.ThisAppProcessInfo.Handle);
         }

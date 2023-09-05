@@ -363,5 +363,8 @@ namespace MonkeyPaste {
     }
     public class MpQuillPasteInfoFormatsClickedNotification : MpJsonObject {
         public string infoId { get; set; }
+        public bool isExpanded { get; set; }
+        public double offsetX { get; set; }
+        public double offsetY { get; set; }
     }
 }

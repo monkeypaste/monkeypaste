@@ -201,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
 
         private Dictionary<string, bool> GetFormatPresetState() {
             return
-              MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
+              MpAvClipboardHandlerCollectionViewModel.Instance.AllWriterPresets
               .ToDictionary(kvp => kvp.ClipboardFormat.clipboardName, kvp => kvp.IsEnabled);
 
         }
@@ -214,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
 
             // TODO should use MpAppClipboardFormatInfo data for last active here
             var drop_app = await Mp.Services.SourceRefTools.FetchOrCreateAppRefAsync(CurDropProcessInfo);
-            foreach (var preset_vm in MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets) {
+            foreach (var preset_vm in MpAvClipboardHandlerCollectionViewModel.Instance.AllWriterPresets) {
                 string param_info = preset_vm.GetPresetParamJson();
                 await MpAppOleFormatInfo.CreateAsync(
                     appId: drop_app.Id,
@@ -251,7 +251,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            MpAvClipboardHandlerCollectionViewModel.Instance.AllAvailableWriterPresets
+            MpAvClipboardHandlerCollectionViewModel.Instance.AllWriterPresets
                 .ForEach(x => x.IsEnabled = _preShowPresetState[x.ClipboardFormat.clipboardName]);
         }
 
@@ -283,7 +283,7 @@ namespace MonkeyPaste.Avalonia {
             }
             OnPropertyChanged(nameof(IsDragObjectInitializing));
             MpAvClipboardHandlerCollectionViewModel.Instance
-                .AllAvailableWriterPresets
+                .AllWriterPresets
                 .ForEach(x => x.OnPropertyChanged(nameof(x.IsFormatPlaceholderOnTargetDragObject)));
 
             var gmp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
@@ -329,7 +329,7 @@ namespace MonkeyPaste.Avalonia {
                     // get preset for app specified format
                     var wpvm =
                     MpAvClipboardHandlerCollectionViewModel.Instance
-                        .AllAvailableWriterPresets
+                        .AllWriterPresets
                         .FirstOrDefault(x => x.ClipboardFormat.clipboardName == cfivm.FormatName);
                     if (wpvm == null) {
                         continue;

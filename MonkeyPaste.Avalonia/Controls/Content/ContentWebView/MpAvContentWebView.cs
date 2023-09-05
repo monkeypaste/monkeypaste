@@ -639,10 +639,11 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillPasteInfoFormatsClickedNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillPasteInfoFormatsClickedNotification pasteInfoFormatsClickedMsg) {
                         MpAvAppCollectionViewModel.Instance
-                        .ShowAppFormatFlyoutMenuCommand.Execute(
+                        .ShowAppPresetsContextMenuCommand.Execute(
                             new object[] {
                                 this,
-                                new MpPortableProcessInfo(pasteInfoFormatsClickedMsg.infoId)
+                                MpPortableProcessInfo.Create(pasteInfoFormatsClickedMsg.infoId),
+                                new MpPoint(pasteInfoFormatsClickedMsg.offsetX,pasteInfoFormatsClickedMsg.offsetY)
                             });
                     }
                     break;

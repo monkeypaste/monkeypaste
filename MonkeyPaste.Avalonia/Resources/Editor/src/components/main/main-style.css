@@ -194,3 +194,13 @@ i {
 .strike-through {
     text-decoration: line-through;
 }
+
+.hover-border {
+        border-width: 1px !important;
+        border-style: solid;
+}
+.hover-border:hover {
+        border-style: solid;
+        border-width: 1px !important;
+        border-color: var(--hovercolor) !important;
+}

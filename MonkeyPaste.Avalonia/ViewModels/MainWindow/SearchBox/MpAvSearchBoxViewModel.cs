@@ -329,10 +329,27 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var target_control = args as Control;
 
+                bool HideOnClickHandler(object arg) {
+                    if (arg is not MenuItem mi ||
+                        mi.DataContext is not MpAvMenuItemViewModel mivm) {
+                        return true;
+                    }
+                    SearchFilterCollectionViewModel.ValidateFilters(SearchFilterCollectionViewModel.Filters.FirstOrDefault(x => x == mivm.Identifier));
+                    if (MpAvContextMenuView.Instance.GetVisualDescendants<MenuItem>() is IEnumerable<MenuItem> mil) {
+                        foreach (var mi2 in mil) {
+                            if (mi2.DataContext is not MpAvMenuItemViewModel mi_mivm ||
+                                SearchFilterCollectionViewModel.Filters.FirstOrDefault(x => x == mi_mivm.Identifier) is not MpAvSearchFilterViewModel sfvm) {
+                                continue;
+                            }
+                            MpAvMenuExtension.SetCheck(mi2, sfvm.IsChecked);
+                        }
+                    }
+                    return false;
+                }
                 MpAvMenuExtension.ShowMenu(
                     target_control,
                     SearchFilterCollectionViewModel.PopupMenuViewModel,
-                    hideOnClick: false,
+                    hideOnClickHandler: HideOnClickHandler,
                     placement: PlacementMode.Pointer);
             });
 

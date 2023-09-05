@@ -1,13 +1,25 @@
 ﻿
+#editor.image-content #pasteAppendToolbarContainer {
+    display: none;
+}
+
+#pasteToolbar:not(:hover) #pasteAppendToolbarContainer:not(.expanded) {
+    opacity: 0;
+}
+#pasteToolbar:hover #pasteAppendToolbarContainer:not(.expanded) {
+    opacity: 1;
+}
+
 #pasteAppendToolbarContainer {
     background-color: var(--editableeditorbgcolor_opaque);
     display: inline-flex;
     border-radius: var(--commonborderradius);
     border-width: 1px;
-    border-color: white;
+    border-color: transparent;
+    border-style: solid;
     text-align: center;
     font-size: 12px;
-    transition: 0.5s;
+    transition: all 0.5s ease;
     align-items: center;
 }
     #pasteAppendToolbarContainer .toolbar-separator
@@ -16,16 +28,37 @@
         height: 20px;
         margin: 5px 0;
     }
+    
+    #pasteAppendToolbarContainer .toolbar-separator.unexpanded-only
+    {
+        background-color: transparent;
+    }
 
-    #pasteAppendToolbarContainer button:hover path
+    #pasteAppendToolbarContainer button:hover .ql-fill
     {
         fill: var(--hovercolor) !important;
+    }
+    #pasteAppendToolbarContainer button:hover .ql-stroke
+    {
+        stroke: var(--hovercolor) !important;
+    }
+    
+    #pasteAppendToolbarContainer > :not(.unexpanded-only)
+    {
+        display: none;
+    }
+    #pasteAppendToolbarContainer.expanded > :not(.unexpanded-only)
+    {
+        display: flex;
+    }
+    #pasteAppendToolbarContainer.expanded > .unexpanded-only
+    {
+        display: none;
     }
 
 #pasteAppendToolbarContainer button {
     background-color: transparent !important;
     border-width: 0 !important;
-    border-color: silver !important;
     border-radius: 3px;
     display: flex;
     padding: 0 !important;

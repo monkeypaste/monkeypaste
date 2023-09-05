@@ -187,9 +187,11 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        public IEnumerable<MpAvClipboardFormatPresetViewModel> AllPresets => Items.SelectMany(x => x.Items.SelectMany(y => y.Items));
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> AllPresets =>
+            Items.SelectMany(x => x.Items.SelectMany(y => y.Items));
 
-        public IEnumerable<MpAvClipboardFormatPresetViewModel> AllSelectedPresets => AllPresets.Where(x => x.IsSelected);
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> AllSelectedPresets =>
+            AllPresets.Where(x => x.IsSelected);
 
         public IEnumerable<MpAvClipboardFormatViewModel> FormatViewModels =>
             MpPortableDataFormats.RegisteredFormats.Select(x => new MpAvClipboardFormatViewModel(this, x));
@@ -199,20 +201,24 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvClipboardFormatPresetViewModel> EnabledWriters => EnabledFormats.Where(x => x.IsWriter);
 
         public IEnumerable<MpAvClipboardFormatPresetViewModel> SortedAvailableEnabledWriters =>
-            AllAvailableWriterPresets
+            AllWriterPresets
             .OrderBy(x => x.ClipboardFormat.sortOrderIdx)
             .ToList();
 
-        public IEnumerable<MpAvClipboardFormatPresetViewModel> AllAvailableWriterPresets {
-            get {
-                var aawpl = new List<MpAvClipboardFormatPresetViewModel>();
-                foreach (var handlerItem in Items) {
-                    foreach (var writerFormat in handlerItem.Writers) {
-                        yield return writerFormat.Items.OrderByDescending(x => x.LastSelectedDateTime).First();
-                    }
-                }
-            }
-        }
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> AllWriterPresets =>
+            AllPresets.Where(x => x.IsWriter);
+        public IEnumerable<MpAvClipboardFormatPresetViewModel> AllReaderPresets =>
+            AllPresets.Where(x => x.IsReader);
+        //public IEnumerable<MpAvClipboardFormatPresetViewModel> AllWriterPresets {
+        //    get {
+        //        var aawpl = new List<MpAvClipboardFormatPresetViewModel>();
+        //        foreach (var handlerItem in Items) {
+        //            foreach (var writerFormat in handlerItem.Writers) {
+        //                yield return writerFormat.Items.OrderByDescending(x => x.LastSelectedDateTime).First();
+        //            }
+        //        }
+        //    }
+        //}
 
         public IEnumerable<MpIClipboardReaderComponent> EnabledReaderComponents =>
             EnabledReaders
@@ -465,7 +471,7 @@ namespace MonkeyPaste.Avalonia {
             IEnumerable<MpAvClipboardFormatPresetViewModel> writer_presets =
                 force_writer_preset_ids == null ?
                     EnabledWriters :
-                    AllAvailableWriterPresets.Where(x => force_writer_preset_ids.Contains(x.PresetId));
+                    AllWriterPresets.Where(x => force_writer_preset_ids.Contains(x.PresetId));
 
             IEnumerable<MpIClipboardWriterComponent> writer_components =
                 writer_presets
@@ -627,7 +633,7 @@ namespace MonkeyPaste.Avalonia {
 
                 OnPropertyChanged(nameof(EnabledFormats));
                 OnPropertyChanged(nameof(FormatViewModels));
-                OnPropertyChanged(nameof(AllAvailableWriterPresets));
+                OnPropertyChanged(nameof(AllWriterPresets));
             }, (presetVmArg) => presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm && cfpvm.IsWriter);
 
         public ICommand UnregisterClipboardFormatCommand => new MpCommand<object>(

@@ -21,16 +21,18 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (_mivm == null) {
                     _mivm = new MpAvMenuItemViewModel() {
-                        IsCheckedSrcObj = this,
-                        IsCheckedPropPath = nameof(IsChecked),
+                        Identifier = this,
+                        //IsCheckedSrcObj = this,
+                        //IsCheckedPropPath = nameof(IsChecked),
+
                         //CommandSrcObj = this,
                         //CommandPath = nameof(ToggleIsCheckedCommand),
                         Header = Label,
-                        IconBorderHexColor = MpSystemColors.Black,
-                        IconSrcBindingObj = this,
-                        IconPropPath = nameof(CheckBoxBgHexStr),
-                        CheckedResourceSrcObj = this,
-                        CheckedResourcePropPath = nameof(CheckedResourceObj),
+                        //IconBorderHexColor = MpSystemColors.Black,
+                        //IconSrcBindingObj = this,
+                        //IconPropPath = nameof(CheckBoxBgHexStr),
+                        //CheckedResourceSrcObj = this,
+                        //CheckedResourcePropPath = nameof(CheckedResourceObj),
 
 
                         IsChecked = IsChecked,

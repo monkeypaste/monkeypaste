@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -205,7 +204,7 @@ namespace MonkeyPaste.Avalonia {
 
             }
         }
-        private void ValidateFilters(MpAvSearchFilterViewModel change_fvm) {
+        public void ValidateFilters(MpAvSearchFilterViewModel change_fvm) {
             bool needsUpdate = false;
             if (change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.Regex)) {
                 // checking regex disables case and whole word, unchecking reenables
@@ -246,15 +245,15 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            if (needsUpdate) {
-                var target = MpAvContextMenuView.Instance.PlacementTarget;
-                if (target == null) {
-                    return;
-                }
-                var offset = new MpPoint(MpAvContextMenuView.Instance.HorizontalOffset, MpAvContextMenuView.Instance.VerticalOffset);
-                MpAvMenuExtension.CloseMenu();
-                MpAvMenuExtension.ShowMenu(target, PopupMenuViewModel, offset, PlacementMode.Pointer);
-            }
+            //if (needsUpdate) {
+            //    var target = MpAvContextMenuView.Instance.PlacementTarget;
+            //    if (target == null) {
+            //        return;
+            //    }
+            //    var offset = new MpPoint(MpAvContextMenuView.Instance.HorizontalOffset, MpAvContextMenuView.Instance.VerticalOffset);
+            //    MpAvMenuExtension.CloseMenu();
+            //    MpAvMenuExtension.ShowMenu(target, PopupMenuViewModel, offset, PlacementMode.Pointer);
+            //}
 
         }
         #endregion

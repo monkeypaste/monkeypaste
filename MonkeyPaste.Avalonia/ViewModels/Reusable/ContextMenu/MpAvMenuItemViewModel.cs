@@ -1,5 +1,5 @@
-﻿using MonkeyPaste.Common;
-using Org.BouncyCastle.Utilities;
+﻿using Avalonia.Media;
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,6 +92,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsSeparator { get; set; }
 
+        public bool IsCheckable { get; set; }
         public bool IsHeaderedSeparator { get; set; }
 
         public bool IsColorPallete { get; set; }
@@ -103,6 +104,8 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (IsHeaderedSeparator) {
                     return HEADERED_ITEM_TEMPLATE_NAME;
+                } else if (IsCheckable) {
+                    return CHECKABLE_TEMPLATE_NAME;
                 } else if (IsSeparator) {
                     return SEPERATOR_TEMPLATE_NAME;
                 } else if (IsPasteToPathRuntimeItem) {
@@ -180,6 +183,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool? NullCheckToggleResult { get; set; } = false;
         public bool? IsChecked { get; set; } = false;
 
         public string ToggleType { get; set; } = "None";
@@ -391,6 +395,10 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        public IBrush ItemBgColor { get; set; }
+        public IBrush CheckedItemBgColor { get; set; }
+        public IBrush UncheckedItemBgColor { get; set; }
         #endregion
 
         #region Layout
@@ -548,6 +556,10 @@ namespace MonkeyPaste.Avalonia {
             if (SubItems != null) {
                 SubItems.ForEach(x => x.ClearCommands());
             }
+        }
+
+        public override string ToString() {
+            return Header;
         }
         #endregion
 

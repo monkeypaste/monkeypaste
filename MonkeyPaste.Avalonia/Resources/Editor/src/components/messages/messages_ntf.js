@@ -252,10 +252,13 @@ function onInternalContextMenuCanBeShownChanged_ntf(canBeShown) {
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyInternalContextMenuCanBeShownChanged', msgStr);
 }
-function onPasteInfoFormatsClicked_ntf(pasteInfoGuid) {
+function onPasteInfoFormatsClicked_ntf(pasteInfoGuid, doShow, x, y) {
 	// output 'MpQuillPasteInfoFormatsClickedNotification'
 	let msg = {
-		infoId: pasteInfoGuid
+		infoId: pasteInfoGuid,
+		isExpanded: doShow,
+		offsetX: x || 0,
+		offsetY: y || 0
 	};
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyPasteInfoFormatsClicked', msgStr);

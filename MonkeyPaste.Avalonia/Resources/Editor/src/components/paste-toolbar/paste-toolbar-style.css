@@ -30,11 +30,6 @@ body.popOut #pasteToolbar {
     display: inline-flex;
     align-items: center;
 }
-    #pasteButtonAndModeContainer button:hover, #pasteButton:hover {
-        border-width: 1px;
-        border-color: var(--hovercolor);
-        color: var(--hovercolor);
-    }
 
 #pasteButton {
     margin: 0 10px 0 10px;
