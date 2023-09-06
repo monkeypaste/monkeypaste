@@ -29,22 +29,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedIds, bool recursive);
     }
 
-
-    //public class MpSetColorArguments {
-    //    public event EventHandler<string> SetColorEventCallback;
-    //    public string OriginalColor { get; }
-    //}
-
-    public enum MpMenuItemType {
-        None = 0,
-        HeaderSeparator,
-        Separator,
-        PasteToPathRuntimeItem,
-        ColorPallete,
-        NewTableSelector,
-        lorIconMenuItem,
-
-    }
     public class MpAvMenuItemViewModel : MpAvViewModelBase {
         #region Constants
 
@@ -102,6 +86,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string ContentTemplateName {
             get {
+
                 if (IsHeaderedSeparator) {
                     return HEADERED_ITEM_TEMPLATE_NAME;
                 } else if (IsCheckable) {

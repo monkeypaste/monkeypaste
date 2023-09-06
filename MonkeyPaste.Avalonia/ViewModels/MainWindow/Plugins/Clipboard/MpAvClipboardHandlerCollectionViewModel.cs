@@ -19,7 +19,8 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncCollectionObject,
         MpIAsyncComboBoxViewModel,
         MpIClipboardFormatDataHandlers,
-        MpIPlatformDataObjectTools { //
+        MpIPlatformDataObjectTools,
+        MpAvIAnchoredMenuItemCollectionViewModel { //
 
         #region Constants
 
@@ -32,6 +33,17 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIMenuItemCollectionViewModel Implementation
+        bool MpAvIMenuItemCollectionViewModel.IsMenuOpen { get; set; }
+        public object MenuAnchorObj { get; set; }
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemCollectionViewModel.Items {
+            get {
+                return null;
+            }
+        }
+
+        #endregion
 
         #region MpITreeItemViewModel Implementation
 

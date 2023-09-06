@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -6,12 +8,23 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchFilterCollectionViewModel :
         MpAvViewModelBase<MpAvSearchBoxViewModel>,
+        MpAvIMenuItemCollectionViewModel,
         MpIPopupMenuViewModel {
         #region Private Variables
 
         #endregion
 
         #region Statics
+
+        #endregion
+
+        #region MpAvIMenuItemCollectionViewModel Implementation
+        bool MpAvIMenuItemCollectionViewModel.IsMenuOpen {
+            get => IsPopupMenuOpen;
+            set => IsPopupMenuOpen = value;
+        }
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemCollectionViewModel.Items =>
+            Filters;
 
         #endregion
 
@@ -72,22 +85,16 @@ namespace MonkeyPaste.Avalonia {
                             "Application Name",
                             nameof(MpAvPrefViewModel.Instance.SearchByApplicationName),
                             MpContentQueryBitFlags.AppName),
-                        //new MpSearchFilterViewModel(
-                        //    this,
-                        //    "Collections",
-                        //    nameof(MpJsonPreferenceIO.Instance.SearchByTag),
-                        //    MpContentFilterType.Tag),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Annotations",
                             nameof(MpAvPrefViewModel.Instance.SearchByAnnotation),
                             MpContentQueryBitFlags.Annotations),
-                        new MpAvSearchFilterViewModel(this,true),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Text Type",
                             nameof(MpAvPrefViewModel.Instance.SearchByTextType),
-                            MpContentQueryBitFlags.TextType),
+                            MpContentQueryBitFlags.TextType,true),
                         new MpAvSearchFilterViewModel(
                             this,
                             "File Type",
@@ -98,12 +105,11 @@ namespace MonkeyPaste.Avalonia {
                             "Image Type",
                             nameof(MpAvPrefViewModel.Instance.SearchByImageType),
                             MpContentQueryBitFlags.ImageType),
-                        new MpAvSearchFilterViewModel(this,true),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Case Sensitive",
                             nameof(MpAvPrefViewModel.Instance.SearchByIsCaseSensitive),
-                            MpContentQueryBitFlags.CaseSensitive),
+                            MpContentQueryBitFlags.CaseSensitive,true),
                         new MpAvSearchFilterViewModel(
                             this,
                             "Whole Word",
@@ -159,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Filters));
 
             MpMessenger.RegisterGlobal(ReceiveGlobalMessage);
-            foreach (var sfvm in Filters.Where(x => !x.IsSeperator)) {
+            foreach (var sfvm in Filters) {
                 sfvm.PropertyChanged += Sfvm_PropertyChanged;
             }
         }
@@ -245,15 +251,17 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            //if (needsUpdate) {
-            //    var target = MpAvContextMenuView.Instance.PlacementTarget;
-            //    if (target == null) {
-            //        return;
-            //    }
-            //    var offset = new MpPoint(MpAvContextMenuView.Instance.HorizontalOffset, MpAvContextMenuView.Instance.VerticalOffset);
-            //    MpAvMenuExtension.CloseMenu();
-            //    MpAvMenuExtension.ShowMenu(target, PopupMenuViewModel, offset, PlacementMode.Pointer);
-            //}
+            if (needsUpdate) {
+                var target = MpAvContextMenuView.Instance.PlacementTarget;
+                if (target == null) {
+                    return;
+                }
+                var offset = new MpPoint(MpAvContextMenuView.Instance.HorizontalOffset, MpAvContextMenuView.Instance.VerticalOffset);
+                MpAvMenuExtension.CloseMenu();
+                MpAvMenuExtension.ShowMenu(
+                    control: target,
+                    mivm: PopupMenuViewModel, offset, PlacementMode.Pointer);
+            }
 
         }
         #endregion

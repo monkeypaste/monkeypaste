@@ -1,0 +1,109 @@
+<local:MpAvMenuView xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:local="using:MonkeyPaste.Avalonia"
+                    xmlns:pcl="using:MonkeyPaste"
+                    mc:Ignorable="d"
+                    d:DesignWidth="800"
+                    d:DesignHeight="450"
+                    x:DataType="local:MpAvIMenuItemCollectionViewModel"
+                    x:CompileBindings="True"
+                    x:Class="MonkeyPaste.Avalonia.MpAvMenuView">
+    <local:MpAvMenuView.Styles>
+        <Style Selector="MenuItem"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Command"
+                    Value="{Binding Command}" />
+            <Setter Property="CommandParameter"
+                    Value="{Binding CommandParameter}" />
+            <Setter Property="StaysOpenOnClick"
+                    Value="{Binding StaysOpenOnClick}" />
+            <Setter Property="InputGesture"
+                    Value="{Binding InputGestureText, Converter={x:Static local:MpAvKeyStringToKeyGestureConverter.Instance}}" />
+            <Setter Property="Theme"
+                    Value="{StaticResource GestureLabelMenuItem}" />
+        </Style>
+        <Style Selector="MenuItem:not(.checkWithIcon)"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Header"
+                    Value="{Binding Header}" />
+        </Style>
+
+        <Style Selector="MenuItem CheckBox"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="IsChecked"
+                    Value="{Binding IsChecked, Mode=OneWay}" />
+            <Setter Property="Command"
+                    Value="{Binding Command}" />
+            <Setter Property="CommandParameter"
+                    Value="{Binding CommandParameter}" />
+        </Style>
+
+        <Style Selector="MenuItem Image"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Source"
+                    Value="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+            <!--<Setter Property="Width"
+                    Value="20" />
+            <Setter Property="Height"
+                    Value="20" />-->
+        </Style>
+        <Style Selector="MenuItem TextBlock"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Text"
+                    Value="{Binding Header}" />
+        </Style>
+    </local:MpAvMenuView.Styles>
+    <local:MpAvMenuView.ItemsSource>
+        <Binding Path="Items">
+            <Binding.Converter>
+                <local:MpAvTemplateDictionaryToItemsSourceConverter>
+                    <!--  DEFAULT  -->
+                    <DataTemplate x:Key="Default"
+                                  x:DataType="local:MpAvIMenuItemViewModel">
+                        <MenuItem>
+                            <MenuItem.Icon>
+                                <Image />
+                            </MenuItem.Icon>
+                            <MenuItem.Header>
+                                <TextBlock />
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </DataTemplate>
+
+                    <!--  CHECKABLE  -->
+                    <DataTemplate x:Key="Checkable"
+                                  x:DataType="local:MpAvIMenuItemViewModel">
+                        <MenuItem>
+                            <MenuItem.Icon>
+                                <CheckBox />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </DataTemplate>
+
+                    <!--  CHECKABLE W/ ICON  -->
+                    <DataTemplate x:Key="CheckableWithIcon"
+                                  x:DataType="local:MpAvIMenuItemViewModel">
+                        <MenuItem Classes="checkWithIcon">
+                            <MenuItem.Icon>
+                                <Image />
+                            </MenuItem.Icon>
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock MinWidth="150" />
+                                    <CheckBox />
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </DataTemplate>
+
+                    <!--  SEPERATOR  -->
+                    <DataTemplate x:Key="Separator">
+                        <Separator />
+                    </DataTemplate>
+                </local:MpAvTemplateDictionaryToItemsSourceConverter>
+            </Binding.Converter>
+        </Binding>
+    </local:MpAvMenuView.ItemsSource>
+</local:MpAvMenuView>

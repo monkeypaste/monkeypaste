@@ -1,11 +1,38 @@
 ﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSearchFilterViewModel : MpAvViewModelBase<MpAvSearchFilterCollectionViewModel> {
+    public class MpAvSearchFilterViewModel :
+        MpAvViewModelBase<MpAvSearchFilterCollectionViewModel>,
+        MpAvIMenuItemViewModel {
         #region Private Variables
 
         private MpContentQueryBitFlags _filterType = MpContentQueryBitFlags.None;
+
+        #endregion
+
+        #region Interfaces
+
+        #region MpAvIMenuItemViewModel Implementation
+
+        ICommand MpAvIMenuItemViewModel.Command => ToggleIsCheckedCommand;
+        object MpAvIMenuItemViewModel.CommandParameter => null;
+        string MpAvIMenuItemViewModel.Header => Label;
+        object MpAvIMenuItemViewModel.IconSourceObj => null;
+        string MpAvIMenuItemViewModel.InputGestureText => "Control+P";
+        public MpMenuItemType MenuItemType =>
+            MpMenuItemType.Checkable;
+        bool MpAvIMenuItemViewModel.StaysOpenOnClick =>
+            true;
+        bool MpAvIMenuItemViewModel.IsVisible =>
+            true;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
+            _filterType != MpContentQueryBitFlags.Content ? null : new[] { new MpAvSearchFilterViewModel() }.Cast<MpAvIMenuItemViewModel>().ToList();
+
+        public bool HasLeadingSeparator { get; set; }
+        #endregion
 
         #endregion
 
@@ -14,25 +41,25 @@ namespace MonkeyPaste.Avalonia {
         private MpAvMenuItemViewModel _mivm;
         public MpAvMenuItemViewModel MenuItemViewModel {
             get {
-                if (IsSeperator) {
-                    return new MpAvMenuItemViewModel() {
-                        IsSeparator = true
-                    };
-                }
+                //if (IsSeparator) {
+                //    return new MpAvMenuItemViewModel() {
+                //        IsSeparator = true
+                //    };
+                //}
                 if (_mivm == null) {
                     _mivm = new MpAvMenuItemViewModel() {
                         Identifier = this,
-                        //IsCheckedSrcObj = this,
-                        //IsCheckedPropPath = nameof(IsChecked),
+                        IsCheckedSrcObj = this,
+                        IsCheckedPropPath = nameof(IsChecked),
 
                         //CommandSrcObj = this,
                         //CommandPath = nameof(ToggleIsCheckedCommand),
                         Header = Label,
-                        //IconBorderHexColor = MpSystemColors.Black,
-                        //IconSrcBindingObj = this,
-                        //IconPropPath = nameof(CheckBoxBgHexStr),
-                        //CheckedResourceSrcObj = this,
-                        //CheckedResourcePropPath = nameof(CheckedResourceObj),
+                        IconBorderHexColor = MpSystemColors.Black,
+                        IconSrcBindingObj = this,
+                        IconPropPath = nameof(CheckBoxBgHexStr),
+                        CheckedResourceSrcObj = this,
+                        CheckedResourcePropPath = nameof(CheckedResourceObj),
 
 
                         IsChecked = IsChecked,
@@ -57,8 +84,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public bool IsSeperator { get; set; } = false;
-
         public bool? IsChecked { get; set; }
 
         public bool IsEnabled =>
@@ -78,12 +103,10 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvSearchFilterViewModel() : base(null) { }
 
-        public MpAvSearchFilterViewModel(MpAvSearchFilterCollectionViewModel parent, bool isSeperator) : base(parent) {
-            IsSeperator = isSeperator;
-        }
 
-        public MpAvSearchFilterViewModel(MpAvSearchFilterCollectionViewModel parent, string label, string prefName, MpContentQueryBitFlags filterType) : base(parent) {
+        public MpAvSearchFilterViewModel(MpAvSearchFilterCollectionViewModel parent, string label, string prefName, MpContentQueryBitFlags filterType, bool hasLeadingSeparator = false) : base(parent) {
             PropertyChanged += MpSearchFilterViewModel_PropertyChanged;
+            HasLeadingSeparator = hasLeadingSeparator;
             _filterType = filterType;
             Label = label;
             PreferenceName = prefName;
@@ -125,6 +148,7 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return IsEnabled;
             });
+
         #endregion
     }
 }

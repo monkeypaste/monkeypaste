@@ -1390,7 +1390,6 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
-    <Folder Include="ViewModels\MainWindow\SearchBox\Filter\Items\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\Reusable\TextBoxes\" />
   </ItemGroup>
@@ -1517,6 +1516,9 @@
     </Compile>
     <Compile Update="Views\Reusable\ContextMenu\DefaultMenuItem\MpAvDefaultMenuItemView.axaml.cs">
       <DependentUpon>MpAvDefaultMenuItemView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\FlyoutMenu\MpAvMenuView.axaml.cs">
+      <DependentUpon>MpAvMenuView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderNotificationWindow.axaml.cs">
       <DependentUpon>MpAvLoaderNotificationWindow.axaml</DependentUpon>
@@ -1701,7 +1703,7 @@
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
+  <!--<ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
     <COMReference Include="IWshRuntimeLibrary">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>0</VersionMinor>
@@ -1711,7 +1713,7 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <Reference Include="CefNet">

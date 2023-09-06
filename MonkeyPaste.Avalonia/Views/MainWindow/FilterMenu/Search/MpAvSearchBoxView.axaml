@@ -215,7 +215,6 @@
                             CommandParameter="{Binding $self}"
                             local:MpAvDropExtension.IsEnabled="True"
                             local:MpAvDropExtension.DragEnterCommand="{Binding ExpandFromDragCommand}"
-                            local:MpAvMenuExtension.IsOpen="{Binding SearchFilterCollectionViewModel.IsPopupMenuOpen}"
                             Classes="noBg noHoverBg noBorder">
                         <ToolTip.Tip>
                             <local:MpAvToolTipView>

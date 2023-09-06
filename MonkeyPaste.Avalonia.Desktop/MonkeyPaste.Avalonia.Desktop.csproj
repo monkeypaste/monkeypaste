@@ -6,6 +6,7 @@
     <LangVersion>$(DefaultLangVersion)</LangVersion>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <Platforms>$(DefaultPlatforms)</Platforms>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
   </PropertyGroup>
   
