@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardHandlerItemViewModel :
         MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel, MpAvHandledClipboardFormatViewModel>,
@@ -20,6 +19,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+
 
         #region MpIBoxViewModel Implementation
         public double X { get; set; }

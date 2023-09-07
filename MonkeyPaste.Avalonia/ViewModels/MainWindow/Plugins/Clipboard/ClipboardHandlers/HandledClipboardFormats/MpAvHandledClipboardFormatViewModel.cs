@@ -18,7 +18,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region Interfaces
-
         #region MpISelectableViewModel Implementation
 
         public bool IsSelected {

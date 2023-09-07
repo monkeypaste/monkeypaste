@@ -306,6 +306,9 @@
         <SolidColorBrush x:Key="MenuFlyoutItemForeground"
                          Color="{DynamicResource ThemeInteractiveColor}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver"
+                         Color="{DynamicResource ThemeInteractiveColor}"
+                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver"
                          Color="{DynamicResource ThemeAccent5Color}"
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />

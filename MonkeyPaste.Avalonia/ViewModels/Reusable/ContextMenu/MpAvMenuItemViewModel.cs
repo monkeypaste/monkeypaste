@@ -29,7 +29,8 @@ namespace MonkeyPaste.Avalonia {
         MpAvMenuItemViewModel GetMenu(ICommand cmd, object cmdArg, IEnumerable<int> selectedIds, bool recursive);
     }
 
-    public class MpAvMenuItemViewModel : MpAvViewModelBase {
+    public class MpAvMenuItemViewModel : MpAvViewModelBase,
+        MpITreeItemViewModel, MpAvIMenuItemViewModel {
         #region Constants
 
         public const string DEFAULT_TEMPLATE_NAME = "DefaultMenuItemTemplate";
@@ -56,6 +57,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpITreeItemViewModel Implementation
+
+        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem =>
+            ParentObj as MpITreeItemViewModel;
+        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children =>
+            SubItems == null ? null : SubItems.Cast<MpITreeItemViewModel>();
+        bool MpIExpandableViewModel.IsExpanded {
+            get => IsSubMenuOpen;
+            set => IsSubMenuOpen = value;
+        }
+        #endregion
+
+        #region MpAvIMenuItemViewModel Implementation
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
+            SubItems == null ? null : SubItems.Cast<MpAvIMenuItemViewModel>().ToList();
+
+        #endregion
         #endregion
 
         #region Properties
@@ -71,6 +89,36 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Data Template Helpers
+
+        public bool IsThreeState { get; set; }
+        public bool StaysOpenOnClick { get; set; }
+        public bool HasLeadingSeparator { get; set; }
+
+        private MpMenuItemType _menuItemType = MpMenuItemType.None;
+        public MpMenuItemType MenuItemType {
+            get {
+                if (_menuItemType != MpMenuItemType.None) {
+                    return _menuItemType;
+                }
+
+                switch (ContentTemplateName) {
+                    case CHECKABLE_TEMPLATE_NAME:
+                        return MpMenuItemType.Checkable;
+                    case COLOR_PALETTE_TEMPLATE_NAME:
+                        return MpMenuItemType.ColorPalette;
+                    case COLOR_PALETTE_ITEM_TEMPLATE_NAME:
+                        return MpMenuItemType.ColorPaletteItem;
+                    default:
+                        return MpMenuItemType.Default;
+                }
+            }
+            set {
+                if (_menuItemType != value) {
+                    _menuItemType = value;
+                    OnPropertyChanged(nameof(MenuItemType));
+                }
+            }
+        }
 
         public bool IsPasteToPathRuntimeItem { get; set; }
 
@@ -431,6 +479,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvMenuItemViewModel() : base(null) { }
+        public MpAvMenuItemViewModel(object parentObj) : base(parentObj) { }
 
 
         #endregion
@@ -579,6 +628,10 @@ namespace MonkeyPaste.Avalonia {
                     Mp.Services.ContextMenuCloser.CloseMenu();
                 });
             });
+
+        public bool IsSubMenuOpen { get; set; }
+
+
 
         #endregion
     }

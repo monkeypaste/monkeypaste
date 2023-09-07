@@ -1,7 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Markup.Xaml;
+using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
 
@@ -9,15 +10,23 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvMenuView : ContextMenu {
         protected override Type StyleKeyOverride => typeof(ContextMenu);
-        public MpAvIMenuItemCollectionViewModel BindingContext {
-            get => DataContext as MpAvIMenuItemCollectionViewModel;
+        public MpAvIMenuItemViewModel BindingContext {
+            get => DataContext as MpAvIMenuItemViewModel;
             set => DataContext = value;
         }
 
-
-        public static MpAvMenuView ShowAt(Control target, MpAvIMenuItemCollectionViewModel dc) {
+        public static MpAvMenuView ShowMenu(
+            Control target,
+            MpAvIMenuItemViewModel dc,
+            PlacementMode placementMode,
+            PopupAnchor popupAnchor,
+            MpPoint offset = null) {
             target.ContextMenu = new MpAvMenuView() {
-                DataContext = dc
+                DataContext = dc,
+                Placement = placementMode,
+                PlacementAnchor = popupAnchor,
+                HorizontalOffset = offset == null ? 0 : offset.X,
+                VerticalOffset = offset == null ? 0 : offset.Y,
             };
             target.ContextMenu.Open();
             return target.ContextMenu as MpAvMenuView;
@@ -26,15 +35,7 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
             this.GetObservable(IsOpenProperty).Subscribe(value => OnIsOpenChanged());
             this.Closed += MpAvMenuView_Closed;
-        }
-        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
-            base.OnAttachedToVisualTree(e);
 
-#if DEBUG
-            if (this.VisualRoot is PopupRoot pr) {
-                pr.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
-            }
-#endif
         }
 
         private void MpAvMenuView_Closed(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
@@ -48,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext == null) {
                 return;
             }
-            BindingContext.IsMenuOpen = IsOpen;
+            BindingContext.IsSubMenuOpen = IsOpen;
         }
     }
 }

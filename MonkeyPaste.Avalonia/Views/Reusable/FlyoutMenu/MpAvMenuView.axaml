@@ -7,12 +7,14 @@
                     mc:Ignorable="d"
                     d:DesignWidth="800"
                     d:DesignHeight="450"
-                    x:DataType="local:MpAvIMenuItemCollectionViewModel"
+                    x:DataType="local:MpAvIMenuItemViewModel"
                     x:CompileBindings="True"
                     x:Class="MonkeyPaste.Avalonia.MpAvMenuView">
     <local:MpAvMenuView.Styles>
         <Style Selector="MenuItem"
                x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="IsSubMenuOpen"
+                    Value="{Binding IsSubMenuOpen, Mode=TwoWay}" />
             <Setter Property="Command"
                     Value="{Binding Command}" />
             <Setter Property="CommandParameter"
@@ -24,6 +26,13 @@
             <Setter Property="Theme"
                     Value="{StaticResource GestureLabelMenuItem}" />
         </Style>
+
+        <Style Selector="MenuItem.checkable /template/ Viewbox#PART_IconPresenter">
+            <Setter Property="Width"
+                    Value="24" />
+            <Setter Property="Height"
+                    Value="24" />
+        </Style>
         <Style Selector="MenuItem:not(.checkWithIcon)"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="Header"
@@ -32,8 +41,10 @@
 
         <Style Selector="MenuItem CheckBox"
                x:DataType="local:MpAvIMenuItemViewModel">
-            <Setter Property="IsChecked"
-                    Value="{Binding IsChecked, Mode=OneWay}" />
+            <!--<Setter Property="IsThreeState"
+                    Value="{Binding IsThreeState}" />-->
+            <!--<Setter Property="IsChecked"
+                    Value="{Binding IsChecked, Mode=OneWay, Converter={x:Static local:MpAvNullableBoolToUnsetValueConverter.Instance}}" />-->
             <Setter Property="Command"
                     Value="{Binding Command}" />
             <Setter Property="CommandParameter"
@@ -43,11 +54,15 @@
         <Style Selector="MenuItem Image"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="Source"
-                    Value="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
             <!--<Setter Property="Width"
                     Value="20" />
             <Setter Property="Height"
                     Value="20" />-->
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
         </Style>
         <Style Selector="MenuItem TextBlock"
                x:DataType="local:MpAvIMenuItemViewModel">
@@ -56,13 +71,17 @@
         </Style>
     </local:MpAvMenuView.Styles>
     <local:MpAvMenuView.ItemsSource>
-        <Binding Path="Items">
+        <Binding Path="SubItems">
             <Binding.Converter>
                 <local:MpAvTemplateDictionaryToItemsSourceConverter>
                     <!--  DEFAULT  -->
                     <DataTemplate x:Key="Default"
                                   x:DataType="local:MpAvIMenuItemViewModel">
                         <MenuItem>
+                            <MenuItem.Resources>
+                                <Thickness x:Key="MenuIconPresenterMargin">0,0,6,0</Thickness>
+
+                            </MenuItem.Resources>
                             <MenuItem.Icon>
                                 <Image />
                             </MenuItem.Icon>
@@ -75,26 +94,33 @@
                     <!--  CHECKABLE  -->
                     <DataTemplate x:Key="Checkable"
                                   x:DataType="local:MpAvIMenuItemViewModel">
-                        <MenuItem>
-                            <MenuItem.Icon>
-                                <CheckBox />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </DataTemplate>
+                        <MenuItem Classes="checkable">
+                            <MenuItem.Resources>
+                                <Thickness x:Key="MenuIconPresenterMargin">0,0,6,0</Thickness>
+                                <Thickness x:Key="MenuFlyoutItemThemePaddingNarrow">11,0,11,0</Thickness>
+                                <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked"
+                                                 Color="{DynamicResource ThemeInteractiveColor}" />
+                                <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver"
+                                                 Color="{DynamicResource ThemeAccent1Color}" />
 
-                    <!--  CHECKABLE W/ ICON  -->
-                    <DataTemplate x:Key="CheckableWithIcon"
-                                  x:DataType="local:MpAvIMenuItemViewModel">
-                        <MenuItem Classes="checkWithIcon">
+                                <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked"
+                                                 Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked"
+                                                 Color="{DynamicResource ThemeInteractiveColor}" />
+                                <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked"
+                                                 Color="{DynamicResource ThemeInteractiveBgColor}" />
+
+                                <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver"
+                                                 Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver"
+                                                 Color="{DynamicResource ThemeInteractiveColor}" />
+                                <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver"
+                                                 Color="{DynamicResource ThemeAccent1Color}" />
+                            </MenuItem.Resources>
                             <MenuItem.Icon>
-                                <Image />
+                                <CheckBox IsChecked="{Binding IsChecked, Mode=OneWay}"
+                                          IsThreeState="{Binding IsThreeState}" />
                             </MenuItem.Icon>
-                            <MenuItem.Header>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock MinWidth="150" />
-                                    <CheckBox />
-                                </StackPanel>
-                            </MenuItem.Header>
                         </MenuItem>
                     </DataTemplate>
 

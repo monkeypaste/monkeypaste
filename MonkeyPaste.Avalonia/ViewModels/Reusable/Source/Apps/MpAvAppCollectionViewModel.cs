@@ -256,7 +256,20 @@ namespace MonkeyPaste.Avalonia {
             return avm;
         }
 
-        private MpAvMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo(MpPortableProcessInfo ppi) {
+        private MpAvIMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo(MpPortableProcessInfo ppi) {
+            object menuArg = null;
+            if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(ppi)
+                is MpAvAppViewModel avm) {
+                menuArg = avm;
+            } else {
+                menuArg = ppi;
+            }
+
+            var root_menu = new MpAvAppOleRootMenuViewModel(menuArg);
+            root_menu.RefreshChecks(true);
+            return root_menu;
+        }
+        private MpAvMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo_old(MpPortableProcessInfo ppi) {
             IBrush enabled_brush =
                 Mp.Services.PlatformResource
                 .GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString())
@@ -540,10 +553,7 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 if (args is not object[] argParts ||
                     argParts[0] is not Control c ||
-                    argParts[2] is not MpPoint offset//c_rel_offset ||
-                                                     //c.TranslatePoint(c_rel_offset.ToAvPoint(), TopLevel.GetTopLevel(c)).Value.ToPortablePoint()
-                                                     //    is not MpPoint offset
-                        ) {
+                    argParts[2] is not MpPoint offset) {
                     return;
                 }
                 // NOTE pi is null when unknown active app
@@ -557,39 +567,13 @@ namespace MonkeyPaste.Avalonia {
                     MpAvContextMenuView.Instance.Closed -= _cmInstance_MenuClosed;
                 }
 
-                bool HideOnClickHandler(object arg) {
-                    if (arg is not MenuItem mi ||
-                        mi.DataContext is not MpAvMenuItemViewModel mivm) {
-
-                        // not preset click so allow hide
-                        return true;
-                    }
-                    if (mivm.Identifier is string clicked_format) {
-                        if (mivm.IsChecked.IsTrueOrNull()) {
-                            // disable all format presets here
-                        }
-                    } else if (mivm.Identifier is MpAvHandledClipboardFormatViewModel hcbvm &&
-                                mivm.TagObj is bool isReader) {
-                        if (mivm.IsChecked.IsTrueOrNull()) {
-                            // disable all plugin presets here
-                        }
-                    } else if (mivm.Identifier is MpAvClipboardFormatPresetViewModel cfpvm) {
-                        // toggle preset and update parents
-                        bool new_checked = !mivm.IsChecked.IsTrue();
-                        MpAvMenuExtension.SetCheck(mi, new_checked);
-
-                    }
-                    return false;
-                }
-
-                MpAvContextMenuView.Instance.Closed += _cmInstance_MenuClosed;
-                MpAvMenuExtension.ShowMenu(
-                    control: c,
-                    placement: PlacementMode.TopEdgeAlignedLeft,
-                    anchor: PopupAnchor.BottomRight,
-                    offset: offset,
-                    mivm: GetPasteInfoMenuItemsByProcessInfo(pi),
-                    hideOnClickHandler: HideOnClickHandler);
+                var cm = MpAvMenuView.ShowMenu(
+                    c,
+                    GetPasteInfoMenuItemsByProcessInfo(pi),
+                    PlacementMode.TopEdgeAlignedLeft,
+                    PopupAnchor.BottomRight,
+                    offset);
+                cm.Closed += _cmInstance_MenuClosed;
             });
         #endregion
     }

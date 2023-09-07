@@ -1,6 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -16,20 +15,22 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpAvIMenuItemViewModel Implementation
-
+        bool MpAvIMenuItemViewModel.IsSubMenuOpen { get; set; }
         ICommand MpAvIMenuItemViewModel.Command => ToggleIsCheckedCommand;
         object MpAvIMenuItemViewModel.CommandParameter => null;
         string MpAvIMenuItemViewModel.Header => Label;
         object MpAvIMenuItemViewModel.IconSourceObj => null;
-        string MpAvIMenuItemViewModel.InputGestureText => "Control+P";
+        string MpAvIMenuItemViewModel.InputGestureText => null;
         public MpMenuItemType MenuItemType =>
             MpMenuItemType.Checkable;
         bool MpAvIMenuItemViewModel.StaysOpenOnClick =>
             true;
         bool MpAvIMenuItemViewModel.IsVisible =>
             true;
+        bool MpAvIMenuItemViewModel.IsThreeState =>
+            false;
         IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
-            _filterType != MpContentQueryBitFlags.Content ? null : new[] { new MpAvSearchFilterViewModel() }.Cast<MpAvIMenuItemViewModel>().ToList();
+            null;
 
         public bool HasLeadingSeparator { get; set; }
         #endregion

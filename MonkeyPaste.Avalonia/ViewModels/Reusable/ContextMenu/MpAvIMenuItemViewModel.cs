@@ -6,17 +6,10 @@ namespace MonkeyPaste.Avalonia {
         None = 0,
         Default,
         Checkable,
-        CheckableWithIcon,
         ColorPalette,
         ColorPaletteItem,
     }
-    public interface MpAvIMenuItemCollectionViewModel : MpIViewModel {
-        bool IsMenuOpen { get; set; }
-        IEnumerable<MpAvIMenuItemViewModel> Items { get; }
-    }
-    public interface MpAvIAnchoredMenuItemCollectionViewModel : MpAvIMenuItemCollectionViewModel {
-        object MenuAnchorObj { get; }
-    }
+
     public interface MpAvIMenuItemViewModel : MpIViewModel {
         ICommand Command { get; }
         object CommandParameter { get; }
@@ -26,7 +19,9 @@ namespace MonkeyPaste.Avalonia {
         bool StaysOpenOnClick { get; }
         bool HasLeadingSeparator { get; }
         bool IsVisible { get; }
-        bool? IsChecked { get; }
+        bool? IsChecked { get; set; }
+        bool IsThreeState { get; }
+        bool IsSubMenuOpen { get; set; }
         MpMenuItemType MenuItemType { get; }
         IEnumerable<MpAvIMenuItemViewModel> SubItems { get; }
     }

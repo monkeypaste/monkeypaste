@@ -15,41 +15,9 @@ namespace MonkeyPaste.Avalonia {
         MpIUserIconViewModel,
         MpILabelText,
         MpITreeItemViewModel,
-        MpAvIParameterCollectionViewModel,
-        MpAvIMenuItemViewModel {
+        MpAvIParameterCollectionViewModel {
 
         #region Interfaces
-
-        #region MpAvIMenuItemViewModel Implementation
-
-        object MenuAnchorObj =>
-            MpAvClipboardHandlerCollectionViewModel.Instance.MenuAnchorObj;
-        ICommand MpAvIMenuItemViewModel.Command =>
-            TogglePresetIsEnabledCommand;
-        object MpAvIMenuItemViewModel.CommandParameter =>
-            MenuAnchorObj;
-        string MpAvIMenuItemViewModel.Header =>
-            Label;
-        object MpAvIMenuItemViewModel.IconSourceObj =>
-            IconId;
-        string MpAvIMenuItemViewModel.InputGestureText => null;
-        bool MpAvIMenuItemViewModel.StaysOpenOnClick => true;
-        bool MpAvIMenuItemViewModel.HasLeadingSeparator => false;
-        bool MpAvIMenuItemViewModel.IsVisible => true;
-        bool? MpAvIMenuItemViewModel.IsChecked {
-            get {
-                if (MenuAnchorObj is not MpAvAppViewModel avm) {
-                    return IsEnabled;
-                }
-                return avm.OleFormatInfos.IsFormatEnabledByPreset(this);
-            }
-        }
-        MpMenuItemType MpAvIMenuItemViewModel.MenuItemType =>
-            MpMenuItemType.CheckableWithIcon;
-
-        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
-            null;
-        #endregion
 
         #region MpISelectableViewModel Implementation
         public bool IsSelected { get; set; }

@@ -5,10 +5,22 @@ using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
+    public interface MpAvIClipboardFormatMenuItemViewModel : MpAvIMenuItemViewModel {
+        string Format { get; set; }
+    }
+    public interface MpAvIClipboardReaderFormatMenuItemViewModel : MpAvIClipboardFormatMenuItemViewModel {
+    }
+    public interface MpAvIClipboardWriterFormatMenuItemViewModel : MpAvIClipboardFormatMenuItemViewModel {
+    }
+
     public class MpAvClipboardFormatViewModel :
         MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerCollectionViewModel, MpAvClipboardHandlerItemViewModel>,
         MpITreeItemViewModel,
         MpISelectableViewModel {
+
+        #region Interfaces
+
+        #endregion
 
         #region Properties
 

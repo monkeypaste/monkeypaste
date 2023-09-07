@@ -8,7 +8,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvSearchFilterCollectionViewModel :
         MpAvViewModelBase<MpAvSearchBoxViewModel>,
-        MpAvIMenuItemCollectionViewModel,
+        MpAvIMenuItemViewModel,
         MpIPopupMenuViewModel {
         #region Private Variables
 
@@ -19,11 +19,22 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpAvIMenuItemCollectionViewModel Implementation
-        bool MpAvIMenuItemCollectionViewModel.IsMenuOpen {
+        ICommand MpAvIMenuItemViewModel.Command { get; }
+        object MpAvIMenuItemViewModel.CommandParameter { get; }
+        string MpAvIMenuItemViewModel.Header { get; }
+        object MpAvIMenuItemViewModel.IconSourceObj { get; }
+        string MpAvIMenuItemViewModel.InputGestureText { get; }
+        bool MpAvIMenuItemViewModel.StaysOpenOnClick { get; }
+        bool MpAvIMenuItemViewModel.HasLeadingSeparator { get; }
+        bool MpAvIMenuItemViewModel.IsThreeState { get; }
+        bool MpAvIMenuItemViewModel.IsVisible { get; }
+        bool? MpAvIMenuItemViewModel.IsChecked { get; set; }
+        MpMenuItemType MpAvIMenuItemViewModel.MenuItemType { get; }
+        bool MpAvIMenuItemViewModel.IsSubMenuOpen {
             get => IsPopupMenuOpen;
             set => IsPopupMenuOpen = value;
         }
-        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemCollectionViewModel.Items =>
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
             Filters;
 
         #endregion
@@ -271,6 +282,9 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 Filters.ForEach(x => x.IsChecked = MpSearchCriteriaItem.DefaultSimpleFilters.HasFlag(x.FilterType));
             });
+
+
+
         #endregion
     }
 }

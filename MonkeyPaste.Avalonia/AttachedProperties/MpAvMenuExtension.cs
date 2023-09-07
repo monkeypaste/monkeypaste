@@ -725,7 +725,14 @@ namespace MonkeyPaste.Avalonia {
             return ib;
         }
 
-        private static IEnumerable<MenuItem> GetChildMenuItems(MenuItem mi) {
+        public static IEnumerable<MenuItem> GetChildMenuItems(this ContextMenu cm) {
+            var items = new List<MenuItem>();
+            foreach (var mi in cm.ItemsSource.OfType<MenuItem>()) {
+                items.AddRange(GetChildMenuItems(mi));
+            }
+            return items;
+        }
+        public static IEnumerable<MenuItem> GetChildMenuItems(this MenuItem mi) {
             var items = new List<MenuItem>();
             if (mi != null) {
                 items.Add(mi);
@@ -742,7 +749,7 @@ namespace MonkeyPaste.Avalonia {
             return items;
         }
 
-        private static List<MenuItem> GetParentMenuItems(MenuItem mi, bool includeSelf = false) {
+        public static List<MenuItem> GetParentMenuItems(this MenuItem mi, bool includeSelf = false) {
             var items = new List<MenuItem>();
             if (mi != null) {
                 if (includeSelf) {

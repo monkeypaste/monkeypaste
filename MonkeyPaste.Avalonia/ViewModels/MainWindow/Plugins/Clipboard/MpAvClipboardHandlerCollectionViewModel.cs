@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-
     public class MpAvClipboardHandlerCollectionViewModel :
         MpAvTreeSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
         MpIMenuItemViewModel,
@@ -19,8 +18,7 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncCollectionObject,
         MpIAsyncComboBoxViewModel,
         MpIClipboardFormatDataHandlers,
-        MpIPlatformDataObjectTools,
-        MpAvIAnchoredMenuItemCollectionViewModel { //
+        MpIPlatformDataObjectTools { //
 
         #region Constants
 
@@ -33,17 +31,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-        #region MpAvIMenuItemCollectionViewModel Implementation
-        bool MpAvIMenuItemCollectionViewModel.IsMenuOpen { get; set; }
-        public object MenuAnchorObj { get; set; }
-        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemCollectionViewModel.Items {
-            get {
-                return null;
-            }
-        }
-
-        #endregion
 
         #region MpITreeItemViewModel Implementation
 

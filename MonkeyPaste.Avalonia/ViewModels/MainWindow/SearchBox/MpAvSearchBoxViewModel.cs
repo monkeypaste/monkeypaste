@@ -1,5 +1,6 @@
 ﻿
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Threading;
@@ -329,7 +330,11 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
                 var target_control = args as Control;
-                MpAvMenuView.ShowAt(target_control, SearchFilterCollectionViewModel);
+                MpAvMenuView.ShowMenu(
+                    target_control,
+                    SearchFilterCollectionViewModel,
+                    PlacementMode.TopEdgeAlignedLeft,
+                    PopupAnchor.BottomRight);
 
                 //bool HideOnClickHandler(object arg) {
                 //    if (arg is not MenuItem mi ||
