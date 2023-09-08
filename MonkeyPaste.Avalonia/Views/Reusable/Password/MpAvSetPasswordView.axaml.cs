@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public MpAvSetPasswordView() : base() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             var pwtb1 = this.FindControl<TextBox>("PasswordBox1");
             var pwtb2 = this.FindControl<TextBox>("PasswordBox2");
             pwtb1.TextChanged += Password_TextChanged;

@@ -1,17 +1,14 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.VisualTree;
-using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvAppModeFlyoutView : MpAvUserControl<object> {
         public MpAvAppModeFlyoutView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             //this.AttachedToVisualTree += MpAvAppModeFlyoutView_AttachedToVisualTree;
 
             //var abrb = this.FindControl<Control>("AppendBaseRadioButton");

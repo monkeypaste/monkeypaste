@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvTriggerActionChooserView : MpAvUserControl<MpAvTriggerCollectionViewModel> {
         public MpAvTriggerActionChooserView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             if (BindingContext != null) {
                 MpAvTriggerActionChooserView_DataContextChanged(this, null);
             }

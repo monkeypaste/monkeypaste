@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
             }
             Instance = this;
 
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             InitDnd();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 

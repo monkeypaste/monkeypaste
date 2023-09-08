@@ -36,6 +36,7 @@ body.popOut #pasteToolbar {
     border-radius: 5px;
     border-width: 1px !important;
     display: inline-flex;
+    padding-left: 5px;
 }    
     #pasteButton img {        
         width: 18px;
@@ -45,7 +46,10 @@ body.popOut #pasteToolbar {
     #pasteButton svg {
         margin-right: 10px;
     }
-
+#pasteButtonAndModeContainer.custom #pasteButton,
+#pasteButtonAndModeContainer.custom #pasteButtonPopupExpander {
+    background-color: var(--pastetoolbarcustominfobuttoncolor);
+}
 
 #pasteButtonAndModeContainer.pasteButtonSpit #pasteButton {
     border-radius: var(--commonborderradius) 0 0 var(--commonborderradius);

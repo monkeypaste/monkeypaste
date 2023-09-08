@@ -4,7 +4,7 @@ using Avalonia.Markup.Xaml;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvHelpView : MpAvUserControl<MpAvSettingsViewModel> {
         public MpAvHelpView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

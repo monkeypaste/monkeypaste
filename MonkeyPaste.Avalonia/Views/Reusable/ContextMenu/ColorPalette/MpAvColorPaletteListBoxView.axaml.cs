@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvColorPaletteListBoxView : MpAvUserControl<MpAvMenuItemViewModel> {
         //Type IStyleable.StyleKey => typeof(MenuItem);
         public MpAvColorPaletteListBoxView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
 
 

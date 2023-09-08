@@ -18,7 +18,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public MpAvContextMenuView() : base() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             this.Initialized += MpAvContextMenuView_Initialized;
         }
 

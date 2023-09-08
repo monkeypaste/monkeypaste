@@ -698,8 +698,13 @@ namespace MonkeyPaste.Avalonia {
             // where padding/margin may lead to false scrollbar visibility
             // (like 1 horiz layout pin item shows vert scrollbar)
             double safe_pad = 2.0d;
-            double qw = DEFAULT_ITEM_SIZE - QueryTrayVerticalScrollBarWidth - safe_pad;
-            double qh = DEFAULT_ITEM_SIZE - QueryTrayHorizontalScrollBarHeight - safe_pad;
+            // BUG this doesn't consider layout/orientation where
+            // in horiz stack vertical sb at default height bounces size around shouldn't be factored
+            // just always considering it now...
+            double vsbw = ScrollBarFixedAxisSize; //QueryTrayVerticalScrollBarWidth;
+            double hsbh = ScrollBarFixedAxisSize; //QueryTrayVerticalScrollBarWidth;
+            double qw = DEFAULT_ITEM_SIZE - vsbw - safe_pad;
+            double qh = DEFAULT_ITEM_SIZE - hsbh - safe_pad;
             double pw = DEFAULT_ITEM_SIZE - safe_pad;
             double ph = DEFAULT_ITEM_SIZE - safe_pad;
 
@@ -938,6 +943,7 @@ namespace MonkeyPaste.Avalonia {
             .Where(x => x.ScreenRect.X >= 0 && x.ScreenRect.Y >= 0)
             .OrderBy(x => x.QueryOffsetIdx);
 
+        public MpAvClipTileViewModel CurPasteOrDragItem { get; private set; }
         //Items
         //.Where(x => x.IsAnyQueryCornerVisible && !x.IsPlaceholder)
         //.OrderBy(x => x.TrayX)
@@ -2336,6 +2342,18 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.DropWidgetEnabledChanged:
                     OnPropertyChanged(nameof(IsAnyMouseModeEnabled));
                     break;
+                case MpMessageType.ItemDragBegin:
+                    CurPasteOrDragItem = SelectedItem;
+                    break;
+                case MpMessageType.ItemDragEnd:
+                case MpMessageType.ItemDragCanceled:
+                case MpMessageType.ContentPasted:
+                    if (CurPasteOrDragItem != null &&
+                        CurPasteOrDragItem.GetContentView() is MpAvContentWebView cwv) {
+                        cwv.SendMessage($"pasteOrDropCompleteResponse_ext");
+                    }
+                    CurPasteOrDragItem = null;
+                    break;
                 //case MpMessageType.ItemDragBegin:
                 //    OnPropertyChanged(nameof(IsAnyTileDragging));
                 //    if(DragItem == null) {
@@ -2369,10 +2387,11 @@ namespace MonkeyPaste.Avalonia {
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
                     pasteButtonTooltipText = string.IsNullOrEmpty(e.ApplicationName) ? e.MainWindowTitle : e.ApplicationName,
                     pasteButtonIconBase64 = e.MainWindowIconBase64,
-                    infoId = e.ProcessPath
+                    infoId = e.ProcessPath,
+                    isFormatDefault = true
                 };
                 if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e) is MpAvAppViewModel avm) {
-                    CurPasteInfoMessage.isFormatDefault = avm.OleFormatInfos.IsEmpty;
+                    CurPasteInfoMessage.isFormatDefault = avm.OleFormatInfos.IsDefault;
                 }
             } else {
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage();
@@ -3041,6 +3060,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpPortableDataObject mpdo = null;
             ctvm.IsPasting = true;
+            CurPasteOrDragItem = ctvm;
 
             MpPortableProcessInfo pi = Mp.Services.ProcessWatcher.LastProcessInfo;
             var cv = ctvm.GetContentView();
@@ -4853,6 +4873,18 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
+            });
+
+        public ICommand UpdatePasteInfoMessageCommand => new MpCommand<object>(
+            (args) => {
+                var pi = args as MpPortableProcessInfo;
+                if (pi == null && args is MpAvAppViewModel avm) {
+                    pi = avm.ToProcessInfo();
+                }
+                if (pi == null) {
+                    return;
+                }
+                SetCurPasteInfoMessage(pi);
             });
 
         #endregion

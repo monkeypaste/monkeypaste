@@ -5,7 +5,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvPopupMenuSelector : MpAvUserControl<MpAvIPopupSelectorMenuViewModel> {
 
         public MpAvPopupMenuSelector() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvWelcomeOptionsView : MpAvUserControl<MpAvWelcomeOptionGroupViewModel> {
         public MpAvWelcomeOptionsView() : base() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
 
         private async void DragImage_PointerPressed(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {

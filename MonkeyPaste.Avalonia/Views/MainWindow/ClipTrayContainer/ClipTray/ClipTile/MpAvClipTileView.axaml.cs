@@ -15,7 +15,7 @@ using System.Windows.Media;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {
         public MpAvClipTileView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             InitPinPlaceholder();
         }

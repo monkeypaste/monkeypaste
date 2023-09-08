@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public MpAvToolTipView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {

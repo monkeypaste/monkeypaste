@@ -4,7 +4,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvOleFormatItemView : MpAvUserControl<MpAvClipboardFormatPresetViewModel> {
 
         public MpAvOleFormatItemView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             //InitDnd();
         }
         //#region Drop

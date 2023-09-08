@@ -9,6 +9,7 @@ using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -119,6 +120,24 @@ namespace MonkeyPaste.Avalonia {
             return aivm.OleFormatInfos;
         }
 
+        public async Task<MpAvAppViewModel> AddOrGetAppByProcessInfoAsync(MpPortableProcessInfo ppi) {
+            if (ppi == null) {
+                return null;
+            }
+            if (GetAppByProcessInfo(ppi) is MpAvAppViewModel existing_avm) {
+                return existing_avm;
+            }
+            var sw = Stopwatch.StartNew();
+            var app = await Mp.Services.AppBuilder.CreateAsync(ppi);
+            var avm = GetAppByProcessInfo(ppi);
+            while (avm == null) {
+                await Task.Delay(100);
+                avm = GetAppByProcessInfo(ppi);
+                MpDebug.Assert(sw.ElapsedMilliseconds < 5_000, $"Add app timeout for pi '{ppi}'");
+            }
+            return avm;
+        }
+
         public MpAvAppViewModel GetAppByProcessInfo(MpPortableProcessInfo ppi) {
             if (ppi == null) {
                 return null;
@@ -128,6 +147,43 @@ namespace MonkeyPaste.Avalonia {
                 .FirstOrDefault(x =>
                 x.AppPath.ToLower() == ppi.ProcessPath.ToLower() &&
                 x.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId);
+        }
+
+        public string GetAppClipboardKeysByProcessInfo(MpPortableProcessInfo pi, bool isCopy) {
+            string keys = isCopy ?
+                        Mp.Services.PlatformShorcuts.CopyKeys :
+                        Mp.Services.PlatformShorcuts.PasteKeys;
+            if (GetAppByProcessInfo(pi) is MpAvAppViewModel avm) {
+                if (isCopy && avm.CopyShortcutViewModel.HasShortcut) {
+                    keys = avm.CopyShortcutViewModel.ShortcutCmdKeyString;
+                } else if (!isCopy && avm.PasteShortcutViewModel.HasShortcut) {
+                    keys = avm.PasteShortcutViewModel.ShortcutCmdKeyString;
+                }
+            }
+            return keys;
+        }
+
+        public int[] GetAppCustomOlePresetsByProcessInfo(MpPortableProcessInfo pi, bool isRead) {
+            if (GetAppByProcessInfo(pi) is not MpAvAppViewModel app_vm) {
+                return null;
+            }
+            if (isRead) {
+                if (app_vm.OleFormatInfos.IsReaderDefault) {
+                    return null;
+                }
+                if (app_vm.OleFormatInfos.IsReadersOnlyNoOp) {
+                    return new int[] { };
+                }
+                return app_vm.OleFormatInfos.Readers.Select(x => x.PresetId).ToArray();
+            }
+            // write presets
+            if (app_vm.OleFormatInfos.IsWriterDefault) {
+                return null;
+            }
+            if (app_vm.OleFormatInfos.IsWritersOnlyNoOp) {
+                return new int[] { };
+            }
+            return app_vm.OleFormatInfos.Writers.Select(x => x.PresetId).ToArray();
         }
 
         #endregion
@@ -257,16 +313,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpAvIMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo(MpPortableProcessInfo ppi) {
-            object menuArg = null;
-            if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(ppi)
-                is MpAvAppViewModel avm) {
+            object menuArg = ppi;
+            if (GetAppByProcessInfo(ppi) is MpAvAppViewModel avm) {
                 menuArg = avm;
-            } else {
-                menuArg = ppi;
             }
 
             var root_menu = new MpAvAppOleRootMenuViewModel(menuArg);
-            root_menu.RefreshChecks(true);
             return root_menu;
         }
         private MpAvMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo_old(MpPortableProcessInfo ppi) {
@@ -286,7 +338,7 @@ namespace MonkeyPaste.Avalonia {
                 if (avm == null) {
                     return y.IsEnabled;
                 }
-                return avm.OleFormatInfos.IsFormatEnabledByPreset(y);
+                return avm.OleFormatInfos.IsFormatEnabledByPresetId(y.PresetId);
             }
 
             bool IsPluginContainEnabled(MpAvClipboardHandlerItemViewModel handler_plugin, string format, bool isReader, MpAvAppViewModel avm) {
@@ -295,7 +347,7 @@ namespace MonkeyPaste.Avalonia {
                 if (avm == null) {
                     return plugin_reader_or_writer_presets_by_format.Any(x => x.IsEnabled);
                 }
-                return plugin_reader_or_writer_presets_by_format.Any(x => avm.OleFormatInfos.IsFormatEnabledByPreset(x));
+                return plugin_reader_or_writer_presets_by_format.Any(x => avm.OleFormatInfos.IsFormatEnabledByPresetId(x.PresetId));
             }
 
             bool IsFormatContainEnabled(string format, bool isReader, MpAvAppViewModel avm) {
@@ -306,7 +358,7 @@ namespace MonkeyPaste.Avalonia {
                 if (avm == null) {
                     return all_reader_or_writer_presets_by_format.Any(x => x.IsEnabled);
                 }
-                return all_reader_or_writer_presets_by_format.Any(x => avm.OleFormatInfos.IsFormatEnabledByPreset(x));
+                return all_reader_or_writer_presets_by_format.Any(x => avm.OleFormatInfos.IsFormatEnabledByPresetId(x.PresetId));
             }
 
             MpAvMenuItemViewModel GetPresetMenuItem(MpAvClipboardFormatPresetViewModel y) {
@@ -553,11 +605,10 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 if (args is not object[] argParts ||
                     argParts[0] is not Control c ||
+                    argParts[1] is not MpPortableProcessInfo pi ||
                     argParts[2] is not MpPoint offset) {
                     return;
                 }
-                // NOTE pi is null when unknown active app
-                var pi = argParts[1] as MpPortableProcessInfo;
 
                 void _cmInstance_MenuClosed(object sender, RoutedEventArgs e) {
                     if (c.DataContext is MpAvClipTileViewModel ctvm &&

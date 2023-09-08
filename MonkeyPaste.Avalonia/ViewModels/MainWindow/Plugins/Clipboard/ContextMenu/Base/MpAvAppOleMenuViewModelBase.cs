@@ -39,25 +39,30 @@ namespace MonkeyPaste.Avalonia {
         public bool HasLeadingSeparator { get; }
         public virtual bool IsThreeState =>
             true;
+        public virtual bool IsEnabled =>
+            true;
         public bool IsVisible => true;
         public virtual MpMenuItemType MenuItemType =>
-            MpMenuItemType.Checkable;
+            MpMenuItemType.CheckableWithIcon;
         public IEnumerable<MpAvIMenuItemViewModel> SubItems { get; set; }
 
         public virtual bool? IsChecked {
             get {
+                var checkable_sub_items = SubItems.OfType<MpAvAppOleMenuViewModelBase>();
+                //checkable_sub_items.ForEach(x => x.RefreshChecks(false));
 
-                if (SubItems == null) {
-                    return false;
+                bool? result =
+                    checkable_sub_items.All(x => x.IsChecked.IsTrue()) ?
+                        true :
+                        checkable_sub_items.Any(x => x.IsChecked.IsTrueOrNull()) ?
+                            null : false;
+                if (this is MpAvAppOleReaderOrWriterMenuViewModel) {
+
                 }
-                return SubItems.Any(x => x.IsChecked.IsTrueOrNull()) ? null : false;
+                return result;
             }
-            set => throw new NotImplementedException();
         }
 
-        //protected bool ContainsCheck(MpAvIMenuItemViewModel mivm) {
-
-        //}
 
         public abstract ICommand Command { get; }
         public abstract string Header { get; }
@@ -95,14 +100,18 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         public void RefreshChecks(bool isSourceCall) {
+            OnPropertyChanged(nameof(IsChecked));
+
             if (isSourceCall && RelativeRoot != null) {
                 RelativeRoot
                     .SubItems
                     .OfType<MpAvAppOleMenuViewModelBase>()
                     .ForEach(x => x.RefreshChecks(false));
+                RelativeRoot.OnPropertyChanged(nameof(RelativeRoot.IsChecked));
+
+                MpAvClipTrayViewModel.Instance.UpdatePasteInfoMessageCommand.Execute(MenuArg);
                 return;
             }
-            OnPropertyChanged(nameof(IsChecked));
             if (SubItems != null) {
                 SubItems.OfType<MpAvAppOleMenuViewModelBase>().ForEach(x => x.RefreshChecks(false));
             }

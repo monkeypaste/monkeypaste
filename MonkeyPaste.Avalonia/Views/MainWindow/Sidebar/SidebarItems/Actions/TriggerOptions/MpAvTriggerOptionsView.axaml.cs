@@ -7,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvTriggerOptionsView : MpAvUserControl<MpAvTriggerCollectionViewModel> {
         public MpAvTriggerOptionsView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

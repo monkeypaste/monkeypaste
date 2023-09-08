@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvSidebarButtonGroupView : MpAvUserControl<MpAvClipTrayViewModel> {
 
         public MpAvSidebarButtonGroupView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             MpMessenger.Register<MpMessageType>(null, ReceivedGlobalMessage);
         }
 

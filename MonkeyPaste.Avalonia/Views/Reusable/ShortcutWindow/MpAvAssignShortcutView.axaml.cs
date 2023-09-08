@@ -9,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvAssignShortcutView : MpAvUserControl<MpAvAssignShortcutViewModel> {
         public MpAvAssignShortcutView() : base() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
 
     }

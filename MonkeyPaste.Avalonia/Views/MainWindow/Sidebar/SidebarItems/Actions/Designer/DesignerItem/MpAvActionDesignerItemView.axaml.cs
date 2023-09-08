@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvActionDesignerItemView : MpAvUserControl<MpAvActionViewModelBase> {
         public MpAvActionDesignerItemView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             var dicc = this.FindControl<ContentControl>("DesignerItemContentControl");
             dicc.AddHandler(ContentControl.KeyDownEvent, Dicc_KeyDown, RoutingStrategies.Tunnel);

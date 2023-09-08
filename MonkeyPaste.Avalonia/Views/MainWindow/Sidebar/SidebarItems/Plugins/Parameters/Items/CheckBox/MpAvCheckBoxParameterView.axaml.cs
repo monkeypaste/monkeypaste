@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvCheckBoxParameterView : MpAvUserControl<MpAvCheckBoxParameterViewModel> {
         public MpAvCheckBoxParameterView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

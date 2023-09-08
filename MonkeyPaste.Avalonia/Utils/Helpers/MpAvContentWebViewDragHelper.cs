@@ -182,8 +182,8 @@ namespace MonkeyPaste.Avalonia {
             if (_dragSource != null) {
                 _dragSource.IsDragging = false;
             }
-            ResetDragState();
             MpMessenger.SendGlobal(MpMessageType.ItemDragEnd);
+            ResetDragState();
         }
         private static void ResetDragState() {
             UnhookDragEvents();

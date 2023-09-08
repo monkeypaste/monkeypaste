@@ -1,5 +1,4 @@
-﻿using Avalonia.Threading;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -21,18 +20,50 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
 
-        public ObservableCollection<MpAvAppOleFormatInfoViewModel> Items { get; set; }
-        public ObservableCollection<MpAvAppOleFormatInfoViewModel> AllFormatsForThisApp { get; set; }
+        public ObservableCollection<MpAvAppOlePresetViewModel> Items { get; } = new ObservableCollection<MpAvAppOlePresetViewModel>();
+        public IList<MpAvAppOlePresetViewModel> Readers =>
+            Items.Where(x => x.IsReaderAppPreset).ToList();
+
+        public IList<MpAvAppOlePresetViewModel> Writers =>
+            Items.Where(x => x.IsWriterAppPreset).ToList();
+
+        MpAvAppOlePresetViewModel NoOpReader =>
+            Readers.FirstOrDefault(x => x.IsReaderNoOp);
+
+        MpAvAppOlePresetViewModel NoOpWriter =>
+            Writers.FirstOrDefault(x => x.IsWriterNoOp);
         #endregion
 
         #region State
+        // NOTE Default means no special settings for this app,
+        // uses whatever presets and params are enabled in cb sidebar
+        public bool IsDefault =>
+            IsReaderDefault && IsWriterDefault;
+        public bool IsReaderDefault =>
+            Readers.Count == 0;
+        public bool IsWriterDefault =>
+            Writers.Count == 0;
 
-        public bool HasCustomInfo =>
-            !IsEmpty;
-        public bool IsEmpty =>
-            Items == null || Items.Count == 0;
+        // NOTE NoOp is primarily used to differentiate
+        // a default app with one that has NO formats to read/write repectively
+        // primarily used during deselect all but can also be intended i guess
+        public bool IsReadersOnlyNoOp =>
+            Readers.Count == 1 &&
+            NoOpReader != null;
 
-        public bool IsAnyBusy => IsBusy || (Items != null && Items.Any(x => x.IsBusy));
+        public bool IsWritersOnlyNoOp =>
+            Writers.Count == 1 &&
+            NoOpWriter != null;
+        public bool HasCustomReaders =>
+            !IsReadersOnlyNoOp &&
+            Readers.Any();
+
+        public bool HasCustomWriters =>
+            !IsWritersOnlyNoOp &&
+            Writers.Any();
+
+        public bool IsAnyBusy =>
+            IsBusy || Items.Any(x => x.IsBusy);
 
         #endregion
 
@@ -48,24 +79,11 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitializeAsync(int appId) {
             IsBusy = true;
-            if (Items != null) {
+            Items.Clear();
 
-                Items.Clear();
-            }
-
-            var overrideInfos = await MpDataModelProvider.GetAppOleFormatInfosByAppIdAsync(appId);
-            if (overrideInfos.Any()) {
-                if (Items == null) {
-                    Items = new ObservableCollection<MpAvAppOleFormatInfoViewModel>();
-                }
-            } else {
-                // no overrides null items
-                Items = null;
-                IsBusy = false;
-                return;
-            }
-            foreach (var ais in overrideInfos.OrderBy(x => x.IgnoreFormatValue)) {
-                var aisvm = await CreateAppClipboardFormatViewModel(ais);
+            var overrideInfos = await MpDataModelProvider.GetAppOlePresetsByAppIdAsync(appId);
+            foreach (var ais in overrideInfos) {
+                var aisvm = await CreateAppOlePresetViewModel(ais);
                 Items.Add(aisvm);
             }
 
@@ -78,132 +96,139 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<MpAvAppOleFormatInfoViewModel> CreateAppClipboardFormatViewModel(MpAppOleFormatInfo ais) {
-            MpAvAppOleFormatInfoViewModel aisvm = new MpAvAppOleFormatInfoViewModel(this);
+        public async Task<MpAvAppOlePresetViewModel> CreateAppOlePresetViewModel(MpAppOlePreset ais) {
+            MpAvAppOlePresetViewModel aisvm = new MpAvAppOlePresetViewModel(this);
             await aisvm.InitializeAsync(ais);
             return aisvm;
         }
 
-        public async Task<MpAvAppOleFormatInfoViewModel> CreateOleFormatInfoViewModelByPresetAsync(MpAvClipboardFormatPresetViewModel cfpvm) {
+        public async Task RemoveAppOlePresetViewModelByPresetIdAsync(int presetId) {
+            if (Items.FirstOrDefault(x => x.PresetId == presetId) is not MpAvAppOlePresetViewModel aopvm) {
+                return;
+            }
+            // NOTE if this is the last info for the app and it is NOT
+            // the no op then it will NEED the no op.
+            // no op is removed by toggling relativeRoot from false in menu cmd
+            bool isReader = aopvm.IsReaderAppPreset;
+            bool needs_no_op =
+                Items
+                .Where(x => x.IsReaderAppPreset == isReader && !x.IsNoOpReaderOrWriter)
+                .Count() == 1;
+            await aopvm.AppOlePreset.DeleteFromDatabaseAsync();
+            Items.Remove(aopvm);
+            if (needs_no_op) {
+                // make sure no op is present for continuing
+                await AddAppOlePresetViewModelByPresetIdAsync(isReader ? MpAppOlePreset.NO_OP_READER_ID : MpAppOlePreset.NO_OP_WRITER_ID);
+            }
+        }
+        public async Task<MpAvAppOlePresetViewModel> AddAppOlePresetViewModelByPresetIdAsync(int presetId) {
 
             // NOTE ignoreFormat ignored for create, update after (but before adding)
             // TODO this and drop widget save preset do same thing, should combine...
-            MpAppOleFormatInfo new_aofi = await MpAppOleFormatInfo.CreateAsync(
+            MpAppOlePreset new_aofi = await MpAppOlePreset.CreateAsync(
                     appId: Parent.AppId,
-                    format: cfpvm.ClipboardFormat.clipboardName,
-                    formatInfo: cfpvm.GetPresetParamJson(),
-                    writerPresetId: cfpvm.PresetId);
-
-            var aofivm = await CreateAppClipboardFormatViewModel(new_aofi);
-
-            while (aofivm == null) {
-                await Task.Delay(100);
-                aofivm = GetAppOleFormatInfoByFormatPreset(cfpvm);
+                    presetId: presetId);
+            if (Items.FirstOrDefault(x => x.AppOlePresetId == new_aofi.Id) is MpAvAppOlePresetViewModel aopvm) {
+                // preset is dup
+                MpDebug.Assert(new_aofi.WasDupOnCreate, $"app ole items and db out of sync");
+                return aopvm;
+            } else {
+                MpDebug.Assert(!new_aofi.WasDupOnCreate, $"app ole items and db out of sync");
             }
+            var aofivm = await CreateAppOlePresetViewModel(new_aofi);
+
+            if (aofivm.IsReaderAppPreset) {
+                if (aofivm.IsReaderNoOp) {
+                    MpDebug.Assert(Readers.Count == 0, $"No op reader error, all readers should be removed before adding no op");
+                } else if (IsReadersOnlyNoOp) {
+                    // remove no op reader
+                    await RemoveAppOlePresetViewModelByPresetIdAsync(NoOpReader.PresetId);
+                }
+            } else {
+                if (aofivm.IsWriterNoOp) {
+                    MpDebug.Assert(Readers.Count == 0, $"No op writer error, all writers should be removed before adding no op");
+                } else if (IsWritersOnlyNoOp) {
+                    // remove no op writer
+                    await RemoveAppOlePresetViewModelByPresetIdAsync(NoOpWriter.PresetId);
+                }
+            }
+            Items.Add(aofivm);
+
             return aofivm;
 
         }
-        public bool IsFormatEnabledByPreset(MpAvClipboardFormatPresetViewModel cfpvm) {
-            return IsEmpty ? cfpvm.IsEnabled : GetAppOleFormatInfoByFormatPreset(cfpvm) != null;
+        public bool IsFormatEnabledByPresetId(int presetId) {
+            return GetAppOleFormatInfoByPresetId(presetId) != null;
+        }
+        public MpAvAppOlePresetViewModel GetAppOleFormatInfoByPresetId(int presetId) {
+            if (Items == null) {
+                return null;
+            }
+            return Items.FirstOrDefault(x => x.PresetId == presetId);
         }
         #endregion
 
         #region Protected Methods
 
-        protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
-            if (e is MpAppOleFormatInfo acfi && Parent != null && Parent.AppId == acfi.AppId) {
-                Dispatcher.UIThread.Post(async () => {
-                    if (Items == null) {
-                        Items = new ObservableCollection<MpAvAppOleFormatInfoViewModel>();
-                    }
-                    var acfvm = Items.FirstOrDefault(x => x.FormatName == acfi.FormatName);
-                    if (acfvm == null) {
-                        acfvm = await CreateAppClipboardFormatViewModel(acfi);
+        //protected override void Instance_OnItemAdded(object sender, MpDbModelBase e) {
+        //    if (e is not MpAppOlePreset acfi ||
+        //        Parent == null ||
+        //        Parent.AppId != acfi.AppId) {
+        //        return;
+        //    }
+        //}
+        //protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
+        //    if (e is MpAppOlePreset acfi && Parent != null && Parent.AppId == acfi.AppId) {
+        //        Dispatcher.UIThread.Post(async () => {
+        //            if (Items == null) {
+        //                MpDebug.Break("App clipboard format error, out of sync w/ db");
+        //                Items = new ObservableCollection<MpAvAppOlePresetViewModel>();
+        //            }
+        //            var acfvm = Items.FirstOrDefault(x => x.AppOlePresetId == acfi.Id);
+        //            if (acfvm == null) {
+        //                MpDebug.Break("App clipboard format error, out of sync w/ db");
+        //            } else {
+        //                await acfvm.InitializeAsync(acfi);
+        //            }
+        //        });
+        //    }
+        //}
 
-                        Items.Add(acfvm);
-                    } else {
-                        await acfvm.InitializeAsync(acfi);
-                    }
-                });
-            }
-        }
-        protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            if (e is MpAppOleFormatInfo acfi && Parent != null && Parent.AppId == acfi.AppId) {
-                Dispatcher.UIThread.Post(async () => {
-                    if (Items == null) {
-                        MpDebug.Break("App clipboard format error, out of sync w/ db");
-                        Items = new ObservableCollection<MpAvAppOleFormatInfoViewModel>();
-                    }
-                    var acfvm = Items.FirstOrDefault(x => x.AppOleInfoId == acfi.Id);
-                    if (acfvm == null) {
-                        MpDebug.Break("App clipboard format error, out of sync w/ db");
-                    } else {
-                        await acfvm.InitializeAsync(acfi);
-                    }
-                });
-            }
-        }
+        //protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
+        //    if (e is MpAppOlePreset acfi && Parent != null && Parent.AppId == acfi.AppId) {
+        //        Dispatcher.UIThread.Post(() => {
+        //            if (Items == null) {
+        //                MpDebug.Break("App clipboard format error, out of sync w/ db");
+        //                return;
+        //            }
+        //            var acfvm = Items.FirstOrDefault(x => x.AppOlePresetId == acfi.Id);
+        //            Items.Remove(acfvm);
+        //        });
+        //    }
+        //}
 
-        protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
-            if (e is MpAppOleFormatInfo acfi && Parent != null && Parent.AppId == acfi.AppId) {
-                Dispatcher.UIThread.Post(() => {
-                    if (Items == null) {
-                        MpDebug.Break("App clipboard format error, out of sync w/ db");
-                        return;
-                    }
-                    var acfvm = Items.FirstOrDefault(x => x.AppOleInfoId == acfi.Id);
-                    Items.Remove(acfvm);
-                });
-            }
-        }
+        #endregion
 
-        public MpAvAppOleFormatInfoViewModel GetAppOleFormatInfoByFormatPreset(MpAvClipboardFormatPresetViewModel cfpvm) {
-            if (cfpvm == null ||
-                Items == null) {
-                return null;
-            }
-            return Items.FirstOrDefault(x => x.WriterPresetId == cfpvm.PresetId);
-        }
-
-
-        private async Task CheckInfosAndResetIfDefaultAsync() {
-            if (IsEmpty) {
-                // already default
-                return;
-            }
-
-            // compare this apps infos formats/state to def formats/state
-            // if not exactly the same then don't treat as default
-
-            IEnumerable<(string, bool)> app_info_format_enabled_lookup =
-                Items.Select(x => (x.FormatName, !x.IgnoreFormat));
-
-            IEnumerable<(string, bool)> def_format_enabled_lookup =
-                MpAvClipboardHandlerCollectionViewModel.Instance.EnabledWriters
-                    .Select(x => (x.ClipboardFormat.clipboardName, true));
-
-            var diffs = app_info_format_enabled_lookup.Difference(def_format_enabled_lookup);
-            if (diffs.Any()) {
-                // has unique info, leave it be
-                return;
-            }
-            // discard infos
-            await Task.WhenAll(Items.Select(x => x.AppOleFormatInfo.DeleteFromDatabaseAsync()));
-            await InitializeAsync(Parent.AppId);
-        }
+        #region Private Methods
         #endregion
 
         #region Commands
 
         public MpIAsyncCommand<object> ToggleFormatEnabledCommand => new MpAsyncCommand<object>(
             async (args) => {
-                if (args is not MpAvClipboardFormatPresetViewModel cfpvm) {
-                    return;
+                int presetId = 0;
+
+                if (args is MpAvClipboardFormatPresetViewModel cfpvm) {
+                    presetId = cfpvm.PresetId;
+                } else if (args is bool isReaderNoOp) {
+                    presetId = isReaderNoOp ? MpAppOlePreset.NO_OP_READER_ID : MpAppOlePreset.NO_OP_WRITER_ID;
                 }
-                if (GetAppOleFormatInfoByFormatPreset(cfpvm) is MpAvAppOleFormatInfoViewModel aofivm) {
-                    await aofivm.AppOleFormatInfo.DeleteFromDatabaseAsync();
+                if (GetAppOleFormatInfoByPresetId(presetId) is MpAvAppOlePresetViewModel aofivm) {
+                    // remove preset
+                    await RemoveAppOlePresetViewModelByPresetIdAsync(presetId);
                 } else {
-                    await CreateOleFormatInfoViewModelByPresetAsync(cfpvm);
+                    //add preset
+                    await AddAppOlePresetViewModelByPresetIdAsync(presetId);
                 }
             });
 

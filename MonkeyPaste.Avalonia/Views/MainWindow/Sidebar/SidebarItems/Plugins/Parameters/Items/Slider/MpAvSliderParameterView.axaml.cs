@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public MpAvSliderParameterView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             var sb = this.FindControl<Border>("SliderBorder");
             sb.EffectiveViewportChanged += Sb_EffectiveViewportChanged;

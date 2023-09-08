@@ -52,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion 
 
         public MpAvClearTextButton() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             var cb = this.FindControl<Button>("ClearButton");
             cb.PointerPressed += Cb_PointerPressed;

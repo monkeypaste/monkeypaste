@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public MpAvParameterCollectionView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

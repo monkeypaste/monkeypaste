@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvEditableListBoxParameterView : MpAvUserControl<MpAvEditableEnumerableParameterViewModel> {
         public MpAvEditableListBoxParameterView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             var el = this.FindControl<ListBox>("EditableList");
             el.AttachedToVisualTree += El_AttachedToVisualTree;
 

@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvButtonParameterView : MpAvUserControl<MpAvButtonParameterViewModel> {
         public MpAvButtonParameterView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

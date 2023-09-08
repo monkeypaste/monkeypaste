@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvMainWindowTitleMenuView : MpAvUserControl<MpAvMainWindowTitleMenuViewModel> {
         private bool _wasZoomDragging = false;
         public MpAvMainWindowTitleMenuView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             var czfb = this.FindControl<Control>("CurZoomFactorButton");
             czfb.PointerMoved += Czfb_PointerMoved;

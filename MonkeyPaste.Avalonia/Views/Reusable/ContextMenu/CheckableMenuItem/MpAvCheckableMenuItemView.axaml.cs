@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
         protected override Type StyleKeyOverride => typeof(MenuItem);
         #endregion
         public MpAvCheckableMenuItemView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             this.PointerPressed += MpAvCheckableMenuItemView_PointerPressed;
             //var cb = this.FindControl<CheckBox>("MenuItemCheckBox");
             //cb.PointerPressed += Cb_PointerPressed;

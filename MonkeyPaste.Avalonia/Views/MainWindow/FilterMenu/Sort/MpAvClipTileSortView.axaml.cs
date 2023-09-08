@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileSortView : MpAvUserControl<MpAvFilterMenuViewModel> {
         public MpAvClipTileSortView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             var sdb = this.FindControl<Button>("SortDirectionButton");
             sdb.AddHandler(PointerPressedEvent, Sdb_PointerPressed, RoutingStrategies.Tunnel);
             sdb.PointerPressed += Sdb_PointerPressed;

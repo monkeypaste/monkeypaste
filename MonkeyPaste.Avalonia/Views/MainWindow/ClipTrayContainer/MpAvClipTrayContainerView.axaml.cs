@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
             }
             Instance = this;
 
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             if (BindingContext == null) {
                 this.DataContextChanged += MpAvClipTrayContainerView_DataContextChanged;

@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvSearchCriteriaListBoxView Instance => _instance;
         public MpAvSearchCriteriaListBoxView() {
             _instance = this;
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             //var sv = this.FindControl<ScrollViewer>("SearchCriteriaContainerScrollViewer");
             //sv.AddHandler(PointerWheelChangedEvent, Sclb_PointerWheelChanged, RoutingStrategies.Tunnel);
 

@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvSettingsFrameCollectionView : MpAvUserControl<object> {
         public MpAvSettingsFrameCollectionView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
 
     }

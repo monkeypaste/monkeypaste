@@ -6,6 +6,7 @@ namespace MonkeyPaste.Avalonia {
         None = 0,
         Default,
         Checkable,
+        CheckableWithIcon,
         ColorPalette,
         ColorPaletteItem,
     }
@@ -19,9 +20,10 @@ namespace MonkeyPaste.Avalonia {
         bool StaysOpenOnClick { get; }
         bool HasLeadingSeparator { get; }
         bool IsVisible { get; }
-        bool? IsChecked { get; set; }
+        bool? IsChecked { get; }
         bool IsThreeState { get; }
         bool IsSubMenuOpen { get; set; }
+        bool IsEnabled { get; }
         MpMenuItemType MenuItemType { get; }
         IEnumerable<MpAvIMenuItemViewModel> SubItems { get; }
     }

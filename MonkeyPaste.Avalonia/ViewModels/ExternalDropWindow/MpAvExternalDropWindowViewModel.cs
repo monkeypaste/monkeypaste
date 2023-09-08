@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         private MpAvWindow _dropCompleteWindow;
 
         private bool _wasHiddenOrCanceled = false;
-        private Dictionary<string, bool> _preShowPresetState { get; set; } = new Dictionary<string, bool>();
+        private List<int> _preShowPresetState { get; set; } = new List<int>();
         private DispatcherTimer _curDropTargetTimer { get; set; }
         private MpPoint _lastGlobalMousePoint { get; set; } // debouncer
         #endregion
@@ -199,11 +199,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Preset State
 
-        private Dictionary<string, bool> GetFormatPresetState() {
-            return
-              MpAvClipboardHandlerCollectionViewModel.Instance.AllWriterPresets
-              .ToDictionary(kvp => kvp.ClipboardFormat.clipboardName, kvp => kvp.IsEnabled);
-
+        private IEnumerable<int> GetFormatPresetState(MpPortableProcessInfo pi) {
+            return MpAvAppCollectionViewModel.Instance.GetAppCustomOlePresetsByProcessInfo(pi, false);
         }
 
         private async Task SaveAppPresetFormatStateAsync() {
@@ -215,12 +212,9 @@ namespace MonkeyPaste.Avalonia {
             // TODO should use MpAppClipboardFormatInfo data for last active here
             var drop_app = await Mp.Services.SourceRefTools.FetchOrCreateAppRefAsync(CurDropProcessInfo);
             foreach (var preset_vm in MpAvClipboardHandlerCollectionViewModel.Instance.AllWriterPresets) {
-                string param_info = preset_vm.GetPresetParamJson();
-                await MpAppOleFormatInfo.CreateAsync(
+                await MpAppOlePreset.CreateAsync(
                     appId: drop_app.Id,
-                    format: preset_vm.ClipboardFormat.clipboardName,
-                    formatInfo: param_info,
-                    ignoreFormat: !preset_vm.IsEnabled);
+                    presetId: preset_vm.PresetId);
             }
         }
         private bool DidPresetsChange(MpPortableProcessInfo drop_pi) {
@@ -228,7 +222,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
 
-            var cur_preset_state = GetFormatPresetState();
+            var cur_preset_state = GetFormatPresetState(drop_pi);
             bool is_default = !_preShowPresetState.Difference(cur_preset_state).Any();
 
             if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(drop_pi) is not MpAvAppViewModel avm ||
@@ -241,8 +235,8 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             // compare cur preset state to db of app
-            var avm_preset_state = avm.OleFormatInfos.Items
-                .ToDictionary(x => x.FormatName, x => !x.IgnoreFormat);
+            var avm_preset_state = avm.OleFormatInfos.Writers
+                .Select(x => x.PresetId);
 
             return avm_preset_state.Difference(cur_preset_state).Any();
         }
@@ -252,7 +246,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             MpAvClipboardHandlerCollectionViewModel.Instance.AllWriterPresets
-                .ForEach(x => x.IsEnabled = _preShowPresetState[x.ClipboardFormat.clipboardName]);
+                .ForEach(x => x.IsEnabled = _preShowPresetState.Any(y => y == x.PresetId));
         }
 
         #endregion
@@ -324,18 +318,10 @@ namespace MonkeyPaste.Avalonia {
             // so presets match current widget state 
             if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(CurDropProcessInfo) is MpAvAppViewModel drop_avm &&
                 drop_avm.OleFormatInfos is MpAvAppOleFormatInfoCollectionViewModel cfic &&
-                !cfic.IsEmpty) {
-                foreach (var cfivm in cfic.Items) {
-                    // get preset for app specified format
-                    var wpvm =
-                    MpAvClipboardHandlerCollectionViewModel.Instance
+                !cfic.IsWriterDefault) {
+                MpAvClipboardHandlerCollectionViewModel.Instance
                         .AllWriterPresets
-                        .FirstOrDefault(x => x.ClipboardFormat.clipboardName == cfivm.FormatName);
-                    if (wpvm == null) {
-                        continue;
-                    }
-                    wpvm.IsEnabled = !cfivm.IgnoreFormat;
-                }
+                        .ForEach(x => x.IsEnabled = cfic.Writers.Any(y => y.PresetId == x.PresetId));
             } else {
                 // no overrides, reset to default
                 RestoreFormatPresetState();
@@ -451,7 +437,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShowDropWindowCommand => new MpCommand(
             () => {
                 Reset();
-                _preShowPresetState = GetFormatPresetState();
+                _preShowPresetState = GetFormatPresetState(null).ToList();
                 StartDropTargetListener();
 
                 OpenDropWindow();

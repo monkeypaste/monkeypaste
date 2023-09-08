@@ -30,10 +30,10 @@ namespace MonkeyPaste.Avalonia {
         public MpAvAppOleRootMenuViewModel(object menuArg) : base(null) {
             MenuArg = menuArg;
 
-            var items = new List<MpAvIMenuItemViewModel>();
-            items.Add(new MpAvAppOleReaderOrWriterMenuViewModel(this, true));
-            items.Add(new MpAvAppOleReaderOrWriterMenuViewModel(this, false));
-            SubItems = items;
+            SubItems = new List<MpAvIMenuItemViewModel> {
+                new MpAvAppOleReaderOrWriterMenuViewModel(this, true),
+                new MpAvAppOleReaderOrWriterMenuViewModel(this, false)
+            };
         }
         #endregion
     }

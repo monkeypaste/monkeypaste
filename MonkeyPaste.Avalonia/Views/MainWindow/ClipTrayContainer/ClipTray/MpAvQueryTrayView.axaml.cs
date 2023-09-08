@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
             }
             Instance = this;
 
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             this.AttachedToVisualTree += MpAvQueryTrayView_AttachedToVisualTree;
 

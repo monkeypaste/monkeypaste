@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string IconResourceKeyStr {
             get {
-                string keyStr = "FormatIcon";
+                string keyStr = "FormatImage";
                 switch (FormatName) {
                     case MpPortableDataFormats.AvRtf_bytes:
                         keyStr = "Rtf" + keyStr;
@@ -95,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
                         keyStr = "Bitmap" + keyStr;
                         break;
                     default:
-                        keyStr = "QuestionMarkIcon";
+                        keyStr = "QuestionMarkImage";
                         break;
                 }
 

@@ -5,7 +5,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvFakeWindowView : MpAvUserControl<MpAvFakeWindowViewModel> {
         public MpAvFakeWindowView() : base() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
 
     }

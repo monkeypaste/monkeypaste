@@ -47,14 +47,13 @@ namespace MonkeyPaste.Avalonia {
         public bool LogPropertyChangedEvents { get; set; } = false;
 
         [JsonIgnore]
+        public bool SupressPropertyChangedNotification { get; set; } = false;
+
+        [JsonIgnore]
         public object TagObj { get; set; }
         #endregion
 
         #region Events
-
-        public event EventHandler ViewModelLoaded;
-        protected virtual void OnViewModelLoaded() => ViewModelLoaded?.Invoke(this, EventArgs.Empty);
-
         #endregion
 
         #region Constructors
@@ -183,20 +182,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region INotifyPropertyChanged 
 
-
-        //public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null, [CallerFilePath] string path = null, [CallerMemberName] string memName = null, [CallerLineNumber] int line = 0) {
-        //    //if (SupressPropertyChangedNotification ||
-        //    //    PropertyChanged == null ||
-        //    //    propertyName == null) {
-        //    //    return;
-        //    //}
-        //    //PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-
-        //    this.RaisePropertyChanged(propertyName);
-        //    if (LogPropertyChangedEvents) {
-        //        MpConsole.WriteLine($"{this} {propertyName} => {this.GetPropertyValue(propertyName)?.ToString()}");
-        //    }
-        //}
         public event PropertyChangedEventHandler PropertyChanged;
 
         [JsonIgnore]
@@ -204,7 +189,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null, [CallerFilePath] string path = null, [CallerMemberName] string memName = null, [CallerLineNumber] int line = 0) {
-            if (//SupressPropertyChangedNotification ||
+            if (SupressPropertyChangedNotification ||
                 PropertyChanged == null ||
                 propertyName == null) {
                 return;

@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
         private DispatcherTimer _dispatcherTimer;
 
         public MpAvAboutView() : base() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
         }
 

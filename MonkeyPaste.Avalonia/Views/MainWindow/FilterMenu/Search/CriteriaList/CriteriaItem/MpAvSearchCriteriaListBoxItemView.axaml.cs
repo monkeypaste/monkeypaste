@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvSearchCriteriaItemView :
         MpAvUserControl<MpAvSearchCriteriaItemViewModel> {
         public MpAvSearchCriteriaItemView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             var db = this.FindControl<Control>("CriteriaDragButton");
             db.AddHandler(PointerPressedEvent, Db_PointerPressed, RoutingStrategies.Tunnel);
         }

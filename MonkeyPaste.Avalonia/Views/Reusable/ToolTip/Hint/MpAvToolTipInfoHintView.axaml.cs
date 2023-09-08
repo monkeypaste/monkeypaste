@@ -52,7 +52,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion 
         public MpAvToolTipInfoHintView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             this.Classes.CollectionChanged += Classes_CollectionChanged;
             this.AttachedToVisualTree += MpAvToolTipInfoHintView_AttachedToVisualTree;
         }

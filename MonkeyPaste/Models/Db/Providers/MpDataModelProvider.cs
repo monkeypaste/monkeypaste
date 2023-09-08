@@ -197,10 +197,24 @@ namespace MonkeyPaste {
 
         #region MpAppOleFormatInfo 
 
-        public static async Task<List<MpAppOleFormatInfo>> GetAppOleFormatInfosByAppIdAsync(int appId) {
-            string query = $"select * from MpAppOleFormatInfo where fk_MpAppId=?";
-            var result = await MpDb.QueryAsync<MpAppOleFormatInfo>(query, appId);
+        public static async Task<List<MpAppOlePreset>> GetAppOlePresetsByPresetIdAsync(int presetId) {
+            string query = $"select * from MpAppOlePreset where fk_MpPluginPresetId=?";
+            var result = await MpDb.QueryAsync<MpAppOlePreset>(query, presetId);
             return result;
+        }
+
+        public static async Task<List<MpAppOlePreset>> GetAppOlePresetsByAppIdAsync(int appId) {
+            string query = $"select * from MpAppOlePreset where fk_MpAppId=?";
+            var result = await MpDb.QueryAsync<MpAppOlePreset>(query, appId);
+            return result;
+        }
+        public static async Task<MpAppOlePreset> GetAppOlePresetByMembersAsync(int appId, int presetId) {
+            string query = $"select * from MpAppOlePreset where fk_MpAppId=? and fk_MpPluginPresetId=?";
+            var result = await MpDb.QueryAsync<MpAppOlePreset>(query, appId, presetId);
+            if (result == null || result.Count == 0) {
+                return null;
+            }
+            return result[0];
         }
 
         #endregion MpAppInteropSetting

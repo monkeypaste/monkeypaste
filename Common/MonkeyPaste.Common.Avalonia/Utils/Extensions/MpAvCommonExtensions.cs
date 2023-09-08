@@ -7,7 +7,6 @@ using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
-using Avalonia.Media.Transformation;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Rendering;
@@ -701,6 +700,11 @@ namespace MonkeyPaste.Common.Avalonia {
                             .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonPressed;
         }
 
+        public static bool IsMiddlePress(this PointerPressedEventArgs ppea, Visual? control) {
+            return ppea.GetCurrentPoint(control)
+                            .Properties.PointerUpdateKind == PointerUpdateKind.MiddleButtonPressed;
+        }
+
         public static bool IsRightPress(this PointerPressedEventArgs ppea, Visual? control) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonPressed;
@@ -710,7 +714,10 @@ namespace MonkeyPaste.Common.Avalonia {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.LeftButtonReleased;
         }
-
+        public static bool IsMiddleRelease(this PointerReleasedEventArgs ppea, Visual? control) {
+            return ppea.GetCurrentPoint(control)
+                            .Properties.PointerUpdateKind == PointerUpdateKind.MiddleButtonReleased;
+        }
         public static bool IsRightRelease(this PointerReleasedEventArgs ppea, Visual? control) {
             return ppea.GetCurrentPoint(control)
                             .Properties.PointerUpdateKind == PointerUpdateKind.RightButtonReleased;
@@ -718,6 +725,9 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static bool IsLeftDown(this PointerEventArgs e, Visual? control) {
             return e.GetCurrentPoint(control).Properties.IsLeftButtonPressed;
+        }
+        public static bool IsMiddleDown(this PointerEventArgs e, Visual? control) {
+            return e.GetCurrentPoint(control).Properties.IsMiddleButtonPressed;
         }
 
         public static bool IsRightDown(this PointerEventArgs e, Visual? control) {

@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         public MpAvShortcutLabel() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             this.GetObservable(MpAvShortcutLabel.KeyGestureProperty)
                 .Subscribe(value => {
                     Init();

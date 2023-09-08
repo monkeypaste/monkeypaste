@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvMultiSelectListBoxParameterView : MpAvUserControl<MpAvMultiEnumerableParameterViewModel> {
         public MpAvMultiSelectListBoxParameterView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             var mslb = this.FindControl<ListBox>("MultiSelectListBox");
             mslb.SelectionChanged += Mslb_SelectionChanged;
             //this.DataContextChanged += MpAvMultiSelectListBoxParameterView_DataContextChanged;

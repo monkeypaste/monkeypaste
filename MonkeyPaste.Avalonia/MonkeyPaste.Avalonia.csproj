@@ -218,6 +218,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvClipTile.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMenuItem.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\MpAvMenuItemCheckBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvParameterItem.axaml" />
@@ -1328,6 +1329,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\Animations\FadeWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\WelcomeWindowGrow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\AutoCompleteBox.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\MpAvMenuItemCheckBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMenuItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTree.axaml" />

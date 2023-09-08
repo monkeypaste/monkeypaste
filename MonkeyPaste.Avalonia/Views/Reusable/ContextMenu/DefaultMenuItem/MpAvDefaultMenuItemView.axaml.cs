@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
         protected override Type StyleKeyOverride => typeof(MenuItem);
         #endregion
         public MpAvDefaultMenuItemView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             this.PointerPressed += MpAvDefaultMenuItemView_PointerPressed;
         }
 

@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvShortcutRecorderParameterView : MpAvUserControl<MpAvShortcutRecorderParameterViewModel> {
         public MpAvShortcutRecorderParameterView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

@@ -31,6 +31,7 @@ body {
     --defaultFontSize: 12px;
     --pastetemplatebgcolor: teal;
     --pastetoolbarbuttoncolor: dodgerblue;
+    --pastetoolbarcustominfobuttoncolor: fuchsia;
     --pastetoolbarbuttoncolor_checked: blue;
     --edittemplatebgcolor: palegreen;
     --tooltipbgcolor: khaki;

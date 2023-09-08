@@ -122,6 +122,11 @@ function enableSubSelection_ext(enableSubSelMsgBase64Str) {
 	enableSubSelection(true, paste_info_req_obj);
 }
 
+function pasteOrDropCompleteResponse_ext() {
+	// input NONE
+	endPasteButtonBusy();
+}
+
 function disableSubSelection_ext() {
 	disableSubSelection(true);
 }

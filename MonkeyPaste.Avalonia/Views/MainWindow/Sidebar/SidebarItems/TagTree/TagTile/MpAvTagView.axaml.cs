@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvTagView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             this.AttachedToVisualTree += MpAvTagView_AttachedToVisualTree;
             this.AddHandler(PointerPressedEvent, MpAvTagView_PointerPressed, RoutingStrategies.Tunnel);
 

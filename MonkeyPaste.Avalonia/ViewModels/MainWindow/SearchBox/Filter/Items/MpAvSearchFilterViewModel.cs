@@ -29,6 +29,7 @@ namespace MonkeyPaste.Avalonia {
             true;
         bool MpAvIMenuItemViewModel.IsThreeState =>
             false;
+
         IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
             null;
 

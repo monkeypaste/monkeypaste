@@ -142,6 +142,10 @@ namespace MonkeyPaste.Avalonia {
             }
 
             base.OnFrameworkInitializationCompleted();
+
+            //#if DEBUG
+            //            this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
+            //#endif
         }
         #endregion
 

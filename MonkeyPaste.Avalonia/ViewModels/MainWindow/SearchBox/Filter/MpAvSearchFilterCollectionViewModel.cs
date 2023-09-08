@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -28,7 +27,8 @@ namespace MonkeyPaste.Avalonia {
         bool MpAvIMenuItemViewModel.HasLeadingSeparator { get; }
         bool MpAvIMenuItemViewModel.IsThreeState { get; }
         bool MpAvIMenuItemViewModel.IsVisible { get; }
-        bool? MpAvIMenuItemViewModel.IsChecked { get; set; }
+        bool MpAvIMenuItemViewModel.IsEnabled => true;
+        public bool? IsChecked { get; set; } = false;
         MpMenuItemType MpAvIMenuItemViewModel.MenuItemType { get; }
         bool MpAvIMenuItemViewModel.IsSubMenuOpen {
             get => IsPopupMenuOpen;
@@ -222,24 +222,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public void ValidateFilters(MpAvSearchFilterViewModel change_fvm) {
-            bool needsUpdate = false;
             if (change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.Regex)) {
                 // checking regex disables case and whole word, unchecking reenables
                 var case_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpAvPrefViewModel.Instance.SearchByIsCaseSensitive));
                 var whole_word_filter = Filters.FirstOrDefault(x => x.PreferenceName == nameof(MpAvPrefViewModel.Instance.SearchByWholeWord));
 
                 if (change_fvm.IsChecked.IsTrue()) {
-                    case_filter.IsChecked = false;
-                    whole_word_filter.IsChecked = false;
-
                     case_filter.IsChecked = null;
                     whole_word_filter.IsChecked = null;
                 } else {
                     case_filter.IsChecked = false;
                     whole_word_filter.IsChecked = false;
                 }
-
-                needsUpdate = true;
             } else if (change_fvm.IsChecked.IsFalse() &&
                 (change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.TextType) ||
                 change_fvm.FilterType.HasFlag(MpContentQueryBitFlags.ImageType) ||
@@ -256,24 +250,9 @@ namespace MonkeyPaste.Avalonia {
                     text_type_filter.IsChecked = true;
                     image_type_filter.IsChecked = true;
                     file_type_filter.IsChecked = true;
-
-
-                    needsUpdate = true;
                 }
             }
-
-            if (needsUpdate) {
-                var target = MpAvContextMenuView.Instance.PlacementTarget;
-                if (target == null) {
-                    return;
-                }
-                var offset = new MpPoint(MpAvContextMenuView.Instance.HorizontalOffset, MpAvContextMenuView.Instance.VerticalOffset);
-                MpAvMenuExtension.CloseMenu();
-                MpAvMenuExtension.ShowMenu(
-                    control: target,
-                    mivm: PopupMenuViewModel, offset, PlacementMode.Pointer);
-            }
-
+            Filters.ForEach(x => x.OnPropertyChanged(nameof(x.IsEnabled)));
         }
         #endregion
 

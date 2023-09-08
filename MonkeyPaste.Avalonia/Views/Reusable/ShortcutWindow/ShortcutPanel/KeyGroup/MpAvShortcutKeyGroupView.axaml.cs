@@ -5,7 +5,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvShortcutKeyGroupView : MpAvUserControl<MpAvShortcutKeyGroupViewModel> {
         public MpAvShortcutKeyGroupView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

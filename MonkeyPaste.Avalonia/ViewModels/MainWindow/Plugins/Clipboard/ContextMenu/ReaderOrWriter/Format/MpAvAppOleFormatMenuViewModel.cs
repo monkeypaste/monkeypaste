@@ -1,6 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -9,15 +8,17 @@ namespace MonkeyPaste.Avalonia {
 
         public override ICommand Command => new MpAsyncCommand(
             async () => {
-                await Task.WhenAll(SubItems
-                .OfType<MpAvAppOlePluginMenuViewModel>()
-                .Where(x => x.IsChecked.IsTrueOrNull())
-                .Select(x => (x.Command as MpIAsyncCommand).ExecuteAsync()));
+                //await Task.WhenAll(SubItems
+                //.OfType<MpAvAppOlePluginMenuViewModel>()
+                //.Where(x => x.IsChecked.IsTrueOrNull())
+                //.SelectMany(x => x.SubItems)
+                //.OfType<MpAvAppOlePluginMenuViewModel>()
+                //.SelectMany(x => x.SubItems)
+                //.OfType<MpAvAppOlePresetMenuViewModel>()
+                //.Distinct()
+                //.Select(x => (x.Command as MpIAsyncCommand).ExecuteAsync()));
 
-                RefreshChecks(true);
-            },
-            () => {
-                return IsChecked.IsTrueOrNull();
+                //RefreshChecks(true);
             });
 
         public override string Header =>

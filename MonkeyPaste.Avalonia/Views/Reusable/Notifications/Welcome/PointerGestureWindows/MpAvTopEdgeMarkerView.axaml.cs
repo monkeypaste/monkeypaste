@@ -7,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvTopEdgeMarkerView : MpAvUserControl<MpAvPointerGestureWindowViewModel> {
         public MpAvTopEdgeMarkerView() : base() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             this.EffectiveViewportChanged += MpAvTopEdgeMarkerView_EffectiveViewportChanged;
 
             var marker = this.FindControl<Control>("ScrollMarkerContainer");

@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvExternalDropView() : base() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             var dilb = this.FindControl<ListBox>("DropItemListBox");
             dilb.EnableItemsControlAutoScroll();

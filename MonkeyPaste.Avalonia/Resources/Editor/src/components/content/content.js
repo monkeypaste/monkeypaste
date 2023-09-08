@@ -59,7 +59,6 @@ async function loadContentAsync(
 		} 
 		if (!is_reload) {
 			clearTableSelectionStates();
-			loadPasteButton();
 			resetSelection();
 			resetColorPaletteState();
 

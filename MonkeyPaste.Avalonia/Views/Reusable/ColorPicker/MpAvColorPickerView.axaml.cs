@@ -20,7 +20,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvColorPickerView() : this(null) {
         }
         public MpAvColorPickerView(string selHexColor) : base() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             var cancelbtn = this.FindControl<Button>("CancelButton");
             cancelbtn.Click += Cancelbtn_Click;

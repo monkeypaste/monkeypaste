@@ -8,15 +8,26 @@ namespace MonkeyPaste.Avalonia {
         public override bool? IsChecked {
             get {
                 if (MenuArg is not MpAvAppViewModel avm) {
+                    // stay lazy w/ unknown apps and reflect default state
                     return ClipboardPresetViewModel.IsEnabled;
                 }
-                return avm.OleFormatInfos.IsFormatEnabledByPreset(ClipboardPresetViewModel);
+                bool is_default =
+                    ClipboardPresetViewModel.IsReader ?
+                        avm.OleFormatInfos.IsReaderDefault :
+                        avm.OleFormatInfos.IsWriterDefault;
+                if (is_default) {
+                    return true;
+                }
+                return avm.OleFormatInfos.IsFormatEnabledByPresetId(ClipboardPresetViewModel.PresetId);
             }
         }
-        public override ICommand Command => new MpAsyncCommand(
-            async () => {
+        public override ICommand Command => new MpAsyncCommand<object>(
+            async (args) => {
                 await ClipboardPresetViewModel.TogglePresetIsEnabledCommand.ExecuteAsync(MenuArg);
-                RefreshChecks(true);
+                if (args == null) {
+                    // was click source
+                    RefreshChecks(true);
+                }
             });
 
         public override string Header =>
@@ -32,6 +43,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvAppOlePresetMenuViewModel(MpAvAppOlePluginMenuViewModel parent, MpAvClipboardFormatPresetViewModel preset) : base(parent) {
             ClipboardPresetViewModel = preset;
+            RelativeRoot.Presets.Add(this);
         }
         #endregion
 

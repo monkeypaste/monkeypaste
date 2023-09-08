@@ -1418,13 +1418,23 @@ namespace MonkeyPaste.Avalonia {
             return req_formats;
         }
         public string[] GetOleFormats(bool isDnd, MpPortableProcessInfo target_pi = null) {
-            List<string> req_formats = GetDefaultOleFormats(CopyItemType, isDnd);
-            if (target_pi != null &&
-                MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(target_pi)
-                    is MpAvAppViewModel avm &&
-               !avm.OleFormatInfos.IsEmpty) {
-                // override item type defaults and return formats by app 
-                return avm.OleFormatInfos.Items.Select(x => x.FormatName).ToArray();
+            IEnumerable<string> req_formats = GetDefaultOleFormats(CopyItemType, isDnd);
+            //if (target_pi != null &&
+            //    MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(target_pi)
+            //        is MpAvAppViewModel avm &&
+            //   !avm.OleFormatInfos.IsEmpty) {
+            //    // override item type defaults and return formats by app 
+            //    return avm.OleFormatInfos.Items.Select(x => x.FormatName).ToArray();
+            //}
+            if (target_pi != null) {
+                var preset_ids = MpAvAppCollectionViewModel.Instance.GetAppCustomOlePresetsByProcessInfo(target_pi, false);
+                if (preset_ids != null) {
+                    req_formats =
+                        MpAvClipboardHandlerCollectionViewModel.Instance
+                        .AllWriterPresets
+                        .Where(x => preset_ids.Contains(x.PresetId))
+                        .Select(x => x.ClipboardFormat.clipboardName);
+                }
             }
             return req_formats.ToArray();
         }
@@ -1802,7 +1812,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(BoundWidth):
                 case nameof(BoundHeight):
-                    if (CopyItemTitle == "Image 110") {
+                    if (QueryOffsetIdx == 0) {
 
                     }
                     if (IsResizing) {

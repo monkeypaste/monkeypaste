@@ -7,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvPluginSelectorView : MpAvUserControl<object> {
 
         public MpAvPluginSelectorView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

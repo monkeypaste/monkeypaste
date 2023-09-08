@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvFileChooserParameterView : MpAvUserControl<MpAvFileChooserParameterViewModel> {
         public MpAvFileChooserParameterView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

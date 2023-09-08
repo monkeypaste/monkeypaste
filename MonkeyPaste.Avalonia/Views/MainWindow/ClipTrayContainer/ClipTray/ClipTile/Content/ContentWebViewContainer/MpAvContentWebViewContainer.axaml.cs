@@ -12,7 +12,7 @@ using AvaloniaWebView;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvContentWebViewContainer : MpAvUserControl<MpAvClipTileViewModel> {
         public MpAvContentWebViewContainer() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
 #if PLAT_WV
             this.FindControl<MpAvContentWebView>("ContentWebView").WebView = this.FindControl<WebView>("AvWebView"); 

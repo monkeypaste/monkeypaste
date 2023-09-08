@@ -7,6 +7,6 @@ namespace MonkeyPaste.Avalonia;
 
 public partial class MpAvImageContentView : MpAvUserControl<MpAvClipTileViewModel> {
     public MpAvImageContentView() {
-        AvaloniaXamlLoader.Load(this);
+        InitializeComponent();
     }
 }

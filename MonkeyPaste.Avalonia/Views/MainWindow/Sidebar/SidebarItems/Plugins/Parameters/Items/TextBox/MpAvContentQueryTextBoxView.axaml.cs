@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvContentQueryTextBoxView : MpAvUserControl<MpIContentQueryTextBoxViewModel> {
         public MpAvContentQueryTextBoxView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

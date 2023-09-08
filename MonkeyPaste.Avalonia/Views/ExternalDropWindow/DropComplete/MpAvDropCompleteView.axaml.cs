@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvDropCompleteView : MpAvUserControl<object> {
 
         public MpAvDropCompleteView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

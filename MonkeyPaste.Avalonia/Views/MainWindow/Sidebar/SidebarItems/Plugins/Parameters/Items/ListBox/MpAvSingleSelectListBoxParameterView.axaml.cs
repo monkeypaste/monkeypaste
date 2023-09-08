@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvSingleSelectListBoxParameterView : MpAvUserControl<MpAvEnumerableParameterViewModelBase> {
         public MpAvSingleSelectListBoxParameterView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

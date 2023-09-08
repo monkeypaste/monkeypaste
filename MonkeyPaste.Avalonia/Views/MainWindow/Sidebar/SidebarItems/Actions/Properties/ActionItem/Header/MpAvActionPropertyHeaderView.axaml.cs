@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvActionPropertyHeaderView : MpAvUserControl<MpAvActionViewModelBase> {
         public MpAvActionPropertyHeaderView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         public MpAvProgressSpinnerView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             //this.AttachedToVisualTree += MpAvProgressSpinnerView_AttachedToVisualTree;
         }
 

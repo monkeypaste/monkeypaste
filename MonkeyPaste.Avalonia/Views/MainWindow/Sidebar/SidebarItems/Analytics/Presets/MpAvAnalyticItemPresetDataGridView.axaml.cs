@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvAnalyticItemPresetDataGridView : MpAvUserControl<MpAvAnalyticItemViewModel> {
 
         public MpAvAnalyticItemPresetDataGridView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             this.DataContextChanged += MpAvAnalyticItemPresetDataGridView_DataContextChanged;
             if (DataContext != null) {
                 MpAvAnalyticItemPresetDataGridView_DataContextChanged(this, null);

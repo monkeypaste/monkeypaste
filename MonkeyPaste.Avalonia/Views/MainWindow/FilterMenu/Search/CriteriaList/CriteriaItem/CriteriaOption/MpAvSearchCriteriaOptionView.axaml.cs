@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvSearchCriteriaOptionView : MpAvUserControl<MpAvSearchCriteriaOptionViewModel> {
         public MpAvSearchCriteriaOptionView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvSearchCriteriaHeaderView : MpAvUserControl<MpAvSearchCriteriaItemCollectionViewModel> {
         public MpAvSearchCriteriaHeaderView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

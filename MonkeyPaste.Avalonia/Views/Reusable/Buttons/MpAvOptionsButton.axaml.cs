@@ -58,7 +58,7 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
         public MpAvOptionsButton() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

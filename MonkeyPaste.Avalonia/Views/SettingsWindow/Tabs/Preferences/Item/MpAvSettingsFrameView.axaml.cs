@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
         public static ObservableCollection<MpAvPluginParameterItemView> ParamViews { get; set; } = new ObservableCollection<MpAvPluginParameterItemView>();
 
         public MpAvSettingsFrameView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             var pplb = this
                 .FindControl<MpAvParameterCollectionView>("ParameterCollectionView")
                 .FindControl<ListBox>("PluginParameterListBox");

@@ -8,7 +8,7 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvFilterMenuView : MpAvUserControl<MpAvFilterMenuViewModel> {
 
         public MpAvFilterMenuView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             var sort_view = this.FindControl<MpAvClipTileSortView>("SortView");
             sort_view.GetObservable(InputElement.IsKeyboardFocusWithinProperty).Subscribe(value => OnFilterControlFocusWithinChanged(sort_view));

@@ -1,18 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Diagnostics;
-using Avalonia.Input;
-using Avalonia.Markup.Xaml;
-using Avalonia.ReactiveUI;
-using Avalonia.Styling;
-using Avalonia.VisualTree;
-using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
-using ReactiveUI;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -31,7 +21,13 @@ namespace MonkeyPaste.Avalonia {
 
         private static DevToolsOptions _defaultDevToolOptions;
         public static DevToolsOptions DefaultDevToolOptions =>
-            _defaultDevToolOptions ?? (_defaultDevToolOptions = new DevToolsOptions() { ShowAsChildWindow = false });
+            _defaultDevToolOptions ??
+            (_defaultDevToolOptions =
+                new DevToolsOptions() {
+                    ShowAsChildWindow = false,
+
+                    //StartupScreenIndex = 0
+                });
 
         #endregion
 

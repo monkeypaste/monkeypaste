@@ -1,23 +1,33 @@
 ﻿using MonkeyPaste.Common;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppOlePluginMenuViewModel : MpAvAppOleMenuViewModelBase {
         #region Overrides
 
-        public override ICommand Command => new MpAsyncCommand(
-            async () => {
-                await Task.WhenAll(SubItems
-                .OfType<MpAvAppOlePresetMenuViewModel>()
-                .Where(x => x.IsChecked.IsTrueOrNull())
-                .Select(x => (x.Command as MpIAsyncCommand).ExecuteAsync()));
+        public override ICommand Command => new MpAsyncCommand<object>(
+            async (args) => {
+                if (IsChecked.IsTrueOrNull()) {
+                    var to_uncheck =
+                    SubItems
+                    .OfType<MpAvAppOlePresetMenuViewModel>()
+                    .Where(x => x.IsChecked.IsTrue());
 
+                    foreach (var pvm in to_uncheck) {
+                        await pvm.ClipboardPresetViewModel.TogglePresetIsEnabledCommand.ExecuteAsync(MenuArg);
+                    }
+                } else {
+                    // when false enable first item
+                    var to_check =
+                        SubItems
+                        .OfType<MpAvAppOlePresetMenuViewModel>()
+                        .FirstOrDefault(x => x.ClipboardPresetViewModel.IsDefault);
+                    MpDebug.Assert(to_check != null, $"Clipboard plugins not determining default right, maybe should fall back to first item?");
+
+                    await to_check.ClipboardPresetViewModel.TogglePresetIsEnabledCommand.ExecuteAsync(MenuArg);
+                }
                 RefreshChecks(true);
-            },
-            () => {
-                return IsChecked.IsTrueOrNull();
             });
 
         public override string Header =>

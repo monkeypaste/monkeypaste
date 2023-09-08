@@ -6,7 +6,7 @@ using MonkeyPaste.Common.Avalonia;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvTagTrayView : MpAvUserControl<MpAvTagTrayViewModel> {
         public MpAvTagTrayView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             var nav_left = this.FindControl<RepeatButton>("TagTrayNavLeftButton");
             var nav_right = this.FindControl<RepeatButton>("TagTrayNavRightButton");

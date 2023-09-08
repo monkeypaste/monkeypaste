@@ -253,6 +253,11 @@ namespace MonkeyPaste {
                 delete_tasks.AddRange(pppvl.Select(x => x.DeleteFromDatabaseAsync()));
             }
 
+            var aolepvl = await MpDataModelProvider.GetAppOlePresetsByPresetIdAsync(Id);
+            if (aolepvl != null && aolepvl.Count > 0) {
+                delete_tasks.AddRange(aolepvl.Select(x => x.DeleteFromDatabaseAsync()));
+            }
+
 
             if (IconId > 0) {
                 var icon = await MpDataModelProvider.GetItemAsync<MpIcon>(IconId);

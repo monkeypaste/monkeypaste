@@ -117,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break("Duplicate singleton");
                 return;
             }
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Stretch;
 #if !DESKTOP

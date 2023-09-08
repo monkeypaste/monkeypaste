@@ -6,7 +6,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvComboBoxParameterView : MpAvUserControl<MpAvSingleEnumerableParameterViewModel> {
         public MpAvComboBoxParameterView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
     }
 }

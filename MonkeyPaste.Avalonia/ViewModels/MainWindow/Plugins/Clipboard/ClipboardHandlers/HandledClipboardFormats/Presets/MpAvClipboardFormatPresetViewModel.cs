@@ -433,30 +433,31 @@ namespace MonkeyPaste.Avalonia {
                 }
                 bool cur_def_enabled = IsEnabled;
                 MpAvAppViewModel avm = args as MpAvAppViewModel;
+
                 if (avm == null &&
                     args is MpPortableProcessInfo pi) {
-                    var app = await Mp.Services.AppBuilder.CreateAsync(pi);
-                    while (avm == null) {
-                        await Task.Delay(100);
-                        avm = MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(pi);
-                    }
-                    while (avm.IsAnyBusy) { await Task.Delay(100); }
+                    avm = await MpAvAppCollectionViewModel.Instance.AddOrGetAppByProcessInfoAsync(pi);
                 }
                 MpDebug.Assert(avm != null, $"Error toggling preset for arg '{args}'");
-                if (avm.OleFormatInfos.IsEmpty) {
-                    // initial custom preset, before toggling create snapshot of defaults to use for toggling
-                    await Task.WhenAll(
-                        MpAvClipboardHandlerCollectionViewModel.Instance.EnabledWriters
-                        .Select(x => avm.OleFormatInfos.CreateOleFormatInfoViewModelByPresetAsync(x)));
-                    while (avm.IsAnyBusy) { await Task.Delay(100); }
-                }
 
-                if (avm.OleFormatInfos.GetAppOleFormatInfoByFormatPreset(this) is MpAvAppOleFormatInfoViewModel aofivm) {
+                //if (IsReader && avm.OleFormatInfos.IsReaderDefault) {
+                //    // initial custom preset, before toggling create snapshot of defaults to use for toggling
+                //    await Task.WhenAll(
+                //        MpAvClipboardHandlerCollectionViewModel.Instance.EnabledReaders
+                //        .Select(x => avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(x.PresetId)));
+                //} else if (IsWriter && avm.OleFormatInfos.IsWriterDefault) {
+                //    // initial custom preset, before toggling create snapshot of defaults to use for toggling
+                //    await Task.WhenAll(
+                //        MpAvClipboardHandlerCollectionViewModel.Instance.EnabledWriters
+                //        .Select(x => avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(x.PresetId)));
+                //}
+
+
+                if (avm.OleFormatInfos.GetAppOleFormatInfoByPresetId(PresetId) is MpAvAppOlePresetViewModel aofivm) {
                     // format exists, remove
-                    await aofivm.AppOleFormatInfo.DeleteFromDatabaseAsync();
-                    while (avm.IsAnyBusy) { await Task.Delay(100); }
+                    await avm.OleFormatInfos.RemoveAppOlePresetViewModelByPresetIdAsync(PresetId);
                 } else {
-                    await avm.OleFormatInfos.CreateOleFormatInfoViewModelByPresetAsync(this);
+                    await avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(PresetId);
                 }
 
             });

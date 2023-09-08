@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public MpAvShortcutView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             this.PointerEntered += MpAvShortcutView_PointerEntered;
             this.PointerExited += MpAvShortcutView_PointerExited;
 

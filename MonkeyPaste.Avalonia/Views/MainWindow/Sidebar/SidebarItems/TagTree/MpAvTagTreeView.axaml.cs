@@ -16,7 +16,7 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
         #endregion
         public MpAvTagTreeView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
 
             var ttv = this.FindControl<TreeView>("TagTreeView");
             //ttv.EnableItemsControlAutoScroll(false);

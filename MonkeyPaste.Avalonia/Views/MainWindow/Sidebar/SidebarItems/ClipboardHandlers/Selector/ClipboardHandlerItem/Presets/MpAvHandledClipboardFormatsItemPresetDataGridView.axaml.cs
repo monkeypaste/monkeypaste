@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
     /// </summary>
     public partial class MpAvHandledClipboardFormatsItemPresetDataGridView : MpAvUserControl<MpAvClipboardHandlerItemViewModel> {
         public MpAvHandledClipboardFormatsItemPresetDataGridView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
             this.DataContextChanged += MpAvAnalyticItemPresetDataGridView_DataContextChanged;
             if (DataContext != null) {
                 MpAvAnalyticItemPresetDataGridView_DataContextChanged(this, null);

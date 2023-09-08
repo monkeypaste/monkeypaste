@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvSearchBoxView : MpAvUserControl<MpAvSearchBoxViewModel> {
         public MpAvSearchBoxView() {
-            AvaloniaXamlLoader.Load(this);
+            InitializeComponent();
         }
 
         protected override async void OnDataContextChanged(EventArgs e) {
