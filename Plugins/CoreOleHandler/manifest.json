@@ -5,16 +5,16 @@
   "credits": "Thomas Kefauver",
   "guid": "cf2ec03f-9edd-45e9-a605-2a2df71e03bd",
   "projectUrl": "https://www.monkeypaste.com",
-  "iconUri": "icon.png",
+  "iconUri": "/Resources/Images/icon.png",
   "tags": "Core,Clipboard,Drag and Drop,Text,Rtf,Rich Text,Html,Csv,Image,Png,Jpg,Jpeg,Link,Avalonia",
   "bundleType": "Dll",
   "clipboardHandler": {
     "readers": [
       {
-        "handlerGuid": "676278d9-6c9b-4efd-b5e9-9c5840222c14",
-        "iconUri": "text.png",
+        "formatGuid": "676278d9-6c9b-4efd-b5e9-9c5840222c14",
+        "iconUri": "/Resources/Images/text.png",
         "displayName": "Text",
-        "clipboardName": "Text",
+        "formatName": "Text",
         "parameters": [
           {
             "label": "Max Characters",
@@ -48,10 +48,10 @@
         ]
       },
       {
-        "handlerGuid": "3023b18c-5f15-4284-ae51-a16bb2ba0f23",
-        "iconUri": "text.png",
+        "formatGuid": "3023b18c-5f15-4284-ae51-a16bb2ba0f23",
+        "iconUri": "/Resources/Images/text.png",
         "displayName": "Text (web)",
-        "clipboardName": "text/plain",
+        "formatName": "text/plain",
         "parameters": [
           {
             "label": "Max Characters",
@@ -85,10 +85,10 @@
         ]
       },
       {
-        "handlerGuid": "58558048-a275-4377-9108-8fb1bed3cd5e",
+        "formatGuid": "58558048-a275-4377-9108-8fb1bed3cd5e",
         "displayName": "Rtf",
-        "iconUri": "rtf.png",
-        "clipboardName": "Rich Text Format",
+        "iconUri": "/Resources/Images/rtf.png",
+        "formatName": "Rich Text Format",
         "parameters": [
           {
             "label": "Max Characters",
@@ -122,10 +122,10 @@
         ]
       },
       {
-        "handlerGuid": "936e7b68-72c9-4a8a-ada1-a60f21c93b10",
+        "formatGuid": "936e7b68-72c9-4a8a-ada1-a60f21c93b10",
         "displayName": "Html",
-        "iconUri": "html.png",
-        "clipboardName": "HTML Format",
+        "iconUri": "/Resources/Images/html.png",
+        "formatName": "HTML Format",
         "parameters": [
           {
             "label": "Max Characters",
@@ -159,10 +159,10 @@
         ]
       },
       {
-        "handlerGuid": "b9d78892-d519-4f6e-a1bf-a287780714bc",
+        "formatGuid": "b9d78892-d519-4f6e-a1bf-a287780714bc",
         "displayName": "Html (web)",
-        "iconUri": "html.png",
-        "clipboardName": "text/html",
+        "iconUri": "/Resources/Images/html.png",
+        "formatName": "text/html",
         "parameters": [
           {
             "label": "Max Characters",
@@ -196,10 +196,10 @@
         ]
       },
       {
-        "handlerGuid": "7ea7e3eb-4c18-4f2f-a4b5-bcc16cd882e3",
+        "formatGuid": "7ea7e3eb-4c18-4f2f-a4b5-bcc16cd882e3",
         "displayName": "Html (url)",
-        "iconUri": "html.png",
-        "clipboardName": "text/x-moz-url-priv",
+        "iconUri": "/Resources/Images/html.png",
+        "formatName": "text/x-moz-url-priv",
         "parameters": [
           {
             "label": "Ignore",
@@ -217,10 +217,10 @@
         ]
       },
       {
-        "handlerGuid": "8af77575-fd03-4c39-87c5-688eda230f06",
+        "formatGuid": "8af77575-fd03-4c39-87c5-688eda230f06",
         "displayName": "Image",
-        "iconUri": "bitmap.png",
-        "clipboardName": "PNG",
+        "iconUri": "/Resources/Images/bitmap.png",
+        "formatName": "PNG",
         "parameters": [
           {
             "label": "Ignore",
@@ -238,10 +238,10 @@
         ]
       },
       {
-        "handlerGuid": "bb997630-985a-420e-808f-60e31625c06f",
+        "formatGuid": "bb997630-985a-420e-808f-60e31625c06f",
         "displayName": "Files",
-        "iconUri": "folder.png",
-        "clipboardName": "Files",
+        "iconUri": "/Resources/Images/folder.png",
+        "formatName": "Files",
         "parameters": [
           {
             "label": "Ignore",
@@ -273,10 +273,10 @@
         ]
       },
       {
-        "handlerGuid": "34b250a9-c7d4-4290-a15f-bb229867b76b",
+        "formatGuid": "34b250a9-c7d4-4290-a15f-bb229867b76b",
         "displayName": "Csv",
-        "iconUri": "csv.png",
-        "clipboardName": "Csv",
+        "iconUri": "/Resources/Images/csv.png",
+        "formatName": "Csv",
         "parameters": [
           {
             "label": "Ignore",
@@ -292,57 +292,15 @@
             ]
           }
         ]
-      },
-      {
-        "handlerGuid": "2e50a430-1cde-4a0a-9973-06aaa5508c41",
-        "displayName": "Url",
-        "iconUri": "html.png",
-        "clipboardName": "UniformResourceLocator",
-        "parameters": [
-          {
-            "label": "Ignore",
-            "description": "When checked Url format will be ignored",
-            "controlType": "CheckBox",
-            "unitType": "Bool",
-            "paramId": "36",
-            "values": [
-              {
-                "value": "false",
-                "isDefault": true
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "handlerGuid": "8e7b2cb2-da79-4239-baa9-097f6ef5b880",
-        "displayName": "Uri List",
-        "iconUri": "html.png",
-        "clipboardName": "text/uri-list",
-        "parameters": [
-          {
-            "label": "Ignore",
-            "description": "When checked Url-list format will be ignored",
-            "controlType": "CheckBox",
-            "unitType": "Bool",
-            "paramId": "38",
-            "values": [
-              {
-                "value": "false",
-                "isDefault": true
-              }
-            ]
-          }
-        ]
       }
     ],
     "writers": [
       {
-        "handlerGuid": "fc932676-f688-4f0c-a558-9918241397db",
-        "iconUri": "text.png",
+        "formatGuid": "fc932676-f688-4f0c-a558-9918241397db",
+        "iconUri": "/Resources/Images/text.png",
         "displayName": "Text",
         "sortOrderIdx": 0,
-        "clipboardName": "Text",
+        "formatName": "Text",
         "parameters": [
           {
             "label": "Max Characters",
@@ -376,12 +334,12 @@
         ]
       },
       {
-        "handlerGuid": "826c32fa-b3ae-46f3-9495-eb1f476b0b1e",
-        "iconUri": "text.png",
+        "formatGuid": "826c32fa-b3ae-46f3-9495-eb1f476b0b1e",
+        "iconUri": "/Resources/Images/text.png",
         "sortOrderIdx": 100,
         "description": "A web compatibility format that maybe needed on a variety of platforms with varying Web Browsers. Output will match standard 'Text' format.",
         "displayName": "Text (web)",
-        "clipboardName": "text/plain",
+        "formatName": "text/plain",
         "parameters": [
           {
             "label": "Max Characters",
@@ -415,12 +373,12 @@
         ]
       },
       {
-        "handlerGuid": "ac15a058-dae6-4a66-9700-c415fd5b89f9",
+        "formatGuid": "ac15a058-dae6-4a66-9700-c415fd5b89f9",
         "displayName": "Rtf",
         "sortOrderIdx": 4,
         "description": "Rich Text Format is a Microsoft-based format which maybe required for formatted text output in certain legacy applications on a variety of platforms.",
-        "iconUri": "rtf.png",
-        "clipboardName": "Rich Text Format",
+        "iconUri": "/Resources/Images/rtf.png",
+        "formatName": "Rich Text Format",
         "parameters": [
           {
             "label": "Max Characters",
@@ -454,11 +412,11 @@
         ]
       },
       {
-        "handlerGuid": "825e4325-908f-48c5-94a1-53eb9af4c470",
+        "formatGuid": "825e4325-908f-48c5-94a1-53eb9af4c470",
         "displayName": "Html",
         "sortOrderIdx": 5,
-        "iconUri": "html.png",
-        "clipboardName": "HTML Format",
+        "iconUri": "/Resources/Images/html.png",
+        "formatName": "HTML Format",
         "parameters": [
           {
             "label": "Max Characters",
@@ -492,12 +450,12 @@
         ]
       },
       {
-        "handlerGuid": "46fc39af-982d-4c47-8a6b-7b6e074c45d8",
+        "formatGuid": "46fc39af-982d-4c47-8a6b-7b6e074c45d8",
         "displayName": "Html (web)",
         "sortOrderIdx": 100,
         "description": "A web compatibility format that maybe needed on a variety of platforms with varying Web Browsers. Output will match standard 'HTML' format.",
-        "iconUri": "html.png",
-        "clipboardName": "text/html",
+        "iconUri": "/Resources/Images/html.png",
+        "formatName": "text/html",
         "parameters": [
           {
             "label": "Max Characters",
@@ -531,12 +489,12 @@
         ]
       },
       {
-        "handlerGuid": "95ed025a-fde5-4b51-8be4-32dcebeb1f15",
+        "formatGuid": "95ed025a-fde5-4b51-8be4-32dcebeb1f15",
         "displayName": "Url (moz)",
         "sortOrderIdx": 100,
         "description": "A mozilla (Firefox) format used for source Url tracking. Typically only required on some Linux platforms.",
-        "iconUri": "html.png",
-        "clipboardName": "text/x-moz-url-priv",
+        "iconUri": "/Resources/Images/html.png",
+        "formatName": "text/x-moz-url-priv",
         "parameters": [
           {
             "label": "Ignore",
@@ -554,11 +512,11 @@
         ]
       },
       {
-        "handlerGuid": "57f363e9-b478-46e7-a39b-4b143c3d3e7d",
+        "formatGuid": "57f363e9-b478-46e7-a39b-4b143c3d3e7d",
         "displayName": "Image",
         "sortOrderIdx": 1,
-        "iconUri": "bitmap.png",
-        "clipboardName": "PNG",
+        "iconUri": "/Resources/Images/bitmap.png",
+        "formatName": "PNG",
         "parameters": [
           {
             "label": "Default Export Type",
@@ -601,11 +559,11 @@
         ]
       },
       {
-        "handlerGuid": "e05ed3da-3b2a-4339-8524-2ea339c0856b",
+        "formatGuid": "e05ed3da-3b2a-4339-8524-2ea339c0856b",
         "displayName": "File",
         "sortOrderIdx": 2,
-        "iconUri": "folder.png",
-        "clipboardName": "Files",
+        "iconUri": "/Resources/Images/folder.png",
+        "formatName": "Files",
         "parameters": [
           {
             "label": "Ignore",
@@ -630,11 +588,11 @@
         ]
       },
       {
-        "handlerGuid": "fd8c2fd9-87c9-4e43-97df-0cca111c69ae",
+        "formatGuid": "fd8c2fd9-87c9-4e43-97df-0cca111c69ae",
         "displayName": "File (Gnome)",
         "sortOrderIdx": 100,
-        "iconUri": "folder.png",
-        "clipboardName": "x-special/gnome-copied-files",
+        "iconUri": "/Resources/Images/folder.png",
+        "formatName": "x-special/gnome-copied-files",
         "dependencies": [
           {
             "type": "os",
@@ -666,12 +624,12 @@
         ]
       },
       {
-        "handlerGuid": "10ab62ae-89fa-4445-895d-b4e5463e6df0",
+        "formatGuid": "10ab62ae-89fa-4445-895d-b4e5463e6df0",
         "displayName": "Csv",
         "sortOrderIdx": 3,
         "description": "Used for tabular (spreadsheet) data",
-        "iconUri": "csv.png",
-        "clipboardName": "Csv",
+        "iconUri": "/Resources/Images/csv.png",
+        "formatName": "Csv",
         "parameters": [
           {
             "label": "Ignore",
@@ -679,50 +637,6 @@
             "controlType": "CheckBox",
             "unitType": "Bool",
             "paramId": "34",
-            "values": [
-              {
-                "value": "false",
-                "isDefault": true
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "handlerGuid": "e36f1993-4865-4043-a517-0e2c31de042e",
-        "displayName": "Url",
-        "sortOrderIdx": 100,
-        "iconUri": "html.png",
-        "clipboardName": "UniformResourceLocator",
-        "parameters": [
-          {
-            "label": "Ignore",
-            "description": "When checked Url format will be ignored",
-            "controlType": "CheckBox",
-            "unitType": "Bool",
-            "paramId": "35",
-            "values": [
-              {
-                "value": "false",
-                "isDefault": true
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "handlerGuid": "8341287f-c987-4ec0-98f3-66e381a3fa56",
-        "displayName": "Uri List",
-        "sortOrderIdx": 100,
-        "iconUri": "html.png",
-        "clipboardName": "text/uri-list",
-        "parameters": [
-          {
-            "label": "Ignore",
-            "description": "When checked Url-list format will be ignored",
-            "controlType": "CheckBox",
-            "unitType": "Bool",
-            "paramId": "37",
             "values": [
               {
                 "value": "false",

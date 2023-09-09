@@ -1,16 +1,11 @@
-﻿using HtmlAgilityPack;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
 
-namespace AvCoreAnnotator {
+namespace CoreAnnotator {
     public static class DeltaAnnotator {
 
         #region Private Variable

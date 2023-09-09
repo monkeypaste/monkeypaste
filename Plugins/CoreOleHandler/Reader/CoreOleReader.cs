@@ -5,8 +5,8 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.Text;
 
-namespace AvCoreClipboardHandler {
-    public static class AvCoreClipboardReader {
+namespace CoreOleHandler{
+    public static class CoreOleReader {
         #region Private Variables
 
         #endregion
@@ -20,7 +20,7 @@ namespace AvCoreClipboardHandler {
             if (request.forcedClipboardDataObject == null) {
                 // clipboard read
                 //await Util.WaitForClipboard();
-                availableFormats = await AvCoreClipboardHandler.ClipboardRef.GetFormatsSafeAsync();
+                availableFormats = await CoreOleHandler.ClipboardRef.GetFormatsSafeAsync();
                 //Util.CloseClipboard();
             } else if (request.forcedClipboardDataObject is IDataObject) {
                 avdo = request.forcedClipboardDataObject as IDataObject;
@@ -49,6 +49,9 @@ namespace AvCoreClipboardHandler {
             var readFormats = request.readFormats.Where(x => availableFormats.Contains(x));
 
             foreach (var read_format in readFormats) {
+                if (read_format == "UniformResourceLocator") {
+
+                }
                 object data = await ReadDataObjectFormat(read_format, avdo);
                 if (!request.ignoreParams) {
                     foreach (var param in request.items) {
@@ -87,7 +90,7 @@ namespace AvCoreClipboardHandler {
 
             if (avdo == null) {
                 //await Util.WaitForClipboard();
-                format_data = await AvCoreClipboardHandler.ClipboardRef.GetDataSafeAsync(format);
+                format_data = await CoreOleHandler.ClipboardRef.GetDataSafeAsync(format);
                 if (OperatingSystem.IsWindows() &&
                     format == MpPortableDataFormats.AvHtml_bytes && format_data is byte[] htmlBytes) {
                     var detected_encoding = htmlBytes.DetectTextEncoding(out string detected_text);
@@ -140,11 +143,11 @@ namespace AvCoreClipboardHandler {
             try {
                 // NOTE by internal convention 'paramId' is an int.
                 // plugin creator has to manage mapping internally
-                CoreClipboardParamType paramType = (CoreClipboardParamType)Convert.ToInt32(pkvp.paramId);
+                CoreOleParamType paramType = (CoreOleParamType)Convert.ToInt32(pkvp.paramId);
                 switch (format) {
                     case MpPortableDataFormats.AvRtf_bytes:
                         switch (paramType) {
-                            case CoreClipboardParamType.R_MaxCharCount_Rtf:
+                            case CoreOleParamType.R_MaxCharCount_Rtf:
                                 if (data is string rtf) {
                                     int max_length = int.Parse(paramVal);
                                     if (rtf.Length > max_length) {
@@ -159,7 +162,7 @@ namespace AvCoreClipboardHandler {
                                     }
                                 }
                                 break;
-                            case CoreClipboardParamType.R_Ignore_Rtf:
+                            case CoreOleParamType.R_Ignore_Rtf:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignoreRtf &&
                                     ignoreRtf) {
                                     AddIgnoreNotification(ref nfl, format);
@@ -173,7 +176,7 @@ namespace AvCoreClipboardHandler {
                         break;
                     case MpPortableDataFormats.Text:
                         switch (paramType) {
-                            case CoreClipboardParamType.R_MaxCharCount_Text:
+                            case CoreOleParamType.R_MaxCharCount_Text:
                                 if (data is string text) {
                                     int max_length = int.Parse(paramVal);
                                     if (text.Length > max_length) {
@@ -188,7 +191,7 @@ namespace AvCoreClipboardHandler {
                                     }
                                 }
                                 break;
-                            case CoreClipboardParamType.R_Ignore_Text:
+                            case CoreOleParamType.R_Ignore_Text:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignText &&
                                     ignText) {
                                     data = null;
@@ -209,7 +212,7 @@ namespace AvCoreClipboardHandler {
                         break;
                     case MpPortableDataFormats.AvPNG:
                         switch (paramType) {
-                            case CoreClipboardParamType.R_Ignore_Image:
+                            case CoreOleParamType.R_Ignore_Image:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignImg &&
                                     ignImg) {
                                     data = null;
@@ -221,14 +224,14 @@ namespace AvCoreClipboardHandler {
 
                     case MpPortableDataFormats.AvFiles:
                         switch (paramType) {
-                            case CoreClipboardParamType.R_IgnoreAll_FileDrop:
+                            case CoreOleParamType.R_IgnoreAll_FileDrop:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignore_fd &&
                                     ignore_fd) {
                                     data = null;
                                     AddIgnoreNotification(ref nfl, format);
                                 }
                                 break;
-                            case CoreClipboardParamType.R_IgnoredExt_FileDrop:
+                            case CoreOleParamType.R_IgnoredExt_FileDrop:
                                 if (!string.IsNullOrWhiteSpace(paramVal) &&
                                     paramVal.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value) is List<string> iel &&
                                     data is IEnumerable<string> fpl) {

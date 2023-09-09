@@ -22,7 +22,9 @@
         ShowActivated="{Binding IsModal}"
         WindowState="Normal"
         Topmost="True"
-        SystemDecorations="None"
+        CanResize="True"
+        ExtendClientAreaToDecorationsHint="True"
+        SystemDecorations="BorderOnly"
         TransparencyLevelHint="Transparent"
         Background="Transparent"
         Title="">
@@ -70,8 +72,12 @@
             local:MpAvIsHoveringExtension.IsEnabled="True"
             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
         <Grid x:Name="NotificationWindowContainerGrid"
-              ColumnDefinitions="0.35*,0.75*"
               RowDefinitions="Auto,Auto,Auto,Auto,0.6*">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.35*"
+                                  MaxWidth="100" />
+                <ColumnDefinition Width="0.75*" />
+            </Grid.ColumnDefinitions>
             <!--  ICON  -->
             <Image Grid.Row="0"
                    Grid.RowSpan="2"
@@ -86,12 +92,43 @@
                    Margin="10,5,10,0" />
 
             <!--  TITLE/UNDERLINE  -->
-            <StackPanel Grid.Row="0"
+
+            <local:MpAvMarqueeTextBox Grid.Row="0"
+                                      Grid.Column="1"
+                                      AutoMarquee="True"
+                                      EditOnFocus="False"
+                                      MinWidth="{Binding #TitleUnderline.Bounds.Width}"
+                                      MaxWidth="{Binding #TitleUnderline.Bounds.Width}"
+                                      Width="{Binding #TitleUnderline.Bounds.Width}"
+                                      MinHeight="30"
+                                      FontSize="20"
+                                      IsReadOnly="True"
+                                      IsMarqueeEnabled="True"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"
+                                      TextAlignment="Left"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Top"
+                                      FontWeight="SemiBold"
+                                      Text="{Binding Title}" />
+            <Border x:Name="TitleUnderline"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    BorderThickness="0"
+                    Margin="0,0,5,0"
+                    Background="{DynamicResource ThemeWhiteColor}"
+                    Height="1" />
+
+            <!--<StackPanel Grid.Row="0"
                         Grid.Column="1"
                         Orientation="Vertical"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Top">
-                <TextBlock VerticalAlignment="Top"
+                <TextBlock Grid.Row="0"
+                           Grid.Column="1"
+                           VerticalAlignment="Top"
                            HorizontalAlignment="Stretch"
                            TextAlignment="Left"
                            FontSize="24"
@@ -100,14 +137,16 @@
                            TextWrapping="WrapWithOverflow"
                            Text="{Binding Title}" />
 
-                <!--  TITLE UNDERLINE  -->
+            -->
+            <!--  TITLE UNDERLINE  -->
+            <!--
 
                 <Border VerticalAlignment="Top"
                         HorizontalAlignment="Stretch"
                         Classes="labelUnderline labelUnderline_long"
                         Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
                         BorderThickness="0" />
-            </StackPanel>
+            </StackPanel>-->
 
 
             <!--  MESSAGE BODY  -->
@@ -126,7 +165,7 @@
                             <SelectableTextBlock FontSize="14"
                                                  HorizontalAlignment="Left"
                                                  VerticalAlignment="Top"
-                                                 TextWrapping="WrapWithOverflow"
+                                                 TextWrapping="Wrap"
                                                  FontWeight="SemiBold"
                                                  Background="Transparent"
                                                  Focusable="True"

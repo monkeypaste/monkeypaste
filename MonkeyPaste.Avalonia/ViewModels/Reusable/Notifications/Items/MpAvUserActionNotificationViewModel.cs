@@ -8,6 +8,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvUserActionNotificationViewModel : MpAvNotificationViewModelBase, MpIProgressIndicatorViewModel {
         #region Private Variables
+        bool _wasIgnoreHiddenToFix = false;
         #endregion
 
         #region Interfaces
@@ -118,16 +119,16 @@ namespace MonkeyPaste.Avalonia {
         public override async Task InitializeAsync(MpNotificationFormat nf) {
             IsBusy = true;
             if (nf.IconSourceObj == null) {
-                if (IsErrorNotification) {
-                    nf.IconSourceObj = MpBase64Images.Error;
-                } else if (IsWarningNotification) {
-                    nf.IconSourceObj = MpBase64Images.Warning;
+                if (GetIsErrorNotification(nf)) {
+                    nf.IconSourceObj = "ErrorImage";
+                } else if (GetIsWarningNotification(nf)) {
+                    nf.IconSourceObj = "WarningImage";
                 } else {
-                    nf.IconSourceObj = MpBase64Images.QuestionMark;
+                    nf.IconSourceObj = "QuestionMarkImage";
                 }
             }
-            await base.InitializeAsync(nf);
 
+            await base.InitializeAsync(nf);
             switch (ButtonsType) {
                 case MpNotificationButtonsType.YesNo:
                     ShowYesButton = true;
@@ -281,6 +282,24 @@ namespace MonkeyPaste.Avalonia {
                     }
                     // NOTE trigger validate here when already flagged invalid (via OkCommand)
                     Validate();
+                    break;
+                case nameof(IsFixing):
+                    // HACK hide ignore while fixing...
+                    // most if not all retry thread loops don't account
+                    // for clicking ignore AFTER fix instead of retry
+                    // but retry should reset if not fixed in which case
+                    // ignore goes through intended logic 
+                    if (IsFixing) {
+                        if (ShowIgnoreButton) {
+                            _wasIgnoreHiddenToFix = true;
+                            ShowIgnoreButton = false;
+                        }
+                    } else {
+                        if (_wasIgnoreHiddenToFix) {
+                            _wasIgnoreHiddenToFix = false;
+                            ShowIgnoreButton = true;
+                        }
+                    }
                     break;
             }
         }

@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls.Shapes;
-using Avalonia.Media;
+﻿using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
@@ -200,14 +199,18 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitAsync() {
             IsBusy = true;
 
-            //while(MpIconCollectionViewModel.Instance.IsAnyBusy) {
-            //    await Task.Delay(100);
-            //}
             Items.Clear();
+            while (!MpPluginLoader.IsLoaded) {
+                await Task.Delay(100);
+            }
 
             var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIAnalyzeAsyncComponent || x.Value.Component is MpIAnalyzeComponent);
             foreach (var pai in pail) {
                 var paivm = await CreateAnalyticItemViewModelAsync(pai.Value);
+                if (paivm.PluginFormat == null) {
+                    // internal error/invalid issue with plugin, ignore it
+                    continue;
+                }
                 Items.Add(paivm);
             }
 

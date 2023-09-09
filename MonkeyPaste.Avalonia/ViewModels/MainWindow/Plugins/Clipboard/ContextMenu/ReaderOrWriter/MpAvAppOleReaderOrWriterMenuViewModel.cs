@@ -64,7 +64,7 @@ namespace MonkeyPaste.Avalonia {
             var presets = MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets.Where(x => x.IsReader == IsReader);
 
             var formats = presets
-                .Select(x => x.ClipboardFormat.clipboardName)
+                .Select(x => x.ClipboardFormat.formatName)
                 .Distinct()
                 .OrderBy(x => x);
 

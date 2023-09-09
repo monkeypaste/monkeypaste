@@ -25,7 +25,7 @@ namespace MonkeyPaste {
 
         #region Properties
         public static Dictionary<string, MpPluginFormat> Plugins { get; set; } = new Dictionary<string, MpPluginFormat>();
-
+        public static bool IsLoaded { get; private set; }
         public static string PluginRootFolderPath =>
             Path.Combine(Mp.Services.PlatformInfo.StorageDir, PLUG_FOLDER_NAME);
         public static string PluginManifestBackupFolderPath =>
@@ -35,33 +35,12 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static async Task InitAsync() {
-
+            IsLoaded = false;
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-            Plugins.Clear();
-            //find plugin folder in main app folder
+            await LoadPluginsAsync();
 
-            if (!Directory.Exists(PluginRootFolderPath)) {
-                MpConsole.WriteLine("Plugin folder missing from: " + PluginRootFolderPath);
-                // if plugin folder doesn't exist then no plugins so nothing to do but it should                
-                return;
-            }
-
-            var manifestPaths = FindManifestPaths(PluginRootFolderPath);
-
-            foreach (var manifestPath in manifestPaths) {
-                var plugin = await LoadPluginAsync(manifestPath);
-                if (plugin == null) {
-                    continue;
-                }
-                Plugins.Add(manifestPath, plugin);
-                MpConsole.WriteLine($"Successfully loaded plugin: {plugin.title}");
-            }
-            try {
-                ValidateLoadedPlugins();
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine("Plugin loader error, invalid plugins will be ignored: ", ex);
-            }
+            await ValidateLoadedPluginsAsync();
+            IsLoaded = true;
         }
 
 
@@ -220,10 +199,39 @@ namespace MonkeyPaste {
                 return null;
             }
         }
+
+        public static MpNotificationFormat CreateInvalidPluginNotification(string msg, MpPluginFormat pf) {
+            return new MpNotificationFormat() {
+                Title = $"{pf.title} Error",
+                Body = msg,
+                NotificationType = MpNotificationType.InvalidPlugin,
+                FixCommand = new MpCommand(() => MpFileIo.OpenFileBrowser(Path.Combine(pf.RootDirectory, "manifest.json")))
+            };
+        }
         #endregion
 
         #region Private Methods
 
+        private static async Task LoadPluginsAsync() {
+            Plugins.Clear();
+            //find plugin folder in main app folder
+
+            if (!Directory.Exists(PluginRootFolderPath)) {
+                MpConsole.WriteLine("Plugin folder missing from: " + PluginRootFolderPath);
+                // if plugin folder doesn't exist then no plugins so nothing to do but it should                
+                return;
+            }
+
+            var manifestPaths = FindManifestPaths(PluginRootFolderPath);
+            foreach (var manifestPath in manifestPaths) {
+                var plugin = await LoadPluginAsync(manifestPath);
+                if (plugin == null) {
+                    continue;
+                }
+                Plugins.Add(manifestPath, plugin);
+                MpConsole.WriteLine($"Successfully loaded plugin: {plugin.title}");
+            }
+        }
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) {
             string assembly_name = args.Name.SplitNoEmpty(",").FirstOrDefault();
             if (string.IsNullOrEmpty(assembly_name)) {
@@ -430,6 +438,7 @@ namespace MonkeyPaste {
             string bundle_path = Path.Combine(bundle_dir, $"{bundle_file_name}.{bundle_ext}");
 
             if (plugin.bundleType != MpPluginBundleType.Http && !bundle_path.IsFile()) {
+                // not found
                 throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' is flagged as {bundle_ext} type in '{manifestPath}' but does not have a matching '{plugin.title}.{bundle_ext}' in its folder.");
             }
             return bundle_path;
@@ -527,25 +536,53 @@ namespace MonkeyPaste {
             return are_all_components_valid;
         }
 
-        private static bool ValidateLoadedPlugins() {
-            var invalidGuida =
+        private static async Task ValidateLoadedPluginsAsync() {
+            bool needsFixing = false;
+            Func<object, object> retryFunc = (args) => {
+                needsFixing = false;
+                return null;
+            };
+
+            var invalidGuids =
                 Plugins
                 .GroupBy(x => x.Value.guid)
                 .Where(x => x.Count() > 1)
                 .Select(x => x.Key);
 
-            if (invalidGuida.Any()) {
-                var sb = new StringBuilder();
-                foreach (var ig in invalidGuida) {
+            if (invalidGuids.Any()) {
+
+                foreach (var ig in invalidGuids) {
                     var toRemove = Plugins.Where(x => x.Value.guid == ig);
-                    toRemove.Select(x => sb.AppendLine($"Duplicate guids detected for plugin at path '{x.Key}' with guid '{x.Value.guid}'. Plugin will be ignored"));
-                    foreach (var tr in toRemove) {
-                        Plugins.Remove(tr.Key);
+
+                    // Show list of duplicate plugins, fix just opens plugin folder, retry will re-initialize
+                    var sb = new StringBuilder();
+                    sb.AppendLine($"Duplicate plugin identifiers detected for these plugins (name | path | id):");
+                    toRemove.ForEach(x => sb.Append(string.Join(Environment.NewLine, new[] { string.Empty, x.Value.title, x.Key, x.Value.guid, string.Empty })));
+                    sb.AppendLine();
+                    sb.AppendLine($"Fix by changing plugin guid or removing duplicates. Otherwise all will be ignored");
+
+                    var dup_guids_detected_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                            notificationType: MpNotificationType.InvalidPlugin,
+                            body: sb.ToString(),
+                            retryAction: retryFunc,
+                            fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(PluginRootFolderPath)));
+                    if (dup_guids_detected_result == MpNotificationDialogResultType.Ignore) {
+                        foreach (var tr in toRemove) {
+                            Plugins.Remove(tr.Key);
+                        }
+                        continue;
                     }
+                    needsFixing = true;
+                    while (needsFixing) {
+                        await Task.Delay(100);
+                    }
+                    await LoadPluginsAsync();
+                    // block initial call until completely done 
+                    await ValidateLoadedPluginsAsync();
+                    return;
+
                 }
-                throw new MpUserNotifiedException(sb.ToString());
             }
-            return true;
         }
 
 

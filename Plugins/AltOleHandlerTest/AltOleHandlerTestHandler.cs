@@ -6,11 +6,11 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.Text;
 
-namespace AvCoreClipboardHandler {
-    public class AvCoreClipboardHandler :
+namespace AltOleHandlerTest {
+    public class AltOleHandlerTestHandler :
         MpIClipboardReaderComponent,
         MpIClipboardWriterComponent {
-        static AvCoreClipboardHandler() {
+        static AltOleHandlerTestHandler() {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
@@ -33,7 +33,7 @@ namespace AvCoreClipboardHandler {
             }
             MpClipboardReaderResponse resp = null;
             if (Dispatcher.UIThread.CheckAccess()) {
-                resp = await AvCoreClipboardReader.ProcessReadRequestAsync(request);
+                resp = await AltOleReader.ProcessReadRequestAsync(request);
             } else {
                 resp = await Dispatcher.UIThread.InvokeAsync<MpClipboardReaderResponse>(async () => {
                     return await ReadClipboardDataAsync(request);
@@ -60,7 +60,7 @@ namespace AvCoreClipboardHandler {
             }
             MpClipboardWriterResponse resp = null;
             if (Dispatcher.UIThread.CheckAccess()) {
-                resp = await AvCoreClipboardWriter.PerformWriteRequestAsync(request);
+                resp = await AltOleWriter.PerformWriteRequestAsync(request);
             } else {
                 resp = await Dispatcher.UIThread.InvokeAsync<MpClipboardWriterResponse>(async () => {
                     return await WriteClipboardDataAsync(request);

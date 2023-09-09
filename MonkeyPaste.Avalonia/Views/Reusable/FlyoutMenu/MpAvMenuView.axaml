@@ -15,19 +15,19 @@
             <Setter Property="Padding"
                     Value="5" />
         </Style>
-        <Style Selector="MenuItem:nth-child(0)">
+        <!--<Style Selector="MenuItem:nth-child(0)">
             <Setter Property="Padding"
                     Value="5,0,5,5" />
         </Style>
         <Style Selector="MenuItem:nth-last-child()">
             <Setter Property="Padding"
                     Value="5,5,5,0" />
-        </Style>
+        </Style>-->
         <Style Selector="MenuItem"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="IsSubMenuOpen"
                     Value="{Binding IsSubMenuOpen, Mode=TwoWay}" />
-            <Setter Property="IsEnabled">
+            <!--<Setter Property="IsEnabled">
                 <Setter.Value>
                     <MultiBinding Converter="{x:Static BoolConverters.Or}">
                         <Binding Path="IsEnabled" />
@@ -35,7 +35,7 @@
                                  Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
                     </MultiBinding>
                 </Setter.Value>
-            </Setter>
+            </Setter>-->
             <Setter Property="Command"
                     Value="{Binding Command}" />
             <Setter Property="CommandParameter"
@@ -62,8 +62,8 @@
 
         <Style Selector="MenuItem CheckBox"
                x:DataType="local:MpAvIMenuItemViewModel">
-            <Setter Property="IsEnabled"
-                    Value="{Binding IsEnabled}" />
+            <!--<Setter Property="IsEnabled"
+                    Value="{Binding IsEnabled}" />-->
             <Setter Property="Command"
                     Value="{Binding Command}" />
             <Setter Property="CommandParameter"

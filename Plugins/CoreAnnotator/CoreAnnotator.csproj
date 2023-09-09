@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <Platforms>$(DefaultPlatforms)</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Html\**" />
+    <EmbeddedResource Remove="Html\**" />
+    <None Remove="Html\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="AvCoreAnnotatorPlugin_html.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="icon.png" />
+    <None Remove="manifest.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.51" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.15.1" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <BuildOutputFiles Include="$(TargetDir)\**\*.*" />
+    </ItemGroup>
+    <!-- update working plugin in storage dir-->
+    <Copy 
+      SourceFiles="@(BuildOutputFiles)" 
+      DestinationFiles="@(BuildOutputFiles->'$(PluginTargetDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" 
+      OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+    <!-- compress plugin to exec dat dir (for initial load)-->
+    <ZipDirectory 
+      Overwrite="true" 
+      SourceDirectory="$(PluginTargetDir)\$(ProjectName)\" 
+      DestinationFile="$(CorePluginExecSourceDir)\$(CoreAnnGuid).zip" />
+  </Target>
+</Project>

@@ -234,7 +234,13 @@ namespace MonkeyPaste.Common {
                     if (path.StartsWith(Path.DirectorySeparatorChar.ToString())) {
                         finalPath = Path.Combine(Path.GetPathRoot(basePath), path.TrimStart(Path.DirectorySeparatorChar));
                     } else {
-                        finalPath = Path.Combine(basePath, path);
+                        if (path.Contains("/") && Path.DirectorySeparatorChar == '\\') {
+                            // relative linux style path in windows dir
+                            path = path.Replace("/", Path.DirectorySeparatorChar.ToString());
+                        } else if (path.Contains("\\") && Path.DirectorySeparatorChar != '\\') {
+                            path = path.Replace("\\", Path.DirectorySeparatorChar.ToString());
+                        }
+                        finalPath = Path.Combine(basePath, path.TrimStart(Path.DirectorySeparatorChar));
                     }
                 } else {
                     finalPath = path;
@@ -459,7 +465,9 @@ namespace MonkeyPaste.Common {
         }
 
         public static async Task<byte[]> ReadBytesFromUriAsync(string uri, string baseDir = "", int timeoutMs = 5000) {
+            if (uri == @"/Resources/Images/text.png") {
 
+            }
             if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute)) {
                 string fileSystemPath = uri;
                 if (!fileSystemPath.IsFileOrDirectory()) {

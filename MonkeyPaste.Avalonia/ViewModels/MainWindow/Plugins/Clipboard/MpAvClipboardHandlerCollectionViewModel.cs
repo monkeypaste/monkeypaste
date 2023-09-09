@@ -6,7 +6,9 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -302,10 +304,18 @@ namespace MonkeyPaste.Avalonia {
 
             Items.Clear();
 
+            while (!MpPluginLoader.IsLoaded) {
+                await Task.Delay(100);
+            }
+
             var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent);
             foreach (var pai in pail) {
                 var paivm = await CreateClipboardHandlerItemViewModelAsync(pai.Value);
-                Items.Add(paivm);
+                bool success = await ValidateHandlerFormatsAsync(paivm);
+                if (success) {
+                    Items.Add(paivm);
+                }
+
             }
 
             while (Items.Any(x => x.IsBusy)) {
@@ -347,7 +357,7 @@ namespace MonkeyPaste.Avalonia {
                 AllPresets.FirstOrDefault(x =>
                     x.Parent.PluginGuid == pluginGuid &&
                     x.IsReader == isReader &&
-                    x.ClipboardFormat.clipboardName.ToLower() == formatName.ToLower());
+                    x.ClipboardFormat.formatName.ToLower() == formatName.ToLower());
         }
 
 
@@ -376,15 +386,6 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsHovering):
                 case nameof(IsAnySelected):
                     break;
-                //case nameof(IsSidebarVisible):
-                //    if (IsSidebarVisible) {
-                //        MpAvTagTrayViewModel.Instance.IsSidebarVisible = false;
-                //        MpAvTriggerCollectionViewModel.Instance.IsSidebarVisible = false;
-                //        MpAvAnalyticItemCollectionViewModel.Instance.IsSidebarVisible = false;
-                //    }
-                //    OnPropertyChanged(nameof(SelectedItem));
-                //    MpAvMainWindowViewModel.Instance.OnPropertyChanged(nameof(MpAvMainWindowViewModel.Instance.SelectedSidebarItemViewModel));
-                //    break;
                 case nameof(Items):
                     OnPropertyChanged(nameof(Children));
                     break;
@@ -392,16 +393,79 @@ namespace MonkeyPaste.Avalonia {
                     if (SelectedPresetViewModel == null) {
                         return;
                     }
-                    //CollectionViewSource.GetDefaultView(SelectedPresetViewModel.Items).Refresh();
                     SelectedPresetViewModel.OnPropertyChanged(nameof(SelectedPresetViewModel.Items));
                     break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(SelectedPresetViewModel));
+                    OnPropertyChanged(nameof(SelectedItemIdx));
                     break;
                 case nameof(IsHandlerDropDownOpen):
                     MpAvMainWindowViewModel.Instance.IsAnyDropDownOpen = IsHandlerDropDownOpen;
                     break;
             }
+        }
+
+        private async Task<bool> ValidateHandlerFormatsAsync(MpAvClipboardHandlerItemViewModel hivm) {
+            if (hivm == null || hivm.PluginFormat == null || hivm.PluginFormat.clipboardHandler == null) {
+                // internal error/invalid issue with plugin, ignore it
+                return false;
+            }
+            var error_notifications = new List<MpNotificationFormat>();
+
+            var all_plugin_formats =
+                Items.Select(x => x.PluginFormat)
+                .Union(new[] { hivm.PluginFormat });
+
+            var allHandlers =
+                all_plugin_formats.SelectMany(x => x.clipboardHandler.readers)
+                .Union(all_plugin_formats.SelectMany(x => x.clipboardHandler.writers));
+
+            var dupGuids = allHandlers.GroupBy(x => x.formatGuid).Where(x => x.Count() > 1);
+            if (dupGuids.Count() > 0) {
+                foreach (var dupGuid_group in dupGuids) {
+                    var loaded_hi = Items.FirstOrDefault(x => x.Items.Any(y => y.ClipboardHandlerGuid == dupGuid_group.Key));
+                    var loaded_hf = loaded_hi.Items.FirstOrDefault(x => x.ClipboardHandlerGuid == dupGuid_group.Key);
+
+                    var sb = new StringBuilder();
+                    sb.AppendLine($"Clipboard 'formatGuid' must be unique. ");
+                    sb.AppendLine($"'formatGuid': ");
+                    sb.AppendLine(dupGuid_group.Key);
+                    sb.AppendLine($"Already exists for");
+                    sb.AppendLine("Plugin:");
+                    sb.AppendLine($"{loaded_hi.PluginFormat.title}");
+                    sb.AppendLine("Format:");
+                    sb.AppendLine($"{loaded_hf.ClipboardPluginFormat.formatName}");
+                    sb.AppendLine("Type:");
+                    sb.AppendLine($"{(loaded_hf.IsReader ? "Reader" : "Writer")}");
+                    error_notifications.Add(MpPluginLoader.CreateInvalidPluginNotification(sb.ToString(), hivm.PluginFormat));
+                }
+            }
+            bool needs_fixing = error_notifications.Count > 0;
+            if (needs_fixing) {
+                // only need first error to recurse
+
+                var invalid_nf = error_notifications[0];
+
+                invalid_nf.RetryAction = (args) => {
+                    needs_fixing = false;
+                    return null;
+                };
+
+                var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(invalid_nf);
+                if (result == MpNotificationDialogResultType.Ignore) {
+                    // ignoring these errors flags plugin to be completely ignored
+                    return false;
+                }
+                while (needs_fixing) {
+                    await Task.Delay(100);
+                }
+
+                hivm.PluginFormat = await MpPluginLoader.ReloadPluginAsync(Path.Combine(hivm.PluginFormat.RootDirectory, "manifest.json"));
+                // loop through another validation pass
+                return await ValidateHandlerFormatsAsync(hivm);
+            }
+
+            return true;
         }
 
         private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(
@@ -482,7 +546,7 @@ namespace MonkeyPaste.Avalonia {
             var formatsToRemove =
                 ido.GetAllDataFormats()
                 .Where(x => !MpPortableDataFormats.InternalFormats.Contains(x))
-                .Where(x => writer_presets.All(y => y.ClipboardFormat.clipboardName != x))
+                .Where(x => writer_presets.All(y => y.ClipboardFormat.formatName != x))
                 .Select(x => x);
 
             if (formatsToRemove.Any()) {

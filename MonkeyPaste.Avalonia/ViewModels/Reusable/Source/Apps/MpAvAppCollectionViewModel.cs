@@ -353,7 +353,7 @@ namespace MonkeyPaste.Avalonia {
             bool IsFormatContainEnabled(string format, bool isReader, MpAvAppViewModel avm) {
                 var all_reader_or_writer_presets_by_format =
                     MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets
-                    .Where(x => x.IsReader == isReader && x.ClipboardFormat.clipboardName == format);
+                    .Where(x => x.IsReader == isReader && x.ClipboardFormat.formatName == format);
 
                 if (avm == null) {
                     return all_reader_or_writer_presets_by_format.Any(x => x.IsEnabled);
@@ -392,7 +392,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             List<MpAvMenuItemViewModel> GetPluginsTree(bool isReader, string format) {
-                var presets = MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets.Where(x => x.IsReader == isReader && x.ClipboardFormat.clipboardName == format);
+                var presets = MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets.Where(x => x.IsReader == isReader && x.ClipboardFormat.formatName == format);
                 var plugins = presets
                     .Select(x => x.Parent.Parent)
                     .Distinct()
@@ -415,14 +415,14 @@ namespace MonkeyPaste.Avalonia {
                 var presets = MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets.Where(x => x.IsReader == isReader);
 
                 var formats = presets
-                    .Select(x => x.ClipboardFormat.clipboardName)
+                    .Select(x => x.ClipboardFormat.formatName)
                     .Distinct()
                     .OrderBy(x => x);
 
                 var flat_formats = formats
                         .Select(x => new MpAvMenuItemViewModel() {
-                            TagObj = presets.FirstOrDefault(y => y.ClipboardFormat.clipboardName == x).Parent.IsPrimaryFormat,
-                            //IconSourceObj = presets.FirstOrDefault(y => y.ClipboardFormat.clipboardName == x).IconId,
+                            TagObj = presets.FirstOrDefault(y => y.ClipboardFormat.formatName == x).Parent.IsPrimaryFormat,
+                            //IconSourceObj = presets.FirstOrDefault(y => y.ClipboardFormat.formatName == x).IconId,
                             //ItemBgColor = IsFormatContainEnabled(x, isReader, avm) ? contains_enabled_brush : Brushes.Transparent,
                             Header = x,
                             IconBorderHexColor = MpSystemColors.Black,

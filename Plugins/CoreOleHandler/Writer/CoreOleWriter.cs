@@ -1,12 +1,11 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 
-namespace AvCoreClipboardHandler {
-    public static class AvCoreClipboardWriter {
+namespace CoreOleHandler{
+    public static class CoreOleWriter {
         #region Private Variables
 
         private static string _cur_img_ext = "png";
@@ -38,7 +37,7 @@ namespace AvCoreClipboardHandler {
             }
             bool needs_pseudo_file = false;
             if (source_type != "FileList" &&
-                request.items.FirstOrDefault(x => Convert.ToInt32(x.paramId) == (int)CoreClipboardParamType.W_IgnoreAll_FileDrop) is MpParameterRequestItemFormat prif &&
+                request.items.FirstOrDefault(x => Convert.ToInt32(x.paramId) == (int)CoreOleParamType.W_IgnoreAll_FileDrop) is MpParameterRequestItemFormat prif &&
                 !bool.Parse(prif.value)) {
                 // when file type is enabled but source is not a file,
                 // add file as a format and flag that it needs to be created
@@ -48,6 +47,9 @@ namespace AvCoreClipboardHandler {
             }
 
             foreach (var write_format in writeFormats) {
+                if (write_format == "UniformResourceLocator") {
+
+                }
                 object data = null;
                 if (needs_pseudo_file && write_format == MpPortableDataFormats.AvFiles) {
                     // called last 
@@ -104,7 +106,7 @@ namespace AvCoreClipboardHandler {
                         }
                     }
                 }
-                await AvCoreClipboardHandler.ClipboardRef.SetDataObjectSafeAsync(write_output);
+                await CoreOleHandler.ClipboardRef.SetDataObjectSafeAsync(write_output);
             }
 
             return new MpClipboardWriterResponse() {
@@ -125,11 +127,11 @@ namespace AvCoreClipboardHandler {
             }
             string paramVal = pkvp.value;
             try {
-                CoreClipboardParamType paramType = (CoreClipboardParamType)Convert.ToInt32(pkvp.paramId);
+                CoreOleParamType paramType = (CoreOleParamType)Convert.ToInt32(pkvp.paramId);
                 switch (format) {
                     case MpPortableDataFormats.Text:
                         switch (paramType) {
-                            case CoreClipboardParamType.W_MaxCharCount_Text:
+                            case CoreOleParamType.W_MaxCharCount_Text:
                                 if (data is string text) {
                                     int max_length = paramVal.ParseOrConvertToInt(int.MaxValue);
                                     if (text.Length > max_length) {
@@ -144,7 +146,7 @@ namespace AvCoreClipboardHandler {
                                     }
                                 }
                                 break;
-                            case CoreClipboardParamType.W_Ignore_Text:
+                            case CoreOleParamType.W_Ignore_Text:
                                 if (paramVal.ParseOrConvertToBool(false) is bool textImg &&
                                     textImg) {
                                     data = null;
@@ -154,14 +156,14 @@ namespace AvCoreClipboardHandler {
                         break;
                     case MpPortableDataFormats.AvPNG:
                         switch (paramType) {
-                            case CoreClipboardParamType.W_Format_Image:
+                            case CoreOleParamType.W_Format_Image:
 
                                 if (!string.IsNullOrWhiteSpace(paramVal)) {
                                     // NOTE used for file creation
                                     _cur_img_ext = paramVal;
                                 }
                                 break;
-                            case CoreClipboardParamType.W_Ignore_Image:
+                            case CoreOleParamType.W_Ignore_Image:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignImg &&
                                     ignImg) {
                                     data = null;
@@ -171,7 +173,7 @@ namespace AvCoreClipboardHandler {
                         break;
                     case MpPortableDataFormats.AvFiles:
                         switch (paramType) {
-                            case CoreClipboardParamType.W_IgnoreAll_FileDrop:
+                            case CoreOleParamType.W_IgnoreAll_FileDrop:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignFiles &&
                                     ignFiles) {
                                     data = null;
@@ -182,7 +184,7 @@ namespace AvCoreClipboardHandler {
 
                     case MpPortableDataFormats.LinuxGnomeFiles:
                         switch (paramType) {
-                            case CoreClipboardParamType.W_IgnoreAll_FileDrop_Linux:
+                            case CoreOleParamType.W_IgnoreAll_FileDrop_Linux:
                                 if (paramVal.ParseOrConvertToBool(false) is bool linuxFilesImg &&
                                     linuxFilesImg) {
                                     data = null;

@@ -23,7 +23,6 @@ namespace MonkeyPaste.Avalonia {
         bool? IsChecked { get; }
         bool IsThreeState { get; }
         bool IsSubMenuOpen { get; set; }
-        bool IsEnabled { get; }
         MpMenuItemType MenuItemType { get; }
         IEnumerable<MpAvIMenuItemViewModel> SubItems { get; }
     }

@@ -57,8 +57,8 @@ namespace MonkeyPaste.Avalonia {
             (IsWriter && PluginFormat.backupCheckPluginFormat.clipboardHandler.writers == null) ?
                 null :
                 IsReader ?
-                    PluginFormat.backupCheckPluginFormat.clipboardHandler.readers.FirstOrDefault(x => x.handlerGuid == ClipboardHandlerGuid) :
-                    PluginFormat.backupCheckPluginFormat.clipboardHandler.writers.FirstOrDefault(x => x.handlerGuid == ClipboardHandlerGuid);
+                    PluginFormat.backupCheckPluginFormat.clipboardHandler.readers.FirstOrDefault(x => x.formatGuid == ClipboardHandlerGuid) :
+                    PluginFormat.backupCheckPluginFormat.clipboardHandler.writers.FirstOrDefault(x => x.formatGuid == ClipboardHandlerGuid);
         public MpIPluginComponentBase PluginComponent => ClipboardPluginComponent;
 
         public string ClipboardHandlerGuid { get; private set; }
@@ -69,12 +69,12 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 if (IsReader) {
-                    return Parent.ClipboardPluginFormat.readers.FirstOrDefault(x => x.handlerGuid == ClipboardHandlerGuid);
+                    return Parent.ClipboardPluginFormat.readers.FirstOrDefault(x => x.formatGuid == ClipboardHandlerGuid);
                 }
                 if (IsWriter) {
-                    return Parent.ClipboardPluginFormat.writers.FirstOrDefault(x => x.handlerGuid == ClipboardHandlerGuid);
+                    return Parent.ClipboardPluginFormat.writers.FirstOrDefault(x => x.formatGuid == ClipboardHandlerGuid);
                 }
-                MpConsole.WriteTraceLine($"Error finding ClipboardHandler format for handlerGuid: '{ClipboardHandlerGuid}'");
+                MpConsole.WriteTraceLine($"Error finding ClipboardHandler format for formatGuid: '{ClipboardHandlerGuid}'");
                 return null;
             }
         }
@@ -84,11 +84,11 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsReader => PluginFormat == null ?
                                     false :
-                                    PluginFormat.clipboardHandler.readers.Any(x => x.handlerGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
+                                    PluginFormat.clipboardHandler.readers.Any(x => x.formatGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
 
         public bool IsWriter => PluginFormat == null ?
                                     false :
-                                    PluginFormat.clipboardHandler.writers.Any(x => x.handlerGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
+                                    PluginFormat.clipboardHandler.writers.Any(x => x.formatGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
 
 
         public MpPluginFormat PluginFormat {
@@ -187,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
                 if (ClipboardPluginFormat == null) {
                     return null;
                 }
-                return ClipboardPluginFormat.clipboardName;
+                return ClipboardPluginFormat.formatName;
             }
         }
 
@@ -265,7 +265,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = true;
 
-            ClipboardHandlerGuid = handlerFormat.handlerGuid;
+            ClipboardHandlerGuid = handlerFormat.formatGuid;
 
             if (IsReader && IsWriter) {
                 MpDebug.Break();

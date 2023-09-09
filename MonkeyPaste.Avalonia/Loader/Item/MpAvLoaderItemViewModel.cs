@@ -1,6 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 //using Xamarin.Forms;
@@ -23,6 +22,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task LoadItemAsync(bool static_fallback = false) {
+            if (ItemType == typeof(MpPluginLoader)) {
+
+            }
             object itemObj = null;
             object[] args = ItemArg == null ? null : new[] { ItemArg };
             MethodInfo initMethodInfo;

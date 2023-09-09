@@ -1295,11 +1295,6 @@ namespace MonkeyPaste.Avalonia {
             // -IconId is primary source icon
             int layerCount = 4;
 
-            //bool hasUserDefinedColor = !string.IsNullOrEmpty(CopyItemHexColor);
-            //if (hasUserDefinedColor) {
-            //    return Enumerable.Repeat(CopyItemHexColor, layerCount).ToList();
-            //}
-
             List<string> hexColors = new List<string>();
             var tagColors = await MpDataModelProvider.GetTagColorsForCopyItemAsync(CopyItemId);
             if (tagColors.Any()) {
@@ -1433,7 +1428,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvClipboardHandlerCollectionViewModel.Instance
                         .AllWriterPresets
                         .Where(x => preset_ids.Contains(x.PresetId))
-                        .Select(x => x.ClipboardFormat.clipboardName);
+                        .Select(x => x.ClipboardFormat.formatName);
                 }
             }
             return req_formats.ToArray();

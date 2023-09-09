@@ -144,7 +144,7 @@
     <sys:String x:Key="AlarmClockImage">avares://MonkeyPaste.Avalonia/Assets/Images/alarmClock.png</sys:String>
     <sys:String x:Key="BeakerImage">avares://MonkeyPaste.Avalonia/Assets/Images/beaker.png</sys:String>
     <sys:String x:Key="AsteriskImage">avares://MonkeyPaste.Avalonia/Assets/Images/asterisk.png</sys:String>
-    <sys:String x:Key="QuestionMarkImage">avares://MonkeyPaste.Avalonia/Assets/Images/question.png</sys:String>
+    <sys:String x:Key="QuestionMarkImage">avares://MonkeyPaste.Avalonia/Assets/Images/questionmark.png</sys:String>
     <sys:String x:Key="EmptyImage">avares://MonkeyPaste.Avalonia/Assets/Images/transparent.png</sys:String>
     <sys:String x:Key="EllipsesImage">avares://MonkeyPaste.Avalonia/Assets/Images/ellipses.png</sys:String>
     <sys:String x:Key="Dots2x10Image">avares://MonkeyPaste.Avalonia/Assets/Images/dots_2x10.png</sys:String>
@@ -153,7 +153,7 @@
     <sys:String x:Key="IndentImage">avares://MonkeyPaste.Avalonia/Assets/Images/indent.png</sys:String>
     <sys:String x:Key="CloseImage">avares://MonkeyPaste.Avalonia/Assets/Images/close2.png</sys:String>
     <sys:String x:Key="CloseOverImage">avares://MonkeyPaste.Avalonia/Assets/Images/close1.png</sys:String>
-    <sys:String x:Key="ErrorImage">avares://MonkeyPaste.Avalonia/Assets/Images/delete2.png</sys:String>
+    <sys:String x:Key="ErrorImage">avares://MonkeyPaste.Avalonia/Assets/Images/error.png</sys:String>
     <sys:String x:Key="FilterImage">avares://MonkeyPaste.Avalonia/Assets/Images/filter.png</sys:String>
     <sys:String x:Key="SheepImage">avares://MonkeyPaste.Avalonia/Assets/Images/sheep.png</sys:String>
     <sys:String x:Key="GoogleSignInImage">avares://MonkeyPaste.Avalonia/Assets/Images/google_signin.png</sys:String>
@@ -169,6 +169,7 @@
     <sys:String x:Key="RtfFormatImage">avares://MonkeyPaste.Avalonia/Assets/Images/rtf.png</sys:String>
     <sys:String x:Key="CsvFormatImage">avares://MonkeyPaste.Avalonia/Assets/Images/csv.png</sys:String>
     <sys:String x:Key="BitmapFormatImage">avares://MonkeyPaste.Avalonia/Assets/Images/bitmap.png</sys:String>
+    <sys:String x:Key="FilesFormatImage">avares://MonkeyPaste.Avalonia/Assets/Images/folder.png</sys:String>
     <sys:String x:Key="FolderImage">avares://MonkeyPaste.Avalonia/Assets/Images/folder.png</sys:String>
     <sys:String x:Key="TextureImage">avares://MonkeyPaste.Avalonia/Assets/Images/texture.png</sys:String>
     <sys:String x:Key="RoundedTextureImage">avares://MonkeyPaste.Avalonia/Assets/Images/RoundedTexture.png</sys:String>

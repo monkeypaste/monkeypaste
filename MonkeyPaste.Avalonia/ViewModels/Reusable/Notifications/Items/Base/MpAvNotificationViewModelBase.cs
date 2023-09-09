@@ -34,10 +34,6 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
-                case MpNotificationType.InvalidPlugin:
-                case MpNotificationType.InvalidAction:
-                case MpNotificationType.InvalidClipboardFormatHandler:
-                case MpNotificationType.PluginResponseWarningWithOption:
                 case MpNotificationType.ExecuteParametersRequest:
                 case MpNotificationType.ContentCapReached:
                 case MpNotificationType.TrashCapReached:
@@ -52,6 +48,12 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.PluginResponseWarning:
                 case MpNotificationType.FileIoWarning:
                     return MpNotificationLayoutType.Warning;
+
+                case MpNotificationType.InvalidPlugin:
+                case MpNotificationType.InvalidAction:
+                case MpNotificationType.InvalidClipboardFormatHandler:
+                case MpNotificationType.PluginResponseWarningWithOption:
+                    return MpNotificationLayoutType.ErrorWithOption;
                 case MpNotificationType.BadHttpRequest:
                 case MpNotificationType.DbError:
                 case MpNotificationType.PluginResponseError:
@@ -136,6 +138,19 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public static bool GetIsErrorNotification(MpNotificationFormat nf) {
+            var lt = GetLayoutTypeFromNotificationType(nf.NotificationType);
+            return lt == MpNotificationLayoutType.Error ||
+                   lt == MpNotificationLayoutType.ErrorAndShutdown ||
+                   lt == MpNotificationLayoutType.ErrorWithOption;
+        }
+
+        public static bool GetIsWarningNotification(MpNotificationFormat nf) {
+            var lt = GetLayoutTypeFromNotificationType(nf.NotificationType);
+            return lt == MpNotificationLayoutType.Error ||
+                   lt == MpNotificationLayoutType.ErrorAndShutdown ||
+                   lt == MpNotificationLayoutType.ErrorWithOption;
+        }
         #endregion
 
         #region Interfaces
@@ -193,12 +208,19 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region Appearance
+        private object _iconSourceObj;
         public object IconSourceObj {
             get {
                 if (NotificationFormat == null) {
                     return string.Empty;
                 }
                 return NotificationFormat.IconSourceObj;
+            }
+            set {
+                if (_iconSourceObj != value) {
+                    _iconSourceObj = value;
+                    OnPropertyChanged(nameof(IconSourceObj));
+                }
             }
         }
         public virtual string ForegroundHexColor {
@@ -271,20 +293,12 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual bool CanChooseNotShowAgain => true;
 
-        public bool IsErrorNotification {
-            get {
-                return LayoutType == MpNotificationLayoutType.Error ||
-                    LayoutType == MpNotificationLayoutType.ErrorAndShutdown ||
-                    LayoutType == MpNotificationLayoutType.ErrorWithOption;
-            }
-        }
 
-        public bool IsWarningNotification {
-            get {
-                return LayoutType == MpNotificationLayoutType.Warning ||
-                    LayoutType == MpNotificationLayoutType.UserAction;
-            }
-        }
+        public bool IsErrorNotification =>
+            GetIsErrorNotification(NotificationFormat);
+
+        public bool IsWarningNotification =>
+            GetIsWarningNotification(NotificationFormat);
 
         public virtual bool IsShowOnceNotification =>
             false;

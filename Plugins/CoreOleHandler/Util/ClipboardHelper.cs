@@ -1,9 +1,7 @@
-﻿
-using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 
-namespace AvCoreClipboardHandler {
+namespace CoreOleHandler{
     public class MpAvWin32HtmlClipboardHelper {
 
         //--------------------------------------------------------------------------------

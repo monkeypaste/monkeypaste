@@ -27,7 +27,6 @@ namespace MonkeyPaste.Avalonia {
         bool MpAvIMenuItemViewModel.HasLeadingSeparator { get; }
         bool MpAvIMenuItemViewModel.IsThreeState { get; }
         bool MpAvIMenuItemViewModel.IsVisible { get; }
-        bool MpAvIMenuItemViewModel.IsEnabled => true;
         public bool? IsChecked { get; set; } = false;
         MpMenuItemType MpAvIMenuItemViewModel.MenuItemType { get; }
         bool MpAvIMenuItemViewModel.IsSubMenuOpen {

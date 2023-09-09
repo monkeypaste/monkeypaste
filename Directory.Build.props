@@ -34,6 +34,7 @@
   <!-- CUSTOM PROPERTIES -->
 
   <PropertyGroup>
+    <CefPlatformDir>cef\cef_win</CefPlatformDir>
     <IsDesktop>false</IsDesktop>
     <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
@@ -54,6 +55,7 @@
     <IsDesktop>true</IsDesktop>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
+    <CefPlatformRelDir>cef\cef_win</CefPlatformRelDir>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'">
@@ -61,6 +63,7 @@
     <DefineConstants>LINUX;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
+    <CefPlatformRelDir>cef\cef_linux</CefPlatformRelDir>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
@@ -68,6 +71,7 @@
     <DefineConstants>MAC;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
+    <CefPlatformRelDir>cef\cef_mac</CefPlatformRelDir>
   </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'BROWSER'">
@@ -104,5 +108,12 @@
     <CefNetLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.dll</CefNetLibDir>
     <CefNetAvLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.Avalonia.dll</CefNetAvLibDir>
     <WebsiteRootDir>$(SolutionDir)\MonkeyPaste.com</WebsiteRootDir>
+    <CefPlatformDir>$(MainProjectDir)\$(CefPlatformRelDir)</CefPlatformDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CoreOleGuid>cf2ec03f-9edd-45e9-a605-2a2df71e03bd</CoreOleGuid>
+    <CoreAnnGuid>ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31</CoreAnnGuid>
+    <CorePluginExecSourceDir>$(UiProjectDir)\dat</CorePluginExecSourceDir>
   </PropertyGroup>
 </Project>

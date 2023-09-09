@@ -42,17 +42,11 @@
     <!--<PackageReference Include="WebViewControl-Avalonia" Version="2.106.11" />-->
   </ItemGroup>
 
-  <ItemGroup Condition="$(BuildOs) == 'WINDOWS'">
-    <Content Include="cef\cef_win\**">
+  <ItemGroup Condition="$(IsDesktop) == 'true'">
+    <Content Include="$(CefPlatformDir)\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  
-  <ItemGroup Condition="$(BuildOs) == 'LINUX'">
-    <Content Include="cef\cef_linux\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  </ItemGroup>  
   
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />

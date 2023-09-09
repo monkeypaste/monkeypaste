@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace MonkeyPaste.Common.Plugin {
     public class MpClipboardHandlerFormats : MpJsonObject {
-        public List<MpClipboardHandlerFormat> readers { get; set; }
-        public List<MpClipboardHandlerFormat> writers { get; set; }
+        public List<MpClipboardHandlerFormat> readers { get; set; } = new List<MpClipboardHandlerFormat>();
+        public List<MpClipboardHandlerFormat> writers { get; set; } = new List<MpClipboardHandlerFormat>();
     }
 
     public class MpClipboardHandlerFormat : MpParameterHostBaseFormat, MpILabelText {
@@ -12,11 +12,11 @@ namespace MonkeyPaste.Common.Plugin {
         string MpILabelText.LabelText => displayName;
 
         public string iconUri { get; set; }
-        public string handlerGuid { get; set; }
+        public string formatGuid { get; set; }
 
 
         public string displayName { get; set; }
-        public string clipboardName { get; set; }
+        public string formatName { get; set; }
 
         public string description { get; set; }
         public List<MpPluginDependency> dependencies { get; set; }

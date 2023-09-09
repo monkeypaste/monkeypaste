@@ -130,7 +130,7 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
                 bool format_exists =
-                    MpAvContentWebViewDragHelper.SourceDataObject.ContainsData(ClipboardFormat.clipboardName);
+                    MpAvContentWebViewDragHelper.SourceDataObject.ContainsData(ClipboardFormat.formatName);
                 return format_exists;
             }
         }
@@ -140,7 +140,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvContentWebViewDragHelper.DragDataObject == null) {
                     return false;
                 }
-                return MpAvContentWebViewDragHelper.DragDataObject.ContainsPlaceholderFormat(ClipboardFormat.clipboardName);
+                return MpAvContentWebViewDragHelper.DragDataObject.ContainsPlaceholderFormat(ClipboardFormat.formatName);
             }
         }
 

@@ -10,7 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="manifest.json" />
     <None Remove="manifest_windows.json" />
+    <None Remove="Resources\Images\icon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,25 +27,32 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="bitmap.png">
+    <EmbeddedResource Include="manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="csv.png">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\bitmap.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="folder.png">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\csv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="html.png">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\folder.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="rtf.png">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\html.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="text.png">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\rtf.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Images\text.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
       <BuildFiles Include="$(TargetDir)\*.*" />
@@ -51,6 +60,5 @@
     </ItemGroup>
     <Copy SourceFiles="@(BuildFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
     <Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(PluginTargetDir)\$(ProjectName)\" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
-
   </Target>
 </Project>

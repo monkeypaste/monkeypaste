@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -8,6 +9,7 @@ namespace MonkeyPaste.Avalonia {
 
         public override ICommand Command => new MpAsyncCommand(
             async () => {
+                await Task.Delay(100);
                 //await Task.WhenAll(SubItems
                 //.OfType<MpAvAppOlePluginMenuViewModel>()
                 //.Where(x => x.IsChecked.IsTrueOrNull())
@@ -44,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
             Format = format;
             var presets =
                 MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets
-                .Where(x => x.IsReader == parent.IsReader && x.ClipboardFormat.clipboardName == Format);
+                .Where(x => x.IsReader == parent.IsReader && x.ClipboardFormat.formatName == Format);
             SubItems =
                 presets
                 .Select(x => x.Parent.Parent)

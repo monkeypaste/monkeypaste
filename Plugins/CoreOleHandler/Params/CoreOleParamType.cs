@@ -1,5 +1,5 @@
-﻿namespace AvCoreClipboardHandler {
-    public enum CoreClipboardParamType {
+﻿namespace CoreOleHandler{
+    public enum CoreOleParamType {
         //readers
         R_MaxCharCount_Text = 1,
         R_Ignore_Text,

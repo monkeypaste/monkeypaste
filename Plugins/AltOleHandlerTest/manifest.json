@@ -1,0 +1,52 @@
+{
+  "title": "ALT Clipboard Handler",
+  "description": "Handles default clipboard formats",
+  "version": "1.0",
+  "credits": "Thomas Kefauver",
+  "guid": "c10af19f-a40f-4a37-920c-e502c2b74d68",
+  "projectUrl": "https://www.monkeypaste.com",
+  "iconUri": "/Resources/Images/icon.png",
+  "tags": "Core,Clipboard,Drag and Drop,Text,Rtf,Rich Text,Html,Csv,Image,Png,Jpg,Jpeg,Link,Avalonia",
+  "bundleType": "Dll",
+  "clipboardHandler": {
+    "readers": [
+      {
+        "formatGuid": "676278d9-6c9b-4efd-b5e9-9c5840222c12",
+        "iconUri": "/Resources/Images/text.png",
+        "displayName": "FUNkY MoNkEY FORMaT",
+        "formatName": "SUPER FUNKY FORMAT",
+        "parameters": [
+          {
+            "label": "Max Characters",
+            "description": "For performance concerns, a maximum amount characters is needed :(",
+            "controlType": "Slider",
+            "unitType": "Integer",
+            "paramId": "1",
+            "isRequired": true,
+            "minimum": 1,
+            "maximum": 10000000,
+            "values": [
+              {
+                "value": "150000",
+                "isDefault": true
+              }
+            ]
+          },
+          {
+            "label": "Ignore",
+            "description": "When checked Plain Text format will be completely ignored",
+            "controlType": "CheckBox",
+            "unitType": "Bool",
+            "paramId": "2",
+            "values": [
+              {
+                "value": "false",
+                "isDefault": true
+              }
+            ]
+          }
+        ]
+      }      
+    ]
+  }
+}

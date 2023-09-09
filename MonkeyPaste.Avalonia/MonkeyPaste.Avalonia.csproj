@@ -43,6 +43,7 @@
     <AvaloniaXaml Remove="cef_old\**" />
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <AvaloniaXaml Remove="Controls\Content\TextElement\**" />
+    <AvaloniaXaml Remove="dat\**" />
     <AvaloniaXaml Remove="Interfaces\Content\**" />
     <AvaloniaXaml Remove="Resources\UiStrings\Baselines\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
@@ -76,6 +77,7 @@
     <Compile Remove="cef_old\**" />
     <Compile Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Compile Remove="Controls\Content\TextElement\**" />
+    <Compile Remove="dat\**" />
     <Compile Remove="Interfaces\Content\**" />
     <Compile Remove="Resources\UiStrings\Baselines\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
@@ -109,6 +111,7 @@
     <EmbeddedResource Remove="cef_old\**" />
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <EmbeddedResource Remove="Controls\Content\TextElement\**" />
+    <EmbeddedResource Remove="dat\**" />
     <EmbeddedResource Remove="Interfaces\Content\**" />
     <EmbeddedResource Remove="Resources\UiStrings\Baselines\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
@@ -143,6 +146,7 @@
     <None Remove="cef_old\**" />
     <None Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <None Remove="Controls\Content\TextElement\**" />
+    <None Remove="dat\**" />
     <None Remove="Interfaces\Content\**" />
     <None Remove="Resources\UiStrings\Baselines\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
@@ -175,6 +179,7 @@
     <Page Remove="cef_old\**" />
     <Page Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Page Remove="Controls\Content\TextElement\**" />
+    <Page Remove="dat\**" />
     <Page Remove="Interfaces\Content\**" />
     <Page Remove="Resources\UiStrings\Baselines\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
@@ -1758,9 +1763,8 @@
   </ItemGroup>
   
   <PropertyGroup>
-  <!-- Makes the TypeScript compilation task a no-op -->
-  <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    
+    <!-- Makes the TypeScript compilation task a no-op -->
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 </PropertyGroup>
 </Project>

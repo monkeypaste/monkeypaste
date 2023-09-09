@@ -20,12 +20,14 @@
         IsVisible="{Binding IsVisible}"
         Width="350"
         MinHeight="50"
+        CanResize="True"
+        ExtendClientAreaToDecorationsHint="True"
+        SystemDecorations="BorderOnly"
         SizeToContent="Height"
         ShowInTaskbar="False"
         ShowActivated="False"
         Topmost="True"
         WindowState="Normal"
-        SystemDecorations="None"
         TransparencyLevelHint="Transparent"
         Background="Transparent"
         Title="">
@@ -92,7 +94,8 @@
                     Padding="10"
                     Margin="3">
                 <Border.Background>
-                    <SolidColorBrush Color="Transparent" Opacity="0.5" />
+                    <SolidColorBrush Color="Transparent"
+                                     Opacity="0.5" />
                 </Border.Background>
                 <TextBlock HorizontalAlignment="Stretch"
                            VerticalAlignment="Center"

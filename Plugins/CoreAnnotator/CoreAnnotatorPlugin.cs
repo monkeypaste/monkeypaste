@@ -1,13 +1,11 @@
-﻿using HtmlAgilityPack;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace AvCoreAnnotator {
-    public enum AvAnnnotaterParameterType {
+namespace CoreAnnotator {
+    public enum AnnnotaterParameterType {
         None = 0,
         HtmlContent,
         PlainTextContent,
@@ -20,17 +18,17 @@ namespace AvCoreAnnotator {
         StreetAddress,
     }
 
-    public class AvCoreAnnotatorPlugin : MpIAnalyzeComponent {
+    public class CoreAnnotatorPlugin : MpIAnalyzeComponent {
         public MpAnalyzerPluginResponseFormat Analyze(MpAnalyzerPluginRequestFormat req) {
             var resp = new MpAnalyzerPluginResponseFormat();
 
-            string content_pt = req.GetRequestParamStringValue((int)AvAnnnotaterParameterType.PlainTextContent);
+            string content_pt = req.GetRequestParamStringValue((int)AnnnotaterParameterType.PlainTextContent);
             if (string.IsNullOrWhiteSpace(content_pt)) {
                 return null;
             }
             content_pt = content_pt.Replace(Environment.NewLine, "\n");
             var formats = new List<MpRegExType>();
-            for (int i = 3; i < Enum.GetValues(typeof(AvAnnnotaterParameterType)).Length; i++) {
+            for (int i = 3; i < Enum.GetValues(typeof(AnnnotaterParameterType)).Length; i++) {
                 if (req.GetRequestParamBoolValue(i)) {
                     formats.Add((MpRegExType)i - 2);
                 }
