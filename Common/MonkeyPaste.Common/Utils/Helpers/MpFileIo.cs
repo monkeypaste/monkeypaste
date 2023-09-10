@@ -447,41 +447,43 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static async Task<bool> IsAccessibleUriAsync(string uri, string baseDir = "", int timeoutMs = 5000) {
-            if (string.IsNullOrWhiteSpace(uri)) {
-                return false;
-            }
-            if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute)) {
-                if (uri.IsFileOrDirectory()) {
-                    return true;
-                }
-                if (GetAbsolutePath(baseDir, uri).IsFileOrDirectory()) {
-                    return true;
-                }
-                return false;
-            }
-            var bytes = await uri.ReadUriBytesAsync(timeoutMs);
-            return bytes != null && bytes.Length > 0;
-        }
 
-        public static async Task<byte[]> ReadBytesFromUriAsync(string uri, string baseDir = "", int timeoutMs = 5000) {
-            if (uri == @"/Resources/Images/text.png") {
+        public static async Task<byte[]> ReadBytesFromUriAsync(string uriStr, string baseDir = "", int timeoutMs = 5000) {
 
-            }
-            if (!Uri.IsWellFormedUriString(uri, UriKind.Absolute)) {
-                string fileSystemPath = uri;
+            if (!Uri.IsWellFormedUriString(uriStr, UriKind.Absolute) ||
+                new Uri(uriStr, UriKind.Absolute) is not Uri uri) {
+                string fileSystemPath = uriStr;
                 if (!fileSystemPath.IsFileOrDirectory()) {
-                    fileSystemPath = GetAbsolutePath(baseDir, uri);
+                    fileSystemPath = GetAbsolutePath(baseDir, uriStr);
                 }
                 if (fileSystemPath.IsFileOrDirectory()) {
                     return ReadBytesFromFile(fileSystemPath);
                 }
 
-                MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + uri + " baseDir: " + baseDir);
+                MpConsole.WriteTraceLine(@"Cannot read bytes, bad url: " + uriStr + " baseDir: " + baseDir);
                 return null;
             }
-            var bytes = await uri.ReadUriBytesAsync(timeoutMs);
-            return bytes;
+            if (uri.Scheme == "file") {
+                return ReadBytesFromFile(uri.LocalPath);
+            }
+            if (uri.Scheme == "avares") {
+                return MpCommonTools.Services.PlatformResource.GetResource<byte[]>(uriStr);
+            }
+
+            using (var httpClient = new HttpClient()) {
+                httpClient.SetDefaultUserAgent();
+                if (timeoutMs > 0) {
+                    httpClient.Timeout = TimeSpan.FromMilliseconds(timeoutMs);
+                }
+                try {
+                    byte[] bytes = await httpClient.GetByteArrayAsync(uri);//.TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
+                    return bytes;
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                }
+            }
+            return null;
         }
 
         public static async Task<string> ReadTextFromUriAsync(string uri, string baseDir = "", int timeoutMs = 5000, Encoding en = null) {

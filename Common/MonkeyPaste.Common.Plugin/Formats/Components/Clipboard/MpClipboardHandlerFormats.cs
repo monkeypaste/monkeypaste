@@ -11,14 +11,24 @@ namespace MonkeyPaste.Common.Plugin {
         [JsonIgnore]
         string MpILabelText.LabelText => displayName;
 
-        public string iconUri { get; set; }
-        public string formatGuid { get; set; }
+        public string iconUri { get; set; } = string.Empty;
+        public string formatGuid { get; set; } = string.Empty;
 
 
-        public string displayName { get; set; }
-        public string formatName { get; set; }
+        private string _displayName = string.Empty;
+        public string displayName {
+            get {
+                if (string.IsNullOrEmpty(_displayName)) {
+                    return formatName;
+                }
+                return _displayName;
+            }
+            set => _displayName = value;
+        }
 
-        public string description { get; set; }
+        public string formatName { get; set; } = string.Empty;
+
+        public string description { get; set; } = string.Empty;
         public List<MpPluginDependency> dependencies { get; set; }
 
         public int sortOrderIdx { get; set; }

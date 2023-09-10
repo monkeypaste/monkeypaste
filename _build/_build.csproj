@@ -24,6 +24,6 @@
   </Target>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.15.1" />
+    
   </ItemGroup>
 </Project>

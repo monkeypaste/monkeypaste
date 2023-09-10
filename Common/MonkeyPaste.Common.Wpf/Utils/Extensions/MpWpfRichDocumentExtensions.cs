@@ -310,10 +310,10 @@ namespace MonkeyPaste.Common.Wpf {
                     MpDebug.Break();
                 }
             }
-            var itemRangeStart = tel.Aggregate((a, b) =>
+            var itemRangeStart = tel.AggregateOrDefault((a, b) =>
                                         docStart.GetOffsetToPosition(a.ContentStart) <
                                         docStart.GetOffsetToPosition(b.ContentStart) ? a : b).ContentStart;
-            var itemRangeEnd = tel.Aggregate((a, b) =>
+            var itemRangeEnd = tel.AggregateOrDefault((a, b) =>
                                         docStart.GetOffsetToPosition(a.ContentEnd) >
                                         docStart.GetOffsetToPosition(b.ContentEnd) ? a : b).ContentEnd;
 

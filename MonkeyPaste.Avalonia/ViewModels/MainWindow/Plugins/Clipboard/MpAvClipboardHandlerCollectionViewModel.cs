@@ -239,7 +239,15 @@ namespace MonkeyPaste.Avalonia {
                         return null;
                     }
                 }
+                if (SelectedItem.SelectedItem.SelectedItem == null) {
+                    if (SelectedItem.SelectedItem.Items.Count > 0) {
+                        SelectedItem.SelectedItem.Items[0].IsSelected = true;
+                    } else {
+                        return null;
+                    }
+                }
                 return SelectedItem.SelectedItem.SelectedItem;
+                //return AllPresets.OrderByDescending(x => x.LastSelectedDateTime).FirstOrDefault();
             }
         }
         #endregion
@@ -299,9 +307,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitAsync() {
             IsBusy = true;
-
-            //MpMessenger.Register<MpMessageType>(typeof(MpDragDropManager), ReceivedDragDropManagerMessage);
-
+            IsLoaded = false;
             Items.Clear();
 
             while (!MpPluginLoader.IsLoaded) {
@@ -338,8 +344,8 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                 }
-
                 if (presetToSelect != null) {
+                    presetToSelect.IsSelected = true;
                     presetToSelect.Parent.SelectedItem = presetToSelect;
                     presetToSelect.Parent.Parent.SelectedItem = presetToSelect.Parent;
                     SelectedItem = presetToSelect.Parent.Parent;
@@ -349,6 +355,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(SelectedItem));
             OnPropertyChanged(nameof(FormatViewModels));
             OnPropertyChanged(nameof(EnabledFormats));
+            IsLoaded = true;
             IsBusy = false;
         }
 
@@ -391,6 +398,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedPresetViewModel):
                     if (SelectedPresetViewModel == null) {
+                        //AllPresets.OrderByDescending(x => x.LastSelectedDateTime).FirstOrDefault().Parent.IsSelected = true;
+                        //OnPropertyChanged(nameof(SelectedPresetViewModel));
                         return;
                     }
                     SelectedPresetViewModel.OnPropertyChanged(nameof(SelectedPresetViewModel.Items));
@@ -423,8 +432,8 @@ namespace MonkeyPaste.Avalonia {
             var dupGuids = allHandlers.GroupBy(x => x.formatGuid).Where(x => x.Count() > 1);
             if (dupGuids.Count() > 0) {
                 foreach (var dupGuid_group in dupGuids) {
-                    var loaded_hi = Items.FirstOrDefault(x => x.Items.Any(y => y.ClipboardHandlerGuid == dupGuid_group.Key));
-                    var loaded_hf = loaded_hi.Items.FirstOrDefault(x => x.ClipboardHandlerGuid == dupGuid_group.Key);
+                    var loaded_hi = Items.FirstOrDefault(x => x.Items.Any(y => y.FormatGuid == dupGuid_group.Key));
+                    var loaded_hf = loaded_hi.Items.FirstOrDefault(x => x.FormatGuid == dupGuid_group.Key);
 
                     var sb = new StringBuilder();
                     sb.AppendLine($"Clipboard 'formatGuid' must be unique. ");

@@ -7,8 +7,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;

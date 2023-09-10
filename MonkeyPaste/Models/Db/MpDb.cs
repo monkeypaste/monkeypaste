@@ -39,7 +39,7 @@ namespace MonkeyPaste {
 
         public static bool IgnoreLogging { get; set; } = false;
 
-        public static bool IsInitialDbCreate { get; set; } = false;
+        static bool IsInitialDbCreate { get; set; } = false;
 
         #endregion
 

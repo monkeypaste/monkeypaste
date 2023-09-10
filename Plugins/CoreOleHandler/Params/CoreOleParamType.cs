@@ -1,66 +1,53 @@
-﻿namespace CoreOleHandler{
+﻿namespace CoreOleHandler {
     public enum CoreOleParamType {
         //readers
-        R_MaxCharCount_Text = 1,
-        R_Ignore_Text,
+        TEXT_R_MAXCHARCOUNT,
+        TEXT_R_IGNORE,
+        TEXT_W_MAXCHARCOUNT,
+        TEXT_W_IGNORE,
 
-        R_MaxCharCount_WebText,
-        R_Ignore_WebText,
+        TEXTPLAIN_R_MAXCHARCOUNT,
+        TEXTPLAIN_R_IGNORE,
+        TEXTPLAIN_W_MAXCHARCOUNT,
+        TEXTPLAIN_W_IGNORE,
 
-        R_MaxCharCount_Rtf,
-        R_Ignore_Rtf,
+        RICHTEXTFORMAT_R_MAXCHARCOUNT,
+        RICHTEXTFORMAT_R_IGNORE,
+        RICHTEXTFORMAT_R_TOHTML,
+        RICHTEXTFORMAT_W_MAXCHARCOUNT,
+        RICHTEXTFORMAT_W_IGNORE,
+        RICHTEXTFORMAT_W_TOHTML,
 
-        R_MaxCharCount_Html,
-        R_Ignore_Html,
+        HTMLFORMAT_R_MAXCHARCOUNT,
+        HTMLFORMAT_R_IGNORE,
+        HTMLFORMAT_R_TORTF,
+        HTMLFORMAT_W_MAXCHARCOUNT,
+        HTMLFORMAT_W_IGNORE,
+        HTMLFORMAT_W_TORTF,
 
-        R_MaxCharCount_WebHtml,
-        R_Ignore_WebHtml,
+        TEXTHTML_R_MAXCHARCOUNT,
+        TEXTHTML_R_IGNORE,
+        TEXTHTML_R_TORTF,
+        TEXTHTML_W_MAXCHARCOUNT,
+        TEXTHTML_W_IGNORE,
+        TEXTHTML_W_TORTF,
 
-        R_Ignore_WebUrl_Linux,
+        TEXTXMOZURLPRIV_R_IGNORE,
+        TEXTXMOZURLPRIV_W_IGNORE,
 
-        R_Ignore_Image,
+        PNG_R_IGNORE,
+        PNG_W_IGNORE,
+        PNG_W_EXPORTTYPE,
 
-        R_IgnoreAll_FileDrop,
-        R_IgnoredExt_FileDrop,
-        R_IgnoredDirs_FileDrop,
+        FILES_R_IGNORE,
+        FILES_R_IGNOREEXTS,
+        FILES_R_IGNOREDIRS,
+        FILES_W_IGNORE,
+        FILES_W_IGNOREEXTS,
 
-        R_Ignore_Csv, //16
-
-        //writers
-        W_MaxCharCount_Text,
-        W_Ignore_Text,
-
-        W_MaxCharCount_WebText,
-        W_Ignore_WebText,
-
-        W_MaxCharCount_Rtf,
-        W_Ignore_Rtf,
-
-        W_MaxCharCount_Html,
-        W_Ignore_Html,
-
-        W_MaxCharCount_WebHtml,
-        W_Ignore_WebHtml,
-
-        W_Ignore_WebUrl_Linux, // don't think is used...
-
-        W_Format_Image,
-        W_Ignore_Image,
-
-        W_IgnoreAll_FileDrop,
-        W_IgnoredExt_FileDrop,
-
-        W_IgnoreAll_FileDrop_Linux,
-        W_IgnoreExt_FileDrop_Linux,
-
-        W_Ignore_Csv, // 34
-
-        W_Ignore_Url, // 35
-        R_Ignore_Url, // 36
-
-        W_UriList, // 37
-        R_UriList, // 38
-
-        W_Ignore_Bitmap, //39
+        CSV_R_IGNORE,
+        CSV_R_MAXCHARCOUNT,
+        CSV_W_IGNORE,
+        CSV_W_MAXCHARCOUNT
     }
 }

@@ -16,10 +16,15 @@ namespace MonkeyPaste {
 
         #endregion
 
-        #region Constants
+        #region Statics
 
-        public const string PLUG_FOLDER_NAME = "Plugins";
-        public const string MANIFEST_BACKUP_FOLDER_NAME = ".cache";
+        public static string PLUG_FOLDER_NAME => "Plugins";
+        public static string MANIFEST_BACKUP_FOLDER_NAME => ".cache";
+        public static string DAT_FOLDER_NAME => "dat";
+
+        public static string CoreClipboardHandlerGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
+        public static string CoreAnnotatorGuid => "ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31";
+        public static string CoreAnnotatorDefaultPresetGuid => "a9fa2fbf-025d-4ced-a23b-234085b5ac5f";
 
         #endregion
 
@@ -30,6 +35,15 @@ namespace MonkeyPaste {
             Path.Combine(Mp.Services.PlatformInfo.StorageDir, PLUG_FOLDER_NAME);
         public static string PluginManifestBackupFolderPath =>
             Path.Combine(PluginRootFolderPath, MANIFEST_BACKUP_FOLDER_NAME);
+        static string CoreDatDir =>
+            Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, DAT_FOLDER_NAME);
+
+        static string[] CorePluginGuids => new string[] {
+            CoreClipboardHandlerGuid,
+            CoreAnnotatorGuid
+        };
+
+
         #endregion
 
         #region Public Methods
@@ -41,6 +55,26 @@ namespace MonkeyPaste {
 
             await ValidateLoadedPluginsAsync();
             IsLoaded = true;
+        }
+        public static async Task CheckAndInstallCorePluginsAsync() {
+            MpDebug.Assert(CoreDatDir.IsDirectory(), $"Dat dir error, '{CoreDatDir}' does not exist");
+            if (!PluginRootFolderPath.IsDirectory()) {
+                bool success = MpFileIo.CreateDirectory(PluginRootFolderPath);
+                MpDebug.Assert(success, $"Error creating root plugin folder at path '{PluginRootFolderPath}'");
+                if (!success) {
+                    return;
+                }
+            }
+            foreach (var core_guid in CorePluginGuids) {
+                if (Plugins.ContainsKey(core_guid)) {
+                    // exists
+                    continue;
+                }
+                string core_plugin_zip_path = Path.Combine(CoreDatDir, $"{core_guid}.zip");
+                MpDebug.Assert(core_plugin_zip_path.IsFile(), $"Dat zip error, core plugin not found at '{core_plugin_zip_path}'");
+                _ = await InstallPluginAsync(core_plugin_zip_path.ToFileSystemUriFromPath(), true);
+                MpConsole.WriteLine($"Core plugin '{core_plugin_zip_path}' installed successfully.");
+            }
         }
 
 
@@ -139,9 +173,9 @@ namespace MonkeyPaste {
             return success;
         }
 
-        public static async Task<MpPluginFormat> InstallPluginAsync(string packageUrl) {
+        public static async Task<MpPluginFormat> InstallPluginAsync(string packageUrl, bool silentInstall = false) {
             try {
-                // download package (should always be a zip file of the plugin root folder)
+                // download package (should always be a zip file of the plugins root folder or contents of root folder)
                 var package_bytes = await MpFileIo.ReadBytesFromUriAsync(packageUrl, string.Empty, 30_000);
 
                 // write zip to temp
@@ -154,18 +188,25 @@ namespace MonkeyPaste {
                 try {
                     // extract zip to temp folder and get inner folder name
                     ZipFile.ExtractToDirectory(temp_package_zip, temp_package_dir);
-                    if (temp_package_dir.IsDirectory() && Directory.GetDirectories(temp_package_dir) is string[] tpfl &&
-                        tpfl.Length > 0) {
-                        pluginName = Path.GetFileName(tpfl[0]);
-                        string dest_dir = Path.Combine(PluginRootFolderPath, pluginName);
-                        if (dest_dir.IsDirectory()) {
-                            // just in case remove existing dir if found
-                            MpFileIo.DeleteDirectory(dest_dir);
-                        }
-                        // copy unzipped plugin from temp to plugin folder
-                        MpFileIo.CopyDirectory(tpfl[0], dest_dir, true);
-                    } else {
+
+
+                    if (!temp_package_dir.IsDirectory() ||
+                        Directory.GetDirectories(temp_package_dir) is not string[] tpfl ||
+                        tpfl.Length == 0) {
                         throw new Exception($"Error extracting plugin from '{temp_package_dir}'");
+                    }
+
+                    pluginName = Path.GetFileName(tpfl[0]);
+                    string dest_dir = Path.Combine(PluginRootFolderPath, pluginName);
+                    if (dest_dir.IsDirectory()) {
+                        // just in case remove existing dir if found
+                        MpFileIo.DeleteDirectory(dest_dir);
+                    }
+                    // copy unzipped plugin from temp to plugin folder
+                    MpFileIo.CopyDirectory(tpfl[0], dest_dir, true);
+                    if (silentInstall) {
+                        // install is core plugin, will be picked up in general load
+                        return null;
                     }
 
                 }
@@ -183,6 +224,7 @@ namespace MonkeyPaste {
                         body: $"Error installing plugin '{pluginName}' corrupt or improper directory structure. Manifest should exist at '{manifest_path}' but was not found.").FireAndForgetSafeAsync();
                     return null;
                 }
+
                 var result = await LoadPluginAsync(manifest_path);
                 if (result != null) {
                     Plugins.AddOrReplace(manifest_path, result);
@@ -214,6 +256,11 @@ namespace MonkeyPaste {
 
         private static async Task LoadPluginsAsync() {
             Plugins.Clear();
+
+            if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
+                // install core plugins
+                await CheckAndInstallCorePluginsAsync();
+            }
             //find plugin folder in main app folder
 
             if (!Directory.Exists(PluginRootFolderPath)) {
@@ -254,6 +301,9 @@ namespace MonkeyPaste {
                 }
             }
             return null;
+        }
+        private static void PreparePluginForInstall(string temp_plugin_dir) {
+
         }
         private static IEnumerable<string> FindManifestPaths(string root) {
             try {
@@ -501,18 +551,26 @@ namespace MonkeyPaste {
             if (pluginAssembly == null || plugin == null) {
                 return;
             }
-            string headless_analyzer_interface_name = "MonkeyPaste.Common.Plugin." + nameof(MpISupportHeadlessAnalyzerComponentFormat);
-            try {
-                object analyzer_obj = GetInterfaceFromAssembly(pluginAssembly, headless_analyzer_interface_name, pluginName);
-                if (analyzer_obj is MpISupportHeadlessAnalyzerComponentFormat apf) {
-                    plugin.analyzer = apf.GetFormat();
+            var headless_interfaces = new Type[] {
+                typeof(MpISupportHeadlessAnalyzerComponentFormat),
+                typeof(MpISupportHeadlessClipboardComponentFormat)
+            };
+            foreach (var hi in headless_interfaces) {
+                string hi_name = $"{hi.Namespace}.{hi.Name}";
+                try {
+                    object hi_obj = GetInterfaceFromAssembly(pluginAssembly, hi_name, pluginName);
+                    if (hi_obj is MpISupportHeadlessAnalyzerComponentFormat apf) {
+                        plugin.analyzer = apf.GetFormat();
+                    } else if (hi_obj is MpISupportHeadlessClipboardComponentFormat hccf) {
+                        plugin.clipboardHandler = hccf.GetFormats();
+                    }
                 }
-            }
-            catch (Exception ex) {
-                if (ex is MpUserNotifiedException) {
-                    throw ex;
+                catch (Exception ex) {
+                    if (ex is MpUserNotifiedException) {
+                        throw ex;
+                    }
+                    throw new MpUserNotifiedException("Error loading " + plugin.title + " ", ex);
                 }
-                throw new MpUserNotifiedException("Error loading " + plugin.title + " ", ex);
             }
         }
 

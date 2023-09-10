@@ -3077,10 +3077,8 @@ namespace MonkeyPaste.Avalonia {
 
             // NOTE paste success is very crude, false positive is likely
             bool success = await Mp.Services.ExternalPasteHandler.PasteDataObjectAsync(mpdo, pi);
-            if (success) {
-                MpMessenger.SendGlobal(MpMessageType.ContentPasted);
-
-            } else {
+            MpMessenger.SendGlobal(MpMessageType.ContentPasted);
+            if (!success) {
                 // clear pi to ignore paste history
                 pi = null;
                 MpMessenger.SendGlobal(MpMessageType.AppError);
@@ -3425,7 +3423,7 @@ namespace MonkeyPaste.Avalonia {
                          // prefer select prev pinned neighbor tile
                          to_select_ctvm =
                             InternalPinnedItems
-                            .Aggregate((a, b) => unpinned_ctvm_idx - a.ItemIdx < unpinned_ctvm_idx - b.ItemIdx ? a : b);
+                            .AggregateOrDefault((a, b) => unpinned_ctvm_idx - a.ItemIdx < unpinned_ctvm_idx - b.ItemIdx ? a : b);
                      }
                  }
 

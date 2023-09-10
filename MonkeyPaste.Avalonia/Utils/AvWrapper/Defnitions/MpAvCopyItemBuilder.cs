@@ -246,17 +246,19 @@ namespace MonkeyPaste.Avalonia {
                 //    //itemData = csvStr.ToRichText();
                 //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvCsv);
                 //}
-            } else if (avdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
-                        !avdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
-                        avdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
-                    rtfBytes.ToDecodedString() is string rtfStr) {
+            }
+            //else if (avdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
+            //            !avdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
+            //            avdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
+            //        rtfBytes.ToDecodedString() is string rtfStr) {
 
-                // RTF (HTML will be preferred)
+            //    // RTF (HTML will be preferred)
 
-                inputTextFormat = "rtf";
-                itemType = MpCopyItemType.Text;
-                itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
-            } else if (avdo.ContainsData(MpPortableDataFormats.AvPNG) &&
+            //    inputTextFormat = "rtf";
+            //    itemType = MpCopyItemType.Text;
+            //    itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
+            //} 
+            else if (avdo.ContainsData(MpPortableDataFormats.AvPNG) &&
                         avdo.GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes &&
                         //pngBytes.ToBase64String() is string pngBase64Str) {
                         Convert.ToBase64String(pngBytes) is string pngBase64Str) {

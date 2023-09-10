@@ -9,7 +9,8 @@ using System.Text;
 namespace AltOleHandlerTest {
     public class AltOleHandlerTestHandler :
         MpIClipboardReaderComponent,
-        MpIClipboardWriterComponent {
+        MpIClipboardWriterComponent,
+        MpISupportHeadlessClipboardComponentFormat {
         static AltOleHandlerTestHandler() {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
@@ -68,6 +69,10 @@ namespace AltOleHandlerTest {
             }
 
             return resp;
+        }
+
+        public MpClipboardHandlerFormats GetFormats() {
+            return PluginFormatBuilder.Build();
         }
         #endregion
     }

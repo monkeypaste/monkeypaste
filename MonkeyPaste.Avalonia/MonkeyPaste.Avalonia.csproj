@@ -213,7 +213,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Control.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
@@ -1350,7 +1349,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\TemplatedControl.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\ComboBoxItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Window.axaml" />
@@ -1710,18 +1708,6 @@
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
-  <!--<ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
-    <COMReference Include="IWshRuntimeLibrary">
-      <WrapperTool>tlbimp</WrapperTool>
-      <VersionMinor>0</VersionMinor>
-      <VersionMajor>1</VersionMajor>
-      <Guid>f935dc20-1cf0-11d0-adb9-00c04fd58a0b</Guid>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>-->
-
   <ItemGroup>
     <Reference Include="CefNet">
       <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
@@ -1731,7 +1717,7 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <Content Update="Resources\Editor\src\components\context-menu-wrapper\context-menu-wrapper-style.css">
       <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
     </Content>
@@ -1741,7 +1727,7 @@
     <Content Update="Resources\Editor\src\components\svg\svg-style.css">
       <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
     </Content>
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.resx">

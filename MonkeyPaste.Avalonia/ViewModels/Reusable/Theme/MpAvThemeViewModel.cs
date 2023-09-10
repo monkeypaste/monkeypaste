@@ -62,6 +62,7 @@ namespace MonkeyPaste.Avalonia {
             "graph.png",
             "html.png",
             "info.png",
+            "jigsaw.png",
             "joystickative.png",
             "joystickative2.png",
             "monkey.png",

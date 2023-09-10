@@ -49,7 +49,8 @@
                                     <Image Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
 
                                 </Button>
-                                <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
+                                <ComboBox 
+                                          SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
                                           Margin="0,0,5,0"
                                           ItemsSource="{Binding SortedItems}">
                                     <ComboBox.ItemTemplate>

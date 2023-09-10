@@ -12,11 +12,8 @@
   <ItemGroup>
     <None Remove="manifest.json" />
     <None Remove="manifest_windows.json" />
+    <None Remove="manifest_w_params.json" />
     <None Remove="Resources\Images\icon.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.15.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="manifest_w_params.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -36,7 +36,7 @@
     <EmbeddedResource Include="Resources\Images\csv.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Images\folder.png">
+    <EmbeddedResource Include="Resources\Images\files.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Images\html.png">
@@ -52,13 +52,29 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
+  
+  <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
+    <Reference Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll" />
+    <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
+  </ItemGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
       <BuildOutputFiles Include="$(TargetDir)\**\*.*" />
     </ItemGroup>
     <!-- update working plugin in storage dir-->
     <Copy SourceFiles="@(BuildOutputFiles)" DestinationFiles="@(BuildOutputFiles->'$(PluginTargetDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
-    <!-- compress plugin to exec dat dir (for initial load)-->
-    <ZipDirectory Overwrite="true" SourceDirectory="$(PluginTargetDir)\$(ProjectName)\" DestinationFile="$(CorePluginExecSourceDir)\$(CoreOleGuid).zip" />
+
+    <!-- remove tmp dir to ensure its new -->
+    <RemoveDir Directories="$(TargetDatTempDir)" />
+
+    <!-- create tmp dir and copy plugin so its the only sub folder-->
+    <Copy SourceFiles="@(BuildOutputFiles)" DestinationFiles="@(BuildOutputFiles->'$(TargetDatTempDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+
+    <!-- compress tmp dir to retain outer folder and ouput plugin to exec dat dir (for initial load)-->
+    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(TargetDatTempDir)" DestinationFile="$(TargetDatDir)\$(CoreOleGuid).zip" />
+
+    <!-- remove tmp dir -->
+    <RemoveDir Directories="$(TargetDatTempDir)" />
   </Target>
 </Project>

@@ -54,9 +54,9 @@ namespace MonkeyPaste.Common.Plugin {
 
         public string projectUrl { get; set; }
         public string packageUrl { get; set; } = string.Empty;
-        public string reportAbuseUrl { get; set; }
+        public string reportAbuseUrl { get; set; } = string.Empty;
 
-        public string tags { get; set; }
+        public string tags { get; set; } = string.Empty;
 
 
         public string guid { get; set; } = string.Empty;

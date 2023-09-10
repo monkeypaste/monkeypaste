@@ -62,6 +62,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public override IntPtr SetActiveProcess(IntPtr handle) {
+            // details here https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow#remarks
             if (handle == IntPtr.Zero) {
                 MpConsole.WriteLine("Warning cannot set active process to IntPtr.Zero, ignoring");
                 return IntPtr.Zero;
@@ -73,6 +74,9 @@ namespace MonkeyPaste.Avalonia {
             IntPtr lastActive = WinApi.SetActiveWindow(ThisAppHandle);
             bool success = WinApi.SetForegroundWindow(handle);
             MpConsole.WriteLine($"SetForegroundWindow to '{handle}' from '{lastActive}' was {(success ? "SUCCESSFUL" : "FAILED")}");
+            if (success) {
+                return handle;
+            }
             return lastActive;
         }
         protected override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {

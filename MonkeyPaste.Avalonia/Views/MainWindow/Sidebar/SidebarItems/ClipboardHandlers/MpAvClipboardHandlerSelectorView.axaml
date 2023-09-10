@@ -49,6 +49,7 @@
                         </Border>
 
                         <Label Classes="h1"
+                               Margin="0,20,0,0"
                                Content="Formats" />
                         <Border Classes="labelUnderline" />
 
@@ -106,9 +107,9 @@
                                            Duration="0:00:00.250" />
                             </TransitioningContentControl.PageTransition>
                             <TransitioningContentControl.ContentTemplate>
-                                <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
+                                <DataTemplate DataType="local:MpAvIParameterCollectionViewModel">
                                     <local:MpAvParameterCollectionView HorizontalAlignment="Stretch"
-                                                                          VerticalAlignment="Stretch" />
+                                                                       VerticalAlignment="Stretch" />
                                 </DataTemplate>
                             </TransitioningContentControl.ContentTemplate>
                         </TransitioningContentControl>

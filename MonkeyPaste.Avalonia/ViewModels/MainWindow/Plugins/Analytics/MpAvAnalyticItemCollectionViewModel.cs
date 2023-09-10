@@ -165,10 +165,8 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool IsHovering { get; set; }
 
-        public bool IsLoaded => Items.Count > 0;
 
         public bool IsAnalyticItemSelectorDropDownOpen { get; set; }
-        //public bool IsAnyEditingParameters => Items.Any(x => x.IsAnyEditingParameters);
 
         #endregion
 
@@ -198,8 +196,9 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitAsync() {
             IsBusy = true;
-
+            IsLoaded = false;
             Items.Clear();
+
             while (!MpPluginLoader.IsLoaded) {
                 await Task.Delay(100);
             }
@@ -223,8 +222,8 @@ namespace MonkeyPaste.Avalonia {
             if (Items.Count > 0) {
                 // select most recent preset
                 MpAvAnalyticItemPresetViewModel presetToSelect = Items
-                            .Aggregate((a, b) => a.Items.Max(x => x.LastSelectedDateTime) > b.Items.Max(x => x.LastSelectedDateTime) ? a : b)
-                            .Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+                            .AggregateOrDefault((a, b) => a.Items.Max(x => x.LastSelectedDateTime) > b.Items.Max(x => x.LastSelectedDateTime) ? a : b)
+                            .Items.AggregateOrDefault((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
 
                 if (presetToSelect != null) {
                     presetToSelect.Parent.SelectedItem = presetToSelect;
@@ -234,6 +233,7 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(SelectedItem));
 
+            IsLoaded = true;
             IsBusy = false;
         }
 
@@ -308,7 +308,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 var core_aipvm = AllPresets
-                    .FirstOrDefault(x => x.PresetGuid == MpAvPrefViewModel.Instance.CoreAnnotatorDefaultPresetGuid);
+                    .FirstOrDefault(x => x.PresetGuid == MpPluginLoader.CoreAnnotatorDefaultPresetGuid);
 
                 if (core_aipvm == null) {
                     return;

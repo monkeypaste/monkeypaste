@@ -72,7 +72,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!IsAnyNotificationVisible) {
                     return null;
                 }
-                return _windows.Aggregate((a, b) => a.Position.Y < b.Position.Y ? a : b);
+                return _windows.AggregateOrDefault((a, b) => a.Position.Y < b.Position.Y ? a : b);
             }
         }
 

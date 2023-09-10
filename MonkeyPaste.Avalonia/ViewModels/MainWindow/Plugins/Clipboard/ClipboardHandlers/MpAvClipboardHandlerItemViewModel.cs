@@ -13,8 +13,9 @@ namespace MonkeyPaste.Avalonia {
         MpISelectableViewModel,
         MpIHoverableViewModel,
         MpIMenuItemViewModel,
-        MpIAsyncComboBoxItemViewModel,
-        MpIBoxViewModel {
+        MpIAsyncComboBoxItemViewModel//,
+                                     //MpIBoxViewModel
+        {
 
         #region Private
         #endregion
@@ -23,13 +24,13 @@ namespace MonkeyPaste.Avalonia {
 
 
 
-        #region MpIBoxViewModel Implementation
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Width { get; }
-        public double Height { get; }
+        //#region MpIBoxViewModel Implementation
+        //public double X { get; set; }
+        //public double Y { get; set; }
+        //public double Width { get; }
+        //public double Height { get; }
 
-        #endregion
+        //#endregion
 
         #region MpIAsyncComboBoxItemViewModel Implementation
         int MpIComboBoxItemViewModel.IconId => PluginIconId;
@@ -200,11 +201,10 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(SelectedItem):
-                    if (SelectedItem != null && !IsSelected) {
-                        Parent.SelectedItem = this;
-                    }
                     Items.ForEach(x => x.IsSelected = x == SelectedItem);
-                    OnPropertyChanged(nameof(SelectedTitleSortedItemIdx));
+                    break;
+                case nameof(SelectedTitleSortedItemIdx):
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
                     break;
             }
         }
@@ -277,7 +277,6 @@ namespace MonkeyPaste.Avalonia {
                     msg += $"paramName '{paramNameGroup.Key}' has multiple entries";
                     error_notifications.Add(MpPluginLoader.CreateInvalidPluginNotification(msg, PluginFormat));
                 }
-
             }
 
             bool needs_fixing = error_notifications.Count > 0;

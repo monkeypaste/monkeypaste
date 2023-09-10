@@ -35,6 +35,8 @@ namespace MonkeyPaste.Avalonia {
 
         [JsonIgnore]
         public bool IsBusy { get; set; }
+        [JsonIgnore]
+        public virtual bool IsLoaded { get; set; }
 
 
         [JsonIgnore]

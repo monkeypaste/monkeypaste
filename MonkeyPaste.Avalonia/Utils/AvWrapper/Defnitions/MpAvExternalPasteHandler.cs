@@ -80,17 +80,8 @@ namespace MonkeyPaste.Avalonia {
             await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true, custom_writer_preset_ids);
 
             // ACTIVATE TARGET
-            bool set_active_success = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle) == pasteToHandle;
-            //if (MpAvWindowManager.IsAnyActive) {
-            //    // NOTE this maybe only a windows req' where this app must be active to change active
-            //    // details here https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setforegroundwindow#remarks
-            //    //bool set_ac = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
-            //    //if (!MpAvMainWindowViewModel.Instance.IsMainWindowLocked) {
-            //    //    MpAvMainWindowViewModel.Instance.FinishMainWindowHide();
-            //    //}
-            //} else {
-            //    // assume target is active (if was start process info needs to be activated earlier)
-            //}
+            nint activate_result = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
+            bool set_active_success = activate_result == pasteToHandle;
 
             // SIMULATE PASTE CMD
             bool sim_input_success = Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(pasteCmdKeyString);

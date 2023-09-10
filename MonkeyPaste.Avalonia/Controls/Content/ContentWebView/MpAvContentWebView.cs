@@ -706,7 +706,12 @@ namespace MonkeyPaste.Avalonia {
                                 }
                                 // wait for delta to updated in editor
                                 await Task.Delay(500);
-                                // re-annotate with new 
+                                // re-annotate with new hex
+
+                                // TODO this is a good case for triggers to 
+                                // be a collection of triggers and not 1 so
+                                // core annotate trigger is applied on 
+                                // new AND updated content
                                 MpAvAnalyticItemCollectionViewModel.Instance
                                 .ApplyCoreAnnotatorCommand.Execute(BindingContext);
                             });

@@ -1,9 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Media;
-using Avalonia.Themes.Fluent;
+using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlatformResource : MpIPlatformResource {
@@ -37,6 +36,14 @@ namespace MonkeyPaste.Avalonia {
             if (typeof(T) == typeof(IBrush)) {
                 if (valObj is Color color) {
                     return (T)((object)new SolidColorBrush(color));
+                }
+            }
+            if (typeof(T) == typeof(byte[])) {
+                if (valObj is string valStr) {
+                    object result = MpAvStringResourceConverter.Instance.Convert(valStr, null, null, null);
+                    if (result is Bitmap bmp) {
+                        return (T)((object)bmp.ToByteArray());
+                    }
                 }
             }
             MpDebug.Break($"Unimplemented resource converting from '{valObj.GetType}' to '{typeof(T)}'");

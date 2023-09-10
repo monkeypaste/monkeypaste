@@ -109,7 +109,9 @@ namespace MonkeyPaste.Avalonia {
         public bool IsAnyBusy =>
             Items.Any(x => x.IsAnyBusy) || IsBusy;
 
-        public virtual bool IsLoaded => Items.Count > 0 && Items[0].Items.Count > 0;
+        public override bool IsLoaded =>
+            Items.Count > 0 &&
+            Items[0].Items.Count > 0;
 
         //public bool IsAnyEditingParameters => Items.Any(x => x.IsEditingParameters);
 
@@ -500,7 +502,7 @@ namespace MonkeyPaste.Avalonia {
                         LastSelectedDateTime = DateTime.Now;
 
                         if (SelectedItem == null) {
-                            SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+                            SelectedItem = Items.AggregateOrDefault((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                         }
                         SelectedItem.OnPropertyChanged(nameof(SelectedItem.Items));
                         UpdateCanExecute();
@@ -764,7 +766,7 @@ namespace MonkeyPaste.Avalonia {
 
                  }
                  if (SelectedItem == null && Items.Count > 0) {
-                     SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+                     SelectedItem = Items.AggregateOrDefault((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                  }
                  MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(Parent);
                  OnPropertyChanged(nameof(SelectedItem));

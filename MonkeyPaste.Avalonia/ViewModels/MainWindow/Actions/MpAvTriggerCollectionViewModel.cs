@@ -401,7 +401,7 @@ namespace MonkeyPaste.Avalonia {
 
             Items.Clear();
 
-            if (MpDb.IsInitialDbCreate) {
+            if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
                 await CreateDefaultTriggersCommand.ExecuteAsync();
             }
             var tal = await MpDataModelProvider.GetAllTriggerActionsAsync();
@@ -422,7 +422,7 @@ namespace MonkeyPaste.Avalonia {
             if (Items.Count() > 0) {
                 // select most recent action
                 MpAvActionViewModelBase actionToSelect = Items
-                                .Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+                                .AggregateOrDefault((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
 
                 if (actionToSelect != null) {
                     SelectActionCommand.Execute(actionToSelect);
@@ -669,6 +669,14 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand CreateDefaultTriggersCommand => new MpAsyncCommand(
             async () => {
+                while (true) {
+                    bool can_create =
+                        MpAvAnalyticItemCollectionViewModel.Instance.IsLoaded;
+                    if (can_create) {
+                        break;
+                    }
+                    await Task.Delay(100);
+                }
                 // NOTE this must be called after analyzer collection has initialized
 
                 #region Annotate new text
@@ -700,7 +708,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvAnalyticItemCollectionViewModel
                     .Instance
                     .AllPresets
-                    .FirstOrDefault(x => x.PresetGuid == MpAvPrefViewModel.Instance.CoreAnnotatorDefaultPresetGuid) is MpAvAnalyticItemPresetViewModel aipvm) {
+                    .FirstOrDefault(x => x.PresetGuid == MpPluginLoader.CoreAnnotatorDefaultPresetGuid) is MpAvAnalyticItemPresetViewModel aipvm) {
                     def_annotate_preset_id = aipvm.AnalyticItemPresetId;
                 }
                 if (def_annotate_preset_id == 0) {

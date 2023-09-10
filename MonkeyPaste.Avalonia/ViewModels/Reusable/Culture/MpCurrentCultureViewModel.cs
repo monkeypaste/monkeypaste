@@ -521,7 +521,7 @@ namespace MonkeyPaste.Avalonia {
 
             // crudely using string comparision to determine closest language
             var best_match =
-                matches.Aggregate((a, b) =>
+                matches.AggregateOrDefault((a, b) =>
                     a.Value.ComputeLevenshteinDistance(displayName) < b.Value.ComputeLevenshteinDistance(displayName) ? a : b);
 
             MpConsole.WriteLine($"Best match: '{best_match.Value}' '{best_match.Key}'");

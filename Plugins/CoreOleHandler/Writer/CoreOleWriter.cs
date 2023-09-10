@@ -4,11 +4,10 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 
-namespace CoreOleHandler{
+namespace CoreOleHandler {
     public static class CoreOleWriter {
         #region Private Variables
 
-        private static string _cur_img_ext = "png";
         //private static int _cur_img_quality = 100;
 
         #endregion
@@ -37,7 +36,7 @@ namespace CoreOleHandler{
             }
             bool needs_pseudo_file = false;
             if (source_type != "FileList" &&
-                request.items.FirstOrDefault(x => Convert.ToInt32(x.paramId) == (int)CoreOleParamType.W_IgnoreAll_FileDrop) is MpParameterRequestItemFormat prif &&
+                request.items.FirstOrDefault(x => x.paramId.ToEnum<CoreOleParamType>() == CoreOleParamType.FILES_W_IGNORE) is MpParameterRequestItemFormat prif &&
                 !bool.Parse(prif.value)) {
                 // when file type is enabled but source is not a file,
                 // add file as a format and flag that it needs to be created
@@ -59,7 +58,7 @@ namespace CoreOleHandler{
                 }
 
                 foreach (var param in request.items) {
-                    data = ProcessWriterParam(param, write_format, data, out var ex, out var param_nfl);
+                    data = CoreParamProcessor.ProcessParam(param, write_format, data, out var ex, out var param_nfl);
                     if (ex != null) {
                         exl.Add(ex);
                     }
@@ -116,94 +115,7 @@ namespace CoreOleHandler{
             };
         }
 
-
         #endregion
-        private static object ProcessWriterParam(MpParameterRequestItemFormat pkvp, string format, object data, out Exception ex, out List<MpPluginUserNotificationFormat> nfl) {
-            ex = null;
-            nfl = null;
-            if (data == null || pkvp == null) {
-                // already omitted
-                return data;
-            }
-            string paramVal = pkvp.value;
-            try {
-                CoreOleParamType paramType = (CoreOleParamType)Convert.ToInt32(pkvp.paramId);
-                switch (format) {
-                    case MpPortableDataFormats.Text:
-                        switch (paramType) {
-                            case CoreOleParamType.W_MaxCharCount_Text:
-                                if (data is string text) {
-                                    int max_length = paramVal.ParseOrConvertToInt(int.MaxValue);
-                                    if (text.Length > max_length) {
-                                        nfl = new List<MpPluginUserNotificationFormat>() {
-                                            Util.CreateNotification(
-                                                MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"Text limit is '{max_length}' and data was '{text.Length}'",
-                                                "CoreClipboardWriter")
-                                        };
-                                        data = text.Substring(0, max_length);
-                                    }
-                                }
-                                break;
-                            case CoreOleParamType.W_Ignore_Text:
-                                if (paramVal.ParseOrConvertToBool(false) is bool textImg &&
-                                    textImg) {
-                                    data = null;
-                                }
-                                break;
-                        }
-                        break;
-                    case MpPortableDataFormats.AvPNG:
-                        switch (paramType) {
-                            case CoreOleParamType.W_Format_Image:
-
-                                if (!string.IsNullOrWhiteSpace(paramVal)) {
-                                    // NOTE used for file creation
-                                    _cur_img_ext = paramVal;
-                                }
-                                break;
-                            case CoreOleParamType.W_Ignore_Image:
-                                if (paramVal.ParseOrConvertToBool(false) is bool ignImg &&
-                                    ignImg) {
-                                    data = null;
-                                }
-                                break;
-                        }
-                        break;
-                    case MpPortableDataFormats.AvFiles:
-                        switch (paramType) {
-                            case CoreOleParamType.W_IgnoreAll_FileDrop:
-                                if (paramVal.ParseOrConvertToBool(false) is bool ignFiles &&
-                                    ignFiles) {
-                                    data = null;
-                                }
-                                break;
-                        }
-                        break;
-
-                    case MpPortableDataFormats.LinuxGnomeFiles:
-                        switch (paramType) {
-                            case CoreOleParamType.W_IgnoreAll_FileDrop_Linux:
-                                if (paramVal.ParseOrConvertToBool(false) is bool linuxFilesImg &&
-                                    linuxFilesImg) {
-                                    data = null;
-                                }
-                                break;
-                        }
-                        break;
-                    default:
-                        // TODO process other types
-
-                        break;
-                }
-                return data;
-            }
-            catch (Exception e) {
-                ex = e;
-            }
-            return data;
-        }
 
         #region Private Methods
 
@@ -244,14 +156,14 @@ namespace CoreOleHandler{
                     imgBytes.ToBase64String() is string imgStr) {
                     // text as image
                     data_to_write = imgStr;
-                    fe = _cur_img_ext;
+                    fe = CoreParamProcessor.CurImageExtVal;
                 }
             } else if (source_type == "image") {
                 if (ido.TryGetData(MpPortableDataFormats.AvPNG, out byte[] imgBytes) &&
                     imgBytes.ToBase64String() is string imgStr) {
                     // image as image
                     data_to_write = imgStr;
-                    fe = _cur_img_ext;
+                    fe = CoreParamProcessor.CurImageExtVal;
                 } else {
                     string pref_text_format = GetPreferredTextFileFormat(ido);
                     if (ido.TryGetData(pref_text_format, out string text)) {

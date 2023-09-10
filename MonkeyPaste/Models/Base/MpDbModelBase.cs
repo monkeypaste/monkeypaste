@@ -4,13 +4,13 @@ using SQLite;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public abstract class MpDbModelBase : IComparer {
         public const string ParseToken = @"^(@!@";
+
         [JsonIgnore]
         public abstract int Id { set; get; }
 

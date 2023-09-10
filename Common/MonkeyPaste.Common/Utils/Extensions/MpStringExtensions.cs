@@ -8,7 +8,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -471,26 +470,6 @@ namespace MonkeyPaste.Common {
             var str = Convert.ToBase64String(bytes);
             return str;
         }
-
-
-        public static async Task<byte[]> ReadUriBytesAsync(this string uri, int timeoutMs = 5000) {
-            using (var httpClient = new HttpClient()) {
-                httpClient.SetDefaultUserAgent();
-                if (timeoutMs > 0) {
-                    httpClient.Timeout = TimeSpan.FromMilliseconds(timeoutMs);
-                }
-                try {
-                    byte[] bytes = await httpClient.GetByteArrayAsync(uri);//.TimeoutAfter(TimeSpan.FromMilliseconds(timeoutMs));
-                    return bytes;
-                }
-                catch (Exception ex) {
-                    MpConsole.WriteTraceLine(ex);
-                }
-            }
-            return null;
-        }
-
-
 
 
         #region Enums

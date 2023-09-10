@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIParameterHost Implementation
 
         int MpIParameterHostViewModel.IconId => HandledFormatIconId;
-        public string PluginGuid => ClipboardHandlerGuid;
+        public string PluginGuid => FormatGuid;
 
         MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => ClipboardPluginFormat;
 
@@ -57,11 +58,11 @@ namespace MonkeyPaste.Avalonia {
             (IsWriter && PluginFormat.backupCheckPluginFormat.clipboardHandler.writers == null) ?
                 null :
                 IsReader ?
-                    PluginFormat.backupCheckPluginFormat.clipboardHandler.readers.FirstOrDefault(x => x.formatGuid == ClipboardHandlerGuid) :
-                    PluginFormat.backupCheckPluginFormat.clipboardHandler.writers.FirstOrDefault(x => x.formatGuid == ClipboardHandlerGuid);
+                    PluginFormat.backupCheckPluginFormat.clipboardHandler.readers.FirstOrDefault(x => x.formatGuid == FormatGuid) :
+                    PluginFormat.backupCheckPluginFormat.clipboardHandler.writers.FirstOrDefault(x => x.formatGuid == FormatGuid);
         public MpIPluginComponentBase PluginComponent => ClipboardPluginComponent;
 
-        public string ClipboardHandlerGuid { get; private set; }
+        public string FormatGuid { get; private set; }
 
         public MpClipboardHandlerFormat ClipboardPluginFormat {
             get {
@@ -69,12 +70,12 @@ namespace MonkeyPaste.Avalonia {
                     return null;
                 }
                 if (IsReader) {
-                    return Parent.ClipboardPluginFormat.readers.FirstOrDefault(x => x.formatGuid == ClipboardHandlerGuid);
+                    return Parent.ClipboardPluginFormat.readers.FirstOrDefault(x => x.formatGuid == FormatGuid);
                 }
                 if (IsWriter) {
-                    return Parent.ClipboardPluginFormat.writers.FirstOrDefault(x => x.formatGuid == ClipboardHandlerGuid);
+                    return Parent.ClipboardPluginFormat.writers.FirstOrDefault(x => x.formatGuid == FormatGuid);
                 }
-                MpConsole.WriteTraceLine($"Error finding ClipboardHandler format for formatGuid: '{ClipboardHandlerGuid}'");
+                MpConsole.WriteTraceLine($"Error finding ClipboardHandler format for formatGuid: '{FormatGuid}'");
                 return null;
             }
         }
@@ -84,11 +85,11 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsReader => PluginFormat == null ?
                                     false :
-                                    PluginFormat.clipboardHandler.readers.Any(x => x.formatGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
+                                    PluginFormat.clipboardHandler.readers.Any(x => x.formatGuid == FormatGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
 
         public bool IsWriter => PluginFormat == null ?
                                     false :
-                                    PluginFormat.clipboardHandler.writers.Any(x => x.formatGuid == ClipboardHandlerGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
+                                    PluginFormat.clipboardHandler.writers.Any(x => x.formatGuid == FormatGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
 
 
         public MpPluginFormat PluginFormat {
@@ -175,7 +176,7 @@ namespace MonkeyPaste.Avalonia {
             HandledFormat == MpPortableDataFormats.AvPNG ||
             HandledFormat == MpPortableDataFormats.AvFiles;
 
-        public virtual bool IsLoaded => Items.Count > 0 && Items[0].Items.Count > 0;
+        public override bool IsLoaded => Items.Count > 0 && Items[0].Items.Count > 0;
 
         public bool IsValid { get; private set; }
         //public bool IsAnyEditingParameters => Items.Any(x => x.IsEditingParameters);
@@ -208,7 +209,7 @@ namespace MonkeyPaste.Avalonia {
                 if (PluginFormat == null) {
                     return false;
                 }
-                return PluginFormat.guid == MpAvPrefViewModel.Instance.CoreClipboardHandlerGuid;
+                return PluginFormat.guid == MpPluginLoader.CoreClipboardHandlerGuid;
             }
         }
         public string Title {
@@ -256,7 +257,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync(MpClipboardHandlerFormat handlerFormat) {
-            IsValid = ValidateClipboardHandlerFormat(handlerFormat);
+            IsValid = await ValidateClipboardHandlerFormatAsync(handlerFormat);
             if (!IsValid) {
                 return;
             }
@@ -265,7 +266,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = true;
 
-            ClipboardHandlerGuid = handlerFormat.formatGuid;
+            FormatGuid = handlerFormat.formatGuid;
 
             if (IsReader && IsWriter) {
                 MpDebug.Break();
@@ -356,7 +357,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void Instance_OnItemDeleted(object sender, MpDbModelBase e) {
             if (e is MpPluginPreset aip) {
-                if (aip.PluginGuid == ClipboardHandlerGuid) {
+                if (aip.PluginGuid == FormatGuid) {
                     var presetVm = Items.FirstOrDefault(x => x.Preset.Id == aip.Id);
                     if (presetVm != null) {
                         int presetIdx = Items.IndexOf(presetVm);
@@ -396,19 +397,13 @@ namespace MonkeyPaste.Avalonia {
                         LastSelectedDateTime = DateTime.Now;
 
                         if (SelectedItem == null) {
-                            SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+                            SelectedItem = Items.AggregateOrDefault((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                         }
-                        //CollectionViewSource.GetDefaultView(Items).Refresh();
-                        //CollectionViewSource.GetDefaultView(SelectedItem.Items).Refresh();
                         OnPropertyChanged(nameof(Items));
                         SelectedItem.OnPropertyChanged(nameof(SelectedItem.Items));
-
-                        //Items.ForEach(x => x.IsEditingParameters = false);
-                        //SelectedIt em.IsEditingParameters = true;
-
                     }
                     Parent.OnPropertyChanged(nameof(Parent.IsAnySelected));
-                    //Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
 
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.IsAnySelected));
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedItem));
@@ -440,15 +435,22 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        private bool ValidateClipboardHandlerFormat(MpClipboardHandlerFormat chf) {
+        private async Task<bool> ValidateClipboardHandlerFormatAsync(MpClipboardHandlerFormat chf) {
+            await Task.Delay(1);
             bool isValid = true;
+
+            var error_notifications = new List<MpNotificationFormat>();
             var sb = new StringBuilder();
 
-            if (string.IsNullOrEmpty(chf.iconUri) || !Uri.IsWellFormedUriString(chf.iconUri, UriKind.RelativeOrAbsolute)) {
-                sb.AppendLine($"Plugin {PluginFormat.title} has malformed icon uri '{chf.iconUri}', plugin must have valid icon");
-                isValid = false;
+            if (string.IsNullOrEmpty(chf.iconUri)
+                //|| !Uri.IsWellFormedUriString(chf.iconUri, UriKind.RelativeOrAbsolute)
+                ) {
+                //sb.AppendLine($"Plugin {PluginFormat.title} has malformed icon uri '{chf.iconUri}', plugin must have valid icon");
+                //error_notifications.Add(MpPluginLoader.CreateInvalidPluginNotification(sb.ToString(), PluginFormat));
+                chf.iconUri = null;// Mp.Services.PlatformResource.GetResource<string>("QuestionMarkImage");
             }
-
+            bool needs_fixing = error_notifications.Count > 0;
+            MpDebug.Assert(!needs_fixing, sb.ToString());
             return isValid;
         }
         #endregion
@@ -473,7 +475,7 @@ namespace MonkeyPaste.Avalonia {
                      Parent.SelectedItem = this;
                  }
                  if (SelectedItem == null && Items.Count > 0) {
-                     SelectedItem = Items.Aggregate((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
+                     SelectedItem = Items.AggregateOrDefault((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                  }
                  //if (!Parent.Parent.IsSidebarVisible) {
                  //    Parent.Parent.IsSidebarVisible = true;
@@ -565,7 +567,7 @@ namespace MonkeyPaste.Avalonia {
                 IsBusy = true;
 
                 MpPluginPreset newPreset = await MpPluginPreset.CreateOrUpdateAsync(
-                        pluginGuid: ClipboardHandlerGuid,
+                        pluginGuid: FormatGuid,
                         //format: ClipboardPluginFormat,
                         iconId: HandledFormatIconId,
                         label: GetUniquePresetName());

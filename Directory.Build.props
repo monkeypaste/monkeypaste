@@ -114,6 +114,7 @@
   <PropertyGroup>
     <CoreOleGuid>cf2ec03f-9edd-45e9-a605-2a2df71e03bd</CoreOleGuid>
     <CoreAnnGuid>ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31</CoreAnnGuid>
-    <CorePluginExecSourceDir>$(UiProjectDir)\dat</CorePluginExecSourceDir>
+    <TargetDatDir>$(MainTargetDir)\dat</TargetDatDir>
+    <TargetDatTempDir>$(TargetDatDir)\tmp</TargetDatTempDir>
   </PropertyGroup>
 </Project>

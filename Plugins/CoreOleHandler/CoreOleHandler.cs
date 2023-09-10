@@ -9,7 +9,8 @@ using System.Text;
 namespace CoreOleHandler {
     public class CoreOleHandler :
         MpIClipboardReaderComponent,
-        MpIClipboardWriterComponent {
+        MpIClipboardWriterComponent,
+        MpISupportHeadlessClipboardComponentFormat {
         static CoreOleHandler() {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
@@ -68,6 +69,10 @@ namespace CoreOleHandler {
             }
 
             return resp;
+        }
+
+        public MpClipboardHandlerFormats GetFormats() {
+            return CoreParamBuilder.Build();
         }
         #endregion
     }

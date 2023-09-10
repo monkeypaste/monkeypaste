@@ -121,7 +121,40 @@ namespace MonkeyPaste.Common.Plugin {
         public double maximum { get; set; } = 1;
         public int precision { get; set; } = 2;
 
-        public List<MpPluginParameterValueFormat> values { get; set; } = new List<MpPluginParameterValueFormat>();
+        private MpPluginParameterValueFormat _value;
+        public MpPluginParameterValueFormat value {
+            //get {
+            //    if(serializedValue == null) {
+            //        if(values == null) {
+            //            return null;
+            //        }
+            //        if(values.FirstOrDefault(x=>x.isDefault) is MpPluginParameterValueFormat pvf) {
+            //            // TODO need validation that only
+            //        }
+            //        return values.FirstOrDefault();
+            //    }
+            //    return serializedValue;
+            //}
+            set {
+                _value = value;
+
+            }
+        }
+        private List<MpPluginParameterValueFormat> _values;
+        public List<MpPluginParameterValueFormat> values {
+            get {
+                if (_values == null) {
+                    _values = new List<MpPluginParameterValueFormat>();
+                    if (_value != null) {
+                        // NOTE this maybe bad setting default here
+                        _value.isDefault = true;
+                        _values.Add(_value);
+                    }
+                }
+                return _values;
+            }
+            set => _values = value;
+        }
 
         public static MpCsvFormatProperties GetControlCsvProps(MpParameterControlType controlType) {
             return IsControlTypeMultiValue(controlType) ?
@@ -154,6 +187,15 @@ namespace MonkeyPaste.Common.Plugin {
         public string value { get; set; } = string.Empty;
         public string label { get; set; } = string.Empty;
         public bool isDefault { get; set; } = false;
+
+        public MpPluginParameterValueFormat() { }
+        public MpPluginParameterValueFormat(string serializedValue) : this(serializedValue, string.Empty, false) { }
+        public MpPluginParameterValueFormat(string serializedValue, bool _isDef) : this(serializedValue, string.Empty, _isDef) { }
+        public MpPluginParameterValueFormat(string serializedValue, string _label, bool _isDef) {
+            value = serializedValue;
+            label = _label;
+            isDefault = _isDef;
+        }
     }
 
 }
