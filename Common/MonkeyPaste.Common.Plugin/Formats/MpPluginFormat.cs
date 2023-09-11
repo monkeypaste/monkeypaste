@@ -16,7 +16,6 @@ namespace MonkeyPaste.Common.Plugin {
         public MpHeadlessPluginFormat headless { get; set; } = null;
         public MpAnalyzerPluginFormat analyzer { get; set; } = null;
 
-        public MpClipboardHandlerFormats clipboardHandler { get; set; }
 
         public MpContactFetcherFormat contactFetcher { get; set; }
 
@@ -26,14 +25,14 @@ namespace MonkeyPaste.Common.Plugin {
         public DateTime manifestLastModifiedDateTime { get; set; }
 
         [JsonIgnore]
-        public object Component { get; set; } = null;
+        public object[] Components { get; set; } = null;
 
 
         [JsonIgnore]
-        public MpPluginFormat backupCheckPluginFormat { get; set; }
+        public virtual MpPluginFormat backupCheckPluginFormat { get; set; }
 
         [JsonIgnore]
-        public IEnumerable<MpParameterHostBaseFormat> componentFormats {
+        public virtual IEnumerable<MpParameterHostBaseFormat> componentFormats {
             get {
                 if (headless != null) {
                     yield return headless;
@@ -43,18 +42,6 @@ namespace MonkeyPaste.Common.Plugin {
                 }
                 if (contactFetcher != null) {
                     yield return contactFetcher;
-                }
-                if (clipboardHandler != null) {
-                    if (clipboardHandler.readers != null) {
-                        foreach (var cr in clipboardHandler.readers) {
-                            yield return cr;
-                        }
-                    }
-                    if (clipboardHandler.writers != null) {
-                        foreach (var cw in clipboardHandler.writers) {
-                            yield return cw;
-                        }
-                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -320,6 +321,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Plugin
+
+        public string FormatName =>
+            ClipboardFormat == null ? string.Empty : ClipboardFormat.formatName;
 
         public MpClipboardHandlerFormat ClipboardFormat {
             get {

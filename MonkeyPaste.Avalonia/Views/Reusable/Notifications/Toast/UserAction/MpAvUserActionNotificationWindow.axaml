@@ -13,21 +13,7 @@
         x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
         Classes="notificationWindow fadeIn fadeOut"
-        Classes.userActionNotificationWindow="True"
-        IsVisible="{Binding IsVisible}"
-        Width="350"
-        MinHeight="150"
-        SizeToContent="Height"
-        ShowInTaskbar="False"
-        ShowActivated="{Binding IsModal}"
-        WindowState="Normal"
-        Topmost="True"
-        CanResize="True"
-        ExtendClientAreaToDecorationsHint="True"
-        SystemDecorations="BorderOnly"
-        TransparencyLevelHint="Transparent"
-        Background="Transparent"
-        Title="">
+        Classes.userActionNotificationWindow="True">
     <Window.Styles>
         <!--  PARAM LISTBOXITEM  -->
         <Style Selector="ListBox#ExecuteParameterListBox > ListBoxItem"

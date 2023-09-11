@@ -24,9 +24,11 @@ namespace MonkeyPaste.Avalonia {
                     // make deferred value request
                     var req = new MpPluginDeferredParameterValueRequestFormat() { paramId = paramFormat.paramId };
                     MpPluginDeferredParameterValueResponseFormat resp = null;
-                    if (pluginHost.PluginFormat.Component is MpISupportDeferredValue sdv) {
+                    //if (pluginHost.PluginFormat.Component is MpISupportDeferredValue sdv) {
+                    if (pluginHost.PluginComponent is MpISupportDeferredValue sdv) {
                         resp = sdv.RequestParameterValue(req);
-                    } else if (pluginHost.PluginFormat.Component is MpISupportDeferredValueAsync sdva) {
+                        //} else if (pluginHost.PluginFormat.Component is MpISupportDeferredValueAsync sdva) {
+                    } else if (pluginHost.PluginComponent is MpISupportDeferredValueAsync sdva) {
                         resp = await sdva.RequestParameterValueAsync(req);
                     } else {
                         throw new Exception($"Plugin '{pluginHost.PluginFormat.title}' does not support deferred values, value will be unavailable");

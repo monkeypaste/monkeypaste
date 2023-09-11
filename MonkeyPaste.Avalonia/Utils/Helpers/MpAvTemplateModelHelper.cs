@@ -2,7 +2,6 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -133,13 +132,13 @@ namespace MonkeyPaste.Avalonia {
 
             var fetchers =
                 MpPluginLoader.Plugins
-                .Where(x => x.Value.Component is MpIAnalyzeComponent)
+                .Where(x => x.Value.Components.Any(y => y is MpIAnalyzeComponent))
                 .Select(x => x);
             //.Select(x => x.Value.Component).Distinct();
 
             foreach (var fetcher_kvp in fetchers) {
                 string guid = fetcher_kvp.Key;
-                var fetcher = fetcher_kvp.Value.Component;
+                var fetcher = fetcher_kvp.Value.Components.FirstOrDefault(x => x is MpIContactFetcherComponent);
                 //MpPluginRequestFormatBase req = null;
                 //if(MpAvAnalyticItemCollectionViewModel.Instance.Items.FirstOrDefault(x => x.PluginGuid == guid) is MpAvAnalyticItemViewModel aivm) {
                 //    if(aivm.Items.FirstOrDefault(x=>x.IsGeneratedDefaultPreset) is MpAvAnalyticItemPresetViewModel aipvm) {

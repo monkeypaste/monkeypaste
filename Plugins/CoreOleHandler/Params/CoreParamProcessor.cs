@@ -26,7 +26,8 @@ namespace CoreOleHandler {
                     case MpPortableDataFormats.AvRtf_bytes:
                         switch (paramType) {
                             case CoreOleParamType.RICHTEXTFORMAT_R_MAXCHARCOUNT: {
-                                    if (data is string rtf) {
+                                    if (data is byte[] rtf_bytes &&
+                                        rtf_bytes.ToDecodedString() is string rtf) {
                                         int max_length = int.Parse(paramVal);
                                         if (rtf.Length > max_length) {
                                             nfl = new List<MpPluginUserNotificationFormat>() {
@@ -53,7 +54,8 @@ namespace CoreOleHandler {
                                 }
                                 break;
                             case CoreOleParamType.RICHTEXTFORMAT_R_TOHTML: {
-                                    if (data is string rtf &&
+                                    if (data is byte[] rtf_bytes &&
+                                        rtf_bytes.ToDecodedString() is string rtf &&
                                         rtf.ToRichHtmlText("rtf") is string html &&
                                         html.ToBytesFromString() is byte[] html_bytes) {
                                         return
@@ -62,6 +64,52 @@ namespace CoreOleHandler {
                                                 new object[] {
                                                     MpPortableDataFormats.AvHtml_bytes,
                                                     html_bytes } };
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+                    case MpPortableDataFormats.AvHtml_bytes:
+                        switch (paramType) {
+                            case CoreOleParamType.HTMLFORMAT_R_MAXCHARCOUNT: {
+                                    if (data is byte[] html_bytes &&
+                                        html_bytes.ToDecodedString() is string html_str) {
+                                        int max_length = int.Parse(paramVal);
+                                        if (html_str.Length > max_length) {
+                                            nfl = new List<MpPluginUserNotificationFormat>() {
+                                            Util.CreateNotification(
+                                                MpPluginNotificationType.PluginResponseWarning,
+                                                "Max Char Count Reached",
+                                                $"{format} limit is '{max_length}' and data was '{html_str.Length}'",
+                                                "CoreClipboardWriter")
+                                        };
+                                            data = html_str.Substring(0, max_length);
+                                        }
+                                    }
+                                }
+
+                                break;
+                            case CoreOleParamType.HTMLFORMAT_R_IGNORE:
+                                if (paramVal.ParseOrConvertToBool(false) is bool ignoreRtf &&
+                                    ignoreRtf) {
+                                    AddIgnoreNotification(ref nfl, format);
+                                    data = null;
+
+                                } else {
+                                    return data;
+                                }
+                                break;
+                            case CoreOleParamType.HTMLFORMAT_R_TORTF: {
+                                    if (data is byte[] html_bytes &&
+                                        html_bytes.ToDecodedString() is string html_str &&
+                                        html_str.ToContentRichText() is string rtf &&
+                                        rtf.ToBytesFromString() is byte[] rtf_bytes) {
+                                        return
+                                            new object[] {
+                                                data,
+                                                new object[] {
+                                                    MpPortableDataFormats.AvRtf_bytes,
+                                                    rtf_bytes } };
                                     }
                                 }
                                 break;

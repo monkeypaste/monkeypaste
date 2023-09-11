@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -48,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
         string MpIParameterHostViewModel.PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpPluginFormat PluginFormat => Parent == null ? null : Parent.PluginFormat;
+        public MpAvPluginFormat PluginFormat => Parent == null ? null : Parent.PluginFormat;
 
         MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => AnalyzerComponentFormat;
 
@@ -60,7 +61,9 @@ namespace MonkeyPaste.Avalonia {
             PluginFormat == null ? null : PluginFormat.analyzer;
 
         public MpIPluginComponentBase PluginComponent =>
-            PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
+            PluginFormat == null || PluginFormat.Components == null ?
+                null :
+                PluginFormat.Components.OfType<MpIPluginComponentBase>().FirstOrDefault();
 
         #endregion
 

@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvHandledClipboardFormatViewModel :
@@ -53,13 +53,13 @@ namespace MonkeyPaste.Avalonia {
         MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
             PluginFormat == null ||
             PluginFormat.backupCheckPluginFormat == null ||
-            PluginFormat.backupCheckPluginFormat.clipboardHandler == null ||
-            (IsReader && PluginFormat.backupCheckPluginFormat.clipboardHandler.readers == null) ||
-            (IsWriter && PluginFormat.backupCheckPluginFormat.clipboardHandler.writers == null) ?
+            PluginFormat.backupCheckPluginFormat.oleHandler == null ||
+            (IsReader && PluginFormat.backupCheckPluginFormat.oleHandler.readers == null) ||
+            (IsWriter && PluginFormat.backupCheckPluginFormat.oleHandler.writers == null) ?
                 null :
                 IsReader ?
-                    PluginFormat.backupCheckPluginFormat.clipboardHandler.readers.FirstOrDefault(x => x.formatGuid == FormatGuid) :
-                    PluginFormat.backupCheckPluginFormat.clipboardHandler.writers.FirstOrDefault(x => x.formatGuid == FormatGuid);
+                    PluginFormat.backupCheckPluginFormat.oleHandler.readers.FirstOrDefault(x => x.formatGuid == FormatGuid) :
+                    PluginFormat.backupCheckPluginFormat.oleHandler.writers.FirstOrDefault(x => x.formatGuid == FormatGuid);
         public MpIPluginComponentBase PluginComponent => ClipboardPluginComponent;
 
         public string FormatGuid { get; private set; }
@@ -80,19 +80,26 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpIClipboardPluginComponent ClipboardPluginComponent =>
-            PluginFormat == null ? null : PluginFormat.Component as MpIClipboardPluginComponent;
+        public MpIOlePluginComponent ClipboardPluginComponent =>
+            PluginFormat == null || PluginFormat.Components == null ?
+                null :
+                IsReader ?
+                    PluginFormat.Components.OfType<MpIOleReaderComponent>().FirstOrDefault() :
+                    PluginFormat.Components.OfType<MpIOleWriterComponent>().FirstOrDefault();
 
-        public bool IsReader => PluginFormat == null ?
-                                    false :
-                                    PluginFormat.clipboardHandler.readers.Any(x => x.formatGuid == FormatGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
+        public bool IsReader =>
+            PluginFormat == null ?
+                false :
+                PluginFormat
+                .oleHandler
+                .readers.Any(x => x.formatGuid == FormatGuid);
 
         public bool IsWriter => PluginFormat == null ?
                                     false :
-                                    PluginFormat.clipboardHandler.writers.Any(x => x.formatGuid == FormatGuid); //ClipboardPluginComponent is MpIClipboardReaderComponent;
+                                    PluginFormat.oleHandler.writers.Any(x => x.formatGuid == FormatGuid); //ClipboardPluginComponent is MpIOleReaderComponent;
 
 
-        public MpPluginFormat PluginFormat {
+        public MpAvPluginFormat PluginFormat {
             get {
                 if (Parent == null) {
                     return null;

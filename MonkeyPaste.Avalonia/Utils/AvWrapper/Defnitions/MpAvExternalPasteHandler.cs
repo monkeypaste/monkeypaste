@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
 
             // SET CLIPBOARD
 
-            await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true, custom_writer_preset_ids);
+            await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
 
             // ACTIVATE TARGET
             nint activate_result = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
@@ -88,7 +88,7 @@ namespace MonkeyPaste.Avalonia {
 
             // RESTORE PREVIOUS CLIPBOARD
             if (last_mpdo_to_restore != null) {
-                await Mp.Services.DataObjectTools.WriteToClipboardAsync(last_mpdo_to_restore, true, null);
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(last_mpdo_to_restore, true);
             }
             return set_active_success && sim_input_success;
         }

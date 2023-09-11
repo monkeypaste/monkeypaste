@@ -1,9 +1,7 @@
 ﻿namespace MonkeyPaste.Common.Plugin {
-    public interface MpISupportHeadlessAnalyzerComponentFormat {
+    public interface MpIHeadlessComponentFormatBase { }
+    public interface MpISupportHeadlessAnalyzerComponentFormat : MpIHeadlessComponentFormatBase {
         MpAnalyzerPluginFormat GetFormat();
     }
 
-    public interface MpISupportHeadlessClipboardComponentFormat {
-        MpClipboardHandlerFormats GetFormats();
-    }
 }

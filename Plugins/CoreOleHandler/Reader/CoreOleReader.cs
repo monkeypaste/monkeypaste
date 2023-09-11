@@ -1,29 +1,44 @@
 ﻿using Avalonia.Input;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System.Text;
 
 namespace CoreOleHandler {
-    public static class CoreOleReader {
+    public class CoreOleReader : MpIOleReaderComponent {
         #region Private Variables
-
         #endregion
+        static CoreOleReader() {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
 
         #region Public Methods
 
-        public static async Task<MpClipboardReaderResponse> ProcessReadRequestAsync(MpClipboardReaderRequest request, int retryCount = 10) {
+        public Task<MpOlePluginResponse> ProcessOleRequestAsync(MpOlePluginRequest request) =>
+            ProcessReadRequestAsync_internal(request);
+
+        #endregion
+
+        #region Private Methods
+        private async Task<MpOlePluginResponse> ProcessReadRequestAsync_internal(MpOlePluginRequest request, int retryCount = 10) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                return await Dispatcher.UIThread.InvokeAsync(async () => {
+                    return await ProcessReadRequestAsync_internal(request, retryCount);
+                });
+            }
             IDataObject avdo = null;
             IEnumerable<string> availableFormats = null;
             // only actually read formats found for data
-            if (request.forcedClipboardDataObject == null) {
+            if (request.oleData == null) {
                 // clipboard read
                 //await Util.WaitForClipboard();
-                availableFormats = await CoreOleHandler.ClipboardRef.GetFormatsSafeAsync();
+                availableFormats = await CoreOleHelpers.ClipboardRef.GetFormatsSafeAsync();
                 //Util.CloseClipboard();
-            } else if (request.forcedClipboardDataObject is IDataObject) {
-                avdo = request.forcedClipboardDataObject as IDataObject;
+            } else if (request.oleData is IDataObject) {
+                avdo = request.oleData as IDataObject;
 
                 try {
 
@@ -37,7 +52,7 @@ namespace CoreOleHandler {
                         MpConsole.WriteLine("Retry attempts reached, failed");
                         return null;
                     }
-                    var retry_result = await ProcessReadRequestAsync(request, --retryCount);
+                    var retry_result = await ProcessReadRequestAsync_internal(request, --retryCount);
                     return retry_result;
                 }
 
@@ -46,7 +61,7 @@ namespace CoreOleHandler {
             List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
             List<Exception> exl = new List<Exception>();
             var read_output = new MpAvDataObject();
-            var readFormats = request.readFormats.Where(x => availableFormats.Contains(x));
+            var readFormats = request.formats.Where(x => availableFormats.Contains(x));
 
             foreach (var read_format in readFormats) {
                 object data = await ReadDataObjectFormat(read_format, avdo);
@@ -83,23 +98,19 @@ namespace CoreOleHandler {
                 read_output.SetData(read_format, data);
             }
 
-            return new MpClipboardReaderResponse() {
-                dataObject = read_output.DataFormatLookup.ToDictionary(x => x.Key.Name, x => x.Value),
+            return new MpOlePluginResponse() {
+                //dataObject = read_output.DataFormatLookup.ToDictionary(x => x.Key.Name, x => x.Value),
+                oleData = read_output,
                 userNotifications = nfl,
                 errorMessage = string.Join(Environment.NewLine, exl)
             };
         }
-
-        #endregion
-
-        #region Private Methods
-
-        private static async Task<object> ReadDataObjectFormat(string format, IDataObject avdo) {
+        private async Task<object> ReadDataObjectFormat(string format, IDataObject avdo) {
             object format_data = null;
 
             if (avdo == null) {
                 //await Util.WaitForClipboard();
-                format_data = await CoreOleHandler.ClipboardRef.GetDataSafeAsync(format);
+                format_data = await CoreOleHelpers.ClipboardRef.GetDataSafeAsync(format);
                 if (OperatingSystem.IsWindows() &&
                     format == MpPortableDataFormats.AvHtml_bytes && format_data is byte[] htmlBytes) {
                     var detected_encoding = htmlBytes.DetectTextEncoding(out string detected_text);

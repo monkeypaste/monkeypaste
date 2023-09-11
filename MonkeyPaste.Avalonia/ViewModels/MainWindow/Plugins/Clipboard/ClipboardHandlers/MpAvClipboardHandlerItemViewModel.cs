@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -119,9 +120,9 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpPluginFormat PluginFormat { get; set; }
+        public MpAvPluginFormat PluginFormat { get; set; }
 
-        public MpClipboardHandlerFormats ClipboardPluginFormat => PluginFormat == null ? null : PluginFormat.clipboardHandler;
+        public MpClipboardHandlerFormats ClipboardPluginFormat => PluginFormat == null ? null : PluginFormat.oleHandler;
 
         #endregion
 
@@ -143,7 +144,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(MpPluginFormat pf) {
             IsBusy = true;
 
-            PluginFormat = pf;
+            PluginFormat = pf as MpAvPluginFormat;
             bool is_plugin_valid = await ValidateClipboardHandlerAsync();
             if (!is_plugin_valid) {
                 PluginFormat = null;
@@ -214,12 +215,12 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteTraceLine("plugin error, not registered");
                 return false;
             }
-            if (PluginFormat.clipboardHandler == null) {
+            if (PluginFormat.oleHandler == null) {
                 MpConsole.WriteTraceLine("clipboard handler empty, ignoring");
                 return false;
             }
-            //if (PluginFormat.clipboardHandler.readers.Count == 0 &&
-            //   PluginFormat.clipboardHandler.writers.Count == 0) {
+            //if (PluginFormat.oleHandler.readers.Count == 0 &&
+            //   PluginFormat.oleHandler.writers.Count == 0) {
             //    MpConsole.WriteTraceLine($"Plugin '{PluginFormat.title}' is identified as a clipboard handler but has no readers or writerss, ignoring");
             //    return false;
             //}
@@ -227,8 +228,8 @@ namespace MonkeyPaste.Avalonia {
             //var sb = new StringBuilder();
             var error_notifications = new List<MpNotificationFormat>();
 
-            if (PluginFormat.clipboardHandler.readers != null) {
-                var dupNames = PluginFormat.clipboardHandler.readers.GroupBy(x => x.formatName).Where(x => x.Count() > 1);
+            if (PluginFormat.oleHandler.readers != null) {
+                var dupNames = PluginFormat.oleHandler.readers.GroupBy(x => x.formatName).Where(x => x.Count() > 1);
                 if (dupNames.Count() > 0) {
                     var sb = new StringBuilder();
                     sb.AppendLine($"Clipboard reader/writer format names must be unique. Reader duplicates:");
@@ -238,8 +239,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
 
-            if (PluginFormat.clipboardHandler.writers != null) {
-                var dupNames = PluginFormat.clipboardHandler.writers.GroupBy(x => x.formatName).Where(x => x.Count() > 1);
+            if (PluginFormat.oleHandler.writers != null) {
+                var dupNames = PluginFormat.oleHandler.writers.GroupBy(x => x.formatName).Where(x => x.Count() > 1);
                 if (dupNames.Count() > 0) {
                     var sb = new StringBuilder();
                     sb.AppendLine($"Clipboard reader/writer format names must be unique. Writer duplicates:");
@@ -250,8 +251,8 @@ namespace MonkeyPaste.Avalonia {
 
 
             var allHandlers =
-                PluginFormat.clipboardHandler.readers
-                .Union(PluginFormat.clipboardHandler.writers)
+                PluginFormat.oleHandler.readers
+                .Union(PluginFormat.oleHandler.writers)
                 .ToList();
 
             var dupGuids = allHandlers.GroupBy(x => x.formatGuid).Where(x => x.Count() > 1);
@@ -299,7 +300,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                PluginFormat = await MpPluginLoader.ReloadPluginAsync(Path.Combine(PluginFormat.RootDirectory, "manifest.json"));
+                PluginFormat = (await MpPluginLoader.ReloadPluginAsync(Path.Combine(PluginFormat.RootDirectory, "manifest.json"))) as MpAvPluginFormat;
                 // loop through another validation pass
                 return await ValidateClipboardHandlerAsync();
             }

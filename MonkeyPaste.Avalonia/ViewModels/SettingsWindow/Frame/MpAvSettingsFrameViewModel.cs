@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -106,7 +107,7 @@ namespace MonkeyPaste.Avalonia {
         string MpIParameterHostViewModel.PluginGuid => null;
         MpIPluginComponentBase MpIParameterHostViewModel.PluginComponent =>
             null;
-        public MpPluginFormat PluginFormat { get; set; }
+        public MpAvPluginFormat PluginFormat { get; set; }
         public MpParameterHostBaseFormat ComponentFormat =>
             PluginFormat == null ?
                 null :

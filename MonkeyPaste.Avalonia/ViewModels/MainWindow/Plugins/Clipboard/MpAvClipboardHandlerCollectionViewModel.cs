@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,6 @@ namespace MonkeyPaste.Avalonia {
         MpISidebarItemViewModel,
         MpIAsyncCollectionObject,
         MpIAsyncComboBoxViewModel,
-        MpIClipboardFormatDataHandlers,
         MpIPlatformDataObjectTools { //
 
         #region Constants
@@ -55,7 +55,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIClipboardFormatHandlers Implementation
-        public IEnumerable<MpIClipboardPluginComponent> Handlers => EnabledFormats.Select(x => x.Parent.ClipboardPluginComponent).Distinct();
+        public IEnumerable<MpIOlePluginComponent> Handlers =>
+            EnabledFormats.Select(x => x.Parent.ClipboardPluginComponent).Distinct();
 
         #endregion
 
@@ -102,55 +103,74 @@ namespace MonkeyPaste.Avalonia {
 
         bool MpIPlatformDataObjectTools.IsOleBusy => IsBusy;
 
-        async Task MpIPlatformDataObjectTools.WriteToClipboardAsync(object idoObj, bool ignoreClipboardChange, int[] force_writer_preset_ids) {
-            MpDebug.Assert(idoObj is IDataObject, $"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
-            await WriteClipboardOrDropObjectAsync(idoObj as IDataObject, true, ignoreClipboardChange, force_writer_preset_ids);
+        async Task MpIPlatformDataObjectTools.WriteToClipboardAsync(object idoObj, bool ignoreClipboardChange) {
+            if (idoObj is not IDataObject ido) {
+                MpDebug.Break($"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
+                return;
+            }
+
+            await PerformOlePluginRequestAsync(
+                isRead: false,
+                isDnd: false,
+                ido: ido,
+                ignorePlugins: false,
+                ignoreClipboardChange: ignoreClipboardChange);
         }
 
         async Task<object> MpIPlatformDataObjectTools.ReadClipboardAsync(bool ignorePlugins) {
-            MpPortableProcessInfo cb_pi = null;
-            if (!ignorePlugins &&
-                Mp.Services.ProcessWatcher.LastProcessInfo is MpPortableProcessInfo ppi) {
-                // non-polling req when clipboard has changed
-                // grab active process info to improve accuracy
-                cb_pi = ppi;
-            }
-            var avdo = await ReadClipboardOrDropObjectAsync(null, ignorePlugins);
-            if (cb_pi != null) {
-                avdo.Set(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, cb_pi.Clone());
-            }
+            var avdo = await PerformOlePluginRequestAsync(
+                isRead: true,
+                isDnd: false,
+                ido: null,
+                ignorePlugins: ignorePlugins);
             return avdo;
         }
 
         async Task<object> MpIPlatformDataObjectTools.ReadDragDropDataObjectAsync(object idoObj) {
-            MpDebug.Assert(idoObj is IDataObject, $"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
-            MpPortableProcessInfo drag_pi = null;
-            if (Mp.Services.DragProcessWatcher.DragProcess is MpPortableProcessInfo ppi) {
-                // grab active process info to improve accuracy
-                drag_pi = ppi;
+            if (idoObj is not IDataObject ido) {
+                MpDebug.Break($"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
+                return null;
             }
-            var avdo = await ReadClipboardOrDropObjectAsync(idoObj as IDataObject);
-            if (drag_pi != null) {
-                avdo.Set(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, drag_pi.Clone());
-            }
+            var avdo = await PerformOlePluginRequestAsync(
+                isRead: true,
+                isDnd: true,
+                ido: ido,
+                ignorePlugins: false);
             return avdo;
         }
-        async Task<object> MpIPlatformDataObjectTools.ProcessDragDropDataObjectAsync(object idoObj, int[] force_writer_preset_ids) {
-            MpDebug.Assert(idoObj is IDataObject, $"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
-            var result = await WriteClipboardOrDropObjectAsync(idoObj as IDataObject, false, false, force_writer_preset_ids);
-            return result;
+        async Task<object> MpIPlatformDataObjectTools.WriteDragDropDataObjectAsync(object idoObj) {
+            //MpDebug.Assert(idoObj is IDataObject, $"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
+            //var result = await WriteClipboardOrDropObjectAsync(idoObj as IDataObject, false, false);
+            //return result;
+            if (idoObj is not IDataObject ido) {
+                MpDebug.Break($"idoObj must be IDataObject. Is '{idoObj.GetType()}'");
+                return null;
+            }
+            var avdo = await PerformOlePluginRequestAsync(
+                isRead: false,
+                isDnd: true,
+                ido: ido,
+                ignorePlugins: false);
+            return avdo;
         }
-        async Task MpIPlatformDataObjectTools.UpdateDragDropDataObjectAsync(object source, object target, int[] force_writer_preset_ids) {
+        async Task MpIPlatformDataObjectTools.UpdateDragDropDataObjectAsync(object source, object target) {
             // NOTE this is called during a drag drop when user toggles a format preset
-            // source should be the initial output of ContentView dataObject and should have the highest fidelity of data on it for conversions
-            // NOTE DO NOT re-instantiate target haven't tested but I imagine the reference must persist that which was given to .DoDragDrop in StartDragging
+            // source should be the initial output of ContentView dataObject and should
+            // have the highest fidelity of data on it for conversions
+            // NOTE DO NOT re-instantiate target haven't tested but I
+            // imagine the reference must persist that which was given to .DoDragDrop in StartDragging
 
             MpDebug.Assert(source is IDataObject, $"source idoObj must be IDataObject. Is '{source.GetType()}'");
             MpDebug.Assert(target is IDataObject, $"target idoObj must be IDataObject. Is '{target.GetType()}'");
             if (source is IDataObject sido &&
                 target is IDataObject tido) {
                 var source_clone = sido.Clone();
-                var temp = await WriteClipboardOrDropObjectAsync(source_clone, false, false, force_writer_preset_ids);
+                //var temp = await WriteClipboardOrDropObjectAsync(source_clone, false, false);
+                var temp = await PerformOlePluginRequestAsync(
+                                    isRead: false,
+                                    isDnd: true,
+                                    ido: source_clone,
+                                    ignorePlugins: false);
                 if (temp is IDataObject temp_ido) {
 
                     temp_ido.CopyTo(tido);
@@ -221,11 +241,11 @@ namespace MonkeyPaste.Avalonia {
         //    }
         //}
 
-        public IEnumerable<MpIClipboardReaderComponent> EnabledReaderComponents =>
+        public IEnumerable<MpIOleReaderComponent> EnabledReaderComponents =>
             EnabledReaders
             .Select(x => x.Parent.ClipboardPluginComponent)
             .Distinct()
-            .Cast<MpIClipboardReaderComponent>();
+            .Cast<MpIOleReaderComponent>();
 
         public MpAvClipboardFormatPresetViewModel SelectedPresetViewModel {
             get {
@@ -314,7 +334,11 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIClipboardPluginComponent);
+            var pail =
+                MpPluginLoader
+                .Plugins.Where(x =>
+                    x.Value.Components.Any(y => y is MpIOlePluginComponent));
+
             foreach (var pai in pail) {
                 var paivm = await CreateClipboardHandlerItemViewModelAsync(pai.Value);
                 bool success = await ValidateHandlerFormatsAsync(paivm);
@@ -415,7 +439,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<bool> ValidateHandlerFormatsAsync(MpAvClipboardHandlerItemViewModel hivm) {
-            if (hivm == null || hivm.PluginFormat == null || hivm.PluginFormat.clipboardHandler == null) {
+            if (hivm == null || hivm.PluginFormat == null || hivm.PluginFormat.oleHandler == null) {
                 // internal error/invalid issue with plugin, ignore it
                 return false;
             }
@@ -426,8 +450,8 @@ namespace MonkeyPaste.Avalonia {
                 .Union(new[] { hivm.PluginFormat });
 
             var allHandlers =
-                all_plugin_formats.SelectMany(x => x.clipboardHandler.readers)
-                .Union(all_plugin_formats.SelectMany(x => x.clipboardHandler.writers));
+                all_plugin_formats.SelectMany(x => x.oleHandler.readers)
+                .Union(all_plugin_formats.SelectMany(x => x.oleHandler.writers));
 
             var dupGuids = allHandlers.GroupBy(x => x.formatGuid).Where(x => x.Count() > 1);
             if (dupGuids.Count() > 0) {
@@ -469,7 +493,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                hivm.PluginFormat = await MpPluginLoader.ReloadPluginAsync(Path.Combine(hivm.PluginFormat.RootDirectory, "manifest.json"));
+                hivm.PluginFormat = (MpAvPluginFormat)await MpPluginLoader.ReloadPluginAsync(Path.Combine(hivm.PluginFormat.RootDirectory, "manifest.json"));
                 // loop through another validation pass
                 return await ValidateHandlerFormatsAsync(hivm);
             }
@@ -477,141 +501,116 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
-        private async Task<MpAvDataObject> ReadClipboardOrDropObjectAsync(
-            IDataObject forced_ido = null,
-            bool ignorePlugins = false) {
-            // NOTE forcedDataObject is used to read drag/drop, when null clipboard is read
-            await WaitForBusyAsync();
-
-            MpAvDataObject mpdo = new MpAvDataObject();
-
-            foreach (var read_component in EnabledReaderComponents) {
-                var reader_request = new MpClipboardReaderRequest() {
-                    ignoreParams = ignorePlugins,
-                    readFormats =
-                        EnabledReaders
-                        .Where(x => x.Parent.ClipboardPluginComponent == read_component)
-                        .Select(x => x.Parent.HandledFormat)
-                        .Union(MpPortableDataFormats.InternalFormats)
-                        .Distinct()
-                        .ToList(),
-                    items =
-                        EnabledReaders
-                        .Where(x => x.Parent.ClipboardPluginComponent == read_component)
-                        .SelectMany(x => x.Items
-                            .Select(y => new MpParameterRequestItemFormat(y.ParamId, y.CurrentValue)))
-                        .ToList(),
-                    forcedClipboardDataObject = forced_ido
-                };
-
-                Func<Task<MpClipboardReaderResponse>> retryHandlerReadFunc = async () => {
-                    var result = await read_component.ReadClipboardDataAsync(reader_request);
-                    return result;
-                };
-
-                MpClipboardReaderResponse reader_response = await read_component.ReadClipboardDataAsync(reader_request);
-
-                reader_response = await MpPluginTransactor.ValidatePluginResponseAsync(
-                    reader_request,
-                    reader_response,
-                    retryHandlerReadFunc);
-
-
-                if (reader_response != null) {
-                    reader_response.dataObject.ForEach(x => mpdo.Set(x.Key, x.Value));
-                } else {
-                    MpConsole.WriteLine("Invalid cb reader response: " + reader_response);
-                }
-            }
-            await mpdo.MapAllPseudoFormatsAsync();
-            IsBusy = false;
-            return mpdo;
-        }
-
-        private async Task<MpAvDataObject> WriteClipboardOrDropObjectAsync(
+        private async Task<MpAvDataObject> PerformOlePluginRequestAsync(
+            bool isRead,
+            bool isDnd,
             IDataObject ido,
-            bool writeToClipboard,
-            bool ignoreClipboardChange,
-            int[] force_writer_preset_ids) {
+            bool ignorePlugins,
+            bool ignoreClipboardChange = false) {
+            // if ido provided carry use provided pi if exits
+            MpPortableProcessInfo active_pi =
+                ido == null ? null : ido.Get(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) as MpPortableProcessInfo;
+
+            int[] custom_preset_ids = ignorePlugins ? null :
+                    MpAvAppCollectionViewModel.Instance
+                    .GetAppCustomOlePresetsByWatcherState(
+                        isRead: isRead,
+                        isDnd: isDnd,
+                        active_pi: ref active_pi);
+
+            // wait for any other clipboard comm to finish
             await WaitForBusyAsync();
 
+            // when writing to clipboard disable internal monitor
             bool was_cb_monitoring = Mp.Services.ClipboardMonitor.IsMonitoring;
-            if (ignoreClipboardChange &&
-                was_cb_monitoring) {
+            if (ignoreClipboardChange && was_cb_monitoring) {
                 Mp.Services.ClipboardMonitor.StopMonitor();
             }
-            IEnumerable<MpAvClipboardFormatPresetViewModel> writer_presets =
-                force_writer_preset_ids == null ?
-                    EnabledWriters :
-                    AllWriterPresets.Where(x => force_writer_preset_ids.Contains(x.PresetId));
 
-            IEnumerable<MpIClipboardWriterComponent> writer_components =
-                writer_presets
+            // get actual preset data and components
+            IEnumerable<MpAvClipboardFormatPresetViewModel> preset_vms =
+                custom_preset_ids != null ?
+                    AllPresets.Where(x => x.IsReader == isRead && custom_preset_ids.Contains(x.PresetId)) :
+                    isRead ?
+                        EnabledReaders : EnabledWriters;
+
+            IEnumerable<MpIOlePluginComponent> ole_components =
+                preset_vms
                     .Select(x => x.Parent.ClipboardPluginComponent)
-                    .Distinct()
-                    .Cast<MpIClipboardWriterComponent>();
+                    .Distinct();
 
-            // pre-pass data object and remove disabled formats
-            var formatsToRemove =
-                ido.GetAllDataFormats()
-                .Where(x => !MpPortableDataFormats.InternalFormats.Contains(x))
-                .Where(x => writer_presets.All(y => y.ClipboardFormat.formatName != x))
-                .Select(x => x);
+            if (ido != null) {
+                // pre-pass data object and remove disabled formats
+                var formatsToRemove =
+                    ido.GetAllDataFormats()
+                    .Where(x => !MpPortableDataFormats.InternalFormats.Contains(x))
+                    .Where(x => preset_vms.All(y => y.FormatName != x))
+                    .Select(x => x);
 
-            if (formatsToRemove.Any()) {
-                MpConsole.WriteLine($"Unrecognized clipboard formats found writing to clipboard: {string.Join(",", formatsToRemove)}");
-                formatsToRemove.ForEach(x => ido.TryRemove(x));
+                if (formatsToRemove.Any()) {
+                    MpConsole.WriteLine($"Unrecognized clipboard formats found writing to clipboard: {string.Join(",", formatsToRemove)}");
+                    formatsToRemove.ForEach(x => ido.TryRemove(x));
+                }
             }
+            // instantiate new ido for output
+            var avdo = new MpAvDataObject();
 
-            var dobj = new MpAvDataObject();
-
-            foreach (var write_component in writer_components) {
-                var write_request = new MpClipboardWriterRequest() {
-                    data = ido,
-                    writeToClipboard = writeToClipboard,
-                    writeFormats =
-                        writer_presets
-                            .Where(x => x.Parent.ClipboardPluginComponent == write_component)
-                            .Select(x => x.Parent.HandledFormat)
+            // only make 1 request per component
+            foreach (var component in ole_components) {
+                // req to component contains unprocessed input ido
+                // with only the formats/params for the custom or def enabled presets 
+                var req = new MpOlePluginRequest() {
+                    oleData = ido,
+                    isDnd = isDnd,
+                    ignoreParams = ignorePlugins,
+                    formats =
+                        preset_vms
+                            .Where(x => x.Parent.ClipboardPluginComponent == component)
+                            .Select(x => x.FormatName)
                             .Distinct()
                             .ToList(),
                     items =
-                        writer_presets
-                            .Where(x => x.Parent.ClipboardPluginComponent == write_component)
+                        preset_vms
+                            .Where(x => x.Parent.ClipboardPluginComponent == component)
                             .SelectMany(x => x.Items
-                                .Select(y => new MpParameterRequestItemFormat(y.ParamId, y.CurrentValue)))
-                            .ToList(),
+                                .Select(y =>
+                                    new MpParameterRequestItemFormat(y.ParamId, y.CurrentValue))).ToList(),
                 };
 
-                Func<Task<MpClipboardWriterResponse>> retryHandlerWriteFunc = async () => {
-                    var result = await write_component.WriteClipboardDataAsync(write_request);
+                Func<Task<MpOlePluginResponse>> retryHandlerFunc = async () => {
+                    // this is mainly just testing retry from plugin
+                    // like if format is > max length, change and retry..
+                    var result = await component.ProcessOleRequestAsync(req);
                     return result;
                 };
 
-                MpClipboardWriterResponse writerResponse = await write_component.WriteClipboardDataAsync(write_request);
+                // get response from request
+                MpOlePluginResponse resp = await component.ProcessOleRequestAsync(req);
 
-                writerResponse = await MpPluginTransactor.ValidatePluginResponseAsync(
-                    write_request,
-                    writerResponse,
-                    retryHandlerWriteFunc);
+                // process response for any ntf or retry requests
+                resp = await MpPluginTransactor.ValidatePluginResponseAsync(
+                    req,
+                    resp,
+                    retryHandlerFunc);
 
-                if (writerResponse != null && writerResponse.processedDataObject is IDataObject processed_ido) {
-                    processed_ido.GetAllDataFormats().ForEach(x => dobj.SetData(x, processed_ido.Get(x)));
+                if (resp != null && resp.oleData is IDataObject processed_ido) {
+                    // set resp ido formats in output ido
+                    processed_ido.GetAllDataFormats().ForEach(x => avdo.SetData(x, processed_ido.Get(x)));
                 }
             }
-
-            //MpConsole.WriteLine("Data written to " + (writeToClipboard ? "CLIPBOARD" : "DATAOBJECT") + ":");
-            //dobj.GetAllDataFormats().ForEach(x => MpConsole.WriteLine("Format: " + x));
-
+            // unmark busy for next ole comm
             IsBusy = false;
-            if (ignoreClipboardChange &&
-                was_cb_monitoring) {
+
+            if (active_pi != null &&
+                !avdo.ContainsData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT)) {
+                // only attach process info if not 
+                avdo.Set(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, active_pi.Clone());
+            }
+            if (ignoreClipboardChange && was_cb_monitoring) {
                 Mp.Services.ClipboardMonitor.StartMonitor(true);
             }
-            return dobj;
+            return avdo;
         }
-
-
         private async Task WaitForBusyAsync() {
             if (IsBusy) {
                 string req_guid = System.Guid.NewGuid().ToString();

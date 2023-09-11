@@ -1,32 +1,36 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 
 namespace CoreOleHandler {
-    public static class CoreOleWriter {
+    public class CoreOleWriter : MpIOleWriterComponent {
         #region Private Variables
 
-        //private static int _cur_img_quality = 100;
+        //private int _cur_img_quality = 100;
 
         #endregion
 
         #region Public Methods
 
-        public static async Task<MpClipboardWriterResponse> PerformWriteRequestAsync(MpClipboardWriterRequest request) {
-            if (request == null) {
-                return null;
+        public async Task<MpOlePluginResponse> ProcessOleRequestAsync(MpOlePluginRequest request) {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                return await Dispatcher.UIThread.InvokeAsync(async () => {
+                    return await ProcessOleRequestAsync(request);
+                });
             }
-            var ido = request.data as IDataObject;
-            if (ido == null) {
+            if (request == null ||
+                request.oleData is not IDataObject ido) {
                 return null;
             }
             List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
             List<Exception> exl = new List<Exception>();
             IDataObject write_output = ido ?? new MpAvDataObject();
             var writeFormats =
-                request.writeFormats
+                request.formats
                 .Where(x => ido.GetAllDataFormats().Contains(x))
                 .OrderBy(x => GetWriterPriority(x));
 
@@ -79,8 +83,8 @@ namespace CoreOleHandler {
             // NOTE not sure if this is needed omitted for now
             //PostProcessImage(write_output);
 
-
-            if (request.writeToClipboard) {
+            if (!request.isDnd) {
+                // for non-dnd write, set clipboard to resp
                 if (write_output is MpAvDataObject avdo) {
                     var empty_formats = write_output.GetAllDataFormats().Where(x => !write_output.ContainsData(x));
                     // NOTE need to make sure empty formats are removed or clipboard will bark
@@ -105,11 +109,12 @@ namespace CoreOleHandler {
                         }
                     }
                 }
-                await CoreOleHandler.ClipboardRef.SetDataObjectSafeAsync(write_output);
+                await CoreOleHelpers.ClipboardRef.SetDataObjectSafeAsync(write_output);
             }
 
-            return new MpClipboardWriterResponse() {
-                processedDataObject = write_output,
+            return new MpOlePluginResponse() {
+                //dataObject = write_output,
+                oleData = write_output,
                 userNotifications = nfl,
                 errorMessage = string.Join(Environment.NewLine, exl)
             };
@@ -120,7 +125,7 @@ namespace CoreOleHandler {
         #region Private Methods
 
         #region File Pre-Processor
-        private static object PreProcessFileFormat(IDataObject ido) {
+        private object PreProcessFileFormat(IDataObject ido) {
 
             string fn = null;
             if (ido.TryGetData<string>(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, out string title)) {
@@ -182,14 +187,14 @@ namespace CoreOleHandler {
                                 isTemporary: true);
             return new[] { output_path };
         }
-        private static int GetWriterPriority(string format) {
+        private int GetWriterPriority(string format) {
             if (format == MpPortableDataFormats.AvFiles) {
                 // process files last
                 return int.MaxValue;
             }
             return 0;
         }
-        private static string GetPreferredTextFileFormat(IDataObject ido) {
+        private string GetPreferredTextFileFormat(IDataObject ido) {
             if (ido.ContainsData(MpPortableDataFormats.AvCsv)) {
                 return MpPortableDataFormats.AvCsv;
             }
@@ -204,7 +209,7 @@ namespace CoreOleHandler {
             }
             return null;
         }
-        private static string GetTextFileFormatExt(string format) {
+        private string GetTextFileFormatExt(string format) {
             if (format == MpPortableDataFormats.AvCsv) {
                 return "csv";
             }
@@ -224,7 +229,7 @@ namespace CoreOleHandler {
 
         #region Windows Image Post-processor
 
-        private static void PostProcessImage(IDataObject ido) {
+        private void PostProcessImage(IDataObject ido) {
 #if WINDOWS
             if (ido.TryGetData(MpPortableDataFormats.AvPNG, out byte[] pngBytes)) {
                 object dib = MonkeyPaste.Common.Wpf.MpWpfClipoardImageHelper.GetWpfDib(pngBytes);

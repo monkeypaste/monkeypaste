@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -259,7 +260,7 @@ namespace MonkeyPaste.Avalonia {
         public string PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpPluginFormat PluginFormat { get; set; }
+        public MpAvPluginFormat PluginFormat { get; set; }
 
         public MpParameterHostBaseFormat ComponentFormat => ActionComponentFormat;
         MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
@@ -271,7 +272,9 @@ namespace MonkeyPaste.Avalonia {
         public virtual MpHeadlessPluginFormat ActionComponentFormat { get; protected set; }
 
         public MpIPluginComponentBase PluginComponent =>
-            PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
+            PluginFormat == null || PluginFormat.Components == null ?
+                null :
+                PluginFormat.Components.FirstOrDefault() as MpIPluginComponentBase;
 
         public Dictionary<object, MpAvParameterViewModelBase> ArgLookup =>
            ActionArgs.ToDictionary(x => x.ParamId, x => x);
@@ -1645,7 +1648,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CopyActionCommand => new MpAsyncCommand(
             async () => {
                 var avdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT, ActionId);
-                await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true, null);
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
                 MpConsole.WriteLine("Copied action avdo: ");
                 MpConsole.WriteLine(avdo.ToString());
             });
@@ -1657,7 +1660,7 @@ namespace MonkeyPaste.Avalonia {
 
                 await Parent.DeleteActionCommand.ExecuteAsync(new object[] { this, true });
                 var avdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT, unwritten_action_clone.SerializeJsonObject());
-                await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true, null);
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
                 MpConsole.WriteLine("Cut action avdo: ");
                 MpConsole.WriteLine(avdo.ToString());
 

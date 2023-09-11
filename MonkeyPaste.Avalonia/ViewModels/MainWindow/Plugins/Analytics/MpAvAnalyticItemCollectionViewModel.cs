@@ -203,7 +203,11 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
 
-            var pail = MpPluginLoader.Plugins.Where(x => x.Value.Component is MpIAnalyzeAsyncComponent || x.Value.Component is MpIAnalyzeComponent);
+            var pail =
+                MpPluginLoader
+                .Plugins.Where(x =>
+                    x.Value.Components.Any(y => y is MpIAnalyzeAsyncComponent) ||
+                    x.Value.Components.Any(y => y is MpIAnalyzeComponent));
             foreach (var pai in pail) {
                 var paivm = await CreateAnalyticItemViewModelAsync(pai.Value);
                 if (paivm.PluginFormat == null) {

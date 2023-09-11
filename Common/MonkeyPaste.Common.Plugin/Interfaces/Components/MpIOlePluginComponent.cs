@@ -1,0 +1,2 @@
+﻿namespace MonkeyPaste.Common.Plugin {
+}

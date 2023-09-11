@@ -179,8 +179,14 @@
                         </DataGridTemplateColumn>
 
                         <!--  IS ENABLED CHECKBOX  -->
-                        <DataGridCheckBoxColumn Header="Enabled?"
-                                                Binding="{Binding IsEnabled, Mode=TwoWay}" />
+                        <DataGridTemplateColumn Header="Enabled?">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
+                                    <CheckBox Command="{Binding TogglePresetIsEnabledCommand}"
+                                              IsChecked="{Binding IsEnabled, Mode=OneWay}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
                         <!--  DUPLICATE COLUMN  -->
                         <DataGridTemplateColumn Width="30"
@@ -255,37 +261,20 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+
                 <!--  ADD PRESET BUTTON  -->
+
                 <Button Grid.Row="1"
-                        Width="150"
-                        Background="Transparent"
-                        BorderThickness="0"
+                        Classes="defaultButton iconTextButton"
                         HorizontalAlignment="Right"
                         HorizontalContentAlignment="Right"
                         Command="{Binding CreateNewPresetCommand}">
-                    <Button.Styles>
-                        <Style Selector="Border">
-                            <Setter Property="Background"
-                                    Value="Beige" />
-                        </Style>
-                        <Style Selector="Border:pointerover">
-                            <Setter Property="Background"
-                                    Value="AntiqueWhite" />
-                        </Style>
-                    </Button.Styles>
-                    <Border CornerRadius="5"
-                            HorizontalAlignment="Stretch"
-                            Padding="5">
-                        <DockPanel>
-                            <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
-                                   DockPanel.Dock="Left"
-                                   Width="15"
-                                   Height="15" />
-                            <Label DockPanel.Dock="Right"
-                                   Foreground="Black"
-                                   Content="Add Preset" />
-                        </DockPanel>
-                    </Border>
+                    <DockPanel>
+                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
+                               DockPanel.Dock="Left" />
+                        <TextBlock DockPanel.Dock="Right"
+                                   Text="Add Preset" />
+                    </DockPanel>
                 </Button>
             </StackPanel>
         </StackPanel>

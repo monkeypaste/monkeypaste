@@ -52,7 +52,14 @@
                 Value="Center" />
     </Style>
 
-    <Style Selector=":is(Button).defaultButton:not(.textOnlyButton) TextBlock">
+    <Style Selector=":is(Button).defaultButton TextBlock">
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+      <!--<Setter Property="ClipToBounds"
+                Value="False" />-->
+    </Style>
+  
+  <Style Selector=":is(Button).defaultButton:not(.textOnlyButton) TextBlock">
         <Setter Property="Margin"
                 Value="7,0,0,0" />
     </Style>

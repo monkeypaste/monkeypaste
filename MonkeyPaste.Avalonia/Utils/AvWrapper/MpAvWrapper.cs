@@ -79,8 +79,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIClipboardMonitor ClipboardMonitor { get; set; }
 
-        public MpIClipboardFormatDataHandlers ClipboardData { get; set; }
-
         public MpIExternalPasteHandler ExternalPasteHandler { get; set; }
 
         public MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }

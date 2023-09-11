@@ -1377,7 +1377,7 @@ namespace MonkeyPaste.Avalonia {
                     // sync append item to current clipboard
                     var append_mpdo = await GetDataObjectAsync(null, false, true);
                     await Mp.Services.DataObjectTools
-                        .WriteToClipboardAsync(append_mpdo, true, null);
+                        .WriteToClipboardAsync(append_mpdo, true);
                     MpConsole.WriteLine($"Clipboard updated with append data. Plain Text: ");
                     if (append_mpdo.TryGetData(MpPortableDataFormats.Text, out string pt)) {
                         MpConsole.WriteLine(pt);

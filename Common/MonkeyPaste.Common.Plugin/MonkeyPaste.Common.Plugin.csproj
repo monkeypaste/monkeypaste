@@ -14,6 +14,7 @@
     <PackageTags>monkeypaste, monkey, clipboard, copy, paste, drag, drop, netstandard, net, plugin, extension</PackageTags>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <LangVersion>$(DefaultLangVersion)</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

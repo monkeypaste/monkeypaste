@@ -14,17 +14,8 @@
         x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
         Classes="notificationWindow fadeIn fadeOut"
-        IsVisible="{Binding IsVisible}"
         Width="350"
-        Height="130"
-        SizeToContent="Manual"
-        ShowInTaskbar="False"
-        ShowActivated="False"
-        WindowState="Normal"
-        SystemDecorations="None"
-        TransparencyLevelHint="Transparent"
-        Background="Transparent"
-        Title="">
+        Height="130">
     <Window.Resources>
         <LinearGradientBrush x:Key="OuterGradientBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
             <LinearGradientBrush.GradientStops>
@@ -179,8 +170,8 @@
                                                    Foreground="White"
                                                    IsVisible="True"
                                                    RenderTransform="translateX(-50px)"
-                                                   Width="50"
-                                                   Height="50" />
+                                                   Width="25"
+                                                   Height="25" />
                     </Border>
                     <!--  PROGRESS BAR  -->
                     <Border x:Name="ProgressBarContainer"

@@ -50,10 +50,6 @@ namespace MonkeyPaste {
 
         MpIClipboardMonitor ClipboardMonitor { get; set; }
 
-        MpIClipboardFormatDataHandlers ClipboardData { get; set; }
-
-        //MpIExternalPasteHandler ExternalPasteHandler { get; set; }
-
         MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
     }

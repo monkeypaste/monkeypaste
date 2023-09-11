@@ -163,6 +163,24 @@ namespace MonkeyPaste.Avalonia {
             return keys;
         }
 
+        public int[] GetAppCustomOlePresetsByWatcherState(bool isRead, bool isDnd, ref MpPortableProcessInfo active_pi) {
+            if (active_pi == null) {
+                // is only not null for dnd updates atm
+                if (isDnd) {
+                    if (isRead) {
+                        active_pi = Mp.Services.DragProcessWatcher.DragProcess;
+                    } else {
+                        // this should probably not be used (yet) cause
+                        // cause its handle by drop widget?
+                        active_pi = Mp.Services.DropProcessWatcher.DropProcess;
+                    }
+                } else {
+                    active_pi = Mp.Services.ProcessWatcher.LastProcessInfo;
+                }
+            }
+            return GetAppCustomOlePresetsByProcessInfo(active_pi, isRead);
+        }
+
         public int[] GetAppCustomOlePresetsByProcessInfo(MpPortableProcessInfo pi, bool isRead) {
             if (GetAppByProcessInfo(pi) is not MpAvAppViewModel app_vm) {
                 return null;

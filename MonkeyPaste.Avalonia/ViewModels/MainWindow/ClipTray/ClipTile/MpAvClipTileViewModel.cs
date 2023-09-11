@@ -2052,7 +2052,8 @@ namespace MonkeyPaste.Avalonia {
                 IsContentReadOnly = true;
             }
 
-            IsSubSelectionEnabled = MpAvPersistentClipTilePropertiesHelper.IsPersistentIsSubSelectable_ById(CopyItemId, QueryOffsetIdx);
+            IsSubSelectionEnabled =
+                MpAvPersistentClipTilePropertiesHelper.IsPersistentIsSubSelectable_ById(CopyItemId, QueryOffsetIdx);
         }
         #endregion
 
@@ -2179,7 +2180,7 @@ namespace MonkeyPaste.Avalonia {
                     IsBusy = false;
                     return;
                 }
-                await Mp.Services.DataObjectTools.WriteToClipboardAsync(mpdo, true, null);
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(mpdo, true);
 
                 // wait extra for cb watcher to know about data
                 //await Task.Delay(300);

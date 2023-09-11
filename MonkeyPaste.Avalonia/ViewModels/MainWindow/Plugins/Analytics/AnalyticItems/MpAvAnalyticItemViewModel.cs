@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         public string PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpPluginFormat PluginFormat { get; set; }
+        public MpAvPluginFormat PluginFormat { get; set; }
 
         MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => AnalyzerComponentFormat;
 
@@ -40,7 +41,9 @@ namespace MonkeyPaste.Avalonia {
             PluginFormat == null ? null : PluginFormat.analyzer;
 
         public MpIPluginComponentBase PluginComponent =>
-            PluginFormat == null ? null : PluginFormat.Component as MpIPluginComponentBase;
+            PluginFormat == null || PluginFormat.Components == null ?
+                null :
+                PluginFormat.Components.FirstOrDefault() as MpIPluginComponentBase;
 
         #endregion
 
@@ -358,7 +361,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = true;
 
-            PluginFormat = analyzerPlugin;
+            PluginFormat = analyzerPlugin as MpAvPluginFormat;
 
             if (PluginComponent == null) {
                 throw new Exception("Cannot find component");

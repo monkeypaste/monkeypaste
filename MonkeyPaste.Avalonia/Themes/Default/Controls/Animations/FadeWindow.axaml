@@ -67,4 +67,10 @@
             </Animation>
         </Style.Animations>
     </Style>
+    
+    <!-- hide border on fade windows since its not affected by opacity-->
+    <Style Selector="Window.fadeOut, Window.fadeIn">
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
 </Styles>
