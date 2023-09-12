@@ -61,11 +61,12 @@ namespace MonkeyPaste.Avalonia {
                 format_handler
                 .Items
                 .Select(x => new MpAvAppOlePresetMenuViewModel(this, x))
-                .OrderBy(x => x)
+                .OrderBy(x => x.Header)
                 .Cast<MpAvIMenuItemViewModel>()
                 .ToList();
 
             items.Add(new MpAvMenuItemViewModel(this) {
+                HasLeadingSeperator = items.Any(),
                 Header = "Manage...",
                 IconSourceObj = "CogImage",
                 Command = format_handler.ManageClipboardHandlerCommand

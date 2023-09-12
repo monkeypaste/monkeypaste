@@ -88,6 +88,42 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Formats.
+        /// </summary>
+        public static string ClipboardPluginFormatsHeader {
+            get {
+                return ResourceManager.GetString("ClipboardPluginFormatsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Readers.
+        /// </summary>
+        public static string ClipboardPluginFormatTypeReadersLabel {
+            get {
+                return ResourceManager.GetString("ClipboardPluginFormatTypeReadersLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writers.
+        /// </summary>
+        public static string ClipboardPluginFormatTypeWritersLabel {
+            get {
+                return ResourceManager.GetString("ClipboardPluginFormatTypeWritersLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Handlers.
+        /// </summary>
+        public static string ClipboardPluginHandlersHeader {
+            get {
+                return ResourceManager.GetString("ClipboardPluginHandlersHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Files.
         /// </summary>
         public static string ClipTileDefTitleFilesPrefix {
@@ -187,6 +223,33 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string CommonDeleteLabel {
+            get {
+                return ResourceManager.GetString("CommonDeleteLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate.
+        /// </summary>
+        public static string CommonDuplicateLabel {
+            get {
+                return ResourceManager.GetString("CommonDuplicateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Name.
+        /// </summary>
+        public static string CommonEditLabel {
+            get {
+                return ResourceManager.GetString("CommonEditLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No results available..
         /// </summary>
         public static string CommonEmptyListText {
@@ -228,6 +291,24 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonRefreshTooltip {
             get {
                 return ResourceManager.GetString("CommonRefreshTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string CommonResetLabel {
+            get {
+                return ResourceManager.GetString("CommonResetLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string CommonSaveLabel {
+            get {
+                return ResourceManager.GetString("CommonSaveLabel", resourceCulture);
             }
         }
         
@@ -475,29 +556,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duplicate.
-        /// </summary>
-        public static string SearchCriteriaHeaderDuplicateButtonLabel {
-            get {
-                return ResourceManager.GetString("SearchCriteriaHeaderDuplicateButtonLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Refresh.
         /// </summary>
         public static string SearchCriteriaHeadeRefreshTooltipText {
             get {
                 return ResourceManager.GetString("SearchCriteriaHeadeRefreshTooltipText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Save.
-        /// </summary>
-        public static string SearchCriteriaHeaderSaveButtonLabel {
-            get {
-                return ResourceManager.GetString("SearchCriteriaHeaderSaveButtonLabel", resourceCulture);
             }
         }
         

@@ -206,6 +206,9 @@ namespace MonkeyPaste.Avalonia {
         public MpThemeType ThemeType =>
             ThemeTypeName.ToEnum<MpThemeType>();
 
+        [JsonIgnore]
+        public bool IsThemeDark =>
+            ThemeType == MpThemeType.Dark;
         #endregion
 
         #region Ole

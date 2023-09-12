@@ -10,7 +10,7 @@
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked"
                          Color="{DynamicResource ThemeInteractiveColor}" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}" />
+                         Color="{DynamicResource ThemeAccent3Color}" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked"
                          Color="{DynamicResource ThemeInteractiveBgColor}" />
 
@@ -27,7 +27,7 @@
 
 
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}" />
+                         Color="{DynamicResource ThemeAccent3Color}" />
 
         <SolidColorBrush x:Key="CheckBoxCheckForegroundStrokeIndeterminate"
                          Color="{DynamicResource ThemeInteractiveBgColor}" />
@@ -46,7 +46,7 @@
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminatePointerOver"
                          Color="{DynamicResource ThemeInteractiveColor}" />
         <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminatePointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}" />
+                         Color="{DynamicResource ThemeAccent3Color}" />
 
         <SolidColorBrush x:Key="CheckBoxBackgroundStrokeIndeterminate"
                          Color="{DynamicResource ThemeInteractiveColor}" />

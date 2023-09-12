@@ -12,6 +12,16 @@
                        d:DesignWidth="800"
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvClipboardHandlerSelectorView">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="ToggleButton#IsFilterWritersToggleButton:checked">
+            <Setter Property="Content"
+                    Value="{x:Static local:UiStrings.ClipboardPluginFormatTypeWritersLabel}" />
+        </Style>
+        <Style Selector="ToggleButton#IsFilterWritersToggleButton">
+            <Setter Property="Content"
+                    Value="{x:Static local:UiStrings.ClipboardPluginFormatTypeReadersLabel}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Padding="10">
@@ -28,7 +38,7 @@
 
                         <!--  HANDLER (PLUGIN) SELECTOR  -->
                         <Label Classes="h1"
-                               Content="Handlers" />
+                               Content="{x:Static local:UiStrings.ClipboardPluginHandlersHeader}" />
                         <Border Classes="labelUnderline" />
                         <Border Classes="iconLabelComboBox"
                                 Grid.Row="2"
@@ -50,7 +60,8 @@
 
                         <Label Classes="h1"
                                Margin="0,20,0,0"
-                               Content="Formats" />
+                               Content="{x:Static local:UiStrings.ClipboardPluginFormatsHeader}" />
+
                         <Border Classes="labelUnderline" />
 
 
@@ -62,22 +73,40 @@
                             <StackPanel Orientation="Vertical">
 
                                 <!--  FORMAT SELECTOR  -->
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Border Grid.Column="0"
+                                            Classes="iconLabelComboBox">
+                                        <ComboBox SelectedIndex="{Binding SelectedTitleSortedItemIdx, Mode=TwoWay}"
+                                                  ItemsSource="{Binding TitleSortedItems}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Classes="outerComboBoxItemBorder">
+                                                        <DockPanel>
+                                                            <Image Effect="drop-shadow(0 0 10 white)"
+                                                                   Source="{Binding HandledFormatIconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                                            <TextBlock Text="{Binding SelectorLabel}" />
+                                                        </DockPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </Border>
+                                    <!--<ToggleButton x:Name="IsFilterWritersToggleButton"
+                                                  Margin="5,0,0,0"
+                                                  HorizontalAlignment="Right"
+                                                  Grid.Column="1"
+                                                  FontWeight="SemiBold"
+                                                  IsChecked="{Binding IsFilterForWriters, Mode=TwoWay}" />-->
+                                    <ToggleSwitch Grid.Column="1"
+                                                  Margin="10,0,0,0"
+                                                  Foreground="{DynamicResource ThemeInteractiveColor}"
+                                                  FontWeight="SemiBold"
+                                                  IsChecked="{Binding IsFilterForWriters, Mode=TwoWay}"
+                                                  OnContent="{x:Static local:UiStrings.ClipboardPluginFormatTypeWritersLabel}"
+                                                  OffContent="{x:Static local:UiStrings.ClipboardPluginFormatTypeReadersLabel}" />
+                                </Grid>
 
-                                <Border Classes="iconLabelComboBox">
-                                    <ComboBox SelectedIndex="{Binding SelectedTitleSortedItemIdx, Mode=TwoWay}"
-                                              ItemsSource="{Binding TitleSortedItems}">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border Classes="outerComboBoxItemBorder">
-                                                    <DockPanel>
-                                                        <Image Source="{Binding HandledFormatIconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                                                        <TextBlock Text="{Binding SelectorLabel}" />
-                                                    </DockPanel>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
-                                </Border>
+
 
                                 <!--  FORMAT PRESET SELECTOR  -->
                                 <local:MpAvHandledClipboardFormatsItemPresetDataGridView Grid.Row="1"

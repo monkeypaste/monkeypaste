@@ -35,12 +35,12 @@ namespace MonkeyPaste.Avalonia {
             if (sourceHandler == null ||
                 trans == null ||
                 trans.Response == null ||
-                trans.Response.dataObject == null ||
-                trans.Response.dataObject.Count == 0) {
+                trans.Response.dataObjectLookup == null ||
+                trans.Response.dataObjectLookup.Count == 0) {
                 return null;
             }
 
-            var mpdo = new MpPortableDataObject(trans.Response.dataObject);
+            var mpdo = new MpPortableDataObject(trans.Response.dataObjectLookup);
             var outputType = pluginFormat.analyzer.outputType;
             List<string> ref_urls = new List<string>();
 

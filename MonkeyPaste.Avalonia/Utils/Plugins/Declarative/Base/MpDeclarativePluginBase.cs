@@ -60,9 +60,9 @@ namespace MonkeyPaste.Avalonia {
             //    return new MpAnalyzerPluginResponseFormat() {
             //        errorMessage = jobj.SelectToken(nameof(MpAnalyzerPluginResponseFormat.errorMessage)).ToString(),
             //        retryMessage = jobj.SelectToken(nameof(MpAnalyzerPluginResponseFormat.retryMessage)).ToString(),
-            //        //dataObject = MpPortableDataObject.Parse(jobj.SelectToken(nameof(MpAnalyzerPluginResponseFormat.dataObject)).ToString()),
+            //        //dataObjectLookup = MpPortableDataObject.Parse(jobj.SelectToken(nameof(MpAnalyzerPluginResponseFormat.dataObjectLookup)).ToString()),
 
-            //        //dataObject = MpPortableDataObject.Parse(jobj.SelectToken(nameof(MpAnalyzerPluginResponseFormat.dataObject)).ToString()),
+            //        //dataObjectLookup = MpPortableDataObject.Parse(jobj.SelectToken(nameof(MpAnalyzerPluginResponseFormat.dataObjectLookup)).ToString()),
             //        //annotations = MpJsonConverter.DeserializeObject<List<MpPluginResponseAnnotationFormat>>(
             //        //    jobj.SelectToken(nameof(MpAnalyzerPluginResponseFormat.annotations)).ToString()),
             //    };

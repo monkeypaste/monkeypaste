@@ -15,7 +15,7 @@ namespace MonkeyPaste.Common.Plugin {
     public class MpPluginFormat : MpManifestFormat {
         public MpHeadlessPluginFormat headless { get; set; } = null;
         public MpAnalyzerPluginFormat analyzer { get; set; } = null;
-
+        public MpClipboardHandlerFormats oleHandler { get; set; }
 
         public MpContactFetcherFormat contactFetcher { get; set; }
 
@@ -42,6 +42,18 @@ namespace MonkeyPaste.Common.Plugin {
                 }
                 if (contactFetcher != null) {
                     yield return contactFetcher;
+                }
+                if (oleHandler != null) {
+                    if (oleHandler.readers != null) {
+                        foreach (var cr in oleHandler.readers) {
+                            yield return cr;
+                        }
+                    }
+                    if (oleHandler.writers != null) {
+                        foreach (var cw in oleHandler.writers) {
+                            yield return cw;
+                        }
+                    }
                 }
             }
         }

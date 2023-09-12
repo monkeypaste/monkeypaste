@@ -28,7 +28,7 @@ namespace FileConverter {
             }
 
             return new MpAnalyzerPluginResponseFormat() {
-                dataObject = new Dictionary<string, object> { { target_format, target_data } }
+                dataObjectLookup = new Dictionary<string, object> { { target_format, target_data } }
             };
         }
     }

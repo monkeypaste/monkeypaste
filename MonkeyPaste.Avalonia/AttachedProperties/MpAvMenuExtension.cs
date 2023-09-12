@@ -662,6 +662,7 @@ namespace MonkeyPaste.Avalonia {
                 iconBorder.BorderBrush = Brushes.Transparent;
             }
             iconBorder.Child = iconImg;
+            iconBorder.Margin = new Thickness(10, 0, 10, 0);
             return iconBorder;
         }
         private static PathIcon GetCheckPathIcon(MpAvMenuItemViewModel mivm) {

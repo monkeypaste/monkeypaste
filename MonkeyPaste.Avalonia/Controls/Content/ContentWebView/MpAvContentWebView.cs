@@ -1323,14 +1323,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            //bool is_reload = BindingContext.PublicHandle == _lastLoadedContentHandle;
-
-            //if (!is_reload &&
-            //    _lastContentHandle != null) {
-            //    MpConsole.WriteLine($"Editor/Vm id mismatch for msg 'LoadCOntent'. should be {BindingContext.CopyItemId} but received {(resp_vm == null ? $"unknown (unloaded, handle '{_lastContentHandle}')" : resp_vm)}", true);
-            //    await LoadContentAsync();
-            //}
-            //_lastLoadedContentHandle = BindingContext.PublicHandle;
             IsEditorLoaded = true;
 
             if (BindingContext.IsAppendNotifier &&
@@ -1339,20 +1331,24 @@ namespace MonkeyPaste.Avalonia {
                 // so it loads quicker
                 return;
             }
+
             if (contentChanged_ntf == null) {
                 // shouldn't be null
                 MpDebug.Break($"Content changed resp was null");
                 return;
             }
+            BindingContext.IgnoreHasModelChanged = true;
 
+            //Dispatcher.UIThread.Post(() => {
             if (contentChanged_ntf.itemData != null) {
                 bool is_empty = contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString();
                 if (is_empty && MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED) {
                     // data's getting reset again
                     MpDebug.Break("data reset caught in webview process content changed. ignoring update");
                 } else {
-
+                    //if (BindingContext.IsContentReadOnly) {
                     BindingContext.CopyItemData = contentChanged_ntf.itemData;
+                    //}
                 }
             }
             if (!string.IsNullOrWhiteSpace(contentChanged_ntf.dataTransferCompletedRespFragment) &&
@@ -1371,6 +1367,8 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.HasEditableTable = contentChanged_ntf.hasEditableTable;
             BindingContext.ActualContentHeight = contentChanged_ntf.contentHeight;
 
+            BindingContext.IgnoreHasModelChanged = false;
+
             if (BindingContext.IsAppendNotifier) {
                 MpConsole.WriteLine("content changed on append");
                 Dispatcher.UIThread.Post(async () => {
@@ -1386,6 +1384,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                 });
             }
+            // }, DispatcherPriority.Background);
+
         }
 
         private void ProcessDataTransferCompleteResponse(MpQuillDataTransferCompletedNotification dataTransferCompleted_ntf) {
@@ -1493,7 +1493,7 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => {
                 if (IsContentReadOnly) {
                     if (!BindingContext.IsWindowOpen) {
-                        MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
+                        Resize(BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
                     }
 
                     //string enableReadOnlyRespStr = await SendMessageAsync("enableReadOnly_ext_ntf()");
@@ -1508,7 +1508,7 @@ namespace MonkeyPaste.Avalonia {
                     _lastReadOnlyEnabledFromHostResp = null;
                     ProcessContentChangedMessage(resp);
                 } else {
-                    MpAvResizeExtension.ResizeAnimated(this, BindingContext.EditableWidth, BindingContext.EditableHeight);
+                    Resize(BindingContext.EditableWidth, BindingContext.EditableHeight);
                     SendMessage($"disableReadOnly_ext()");
                 }
             });
@@ -1551,11 +1551,11 @@ namespace MonkeyPaste.Avalonia {
             if (IsContentSubSelectable) {
                 SendMessage($"enableSubSelection_ext('{MpAvClipTrayViewModel.Instance.CurPasteInfoMessage.SerializeJsonObjectToBase64()}')");
                 if (BindingContext.HasTemplates && !BindingContext.IsDropOverTile) {
-                    MpAvResizeExtension.ResizeAnimated(this, BindingContext.EditableWidth, BindingContext.EditableHeight);
+                    Resize(BindingContext.EditableWidth, BindingContext.EditableHeight);
                 }
             } else {
                 SendMessage("disableSubSelection_ext()");
-                MpAvResizeExtension.ResizeAnimated(this, BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
+                Resize(BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
             }
 
         }
@@ -1646,6 +1646,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         #endregion
+
+        private void Resize(double nw, double nh) {
+            // NOTE trying to isolate this cause persistent size gets lost
+            // keeping animation smooth so waiting till end to make sure its set
+            MpAvResizeExtension.ResizeAnimated(this, nw, nh, () => BindingContext.StoreSelectionStateCommand.Execute(null));
+        }
 
     }
 }

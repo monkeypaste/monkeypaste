@@ -1,10 +1,8 @@
-﻿using Avalonia.Input;
-using MonkeyPaste.Common.Plugin;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste.Common.Avalonia.Plugin {
+namespace MonkeyPaste.Common.Plugin {
     public interface MpISupportHeadlessClipboardComponentFormat : MpIHeadlessComponentFormatBase {
         MpClipboardHandlerFormats GetFormats();
     }
@@ -53,11 +51,11 @@ namespace MonkeyPaste.Common.Avalonia.Plugin {
 
     public class MpOlePluginRequest : MpPluginParameterRequestFormat {
         public bool isDnd { get; set; }
-        public IDataObject oleData { get; set; }
+        //public IDataObject oleData { get; set; }
         public List<string> formats { get; set; }
         public bool ignoreParams { get; set; }
     }
     public class MpOlePluginResponse : MpPluginResponseFormatBase {
-        public IDataObject oleData { get; set; }
+        //public IDataObject oleData { get; set; }
     }
 }

@@ -15,7 +15,7 @@
         Classes.IsClosing="{Binding IsClosing}"
         Classes="notificationWindow fadeIn fadeOut"
         Width="350"
-        Height="130">
+        Height="140">
     <Window.Resources>
         <LinearGradientBrush x:Key="OuterGradientBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
             <LinearGradientBrush.GradientStops>
@@ -134,7 +134,7 @@
                    Stretch="Fill"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
-                   Margin="10,10,0,0">
+                   Margin="10,10,0,10">
                 <Image.RenderTransform>
                     <RotateTransform />
                 </Image.RenderTransform>
@@ -239,8 +239,8 @@
                 <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
                                              Grid.Row="2"
                                              ClipToBounds="False"
-                                             Margin="0,0,8,10"
-                                             VerticalAlignment="Center"
+                                             Margin="0,0,8,3"
+                                             VerticalAlignment="Bottom"
                                              HorizontalAlignment="Right"
                                              Content="{Binding Body}">
                     <TransitioningContentControl.PageTransition>
@@ -252,6 +252,7 @@
                                        ClipToBounds="False"
                                        Width="200"
                                        FontSize="12"
+                                       VerticalAlignment="Bottom"
                                        TextAlignment="Right"
                                        Foreground="{DynamicResource ThemeWhiteColor}"
                                        Text="{Binding}" />

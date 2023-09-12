@@ -1132,7 +1132,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvClipTileViewModel(MpAvClipTrayViewModel parent) : base(parent) {
             TileCreatedDateTime = DateTime.Now;
-            PropertyChanged += MpClipTileViewModel_PropertyChanged;
+            PropertyChanged += MpAvClipTileViewModel_PropertyChanged;
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
             IsBusy = true;
 
@@ -1524,7 +1524,7 @@ namespace MonkeyPaste.Avalonia {
 
         public override void DisposeViewModel() {
             //base.Dispose();
-            //PropertyChanged -= MpClipTileViewModel_PropertyChanged;
+            //PropertyChanged -= MpAvClipTileViewModel_PropertyChanged;
             //SelectionBgColorPopupViewModel.OnColorChanged -= SelectionBgColorPopupViewModel_OnColorChanged;
             //SelectionFgColorPopupViewModel.OnColorChanged -= SelectionFgColorPopupViewModel_OnColorChanged;
             ClearSelection();
@@ -1556,7 +1556,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private void MpClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
+        private void MpAvClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
                 case nameof(IsAnyBusy):
                     if (Parent != null) {
@@ -1807,16 +1807,11 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(BoundWidth):
                 case nameof(BoundHeight):
-                    if (QueryOffsetIdx == 0) {
-
-                    }
                     if (IsResizing) {
                         //this occurs when mainwindow is resized or user gives tile unique width
                         if (e1.PropertyName == nameof(BoundWidth)) {
-
                             MpAvPersistentClipTilePropertiesHelper.AddOrReplaceUniqueWidth_ById(CopyItemId, BoundWidth, QueryOffsetIdx);
                         } else {
-
                             MpAvPersistentClipTilePropertiesHelper.AddOrReplaceUniqueHeight_ById(CopyItemId, BoundHeight, QueryOffsetIdx);
                         }
                     }
@@ -2025,6 +2020,34 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsContentReadOnly));
         }
 
+        private void StorePersistentState() {
+            if (BoundWidth != MinWidth) {
+                MpAvPersistentClipTilePropertiesHelper.AddOrReplaceUniqueWidth_ById(CopyItemId, BoundWidth, QueryOffsetIdx);
+            } else {
+                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueWidth_ById(CopyItemId, QueryOffsetIdx);
+            }
+            if (BoundHeight != MinHeight) {
+                MpAvPersistentClipTilePropertiesHelper.AddOrReplaceUniqueHeight_ById(CopyItemId, BoundHeight, QueryOffsetIdx);
+            } else {
+                MpAvPersistentClipTilePropertiesHelper.RemoveUniqueHeight_ById(CopyItemId, QueryOffsetIdx);
+            }
+            if (IsTitleReadOnly) {
+                MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsTitleEditableTile_ById(CopyItemId, QueryOffsetIdx);
+            } else {
+                MpAvPersistentClipTilePropertiesHelper.AddPersistentIsTitleEditableTile_ById(CopyItemId, QueryOffsetIdx);
+            }
+            if (IsContentReadOnly) {
+                MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);
+            } else {
+                MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);
+            }
+            if (IsSubSelectionEnabled) {
+                MpAvPersistentClipTilePropertiesHelper.AddPersistentIsSubSelectableTile_ById(CopyItemId, QueryOffsetIdx);
+            } else {
+                MpAvPersistentClipTilePropertiesHelper.RemovePersistentSubSelectionState(CopyItemId, QueryOffsetIdx);
+            }
+        }
+
         private void RestorePersistentState() {
             if (MpAvPersistentClipTilePropertiesHelper.TryGetUniqueWidth_ById(CopyItemId, QueryOffsetIdx, out double uw) &&
                 Math.Abs(uw - BoundWidth) >= 1 && IsResizerEnabled) {
@@ -2046,6 +2069,7 @@ namespace MonkeyPaste.Avalonia {
 
             if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(CopyItemId, QueryOffsetIdx) &&
                 IsResizerEnabled) {
+                // NOTE no idea why this checks IsResizerEnabled but I think its important...
                 IsContentReadOnly = false;
             } else {
                 MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);
@@ -2309,6 +2333,19 @@ namespace MonkeyPaste.Avalonia {
                 await Mp.Services.ShareTools.ShareTextAsync(CopyItemTitle, pt);
             });
 
+        public ICommand StoreSelectionStateCommand => new MpCommand(
+            () => {
+                StorePersistentState();
+            }, () => {
+                return !IsAnyPlaceholder;
+            });
+
+        public ICommand RestoreSelectionStateCommand => new MpCommand(
+            () => {
+                RestorePersistentState();
+            }, () => {
+                return !IsAnyPlaceholder;
+            });
         #endregion
     }
 }

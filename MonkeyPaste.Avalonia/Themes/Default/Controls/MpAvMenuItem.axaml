@@ -6,10 +6,9 @@
         <x:Double x:Key="MenuFlyoutSubItemPopupHorizontalOffset">-4</x:Double>
         <Thickness x:Key="MenuIconPresenterMargin">0,0,12,0</Thickness>
         <Thickness x:Key="MenuInputGestureTextMargin">24,0,0,0</Thickness>
+
         <StreamGeometry x:Key="MenuItemChevronPathData">M 1,0 10,10 l -9,10 -1,-1 L 8,10 -0,1 Z</StreamGeometry>
 
-        <!--<ControlTheme x:Key="{x:Type local:MpAvMenuItem}"
-                      TargetType="local:MpAvMenuItem">-->
         <ControlTheme x:Key="GestureLabelMenuItem"
                       TargetType="MenuItem">
             <Setter Property="Background"

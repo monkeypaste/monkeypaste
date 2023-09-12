@@ -47,16 +47,53 @@
                     Value="DarkTurquoise" />
         </Style>
 
+        <Style Selector="ToggleButton#EditToggleButton:checked">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonSaveLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ToggleButton#EditToggleButton">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonEditLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!--  RESET/DELETE BUTTON  -->
 
-        <Style Selector="Button#ResetOrDeleteButton.canReset Image"
+        <Style Selector="Button#ResetOrDeleteButton:not(.canDelete) Image"
                x:DataType="local:MpAvAnalyticItemPresetViewModel">
             <Setter Property="Source"
                     Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ResetImage}}" />
         </Style>
-        <Style Selector="Button#ResetOrDeleteButton:not(.canReset) Image">
+        <Style Selector="Button#ResetOrDeleteButton.canDelete Image">
             <Setter Property="Source"
                     Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource TrashCanImage}}" />
+        </Style>
+
+        <Style Selector="Button#ResetOrDeleteButton:not(.canDelete)">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonResetLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Button#ResetOrDeleteButton.canDelete">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDeleteLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
         </Style>
 
     </local:MpAvUserControl.Styles>
@@ -87,35 +124,25 @@
                           CanUserSortColumns="True">
                     <DataGrid.Columns>
                         <!--  ICON COLUMN  -->
-                        <DataGridTemplateColumn Width="30"
+                        <DataGridTemplateColumn Width="40"
                                                 Header="Icon">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
-
-                                    <Border BorderThickness="0"
-                                            Padding="3"
-                                            CornerRadius="0">
-                                        <Button x:Name="PresetIcon"
-                                                BorderThickness="0"
-                                                CornerRadius="0"
-                                                Cursor="Hand"
-                                                Background="Transparent"
-                                                Command="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
-                                                CommandParameter="{Binding $self}">
-                                            <Image Width="20"
-                                                   Height="20"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                                        </Button>
-                                    </Border>
+                                    <Button x:Name="PresetIcon"
+                                            IsHitTestVisible="{Binding !IsGeneratedDefaultPreset}"
+                                            Classes="defaultButton noBg noHoverBg outlineOver square"
+                                            local:MpAvPointerCommandExtension.IsEnabled="True"
+                                            local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ChangeIconCommand, Source={x:Static local:MpAvIconCollectionViewModel.Instance}}"
+                                            local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">
+                                        <Image Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                    </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
 
                         </DataGridTemplateColumn>
 
                         <!--  LABEL COLUMN  -->
-                        <DataGridTemplateColumn MinWidth="120"
+                        <DataGridTemplateColumn MinWidth="150"
                                                 Width="*"
                                                 Header="Label">
                             <DataGridTemplateColumn.CellTemplate>
@@ -143,43 +170,28 @@
                         </DataGridTemplateColumn>
 
                         <!--  TOGGLE EDIT COLUMN  -->
-                        <DataGridTemplateColumn Width="30"
+                        <DataGridTemplateColumn Width="40"
                                                 Header="Edit">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
-                                    <Grid>
-                                        <Grid.Styles>
-                                            <Style Selector="ToggleButton /template/ ContentPresenter">
-                                                <Setter Property="Background"
-                                                        Value="Transparent" />
-                                            </Style>
-                                            <Style Selector="ToggleButton:checked /template/ ContentPresenter">
-                                                <Setter Property="Background"
-                                                        Value="DarkTurquoise" />
-                                            </Style>
-                                        </Grid.Styles>
-                                        <ToggleButton Background="Transparent"
-                                                      BorderThickness="0"
-                                                      HorizontalAlignment="Center"
-                                                      Cursor="Hand"
-                                                      IsChecked="{Binding !IsLabelReadOnly, Mode=TwoWay}">
+                                    <ToggleButton x:Name="EditToggleButton"
+                                                  Classes="defaultButton noBg noHoverBg outlineOver square"
+                                                  local:MpAvPointerCommandExtension.IsEnabled="True"
+                                                  local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ToggleIsLabelReadOnlyCommand}"
+                                                  IsChecked="{Binding !IsLabelReadOnly, Mode=OneWay}">
 
-                                            <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="Edit Label" />
-                                            </ToolTip.Tip>
-                                            <Image Width="20"
-                                                   Height="20"
-                                                   Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource EditImage}}" />
-
-
-                                        </ToggleButton>
-                                    </Grid>
+                                        <ToolTip.Tip>
+                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonEditLabel}" />
+                                        </ToolTip.Tip>
+                                        <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource EditImage}}" />
+                                    </ToggleButton>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
                         <!--  IS ENABLED CHECKBOX  -->
-                        <DataGridTemplateColumn Header="Enabled?">
+                        <DataGridTemplateColumn Width="40"
+                                                Header="Enabled?">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
                                     <CheckBox Command="{Binding TogglePresetIsEnabledCommand}"
@@ -189,31 +201,28 @@
                         </DataGridTemplateColumn>
 
                         <!--  DUPLICATE COLUMN  -->
-                        <DataGridTemplateColumn Width="30"
+                        <DataGridTemplateColumn Width="40"
                                                 Header="Clone">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
-                                    <Grid>
-                                        <Button Background="Transparent"
-                                                BorderThickness="0"
-                                                IsVisible="{Binding !Parent.IsBusy}"
-                                                Command="{Binding Parent.DuplicatePresetCommand}"
-                                                CommandParameter="{Binding}">
-                                            <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="Clone" />
-                                            </ToolTip.Tip>
-                                            <Image Width="20"
-                                                   Height="20"
+                                    <Button x:Name="DuplicateButton"
+                                            Classes="defaultButton noBg noHoverBg outlineOver square"
+                                            IsEnabled="{Binding !Parent.IsBusy}"
+                                            local:MpAvPointerCommandExtension.IsEnabled="True"
+                                            local:MpAvPointerCommandExtension.LeftPressCommand="{Binding DuplicateThisPresetCommand}">
+                                        <ToolTip.Tip>
+                                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDuplicateLabel}" />
+                                        </ToolTip.Tip>
+                                        <Grid DataContext="{Binding Parent}"
+                                              x:DataType="local:MpAvAnalyticItemViewModel">
+                                            <Image IsVisible="{Binding !IsBusy}"
                                                    Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource SheepImage}}" />
-                                        </Button>
-                                        <Border IsVisible="{Binding Parent.IsBusy, FallbackValue=True, TargetNullValue=True}">
+                                            <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
+                                                                       VerticalAlignment="Stretch"
+                                                                       IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}" />
+                                        </Grid>
 
-                                            <local:MpAvBusySpinnerView HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"
-                                                                       Width="20"
-                                                                       Height="20" />
-                                        </Border>
-                                    </Grid>
+                                    </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -221,41 +230,30 @@
 
                         <!--  DELETE/RESET ANALYSIS  -->
                         <DataGridTemplateColumn Header="Bin"
-                                                Width="30">
+                                                Width="40">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate DataType="local:MpAvClipboardFormatPresetViewModel">
-                                    <Grid>
-                                        <Grid.Styles>
-                                            <Style Selector="Button.canReset Image"
-                                                   x:DataType="local:MpAvClipboardFormatPresetViewModel">
-                                                <Setter Property="Source"
-                                                        Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ResetImage}}" />
-                                            </Style>
-                                            <Style Selector="Button:not(.canReset) Image">
-                                                <Setter Property="Source"
-                                                        Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource TrashCanImage}}" />
-                                            </Style>
-                                        </Grid.Styles>
-                                        <Button Background="Transparent"
-                                                IsVisible="{Binding !Parent.IsBusy}"
-                                                BorderThickness="0"
-                                                Classes.canReset="{Binding IsManifestPreset}"
-                                                Command="{Binding Parent.ResetOrDeletePresetCommand}"
-                                                CommandParameter="{Binding}">
-                                            <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="{Binding ResetOrDeleteLabel}" />
-                                            </ToolTip.Tip>
-                                            <Image Width="20"
-                                                   Height="20" />
-                                        </Button>
-                                        <Border IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}">
+                                    <!--  NOTE cmd parameter set to req format in trans style, null in sidebar  -->
+                                    <Button x:Name="ResetOrDeleteButton"
+                                            Classes="defaultButton noBg noHoverBg outlineOver square"
+                                            IsEnabled="{Binding !Parent.IsBusy}"
+                                            local:MpAvPointerCommandExtension.IsEnabled="True"
+                                            local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ResetOrDeleteThisPresetCommand}">
+                                        <Classes.canDelete>
+                                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                <Binding Path="!IsManifestPreset" />
+                                                <Binding Path="!IsGeneratedDefaultPreset" />
+                                            </MultiBinding>
+                                        </Classes.canDelete>
+                                        <Grid DataContext="{Binding Parent}"
+                                              x:DataType="local:MpAvHandledClipboardFormatViewModel">
+                                            <Image />
+                                            <local:MpAvBusySpinnerView HorizontalAlignment="Stretch"
+                                                                       VerticalAlignment="Stretch"
+                                                                       IsVisible="{Binding IsBusy, FallbackValue=True, TargetNullValue=True}" />
+                                        </Grid>
 
-                                            <local:MpAvBusySpinnerView HorizontalAlignment="Center"
-                                                                       VerticalAlignment="Center"
-                                                                       Width="20"
-                                                                       Height="20" />
-                                        </Border>
-                                    </Grid>
+                                    </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

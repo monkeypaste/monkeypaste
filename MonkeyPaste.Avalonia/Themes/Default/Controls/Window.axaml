@@ -53,7 +53,7 @@
                 Value="5" />
     </Style>
 
-    <Style Selector="Window.notificationWindow"
+    <Style Selector="Window.notificationWindow:not(.welcome)"
            x:DataType="local:MpAvNotificationViewModelBase">
         <Style.Resources>
             <!--<SolidColorBrush x:Key="SystemRegionBrush" Color="Transparent"/>

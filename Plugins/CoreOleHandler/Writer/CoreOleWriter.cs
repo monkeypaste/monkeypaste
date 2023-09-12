@@ -3,7 +3,6 @@ using Avalonia.Input;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 
 namespace CoreOleHandler {
@@ -23,20 +22,20 @@ namespace CoreOleHandler {
                 });
             }
             if (request == null ||
-                request.oleData is not IDataObject ido) {
+                request.dataObjectLookup is not Dictionary<string, object> ido_dict) {
                 return null;
             }
             List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
             List<Exception> exl = new List<Exception>();
-            IDataObject write_output = ido ?? new MpAvDataObject();
+            IDataObject write_output = ido_dict == null ? new MpAvDataObject() : ido_dict.ToDataObject();
             var writeFormats =
                 request.formats
-                .Where(x => ido.GetAllDataFormats().Contains(x))
+                .Where(x => ido_dict.ContainsKey(x))
                 .OrderBy(x => GetWriterPriority(x));
 
             string source_type = null;
-            if (ido.Contains(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT)) {
-                source_type = ido.Get(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT) as string;
+            if (ido_dict.TryGetValue(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT, out object source_type_obj)) {
+                source_type = source_type_obj as string;
             }
             bool needs_pseudo_file = false;
             if (source_type != "FileList" &&
@@ -113,8 +112,8 @@ namespace CoreOleHandler {
             }
 
             return new MpOlePluginResponse() {
-                //dataObject = write_output,
-                oleData = write_output,
+                //dataObjectLookup = write_output,
+                dataObjectLookup = write_output.ToDictionary(),
                 userNotifications = nfl,
                 errorMessage = string.Join(Environment.NewLine, exl)
             };

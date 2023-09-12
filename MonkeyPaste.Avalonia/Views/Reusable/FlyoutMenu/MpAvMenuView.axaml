@@ -15,27 +15,10 @@
             <Setter Property="Padding"
                     Value="5" />
         </Style>
-        <!--<Style Selector="MenuItem:nth-child(0)">
-            <Setter Property="Padding"
-                    Value="5,0,5,5" />
-        </Style>
-        <Style Selector="MenuItem:nth-last-child()">
-            <Setter Property="Padding"
-                    Value="5,5,5,0" />
-        </Style>-->
         <Style Selector="MenuItem"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="IsSubMenuOpen"
                     Value="{Binding IsSubMenuOpen, Mode=TwoWay}" />
-            <!--<Setter Property="IsEnabled">
-                <Setter.Value>
-                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                        <Binding Path="IsEnabled" />
-                        <Binding Path="SubItems"
-                                 Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
-                    </MultiBinding>
-                </Setter.Value>
-            </Setter>-->
             <Setter Property="Command"
                     Value="{Binding Command}" />
             <Setter Property="CommandParameter"
@@ -62,8 +45,6 @@
 
         <Style Selector="MenuItem CheckBox"
                x:DataType="local:MpAvIMenuItemViewModel">
-            <!--<Setter Property="IsEnabled"
-                    Value="{Binding IsEnabled}" />-->
             <Setter Property="Command"
                     Value="{Binding Command}" />
             <Setter Property="CommandParameter"
@@ -84,6 +65,19 @@
                     Value="16" />
             <Setter Property="Height"
                     Value="16" />
+            <Setter Property="Effect"
+                    Value="drop-shadow(0 0 10 black)" />
+        </Style>
+
+        <Style Selector="MenuItem.dark Image"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Effect"
+                    Value="drop-shadow(0 0 10 white)" />
+        </Style>
+        <Style Selector="Separator.dark"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Effect"
+                    Value="drop-shadow(0 0 10 white)" />
         </Style>
         <Style Selector="MenuItem TextBlock"
                x:DataType="local:MpAvIMenuItemViewModel">
@@ -98,7 +92,7 @@
                     <!--  DEFAULT  -->
                     <DataTemplate x:Key="Default"
                                   x:DataType="local:MpAvIMenuItemViewModel">
-                        <MenuItem>
+                        <MenuItem Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Resources>
                                 <Thickness x:Key="MenuIconPresenterMargin">0,0,6,0</Thickness>
 
@@ -115,7 +109,8 @@
                     <!--  CHECKABLE  -->
                     <DataTemplate x:Key="Checkable"
                                   x:DataType="local:MpAvIMenuItemViewModel">
-                        <MenuItem Classes="checkable">
+                        <MenuItem Classes="checkable"
+                                  Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
                                 <CheckBox IsChecked="{Binding IsChecked, Mode=OneWay}"
                                           IsThreeState="{Binding IsThreeState}" />
@@ -126,7 +121,8 @@
                     <!--  CHECKABLE W/ ICON  -->
                     <DataTemplate x:Key="CheckableWithIcon"
                                   x:DataType="local:MpAvIMenuItemViewModel">
-                        <MenuItem Classes="checkable checkWithIcon">
+                        <MenuItem Classes="checkable checkWithIcon"
+                                  Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
                                 <CheckBox IsChecked="{Binding IsChecked, Mode=OneWay}"
                                           IsThreeState="{Binding IsThreeState}" />
@@ -143,7 +139,7 @@
 
                     <!--  SEPERATOR  -->
                     <DataTemplate x:Key="Separator">
-                        <Separator />
+                        <Separator Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}" />
                     </DataTemplate>
                 </local:MpAvTemplateDictionaryToItemsSourceConverter>
             </Binding.Converter>

@@ -1,14 +1,10 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media.Imaging;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using Org.BouncyCastle.Utilities.Encoders;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
@@ -24,9 +20,9 @@ namespace MonkeyPaste.Avalonia {
             if (!IS_DYNAMIC_TINT_ENABLED) {
                 return MpAvIconSourceObjToBitmapConverter.Instance.Convert(value, targetType, parameter, culture);
             }
-            if (value is string &&
-                MpAvThemeViewModel.Instance.IsColoredImageResource(value.ToString())) {
-                // ignore tinting known color images
+
+            if (MpAvThemeViewModel.Instance.IsColoredImageResource(value)) {
+                // ignore tinting known color images or db images (since colors unknown)
                 return MpAvIconSourceObjToBitmapConverter.Instance.Convert(value, targetType, parameter, culture);
             }
 

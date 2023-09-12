@@ -2,11 +2,19 @@
 using Avalonia.Platform.Storage;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvPlatformDataObjectExtensions {
+        public static IDataObject ToDataObject(this Dictionary<string, object> dict) {
+            return new MpAvDataObject(dict);
+        }
+        public static Dictionary<string, object> ToDictionary(this IDataObject ido) {
+            if (ido == null) {
+                return null;
+            }
+            return ido.GetAllDataFormats().ToDictionary(x => x, x => ido.Get(x));
+        }
         public static IEnumerable<string> GetAllDataFormats(this IDataObject ido) {
             if (ido == null ||
                 ido.GetDataFormats() is not IEnumerable<string> dfl) {
@@ -133,7 +141,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
 
         public static bool ContainsData(this IDataObject ido, string format) {
-            // NOTE used for live dnd dataObject state
+            // NOTE used for live dnd dataObjectLookup state
             // since IDataObject doesn't allow for format removal
             // when format disabled in drop widget the item isn't
             // removed (in WriteClipboardOrDropObjectAsync)

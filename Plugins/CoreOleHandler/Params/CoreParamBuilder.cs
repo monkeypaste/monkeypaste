@@ -1,10 +1,11 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia.Plugin;
+
 using MonkeyPaste.Common.Plugin;
 
 namespace CoreOleHandler {
     public class CoreParamBuilder : MpISupportHeadlessClipboardComponentFormat {
-        const int DEF_MAX_TEXT = 1_000_000;
+        const int DEF_MAX_TEXT = 100_000;
+        const int MAX_MAX_TEXT = 1_000_000;
         string PluginGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
         string IconDir => @".\Resources\Images";
 
@@ -59,7 +60,7 @@ namespace CoreOleHandler {
                     controlType = MpParameterControlType.Slider,
                     unitType = MpParameterValueUnitType.Integer,
                     minimum = 1,
-                    maximum = int.MaxValue,
+                    maximum = MAX_MAX_TEXT,
                     value = new MpPluginParameterValueFormat(tup.Item3.ToString(), true),
                     paramId = GetParamId(format, isReader, "maxcharcount")
                 });

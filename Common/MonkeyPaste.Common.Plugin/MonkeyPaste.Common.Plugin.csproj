@@ -34,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Formats\Components\Clipboard\" />
     <Folder Include="Formats\Components\Contact\" />
     <Folder Include="Formats\Components\Content\Action\Trigger\" />
   </ItemGroup>

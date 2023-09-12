@@ -22,16 +22,10 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
         public MpAvDataObject() : base() { }
         public MpAvDataObject(string format, object data) : base(format, data) { }
-        public MpAvDataObject(Dictionary<string, object> items, bool caseSensitive = false) : base(items, caseSensitive) { }
-        public MpAvDataObject(MpPortableDataObject mpdo) : this(mpdo.DataFormatLookup.ToDictionary(x => x.Key.Name, x => x.Value)) { }
-        //public override object GetData(string format) {
-        //    object base_result = base.GetData(format);
-        //    if (format == MpPortableDataFormats.AvFileNames &&
-        //        base_result is IEnumerable<IStorageItem> sil) {
-        //        return sil.Select(x => x.Path);
-        //    }
-        //    return base_result;
-        //}
+        public MpAvDataObject(Dictionary<string, object> items) : base(items) { }
+        public MpAvDataObject(MpPortableDataObject mpdo) :
+            this(mpdo.DataFormatLookup.ToDictionary(x => x.Key.Name, x => x.Value)) { }
+
         public override void SetData(string format, object data) {
             // NOTE this wrapper just ensures formats are saved properly 
             // mapping is done after obj created so nothing is overwritten if it was populated

@@ -1,5 +1,5 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia.Plugin;
+
 using MonkeyPaste.Common.Plugin;
 using Newtonsoft.Json;
 using System;
@@ -328,7 +328,7 @@ namespace MonkeyPaste.Avalonia {
             if (!needsFixing) {
                 try {
                     string manifestStr = MpFileIo.ReadTextFromFile(manifestPath);
-                    plugin = JsonConvert.DeserializeObject<MpAvPluginFormat>(manifestStr);
+                    plugin = JsonConvert.DeserializeObject<MpPluginFormat>(manifestStr);
                     plugin.RootDirectory = Path.GetDirectoryName(manifestPath);
 
                     if (!ValidatePluginDependencies(plugin)) {
@@ -422,7 +422,7 @@ namespace MonkeyPaste.Avalonia {
                     throw new MpUserNotifiedException($"Plugin error '{manifestPath}' must define 'analyzer' definition for '{component.GetType()}' which implements analyzer interface.");
                 }
             } else if (component is MpIOlePluginComponent &&
-                    (plugin is not MpAvPluginFormat avpf ||
+                    (plugin is not MpPluginFormat avpf ||
                     avpf.oleHandler == null)) {
                 throw new MpUserNotifiedException($"Plugin error '{manifestPath}' must define 'oleHandler' definition for '{component.GetType()}' which implements analyzer interface.");
             }
@@ -561,7 +561,7 @@ namespace MonkeyPaste.Avalonia {
                     if (hi_objs.OfType<MpISupportHeadlessAnalyzerComponentFormat>().FirstOrDefault()
                         is MpISupportHeadlessAnalyzerComponentFormat apf) {
                         plugin.analyzer = apf.GetFormat();
-                    } else if (plugin is MpAvPluginFormat avplugin && hi_objs.OfType<MpISupportHeadlessClipboardComponentFormat>().FirstOrDefault()
+                    } else if (plugin is MpPluginFormat avplugin && hi_objs.OfType<MpISupportHeadlessClipboardComponentFormat>().FirstOrDefault()
                                 is MpISupportHeadlessClipboardComponentFormat hccf) {
 
                         avplugin.oleHandler = hccf.GetFormats();
@@ -687,7 +687,7 @@ namespace MonkeyPaste.Avalonia {
             return $"{plugin.guid}.json";
         }
 
-        public static MpAvPluginFormat GetLastLoadedBackupPluginFormat(MpPluginFormat plugin) {
+        public static MpPluginFormat GetLastLoadedBackupPluginFormat(MpPluginFormat plugin) {
             if (!PluginManifestBackupFolderPath.IsDirectory()) {
                 return null;
             }
@@ -700,7 +700,7 @@ namespace MonkeyPaste.Avalonia {
             string backup_manifest_data = MpFileIo.ReadTextFromFile(backup_manifest_path);
             if (!string.IsNullOrWhiteSpace(backup_manifest_data)) {
                 try {
-                    return MpJsonConverter.DeserializeObject<MpAvPluginFormat>(backup_manifest_data);
+                    return MpJsonConverter.DeserializeObject<MpPluginFormat>(backup_manifest_data);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error deserializing backup manifest at path: '{backup_manifest_path}' with data: '{backup_manifest_data}' ex: ", ex);
@@ -711,9 +711,9 @@ namespace MonkeyPaste.Avalonia {
             string plugin_json_str = plugin.SerializeJsonObject();
             MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str, false);
 
-            return MpJsonConverter.DeserializeObject<MpAvPluginFormat>(plugin_json_str);
+            return MpJsonConverter.DeserializeObject<MpPluginFormat>(plugin_json_str);
         }
-        public static MpAvPluginFormat CreateLastLoadedBackupPluginFormat(MpPluginFormat plugin) {
+        public static MpPluginFormat CreateLastLoadedBackupPluginFormat(MpPluginFormat plugin) {
             if (!PluginManifestBackupFolderPath.IsDirectory()) {
                 try {
                     Directory.CreateDirectory(PluginManifestBackupFolderPath);
@@ -728,7 +728,7 @@ namespace MonkeyPaste.Avalonia {
             string plugin_json_str = plugin.SerializeJsonObject();
             MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str, false);
 
-            return MpJsonConverter.DeserializeObject<MpAvPluginFormat>(plugin_json_str);
+            return MpJsonConverter.DeserializeObject<MpPluginFormat>(plugin_json_str);
         }
 
         #endregion

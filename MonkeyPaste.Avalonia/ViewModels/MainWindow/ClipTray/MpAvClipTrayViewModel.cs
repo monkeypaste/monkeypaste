@@ -1904,13 +1904,17 @@ namespace MonkeyPaste.Avalonia {
                 if (ci_ctvm.HasModelChanged) {
                     // this means the model has been updated from the view model so ignore
                 } else {
-                    Dispatcher.UIThread.Post(async () => {
-                        await ci_ctvm.InitializeAsync(ci, ci_ctvm.QueryOffsetIdx);
-                        //wait for model to propagate then trigger view to reload
-                        if (ci_ctvm.GetContentView() is MpIContentView cv) {
-                            cv.LoadContentAsync().FireAndForgetSafeAsync();
-                        }
-                    });
+                    // BUG this gets called when it shouldn't when user is editing
+                    // which unexpands tile or further unintended things
+                    // disabling this is as close as I can get to fixing it
+                    // may mess up some important external updates, not sure...
+                    //Dispatcher.UIThread.Post(async () => {
+                    //    await ci_ctvm.InitializeAsync(ci, ci_ctvm.QueryOffsetIdx);
+                    //    //wait for model to propagate then trigger view to reload
+                    //    if (ci_ctvm.GetContentView() is MpIContentView cv) {
+                    //        cv.LoadContentAsync().FireAndForgetSafeAsync();
+                    //    }
+                    //});
                 }
                 return;
             }

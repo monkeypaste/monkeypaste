@@ -48,7 +48,24 @@
             <Setter Property="Background"
                     Value="DarkTurquoise" />
         </Style>
-
+        <Style Selector="ToggleButton#EditToggleButton:checked">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonSaveLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ToggleButton#EditToggleButton">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonEditLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!--  RESET/DELETE BUTTON  -->
 
         <Style Selector="Button#ResetOrDeleteButton:not(.canDelete) Image"
@@ -59,6 +76,25 @@
         <Style Selector="Button#ResetOrDeleteButton.canDelete Image">
             <Setter Property="Source"
                     Value="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource TrashCanImage}}" />
+        </Style>
+
+        <Style Selector="Button#ResetOrDeleteButton:not(.canDelete)">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonResetLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="Button#ResetOrDeleteButton.canDelete">
+            <Setter Property="ToolTip.Tip">
+                <Setter.Value>
+                    <Template>
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDeleteLabel}" />
+                    </Template>
+                </Setter.Value>
+            </Setter>
         </Style>
 
     </local:MpAvUserControl.Styles>
@@ -146,7 +182,7 @@
                                               IsChecked="{Binding !IsLabelReadOnly, Mode=OneWay}">
 
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="Edit Label" />
+                                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonEditLabel}" />
                                     </ToolTip.Tip>
                                     <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource EditImage}}" />
                                 </ToggleButton>
@@ -172,7 +208,8 @@
                                         <Image x:Name="StarOutline"
                                                IsVisible="{Binding !IsQuickAction}">
                                             <Image.Resources>
-                                                <SolidColorBrush x:Key="Brush0" Color="#FF000000" />
+                                                <SolidColorBrush x:Key="Brush0"
+                                                                 Color="#FF000000" />
                                             </Image.Resources>
                                             <DrawingImage>
                                                 <DrawingGroup>
@@ -189,8 +226,10 @@
                                         <Image x:Name="StarSolid"
                                                IsVisible="{Binding IsQuickAction}">
                                             <Image.Resources>
-                                                <SolidColorBrush x:Key="Brush0" Color="#FFF4B459" />
-                                                <SolidColorBrush x:Key="Brush1" Color="#FFE3A753" />
+                                                <SolidColorBrush x:Key="Brush0"
+                                                                 Color="#FFF4B459" />
+                                                <SolidColorBrush x:Key="Brush1"
+                                                                 Color="#FFE3A753" />
                                             </Image.Resources>
                                             <DrawingImage>
                                                 <DrawingGroup>
@@ -284,7 +323,7 @@
                                         local:MpAvPointerCommandExtension.IsEnabled="True"
                                         local:MpAvPointerCommandExtension.LeftPressCommand="{Binding DuplicateThisPresetCommand}">
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="Clone" />
+                                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDuplicateLabel}" />
                                     </ToolTip.Tip>
                                     <Grid DataContext="{Binding Parent}"
                                           x:DataType="local:MpAvAnalyticItemViewModel">
@@ -318,9 +357,6 @@
                                             <Binding Path="!IsGeneratedDefaultPreset" />
                                         </MultiBinding>
                                     </Classes.canDelete>
-                                    <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="Reset or Delete" />
-                                    </ToolTip.Tip>
                                     <Grid DataContext="{Binding Parent}"
                                           x:DataType="local:MpAvAnalyticItemViewModel">
                                         <Image />

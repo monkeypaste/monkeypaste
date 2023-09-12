@@ -297,7 +297,7 @@ namespace MonkeyPaste.Avalonia {
                 _rootResponseToken = JObject.Parse(responseStr);
             }
 
-            response_format.dataObject = CreateDataObject(_httpTransactionFormat.response.dataObject, _rootResponseToken.DeepClone());
+            response_format.dataObjectLookup = CreateDataObject(_httpTransactionFormat.response.dataObjectLookup, _rootResponseToken.DeepClone());
 
             //response_format.newContentItem = CreateNewContent(_httpTransactionFormat.response.newContentItem, _rootResponseToken.DeepClone());
             //response_format.annotations = CreateAnnotations(_httpTransactionFormat.response.annotations, _rootResponseToken.DeepClone());
@@ -309,7 +309,7 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
-            // dataObject format should have a json path as its value to be used as query for result
+            // dataObjectLookup format should have a json path as its value to be used as query for result
             // when format value empty return whole result
             Dictionary<string, object> result = new Dictionary<string, object>();
             foreach (var do_format in data_object_format) {

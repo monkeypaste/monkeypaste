@@ -1,5 +1,5 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia.Plugin;
+
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
         string MpIParameterHostViewModel.PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpAvPluginFormat PluginFormat => Parent == null ? null : Parent.PluginFormat;
+        public MpPluginFormat PluginFormat => Parent == null ? null : Parent.PluginFormat;
 
         MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => AnalyzerComponentFormat;
 
@@ -599,19 +599,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand ToggleEditLabelCommand => new MpCommand(
-            () => {
-                IsLabelReadOnly = !IsLabelReadOnly;
-            });
 
         public ICommand ToggleIsQuickActionCommand => new MpCommand(
             () => {
                 IsQuickAction = !IsQuickAction;
-            });
-
-        public ICommand ToggleIsLabelReadOnlyCommand => new MpCommand(
-            () => {
-                IsLabelReadOnly = !IsLabelReadOnly;
             });
 
         public ICommand ExecutePresetAnalysisOnSelectedContentCommand => new MpCommand(
@@ -624,6 +615,11 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return Parent.ExecuteAnalysisCommand.CanExecute(this);
             });
+        public ICommand ToggleIsLabelReadOnlyCommand => new MpCommand(
+            () => {
+                IsLabelReadOnly = !IsLabelReadOnly;
+            });
+
         public ICommand ResetThisPresetCommand => new MpCommand(
             () => {
                 Parent.ResetPresetCommand.Execute(this);

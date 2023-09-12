@@ -1,5 +1,5 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia.Plugin;
+
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -72,7 +72,9 @@ namespace MonkeyPaste.Avalonia {
             Items.Where(x => !x.IsWriter);
 
         public IEnumerable<MpAvHandledClipboardFormatViewModel> TitleSortedItems =>
-            Items.OrderBy(x => x.SelectorLabel);
+            Items
+            .Where(x => x.IsWriter == IsFilterForWriters)
+            .OrderBy(x => x.Title);
 
         public override MpAvHandledClipboardFormatViewModel SelectedItem { get; set; }
         #endregion
@@ -88,6 +90,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsFilterForWriters { get; set; }
         public int SelectedTitleSortedItemIdx {
             get {
                 return TitleSortedItems.IndexOf(SelectedItem);
@@ -120,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public MpAvPluginFormat PluginFormat { get; set; }
+        public MpPluginFormat PluginFormat { get; set; }
 
         public MpClipboardHandlerFormats ClipboardPluginFormat => PluginFormat == null ? null : PluginFormat.oleHandler;
 
@@ -144,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(MpPluginFormat pf) {
             IsBusy = true;
 
-            PluginFormat = pf as MpAvPluginFormat;
+            PluginFormat = pf as MpPluginFormat;
             bool is_plugin_valid = await ValidateClipboardHandlerAsync();
             if (!is_plugin_valid) {
                 PluginFormat = null;
@@ -203,6 +206,26 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.IsSelected = x == SelectedItem);
+                    OnPropertyChanged(nameof(SelectedTitleSortedItemIdx));
+                    if (SelectedItem == null) {
+                        IsFilterForWriters = false;
+                    } else {
+                        IsFilterForWriters = SelectedItem.IsWriter;
+                    }
+                    break;
+                case nameof(IsFilterForWriters):
+                    OnPropertyChanged(nameof(TitleSortedItems));
+                    if (!TitleSortedItems.Contains(SelectedItem)) {
+                        // on io toggle try to select format compliment
+                        MpAvHandledClipboardFormatViewModel to_select = TitleSortedItems.FirstOrDefault();
+                        if (SelectedItem != null &&
+                            TitleSortedItems.FirstOrDefault(x => x.HandledFormat == SelectedItem.HandledFormat)
+                                is MpAvHandledClipboardFormatViewModel compliment_vm) {
+                            to_select = compliment_vm;
+                        }
+                        SelectedItem = to_select;
+                        OnPropertyChanged(nameof(SelectedTitleSortedItemIdx));
+                    }
                     break;
                 case nameof(SelectedTitleSortedItemIdx):
                     Parent.OnPropertyChanged(nameof(Parent.SelectedPresetViewModel));
@@ -300,7 +323,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                PluginFormat = (await MpPluginLoader.ReloadPluginAsync(Path.Combine(PluginFormat.RootDirectory, "manifest.json"))) as MpAvPluginFormat;
+                PluginFormat = (await MpPluginLoader.ReloadPluginAsync(Path.Combine(PluginFormat.RootDirectory, "manifest.json"))) as MpPluginFormat;
                 // loop through another validation pass
                 return await ValidateClipboardHandlerAsync();
             }
@@ -315,6 +338,9 @@ namespace MonkeyPaste.Avalonia {
             return icon.Id;
         }
 
+        #endregion
+
+        #region Commands
         #endregion
     }
 }

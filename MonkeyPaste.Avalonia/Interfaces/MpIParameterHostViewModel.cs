@@ -1,10 +1,9 @@
-﻿using MonkeyPaste.Common.Avalonia.Plugin;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common.Plugin;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpIParameterHostViewModel : MpIViewModel {
         int IconId { get; }
-        MpAvPluginFormat PluginFormat { get; }
+        MpPluginFormat PluginFormat { get; }
         MpParameterHostBaseFormat ComponentFormat { get; }
         MpParameterHostBaseFormat BackupComponentFormat { get; }
         string PluginGuid { get; }

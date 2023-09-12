@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
             if (ido is MpAvDataObject ido_mpdo) {
                 return ido_mpdo;
             }
-            // will only be avalonia dataObject
+            // will only be avalonia dataObjectLookup
             var avdo = new MpAvDataObject();
             if (ido == null) {
                 return avdo;

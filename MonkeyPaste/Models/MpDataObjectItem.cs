@@ -50,7 +50,7 @@ namespace MonkeyPaste {
             int itemIconId = 0,
             bool suppressWrite = false) {
             if (dataObjectId <= 0) {
-                throw new Exception("Must have valid dataObject id, id is " + dataObjectId);
+                throw new Exception("Must have valid dataObjectLookup id, id is " + dataObjectId);
             }
 
             var ndio = new MpDataObjectItem() {

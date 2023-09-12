@@ -3,7 +3,6 @@ using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System.Text;
 
@@ -32,13 +31,13 @@ namespace AltOleHandler {
             IDataObject avdo = null;
             IEnumerable<string> availableFormats = null;
             // only actually read formats found for data
-            if (request.oleData == null) {
+            if (request.dataObjectLookup == null) {
                 // clipboard read
                 //await Util.WaitForClipboard();
                 availableFormats = await AltOleHelpers.ClipboardRef.GetFormatsSafeAsync();
                 //Util.CloseClipboard();
-            } else if (request.oleData is IDataObject) {
-                avdo = request.oleData as IDataObject;
+            } else {
+                avdo = request.dataObjectLookup.ToDataObject();
 
                 try {
 
@@ -99,7 +98,7 @@ namespace AltOleHandler {
             }
 
             return new MpOlePluginResponse() {
-                oleData = read_output,
+                dataObjectLookup = read_output.ToDictionary(),
                 userNotifications = nfl,
                 errorMessage = string.Join(Environment.NewLine, exl)
             };

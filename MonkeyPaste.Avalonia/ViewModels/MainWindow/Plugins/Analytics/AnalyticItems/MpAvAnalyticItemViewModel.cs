@@ -1,6 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Avalonia.Plugin;
+
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -11,13 +11,15 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAnalyticItemViewModel :
-        MpAvTreeSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>,
+        //MpAvTreeSelectorViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>,
+        MpAvPresetParamHostViewModelBase<MpAvAnalyticItemCollectionViewModel, MpAvAnalyticItemPresetViewModel>,
         MpISelectableViewModel,
         MpIAsyncCollectionObject,
         MpIHoverableViewModel,
         MpIAsyncComboBoxItemViewModel,
-        MpIMenuItemViewModel,
-        MpIParameterHostViewModel {
+        MpIMenuItemViewModel
+        //MpIParameterHostViewModel 
+        {
         #region Private Variables
         #endregion
 
@@ -25,22 +27,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Implementation
 
-        int MpIParameterHostViewModel.IconId => PluginIconId;
-        public string PluginGuid =>
+        public override int IconId => PluginIconId;
+        public override string PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpAvPluginFormat PluginFormat { get; set; }
+        private MpPluginFormat _pluginFormat;
+        public override MpPluginFormat PluginFormat => _pluginFormat;
 
-        MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => AnalyzerComponentFormat;
+        public override MpParameterHostBaseFormat ComponentFormat => AnalyzerComponentFormat;
 
-        MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
+        public override MpParameterHostBaseFormat BackupComponentFormat =>
             PluginFormat == null || PluginFormat.backupCheckPluginFormat == null || PluginFormat.backupCheckPluginFormat.analyzer == null ?
                 null : PluginFormat.backupCheckPluginFormat.analyzer;
 
         public MpAnalyzerPluginFormat AnalyzerComponentFormat =>
             PluginFormat == null ? null : PluginFormat.analyzer;
 
-        public MpIPluginComponentBase PluginComponent =>
+        public override MpIPluginComponentBase PluginComponent =>
             PluginFormat == null || PluginFormat.Components == null ?
                 null :
                 PluginFormat.Components.FirstOrDefault() as MpIPluginComponentBase;
@@ -361,7 +364,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = true;
 
-            PluginFormat = analyzerPlugin as MpAvPluginFormat;
+            _pluginFormat = analyzerPlugin as MpPluginFormat;
 
             if (PluginComponent == null) {
                 throw new Exception("Cannot find component");
@@ -723,8 +726,8 @@ namespace MonkeyPaste.Avalonia {
                         rci.WasDupOnCreate = rci.Id == sourceCopyItem.Id;
                         await MpAvClipTrayViewModel.Instance.AddUpdateOrAppendCopyItemAsync(rci);
                     } else if (result_trans.Response != null &&
-                                result_trans.Response.dataObject != null &&
-                                new MpAvDataObject(result_trans.Response.dataObject) is MpAvDataObject avdo) {
+                                result_trans.Response.dataObjectLookup != null &&
+                                new MpAvDataObject(result_trans.Response.dataObjectLookup) is MpAvDataObject avdo) {
                         result_trans.ResponseContent = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false);
                     }
                     LastTransaction = result_trans;

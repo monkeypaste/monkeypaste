@@ -1,5 +1,6 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia.Plugin;
+﻿using DynamicData;
+using MonkeyPaste.Common;
+
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,10 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvHandledClipboardFormatViewModel :
-        MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerItemViewModel, MpAvClipboardFormatPresetViewModel>,
+        //MpAvTreeSelectorViewModelBase<MpAvClipboardHandlerItemViewModel, MpAvClipboardFormatPresetViewModel>,
+        MpAvPresetParamHostViewModelBase<MpAvClipboardHandlerItemViewModel, MpAvClipboardFormatPresetViewModel>,
         MpISelectableViewModel,
-        MpIParameterHostViewModel,
+        //MpIParameterHostViewModel,
         MpIHoverableViewModel {
         #region Private Variables
         #endregion
@@ -45,12 +47,20 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIParameterHost Implementation
 
-        int MpIParameterHostViewModel.IconId => HandledFormatIconId;
-        public string PluginGuid => FormatGuid;
+        public override MpPluginFormat PluginFormat {
+            get {
+                if (Parent == null) {
+                    return null;
+                }
+                return Parent.PluginFormat;
+            }
+        }
+        public override int IconId => HandledFormatIconId;
+        public override string PluginGuid => FormatGuid;
 
-        MpParameterHostBaseFormat MpIParameterHostViewModel.ComponentFormat => ClipboardPluginFormat;
+        public override MpParameterHostBaseFormat ComponentFormat => ClipboardPluginFormat;
 
-        MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>
+        public override MpParameterHostBaseFormat BackupComponentFormat =>
             PluginFormat == null ||
             PluginFormat.backupCheckPluginFormat == null ||
             PluginFormat.backupCheckPluginFormat.oleHandler == null ||
@@ -60,7 +70,7 @@ namespace MonkeyPaste.Avalonia {
                 IsReader ?
                     PluginFormat.backupCheckPluginFormat.oleHandler.readers.FirstOrDefault(x => x.formatGuid == FormatGuid) :
                     PluginFormat.backupCheckPluginFormat.oleHandler.writers.FirstOrDefault(x => x.formatGuid == FormatGuid);
-        public MpIPluginComponentBase PluginComponent => ClipboardPluginComponent;
+        public override MpIPluginComponentBase PluginComponent => ClipboardPluginComponent;
 
         public string FormatGuid { get; private set; }
 
@@ -99,14 +109,6 @@ namespace MonkeyPaste.Avalonia {
                                     PluginFormat.oleHandler.writers.Any(x => x.formatGuid == FormatGuid); //ClipboardPluginComponent is MpIOleReaderComponent;
 
 
-        public MpAvPluginFormat PluginFormat {
-            get {
-                if (Parent == null) {
-                    return null;
-                }
-                return Parent.PluginFormat;
-            }
-        }
         #endregion
 
         #endregion
@@ -228,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public string SelectorLabel =>
-            $"{Title} ({(IsReader ? "Reader" : "Writer")})";
+            $"{Title} ({HandledFormat})";
 
         public string Description {
             get {
@@ -425,6 +427,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(SelectedItem):
                     Parent.Parent.OnPropertyChanged(nameof(Parent.Parent.SelectedPresetViewModel));
                     break;
+                case nameof(Title):
+                    OnPropertyChanged(nameof(SelectorLabel));
+                    break;
             }
         }
 
@@ -484,68 +489,129 @@ namespace MonkeyPaste.Avalonia {
                  if (SelectedItem == null && Items.Count > 0) {
                      SelectedItem = Items.AggregateOrDefault((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                  }
-                 //if (!Parent.Parent.IsSidebarVisible) {
-                 //    Parent.Parent.IsSidebarVisible = true;
-                 //}
                  MpAvSidebarItemCollectionViewModel.Instance.SelectSidebarItemCommand.Execute(Parent.Parent);
                  OnPropertyChanged(nameof(SelectedItem));
 
              });
 
-        public ICommand DeletePresetCommand => new MpAsyncCommand<MpAvClipboardFormatPresetViewModel>(
-            async (presetVm) => {
-                if (presetVm.IsDefault) {
-                    return;
-                }
+
+        public ICommand DeletePresetCommand => new MpAsyncCommand<object>(
+            async (presetVmArg) => {
+                // NOTE delete will never get trnasaction type of parameter so it can be ignored
                 IsBusy = true;
 
+                var presetVm = presetVmArg as MpAvClipboardFormatPresetViewModel;
                 foreach (var presetVal in presetVm.Items) {
                     await presetVal.PresetValueModel.DeleteFromDatabaseAsync();
                 }
                 await presetVm.Preset.DeleteFromDatabaseAsync();
 
                 IsBusy = false;
+            },
+            (presetVmArg) => {
+                if (presetVmArg is MpAvClipboardFormatPresetViewModel aipvm &&
+                     aipvm.CanDelete(null)) {
+                    return true;
+                } else if (presetVmArg is object[] argParts &&
+                        argParts[0] is MpAvClipboardFormatPresetViewModel trans_aipvm) {
+                    return trans_aipvm.CanDelete(argParts[1]);
+                }
+                return false;
             });
-
-        public ICommand ResetDefaultPresetCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand ResetPresetCommand => new MpAsyncCommand<object>(
+            async (presetVmArg) => {
+                MpConsole.WriteLine("Resetting...");
                 IsBusy = true;
 
-                var defvm = Items.FirstOrDefault(x => x.IsDefault);
-                if (defvm == null) {
-                    throw new Exception("Analyzer is supposed to have a default preset");
+                MpAvClipboardFormatPresetViewModel aipvm = null;
+                if (presetVmArg is MpAvClipboardFormatPresetViewModel arg_vm) {
+                    aipvm = arg_vm;
+                } else if (presetVmArg is object[] argParts &&
+                        argParts[0] is MpAvClipboardFormatPresetViewModel trans_aipvm) {
+                    aipvm = trans_aipvm;
+                    if (argParts[1] is MpOlePluginRequest aprf) {
+                        // loop through req settings and set preset to those values
+                        foreach (var req_kvp in aprf.items) {
+                            if (aipvm.Items.FirstOrDefault(x => x.ParamId == req_kvp.paramId) is MpAvParameterViewModelBase pvm) {
+                                pvm.CurrentValue = req_kvp.value;
+                            } else {
+                                MpConsole.WriteLine($"Param req item id '{req_kvp.paramId}' w/ value '{req_kvp.value}' not found on preset '{aipvm}'");
+                            }
+                        }
+                        IsBusy = false;
+                        return;
+                    }
+                }
+                if (aipvm == null) {
+                    IsBusy = false;
+                    return;
                 }
 
+                Dictionary<string, string> shared_params_to_clear_or_restore = new Dictionary<string, string>();
+                foreach (var sp in aipvm.Items.Where(x => x.IsSharedValue)) {
+                    shared_params_to_clear_or_restore.Add(sp.ParamId.ToString(), sp.CurrentValue);
+                }
+
+                if (shared_params_to_clear_or_restore.Any()) {
+                    // ntf w/ yes/no/cancel to reset shared values
+                    var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
+                        title: UiStrings.CommonNtfConfirmTitle,
+                        message: $"'{aipvm.Label}' contains shared values. Would you like to reset those as well?",
+                        iconResourceObj: "QuestionMarkImage",
+                        owner: MpAvWindowManager.MainWindow);
+                    if (result.IsNull()) {
+                        // cancel
+                        IsBusy = false;
+                        return;
+                    }
+                    if (result.IsTrue()) {
+                        // clear shared values
+                        foreach (var kvp in shared_params_to_clear_or_restore) {
+                            shared_params_to_clear_or_restore[kvp.Key] = string.Empty;
+                        }
+                    }
+                }
                 // recreate default preset record (name, icon, etc.)
                 var defaultPresetModel = await MpAvPluginPresetLocator.CreateOrResetManifestPresetModelAsync(
-                    this, defvm.PresetGuid, Items.IndexOf(defvm));
-
-                // store IsEnabled to current state
-                bool wasEnabled = defvm.IsEnabled;
+                    this, aipvm.PresetGuid, Items.IndexOf(aipvm));
 
                 // before initializing preset remove current values from db or it won't reset values
-                await Task.WhenAll(defvm.Items.Select(x => x.PresetValueModel.DeleteFromDatabaseAsync()));
+                await Task.WhenAll(aipvm.Items.Select(x => x.PresetValueModel.DeleteFromDatabaseAsync()));
 
-                await defvm.InitializeAsync(defaultPresetModel);
+                await aipvm.InitializeAsync(defaultPresetModel);
 
-                Items.ForEach(x => x.IsSelected = x.PresetId == defvm.PresetId);
+                if (shared_params_to_clear_or_restore.Any()) {
+                    // update shared values and trigger db write for other instance updates
+                    foreach (var shared_param_to_restore in shared_params_to_clear_or_restore) {
+                        var cur_param = aipvm.Items.FirstOrDefault(x => x.ParamId.ToString() == shared_param_to_restore.Key);
+                        MpDebug.Assert(cur_param != null, $"Can't find shared param '{shared_param_to_restore.Key}'");
+                        cur_param.CurrentValue = shared_param_to_restore.Value;
+                        cur_param.SaveCurrentValueCommand.Execute(null);
+                    }
+                }
+                Items.ForEach(x => x.IsSelected = x.PresetId == aipvm.PresetId);
                 OnPropertyChanged(nameof(SelectedItem));
 
-                if (wasEnabled) {
-                    MpAvClipboardHandlerCollectionViewModel.Instance.ToggleFormatPresetIsEnabled.Execute(defvm);
-                }
-
                 IsBusy = false;
+            },
+            (presetVmArg) => {
+                if (presetVmArg is MpAvClipboardFormatPresetViewModel aipvm &&
+                     !aipvm.CanDelete(null)) {
+                    return true;
+                } else if (presetVmArg is object[] argParts &&
+                        argParts[0] is MpAvClipboardFormatPresetViewModel trans_aipvm) {
+                    return !trans_aipvm.CanDelete(argParts[1]);
+                }
+                return false;
             });
-
 
         public ICommand ResetOrDeletePresetCommand => new MpCommand<object>(
             (presetVmArg) => {
-                //if (ResetPresetCommand.CanExecute(presetVmArg)) {
-                //    ResetPresetCommand.Execute(presetVmArg);
-                //} else {
-                //    DeletePresetCommand.Execute(presetVmArg);
-                //}
+                if (ResetPresetCommand.CanExecute(presetVmArg)) {
+                    ResetPresetCommand.Execute(presetVmArg);
+                } else {
+                    DeletePresetCommand.Execute(presetVmArg);
+                }
             }, (presetVmArg) => {
                 return presetVmArg is MpAvClipboardFormatPresetViewModel;
             });
@@ -572,11 +638,14 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CreateNewPresetCommand => new MpAsyncCommand(
             async () => {
                 IsBusy = true;
+                var def_icon = await MpDataModelProvider.GetItemAsync<MpIcon>(HandledFormatIconId);
+
+                var np_icon = await def_icon.CloneDbModelAsync();
 
                 MpPluginPreset newPreset = await MpPluginPreset.CreateOrUpdateAsync(
                         pluginGuid: FormatGuid,
-                        //format: ClipboardPluginFormat,
-                        iconId: HandledFormatIconId,
+                        sortOrderIdx: Items.Count,
+                        iconId: np_icon.Id,
                         label: GetUniquePresetName());
 
                 var npvm = await CreatePresetViewModelAsync(newPreset);

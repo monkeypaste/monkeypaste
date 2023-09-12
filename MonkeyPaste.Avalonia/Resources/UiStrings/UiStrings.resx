@@ -339,13 +339,10 @@
   <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
     <value>Dismiss</value>
   </data>
-  <data name="SearchCriteriaHeaderDuplicateButtonLabel" xml:space="preserve">
-    <value>Duplicate</value>
-  </data>
   <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
     <value>Refresh</value>
   </data>
-  <data name="SearchCriteriaHeaderSaveButtonLabel" xml:space="preserve">
+  <data name="CommonSaveLabel" xml:space="preserve">
     <value>Save</value>
   </data>
   <data name="AccountNextRemoveToolTipText" xml:space="preserve">
@@ -401,5 +398,29 @@
   </data>
   <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
     <value>- Please Select -</value>
+  </data>
+  <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
+    <value>Formats</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
+    <value>Readers</value>
+  </data>
+  <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
+    <value>Writers</value>
+  </data>
+  <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
+    <value>Handlers</value>
+  </data>
+  <data name="CommonDeleteLabel" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="CommonDuplicateLabel" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="CommonEditLabel" xml:space="preserve">
+    <value>Edit Name</value>
+  </data>
+  <data name="CommonResetLabel" xml:space="preserve">
+    <value>Reset</value>
   </data>
 </root>

@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Avalonia.Plugin;
+
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -260,7 +260,7 @@ namespace MonkeyPaste.Avalonia {
         public string PluginGuid =>
             PluginFormat == null ? string.Empty : PluginFormat.guid;
 
-        public MpAvPluginFormat PluginFormat { get; set; }
+        public MpPluginFormat PluginFormat { get; set; }
 
         public MpParameterHostBaseFormat ComponentFormat => ActionComponentFormat;
         MpParameterHostBaseFormat MpIParameterHostViewModel.BackupComponentFormat =>

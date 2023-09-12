@@ -3,7 +3,6 @@ using Avalonia.Input;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Avalonia.Plugin;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -16,6 +15,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardHandlerCollectionViewModel :
         MpAvTreeSelectorViewModelBase<object, MpAvClipboardHandlerItemViewModel>,
+        MpITreeItemViewModel,
         MpIMenuItemViewModel,
         MpISidebarItemViewModel,
         MpIAsyncCollectionObject,
@@ -37,7 +37,6 @@ namespace MonkeyPaste.Avalonia {
         #region MpITreeItemViewModel Implementation
 
         public override MpITreeItemViewModel ParentTreeItem => null;
-
         #endregion
 
         #region MpIAsyncComboBoxViewModel Implementation
@@ -155,7 +154,7 @@ namespace MonkeyPaste.Avalonia {
         }
         async Task MpIPlatformDataObjectTools.UpdateDragDropDataObjectAsync(object source, object target) {
             // NOTE this is called during a drag drop when user toggles a format preset
-            // source should be the initial output of ContentView dataObject and should
+            // source should be the initial output of ContentView dataObjectLookup and should
             // have the highest fidelity of data on it for conversions
             // NOTE DO NOT re-instantiate target haven't tested but I
             // imagine the reference must persist that which was given to .DoDragDrop in StartDragging
@@ -196,7 +195,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties       
 
         #region View Models
-
         public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpAvMenuItemViewModel() {
@@ -414,11 +412,8 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpClipboardHandlerCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsHovering):
-                case nameof(IsAnySelected):
-                    break;
                 case nameof(Items):
-                    OnPropertyChanged(nameof(Children));
+                    //OnPropertyChanged(nameof(Children));
                     break;
                 case nameof(SelectedPresetViewModel):
                     if (SelectedPresetViewModel == null) {
@@ -493,7 +488,7 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
 
-                hivm.PluginFormat = (MpAvPluginFormat)await MpPluginLoader.ReloadPluginAsync(Path.Combine(hivm.PluginFormat.RootDirectory, "manifest.json"));
+                hivm.PluginFormat = (MpPluginFormat)await MpPluginLoader.ReloadPluginAsync(Path.Combine(hivm.PluginFormat.RootDirectory, "manifest.json"));
                 // loop through another validation pass
                 return await ValidateHandlerFormatsAsync(hivm);
             }
@@ -553,6 +548,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             // instantiate new ido for output
+            Dictionary<string, object> dataLookup = ido.ToDictionary();
             var avdo = new MpAvDataObject();
 
             // only make 1 request per component
@@ -560,7 +556,7 @@ namespace MonkeyPaste.Avalonia {
                 // req to component contains unprocessed input ido
                 // with only the formats/params for the custom or def enabled presets 
                 var req = new MpOlePluginRequest() {
-                    oleData = ido,
+                    dataObjectLookup = dataLookup,
                     isDnd = isDnd,
                     ignoreParams = ignorePlugins,
                     formats =
@@ -593,9 +589,9 @@ namespace MonkeyPaste.Avalonia {
                     resp,
                     retryHandlerFunc);
 
-                if (resp != null && resp.oleData is IDataObject processed_ido) {
+                if (resp != null && resp.dataObjectLookup != null) {
                     // set resp ido formats in output ido
-                    processed_ido.GetAllDataFormats().ForEach(x => avdo.SetData(x, processed_ido.Get(x)));
+                    resp.dataObjectLookup.ForEach(kvp => avdo.SetData(kvp.Key, kvp.Value));
                 }
             }
             // unmark busy for next ole comm
@@ -672,7 +668,6 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(EnabledFormats));
                 OnPropertyChanged(nameof(FormatViewModels));
             }, (presetVmArg) => presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm && cfpvm.IsReader);
-
 
         public ICommand ToggleFormatPresetIsWriteEnabledCommand => new MpCommand<object>(
             (presetVmArg) => {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 
@@ -45,7 +44,7 @@ namespace MonkeyPaste.Common {
         public MpPortableDataObject(string format, object data) : this() {
             SetData(format, data);
         }
-        public MpPortableDataObject(Dictionary<string, object> formatDataLookup, bool caseSensitive = true) : this() {
+        public MpPortableDataObject(Dictionary<string, object> formatDataLookup) : this() {
             if (formatDataLookup != null) {
                 formatDataLookup.ForEach(x => SetData(x.Key, x.Value));
             }

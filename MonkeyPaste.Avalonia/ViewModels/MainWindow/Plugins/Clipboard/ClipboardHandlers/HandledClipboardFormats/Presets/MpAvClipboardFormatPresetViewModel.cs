@@ -1,6 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using MonkeyPaste.Common.Avalonia.Plugin;
+
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+
     public class MpAvClipboardFormatPresetViewModel :
         MpAvSelectorViewModelBase<MpAvHandledClipboardFormatViewModel, MpAvParameterViewModelBase>,
         MpISelectableViewModel,
@@ -105,12 +106,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string ResetOrDeleteLabel => $"{(IsManifestPreset ? "Reset" : "Delete")} '{Label}'";
-
         #endregion
 
         #region State
-
+        public bool IsGeneratedDefaultPreset {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                if (Parent.Items.Any(x => x.IsManifestPreset)) {
+                    // default won't be generated if plugin comes w/ presets
+                    return false;
+                }
+                // lowest id will be generated preset
+                return Parent.Items.OrderBy(x => x.PresetId).FirstOrDefault() == this;
+            }
+        }
         public bool IsManifestPreset =>
             Parent == null ?
                 false :
@@ -388,6 +399,13 @@ namespace MonkeyPaste.Avalonia {
         public string GetPresetParamJson() {
             return MpJsonConverter.SerializeObject(Items.Select(x => new[] { x.ParamId, x.CurrentValue }).ToList());
         }
+
+        public bool CanDelete(object args) {
+            if (args == null) {
+                return !IsManifestPreset && !IsGeneratedDefaultPreset;
+            }
+            return false;
+        }
         #endregion
 
         #region Protected Methods
@@ -432,7 +450,18 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand<object> TogglePresetIsEnabledCommand => new MpAsyncCommand<object>(
             async (args) => {
                 if (args == null) {
-                    IsEnabled = !IsEnabled;
+                    // default enable toggle
+                    bool will_enable = !IsEnabled;
+                    if (will_enable) {
+                        // NOTE when enabling to true disable all other
+                        // presets w/ same io and format types
+                        MpAvClipboardHandlerCollectionViewModel.Instance
+                        .AllPresets
+                        .Where(x => x.IsReader == IsReader && x.FormatName == FormatName)
+                        .ForEach(x => x.IsEnabled = x == this);
+                    } else {
+                        IsEnabled = false;
+                    }
                     return;
                 }
                 bool cur_def_enabled = IsEnabled;
@@ -444,19 +473,6 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpDebug.Assert(avm != null, $"Error toggling preset for arg '{args}'");
 
-                //if (IsReader && avm.OleFormatInfos.IsReaderDefault) {
-                //    // initial custom preset, before toggling create snapshot of defaults to use for toggling
-                //    await Task.WhenAll(
-                //        MpAvClipboardHandlerCollectionViewModel.Instance.EnabledReaders
-                //        .Select(x => avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(x.PresetId)));
-                //} else if (IsWriter && avm.OleFormatInfos.IsWriterDefault) {
-                //    // initial custom preset, before toggling create snapshot of defaults to use for toggling
-                //    await Task.WhenAll(
-                //        MpAvClipboardHandlerCollectionViewModel.Instance.EnabledWriters
-                //        .Select(x => avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(x.PresetId)));
-                //}
-
-
                 if (avm.OleFormatInfos.GetAppOleFormatInfoByPresetId(PresetId) is MpAvAppOlePresetViewModel aofivm) {
                     // format exists, remove
                     await avm.OleFormatInfos.RemoveAppOlePresetViewModelByPresetIdAsync(PresetId);
@@ -466,7 +482,48 @@ namespace MonkeyPaste.Avalonia {
 
             });
 
+        public ICommand ToggleIsLabelReadOnlyCommand => new MpCommand(
+            () => {
+                IsLabelReadOnly = !IsLabelReadOnly;
+            });
 
+        public ICommand ResetThisPresetCommand => new MpCommand(
+            () => {
+                Parent.ResetOrDeletePresetCommand.Execute(this);
+            }, () => {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.ResetPresetCommand.CanExecute(this);
+            });
+
+        public ICommand DeleteThisPresetCommand => new MpCommand(
+            () => {
+                Parent.DeletePresetCommand.Execute(this);
+            }, () => {
+                if (Parent == null) {
+                    return false;
+                }
+                return Parent.DeletePresetCommand.CanExecute(this);
+            });
+
+        public ICommand ResetOrDeleteThisPresetCommand => new MpCommand<object>(
+            (args) => {
+                if (args == null) {
+                    // called from sidebar preset grid
+                    Parent.ResetOrDeletePresetCommand.Execute(this);
+                    return;
+                }
+                Parent.ResetOrDeletePresetCommand.Execute(new object[] { this, args });
+            });
+
+        public ICommand DuplicateThisPresetCommand => new MpCommand(
+            () => {
+                if (Parent == null) {
+                    return;
+                }
+                Parent.DuplicatePresetCommand.Execute(this);
+            });
         #endregion
     }
 }

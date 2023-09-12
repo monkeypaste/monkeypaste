@@ -78,8 +78,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E5EED861-0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AltOleHandler", "Plugins\AltOleHandler\AltOleHandler.csproj", "{8F8097D3-B754-4B54-82B3-53F7F1E2F5D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.Common.Avalonia.Plugin", "Common\MonkeyPaste.Common.Avalonia.Plugin\MonkeyPaste.Common.Avalonia.Plugin.csproj", "{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1223,48 +1221,6 @@ Global
 		{8F8097D3-B754-4B54-82B3-53F7F1E2F5D4}.Release|x64.Build.0 = Release|x64
 		{8F8097D3-B754-4B54-82B3-53F7F1E2F5D4}.Release|x86.ActiveCfg = Release|x86
 		{8F8097D3-B754-4B54-82B3-53F7F1E2F5D4}.Release|x86.Build.0 = Release|x86
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|ARM.Build.0 = Debug|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|x64.ActiveCfg = Debug|x64
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|x64.Build.0 = Debug|x64
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|x86.ActiveCfg = Debug|x86
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Debug|x86.Build.0 = Debug|x86
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|Any CPU.Build.0 = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|ARM.ActiveCfg = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|ARM.Build.0 = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|ARM64.ActiveCfg = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|ARM64.Build.0 = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|iPhone.ActiveCfg = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|iPhone.Build.0 = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|x64.ActiveCfg = Release|x64
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|x64.Build.0 = Release|x64
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|x86.ActiveCfg = Release|x86
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Nuget_Release|x86.Build.0 = Release|x86
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|ARM.ActiveCfg = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|ARM.Build.0 = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|ARM64.Build.0 = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|iPhone.Build.0 = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|x64.ActiveCfg = Release|x64
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|x64.Build.0 = Release|x64
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|x86.ActiveCfg = Release|x86
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1286,11 +1242,10 @@ Global
 		{1A3788A7-1387-4327-8E9F-14E90ED1F7A3} = {E5EED861-066B-42FA-9975-7067762B2D85}
 		{E5EED861-066B-42FA-9975-7067762B2D85} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
 		{8F8097D3-B754-4B54-82B3-53F7F1E2F5D4} = {D87F8DC2-8DB2-444D-BF8A-2D592009864A}
-		{30AFD5B6-B311-4FC6-A805-A9966AE61AA1} = {E0839402-4D82-4FF2-8778-A2E538ABCEAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_AutoCreateNewLanguageFiles = True
-		RESX_RemoveEmptyEntries = False
 		SolutionGuid = {712D1144-9FDB-4394-AE3C-DA16C9FBE394}
+		RESX_RemoveEmptyEntries = False
+		RESX_AutoCreateNewLanguageFiles = True
 	EndGlobalSection
 EndGlobal

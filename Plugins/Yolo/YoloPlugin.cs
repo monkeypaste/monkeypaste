@@ -104,7 +104,7 @@ namespace Yolo {
                         string ann_json = rootNode.SerializeJsonObject();
 
                         var resp = new MpAnalyzerPluginResponseFormat() {
-                            dataObject = new Dictionary<string, object> {
+                            dataObjectLookup = new Dictionary<string, object> {
                                 { MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, ann_json }
                             }
                         };

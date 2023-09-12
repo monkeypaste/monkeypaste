@@ -1,5 +1,5 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia.Plugin;
+
 using MonkeyPaste.Common.Plugin;
 
 namespace AltOleHandler {

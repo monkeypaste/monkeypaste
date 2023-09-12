@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Common.Plugin {
-
+    public abstract class MpPluginRequestFormatBase : MpPluginMessageFormatBase { }
     public class MpPluginParameterRequestFormat : MpPluginRequestFormatBase {
         public static MpPluginParameterRequestFormat Parse(string json) {
             var req_lookup = MpJsonConverter.DeserializeObject<Dictionary<string, object>>(json);

@@ -100,7 +100,7 @@ namespace ComputerVision {
                     label = "Azure Image Analysis",
                     children = annotations
                 };
-                resp.dataObject = new Dictionary<string, object>() {
+                resp.dataObjectLookup = new Dictionary<string, object>() {
                     { MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, root_annotation.SerializeJsonObject()} };
             }
 

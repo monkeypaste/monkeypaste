@@ -449,6 +449,7 @@ namespace MonkeyPaste.Avalonia {
             if (control is MpAvIResizableControl rc) {
                 control = rc.ResizerControl;
             }
+
             if (control == null) {
                 onComplete?.Invoke();
                 return;
