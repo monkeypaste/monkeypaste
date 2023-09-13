@@ -249,6 +249,15 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand ExitApplicationCommand => new MpCommand<object>(
             (args) => {
+                if (args is string argStr &&
+                    argStr == "welcome") {
+                    // This should only be able to occur before actual app is loaded
+                    // and before welcome moves to 'forget' state
+                    // if user closes welcome window, pref file still exists
+                    // so welcome still shows up but rest of app doesn't think its 
+                    // initial startup. So delete storage dir here to clean everything up
+                    MpFileIo.DeleteDirectory(Mp.Services.PlatformInfo.StorageDir);
+                }
                 Mp.Services.ShutdownHelper.ShutdownApp($"systray cmd - '{args.ToStringOrEmpty("no detail (likely quit cmd) ")}'");
             });
 

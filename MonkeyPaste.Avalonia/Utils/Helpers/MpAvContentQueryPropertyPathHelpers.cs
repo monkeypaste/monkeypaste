@@ -14,6 +14,7 @@ namespace MonkeyPaste.Avalonia {
             hiddenPaths = hiddenPaths ?? new List<MpContentQueryPropertyPathType>();
 
             var adv_mivm = new MpAvMenuItemViewModel() {
+                HasLeadingSeparator = true,
                 Header = "Advanced",
                 IconResourceKey = "CogImage",
                 SubItems =
@@ -46,7 +47,12 @@ namespace MonkeyPaste.Avalonia {
                     pt_mivm.IconResourceKey = GetGroupIconResourceKey(gt);
                     root_mivml.Add(pt_mivm);
                 } else {
-                    adv_mivm.SubItems[(int)gt - 1].SubItems.Add(pt_mivm);
+                    //adv_mivm.SubItems[(int)gt - 1].SubItems.Add(pt_mivm);
+                    if (adv_mivm.SubItems is List<MpAvMenuItemViewModel> adv_sub_mivml &&
+                        adv_sub_mivml[(int)gt - 1] is MpAvMenuItemViewModel gt_mivm &&
+                        gt_mivm.SubItems is List<MpAvMenuItemViewModel> gt_sub_mivml) {
+                        gt_sub_mivml.Add(pt_mivm);
+                    }
                 }
             }
 

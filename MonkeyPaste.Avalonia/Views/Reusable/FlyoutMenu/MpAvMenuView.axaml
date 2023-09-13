@@ -13,22 +13,25 @@
     <local:MpAvMenuView.Styles>
         <Style Selector="MenuItem">
             <Setter Property="Padding"
-                    Value="5" />
+                    Value="10,5,15,5" />
         </Style>
         <Style Selector="MenuItem"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="IsSubMenuOpen"
                     Value="{Binding IsSubMenuOpen, Mode=TwoWay}" />
-            <Setter Property="Command"
-                    Value="{Binding Command}" />
-            <Setter Property="CommandParameter"
-                    Value="{Binding CommandParameter}" />
             <Setter Property="StaysOpenOnClick"
                     Value="{Binding StaysOpenOnClick}" />
             <Setter Property="InputGesture"
                     Value="{Binding InputGestureText, Converter={x:Static local:MpAvKeyStringToKeyGestureConverter.Instance}}" />
             <Setter Property="Theme"
                     Value="{StaticResource GestureLabelMenuItem}" />
+        </Style>
+        <Style Selector="MenuItem:not(.checkable)"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="Command"
+                    Value="{Binding Command}" />
+            <Setter Property="CommandParameter"
+                    Value="{Binding CommandParameter}" />
         </Style>
 
         <Style Selector="MenuItem.checkable /template/ Viewbox#PART_IconPresenter">
@@ -55,6 +58,8 @@
 
         <Style Selector="MenuItem Image"
                x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="IsVisible"
+                    Value="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
             <Setter Property="Source"
                     Value="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
             <Setter Property="VerticalAlignment"
@@ -65,19 +70,23 @@
                     Value="16" />
             <Setter Property="Height"
                     Value="16" />
-            <Setter Property="Effect"
-                    Value="drop-shadow(0 0 10 black)" />
+            <!--<Setter Property="Effect"
+                    Value="drop-shadow(0 0 5 black)" />-->
         </Style>
 
         <Style Selector="MenuItem.dark Image"
                x:DataType="local:MpAvIMenuItemViewModel">
-            <Setter Property="Effect"
-                    Value="drop-shadow(0 0 10 white)" />
+            <!--<Setter Property="Effect"
+                    Value="drop-shadow(0 0 5 white)" />-->
         </Style>
-        <Style Selector="Separator.dark"
-               x:DataType="local:MpAvIMenuItemViewModel">
-            <Setter Property="Effect"
-                    Value="drop-shadow(0 0 10 white)" />
+        <Style Selector="Separator">
+            <Style.Resources>
+                <LinearGradientBrush x:Key="SystemControlForegroundBaseMediumLowBrush" StartPoint="0%,0%" EndPoint="100%,0%">
+                    <GradientStop Offset="0" Color="Transparent" />
+                    <GradientStop Offset="0.5" Color="{DynamicResource ThemeGrayAccent2Color}" />
+                    <GradientStop Offset="1" Color="Transparent" />
+                </LinearGradientBrush>
+            </Style.Resources>
         </Style>
         <Style Selector="MenuItem TextBlock"
                x:DataType="local:MpAvIMenuItemViewModel">
@@ -98,10 +107,10 @@
 
                             </MenuItem.Resources>
                             <MenuItem.Icon>
-                                <Image />
+                                <Image Classes="icon" />
                             </MenuItem.Icon>
                             <MenuItem.Header>
-                                <TextBlock />
+                                <TextBlock Classes="header" />
                             </MenuItem.Header>
                         </MenuItem>
                     </DataTemplate>
@@ -112,7 +121,8 @@
                         <MenuItem Classes="checkable"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
-                                <CheckBox IsChecked="{Binding IsChecked, Mode=OneWay}"
+                                <CheckBox Classes="icon"
+                                          IsChecked="{Binding IsChecked, Mode=OneWay}"
                                           IsThreeState="{Binding IsThreeState}" />
                             </MenuItem.Icon>
                         </MenuItem>
@@ -124,14 +134,15 @@
                         <MenuItem Classes="checkable checkWithIcon"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
-                                <CheckBox IsChecked="{Binding IsChecked, Mode=OneWay}"
+                                <CheckBox Classes="icon"
+                                          IsChecked="{Binding IsChecked, Mode=OneWay}"
                                           IsThreeState="{Binding IsThreeState}" />
                             </MenuItem.Icon>
                             <MenuItem.Header>
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="10">
-                                    <Image />
-                                    <TextBlock />
+                                    <Image Classes="icon" />
+                                    <TextBlock Classes="header" />
                                 </StackPanel>
                             </MenuItem.Header>
                         </MenuItem>
@@ -140,6 +151,18 @@
                     <!--  SEPERATOR  -->
                     <DataTemplate x:Key="Separator">
                         <Separator Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}" />
+                    </DataTemplate>
+
+                    <!--  SEPERATOR  -->
+                    <DataTemplate x:Key="ColorPalette"
+                                  x:DataType="local:MpAvMenuItemViewModel">
+                        <MenuItem Classes="colorPalette"
+                                  Theme="{StaticResource ColorPaletteMenuItem}">
+                            <MenuItem.Header>
+
+                                <local:MpAvColorPaletteListBoxView />
+                            </MenuItem.Header>
+                        </MenuItem>
                     </DataTemplate>
                 </local:MpAvTemplateDictionaryToItemsSourceConverter>
             </Binding.Converter>

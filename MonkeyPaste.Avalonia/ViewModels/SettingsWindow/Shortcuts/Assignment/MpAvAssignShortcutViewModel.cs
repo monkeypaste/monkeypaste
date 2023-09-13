@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
             if (result is bool assignResult && assignResult && ascw.DataContext is MpAvAssignShortcutViewModel ascwvm) {
                 MpRoutingType routing_type = MpRoutingType.None;
                 if (ascwvm.AssignmentType != MpShortcutAssignmentType.AppPaste) {
-                    routing_type = ascwvm.RoutingTypes[ascwvm.SelectedRoutingTypeIdx].ToEnum<MpRoutingType>();
+                    routing_type = ascwvm.SelectedRoutingType;
                 }
                 return new Tuple<string, MpRoutingType>(ascwvm.KeyString, routing_type);
             }
@@ -114,8 +114,7 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<string> RoutingTypes {
             get {
                 if (_routingTypes == null) {
-                    _routingTypes = new ObservableCollection<string>(
-                        typeof(MpRoutingType).EnumToUiStrings(hideFirst: true));
+                    _routingTypes = new ObservableCollection<string>(typeof(MpRoutingType).EnumToUiStrings());
                 }
                 return _routingTypes;
             }
@@ -125,12 +124,27 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsGlobal =>
-            RoutingTypes[SelectedRoutingTypeIdx] != MpRoutingType.Internal.ToString() &&
-            RoutingTypes[SelectedRoutingTypeIdx] != MpRoutingType.None.ToString() &&
+            SelectedRoutingType != MpRoutingType.Internal &&
+            SelectedRoutingType != MpRoutingType.None &&
             CanBeGlobal;
         public bool CanBeGlobal { get; set; }
+        public MpRoutingType SelectedRoutingType =>
+            (MpRoutingType)SelectedRoutingTypeIdx;
 
-        public int SelectedRoutingTypeIdx { get; set; } = 0;
+        private int _selectedRoutingTypeIdx;
+        public int SelectedRoutingTypeIdx {
+            get => _selectedRoutingTypeIdx;
+            set {
+                if (value < 1) {
+                    // ignore none or ui init crap (-1 idx)
+                    return;
+                }
+                if (_selectedRoutingTypeIdx != value) {
+                    _selectedRoutingTypeIdx = value;
+                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
+                }
+            }
+        }
         public MpShortcutAssignmentType AssignmentType { get; set; }
         public bool IsEmpty =>
             string.IsNullOrEmpty(KeyString);

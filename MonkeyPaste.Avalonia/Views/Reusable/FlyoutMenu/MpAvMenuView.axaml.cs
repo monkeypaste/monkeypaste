@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
@@ -11,18 +12,28 @@ namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
     public partial class MpAvMenuView : ContextMenu {
         static bool _IsDevToolsOpen = false;
+        static ContextMenu _cm;
+
         protected override Type StyleKeyOverride => typeof(ContextMenu);
         public MpAvIMenuItemViewModel BindingContext {
             get => DataContext as MpAvIMenuItemViewModel;
             set => DataContext = value;
         }
-
+        public static void CloseMenu() {
+            if (_cm != null) {
+                _cm.Close();
+            }
+            _cm = null;
+        }
         public static MpAvMenuView ShowMenu(
             Control target,
             MpAvIMenuItemViewModel dc,
-            PlacementMode placementMode,
-            PopupAnchor popupAnchor,
+            PlacementMode placementMode = PlacementMode.Pointer,
+            PopupAnchor popupAnchor = PopupAnchor.TopLeft,
             MpPoint offset = null) {
+            if (target == null || !target.IsAttachedToVisualTree()) {
+                return null;
+            }
             target.ContextMenu = new MpAvMenuView() {
                 DataContext = dc,
                 Placement = placementMode,
@@ -30,6 +41,7 @@ namespace MonkeyPaste.Avalonia {
                 HorizontalOffset = offset == null ? 0 : offset.X,
                 VerticalOffset = offset == null ? 0 : offset.Y,
             };
+            _cm = target.ContextMenu;
             target.ContextMenu.Open();
             return target.ContextMenu as MpAvMenuView;
         }

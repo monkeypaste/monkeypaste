@@ -224,7 +224,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsColoredImageResource(object resource_key_or_uri) {
-            if (resource_key_or_uri is not string res_str) {
+            if (resource_key_or_uri is not string res_str ||
+                res_str.IsStringBase64()) {
                 return true;
             }
 

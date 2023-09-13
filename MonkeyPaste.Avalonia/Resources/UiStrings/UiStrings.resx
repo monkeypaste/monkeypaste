@@ -423,4 +423,7 @@
   <data name="CommonResetLabel" xml:space="preserve">
     <value>Reset</value>
   </data>
+  <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
+    <value>Tags</value>
+  </data>
 </root>

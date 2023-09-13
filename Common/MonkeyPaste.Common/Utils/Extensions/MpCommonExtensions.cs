@@ -757,8 +757,12 @@ namespace MonkeyPaste.Common {
                     return 0;
                 }
             }
+
             if (obj is int intObj) {
                 return intObj;
+            }
+            if (obj is char charObj) {
+                return (int)char.GetNumericValue(charObj);
             }
             if (obj is double dblObj) {
                 return (int)dblObj;

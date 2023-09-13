@@ -468,7 +468,7 @@ namespace MonkeyPaste.Avalonia {
                     openSubMenuItems.Remove(mitr);
                 }
 
-                if (mivm.SubItems != null && mivm.SubItems.Count > 0 && !mivm.IsColorPallete) {
+                if (mivm.SubItems != null && mivm.SubItems.Count() > 0 && !mivm.IsColorPallete) {
                     // show hover mi subitems
 
                     mi.InvalidateVisual();
@@ -559,7 +559,10 @@ namespace MonkeyPaste.Avalonia {
                         InputGesture = inputGesture,
                         DataContext = mivm,
                         Icon = CreateIcon(mivm),
-                        ItemsSource = mivm.SubItems == null ? null : mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x))
+                        ItemsSource =
+                            mivm.SubItems == null ? null :
+                                mivm.SubItems.Where(x => x != null && x.IsVisible)
+                                .OfType<MpAvMenuItemViewModel>().Select(x => CreateMenuItem(x))
                     };
 
                     UpdateMenuItemBgColor(mi);
@@ -859,12 +862,12 @@ namespace MonkeyPaste.Avalonia {
                 _cmInstance.VerticalOffset = 0;
             }
             AddLeadingSeperators(mivm);
-            if (mivm.SubItems == null || mivm.SubItems.Count == 0) {
+            if (mivm.SubItems == null || !mivm.SubItems.Any()) {
                 _cmInstance.ItemsSource = new[] { mivm };
             } else {
                 // add leading seperators where necessary
 
-                _cmInstance.ItemsSource = mivm.SubItems.Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x));
+                _cmInstance.ItemsSource = mivm.SubItems.OfType<MpAvMenuItemViewModel>().Where(x => x != null && x.IsVisible).Select(x => CreateMenuItem(x));
             }
 
             try {
@@ -897,7 +900,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void AddLeadingSeperators(MpAvMenuItemViewModel mivm) {
             if (mivm.SubItems == null ||
-                mivm.SubItems.Count == 0) {
+                !mivm.SubItems.Any()) {
                 return;
             }
 
@@ -905,9 +908,10 @@ namespace MonkeyPaste.Avalonia {
             // there is items before it and actual previous isn't seperator
             var leading_sep_items =
                 mivm.SubItems
+                .OfType<MpAvMenuItemViewModel>()
                 .Where((x, idx1) =>
                     x.IsVisible &&
-                    x.HasLeadingSeperator &&
+                    x.HasLeadingSeparator &&
                     mivm.SubItems
                     .Where((y, idx2) => idx2 < idx1 && y.IsVisible)
                     .OrderByDescending(y => mivm.SubItems.IndexOf(y))
@@ -915,12 +919,15 @@ namespace MonkeyPaste.Avalonia {
                     !actual_prev_mivm.IsSeparator)
                 .ToList();
 
+            var output_items = mivm.SubItems.ToList();
+
             foreach (var lsi in leading_sep_items) {
-                mivm.SubItems.Insert(mivm.SubItems.IndexOf(lsi), new MpAvMenuItemViewModel() { IsSeparator = true });
+                output_items.Insert(output_items.IndexOf(lsi), new MpAvMenuItemViewModel() { IsSeparator = true });
             }
 
             // apply to children
-            mivm.SubItems.ForEach(x => AddLeadingSeperators(x));
+            output_items.OfType<MpAvMenuItemViewModel>().ForEach(x => AddLeadingSeperators(x));
+            mivm.SubItems = output_items;
         }
 
         #endregion
@@ -930,6 +937,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvContextMenuCloser : MpIContextMenuCloser {
         public void CloseMenu() {
             MpAvMenuExtension.CloseMenu();
+            MpAvMenuView.CloseMenu();
         }
     }
 }

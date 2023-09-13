@@ -18,12 +18,18 @@ namespace MonkeyPaste.Avalonia {
             => throw new NotSupportedException();
 
         private Control GetMenuItem(MpAvIMenuItemViewModel mivm) {
-            if (!this.TryGetValue(mivm.MenuItemType.ToString(), out var result) ||
+            string key = mivm.MenuItemType.ToString();
+            if (mivm is MpAvMenuItemViewModel mivm_obj &&
+                mivm_obj.IsSeparator) {
+                key = "Separator";
+            }
+            if (!this.TryGetValue(key, out var result) ||
                 result.Build(mivm) is not Control c) {
                 return null;
             }
             c.DataContext = mivm;
-            if (c is not MenuItem mi) {
+            if (c is not MenuItem mi ||
+                mivm.MenuItemType == MpMenuItemType.ColorPalette) {
                 return c;
             }
             mi.ItemsSource = GetMenuItems(mivm.SubItems);

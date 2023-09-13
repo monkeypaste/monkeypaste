@@ -254,6 +254,7 @@ namespace MonkeyPaste.Avalonia {
 
             return new MpAvMenuItemViewModel() {
                 Header = @"Analyze",
+                HasLeadingSeparator = true,
                 AltNavIdx = 0,
                 IconResourceKey = Mp.Services.PlatformResource.GetResource("BrainImage") as string,
                 SubItems = sub_items

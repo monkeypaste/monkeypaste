@@ -145,6 +145,7 @@ namespace MonkeyPaste.Avalonia {
                     continue;
                 }
                 enum_strs.Add(val.EnumToUiString(noneText));
+                idx++;
             }
             return enum_strs.ToArray();
         }

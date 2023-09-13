@@ -79,14 +79,19 @@ namespace MonkeyPaste.Avalonia {
                         .FirstOrDefault(x => x.SourceRef.IsSourceEqual(source_ref))
                         .ContextMenuItemViewModel;
 
-                    if (analysis_mil.Any()) {
+                    var source_sub_mil = source_mi.SubItems.OfType<MpAvMenuItemViewModel>().ToList();
+
+                    if (analysis_mil.Any() &&
+                        source_sub_mil.Any()) {
+                        source_sub_mil.FirstOrDefault().HasLeadingSeparator = true;
                         // insert seperator between source and messages
-                        source_mi.SubItems.Insert(0, new MpAvMenuItemViewModel() { IsSeparator = true });
+                        //source_mi.SubItems.Insert(0, new MpAvMenuItemViewModel() { IsSeparator = true });
                     }
 
                     // insert msgs (header is trans dt)
-                    analysis_mil.ForEach((x, idx) => source_mi.SubItems.Insert(idx, x));
+                    analysis_mil.ForEach((x, idx) => source_sub_mil.Insert(idx, x));
 
+                    source_mi.SubItems = source_sub_mil;
                     // add source to output list
                     cmil.Add(source_mi);
                 }
@@ -102,6 +107,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return new MpAvMenuItemViewModel() {
                     Header = "Sources",
+                    HasLeadingSeparator = true,
                     IconResourceKey = "EggImage",
                     SubItems = cmil
 

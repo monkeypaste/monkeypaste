@@ -49,15 +49,15 @@
                                     <Image Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
 
                                 </Button>
-                                <ComboBox 
-                                          SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
+                                <ComboBox SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
                                           Margin="0,0,5,0"
                                           ItemsSource="{Binding SortedItems}">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>
                                             <Border Classes="outerComboBoxItemBorder">
                                                 <DockPanel>
-                                                    <Image Source="{Binding PluginIconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                                    <Image Effect="drop-shadow(0 0 10 white)"
+                                                           Source="{Binding PluginIconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
 
                                                     <Border Classes="comboBoxItemBusyBorder"
                                                             IsVisible="{Binding IsBusy}">

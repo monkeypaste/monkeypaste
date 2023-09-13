@@ -412,9 +412,6 @@
                          Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  SEPARATOR  -->
-        <!--<SolidColorBrush x:Key="SystemControlForegroundBaseMediumLowBrush"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
 
         <!--  BRUSHES  -->
 

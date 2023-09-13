@@ -2237,7 +2237,9 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 IsSelected = true;
-                MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
+                MpAvMenuView.ShowMenu(
+                    control,
+                    ContextMenuViewModel);
             }, (args) => {
                 return CanShowContextMenu && !IsPinPlaceholder;
             });

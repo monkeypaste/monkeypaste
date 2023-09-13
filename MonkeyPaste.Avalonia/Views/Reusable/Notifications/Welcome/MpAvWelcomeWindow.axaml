@@ -148,6 +148,7 @@
                 </Button>
                 <Button x:Name="CloseButton"
                         Command="{Binding ExitApplicationCommand, Source={x:Static local:MpAvSystemTrayViewModel.Instance}}"
+                        CommandParameter="welcome"
                         Classes="outline outlineOver noBg noHoverBg noBorder noHoverBorder windowButton close">
                     <Grid>
                         <Border RenderTransform="rotate(-45deg)" />

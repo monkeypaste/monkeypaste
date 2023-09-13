@@ -374,7 +374,7 @@ namespace MonkeyPaste.Avalonia {
                             Command = PasteActionCommand,
                         },
                         new MpAvMenuItemViewModel() {
-                            HasLeadingSeperator = true,
+                            HasLeadingSeparator = true,
                             Header = UiStrings.ActionMoveLabel,
                             IconResourceKey = "ChainImage",
                             IsVisible = move_items.Any(),
@@ -382,7 +382,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             Header = UiStrings.CommonAddLabel,
-                            HasLeadingSeperator = true,
+                            HasLeadingSeparator = true,
                             IconResourceKey = "AddImage",
                             SubItems =
                                 typeof(MpActionType)
@@ -398,7 +398,7 @@ namespace MonkeyPaste.Avalonia {
                                     }).ToList()
                         },
                         new MpAvMenuItemViewModel() {
-                            HasLeadingSeperator = true,
+                            HasLeadingSeparator = true,
                             Header = "Remove",
                             IconResourceKey = "DeleteImage",
                             Command = DeleteThisActionCommand

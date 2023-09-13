@@ -38,7 +38,7 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             return
-                cur_mivm.SubItems
+                cur_mivm.SubItems.OfType<MpAvMenuItemViewModel>()
                 .FirstOrDefault(x => FindItemByIdentifier(identifier, x) != null);
 
         }

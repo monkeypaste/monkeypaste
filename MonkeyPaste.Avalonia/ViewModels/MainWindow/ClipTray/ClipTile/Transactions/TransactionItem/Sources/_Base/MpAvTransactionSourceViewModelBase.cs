@@ -63,7 +63,9 @@ namespace MonkeyPaste.Avalonia {
                     IconSourceObj = IconSourceObj,
                     Header = SourceLabel,
                     Tooltip = MpAvDateTimeToStringConverter.Instance.Convert(SourcedDateTimeUtc, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null),
-                    SubItems = new List<MpAvMenuItemViewModel>() {
+
+                };
+                var sub_mivml = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {
                             Header = $"Browse to '{SourceLabel}'",
                             IconResourceKey = IsExternalSource ? SourceUri.StartsWith("http") ? "WebImage":"FolderImage" : "NewWindowImage",
@@ -71,13 +73,13 @@ namespace MonkeyPaste.Avalonia {
                             Command = MpAvUriNavigator.Instance.NavigateToSourceRefCommand,
                             CommandParameter = SourceRef
                         }
-                    }
-                };
+                    };
+
                 if (IsExternalSource) {
                     // REJECT SOURCE
-                    mivm.SubItems.Add(
+                    sub_mivml.Add(
                         new MpAvMenuItemViewModel() {
-                            HasLeadingSeperator = true,
+                            HasLeadingSeparator = true,
                             Header = $"{(IsSourceRejected ? "Un-block" : "Block")} '{SourceLabel}'",
                             AltNavIdx = 0,
                             IconResourceKey = IsSourceRejected ? "AddImage" : "NoEntryImage",
@@ -89,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
 
                         // REJECT SOURCE DOMAIN
 
-                        mivm.SubItems.Add(
+                        sub_mivml.Add(
                             new MpAvMenuItemViewModel() {
                                 Header = $"{(url.IsDomainRejected ? "Un-block" : "Block")} Domain '{url.UrlDomainPath}'",
                                 AltNavIdx = 0,
@@ -99,6 +101,7 @@ namespace MonkeyPaste.Avalonia {
                             });
                     }
                 }
+                mivm.SubItems = sub_mivml;
                 return mivm;
             }
         }

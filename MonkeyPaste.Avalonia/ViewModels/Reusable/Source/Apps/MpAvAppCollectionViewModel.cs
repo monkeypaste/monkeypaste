@@ -401,7 +401,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var plugin_presets_results = plugin_presets.Select(x => GetPresetMenuItem(x)).ToList();
                 plugin_presets_results.Add(new MpAvMenuItemViewModel() {
-                    HasLeadingSeperator = true,
+                    HasLeadingSeparator = true,
                     IconSourceObj = "CogImage",
                     Header = "Manage...",
                     Command = hcfvm.ManageClipboardHandlerCommand
@@ -495,7 +495,7 @@ namespace MonkeyPaste.Avalonia {
                         SubItems = readers
                     },
                     new MpAvMenuItemViewModel() {
-                        HasLeadingSeperator = true,
+                        HasLeadingSeparator = true,
                         IconResourceKey = "PenImage",
                         IconTintHexStr = MpSystemColors.peachpuff3,
                         Header = "Writers",

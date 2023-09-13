@@ -11,7 +11,7 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutKeyGroupView">
     <local:MpAvUserControl.Styles>
     </local:MpAvUserControl.Styles>
-    <Border x:Name="KeyGroupContainer" 
+    <Border x:Name="KeyGroupContainer"
             Grid.Column="0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -27,6 +27,7 @@
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"
+                                Spacing="1"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch" />
                 </ItemsPanelTemplate>

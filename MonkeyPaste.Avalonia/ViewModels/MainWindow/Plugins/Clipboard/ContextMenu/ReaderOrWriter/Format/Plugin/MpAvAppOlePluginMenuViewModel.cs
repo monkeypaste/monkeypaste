@@ -66,7 +66,7 @@ namespace MonkeyPaste.Avalonia {
                 .ToList();
 
             items.Add(new MpAvMenuItemViewModel(this) {
-                HasLeadingSeperator = items.Any(),
+                HasLeadingSeparator = items.Any(),
                 Header = "Manage...",
                 IconSourceObj = "CogImage",
                 Command = format_handler.ManageClipboardHandlerCommand

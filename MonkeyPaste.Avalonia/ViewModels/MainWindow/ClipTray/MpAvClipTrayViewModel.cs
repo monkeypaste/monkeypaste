@@ -141,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
                                 Command = RestoreSelectedClipCommand,
                             },
                             new MpAvMenuItemViewModel() {
-                                HasLeadingSeperator = true,
+                                HasLeadingSeparator = true,
                                 Header = @"Permanently Delete",
                                 IconResourceKey = "TrashCanImage",
                                 Command = DeleteSelectedClipCommand,
@@ -152,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 return new MpAvMenuItemViewModel() {
-                    SubItems = new List<MpAvMenuItemViewModel>() {
+                    SubItems = new List<MpAvIMenuItemViewModel>() {
 #if DEBUG
                         new MpAvMenuItemViewModel() {
                             Header = @"Show Dev Tools",
@@ -186,37 +186,38 @@ namespace MonkeyPaste.Avalonia {
                         //},
                         new MpAvMenuItemViewModel() {
                             Header = "Duplicate",
-                            AltNavIdx = 0,
+                            //AltNavIdx = 0,
                             IconResourceKey = "DuplicateImage",
                             Command = DuplicateSelectedClipsCommand,
                             ShortcutArgs = new object[] { MpShortcutType.Duplicate },
                         },
                         new MpAvMenuItemViewModel() {
                             Header = @"Paste Here",
-                            AltNavIdx = 6,
+                            //AltNavIdx = 6,
                             IconResourceKey = "PasteImage",
                             Command = PasteHereFromContextMenuCommand,
                             IsVisible = false,
                             ShortcutArgs = new object[] { MpShortcutType.PasteHere },
                         },
                         new MpAvMenuItemViewModel() {
+                            IsVisible = CurPasteInfoMessage.infoId != null,
                             Header = $"Paste To '{CurPasteInfoMessage.pasteButtonTooltipText}'",
-                            AltNavIdx = 0,
+                            //AltNavIdx = 0,
                             IconSourceObj = CurPasteInfoMessage.pasteButtonIconBase64,
                             Command = PasteSelectedClipTileFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.PasteSelectedItems },
                         },
                         new MpAvMenuItemViewModel() {
-                            HasLeadingSeperator = true,
+                            HasLeadingSeparator = true,
                             Header = @"Delete",
-                            AltNavIdx = 0,
+                            //AltNavIdx = 0,
                             IconResourceKey = "TrashCanImage",
                             Command = TrashSelectedClipCommand,
                             ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
                         },
                         new MpAvMenuItemViewModel() {
                             Header = @"Rename",
-                            AltNavIdx = 0,
+                            //AltNavIdx = 0,
                             IconResourceKey = "RenameImage",
                             Command = EditSelectedTitleCommand,
                             ShortcutArgs = new object[] { MpShortcutType.Rename },
@@ -224,40 +225,33 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             Header = @"Edit",
                             IsVisible = !IsAutoEditEnabled,
-                            AltNavIdx = 0,
+                            //AltNavIdx = 0,
                             IconResourceKey = "EditContentImage",
                             Command = EditSelectedContentCommand,
                             ShortcutArgs = new object[] { MpShortcutType.ToggleContentReadOnly },
                         },
                         new MpAvMenuItemViewModel() {
                             Header = @"Find and Replace...",
-                            AltNavIdx = 0,
+                            //AltNavIdx = 0,
                             IconResourceKey = "SearchImage",
                             Command = EnableFindAndReplaceForSelectedItem,
                             ShortcutArgs = new object[] { MpShortcutType.FindAndReplaceSelectedItem },
                         },
-                        MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel2(SelectedItem,true),
-                        new MpAvMenuItemViewModel() {IsSeparator = true},
-                        SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
-                        new MpAvMenuItemViewModel() {IsSeparator = true},
-                        MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.CopyItemType),
+                        // share
                         new MpAvMenuItemViewModel() {
-                            HasLeadingSeperator = true,
-                            Header = @"Tags",
-                            AltNavIdx = 0,
-                            IconResourceKey = "PinToCollectionImage",
-                            SubItems =
-                                MpAvTagTrayViewModel.Instance
-                                    .RootLinkableItems
-                                    .Select(x=>x.ContentMenuItemViewModel)
-                                    .ToList()
-                        },
-                        new MpAvMenuItemViewModel() {
-                            HasLeadingSeperator = true,
+                            HasLeadingSeparator = true,
                             Header = @"Share...",
                             IconResourceKey = "ShareImage",
                             Command = SelectedItem.ShareCommand
                         },
+                        // sources
+                        SelectedItem.TransactionCollectionViewModel.ContextMenuViewModel,
+                        // analyzers
+                        MpAvAnalyticItemCollectionViewModel.Instance.GetContentContextMenuItem(SelectedItem.CopyItemType),
+                        // collections
+                        MpAvTagTrayViewModel.Instance,
+                        // colors                        
+                        MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel(SelectedItem,true),
                     },
                 };
             }
@@ -2389,7 +2383,10 @@ namespace MonkeyPaste.Avalonia {
             }
             if (e != null) {
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
-                    pasteButtonTooltipText = string.IsNullOrEmpty(e.ApplicationName) ? e.MainWindowTitle : e.ApplicationName,
+                    pasteButtonTooltipText =
+                        string.IsNullOrEmpty(e.ApplicationName) ?
+                            e.MainWindowTitle :
+                            e.ApplicationName,
                     pasteButtonIconBase64 = e.MainWindowIconBase64,
                     infoId = e.ProcessPath,
                     isFormatDefault = true

@@ -32,17 +32,17 @@
         </ListBox.Resources>
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
-                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                <Grid HorizontalAlignment="Center"
+                      RowDefinitions="Auto,Auto,Auto,Auto,Auto"
                       ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" />
             </ItemsPanelTemplate>
         </ListBox.ItemsPanel>
         <ListBox.Styles>
-            <Style Selector="ListBoxItem"
-                   x:DataType="local:MpAvMenuItemViewModel">
-                <Setter Property="Grid.Row"
+            <Style Selector="ListBoxItem">
+                <!--<Setter Property="Grid.Row"
                         Value="{Binding SortOrderIdx, ConverterParameter=row|14, Converter={x:Static local:MpAvIntToGridLocationConverter.Instance}}" />
                 <Setter Property="Grid.Column"
-                        Value="{Binding SortOrderIdx, ConverterParameter=col|14, Converter={x:Static local:MpAvIntToGridLocationConverter.Instance}}" />
+                        Value="{Binding SortOrderIdx, ConverterParameter=col|14, Converter={x:Static local:MpAvIntToGridLocationConverter.Instance}}" />-->
                 <Setter Property="IsSelected"
                         Value="{Binding IsChecked, Mode=TwoWay}" />
                 <Setter Property="FocusAdorner"
@@ -54,30 +54,28 @@
                 <Setter Property="VerticalContentAlignment"
                         Value="Center" />
                 <Setter Property="Margin"
-                        Value="0" />
+                        Value="2" />
                 <Setter Property="Padding"
                         Value="0" />
-                <Setter Property="Width"
+                <!--<Setter Property="Width"
                         Value="16" />
                 <Setter Property="Height"
-                        Value="16" />
+                        Value="16" />-->
 
             </Style>
         </ListBox.Styles>
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Button x:DataType="local:MpAvMenuItemViewModel"
-                        Classes="noBg noHoverBg"
+                        EffectiveViewportChanged="Btn_EffectiveViewportChanged"
+                        Classes="noBg noHoverBg noBorder"
                         local:MpAvIsHoveringExtension.IsEnabled="True"
                         local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                         Background="Transparent"
                         BorderThickness="0"
                         Command="{Binding Command}"
                         CommandParameter="{Binding CommandParameter}">
-                    <Border Width="12"
-                            Height="12"
-                            Padding="0"
-                            Background="{Binding Header, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                    <Border Background="{Binding Header, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                             BorderBrush="{Binding IconBorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                             BorderThickness="1"
                             CornerRadius="2">

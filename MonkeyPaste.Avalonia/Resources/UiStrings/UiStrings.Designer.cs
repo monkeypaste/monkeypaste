@@ -196,6 +196,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        public static string ClipTileTagContextMenuLabel {
+            get {
+                return ResourceManager.GetString("ClipTileTagContextMenuLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string CommonAddLabel {

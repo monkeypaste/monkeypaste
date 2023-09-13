@@ -4,8 +4,6 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -13,6 +11,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvTagTrayViewModel :
         MpAvSelectorViewModelBase<object, MpAvTagTileViewModel>,
+        MpAvIMenuItemViewModel,
         MpIAsyncCollectionObject,
         MpIBadgeCountViewModel,
         MpIHasDragOverProperty,
@@ -42,6 +41,26 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        #region MpAvIMenuItemViewModel Implementation
+
+        ICommand MpAvIMenuItemViewModel.Command => null;
+        object MpAvIMenuItemViewModel.CommandParameter => null;
+        string MpAvIMenuItemViewModel.Header => UiStrings.ClipTileTagContextMenuLabel;
+        object MpAvIMenuItemViewModel.IconSourceObj => "PinToCollectionImage";
+        string MpAvIMenuItemViewModel.InputGestureText { get; }
+        bool MpAvIMenuItemViewModel.StaysOpenOnClick => false;
+        bool MpAvIMenuItemViewModel.HasLeadingSeparator => true;
+        bool MpAvIMenuItemViewModel.IsVisible => true;
+        bool? MpAvIMenuItemViewModel.IsChecked => false;
+        bool MpAvIMenuItemViewModel.IsThreeState => false;
+        bool MpAvIMenuItemViewModel.IsSubMenuOpen { get; set; }
+        MpMenuItemType MpAvIMenuItemViewModel.MenuItemType =>
+            MpMenuItemType.Default;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
+            RootLinkableItems;
+
+        #endregion
+
         #region MpIBadgeCountViewModel Implementation
 
         // NOTE since badges
@@ -57,7 +76,8 @@ namespace MonkeyPaste.Avalonia {
             return new MpAvMenuItemViewModel() {
                 SubItems =
                     RootLinkableItems
-                        .Select(x => x.GetMenu(cmd, cmdArg, selectedTagIds, recursive)).ToList()
+                        .Select(x => x.GetMenu(cmd, cmdArg, selectedTagIds, recursive))
+                        .Cast<MpAvIMenuItemViewModel>().ToList()
             };
         }
 

@@ -30,7 +30,8 @@ namespace MonkeyPaste.Avalonia {
     }
 
     public class MpAvMenuItemViewModel : MpAvViewModelBase,
-        MpITreeItemViewModel, MpAvIMenuItemViewModel {
+        //MpITreeItemViewModel, 
+        MpAvIMenuItemViewModel {
         #region Constants
 
         public const string DEFAULT_TEMPLATE_NAME = "DefaultMenuItemTemplate";
@@ -55,37 +56,12 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Interfaces
-
-        #region MpITreeItemViewModel Implementation
-
-        MpITreeItemViewModel MpITreeItemViewModel.ParentTreeItem =>
-            ParentObj as MpITreeItemViewModel;
-        IEnumerable<MpITreeItemViewModel> MpITreeItemViewModel.Children =>
-            SubItems == null ? null : SubItems.Cast<MpITreeItemViewModel>();
-        bool MpIExpandableViewModel.IsExpanded {
-            get => IsSubMenuOpen;
-            set => IsSubMenuOpen = value;
-        }
-        #endregion
-
-        #region MpAvIMenuItemViewModel Implementation
-        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
-            SubItems == null ? null : SubItems.Cast<MpAvIMenuItemViewModel>().ToList();
-
-        #endregion
-        #endregion
-
         #region Properties
 
         #region View Models
 
-        public IList<MpAvMenuItemViewModel> SubItems { get; set; }
+        public IEnumerable<MpAvIMenuItemViewModel> SubItems { get; set; }
 
-        public IEnumerable<MpAvMenuItemViewModel> AllDescendants =>
-            GetAllDescendants(false);
-        public IEnumerable<MpAvMenuItemViewModel> SelfAndAllDescendants =>
-            GetAllDescendants(true);
         #endregion
 
         #region Data Template Helpers
@@ -189,16 +165,17 @@ namespace MonkeyPaste.Avalonia {
 
         public string HeaderedSeparatorLabel { get; set; }
 
-        private string _header;
-        public string Header {
-            get => _header.EscapeMenuItemHeader(AltNavIdx);
-            set {
-                if (Header != value && Header != value.EscapeMenuItemHeader(AltNavIdx)) {
-                    _header = value;
-                    OnPropertyChanged(nameof(Header));
-                }
-            }
-        }
+        //private string _header;
+        //public string Header {
+        //    get => _header.EscapeMenuItemHeader(AltNavIdx);
+        //    set {
+        //        if (Header != value && Header != value.EscapeMenuItemHeader(AltNavIdx)) {
+        //            _header = value;
+        //            OnPropertyChanged(nameof(Header));
+        //        }
+        //    }
+        //}
+        public string Header { get; set; }
 
         public int AltNavIdx { get; set; } = -1;
 
@@ -226,8 +203,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsCustomColorButton { get; set; }
 
         public int SortOrderIdx { get; set; }
-
-        public bool HasLeadingSeperator { get; set; }
         #endregion
 
         #region Appearance
@@ -345,7 +320,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpShape IconShape { get; set; }
         public int IconId { get; set; } = 0;
-
+        string IconBase64Str { get; set; }
         public string IconResourceKey { get; set; } = string.Empty;
 
         public object IconSourceObj {
@@ -353,7 +328,13 @@ namespace MonkeyPaste.Avalonia {
                 if (IconId > 0) {
                     return IconId;
                 }
+                if (!string.IsNullOrWhiteSpace(IconBase64Str)) {
+                    return IconBase64Str;
+                }
                 if (!string.IsNullOrWhiteSpace(IconResourceKey)) {
+                    if (IconHexStr.IsStringHexOrNamedColor()) {
+                        return new object[] { IconResourceKey, IconHexStr };
+                    }
                     return IconResourceKey;
                 }
                 if (IconHexStr.IsStringHexColor()) {
@@ -369,6 +350,8 @@ namespace MonkeyPaste.Avalonia {
                         IconHexStr = valStr;
                     } else if (valStr.IsStringImageResourcePathOrKey()) {
                         IconResourceKey = valStr;
+                    } else if (valStr.IsStringBase64()) {
+                        IconBase64Str = valStr;
                     } else {
                         IconId = 0;
                         IconHexStr = null;
@@ -486,54 +469,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public static MpAvMenuItemViewModel GetColorPalleteMenuItemViewModel2(MpIColorPalettePickerViewModel ucvm, bool has_leading_sep = false) {
-            bool isAnySelected = false;
-            var colors = new List<MpAvMenuItemViewModel>();
-            string selectedHexStr = ucvm.UserHexColor == null ? string.Empty : ucvm.UserHexColor;
-            if (selectedHexStr.Length == 7) {
-                // add alpha for matching
-                selectedHexStr = $"#FF{selectedHexStr.Substring(1)}";
-            }
-            for (int i = 0; i < MpSystemColors.ContentColors.Count; i++) {
-                string cc = MpSystemColors.ContentColors[i].ToUpper();
-                bool isCustom = i == MpSystemColors.ContentColors.Count - 1;
-                bool isSelected = selectedHexStr.ToUpper() == cc;
-                if (isSelected) {
-                    isAnySelected = true;
-                }
-                ICommand command = ucvm.PaletteColorPickedCommand;
-                object commandArg;
-                string header = cc;
 
-                if (isCustom) {
-                    if (!isAnySelected) {
-                        isSelected = true;
-                        // if selected color is custom make background of custom icon that color (default white)
-                        header = selectedHexStr;
-                    }
-                    commandArg = "custom";
-                } else {
-                    commandArg = cc;
-                }
-
-                colors.Add(new MpAvMenuItemViewModel() {
-                    IsChecked = isSelected,
-                    Header = header,
-                    Command = command,
-                    CommandParameter = commandArg,
-                    IsVisible = isCustom,
-                    IsCustomColorButton = isCustom,
-                    IsColorPalleteItem = true,
-                    SortOrderIdx = i
-                });
-            }
-
-            return new MpAvMenuItemViewModel() {
-                IsColorPallete = true,
-                HasLeadingSeperator = has_leading_sep,
-                SubItems = colors.OrderBy(x => x.SortOrderIdx).ToList()
-            };
-        }
         public static MpAvMenuItemViewModel GetColorPalleteMenuItemViewModel(MpIUserColorViewModel ucvm, bool has_leading_sep = false) {
             bool isAnySelected = false;
             var colors = new List<MpAvMenuItemViewModel>();
@@ -549,21 +485,33 @@ namespace MonkeyPaste.Avalonia {
                 if (isSelected) {
                     isAnySelected = true;
                 }
-                ICommand command;
+                ICommand command = null;
                 object commandArg;
                 string header = cc;
-
+                bool is_palette_picker = false;
+                if (ucvm is MpIColorPalettePickerViewModel cppvm) {
+                    command = cppvm.PaletteColorPickedCommand;
+                    is_palette_picker = true;
+                }
                 if (isCustom) {
                     if (!isAnySelected) {
                         isSelected = true;
                         // if selected color is custom make background of custom icon that color (default white)
                         header = selectedHexStr;
                     }
-                    command = Mp.Services.CustomColorChooserMenuAsync.SelectCustomColorCommand;
-                    commandArg = ucvm;
+                    if (is_palette_picker) {
+                        commandArg = "custom";
+                    } else {
+                        command = Mp.Services.CustomColorChooserMenuAsync.SelectCustomColorCommand;
+                        commandArg = ucvm;
+                    }
                 } else {
-                    command = SetColorCommand;
-                    commandArg = new object[] { ucvm, cc };
+                    if (is_palette_picker) {
+                        commandArg = cc;
+                    } else {
+                        command = SetColorCommand;
+                        commandArg = new object[] { ucvm, cc };
+                    }
                 }
 
                 colors.Add(new MpAvMenuItemViewModel() {
@@ -577,20 +525,23 @@ namespace MonkeyPaste.Avalonia {
                     SortOrderIdx = i
                 });
             }
-
             return new MpAvMenuItemViewModel() {
-                IsColorPallete = true,
-                HasLeadingSeperator = has_leading_sep,
-                SubItems = colors.OrderBy(x => x.SortOrderIdx).ToList()
+                HasLeadingSeparator = has_leading_sep,
+                Header = "Color",
+                IconResourceKey = "ColorsImage",
+                SubItems = new[] {
+                    new MpAvMenuItemViewModel() {
+                        IsColorPallete = true,
+                        SubItems =
+                            colors
+                            .OrderBy(x => x.SortOrderIdx)
+                            .Cast<MpAvIMenuItemViewModel>()
+                            .ToList()
+                    }
+                }
             };
         }
 
-        public void ClearCommands() {
-            Command = null;
-            if (SubItems != null) {
-                SubItems.ForEach(x => x.ClearCommands());
-            }
-        }
 
         public override string ToString() {
             return Header;
@@ -599,18 +550,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private IEnumerable<MpAvMenuItemViewModel> GetAllDescendants(bool includeSelf) {
-            var mivml = new List<MpAvMenuItemViewModel>();
-            if (includeSelf) {
-                mivml.Add(this);
-            }
-            if (SubItems != null) {
-                SubItems
-                    .Where(x => !x.IsSeparator)
-                    .ForEach(x => mivml.AddRange(x.GetAllDescendants(true)));
-            }
-            return mivml;
-        }
         #endregion
 
         #region Commands

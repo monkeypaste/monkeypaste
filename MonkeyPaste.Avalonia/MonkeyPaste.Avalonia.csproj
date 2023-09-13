@@ -1519,9 +1519,6 @@
     <Compile Update="Views\Reusable\ContextMenu\CheckableMenuItem\MpAvCheckableMenuItemView.axaml.cs">
       <DependentUpon>MpAvCheckableMenuItemView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\ContextMenu\DefaultMenuItem\MpAvDefaultMenuItemView.axaml.cs">
-      <DependentUpon>MpAvDefaultMenuItemView.axaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\Reusable\FlyoutMenu\MpAvMenuView.axaml.cs">
       <DependentUpon>MpAvMenuView.axaml</DependentUpon>
     </Compile>

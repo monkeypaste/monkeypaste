@@ -20,6 +20,9 @@ namespace MonkeyPaste.Avalonia {
             if (!IS_DYNAMIC_TINT_ENABLED) {
                 return MpAvIconSourceObjToBitmapConverter.Instance.Convert(value, targetType, parameter, culture);
             }
+            if (value.ToStringOrEmpty() == "EggImage") {
+
+            }
 
             if (MpAvThemeViewModel.Instance.IsColoredImageResource(value)) {
                 // ignore tinting known color images or db images (since colors unknown)
@@ -28,11 +31,35 @@ namespace MonkeyPaste.Avalonia {
 
             object imgResourceObj = null;
             string hex = null;
+            if (value is object[] valParts) {
+                hex = valParts.FirstOrDefault(x => x.ToStringOrEmpty().IsStringHexOrNamedColor()).ToStringOrDefault();
+                imgResourceObj = valParts.FirstOrDefault(x => x.ToStringOrDefault() != hex);
+                return Convert(imgResourceObj, null, hex, null);
+            }
+
             if (parameter is string paramStr &&
                 paramStr.SplitNoEmpty("|") is string[] paramParts) {
                 if (paramParts.FirstOrDefault(x => x.StartsWith("Theme")) is string theme_key &&
                     Enum.TryParse(theme_key, true, out MpThemeResourceKey trk)) {
-                    hex = Mp.Services.PlatformResource.GetResource<string>(trk.ToString());
+                    if (trk == MpThemeResourceKey.ThemeInteractiveColor &&
+                        value.ToStringOrEmpty() is string randColorSeed) {
+                        // when image
+                        int max = MpSystemColors.ContentColors.Count - 1;
+                        int len = randColorSeed.Length;
+                        int rand_idx = (int)((double)len).Wrap(0, max);
+                        if (rand_idx % (MpSystemColors.COLOR_PALETTE_COLS - 1) == 0) {
+                            // if rand color is last column (gray scale) bump it 
+                            rand_idx = rand_idx + 1;
+                            if (rand_idx > max) {
+                                rand_idx = 0;
+                            }
+                        }
+                        MpConsole.WriteLine($"Seed: '{randColorSeed}' Idx: {rand_idx}");
+                        hex = MpSystemColors.ContentColors[rand_idx].RemoveHexAlpha();
+                    } else {
+                        hex = Mp.Services.PlatformResource.GetResource<string>(trk.ToString());
+                    }
+
                 } else if (paramParts.Length > 1) {
                     hex = MpColorHelpers.ParseHexFromString(paramParts[0]);
                 } else if (paramStr.IsStringImageResourcePathOrKey()) {

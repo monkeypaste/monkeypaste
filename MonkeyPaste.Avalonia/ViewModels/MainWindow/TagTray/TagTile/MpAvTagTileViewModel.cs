@@ -13,6 +13,7 @@ using System.Windows.Input;
 namespace MonkeyPaste.Avalonia {
     public class MpAvTagTileViewModel :
         MpAvTreeSelectorViewModelBase<MpAvTagTrayViewModel, MpAvTagTileViewModel>,
+        MpAvIMenuItemViewModel,
         MpIBadgeCountViewModel,
         MpIDraggable,
         MpIHoverableViewModel,
@@ -42,6 +43,27 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIMenuItemViewModel Implementation
+
+        ICommand MpAvIMenuItemViewModel.Command => ToggleLinkToSelectedClipTileCommand;
+        object MpAvIMenuItemViewModel.CommandParameter => null;
+        string MpAvIMenuItemViewModel.Header => TagName;
+        object MpAvIMenuItemViewModel.IconSourceObj => TagHexColor;
+        string MpAvIMenuItemViewModel.InputGestureText { get; }
+        bool MpAvIMenuItemViewModel.StaysOpenOnClick => true;
+        bool MpAvIMenuItemViewModel.HasLeadingSeparator => false;
+        bool MpAvIMenuItemViewModel.IsVisible => true;
+        bool? MpAvIMenuItemViewModel.IsChecked =>
+            IsLinkedToSelectedClipTile;
+        bool MpAvIMenuItemViewModel.IsThreeState => Items.Count > 0;
+        bool MpAvIMenuItemViewModel.IsSubMenuOpen { get; set; }
+        MpMenuItemType MpAvIMenuItemViewModel.MenuItemType =>
+            MpMenuItemType.CheckableWithIcon;
+        IEnumerable<MpAvIMenuItemViewModel> MpAvIMenuItemViewModel.SubItems =>
+            Items;
+
+        #endregion
 
         #region MpIDraggableViewModel Implementation
         bool MpIDraggable.IsDragging {
@@ -202,15 +224,15 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             IsVisible = IsTrashTag,
-                            HasLeadingSeperator = true,
+                            HasLeadingSeparator = true,
                             Header = "Restore All",
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("ResetImage") as string,
                             Command = Parent.RestoreAllTrashCommand
                         },
-                        MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel2(this,true),
+                        MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel(this,true),
                         new MpAvMenuItemViewModel() {
                             IsVisible = !IsTagReadOnly,
-                            HasLeadingSeperator = true,
+                            HasLeadingSeparator = true,
                             Header = "Delete",
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("DeleteImage") as string,
                             Command = DeleteThisTagCommand
@@ -506,7 +528,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public MpShape MenuIconShape =>
-            IsLinkTag ? null : IsQueryTag ? QUERY_SHAPE : IsGroupTag ? GROUP_SHAPE : null;
+            IsLinkTag ? null :
+            IsQueryTag ? QUERY_SHAPE : IsGroupTag ? GROUP_SHAPE : null;
 
         public int CompletedAnalysisCount { get; set; }
         public int TotalAnalysisCount { get; set; }
@@ -1010,6 +1033,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsLinkedToSelectedClipTile):
 
                     OnPropertyChanged(nameof(TagTextHexColor));
+                    if (this is MpAvIMenuItemViewModel imivm) {
+                        imivm.OnPropertyChanged(nameof(imivm.IsChecked));
+                    }
                     break;
                 case nameof(IsSortDescending):
                 case nameof(SortType):
@@ -1546,7 +1572,7 @@ namespace MonkeyPaste.Avalonia {
                 if (control == null) {
                     return;
                 }
-                MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
+                MpAvMenuView.ShowMenu(control, ContextMenuViewModel);
             },
             (args) => {
                 return IsTagNameReadOnly;
@@ -1705,6 +1731,8 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 return args is object[];
             });
+
+
         #endregion
     }
 }

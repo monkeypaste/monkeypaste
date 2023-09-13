@@ -1,16 +1,7 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace MonkeyPaste.Common {
     public static class MpSystemColors {
-
-
-
-
-
-
         public static string White => "#FFFFFFFF";
         public static string DarkGray => "#FF696969"; //DimGray
         public static string Gray => "#FFC0C0C0"; //silver
@@ -21,7 +12,8 @@ namespace MonkeyPaste.Common {
         public static string Transparent => "#00FFFFFF"; //transparent
         public static string Black => "#FF000000";
 
-
+        public const int COLOR_PALETTE_ROWS = 5;
+        public const int COLOR_PALETTE_COLS = 14;
         public static List<string> ContentColors => new List<string>() {
             // NOTE is 5x14 
             "#FFF8A0AE",

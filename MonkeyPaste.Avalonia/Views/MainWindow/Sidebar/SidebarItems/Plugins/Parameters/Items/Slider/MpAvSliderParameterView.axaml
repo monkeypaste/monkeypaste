@@ -98,7 +98,7 @@
                      Cursor="Ibeam"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      local:MpAvLostFocusUpdateBindingExtension.IsEnabled="True"
-                     local:MpAvLostFocusUpdateBindingExtension.Text="{Binding CurrentTypedValue, Mode=TwoWay}"
+                     local:MpAvLostFocusUpdateBindingExtension.Text="{Binding CurrentTypedValue, Mode=TwoWay, StringFormat='{}{0:#,#.}'}"
                      BorderThickness="0"
                      IsReadOnly="False"
                      HorizontalAlignment="Center"

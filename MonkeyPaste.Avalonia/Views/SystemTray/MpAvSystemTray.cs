@@ -118,7 +118,12 @@ namespace MonkeyPaste.Avalonia {
             var nm = new NativeMenu();
             // SUB ITEMS
 
-            var nmil = MpAvSystemTrayViewModel.Instance.TrayMenuItemViewModel.SubItems.Where(x => x.IsVisible).Select(x => CreateMenuItem(x));
+            var nmil = MpAvSystemTrayViewModel.Instance
+                .TrayMenuItemViewModel
+                .SubItems
+                .OfType<MpAvMenuItemViewModel>()
+                .Where(x => x.IsVisible)
+                .Select(x => CreateMenuItem(x));
             foreach (var nmi in nmil) {
                 nm.Add(nmi);
             }
@@ -156,7 +161,7 @@ namespace MonkeyPaste.Avalonia {
                 keyGestureSrcObj: mivm.InputGestureSrcObj,
                 keyGesturePropPath: mivm.InputGesturePropPath,
 
-                children: mivm.SubItems == null ? null : mivm.SubItems.Select(x => CreateMenuItem(x)));
+                children: mivm.SubItems == null ? null : mivm.SubItems.OfType<MpAvMenuItemViewModel>().Select(x => CreateMenuItem(x)));
             return nmi;
         }
 

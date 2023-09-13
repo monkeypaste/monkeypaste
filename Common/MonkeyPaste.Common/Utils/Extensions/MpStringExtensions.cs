@@ -900,7 +900,11 @@ namespace MonkeyPaste.Common {
             // Check that the length is a multiple of 4 characters
             //Check that every character is in the set A - Z, a - z, 0 - 9, +, / except for padding at the end which is 0, 1 or 2 '=' characters
 
-            if (string.IsNullOrEmpty(str)) {
+            if (string.IsNullOrEmpty(str) ||
+                str.Contains(".") ||
+                str.EndsWith("Image") ||
+                str.EndsWith("Icon") ||
+                str.EndsWith("Svg")) {
                 return false;
             }
             if (str.Length % 4 != 0) {
@@ -1113,6 +1117,16 @@ namespace MonkeyPaste.Common {
                 allTags.AddRange(QuillInlineTagNames);
                 return allTags.ToArray();
             }
+        }
+
+        public static int ToPseudoRandomInt(this string str, int max) {
+            //int sum = str.ToCharArray().Sum(x => x.ParseOrConvertToInt());
+            //return sum % max;
+            if (str == "TrashCanImage" ||
+                str.EndsWith("trashcan.png")) {
+
+            }
+            return (int)((double)str.Length).Wrap(0, max);
         }
     }
 }
