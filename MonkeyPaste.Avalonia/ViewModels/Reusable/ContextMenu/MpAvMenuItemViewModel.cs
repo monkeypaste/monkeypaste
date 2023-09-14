@@ -564,7 +564,7 @@ namespace MonkeyPaste.Avalonia {
                     MpIUserColorViewModel ucvm = argParts[0] as MpIUserColorViewModel;
                     string hexColor = argParts[1] as string;
                     ucvm.UserHexColor = hexColor;
-                    Mp.Services.ContextMenuCloser.CloseMenu();
+                    MpAvMenuView.CloseMenu();
                 });
             });
 

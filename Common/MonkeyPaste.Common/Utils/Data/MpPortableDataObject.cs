@@ -91,14 +91,7 @@ namespace MonkeyPaste.Common {
 
         public virtual void SetData(string format, object data) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
-            if (pdf == null) {
-                throw new MpUnregisteredDataFormatException($"Format {format} is not registered");
-                //MpConsole.WriteLine($"Warning! '{format}' data object format not registered at startup deteced. Attempting to add now..");
-                //pdf = MpPortableDataFormats.RegisterDataFormat(format);
-                //if (pdf == null) {
-                //    throw new MpUnregisteredDataFormatException($"Format {format} cannot be registered");
-                //}
-            }
+            MpDebug.Assert(pdf != null, $"Shouldn't ever be null anymore");
 
             if (data is string[] newStrArr &&
                 TryGetData(format, out string[] curStrArr) &&

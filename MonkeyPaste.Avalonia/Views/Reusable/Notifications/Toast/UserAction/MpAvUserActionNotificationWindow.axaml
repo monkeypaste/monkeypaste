@@ -322,10 +322,8 @@
                                      RenderTransform="translateX(13px) translateY(-10px)"
                                      HorizontalAlignment="Right"
                                      IsVisible="{Binding ShowOptionsButton}"
-                                     local:MpAvIsHoveringExtension.IsEnabled="True"
-                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
-                                     local:MpAvMenuExtension.IsEnabled="True"
-                                     local:MpAvMenuExtension.PlacementMode="Left" />
+                                     Command="{Binding ShowOptionsPopupCommand}"
+                                     CommandParameter="{Binding $self}" />
         </Grid>
     </Border>
 </Window>

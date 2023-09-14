@@ -203,19 +203,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void InitWelcomeItems() {
+            #region Greeting
             GreetingViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.Greeting) {
                 SplashIconSourceObj = "AppImage",
                 Title = UiStrings.WelcomeGreetingTitle,
                 Caption = UiStrings.WelcomeGreetingCaption,
             };
+            #endregion
+
+            #region Account
             string account_help_url = @"https://www.monkeypaste.com/help#recycling";
             string monthly_color = MpSystemColors.yellowgreen.RemoveHexAlpha();
             string yearly_color = MpSystemColors.olivedrab.RemoveHexAlpha();
             string line_break = Environment.NewLine;
+
             AccountViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.Account) {
                 Title = UiStrings.WelcomeAccountTitle,
-                Caption = UiStrings.WelcomeAccountCaption,
-                Items = new[] {
+                Caption = UiStrings.WelcomeAccountCaption
+            };
+            AccountViewModel.Items = new[] {
                     new MpAvWelcomeOptionItemViewModel(this,null) {
                         IconSourceObj = "LoginImage",
                         LabelText = UiStrings.WelcomeAccountLabel1,
@@ -261,74 +267,100 @@ namespace MonkeyPaste.Avalonia {
                                 monthly_color,
                                 yearly_color)
                     },
-                }
-            };
+                };
+            #endregion
 
+            #region LoginLoad
             LoginLoadViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.LoginLoad) {
                 Title = UiStrings.WelcomeLoginLoadTitle,
-                Caption = UiStrings.WelcomeLoginLoadCaption,
-                Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,null) {
+                Caption = UiStrings.WelcomeLoginLoadCaption
+            };
+            LoginLoadViewModel.Items = new[] {
+                    new MpAvWelcomeOptionItemViewModel(this,false) {
+                        IsChecked = false,
+                        IconSourceObj = "NoEntryImage",
+                        LabelText = UiStrings.CommonDisableLabel,
+                        DescriptionText = UiStrings.WelcomeLoginLoadDescription1
+                    },
+                    new MpAvWelcomeOptionItemViewModel(this,true) {
                         IsChecked = true,
                         IconSourceObj = "UserImage",
-                        LabelText = UiStrings.WelcomeLoginLoadLabel1,
-                        DescriptionText = UiStrings.WelcomeLoginLoadDescription1
+                        LabelText = UiStrings.CommonEnableLabel,
+                        DescriptionText = UiStrings.WelcomeLoginLoadDescription2
                     }
-                }
-            };
+                };
+            #endregion
 
+            #region Gesture Profile
             GestureProfilesViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.GestureProfile) {
                 Title = UiStrings.WelcomeGestureProfileTitle,
-                Caption = UiStrings.WelcomeGestureProfileCaption,
-                Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,null) {
-                        IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType != MpShortcutRoutingProfileType.Internal,
-                        UncheckedIconSourceObj = "PrivateImage",
-                        CheckedIconSourceObj = "GlobeImage",
-                        CheckedLabelText = UiStrings.WelcomeGestureProfileLabel2,
-                        CheckedDescriptionText = UiStrings.WelcomeGestureProfileDescription2,
-                        UncheckedLabelText = UiStrings.WelcomeGestureProfileLabel1,
-                        UncheckedDescriptionText = UiStrings.WelcomeGestureProfileDescription1
-                    },
-                }
+                Caption = UiStrings.WelcomeGestureProfileCaption
             };
+            GestureProfilesViewModel.Items = new[] {
+                    new MpAvWelcomeOptionItemViewModel(this,false) {
+                        IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Internal,
+                        IconSourceObj = "PrivateImage",
+                        LabelText = UiStrings.WelcomeGestureProfileLabel1,
+                        DescriptionText = UiStrings.WelcomeGestureProfileDescription1
+                    },
+                    new MpAvWelcomeOptionItemViewModel(this,true) {
+                        IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Global,
+                        IconSourceObj = "GlobeImage",
+                        LabelText = UiStrings.WelcomeGestureProfileLabel2,
+                        DescriptionText = UiStrings.WelcomeGestureProfileDescription2
+                    },
+                };
+            #endregion
 
+            #region Scroll Wheel
             ScrollWheelBehaviorViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.ScrollWheel) {
                 Title = UiStrings.WelcomeScrollToOpenTitle,
-                Caption = UiStrings.WelcomeScrollToOpenCaption,
-                Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,null) {
+                Caption = UiStrings.WelcomeScrollToOpenCaption
+            };
+            ScrollWheelBehaviorViewModel.Items = new[] {
+                    new MpAvWelcomeOptionItemViewModel(this,false) {
+                        IsChecked = !MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
+                        IconSourceObj = "NoEntryImage",
+                        LabelText = UiStrings.CommonDisableLabel,
+                        DescriptionText = UiStrings.WelcomeScrollToOpenDescription1
+                    },
+                    new MpAvWelcomeOptionItemViewModel(this,true) {
                         IsChecked = MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
                         IconSourceObj = "MouseWheelImage",
-                        CheckedLabelText = UiStrings.WelcomeScrollToOpenLabel2,
-                        CheckedDescriptionText = UiStrings.WelcomeScrollToOpenDescription2,
-                        UncheckedLabelText = UiStrings.WelcomeScrollToOpenLabel1,
-                        UncheckedDescriptionText = UiStrings.WelcomeScrollToOpenDescription1
+                        LabelText = UiStrings.CommonEnableLabel,
+                        DescriptionText = UiStrings.WelcomeScrollToOpenDescription2,
                     }
-                }
-            };
+                };
+            #endregion
 
+            #region Drag To Open
             DragToOpenBehaviorViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.DragToOpen) {
                 Title = UiStrings.WelcomeDragToOpenTitle,
-                Caption = UiStrings.WelcomeDragToOpenCaption,
-                Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,null) {
-                        IsChecked = MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
-                        UncheckedIconSourceObj = "CloseWindowImage",
-                        CheckedIconSourceObj = "AppFrameImage",
-                        CheckedLabelText = UiStrings.WelcomeDragToOpenLabel2,
-                        CheckedDescriptionText = UiStrings.WelcomeDragToOpenDescription2,
-                        UncheckedLabelText = UiStrings.WelcomeDragToOpenLabel1,
-                        UncheckedDescriptionText = UiStrings.WelcomeDragToOpenDescription1
-                    }
-                }
+                Caption = UiStrings.WelcomeDragToOpenCaption
             };
+            DragToOpenBehaviorViewModel.Items = new[] {
+                    new MpAvWelcomeOptionItemViewModel(this,false) {
+                        IsChecked = !MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
+                        IconSourceObj = "CloseWindowImage",
+                        LabelText = UiStrings.CommonDisableLabel,
+                        DescriptionText = UiStrings.WelcomeDragToOpenDescription1
+                    },
+                    new MpAvWelcomeOptionItemViewModel(this,true) {
+                        IsChecked = MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
+                        IconSourceObj = "AppFrameImage",
+                        LabelText = UiStrings.CommonEnableLabel,
+                        DescriptionText = UiStrings.WelcomeDragToOpenDescription2
+                    }
+                };
+            #endregion
 
+            #region Db Password
             DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.DbPassword) {
                 SplashIconSourceObj = "LockImage",
                 Title = UiStrings.WelcomeDbPasswordTitle,
                 Caption = UiStrings.WelcomeDbPasswordCaption,
             };
+            #endregion
         }
         private async Task BeginWelcomeSetupAsync() {
             IsWelcomeDone = false;
@@ -367,20 +399,20 @@ namespace MonkeyPaste.Avalonia {
 
             // LOGIN LOAD
             bool loadOnLogin =
-                LoginLoadViewModel.Items.FirstOrDefault().IsChecked;
+                LoginLoadViewModel.Items.FirstOrDefault(x => x.OptionId is bool boolVal && boolVal).IsChecked;
             Mp.Services.LoadOnLoginTools.SetLoadOnLogin(loadOnLogin);
             MpAvPrefViewModel.Instance.LoadOnLogin = Mp.Services.LoadOnLoginTools.IsLoadOnLoginEnabled;
 
             // SHORTCUT PROFILE
             MpAvPrefViewModel.Instance.DefaultRoutingProfileType =
-                GestureProfilesViewModel.Items.FirstOrDefault().IsChecked ?
+                GestureProfilesViewModel.Items.FirstOrDefault(x => x.OptionId is bool boolVal && boolVal).IsChecked ?
                     MpShortcutRoutingProfileType.Global :
                     MpShortcutRoutingProfileType.Internal;
 
             // SCROLL-TO-OPEN
             if (ScrollWheelBehaviorViewModel.WasVisited) {
                 MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta =
-                    ScrollWheelBehaviorViewModel.Items.FirstOrDefault().IsChecked;
+                    ScrollWheelBehaviorViewModel.Items.FirstOrDefault(x => x.OptionId is bool boolVal && boolVal).IsChecked;
             } else {
                 // when skipped, default to true
                 MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta = true;
@@ -390,7 +422,7 @@ namespace MonkeyPaste.Avalonia {
             // DRAG-TO-SHOW
             if (DragToOpenBehaviorViewModel.WasVisited) {
                 MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop =
-                    DragToOpenBehaviorViewModel.Items.FirstOrDefault().IsChecked;
+                    DragToOpenBehaviorViewModel.Items.FirstOrDefault(x => x.OptionId is bool boolVal && boolVal).IsChecked;
             } else {
                 // when skipped default to true
                 MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop = true;

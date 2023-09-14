@@ -195,6 +195,7 @@ namespace MonkeyPaste.Avalonia {
             set {
                 if (IsEnabled != value) {
                     Preset.IsEnabled = value;
+                    HasModelChanged = true;
                     OnPropertyChanged(nameof(IsEnabled));
                 }
             }
@@ -250,22 +251,6 @@ namespace MonkeyPaste.Avalonia {
                     Preset.SortOrderIdx = value;
                     HasModelChanged = true;
                     OnPropertyChanged(nameof(SortOrderIdx));
-                }
-            }
-        }
-
-        public bool IsQuickAction {
-            get {
-                if (Preset == null) {
-                    return true;
-                }
-                return Preset.IsQuickAction;
-            }
-            set {
-                if (IsQuickAction != value) {
-                    Preset.IsQuickAction = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(IsQuickAction));
                 }
             }
         }

@@ -88,7 +88,7 @@ namespace CoreOleHandler {
                 case MpPortableDataFormats.AvRtf_bytes:
                     pfl.Add(new MpParameterFormat() {
                         label = "Convert to Html",
-                        description = $"When html is not already present, rtf will be converted to html. This may be useful between web browsers and/or word processing applications. (only for supported platforms)",
+                        description = $"When html is not already present, rtf will be converted to html. This may be useful between web browsers and/or word processing applications. (requires Html format to be enabled and is only for supported platforms)",
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
                         value = new MpPluginParameterValueFormat(true.ToString(), true),
@@ -99,7 +99,7 @@ namespace CoreOleHandler {
                 case MpPortableDataFormats.AvHtml_bytes:
                     pfl.Add(new MpParameterFormat() {
                         label = "Convert to Rtf",
-                        description = $"When rtf is not already present, html will be converted to rtf. This may be useful between web browsers and/or word processing applications. (only for supported platforms)",
+                        description = $"When rtf is not already present, html will be converted to rtf. This may be useful between web browsers and/or word processing applications. (requires Rtf format to be enabled and is only for supported platforms)",
                         controlType = MpParameterControlType.CheckBox,
                         unitType = MpParameterValueUnitType.Bool,
                         value = new MpPluginParameterValueFormat(true.ToString(), true),

@@ -6,7 +6,7 @@
   "guid": "4abe63e3-f81b-4c75-8401-4268ddea793d",
   "projectUrl": "https://github.com/codebude/QRCoder/",
   "iconUri": "icon.png",
-  "bundleType": "Dll",
+  "packageType": "Dll",
   "tags": "Core,Qr Code,Text,Image,Link,Converter",
   "analyzer": {
     "inputType": {

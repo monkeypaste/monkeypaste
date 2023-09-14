@@ -68,8 +68,8 @@
                                  Width="15"
                                  Height="25"
                                  Margin="3,0,10,0"
-                                 local:MpAvMenuExtension.IsEnabled="True"
-                                 local:MpAvMenuExtension.PlacementMode="Left"
+                                 Command="{Binding ShowAddChildContextMenuCommand}"
+                                 CommandParameter="{Binding $self}"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Left" />
         <!--  ENABLE/DISABLE BUTTON  -->

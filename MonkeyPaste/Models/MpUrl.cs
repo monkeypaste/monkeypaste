@@ -140,7 +140,7 @@ namespace MonkeyPaste {
 
             newUrl.IconId = iconId;
             if (newUrl.IconId == 0) {
-                newUrl.IconId = MpDefaultDataModelTools.ThisAppIconId;
+                newUrl.IconId = MpDefaultDataModelTools.UnknownIconId;
             }
 
             if (!suppressWrite) {

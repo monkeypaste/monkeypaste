@@ -62,7 +62,7 @@ namespace MonkeyPaste.Common.Plugin {
         public string guid { get; set; } = string.Empty;
         public string iconUri { get; set; } = string.Empty;
 
-        public MpPluginBundleType bundleType { get; set; }
+        public MpPluginPackageType packageType { get; set; }
         public List<MpPluginDependency> dependencies { get; set; }
         [JsonIgnore]
         public DateTime? datePublished { get; set; }

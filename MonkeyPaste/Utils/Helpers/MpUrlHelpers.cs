@@ -2,15 +2,11 @@
 using MonkeyPaste.Common;
 using Nager.PublicSuffix;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
-using System.Xml.Linq;
 
 namespace MonkeyPaste {
 
@@ -37,7 +33,6 @@ namespace MonkeyPaste {
             };
             url_props.Source = await ReadUrlAsString(url);
 
-            //url_props.IconBase64 = await GetUrlFavIconAsync(url_props.FullyFormattedUriStr);
             string formatted_url = url_props.FullyFormattedUriStr;
             url_props.FavIconBase64 = string.Empty;
             if (Uri.IsWellFormedUriString(formatted_url, UriKind.Absolute)) {
@@ -210,32 +205,6 @@ namespace MonkeyPaste {
                 MpConsole.WriteTraceLine($"Error resolving domain from url '{url}'.", ex);
             }
             return string.Empty;
-        }
-
-        private static async Task<string> GetUrlFavIconAsync(string url) {
-            try {
-                string base64FavIcon = string.Empty;
-                if (Uri.IsWellFormedUriString(url, UriKind.Absolute)) {
-                    var uri = new Uri(url, UriKind.Absolute);
-                    base64FavIcon = await GetDomainFavIcon1(uri.Host);
-                    if (Mp.Services.IconBuilder.IsStringBase64Image(base64FavIcon)) {
-                        return base64FavIcon;
-                    }
-                    base64FavIcon = await GetDomainFavIcon2(url);
-                    if (Mp.Services.IconBuilder.IsStringBase64Image(base64FavIcon)) {
-                        return base64FavIcon;
-                    }
-                    if (string.IsNullOrEmpty(base64FavIcon) ||
-                        base64FavIcon.Equals(MpBase64Images.UnknownFavIcon)) {
-                        base64FavIcon = MpBase64Images.AppIcon;
-                    }
-                }
-                return base64FavIcon;
-            }
-            catch (Exception ex) {
-                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: " + ex);
-                return string.Empty;
-            }
         }
 
         private static async Task<string> GetDomainFavIcon1(string domain) {

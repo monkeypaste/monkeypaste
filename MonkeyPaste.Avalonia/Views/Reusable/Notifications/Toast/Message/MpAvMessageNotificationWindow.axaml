@@ -63,10 +63,8 @@
             <local:MpAvOptionsButton Grid.Row="0"
                                      Grid.Column="2"
                                      Foreground="{DynamicResource ThemeWhiteColor}"
-                                     local:MpAvIsHoveringExtension.IsEnabled="True"
-                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
-                                     local:MpAvMenuExtension.IsEnabled="True"
-                                     local:MpAvMenuExtension.PlacementMode="Left" />
+                                     Command="{Binding ShowOptionsPopupCommand}"
+                                     CommandParameter="{Binding $self}" />
 
             <Border Grid.Row="1"
                     Grid.Column="1"

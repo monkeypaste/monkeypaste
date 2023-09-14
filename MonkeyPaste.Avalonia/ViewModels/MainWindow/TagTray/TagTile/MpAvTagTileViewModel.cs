@@ -158,7 +158,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                MpAvMenuExtension.CloseMenu();
+                MpAvMenuView.CloseMenu();
                 TagHexColor = new_color;
             });
 
@@ -1389,7 +1389,10 @@ namespace MonkeyPaste.Avalonia {
 
                  if (args is Control control && AddChildPopupMenuItemViewModel != null) {
                      // show popup menu calling this command w/ tag type as parameter 
-                     MpAvMenuExtension.ShowMenu(control, AddChildPopupMenuItemViewModel, null, PlacementMode.Right);
+
+                     MpAvMenuView.ShowMenu(
+                         target: control,
+                         dc: AddChildPopupMenuItemViewModel);
                      return;
                  } else if (args is MpTagType) {
                      // coming from plus button or plus popup menu
@@ -1561,7 +1564,7 @@ namespace MonkeyPaste.Avalonia {
                 // BUG may have been intended but context menu doesn't close when toggling tag link
                 // and to avoid messing w/ context menu any more just manually closing since
                 // that menu is the only ref to this cmd
-                MpAvMenuExtension.CloseMenu();
+                MpAvMenuView.CloseMenu();
             }, () => {
                 return !IsAllTag;
             });
@@ -1583,7 +1586,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //if (IsContextMenuOpen) {
                 //    // toggle menu closed
-                //    MpAvMenuExtension.CloseMenu();
+                //    MpAvMenuView.CloseMenu();
                 //    //IsContextMenuOpen = false;
                 //    Parent.IsSelecting = false;
                 //    return;
@@ -1599,10 +1602,10 @@ namespace MonkeyPaste.Avalonia {
                 if (control == null) {
                     return;
                 }
-                MpAvMenuExtension.ShowMenu(
-                    control,
-                    child_mivm,
-                    hideOnClick: true);
+
+                MpAvMenuView.ShowMenu(
+                    target: control,
+                    dc: child_mivm);
             },
             (args) => {
                 if (args is not Control ||

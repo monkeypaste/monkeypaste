@@ -153,6 +153,7 @@ namespace MonkeyPaste.Avalonia {
                 return "Application";
             }
         }
+        public string SelectedRoutingTypeStr => RoutingType.ToString();
 
         public int SelectedRoutingTypeIdx {
             get {

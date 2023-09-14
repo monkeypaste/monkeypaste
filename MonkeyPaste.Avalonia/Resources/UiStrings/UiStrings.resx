@@ -177,12 +177,6 @@
   <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
     <value>Drag Bananas Up Here!</value>
   </data>
-  <data name="WelcomeDragToOpenLabel1" xml:space="preserve">
-    <value>Disabled</value>
-  </data>
-  <data name="WelcomeDragToOpenLabel2" xml:space="preserve">
-    <value>Enabled</value>
-  </data>
   <data name="WelcomeDragToOpenTitle" xml:space="preserve">
     <value>Drag-to-Open</value>
   </data>
@@ -190,7 +184,7 @@
     <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings-&gt;Shortcuts' menu.</value>
   </data>
   <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
-    <value>Internal</value>
+    <value>All global shortcuts will be marked as local so you can configure them yourself later.</value>
   </data>
   <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
     <value>MonkeyPaste's clipboard shortcuts will be available in all applications.</value>
@@ -214,9 +208,9 @@
     <value>To get the most use out of MonkeyPaste, loading automatically when you log in is a good idea. But, that's entirely up to you.</value>
   </data>
   <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
-    <value>MonkeyPaste will only load when this user account is logged in, not for other users.</value>
+    <value>Keep it casual.</value>
   </data>
-  <data name="WelcomeLoginLoadLabel1" xml:space="preserve">
+  <data name="CommonEnableLabel" xml:space="preserve">
     <value>Enable</value>
   </data>
   <data name="WelcomeLoginLoadTitle" xml:space="preserve">
@@ -236,12 +230,6 @@
   </data>
   <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
     <value>Scroll Up Here!</value>
-  </data>
-  <data name="WelcomeScrollToOpenLabel1" xml:space="preserve">
-    <value>Disabled</value>
-  </data>
-  <data name="WelcomeScrollToOpenLabel2" xml:space="preserve">
-    <value>Enabled</value>
   </data>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
     <value>Scroll-to-Open</value>
@@ -425,5 +413,50 @@
   </data>
   <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
     <value>Tags</value>
+  </data>
+  <data name="ShortcutDataGridActionHeader" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
+    <value>Routing</value>
+  </data>
+  <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
+    <value>Shortcut</value>
+  </data>
+  <data name="ShortcutGestureRulesHint" xml:space="preserve">
+    <value>Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control,Shift,Alt,Meta/Win depending on platform)</value>
+  </data>
+  <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+	&lt;li&gt;
+		&lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
+	&lt;li&gt;
+		&lt;b&gt;Global&lt;/b&gt;The default shortcut configuration where all global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color="green"&gt;give it a try&lt;/span&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="ShortcutRoutingTypeHint" xml:space="preserve">
+    <value>&lt;ul&gt;
+	&lt;li&gt;
+		&lt;b&gt;Internal&lt;/b&gt; In app shortcuts, are not globally enabled&lt;/li&gt;
+	&lt;li&gt;
+		&lt;b&gt;Direct&lt;/b&gt; Gesture will &lt;b&gt;
+			&lt;i&gt;override&lt;/i&gt;
+		&lt;/b&gt; the input, ie. it will &lt;b style="foreground: #FF0000"&gt;not&lt;/b&gt; be received by active application. &lt;/li&gt;
+	&lt;li&gt;
+		&lt;b&gt;Bubble&lt;/b&gt; Gesture will execute &lt;b&gt;
+			&lt;i&gt;after&lt;/i&gt;
+		&lt;/b&gt; active application &lt;/li&gt;
+	&lt;li&gt;
+		&lt;b&gt;Tunnel&lt;/b&gt; Gesture will execute &lt;b&gt;
+			&lt;i&gt;before&lt;/i&gt;
+		&lt;/b&gt; active application &lt;/li&gt;
+&lt;/ul&gt;</value>
+  </data>
+  <data name="CommonDisableLabel" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
+    <value>Load up when this user account is logged in, not for other users.</value>
   </data>
 </root>

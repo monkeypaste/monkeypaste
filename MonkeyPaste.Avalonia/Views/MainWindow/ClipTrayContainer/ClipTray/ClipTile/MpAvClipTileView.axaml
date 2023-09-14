@@ -303,6 +303,8 @@
                 </Grid.Transitions>
                 <Image Grid.Row="0"
                        Classes="square"
+                       MinWidth="50"
+                       MinHeight="50"
                        Stretch="Uniform"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"

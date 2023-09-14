@@ -8,7 +8,7 @@
   "donateUrl": "https://www.monkeypaste.com",
   "iconUri": "icon.png",
   "tags": "Core,Text,Image,File,Converter,File to text,File to image",
-  "bundleType": "Dll",
+  "packageType": "Dll",
   "analyzer": {
     "inputType": {
       "file": true

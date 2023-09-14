@@ -6,7 +6,7 @@
   "guid": "56241e2d-84bd-4f12-b7fd-14911f24cf35",
   "projectUrl": "https://www.monkeypaste.com",
   "iconUri": "icon.png",
-  "bundleType": "Dll",
+  "packageType": "Dll",
   "tags": "Core,Google,Bing,DuckDuckGo,Yandex,Yahoo,Text,Search",
   "analyzer": {
     "inputType": {

@@ -484,7 +484,7 @@
                          CommandParameter="4">
                 <DockPanel>
                     <Label Content="Help" />
-                    <Image Source="{Binding Source={StaticResource QuestionMarkImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    <Image Source="{Binding Source={StaticResource QuestionMarkBwImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                 </DockPanel>
             </RadioButton>
 

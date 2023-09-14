@@ -15,6 +15,10 @@
             <Setter Property="Padding"
                     Value="10,5,15,5" />
         </Style>
+        <Style Selector="MenuItem.hasGesture">
+            <Setter Property="Padding"
+                    Value="10,5,5,5" />
+        </Style>
         <Style Selector="MenuItem"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="IsSubMenuOpen"
@@ -90,6 +94,10 @@
         </Style>
         <Style Selector="MenuItem TextBlock"
                x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="TextWrapping"
+                    Value="WrapWithOverflow" />
+            <Setter Property="MaxWidth"
+                    Value="200" />
             <Setter Property="Text"
                     Value="{Binding Header}" />
         </Style>
@@ -101,7 +109,8 @@
                     <!--  DEFAULT  -->
                     <DataTemplate x:Key="Default"
                                   x:DataType="local:MpAvIMenuItemViewModel">
-                        <MenuItem Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
+                        <MenuItem Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}"
+                                  Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
                             <MenuItem.Resources>
                                 <Thickness x:Key="MenuIconPresenterMargin">0,0,6,0</Thickness>
 
@@ -119,6 +128,7 @@
                     <DataTemplate x:Key="Checkable"
                                   x:DataType="local:MpAvIMenuItemViewModel">
                         <MenuItem Classes="checkable"
+                                  Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
                                 <CheckBox Classes="icon"
@@ -132,6 +142,7 @@
                     <DataTemplate x:Key="CheckableWithIcon"
                                   x:DataType="local:MpAvIMenuItemViewModel">
                         <MenuItem Classes="checkable checkWithIcon"
+                                  Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
                                 <CheckBox Classes="icon"

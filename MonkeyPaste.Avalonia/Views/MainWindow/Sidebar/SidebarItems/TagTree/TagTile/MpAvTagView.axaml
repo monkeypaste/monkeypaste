@@ -201,7 +201,7 @@
                                    TextAlignment="Center"
                                    FontWeight="SemiBold"
                                    Padding="3,0"
-                                   Text="{Binding TagClipCount, ConverterParameter=abbr, Converter={x:Static local:MpAvNullableToStringConverter.Instance}}"
+                                   Text="{Binding TagClipCount, ConverterParameter=abbr, Converter={x:Static local:MpAvNullableToStringConverter.Instance}, StringFormat='{}{0:#,#.}'}"
                                    Foreground="{Binding $parent[Border].BorderBrush}">
                             <TextBlock.IsVisible>
                                 <MultiBinding Converter="{x:Static BoolConverters.And}">

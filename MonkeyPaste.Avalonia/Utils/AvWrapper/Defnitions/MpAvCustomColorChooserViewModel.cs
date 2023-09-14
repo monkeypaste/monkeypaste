@@ -1,8 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -102,12 +100,12 @@ namespace MonkeyPaste.Avalonia {
 
                 // NOTE pre-closing context menu cause it'll make funny activation behavior
 
-                //Mp.Services.ContextMenuCloser.CloseMenu();
+                //MpAvMenuView.CloseMenu();
 
                 var result = await cw.ShowChildDialogWithResultAsync(owner as Window);
                 MpConsole.WriteLine($"Custom color result: '{result.ToStringOrEmpty("NULL")}'");
                 //await Task.Delay(200);
-                Mp.Services.ContextMenuCloser.CloseMenu();
+                MpAvMenuView.CloseMenu();
 
                 //if (owner is MpAvMainWindow) {
                 //    MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;

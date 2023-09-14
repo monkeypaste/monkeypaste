@@ -201,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
                 var selectedImagePath = await Mp.Services.NativePathDialog
                         .ShowFileDialogAsync($"Image", null, FilePickerFileTypes.ImageAll);
 
-                MpAvMenuExtension.CloseMenu();
+                MpAvMenuView.CloseMenu();
 
                 if (selectedImagePath.IsFile()) {
                     string imagePath = selectedImagePath;
@@ -240,7 +240,9 @@ namespace MonkeyPaste.Avalonia {
                          }
                      };
                  }
-                 MpAvMenuExtension.ShowMenu(controlArg, mivm, MpPoint.Zero);
+                 MpAvMenuView.ShowMenu(
+                    target: controlArg,
+                    dc: mivm);
 
 
                  //if (controlArg.DataContext is MpIUserIconViewModel) {

@@ -1,14 +1,14 @@
 <local:MpAvUserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             d:DesignWidth="800"
-             d:DesignHeight="750"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:local="using:MonkeyPaste.Avalonia"
-             xmlns:pcl="using:MonkeyPaste"
-             x:Class="MonkeyPaste.Avalonia.MpAvShortcutDataGridView">
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="750"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:Class="MonkeyPaste.Avalonia.MpAvShortcutDataGridView">
     <local:MpAvUserControl.Resources>
 
     </local:MpAvUserControl.Resources>
@@ -46,6 +46,7 @@
     <local:MpAvClipBorder Classes="filterDataGridContainer">
         <Grid>
             <DataGrid x:Name="ShortcutDatagrid"
+                      Sorting="Dg_Sorting"
                       local:MpAvDataGridRefreshExtension.IsEnabled="False"
                       IsVisible="{Binding ., Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                       ItemsSource="{Binding}">
@@ -53,7 +54,7 @@
 
                     <!--  SHORTCUT TYPE LABEL  -->
 
-                    <DataGridTemplateColumn Header="Action"
+                    <DataGridTemplateColumn Header="{x:Static local:UiStrings.ShortcutDataGridActionHeader}"
                                             CanUserSort="True"
                                             SortMemberPath="ShortcutDisplayName"
                                             Width="0.5*">
@@ -72,37 +73,23 @@
                     <!--  ROUTING TYPE  -->
                     <DataGridTemplateColumn Width="125"
                                             CanUserSort="True"
-                                            SortMemberPath="RoutingType">
+                                            SortMemberPath="SelectedRoutingTypeStr">
                         <DataGridTemplateColumn.HeaderTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="5">
-                                    <TextBlock Text="Routing" />
-                                    <local:MpAvToolTipInfoHintView ToolTipHtml="{StaticResource RoutingInfoHtml}" />
+                                    <TextBlock Text="{x:Static local:UiStrings.ShortcutDataGridRoutingHeader}" />
+                                    <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.ShortcutRoutingTypeHint}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid HorizontalAlignment="Center">
-                                    <Grid.Styles>
-                                        <Style Selector="ComboBox.routingBox > ComboBoxItem:nth-child(1)">
-                                            <Setter Property="IsVisible"
-                                                    Value="False" />
-                                        </Style>
-                                    </Grid.Styles>
-                                    <ComboBox Classes="routingBox"
-                                              HorizontalAlignment="Center"
-                                              IsEnabled="{Binding CanBeGlobalShortcut}"
-                                              IsVisible="{Binding CanBeGlobalShortcut}"
-                                              SelectedIndex="{Binding SelectedRoutingTypeIdx}"
-                                              ItemsSource="{Binding RoutingTypes}" />
-                                    <TextBlock Text="Internal"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               FontWeight="SemiBold"
-                                               IsVisible="{Binding !CanBeGlobalShortcut}" />
-                                </Grid>
+                                <ComboBox Classes="routingBox hideFirst"
+                                          HorizontalAlignment="Center"
+                                          IsEnabled="{Binding CanBeGlobalShortcut}"
+                                          SelectedIndex="{Binding SelectedRoutingTypeIdx}"
+                                          ItemsSource="{Binding RoutingTypes}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -115,8 +102,8 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="5">
-                                    <TextBlock Text="Shortcut" />
-                                    <local:MpAvToolTipInfoHintView ToolTipHtml="{StaticResource GestureInfoHtml}" />
+                                    <TextBlock Text="{x:Static local:UiStrings.ShortcutDataGridShortcutHeader}" />
+                                    <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.ShortcutGestureRulesHint}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.HeaderTemplate>
@@ -159,7 +146,7 @@
             </DataGrid>
             <TextBlock IsVisible="{Binding ., ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                        Classes="emptyTextBlock"
-                       Text="No results available" />
+                       Text="{x:Static local:UiStrings.CommonEmptyListText}" />
         </Grid>
 
     </local:MpAvClipBorder>

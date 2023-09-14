@@ -848,12 +848,7 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = "Show on drag to top of screen",
-                                            values =new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop.ToString()
-                                                },
-                                            }
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop.ToString(),true)
                                         }
                                     }
                                 }
@@ -867,7 +862,7 @@ namespace MonkeyPaste.Avalonia {
                                             paramId = MpRuntimePrefParamType.ChangeRoutingType.ToString(),
                                             controlType = MpParameterControlType.ComboBox,
                                             label = "Profile",
-                                            description = Mp.Services.PlatformResource.GetResource<string>("RoutingProfileInfoHtml"),
+                                            description = UiStrings.ShortcutRoutingProfileTypeHint,
                                             values =
                                                 Enum.GetNames(typeof(MpShortcutRoutingProfileType))
                                                 .Select((x,idx)=> new MpPluginParameterValueFormat() {
@@ -993,7 +988,6 @@ namespace MonkeyPaste.Avalonia {
 
         }
         private void InitRuntimeParams() {
-
             _runtimeParamAttachActions = new Dictionary<object, Action<MpAvPluginParameterItemView>>() {
                 {
                     nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),

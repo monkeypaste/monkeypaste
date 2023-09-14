@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string ToRichText(string text) {
-            return text.ToContentRichText();
+            return text.ToRtfFromRichHtml();
         }
 
         public string ToCsv(string text) {

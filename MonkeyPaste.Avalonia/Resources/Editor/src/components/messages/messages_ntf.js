@@ -37,6 +37,7 @@ function onReadOnlyChanged_ntf(isReadOnly) {
 
 function onShowToolTip_ntf(is_visible, anchor_p, tt_html, gesture_text) {
 	// output 'MpQuillShowToolTipNotification'
+	tt_html = globals.DomParser.parseFromString(tt_html, 'text/html').documentElement.outerHTML;
 	let msg = {
 		tooltipHtml: tt_html,
 		gestureText: gesture_text,

@@ -331,8 +331,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var target_control = args as Control;
                 MpAvMenuView.ShowMenu(
-                    target_control,
-                    SearchFilterCollectionViewModel,
+                    target: target_control,
+                    dc: SearchFilterCollectionViewModel,
+                    showByPointer: false,
                     PlacementMode.TopEdgeAlignedLeft,
                     PopupAnchor.BottomRight);
 

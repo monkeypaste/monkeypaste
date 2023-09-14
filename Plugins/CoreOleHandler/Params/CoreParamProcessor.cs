@@ -102,7 +102,7 @@ namespace CoreOleHandler {
                             case CoreOleParamType.HTMLFORMAT_R_TORTF: {
                                     if (data is byte[] html_bytes &&
                                         html_bytes.ToDecodedString() is string html_str &&
-                                        html_str.ToContentRichText() is string rtf &&
+                                        html_str.ToRtfFromRichHtml() is string rtf &&
                                         rtf.ToBytesFromString() is byte[] rtf_bytes) {
                                         return
                                             new object[] {

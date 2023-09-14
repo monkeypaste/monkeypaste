@@ -71,7 +71,6 @@ namespace MonkeyPaste.Avalonia {
         public MpICustomColorChooserMenuAsync CustomColorChooserMenuAsync { get; set; }
         public MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
         public MpIPlatformResource PlatformResource { get; set; }
-        public MpIContextMenuCloser ContextMenuCloser { get; set; }
         public MpIStringTools StringTools { get; set; }
         public MpIPlatformInfo PlatformInfo { get; set; }
         public MpIPlatformDataObjectTools DataObjectTools { get; set; }
@@ -166,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
 
             KeyStrokeSimulator = new MpAvKeyStrokeSimulator();
             PlatformResource = new MpAvPlatformResource();
-            ContextMenuCloser = new MpAvContextMenuCloser();
+
             MainThreadMarshal = new MpAvMainThreadMarshal();
             StringTools = new MpAvStringTools();
             PlatformMessageBox = new MpAvMessageBox();

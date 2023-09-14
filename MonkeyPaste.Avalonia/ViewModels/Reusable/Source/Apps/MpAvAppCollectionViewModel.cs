@@ -628,20 +628,21 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
+                var cm = MpAvMenuView.ShowMenu(
+                    c,
+                    GetPasteInfoMenuItemsByProcessInfo(pi),
+                    showByPointer: false,
+                    PlacementMode.TopEdgeAlignedLeft,
+                    PopupAnchor.BottomRight,
+                    offset);
+
                 void _cmInstance_MenuClosed(object sender, RoutedEventArgs e) {
                     if (c.DataContext is MpAvClipTileViewModel ctvm &&
                         ctvm.GetContentView() is MpAvContentWebView cwv) {
                         cwv.SendMessage("unexpandPasteButtonPopup_ext()");
                     }
-                    MpAvContextMenuView.Instance.Closed -= _cmInstance_MenuClosed;
+                    cm.Closed -= _cmInstance_MenuClosed;
                 }
-
-                var cm = MpAvMenuView.ShowMenu(
-                    c,
-                    GetPasteInfoMenuItemsByProcessInfo(pi),
-                    PlacementMode.TopEdgeAlignedLeft,
-                    PopupAnchor.BottomRight,
-                    offset);
                 cm.Closed += _cmInstance_MenuClosed;
             });
         #endregion

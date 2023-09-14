@@ -1,12 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -36,11 +32,11 @@ namespace MonkeyPaste.Avalonia {
 
         private static void HandleIsEnabledChanged(DataGrid element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
-                if (element is DataGrid control) {
-                    if (!_enabledGrids.Contains(control)) {
-                        _enabledGrids.Add(control);
+                if (element is DataGrid dg) {
+                    if (!_enabledGrids.Contains(dg)) {
+                        _enabledGrids.Add(dg);
                     }
-                    control.DetachedFromVisualTree += DetachedFromVisualHandler;
+                    dg.DetachedFromVisualTree += DetachedFromVisualHandler;
                 }
             } else {
                 DetachedFromVisualHandler(element, null);
@@ -48,6 +44,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         }
+
 
         private static void DetachedFromVisualHandler(object s, VisualTreeAttachmentEventArgs? e) {
             if (s is DataGrid dg) {

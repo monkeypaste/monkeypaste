@@ -2,8 +2,6 @@
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -50,10 +48,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowQueryMenuCommand => new MpCommand<object>(
             (args) => {
-                if (args is not Control c) {
-                    return;
-                }
-                MpAvMenuExtension.ShowMenu(c, PopupMenuViewModel);
+                MpAvMenuView.ShowMenu(
+                    target: args as Control,
+                    dc: PopupMenuViewModel);
             });
         public string Watermark =>
             Placeholder;
@@ -206,7 +203,13 @@ namespace MonkeyPaste.Avalonia {
                 string pathStr = string.Format(@"{{{0}}}", cppt.ToString());
                 CurrentValue = CurrentValue.Remove(SelectionStart, SelectionLength).Insert(SelectionStart, pathStr);
             });
+        public ICommand ShowContentQueryPopupCommand => new MpCommand<object>(
+            (args) => {
 
+                MpAvMenuView.ShowMenu(
+                    target: args as Control,
+                    dc: PopupMenuViewModel);
+            });
 
 
         #endregion

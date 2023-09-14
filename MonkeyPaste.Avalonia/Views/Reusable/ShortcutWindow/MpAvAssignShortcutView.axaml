@@ -103,11 +103,6 @@
                     Value="16" />
 
         </Style>
-
-        <Style Selector="ComboBox#RoutingSelectorComboBox > ComboBoxItem:nth-child(1)">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
     </local:MpAvUserControl.Styles>
     <StackPanel Background="{DynamicResource ThemeGrayAccent3Color}">
         <!--  HEADER ROW  -->
@@ -151,10 +146,11 @@
                            Foreground="{DynamicResource ThemeInteractiveColor}"
                            VerticalAlignment="Center" />
                 <local:MpAvToolTipInfoHintView Classes="info"
-                                               ToolTipHtml="{StaticResource RoutingInfoHtml}" />
+                                               ToolTipHtml="{x:Static local:UiStrings.ShortcutRoutingTypeHint}" />
             </StackPanel>
             <!--  ROUTING COMBOBOX  -->
             <ComboBox x:Name="RoutingSelectorComboBox"
+                      Classes="hideFirst"
                       Margin="10,5"
                       ItemsSource="{Binding RoutingTypes}"
                       SelectedIndex="{Binding SelectedRoutingTypeIdx, Mode=TwoWay}" />

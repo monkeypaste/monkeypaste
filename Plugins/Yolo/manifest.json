@@ -5,7 +5,7 @@
   "credits": "Thomas Kefauver",
   "guid": "f0988931-c39a-4ea4-b39a-32346c23094b",
   "iconUri": "icon.png",
-  "bundleType": "Dll",
+  "packageType": "Dll",
   "tags": "Core,Image Detection,Annotation,Image,AI,Text,Windows",
   "dependencies": [
     {

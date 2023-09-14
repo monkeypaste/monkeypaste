@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Primitives.PopupPositioning;
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -289,7 +291,6 @@ namespace MonkeyPaste.Avalonia {
         public virtual bool CanPin => false;
         public bool IsPinned { get; set; } = false;
 
-        public bool IsOverOptionsButton { get; set; }
 
         public virtual bool CanChooseNotShowAgain => true;
 
@@ -492,6 +493,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+        public ICommand ShowOptionsPopupCommand => new MpCommand<object>(
+            (args) => {
+
+                MpAvMenuView.ShowMenu(
+                    target: args as Control,
+                    dc: PopupMenuViewModel,
+                    showByPointer: false,
+                    placementMode: PlacementMode.Left,
+                    popupAnchor: PopupAnchor.None);
+            });
         public ICommand ResetAllNotificationsCommand => new MpCommand(
              () => {
                  // TODO this should be moved to somewhere in preferences

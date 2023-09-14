@@ -440,7 +440,10 @@ namespace MonkeyPaste.Avalonia {
                 if (!Parent.IsSelected) {
                     Parent.Parent.SelectClipTileCommand.Execute(Parent);
                 }
-                MpAvMenuExtension.ShowMenu(control, ContextMenuViewModel);
+
+                MpAvMenuView.ShowMenu(
+                    target: control,
+                    dc: ContextMenuViewModel);
             });
 
         public ICommand ToggleTransactionPaneOpenCommand => new MpCommand(

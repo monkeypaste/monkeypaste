@@ -72,4 +72,15 @@
         <Setter Property="FontSize"
                 Value="12" />
     </Style>
+
+    <Style Selector="local|MpAvShortcutKeyView Border#KeyContainer">
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeGrayAccent1Color}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource ThemeGrayAccent3Color}" />
+    </Style>
+    <Style Selector="local|MpAvShortcutKeyView.mod Border#KeyContainer">
+        <!--<Setter Property="Background"
+                Value="{DynamicResource ThemeGrayAccent2Color}" />-->
+    </Style>
 </Styles>

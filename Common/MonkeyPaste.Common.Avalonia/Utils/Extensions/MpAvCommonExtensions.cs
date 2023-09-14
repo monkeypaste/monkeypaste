@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Media.TextFormatting;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
@@ -237,7 +238,28 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
         #region Control
-
+        public static RenderTargetBitmap RenderToBitmap(this Control target) {
+            if (target is TemplatedControl tc) {
+                MpDebug.Assert(tc.Background != null, $"Needs bg");
+                if (tc.Background is SolidColorBrush scb) {
+                    MpDebug.Assert(scb.Opacity >= 1, $"Needs solid bg");
+                }
+            }
+            var pixelSize = new PixelSize((int)target.Width, (int)target.Height);
+            var size = new Size(target.Width, target.Height);
+            using (RenderTargetBitmap bitmap = new RenderTargetBitmap(pixelSize, new Vector(96, 96))) {
+                target.Measure(size);
+                target.Arrange(new Rect(size));
+                bitmap.Render(target);
+                return bitmap;
+            }
+        }
+        public static void RenderToFile(this Control target, string path) {
+            if (target.RenderToBitmap() is RenderTargetBitmap rtb) {
+                rtb.Save(path);
+                rtb.Dispose();
+            }
+        }
         public static void ReloadDataContext(this Control c) {
             // this is useful to reapply template 
             if (c == null || c.DataContext == null) {

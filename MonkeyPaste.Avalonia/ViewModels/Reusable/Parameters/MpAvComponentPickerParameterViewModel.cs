@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
@@ -195,11 +196,17 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(SelectedLabel));
                     OnPropertyChanged(nameof(SelectedIconResourceObj));
 
-                    Mp.Services.ContextMenuCloser.CloseMenu();
+                    MpAvMenuView.CloseMenu();
                 }
             });
 
+        public ICommand ShowSelectorMenuCommand => new MpCommand<object>(
+            (args) => {
 
+                MpAvMenuView.ShowMenu(
+                    target: args as Control,
+                    dc: PopupMenu);
+            });
         #endregion
     }
 }

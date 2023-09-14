@@ -241,6 +241,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disable.
+        /// </summary>
+        public static string CommonDisableLabel {
+            get {
+                return ResourceManager.GetString("CommonDisableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicate.
         /// </summary>
         public static string CommonDuplicateLabel {
@@ -264,6 +273,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonEmptyListText {
             get {
                 return ResourceManager.GetString("CommonEmptyListText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable.
+        /// </summary>
+        public static string CommonEnableLabel {
+            get {
+                return ResourceManager.GetString("CommonEnableLabel", resourceCulture);
             }
         }
         
@@ -574,6 +592,79 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string ShortcutDataGridActionHeader {
+            get {
+                return ResourceManager.GetString("ShortcutDataGridActionHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Routing.
+        /// </summary>
+        public static string ShortcutDataGridRoutingHeader {
+            get {
+                return ResourceManager.GetString("ShortcutDataGridRoutingHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shortcut.
+        /// </summary>
+        public static string ShortcutDataGridShortcutHeader {
+            get {
+                return ResourceManager.GetString("ShortcutDataGridShortcutHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control,Shift,Alt,Meta/Win depending on platform).
+        /// </summary>
+        public static string ShortcutGestureRulesHint {
+            get {
+                return ResourceManager.GetString("ShortcutGestureRulesHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ul&gt;
+        ///	&lt;li&gt;
+        ///		&lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
+        ///	&lt;li&gt;
+        ///		&lt;b&gt;Global&lt;/b&gt;The default shortcut configuration where all global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color=&quot;red&quot;&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color=&quot;green&quot;&gt;give it a try&lt;/s [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ShortcutRoutingProfileTypeHint {
+            get {
+                return ResourceManager.GetString("ShortcutRoutingProfileTypeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ul&gt;
+        ///	&lt;li&gt;
+        ///		&lt;b&gt;Internal&lt;/b&gt; In app shortcuts, are not globally enabled&lt;/li&gt;
+        ///	&lt;li&gt;
+        ///		&lt;b&gt;Direct&lt;/b&gt; Gesture will &lt;b&gt;
+        ///			&lt;i&gt;override&lt;/i&gt;
+        ///		&lt;/b&gt; the input, ie. it will &lt;b style=&quot;foreground: #FF0000&quot;&gt;not&lt;/b&gt; be received by active application. &lt;/li&gt;
+        ///	&lt;li&gt;
+        ///		&lt;b&gt;Bubble&lt;/b&gt; Gesture will execute &lt;b&gt;
+        ///			&lt;i&gt;after&lt;/i&gt;
+        ///		&lt;/b&gt; active application &lt;/li&gt;
+        ///	&lt;li&gt;
+        ///		&lt;b&gt;Tunnel&lt;/b&gt; Gesture will execute &lt;b&gt;
+        ///			&lt;i&gt;before&lt;/i&gt;
+        ///		&lt;/b&gt; active application &lt;/li&gt;
+        ///&lt;/ul&gt;.
+        /// </summary>
+        public static string ShortcutRoutingTypeHint {
+            get {
+                return ResourceManager.GetString("ShortcutRoutingTypeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is a test &lt;b color=&quot;green&quot;&gt;test&lt;/b&gt; &lt;em color=&quot;red&quot;&gt;&lt;b&gt;test&lt;/b&lt;/em&gt; &lt;a color=&quot;pink&quot; href=&quot;https://www.google.com/&quot;&gt;test&lt;/a&gt;.
         /// </summary>
         public static string Test {
@@ -745,24 +836,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disabled.
-        /// </summary>
-        public static string WelcomeDragToOpenLabel1 {
-            get {
-                return ResourceManager.GetString("WelcomeDragToOpenLabel1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enabled.
-        /// </summary>
-        public static string WelcomeDragToOpenLabel2 {
-            get {
-                return ResourceManager.GetString("WelcomeDragToOpenLabel2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Drag Bananas Up Here!.
         /// </summary>
         public static string WelcomeDragToOpenMarkerLabel {
@@ -799,7 +872,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Internal.
+        ///   Looks up a localized string similar to All global shortcuts will be marked as local so you can configure them yourself later..
         /// </summary>
         public static string WelcomeGestureProfileDescription1 {
             get {
@@ -871,7 +944,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MonkeyPaste will only load when this user account is logged in, not for other users..
+        ///   Looks up a localized string similar to Keep it casual..
         /// </summary>
         public static string WelcomeLoginLoadDescription1 {
             get {
@@ -880,11 +953,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable.
+        ///   Looks up a localized string similar to Load up when this user account is logged in, not for other users..
         /// </summary>
-        public static string WelcomeLoginLoadLabel1 {
+        public static string WelcomeLoginLoadDescription2 {
             get {
-                return ResourceManager.GetString("WelcomeLoginLoadLabel1", resourceCulture);
+                return ResourceManager.GetString("WelcomeLoginLoadDescription2", resourceCulture);
             }
         }
         
@@ -939,24 +1012,6 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeScrollToOpenFakeWindowLabel {
             get {
                 return ResourceManager.GetString("WelcomeScrollToOpenFakeWindowLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Disabled.
-        /// </summary>
-        public static string WelcomeScrollToOpenLabel1 {
-            get {
-                return ResourceManager.GetString("WelcomeScrollToOpenLabel1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Enabled.
-        /// </summary>
-        public static string WelcomeScrollToOpenLabel2 {
-            get {
-                return ResourceManager.GetString("WelcomeScrollToOpenLabel2", resourceCulture);
             }
         }
         

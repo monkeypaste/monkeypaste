@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-using Avalonia;
 using Avalonia.Input;
-using Avalonia.Platform;
 
 using DynamicData;
 
@@ -51,7 +48,8 @@ namespace CefNet.Internal
 						return CefCursorType.Move;
 
 					case StandardCursorType.SizeNorthSouth:
-						return CefCursorType.Northsouthresize;
+						//return CefCursorType.Northsouthresize;
+						return CefCursorType.Rowresize;
 
 					case StandardCursorType.SizeWestEast:
 						return CefCursorType.Eastwestresize;

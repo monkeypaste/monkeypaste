@@ -18,8 +18,7 @@
              VerticalAlignment="Top"
              VerticalContentAlignment="Top"
              x:Class="MonkeyPaste.Avalonia.MpAvOptionsButton"
-             Foreground="{DynamicResource DefaultIconButtonBrush}"
-             local:MpAvMenuExtension.IsEnabled="True">
+             Foreground="{DynamicResource DefaultIconButtonBrush}">
     <local:MpAvUserControl.Styles>
 
         <Style Selector="Button:pointerover">

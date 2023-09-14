@@ -1,5 +1,5 @@
 ﻿namespace MonkeyPaste.Common.Plugin {
-    public enum MpPluginBundleType {
+    public enum MpPluginPackageType {
         None,
         Dll,
         Nuget,

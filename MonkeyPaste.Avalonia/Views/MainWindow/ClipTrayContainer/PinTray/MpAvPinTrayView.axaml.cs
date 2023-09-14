@@ -1,21 +1,15 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
 using System;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvPinTrayView : MpAvUserControl<MpAvClipTrayViewModel> {
@@ -254,15 +248,18 @@ namespace MonkeyPaste.Avalonia {
             drop_line.P1 += items_panel_offset;
             drop_line.P2 += items_panel_offset;
 
-            // get child to adjust height
-            var ctv = ref_lbi.GetVisualDescendant<MpAvClipTileView>();
-            // NOTE get inner child because of border thickness
-            var lbi_child = ctv.FindControl<MpAvClipBorder>("ClipTileContainerBorder").Content as Control;
-            var lbi_child_tl = lbi_child.TranslatePoint(new Point(0, 0), ptr_lb_wp);
-            drop_line.P1.Y = lbi_child_tl.Value.Y;
-
-            var lbi_child_bl = lbi_child.TranslatePoint(new Point(0, lbi_child.Bounds.Height), ptr_lb_wp);
-            drop_line.P2.Y = lbi_child_bl.Value.Y;
+            MpPoint lbi_child_tl = ptr_lb_wp.Bounds.TopLeft.ToPortablePoint();
+            MpPoint lbi_child_bl = ptr_lb_wp.Bounds.BottomLeft.ToPortablePoint();
+            if (ref_lbi.GetVisualDescendant<MpAvClipTileView>() is MpAvClipTileView ctv &&
+                ctv.FindControl<MpAvClipBorder>("ClipTileContainerBorder") is MpAvClipBorder cb &&
+                cb.Content is Control lbi_child) {
+                // get child to adjust height
+                // NOTE get inner child because of border thickness
+                lbi_child_tl = lbi_child.TranslatePoint(new Point(0, 0), ptr_lb_wp).Value.ToPortablePoint();
+                lbi_child_bl = lbi_child.TranslatePoint(new Point(0, lbi_child.Bounds.Height), ptr_lb_wp).Value.ToPortablePoint();
+            }
+            drop_line.P1.Y = lbi_child_tl.Y;
+            drop_line.P2.Y = lbi_child_bl.Y;
 
             drop_line.StrokeOctColor = isCopy ? MpSystemColors.limegreen : MpSystemColors.White;
             drop_line.StrokeThickness = 2;

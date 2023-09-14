@@ -6,7 +6,7 @@
   "guid": "26436e84-392e-4038-a99c-0abe92b843bd",
   "projectUrl": "https://www.monkeypaste.com",
   "iconUri": "icon.png",
-  "bundleType": "Dll",
+  "packageType": "Dll",
   "tags": "Core,Audio,Accessibility,Speech,Text,Windows",
   "dependencies": [
     {

@@ -169,16 +169,18 @@ namespace MonkeyPaste.Common {
             }
         }
         public static MpPortableDataFormat GetDataFormat(int id) {
-            if (id < 0 || id >= _formatLookup.Count) {
-                return null;
+            if (_formatLookup.TryGetValue(id, out var df)) {
+                return df;
             }
-            return _formatLookup.ToList()[id].Value;
+            return null;
         }
 
         public static MpPortableDataFormat GetDataFormat(string format) {
             int id = GetDataFormatId(format);
             if (id < 0) {
-                return null;
+                MpConsole.WriteLine($"Unregistered data format '{format}' accessed. Registering it...");
+                RegisterDataFormat(format);
+                return GetDataFormat(format);
             }
             _formatLookup.TryGetValue(id, out MpPortableDataFormat dataFormat);
             return dataFormat;

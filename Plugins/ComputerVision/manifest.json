@@ -6,7 +6,7 @@
   "guid": "56024047-fe88-412d-aa65-1878ff088879",
   "iconUri": "logo.png",
   "tags": "Computer Vision,Image Detection,Image Processing,Azure,Microsoft,Annotation,Classification",
-  "bundleType": "Dll",
+  "packageType": "Dll",
   "analyzer": {
     "inputType": {
       "image": true

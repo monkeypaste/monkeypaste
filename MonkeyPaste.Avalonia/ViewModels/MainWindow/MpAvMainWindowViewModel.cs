@@ -1210,15 +1210,12 @@ namespace MonkeyPaste.Avalonia {
                         (c.GetVisualAncestor<Window>() is Window w && w != MpAvWindowManager.MainWindow) ||
                         (c.GetVisualAncestor<TextBox>() is TextBox tb && !tb.IsReadOnly)
                     );
-                bool isContextMenuOpen = MpAvContextMenuView.Instance.IsOpen;
 
                 bool isModalOpen =
                     MpAvWindowManager.AllWindows.Any(x => x.IsActive && (x.DataContext is MpIWindowViewModel && (x.DataContext as MpIWindowViewModel).WindowType == MpWindowType.Modal));
                 bool canHide = !IsMainWindowLocked &&
                                   !IsAnyDropDownOpen &&
                                   !IsMainWindowInitiallyOpening &&
-                                    //!IsAnyDialogOpen &&
-                                    !isContextMenuOpen &&
                                     !isModalOpen &&
                                     !isInputFocused &&
                                   !IsAnyItemDragging &&

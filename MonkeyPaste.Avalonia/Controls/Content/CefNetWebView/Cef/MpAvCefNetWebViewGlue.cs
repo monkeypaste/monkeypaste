@@ -1,17 +1,12 @@
 ﻿#if DESKTOP
 
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CefNet;
 using CefNet.Avalonia;
 using CefNet.Internal;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using System.Linq;
-using System.Reflection;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetWebViewGlue : AvaloniaWebViewGlue {
@@ -82,7 +77,13 @@ namespace MonkeyPaste.Avalonia {
             }
             base.UpdateDragCursor(browser, operation);
         }
+        protected override bool OnCursorChange(CefBrowser browser, nint cursorHandle, CefCursorType type, CefCursorInfo customCursorInfo) {
+            MpConsole.WriteLine($"Cursor: {type}");
+            if (type == CefCursorType.Northsouthresize) {
 
+            }
+            return base.OnCursorChange(browser, cursorHandle, type, customCursorInfo);
+        }
         protected override void OnBeforeContextMenu(CefBrowser browser, CefFrame frame, CefContextMenuParams menuParams, CefMenuModel model) {
             // ensure default cefnet context menu is empty
             model.Clear();

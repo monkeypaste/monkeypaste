@@ -394,21 +394,21 @@ namespace MonkeyPaste.Avalonia {
         private static object[] GetPluginComponents(string manifestPath, MpPluginFormat plugin, out Assembly component_assembly) {
             plugin.manifestLastModifiedDateTime = File.GetLastWriteTime(manifestPath);
             string bundle_path = GetBundlePath(manifestPath, plugin);
-            switch (plugin.bundleType) {
-                case MpPluginBundleType.None:
+            switch (plugin.packageType) {
+                case MpPluginPackageType.None:
                     throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' defined in '{manifestPath}' must specify a bundle type.");
-                case MpPluginBundleType.Dll:
+                case MpPluginPackageType.Dll:
                     return GetDllComponents(bundle_path, plugin.title, out component_assembly);
-                case MpPluginBundleType.Nuget:
+                case MpPluginPackageType.Nuget:
                     return GetNugetComponent(bundle_path, plugin.title, out component_assembly);
-                case MpPluginBundleType.Python:
+                case MpPluginPackageType.Python:
                     component_assembly = Assembly.GetAssembly(typeof(MpPythonAnalyzerPlugin));
                     return new object[] { new MpPythonAnalyzerPlugin(bundle_path) };
-                case MpPluginBundleType.Http:
+                case MpPluginPackageType.Http:
                     component_assembly = Assembly.GetAssembly(typeof(MpHttpAnalyzerPlugin));
                     return new object[] { new MpHttpAnalyzerPlugin(plugin.analyzer.http) };
                 default:
-                    throw new MpUserNotifiedException($"Unhandled plugin bundle type for '{plugin.title}' defined at '{manifestPath}' with type '{plugin.bundleType}'");
+                    throw new MpUserNotifiedException($"Unhandled plugin bundle type for '{plugin.title}' defined at '{manifestPath}' with type '{plugin.packageType}'");
             }
 
         }
@@ -478,26 +478,26 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static string GetBundlePath(string manifestPath, MpPluginFormat plugin) {
-            string bundle_ext = GetBundleExt(plugin.bundleType, plugin.version);
+            string bundle_ext = GetBundleExt(plugin.packageType, plugin.version);
             string bundle_dir = Path.GetDirectoryName(manifestPath);
             string bundle_file_name = Path.GetFileName(bundle_dir);
             string bundle_path = Path.Combine(bundle_dir, $"{bundle_file_name}.{bundle_ext}");
 
-            if (plugin.bundleType != MpPluginBundleType.Http && !bundle_path.IsFile()) {
+            if (plugin.packageType != MpPluginPackageType.Http && !bundle_path.IsFile()) {
                 // not found
                 throw new MpUserNotifiedException($"Error, Plugin '{plugin.title}' is flagged as {bundle_ext} type in '{manifestPath}' but does not have a matching '{plugin.title}.{bundle_ext}' in its folder.");
             }
             return bundle_path;
         }
-        private static string GetBundleExt(MpPluginBundleType bt, string version) {
+        private static string GetBundleExt(MpPluginPackageType bt, string version) {
             switch (bt) {
-                case MpPluginBundleType.Nuget:
+                case MpPluginPackageType.Nuget:
                     return $".{version}.nupkg";
-                case MpPluginBundleType.Dll:
+                case MpPluginPackageType.Dll:
                     return "dll";
-                case MpPluginBundleType.Python:
+                case MpPluginPackageType.Python:
                     return "py";
-                case MpPluginBundleType.Javascript:
+                case MpPluginPackageType.Javascript:
                     return "js";
                 default:
                     return string.Empty;
@@ -534,7 +534,7 @@ namespace MonkeyPaste.Avalonia {
             }
             catch (Exception ex) {
                 if (ex is MpUserNotifiedException) {
-                    throw ex;
+                    throw;
                 }
                 throw new MpUserNotifiedException("Error loading " + pluginName + " ", ex);
             }
@@ -569,7 +569,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 catch (Exception ex) {
                     if (ex is MpUserNotifiedException) {
-                        throw ex;
+                        throw;
                     }
                     throw new MpUserNotifiedException("Error loading " + plugin.title + " ", ex);
                 }

@@ -14,12 +14,10 @@
                 <ResourceInclude Source="/Resources/Dictionaries/MpAvIconResourceDictionary.axaml" />
                 <ResourceInclude Source="/Resources/Dictionaries/MpAvSvgResourceDictionary.axaml" />
                 <ResourceInclude Source="/Resources/Dictionaries/MpAvSoundResourceDictionary.axaml" />
-                <ResourceInclude Source="/Resources/Dictionaries/MpAvHintStringsResourceDictionary.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>
-        <!--<FluentTheme />-->
         <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Default.axaml" />
 
     </Application.Styles>

@@ -134,11 +134,15 @@ namespace MonkeyPaste.Avalonia {
             // find highest priority source with existing db icon
             var primary_source =
                 refs
-                .Where(x => x.IconResourceObj is int && ((int)x.IconResourceObj) > 0)
-                .OrderByDescending(x => x.Priority)
+                // search sources with icons defined
+                .Where(x => x.IconResourceObj is int iconId && iconId > 0)
+                // sort this app and unknown to bottom
+                .OrderByDescending(x => ((int)x.IconResourceObj) == MpDefaultDataModelTools.UnknownIconId || ((int)x.IconResourceObj) == MpDefaultDataModelTools.ThisAppIconId ? 0 : 1)
+                // sub-sort highest by highest priority
+                .ThenByDescending(x => x.Priority)
                 .FirstOrDefault();
             if (primary_source == null) {
-                return 0;
+                return MpDefaultDataModelTools.UnknownIconId;
             }
             // TODO? when primary source is a copy item
             // this will returns its primary icon id which is fine 

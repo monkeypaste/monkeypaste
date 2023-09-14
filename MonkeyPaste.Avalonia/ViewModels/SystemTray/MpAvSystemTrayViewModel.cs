@@ -311,7 +311,8 @@ namespace MonkeyPaste.Avalonia {
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
                 //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
 
-
+                var test = new MpAvDataObject("Dat funky format", "funky format texxxxxt!!J!J");
+                await TopLevel.GetTopLevel(MpAvWindowManager.MainWindow).Clipboard.SetDataObjectSafeAsync(test);
             });
         #endregion
     }

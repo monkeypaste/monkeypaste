@@ -14,6 +14,7 @@
         x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
         Classes="notificationWindow fadeIn fadeOut"
+        CanResize="False"
         Width="350"
         Height="140">
     <Window.Resources>
@@ -263,10 +264,8 @@
 
             <local:MpAvOptionsButton Grid.Column="1"
                                      Foreground="{DynamicResource ThemeWhiteBrush}"
-                                     local:MpAvIsHoveringExtension.IsEnabled="True"
-                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsOverOptionsButton, Mode=TwoWay}"
-                                     local:MpAvMenuExtension.IsEnabled="True"
-                                     local:MpAvMenuExtension.PlacementMode="Left" />
+                                     Command="{Binding ShowOptionsPopupCommand}"
+                                     CommandParameter="{Binding $self}" />
         </Grid>
     </Border>
 </Window>

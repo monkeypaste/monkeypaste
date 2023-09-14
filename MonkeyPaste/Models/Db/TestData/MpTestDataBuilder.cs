@@ -13,14 +13,14 @@ namespace MonkeyPaste {
             string batch_file_path = await CreateImportsTestContentAsync(
                    db_path: Mp.Services.DbInfo.DbPath,
                    pwd: Mp.Services.DbInfo.DbPassword,
-                   content_count: 100,//1_000_000,
+                   content_count: 1000,//1_000_000,
                    big_count: 5,
-                   link_count: 10,
+                   link_count: 50,
                    parent_tag_count: 3,
                    child_tag_count: 3,
                    sub_child_tag_count: 2);
 
-            //await ImportTestDataAsync(batch_file_path);
+            await ImportTestDataAsync(batch_file_path);
             MpDebug.Break($"batch file created at path '{batch_file_path}'");
         }
 

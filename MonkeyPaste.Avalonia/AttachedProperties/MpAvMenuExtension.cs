@@ -936,7 +936,7 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvContextMenuCloser : MpIContextMenuCloser {
         public void CloseMenu() {
-            MpAvMenuExtension.CloseMenu();
+            Mp.Services.ContextMenuCloser.CloseMenu();
             MpAvMenuView.CloseMenu();
         }
     }

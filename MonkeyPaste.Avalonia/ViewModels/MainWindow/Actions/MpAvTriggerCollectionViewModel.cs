@@ -726,9 +726,11 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand ShowTriggerSelectorMenuCommand => new MpCommand<object>(
              (args) => {
-                 var control = args as Control;
-                 MpAvMenuExtension.ShowMenu(control, PopupMenuViewModel, MpPoint.Zero);
-             }, (args) => args is Control);
+
+                 MpAvMenuView.ShowMenu(
+                     target: args as Control,
+                     dc: PopupMenuViewModel);
+             });
 
         public ICommand AddTriggerCommand => new MpCommand<object>(
              async (args) => {

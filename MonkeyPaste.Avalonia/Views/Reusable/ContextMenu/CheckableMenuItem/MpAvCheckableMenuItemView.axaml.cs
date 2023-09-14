@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
             if (sender is CheckBox ||
                 (sender is Control control && control.GetVisualAncestor<CheckBox>() != null)) {
                 //don't close tree item parents
-                MpAvMenuExtension.CloseMenu();
+                Mp.Services.ContextMenuCloser.CloseMenu();
             }
 
         }

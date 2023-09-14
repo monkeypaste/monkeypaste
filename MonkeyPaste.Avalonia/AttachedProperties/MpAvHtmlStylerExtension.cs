@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<string> DefaultColorProperty =
             AvaloniaProperty.RegisterAttached<object, HtmlControl, string>(
                 "DefaultColor",
-                Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveColor.ToString()));
+                Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString()));
 
         #endregion
 
@@ -139,6 +139,8 @@ namespace MonkeyPaste.Avalonia {
             hc.RenderError += Hc_RenderError;
             hc.StylesheetLoad += Hc_StylesheetLoad;
             hc.LinkClicked += Hc_LinkClicked;
+
+            hc.BaseStylesheet = GetStyleSheet(hc);
         }
 
         private static void Hc_DetachedFromVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
@@ -180,18 +182,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private static string GetStyleSheet(HtmlControl hc) {
-            switch (GetHtmlStyleType(hc)) {
-                default:
-                    return string.Format(
-@"* {{ color: {0}; font: {1}px {2}; }}
-a:link {{ text-decoration: none; }}
-a:hover {{ text-decoration: underline; }}",
-                        GetDefaultColor(hc),
-                        GetDefaultFontSize(hc),
-                        MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily);
-
-                case MpHtmlStyleType.Content:
-                    return @"h1, h2, h3 { color: navy; font-weight:normal; }
+            // NOTE this is sample css from HtmlRenderer proj:
+            /*
+            @"h1, h2, h3 { color: navy; font-weight:normal; }
                             h1 { margin-bottom: .47em }
                             h2 { margin-bottom: .3em }
                             h3 { margin-bottom: .4em }
@@ -207,23 +200,18 @@ a:hover {{ text-decoration: underline; }}",
                             .caption { font-size: 1.1em }
                             .comment { color: green; margin-bottom: 5px; margin-left: 3px; }
                             .comment2 { color: green; }";
+            */
+            switch (GetHtmlStyleType(hc)) {
+                case MpHtmlStyleType.Content:
                 case MpHtmlStyleType.Tooltip:
-                    return @"h1, h2, h3 { color: navy; font-weight:normal; }
-                    h1 { margin-bottom: .47em }
-                    h2 { margin-bottom: .3em }
-                    h3 { margin-bottom: .4em }
-                    ul { margin-top: .5em }
-                    ul li {margin: .25em}
-                    body { font:10pt Tahoma }
-		            pre  { border:solid 1px gray; background-color:#eee; padding:1em }
-                    a:link { text-decoration: none; }
-                    a:hover { text-decoration: underline; }
-                    .gray    { color:gray; }
-                    .example { background-color:#efefef; corner-radius:5px; padding:0.5em; }
-                    .whitehole { background-color:white; corner-radius:10px; padding:15px; }
-                    .caption { font-size: 1.1em }
-                    .comment { color: green; margin-bottom: 5px; margin-left: 3px; }
-                    .comment2 { color: green; }";
+                default:
+                    return string.Format(
+@"body {{ color: {0}; font: {1}px {2}; }}
+a:link {{ text-decoration: none; }}
+a:hover {{ text-decoration: underline; }}",
+                        GetDefaultColor(hc),
+                        GetDefaultFontSize(hc),
+                        MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily);
             }
         }
     }

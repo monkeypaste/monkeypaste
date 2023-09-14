@@ -28,12 +28,26 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvMenuView ShowMenu(
             Control target,
             MpAvIMenuItemViewModel dc,
+            bool showByPointer = true,
             PlacementMode placementMode = PlacementMode.Pointer,
             PopupAnchor popupAnchor = PopupAnchor.TopLeft,
             MpPoint offset = null) {
             if (target == null || !target.IsAttachedToVisualTree()) {
                 return null;
             }
+
+            if (showByPointer) {
+                placementMode = PlacementMode.TopEdgeAlignedLeft;
+                popupAnchor = PopupAnchor.TopLeft;
+
+                offset = MpPoint.Zero;
+
+                if (TopLevel.GetTopLevel(target) is TopLevel tl) {
+                    var tlp = tl.PointToClient(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation.ToAvPixelPoint(tl.VisualPixelDensity()));
+                    offset = tl.TranslatePoint(tlp, target).Value.ToPortablePoint();
+                }
+            }
+
             target.ContextMenu = new MpAvMenuView() {
                 DataContext = dc,
                 Placement = placementMode,

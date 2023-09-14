@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvClipboardHandlerCollectionViewModel :
@@ -591,7 +590,15 @@ namespace MonkeyPaste.Avalonia {
 
                 if (resp != null && resp.dataObjectLookup != null) {
                     // set resp ido formats in output ido
-                    resp.dataObjectLookup.ForEach(kvp => avdo.SetData(kvp.Key, kvp.Value));
+                    // only include internal or requested formats
+                    // NOTE this will deal w/ rtf<->html enabled but
+                    // converted format is not enabled, then its removed here
+                    resp.dataObjectLookup
+                    .Where(x =>
+                        x.Value != null &&
+                        (MpPortableDataFormats.InternalFormats.Contains(x.Key) ||
+                        preset_vms.Any(y => y.FormatName == x.Key)))
+                    .ForEach(kvp => avdo.SetData(kvp.Key, kvp.Value));
                 }
             }
             // unmark busy for next ole comm
@@ -625,111 +632,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-
-        public ICommand ToggleFormatPresetIsEnabled => new MpCommand<object>(
-            (presetVmArg) => {
-                if (presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm) {
-                    if (cfpvm.IsReader) {
-                        ToggleFormatPresetIsReadEnabledCommand.Execute(cfpvm);
-                    } else if (cfpvm.IsWriter) {
-                        ToggleFormatPresetIsWriteEnabledCommand.Execute(cfpvm);
-                    } else {
-                        MpDebug.Break();
-                    }
-                }
-            });
-        public ICommand ToggleFormatPresetIsReadEnabledCommand => new MpCommand<object>(
-            (presetVmArg) => {
-                var presetVm = presetVmArg as MpAvClipboardFormatPresetViewModel;
-                if (presetVm == null) {
-                    return;
-                }
-                var handlerVm = presetVm.Parent;
-
-                if (presetVm.IsEnabled) {
-                    //when toggled on, untoggle any other preset handling same format
-                    var otherEnabled = EnabledFormats.Where(x => x.IsReader).FirstOrDefault(x => x.Parent.HandledFormat == presetVm.Parent.HandledFormat && x.PresetId != presetVm.PresetId);
-                    if (otherEnabled == null) {
-                        //no other preset was enabled so nothing to replace
-                        return;
-                    }
-                    otherEnabled.IsEnabled = false;
-
-                    MpPortableDataFormats.RegisterDataFormat(handlerVm.HandledFormat);
-                } else {
-                    // when preset isDisabled unregister format 
-                    UnregisterClipboardFormatCommand.Execute(new object[] {
-                                handlerVm.HandledFormat,
-                                true,
-                                false
-                            });
-                }
-
-                OnPropertyChanged(nameof(EnabledFormats));
-                OnPropertyChanged(nameof(FormatViewModels));
-            }, (presetVmArg) => presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm && cfpvm.IsReader);
-
-        public ICommand ToggleFormatPresetIsWriteEnabledCommand => new MpCommand<object>(
-            (presetVmArg) => {
-                var presetVm = presetVmArg as MpAvClipboardFormatPresetViewModel;
-                if (presetVm == null) {
-                    return;
-                }
-                var handlerVm = presetVm.Parent;
-
-                if (presetVm.IsEnabled) {
-                    //when toggled on, untoggle any other preset handling same format
-                    var otherEnabled = EnabledFormats.Where(x => x.IsWriter)
-                    .FirstOrDefault(x => x.Parent.HandledFormat == presetVm.Parent.HandledFormat && x.PresetId != presetVm.PresetId);
-                    if (otherEnabled == null) {
-                        //no other preset was enabled so nothing to replace
-                        return;
-                    }
-                    otherEnabled.IsEnabled = false;
-
-                    MpPortableDataFormats.RegisterDataFormat(handlerVm.HandledFormat);
-                } else {
-                    // when preset isDisabled unregister format 
-                    UnregisterClipboardFormatCommand.Execute(new object[] {
-                                handlerVm.HandledFormat,
-                                true,
-                                false
-                            });
-                }
-
-                OnPropertyChanged(nameof(EnabledFormats));
-                OnPropertyChanged(nameof(FormatViewModels));
-                OnPropertyChanged(nameof(AllWriterPresets));
-            }, (presetVmArg) => presetVmArg is MpAvClipboardFormatPresetViewModel cfpvm && cfpvm.IsWriter);
-
-        public ICommand UnregisterClipboardFormatCommand => new MpCommand<object>(
-            (args) => {
-                return;
-                //if (args is object[] argParts &&
-                //   argParts.Length == 3 &&
-                //   argParts[0] is string format &&
-                //   argParts[2] is bool isReadUnregister &&
-                //   argParts[1] is bool isWriteUnregister) {
-
-                //    bool canUnregister = false;
-                //    if (isReadUnregister && isWriteUnregister) {
-                //        // when both read and write are unregistered (i don't know when this would happen)
-                //        // it doesn't matter if format is known anymore so just unregister
-                //        canUnregister = true;
-                //    } else if (isReadUnregister && EnabledFormats.Any(x => x.IsWriter && x.Parent.HandledFormat == format)) {
-                //        MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because read unregistered but a writer uses it so ignoring");
-                //    } else if (isWriteUnregister && EnabledFormats.Any(x => x.IsReader && x.Parent.HandledFormat == format)) {
-                //        MpConsole.WriteTraceLine($"Note! Attempting to unregister '{format}' because writer unregistered but a reader uses it so ignoring");
-                //    } else {
-                //        canUnregister = true;
-                //    }
-
-                //    if (canUnregister) {
-                //        MpPortableDataFormats.UnregisterDataFormat(format);
-                //    }
-                //    OnPropertyChanged(nameof(FormatViewModels));
-                //}
-            });
 
         #endregion
     }

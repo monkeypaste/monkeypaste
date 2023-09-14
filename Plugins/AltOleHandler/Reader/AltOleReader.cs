@@ -96,6 +96,9 @@ namespace AltOleHandler {
                 }
                 read_output.SetData(read_format, data);
             }
+            if (read_output.ContainsData("Dat funky format")) {
+                read_output.SetData(MpPortableDataFormats.Text, read_output.GetData("Dat funky format"));
+            }
 
             return new MpOlePluginResponse() {
                 dataObjectLookup = read_output.ToDictionary(),
@@ -109,16 +112,9 @@ namespace AltOleHandler {
             if (avdo == null) {
                 //await Util.WaitForClipboard();
                 format_data = await AltOleHelpers.ClipboardRef.GetDataSafeAsync(format);
-                if (OperatingSystem.IsWindows() &&
-                    format == MpPortableDataFormats.AvHtml_bytes && format_data is byte[] htmlBytes) {
-                    var detected_encoding = htmlBytes.DetectTextEncoding(out string detected_text);
-                    format_data = Encoding.UTF8.GetBytes(detected_text);
-                    if (detected_text.Contains("Â")) {
-                        MpDebug.Break();
-                    }
+                if (format == "Dat funky format" && format_data is byte[] byteData) {
+                    format_data = byteData.ToDecodedString();
                 }
-                //Util.CloseClipboard();
-
             } else {
                 if (format == MpPortableDataFormats.AvFiles) {
                     if (avdo.GetFilesAsPaths() is IEnumerable<string> paths &&

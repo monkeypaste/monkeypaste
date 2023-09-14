@@ -48,11 +48,8 @@
             CornerRadius="10"
             BorderThickness="1"
             BorderBrush="DimGray"
-            local:MpAvMenuExtension.IsEnabled="True"
-            local:MpAvMenuExtension.IsOpen="{Binding IsOpen, Mode=TwoWay}"
-            local:MpAvMenuExtension.SuppressDefaultRightClick="True"
-            local:MpAvMenuExtension.PlacementMode="Center"
-            local:MpAvMenuExtension.ForcedMenuItemViewModel="{Binding PopupMenu}"
+            Command="{Binding ShowSelectorMenuCommand}"
+            CommandParameter="{Binding $self}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <!--<Grid ColumnDefinitions="Auto,*,Auto">-->

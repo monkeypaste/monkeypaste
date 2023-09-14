@@ -1,8 +1,6 @@
 ﻿using Avalonia.Controls;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -46,10 +44,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowQueryMenuCommand => new MpCommand<object>(
             (args) => {
-                if (args is not Control c) {
-                    return;
-                }
-                MpAvMenuExtension.ShowMenu(c, PopupMenuViewModel);
+                MpAvMenuView.ShowMenu(
+                    target: args as Control,
+                    dc: PopupMenuViewModel);
             });
 
         #endregion

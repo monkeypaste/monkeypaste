@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const bool IS_DROP_WIDGET_HIDDEN = false;
+        public const bool IS_DROP_WIDGET_HIDDEN = true;
         #endregion
 
         #region Statics
@@ -86,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.PlatformInfo.IsDesktop && !IS_DROP_WIDGET_HIDDEN;
 
         public bool IsDropWidgetEnabled {
-            get => MpAvPrefViewModel.Instance.IsDropWidgetEnabled;
+            get => MpAvPrefViewModel.Instance.IsDropWidgetEnabled && !IS_DROP_WIDGET_HIDDEN;
             private set {
                 if (MpAvPrefViewModel.Instance.IsDropWidgetEnabled != value) {
                     MpAvPrefViewModel.Instance.IsDropWidgetEnabled = value;

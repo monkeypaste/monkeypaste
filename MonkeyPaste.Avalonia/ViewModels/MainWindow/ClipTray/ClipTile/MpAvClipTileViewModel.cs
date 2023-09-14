@@ -160,7 +160,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!new_color.IsStringHexColor()) {
                     return;
                 }
-                MpAvMenuExtension.CloseMenu();
+                MpAvMenuView.CloseMenu();
                 CopyItemHexColor = new_color;
                 await InitTitleLayersAsync();
             });
@@ -2238,8 +2238,8 @@ namespace MonkeyPaste.Avalonia {
 
                 IsSelected = true;
                 MpAvMenuView.ShowMenu(
-                    control,
-                    ContextMenuViewModel);
+                    target: control,
+                    dc: ContextMenuViewModel);
             }, (args) => {
                 return CanShowContextMenu && !IsPinPlaceholder;
             });

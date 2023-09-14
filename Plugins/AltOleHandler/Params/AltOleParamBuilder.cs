@@ -9,7 +9,8 @@ namespace AltOleHandler {
         string IconDir => @".\Resources\Images";
 
         (string, string, int, string)[] _formats = new (string, string, int, string)[] {
-                ("SUPeR FUNkY FoRmATZZz","Dat funky format",DEF_MAX_TEXT,"funky.png")
+                ("Dat funky format","SUPeR FUNkY FoRmATZZz",DEF_MAX_TEXT,"funky.png"),
+                ("Text","FUnky Text",DEF_MAX_TEXT,"funky.png"),
         };
         public MpClipboardHandlerFormats GetFormats() {
             return new MpClipboardHandlerFormats() {

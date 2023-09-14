@@ -21,13 +21,13 @@
         <ItemsControl ItemsSource="{Binding Items}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <local:MpAvShortcutKeyView />
+                    <local:MpAvShortcutKeyView Classes.mod="{Binding KeyStr, Converter={x:Static local:MpAvStringKeyLiteralToIsModBoolConverterConverter.Instance}}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"
-                                Spacing="1"
+                                Spacing="3"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch" />
                 </ItemsPanelTemplate>

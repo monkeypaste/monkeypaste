@@ -7,7 +7,7 @@
   "projectUrl": "https://www.monkeypaste.com",
   "iconUri": "/Resources/Images/icon.png",
   "tags": "Core,Clipboard,Drag and Drop,Text,Rtf,Rich Text,Html,Csv,Image,Png,Jpg,Jpeg,Link,Avalonia",
-  "bundleType": "Dll",
+  "packageType": "Dll",
   "clipboardHandler": {
     "readers": [
       {

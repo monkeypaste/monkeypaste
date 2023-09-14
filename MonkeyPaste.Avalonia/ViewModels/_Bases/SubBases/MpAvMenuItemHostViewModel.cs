@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
+using System.Linq;
+using System.Windows.Input;
 //using Xamarin.Forms;
 
 namespace MonkeyPaste.Avalonia {
@@ -42,6 +45,12 @@ namespace MonkeyPaste.Avalonia {
                 .FirstOrDefault(x => FindItemByIdentifier(identifier, x) != null);
 
         }
+        public ICommand ShowSelectorMenuCommand => new MpCommand<object>(
+            (args) => {
 
+                MpAvMenuView.ShowMenu(
+                    target: args as Control,
+                    dc: PopupMenu);
+            });
     }
 }

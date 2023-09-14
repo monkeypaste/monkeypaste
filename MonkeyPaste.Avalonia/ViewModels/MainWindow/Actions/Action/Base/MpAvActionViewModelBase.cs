@@ -1605,12 +1605,9 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent.FocusAction != this) {
                     Parent.FocusAction = this;
                 }
-                MpAvMenuExtension.ShowMenu(
-                    control: args as Control,
-                    placement: PlacementMode.Right,
-                    mivm: ContextMenuViewModel//,
-                                              //selectOnRightClick: true
-                    );
+                MpAvMenuView.ShowMenu(
+                    target: args as Control,
+                    dc: ContextMenuViewModel);
             });
 
         public ICommand ChangeParentCommand => new MpAsyncCommand<object>(

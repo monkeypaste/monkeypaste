@@ -3,6 +3,7 @@ using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpCopyItemExtensions {
@@ -34,11 +35,20 @@ namespace MonkeyPaste.Avalonia {
                     switch (ci.ItemType) {
                         case MpCopyItemType.Text:
                             switch (format) {
+                                case MpPortableDataFormats.AvHtml_bytes:
+                                    data = ci.ItemData.ToBase64String();
+                                    break;
                                 case MpPortableDataFormats.CefHtml:
                                     data = ci.ItemData;
                                     break;
                                 case MpPortableDataFormats.Text:
                                     data = ci.ItemData.ToPlainText("html");
+                                    break;
+                                case MpPortableDataFormats.AvPNG:
+                                    data = ci.ItemData.ToHtmlImageDoc();
+                                    break;
+                                case MpPortableDataFormats.AvFiles:
+                                    data = ci.ItemData.ToFile(forcePath: ci.GetDefaultFilePaths().FirstOrDefault());
                                     break;
                             }
                             break;
@@ -48,14 +58,24 @@ namespace MonkeyPaste.Avalonia {
                                     data = ci.ItemData.ToHtmlImageDoc();
                                     break;
                                 case MpPortableDataFormats.Text:
-                                    data = ci.ItemData.ToBytesFromBase64String();
+                                    data = ci.ItemData.ToAvBitmap().ToAsciiImage();
+                                    break;
+                                case MpPortableDataFormats.AvFiles:
+                                    data = ci.ItemData.ToFile(forcePath: ci.GetDefaultFilePaths().FirstOrDefault());
                                     break;
                             }
                             break;
                         case MpCopyItemType.FileList:
                             switch (format) {
+                                case MpPortableDataFormats.Text:
+                                    data = ci.ItemData;
+                                    break;
                                 case MpPortableDataFormats.AvFiles:
                                     data = ci.ItemData.SplitNoEmpty(Environment.NewLine);
+                                    break;
+
+                                case MpPortableDataFormats.AvPNG:
+                                    data = ci.ItemData.ToHtmlImageDoc();
                                     break;
                             }
                             break;
