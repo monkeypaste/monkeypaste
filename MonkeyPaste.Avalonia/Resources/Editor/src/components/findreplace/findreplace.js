@@ -276,6 +276,8 @@ function showFindReplaceToolbar(fromHost = false) {
 
 	updateAllElements();
 
+	populateFindReplaceResults();
+
 	if (!fromHost) {
 		onFindReplaceVisibleChange_ntf(true);
 	}
@@ -537,25 +539,14 @@ function navigateFindReplaceResults(dir) {
 
 	let cur_doc_range = globals.CurFindReplaceDocRanges[globals.CurFindReplaceDocRangeIdx];
 	if (cur_doc_range) {
-		let cur_doc_range_head_rect = getRangeRects({ index: cur_doc_range.index, length: 0 }, true, true, false)[0];
-		scrollToEditorLoc(cur_doc_range_head_rect.left, cur_doc_range_head_rect.top);
+		//let cur_doc_range_head_rect = getRangeRects({ index: cur_doc_range.index, length: 0 }, true, true, false)[0];
+		//scrollToEditorLoc(cur_doc_range_head_rect.left, cur_doc_range_head_rect.top);
+		const scroll_opts = {
+			start: { behavior: 'auto', block: 'center', inline: 'center' },
+			end: { behavior: 'auto', block: 'center', inline: 'center' }
+		};
+		scrollDocRangeIntoView(cur_doc_range, scroll_opts);
 	}
-	//let cur_dom_range = convertDocRangeToDomRange(cur_doc_range);
-	//if (cur_dom_range && cur_dom_range.startContainer) {
-		//if (cur_dom_range.startContainer.nodeType === 3) {
-		//	cur_dom_range.startContainer.parentNode.scrollIntoView();
-		//} else {
-		//	cur_dom_range.startContainer.scrollIntoView();
-		//}
-	//}
-
-	//let cur_doc_range_scroll_offset = getDocRangeScrollOffset(cur_doc_range);
-	//scrollEditorTop(cur_doc_range_scroll_offset.top);
-
-	//let active_y = globals.CurFindReplaceDocRangesRects[globals.CurFindReplaceDocRangeRectIdxLookup[globals.CurFindReplaceDocRangeIdx][0]].top;
-	//scrollEditorTop(active_y);
-
-	//drawOverlay();
 }
 
 function deactivateFindReplace(redraw = true) {

@@ -106,16 +106,16 @@ function scrollToEditorLoc(x, y) {
 function scrollDocRangeIntoView(docRange, opts) {
     // opts as bool = alignToTop
     // opts as obj = behavior (smooth|instant|auto), block (*start*|center|end|nearest), inline (start|center|end|*nearest*)
-    const def_start_opts = { behavior: 'auto', block: 'start', inline: 'nearest' };
-    const def_end_opts = { behavior: 'auto', block: 'end', inline: 'nearest' };
+    const start_opts = opts && opts.start ? opts.start : { behavior: 'auto', block: 'start', inline: 'nearest' };
+    const end_opts = opts && opts.end ? opts.end : { behavior: 'auto', block: 'end', inline: 'nearest' };
 
     const start_elm = getElementAtDocIdx(docRange.index, true);
     const end_elm = getElementAtDocIdx(Math.min(getDocLength()-1,docRange.index + docRange.length), true);
 
-    start_elm.scrollIntoView(isNullOrUndefined(opts) ? def_start_opts : opts);
+    start_elm.scrollIntoView(start_opts);
     if (docRange.length > 0) {
         // NOTE for big (multiline spans for example) don't include end 
-        end_elm.scrollIntoView(isNullOrUndefined(opts) ? def_end_opts : opts);
+        end_elm.scrollIntoView(end_opts);
     }
 }
 

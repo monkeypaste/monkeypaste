@@ -2,7 +2,7 @@
 
 function initMain(initObj) {
 	try {
-		globals.EnvName = !initObj.envName ? globals.WindowsEnv : initObj.envName;
+		globals.EnvName = initObj && initObj.envName ? initObj.envName : globals.WindowsEnv;
 		initGlobals();
 		initDefaults(initObj.defaults);
 		//initExceptionHandler();
@@ -46,7 +46,13 @@ function initDefaults(defaultsObj) {
 		return;
 	}
 	if (!isNullOrUndefined(defaultsObj.maxUndo)) {
-		globals.MaxUndoLimit = parseInt(defaultsObj.maxUndo);
+		globals.MaxUndoLimit = defaultsObj.maxUndo;
+	}
+	if (!isNullOrUndefined(defaultsObj.minLogLevel)) {
+		globals.MinLogLevel = defaultsObj.minLogLevel;
+	}
+	if (!isNullOrUndefined(defaultsObj.isDebug)) {
+		globals.IsDebug = defaultsObj.isDebug;
 	}
 	
 	if (!isNullOrUndefined(defaultsObj.bgOpacity)) {
@@ -56,7 +62,6 @@ function initDefaults(defaultsObj) {
 	const bg_opacity = 0;// parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
 	if(!isNullOrUndefined(defaultsObj.currentTheme)) {
 		globals.EditorTheme = defaultsObj.currentTheme;
-
 
 		let no_sel_bg = 'transparent';
 		let sub_sel_bg = `rgba(189,188,188,${bg_opacity})`;
@@ -72,6 +77,7 @@ function initDefaults(defaultsObj) {
 		let sel_fg = 'black';
 		let caret_color = 'black';
 		let copy_color = 'green';
+		let hover_color = 'gold';
 
 		if (defaultsObj.currentTheme.toLowerCase() == 'dark') {
 			getEditorContainerElement().classList.remove('light');
@@ -91,6 +97,7 @@ function initDefaults(defaultsObj) {
 			sel_fg = 'white';
 			caret_color = 'white';
 			copy_color = 'lime';
+			hover_color = 'yellow';
 		} else {
 			getEditorContainerElement().classList.add('light');
 			getEditorContainerElement().classList.remove('dark');
@@ -114,6 +121,7 @@ function initDefaults(defaultsObj) {
 		setElementComputedStyleProp(document.body, '--pastetemplatebgcolor', cleanHexColor(paste_template_bg_color,null,false));
 		setElementComputedStyleProp(document.body, '--pastetoolbarbuttoncolor', cleanHexColor(paste_toolbar_button_color,null,false));
 		setElementComputedStyleProp(document.body, '--edittemplatebgcolor', cleanHexColor(edit_template_bg_color,null,false));
+		setElementComputedStyleProp(document.body, '--hovercolor', cleanHexColor(hover_color,null,false));
 
 	}
 	if(!isNullOrUndefined(defaultsObj.defaultFontFamily)) {

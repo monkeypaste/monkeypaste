@@ -1,22 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 
 namespace MonkeyPaste.Common {
-
     public static class MpConsole {
         #region Private Variables
         private static bool _canLogToFile = true;
         private static StreamWriter _logStream;
+
+        private static object _logLock = new object();
+
         #endregion
 
         #region Properties
+
+        public static MpLogLevel MinLogLevel =>
+#if DEBUG
+            MpLogLevel.Debug;
+#else
+            MpLogLevel.Error;
+#endif
+
         public static bool HasInitialized { get; private set; } = false;
 
         public static double MaxLogFileSizeInMegaBytes = 3.25;
@@ -53,21 +60,26 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static void WriteLine(string line, bool pad_pre = false, bool pad_post = false) {
+
+        public static void WriteLine(string line, bool pad_pre = false, bool pad_post = false, MpLogLevel level = MpLogLevel.Debug) {
+            if (!CanLog(level)) {
+                return;
+            }
             line = line == null ? string.Empty : line;
             string str = line.ToString();
-            str = $"[{DateTime.Now.ToString()}] {str}";
+            str = $"[{DateTime.Now}] {str}";
             if (LogToConsole) {
-                WriteLineWrapper(str, false, pad_pre, pad_post);
+                WriteLineWrapper(str, false, pad_pre, pad_post, level);
             }
             if (LogToFile) {
-                WriteLogLine(str);
+                WriteLineToFile(str);
             }
         }
-        public static void WriteWarningLine(string line, bool pad_pre = false, bool pad_post = false) {
-            WriteLine("[WARNING] " + line, pad_pre, pad_post);
-        }
-        public static void WriteTraceLine(object line, object ex = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
+
+        public static void WriteTraceLine(object line, object ex = null, MpLogLevel level = MpLogLevel.Debug, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
+            if (!CanLog(level)) {
+                return;
+            }
             line = line == null ? string.Empty : line;
 
             line = $"[{DateTime.Now.ToString()}] {line}";
@@ -85,13 +97,27 @@ namespace MonkeyPaste.Common {
                 }
             }
             if (LogToFile) {
-                WriteLogLine(line);
+                WriteLineToFile(line);
                 if (ex != null) {
-                    WriteLogLine("Exception: ");
-                    WriteLogLine(ex);
+                    WriteLineToFile("Exception: ");
+                    WriteLineToFile(ex);
                 }
             }
         }
+
+
+        public static void ShutdownLog() {
+            if (_logStream == null) {
+                return;
+            }
+            _logStream.Close();
+            _logStream.Dispose();
+            _logStream = null;
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private static void LogException(object ex, bool isTrace = true, bool recursive = true, int depth = 0) {
             if (ex == null) {
@@ -112,9 +138,7 @@ namespace MonkeyPaste.Common {
                 WriteLineWrapper("Exception: " + ex.ToString(), isTrace);
             }
         }
-        private static object _logLock = new object();
-        public static void WriteLogLine(object line, params object[] args) {
-
+        private static void WriteLineToFile(object line, params object[] args) {
             if (!_canLogToFile || _logStream == null) {
                 return;
             }
@@ -134,24 +158,9 @@ namespace MonkeyPaste.Common {
             }
             catch {
                 _canLogToFile = false;
-                //WriteTraceLine($"Error writing to console log file at path '{LogFilePath}'", aex);
-
             }
         }
-
-        public static void ShutdownLog() {
-            if (_logStream == null) {
-                return;
-            }
-            _logStream.Close();
-            _logStream.Dispose();
-            _logStream = null;
-        }
-        #endregion
-
-        #region Private Methods
-
-        private static void WriteLineWrapper(string str, bool isTrace = false, bool pad_pre = false, bool pad_post = false) {
+        private static void WriteLineWrapper(string str, bool isTrace = false, bool pad_pre = false, bool pad_post = false, MpLogLevel level = MpLogLevel.Debug) {
             if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net framework") || isTrace) {
                 // wpf
                 if (pad_pre) {
@@ -196,54 +205,10 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        #endregion
-
-        private class ExclusiveSynchronizationContext : SynchronizationContext {
-            private bool done;
-            public Exception InnerException { get; set; }
-            readonly AutoResetEvent workItemsWaiting = new AutoResetEvent(false);
-            readonly Queue<Tuple<SendOrPostCallback, object>> items =
-                new Queue<Tuple<SendOrPostCallback, object>>();
-
-            public override void Send(SendOrPostCallback d, object state) {
-                throw new NotSupportedException("We cannot send to our same thread");
-            }
-
-            public override void Post(SendOrPostCallback d, object state) {
-                lock (items) {
-                    items.Enqueue(Tuple.Create(d, state));
-                }
-                workItemsWaiting.Set();
-            }
-
-            public void EndMessageLoop() {
-                Post(_ => done = true, null);
-            }
-
-            public void BeginMessageLoop() {
-                while (!done) {
-                    Tuple<SendOrPostCallback, object> task = null;
-                    lock (items) {
-                        if (items.Count > 0) {
-                            task = items.Dequeue();
-                        }
-                    }
-                    if (task != null) {
-                        task.Item1(task.Item2);
-                        if (InnerException != null) // the method threw an exeption
-                        {
-                            throw new AggregateException("MpAsyncHelpers.Run method threw an exception.", InnerException);
-                        }
-                    } else {
-                        workItemsWaiting.WaitOne();
-                    }
-                }
-            }
-
-            public override SynchronizationContext CreateCopy() {
-                return this;
-            }
+        private static bool CanLog(MpLogLevel level) {
+            return (int)level <= (int)MinLogLevel;
         }
+        #endregion
     }
 
 }

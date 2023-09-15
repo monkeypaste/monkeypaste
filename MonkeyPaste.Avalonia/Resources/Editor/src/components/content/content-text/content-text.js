@@ -832,7 +832,7 @@ function transferTextContent(dt, source_doc_range, dest_doc_range, source) {
 	// ignore html for append when dest formating pref is enabled
 	const can_transfer_formatted_content =
 		!isAnyAppendEnabled() ||
-		!globals.IsAppendWIthDestFormattingEnabled;
+		!globals.isAppendWithDestFormattingEnabled;
 	if (isString(dt_html_str) && can_transfer_formatted_content) {
 		let dt_html_delta = convertHtmlToDelta(dt_html_str);
 		dt_html_delta = decodeHtmlEntitiesInDeltaInserts(dt_html_delta);

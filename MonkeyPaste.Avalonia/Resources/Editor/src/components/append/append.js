@@ -215,7 +215,7 @@ function disablePreAppend(fromHost = false) {
 
 // #region Actions
 
-function updateAppendModeState(req, fromHost) {
+function updateAppendModeState(req, fromHost = false) {
 	if (req == null) {
 		if (isAnyAppendEnabled()) {
 			disableAppendMode(fromHost);
@@ -292,8 +292,8 @@ function updateAppendModeState(req, fromHost) {
 		appendContentData(req.appendData);
 	}
 
-	if (fromhost) {
-		globals.IsAppendWIthDestFormattingEnabled = req.isAppendWIthDestFormattingEnabled;
+	if (fromHost) {
+		globals.isAppendWithDestFormattingEnabled = req.isAppendWithDestFormattingEnabled;
 	}
 }
 

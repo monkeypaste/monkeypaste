@@ -56,15 +56,20 @@
             Classes.html="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
         <Grid>
             <DockPanel x:Name="ToolTipTextContainer">
-                <TextBlock x:Name="InputGestureTextBlock"
+                <!--<TextBlock x:Name="InputGestureTextBlock"
                            DockPanel.Dock="Right"
                            Margin="5,0,0,0"
                            FontSize="14"
                            FontStyle="Italic"
                            Foreground="{DynamicResource ThemeGrayAccent3Color}"
-                           Text="{Binding InputGestureText, ElementName=ToolTipView, StringFormat='({0})'}">
+                           Text="{Binding InputGestureText, ElementName=ToolTipView, StringFormat='({0})'}" />-->
 
-                </TextBlock>
+                <local:MpAvShortcutLabel Classes="menuItemGesture"
+                                         KeyGesture="{Binding InputGestureText, ElementName=ToolTipView}"
+                                         DockPanel.Dock="Right"
+                                         Margin="5,0,0,0"
+                                         HorizontalAlignment="Right"
+                                         VerticalAlignment="Center" />
                 <TextBlock x:Name="ToolTipTextBlock"
                            FontSize="14"
                            Margin="0"

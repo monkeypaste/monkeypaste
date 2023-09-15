@@ -207,11 +207,13 @@ namespace MonkeyPaste.Avalonia {
                 default:
                     return string.Format(
 @"body {{ color: {0}; font: {1}px {2}; }}
+.paste-tooltip-suffix {{ font-style: italic; color: {3}; }}
 a:link {{ text-decoration: none; }}
 a:hover {{ text-decoration: underline; }}",
                         GetDefaultColor(hc),
                         GetDefaultFontSize(hc),
-                        MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily);
+                        MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily,
+                        Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent3Color.ToString()).RemoveHexAlpha());
             }
         }
     }

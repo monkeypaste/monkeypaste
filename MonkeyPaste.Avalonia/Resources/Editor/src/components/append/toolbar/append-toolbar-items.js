@@ -102,7 +102,7 @@ function createAppendButtonLookup() {
 			],
 			[
 				'triangle-down',
-				`${globals.AppendPostLabel} ##ToggleAppendPostMode##`
+				`${globals.AppendPostLabel} ##ToggleAppendPreMode##`
 			],
 		],
 		[
@@ -165,6 +165,7 @@ function updatePasteAppendToolbar() {
 			svg_key = disabled_svg_key;
 			tt_text = disabled_tt_text;
 		}
+		//tt_text = decodeStringWithShortcut(tt_text);
 		elm.innerHTML = getSvgHtml(svg_key);
 		elm.setAttribute('hover-tooltip', tt_text);
 	}

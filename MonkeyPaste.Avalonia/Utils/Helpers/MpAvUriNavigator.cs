@@ -81,22 +81,45 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        private Uri ParseUriFromArgStr(string argStr) {
+            if (!Uri.IsWellFormedUriString(argStr, UriKind.Absolute) &&
+                        argStr.IsFileOrDirectory()) {
+                argStr = argStr.ToFileSystemUriFromPath();
+            }
+            if (Uri.IsWellFormedUriString(argStr, UriKind.Absolute)) {
+                return new Uri(argStr, UriKind.Absolute);
+            }
+            return null;
+        }
         #endregion
 
         #region Commands
 
         public ICommand NavigateToUriCommand => new MpAsyncCommand<object>(
             async (args) => {
+                bool needsConfirm = false;
                 Uri uri = null;
                 if (args is Uri) {
                     uri = args as Uri;
                 } else if (args is string argStr) {
-                    if (!Uri.IsWellFormedUriString(argStr, UriKind.Absolute) &&
-                        argStr.IsFileOrDirectory()) {
-                        argStr = argStr.ToFileSystemUriFromPath();
-                    }
-                    if (Uri.IsWellFormedUriString(argStr, UriKind.Absolute)) {
-                        uri = new Uri(argStr, UriKind.Absolute);
+                    uri = ParseUriFromArgStr(argStr);
+                } else if (args is object[] argParts &&
+                            argParts.Length == 2 &&
+                            argParts[0] is string uriStr &&
+                            argParts[1] is bool confirmArg) {
+                    uri = ParseUriFromArgStr(uriStr);
+                    needsConfirm = confirmArg;
+                }
+                if (needsConfirm) {
+                    var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+                        title: "Confirm",
+                        message: $"Do you really want to goto '{uri}'?",
+                        iconResourceObj: "QuestionMarkImage",
+                        owner: MpAvWindowManager.ActiveWindow);
+                    if (!result) {
+                        // cancel
+                        return;
                     }
                 }
                 if (MpAvWindowManager.MainWindow.IsActive) {

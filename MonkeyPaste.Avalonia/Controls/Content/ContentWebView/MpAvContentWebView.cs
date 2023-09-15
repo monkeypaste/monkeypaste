@@ -479,14 +479,13 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillShowToolTipNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillShowToolTipNotification showToolTipNtf) {
                         if (showToolTipNtf.isVisible && !IsDragging) {
-                            var tt = AvToolTip.GetTip(this) as MpAvToolTipView;
-                            if (tt == null) {
-                                tt = new MpAvToolTipView();
-                                AvToolTip.SetTip(this, tt);
-                            }
+                            AvToolTip.SetTip(this, null);
+                            var tt = new MpAvToolTipView();
+                            AvToolTip.SetTip(this, tt);
+                            tt.ToolTipText = showToolTipNtf.tooltipText;
                             tt.ToolTipHtml = showToolTipNtf.tooltipHtml;
-                            //AvToolTip.SetHorizontalOffset(this, showToolTipNtf.anchorX);
-                            //AvToolTip.SetHorizontalOffset(this, showToolTipNtf.anchorY);
+                            tt.InputGestureText = showToolTipNtf.gestureText;
+                            AvToolTip.SetVerticalOffset(this, -20);
                             AvToolTip.SetPlacement(this, PlacementMode.Pointer);
                             AvToolTip.SetIsOpen(this, true);
                         } else {
@@ -715,8 +714,10 @@ namespace MonkeyPaste.Avalonia {
                                 MpAvAnalyticItemCollectionViewModel.Instance
                                 .ApplyCoreAnnotatorCommand.Execute(BindingContext);
                             });
+                            return;
                         }
                         string uri_str = HttpUtility.HtmlDecode(navUriReq.uri);
+
                         MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(uri_str);
                     }
                     break;
@@ -987,7 +988,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-
         public async Task ReloadAsync() {
             await LoadEditorAsync();
             await LoadContentAsync();
@@ -1035,6 +1035,8 @@ namespace MonkeyPaste.Avalonia {
 
         private MpQuillDefaultsRequestMessage GetDefaultsMessage() {
             return new MpQuillDefaultsRequestMessage() {
+                minLogLevel = (int)MpConsole.MinLogLevel,
+                isDebug = MpDebug.IsDebug,
                 defaultFontFamily = MpAvPrefViewModel.Instance.DefaultEditableFontFamily,
                 defaultFontSize = MpAvPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
                 isSpellCheckEnabled = MpAvPrefViewModel.Instance.IsSpellCheckEnabled,
@@ -1346,9 +1348,7 @@ namespace MonkeyPaste.Avalonia {
                     // data's getting reset again
                     MpDebug.Break("data reset caught in webview process content changed. ignoring update");
                 } else {
-                    //if (BindingContext.IsContentReadOnly) {
                     BindingContext.CopyItemData = contentChanged_ntf.itemData;
-                    //}
                 }
             }
             if (!string.IsNullOrWhiteSpace(contentChanged_ntf.dataTransferCompletedRespFragment) &&
@@ -1363,7 +1363,13 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.CopyItemSize2 = contentChanged_ntf.itemSize2;
             }
 
-            BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
+            if (BindingContext.HasTemplates != contentChanged_ntf.hasTemplates) {
+                BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
+                if (BindingContext.HasTemplates) {
+                    GrowView();
+                }
+            }
+
             BindingContext.HasEditableTable = contentChanged_ntf.hasEditableTable;
             BindingContext.ActualContentHeight = contentChanged_ntf.contentHeight;
 
@@ -1372,6 +1378,10 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext.IsAppendNotifier) {
                 MpConsole.WriteLine("content changed on append");
                 Dispatcher.UIThread.Post(async () => {
+                    // NOTE have to call this as
+                    // a workaround since db update trigger made editing too slow
+                    // and this is a case its needed or it doesn't update (the view at least)
+                    //await BindingContext.RefreshModelAsync();
                     // sync append item to current clipboard
                     var append_mpdo = await GetDataObjectAsync(null, false, true);
                     await Mp.Services.DataObjectTools
@@ -1493,12 +1503,8 @@ namespace MonkeyPaste.Avalonia {
             Dispatcher.UIThread.Post(async () => {
                 if (IsContentReadOnly) {
                     if (!BindingContext.IsWindowOpen) {
-                        Resize(BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
+                        ShrinkView();
                     }
-
-                    //string enableReadOnlyRespStr = await SendMessageAsync("enableReadOnly_ext_ntf()");
-                    //var qrm = MpJsonConverter.DeserializeBase64Object<MpQuillEditorContentChangedMessage>(enableReadOnlyRespStr);
-
                     _lastReadOnlyEnabledFromHostResp = null;
                     SendMessage("enableReadOnly_ext_ntf()");
                     while (_lastReadOnlyEnabledFromHostResp == null) {
@@ -1508,7 +1514,7 @@ namespace MonkeyPaste.Avalonia {
                     _lastReadOnlyEnabledFromHostResp = null;
                     ProcessContentChangedMessage(resp);
                 } else {
-                    Resize(BindingContext.EditableWidth, BindingContext.EditableHeight);
+                    GrowView();
                     SendMessage($"disableReadOnly_ext()");
                 }
             });
@@ -1550,12 +1556,13 @@ namespace MonkeyPaste.Avalonia {
 
             if (IsContentSubSelectable) {
                 SendMessage($"enableSubSelection_ext('{MpAvClipTrayViewModel.Instance.CurPasteInfoMessage.SerializeJsonObjectToBase64()}')");
-                if (BindingContext.HasTemplates && !BindingContext.IsDropOverTile) {
-                    Resize(BindingContext.EditableWidth, BindingContext.EditableHeight);
+                if (//BindingContext.HasTemplates && 
+                    !BindingContext.IsDropOverTile) {
+                    GrowView();
                 }
             } else {
                 SendMessage("disableSubSelection_ext()");
-                Resize(BindingContext.ReadOnlyWidth, BindingContext.ReadOnlyHeight);
+                ShrinkView();
             }
 
         }
@@ -1647,10 +1654,25 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        private void GrowView() {
+            double nw = Math.Max(BindingContext.DesiredWidth, BindingContext.BoundWidth);
+            double nh = Math.Max(BindingContext.EditableHeight, BindingContext.BoundHeight);
+            Resize(nw, nh);
+        }
+        private void ShrinkView() {
+            double nw = Math.Min(BindingContext.DesiredWidth, BindingContext.BoundWidth);
+            double nh = Math.Min(BindingContext.BoundHeight, BindingContext.BoundHeight); //no change
+            Resize(nw, nh);
+        }
         private void Resize(double nw, double nh) {
             // NOTE trying to isolate this cause persistent size gets lost
             // keeping animation smooth so waiting till end to make sure its set
-            MpAvResizeExtension.ResizeAnimated(this, nw, nh, () => BindingContext.StoreSelectionStateCommand.Execute(null));
+            MpAvResizeExtension.ResizeAnimated(this, nw, nh, () => {
+                if (BindingContext == null) {
+                    return;
+                }
+                BindingContext.StoreSelectionStateCommand.Execute(null);
+            });
         }
 
     }

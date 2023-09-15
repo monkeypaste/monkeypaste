@@ -13,7 +13,7 @@ function getBusySpinnerMenuItem() {
         {
             icon: 'spinner',
             iconFgColor: 'dimgray',
-            iconClassList: ['rotate'],
+            iconClasses: 'rotate',
             label: 'Loading...'
         }
     ];

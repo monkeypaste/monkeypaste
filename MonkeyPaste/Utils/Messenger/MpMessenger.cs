@@ -15,8 +15,6 @@ namespace MonkeyPaste {
         InPlaceRequeryCompleted,
         TotalQueryCountChanged,
 
-        IsReadOnly, //has context (tile)
-        IsEditable,   //has context (tile)
         ResizingMainWindowComplete,
 
         //UnexpandComplete,

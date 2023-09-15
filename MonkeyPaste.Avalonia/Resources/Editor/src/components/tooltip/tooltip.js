@@ -5,11 +5,27 @@ function initTooltip() {
 	const hover_tt_elms = getTooltipHoverElements();
 	for (var i = 0; i < hover_tt_elms.length; i++) {
 		const htt_elm = hover_tt_elms[i];
+		var tt_enter_mp = null;
 		htt_elm.addEventListener('pointerenter', (e) => {
+			if (tt_enter_mp) {
+				// already showing it
+				//return;
+			}
+			log('tt show' + htt_elm.id);
 			showTooltipOverlay(e.currentTarget);
+			tt_enter_mp = globals.WindowMouseLoc;
 
 		});
 		htt_elm.addEventListener('pointerleave', (e) => {
+			if (!tt_enter_mp) {
+				//return;
+			}
+			const enter_dist = dist(tt_enter_mp, globals.WindowMouseLoc);
+			if (enter_dist < 5) {
+				//return;
+			}
+			log('tt hide' + htt_elm.id + ' exit dist: ' + enter_dist);
+			tt_enter_mp = null;
 			hideTooltipOverlay();
 		});
 	}
@@ -79,9 +95,19 @@ function showTooltipOverlay(targetElm, tooltipText) {
 		// don't show empty tooltip
 		return;
 	}
+
 	if (isRunningInHost()) {
 		let target_loc = getRectCenter(cleanRect(targetElm.getBoundingClientRect()));
-		onShowToolTip_ntf(true, target_loc, tooltipText, parseShortcutText(tooltipText));
+		const sc_parts = parseShortcutTooltipParts(tooltipText);
+		let tt_html = null;
+		let tt_text = sc_parts[0];
+		let tt_gesture = sc_parts[1];
+		if (isNullOrWhiteSpace(tt_gesture)) {
+			// when no gesture treat as html
+			tt_html = tt_text;
+			tt_text = null;
+		}
+		onShowToolTip_ntf(true, target_loc, tt_html,tt_text,tt_gesture);
 		return;
 	}
 

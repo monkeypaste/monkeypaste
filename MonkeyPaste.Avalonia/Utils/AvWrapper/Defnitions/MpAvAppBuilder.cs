@@ -1,7 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using System;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (string.IsNullOrEmpty(iconBase64)) {
-                MpConsole.WriteWarningLine($" could not find icon for info (using question mark): ");
+                MpConsole.WriteLine($" could not find icon for info (using question mark): ");
                 MpConsole.WriteLine(pi.ToString());
                 iconBase64 = MpBase64Images.QuestionMark;
             }

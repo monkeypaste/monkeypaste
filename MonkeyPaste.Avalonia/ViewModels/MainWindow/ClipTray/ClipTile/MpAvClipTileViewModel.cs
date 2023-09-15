@@ -48,9 +48,14 @@ namespace MonkeyPaste.Avalonia {
         public const int AUTO_CYCLE_DETAIL_DELAY_MS = 5000;
         public const string TABLE_WRAPPER_CLASS_NAME = "quill-better-table-wrapper";
 
-        public const double EDITOR_TOOLBAR_MIN_WIDTH = 870.0d;
+        public const double EDITOR_TOOLBAR_MIN_WIDTH = 780.0d;
         public const double PASTE_APPEND_TOOLBAR_MIN_WIDTH = 290.0d;
         public const double PASTE_TEMPLATE_TOOLBAR_MIN_WIDTH = 850.0d;
+
+        public const double PASTE_BUTTON_WIDTH = 93 + 32; // button + expander
+        public const double APPEND_UNEXPANDED_WIDTH = 20;
+        public const double APPEND_EXPANDED_WIDTH = 146;
+        public const double MAX_TEMPLATE_TOOLBAR_WIDTH = 770;
 
         #endregion
 
@@ -432,7 +437,40 @@ namespace MonkeyPaste.Avalonia {
         public double ReadOnlyWidth => MinWidth;
         public double ReadOnlyHeight => MinHeight;
 
+        public double DesiredWidth {
+            get {
 
+                if (Parent == null) {
+                    return 0;
+                }
+                if (Parent.LayoutType == MpClipTrayLayoutType.Grid) {
+                    return BoundWidth;
+                }
+                if (!IsSubSelectionEnabled) {// || !IsWindowOpen) {
+                    return IsPinned ? Parent.DefaultPinItemWidth : Parent.DefaultQueryItemWidth;
+                }
+                double dw = PASTE_BUTTON_WIDTH;
+                if (IsAppendNotifier) {
+                    dw += APPEND_EXPANDED_WIDTH;
+                } else {
+                    dw += APPEND_UNEXPANDED_WIDTH;
+                }
+                if (HasTemplates) {
+                    dw += MAX_TEMPLATE_TOOLBAR_WIDTH;
+                }
+                if (IsContentReadOnly) {
+                    return dw;
+                }
+                dw = Math.Max(dw, EDITOR_TOOLBAR_MIN_WIDTH);
+                if (IsWindowOpen) {
+                    return dw;
+                }
+                if (IsPinned) {
+                    return Math.Min(dw, Parent.ObservedPinTrayScreenWidth);
+                }
+                return Math.Min(dw, Parent.ObservedQueryTrayScreenWidth);
+            }
+        }
         public double EditableWidth {
             get {
                 if (Parent == null) {
@@ -1481,6 +1519,17 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public async Task RefreshModelAsync() {
+            while (HasModelChanged) {
+                await Task.Delay(100);
+            }
+            var ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(CopyItemId);
+            await InitializeAsync(ci, QueryOffsetIdx);
+            //wait for model to propagate then trigger view to reload
+            if (GetContentView() is MpIContentView cv) {
+                await cv.LoadContentAsync();
+            }
+        }
         public void ClearSelection(bool clearEditing = true) {
             IsSelected = false;
             LastSelectedDateTime = DateTime.MaxValue;
@@ -1558,6 +1607,11 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
         private void MpAvClipTileViewModel_PropertyChanged(object s, System.ComponentModel.PropertyChangedEventArgs e1) {
             switch (e1.PropertyName) {
+                case nameof(IsAppendNotifier):
+                    if (IsAppendNotifier) {
+                        IsSubSelectionEnabled = true;
+                    }
+                    break;
                 case nameof(IsAnyBusy):
                     if (Parent != null) {
                         Parent.OnPropertyChanged(nameof(Parent.IsAnyBusy));
@@ -1658,6 +1712,7 @@ namespace MonkeyPaste.Avalonia {
                         MpAvMainWindowViewModel.Instance.LastDecreasedFocusLevelDateTime = DateTime.Now;
                         MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsSubSelectableTile_ById(CopyItemId, QueryOffsetIdx);
                     }
+                    OnPropertyChanged(nameof(MinWidth));
 
                     break;
                 case nameof(IsTitleReadOnly):
@@ -1694,7 +1749,6 @@ namespace MonkeyPaste.Avalonia {
                         IsTitleReadOnly = true;
                         OnPropertyChanged(nameof(IsTitleVisible));
                     }
-                    MpMessenger.Send<MpMessageType>(IsContentReadOnly ? MpMessageType.IsReadOnly : MpMessageType.IsEditable, this);
                     Parent.OnPropertyChanged(nameof(Parent.IsQueryHorizontalScrollBarVisible));
                     Parent.OnPropertyChanged(nameof(Parent.IsQueryVerticalScrollBarVisible));
 
@@ -1702,7 +1756,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
                     IsSubSelectionEnabled = !IsContentReadOnly;
                     OnPropertyChanged(nameof(IsSubSelectionEnabled));
-                    //OnPropertyChanged(nameof(IsContentEditable));
+                    OnPropertyChanged(nameof(MinWidth));
 
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
@@ -1712,6 +1766,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsPasting):
                     Parent.OnPropertyChanged(nameof(Parent.IsPasting));
+                    break;
+                case nameof(HasTemplates):
+                    OnPropertyChanged(nameof(MinWidth));
                     break;
                 case nameof(IsDropOverTile):
                     if (IsDropOverTile && !IsSubSelectionEnabled) {
@@ -1873,6 +1930,10 @@ namespace MonkeyPaste.Avalonia {
                 Background = Brushes.Transparent,
                 CornerRadius = Mp.Services.PlatformResource.GetResource<CornerRadius>("TileCornerRadius")
             };
+            if (pow.Content is MpAvClipTileView ctv &&
+                ctv.Content is MpAvClipBorder cb) {
+                cb.CornerRadius = new CornerRadius(0);
+            }
             //pow.Classes.Add("tileWindow");
             //pow.Classes.Add("fadeIn");
             //pow.Classes.Add("fadeOut");

@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -124,7 +123,10 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
             base.OnAttachedToVisualTree(e);
-
+            IsHitTestVisible = false;
+            if (TopLevel.GetTopLevel(this) is TopLevel tt_tl) {
+                tt_tl.IsHitTestVisible = false;
+            }
             if (e.Root is not TopLevel tl) {
                 return;
             }

@@ -3,9 +3,17 @@ using System.Diagnostics;
 
 namespace MonkeyPaste.Common {
     public static class MpDebug {
-        public static void Break(object args = null, bool silent = false, bool asException = false) {
+        public static bool IsDebug =>
+#if DEBUG
+            true;
+#else
+            false;
+#endif
+        public static void Break(object args = null, bool silent = false, bool asException = false, MpLogLevel level = MpLogLevel.Debug) {
             if (args != null) {
-                MpConsole.WriteLine(args.ToString());
+                MpConsole.WriteLine(
+                    line: args.ToString(),
+                    level: level);
             }
             if (silent) {
                 return;
@@ -20,11 +28,15 @@ namespace MonkeyPaste.Common {
             }
 #endif
         }
-        public static void Assert(bool test, string msg, bool silent = false, bool failAsException = false) {
+        public static void Assert(bool test, string msg, bool silent = false, bool failAsException = false, MpLogLevel level = MpLogLevel.Debug) {
             if (test) {
                 return;
             }
-            Break(msg, silent, failAsException);
+            Break(
+                args: msg,
+                silent: silent,
+                asException: failAsException,
+                level: level);
         }
     }
 }

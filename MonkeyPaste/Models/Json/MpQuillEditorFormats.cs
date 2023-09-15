@@ -20,6 +20,8 @@ namespace MonkeyPaste {
         public bool isConverter { get; set; }
     }
     public class MpQuillDefaultsRequestMessage : MpJsonObject {
+        public int minLogLevel { get; set; }
+        public bool isDebug { get; set; }
         public string defaultFontFamily { get; set; }
         public string defaultFontSize { get; set; }
         public bool isSpellCheckEnabled { get; set; }
@@ -107,6 +109,7 @@ namespace MonkeyPaste {
     }
     public class MpQuillShowToolTipNotification : MpJsonObject {
         public string tooltipHtml { get; set; }
+        public string tooltipText { get; set; }
         public string gestureText { get; set; }
         public double anchorX { get; set; }
         public double anchorY { get; set; }
@@ -238,6 +241,7 @@ namespace MonkeyPaste {
         public string linkText { get; set; }
         public int linkDocIdx { get; set; }
         public string linkType { get; set; }
+        public bool needsConfirm { get; set; }
         public List<string> modKeys { get; set; }
     }
 
@@ -267,7 +271,7 @@ namespace MonkeyPaste {
         public bool isAppendManualMode { get; set; }
         public bool isAppendPaused { get; set; }
         public bool isAppendPreMode { get; set; }
-        public bool isAppendWIthDestFormattingEnabled { get; set; } = true;
+        public bool isAppendWithDestFormattingEnabled { get; set; } = true;
 
         public int appendDocIdx { get; set; }
         public int appendDocLength { get; set; }

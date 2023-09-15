@@ -137,10 +137,24 @@ function showTemplateToolbarContextMenu() {
             let cm = [];
 
             for (var i = 0; i < globals.TemplateTypesMenuOptions.length; i++) {
+                // get predefined template type
                 let tmi = globals.TemplateTypesMenuOptions[i];
-
+                if (tmi.separator) {
+                    cm.push(tmi);
+                    continue;
+                }
+                if (tmi.id == 'MoreLink') {
+                    tmi.action = function () {
+                        onNavigateUriRequested_ntf(tmi.url, 'uri', -1, '', null, true);
+                    }
+                    cm.push(tmi);
+                    continue;
+                }
+                // get all templates for type
                 let allTemplateDefsForType = allTemplateDefs.filter(x => x.templateType.toLowerCase() == tmi.label.toLowerCase());
 
+                tmi.submenu = [];
+                // bind existing template creates to menu items
                 tmi.submenu = allTemplateDefsForType.map(function (ttd) {
                     return {
                         icon: ' ',
@@ -151,8 +165,7 @@ function showTemplateToolbarContextMenu() {
                         },
                     }
                 });
-                tmi.submenu = [];
-
+                // append add new to bottom of template type sub menu
                 if (allTemplateDefsForType.length > 0) {
                     tmi.submenu.push({ separator: true });
                 }
@@ -169,8 +182,6 @@ function showTemplateToolbarContextMenu() {
                 cm.push(tmi);
             }
 
-            cm[1].classes = 'partial-selected';
-            cm[1].submenu[0].classes = 'selected';
             showContextMenu(tb_elm, cm, anchor_corner, menu_anchor_corner, offset.x, offset.y);
         });
 }

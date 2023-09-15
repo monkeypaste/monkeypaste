@@ -16,6 +16,7 @@
     padding: 1px 30px 1px 15px !important;
     display: flex;
     align-items: center;
+    white-space: pre-wrap;
 }
 
 .context-menu-submenu.partial-selected {

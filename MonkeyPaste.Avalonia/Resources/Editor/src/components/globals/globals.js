@@ -38,7 +38,7 @@ var globals = {
 	IsAppendPreMode: false,
 	IsAppendPaused: false,
 
-	IsAppendWIthDestFormattingEnabled: true,
+	isAppendWithDestFormattingEnabled: true,
 
 	FixedAppendIdx: -1,
 
@@ -48,8 +48,8 @@ var globals = {
 	AppendInlineModeLabel: 'Inline',
 	AppendManualModeLabel: 'Manual',
 	AppendNonManualModeLabel: 'Extent',
-	AppendPreLabel: 'Before',
-	AppendPostLabel: 'After',
+	AppendPreLabel: 'Toggle Before',
+	AppendPostLabel: 'Toggle Before',
 	AppendPauseLabel: 'Pause appending to clipboard',
 	AppendResumeLabel: 'Resume appending to clipboard',
 	AppendCloseLabel: 'Finish appending',
@@ -57,7 +57,7 @@ var globals = {
 
 	// #region CLIPBOARD
 
-	PLACEHOLDER_DATAOBJECT_TEXT:'3acaaed7-862d-47f5-8614-3259d40fce4d',
+	PLACEHOLDER_DATAOBJECT_TEXT: '3acaaed7-862d-47f5-8614-3259d40fce4d',
 	// #endregion
 
 	// #region COLORS
@@ -163,13 +163,13 @@ var globals = {
 	// #endregion
 
 	// #region PALETTE
-	ColorPaletteAnchorElement:  null,
-	ColorPaletteAnchorResultCallback:  null,
+	ColorPaletteAnchorElement: null,
+	ColorPaletteAnchorResultCallback: null,
 
-	COLOR_PALETTE_ROW_COUNT:  5,
-	COLOR_PALETTE_COL_COUNT:  14,
+	COLOR_PALETTE_ROW_COUNT: 5,
+	COLOR_PALETTE_COL_COUNT: 14,
 
-	IsCustomColorPaletteOpen:  false,
+	IsCustomColorPaletteOpen: false,
 	// #endregion
 
 	// #endregion
@@ -204,13 +204,13 @@ var globals = {
 
 	// #region DATA TRANSFER
 
-	LOCAL_HOST_DOMAIN:  'https://localhost',
-	URL_DATA_FORMAT:  "uniformresourcelocator",
-	URI_LIST_FORMAT:  'text/uri-list',
-	HTML_FORMAT:  'text/html',
-	HTML_FRAGMENT_FORMAT:  'html format',
-	TEXT_FORMAT:  'text/plain',
-	FILE_ITEM_FRAGMENT_FORMAT:  'mp internal file list fragment format',
+	LOCAL_HOST_DOMAIN: 'https://localhost',
+	URL_DATA_FORMAT: "uniformresourcelocator",
+	URI_LIST_FORMAT: 'text/uri-list',
+	HTML_FORMAT: 'text/html',
+	HTML_FRAGMENT_FORMAT: 'html format',
+	TEXT_FORMAT: 'text/plain',
+	FILE_ITEM_FRAGMENT_FORMAT: 'mp internal file list fragment format',
 
 	// #endregion
 
@@ -292,16 +292,16 @@ var globals = {
 
 	// #region FIND/REPLACE
 
-	CurFindReplaceDocRanges:  null,
-	CurFindReplaceDocRangeIdx:  -1,
+	CurFindReplaceDocRanges: null,
+	CurFindReplaceDocRangeIdx: -1,
 
-	CurFindReplaceDocRangeRectIdxLookup:  null,
+	CurFindReplaceDocRangeRectIdxLookup: null,
 
-	CurFindReplaceDocRangesRects:  null,
+	CurFindReplaceDocRangesRects: null,
 
-	LastFindReplaceInputState:  null,
+	LastFindReplaceInputState: null,
 
-	Searches:  null,
+	Searches: null,
 	// #endregion
 
 	// #region FOCUS
@@ -589,9 +589,9 @@ var globals = {
 	// #endregion
 
 	// #region FONT SIZE
-	DefaultFontSizes:  ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'],
-	DefaultFontSize:  '12px',
-	IsFontSizePickerOpen:  false,
+	DefaultFontSizes: ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'],
+	DefaultFontSize: '12px',
+	IsFontSizePickerOpen: false,
 	// #endregion
 
 	// #endregion
@@ -599,11 +599,11 @@ var globals = {
 	// #region INPUT
 
 	// #region KEYBOARD
-	DecreaseFocusLevelKey:  'Escape',
-	IncreaseFocusLevelKey:  ' ',
+	DecreaseFocusLevelKey: 'Escape',
+	IncreaseFocusLevelKey: ' ',
 
 
-	NavigationKeys:  [
+	NavigationKeys: [
 		"ArrowLeft",
 		"ArrowUp",
 		"ArrowRight",
@@ -620,28 +620,28 @@ var globals = {
 		//globals.IncreaseFocusLevelKey
 	],
 
-	IsMetaDown:  false, //duplicate (mac)
-	IsCtrlDown:  false, //duplicate
-	IsShiftDown:  false, //split 
-	IsAltDown:  false, // w/ formatting (as html)? ONLY formating? dunno
+	IsMetaDown: false, //duplicate (mac)
+	IsCtrlDown: false, //duplicate
+	IsShiftDown: false, //split 
+	IsAltDown: false, // w/ formatting (as html)? ONLY formating? dunno
 	// #endregion
 
 	// #region MOUSE
 
-	WindowMouseDownLoc:  null,
-	WindowMouseLoc:  null,
+	WindowMouseDownLoc: null,
+	WindowMouseLoc: null,
 
-	WasSupressRightMouseDownSentToHost:  false,
-	WasInternalContextMenuAbleToShow:  false,
+	WasSupressRightMouseDownSentToHost: false,
+	WasInternalContextMenuAbleToShow: false,
 	// #endregion
 	// #endregion
 
 	// #region LINKS
-	RequiredNavigateUriModKeys:  [
+	RequiredNavigateUriModKeys: [
 		'Alt'
 	],
 
-	LinkTypes:  [
+	LinkTypes: [
 		'fileorfolder',
 		'uri',
 		'email',
@@ -652,12 +652,12 @@ var globals = {
 		'delete-item'
 	],
 
-	LinkTypeAttrb:  null,
+	LinkTypeAttrb: null,
 	// #endregion
 
 	// #region LISTS
-	ENCODED_LIST_ITEM_OPEN_TOKEN:  "{li{",
-	ENCODED_LIST_ITEM_CLOSE_TOKEN:  "}li}",
+	ENCODED_LIST_ITEM_OPEN_TOKEN: "{li{",
+	ENCODED_LIST_ITEM_CLOSE_TOKEN: "}li}",
 	ListOptionItems: [
 		{
 			icon: 'list-ordered',
@@ -681,11 +681,20 @@ var globals = {
 
 	// #endregion
 
+	// #region LOG
+	MinLogLevel: 0,
+	IsDebug: false,
+	LogLevel_Verbose: 1,
+	LogLevel_Debug: 2,
+	LogLevel_Informational: 3,
+	LogLevel_Error: 4,
+	LogLevel_Fatal: 5,
+	// #endregion
+
 	// #region MAIN
 	IsLoaded: false,
 	DomParser: new DOMParser(),
 	DomSerializer: new XMLSerializer(),
-	IsDebug: true,
 	IsTesting: false,
 	IsSpellCheckEnabled: false,
 	MaxUndoLimit: -1,
@@ -696,12 +705,12 @@ var globals = {
 	// #endregion
 
 	// #region OVERLAY
-	IS_OVERLAY_CARET_ENABLED:  true,
+	IS_OVERLAY_CARET_ENABLED: true,
 
 
-	CaretBlinkTickMs:  500,
-	CaretBlinkOffColor:  null,
-	CaretBlinkTimerInterval:  null,
+	CaretBlinkTickMs: 500,
+	CaretBlinkOffColor: null,
+	CaretBlinkTimerInterval: null,
 
 	// #endregion
 
@@ -709,7 +718,7 @@ var globals = {
 
 	// #region PASTE BUTTON POPUP
 
-	PasteButtonFormatsLabel: 'Formats...',
+	PasteButtonFormatsLabel: 'Clipboard Formats...',
 	PasteButtonAppendBeginLabel: 'Append...',
 
 	// #endregion
@@ -745,60 +754,60 @@ var globals = {
 
 	// #region SCROLL
 
-	SuppressNextEditorScrollChangedNotification:  false,
+	SuppressNextEditorScrollChangedNotification: false,
 
-	LastVerticalScrollBarIsVisible:  false,
-	LastHorizontalScrollBarIsVisible:  false,
+	LastVerticalScrollBarIsVisible: false,
+	LastHorizontalScrollBarIsVisible: false,
 	// #region AUTO SCROLL
 
-	AutoScrolledOffset:  null,
+	AutoScrolledOffset: null,
 
-	AutoScrollVelX:  0,
-	AutoScrollVelY:  0,
+	AutoScrollVelX: 0,
+	AutoScrollVelY: 0,
 
-	AutoScrollAccumlator:  5,
-	AutoScrollBaseVelocity:  25,
+	AutoScrollAccumlator: 5,
+	AutoScrollBaseVelocity: 25,
 
-	MIN_AUTO_SCROLL_DIST:  30,
+	MIN_AUTO_SCROLL_DIST: 30,
 
-	AutoScrollInterval:  null,
+	AutoScrollInterval: null,
 	// #endregion
 	// #endregion
 
 	// #region SHORTCUTS
-	SHORTCUT_STR_TOKEN:  '##',
+	SHORTCUT_STR_TOKEN: '##',
 
-	SHORTCUT_TYPES:  [
+	SHORTCUT_TYPES: [
 		'ToggleAppendInsertMode',
 		'ToggleAppendLineMode',
 		'ToggleAppendPreMode',
 		'ToggleAppendPaused'
 	],
 
-	ShortcutKeysLookup:  {},
+	ShortcutKeysLookup: {},
 	// #endregion
 
 	// #region TABLES
-	TABLE_WRAPPER_CLASS_NAME:  'quill-better-table-wrapper',
-	TABLE_COL_TOOLS_CLASS_NAME:  'qlbt-col-tool',
-	TABLE_OPS_MENU_CLASS_NAME:  'qlbt-operation-menu',
+	TABLE_WRAPPER_CLASS_NAME: 'quill-better-table-wrapper',
+	TABLE_COL_TOOLS_CLASS_NAME: 'qlbt-col-tool',
+	TABLE_OPS_MENU_CLASS_NAME: 'qlbt-operation-menu',
 
-	ALLOW_TABLE_OPS_MENU:  true,
-	IS_TABLE_OPS_TOOLBAR_ENABLED:  false,
+	ALLOW_TABLE_OPS_MENU: true,
+	IS_TABLE_OPS_TOOLBAR_ENABLED: false,
 
-	IsTableOpsMenuEnabled:  true,
-	IsTableInteractionEnabled:  true,
+	IsTableOpsMenuEnabled: true,
+	IsTableInteractionEnabled: true,
 
-	DefaultCsvProps:  {
+	DefaultCsvProps: {
 		ColSeparator: ',',
 		RowSeparator: '\n'
 	},
 
-	IsTableDragSelecting:  false,
+	IsTableDragSelecting: false,
 	// #region CREATE TABLES
 
-	MAX_TABLE_ROWS:  7,
-	MAX_TABLE_COLS:  7,
+	MAX_TABLE_ROWS: 7,
+	MAX_TABLE_COLS: 7,
 	// #endregion
 	// #endregion
 
@@ -840,15 +849,25 @@ var globals = {
 		{
 			label: 'DateTime',
 			icon: 'datetime'
+		},
+		{
+			separator: true
+		},
+		{
+			id: 'MoreLink',
+			label: 'More Coming Soon!',
+			url: 'https://www.monkeypaste.com/',
+			iconClasses: 'svg-no-defaults',
+			icon: 'megaphone'
 		}
 	],
 
 	// #region TEMPLATE BLOT
-	TemplateEmbedClass:  'template-blot',
+	TemplateEmbedClass: 'template-blot',
 
-	Template_AT_INSERT_Class:  'template-blot-at-insert',
+	Template_AT_INSERT_Class: 'template-blot-at-insert',
 
-	TemplateEmbedHtmlAttributes:  [
+	TemplateEmbedHtmlAttributes: [
 		'background-color',
 		'wasVisited',
 		'docIdx'
@@ -882,21 +901,21 @@ var globals = {
 	// #endregion
 
 	// #region TEMPLATE DATETIME
-	CUSTOM_TEMPLATE_LABEL_VAL:  'Custom',
+	CUSTOM_TEMPLATE_LABEL_VAL: 'Custom',
 
-	
+
 	// #endregion
 
 	// #region TOOLTIP
 
-TOOLTIP_HOVER_ATTRB_NAME:  "hover-tooltip",
-TOOLTIP_TOOLBAR_ATTRB_NAME:  "toolbar-tooltip",
+	TOOLTIP_HOVER_ATTRB_NAME: "hover-tooltip",
+	TOOLTIP_TOOLBAR_ATTRB_NAME: "toolbar-tooltip",
 	// #endregion
 
 	// #region WINDOW
-EDITOR_WINDOW_NAME:  'MpEditorWindow',
+	EDITOR_WINDOW_NAME: 'MpEditorWindow',
 
-IsWindowResizeUpdateEnabled:  true,
+	IsWindowResizeUpdateEnabled: true,
 	// #endregion
 
 	// #endregion
@@ -958,7 +977,8 @@ IsWindowResizeUpdateEnabled:  true,
 		'triangle-up': `<svg viewBox="0 0 512 512" fill="#000000"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g fill="#000000" transform="translate(32.000000, 42.666667)"><path d="M246.312928,5.62892705 C252.927596,9.40873724 258.409564,14.8907053 262.189374,21.5053731 L444.667042,340.84129 C456.358134,361.300701 449.250007,387.363834 428.790595,399.054926 C422.34376,402.738832 415.04715,404.676552 407.622001,404.676552 L42.6666667,404.676552 C19.1025173,404.676552 7.10542736e-15,385.574034 7.10542736e-15,362.009885 C7.10542736e-15,354.584736 1.93772021,347.288125 5.62162594,340.84129 L188.099293,21.5053731 C199.790385,1.04596203 225.853517,-6.06216498 246.312928,5.62892705 Z" id="Combined-Shape"></path></g></g></g></svg>`,
 		'triangle-down': `<svg viewBox="0 0 512 512" fill="#000000" transform="matrix(1, 0, 0, -1, 0, 0)"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g fill="#000000" transform="translate(32.000000, 42.666667)"><path d="M246.312928,5.62892705 C252.927596,9.40873724 258.409564,14.8907053 262.189374,21.5053731 L444.667042,340.84129 C456.358134,361.300701 449.250007,387.363834 428.790595,399.054926 C422.34376,402.738832 415.04715,404.676552 407.622001,404.676552 L42.6666667,404.676552 C19.1025173,404.676552 7.10542736e-15,385.574034 7.10542736e-15,362.009885 C7.10542736e-15,354.584736 1.93772021,347.288125 5.62162594,340.84129 L188.099293,21.5053731 C199.790385,1.04596203 225.853517,-6.06216498 246.312928,5.62892705 Z" id="Combined-Shape"></path></g></g></g></svg>`,
 		'cog': `<svg fill="#000000" viewBox="0 0 32 32"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path d="M25.995 19.068h-1.324c-0.215 0.779-0.523 1.518-0.918 2.203l1.224 1.223c0.783 0.783 0.783 2.053 0 2.836l-0.709 0.709c-0.783 0.783-2.053 0.783-2.836 0l-1.232-1.231c-0.683 0.389-1.419 0.692-2.194 0.903v1.284c0 1.107-0.897 2.005-2.005 2.005h-1.002c-1.107 0-2.006-0.897-2.006-2.005v-1.284c-0.774-0.211-1.511-0.515-2.194-0.903l-1.231 1.231c-0.782 0.783-2.052 0.783-2.835 0l-0.71-0.709c-0.783-0.783-0.783-2.053 0-2.836l1.224-1.223c-0.395-0.686-0.703-1.424-0.919-2.203h-1.323c-1.108 0-2.005-0.897-2.005-2.004v-1.003c0-1.107 0.897-2.005 2.005-2.005h1.308c0.207-0.771 0.503-1.505 0.887-2.186l-1.177-1.176c-0.783-0.783-0.783-2.053 0-2.836l0.709-0.708c0.783-0.783 2.053-0.783 2.835 0l1.153 1.153c0.706-0.411 1.468-0.731 2.272-0.95v-1.348c0.001-1.108 0.9-2.005 2.007-2.005h1.002c1.107 0 2.005 0.897 2.005 2.005v1.347c0.806 0.22 1.567 0.54 2.272 0.951l1.153-1.153c0.783-0.783 2.053-0.783 2.836 0l0.709 0.708c0.783 0.783 0.783 2.053 0 2.836l-1.176 1.176c0.384 0.681 0.68 1.415 0.888 2.187h1.308c1.107 0 2.005 0.898 2.005 2.005v1.003c-0.001 1.106-0.898 2.003-2.006 2.003zM15.5 11.080c-3.045 0-5.514 2.469-5.514 5.514s2.469 5.514 5.514 5.514 5.514-2.469 5.514-5.514-2.469-5.514-5.514-5.514zM15.5 19.037c-1.384 0-2.507-1.121-2.507-2.506 0-1.384 1.123-2.506 2.507-2.506s2.506 1.122 2.506 2.506c0 1.385-1.122 2.506-2.506 2.506z"></path></g></svg>`,
-		'stack': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#000000" fill="none"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path d="M11.39,19.82,32.1,30.48a.51.51,0,0,0,.45,0L54.21,19.81a.5.5,0,0,0,0-.89L33.72,8.45a2,2,0,0,0-1.82,0L11.4,18.93A.5.5,0,0,0,11.39,19.82Z" stroke-linecap="round"></path><path d="M10.83,32.23l21.27,11h.45l22.25-11" stroke-linecap="round"></path><path d="M10.83,44.94l21.27,11h.45l22.25-11" stroke-linecap="round"></path></g></svg>`
+		'stack': `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" stroke-width="3" stroke="#000000" fill="none"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path d="M11.39,19.82,32.1,30.48a.51.51,0,0,0,.45,0L54.21,19.81a.5.5,0,0,0,0-.89L33.72,8.45a2,2,0,0,0-1.82,0L11.4,18.93A.5.5,0,0,0,11.39,19.82Z" stroke-linecap="round"></path><path d="M10.83,32.23l21.27,11h.45l22.25-11" stroke-linecap="round"></path><path d="M10.83,44.94l21.27,11h.45l22.25-11" stroke-linecap="round"></path></g></svg>`,
+		'megaphone': `<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid meet" fill="#000000"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path fill="#F2A74E" d="M184.433 484.431l-12.195 8.072c-11.469 7.592-26.92 4.449-34.512-7.02l-48.892-73.86c-7.592-11.469-4.449-26.92 7.02-34.512l12.195-8.072c11.469-7.592 26.92-4.449 34.512 7.02l48.892 73.86c7.591 11.469 4.449 26.921-7.02 34.512z"></path><path fill="#FFB636" d="M353.886 165.453C309.487 98.379 248.064 47.88 224.052 63.775c-2.905 1.923-5.123 4.737-6.711 8.304c-.117.19-.231.383-.336.591c-16.442 32.736-165.25 189.545-199.864 223.009A27.674 27.674 0 0 0 9.3 309.792c-3.141 14.703-6.169 45.422 13.231 74.728c19.539 29.518 49.978 38.597 65.006 41.348a27.81 27.81 0 0 0 15.856-1.729c43.952-18.591 246.136-93.953 282.547-96.289c1.1-.071 2.156-.212 3.175-.406c2.846-.368 5.411-1.271 7.65-2.754a16.765 16.765 0 0 0 3.226-2.806a19.592 19.592 0 0 0 4.593-7.18a9.788 9.788 0 0 1-.947 1.334c11.177-26.161-10.9-91.893-49.751-150.585z"></path><path fill="#CC883E" d="M341.246 173.821c38.761 58.556 59.99 124.085 40.994 136.66c-18.997 12.575-71.026-32.566-109.787-91.122s-59.99-124.085-40.994-136.66s71.025 32.565 109.787 91.122z"></path><path fill="#FFD469" d="M66.676 328.848a18.42 18.42 0 0 1-13.264-5.614c-7.101-7.324-6.92-19.019.405-26.119l43.134-41.818c7.325-7.101 19.019-6.92 26.119.405c7.101 7.324 6.92 19.018-.405 26.119l-43.134 41.818a18.414 18.414 0 0 1-12.855 5.209z"></path><path fill="#59CAFC" d="M393.301 130.912L467.319 57.6c3.143-3.113 8.341-2.601 10.816 1.064l17.075 25.279c2.352 3.482 1.16 8.235-2.557 10.195L401.56 142.17a7.06 7.06 0 0 1-8.259-11.258zm12.241 62.958a5.617 5.617 0 0 0 6.025 4.466l81.588-7.616a5.616 5.616 0 0 0 4.98-6.719l-4.868-23.78c-.706-3.448-4.372-5.405-7.63-4.072l-76.72 31.397a5.615 5.615 0 0 0-3.375 6.324zm-60.917-86.577a5.617 5.617 0 0 0 7.418-1.102l52.306-63.077a5.616 5.616 0 0 0-1.229-8.272l-20.257-13.373c-2.937-1.939-6.914-.73-8.274 2.516l-32.048 76.45a5.613 5.613 0 0 0 2.084 6.858z"></path></g></svg>`
 	}
 	// #endregion 
 }

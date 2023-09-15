@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
                                 rand_idx = 0;
                             }
                         }
-                        MpConsole.WriteLine($"Seed: '{randColorSeed}' Idx: {rand_idx}");
+                        //MpConsole.WriteLine($"Seed: '{randColorSeed}' Idx: {rand_idx}");
                         hex = MpSystemColors.ContentColors[rand_idx].RemoveHexAlpha();
                     } else {
                         hex = Mp.Services.PlatformResource.GetResource<string>(trk.ToString());

@@ -176,9 +176,10 @@ window.superCm = (function (msie) {
 				var iconElm = optIconTemplate.clone();
 				
 
-				if (opt.iconClassList !== undefined) {
-					for (var i = 0; i < opt.iconClassList.length; i++) {
-						iconElm.addClass(opt.iconClassList[i]);
+				if (opt.iconClasses !== undefined) {
+					const icl = opt.iconClasses.split(' ');
+					for (var i = 0; i < icl.length; i++) {
+						iconElm.addClass(icl[i]);
 					}
 				}
 
@@ -199,7 +200,10 @@ window.superCm = (function (msie) {
 					if (opt.isIconBase64 !== undefined) {
 						iconElm.html(`<img class="context-menu-icon-img" src="data:image/png;base64,${opt.icon}">`);
 					} else {
-						iconElm.html(getSvgHtml(opt.icon));
+						const do_default_svg_styles =
+							opt.iconClasses == undefined ||
+							!opt.iconClasses.split(' ').includes(globals.SVG_NO_DEFAULT_CLASS);
+						iconElm.html(getSvgHtml(opt.icon, opt.iconClasses, do_default_svg_styles));
 					}
 				}
 
@@ -325,10 +329,17 @@ window.superCm = (function (msie) {
 			cm.position = {
 				x: parentCm.position.x + parentCm.element.outerWidth(),
 				y:
+					// TAK START
 					parentCm.position.y +
 					activeSubmenu[0].offsetTop -
-					activeSubmenu[0].parentElement.scrollTop -
+					activeSubmenu[0].parentElement.scrollTop +
 					parseInt(getOptContainer(parentCmIndex).css("padding-top"))
+
+					//parentCm.position.y +
+					//activeSubmenu[0].offsetTop -
+					//activeSubmenu[0].parentElement.scrollTop -
+					//parseInt(getOptContainer(parentCmIndex).css("padding-top"))
+					// TAK END
 			};
 		}
 

@@ -35,11 +35,12 @@ function onReadOnlyChanged_ntf(isReadOnly) {
 	}
 }
 
-function onShowToolTip_ntf(is_visible, anchor_p, tt_html, gesture_text) {
+function onShowToolTip_ntf(is_visible, anchor_p, tt_html, tt_text, gesture_text) {
 	// output 'MpQuillShowToolTipNotification'
-	tt_html = globals.DomParser.parseFromString(tt_html, 'text/html').documentElement.outerHTML;
+	tt_html = isNullOrEmpty(tt_html) ? null : globals.DomParser.parseFromString(tt_html, 'text/html').documentElement.outerHTML;
 	let msg = {
 		tooltipHtml: tt_html,
+		tooltipText: tt_text,
 		gestureText: gesture_text,
 		anchorX: anchor_p ? anchor_p.x : 0,
 		anchorY: anchor_p ? anchor_p.y : 0,
@@ -196,14 +197,15 @@ function onShowCustomColorPicker_ntf(dotnetHexStr,title) {
 	}
 }
 
-function onNavigateUriRequested_ntf(navUri,uriType,docIdx, elmText, curModKeys) {
+function onNavigateUriRequested_ntf(navUri,uriType,docIdx, elmText, curModKeys, confirm) {
 	// output 'MpQuillNavigateUriRequestNotification'
 	let msg = {
 		uri: navUri,
 		linkDocIdx: docIdx,
 		linkType: uriType,
 		linkText: elmText,
-		modKeys: curModKeys
+		modKeys: curModKeys,
+		needsConfirm: confirm === undefined ? false : confirm
 	};
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyNavigateUriRequested', msgStr);

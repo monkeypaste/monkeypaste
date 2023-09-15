@@ -2,14 +2,10 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
-using System.Windows.Data;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -63,24 +59,12 @@ namespace MonkeyPaste.Avalonia {
         private void Init() {
             var sclb = this.FindControl<ItemsControl>("ShortcutListBox");
             if (KeyGesture is ObservableCollection<MpAvShortcutKeyGroupViewModel> keyGroups) {
-                //sclb.Bind(
-                //    ItemsControl.ItemsSourceProperty,
-                //    new Binding() {
-                //        Source = DataContext,
-                //        Path = 
-                //    })
                 sclb.ItemsSource = keyGroups;
             } else if (KeyGesture is KeyGesture kg) {
                 sclb.ItemsSource = kg.ToKeyLiteral().ToKeyItems();
+            } else if (KeyGesture is string keystr) {
+                sclb.ItemsSource = keystr.ToKeyItems();
             }
-
-            //if (sclb.ItemCount > 0) {
-            //    this.MinWidth = 50;
-            //    this.MinHeight = 20;
-            //} else {
-            //    this.MinWidth = 0;
-            //    this.MinHeight = 0;
-            //}
         }
     }
 }

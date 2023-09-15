@@ -4481,7 +4481,7 @@ namespace MonkeyPaste.Avalonia {
                 isAppendManualMode = IsAppendManualMode,
                 isAppendPaused = IsAppendPaused,
                 isAppendPreMode = IsAppendPreMode,
-                isAppendWIthDestFormattingEnabled = MpAvPrefViewModel.Instance.IsAppendWithDestinationFormattingEnabled,
+                isAppendWithDestFormattingEnabled = MpAvPrefViewModel.Instance.IsAppendWithDestinationFormattingEnabled,
                 appendData = data
             };
         }
@@ -4841,10 +4841,11 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
 
-        public ICommand ReloadSelectedItemCommand => new MpCommand(
-            () => {
-                if (SelectedItem != null && SelectedItem.GetContentView() is MpAvContentWebView wv) {
-                    wv.ReloadAsync().FireAndForgetSafeAsync();
+        public ICommand ReloadSelectedItemCommand => new MpAsyncCommand(
+            async () => {
+
+                if (SelectedItem != null) {
+                    await SelectedItem.RefreshModelAsync();
                 }
             });
 

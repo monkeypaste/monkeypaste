@@ -27,6 +27,7 @@ function initShortcuts(shortcutBase64MsgStr) {
                 globals.ShortcutKeysLookup[st] = shortcut_item.keys;
             }
         }
+        log('Init Shortcut Type: \'' + st + '\' keys: \'' + globals.ShortcutKeysLookup[st] + '\'');
     }   
 
 }
@@ -50,14 +51,16 @@ function getShortcutHtml(shortcutText) {
 
 // #region Actions
 
-function parseShortcutText(str) {
-    // NOTE this presumes theres only 1 shortcut
+function parseShortcutTooltipParts(str) {
+    // NOTE this presumes theres only 1 shortcut and its at the END
     // example: 'This is a tooltip command ##ShortcutTypeName##'
-    // returns ShortcutTypeGestureText
+    // returns [0] pre shortcut text, [1] keystr
+    let result = ['', ''];
     if (!isString(str)) {
-        return '';
+        return result;
     }
     let str_parts = str.split(globals.SHORTCUT_STR_TOKEN);
+    result[0] = str_parts[0];
     for (var i = 0; i < str_parts.length; i++) {
         if (i % 2 == 0) {
             continue;
@@ -65,13 +68,14 @@ function parseShortcutText(str) {
 
         let str_part = str_parts[i];
         if (globals.ShortcutKeysLookup[str_part] !== undefined) {
-            return globals.ShortcutKeysLookup[str_part];
+            result[1] = globals.ShortcutKeysLookup[str_part];
+            break;
         }
     }
-    return '';
+    return result;
 }
 
-function decodeStringWithShortcut(str) {
+function decodeStringWithShortcut(str,isHtml) {
     // example: 'This is a tooltip command ##ShortcutTypeName##'
     if (!isString(str)) {
         return str;
@@ -83,8 +87,9 @@ function decodeStringWithShortcut(str) {
         if (i % 2 == 0) {
             out_str += str_part;            
         } else {
-            if (globals.ShortcutKeysLookup[str_part] !== undefined) {
-                out_str += globals.ShortcutKeysLookup[str_part]
+            const key_str = globals.ShortcutKeysLookup[str_part];
+            if (key_str !== undefined) {
+                out_str += isHtml ? getShortcutHtml(key_str) : key_str;
             }
         }
     }
