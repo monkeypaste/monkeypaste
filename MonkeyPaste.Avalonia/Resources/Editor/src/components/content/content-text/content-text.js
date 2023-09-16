@@ -825,22 +825,9 @@ function transferTextContent(dt, source_doc_range, dest_doc_range, source) {
 
 	let pre_doc_length = getDocLength();
 
-    // PERFORM TRANSFER
-
-	let dt_html_str = getDataTransferHtml(dt).html;
-
-	// ignore html for append when dest formating pref is enabled
-	const can_transfer_formatted_content =
-		!isAnyAppendEnabled() ||
-		!globals.isAppendWithDestFormattingEnabled;
-	if (isString(dt_html_str) && can_transfer_formatted_content) {
-		let dt_html_delta = convertHtmlToDelta(dt_html_str);
-		dt_html_delta = decodeHtmlEntitiesInDeltaInserts(dt_html_delta);
-		insertDelta(dest_doc_range, dt_html_delta, source);
-	} else if (dt.types.includes('text/plain')) {
-		let dt_pt_str = dt.getData('text/plain');
-		setTextInRange(dest_doc_range, dt_pt_str, source, true);
-	}
+	// PERFORM TRANSFER
+	let dt_delta = getDataTransferDelta(dt);
+	insertDelta(dest_doc_range, dt_delta, source);
 
 	let dt_length_diff = getDocLength() - pre_doc_length;
 

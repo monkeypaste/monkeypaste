@@ -481,12 +481,41 @@ namespace MonkeyPaste.Avalonia {
                         if (showToolTipNtf.isVisible && !IsDragging) {
                             AvToolTip.SetTip(this, null);
                             var tt = new MpAvToolTipView();
-                            AvToolTip.SetTip(this, tt);
                             tt.ToolTipText = showToolTipNtf.tooltipText;
                             tt.ToolTipHtml = showToolTipNtf.tooltipHtml;
                             tt.InputGestureText = showToolTipNtf.gestureText;
-                            AvToolTip.SetVerticalOffset(this, -20);
-                            AvToolTip.SetPlacement(this, PlacementMode.Pointer);
+
+                            void tt_attachedToView(object sender, VisualTreeAttachmentEventArgs e) {
+                                // anchor is some editor elm's center
+                                // move tooltip towards editor center along line from center to anchor
+                                // to avoid tooltip overlapping mouse which creates a stutter from
+                                // leave/exit calls
+
+                                MpPoint center_p = this.Bounds.Center.ToPortablePoint();
+                                MpPoint anchor_p = new MpPoint(showToolTipNtf.anchorX, showToolTipNtf.anchorY);
+                                // adj tooltip to be its height + pad away from anchor
+                                double adj_pad = 10;
+                                double adj_dist = (tt.Bounds.Height / 2) + adj_pad;
+                                MpPoint center_to_anchor = anchor_p - center_p;
+                                double anchor_dist = center_to_anchor.Length;
+                                if (anchor_dist <= Math.Abs(adj_dist)) {
+                                    // anchor is IN the center so flip adj_dist out along line
+                                    adj_dist *= -1;
+                                }
+                                double offset_dist = anchor_dist - adj_dist;
+                                MpPoint adj_offset = center_to_anchor.Normalized * offset_dist;
+                                MpPoint adj_p = anchor_p - adj_offset;
+                                AvToolTip.SetHorizontalOffset(this, adj_p.X);
+                                AvToolTip.SetVerticalOffset(this, adj_p.Y);
+
+                                tt.AttachedToVisualTree -= tt_attachedToView;
+                            }
+                            // wait till tt is attached to know its height
+                            tt.AttachedToVisualTree += tt_attachedToView;
+
+
+                            AvToolTip.SetTip(this, tt);
+                            AvToolTip.SetPlacement(this, PlacementMode.TopEdgeAlignedLeft);
                             AvToolTip.SetIsOpen(this, true);
                         } else {
                             AvToolTip.SetIsOpen(this, false);

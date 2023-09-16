@@ -78,7 +78,7 @@ namespace MonkeyPaste.Avalonia {
             base.UpdateDragCursor(browser, operation);
         }
         protected override bool OnCursorChange(CefBrowser browser, nint cursorHandle, CefCursorType type, CefCursorInfo customCursorInfo) {
-            MpConsole.WriteLine($"Cursor: {type}");
+            //MpConsole.WriteLine($"Cursor: {type}");
             if (type == CefCursorType.Northsouthresize) {
 
             }

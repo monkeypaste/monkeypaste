@@ -243,17 +243,17 @@ function drawCaret(ctx, sel, caret_width = 1.0, caret_opacity = 1) {
 }
 
 function drawAppendNotifierPreview(ctx, color, thickness = 1.0, line_style = [5, 5]) {
-    if (globals.IsAppendManualMode) {
+    if (isAppendManualMode()) {
         color = globals.DropCopyLineColor;
     }
     if (isNullOrUndefined(color)) {
         color = globals.DropMoveLineColor;
     }
-    let block_state = globals.IsAppendLineMode ? globals.IsAppendPreMode ? 'pre' : 'post' : 'inline';
+    let block_state = isAppendLineMode() ? isAppendPreMode() ? 'pre' : 'post' : 'inline';
     let render_lines = getPreviewLines(getAppendDocRange().index, block_state, false);
     // NOTE drawing on flip of caret blink
     let append_color = globals.CaretBlinkOffColor != null ? color : 'transparent';
-    if (globals.IsAppendPaused) {
+    if (isAppendPaused()) {
         // when paused show unblinking line
         append_color = globals.AppendPauseLineColor;
     }

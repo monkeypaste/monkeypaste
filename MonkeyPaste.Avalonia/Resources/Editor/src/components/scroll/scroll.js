@@ -33,6 +33,13 @@ function getScrollableElements() {
     return scroll_elms;
 }
 
+function getDefaultScrollStartOpts() {
+
+}
+function getDefaultScrollEndOpts() {
+
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -160,6 +167,7 @@ function scrollToHome() {
 }
 
 function scrollToEnd() {
+    log('scroll to end, new top: ' + getEditorElement().offsetHeight);
     getEditorContainerElement().scrollTop = getEditorElement().offsetHeight;
 }
 

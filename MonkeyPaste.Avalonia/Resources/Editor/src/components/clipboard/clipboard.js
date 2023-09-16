@@ -300,6 +300,7 @@ function getClipboardEnabledElements() {
         ...document.querySelectorAll('textarea')
     ];
 }
+
 // #endregion Getters
 
 // #region Setters

@@ -29,6 +29,11 @@
     color: var(--defcontentfgcolor);
 }
 
+#editor.append {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
 #editor.no-select > .ql-editor {
     user-select: none;
     pointer-events: none;

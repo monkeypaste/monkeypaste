@@ -8,6 +8,52 @@
 
 // #region Getters
 
+function getDataTransferDelta(dt) {
+    if (globals.ContentItemType != 'Text') {
+        log('Warning! Only text items should use deltas for data transfer, this is not text type');
+        debugger;
+    }
+    let dt_html_str = getDataTransferHtmlFragment(dt).html;
+
+    // ignore html for append when dest formating pref is enabled
+    const can_transfer_formatted_content =
+        !isNullOrEmpty(dt_html_str) &&
+        (!isAnyAppendEnabled() ||
+            !globals.isAppendWithDestFormattingEnabled);
+    
+    let result_delta = null;
+    if (can_transfer_formatted_content) {
+        result_delta = convertHtmlToDelta(dt_html_str);
+    } else {
+        let dt_pt_str = getDataTransferPlainText(dt);
+        if (!isNullOrEmpty(dt_pt_str)) {
+            result_delta = convertHtmlToDelta(dt_pt_str);
+        } else {
+            // no text format on data object
+            // when html found fallback and 
+            // convert that to delta and strip attributes
+            result_delta = {
+                ops: convertHtmlToDelta(dt_html_str)
+                    .filter(x => x.insert !== undefined)
+                    .map(x => ({ insert: x.insert }))
+            };
+        }
+    }
+    result_delta = decodeHtmlEntitiesInDeltaInserts(result_delta);
+    return result_delta;
+}
+function getDataTransferHtmlFragment(dt) {
+    let dt_html_str = null;
+    let dt_html_source = null;
+    if (dt.types.includes('html format')) {
+        // prefer system html format to get sourceurl (on windows)
+        dt_html_str = b64_to_utf8(dt.getData('html format'));
+    } else if (dt.types.includes('text/html')) {
+        dt_html_str = dt.getData('text/html');
+    }
+    let result = parseHtmlFromHtmlClipboardFragment(dt_html_str);
+    return result;
+}
 // #endregion Getters
 
 // #region Setters
@@ -39,18 +85,6 @@ function isHtmlClipboardFormat(dataStr) {
 
 // #region Actions
 
-function getDataTransferHtml(dt) {
-    let dt_html_str = null;
-    let dt_html_source = null;
-    if (dt.types.includes('html format')) {
-        // prefer system html format to get sourceurl (on windows)
-        dt_html_str = b64_to_utf8(dt.getData('html format'));
-    } else if (dt.types.includes('text/html')) {
-        dt_html_str = dt.getData('text/html');
-    }
-    let result = parseHtmlFromHtmlClipboardFragment(dt_html_str);
-    return result;
-}
 
 function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
     // PARSE URL

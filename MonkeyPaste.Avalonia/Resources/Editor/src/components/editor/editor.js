@@ -30,6 +30,8 @@ function initEditor() {
 
 	getEditorElement().addEventListener('focus', onEditorFocus);
 	getEditorElement().addEventListener('blur', onEditorBlur);
+
+	globals.ContentLoadedEvent = new Event("onContentLoaded");
 }
 
 function initEditorToolbars() {
@@ -372,7 +374,7 @@ function onEditorBlur(e) {
 }
 
 function onEditorSelChanged(range, oldRange, source) {
-	if (globals.IsAppendPreMode && source == 'user' && range) {
+	if (isAppendPreMode() && source == 'user' && range) {
 		globals.FixedAppendIdx = range.index;
 	}
 	// showing ops menu takes focus

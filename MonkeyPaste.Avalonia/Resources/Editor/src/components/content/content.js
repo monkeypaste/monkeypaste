@@ -1,16 +1,3 @@
-// #region Globals
-//const globals.CONTENT_CLASS_PREFIX = 'content';
-//var globals.ContentClassAttrb = null;
-
-//var globals.ContentHandle = null;
-//var globals.ContentItemType = 'Text';
-
-
-//const globals.InlineTags = ['span', 'a', 'em', 'strong', 'u', 's', 'sub', 'sup', 'img'];
-//const globals.BlockTags = ['p', 'ol', 'ul', 'li', 'div', 'table', 'colgroup', 'col', 'tbody', 'tr', 'td', 'iframe', 'blockquote', 'pre']
-//const globals.AllDocumentTags = [...globals.InlineTags, ...globals.BlockTags];
-
-// #endregion Globals
 
 // #region Life Cycle
 
@@ -26,6 +13,7 @@ async function loadContentAsync(
 	sel_state,
 	paste_button_info) {
 	// NOTE only called fromHost (or tester which calls _ext)
+	globals.IsLoadingContent = true;
 
 	let is_reload = contentHandle == globals.ContentHandle;
 	let was_sub_sel_enabled = null;
@@ -145,6 +133,10 @@ async function loadContentAsync(
 	} else {
 		log('Editor loaded');
 	}
+
+	globals.IsLoadingContent = false;
+	// signal content loaded (atm used by scrollToAppendIdx)
+	getEditorContainerElement().dispatchEvent(globals.ContentLoadedEvent);
 }
 
 function initContentClassStyle() {

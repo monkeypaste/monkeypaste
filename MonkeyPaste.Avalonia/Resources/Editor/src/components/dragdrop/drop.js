@@ -111,6 +111,7 @@ function resetDrop(fromHost, wasLeave, wasCancel) {
             // NOTE dragend isn't called on drag cancel (from escape key)
             onDragEnd();
         }
+        enableSubSelection();
         updateAllElements();
     }
 
@@ -245,8 +246,8 @@ function onDragOver(e) {
 
     globals.DropIdx = getDocIdxFromPoint(globals.WindowMouseLoc);
 
-    // VALIDATE SELF DROP
-    if (isDragging()) {
+    // INVALIDATE DROP ONTO SELECTION
+    //if (isDragging()) {
         let sel = getDocSelection();
         let is_drop_over_drag_sel = isDocIdxInRange(globals.DropIdx, sel);
         let is_drop_over_template = getAllTemplateDocIdxs().includes(globals.DropIdx);
@@ -258,7 +259,7 @@ function onDragOver(e) {
             log('invalidating self drop. DROP EFFECT SHOULD BE NONE IS: ' + e.dataTransfer.dropEffect + ' over drag sel: ' + is_drop_over_drag_sel + ' over template: ' + is_drop_over_template);
             return rejectDrop(e);
         }
-    }
+    //}
     drawOverlay();
 
     return false;
@@ -267,21 +268,12 @@ function onDragOver(e) {
 function onDragLeave(e) {
     log('drag leave called');
 
-    updateWindowMouseState(e,'dragLeave');
 
     let editor_rect = getEditorContainerRect();
     if (isPointInRect(editor_rect, globals.WindowMouseLoc)) {
         return;
-
-        //if (!globals.DropItemElms.includes(e.target)) {
-        //    // drag leave of block/inline element, ignore
-        //    return;
-        //}
-        //resetDrop(e.fromHost, true, false);
-        //log('drag canceled (pointer still in window)');
-        //onDragLeave_ntf();
-        //return rejectDrop(e);
     }
+    updateWindowMouseState(e,'dragLeave');Ä
 
     log('drag leave');
 
@@ -370,8 +362,12 @@ function onDrop(e) {
             logDataTransfer(processed_dt, 'Drop DataTransfer (processed):');
 
             // PERFORM DROP TRANSACTION    
-
-            performDataTransferOnContent(processed_dt, source_range, drop_range, drop_insert_source, 'Dropped');
+            try {
+                performDataTransferOnContent(processed_dt, source_range, drop_range, drop_insert_source, 'Dropped');
+            } catch (ex) {
+                log('Exception performing drop: ');
+                log(ex);
+            }
 
             // RESET
 

@@ -16,6 +16,20 @@ function getAllowedDataTransferTypes(contentType) {
     return ['text/plain', 'text/html', 'application/json', 'files', 'text', 'html format']
 }
 
+function getDataTransferPlainText(dt) {
+    if (!isValidDataTransfer(dt)) {
+        return '';
+    }
+    for (var i = 0; i < dt.types.length; i++) {
+        let dt_type = dt.types[i];
+        if (isPlainTextFormat(dt_type.toLowerCase())) {
+            return dt.getData(dt_type);
+        }
+    }
+    return '';
+    
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -78,11 +92,7 @@ function convertDataTransferToHostDataItems(dt) {
     }; 
     for (var i = 0; i < dt.types.length; i++) {
         let dataStr = null;
-        if (dt.types[i].toLowerCase() == 'files') {
-            if (dt.types[i] == 'files') {
-                log('still have format lower case issue!');
-                throw new DOMException('still have format lower case issue!');
-            }
+        if (isFileListFormat(dt.types[i].toLowerCase())) {
             // NOTE cef encodes spaces in file names so fix em
             dataStr = Array.from(dt.files).map(x => x.name).join(envNewLine());
         } else {
@@ -150,7 +160,7 @@ function performDataTransferOnContent(
 
     // CHECK FOR URL FRAGMENT SOURCE (IF AVAILABLE)
 
-    let dt_html_data = getDataTransferHtml(dt);
+    let dt_html_data = getDataTransferHtmlFragment(dt);
     if (dt_html_data && !isNullOrWhiteSpace(dt_html_data.sourceUrl)) {
         source_urls.push(dt_html_data.sourceUrl);
     }

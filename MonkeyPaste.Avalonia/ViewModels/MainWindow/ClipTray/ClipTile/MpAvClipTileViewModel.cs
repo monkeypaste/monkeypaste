@@ -1404,7 +1404,9 @@ namespace MonkeyPaste.Avalonia {
                     pow.WindowStartupLocation = WindowStartupLocation.Manual;
                     pow.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(pow);
                 }
-                pow.ShowChild();
+                // NOTE only silent lock for pop out
+                // when appending user likely wants external app fully visible
+                pow.ShowChild(silentLock: !IsAppendNotifier);
             }
 
             OnPropertyChanged(nameof(IsWindowOpen));

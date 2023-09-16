@@ -31,12 +31,6 @@ var globals = {
 	// #endregion 
 
 	// #region APPEND
-	IsAppendInsertMode: false,
-	IsAppendLineMode: false,
-
-	IsAppendManualMode: false,
-	IsAppendPreMode: false,
-	IsAppendPaused: false,
 
 	isAppendWithDestFormattingEnabled: true,
 
@@ -181,6 +175,8 @@ var globals = {
 	ContentHandle: null,
 	ContentItemType: 'Text',
 	ContentId: 0,
+	IsLoadingContent: false,
+	ContentLoadedEvent: null,
 
 	// #region TEXT
 	// #endregion

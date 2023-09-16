@@ -290,7 +290,7 @@ function transferFileListContent(data_or_dt, source_fli_row_idxs, dest_doc_range
 	const append_cell = getTableCellAtDocIdx(dest_doc_range.index);
 	let insert_idx = -1;
 	if (dest_doc_range.mode == 'pre') {
-		if (globals.IsAppendManualMode) {
+		if (isAppendManualMode()) {
 			insert_idx = append_cell[0];
 		} else {
 			insert_idx = Math.max(0, append_cell[0] - 1);
@@ -308,20 +308,20 @@ function transferFileListContent(data_or_dt, source_fli_row_idxs, dest_doc_range
 	for (var i = 0; i < globals.FileListItems.length; i++) {
 		if (i == insert_idx) {
 			for (var j = 0; j < append_items.length; j++) {
-				if (!globals.IsAppendPreMode) {
+				if (!isAppendPreMode()) {
 					updated_sel_idxs.push(i + j);
 				}
 				updated_items.push(append_items[j]);
 			}
 		}
-		if (globals.IsAppendPreMode && cur_sel_idxs.includes(i)) {
+		if (isAppendPreMode() && cur_sel_idxs.includes(i)) {
 			updated_sel_idxs.push(updated_items.length);
 		}
 		updated_items.push(globals.FileListItems[i]);
 	}
 	if (insert_idx == globals.FileListItems.length) {
 		for (var j = 0; j < append_items.length; j++) {
-			if (!globals.IsAppendPreMode) {
+			if (!isAppendPreMode()) {
 				updated_sel_idxs.push(updated_items.length);
 			}
 			updated_items.push(append_items[j]);

@@ -21,7 +21,7 @@ function initTooltip() {
 				//return;
 			}
 			const enter_dist = dist(tt_enter_mp, globals.WindowMouseLoc);
-			if (enter_dist < 5) {
+			if (enter_dist < 15) {
 				//return;
 			}
 			log('tt hide' + htt_elm.id + ' exit dist: ' + enter_dist);

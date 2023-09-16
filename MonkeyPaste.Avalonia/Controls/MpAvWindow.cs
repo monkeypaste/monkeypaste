@@ -87,8 +87,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public void ShowChild(Window owner = null) {
-            SilentLockMainWindowCheck(owner);
+        public void ShowChild(Window owner = null, bool silentLock = true) {
+            if (silentLock) {
+                SilentLockMainWindowCheck(owner);
+            }
 
             if (owner == null) {
                 Show();

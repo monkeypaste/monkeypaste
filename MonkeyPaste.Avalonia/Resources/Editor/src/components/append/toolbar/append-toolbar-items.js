@@ -70,7 +70,7 @@ function attachAppendButtonHandlers() {
 function createAppendButtonLookup() {
 	globals.AppendButtonLookup = [
 		[
-			globals.IsAppendInsertMode,
+			isAppendInsertMode(),
 			getPasteAppendToggleInlineButtonElement(),
 			[
 				'text-insert-caret-outline',
@@ -82,7 +82,7 @@ function createAppendButtonLookup() {
 			],
 		],
 		[
-			globals.IsAppendManualMode,
+			isAppendManualMode(),
 			getPasteAppendToggleManualButtonElement(),
 			[
 				'scope',
@@ -94,7 +94,7 @@ function createAppendButtonLookup() {
 			]
 		],
 		[
-			globals.IsAppendPreMode,
+			isAppendPreMode(),
 			getPasteAppendToggleBeforeButtonElement(),
 			[
 				'triangle-up',
@@ -106,7 +106,7 @@ function createAppendButtonLookup() {
 			],
 		],
 		[
-			globals.IsAppendPaused,
+			isAppendPaused(),
 			getPasteAppendPauseAppendButtonElement(),			
 			[
 				'pause',
@@ -190,6 +190,7 @@ function onStopAppendButtonClickOrKey(e) {
 function onAppendBeginButtonClickOrKey(e) {
 	showPasteAppendToolbar();
 	enableAppendMode(true, false);
+	scrollToAppendIdx();
 }
 function onAppendToggleInlineButtonClickOrKey(e) {
 	if (globals.ContentItemType == 'FileList') {
@@ -200,6 +201,7 @@ function onAppendToggleInlineButtonClickOrKey(e) {
 
 	let is_line = !e.currentTarget.classList.contains('enabled');
 	enableAppendMode(is_line, false);
+	scrollToAppendIdx();
 }
 function onAppendToggleManualButtonClickOrKey(e) {
 	e.currentTarget.classList.toggle('enabled');
@@ -210,6 +212,7 @@ function onAppendToggleManualButtonClickOrKey(e) {
 	} else {
 		disableAppendManualMode(false);
 	}
+	scrollToAppendIdx();
 }
 function onAppendToggleBeforeButtonClickOrKey(e) {
 	e.currentTarget.classList.toggle('enabled');
@@ -220,6 +223,7 @@ function onAppendToggleBeforeButtonClickOrKey(e) {
 	} else {
 		disablePreAppend(false);
 	}
+	scrollToAppendIdx();
 }
 
 // #endregion Event Handlers

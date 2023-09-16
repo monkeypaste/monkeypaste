@@ -113,8 +113,11 @@ function cleanDelta(delta1) {
 	}
 	if (Array.isArray(delta1)) {
 		// if array of merge each into single
-		let result = null;
-		for (var i = 0; i < delta1.length; i++) {
+		if (delta1.length == 0) {
+			return [];
+		}
+		let result = delta1[0];
+		for (var i = 1; i < delta1.length; i++) {
 			result = mergeDeltas(result, delta1[i]);
 		}
 		return result;
@@ -132,7 +135,17 @@ function cleanDelta(delta1) {
 function mergeDeltas(delta1, delta2) {
 	delta1 = cleanDelta(delta1);
 	delta2 = cleanDelta(delta2);
-	return delta1.concat(delta2);
+	// BUG quill changes order of ops for concat and compose
+	// maybe since testing w/ a delete attrib but either
+	// way it will screw it up so do not use it! (like below comment)
+	//return delta1.concat(delta2);
+
+	const Delta = Quill.imports.delta;
+	let merged_delta = new Delta([
+		...delta1.ops,
+		...delta2.ops
+	]);
+	return merged_delta;
 }
 
 function insertDelta(range, deltaOrDeltaJsonStr, source = 'api') {
@@ -143,15 +156,8 @@ function insertDelta(range, deltaOrDeltaJsonStr, source = 'api') {
 	}
 
 	const Delta = Quill.imports.delta;
-	//setTextInRange(range, '', source);
 	let to_range_delta = new Delta().retain(range.index).delete(range.length);
 	let update_delta = mergeDeltas(to_range_delta, deltaObj);
-
-	//let insert_delta = new Delta([
-	//	{ retain: range.index },
-	//	{ delete: range.length },
-	//	...deltaObj.ops
-	//]);
 	return globals.quill.updateContents(update_delta, source);
 }
 

@@ -289,11 +289,11 @@ function onAppendStateChanged_ntf(appendDataStr = null) {
 		return;
 	}
 	let msg = {
-		isAppendLineMode: globals.IsAppendLineMode,
-		isAppendInsertMode: globals.IsAppendInsertMode,
-		isAppendManualMode: globals.IsAppendManualMode,
-		isAppendPaused: globals.IsAppendPaused,
-		isAppendPreMode: globals.IsAppendPreMode,
+		isAppendLineMode: isAppendLineMode(),
+		isAppendInsertMode: isAppendInsertMode(),
+		isAppendManualMode: isAppendManualMode(),
+		isAppendPaused: isAppendPaused(),
+		isAppendPreMode: isAppendPreMode(),
 		appendDocIdx: getAppendDocRange().index,
 		appendDocLength: getAppendDocRange().length,
 		appendData: appendDataStr
