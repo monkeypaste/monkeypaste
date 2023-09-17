@@ -26,7 +26,7 @@ function initMain(initObj) {
 		initEditor();
 		setEditorIsLoaded(true);
 
-		if (isAppendNotifier()) {
+		if (isAnyAppendEnabled()) {
 			log('Main Initialized.(Appender)');
 			enableSubSelection();
 		} else {

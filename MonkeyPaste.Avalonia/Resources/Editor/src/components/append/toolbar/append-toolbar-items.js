@@ -6,7 +6,6 @@
 
 function initPasteAppendToolbarItems() {
 	hidePasteAppendToolbar();
-	createAppendButtonLookup();
 	attachAppendButtonHandlers();
 }
 
@@ -52,13 +51,14 @@ function getPasteAppendStopAppendButtonElement() {
 
 // #region Actions
 function attachAppendButtonHandlers() {
-	addClickOrKeyClickEventListener(getPasteAppendBeginButtonElement(), onAppendBeginButtonClickOrKey);
-	addClickOrKeyClickEventListener(getPasteAppendToggleInlineButtonElement(), onAppendToggleInlineButtonClickOrKey);
-	addClickOrKeyClickEventListener(getPasteAppendToggleManualButtonElement(), onAppendToggleManualButtonClickOrKey);
-	addClickOrKeyClickEventListener(getPasteAppendToggleBeforeButtonElement(), onAppendToggleBeforeButtonClickOrKey);
+	const capture = true;
+	addClickOrKeyClickEventListener(getPasteAppendBeginButtonElement(), onAppendBeginButtonClickOrKey, capture);
+	addClickOrKeyClickEventListener(getPasteAppendToggleInlineButtonElement(), onAppendToggleInlineButtonClickOrKey, capture);
+	addClickOrKeyClickEventListener(getPasteAppendToggleManualButtonElement(), onAppendToggleManualButtonClickOrKey, capture);
+	addClickOrKeyClickEventListener(getPasteAppendToggleBeforeButtonElement(), onAppendToggleBeforeButtonClickOrKey, capture);
 
-	addClickOrKeyClickEventListener(getPasteAppendPauseAppendButtonElement(), onPauseAppendButtonClickOrKey);
-	addClickOrKeyClickEventListener(getPasteAppendStopAppendButtonElement(), onStopAppendButtonClickOrKey);
+	addClickOrKeyClickEventListener(getPasteAppendPauseAppendButtonElement(), onPauseAppendButtonClickOrKey, capture);
+	addClickOrKeyClickEventListener(getPasteAppendStopAppendButtonElement(), onStopAppendButtonClickOrKey, capture);
 
 	if (globals.ContentItemType == 'FileList') {
 		getPasteAppendToggleInlineButtonElement().classList.add('disabled');
@@ -67,8 +67,8 @@ function attachAppendButtonHandlers() {
 	}
 }
 
-function createAppendButtonLookup() {
-	globals.AppendButtonLookup = [
+function getAppendButtonLookup() {
+	let ap_btn_lookup = [
 		[
 			isAppendInsertMode(),
 			getPasteAppendToggleInlineButtonElement(),
@@ -86,11 +86,11 @@ function createAppendButtonLookup() {
 			getPasteAppendToggleManualButtonElement(),
 			[
 				'scope',
-				`${globals.AppendManualModeLabel}`
+				`${globals.AppendNonManualModeLabel}`
 			],
 			[
 				'scope',
-				`${globals.AppendNonManualModeLabel}`
+				`${globals.AppendManualModeLabel}`
 			]
 		],
 		[
@@ -107,22 +107,24 @@ function createAppendButtonLookup() {
 		],
 		[
 			isAppendPaused(),
-			getPasteAppendPauseAppendButtonElement(),			
+			getPasteAppendPauseAppendButtonElement(),	
+			[
+				'pause',
+				`${globals.AppendResumeLabel}`
+			],
 			[
 				'pause',
 				`${globals.AppendPauseLabel}`
 			],
-			[
-				'play',
-				`${globals.AppendResumeLabel}`
-			],
+			
 		],
 	];
 	if (globals.ContentItemType == 'FileList') {
 		// NOTE file list is block-only, ensure
 		// item0 always shows paragraph thing
-		globals.AppendButtonLookup[0][0] = false;
+		ap_btn_lookup[0][0] = false;
 	}
+	return ap_btn_lookup;
 }
 
 function showPasteAppendToolbar() {
@@ -140,10 +142,10 @@ function updatePasteAppendToolbar() {
 		return;
 	}
 	showPasteAppendToolbar();
-	createAppendButtonLookup();
+	let ap_btn_lookup = getAppendButtonLookup();
 
-	for (var i = 0; i < globals.AppendButtonLookup.length; i++) {
-		let append_btn = globals.AppendButtonLookup[i];
+	for (var i = 0; i < ap_btn_lookup.length; i++) {
+		let append_btn = ap_btn_lookup[i];
 
 		let is_enabled = append_btn[0];
 		let elm = append_btn[1];
@@ -169,6 +171,7 @@ function updatePasteAppendToolbar() {
 		elm.innerHTML = getSvgHtml(svg_key);
 		elm.setAttribute('hover-tooltip', tt_text);
 	}
+	drawOverlay();
 }
 // #endregion Actions
 
@@ -182,15 +185,18 @@ function onPauseAppendButtonClickOrKey(e) {
 	} else {
 		disablePauseAppend(false);
 	}
+	updatePasteAppendToolbar();
 }
 function onStopAppendButtonClickOrKey(e) {
 	disableAppendMode(false);
+	updatePasteAppendToolbar();
 }
 
 function onAppendBeginButtonClickOrKey(e) {
 	showPasteAppendToolbar();
 	enableAppendMode(true, false);
 	scrollToAppendIdx();
+	updatePasteAppendToolbar();
 }
 function onAppendToggleInlineButtonClickOrKey(e) {
 	if (globals.ContentItemType == 'FileList') {
@@ -202,6 +208,7 @@ function onAppendToggleInlineButtonClickOrKey(e) {
 	let is_line = !e.currentTarget.classList.contains('enabled');
 	enableAppendMode(is_line, false);
 	scrollToAppendIdx();
+	updatePasteAppendToolbar();
 }
 function onAppendToggleManualButtonClickOrKey(e) {
 	e.currentTarget.classList.toggle('enabled');
@@ -213,6 +220,7 @@ function onAppendToggleManualButtonClickOrKey(e) {
 		disableAppendManualMode(false);
 	}
 	scrollToAppendIdx();
+	updatePasteAppendToolbar();
 }
 function onAppendToggleBeforeButtonClickOrKey(e) {
 	e.currentTarget.classList.toggle('enabled');
@@ -224,6 +232,7 @@ function onAppendToggleBeforeButtonClickOrKey(e) {
 		disablePreAppend(false);
 	}
 	scrollToAppendIdx();
+	updatePasteAppendToolbar();
 }
 
 // #endregion Event Handlers

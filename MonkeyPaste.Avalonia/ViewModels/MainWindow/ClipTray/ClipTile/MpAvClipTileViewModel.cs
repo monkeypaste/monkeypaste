@@ -21,6 +21,7 @@ namespace MonkeyPaste.Avalonia {
         MpIConditionalSelectableViewModel,
         MpICloseWindowViewModel,
         MpIDraggable,
+        MpIAnimatable,
         MpILocatorItem,
         MpIIconResource,
         MpIAsyncCollectionObject,
@@ -511,6 +512,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsAnimating { get; set; }
         bool IsContentChangeModelChange { get; set; }
         public bool CanDrop {
             get {
@@ -693,6 +695,18 @@ namespace MonkeyPaste.Avalonia {
                 return Parent.Items.IndexOf(this);
             }
         }
+
+        public bool IsPinOpTile {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                if (IsPinPlaceholder) {
+                    return Parent.PinOpCopyItemId == PinPlaceholderCopyItemId;
+                }
+                return Parent.PinOpCopyItemId == CopyItemId;
+            }
+        }
         public bool IsTitleReadOnly { get; set; } = true;
 
         private bool _isContentReadOnly = true;
@@ -715,7 +729,7 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanDisableSubSelection {
             get {
-                return !IsAppendNotifier;
+                return !IsAppendNotifier && !IsPinOpTile;
             }
         }
 
@@ -1223,14 +1237,13 @@ namespace MonkeyPaste.Avalonia {
                 TransactionCollectionViewModel.InitializeAsync(CopyItemId).FireAndForgetSafeAsync(this);
                 InitTitleLayersAsync().FireAndForgetSafeAsync(this);
 
-                if (isRestoringSelection) {
+                if (isRestoringSelection && Parent != null) {
                     Parent.RestoreSelectionState(this);
                 }
             }
 
             UpdateQueryOffset(queryOffset);
             RestorePersistentState();
-
 
             OnPropertyChanged(nameof(IconResourceObj));
             OnPropertyChanged(nameof(IsPlaceholder));
@@ -1406,7 +1419,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 // NOTE only silent lock for pop out
                 // when appending user likely wants external app fully visible
-                pow.ShowChild(silentLock: !IsAppendNotifier);
+                pow.ShowChild(silentLock: false);
             }
 
             OnPropertyChanged(nameof(IsWindowOpen));
@@ -1676,10 +1689,8 @@ namespace MonkeyPaste.Avalonia {
                         }
                     } else {
                         LastDeselectedDateTime = DateTime.Now;
-                        if (IsContentReadOnly) {
-                            if (IsSubSelectionEnabled) {
-                                DisableSubSelectionCommand.Execute(null);
-                            }
+                        if (!IsWindowOpen && IsContentReadOnly && IsSubSelectionEnabled) {
+                            DisableSubSelectionCommand.Execute(null);
                         }
                     }
                     OnPropertyChanged(nameof(IsCornerButtonsVisible));
@@ -2309,9 +2320,13 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> PersistContentStateCommand => new MpAsyncCommand<object>(
             async (args) => {
-                if (args is bool make_editable && make_editable) {
-                    // query tile edit in grid mode so popout tile init picks up editable state
-                    MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);
+                if (args is string persist_state) {
+                    if (persist_state == "editable") {
+                        // query tile edit in grid mode so popout tile init picks up editable state
+                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);
+                    } else if (persist_state == "subselectable") {
+                        MpAvPersistentClipTilePropertiesHelper.AddPersistentIsSubSelectableTile_ById(CopyItemId, QueryOffsetIdx);
+                    }
                 }
 
                 if (GetContentView() is not MpAvContentWebView wv) {

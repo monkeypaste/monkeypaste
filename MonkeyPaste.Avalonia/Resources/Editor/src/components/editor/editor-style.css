@@ -30,9 +30,11 @@
 }
 
 #editor.append {
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-top: var(--appendpad);
+    padding-bottom: var(--appendpad);
 }
+
+
 
 #editor.no-select > .ql-editor {
     user-select: none;

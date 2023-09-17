@@ -65,11 +65,19 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	}
 
 	if (DO_VALIDATE && verifyText != null) {
-		const converted_text = toAscii(trimQuillTrailingLineEndFromText(getText()));
 		verifyText = toAscii(verifyText.replaceAll(`\r\n`, `\n`));
+		let converted_text = toAscii(getText());
+		if (!verifyText.endsWith('\n')) {
+			// when actual text doesn't end w/ newline make sure quills newline is removed
+			converted_text = trimQuillTrailingLineEndFromText(converted_text);
+		}
 		const diff_idx = getFirstDifferenceIdx(verifyText, converted_text);
 		if (diff_idx < 0) {
 			log('conversion validate: PASSED');
+			const is_actual_inline_only = verifyText.indexOf('\n') < 0;
+			if (is_actual_inline_only) {
+				output_html = output_html.replace('<p', '<span').replace('p>','span>');
+			}
 		} else {
 			log('conversion validate: FAILED');
 			log('first diff_idx: ' + diff_idx);

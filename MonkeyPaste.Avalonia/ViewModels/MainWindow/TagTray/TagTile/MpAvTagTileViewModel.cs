@@ -955,6 +955,9 @@ namespace MonkeyPaste.Avalonia {
                             MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending = IsSortDescending;
                             MpAvClipTileSortFieldViewModel.Instance.SelectedSortType = SortType;
                         }
+                        if (IsGroupTag) {
+                            IsExpanded = true;
+                        }
                         Parent.SelectTagCommand.Execute(this);
                     } else if (!IsTagNameTextBoxFocused) {
                         IsTagNameReadOnly = true;

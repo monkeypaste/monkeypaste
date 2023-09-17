@@ -2,6 +2,9 @@
 #editor.image-content #pasteAppendToolbarContainer {
     display: none;
 }
+#editor.file-list-content #pasteAppendToolbarContainer .text-only {
+    display: none;
+}
 
 #pasteToolbar:not(:hover) #pasteAppendToolbarContainer:not(.expanded) {
     opacity: 0;

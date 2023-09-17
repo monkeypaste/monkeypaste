@@ -1,6 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -94,6 +93,12 @@ namespace MonkeyPaste.Avalonia {
                     _iconBase64 = ivm.IconBase64;
                 }
                 if (_iconBase64 == null) {
+                    if (Path.IsFileOrDirectory()) {
+                        _iconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(Path, MpIconSize.SmallIcon16);
+                        if (_iconBase64 != null) {
+                            return _iconBase64;
+                        }
+                    }
                     if (MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Dark) {
                         _iconBase64 = MpBase64Images.MissingFile_white;
                     } else {

@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using AvToolTip = Avalonia.Controls.ToolTip;
+using Avalonia.Layout;
 #if DESKTOP
 
 
@@ -484,35 +485,49 @@ namespace MonkeyPaste.Avalonia {
                             tt.ToolTipText = showToolTipNtf.tooltipText;
                             tt.ToolTipHtml = showToolTipNtf.tooltipHtml;
                             tt.InputGestureText = showToolTipNtf.gestureText;
+                            if (!tt.HasText) {
+                                return;
+                            }
 
-                            void tt_attachedToView(object sender, VisualTreeAttachmentEventArgs e) {
+                            void tt_attachedToView(object sender, EffectiveViewportChangedEventArgs e) {
                                 // anchor is some editor elm's center
                                 // move tooltip towards editor center along line from center to anchor
                                 // to avoid tooltip overlapping mouse which creates a stutter from
                                 // leave/exit calls
 
-                                MpPoint center_p = this.Bounds.Center.ToPortablePoint();
-                                MpPoint anchor_p = new MpPoint(showToolTipNtf.anchorX, showToolTipNtf.anchorY);
-                                // adj tooltip to be its height + pad away from anchor
-                                double adj_pad = 10;
-                                double adj_dist = (tt.Bounds.Height / 2) + adj_pad;
-                                MpPoint center_to_anchor = anchor_p - center_p;
-                                double anchor_dist = center_to_anchor.Length;
-                                if (anchor_dist <= Math.Abs(adj_dist)) {
-                                    // anchor is IN the center so flip adj_dist out along line
-                                    adj_dist *= -1;
+                                var tl = TopLevel.GetTopLevel(tt);
+                                var tt_size = tl.Bounds.Size.ToPortableSize();
+                                if (tt_size.IsEmpty()) {
+                                    return;
                                 }
-                                double offset_dist = anchor_dist - adj_dist;
-                                MpPoint adj_offset = center_to_anchor.Normalized * offset_dist;
-                                MpPoint adj_p = anchor_p - adj_offset;
+                                MpPoint center_p = this.Bounds.Center.ToPortablePoint();
+                                //MpPoint anchor_p = new MpPoint(showToolTipNtf.anchorX, showToolTipNtf.anchorY);
+                                //// adj tooltip to be its height + pad away from anchor
+                                //double adj_pad = 10;
+                                //double adj_dist = (tt_size.Height / 2) + adj_pad;
+                                //MpPoint center_to_anchor = anchor_p - center_p;
+                                //double anchor_dist = center_to_anchor.Length;
+                                //if (anchor_dist <= Math.Abs(adj_dist)) {
+                                //    // anchor is IN the center so flip adj_dist out along line
+                                //    adj_dist *= -1;
+                                //}
+                                //double offset_dist = anchor_dist - adj_dist;
+                                //MpPoint adj_offset = center_to_anchor.Normalized * offset_dist;
+                                //MpPoint adj_p = anchor_p - adj_offset;
+                                //adj_p -= (tt_size.ToPortablePoint() * 0.5);
+                                MpPoint adj_p = center_p - (tt_size.ToPortablePoint() * 0.5);
+                                if (Math.Abs(center_p.Y - showToolTipNtf.anchorY) < tt_size.Height) {
+                                    // if its in the middle just shove to the top
+                                    adj_p.Y = this.Bounds.Top;
+                                }
+
                                 AvToolTip.SetHorizontalOffset(this, adj_p.X);
                                 AvToolTip.SetVerticalOffset(this, adj_p.Y);
 
-                                tt.AttachedToVisualTree -= tt_attachedToView;
+                                tt.EffectiveViewportChanged -= tt_attachedToView;
                             }
                             // wait till tt is attached to know its height
-                            tt.AttachedToVisualTree += tt_attachedToView;
-
+                            tt.EffectiveViewportChanged += tt_attachedToView;
 
                             AvToolTip.SetTip(this, tt);
                             AvToolTip.SetPlacement(this, PlacementMode.TopEdgeAlignedLeft);
@@ -861,28 +876,29 @@ namespace MonkeyPaste.Avalonia {
 
                         var unprocessed_drag_avdo = drag_hdo.ToAvDataObject();
 
+                        processed_drag_avdo = await Mp.Services
+                            .DataObjectTools.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
+
                         if (BindingContext.CopyItemType == MpCopyItemType.FileList &&
-                            unprocessed_drag_avdo.TryGetData(MpPortableDataFormats.AvFiles, out object fn_obj)) {
+                            processed_drag_avdo.TryGetData(MpPortableDataFormats.AvFiles, out object fn_obj)) {
                             // NOTE for file drops files are converted to fragment and dropped like append handling
                             if (fn_obj is IEnumerable<string> fnl) {
                                 var fl_frag = new MpQuillFileListDataFragment() {
-                                    fileItems = fnl.Select(x => new MpQuillFileListItemDataFragmentMessage() {
-                                        filePath = Uri.UnescapeDataString(x),
+                                    fileItems = fnl.Select(x => Uri.UnescapeDataString(x)).Select(x => new MpQuillFileListItemDataFragmentMessage() {
+                                        filePath = x,
                                         fileIconBase64 =
                                             x.IsFileOrDirectory() ?
-                                                ((Bitmap)MpAvStringFileOrFolderPathToBitmapConverter.Instance.Convert(Uri.UnescapeDataString(x), null, null, null)).ToBase64String() :
+                                                ((Bitmap)MpAvStringFileOrFolderPathToBitmapConverter.Instance.Convert(x, null, null, null)).ToBase64String() :
                                                 MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Dark ?
                                                     MpBase64Images.MissingFile_white :
                                                     MpBase64Images.MissingFile
                                     }).ToList()
                                 };
-                                unprocessed_drag_avdo.SetData(MpPortableDataFormats.INTERNAL_FILE_LIST_FRAGMENT_FORMAT, fl_frag.SerializeJsonObjectToBase64());
+                                processed_drag_avdo.Set(MpPortableDataFormats.INTERNAL_FILE_LIST_FRAGMENT_FORMAT, fl_frag.SerializeJsonObjectToBase64());
                             } else {
                                 MpDebug.Break($"unhandled file obj type {fn_obj.GetType()}");
                             }
                         }
-                        processed_drag_avdo = await Mp.Services
-                            .DataObjectTools.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
                     }
 
 
@@ -1095,6 +1111,8 @@ namespace MonkeyPaste.Avalonia {
                 isReadOnly = BindingContext.IsContentReadOnly,
                 isSubSelectionEnabled = BindingContext.IsSubSelectionEnabled
             };
+            var test1 = MpAvPersistentClipTilePropertiesHelper.IsPersistentIsSubSelectable_ById(BindingContext.CopyItemId, BindingContext.QueryOffsetIdx);
+            var test2 = MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(BindingContext.CopyItemId, BindingContext.QueryOffsetIdx);
 
             if (isSearchEnabled) {
                 var searches =
@@ -1659,7 +1677,10 @@ namespace MonkeyPaste.Avalonia {
                 // but line vs insert changes are only compared for is true since
                 // they are interdependant to avoid double ntf
 
-                if (appendChangedMsg.isAppendPaused != ctrvm.IsAppendPaused) {
+                if (BindingContext.IsAppendNotifier &&
+                    (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendInsertMode && ctrvm.IsAnyAppendMode)) {
+                    ctrvm.DeactivateAppendModeCommand.Execute(null);
+                } else if (appendChangedMsg.isAppendPaused != ctrvm.IsAppendPaused) {
                     ctrvm.ToggleAppendPausedCommand.Execute(null);
                 } else if (appendChangedMsg.isAppendManualMode != ctrvm.IsAppendManualMode) {
                     ctrvm.ToggleAppendManualModeCommand.Execute(null);
@@ -1669,9 +1690,6 @@ namespace MonkeyPaste.Avalonia {
                     ctrvm.ToggleAppendLineModeCommand.Execute(null);
                 } else if (appendChangedMsg.isAppendInsertMode && !ctrvm.IsAppendInsertMode) {
                     ctrvm.ToggleAppendInsertModeCommand.Execute(null);
-                } else if (BindingContext.IsAppendNotifier &&
-                    (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendInsertMode && ctrvm.IsAnyAppendMode)) {
-                    ctrvm.DeactivateAppendModeCommand.Execute(null);
                 }
             } else {
                 if (!CanSendContentMessage) {
@@ -1703,6 +1721,7 @@ namespace MonkeyPaste.Avalonia {
                 BindingContext.StoreSelectionStateCommand.Execute(null);
             });
         }
+
 
     }
 }

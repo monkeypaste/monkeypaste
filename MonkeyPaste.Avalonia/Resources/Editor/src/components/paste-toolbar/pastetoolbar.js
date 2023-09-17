@@ -94,7 +94,7 @@ function showPasteToolbar(isPasting = false) {
 }
 
 function hidePasteToolbar() {
-    if (isAppendNotifier()) {
+    if (isAnyAppendEnabled()) {
         // should always have pastey for appender
         return;
     }

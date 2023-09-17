@@ -7,7 +7,7 @@
 // #region Life Cycle
 
 function initAppend() {
-	if (!isAppendNotifier()) {
+	if (!isAnyAppendEnabled()) {
 		return;
 	}
 	getDisableAppendModeButtonElement().innerHTML = getSvgHtml('stop', null, false);
@@ -72,14 +72,6 @@ function getAppendDocRange() {
 
 // #region State
 
-
-function isAppendNotifier() {
-	//return window.location.search.toLowerCase().endsWith(APPEND_NOTIFIER_PARAMS.toLowerCase());
-	let result = getEditorElement().classList.contains('append');
-	return result;
-}
-
-
 function isAnyAppendEnabled() {
 	return getEditorContainerElement().classList.contains('append');
 }
@@ -119,12 +111,15 @@ function enableAppendMode(isAppendLine, fromHost = false) {
 
 	scrollToAppendIdx();
 
-	if (!fromHost && did_append_mode_change) {
-		onAppendStateChanged_ntf();
+	if (did_append_mode_change) {
+		updateOverlayPad(true);
+		if (!fromHost) {
+			onAppendStateChanged_ntf();
+		}		
 	}
 
 	drawOverlay();
-	log('append mode enabled. IsAppendNotifier: ' + isAppendNotifier());
+	log('append mode enabled. IsAppendNotifier: ' + isAnyAppendEnabled());
 }
 
 function disableAppendMode(fromHost = false) {
@@ -132,28 +127,27 @@ function disableAppendMode(fromHost = false) {
 	let did_manual_mode_change = isAppendManualMode();
 	let did_paused_change = isAppendPaused();
 
+	getEditorContainerElement().classList.remove('append');
 	getEditorContainerElement().classList.remove('append-line');
 	getEditorContainerElement().classList.remove('append-insert');
 	getEditorContainerElement().classList.remove('append-pre');
-	getEditorContainerElement().classList.remove('append');
 	getEditorContainerElement().classList.remove('append-manual');
 	getEditorContainerElement().classList.remove('append-paused');
 
-	// NOTE dont allow manual to notify here (regardless of source) to avoid double messages
-	//disableAppendManualMode(false);
-	//disablePauseAppend(false);
-
 	updatePasteAppendToolbar();
 
-	if (isReadOnly()) {
-		disableSubSelection();
-	}
-
-	if (!fromHost && (did_append_mode_change || did_manual_mode_change || did_paused_change)) {
-		onAppendStateChanged_ntf();
+	if (did_append_mode_change || did_manual_mode_change || did_paused_change) {
+		updateOverlayPad(false);
+		if (!fromHost) {
+			// BUG getting mismatches after disabling append
+			// with file item content not matching data object
+			// so forcing content update, maybe bad
+			onContentChanged_ntf();
+			onAppendStateChanged_ntf();
+		}
 	}
 	drawOverlay();
-	log('append mode disabled. IsAppendNotifier: ' + isAppendNotifier());
+	log('append mode disabled. IsAppendNotifier: ' + isAnyAppendEnabled());
 }
 
 function enableAppendManualMode(fromHost = false) {
@@ -161,13 +155,13 @@ function enableAppendManualMode(fromHost = false) {
 	getEditorContainerElement().classList.add('append-manual');
 
 	scrollToAppendIdx();
+	updatePasteAppendToolbar();
 
 	drawOverlay();
-	log('append manual mode enabled. IsAppendNotifier: ' + isAppendNotifier());
+	log('append manual mode enabled. IsAppendNotifier: ' + isAnyAppendEnabled());
 	if (!fromHost && did_manual_mode_change) {
 		onAppendStateChanged_ntf();
 	}
-	updatePasteAppendToolbar();
 }
 
 function disableAppendManualMode(fromHost = false) {
@@ -179,35 +173,34 @@ function disableAppendManualMode(fromHost = false) {
 		scrollToAppendIdx();
 	}
 
-	drawOverlay();
-	log('append manual mode disabled. IsAppendNotifier: ' + isAppendNotifier());
+	log('append manual mode disabled. IsAppendNotifier: ' + isAnyAppendEnabled());
 
+	updatePasteAppendToolbar();
 	if (!fromHost && did_manual_mode_change) {
 		onAppendStateChanged_ntf();
 	}
-	updatePasteAppendToolbar();
 }
 
 function enablePauseAppend(fromHost = false) {
 	const did_pause_append_change = !isAppendPaused();
 	getEditorContainerElement().classList.add('append-paused');
 
+	updatePasteAppendToolbar();
 	if (!fromHost && did_pause_append_change) {
 		onAppendStateChanged_ntf();
 	}
-	updatePasteAppendToolbar();
 }
 
 function disablePauseAppend(fromHost = false) {
 	const did_pause_append_change = isAppendPaused();
 	getEditorContainerElement().classList.remove('append-paused');
 
+	updatePasteAppendToolbar();
 	if (!fromHost && did_pause_append_change) {
 		onAppendStateChanged_ntf();
 		// trigger content change to refresh clipboard to append buffer
 		onContentChanged_ntf();
 	}
-	updatePasteAppendToolbar();
 }
 
 function enablePreAppend(fromHost = false) {
@@ -215,10 +208,10 @@ function enablePreAppend(fromHost = false) {
 	getEditorContainerElement().classList.add('append-pre');
 
 	globals.FixedAppendIdx = getDocSelection().index;
+	updatePasteAppendToolbar();
 	if (!fromHost && did_pre_append_change) {
 		onAppendStateChanged_ntf();
 	}
-	updatePasteAppendToolbar();
 }
 
 function disablePreAppend(fromHost = false) {
@@ -227,10 +220,10 @@ function disablePreAppend(fromHost = false) {
 
 	globals.FixedAppendIdx = -1;
 
+	updatePasteAppendToolbar();
 	if (!fromHost && did_pre_append_change) {
 		onAppendStateChanged_ntf();
 	}
-	updatePasteAppendToolbar();
 }
 // #endregion State
 
@@ -306,9 +299,9 @@ function updateAppendModeState(req, fromHost = false) {
 	if (is_resuming) {
 		disablePauseAppend(fromHost);
 	}
-	if (is_append_range_changed) {
-		setDocSelection(new_append_range);
-	}
+	//if (is_append_range_changed) {
+	//	setDocSelection(new_append_range);
+	//}
 	if (is_appending_data) {
 		appendContentData(req.appendData);
 	}

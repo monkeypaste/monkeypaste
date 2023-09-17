@@ -16,8 +16,11 @@ function loadFileListContent(itemDataStr) {
 	hideAllToolbars();
 	disableTableContextMenu();
 	disableTableInteraction();
-	enableReadOnly();
-	disableSubSelection();
+
+	if (!isAnyAppendEnabled()) {
+		enableReadOnly();
+		disableSubSelection();
+	}
 	globals.FileListItems = [];
 	let fldfObj = toJsonObjFromBase64Str(itemDataStr);
 	for (var i = 0; i < fldfObj.fileItems.length; i++) {
@@ -366,12 +369,13 @@ function transferFileListContent(data_or_dt, source_fli_row_idxs, dest_doc_range
 	loadFileListContent(toBase64FromJsonObj({ fileItems: updated_items }));
 	updated_sel_idxs.forEach(x => getFileListRowElements()[x].classList.add('selected'));
 
-
+	let fli_doc_range = getFileListItemDocRange(updated_sel_idxs[0]);
+	let append_idx = fli_doc_range && fli_doc_range.index !== undefined ? fli_doc_range.index : 0;
 	let append_range = {
-		index: getFileListItemDocRange(updated_sel_idxs[0]).index
+		index: append_idx
 	};
 	let last_range = getFileListItemDocRange(updated_sel_idxs[updated_sel_idxs.length - 1]);
-	append_range.length = last_range.index + last_range.length;
+	append_range.length = last_range ? last_range.index + last_range.length : 0;
 	return append_range;
 }
 

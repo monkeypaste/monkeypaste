@@ -38,10 +38,10 @@ var globals = {
 
 	AppendPauseLineColor: 'gold',
 
-	AppendLineModeLabel: 'Block',
-	AppendInlineModeLabel: 'Inline',
-	AppendManualModeLabel: 'Manual',
-	AppendNonManualModeLabel: 'Extent',
+	AppendLineModeLabel: 'Toggle inline',
+	AppendInlineModeLabel: 'Toggle inline',
+	AppendManualModeLabel: 'Toggle manual',
+	AppendNonManualModeLabel: 'Toggle manual',
 	AppendPreLabel: 'Toggle Before',
 	AppendPostLabel: 'Toggle Before',
 	AppendPauseLabel: 'Pause appending to clipboard',

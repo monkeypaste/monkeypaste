@@ -1117,6 +1117,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public int PinOpCopyItemId { get; set; } = -1;
 
         public bool IsAutoEditEnabled =>
             !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled;
@@ -1537,6 +1538,16 @@ namespace MonkeyPaste.Avalonia {
             if (ctvm.IsPinned) {
                 OnScrollIntoPinTrayViewRequest?.Invoke(this, obj);
                 IsScrollingIntoView = false;
+                return;
+            }
+            if (ctvm.IsAnimating) {
+                Dispatcher.UIThread.Post(async () => {
+                    while (ctvm.IsAnimating) {
+                        await Task.Delay(100);
+                    }
+                    IsScrollingIntoView = false;
+                    ScrollIntoView(ctvm);
+                });
                 return;
             }
 
@@ -3267,8 +3278,14 @@ namespace MonkeyPaste.Avalonia {
                      MpDebug.Break();
                      return;
                  }
+                 PinOpCopyItemId = ctvm_to_pin.CopyItemId;
 
-                 await ctvm_to_pin.PersistContentStateCommand.ExecuteAsync(pin_as_editable.HasValue ? pin_as_editable.Value : null);
+                 string persist_args = pin_as_editable.IsTrue() ? "editable" : null;
+                 if (persist_args == null && ctvm_to_pin.IsSubSelectionEnabled) {
+                     persist_args = "subselectable";
+                 }
+
+                 await ctvm_to_pin.PersistContentStateCommand.ExecuteAsync(persist_args);
 
                  int ctvm_to_pin_query_idx = -1;
                  MpAvClipTileViewModel query_ctvm_to_pin = QueryItems.FirstOrDefault(x => x.CopyItemId == ctvm_to_pin.CopyItemId);
@@ -3318,18 +3335,15 @@ namespace MonkeyPaste.Avalonia {
                  ctvm_to_pin.OnPropertyChanged(nameof(ctvm_to_pin.IsPlaceholder));
 
                  if (query_ctvm_to_pin != null &&
-                    ctvm_to_pin_query_idx >= 0) {
+                    ctvm_to_pin_query_idx >= 0
+                    ) {
                      await query_ctvm_to_pin.InitializeAsync(ctvm_to_pin.CopyItem, ctvm_to_pin_query_idx);
-                     //QueryCommand.Execute(string.Empty);
-                     //await Task.Delay(100);
-                     //while (IsQuerying) {
-                     //    await Task.Delay(100);
-                     //}
-
                  }
                  await Task.Delay(200);
                  //SelectedItem = ctvm_to_pin;
                  ctvm_to_pin.IsSelected = true;
+
+                 PinOpCopyItemId = -1;
 
                  OnPropertyChanged(nameof(Items));
                  OnPropertyChanged(nameof(PinnedItems));
@@ -4513,6 +4527,11 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             MpAvClipTileViewModel append_ctvm = null;
+            if (MpAvWindowManager.ActiveWindow != null &&
+                MpAvWindowManager.ActiveWindow.DataContext is MpAvClipTileViewModel active_ctvm) {
+                MpDebug.Assert(SelectedItem == active_ctvm, $"Append activate sel/active item mismatch");
+                append_ctvm = active_ctvm;
+            }
             if (MpAvMainWindowViewModel.Instance.IsMainWindowOpen) {
                 if (SelectedItem != null) {
                     append_ctvm = SelectedItem;

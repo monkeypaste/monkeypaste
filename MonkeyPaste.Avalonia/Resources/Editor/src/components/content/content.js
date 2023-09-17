@@ -328,9 +328,6 @@ function canEnableSubSelection() {
 }
 
 function canDisableSubSelection() {
-	if (isAppendNotifier()) {
-		return false;
-	}
 	if (isAnyAppendEnabled()) {
 		return false;
 	}

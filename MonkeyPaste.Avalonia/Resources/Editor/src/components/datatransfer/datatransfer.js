@@ -78,6 +78,15 @@ function convertHostDataItemsToDataTransfer(dataItemsMsgObj) {
     }
     for (var i = 0; i < dataItemsMsgObj.dataItems.length; i++) {
         let dti = dataItemsMsgObj.dataItems[i];
+   //     if (isFileListFormat(dti.format.toLowerCase())) {
+   //         let file_frag_obj = {
+   //             fileItems: []
+   //         };
+   //         let fpl = dti.data.split(envNewLine());
+   //         for (var j = 0; j < fpl.length; j++) {
+   //             let fp = decodeURIComponent(fpl[j]);
+			//}
+   //     }
         dt.setData(dti.format, dti.data);
     }
     return dt;

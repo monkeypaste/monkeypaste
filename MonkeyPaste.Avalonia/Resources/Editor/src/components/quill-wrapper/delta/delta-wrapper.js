@@ -147,7 +147,20 @@ function mergeDeltas(delta1, delta2) {
 	]);
 	return merged_delta;
 }
-
+function isDeltaStartWithNewline(delta) {
+	let inserts = delta.ops.filter(x => x.insert !== undefined && isString(x.insert));
+	if (inserts.length == 0) {
+		return false;
+	}
+	return inserts[0].insert.startsWith('\n');
+}
+function isDeltaEndWithNewline(delta) {
+	let inserts = delta.ops.filter(x => x.insert !== undefined && isString(x.insert));
+	if (inserts.length == 0) {
+		return false;
+	}
+	return inserts[inserts.length-1].insert.endsWith('\n');
+}
 function insertDelta(range, deltaOrDeltaJsonStr, source = 'api') {
 	let deltaObj = cleanDelta(deltaOrDeltaJsonStr);
 

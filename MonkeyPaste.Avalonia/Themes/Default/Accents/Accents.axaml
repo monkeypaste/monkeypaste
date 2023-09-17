@@ -634,5 +634,32 @@
         <SolidColorBrush x:Key="SettingsWindowBgBrush"
                          Color="{DynamicResource ThemeColor}" />
 
+
+        <!--  EFFECTS  -->
+        <DropShadowEffect x:Key="ThemeDropShadow"
+                          OffsetX="3"
+                          OffsetY="3"
+                          Color="{DynamicResource ThemeInteractiveColor}"
+                          BlurRadius="5"
+                          Opacity="0.8" />
+        <DropShadowEffect x:Key="ThemeGlow"
+                          OffsetX="0"
+                          OffsetY="0"
+                          Color="{DynamicResource ThemeInteractiveColor}"
+                          BlurRadius="5"
+                          Opacity="0.8" />
+
+        <DropShadowEffect x:Key="ThemeBgDropShadow"
+                          OffsetX="3"
+                          OffsetY="3"
+                          Color="{DynamicResource ThemeInteractiveBgColor}"
+                          BlurRadius="5"
+                          Opacity="0.8" />
+        <DropShadowEffect x:Key="ThemeBgGlow"
+                          OffsetX="0"
+                          OffsetY="0"
+                          Color="{DynamicResource ThemeInteractiveBgColor}"
+                          BlurRadius="5"
+                          Opacity="0.8" />
     </Style.Resources>
 </Style>

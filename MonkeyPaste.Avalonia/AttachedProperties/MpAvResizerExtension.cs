@@ -454,6 +454,9 @@ namespace MonkeyPaste.Avalonia {
                 onComplete?.Invoke();
                 return;
             }
+            if (control.DataContext is MpIAnimatable anim) {
+                anim.IsAnimating = true;
+            }
             double zeta, omega, fps;
 
             //if (MpAvSearchBoxViewModel.Instance.HasText) {
@@ -499,6 +502,9 @@ namespace MonkeyPaste.Avalonia {
                 double fdh = nh - fh;
                 ResizeByDelta(control, fdw, fdh, false);
 
+                if (control.DataContext is MpIAnimatable anim) {
+                    anim.IsAnimating = false;
+                }
                 onComplete?.Invoke();
 
             });

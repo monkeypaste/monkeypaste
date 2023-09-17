@@ -120,6 +120,16 @@ function stopOverlayCaretTimer() {
     globals.CaretBlinkTimerInterval = null;
 }
 
+function updateOverlayPad(addPad) {
+    let pad_h = parseFloat(getElementComputedStyleProp(document.body, '--appendpad'));
+    if (!addPad) {
+        pad_h *= -1;
+    }
+    overlayCanvas.style.top -= pad_h;
+    overlayCanvas.height += (pad_h * 2);
+
+}
+
 function updateOverlayBounds() {
     let editorRect = getEditorContainerRect();
     let window_rect = getWindowRect();
@@ -175,7 +185,7 @@ function drawTextSelection(ctx) {
     if (!isDragging() &&
         !isDropping() &&
         !globals.CurFindReplaceDocRangesRects &&
-        !isAppendNotifier()) {
+        !isAnyAppendEnabled()) {
         //return;
     }
 
@@ -242,7 +252,7 @@ function drawCaret(ctx, sel, caret_width = 1.0, caret_opacity = 1) {
     drawLine(ctx, caret_line, caret_color, caret_width);
 }
 
-function drawAppendNotifierPreview(ctx, color, thickness = 1.0, line_style = [5, 5]) {
+function drawAppendNotifierPreview(ctx, color, thickness = 3.0, line_style = [5, 5]) {
     if (isAppendManualMode()) {
         color = globals.DropCopyLineColor;
     }
@@ -250,15 +260,33 @@ function drawAppendNotifierPreview(ctx, color, thickness = 1.0, line_style = [5,
         color = globals.DropMoveLineColor;
     }
     let block_state = isAppendLineMode() ? isAppendPreMode() ? 'pre' : 'post' : 'inline';
-    let render_lines = getPreviewLines(getAppendDocRange().index, block_state, false);
+    let append_lines = getPreviewLines(getAppendDocRange().index, block_state, false);
     // NOTE drawing on flip of caret blink
     let append_color = globals.CaretBlinkOffColor != null ? color : 'transparent';
     if (isAppendPaused()) {
         // when paused show unblinking line
         append_color = globals.AppendPauseLineColor;
     }
-    for (var i = 0; i < render_lines.length; i++) {
-        let line = render_lines[i];
+
+    let editor_rect = cleanRect(getEditorElement().getBoundingClientRect());
+    let cont_rect = getEditorContainerRect();
+    let vert_sb_w = getEditorVerticalScrollBarWidth();
+    
+    let top_pad_rect = cleanRect(cont_rect);
+    top_pad_rect.bottom = editor_rect.top;
+    top_pad_rect.right -= vert_sb_w;
+    top_pad_rect = cleanRect(top_pad_rect);
+
+    let bottom_pad_rect = cleanRect(cont_rect);
+    bottom_pad_rect.top = editor_rect.bottom;
+    bottom_pad_rect.right -= vert_sb_w;
+    bottom_pad_rect = cleanRect(bottom_pad_rect);
+    let pad_color = getElementComputedStyleProp(document.body, '--caretcolor');
+    drawRect(ctx, top_pad_rect, pad_color, 'transparent', 0, 0.5);
+    drawRect(ctx, bottom_pad_rect, pad_color, 'transparent', 0, 0.5);
+
+    for (var i = 0; i < append_lines.length; i++) {
+        let line = append_lines[i];
         drawLine(ctx, line, append_color, thickness, line_style)
     }
 }

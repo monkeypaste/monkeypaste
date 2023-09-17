@@ -63,10 +63,13 @@ namespace MonkeyPaste.Avalonia {
             if (ci.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter) is string[] fpl) {
                 // NOTE presuming text format returned from editor on content change is the current order of file items
                 // sort paths by text order
-#if DEBUG
-                MpDebug.Assert(fpl.Length == ci_dobil.Count, $"FileList count mismatch content {fpl.Length} item paths {ci_dobil.Count} for item '{ci.Title}'");
-                MpDebug.Assert(fpl.Length == ci_dobil.Count, $"FileList count mismatch content {fpl.Length} item paths {ci_dobil.Count} for item '{ci.Title}'");
-#endif       
+                if (fpl.Length != ci_dobil.Count) {
+                    MpDebug.Break($"FileList count mismatch content {fpl.Length} item paths {ci_dobil.Count} for item '{ci.Title}'. Using db.", true);
+                    // write item and reset files to current content
+                    await ci.WriteToDatabaseAsync();
+                    // use those newly written item
+                    ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(ci.DataObjectId, MpPortableDataFormats.AvFiles);
+                }
                 ci_dobil = ci_dobil.OrderBy(x => fpl.IndexOf(x.ItemData)).ToList();
             }
             var fivml = await Task.WhenAll(ci_dobil.Select(x => CreateFileItemViewModel(x)));

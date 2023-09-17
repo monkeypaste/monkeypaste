@@ -817,16 +817,18 @@ function convertTextContentToFormats(selectionOnly, formats) {
 }
 
 function transferTextContent(dt, source_doc_range, dest_doc_range, source) {
-	// PREPARE DROP RANGE
-
-	dest_doc_range = prepareDestDocRangeForDataTransfer(dest_doc_range, source);
 
 	// PRE TRANSFER DEFS
 
 	let pre_doc_length = getDocLength();
 
-	// PERFORM TRANSFER
 	let dt_delta = getDataTransferDelta(dt);
+
+	// PREPARE DROP RANGE
+
+	dest_doc_range = prepareDestDocRangeForDataTransfer(dest_doc_range, dt_delta, source);
+
+	// PERFORM TRANSFER
 	insertDelta(dest_doc_range, dt_delta, source);
 
 	let dt_length_diff = getDocLength() - pre_doc_length;
@@ -854,21 +856,31 @@ function transferTextContent(dt, source_doc_range, dest_doc_range, source) {
 	return dt_range;
 }
 
-function prepareDestDocRangeForDataTransfer(dest_doc_range, drop_insert_source) {
+function prepareDestDocRangeForDataTransfer(dest_doc_range, dt_delta, drop_insert_source) {
+	let dt_begins_w_newline = isDeltaStartWithNewline(dt_delta);
+	let dt_ends_w_newline = isDeltaEndWithNewline(dt_delta);
 	dest_doc_range.mode = dest_doc_range.mode === undefined ? 'inline' : dest_doc_range.mode;
 	switch (dest_doc_range.mode) {
 		case 'split':
-			insertText(dest_doc_range.index, '\n', drop_insert_source);
-			insertText(dest_doc_range.index, '\n', drop_insert_source);
-			dest_doc_range.index += 1;
+			const split_idx = dest_doc_range.index;
+			if (!dt_begins_w_newline) {
+				insertText(split_idx, '\n', drop_insert_source);
+				dest_doc_range.index += 1;
+			}
+			if (!dt_ends_w_newline) {
+				insertText(split_idx, '\n', drop_insert_source);
+			}
 			break;
 		case 'pre':
 			dest_doc_range.index = 0;
-			insertText(dest_doc_range.index, '\n', drop_insert_source);
+			if (!dt_ends_w_newline) {
+				insertText(dest_doc_range.index, '\n', drop_insert_source);
+			}
 			break;
 		case 'post':
 			dest_doc_range.index = getLineEndDocIdx(dest_doc_range.index);
-			if (dest_doc_range.index < getDocLength() - 1) {
+			if (dest_doc_range.index < getDocLength() - 1 &&
+				!dt_begins_w_newline) {
 				// ignore new line for last line since it already is a new line
 				insertText(dest_doc_range.index, '\n', drop_insert_source);
 				dest_doc_range.index += 1;
@@ -876,6 +888,8 @@ function prepareDestDocRangeForDataTransfer(dest_doc_range, drop_insert_source) 
 			break;
 		case 'inline':
 		default:
+			// when length is 1 and insert is at end and data ends with newline it'll get removed unless length is 0
+			dest_doc_range.length = 0;
 			break;
 	}
 	return dest_doc_range;

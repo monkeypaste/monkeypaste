@@ -63,7 +63,7 @@
 
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover Grid#PinPlaceholderOverlay TextBlock">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeAccent1Brush}" />
+                    Value="{DynamicResource ThemeAccent1BgBrush}" />
         </Style>
 
 
@@ -283,7 +283,6 @@
             <!--  PIN PLACEHOLDER OVERLAY  -->
 
             <Grid x:Name="PinPlaceholderOverlay"
-                  Opacity="{Binding IsHovering, ConverterParameter=1|0.2, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                   Cursor="Hand"
                   Grid.ColumnSpan="2"
                   Grid.RowSpan="3"
@@ -302,6 +301,8 @@
                     </Transitions>
                 </Grid.Transitions>
                 <Image Grid.Row="0"
+                       Opacity="{Binding IsHovering, ConverterParameter=1|0.2, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                       Effect="{DynamicResource ThemeDropShadow}"
                        Classes="square"
                        MinWidth="50"
                        MinHeight="50"
@@ -309,6 +310,9 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Source="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeInteractiveColor, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}">
+                    <Image.RenderTransform>
+                        <RotateTransform />
+                    </Image.RenderTransform>
                     <Image.Height>
                         <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
                                       ConverterParameter="/">
@@ -326,10 +330,17 @@
                            TextAlignment="Center"
                            TextWrapping="WrapWithOverflow"
                            Margin="30,15,30,0"
-                           FontWeight="Bold"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Top">
-                    <TextBlock.Text>
+                    <TextBlock.Inlines>
+                        <InlineCollection>
+                            <Run Foreground="{DynamicResource ThemeAccent2Color}"
+                                 FontWeight="Bold"
+                                 Text="Double Click to unpin " />
+                            <Run Text="{Binding PinPlaceholderLabel, StringFormat='\'{0}\''}" />
+                        </InlineCollection>
+                    </TextBlock.Inlines>
+                    <!--<TextBlock.Text>
                         <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
                             <Binding>
                                 <Binding.Source>
@@ -343,7 +354,7 @@
                                 </Binding.Source>
                             </Binding>
                         </MultiBinding>
-                    </TextBlock.Text>
+                    </TextBlock.Text>-->
 
                 </TextBlock>
             </Grid>

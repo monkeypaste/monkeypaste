@@ -1,11 +1,10 @@
 ﻿using MonkeyPaste.Common;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPersistentClipTileProperties {
+        public bool IsFrozen { get; set; }
         public int QueryOffsetIdx { get; set; } = -1;
         public bool IsTileDragging { get; set; }
         public bool IsSelected { get; set; }

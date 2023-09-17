@@ -283,7 +283,7 @@ function onShowDebugger_ntf(debugReason, breakAfterSend) {
 
 function onAppendStateChanged_ntf(appendDataStr = null) {	
 	// output 'MpQuillAppendStateChangedMessage'
-	if (appendDataStr && !isAppendNotifier()) {
+	if (appendDataStr && !isAnyAppendEnabled()) {
 		log('append error. only notifier should pass append data. data: ', appendDataStr);
 		debugger;
 		return;

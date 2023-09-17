@@ -39,6 +39,7 @@ body {
     --tooltipfgcolor: black;
     --toolbartransitionms: 400ms;
     --commonborderradius: 5px;
+    --appendpad: 15px;
     margin: 0px;
     padding: 0px;
     font-family: var(--defaultFontFamily);
