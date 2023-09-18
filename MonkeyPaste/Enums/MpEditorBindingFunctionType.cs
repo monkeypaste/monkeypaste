@@ -46,6 +46,7 @@
         notifyAnnotationSelected,
         notifyShowDebugger,
         notifyScrollBarVisibilityChanged,
-        notifyPasteInfoFormatsClicked
+        notifyPasteInfoFormatsClicked,
+        notifyAppendStateChangeComplete
     }
 }

@@ -1,16 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Windows.Media;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTileView : MpAvUserControl<MpAvClipTileViewModel> {

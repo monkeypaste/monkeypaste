@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
         private MpQuillContentDataObjectResponseMessage _lastDataObjectResp = null;
         private MpQuillEditorContentChangedMessage _lastReadOnlyEnabledFromHostResp = null;
         private MpQuillEditorSelectionStateMessage _lastEditorSelectionStateMessage = null;
-
+        private DateTime? _lastAppendStateChangeCompleteDt = null;
 
         #endregion
 
@@ -572,8 +572,12 @@ namespace MonkeyPaste.Avalonia {
                 case MpEditorBindingFunctionType.notifyAppendStateChanged:
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillAppendStateChangedMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillAppendStateChangedMessage appendStateChangedMsg) {
-                        ProcessAppendStateChangedMessage(appendStateChangedMsg, "editor");
+                        ProcessAppendStateChangedMessageAsync(appendStateChangedMsg, "editor").FireAndForgetSafeAsync();
                     }
+                    break;
+
+                case MpEditorBindingFunctionType.notifyAppendStateChangeComplete:
+                    _lastAppendStateChangeCompleteDt = DateTime.Now;
                     break;
 
                 #endregion
@@ -1651,9 +1655,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Append
 
-        public void ProcessAppendStateChangedMessage(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
+        public async Task ProcessAppendStateChangedMessageAsync(MpQuillAppendStateChangedMessage appendChangedMsg, string source) {
             if (!Dispatcher.UIThread.CheckAccess()) {
-                Dispatcher.UIThread.Post(() => ProcessAppendStateChangedMessage(appendChangedMsg, source));
+                await Dispatcher.UIThread.InvokeAsync(() => ProcessAppendStateChangedMessageAsync(appendChangedMsg, source));
                 return;
             }
             var ctrvm = MpAvClipTrayViewModel.Instance;
@@ -1668,35 +1672,57 @@ namespace MonkeyPaste.Avalonia {
                         int deactivated_ciid = ctrvm.AppendClipTileViewModel.CopyItemId;
                         // go through current tile deactivation and recall this to process
                         await ctrvm.DeactivateAppendModeCommand.ExecuteAsync();
-                        ProcessAppendStateChangedMessage(appendChangedMsg, source);
+                        await ProcessAppendStateChangedMessageAsync(appendChangedMsg, source);
 
                     });
                     return;
                 }
-                //NOTE state changes should only come in one at a time
-                // but line vs insert changes are only compared for is true since
-                // they are interdependant to avoid double ntf
-
-                if (BindingContext.IsAppendNotifier &&
-                    (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendInsertMode && ctrvm.IsAnyAppendMode)) {
-                    ctrvm.DeactivateAppendModeCommand.Execute(null);
-                } else if (appendChangedMsg.isAppendPaused != ctrvm.IsAppendPaused) {
-                    ctrvm.ToggleAppendPausedCommand.Execute(null);
-                } else if (appendChangedMsg.isAppendManualMode != ctrvm.IsAppendManualMode) {
-                    ctrvm.ToggleAppendManualModeCommand.Execute(null);
-                } else if (appendChangedMsg.isAppendPreMode != ctrvm.IsAppendPreMode) {
-                    ctrvm.ToggleAppendPreModeCommand.Execute(null);
-                } else if (appendChangedMsg.isAppendLineMode && !ctrvm.IsAppendLineMode) {
-                    ctrvm.ToggleAppendLineModeCommand.Execute(null);
-                } else if (appendChangedMsg.isAppendInsertMode && !ctrvm.IsAppendInsertMode) {
-                    ctrvm.ToggleAppendInsertModeCommand.Execute(null);
+                var append_cmdl = GetAppendChangeCommands(appendChangedMsg).ToList();
+                if (append_cmdl.Count > 1) {
+                    // check doubles, should be whats throwing toggling off
                 }
+                foreach (var cmd in append_cmdl) {
+                    await cmd.ExecuteAsync();
+                }
+
             } else {
                 if (!CanSendContentMessage) {
                     // won't need to update state, its passed in init so ignore this case
                     return;
                 }
+                DateTime? lastStateComplete = _lastAppendStateChangeCompleteDt;
                 SendMessage($"appendStateChanged_ext('{appendChangedMsg.SerializeJsonObjectToBase64()}')");
+                while (lastStateComplete == _lastAppendStateChangeCompleteDt) {
+                    // wait for change to complete
+                    await Task.Delay(100);
+                }
+            }
+        }
+
+        private IEnumerable<MpIAsyncCommand> GetAppendChangeCommands(MpQuillAppendStateChangedMessage appendChangedMsg) {
+            //NOTE state changes should only come in one at a time
+            // but line vs insert changes are only compared for is true since
+            // they are interdependant to avoid double ntf
+
+            var ctrvm = MpAvClipTrayViewModel.Instance;
+            if (BindingContext.IsAppendNotifier &&
+                    (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendInsertMode && ctrvm.IsAnyAppendMode)) {
+                yield return ctrvm.DeactivateAppendModeCommand;
+            }
+            if (appendChangedMsg.isAppendPaused != ctrvm.IsAppendPaused) {
+                yield return ctrvm.ToggleAppendPausedCommand;
+            }
+            if (appendChangedMsg.isAppendManualMode != ctrvm.IsAppendManualMode) {
+                yield return ctrvm.ToggleAppendManualModeCommand;
+            }
+            if (appendChangedMsg.isAppendPreMode != ctrvm.IsAppendPreMode) {
+                yield return ctrvm.ToggleAppendPreModeCommand;
+            }
+            if (appendChangedMsg.isAppendLineMode && !ctrvm.IsAppendLineMode) {
+                yield return ctrvm.ToggleAppendLineModeCommand;
+            }
+            if (appendChangedMsg.isAppendInsertMode && !ctrvm.IsAppendInsertMode) {
+                yield return ctrvm.ToggleAppendInsertModeCommand;
             }
         }
         #endregion

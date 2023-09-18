@@ -53,6 +53,8 @@
                     Value="Center" />
             <Setter Property="ClipToBounds"
                     Value="False" />
+            <Setter Property="Effect"
+                    Value="{DynamicResource ThemeBgGlow}" />
         </Style>
         <!--  PIN TRAY  -->
 

@@ -214,7 +214,7 @@ function appendStateChanged_ext(reqMsgBase64Str) {
 	let req = toJsonObjFromBase64Str(reqMsgBase64Str);
 	log('appendStateChanged_ext: ', req);
 
-	updateAppendModeState(req, true);	
+	updateAppendModeStateFromHost(req, true);	
 }
 
 function annotationSelected_ext(reqMsgBase64Str) {

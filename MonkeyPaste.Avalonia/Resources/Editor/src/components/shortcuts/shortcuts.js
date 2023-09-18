@@ -39,6 +39,9 @@ function getShortcutHtml(shortcutText) {
     return `<em class="option-keys">${shortcutText}</em>`;
 }
 
+function getShortcutEncStr(shortcutIdx) {
+    return `${globals.SHORTCUT_STR_TOKEN}${globals.SHORTCUT_TYPES[shortcutIdx]}${globals.SHORTCUT_STR_TOKEN}`
+}
 // #endregion Getters
 
 // #region Setters

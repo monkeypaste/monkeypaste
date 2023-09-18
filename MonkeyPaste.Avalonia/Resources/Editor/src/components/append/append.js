@@ -31,20 +31,23 @@ function getAppendDocRange() {
 		return sel_doc_range;
 	}
 	if (isAppendManualMode()) {
+		let sel = cleanDocRange(getDocSelection());
 		if (isAppendPreMode()) {
 			if (isAppendInsertMode()) {
-				return { index: globals.FixedAppendIdx, length: 0, mode:'inline' };
+				//return { index: globals.FixedAppendIdx, length: 0, mode:'inline' };
+				return { index: sel.index, length: 0, mode:'inline' };
 			} else {
 				// NOTE need to make block range in terms of the leading block unless its the first
 				// for dt to handle blocks since pre is just for before first block
-				let line_start_idx = getLineStartDocIdx(globals.FixedAppendIdx);
-				return { index: globals.FixedAppendIdx, length: 0, mode: line_start_idx == 0 ?'pre': 'post' };
+				//let line_start_idx = getLineStartDocIdx(globals.FixedAppendIdx);
+				//return { index: globals.FixedAppendIdx, length: 0, mode: line_start_idx == 0 ? 'pre' : 'post' };
+				let line_start_idx = getLineStartDocIdx(sel.index);
+				return { index: sel.index, length: 0, mode: line_start_idx == 0 ?'pre': 'post' };
 			}
 		} else {
-			let sel = cleanDocRange(getDocSelection());
 			if (isAppendInsertMode()) {
 				sel.mode = 'inline';
-				return sel;
+				return { index: sel.index + sel.length, length: 0, mode: 'inline' };
 			} else {
 				return { index: getLineEndDocIdx(sel.index + sel.length), length: 0, mode:'post' };
 			}
@@ -229,7 +232,7 @@ function disablePreAppend(fromHost = false) {
 
 // #region Actions
 
-function updateAppendModeState(req, fromHost = false) {
+function updateAppendModeStateFromHost(req, fromHost = false) {
 	if (req == null) {
 		if (isAnyAppendEnabled()) {
 			disableAppendMode(fromHost);
@@ -308,6 +311,13 @@ function updateAppendModeState(req, fromHost = false) {
 
 	if (fromHost) {
 		globals.isAppendWithDestFormattingEnabled = req.isAppendWithDestFormattingEnabled;
+		// NOTE host blocks until this message is returned to avoid
+		// collisions of (missing) quickly successive changes
+		// ie. switching block/inline then immediatly toggling
+		// pre mode and it only scrolls the preview line (state) doesn't change
+		// because the host reports back old pre state AFTER internally changed so 
+		// it unchanges
+		appendStateChangeComplete_ntf();
 	}
 }
 

@@ -421,8 +421,10 @@ namespace MonkeyPaste.Common {
                 var longValue = Convert.ToInt64(value);
                 var longFlags = Convert.ToInt64(flags);
                 return (longValue & longFlags) == longFlags;
-            } else
+            } else {
                 throw new NotSupportedException("Enum with size of " + Unsafe.SizeOf<T>() + " are not supported");
+            }
+
         }
         public static bool HasAnyFlag<T>(this T value, T flags) where T : Enum {
             if (Enum.GetUnderlyingType(typeof(T)) == typeof(byte)) {
@@ -441,8 +443,25 @@ namespace MonkeyPaste.Common {
                 var longValue = Convert.ToInt64(value);
                 var longFlags = Convert.ToInt64(flags);
                 return (longValue & longFlags) != 0;
-            } else
+            } else {
                 throw new NotSupportedException("Enum with size of " + Unsafe.SizeOf<T>() + " are not supported");
+            }
+        }
+
+        public static void RemoveFlag<T>(ref this T value, T flag) where T : struct {
+            // remove flag from string of value and any leading/trailing commas 
+            string result = value.ToString().Replace(flag.ToString(), string.Empty).Trim(new[] { ' ', ',' });
+            if (result.Length == 0) {
+                // parse doesn't assoc empty string w/ empty enum so cast manually
+                value = (T)(object)0;
+                return;
+            }
+            value = (T)Enum.Parse(typeof(T), result);
+        }
+
+        public static void AddFlag<T>(ref this T value, T flag) where T : struct {
+            string result = $"{value}, {flag}".Trim(new[] { ' ', ',' }); ;
+            value = (T)Enum.Parse(typeof(T), result);
         }
         #endregion
 

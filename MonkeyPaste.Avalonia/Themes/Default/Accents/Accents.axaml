@@ -636,6 +636,13 @@
 
 
         <!--  EFFECTS  -->
+        <DropShadowEffect x:Key="EmptyDropShadow"
+                          OffsetX="0"
+                          OffsetY="0"
+                          Color="{DynamicResource ThemeInteractiveColor}"
+                          BlurRadius="0"
+                          Opacity="0.0" />
+      
         <DropShadowEffect x:Key="ThemeDropShadow"
                           OffsetX="3"
                           OffsetY="3"

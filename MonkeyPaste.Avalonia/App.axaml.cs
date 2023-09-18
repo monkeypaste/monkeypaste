@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
+using Avalonia.Logging;
 using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using PropertyChanged;
@@ -114,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public override async void OnFrameworkInitializationCompleted() {
             DateTime startup_datetime = DateTime.Now;
-
+            MpAvLogSink.Init();
 
             ReportCommandLineArgs(Args);
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
@@ -143,9 +144,9 @@ namespace MonkeyPaste.Avalonia {
 
             base.OnFrameworkInitializationCompleted();
 
-            //#if DEBUG
-            //            this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
-            //#endif
+#if DEBUG
+            this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
+#endif
         }
         #endregion
 
@@ -194,6 +195,37 @@ namespace MonkeyPaste.Avalonia {
             catch {
                 return false;
             }
+        }
+    }
+
+    public class MpAvLogSink : ILogSink {
+        private ILogSink _defSink;
+
+        private (LogEventLevel, string)[] _disabledLogs = {
+            (LogEventLevel.Warning,LogArea.Binding)
+        };
+        public static void Init() {
+            Logger.Sink = new MpAvLogSink();
+        }
+        private MpAvLogSink() {
+            if (Logger.Sink != this) {
+                _defSink = Logger.Sink;
+            }
+        }
+
+        public bool IsEnabled(LogEventLevel level, string area) {
+            if (!_defSink.IsEnabled(level, area)) {
+                return false;
+            }
+            return _disabledLogs.All(x => x.Item1 != level && x.Item2 != area);
+        }
+
+        public void Log(LogEventLevel level, string area, object source, string messageTemplate) {
+            _defSink.Log(level, area, source, messageTemplate);
+        }
+
+        public void Log(LogEventLevel level, string area, object source, string messageTemplate, params object[] propertyValues) {
+            _defSink.Log(level, area, source, messageTemplate, propertyValues);
         }
     }
 }

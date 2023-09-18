@@ -62,7 +62,7 @@ async function loadContentAsync(
 		if (!is_reload) {
 			// need to wait for content before enabling append
 			// or it won't scroll to end (only relevant for !pre state)
-			updateAppendModeState(append_state, true);
+			updateAppendModeStateFromHost(append_state, true);
 			if (isContentSubSelectionEnabled) {
 				enableSubSelection(true, paste_button_info);
 			} else {
@@ -78,7 +78,7 @@ async function loadContentAsync(
 		if (is_reload && append_state == null) {
 			// handle special case where query tile append ended
 			// so its append state is cleared (was only enabled before popout triggered)
-			updateAppendModeState(null, true);
+			updateAppendModeStateFromHost(null, true);
 		}
 		
 		if (globals.ContentItemType != 'Text') {

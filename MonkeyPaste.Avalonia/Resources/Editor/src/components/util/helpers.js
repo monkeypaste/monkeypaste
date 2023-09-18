@@ -20,7 +20,14 @@
 
     return os;
 }
+function moveElement(elm, origin) {
+    if (!elm) {
+        return;
+    }
 
+    setElementComputedStyleProp(elm, 'left', `${origin.x}px`);
+    setElementComputedStyleProp(elm, 'top', `${origin.y}px`);
+}
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
@@ -873,9 +880,7 @@ function toTitleCase(str) {
 }
 
 function moveAbsoluteElement(elm, p) {
-    setElementComputedStyleProp(elm, 'margin-left', `${p.x}px`);
-    setElementComputedStyleProp(elm, 'margin-top', `${p.y}px`);
-    return cleanRect(elm.getBoundingClientRect());
+    elm.style.transform = `translate(${p.x}px, ${p.y}px)`;
 }
 
 function toAscii(str) {

@@ -414,9 +414,11 @@ namespace MonkeyPaste {
                     }
                     return;
                 case MpCopyItemType.FileList:
-                    if (isContentChangeWrite) {
-                        UpdateContentCheckSum(ItemData);
+                    if (!isContentChangeWrite) {
+                        // only itemData updates affect dataObject
+                        break;
                     }
+
                     // update file plain text (fire and foreget, not needed later)
                     var fl_texts = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.Text);
                     MpDebug.Assert(fl_texts.Count <= 1, $"There should only be 1 text entry for file dataObj, there is {fl_texts.Count}");
@@ -447,6 +449,7 @@ namespace MonkeyPaste {
                                     itemFormat: MpPortableDataFormats.AvFiles,
                                     itemData: x)));
 
+                    UpdateContentCheckSum(ItemData);
                     // NOTE below is bad when theres duplicates, real bad
 
                     //var to_remove = doi_fpl.Where(x => !fpl.Contains(x.ItemData));

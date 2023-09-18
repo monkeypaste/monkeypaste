@@ -884,7 +884,7 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
                 if (Mp.Services.PlatformInfo.IsDesktop) {
-                    if (IsHovering && !IsAppendNotifier && !Parent.IsAnyDropOverTrays) {
+                    if (IsHovering && !Parent.IsAnyDropOverTrays) {
                         return true;
                     }
                 } else if (IsSelected) {
@@ -2030,17 +2030,42 @@ namespace MonkeyPaste.Avalonia {
                     });
                     return;
                 }
-                // reject close and show confirm ntf
+                // only append window from here, reject close and show confirm ntf
                 IsBusy = true;
                 e.Cancel = true;
                 pow.IsHitTestVisible = false;
                 Dispatcher.UIThread.Post(async () => {
+                    Control confirm_owner = null;
+                    // NOTE for dbl click close placeholder this is called ON placeholder (i think)
+                    // need to get placeholder from window NOT this tile 
+                    var placeholder_ctvm = (pow.DataContext as MpAvClipTileViewModel).PlaceholderForThisPinnedItem;
+                    if (pow.IsActive || placeholder_ctvm == null) {
+                        confirm_owner = pow;
+                    } else {
+                        // this implies that popout is being closed
+                        // by double clicking placeholder so show
+                        // confirm over placeholder and restore append popout 
+                        // if minimized
+                        var ppctv =
+                            MpAvQueryTrayView.Instance
+                            .GetVisualDescendants<MpAvClipTileView>()
+                            .FirstOrDefault(x => x.DataContext == placeholder_ctvm);
+                        if (ppctv == null) {
+                            MpDebug.Break($"Error finding pin placeholder view for tile {this}");
+                            confirm_owner = pow;
+                        } else {
+                            confirm_owner = ppctv;
+                            if (PopOutWindowState == WindowState.Minimized) {
+                                PopOutWindowState = WindowState.Normal;
+                            }
+                        }
+                    }
                     var result = await
                         Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                             title: UiStrings.CommonNtfConfirmTitle,
                             message: "Are you sure you want to finish appending?",
                             iconResourceObj: "QuestionMarkImage",
-                            owner: pow,
+                            owner: confirm_owner,
                             ntfType: MpNotificationType.ConfirmEndAppend);
                     if (result) {
                         // allow close

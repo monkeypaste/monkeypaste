@@ -13,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
             bool flip = false;
             bool allow_zero = false;
             if (parameter is string paramStr) {
-                if (paramStr == "test") {
+                if (paramStr == "testy") {
 
                 }
                 if (paramStr.ToLower() == "flip") {

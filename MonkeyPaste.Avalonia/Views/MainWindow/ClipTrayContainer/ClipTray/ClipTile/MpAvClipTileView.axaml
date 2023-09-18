@@ -47,6 +47,8 @@
 
         <!--  PIN PLACEHOLDER OVERLAY  -->
         <Style Selector="Grid#PinPlaceholderOverlay Image">
+            <Setter Property="Effect"
+                    Value="{DynamicResource EmptyDropShadow}" />
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeInteractiveColor, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
@@ -57,6 +59,8 @@
         </Style>
 
         <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.hover Grid#PinPlaceholderOverlay Image">
+            <Setter Property="Effect"
+                    Value="{DynamicResource ThemeDropShadow}" />
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource PinImage}, ConverterParameter=ThemeAccent1Color, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
@@ -302,7 +306,6 @@
                 </Grid.Transitions>
                 <Image Grid.Row="0"
                        Opacity="{Binding IsHovering, ConverterParameter=1|0.2, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
-                       Effect="{DynamicResource ThemeDropShadow}"
                        Classes="square"
                        MinWidth="50"
                        MinHeight="50"
@@ -313,6 +316,14 @@
                     <Image.RenderTransform>
                         <RotateTransform />
                     </Image.RenderTransform>
+
+                    <Image.Transitions>
+                        <Transitions>
+                            <EffectTransition Property="Effect"
+                                              Duration="0:0:0.5" />
+                        </Transitions>
+                    </Image.Transitions>
+
                     <Image.Height>
                         <MultiBinding Converter="{x:Static local:MpAvMultiDoubleMathConverter.Instance}"
                                       ConverterParameter="/">
@@ -340,21 +351,6 @@
                             <Run Text="{Binding PinPlaceholderLabel, StringFormat='\'{0}\''}" />
                         </InlineCollection>
                     </TextBlock.Inlines>
-                    <!--<TextBlock.Text>
-                        <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>Double Click to unpin '</sys:String>
-                                </Binding.Source>
-                            </Binding>
-                            <Binding Path="PinPlaceholderLabel" />
-                            <Binding>
-                                <Binding.Source>
-                                    <sys:String>'</sys:String>
-                                </Binding.Source>
-                            </Binding>
-                        </MultiBinding>
-                    </TextBlock.Text>-->
 
                 </TextBlock>
             </Grid>

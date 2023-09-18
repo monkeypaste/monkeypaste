@@ -166,7 +166,9 @@ function onFindReplaceVisibleChange_ntf(isVisible) {
 	let msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyFindReplaceVisibleChange', msgStr);
 }
-
+function appendStateChangeComplete_ntf() {
+	sendMessage('notifyAppendStateChangeComplete', '');
+}
 function onQuerySearchRangesChanged_ntf(range_count) {
 	// output 'MpQuillContentFindReplaceVisibleChanedotificationMessage'
 	let msg = {
@@ -177,9 +179,6 @@ function onQuerySearchRangesChanged_ntf(range_count) {
 }
 
 function onInitComplete_ntf() {
-	//if (typeof notifyInitComplete === 'function') {
-	//	notifyInitComplete();
-	//}
 	sendMessage('notifyInitComplete', '');
 }
 

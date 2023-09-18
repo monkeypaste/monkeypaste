@@ -1,19 +1,19 @@
 ﻿
-#editor.image-content #pasteAppendToolbarContainer {
+#editor.image-content .append-toolbar-container {
     display: none;
 }
-#editor.file-list-content #pasteAppendToolbarContainer .text-only {
+#editor.file-list-content .append-toolbar-container .text-only {
     display: none;
 }
 
-#pasteToolbar:not(:hover) #pasteAppendToolbarContainer:not(.expanded) {
+#pasteToolbar:not(:hover) .append-toolbar-container:not(.expanded) {
     opacity: 0;
 }
-#pasteToolbar:hover #pasteAppendToolbarContainer:not(.expanded) {
+#pasteToolbar:hover .append-toolbar-container:not(.expanded) {
     opacity: 1;
 }
 
-#pasteAppendToolbarContainer {
+.append-toolbar-container {
     background-color: var(--editableeditorbgcolor_opaque);
     display: inline-flex;
     border-radius: var(--commonborderradius);
@@ -25,41 +25,51 @@
     transition: all 0.5s ease;
     align-items: center;
 }
-    #pasteAppendToolbarContainer .toolbar-separator
+.append-toolbar-container.popup {
+    position: absolute;
+    z-index: 100;
+    width: 30px;
+    height: 30px;
+    transition: 0s;
+}
+.append-toolbar-container.popup:hover {
+    background-color: var(--selbgcolor);
+}
+    .append-toolbar-container .toolbar-separator
     {
         background-color: var(--editortoolbarbuttoncolor);
         height: 20px;
         margin: 5px 0;
     }
     
-    #pasteAppendToolbarContainer .toolbar-separator.unexpanded-only
+    .append-toolbar-container .toolbar-separator.unexpanded-only
     {
         background-color: transparent;
     }
 
-    #pasteAppendToolbarContainer button:hover .ql-fill
+    .append-toolbar-container button:hover .ql-fill
     {
         fill: var(--hovercolor) !important;
     }
-    #pasteAppendToolbarContainer button:hover .ql-stroke
+    .append-toolbar-container button:hover .ql-stroke
     {
         stroke: var(--hovercolor) !important;
     }
     
-    #pasteAppendToolbarContainer > :not(.unexpanded-only)
+    .append-toolbar-container > :not(.unexpanded-only):not(.popup)
     {
         display: none;
     }
-    #pasteAppendToolbarContainer.expanded > :not(.unexpanded-only)
+    .append-toolbar-container.expanded > :not(.unexpanded-only)
     {
         display: flex;
     }
-    #pasteAppendToolbarContainer.expanded > .unexpanded-only
+    .append-toolbar-container.expanded > .unexpanded-only
     {
         display: none;
     }
 
-#pasteAppendToolbarContainer button {
+.append-toolbar-container button {
     background-color: transparent !important;
     border-width: 0 !important;
     border-radius: 3px;
@@ -78,12 +88,13 @@
     fill: salmon !important;
 }
 
-#pasteAppendToolbarContainer .svg-icon {
+.append-toolbar-container .svg-icon {
     margin: 0px !important;    
 }
 
 #pasteAppendPauseAppendButton.enabled:not(:hover) {
     animation: blink 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    transition: 3s;
 }
 
 @keyframes blink {
