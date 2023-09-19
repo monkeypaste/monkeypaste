@@ -51,6 +51,10 @@ function getPasteToolbarHeight() {
 
 // #region State
 
+function isPasting() {
+    let result = getEditorContainerElement().classList.contains('pasting');
+    return result;
+}
 function isPastePopupExpanded() {
     return getPasteButtonPopupExpanderElement().classList.contains('expanded');
 }
@@ -177,9 +181,19 @@ function startPasteButtonBusy() {
     setPasteButtonContent('spinner', 'Please wait...');
     getPasteButtonElement().classList.add('disabled');
     getPasteButtonPopupExpanderElement().classList.add('disabled');
+    getEditorContainerElement().classList.add('pasting');
+    drawOverlay();
+    if (!isRunningInHost()) {
+        delay(1000)
+            .then(() => {
+                endPasteButtonBusy();
+            });
+    }
 }
 function endPasteButtonBusy() {
     updatePasteButtonInfo(globals.LastRecvdPasteInfoMsgObj);
+    getEditorContainerElement().classList.remove('pasting');
+    drawOverlay();
 }
 // #endregion Actions
 
@@ -189,7 +203,7 @@ function endPasteButtonBusy() {
 function onPasteButtonClickOrKeyDown(e) {
     startPasteButtonBusy();
     if (!isRunningInHost()) {
-        alert(getText(getDocSelection(true), true));
+        //alert(getText(getDocSelection(true), true));
     }
     onPasteRequest_ntf();
 }

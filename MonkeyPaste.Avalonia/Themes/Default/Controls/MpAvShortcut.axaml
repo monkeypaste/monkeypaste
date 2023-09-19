@@ -42,18 +42,6 @@
     </Style>
 
     <!--  SHORTCUT LABEL BG  -->
-    <Style Selector="local|MpAvShortcutLabel Border#KeyGroupContainer">
-        <Setter Property="Background"
-                Value="Cyan" />
-        <Setter Property="BorderBrush"
-                Value="Black" />
-    </Style>
-    <Style Selector="local|MpAvShortcutLabel.menuItemGesture  Border#KeyGroupContainer">
-        <Setter Property="Background"
-                Value="Transparent" />
-        <Setter Property="BorderBrush"
-                Value="Transparent" />
-    </Style>
 
     <Style Selector="local|MpAvShortcutLabel Border#KeyContainer">
         <Setter Property="Margin"
@@ -72,15 +60,53 @@
         <Setter Property="FontSize"
                 Value="12" />
     </Style>
+    <!--  GROUP CONTAINER  -->
+    <Style Selector="local|MpAvShortcutLabel Border#KeyGroupContainer">
+        <Setter Property="Background"
+                Value="Cyan" />
+        <Setter Property="BorderBrush"
+                Value="Black" />
+    </Style>
+    <Style Selector="local|MpAvShortcutLabel.menuItemGesture Border#KeyGroupContainer">
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="BorderBrush"
+                Value="Transparent" />
+    </Style>
 
+    <!--  KEY CONTAINER  -->
     <Style Selector="local|MpAvShortcutKeyView Border#KeyContainer">
         <Setter Property="Background"
                 Value="{DynamicResource ThemeGrayAccent1Color}" />
         <Setter Property="BorderBrush"
                 Value="{DynamicResource ThemeGrayAccent3Color}" />
     </Style>
-    <Style Selector="local|MpAvShortcutKeyView.mod Border#KeyContainer">
-        <!--<Setter Property="Background"
-                Value="{DynamicResource ThemeGrayAccent2Color}" />-->
+
+    <Style Selector="local|MpAvShortcutLabel.menuItemGesture Border#KeyContainer">
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeGrayAccent1Color}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource ThemeGrayAccent3Color}" />
+    </Style>
+
+    <Style Selector="local|MpAvShortcutLabel.global.menuItemGesture Border#KeyContainer">
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeCompliment4Color}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource ThemeCompliment4DarkColor}" />
+    </Style>
+
+    <!--  KEY  -->
+    <Style Selector="local|MpAvShortcutKeyView Border#KeyContainer TextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveBgColor}" />
+    </Style>
+    <Style Selector="local|MpAvShortcutLabel.menuItemGesture TextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveBgColor}" />
+    </Style>
+    <Style Selector="local|MpAvShortcutLabel.global.menuItemGesture TextBlock">
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveColor}" />
     </Style>
 </Styles>

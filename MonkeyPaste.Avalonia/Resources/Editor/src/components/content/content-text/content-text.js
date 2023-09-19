@@ -848,6 +848,7 @@ function transferTextContent(dt, source_doc_range, dest_doc_range, source) {
 
 
 	// SELECT DEST
+	
 
 	var dt_range = dest_doc_range;
 	dt_range.length += dt_length_diff;

@@ -289,8 +289,10 @@ function updateSelectionColors() {
 				// only make caret red when not appending
 				caret_color = globals.SubSelCaretColor;
 
-			}
-			
+			}			
+		}
+		if (isPasting()) {
+			sel_bg_color = globals.PastingSelBgColor;
 		}
 	} else {
 		// in no select hide cursor

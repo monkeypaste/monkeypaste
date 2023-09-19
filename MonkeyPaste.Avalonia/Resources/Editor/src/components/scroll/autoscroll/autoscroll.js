@@ -25,36 +25,7 @@ function isAutoScrolling() {
 // #region Actions
 
 function startAutoScroll() {
-    // .drop class makes .ql-editor huge so no wrapping 
-    // this finds actual max width and sets so won't overscroll...
-    let actual_content_width = 0;
-    let actual_content_height = 0;
-    let lines = getLineCount();
-    for (var i = 0; i < lines; i++) {
-        let line_rect = getLineRect(i, false);
-        actual_content_width = Math.max(actual_content_width, line_rect.width);
-        if (i == lines - 1) {
-            actual_content_height = line_rect.bottom;
-        }
-    } 
-    let editor_elm = getEditorElement();
-    let adjusted_editor_width = editor_elm.getBoundingClientRect().width;
-
-    // add 100 in case template at the end ( i think its from extra spaces or somethign...)
-    let container_width = getEditorContainerElement().getBoundingClientRect().width;
-    if (actual_content_width > container_width) {
-        // only add extra padding if content overflows or h scrollbar will be falsely visible
-        // since that pad will always make it bigger
-        adjusted_editor_width = actual_content_width + 100;
-    } else {
-        adjusted_editor_width = container_width;
-    }
-
-    let container_height = getEditorContainerElement().getBoundingClientRect().height;
-    let adjusted_editor_height = Math.max(actual_content_height, container_height);
-
-    editor_elm.style.width = `${adjusted_editor_width}px`;
-    editor_elm.style.height = `${adjusted_editor_height}px`;
+    unwrapContentScroll();
 
     scrollDocRangeIntoView(getDocSelection());
 
@@ -65,7 +36,7 @@ function stopAutoScroll(isLeave) {
     if (globals.AutoScrollInterval == null) {
         return;
     }
-    getEditorElement().style.width = '';
+    wrapContentScroll();
     clearInterval(globals.AutoScrollInterval);
     globals.AutoScrollInterval = null;
     globals.AutoScrollVelX = 0;

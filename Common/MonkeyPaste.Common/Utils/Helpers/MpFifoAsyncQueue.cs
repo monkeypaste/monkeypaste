@@ -1,7 +1,5 @@
-﻿using MonkeyPaste.Common;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
 //using Avalonia.Win32;
 using System.Threading.Tasks;
@@ -73,42 +71,53 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        private static void DecrementWaitByLock(object lockObj, string debug_label) {
+
+        private static bool TryAdjustWaitByLock(object lockObj, int count, string debug_label, out int new_val) {
+            new_val = 0;
             if (_lockCountLookup == null ||
                 !_lockCountLookup.ContainsKey(lockObj)) {
-                return;
+                return false;
             }
-            _lockCountLookup[lockObj]--;
-
-            MpConsole.WriteLine($"Item '{debug_label}' waiting DONE");
-            if (_lockCountLookup[lockObj] <= 0) {
-                if (!_lockCountLookup.TryRemove(lockObj, out _)) {
-                    MpConsole.WriteLine($"Lock for Item '{debug_label}' removal FAILED");
-                } else {
-                    MpConsole.WriteLine($"Lock for Item '{debug_label}' removal SUCCEEDED");
+            if (_lockCountLookup.TryGetValue(lockObj, out new_val)) {
+                MpConsole.WriteLine($"Item '{debug_label}' waiting DONE");
+                new_val += count;
+                if (_lockCountLookup.TryUpdate(lockObj, new_val, new_val)) {
+                    return true;
                 }
             }
+            return false;
         }
 
         public static int GetWaitCountByLock(object lockObj) {
             if (_lockCountLookup == null ||
-                !_lockCountLookup.ContainsKey(lockObj)) {
+                !_lockCountLookup.TryGetValue(lockObj, out int count)) {
                 return 0;
             }
-            return _lockCountLookup[lockObj];
+            return count;
+        }
+        private static void DecrementWaitByLock(object lockObj, string debug_label) {
+            if (TryAdjustWaitByLock(lockObj, -1, debug_label, out int new_val)) {
+
+                if (new_val <= 0) {
+                    if (_lockCountLookup.TryRemove(lockObj, out _)) {
+                        MpConsole.WriteLine($"Lock for Item '{debug_label}' removal SUCCEEDED");
+                    } else {
+                        MpConsole.WriteLine($"Lock for Item '{debug_label}' removal FAILED");
+                    }
+                }
+            }
         }
         private static int AddWaiterByLock(object lockObj, string debug_label) {
             if (_lockCountLookup == null) {
                 _lockCountLookup = new ConcurrentDictionary<object, int>();
             }
-            if (!_lockCountLookup.ContainsKey(lockObj)) {
-                if (!_lockCountLookup.TryAdd(lockObj, 1)) {
-                    MpConsole.WriteLine($"Lock for Item '{debug_label}' create FAILED");
-                }
+            if (TryAdjustWaitByLock(lockObj, 1, debug_label, out int new_val)) {
+                return new_val;
+            } else if (_lockCountLookup.TryAdd(lockObj, 1)) {
                 return 1;
             }
-            _lockCountLookup[lockObj]++;
-            return _lockCountLookup[lockObj];
+            MpConsole.WriteLine($"Lock for Item '{debug_label}' create FAILED");
+            return 1;
         }
     }
 }

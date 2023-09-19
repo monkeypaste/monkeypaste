@@ -24,4 +24,23 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
     }
+
+    public class MpAvKeyStringToIsGlobalBoolConverterConverter : IValueConverter {
+        public static readonly MpAvKeyStringToIsGlobalBoolConverterConverter Instance = new();
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            if (value is KeyGesture kg) {
+                value = kg.ToKeyLiteral();
+            }
+            if (value is not string keyStr ||
+                MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.KeyString == keyStr)
+                    is not MpAvShortcutViewModel scvm) {
+                return false;
+            }
+            return scvm.IsGlobal;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            return null;
+        }
+    }
 }

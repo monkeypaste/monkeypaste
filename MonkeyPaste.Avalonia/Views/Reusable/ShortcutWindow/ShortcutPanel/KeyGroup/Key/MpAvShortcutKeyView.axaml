@@ -15,10 +15,9 @@
             VerticalAlignment="Stretch"
             MinWidth="{Binding $self.Bounds.Height}"
             BorderThickness="1"
-            CornerRadius="5">
+            CornerRadius="3">
         <TextBlock HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Foreground="{DynamicResource ThemeInteractiveBgColor}"
                    Padding="3,0"
                    Text="{Binding KeyStr, Converter={x:Static local:MpAvEnumToKeyLiteralConverter.Instance}, ConverterParameter=label}"
                    FontWeight="SemiBold" />

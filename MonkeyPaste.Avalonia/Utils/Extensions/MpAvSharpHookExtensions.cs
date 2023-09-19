@@ -1,9 +1,7 @@
 ﻿using MonkeyPaste.Common;
-using SharpHook;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
@@ -167,7 +165,7 @@ namespace MonkeyPaste.Avalonia {
             if (key == KeyCode.VcSemicolon) {
                 return ";";
             }
-            if (key == KeyCode.VcBackQuote) {
+            if (key == KeyCode.VcBackquote) {
                 return "`";
             }
             if (key == KeyCode.VcQuote) {
@@ -182,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
             if (key == KeyCode.VcComma) {
                 return ",";
             }
-            if (key == KeyCode.VcBackslash) {
+            if (key == KeyCode.VcBackSlash) {
                 return @"/";
             }
             if (key == KeyCode.VcPeriod) {
@@ -223,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
                 return KeyCode.VcSemicolon;
             }
             if (lks == "`") {
-                return KeyCode.VcBackQuote;
+                return KeyCode.VcBackquote;
             }
             if (lks == "'") {
                 return KeyCode.VcQuote;
@@ -238,7 +236,7 @@ namespace MonkeyPaste.Avalonia {
                 return KeyCode.VcComma;
             }
             if (lks == @"/") {
-                return KeyCode.VcBackslash;
+                return KeyCode.VcBackSlash;
             }
             if (lks == ".") {
                 return KeyCode.VcPeriod;

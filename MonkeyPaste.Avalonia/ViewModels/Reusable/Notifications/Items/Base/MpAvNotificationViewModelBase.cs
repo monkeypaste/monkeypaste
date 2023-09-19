@@ -350,6 +350,12 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return NotificationFormat.Owner;
             }
+            set {
+                if (Owner != value) {
+                    NotificationFormat.Owner = value;
+                    OnPropertyChanged(nameof(Owner));
+                }
+            }
         }
         public object AnchorTarget {
             get {

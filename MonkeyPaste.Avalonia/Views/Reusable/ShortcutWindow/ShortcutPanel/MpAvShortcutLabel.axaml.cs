@@ -58,12 +58,22 @@ namespace MonkeyPaste.Avalonia {
         }
         private void Init() {
             var sclb = this.FindControl<ItemsControl>("ShortcutListBox");
+            string keys = null;
             if (KeyGesture is ObservableCollection<MpAvShortcutKeyGroupViewModel> keyGroups) {
                 sclb.ItemsSource = keyGroups;
             } else if (KeyGesture is KeyGesture kg) {
-                sclb.ItemsSource = kg.ToKeyLiteral().ToKeyItems();
+                keys = kg.ToKeyLiteral();
+                sclb.ItemsSource = keys.ToKeyItems();
             } else if (KeyGesture is string keystr) {
+                keys = keystr;
                 sclb.ItemsSource = keystr.ToKeyItems();
+            }
+            if (!string.IsNullOrEmpty(keys) &&
+                MpAvKeyStringToIsGlobalBoolConverterConverter.Instance.Convert(keys, null, null, null) is bool isGlobal &&
+                isGlobal) {
+                this.Classes.Add("global");
+            } else {
+                this.Classes.Remove("global");
             }
         }
     }

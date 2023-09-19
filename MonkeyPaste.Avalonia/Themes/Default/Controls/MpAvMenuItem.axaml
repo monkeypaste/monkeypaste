@@ -75,7 +75,7 @@
                                         VerticalAlignment="Center"
                                         Margin="{DynamicResource MenuInputGestureTextMargin}">
                                     <local:MpAvShortcutLabel Classes="menuItemGesture"
-                                                             KeyGesture="{TemplateBinding InputGesture}"
+                                                              KeyGesture="{TemplateBinding InputGesture}"
                                                              HorizontalAlignment="Right"
                                                              VerticalAlignment="Center" />
                                 </Border>

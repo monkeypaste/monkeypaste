@@ -1,19 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
-using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Threading;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvHighlightTextExtension {
@@ -142,17 +136,32 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleIsEnabledChanged(Control attached_control, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal) {
                 if (isEnabledVal) {
-                    attached_control.AttachedToLogicalTree += Attached_control_AttachedToLogicalTree;
-                    attached_control.DetachedFromLogicalTree += Attached_control_DetachedFromLogicalTree;
+                    attached_control.Loaded += Attached_control_Loaded;
+                    attached_control.Unloaded += Attached_control_Unloaded;
                     attached_control.EffectiveViewportChanged += Attached_control_EffectiveViewportChanged;
                     if (attached_control.IsInitialized) {
-                        Attached_control_AttachedToLogicalTree(attached_control, null);
+                        Attached_control_Loaded(attached_control, null);
                     }
 
                 } else {
-                    Attached_control_DetachedFromLogicalTree(attached_control, null);
+                    Attached_control_Unloaded(attached_control, null);
                 }
             }
+        }
+
+        private static void Attached_control_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            if (sender is not Control attached_control ||
+                _AttachedControlAdornerLookup.ContainsKey(attached_control)) {
+                return;
+            }
+            var tha = new MpAvTextHighlightAdorner(attached_control);
+            _AttachedControlAdornerLookup.Add(attached_control, tha);
+            Dispatcher.UIThread.Post(async () => {
+                //AddVisualAdorner(attached_control, tha, AdornerLayer.GetAdornerLayer(attached_control));
+                await attached_control.AddOrReplaceAdornerAsync(tha);
+
+                UpdateHighlights(attached_control);
+            });
         }
 
         private static void Attached_control_EffectiveViewportChanged(object sender, global::Avalonia.Layout.EffectiveViewportChangedEventArgs e) {
@@ -162,29 +171,12 @@ namespace MonkeyPaste.Avalonia {
             UpdateHighlights(attached_control);
         }
 
-        private static void Attached_control_AttachedToLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
-            if (sender is not Control attached_control ||
-                _AttachedControlAdornerLookup.ContainsKey(attached_control)) {
-                return;
-            }
-            var tha = new MpAvTextHighlightAdorner(attached_control);
-            _AttachedControlAdornerLookup.Add(attached_control, tha);
-            Dispatcher.UIThread.Post(async () => {
-
-                //AddVisualAdorner(attached_control, tha, AdornerLayer.GetAdornerLayer(attached_control));
-                await attached_control.AddOrReplaceAdornerAsync(tha, -1);
-
-                UpdateHighlights(attached_control);
-            });
-        }
-
-        private static void Attached_control_DetachedFromLogicalTree(object sender, global::Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e) {
+        private static void Attached_control_Unloaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             if (sender is not Control attached_control) {
                 return;
             }
-            attached_control.AttachedToLogicalTree += Attached_control_AttachedToLogicalTree;
-            attached_control.DetachedFromLogicalTree += Attached_control_DetachedFromLogicalTree;
-
+            attached_control.Loaded += Attached_control_Loaded;
+            attached_control.Unloaded += Attached_control_Unloaded;
             if (!_AttachedControlAdornerLookup.ContainsKey(attached_control)) {
                 return;
             }

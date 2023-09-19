@@ -115,6 +115,7 @@ function enableAppendMode(isAppendLine, fromHost = false) {
 	scrollToAppendIdx();
 
 	if (did_append_mode_change) {
+		unwrapContentScroll();
 		updateOverlayPad(true);
 		if (!fromHost) {
 			onAppendStateChanged_ntf();
@@ -140,12 +141,13 @@ function disableAppendMode(fromHost = false) {
 	updatePasteAppendToolbar();
 
 	if (did_append_mode_change || did_manual_mode_change || did_paused_change) {
+		wrapContentScroll();
 		updateOverlayPad(false);
 		if (!fromHost) {
 			// BUG getting mismatches after disabling append
 			// with file item content not matching data object
 			// so forcing content update, maybe bad
-			onContentChanged_ntf();
+			//onContentChanged_ntf();
 			onAppendStateChanged_ntf();
 		}
 	}

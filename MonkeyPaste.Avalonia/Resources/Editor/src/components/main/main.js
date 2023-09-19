@@ -63,8 +63,7 @@ function initDefaults(defaultsObj) {
 	if(!isNullOrUndefined(defaultsObj.currentTheme)) {
 		globals.EditorTheme = defaultsObj.currentTheme;
 
-		let no_sel_bg = 'transparent';
-		let sub_sel_bg = `rgba(189,188,188,${bg_opacity})`;
+		let no_sel_bg = 'transparent';		
 		let edit_bg = `rgba(255,248,220,${bg_opacity})`;
 		let edit_op_bg = `white`;
 		let def_content_fg = 'black';
@@ -74,8 +73,9 @@ function initDefaults(defaultsObj) {
 		let paste_template_bg_color = 'teal';
 		let paste_toolbar_button_color = 'dodgerblue';
 		let edit_template_bg_color = 'palegreen';
-		let sel_fg = 'black';
-		let caret_color = 'black';
+		let sel_fg = globals.DefaultSelectionFgColor;
+		let caret_color = globals.DefaultCaretColor;
+		let sub_sel_bg = `rgba(189,188,188,${bg_opacity})`;
 		let copy_color = 'green';
 		let hover_color = 'gold';
 
@@ -94,7 +94,7 @@ function initDefaults(defaultsObj) {
 			paste_template_bg_color = 'darkslategray';
 			paste_toolbar_button_color = 'darkblue';
 			edit_template_bg_color = 'darkolivegreen';
-			sel_fg = 'white';
+			sel_fg = 'black';
 			caret_color = 'white';
 			copy_color = 'lime';
 			hover_color = 'yellow';

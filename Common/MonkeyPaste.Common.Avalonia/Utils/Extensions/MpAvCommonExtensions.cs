@@ -53,8 +53,8 @@ namespace MonkeyPaste.Common.Avalonia {
         public static Screen AsScreen(this IRenderRoot rr) {
             return new Screen(
                             1,
-                            new PixelRect(rr.ClientSize.ToAvPixelSize()),
-                            new PixelRect(rr.ClientSize.ToAvPixelSize()),
+                            new PixelRect(rr.ClientSize.ToAvPixelSize(1)),
+                            new PixelRect(rr.ClientSize.ToAvPixelSize(1)),
                             true);
         }
 
@@ -610,6 +610,10 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (sw != null && sw.ElapsedMilliseconds >= timeout_ms) {
                     break;
                 }
+                //if (adornedControl.GetVisualRoot() == null) {
+                //    // control detached (i think)
+                //    break;
+                //}
                 await Task.Delay(100);
                 adornerLayer = AdornerLayer.GetAdornerLayer(adornedControl);
             }
@@ -621,6 +625,7 @@ namespace MonkeyPaste.Common.Avalonia {
             Dispatcher.UIThread.VerifyAccess();
             var adornerLayer = await adornedControl.GetAdornerLayerAsync(timeout_ms);
             if (adornerLayer == null) {
+                // timeout (removed infinite from hl ext is this ok?)
                 return false;
             }
             var cur_adorner = adornerLayer.Children.FirstOrDefault(x => x == adorner);
@@ -876,12 +881,12 @@ namespace MonkeyPaste.Common.Avalonia {
             return new PixelSize((int)(size.Width * scaling), (int)(size.Height * scaling));
         }
 
-        public static PixelSize ToAvPixelSize(this Size size) {
-            return new PixelSize((int)size.Width, (int)size.Height);
+        public static PixelSize ToAvPixelSize(this Size size, double scaling) {
+            return new PixelSize((int)(size.Width * scaling), (int)(size.Height * scaling));
         }
 
-        public static PixelSize ToAvPixelSize(this Point point) {
-            return new PixelSize((int)point.X, (int)point.Y);
+        public static PixelSize ToAvPixelSize(this Point point, double scaling) {
+            return new PixelSize((int)(point.X * scaling), (int)(point.Y * scaling));
         }
 
         public static PixelSize ToAvPixelSize(this PixelPoint point) {
@@ -915,6 +920,10 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static PixelRect ToAvPixelRect(this MpRect rect, double pixelDensity) {
+            return new PixelRect(rect.Location.ToAvPixelPoint(pixelDensity), rect.Size.ToAvPixelSize(pixelDensity));
+        }
+
+        public static PixelRect ToAvScreenPixelRect(this MpRect rect, double pixelDensity) {
             return new PixelRect(rect.Location.ToAvPixelPoint(pixelDensity), rect.Size.ToAvPixelSize(pixelDensity));
         }
 

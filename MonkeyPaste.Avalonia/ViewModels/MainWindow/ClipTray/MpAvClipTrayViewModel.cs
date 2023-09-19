@@ -2347,7 +2347,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.ContentPasted:
                     if (CurPasteOrDragItem != null &&
                         CurPasteOrDragItem.GetContentView() is MpAvContentWebView cwv) {
-                        cwv.SendMessage($"pasteOrDropCompleteResponse_ext");
+                        cwv.SendMessage($"pasteOrDropCompleteResponse_ext()");
                     }
                     CurPasteOrDragItem = null;
                     break;
@@ -3355,12 +3355,13 @@ namespace MonkeyPaste.Avalonia {
                      if (arg_ctvm.IsPinPlaceholder) {
                          // unpinning from query tray pin placeholder (lbi double click)
                          pin_placeholder_ctvm = arg_ctvm;
-                         unpinned_ctvm = PinnedItems.FirstOrDefault(x => x.CopyItemId == pin_placeholder_ctvm.PinPlaceholderCopyItemId);
+                         unpinned_ctvm = pin_placeholder_ctvm.PinnedItemForThisPlaceholder;
+                         //PinnedItems.FirstOrDefault(x => x.CopyItemId == pin_placeholder_ctvm.PinPlaceholderCopyItemId);
                      } else {
                          // unpinning from corner button or popout closed
                          unpinned_ctvm = arg_ctvm;
-                         pin_placeholder_ctvm =
-                            QueryItems.FirstOrDefault(x => x.PinPlaceholderCopyItemId == unpinned_ctvm.CopyItemId);
+                         pin_placeholder_ctvm = unpinned_ctvm.PlaceholderForThisPinnedItem;
+                         //QueryItems.FirstOrDefault(x => x.PinPlaceholderCopyItemId == unpinned_ctvm.CopyItemId);
                      }
                  }
                  if (unpinned_ctvm == null) {
@@ -3374,9 +3375,16 @@ namespace MonkeyPaste.Avalonia {
                  int unpinned_ctvm_idx = PinnedItems.IndexOf(unpinned_ctvm);
 
                  if (unpinned_ctvm.IsWindowOpen) {
-                     await unpinned_ctvm.TransactionCollectionViewModel.CloseTransactionPaneCommand.ExecuteAsync();
-                     MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(unpinned_ciid, unpinned_ctvm_idx);
-                     unpinned_ctvm.IsWindowOpen = false;
+                     bool was_closed = await unpinned_ctvm.ClosePopoutAsync();
+                     if (!PinnedItems.Contains(unpinned_ctvm)) {
+                         // not sure whats going on but this becomes
+                         // an extra trail of exec when items removed so cancel if gone
+                         return;
+                     }
+                     if (!was_closed) {
+                         // cancel unpin
+                         return;
+                     }
                  }
 
                  PinnedItems.Remove(unpinned_ctvm);

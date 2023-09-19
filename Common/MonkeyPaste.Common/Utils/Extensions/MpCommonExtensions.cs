@@ -448,7 +448,7 @@ namespace MonkeyPaste.Common {
             }
         }
 
-        public static void RemoveFlag<T>(ref this T value, T flag) where T : struct {
+        public static void RemoveFlag<T>(ref this T value, T flag) where T : struct, Enum {
             // remove flag from string of value and any leading/trailing commas 
             string result = value.ToString().Replace(flag.ToString(), string.Empty).Trim(new[] { ' ', ',' });
             if (result.Length == 0) {
@@ -459,7 +459,7 @@ namespace MonkeyPaste.Common {
             value = (T)Enum.Parse(typeof(T), result);
         }
 
-        public static void AddFlag<T>(ref this T value, T flag) where T : struct {
+        public static void AddFlag<T>(ref this T value, T flag) where T : struct, Enum {
             string result = $"{value}, {flag}".Trim(new[] { ' ', ',' }); ;
             value = (T)Enum.Parse(typeof(T), result);
         }

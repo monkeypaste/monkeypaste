@@ -11,7 +11,7 @@ body {
     --editortoolbarsepbgcolor: silver;
     --editortoolbarbuttoncolor: dimgray;
     --defcontentfgcolor: black;
-    --inactiveselbgcolor: honeydew;
+    --inactiveselbgcolor: lightcyan;
     --selbgcolor: lightblue;
     --selfgcolor: black;
     --inactivematchbgcolor: yellow;
@@ -49,6 +49,14 @@ body {
     /*white-space: pre-wrap;*/
 }
 
+.unwrap {
+    white-space: nowrap !important;
+    overflow: auto;
+}
+.unwrap.size-check > .ql-editor {
+        width: 808080px;
+        height: 808080px !important;
+}
 
 ::selection {
     background-color: var(--selbgcolor);

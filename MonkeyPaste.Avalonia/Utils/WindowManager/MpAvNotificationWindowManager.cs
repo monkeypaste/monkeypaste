@@ -163,6 +163,35 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMoveWindowExtension.SetRejectedControlTypeNames(nw, string.Join("|", nvmb.RejectedMoveControlTypes.Select(x => x.ToString())));
                 }
             }
+            if (nvmb.Owner is not Window &&
+                nvmb.Owner is Control owner_c &&
+                TopLevel.GetTopLevel(owner_c) is Window owner_w) {
+                // owner is some control so swap to its window
+                // and adjust startup to be center of that control
+                if (owner_w.WindowState == WindowState.Minimized) {
+                    // remove owner
+                    nvmb.Owner = null;
+                    nvmb.AnchorTarget = null;
+                    nw.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                } else {
+                    nvmb.Owner = owner_w;
+                    MpDebug.Assert(nvmb.AnchorTarget == null, $"Use owner not anchorTarget");
+                    nvmb.AnchorTarget = owner_c;
+                    nw.WindowStartupLocation = WindowStartupLocation.Manual;
+                    nw.Opened += (s, e) => {
+                        var anchor_s_origin = owner_c.PointToScreen(new Point());
+                        var anchor_s_size = owner_c.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
+                        var nw_s_size = nw.Bounds.Size.ToAvPixelSize(owner_c.VisualPixelDensity());
+                        double nw_x = anchor_s_origin.X + (anchor_s_size.Width / 2) - (nw_s_size.Width / 2);
+                        double nw_y = anchor_s_origin.Y + (anchor_s_size.Height / 2) - (nw_s_size.Height / 2);
+                        var s_size = owner_w.Screens.ScreenFromVisual(owner_w).WorkingArea.Size;
+                        nw_x = Math.Clamp(nw_x, 0, s_size.Width - nw_s_size.Width);
+                        nw_y = Math.Clamp(nw_y, 0, s_size.Height - nw_s_size.Height);
+                        nw.Position = new PixelPoint((int)nw_x, (int)nw_y);
+                    };
+                }
+
+            }
 
             if (nvmb.Owner is Window w &&
                 nvmb.AnchorTarget == null) {
@@ -182,7 +211,8 @@ namespace MonkeyPaste.Avalonia {
                 MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
             }
             if (nw.WindowStartupLocation != WindowStartupLocation.CenterScreen &&
-                nw.WindowStartupLocation != WindowStartupLocation.CenterOwner //nw is MpAvMessageNotificationWindow
+                nw.WindowStartupLocation != WindowStartupLocation.CenterOwner &&
+                nw.WindowStartupLocation != WindowStartupLocation.Manual
                 ) {
                 //MpIPlatformScreenInfo primaryScreen = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary);
                 //if (primaryScreen != null) {

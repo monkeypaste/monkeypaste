@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIWindowHandlesClosingViewModel Implementation
 
         public bool IsWindowCloseHandled =>
-            //(IsAppendNotifier && !WasCloseAppendWindowConfirmed) && 
+            //(IsAppendNotifier && !IsClosePopoutConfirmFinished) && 
             !IsFinalClosingState;
 
         #endregion
@@ -281,6 +281,7 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
         }
+
 
         public MpAvClipTileViewModel PinnedItemForThisPlaceholder =>
             IsPinPlaceholder &&
@@ -646,7 +647,7 @@ namespace MonkeyPaste.Avalonia {
         public int AppendCount { get; set; } = 0;
         public bool IsAppendNotifier { get; set; }
 
-        public bool WasCloseAppendWindowConfirmed { get; set; }
+        public bool IsClosePopoutConfirmFinished { get; set; }
         #endregion
 
         #region Appearance
@@ -661,7 +662,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTrashOrDeleting =>
             IsTrashing || IsDeleting;
         public bool IsFinalClosingState { get; set; }
-        //public string AnnotationsJsonStr { get; set; }
+        public bool IsPopoutCloseRequireConfirm { get; set; }
         public bool CanShowContextMenu { get; set; } = true;
 
         public bool HasTemplates { get; set; } = false;
@@ -1187,13 +1188,6 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAvClipTileViewModel_PropertyChanged;
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
             IsBusy = true;
-
-            //this.WhenActivated((CompositeDisposable disposables) => {
-            //    /* handle activation */
-            //    Disposable
-            //        .Create(() => { /* handle deactivation */ })
-            //        .DisposeWith(disposables);
-            //});
         }
 
         #endregion
@@ -1584,6 +1578,7 @@ namespace MonkeyPaste.Avalonia {
             // highest idx has highest priority
             return QueryOffsetIdx;
         }
+
         #region IDisposable
 
         public override void DisposeViewModel() {
@@ -1625,6 +1620,9 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsAppendNotifier):
                     if (IsAppendNotifier) {
                         IsSubSelectionEnabled = true;
+                        IsPopoutCloseRequireConfirm = true;
+                    } else {
+                        IsPopoutCloseRequireConfirm = false;
                     }
                     break;
                 case nameof(IsAnyBusy):
@@ -1932,6 +1930,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #region Popout Window
         private MpAvWindow CreatePopoutWindow() {
             int orig_ciid = CopyItemId;
 
@@ -1989,120 +1988,182 @@ namespace MonkeyPaste.Avalonia {
             }
             #endregion
 
-            #region Selection
-            EventHandler activate_handler = (s, e) => {
-                Parent.SelectClipTileCommand.Execute(orig_ciid); ;
-            };
-
-            #endregion
-
-            EventHandler open_handler = null;
-            open_handler = (s, e) => {
-                if (GetContentView() is MpIContentView cv &&
-                    !IsContentReadOnly) {
-                    OnPropertyChanged(nameof(IsTitleVisible));
-                    cv.LoadContentAsync().FireAndForgetSafeAsync(this);
-                }
-                pow.Opened -= open_handler;
-            };
-            #region CLOSE
-
-            EventHandler<WindowClosingEventArgs> closing_handler = null;
-            closing_handler = (s, e) => {
-                MpConsole.WriteLine($"tile popout closing called. reason '{e.CloseReason}' programmatic '{e.IsProgrammatic}' final: {IsFinalClosingState}");
-                if (IsFinalClosingState) {
-                    // handled in secondary closing
-                    return;
-                }
-                if (Parent == null ||
-                    !IsAppendNotifier ||
-                    WasCloseAppendWindowConfirmed) {
-                    // closing pop out confirmed but need to store state before view is disposed
-                    // which is async so store it, then retrigger close knowing its final
-                    IsFinalClosingState = true;
-                    pow.Closing -= closing_handler;
-                    e.Cancel = true;
-                    IsBusy = false;
-
-                    Dispatcher.UIThread.Post(async () => {
-                        await Parent.UnpinTileCommand.ExecuteAsync(this);
-                        pow.Close();
-                    });
-                    return;
-                }
-                // only append window from here, reject close and show confirm ntf
-                IsBusy = true;
-                e.Cancel = true;
-                pow.IsHitTestVisible = false;
-                Dispatcher.UIThread.Post(async () => {
-                    Control confirm_owner = null;
-                    // NOTE for dbl click close placeholder this is called ON placeholder (i think)
-                    // need to get placeholder from window NOT this tile 
-                    var placeholder_ctvm = (pow.DataContext as MpAvClipTileViewModel).PlaceholderForThisPinnedItem;
-                    if (pow.IsActive || placeholder_ctvm == null) {
-                        confirm_owner = pow;
-                    } else {
-                        // this implies that popout is being closed
-                        // by double clicking placeholder so show
-                        // confirm over placeholder and restore append popout 
-                        // if minimized
-                        var ppctv =
-                            MpAvQueryTrayView.Instance
-                            .GetVisualDescendants<MpAvClipTileView>()
-                            .FirstOrDefault(x => x.DataContext == placeholder_ctvm);
-                        if (ppctv == null) {
-                            MpDebug.Break($"Error finding pin placeholder view for tile {this}");
-                            confirm_owner = pow;
-                        } else {
-                            confirm_owner = ppctv;
-                            if (PopOutWindowState == WindowState.Minimized) {
-                                PopOutWindowState = WindowState.Normal;
-                            }
-                        }
-                    }
-                    var result = await
-                        Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                            title: UiStrings.CommonNtfConfirmTitle,
-                            message: "Are you sure you want to finish appending?",
-                            iconResourceObj: "QuestionMarkImage",
-                            owner: confirm_owner,
-                            ntfType: MpNotificationType.ConfirmEndAppend);
-                    if (result) {
-                        // allow close
-                        WasCloseAppendWindowConfirmed = true;
-                        await Parent.DeactivateAppendModeCommand.ExecuteAsync();
-                        IsWindowOpen = false;
-                        return;
-                    }
-                    pow.IsHitTestVisible = true;
-                    IsBusy = false;
-                });
-            };
-            EventHandler close_handler = null;
-            close_handler = (s, e) => {
-                pow.Activated -= activate_handler;
-                pow.Closed -= close_handler;
-                pow.Closing -= closing_handler;
-                IsFinalClosingState = false;
-                WasCloseAppendWindowConfirmed = false;
-
-                if (_contentView is MpAvContentWebView wv) {
-                    // NOTE for some reason even canceling closing webview tries to dispose
-                    // so it is ignored from final closing state. here is the only place it'll dispose
-                    wv.FinishDisposal();
-                }
-                _contentView = null;
-            };
-            #endregion
-
             pow.Activated += activate_handler;
-            pow.Closed += close_handler;
             pow.Opened += open_handler;
             pow.Closing += closing_handler;
+            pow.Closed += close_handler;
 
             _contentView = null;
             return pow;
         }
+
+        public async Task<bool> ClosePopoutAsync() {
+            if (GetContentView() is not Control c ||
+                TopLevel.GetTopLevel(c) is not MpAvWindow pow) {
+                return true;
+            }
+
+            if (pow.DataContext is MpAvMainWindowViewModel) {
+                // should be other vm here
+
+            }
+            pow.Close();
+            if (IsPopoutCloseRequireConfirm) {
+                while (IsBusy) {
+                    await Task.Delay(100);
+                }
+            }
+            if (IsWindowOpen) {
+                // close was canceled
+                return false;
+            }
+            await TransactionCollectionViewModel.CloseTransactionPaneCommand.ExecuteAsync();
+            MpAvPersistentClipTilePropertiesHelper.RemoveUniqueSize_ById(CopyItemId, QueryOffsetIdx);
+
+            return true;
+        }
+
+        #region Event Wrappers
+        private void HandleThisPopoutOpen(MpAvWindow pow, EventArgs e) {
+            OnPropertyChanged(nameof(IsTitleVisible));
+            if (GetContentView() is not MpIContentView cv) {
+                // is this ok?
+                return;
+            }
+            cv.LoadContentAsync().FireAndForgetSafeAsync(this);
+        }
+        private void HandleThisPopoutActivate(MpAvWindow pow, EventArgs e) {
+
+            Parent.SelectClipTileCommand.Execute(CopyItemId);
+        }
+
+        private void HandleThisPopoutClosing(MpAvWindow pow, WindowClosingEventArgs e) {
+            var placeholder_ctvm = PlaceholderForThisPinnedItem;
+
+            MpConsole.WriteLine($"tile popout closing called. reason '{e.CloseReason}' programmatic '{e.IsProgrammatic}' final: {IsFinalClosingState}");
+
+            // ALLOW CLOSE
+            if (IsFinalClosingState) {
+                // handled in secondary closing
+                return;
+            }
+            if (!IsPopoutCloseRequireConfirm ||
+                IsBusy) {
+                // closing pop out confirmed but need to store state before view is disposed
+                // which is async so store it, then retrigger close knowing its final
+                IsFinalClosingState = true;
+                e.Cancel = true;
+
+                Dispatcher.UIThread.Post(async () => {
+                    await MpAvClipTrayViewModel.Instance.UnpinTileCommand.ExecuteAsync(this);
+                    pow.Close();
+                    IsBusy = false;
+                });
+                return;
+            }
+            // only append window from here, reject close and show confirm ntf
+            IsBusy = true;
+            e.Cancel = true;
+            pow.IsHitTestVisible = false;
+            Dispatcher.UIThread.Post(async () => {
+                Control confirm_owner = null;
+                if (pow.IsActive || placeholder_ctvm == null) {
+                    confirm_owner = pow;
+                } else {
+                    // this implies that popout is being closed
+                    // by double clicking placeholder so show
+                    // confirm over placeholder and restore append popout 
+                    // if minimized
+                    var ppctv =
+                        MpAvQueryTrayView.Instance
+                        .GetVisualDescendants<MpAvClipTileView>()
+                        .FirstOrDefault(x => x.DataContext == placeholder_ctvm);
+                    if (ppctv == null) {
+                        MpDebug.Break($"Error finding pin placeholder view for tile {this}");
+                        confirm_owner = pow;
+                    } else {
+                        confirm_owner = ppctv;
+                        if (PopOutWindowState == WindowState.Minimized ||
+                            !pow.IsActive) {
+                            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
+                            PopOutWindowState = WindowState.Normal;
+                            pow.Activate();
+                        }
+                    }
+                }
+                var can_close_result = await
+                    Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+                        title: UiStrings.CommonNtfConfirmTitle,
+                        message: "Are you sure you want to finish appending?",
+                        iconResourceObj: "QuestionMarkImage",
+                        owner: confirm_owner,
+                        ntfType: MpNotificationType.ConfirmEndAppend);
+                if (can_close_result) {
+                    //allow close
+                    IsWindowOpen = false;
+                    if (IsAppendNotifier) {
+                        // shouldn't need to check this since only append needs confirm
+                        // but if others do later good to check, all this is confusing
+                        await Parent.DeactivateAppendModeCommand.ExecuteAsync();
+                    }
+                } else {
+                    // flag window as open BEFORE marking finished
+                    // for unpin cmd to cancel unpin properly
+                    IsWindowOpen = true;
+                }
+                MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
+                //IsClosePopoutConfirmFinished = true;
+                pow.IsHitTestVisible = true;
+                IsBusy = false;
+            });
+        }
+
+        private void HandleThisPopoutClosed(MpAvWindow pow, EventArgs e) {
+            IsFinalClosingState = false;
+            // IsClosePopoutConfirmFinished = false;
+
+            if (GetContentView() is MpAvContentWebView wv) {
+                // NOTE for some reason even canceling closing webview tries to dispose
+                // so it is ignored from final closing state. here is the only place it'll dispose
+                wv.FinishDisposal();
+            }
+            _contentView = null;
+        }
+        #endregion
+
+        #region Event Handlers
+        private void open_handler(object sender, EventArgs e) {
+            if (sender is not MpAvWindow pow ||
+                pow.DataContext is not MpAvClipTileViewModel popout_ctvm) {
+                return;
+            }
+            popout_ctvm.HandleThisPopoutOpen(pow, e);
+        }
+        private void activate_handler(object sender, EventArgs e) {
+            if (sender is not MpAvWindow pow ||
+                pow.DataContext is not MpAvClipTileViewModel popout_ctvm) {
+                return;
+            }
+            popout_ctvm.HandleThisPopoutActivate(pow, e);
+        }
+        private void closing_handler(object sender, WindowClosingEventArgs e) {
+            if (sender is not MpAvWindow pow ||
+                pow.DataContext is not MpAvClipTileViewModel popout_ctvm) {
+                return;
+            }
+            popout_ctvm.HandleThisPopoutClosing(pow, e);
+        }
+        private void close_handler(object sender, EventArgs e) {
+            if (sender is not MpAvWindow pow ||
+                pow.DataContext is not MpAvClipTileViewModel popout_ctvm) {
+                return;
+            }
+            popout_ctvm.HandleThisPopoutClosed(pow, e);
+        }
+        #endregion
+
+        #endregion
+
         private async Task DisableReadOnlyInPlainTextHandlerAsync() {
             Dispatcher.UIThread.VerifyAccess();
 

@@ -29,6 +29,8 @@
     color: var(--defcontentfgcolor);
 }
 
+
+
 #editor.append {
     padding-top: var(--appendpad);
     padding-bottom: var(--appendpad);

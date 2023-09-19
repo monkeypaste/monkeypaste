@@ -278,7 +278,8 @@ function drawAppendNotifierPreview(ctx, color, thickness = 3.0, line_style = [5,
     top_pad_rect = cleanRect(top_pad_rect);
 
     let bottom_pad_rect = cleanRect(cont_rect);
-    bottom_pad_rect.top = editor_rect.bottom;
+    bottom_pad_rect.top = editor_rect.bottom - getEditorHorizontalScrollBarHeight();
+    bottom_pad_rect.bottom -= getEditorHorizontalScrollBarHeight();
     bottom_pad_rect.right -= vert_sb_w;
     bottom_pad_rect = cleanRect(bottom_pad_rect);
     let pad_color = getElementComputedStyleProp(document.body, '--caretcolor');

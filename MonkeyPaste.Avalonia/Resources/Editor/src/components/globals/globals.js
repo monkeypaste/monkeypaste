@@ -742,6 +742,7 @@ var globals = {
 	DragSelBgColor: 'salmon',
 	DragFormatedSelFgColor: 'orange',
 	DragCopySelBgColor: 'green',
+	PastingSelBgColor: 'lime',
 	LastSelRange: null,
 	CurSelRange: { index: 0, length: 0 },
 	CurSelRects: null,
