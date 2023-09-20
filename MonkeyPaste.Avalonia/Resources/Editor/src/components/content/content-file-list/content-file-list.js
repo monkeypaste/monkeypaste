@@ -28,8 +28,8 @@ function loadFileListContent(itemDataStr) {
 		globals.FileListItems.push(flif);
 	}
 	createFileList();
+	loadLinkHandlers();
 
-	loadLinkHandlers();	
 }
 
 function initFileListClassAttrb() {
@@ -131,6 +131,9 @@ function getSelectedFileListRowElements() {
 function getFileListRowElements() {
 	return Array.from(document.querySelectorAll('tr'));
 }
+function getFileListDeleteCellElements() {
+	return Array.from(document.querySelectorAll('.file-list-remove-cell'));
+}
 
 function getTotalFileSize() {
 	return '';
@@ -172,6 +175,7 @@ function isMultiFileSelectEnabled() {
 // #region Actions
 
 function createFileList() {
+	const delete_img_base64 = `iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAFdSURBVFhH7ZZNasMwFIQfpblBeqwuE7LvIosGusnhmkXJRQJdBHqAQnf56TfwHBz52bFiF7rQwOAfPc2MZCTZCgoK/jW+zZ5OZlt4gPuD2dybWkHd4mj25X0+zmZTb8oHAlsEznUSYuXNDVD/ltbzbuPN+dAoAsETfPWSCwi2TmtFZuPHS/KB0T4SVQgMLyFkzrtGndfuvCwf+uaRaEWFwKAx7XXS/uxy9wGTlUYciXdRfeDSZYYBIY20dwhqjwR/8e7jQNMdmaVU0NHNK/QJkTvtD37tBYof/bYVBJj47bhg9OE6T6lPABv7xCDIHNHQMKJC6HN592FArHOdd3FwCMwXkbCoUcIlJrf2iZnL5UOnWiAo86t1znPrPoHGp5flA9HwMKqbV9B0p7Xi0MNI5/mVIO9a13kUggDv3pwPBKYYbjQKrjt482Chz0zTrj4y56fm/h+SgoKCv4fZL5aNtQNpHdf1AAAAAElFTkSuQmCC`;
 	let file_list_tbody_inner_html = '';
 	for (var i = 0; i < globals.FileListItems.length; i++) {
 		let row_id = getTableItemIdentifier('row');
@@ -190,9 +194,9 @@ function createFileList() {
 			`<a class="link-type-fileorfolder file-list-path ql-font-consolas ql-align-right" href="${getPathUri(fp)}">${formatFilePathDisplayValue(fp)}</a>` +
 			'</p></td>' +
 			// REMOVE COLUMN
-			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
+			'<td class="file-list-cell file-list-remove-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
 			'<p class="qlbt-cell-line ql-align-center" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
-			'<a class="link-type-delete-item file-list-remove ql-align-center">x</span>' +
+			'<a class="link-type-delete-item file-list-remove ql-align-center"><img src="data:image/png;base64,' + delete_img_base64 + '"></a>' +
 			'</p></td>' +
 			'</tr>';
 		file_list_tbody_inner_html += file_item_tr_outer_html;
@@ -388,7 +392,7 @@ function appendFileListContentData(data) {
 	onContentChanged_ntf();
 }
 
-function excludeRowByAnchorElement(a_elm) {
+function removeFileItemByAnchorElement(a_elm) {
 	if (!a_elm) {
 		return;
 	}
@@ -403,7 +407,7 @@ function excludeRowByAnchorElement(a_elm) {
 	}
 	// NOTE remove item before content change so host receives updated list
 	globals.FileListItems.splice(row_idx, 1);
-
+	globals.SuppressContentChangedNtf = true;
 	globals.quill.enable(true);
 
 	let btm = getBetterTableModule(true);
@@ -415,8 +419,8 @@ function excludeRowByAnchorElement(a_elm) {
 	globals.quill.enable(false);
 
 	//createFileList();
-
-	//onContentChanged_ntf();
+	globals.SuppressContentChangedNtf = false;
+	onContentChanged_ntf();
 }
 
 function selectAllFileItems() {
@@ -438,6 +442,10 @@ function deselectAllFileItems() {
 
 // #region Event Handlers
 
+function onFileListItemRemoveRowClick(e) {
+
+	removeFileItemByAnchorElement(e.currentTarget);
+}
 function onFileListItemRowClick(e) {
 	if (!isSubSelectionEnabled()) {
 		return;

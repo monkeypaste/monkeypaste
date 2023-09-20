@@ -61,8 +61,8 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
             Dispatcher.UIThread.Post(async () => {
-                allowedOps = CefDragOperationsMask.Copy;
-                var de = DragDropEffects.Copy;// | DragDropEffects.Move;
+                allowedOps = CefDragOperationsMask.Copy | CefDragOperationsMask.Move;
+                var de = DragDropEffects.Copy | DragDropEffects.Move;
                 await MpAvContentWebViewDragHelper.StartDragAsync(ds, de);
 
                 browser.Host.DragSourceEndedAt(0, 0, CefDragOperationsMask.None);
@@ -72,9 +72,10 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
         protected override void UpdateDragCursor(CefBrowser browser, CefDragOperationsMask operation) {
-            if (operation == CefDragOperationsMask.None) {
-                MpConsole.WriteLine($"Drag cursor set to '{operation}'");
+            if (operation != CefDragOperationsMask.Copy) {
+
             }
+            MpConsole.WriteLine($"Drag cursor set to '{operation}'");
             base.UpdateDragCursor(browser, operation);
         }
         protected override bool OnCursorChange(CefBrowser browser, nint cursorHandle, CefCursorType type, CefCursorInfo customCursorInfo) {

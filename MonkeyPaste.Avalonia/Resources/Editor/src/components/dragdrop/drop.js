@@ -55,15 +55,15 @@ function getDropBlockState(doc_idx, mp, isShiftDown) {
 // #region State
 
 function isDragCopy() {
-    return globals.IsCtrlDown;
+    return globals.ModKeys.IsCtrlDown;
 }
 
 function isDragCut() {
-    return !globals.IsCtrlDown;
+    return !globals.ModKeys.IsCtrlDown;
 }
 
 function isDropHtml() {
-    return globals.IsAltDown;
+    return globals.ModKeys.IsAltDown;
 }
 
 function isDropping() {
@@ -94,9 +94,7 @@ function resetDrop(fromHost, wasLeave, wasCancel) {
 
     globals.CurDropTargetElm = null;
 
-    globals.IsCtrlDown = false;
-    globals.IsAltDown = false
-    globals.IsShiftDown = false;
+    globals.ModKeys = cleanModKeys(null);
     globals.IsTableDragSelecting = false;
 
     for (var i = 0; i < globals.DropItemElms.length; i++) {
@@ -112,32 +110,44 @@ function resetDrop(fromHost, wasLeave, wasCancel) {
             onDragEnd();
         }
         enableSubSelection();
-        updateAllElements();
     }
 
     log('drop reset: ' + (fromHost ? "FROM HOST" : "INTERNALLY") + (wasLeave ? ' | WAS LEAVE' : ' | WAS DROP'));
+
+
+    delay(500)
+        .then(() => {
+            // mod key msgs may still come through after reset so wipe em out
+            globals.ModKeys = cleanModKeys(null);
+        });
+    updateAllElements();
 }
 
 function processEffectAllowed(e) {
     let effect_str = 'none';
+    let from_host = true;
     if (e.fromHost === undefined && !isNullOrUndefined(e.dataTransfer)) {
         effect_str = e.dataTransfer.effectAllowed;
     } else if (!isNullOrUndefined(e.effectAllowed_override)) {
         effect_str = e.effectAllowed_override;
+    } else {
+        from_host = false;
     }
+
     if (!globals.AllowedEffects.includes(effect_str)) {
         effect_str = 'none'
     }
     if (isDragCopy() || effect_str == 'copy') {
         effect_str = 'copy';
     } else if (isDragCut()) {
-        effect_str = 'copy';// 'move';
+        effect_str = 'move';
     } else {
         effect_str = 'none';
     }
     if (!isNullOrUndefined(e.dataTransfer)) {
         e.dataTransfer.dropEffect = effect_str;
     }
+    log('drop effects: ' + effect_str + ' from host: ' + from_host);
     
     return effect_str;
 }
@@ -186,8 +196,6 @@ function onDragEnter(e) {
 }
 
 function onDragOver(e) {
-    //log('drag over called');
-
     updateWindowMouseState(e,'dragOver');
 
     if (e.fromHost === undefined) {
@@ -197,39 +205,26 @@ function onDragOver(e) {
     
 
     if (!isDropping()) {
-        //if (isDragging()) {
-        //    // IsDropping won't be set to true when its dragOverlay ie. can't drop whole tile on itself.
-        //    log('onDragOver called but not dropping, returning false');
-        //    return rejectDrop(e);
-
-        //} else {
-            onDragEnter(e);
-        //}
+        onDragEnter(e);
     }
 
     // VALIDATE 
 
     if (!e || !isValidDataTransfer(e.dataTransfer)) {
         return rejectDrop(e);
+    }    
+
+    // DROP EFFECT
+    if (isRunningInHost() && isDragging()) {
+        // mod keys updated from host msg in updateGlobalModKeys
+    } else {
+        updateGlobalModKeys(e);
     }
-
-
     // DEBOUNCE (my own type but word comes from https://css-tricks.com/debouncing-throttling-explained-examples/)
     let can_proceed = canDebounceDragOverProceed();
     if (!can_proceed) {
         return false;
     }
-
-    
-
-
-    // DROP EFFECT
-    if (isRunningInHost() && isDragging()) {
-        // mod keys updated from host msg in updateModKeys
-    } else {
-        updateModKeys(e);
-    }
-
 
     if (processEffectAllowed(e) == 'none') {
         return rejectDrop(e);
@@ -266,18 +261,23 @@ function onDragOver(e) {
 }
 
 function onDragLeave(e) {
-    log('drag leave called');
+    let window_rect = getWindowRect();
+    let mp_dist = getPointDistanceToRect(globals.WindowMouseLoc, window_rect);
+    let is_mp_in_win = isPointInRect(window_rect, globals.WindowMouseLoc);
+    let from_host = e.fromHost === undefined || e.fromHost == false ? false : true;
+    log('drag leave called. mp dist: ' + mp_dist + ' in editor: ' + is_mp_in_win);
 
-
-    let editor_rect = getEditorContainerRect();
-    if (isPointInRect(editor_rect, globals.WindowMouseLoc)) {
+    if (is_mp_in_win && !from_host) {
+        // NOTE host only triggers in webview drag leave
+        // since catching actual drag leave is so problematic
+        updateWindowMouseState(e, 'dragOver');
         return;
     }
-    updateWindowMouseState(e,'dragLeave');Ä
+    updateWindowMouseState(e, 'dragLeave');
 
-    log('drag leave');
+    log('drag leave confirmed. from host: ' + from_host);
 
-    resetDrop(e.fromHost, true, false);
+    resetDrop(from_host, true, false);
 
     onDragLeave_ntf();
 }
@@ -327,11 +327,11 @@ function onDrop(e) {
         return rejectDrop(e);
     }
 
-    if (isDragging() && (!drag_dist || drag_dist < globals.MIN_DRAG_DIST)) {
-        log('Drop rejected, dist was ' + drag_dist + ' minimum is ' + globals.MIN_DRAG_DIST);
-        resetDrop(e.fromHost, false, true);
-        return rejectDrop(e);
-    }
+    //if (isDragging() && (!drag_dist || drag_dist < globals.MIN_DRAG_DIST)) {
+    //    log('Drop rejected, dist was ' + drag_dist + ' minimum is ' + globals.MIN_DRAG_DIST);
+    //    resetDrop(e.fromHost, false, true);
+    //    return rejectDrop(e);
+    //}
 
 
     log('drop');
@@ -352,7 +352,7 @@ function onDrop(e) {
     var drop_range = {
         index: globals.DropIdx,
         length: 0,
-        mode: getDropBlockState(globals.DropIdx, globals.WindowMouseLoc, globals.IsShiftDown)
+        mode: getDropBlockState(globals.DropIdx, globals.WindowMouseLoc, globals.ModKeys.IsShiftDown)
     };
 
     logDataTransfer(e.dataTransfer, 'Drop DataTransfer (unprocessed):');
@@ -371,9 +371,8 @@ function onDrop(e) {
 
             // RESET
 
-            resetDrop(e.fromHost, false, false);
-
             onDropCompleted_ntf();
+            resetDrop(e.fromHost, false, false);
             drawOverlay();
         });
 

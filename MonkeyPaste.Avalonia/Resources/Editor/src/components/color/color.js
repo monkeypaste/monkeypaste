@@ -409,7 +409,7 @@ function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity, outputTy
         return rgbaToRgbaStyle(color);
     }
     if (outputType == 'hex') {
-        return rgbaToHex()
+        return rgbaToHex(color);
     }
     return color;
 }

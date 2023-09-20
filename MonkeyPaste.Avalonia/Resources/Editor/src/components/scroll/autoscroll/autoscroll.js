@@ -25,11 +25,13 @@ function isAutoScrolling() {
 // #region Actions
 
 function startAutoScroll() {
+    // .drop class makes .ql-editor huge so no wrapping
+    // this finds actual max width and sets so won't overscroll...
     unwrapContentScroll();
 
     scrollDocRangeIntoView(getDocSelection());
 
-    globals.AutoScrollInterval = setInterval(onAutoScrollTick, 300, editor_elm);
+    globals.AutoScrollInterval = setInterval(onAutoScrollTick, 300, getEditorElement());
 }
 
 function stopAutoScroll(isLeave) {

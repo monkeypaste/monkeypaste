@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
         private string[] _reinitContentParams = new string[] {
             nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
             nameof(MpAvPrefViewModel.Instance.DefaultEditableFontFamily),
-            nameof(MpAvPrefViewModel.Instance.IsAppendWithDestinationFormattingEnabled),
+            nameof(MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled),
             nameof(MpAvPrefViewModel.Instance.DefaultFontSize),
             nameof(MpAvPrefViewModel.Instance.IsSpellCheckEnabled),
             nameof(MpAvPrefViewModel.Instance.ThemeTypeName),
@@ -798,14 +798,15 @@ namespace MonkeyPaste.Avalonia {
                                             }
                                         },
                                         new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.IsAppendWithDestinationFormattingEnabled),
+                                            paramId = nameof(MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled),
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
-                                            label = "Append with destination formatting",
+                                            label = "Paste, drop or append with destination formatting",
+                                            description = "When true, external content inserted into a clip will use the clips rich formatting and not the source content.",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
-                                                    value = MpAvPrefViewModel.Instance.IsAppendWithDestinationFormattingEnabled.ToString()
+                                                    value = MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled.ToString()
                                                 }
                                             }
                                         },

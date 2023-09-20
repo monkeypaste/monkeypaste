@@ -76,7 +76,7 @@ function initDefaults(defaultsObj) {
 		let sel_fg = globals.DefaultSelectionFgColor;
 		let caret_color = globals.DefaultCaretColor;
 		let sub_sel_bg = `rgba(189,188,188,${bg_opacity})`;
-		let copy_color = 'green';
+		let copy_color = 'lime';
 		let hover_color = 'gold';
 
 		if (defaultsObj.currentTheme.toLowerCase() == 'dark') {

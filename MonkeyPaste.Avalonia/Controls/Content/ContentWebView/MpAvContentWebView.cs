@@ -519,6 +519,9 @@ namespace MonkeyPaste.Avalonia {
                                 if (Math.Abs(center_p.Y - showToolTipNtf.anchorY) < tt_size.Height) {
                                     // if its in the middle just shove to the top
                                     adj_p.Y = this.Bounds.Top;
+                                } else if (showToolTipNtf.anchorY < tt_size.Height) {
+                                    // if its at the top shove it to the bottom
+                                    adj_p.Y = this.Bounds.Bottom - tt_size.Height;
                                 }
 
                                 AvToolTip.SetHorizontalOffset(this, adj_p.X);
@@ -1060,6 +1063,23 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
+        protected override void OnDragLeave(RoutedEventArgs e) {
+            base.OnDragLeave(e);
+
+            var dndMsg = new MpQuillDragDropEventMessage() {
+                eventType = "dragleave"
+            };
+            SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeJsonObjectToBase64()}')");
+        }
+
+        protected override void OnDrop(DragEventArgs e) {
+            base.OnDrop(e);
+            this.Cursor = null;// new Cursor(StandardCursorType.Arrow);
+        }
+
+        protected override void OnCursorChange(CursorChangeEventArgs e) {
+            base.OnCursorChange(e);
+        }
 #if DESKTOP
 
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
@@ -1081,7 +1101,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+        private void InitDnd() {
 
+        }
         private MpQuillDefaultsRequestMessage GetDefaultsMessage() {
             return new MpQuillDefaultsRequestMessage() {
                 minLogLevel = (int)MpConsole.MinLogLevel,

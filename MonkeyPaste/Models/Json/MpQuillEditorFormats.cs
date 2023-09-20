@@ -10,6 +10,9 @@ namespace MonkeyPaste {
         public string msgData { get; set; }
         public string handle { get; set; }
     }
+    public class MpQuillInitMainResponseMessage : MpJsonObject {
+        public string userAgent { get; set; }
+    }
     public class MpQuillInitMainRequestMessage : MpJsonObject {
 
         public string envName { get; set; } // will be wpf,android, etc.
@@ -271,7 +274,7 @@ namespace MonkeyPaste {
         public bool isAppendManualMode { get; set; }
         public bool isAppendPaused { get; set; }
         public bool isAppendPreMode { get; set; }
-        public bool isAppendWithDestFormattingEnabled { get; set; } = true;
+        public bool isDataTransferDestFormattingEnabled { get; set; } = true;
 
         public int appendDocIdx { get; set; }
         public int appendDocLength { get; set; }

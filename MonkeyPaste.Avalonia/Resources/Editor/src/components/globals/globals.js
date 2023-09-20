@@ -32,7 +32,7 @@ var globals = {
 
 	// #region APPEND
 
-	isAppendWithDestFormattingEnabled: true,
+	isDataTransferDestFormattingEnabled: true,
 
 	FixedAppendIdx: -1,
 
@@ -215,6 +215,7 @@ var globals = {
 	// #region DEBOUNCER
 	LastDebouncedMouseLoc: null,
 	LastDragOverDateTime: null,
+	LastDebounceProceededModKeys: null,
 	// #endregion
 
 	// #region DRAG
@@ -615,11 +616,14 @@ var globals = {
 		//globals.DecreaseFocusLevelKey,
 		//globals.IncreaseFocusLevelKey
 	],
+	ModKeys: {
+		IsMetaDown: false, //duplicate (mac)
+		IsCtrlDown: false, //duplicate
+		IsShiftDown: false, //split 
+		IsAltDown: false, // w/ formatting (as html)? ONLY formating? dunno
+	},
 
-	IsMetaDown: false, //duplicate (mac)
-	IsCtrlDown: false, //duplicate
-	IsShiftDown: false, //split 
-	IsAltDown: false, // w/ formatting (as html)? ONLY formating? dunno
+	
 	// #endregion
 
 	// #region MOUSE
@@ -724,6 +728,8 @@ var globals = {
 	MIN_TOOLBAR_HEIGHT: 65,
 	CurPasteInfoId: null,
 	LastRecvdPasteInfoMsgObj: null,
+	PasteButtonBusyStartDt: null,
+	MinPasteBusyMs: 1000,
 	// #endregion
 
 	// #endregion

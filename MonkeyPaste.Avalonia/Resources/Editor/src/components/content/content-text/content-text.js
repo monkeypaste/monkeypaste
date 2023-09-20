@@ -817,10 +817,7 @@ function convertTextContentToFormats(selectionOnly, formats) {
 }
 
 function transferTextContent(dt, source_doc_range, dest_doc_range, source) {
-
-	// PRE TRANSFER DEFS
-
-	let pre_doc_length = getDocLength();
+	// PREPARE DELTA
 
 	let dt_delta = getDataTransferDelta(dt);
 
@@ -828,8 +825,13 @@ function transferTextContent(dt, source_doc_range, dest_doc_range, source) {
 
 	dest_doc_range = prepareDestDocRangeForDataTransfer(dest_doc_range, dt_delta, source);
 
+	// PREPARE SELECTION
+	let pre_doc_length = getDocLength();
+
 	// PERFORM TRANSFER
 	insertDelta(dest_doc_range, dt_delta, source);
+
+	// PROCESS SELECTION
 
 	let dt_length_diff = getDocLength() - pre_doc_length;
 

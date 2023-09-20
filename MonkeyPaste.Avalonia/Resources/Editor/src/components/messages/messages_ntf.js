@@ -179,7 +179,15 @@ function onQuerySearchRangesChanged_ntf(range_count) {
 }
 
 function onInitComplete_ntf() {
-	sendMessage('notifyInitComplete', '');
+	// output 'MpQuillInitMainResponseMessage'
+	let resp = '';
+	if (isPlainHtmlConverter()) {
+		let msg = {
+			userAgent: navigator.userAgent
+		};
+		resp = toBase64FromJsonObj(msg);
+	}
+	sendMessage('notifyInitComplete', resp);
 }
 
 function onShowCustomColorPicker_ntf(dotnetHexStr,title) {

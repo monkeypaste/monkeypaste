@@ -395,7 +395,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public bool IgnoreAppendedItems { get; set; } = true;
         public bool IsSpellCheckEnabled { get; set; } = true;
-        public bool IsAppendWithDestinationFormattingEnabled { get; set; } = true;
+        public bool IsDataTransferDestinationFormattingEnabled { get; set; } = true;
 
         public bool IgnoreInternalClipboardChanges { get; set; } = true;
         public bool IgnoreWhiteSpaceCopyItems { get; set; } = true;

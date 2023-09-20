@@ -19,10 +19,17 @@
 function resetDebounceDragOver() {
 	globals.LastDebouncedMouseLoc = null;
 	globals.LastDragOverDateTime = null;
+	globals.LastDebounceProceededModKeys = null;
 }
 
 function canDebounceDragOverProceed() {
 	// DEBOUNCE (my own type but word comes from https://css-tricks.com/debouncing-throttling-explained-examples/)
+
+	if (isModKeysDifferent(globals.ModKeys, globals.LastDebounceProceededModKeys)) {
+		// without this keyboard feedback needs mouse movement
+		globals.LastDebounceProceededModKeys = globals.ModKeys;
+		return true;
+	}
 
 	let cur_date_time = Date.now();
 	if (globals.LastDragOverDateTime == null) {

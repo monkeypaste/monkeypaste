@@ -737,9 +737,16 @@ namespace MonkeyPaste.Common {
             }
         }
 
+        public static string GetDefaultUserAgent() {
+            string user_agent_str = $"Mozilla/5.0 (compatible; {MpCommonTools.Services.ThisAppInfo.ThisAppProductName}/{MpCommonTools.Services.ThisAppInfo.ThisAppProductVersion})";
+            return user_agent_str;
+        }
+
         public static void SetDefaultUserAgent(this HttpClient httpClient) {
             //httpClient.DefaultRequestHeaders.Add("User-Agent", System.Guid.NewGuid().ToString());
-            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd($"Mozilla/5.0 (compatible; {MpCommonTools.Services.ThisAppInfo.ThisAppProductName}/{MpCommonTools.Services.ThisAppInfo.ThisAppProductVersion})");
+            //httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(MpCommonTools.Services.ThisAppInfo.ThisAppProductName);
+            string ua = MpCommonTools.Services.UserAgentProvider.UserAgent;
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(ua);
         }
     }
 }

@@ -4495,7 +4495,7 @@ namespace MonkeyPaste.Avalonia {
                 isAppendManualMode = IsAppendManualMode,
                 isAppendPaused = IsAppendPaused,
                 isAppendPreMode = IsAppendPreMode,
-                isAppendWithDestFormattingEnabled = MpAvPrefViewModel.Instance.IsAppendWithDestinationFormattingEnabled,
+                isDataTransferDestFormattingEnabled = MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled,
                 appendData = data
             };
         }

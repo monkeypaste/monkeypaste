@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Startup Set Services 
+        public MpIUserAgentProvider UserAgentProvider { get; set; }
         public MpIShutdownTools ShutdownHelper { get; set; }
         public MpIContentBuilder ContentBuilder { get; set; }
 
@@ -134,6 +135,7 @@ namespace MonkeyPaste.Avalonia {
             await MpAvPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
             MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily = "Nunito";
+            UserAgentProvider = MpAvPlainHtmlConverter.Instance;
             SslInfo = MpAvPrefViewModel.Instance;
             WelcomeSetupInfo = MpAvPrefViewModel.Instance;
             ThisDeviceInfo = MpAvPrefViewModel.Instance;

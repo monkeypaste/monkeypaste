@@ -20,8 +20,12 @@ namespace MonkeyPaste.Avalonia {
         MpIAsyncCollectionObject,
         MpIAsyncComboBoxViewModel,
         MpIPlatformDataObjectTools { //
+        #region Private Variables
+        private static object _oleLock = new object();
+        #endregion
 
         #region Constants
+        const int OLE_WAIT_TIMEOUT_MS = 3_000;
 
         #endregion
 
@@ -513,7 +517,7 @@ namespace MonkeyPaste.Avalonia {
                         active_pi: ref active_pi);
 
             // wait for any other clipboard comm to finish
-            await WaitForBusyAsync();
+            await WaitForBusyAsync($"ole req. isRead: {isRead} isDnd: {isDnd} ignorePlugins: {ignorePlugins}");
 
             // when writing to clipboard disable internal monitor
             bool was_cb_monitoring = Mp.Services.ClipboardMonitor.IsMonitoring;
@@ -614,18 +618,33 @@ namespace MonkeyPaste.Avalonia {
             }
             return avdo;
         }
-        private async Task WaitForBusyAsync() {
-            if (IsBusy) {
-                string req_guid = System.Guid.NewGuid().ToString();
-                _oleReqGuids.Add(req_guid);
-                while (true) {
-                    if (!IsBusy && _oleReqGuids.First() == req_guid) {
-                        IsBusy = true;
-                        _oleReqGuids.Remove(req_guid);
-                        return;
-                    }
-                    await Task.Delay(100);
-                }
+        private async Task WaitForBusyAsync(string debug_label) {
+            //if (IsBusy) {
+            //    string req_guid = System.Guid.NewGuid().ToString();
+            //    _oleReqGuids.Add(req_guid);
+            //    while (true) {
+            //        if (!IsBusy && _oleReqGuids.First() == req_guid) {
+            //            IsBusy = true;
+            //            _oleReqGuids.Remove(req_guid);
+            //            return;
+            //        }
+            //        await Task.Delay(100);
+            //    }
+            //}
+            //IsBusy = true;
+
+            try {
+                await MpFifoAsyncQueue.WaitByConditionAsync(
+                lockObj: _oleLock,
+                time_out_ms: OLE_WAIT_TIMEOUT_MS,
+                waitWhenTrueFunc: () => {
+                    return IsBusy;
+                },
+                debug_label: debug_label);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Add content ex. Probably too hot outside. ", ex);
+                return;
             }
             IsBusy = true;
         }

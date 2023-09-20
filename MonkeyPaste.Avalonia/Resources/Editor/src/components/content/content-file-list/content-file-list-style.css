@@ -13,6 +13,18 @@
     width: 0px;
 }
 
+.file-list-remove-cell, .file-list-remove-cell a {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+.file-list-remove-cell img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
 .file-list-icon {
     max-width: 25px;
     max-height: 25px;

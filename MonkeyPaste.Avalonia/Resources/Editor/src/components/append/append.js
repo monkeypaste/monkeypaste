@@ -312,7 +312,7 @@ function updateAppendModeStateFromHost(req, fromHost = false) {
 	}
 
 	if (fromHost) {
-		globals.isAppendWithDestFormattingEnabled = req.isAppendWithDestFormattingEnabled;
+		globals.isDataTransferDestFormattingEnabled = req.isDataTransferDestFormattingEnabled;
 		// NOTE host blocks until this message is returned to avoid
 		// collisions of (missing) quickly successive changes
 		// ie. switching block/inline then immediatly toggling

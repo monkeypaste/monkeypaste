@@ -76,6 +76,13 @@ function getRectCenter(rect) {
     };
 }
 
+function getPointDistanceToRect(p, rect) {
+    let dx = Math.max(rect.left - p.x, 0, p.x - rect.bottom);
+    let dy = Math.max(rect.top - p.y, 0, p.y - rect.bottom);
+    let dist = Math.sqrt(dx * dx + dy * dy);
+    return dist;
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -191,7 +198,7 @@ function rectUnion(rect_a, rect_b) {
 
 function rectsUnion(rects) {
     let union_rect = null;
-    for (var i = 0; i < rects.length; i++) {
+    for (let i = 0; i < rects.length; i++) {
         if (!union_rect) {
             union_rect = rects[i];
         } else {

@@ -133,11 +133,10 @@ function disableSubSelection_ext() {
 
 function updateModifierKeysFromHost_ext(modKeyMsgStr) {
 	// input MpQuillModifierKeysNotification
-	log('mod key msg from host recvd: ' + modKeyMsgStr);
-
+	//log('mod key msg from host recvd: ' + modKeyMsgStr);
 	let modKeyMsg = toJsonObjFromBase64Str(modKeyMsgStr);
 	modKeyMsg.fromHost = true;
-	updateModKeys(modKeyMsg);
+	updateGlobalModKeys(modKeyMsg);
 	drawOverlay();
 }
 

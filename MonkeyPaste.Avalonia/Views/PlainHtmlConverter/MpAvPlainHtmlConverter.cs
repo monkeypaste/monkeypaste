@@ -13,6 +13,7 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvPlainHtmlConverter :
+        MpIUserAgentProvider,
         MpIAsyncObject,
         MpIAsyncCollectionObject {
         #region Private Variables
@@ -23,6 +24,16 @@ namespace MonkeyPaste.Avalonia {
 
         private static MpAvPlainHtmlConverter _instance;
         public static MpAvPlainHtmlConverter Instance => _instance ?? (_instance = new MpAvPlainHtmlConverter());
+        #endregion
+
+        #region MpIUserAgentProvider Implementation
+
+        private string _userAgent = MpFileIo.GetDefaultUserAgent();
+        public string UserAgent =>
+            ConverterWebView == null ||
+            string.IsNullOrEmpty(ConverterWebView.UserAgent) ?
+                _userAgent :
+                ConverterWebView.UserAgent;
         #endregion
 
         #region MpIAsyncObject Implementation

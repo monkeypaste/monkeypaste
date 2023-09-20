@@ -18,8 +18,7 @@ function getDataTransferDelta(dt) {
     // ignore html for append when dest formating pref is enabled
     const can_transfer_formatted_content =
         !isNullOrEmpty(dt_html_str) &&
-        (!isAnyAppendEnabled() ||
-            !globals.isAppendWithDestFormattingEnabled);
+        !globals.isDataTransferDestFormattingEnabled;
     
     let result_delta = null;
     if (can_transfer_formatted_content) {

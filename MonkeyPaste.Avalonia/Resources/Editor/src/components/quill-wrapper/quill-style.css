@@ -169,3 +169,11 @@
     .ql-snow .ql-Table-Input.ql-picker .ql-picker-label {
         padding: 2px 4px;
     }
+
+.ql-code-block-container {
+    background-color: unset !important;
+    color: unset !important;
+    font-family: unset !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}

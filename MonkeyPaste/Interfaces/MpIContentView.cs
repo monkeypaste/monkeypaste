@@ -23,7 +23,7 @@ namespace MonkeyPaste {
     public interface MpIJsonMessenger {
         void SendMessage(string msgJsonBase64Str);
     }
-    public interface MpIPlainHtmlConverterView : MpIJsonMessenger, MpIHasDevTools, MpIPlatformView {
+    public interface MpIPlainHtmlConverterView : MpIJsonMessenger, MpIHasDevTools, MpIPlatformView, MpIUserAgentProvider {
 
     }
     public interface MpIWebView : MpIHasDataContext {

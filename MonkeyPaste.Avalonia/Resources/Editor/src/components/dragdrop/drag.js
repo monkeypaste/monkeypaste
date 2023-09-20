@@ -99,9 +99,9 @@ function onDragEnd(e) {
     log('drag end');
     updateWindowMouseState(e,'dragEnd');
     globals.CurDragTargetElm = null;
-    globals.IsShiftDown = false;
-    globals.IsCtrlDown = false;
-    globals.IsAltDown = false;
+    globals.ModKeys.IsShiftDown = false;
+    globals.ModKeys.IsCtrlDown = false;
+    globals.ModKeys.IsAltDown = false;
     
     if (globals.WasNoSelectBeforeDragStart) {
         resetSelection();

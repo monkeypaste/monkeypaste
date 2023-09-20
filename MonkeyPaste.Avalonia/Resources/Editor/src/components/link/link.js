@@ -216,7 +216,7 @@ function onLinkPointerUp(e) {
 
     if (link_type == 'delete-item') {
         // only occurs for file item remove
-        excludeRowByAnchorElement(link_elm);
+        removeFileItemByAnchorElement(link_elm);
         return false;
     }
     let link_doc_range = getElementDocRange(link_elm);

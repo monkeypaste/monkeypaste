@@ -150,7 +150,7 @@ function drawDropPreview(ctx, color, thickness = 1.0, line_style = [5, 5]) {
     if (isNullOrUndefined(color)) {
         color = globals.DropMoveLineColor;
     }
-    let drop_block_state = getDropBlockState(globals.DropIdx, globals.WindowMouseLoc, globals.IsShiftDown);
+    let drop_block_state = getDropBlockState(globals.DropIdx, globals.WindowMouseLoc, globals.ModKeys.IsShiftDown);
     let render_lines = getPreviewLines(globals.DropIdx, drop_block_state);
 
     for (var i = 0; i < render_lines.length; i++) {
@@ -282,9 +282,9 @@ function drawAppendNotifierPreview(ctx, color, thickness = 3.0, line_style = [5,
     bottom_pad_rect.bottom -= getEditorHorizontalScrollBarHeight();
     bottom_pad_rect.right -= vert_sb_w;
     bottom_pad_rect = cleanRect(bottom_pad_rect);
-    let pad_color = getElementComputedStyleProp(document.body, '--caretcolor');
-    drawRect(ctx, top_pad_rect, pad_color, 'transparent', 0, 0.5);
-    drawRect(ctx, bottom_pad_rect, pad_color, 'transparent', 0, 0.5);
+    let pad_color = 'silver';
+    drawRect(ctx, top_pad_rect, pad_color, pad_color, 0, 0.5, 0);
+    drawRect(ctx, bottom_pad_rect, pad_color, pad_color, 0, 0.5, 0);
 
     for (var i = 0; i < append_lines.length; i++) {
         let line = append_lines[i];

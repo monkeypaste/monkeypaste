@@ -69,6 +69,11 @@ function isShowingPasteToolbar() {
 // #region Actions
 
 function showPasteToolbar(isPasting = false) {
+    if (isDropping()) {
+        // ensure paste toolbar is hidden during drop
+        hidePasteToolbar();
+        return;
+    }
     var ptt_elm = getPasteToolbarContainerElement();
     const animate_tb = !isShowingPasteToolbar() || parseInt(ptt_elm.style.bottom) < 0; 
 
@@ -182,18 +187,25 @@ function startPasteButtonBusy() {
     getPasteButtonElement().classList.add('disabled');
     getPasteButtonPopupExpanderElement().classList.add('disabled');
     getEditorContainerElement().classList.add('pasting');
+    globals.PasteButtonBusyStartDt = Date.now();
+
     drawOverlay();
-    if (!isRunningInHost()) {
-        delay(1000)
-            .then(() => {
-                endPasteButtonBusy();
-            });
-    }
 }
 function endPasteButtonBusy() {
-    updatePasteButtonInfo(globals.LastRecvdPasteInfoMsgObj);
-    getEditorContainerElement().classList.remove('pasting');
-    drawOverlay();
+    // get ms since paste button went busy
+    let busy_dt = Date.now() - globals.PasteButtonBusyStartDt;
+    // wait 0 or remaining ms compared to min ms (1second)
+    let wait_ms = Math.max(0, globals.MinPasteBusyMs - busy_dt);
+
+    delay(wait_ms)
+        .then(() => {
+            updatePasteButtonInfo(globals.LastRecvdPasteInfoMsgObj);
+            getEditorContainerElement().classList.remove('pasting');
+            drawOverlay();
+            if (!isRunningInHost()) {
+                alert(getText(getDocSelection(true), true));
+            }
+        });
 }
 // #endregion Actions
 
@@ -202,9 +214,11 @@ function endPasteButtonBusy() {
 
 function onPasteButtonClickOrKeyDown(e) {
     startPasteButtonBusy();
+
     if (!isRunningInHost()) {
-        //alert(getText(getDocSelection(true), true));
+        endPasteButtonBusy();
     }
+    
     onPasteRequest_ntf();
 }
 
