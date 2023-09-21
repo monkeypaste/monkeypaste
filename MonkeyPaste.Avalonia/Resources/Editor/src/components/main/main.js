@@ -59,7 +59,7 @@ function initDefaults(defaultsObj) {
 		setElementComputedStyleProp(document.body, '--editableopacity', parseFloat(defaultsObj.bgOpacity));
 	}
 
-	const bg_opacity = 0;// parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
+	const bg_opacity = isRunningOnHost() ? 0:1;// parseFloat(getElementComputedStyleProp(document.body, '--editableopacity'));
 	if(!isNullOrUndefined(defaultsObj.currentTheme)) {
 		globals.EditorTheme = defaultsObj.currentTheme;
 
@@ -83,9 +83,9 @@ function initDefaults(defaultsObj) {
 			getEditorContainerElement().classList.remove('light');
 			getEditorContainerElement().classList.add('dark');
 
-			no_sel_bg = `rgba(0,0,0,${bg_opacity})`;
+			no_sel_bg = `rgba(30,30,30,${bg_opacity})`;
 			sub_sel_bg = `rgba(67,67,67,${bg_opacity})`;
-			edit_bg = `rgba(0,0,0,${bg_opacity})`;
+			edit_bg = `rgba(30,30,30,${bg_opacity})`;
 			edit_op_bg = `black`;
 			def_content_fg = 'white';
 			edit_tb_bg_color = 'dimgray';

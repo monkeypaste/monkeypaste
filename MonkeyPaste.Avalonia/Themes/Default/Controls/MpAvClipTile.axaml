@@ -23,10 +23,24 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <Style Selector="Border#TileBusyOverlay"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="IsVisible"
                 Value="{Binding IsAnyBusy}" />
+    </Style>
+
+    <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.append Border#TileBusyOverlay"
+           x:DataType="local:MpAvClipTileViewModel">
+        <Setter Property="IsVisible">
+            <Setter.Value>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="IsAnyBusy" />
+                    <Binding Path="IsAddingClipboardItem"
+                             Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <!--  TILE BORDER TRANSITIONS  -->

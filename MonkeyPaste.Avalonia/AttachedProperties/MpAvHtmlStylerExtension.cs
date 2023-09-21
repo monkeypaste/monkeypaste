@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
             IsEnabledProperty.Changed.AddClassHandler<HtmlControl>((x, y) => HandleIsEnabledChanged(x, y));
         }
+
         #region Properties
 
         #region HtmlStyleType AvaloniaProperty
@@ -52,7 +53,9 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<double> DefaultFontSizeProperty =
             AvaloniaProperty.RegisterAttached<object, HtmlControl, double>(
                 "DefaultFontSize",
-                MpAvPrefViewModel.Instance.DefaultFontSize);
+                MpAvPrefViewModel.Instance == null ?
+                    MpAvPrefViewModel.BASE_DEFAULT_FONT_SIZE :
+                    MpAvPrefViewModel.Instance.DefaultFontSize);
 
         #endregion
 
@@ -68,7 +71,10 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<string> DefaultColorProperty =
             AvaloniaProperty.RegisterAttached<object, HtmlControl, string>(
                 "DefaultColor",
-                Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString()));
+                Mp.Services == null || Mp.Services.PlatformResource == null ?
+                    "#000000" :
+                    Mp.Services.PlatformResource
+                    .GetResource<string>(MpThemeResourceKey.ThemeInteractiveBgColor.ToString()));
 
         #endregion
 

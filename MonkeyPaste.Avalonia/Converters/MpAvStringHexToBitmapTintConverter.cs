@@ -10,7 +10,28 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringHexToBitmapTintConverter : IValueConverter {
-        private Dictionary<object, Dictionary<string, Bitmap>> _tintCache = new Dictionary<object, Dictionary<string, Bitmap>>();
+        #region Statics
+        static MpAvStringHexToBitmapTintConverter() {
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+        }
+        private static void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ThemeChanged:
+                    RefreshCache();
+                    break;
+            }
+        }
+
+        public static void RefreshCache() {
+            _tintCache.Clear();
+
+            MpAvWindowManager.AllWindows
+                    .SelectMany(x => x.GetVisualDescendants<Image>())
+                    .ForEach(x => x.InvalidateVisual());
+        }
+
+        #endregion
+        private static Dictionary<object, Dictionary<string, Bitmap>> _tintCache = new Dictionary<object, Dictionary<string, Bitmap>>();
 
         private bool IS_DYNAMIC_TINT_ENABLED = true;
 
@@ -120,12 +141,5 @@ namespace MonkeyPaste.Avalonia {
             throw new NotSupportedException();
         }
 
-        public void RefreshCache() {
-            _tintCache.Clear();
-
-            MpAvWindowManager.AllWindows
-                    .SelectMany(x => x.GetVisualDescendants<Image>())
-                    .ForEach(x => x.InvalidateVisual());
-        }
     }
 }

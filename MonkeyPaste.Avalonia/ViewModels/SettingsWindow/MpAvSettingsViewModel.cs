@@ -255,10 +255,6 @@ namespace MonkeyPaste.Avalonia {
                                             label = "Theme Style",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
-                                                    isDefault = MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Default,
-                                                    value = MpThemeType.Default.ToString()
-                                                },
-                                                new MpPluginParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.ThemeType == MpThemeType.Light,
                                                     value = MpThemeType.Light.ToString()
                                                 },
@@ -1232,8 +1228,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (MpAvThemeViewModel.Instance.IsThemePref(e.PropertyName)) {
-                MpAvThemeViewModel.Instance.SyncThemePrefs(true);
-                MpAvStringHexToBitmapTintConverter.Instance.RefreshCache();
+                MpAvThemeViewModel.Instance.UpdateThemeResources(true);
             }
 
             if (_reinitContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {

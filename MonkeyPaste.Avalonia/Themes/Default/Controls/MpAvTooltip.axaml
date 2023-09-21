@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
         xmlns:local="using:MonkeyPaste.Avalonia">
 
     <!--  DEFAULT  -->
@@ -39,6 +40,7 @@
     </Style>
 
     <!--  HINTS  -->
+
     <!--  INFO  -->
     <Style Selector="local|MpAvToolTipInfoHintView:not(.warning):not(.error) Grid :is(Control).hint:not(.info)">
         <Setter Property="IsVisible"
@@ -56,5 +58,4 @@
         <Setter Property="IsVisible"
                 Value="False" />
     </Style>
-
 </Styles>

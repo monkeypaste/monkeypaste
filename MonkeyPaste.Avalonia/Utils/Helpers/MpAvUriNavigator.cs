@@ -55,10 +55,6 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void NavigateToPath(string path, bool useFileBrowser = true) {
-            if (path.IsFile() && useFileBrowser) {
-                path = path.FindParentDirectory();
-            }
-            path = path.Contains(" ") ? $"\"{path}\"" : path;
 
             if (OperatingSystem.IsWindows()) {
                 //using (var myProcess = new Process()) {
@@ -72,8 +68,22 @@ namespace MonkeyPaste.Avalonia {
                 //    myProcess.StartInfo.ArgumentList.Add(path);
                 //    myProcess.Start();
                 //}
-                Process.Start("explorer.exe", path);
+                if (useFileBrowser) {
+                    string args = string.Empty;
+                    if (path.IsFile()) {
+                        args = "/select, \"" + path + "\"";
+                    } else {
+                        // if its not a dir it'll just open default...
+                        args = "/open, \"" + path + "\"";
+                    }
+                    Process.Start("explorer.exe", args);
+                    return;
+                }
+                Process.Start(path);
             } else {
+                if (path.IsFile() && useFileBrowser) {
+                    path = path.FindParentDirectory();
+                }
                 using (var myProcess = new Process()) {
                     myProcess.StartInfo.UseShellExecute = true;
                     myProcess.StartInfo.FileName = path;
@@ -126,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
                     MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
                 }
                 NavigateToUri(uri);
-                await Task.Delay(500);
+                await Task.Delay(2_000);
                 MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
             });
 

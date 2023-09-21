@@ -22,7 +22,7 @@
     }
 
 body.no-host .tooltip-hint-container::before {
-        transform: translate(6px, -2px);
+        /*transform: translate(6px, -2px);*/
 }
 
 

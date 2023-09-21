@@ -88,11 +88,11 @@ function getAppendButtonLookup2() {
 			elm: getPasteAppendToggleInlineButtonElement(),
 			enabledInfo: {
 				svgKey: 'text-insert-caret-outline',
-				ttText: `${globals.AppendInlineModeLabel} ${getShortcutEncStr(globals.APD_INSERT_SCT_IDX)}`
+				ttText: `${globals.AppendInlineModeLabel} ${getShortcutEncStr(globals.APD_LINE_SCT_IDX)}`
 			},
 			disabledInfo: {
 				svgKey: 'paragraph',
-				ttText: `${globals.AppendLineModeLabel} ${getShortcutEncStr(globals.APD_LINE_SCT_IDX)}`
+				ttText: `${globals.AppendLineModeLabel} ${getShortcutEncStr(globals.APD_INSERT_SCT_IDX)}`
 			},
 			handler: function (e) {
 				onPasteAppendOptButtonClick(e, 'insert');
@@ -136,11 +136,11 @@ function getAppendButtonLookup2() {
 			elm: getPasteAppendPauseAppendButtonElement(),
 			enabledInfo: {
 				svgKey: 'pause',
-				ttText: `${globals.AppendResumeLabel}`
+				ttText: `${globals.AppendResumeLabel} ${getShortcutEncStr(globals.APD_PAUSED_SCT_IDX)}`
 			},
 			disabledInfo: {
 				svgKey: 'pause',
-				ttText: `${globals.AppendPauseLabel}`
+				ttText: `${globals.AppendPauseLabel} ${getShortcutEncStr(globals.APD_PAUSED_SCT_IDX)}`
 			},
 			handler: function (e) {
 				onPasteAppendOptButtonClick(e, 'paused');

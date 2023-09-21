@@ -202,12 +202,12 @@ namespace MonkeyPaste.Avalonia {
             GlobalBgOpacity = GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity_mobile); ;
             DefaultGridSplitterFixedDimensionLength = GetThemeValue<double>(MpThemeResourceKey.DefaultGridSplitterFixedDimensionLength_mobile);
 #endif
-            SyncThemePrefs();
+            UpdateThemeResources();
         }
         #endregion
 
         #region Public Methods
-        public void SyncThemePrefs(bool showWait = false) {
+        public void UpdateThemeResources(bool showWait = false) {
             _themePrefPropNames.ForEach(x => SyncThemePref(x));
 
             if (showWait) {
@@ -251,6 +251,8 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
+
 
         private void SyncThemePref(string prefName) {
             if (!this.HasProperty(prefName)) {
@@ -365,13 +367,13 @@ namespace MonkeyPaste.Avalonia {
             prev = Math.Max(0.5d, prev);
             hex = MpColorHelpers.ColorFromHsv(preh, pres, prev).ToHex(true);
 
-            if (tt != MpThemeType.Default) {
+            if (tt == MpThemeType.Dark) {
                 hex.ToPortableColor().ColorToHsl(out double th, out double ts, out double tl);
-                if (tt == MpThemeType.Dark) {
-                    tl = Math.Max(25d / 100d, tl - (15d / 100d));
-                } else {
-                    tl = Math.Min(75d / 100d, tl + (10d / 100d));
-                }
+                //if (tt == MpThemeType.Dark) {
+                tl = Math.Max(25d / 100d, tl - (15d / 100d));
+                //} else {
+                //    tl = Math.Min(75d / 100d, tl + (10d / 100d));
+                //}
                 hex = MpColorHelpers.ColorFromHsl(th, ts, tl).ToHex(true);
             }
             hex.ToPortableColor().ColorToHsv(out double h, out double s, out double v);
@@ -415,7 +417,7 @@ namespace MonkeyPaste.Avalonia {
             string dark_gray = MpSystemColors.dimgray.RemoveHexAlpha(); //MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.3d)).ToHex(true);
             string med_gray = MpSystemColors.gray.RemoveHexAlpha(); //MpColorHelpers.ColorFromHsv(h, 0.05d, Math.Max(0, v - 0.1d)).ToHex(true);
             string light_gray = MpSystemColors.lightgray.RemoveHexAlpha(); //MpColorHelpers.ColorFromHsv(h, 0.1d, Math.Max(0, v - 0.1d)).ToHex(true);
-            if (tt == MpThemeType.Default || tt == MpThemeType.Light) {
+            if (tt == MpThemeType.Light) {
                 palette.AddRange(new[] { dark_gray, med_gray, light_gray });
             } else {
                 palette.AddRange(new[] { light_gray, med_gray, dark_gray });
@@ -499,6 +501,9 @@ namespace MonkeyPaste.Avalonia {
             SetThemeValue(MpThemeResourceKey.ThemeCompliment5LighterColor, colors[26]);
 
             var test = palette.Where(x => x.ToLower() == "#ff252226" || x.ToLower() == "#252226").Select(x => palette.IndexOf(x));
+
+
+            MpMessenger.SendGlobal(MpMessageType.ThemeChanged);
         }
 
         #endregion

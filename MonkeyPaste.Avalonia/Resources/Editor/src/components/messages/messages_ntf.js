@@ -230,8 +230,8 @@ function onSetClipboardRequested_ntf() {
 function onDataTransferCompleted_ntf(changeDelta, input_dataObj, transfer_label) {
 	// output 'MpQuillDataTransferCompletedNotification'
 	let msg = {
-		changeDeltaJsonStr: changeDelta ? toBase64FromJsonObj(changeDelta) : null,
-		sourceDataItemsJsonStr: input_dataObj ? toBase64FromJsonObj(input_dataObj) : null,
+		changeDeltaJsonStr: changeDelta,
+		sourceDataItemsJsonStr: input_dataObj,
 		contentChangedMessageFragment: toBase64FromJsonObj(getContentAsMessage()),
 		transferLabel: transfer_label
 	};

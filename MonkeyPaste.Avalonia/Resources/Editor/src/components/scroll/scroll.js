@@ -186,8 +186,8 @@ function unwrapContentScroll() {
     let adjusted_editor_height = actual_content_height;// Math.max(actual_content_height, cnt_rect.height);
 
     getEditorContainerElement().classList.remove('size-check');
-    editor_elm.style.width = `${adjusted_editor_width}px`;
-    editor_elm.style.height = `${adjusted_editor_height}px`;
+    editor_elm.style.minWidth = `${adjusted_editor_width}px`;
+    editor_elm.style.minHeight = `${adjusted_editor_height}px`;
     updateAllElements();
 }
 function wrapContentScroll() {
@@ -197,8 +197,8 @@ function wrapContentScroll() {
         return;
     }
     let editor_elm = getEditorElement();
-    editor_elm.style.width = '';
-    editor_elm.style.height = '';
+    editor_elm.style.minWidth = '';
+    editor_elm.style.minHeight = '';
     updateAllElements();
 }
 function scrollToHome() {

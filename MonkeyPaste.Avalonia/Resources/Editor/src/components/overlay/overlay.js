@@ -252,7 +252,7 @@ function drawCaret(ctx, sel, caret_width = 1.0, caret_opacity = 1) {
     drawLine(ctx, caret_line, caret_color, caret_width);
 }
 
-function drawAppendNotifierPreview(ctx, color, thickness = 3.0, line_style = [5, 5]) {
+function drawAppendNotifierPreview(ctx, color, thickness = 1.5, line_style = [5, 5]) {
     if (isAppendManualMode()) {
         color = globals.DropCopyLineColor;
     }
@@ -269,18 +269,14 @@ function drawAppendNotifierPreview(ctx, color, thickness = 3.0, line_style = [5,
     }
 
     let editor_rect = cleanRect(getEditorElement().getBoundingClientRect());
-    let cont_rect = getEditorContainerRect();
-    let vert_sb_w = getEditorVerticalScrollBarWidth();
+    let cont_rect = getEditorContainerRect(false);
     
     let top_pad_rect = cleanRect(cont_rect);
     top_pad_rect.bottom = editor_rect.top;
-    top_pad_rect.right -= vert_sb_w;
     top_pad_rect = cleanRect(top_pad_rect);
 
     let bottom_pad_rect = cleanRect(cont_rect);
-    bottom_pad_rect.top = editor_rect.bottom - getEditorHorizontalScrollBarHeight();
-    bottom_pad_rect.bottom -= getEditorHorizontalScrollBarHeight();
-    bottom_pad_rect.right -= vert_sb_w;
+    bottom_pad_rect.top = editor_rect.bottom;
     bottom_pad_rect = cleanRect(bottom_pad_rect);
     let pad_color = 'silver';
     drawRect(ctx, top_pad_rect, pad_color, pad_color, 0, 0.5, 0);

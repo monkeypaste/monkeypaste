@@ -1687,7 +1687,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                     } else {
                         LastDeselectedDateTime = DateTime.Now;
-                        if (!IsWindowOpen && IsContentReadOnly && IsSubSelectionEnabled) {
+                        if (!IsWindowOpen && IsContentReadOnly && IsSubSelectionEnabled && (Parent == null || !Parent.IsUnpinning)) {
                             DisableSubSelectionCommand.Execute(null);
                         }
                     }
@@ -1765,7 +1765,7 @@ namespace MonkeyPaste.Avalonia {
 
                     OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
                     OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
-                    IsSubSelectionEnabled = !IsContentReadOnly;
+                    //IsSubSelectionEnabled = !IsContentReadOnly;
                     OnPropertyChanged(nameof(IsSubSelectionEnabled));
                     OnPropertyChanged(nameof(MinWidth));
 
@@ -2224,12 +2224,12 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPersistentClipTilePropertiesHelper.RemoveUniqueHeight_ById(CopyItemId, QueryOffsetIdx);
                 BoundHeight = MinHeight;
             }
-
+            if (IsAnyPlaceholder) {
+                return;
+            }
             IsTitleReadOnly = !MpAvPersistentClipTilePropertiesHelper.IsPersistentTileTitleEditable_ById(CopyItemId, QueryOffsetIdx);
 
-            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(CopyItemId, QueryOffsetIdx) &&
-                IsResizerEnabled) {
-                // NOTE no idea why this checks IsResizerEnabled but I think its important...
+            if (MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(CopyItemId, QueryOffsetIdx)) {
                 IsContentReadOnly = false;
             } else {
                 MpAvPersistentClipTilePropertiesHelper.RemovePersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);

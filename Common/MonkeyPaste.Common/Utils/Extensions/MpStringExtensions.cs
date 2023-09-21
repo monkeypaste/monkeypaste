@@ -794,7 +794,17 @@ namespace MonkeyPaste.Common {
             }
             return text;
         }
-
+        public static bool IsStringHtmlDocument(this string text) {
+            if (text == null) {
+                return false;
+            }
+            return
+                text.StartsWith("<html>", StringComparison.InvariantCultureIgnoreCase) &&
+                text.EndsWith("</html>", StringComparison.InvariantCultureIgnoreCase);
+        }
+        public static string ToHtmlDocumentFromTextOrPartialHtml(this string text) {
+            return $"<html><head></head><body>{text}</body></html>";
+        }
         public static bool IsStringMayContainEnvVars(this string text) {
             string envTokenRegExStr = @"%\w*%{1}";
             return Regex.IsMatch(text, envTokenRegExStr);

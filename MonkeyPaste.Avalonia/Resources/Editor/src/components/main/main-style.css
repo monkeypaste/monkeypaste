@@ -40,6 +40,7 @@ body {
     --toolbartransitionms: 400ms;
     --commonborderradius: 5px;
     --appendpad: 15px;
+    --maxfontsize: 98px;
     margin: 0px;
     padding: 0px;
     font-family: var(--defaultFontFamily);
@@ -54,8 +55,8 @@ body {
     overflow: auto;
 }
 .unwrap.size-check > .ql-editor {
-        width: 808080px;
-        height: 808080px !important;
+        min-width: 808080px;
+        min-height: 808080px !important;
 }
 
 ::selection {

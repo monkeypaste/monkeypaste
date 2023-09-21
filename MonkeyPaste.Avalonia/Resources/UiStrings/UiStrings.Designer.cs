@@ -367,6 +367,73 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;template-contact tooltiptext&quot;&gt;
+        ///    &lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;
+        ///    &lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        public static string EditorTemplateContactHint {
+            get {
+                return ResourceManager.GetString("EditorTemplateContactHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;template-datetime-custom tooltiptext left-text-align&quot;&gt;
+        ///    &lt;p&gt;yy = short year&lt;/p&gt;
+        ///    &lt;p&gt;yyyy = long year&lt;/p&gt;
+        ///    &lt;p&gt;M = month (1-12)&lt;/p&gt;
+        ///    &lt;p&gt;MM = month (01-12)&lt;/p&gt;
+        ///    &lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;
+        ///    &lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;
+        ///    &lt;p&gt;d = day (1 - 31)&lt;/p&gt;
+        ///    &lt;p&gt;dd = day (01 - 31)&lt;/p&gt;
+        ///    &lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;
+        ///    &lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;
+        ///    &lt;p&gt;D - [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string EditorTemplateDateTimeCustomHint {
+            get {
+                return ResourceManager.GetString("EditorTemplateDateTimeCustomHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;template-datetime tooltiptext&quot;&gt;
+        ///    &lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
+        ///    &lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        public static string EditorTemplateDateTimeHint {
+            get {
+                return ResourceManager.GetString("EditorTemplateDateTimeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;template-dynamic tooltiptext&quot;&gt;
+        ///    &lt;p&gt;All occurances of this template will be set to the value you provide here&lt;/p&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        public static string EditorTemplateDynamicHint {
+            get {
+                return ResourceManager.GetString("EditorTemplateDynamicHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;div class=&quot;template-static tooltiptext&quot;&gt;
+        ///    &lt;p&gt;Static templates are shared across the whole application. &lt;/p&gt;
+        ///    &lt;p&gt;So the value you have here will always be used when pasting.&lt;/p&gt;
+        ///&lt;/div&gt;.
+        /// </summary>
+        public static string EditorTemplateStaticHint {
+            get {
+                return ResourceManager.GetString("EditorTemplateStaticHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All interop shortcuts (those useful outside of MonkeyPaste) are enabled by default. Pressing Caps Lock (without any other key) will show or hide the interface at anytime (not currently supported on Linux).
         /// </summary>
         public static string GestureProfileGlobal {

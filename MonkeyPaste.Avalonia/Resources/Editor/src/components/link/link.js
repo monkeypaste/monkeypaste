@@ -21,16 +21,13 @@ function initLinkClassAttributes() {
 
 
 function loadLinkHandlers() {
-    //if (globals.ContentItemType == 'FileList') {
-    //    globals.RequiredNavigateUriModKeys = ['Alt'];
-    //} else {
-    //    globals.RequiredNavigateUriModKeys = [];
-    //}
-
     let a_elms = Array.from(getEditorElement().querySelectorAll('a'));
     for (var i = 0; i < a_elms.length; i++) {
         let link_elm = a_elms[i];
-        //link_elm.addEventListener('click', onLinkClick, true);
+
+        link_elm.addEventListener('click', function (event) {
+            event.preventDefault();
+        }, true);
         link_elm.addEventListener('pointerup', onLinkPointerUp, true);
         link_elm.addEventListener('pointerenter', onLinkPointerEnter, true);
         link_elm.addEventListener('pointerleave', onLinkPointerLeave, true);
@@ -76,18 +73,20 @@ function getLinkToolbarPopupTextInputElement() {
     return Array.from(link_tooltip_container_elm.querySelectorAll('input'))[0];
 }
 
-function getRequiredModKeyText() {
-    let mod_key_text = '';
-    if (globals.RequiredNavigateUriModKeys.length > 0) {
-        mod_key_text = `[+ <strong>${globals.RequiredNavigateUriModKeys.join(' ')}</strong>]`;
-    }
-    return mod_key_text;
+function getLinkMouseGestureHtml() {
+    let gesture_parts = [
+        'Click',
+        ...globals.RequiredNavigateUriModKeys
+    ];
+
+    let result = `<em><strong>${gesture_parts.join('+')}</strong></em> `;
+    return result;
 }
 
 function getLinkTooltipText(a_elm, includeContext = false) {
     // NOTE omitting context to avoid long tooltips cause still haven't 
     // found solid layout to prevent overlap/overflow issues..
-    let result = `Click ${getRequiredModKeyText()} to `;
+    let result = getLinkMouseGestureHtml();
     if (a_elm.classList.contains('link-type-hexcolor')) {
         if (includeContext) {
             result += `edit '<em>${a_elm.innerHTML}</em>'...`;
@@ -105,7 +104,7 @@ function getLinkTooltipText(a_elm, includeContext = false) {
         if (includeContext) {
             result += `goto '<em>${a_elm.getAttribute('href')}</em>'...`;
         } else {
-            result += 'follow...'
+            result += 'to follow...'
         }
     }
     return result;
@@ -222,7 +221,7 @@ function onLinkPointerUp(e) {
     let link_doc_range = getElementDocRange(link_elm);
 
     onNavigateUriRequested_ntf(e.currentTarget.href, link_type, link_doc_range.index, e.currentTarget.innerText, down_mod_keys);
-    return false;
+    return true;
 }
 
 function onLinkToolbarItemClick(e) {

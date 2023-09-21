@@ -72,6 +72,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+
+        public const double BASE_DEFAULT_FONT_SIZE = 12;
+
+        #endregion
         #region Statics
 
         [JsonIgnore]
@@ -335,7 +340,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string DefaultReadOnlyFontFamily { get; set; } = "Nunito";
         public string DefaultEditableFontFamily { get; set; } = "Arial";
-        public int DefaultFontSize { get; set; } = 12;
+        public double DefaultFontSize { get; set; } = BASE_DEFAULT_FONT_SIZE;
 
         public bool ShowHints { get; set; } = true;
         public double GlobalBgOpacity { get; set; }

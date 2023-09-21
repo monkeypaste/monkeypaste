@@ -17,7 +17,7 @@
     }
 
     .template-blot:hover {
-        border-color: var(--pastetoolbarbuttoncolor);
+        border-color: var(--hovercolor);
     }
 
 /*

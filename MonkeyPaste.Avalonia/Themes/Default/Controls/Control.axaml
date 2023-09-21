@@ -15,6 +15,8 @@
     <Style Selector=":is(Control)">
         <Setter Property="ToolTip.Placement"
                 Value="Pointer" />
+        <Setter Property="ToolTip.ShowDelay"
+                Value="1000" />
     </Style>
 
     <Style Selector=":is(Control).square">

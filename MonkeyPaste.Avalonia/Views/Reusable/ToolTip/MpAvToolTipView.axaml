@@ -56,14 +56,6 @@
             Classes.html="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
         <Grid>
             <DockPanel x:Name="ToolTipTextContainer">
-                <!--<TextBlock x:Name="InputGestureTextBlock"
-                           DockPanel.Dock="Right"
-                           Margin="5,0,0,0"
-                           FontSize="14"
-                           FontStyle="Italic"
-                           Foreground="{DynamicResource ThemeGrayAccent3Color}"
-                           Text="{Binding InputGestureText, ElementName=ToolTipView, StringFormat='({0})'}" />-->
-
                 <local:MpAvShortcutLabel Classes="menuItemGesture"
                                          KeyGesture="{Binding InputGestureText, ElementName=ToolTipView}"
                                          DockPanel.Dock="Right"
@@ -83,7 +75,7 @@
                           local:MpAvHtmlStylerExtension.IsEnabled="True"
                           local:MpAvHtmlStylerExtension.DefaultFontSize="14"
                           IsVisible="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                          Text="{Binding ToolTipHtml, ElementName=ToolTipView}" />
+                          Text="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvStringTextToHtmlDocTextConverter.Instance}}" />
         </Grid>
     </Border>
 </local:MpAvUserControl>

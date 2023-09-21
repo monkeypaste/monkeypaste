@@ -164,6 +164,7 @@
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
+                          Classes.append="{Binding IsAppendNotifier}"
                           Classes.trashOrDeleting="{Binding IsTrashOrDeleting}"
                           Classes.popout="{Binding IsWindowOpen}"
                           Classes.transOpen="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen}"

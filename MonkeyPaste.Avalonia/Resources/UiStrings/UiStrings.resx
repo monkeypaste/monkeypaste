@@ -459,4 +459,51 @@
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
     <value>Load up when this user account is logged in, not for other users.</value>
   </data>
+  <data name="EditorTemplateContactHint" xml:space="preserve">
+    <value>&lt;div class="template-contact tooltiptext"&gt;
+    &lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;
+    &lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;
+&lt;/div&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
+    <value>&lt;div class="template-datetime-custom tooltiptext left-text-align"&gt;
+    &lt;p&gt;yy = short year&lt;/p&gt;
+    &lt;p&gt;yyyy = long year&lt;/p&gt;
+    &lt;p&gt;M = month (1-12)&lt;/p&gt;
+    &lt;p&gt;MM = month (01-12)&lt;/p&gt;
+    &lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;
+    &lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;
+    &lt;p&gt;d = day (1 - 31)&lt;/p&gt;
+    &lt;p&gt;dd = day (01 - 31)&lt;/p&gt;
+    &lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;
+    &lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;
+    &lt;p&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;/p&gt;
+    &lt;p&gt;h = hour in am/pm (0-12)&lt;/p&gt;
+    &lt;p&gt;hh = hour in am/pm (00-12)&lt;/p&gt;
+    &lt;p&gt;H = hour in day (0-23)&lt;/p&gt;
+    &lt;p&gt;HH = hour in day (00-23)&lt;/p&gt;
+    &lt;p&gt;mm = minute&lt;/p&gt;
+    &lt;p&gt;ss = second&lt;/p&gt;
+    &lt;p&gt;SSS = milliseconds&lt;/p&gt;
+    &lt;p&gt;a = AM/PM marker&lt;/p&gt;
+    &lt;p&gt;p = a.m./p.m. marker&lt;/p&gt;
+&lt;/div&gt;</value>
+  </data>
+  <data name="EditorTemplateDateTimeHint" xml:space="preserve">
+    <value>&lt;div class="template-datetime tooltiptext"&gt;
+    &lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
+    &lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;
+&lt;/div&gt;</value>
+  </data>
+  <data name="EditorTemplateDynamicHint" xml:space="preserve">
+    <value>&lt;div class="template-dynamic tooltiptext"&gt;
+    &lt;p&gt;All occurances of this template will be set to the value you provide here&lt;/p&gt;
+&lt;/div&gt;</value>
+  </data>
+  <data name="EditorTemplateStaticHint" xml:space="preserve">
+    <value>&lt;div class="template-static tooltiptext"&gt;
+    &lt;p&gt;Static templates are shared across the whole application. &lt;/p&gt;
+    &lt;p&gt;So the value you have here will always be used when pasting.&lt;/p&gt;
+&lt;/div&gt;</value>
+  </data>
 </root>

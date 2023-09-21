@@ -406,9 +406,9 @@ namespace MonkeyPaste.Avalonia {
         public double QueryTrayTotalTileHeight { get; private set; }
 
         public double QueryTrayTotalWidth =>
-            Math.Max(0, Math.Max(ObservedQueryTrayScreenWidth, QueryTrayTotalTileWidth));
+            Math.Max(0, Math.Max(ObservedQueryTrayScreenWidth, QueryTrayTotalTileWidth + QueryTrayVerticalScrollBarWidth));
         public double QueryTrayTotalHeight =>
-            Math.Max(0, Math.Max(ObservedQueryTrayScreenHeight, QueryTrayTotalTileHeight));
+            Math.Max(0, Math.Max(ObservedQueryTrayScreenHeight, QueryTrayTotalTileHeight + QueryTrayHorizontalScrollBarHeight));
 
 
         public double QueryTrayFixedDimensionLength =>
@@ -1117,6 +1117,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsUnpinning { get; set; }
         public int PinOpCopyItemId { get; set; } = -1;
 
         public bool IsAutoEditEnabled =>
@@ -1202,6 +1203,7 @@ namespace MonkeyPaste.Avalonia {
                 //} else {
                 if (Mp.Services.PlatformInfo.IsDesktop) {
                     return 20;
+                    //return LayoutType == MpClipTrayLayoutType.Grid ? 40 : 20;
                 }
                 return 5;
                 //}
@@ -3348,6 +3350,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> UnpinTileCommand => new MpAsyncCommand<object>(
              async (args) => {
+
                  MpAvClipTileViewModel pin_placeholder_ctvm = null;
                  MpAvClipTileViewModel unpinned_ctvm = null;
 
@@ -3368,7 +3371,7 @@ namespace MonkeyPaste.Avalonia {
                      MpDebug.Break($"No pin tile found for placeholder ciid {pin_placeholder_ctvm.PinPlaceholderCopyItemId} at queryIdx {pin_placeholder_ctvm.QueryOffsetIdx}");
                      return;
                  }
-
+                 unpinned_ctvm.StoreSelectionStateCommand.Execute(null);
                  await unpinned_ctvm.PersistContentStateCommand.ExecuteAsync(null);
 
                  int unpinned_ciid = unpinned_ctvm.CopyItemId;
@@ -3386,8 +3389,10 @@ namespace MonkeyPaste.Avalonia {
                          return;
                      }
                  }
+                 IsUnpinning = true;
 
                  PinnedItems.Remove(unpinned_ctvm);
+                 unpinned_ctvm.IsContentReadOnly = true;
 
                  if (!IsAnyTilePinned) {
                      ObservedPinTrayScreenWidth = 0;
@@ -3409,6 +3414,7 @@ namespace MonkeyPaste.Avalonia {
                  } else {
                      // unpinned tile is part of current query page, load into pin placeholder
                      int pin_placeholder_query_idx = pin_placeholder_ctvm.QueryOffsetIdx;
+
                      await pin_placeholder_ctvm.InitializeAsync(null, pin_placeholder_query_idx);
 
                      await pin_placeholder_ctvm.InitializeAsync(
@@ -3448,7 +3454,7 @@ namespace MonkeyPaste.Avalonia {
                  } else {
                      to_select_ctvm.IsSelected = true;
                  }
-
+                 IsUnpinning = false;
                  UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync(this);
              },
             (args) => {

@@ -106,11 +106,11 @@ function getCaretLine(forceDocIdx = -1) {
 	if (caret_line.x1 < 0) {
 		caret_line.x1 = left_clamp;
 		caret_line.x2 = left_clamp;
-		log('caret_line was < editor_rect.left: ' + left_clamp);
+		//log('caret_line was < editor_rect.left: ' + left_clamp);
 	} else if (caret_line.x1 > right_clamp) {
 		caret_line.x1 = right_clamp;
 		caret_line.x2 = right_clamp;
-		log('caret_line was > editor_rect.right: ' + right_clamp);
+		//log('caret_line was > editor_rect.right: ' + right_clamp);
 	}
 	if (caret_line.x1 < 0 || caret_line.x2 < 0) {
 		caret_line.x1 = 0;

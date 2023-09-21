@@ -19,6 +19,8 @@ using System.Threading.Tasks;
 using System.Web;
 using AvToolTip = Avalonia.Controls.ToolTip;
 using Avalonia.Layout;
+using Avalonia.Platform;
+
 #if DESKTOP
 
 
@@ -1762,6 +1764,33 @@ namespace MonkeyPaste.Avalonia {
         private void Resize(double nw, double nh) {
             // NOTE trying to isolate this cause persistent size gets lost
             // keeping animation smooth so waiting till end to make sure its set
+
+            if (BindingContext.IsWindowOpen &&
+                TopLevel.GetTopLevel(this) is MpAvWindow w &&
+                w.Screens.ScreenFromPoint(w.Position) is Screen ws) {
+                // for pop out keep it on its screen
+                double pd = this.VisualPixelDensity();
+                var nss = new MpSize(nw, nh).ToAvPixelSize(pd);
+                var nsr = new PixelRect(w.Position, nss);
+                var wr = ws.WorkingArea;
+                int nx = w.Position.X;
+                int ny = w.Position.Y;
+                if (!wr.Contains(nsr)) {
+                    if (nsr.X < wr.X) {
+                        nx = wr.X;
+                    }
+                    if (nsr.Right > wr.Right) {
+                        nx = wr.Right - nsr.Width;
+                    }
+                    if (nsr.Y < wr.Y) {
+                        ny = wr.Y;
+                    }
+                    if (nsr.Bottom > wr.Bottom) {
+                        ny = wr.Bottom - nsr.Height;
+                    }
+                    w.Position = new PixelPoint(nx, ny);
+                }
+            }
             MpAvResizeExtension.ResizeAnimated(this, nw, nh, () => {
                 if (BindingContext == null) {
                     return;

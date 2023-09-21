@@ -67,11 +67,9 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("Warning cannot set active process to IntPtr.Zero, ignoring");
                 return IntPtr.Zero;
             }
-            //if (!MpAvMainView.Instance.IsVisible) {
-            //    MpConsole.WriteLine("Warning cannot set active process mw is not visible");
-            //    return IntPtr.Zero;
-            //}
-            IntPtr lastActive = WinApi.SetActiveWindow(ThisAppHandle);
+            MpDebug.Assert(MpAvWindowManager.IsAnyActive, $"Must be active window to set fg window");
+            //IntPtr lastActive = WinApi.SetActiveWindow(ThisAppHandle);
+            IntPtr lastActive = GetActiveProcessHandle(); ;
             bool success = WinApi.SetForegroundWindow(handle);
             MpConsole.WriteLine($"SetForegroundWindow to '{handle}' from '{lastActive}' was {(success ? "SUCCESSFUL" : "FAILED")}");
             if (success) {

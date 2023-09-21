@@ -196,15 +196,15 @@ function performDataTransferOnContent(
     }
     let host_dt_obj = convertDataTransferToHostDataItems(dt);
     onDataTransferCompleted_ntf(
-        globals.LastTextChangedDelta,
-        host_dt_obj,
+        toJsonObjFromBase64Str(globals.LastTextChangedDelta),
+        toJsonObjFromBase64Str(host_dt_obj),
         transferLabel);
 
     // SCROLL TO DEST
 
     updateQuill();
     scrollDocRangeIntoView(dt_range);
-
+    drawOverlay();
 
     // RESET STATE
 

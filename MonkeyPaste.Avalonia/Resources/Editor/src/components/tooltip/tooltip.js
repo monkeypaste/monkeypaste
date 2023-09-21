@@ -5,31 +5,16 @@ function initTooltip() {
 	const hover_tt_elms = getTooltipHoverElements();
 	for (var i = 0; i < hover_tt_elms.length; i++) {
 		const htt_elm = hover_tt_elms[i];
-		var tt_enter_mp = null;
 		htt_elm.addEventListener('pointerenter', (e) => {
-			if (tt_enter_mp) {
-				// already showing it
-				//return;
-			}
-			log('tt show' + htt_elm.id);
 			showTooltipOverlay(e.currentTarget);
-			tt_enter_mp = globals.WindowMouseLoc;
 
 		});
 		htt_elm.addEventListener('pointerleave', (e) => {
-			if (!tt_enter_mp) {
-				//return;
-			}
-			const enter_dist = dist(tt_enter_mp, globals.WindowMouseLoc);
-			if (enter_dist < 15) {
-				//return;
-			}
-			log('tt hide' + htt_elm.id + ' exit dist: ' + enter_dist);
-			tt_enter_mp = null;
 			hideTooltipOverlay();
 		});
 	}
 
+	// NOTE tooltip toolbar only used by templates, probably should send to host :(
 	const toolbar_tt_elms = getTooltipToolbarlements();
 	for (var i = 0; i < toolbar_tt_elms.length; i++) {
 		const ttt_elm = toolbar_tt_elms[i];

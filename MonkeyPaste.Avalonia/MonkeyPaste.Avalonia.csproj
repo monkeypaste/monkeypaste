@@ -1639,8 +1639,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\cefnet11\CefNet\CefNet.Avalonia\CefNet.Avalonia.csproj" />
-    <ProjectReference Include="..\cefnet11\CefNet\CefNet\CefNet.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Avalonia\MonkeyPaste.Common.Avalonia.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\Common\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />

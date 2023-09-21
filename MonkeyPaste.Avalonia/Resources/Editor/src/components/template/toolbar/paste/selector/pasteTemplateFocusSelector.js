@@ -165,7 +165,7 @@ function createTemplateSelectorItem(t, sel, ftguid, onClick) {
         item_elm.classList.add('disabled');
     }
     if (is_unavailable) {
-        item_elm.classList.add('unavailable-text');
+        label_elm.classList.add('unavailable-text');
     }
     if (is_selected) {
         item_elm.classList.add('selected-paste-option');

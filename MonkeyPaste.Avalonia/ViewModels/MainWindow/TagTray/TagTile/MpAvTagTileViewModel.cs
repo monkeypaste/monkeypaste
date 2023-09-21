@@ -1559,15 +1559,6 @@ namespace MonkeyPaste.Avalonia {
                 } else if (IsLinkedToSelectedClipTile.IsFalseOrNull()) {
                     LinkCopyItemCommand.Execute(ciid);
                 }
-
-                if (MpAvShortcutCollectionViewModel.Instance.GlobalIsCtrlDown) {
-                    // ignore close, allow multi tag linking when ctrl down
-                    return;
-                }
-                // BUG may have been intended but context menu doesn't close when toggling tag link
-                // and to avoid messing w/ context menu any more just manually closing since
-                // that menu is the only ref to this cmd
-                MpAvMenuView.CloseMenu();
             }, () => {
                 return !IsAllTag;
             });

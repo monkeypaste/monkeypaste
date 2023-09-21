@@ -114,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPrefViewModel.Instance.LastStartupDateTime = MpAvPrefViewModel.Instance.StartupDateTime;
                 MpAvPrefViewModel.Instance.StartupDateTime = startup_datetime;
 
-                MpAvThemeViewModel.Instance.SyncThemePrefs();
+                MpAvThemeViewModel.Instance.UpdateThemeResources();
             }
         }
 

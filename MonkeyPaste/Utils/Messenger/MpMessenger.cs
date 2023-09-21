@@ -135,6 +135,8 @@ namespace MonkeyPaste {
         AccountUpgrade,
         AccountInfoChanged,
 
+        ThemeChanged,
+
         Loaded, //has context (object)
         Busy,
         NotBusy

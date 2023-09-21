@@ -30,7 +30,7 @@
             <Setter Property="Theme"
                     Value="{StaticResource GestureLabelMenuItem}" />
         </Style>
-        <Style Selector="MenuItem:not(.checkable)"
+        <Style Selector="MenuItem:not(.checkable.mobile)"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="Command"
                     Value="{Binding Command}" />
@@ -124,7 +124,7 @@
                         </MenuItem>
                     </DataTemplate>
 
-                    <!--  CHECKABLE  -->
+                    <!--  CHECKABLE  (only search filters pretty much i think)  -->
                     <DataTemplate x:Key="Checkable"
                                   x:DataType="local:MpAvIMenuItemViewModel">
                         <MenuItem Classes="checkable"
@@ -142,6 +142,7 @@
                     <DataTemplate x:Key="CheckableWithIcon"
                                   x:DataType="local:MpAvIMenuItemViewModel">
                         <MenuItem Classes="checkable checkWithIcon"
+                                  Classes.mobile="{Binding !IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                                   Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>

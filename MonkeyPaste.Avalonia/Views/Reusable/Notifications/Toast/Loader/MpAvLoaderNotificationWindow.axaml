@@ -262,7 +262,9 @@
                 </TransitioningContentControl>
             </Grid>
 
-            <local:MpAvOptionsButton Grid.Column="1"
+            <local:MpAvOptionsButton x:Name="OptsButton"
+                                     Grid.Column="1"
+                                     Classes="loader"
                                      Foreground="{DynamicResource ThemeWhiteBrush}"
                                      Command="{Binding ShowOptionsPopupCommand}"
                                      CommandParameter="{Binding $self}" />

@@ -1,3 +1,19 @@
+function getLinesMinMaxY(lines) {
+    let min_y = lines.length > 0 ? getLineMinY(lines.sort((a, b) => getLineMinY(a) < getLineMinY(b))[0]) : 0;
+    let max_y = lines.length > 0 ? getLineMaxY(lines.sort((a, b) => getLineMaxY(a) < getLineMaxY(b))[0]) : 0;
+    return {
+        min: min_y,
+        max: max_y
+    };
+}
+
+function getLineMinY(line) {
+    return Math.min(line.y1, line.y2);
+}
+function getLineMaxY(line) {
+    return Math.max(line.y1, line.y2);
+}
+
 function drawLine(ctx, line, stroke = 'black', width = 1, dash = [1, 0]) {
     if (!line) {
         return;
