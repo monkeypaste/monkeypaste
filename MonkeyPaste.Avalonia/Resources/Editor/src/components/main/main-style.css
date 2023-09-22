@@ -24,6 +24,7 @@ body {
     --selectedcolor: lime;
     --insertselectcolor: darkorange;
     --invalidcolor: crimson;
+    --linkfgcolor: cyan;
     --editableopacity: 0.5;
     --defaultopacity: 0.0;
     --highlightopacity: 0.5;

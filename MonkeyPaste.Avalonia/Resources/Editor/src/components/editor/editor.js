@@ -9,6 +9,7 @@ function initEditor() {
 
 	globals.quill = initQuill();
 
+	initLocalizer();
 	initClipboard();
 	initSvgElements();
 	initEditorToolbar();

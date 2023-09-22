@@ -895,3 +895,12 @@ function toAscii(str) {
     }
     return result;
 }
+
+String.Format = function (b) {
+    var a = arguments;
+    return b.replace(/(\{\{\d\}\}|\{\d\})/g, function (b) {
+        if (b.substring(0, 2) == "{{") return b;
+        var c = parseInt(b.match(/\d/)[0]);
+        return a[c + 1]
+    })
+};

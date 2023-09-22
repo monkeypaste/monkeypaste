@@ -315,23 +315,6 @@ namespace MonkeyPaste.Avalonia {
              HoverItem.IsPinned ||
              !HoverItem.IsSubSelectionEnabled);
 
-        public double ScrollWheelDampeningX {
-            get {
-                if (LayoutType == MpClipTrayLayoutType.Stack) {
-                    return 0.03d;
-                }
-                return 0.01d;
-            }
-        }
-
-        public double ScrollWheelDampeningY {
-            get {
-                if (LayoutType == MpClipTrayLayoutType.Stack) {
-                    return 0.03d;
-                }
-                return 0.01d;
-            }
-        }
 
         public Orientation ListOrientation =>
             MpAvMainWindowViewModel.Instance.IsHorizontalOrientation ? Orientation.Horizontal : Orientation.Vertical;
@@ -387,13 +370,13 @@ namespace MonkeyPaste.Avalonia {
 
         public double MaxScrollOffsetX {
             get {
-                double maxScrollOffsetX = Math.Max(0, QueryTrayTotalTileWidth - ObservedQueryTrayScreenWidth);
+                double maxScrollOffsetX = Math.Max(0, QueryTrayTotalWidth - ObservedQueryTrayScreenWidth);
                 return maxScrollOffsetX;
             }
         }
         public double MaxScrollOffsetY {
             get {
-                double maxScrollOffsetY = Math.Max(0, QueryTrayTotalTileHeight - ObservedQueryTrayScreenHeight);
+                double maxScrollOffsetY = Math.Max(0, QueryTrayTotalHeight - ObservedQueryTrayScreenHeight);
                 return maxScrollOffsetY;
             }
         }
@@ -438,13 +421,55 @@ namespace MonkeyPaste.Avalonia {
         public double ScrollVelocityX { get; set; }
         public double ScrollVelocityY { get; set; }
 
-        public double ScrollFrictionX =>
-            Mp.Services.PlatformInfo.IsDesktop ?
-            0.85 : 0.3;
+        public double ScrollWheelDampeningX {
+            get {
+                if (MpAvSearchBoxViewModel.Instance.SearchText.StartsWith("*") &&
+                    MpAvSearchBoxViewModel.Instance.SearchText.SplitNoEmpty(",") is string[] parts &&
+                    double.Parse(parts[1]) is double val) {
+                    return val;
+                }
+                if (LayoutType == MpClipTrayLayoutType.Stack) {
+                    return 0.03d;
+                }
+                return 0.01d;
+            }
+        }
 
-        public double ScrollFrictionY =>
-            Mp.Services.PlatformInfo.IsDesktop ?
-            0.75 : 0.0;
+        public double ScrollWheelDampeningY {
+            get {
+                if (MpAvSearchBoxViewModel.Instance.SearchText.StartsWith("*") &&
+                    MpAvSearchBoxViewModel.Instance.SearchText.SplitNoEmpty(",") is string[] parts &&
+                    double.Parse(parts[1]) is double val) {
+                    return val;
+                }
+                if (LayoutType == MpClipTrayLayoutType.Stack) {
+                    return 0.03d;
+                }
+                return 0.01d;
+            }
+        }
+        public double ScrollFrictionX {
+            get {
+                if (MpAvSearchBoxViewModel.Instance.SearchText.StartsWith("*") &&
+                    MpAvSearchBoxViewModel.Instance.SearchText.SplitNoEmpty(",") is string[] parts &&
+                    double.Parse(parts[1]) is double val) {
+                    return val;
+                }
+                return Mp.Services.PlatformInfo.IsDesktop ? 0.85 : 0.3;
+            }
+        }
+
+
+        public double ScrollFrictionY {
+            get {
+                if (MpAvSearchBoxViewModel.Instance.SearchText.StartsWith("*") &&
+                    MpAvSearchBoxViewModel.Instance.SearchText.SplitNoEmpty(",") is string[] parts &&
+                    double.Parse(parts[1]) is double val) {
+                    return val;
+                }
+                return Mp.Services.PlatformInfo.IsDesktop ? 0.85 : 0.0;
+            }
+        }
 
         public bool HasScrollVelocity => Math.Abs(ScrollVelocityX) + Math.Abs(ScrollVelocityY) > 0.1d;
         public MpPoint ScrollVelocity {
@@ -512,7 +537,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 var (row, col) = GetGridLocFromQueryIdx(tc);
 
-                // adjust fixed idx so its rectangluar
+                //adjust fixed idx so its rectangluar
                 if (ListOrientation == Orientation.Horizontal) {
                     row = row + 1;
                     col = CurGridFixedCount + 1;
@@ -548,7 +573,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private int FindJumpTileIdx(double scrollOffsetX, double scrollOffsetY, out MpRect tileRect) {
-            int qidx = 0;
+            int qidx;
             if (LayoutType == MpClipTrayLayoutType.Stack) {
                 if (ListOrientation == Orientation.Horizontal) {
                     qidx = (int)(scrollOffsetX / DefaultQueryItemWidth);
@@ -557,9 +582,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else {
                 if (ListOrientation == Orientation.Horizontal) {
-                    qidx = (int)(scrollOffsetY / DefaultQueryItemWidth) * (CurGridFixedCount - 1);
+                    qidx = (int)(scrollOffsetY / DefaultQueryItemHeight) * (CurGridFixedCount);
                 } else {
-                    qidx = (int)(scrollOffsetX / DefaultQueryItemHeight) * (CurGridFixedCount - 1);
+                    qidx = (int)(scrollOffsetX / DefaultQueryItemWidth) * (CurGridFixedCount);
                 }
             }
             var actual_pos = GetQueryPosition(qidx);
@@ -709,7 +734,7 @@ namespace MonkeyPaste.Avalonia {
                         Mp.Services.Query.TotalAvailableItemsInQuery > CurGridFixedCount) {
                 // when there's multiple query rows shorten height a bit to 
                 // hint theres more there (if not multiple rows, don't shorten looks funny
-                qh *= 0.7;
+                qh *= 0.67;
             }
 
             _defaultQueryItemWidth = qw;
@@ -1049,11 +1074,11 @@ namespace MonkeyPaste.Avalonia {
                     return 1;
                 }
                 if (ListOrientation == Orientation.Horizontal) {
-                    int fixed_cols = (int)(DesiredMaxTileRight / DefaultQueryItemWidth);
+                    int fixed_cols = (int)Math.Floor(DesiredMaxTileRight / DefaultQueryItemWidth);
 
                     return fixed_cols;
                 } else {
-                    int fixed_rows = (int)(DesiredMaxTileBottom / DefaultQueryItemHeight);
+                    int fixed_rows = (int)Math.Floor(DesiredMaxTileBottom / DefaultQueryItemHeight);
 
                     return fixed_rows;
                 }
@@ -2273,7 +2298,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpMessageType.JumpToIdxCompleted:
                     RefreshQueryTrayLayout();
                     //LockScrollToAnchor();
-                    CheckLoadMore();
+                    //CheckLoadMore();
 
                     //SetScrollAnchor();
                     break;
@@ -3577,7 +3602,7 @@ namespace MonkeyPaste.Avalonia {
             if (dir > 0) {
                 int result_offset = offset + desiredCount;
                 if (result_offset >= Mp.Services.Query.TotalAvailableItemsInQuery) {
-                    result_offset = Mp.Services.Query.TotalAvailableItemsInQuery - 1;
+                    result_offset = Mp.Services.Query.TotalAvailableItemsInQuery;// - 1;
                 }
                 return result_offset - offset;
             }
@@ -3679,7 +3704,7 @@ namespace MonkeyPaste.Avalonia {
             if (ranges == null) {
                 return false;
             }
-
+            //MpConsole.WriteLine($"Load More Qidxs: {string.Join(",", ranges.SelectMany(x => x))}");
             QueryCommand.Execute(ranges);
             return true;
         }
@@ -3950,9 +3975,9 @@ namespace MonkeyPaste.Avalonia {
 
                 } else {
                     if (isLoadMore) {
-                        if (CheckLoadMore()) {
-                            return;
-                        }
+                        //if (CheckLoadMore()) {
+                        //    return;
+                        //}
                     } else {
                         RefreshQueryTrayLayout();
                     }

@@ -1,13 +1,11 @@
 // #region Life Cycle
 
 function initTooltip() {
-
 	const hover_tt_elms = getTooltipHoverElements();
 	for (var i = 0; i < hover_tt_elms.length; i++) {
 		const htt_elm = hover_tt_elms[i];
 		htt_elm.addEventListener('pointerenter', (e) => {
 			showTooltipOverlay(e.currentTarget);
-
 		});
 		htt_elm.addEventListener('pointerleave', (e) => {
 			hideTooltipOverlay();
@@ -64,51 +62,61 @@ function isShowingTooltipToolbar() {
 // #region Actions
 
 function showTooltipOverlay(targetElm, tooltipText) {
-	let is_html = false;
-	if (isNullOrUndefined(tooltipText) &&
-		targetElm &&
-		typeof targetElm.hasAttribute === 'function' &&
-		targetElm.hasAttribute(globals.TOOLTIP_HOVER_ATTRB_NAME)) {
-		// only use attrb value if exists and not provided in param
-		tooltipText = targetElm.getAttribute(globals.TOOLTIP_HOVER_ATTRB_NAME);
-		if (isNullOrEmpty(tooltipText)) {
-			tooltipText = targetElm.innerHTML;
-			is_html = true;
-		}
-	}
-	if (isNullOrEmpty(tooltipText)) {
-		// don't show empty tooltip
-		return;
-	}
+	globals.TooltipExitDt = null;
+	delay(globals.TOOLTIP_MIN_HOVER_MS)
+		.then(() => {
+			if (globals.TooltipExitDt) {
+				// pointer left before show delay
+				return;
+			}
 
-	if (isRunningInHost()) {
-		let target_loc = getRectCenter(cleanRect(targetElm.getBoundingClientRect()));
-		const sc_parts = parseShortcutTooltipParts(tooltipText);
-		let tt_html = null;
-		let tt_text = sc_parts[0];
-		let tt_gesture = sc_parts[1];
-		if (isNullOrWhiteSpace(tt_gesture)) {
-			// when no gesture treat as html
-			tt_html = tt_text;
-			tt_text = null;
-		}
-		onShowToolTip_ntf(true, target_loc, tt_html,tt_text,tt_gesture);
-		return;
-	}
+			let is_html = false;
+			if (isNullOrUndefined(tooltipText) &&
+				targetElm &&
+				typeof targetElm.hasAttribute === 'function' &&
+				targetElm.hasAttribute(globals.TOOLTIP_HOVER_ATTRB_NAME)) {
+				// only use attrb value if exists and not provided in param
+				tooltipText = targetElm.getAttribute(globals.TOOLTIP_HOVER_ATTRB_NAME);
+				if (isNullOrEmpty(tooltipText)) {
+					tooltipText = targetElm.innerHTML;
+					is_html = true;
+				}
+			}
+			if (isNullOrEmpty(tooltipText)) {
+				// don't show empty tooltip
+				return;
+			}
 
-	tooltipText = decodeStringWithShortcut(tooltipText);
-	let tt_elm = getTooltipOverlayElement();
-	if (is_html) {
-		tt_elm.innerHTML = tooltipText;
-	} else {
-		tt_elm.innerHTML = `<span class="tooltiptext">${tooltipText}</span>`;
-	}
-	tt_elm.classList.remove('hidden');
+			if (isRunningInHost()) {
+				let target_loc = getRectCenter(cleanRect(targetElm.getBoundingClientRect()));
+				const sc_parts = parseShortcutTooltipParts(tooltipText);
+				let tt_html = null;
+				let tt_text = sc_parts[0];
+				let tt_gesture = sc_parts[1];
+				if (isNullOrWhiteSpace(tt_gesture)) {
+					// when no gesture treat as html
+					tt_html = tt_text;
+					tt_text = null;
+				}
+				onShowToolTip_ntf(true, target_loc, tt_html, tt_text, tt_gesture);
+				return;
+			}
 
-	positionTooltipOverlayLocation(targetElm, tt_elm);
+			tooltipText = decodeStringWithShortcut(tooltipText);
+			let tt_elm = getTooltipOverlayElement();
+			if (is_html) {
+				tt_elm.innerHTML = tooltipText;
+			} else {
+				tt_elm.innerHTML = `<span class="tooltiptext">${tooltipText}</span>`;
+			}
+			tt_elm.classList.remove('hidden');
+
+			positionTooltipOverlayLocation(targetElm, tt_elm);
+		});	
 }
 
 function hideTooltipOverlay() {
+	globals.TooltipExitDt = Date.now();
 	if (isRunningInHost()) {
 		onShowToolTip_ntf(false);
 		return;

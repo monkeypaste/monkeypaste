@@ -222,16 +222,24 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
 
                 case nameof(SearchText):
+#if DEBUG
+                    if (HasText && SearchText.StartsWith("#")) {
+                        var test = MpAvWindowManager.FindByHashCode(SearchText);
+                        break;
+                    } else if (HasText && SearchText.StartsWith("*")) {
+                        var ctrvm = MpAvClipTrayViewModel.Instance;
+                        ctrvm.OnPropertyChanged(nameof(ctrvm.ScrollWheelDampeningX));
+                        ctrvm.OnPropertyChanged(nameof(ctrvm.ScrollWheelDampeningY));
+                        ctrvm.OnPropertyChanged(nameof(ctrvm.ScrollFrictionX));
+                        ctrvm.OnPropertyChanged(nameof(ctrvm.ScrollFrictionY));
+                        break;
+                    }
+#endif
                     PerformSearchCommand.Execute(null);
 
                     if (HasText && !IsExpanded) {
                         IsExpanded = true;
                     }
-#if DEBUG
-                    if (HasText && SearchText.StartsWith("#")) {
-                        var test = MpAvWindowManager.FindByHashCode(SearchText);
-                    }
-#endif
                     break;
                 case nameof(IsAutoCompleteOpen):
                     if (IsAutoCompleteOpen) {

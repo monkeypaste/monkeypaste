@@ -177,3 +177,16 @@
     margin: 0 !important;
     padding: 0 !important;
 }
+
+#editor.light .ql-snow a {
+    color: blue !important;
+}
+
+#editor.dark a {
+    color: cyan !important;
+}
+
+#editor.dark:not(.no-select) tr:hover a,
+#editor.dark:not(.no-select) tr.selected a {
+    color: blue !important;
+}

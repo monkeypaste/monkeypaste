@@ -72,11 +72,11 @@ function getAppendButtonLookup2() {
 			elm: getPasteAppendBeginButtonElement(),
 			enabledInfo: {
 				svgKey: 'stack',
-				ttText: `${globals.PasteButtonAppendBeginLabel} ${getShortcutEncStr(globals.APD_LINE_SCT_IDX)}`
+				ttText: `${UiStrings.EditorPasteButtonAppendBeginLabel} ${getShortcutEncStr(globals.APD_LINE_SCT_IDX)}`
 			},
 			disabledInfo: {
 				svgKey: 'stack',
-				ttText: `${globals.PasteButtonAppendBeginLabel} ${getShortcutEncStr(globals.APD_LINE_SCT_IDX)}`
+				ttText: `${UiStrings.EditorPasteButtonAppendBeginLabel} ${getShortcutEncStr(globals.APD_LINE_SCT_IDX)}`
 			},
 			handler: function (e) {
 				onPasteAppendOptButtonClick(e, 'begin');
@@ -88,11 +88,11 @@ function getAppendButtonLookup2() {
 			elm: getPasteAppendToggleInlineButtonElement(),
 			enabledInfo: {
 				svgKey: 'text-insert-caret-outline',
-				ttText: `${globals.AppendInlineModeLabel} ${getShortcutEncStr(globals.APD_LINE_SCT_IDX)}`
+				ttText: `${UiStrings.EditorAppendInlineModeLabel} ${getShortcutEncStr(globals.APD_LINE_SCT_IDX)}`
 			},
 			disabledInfo: {
 				svgKey: 'paragraph',
-				ttText: `${globals.AppendLineModeLabel} ${getShortcutEncStr(globals.APD_INSERT_SCT_IDX)}`
+				ttText: `${UiStrings.EditorAppendLineModeLabel} ${getShortcutEncStr(globals.APD_INSERT_SCT_IDX)}`
 			},
 			handler: function (e) {
 				onPasteAppendOptButtonClick(e, 'insert');
@@ -104,11 +104,11 @@ function getAppendButtonLookup2() {
 			elm: getPasteAppendToggleManualButtonElement(),
 			enabledInfo: {
 				svgKey: 'scope',
-				ttText: `${globals.AppendNonManualModeLabel}`
+				ttText: `${UiStrings.EditorAppendNonManualModeLabel}`
 			},
 			disabledInfo: {
 				svgKey: 'scope',
-				ttText: `${globals.AppendManualModeLabel}`
+				ttText: `${UiStrings.EditorAppendManualModeLabel}`
 			},
 			handler: function (e) {
 				onPasteAppendOptButtonClick(e, 'manual');
@@ -120,11 +120,11 @@ function getAppendButtonLookup2() {
 			elm: getPasteAppendToggleBeforeButtonElement(),
 			enabledInfo: {
 				svgKey: 'triangle-up',
-				ttText: `${globals.AppendPreLabel} ${getShortcutEncStr(globals.APD_PRE_SCT_IDX)}`
+				ttText: `${UiStrings.EditorAppendPreLabel} ${getShortcutEncStr(globals.APD_PRE_SCT_IDX)}`
 			},
 			disabledInfo: {
 				svgKey: 'triangle-down',
-				ttText: `${globals.AppendPostLabel} ${getShortcutEncStr(globals.APD_PRE_SCT_IDX)}`
+				ttText: `${UiStrings.EditorAppendPostLabel} ${getShortcutEncStr(globals.APD_PRE_SCT_IDX)}`
 			},
 			handler: function (e) {
 				onPasteAppendOptButtonClick(e, 'pre');
@@ -136,11 +136,11 @@ function getAppendButtonLookup2() {
 			elm: getPasteAppendPauseAppendButtonElement(),
 			enabledInfo: {
 				svgKey: 'pause',
-				ttText: `${globals.AppendResumeLabel} ${getShortcutEncStr(globals.APD_PAUSED_SCT_IDX)}`
+				ttText: `${UiStrings.EditorAppendResumeLabel} ${getShortcutEncStr(globals.APD_PAUSED_SCT_IDX)}`
 			},
 			disabledInfo: {
 				svgKey: 'pause',
-				ttText: `${globals.AppendPauseLabel} ${getShortcutEncStr(globals.APD_PAUSED_SCT_IDX)}`
+				ttText: `${UiStrings.EditorAppendPauseLabel} ${getShortcutEncStr(globals.APD_PAUSED_SCT_IDX)}`
 			},
 			handler: function (e) {
 				onPasteAppendOptButtonClick(e, 'paused');
@@ -152,11 +152,11 @@ function getAppendButtonLookup2() {
 			elm: getPasteAppendStopAppendButtonElement(),
 			enabledInfo: {
 				svgKey: 'stop',
-				ttText: `${globals.AppendCloseLabel} ${finish_enc_sc_str}`
+				ttText: `${UiStrings.EditorAppendCloseLabel} ${finish_enc_sc_str}`
 			},
 			disabledInfo: {
 				svgKey: 'stop',
-				ttText: `${globals.AppendCloseLabel} ${finish_enc_sc_str}`
+				ttText: `${UiStrings.EditorAppendCloseLabel} ${finish_enc_sc_str}`
 			},
 			handler: function (e) {
 				onPasteAppendOptButtonClick(e, 'stop');

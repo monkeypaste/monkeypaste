@@ -72,7 +72,7 @@
 
         <!--  TRAY CURSOR  -->
 
-        <Style Selector="Grid#ClipTrayContainerGrid.busy"
+        <Style Selector="Grid#ClipTrayContainerGrid.busy:not(.scrolling)"
                x:DataType="local:MpAvClipTrayViewModel">
             <Setter Property="Cursor"
                     Value="Wait" />
@@ -125,6 +125,7 @@
     <Grid x:Name="ClipTrayContainerGrid"
           Background="{DynamicResource ClipTrayBgColor}"
           Classes.busy="{Binding IsAnyBusy}"
+          Classes.scrolling="{Binding HasScrollVelocity}"
           Classes.iprqBusy="{Binding IsInPlaceRequerying}"
           Classes.vert="{Binding IsVerticalOrientation}"
           HorizontalAlignment="Stretch"

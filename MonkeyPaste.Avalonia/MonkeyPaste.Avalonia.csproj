@@ -529,6 +529,8 @@
     <None Remove="resources\editor\src\components\context-menu-wrapper\context-menu-wrapper.js" />
     <None Remove="resources\editor\src\components\formatpaint\formatPainter.js" />
     <None Remove="Resources\Editor\src\components\italic\italic.js" />
+    <None Remove="resources\editor\src\components\localizer\localizer.js" />
+    <None Remove="resources\editor\src\components\localizer\uiStrings.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
@@ -1407,6 +1409,7 @@
   <ItemGroup>
     <Folder Include="Resources\Editor\src\components\bold\" />
     <Folder Include="Resources\Editor\src\components\formatPaint\" />
+    <Folder Include="Resources\Editor\src\components\localizer\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />
@@ -1721,6 +1724,15 @@
 
   <ItemGroup>
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CefNet">
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
+    </Reference>
+    <Reference Include="CefNet.Avalonia">
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <!--<ItemGroup>

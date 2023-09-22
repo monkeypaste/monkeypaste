@@ -367,10 +367,107 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;template-contact tooltiptext&quot;&gt;
-        ///    &lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;
-        ///    &lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;
-        ///&lt;/div&gt;.
+        ///   Looks up a localized string similar to Finish appending.
+        /// </summary>
+        public static string EditorAppendCLoseLabel {
+            get {
+                return ResourceManager.GetString("EditorAppendCLoseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Paragraph.
+        /// </summary>
+        public static string EditorAppendInlineModelLabel {
+            get {
+                return ResourceManager.GetString("EditorAppendInlineModelLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Inline.
+        /// </summary>
+        public static string EditorAppendLineModeLabel {
+            get {
+                return ResourceManager.GetString("EditorAppendLineModeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle manual.
+        /// </summary>
+        public static string EditorAppendManualModeLabel {
+            get {
+                return ResourceManager.GetString("EditorAppendManualModeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle manual.
+        /// </summary>
+        public static string EditorAppendNonManualModeLabel {
+            get {
+                return ResourceManager.GetString("EditorAppendNonManualModeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pause appending to clipboard.
+        /// </summary>
+        public static string EditorAppendPauseLabel {
+            get {
+                return ResourceManager.GetString("EditorAppendPauseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Before.
+        /// </summary>
+        public static string EditorAppendPostLabel {
+            get {
+                return ResourceManager.GetString("EditorAppendPostLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Before.
+        /// </summary>
+        public static string EditorAppendPreLabel {
+            get {
+                return ResourceManager.GetString("EditorAppendPreLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume appending to clipboard.
+        /// </summary>
+        public static string EditorAppendResumeLabel {
+            get {
+                return ResourceManager.GetString("EditorAppendResumeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Append....
+        /// </summary>
+        public static string EditorPasteButtonAppendBeginLabel {
+            get {
+                return ResourceManager.GetString("EditorPasteButtonAppendBeginLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste.
+        /// </summary>
+        public static string EditorPasteButtonLabel {
+            get {
+                return ResourceManager.GetString("EditorPasteButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;
+        ///&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;.
         /// </summary>
         public static string EditorTemplateContactHint {
             get {
@@ -379,18 +476,19 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;template-datetime-custom tooltiptext left-text-align&quot;&gt;
-        ///    &lt;p&gt;yy = short year&lt;/p&gt;
-        ///    &lt;p&gt;yyyy = long year&lt;/p&gt;
-        ///    &lt;p&gt;M = month (1-12)&lt;/p&gt;
-        ///    &lt;p&gt;MM = month (01-12)&lt;/p&gt;
-        ///    &lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;
-        ///    &lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;
-        ///    &lt;p&gt;d = day (1 - 31)&lt;/p&gt;
-        ///    &lt;p&gt;dd = day (01 - 31)&lt;/p&gt;
-        ///    &lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;
-        ///    &lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;
-        ///    &lt;p&gt;D - [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;p&gt;yy = short year&lt;/p&gt;
+        ///&lt;p&gt;yyyy = long year&lt;/p&gt;
+        ///&lt;p&gt;M = month (1-12)&lt;/p&gt;
+        ///&lt;p&gt;MM = month (01-12)&lt;/p&gt;
+        ///&lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;
+        ///&lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;
+        ///&lt;p&gt;d = day (1 - 31)&lt;/p&gt;
+        ///&lt;p&gt;dd = day (01 - 31)&lt;/p&gt;
+        ///&lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;
+        ///&lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;
+        ///&lt;p&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;/p&gt;
+        ///&lt;p&gt;h = hour in am/pm (0-12)&lt;/p&gt;
+        ///&lt;p&gt;hh = hour  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string EditorTemplateDateTimeCustomHint {
             get {
@@ -399,10 +497,8 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;template-datetime tooltiptext&quot;&gt;
-        ///    &lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
-        ///    &lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;
-        ///&lt;/div&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
+        ///&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;.
         /// </summary>
         public static string EditorTemplateDateTimeHint {
             get {
@@ -411,9 +507,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;template-dynamic tooltiptext&quot;&gt;
-        ///    &lt;p&gt;All occurances of this template will be set to the value you provide here&lt;/p&gt;
-        ///&lt;/div&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;All occurances of this template will be set to the value you provide here&lt;/p&gt;.
         /// </summary>
         public static string EditorTemplateDynamicHint {
             get {
@@ -422,10 +516,8 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;div class=&quot;template-static tooltiptext&quot;&gt;
-        ///    &lt;p&gt;Static templates are shared across the whole application. &lt;/p&gt;
-        ///    &lt;p&gt;So the value you have here will always be used when pasting.&lt;/p&gt;
-        ///&lt;/div&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
+        ///&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;.
         /// </summary>
         public static string EditorTemplateStaticHint {
             get {

@@ -681,6 +681,13 @@ var globals = {
 
 	// #endregion
 
+	// #region LOCALIZER
+
+	LOCALIZER_UI_STRING_TOOLTIP_ATTR_NAME: 'ui-tooltip-key',
+	LOCALIZER_UI_STRING_CONTENT_ATTR_NAME: 'ui-content-key',
+
+	// #endregion
+
 	// #region LOG
 	MinLogLevel: 0,
 	IsDebug: false,
@@ -717,8 +724,6 @@ var globals = {
 	// #region PASTE
 
 	// #region PASTE BUTTON POPUP
-
-	PasteButtonFormatsLabel: 'Clipboard Formats...',
 	PasteButtonAppendBeginLabel: 'Append...',
 
 	// #endregion
@@ -972,7 +977,8 @@ var globals = {
 	// #endregion
 
 	// #region TOOLTIP
-
+	TooltipExitDt: null,
+	TOOLTIP_MIN_HOVER_MS: 1000,
 	TOOLTIP_HOVER_ATTRB_NAME: "hover-tooltip",
 	TOOLTIP_TOOLBAR_ATTRB_NAME: "toolbar-tooltip",
 	// #endregion

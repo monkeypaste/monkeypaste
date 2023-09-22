@@ -445,7 +445,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return 0;
                 }
-                if (Parent.LayoutType == MpClipTrayLayoutType.Grid) {
+                if (Parent.LayoutType == MpClipTrayLayoutType.Grid && !IsWindowOpen) {
                     return BoundWidth;
                 }
                 if (!IsSubSelectionEnabled) {// || !IsWindowOpen) {
@@ -487,7 +487,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     return Math.Min(EDITOR_TOOLBAR_MIN_WIDTH, Parent.ObservedPinTrayScreenWidth);
                 }
-                if (Parent.LayoutType == MpClipTrayLayoutType.Grid) {
+                if (Parent.LayoutType == MpClipTrayLayoutType.Grid && !IsWindowOpen) {
                     return BoundWidth;
                 }
                 return Math.Min(EDITOR_TOOLBAR_MIN_WIDTH, Parent.ObservedQueryTrayScreenWidth);
@@ -1687,7 +1687,10 @@ namespace MonkeyPaste.Avalonia {
                         }
                     } else {
                         LastDeselectedDateTime = DateTime.Now;
-                        if (!IsWindowOpen && IsContentReadOnly && IsSubSelectionEnabled && (Parent == null || !Parent.IsUnpinning)) {
+                        if (!IsWindowOpen &&
+                            IsContentReadOnly &&
+                            IsSubSelectionEnabled &&
+                            (Parent == null || !Parent.IsUnpinning)) {
                             DisableSubSelectionCommand.Execute(null);
                         }
                     }
@@ -1755,6 +1758,9 @@ namespace MonkeyPaste.Avalonia {
                         MpAvMainWindowViewModel.Instance.LastDecreasedFocusLevelDateTime = DateTime.Now;
                         if (!IsSelected) {
                             IsSelected = true;
+                        }
+                        if (!IsSubSelectionEnabled) {
+                            IsSubSelectionEnabled = true;
                         }
                         MpAvPersistentClipTilePropertiesHelper.AddPersistentIsContentEditableTile_ById(CopyItemId, QueryOffsetIdx);
                         IsTitleReadOnly = true;

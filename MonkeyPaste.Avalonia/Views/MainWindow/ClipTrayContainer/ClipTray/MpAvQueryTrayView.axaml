@@ -108,15 +108,6 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Grid.Row="1">
-            <!--<Border.IsVisible>
-                <MultiBinding Converter="{x:Static local:MpAvMultiBoolConverter.Instance}"
-                              ConverterParameter="AND">
-                    <Binding Path="QueryItems"
-                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}"
-                             ConverterParameter="flip" />
-                    <Binding Path="IsAnyBusy" />
-                </MultiBinding>
-            </Border.IsVisible>-->
             <Border x:Name="QueryTrayBusyInnerBorder"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -161,9 +152,9 @@
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                          local:MpAvPagingListBoxExtension.IsEnabled="True"
                          local:MpAvPagingListBoxExtension.FrictionX="{Binding ScrollFrictionX}"
-                         local:MpAvPagingListBoxExtension.WheelDampeningX="0.03"
+                         local:MpAvPagingListBoxExtension.WheelDampeningX="{Binding ScrollWheelDampeningX}"
                          local:MpAvPagingListBoxExtension.FrictionY="{Binding ScrollFrictionY}"
-                         local:MpAvPagingListBoxExtension.WheelDampeningY="0.03"
+                         local:MpAvPagingListBoxExtension.WheelDampeningY="{Binding ScrollWheelDampeningY}"
                          local:MpAvPagingListBoxExtension.ScrollOffsetX="{Binding ScrollOffsetX, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.ScrollOffsetY="{Binding ScrollOffsetY, Mode=TwoWay}"
                          local:MpAvPagingListBoxExtension.IsThumbDraggingX="{Binding IsThumbDraggingX, Mode=TwoWay}"
