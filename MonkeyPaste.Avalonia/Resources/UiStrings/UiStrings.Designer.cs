@@ -313,6 +313,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pin.
+        /// </summary>
+        public static string CommonPinItemLabel {
+            get {
+                return ResourceManager.GetString("CommonPinItemLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refresh.
         /// </summary>
         public static string CommonRefreshTooltip {
@@ -363,6 +372,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonTitledCopyTitleText {
             get {
                 return ResourceManager.GetString("CommonTitledCopyTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpin.
+        /// </summary>
+        public static string CommonUnpinItemLabel {
+            get {
+                return ResourceManager.GetString("CommonUnpinItemLabel", resourceCulture);
             }
         }
         
@@ -540,6 +558,24 @@ namespace MonkeyPaste.Avalonia {
         public static string GestureProfileInternal {
             get {
                 return ResourceManager.GetString("GestureProfileInternal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide all &apos;{0}&apos; notifications.
+        /// </summary>
+        public static string NotificationOptionHideAllLabel {
+            get {
+                return ResourceManager.GetString("NotificationOptionHideAllLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide.
+        /// </summary>
+        public static string NotificationOptionHideLabel {
+            get {
+                return ResourceManager.GetString("NotificationOptionHideLabel", resourceCulture);
             }
         }
         

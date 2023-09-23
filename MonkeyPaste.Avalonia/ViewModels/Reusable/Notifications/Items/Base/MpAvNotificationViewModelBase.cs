@@ -181,20 +181,20 @@ namespace MonkeyPaste.Avalonia {
                 return new MpAvMenuItemViewModel() {
                     SubItems = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {
-                            Header = "Hide",
+                            Header = UiStrings.NotificationOptionHideLabel,
                             IconResourceKey = "ErrorImage",
                             Command = CloseNotificationCommand
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = $"Hide all '{NotificationType.EnumToUiString()}' notifications",
+                            Header = string.Format(UiStrings.NotificationOptionHideAllLabel,NotificationType.EnumToUiString()),
                             IconResourceKey = "ClosedEyeImage",
                             Command = CheckDoNotShowAgainCommand
                         },
                         new MpAvMenuItemViewModel() {IsSeparator = true, IsVisible = CanPin},
                         new MpAvMenuItemViewModel() {
                             IsVisible = CanPin,
-                            Header = IsPinned ? "Unpin":"Pin",
-                            IconResourceKey = IsPinned ? "PinDownImage" : "PinImage",
+                            Header = IsPinned ? UiStrings.CommonUnpinItemLabel:UiStrings.CommonPinItemLabel,
+                            IconResourceKey = "PinImage",
                             Command = ToggleIsPinnedCommand
                         }
                     }

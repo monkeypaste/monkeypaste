@@ -13,8 +13,7 @@
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
-        Classes="notificationWindow fadeIn fadeOut"
-        CanResize="False"
+        Classes="notificationWindow fadeIn fadeOut loader"
         Width="350"
         Height="140">
     <Window.Resources>

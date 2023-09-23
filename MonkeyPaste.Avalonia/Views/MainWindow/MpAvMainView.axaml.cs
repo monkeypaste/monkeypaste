@@ -4,7 +4,6 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Layout;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -126,6 +125,8 @@ namespace MonkeyPaste.Avalonia {
             RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
 
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
+            sidebarSplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChangeBegin);
+            sidebarSplitter.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.SidebarItemSizeChangeEnd);
             sidebarSplitter.DragDelta += SidebarSplitter_DragDelta;
 
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);

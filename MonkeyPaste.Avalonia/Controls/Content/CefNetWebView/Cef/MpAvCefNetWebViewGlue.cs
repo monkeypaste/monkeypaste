@@ -6,7 +6,6 @@ using Avalonia.Threading;
 using CefNet;
 using CefNet.Avalonia;
 using CefNet.Internal;
-using MonkeyPaste.Common;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvCefNetWebViewGlue : AvaloniaWebViewGlue {
@@ -62,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
             }
             Dispatcher.UIThread.Post(async () => {
                 allowedOps = CefDragOperationsMask.Copy | CefDragOperationsMask.Move;
-                var de = DragDropEffects.Copy | DragDropEffects.Move;
+                var de = DragDropEffects.Move | DragDropEffects.Copy;
                 await MpAvContentWebViewDragHelper.StartDragAsync(ds, de);
 
                 browser.Host.DragSourceEndedAt(0, 0, CefDragOperationsMask.None);
@@ -72,10 +71,34 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
         protected override void UpdateDragCursor(CefBrowser browser, CefDragOperationsMask operation) {
-            if (operation != CefDragOperationsMask.Copy) {
+            //if (operation != CefDragOperationsMask.Copy) {
 
-            }
-            MpConsole.WriteLine($"Drag cursor set to '{operation}'");
+            //}
+            //MpConsole.WriteLine($"Drag cursor set to '{operation}'");
+            //Cursor cursor;
+            //CefCursorType cursorType;
+            //switch (operation) {
+            //    case CefDragOperationsMask.None:
+            //        cursor = CursorInteropHelper.Create(StandardCursorType.No);
+            //        cursorType = CefCursorType.Notallowed;
+            //        break;
+            //    case CefDragOperationsMask.Move:
+            //        cursor = CursorInteropHelper.Create(StandardCursorType.DragMove);
+            //        cursorType = CefCursorType.Move;
+            //        break;
+            //    case CefDragOperationsMask.Link:
+            //        cursor = CursorInteropHelper.Create(StandardCursorType.DragLink);
+            //        cursorType = CefCursorType.Alias;
+            //        break;
+            //    default:
+            //        cursor = CursorInteropHelper.Create(StandardCursorType.DragCopy);
+            //        cursorType = CefCursorType.Copy;
+            //        break;
+            //}
+            //Dispatcher.UIThread.Post(() => {
+
+            //    (WebView as Control).Cursor = cursor;
+            //});
             base.UpdateDragCursor(browser, operation);
         }
         protected override bool OnCursorChange(CefBrowser browser, nint cursorHandle, CefCursorType type, CefCursorInfo customCursorInfo) {

@@ -24,6 +24,7 @@ namespace MonkeyPaste {
 
         #region Table Query
 
+
         public static async Task<List<T>> GetItemsAsync<T>() where T : new() {
             string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
             string query = $"select * from {table_name}";

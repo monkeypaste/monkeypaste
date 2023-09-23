@@ -644,10 +644,10 @@
                           Opacity="0.0" />
       
         <DropShadowEffect x:Key="ThemeDropShadow"
-                          OffsetX="3"
-                          OffsetY="3"
+                          OffsetX="1"
+                          OffsetY="1"
                           Color="{DynamicResource ThemeInteractiveColor}"
-                          BlurRadius="5"
+                          BlurRadius="3"
                           Opacity="0.8" />
         <DropShadowEffect x:Key="ThemeGlow"
                           OffsetX="0"
@@ -660,7 +660,7 @@
                           OffsetX="3"
                           OffsetY="3"
                           Color="{DynamicResource ThemeInteractiveBgColor}"
-                          BlurRadius="5"
+                          BlurRadius="3"
                           Opacity="0.8" />
         <DropShadowEffect x:Key="ThemeBgGlow"
                           OffsetX="0"

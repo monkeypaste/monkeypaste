@@ -657,6 +657,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        public int RowIdx { get; private set; }
+        public int ColIdx { get; private set; }
         public bool IsTrashing { get; set; }
         public bool IsDeleting { get; set; }
         public bool IsTrashOrDeleting =>
@@ -1009,7 +1011,7 @@ namespace MonkeyPaste.Avalonia {
                 return CopyItem.ItemSize1;
             }
             set {
-                if (CopyItemSize1 != value) {
+                if (CopyItemSize1 != value && value >= 0) {
                     CopyItem.ItemSize1 = value;
                     OnPropertyChanged(nameof(CopyItemSize1));
                 }
@@ -1024,7 +1026,7 @@ namespace MonkeyPaste.Avalonia {
                 return CopyItem.ItemSize2;
             }
             set {
-                if (CopyItemSize2 != value) {
+                if (CopyItemSize2 != value && value >= 0) {
                     CopyItem.ItemSize2 = value;
                     OnPropertyChanged(nameof(CopyItemSize2));
                 }
@@ -1561,6 +1563,9 @@ namespace MonkeyPaste.Avalonia {
             _queryOffsetIdx = forceOffsetIdx;
             MpAvPersistentClipTilePropertiesHelper.UpdateQueryOffsetIdx(CopyItemId, _queryOffsetIdx);
             OnPropertyChanged(nameof(QueryOffsetIdx));
+            if (Parent != null) {
+                (RowIdx, ColIdx) = Parent.GetGridLocFromQueryIdx(_queryOffsetIdx);
+            }
         }
         public int GetRecyclePriority(bool? isLoadMoreTail) {
             if (Parent == null) {
@@ -1680,8 +1685,10 @@ namespace MonkeyPaste.Avalonia {
                         if (Parent.SelectedItem != this) {
                             Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
                         }
+                        if (!IsPinOpTile) {
+                            Parent.ScrollIntoView(this);
+                        }
 
-                        Parent.ScrollIntoView(this);
                         if (!Parent.IsRestoringSelection) {
                             Parent.StoreSelectionState(this);
                         }
@@ -1777,6 +1784,12 @@ namespace MonkeyPaste.Avalonia {
 
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyEditingClipTile));
+                    break;
+                case nameof(IsHorizontalScrollbarVisibile):
+                case nameof(IsVerticalScrollbarVisibile):
+                    if (IsAnyScrollbarVisible) {
+
+                    }
                     break;
                 case nameof(IsContextMenuOpen):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileContextMenuOpened));
@@ -1952,9 +1965,8 @@ namespace MonkeyPaste.Avalonia {
                 ctv.Content is MpAvClipBorder cb) {
                 cb.CornerRadius = new CornerRadius(0);
             }
-            //pow.Classes.Add("tileWindow");
-            //pow.Classes.Add("fadeIn");
-            //pow.Classes.Add("fadeOut");
+            pow.Classes.Add("fadeIn");
+            pow.Classes.Add("fadeOut");
 
             #region Window Bindings
 

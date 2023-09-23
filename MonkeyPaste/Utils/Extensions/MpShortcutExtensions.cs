@@ -5,6 +5,8 @@
             switch (st) {
                 // APPLICATION
                 case MpShortcutType.ToggleMainWindow:
+                case MpShortcutType.ToggleAppendPaused:
+                case MpShortcutType.ToggleAppendPreMode:
                 case MpShortcutType.ToggleAppendInsertMode:
                 case MpShortcutType.ToggleAppendLineMode:
                 case MpShortcutType.ToggleAutoCopyMode:

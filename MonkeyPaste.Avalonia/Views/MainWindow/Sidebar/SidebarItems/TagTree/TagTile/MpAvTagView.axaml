@@ -177,11 +177,12 @@
                 </Transitions>
             </Border.Transitions>
 
-            <Grid VerticalAlignment="Stretch">
+            <!--<Grid VerticalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                </Grid.ColumnDefinitions>-->
+            <StackPanel Orientation="Horizontal">
                 <!--  Tag Count Box  -->
                 <Border x:Name="TagCountContainer"
                         CornerRadius="5"
@@ -291,7 +292,8 @@
                                           ReadOnlyBackground="Transparent"
                                           ReadOnlyForeground="{Binding TagTextHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                                           Text="{Binding TagName, Mode=TwoWay}" />
-            </Grid>
+                <!--</Grid>-->
+            </StackPanel>
         </Border>
 
         <!--  BADGE COUNT  -->

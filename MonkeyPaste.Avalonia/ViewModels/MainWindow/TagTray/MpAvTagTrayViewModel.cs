@@ -133,7 +133,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                     return MpAvClipTrayViewModel.Instance.ObservedQueryTrayScreenHeight;
                 } else {
-                    return 300;
+                    return 250;
                 }
             }
         }

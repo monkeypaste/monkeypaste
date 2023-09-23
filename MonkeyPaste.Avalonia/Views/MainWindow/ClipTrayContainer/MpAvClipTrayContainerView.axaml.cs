@@ -1,11 +1,7 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvClipTrayContainerView : MpAvUserControl<MpAvClipTrayViewModel> {
@@ -28,8 +24,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var gs = this.FindControl<GridSplitter>("ClipTraySplitter");
-            gs.AddHandler(Control.PointerPressedEvent, Gs_PointerPressed, RoutingStrategies.Tunnel);
-            gs.AddHandler(Control.PointerReleasedEvent, Gs_PointerReleased, RoutingStrategies.Tunnel);
+            gs.DragStarted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeBegin);
+            gs.DragCompleted += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTrayResizeEnd);
+            gs.DragDelta += (s, e) => MpMessenger.SendGlobal(MpMessageType.PinTraySizeChanged);
+
+            //gs.AddHandler(Control.PointerPressedEvent, Gs_PointerPressed, RoutingStrategies.Tunnel);
+            //gs.AddHandler(Control.PointerReleasedEvent, Gs_PointerReleased, RoutingStrategies.Tunnel);
         }
 
         private void Gs_PointerReleased(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {

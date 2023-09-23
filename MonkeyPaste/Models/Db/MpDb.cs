@@ -176,6 +176,9 @@ namespace MonkeyPaste {
 
         #region Async Query
 
+        public static AsyncTableQuery<T> GetAsyncTable<T>() where T : new() {
+            return _connectionAsync.Table<T>();
+        }
         public static async Task<TableMapping> GetTableMappingAsync(string tableName) {
             await Task.Delay(1);
             if (_connectionAsync == null) {

@@ -13,8 +13,8 @@ namespace MonkeyPaste {
             string batch_file_path = await CreateImportsTestContentAsync(
                    db_path: Mp.Services.DbInfo.DbPath,
                    pwd: Mp.Services.DbInfo.DbPassword,
-                   content_count: 1000,//1_000_000,
-                   big_count: 5,
+                   content_count: 100_000,//1_000_000,
+                   big_count: 25,
                    link_count: 50,
                    parent_tag_count: 3,
                    child_tag_count: 3,

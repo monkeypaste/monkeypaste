@@ -529,4 +529,16 @@
   <data name="EditorPasteButtonLabel" xml:space="preserve">
     <value>Paste</value>
   </data>
+  <data name="CommonPinItemLabel" xml:space="preserve">
+    <value>Pin</value>
+  </data>
+  <data name="CommonUnpinItemLabel" xml:space="preserve">
+    <value>Unpin</value>
+  </data>
+  <data name="NotificationOptionHideAllLabel" xml:space="preserve">
+    <value>Hide all '{0}' notifications</value>
+  </data>
+  <data name="NotificationOptionHideLabel" xml:space="preserve">
+    <value>Hide</value>
+  </data>
 </root>

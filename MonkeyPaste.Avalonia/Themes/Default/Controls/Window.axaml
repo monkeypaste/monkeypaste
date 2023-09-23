@@ -4,7 +4,7 @@
         xmlns:local="using:MonkeyPaste.Avalonia"
         xmlns:pcl="using:MonkeyPaste">
     <!--  USER ACTION BUTTONS  -->
-    <Style Selector="Window.notificationWindow Button:not(.optionsButton)">
+    <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton)">
         <Setter Property="HorizontalAlignment"
                 Value="Center" />
         <Setter Property="VerticalAlignment"
@@ -35,11 +35,11 @@
                 Value="100" />
     </Style>
 
-    <Style Selector="Window.notificationWindow Button:not(.optionsButton):pointerover /template/ ContentPresenter">
+    <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton):pointerover /template/ ContentPresenter">
         <Setter Property="Background"
                 Value="{DynamicResource ThemeGrayAccent1Color}" />
     </Style>
-    <Style Selector="Window.userActionNotificationWindow Button:not(.optionsButton):pointerover">
+    <Style Selector=":is(Window).userActionNotificationWindow Button:not(.optionsButton):pointerover">
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
         <Setter Property="Background"
@@ -48,20 +48,18 @@
 
     <!--  NTF OUTER BORDER  -->
 
-    <Style Selector="Window.notificationWindow > Border">
+    <Style Selector=":is(Window).notificationWindow > Border">
         <Setter Property="CornerRadius"
                 Value="5" />
     </Style>
-
-    <Style Selector="Window.notificationWindow:not(.welcome)"
+    <Style Selector=":is(Window).resizable"
            x:DataType="local:MpAvNotificationViewModelBase">
-        <Style.Resources>
-            <!--<SolidColorBrush x:Key="SystemRegionBrush" Color="Transparent"/>
-        <SolidColorBrush x:Key="SystemControlBackgroundAltHighBrush" Color="Transparent"/>
-        <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="Transparent"/>
-        <SolidColorBrush x:Key="SystemControlForegroundBaseHighBrush" Color="Transparent"/>-->
-        </Style.Resources>
+        <Setter Property="CanResize"
+                Value="True" />
 
+    </Style>
+    <Style Selector=":is(Window).notificationWindow:not(.welcome)"
+           x:DataType="local:MpAvNotificationViewModelBase">
         <Setter Property="IsVisible"
                 Value="{Binding IsVisible}" />
         <Setter Property="Title"
@@ -79,8 +77,6 @@
         <Setter Property="WindowState"
                 Value="Normal" />
         <Setter Property="Topmost"
-                Value="True" />
-        <Setter Property="CanResize"
                 Value="True" />
         <Setter Property="ExtendClientAreaToDecorationsHint"
                 Value="True" />

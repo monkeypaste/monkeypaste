@@ -226,13 +226,6 @@ namespace MonkeyPaste.Avalonia {
                     if (HasText && SearchText.StartsWith("#")) {
                         var test = MpAvWindowManager.FindByHashCode(SearchText);
                         break;
-                    } else if (HasText && SearchText.StartsWith("*")) {
-                        var ctrvm = MpAvClipTrayViewModel.Instance;
-                        ctrvm.OnPropertyChanged(nameof(ctrvm.ScrollWheelDampeningX));
-                        ctrvm.OnPropertyChanged(nameof(ctrvm.ScrollWheelDampeningY));
-                        ctrvm.OnPropertyChanged(nameof(ctrvm.ScrollFrictionX));
-                        ctrvm.OnPropertyChanged(nameof(ctrvm.ScrollFrictionY));
-                        break;
                     }
 #endif
                     PerformSearchCommand.Execute(null);

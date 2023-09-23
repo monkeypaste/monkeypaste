@@ -28,7 +28,7 @@
                 Value="False" />
     </Style>
 
-    <Style Selector="local|MpAvShortcutView:pointerover ItemsControl#ShortcutListBox">
+    <!--<Style Selector="local|MpAvShortcutView:pointerover ItemsControl#ShortcutListBox">
         <Setter Property="IsVisible"
                 Value="False" />
     </Style>
@@ -39,7 +39,7 @@
     <Style Selector="local|MpAvShortcutView:pointerover Button#RecordButton">
         <Setter Property="IsVisible"
                 Value="True" />
-    </Style>
+    </Style>-->
 
     <!--  SHORTCUT LABEL BG  -->
 
@@ -80,6 +80,11 @@
                 Value="{DynamicResource ThemeGrayAccent1Color}" />
         <Setter Property="BorderBrush"
                 Value="{DynamicResource ThemeGrayAccent3Color}" />
+    </Style>
+
+    <Style Selector="local|MpAvShortcutLabel:not(.menuItemGesture) Border#KeyContainer">
+        <Setter Property="BoxShadow"
+                Value="1 1 3 black" />
     </Style>
 
     <Style Selector="local|MpAvShortcutLabel.menuItemGesture Border#KeyContainer">

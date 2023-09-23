@@ -383,6 +383,7 @@ namespace MonkeyPaste.Avalonia {
 
         private string _lastContentHandle = null;
         public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
+            bool is_new_content = _lastContentHandle == contentHandle;
             _lastContentHandle = contentHandle;
             if (!this.IsAttachedToVisualTree()) {
                 NeedsEvalJsCleared = true;
@@ -414,7 +415,7 @@ namespace MonkeyPaste.Avalonia {
                     if (ntf is MpQuillEditorContentChangedMessage loadComplete_ntf) {
                         //_lastLoadedContentHandle = contentHandle
                         IsEditorLoaded = true;
-                        ProcessContentChangedMessage(loadComplete_ntf);
+                        ProcessContentChangedMessage(loadComplete_ntf, is_new_content);
                     }
                     break;
 
@@ -1305,6 +1306,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private void OnContentIdChanged() {
+            _lastContentHandle = null;
             if (BindingContext == null ||
                 !BindingContext.IsContentReadOnly) {
                 return;
@@ -1389,7 +1391,7 @@ namespace MonkeyPaste.Avalonia {
             SendMessage($"loadContentAsync_ext('{msgStr}')");
         }
 
-        private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf) {
+        private void ProcessContentChangedMessage(MpQuillEditorContentChangedMessage contentChanged_ntf, bool isInitialLoad = false) {
             if (!IsEditorInitialized) {
                 // BUG load stalls on reload while editing waiting for initialzing...
                 IsEditorInitialized = true;
@@ -1414,7 +1416,27 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break($"Content changed resp was null");
                 return;
             }
+
+            BindingContext.HasEditableTable = contentChanged_ntf.hasEditableTable;
+            BindingContext.ActualContentHeight = contentChanged_ntf.contentHeight;
+
+            if (BindingContext.HasTemplates != contentChanged_ntf.hasTemplates) {
+                // find out if tile has templates lazy cause some are not in db
+                BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
+                if (BindingContext.HasTemplates && BindingContext.IsSubSelectionEnabled) {
+                    // expand (if needed) for template toolbar stuff (meant to happen while editing really..)
+                    GrowView();
+                }
+            }
+            if (isInitialLoad) {
+                // avoid initial load re-writes, only on subsequent content changes
+                return;
+            }
+
             BindingContext.IgnoreHasModelChanged = true;
+
+            BindingContext.CopyItemSize1 = contentChanged_ntf.itemSize1;
+            BindingContext.CopyItemSize2 = contentChanged_ntf.itemSize2;
 
             //Dispatcher.UIThread.Post(() => {
             if (contentChanged_ntf.itemData != null) {
@@ -1432,21 +1454,6 @@ namespace MonkeyPaste.Avalonia {
                 ProcessDataTransferCompleteResponse(dtcn);
             }
 
-            if (contentChanged_ntf.itemSize1 >= 0 &&
-                contentChanged_ntf.itemSize2 >= 0) {
-                BindingContext.CopyItemSize1 = contentChanged_ntf.itemSize1;
-                BindingContext.CopyItemSize2 = contentChanged_ntf.itemSize2;
-            }
-
-            if (BindingContext.HasTemplates != contentChanged_ntf.hasTemplates) {
-                BindingContext.HasTemplates = contentChanged_ntf.hasTemplates;
-                if (BindingContext.HasTemplates) {
-                    GrowView();
-                }
-            }
-
-            BindingContext.HasEditableTable = contentChanged_ntf.hasEditableTable;
-            BindingContext.ActualContentHeight = contentChanged_ntf.contentHeight;
 
             BindingContext.IgnoreHasModelChanged = false;
 
@@ -1753,7 +1760,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void GrowView() {
             double nw = Math.Max(BindingContext.DesiredWidth, BindingContext.BoundWidth);
-            double nh = Math.Max(BindingContext.EditableHeight, BindingContext.BoundHeight);
+            double nh = Math.Max(BindingContext.BoundHeight, BindingContext.BoundHeight);
             Resize(nw, nh);
         }
         private void ShrinkView() {

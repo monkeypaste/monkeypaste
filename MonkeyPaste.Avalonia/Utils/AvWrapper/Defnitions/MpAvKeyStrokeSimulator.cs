@@ -1,13 +1,10 @@
 ﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using SharpHook;
 using SharpHook.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 //using Avalonia.Win32;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvKeyStrokeSimulator : MpIKeyStrokeSimulator {
@@ -33,6 +30,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool SimulateKeyStrokeSequence<T>(IReadOnlyList<IReadOnlyList<T>> gesture) {
             if (typeof(T) != typeof(KeyCode)) {
+                throw new NotSupportedException("Must be sharphook keycode");
+                throw new NotSupportedException("Must be sharphook keycode");
                 throw new NotSupportedException("Must be sharphook keycode");
             }
             if (gesture == null) {

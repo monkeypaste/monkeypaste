@@ -112,7 +112,7 @@
                               Grid.Column="1"
                               ResizeDirection="Columns"
                               HorizontalAlignment="Right"
-                              VerticalAlignment="Stretch"
+                              VerticalAlignment="Stretch" 
                               IsVisible="False"
                               Classes.sidebarSplitter="True"
                               Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"

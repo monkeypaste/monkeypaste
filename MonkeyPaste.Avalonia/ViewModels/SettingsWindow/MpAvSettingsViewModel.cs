@@ -484,41 +484,40 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.International) {
-                            //IsVisible = false,
-                            PluginFormat = new MpPluginFormat() {
-                                headless = new MpHeadlessPluginFormat() {
-                                    parameters = new List<MpParameterFormat>() {
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.UserLanguageCode),
-                                            controlType = MpParameterControlType.ComboBox,
-                                            unitType = MpParameterValueUnitType.PlainText,
-                                            label = "Language",
-                                            values =
-                                                MpCurrentCultureViewModel.Instance.AvailableCultureLookup
-                                                .Select(x=>
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = x.Key == MpAvPrefViewModel.Instance.UserLanguageCode,
-                                                    label = x.Value,
-                                                    value = x.Key
-                                                }).ToList()
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Right-to-left",
-                                            values = new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = MpAvPrefViewModel.Instance.IsTextRightToLeft.ToString()
-                                                }
-                                            }
-                                        },
-                                    }
-                                }
-                            }
-                        },
+                        //new MpAvSettingsFrameViewModel(MpSettingsFrameType.International) {
+                        //    PluginFormat = new MpPluginFormat() {
+                        //        headless = new MpHeadlessPluginFormat() {
+                        //            parameters = new List<MpParameterFormat>() {
+                        //                new MpParameterFormat() {
+                        //                    paramId = nameof(MpAvPrefViewModel.Instance.UserLanguageCode),
+                        //                    controlType = MpParameterControlType.ComboBox,
+                        //                    unitType = MpParameterValueUnitType.PlainText,
+                        //                    label = "Language",
+                        //                    values =
+                        //                        MpCurrentCultureViewModel.Instance.AvailableCultureLookup
+                        //                        .Select(x=>
+                        //                        new MpPluginParameterValueFormat() {
+                        //                            isDefault = x.Key == MpAvPrefViewModel.Instance.UserLanguageCode,
+                        //                            label = x.Value,
+                        //                            value = x.Key
+                        //                        }).ToList()
+                        //                },
+                        //                new MpParameterFormat() {
+                        //                    paramId = nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft),
+                        //                    controlType = MpParameterControlType.CheckBox,
+                        //                    unitType = MpParameterValueUnitType.Bool,
+                        //                    label = "Right-to-left",
+                        //                    values = new List<MpPluginParameterValueFormat>() {
+                        //                        new MpPluginParameterValueFormat() {
+                        //                            isDefault = true,
+                        //                            value = MpAvPrefViewModel.Instance.IsTextRightToLeft.ToString()
+                        //                        }
+                        //                    }
+                        //                },
+                        //            }
+                        //        }
+                        //    }
+                        //},
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Limits) {
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {

@@ -70,7 +70,10 @@ namespace MonkeyPaste {
         PreTrayLayoutChange,
         PostTrayLayoutChange,
 
+        SidebarItemSizeChangeBegin,
+        SidebarItemSizeChangeEnd,
         SidebarItemSizeChanged,
+
         SelectedSidebarItemChangeBegin,
         SelectedSidebarItemChangeEnd,
 
@@ -78,6 +81,7 @@ namespace MonkeyPaste {
 
         PinTrayResizeBegin,
         PinTrayResizeEnd,
+        PinTraySizeChanged,
 
         TrayZoomFactorChangeBegin,
         TrayZoomFactorChanged,

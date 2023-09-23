@@ -165,7 +165,8 @@ namespace MonkeyPaste.Avalonia {
             if (key == KeyCode.VcSemicolon) {
                 return ";";
             }
-            if (key == KeyCode.VcBackquote) {
+            //if (key == KeyCode.VcBackquote) {
+            if (key == KeyCode.VcBackQuote) {
                 return "`";
             }
             if (key == KeyCode.VcQuote) {
@@ -180,7 +181,8 @@ namespace MonkeyPaste.Avalonia {
             if (key == KeyCode.VcComma) {
                 return ",";
             }
-            if (key == KeyCode.VcBackSlash) {
+            //if (key == KeyCode.VcBackSlash) {
+            if (key == KeyCode.VcBackslash) {
                 return @"/";
             }
             if (key == KeyCode.VcPeriod) {
@@ -221,7 +223,8 @@ namespace MonkeyPaste.Avalonia {
                 return KeyCode.VcSemicolon;
             }
             if (lks == "`") {
-                return KeyCode.VcBackquote;
+                //return KeyCode.VcBackquote;
+                return KeyCode.VcBackQuote;
             }
             if (lks == "'") {
                 return KeyCode.VcQuote;
@@ -236,7 +239,8 @@ namespace MonkeyPaste.Avalonia {
                 return KeyCode.VcComma;
             }
             if (lks == @"/") {
-                return KeyCode.VcBackSlash;
+                //return KeyCode.VcBackSlash;
+                return KeyCode.VcBackslash;
             }
             if (lks == ".") {
                 return KeyCode.VcPeriod;

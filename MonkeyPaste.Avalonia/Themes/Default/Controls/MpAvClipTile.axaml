@@ -30,7 +30,7 @@
                 Value="{Binding IsAnyBusy}" />
     </Style>
 
-    <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.append Border#TileBusyOverlay"
+    <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.append:not(.appendpaused) Border#TileBusyOverlay"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="IsVisible">
             <Setter.Value>

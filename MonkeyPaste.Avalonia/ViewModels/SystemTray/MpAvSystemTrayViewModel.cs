@@ -6,6 +6,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -150,8 +151,12 @@ namespace MonkeyPaste.Avalonia {
                             Command = NavigateToCefNetUriCommand,
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = "Generic Test",
-                            Command = GenericTestCommand,
+                            Header = "Test Command 1",
+                            Command = GenericTestCommand1,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Test Command 2",
+                            Command = GenericTestCommand2,
                         },
                         //new MpMenuItemViewModel() {
                         //    Header = "Show Notifier DevTools",
@@ -303,16 +308,35 @@ namespace MonkeyPaste.Avalonia {
         //private INotificationManager? _notificationManager;
         //private INotificationManager NotificationManager => _notificationManager
         //    ??= new WindowNotificationManager(TopLevel.GetTopLevel(MpAvWindowManager.MainWindow)!);
-        public ICommand GenericTestCommand => new MpAsyncCommand(
+        public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
-                await Task.Delay(1);
-                //await MpTestDataBuilder.CreateTestDataAsync();
+                //await Task.Delay(1);
+                await MpTestDataBuilder.CreateTestDataAsync();
                 //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
                 //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
 
-                var test = new MpAvDataObject("Dat funky format", "funky format texxxxxt!!J!J");
-                await TopLevel.GetTopLevel(MpAvWindowManager.MainWindow).Clipboard.SetDataObjectSafeAsync(test);
+                //var test = new MpAvDataObject("Dat funky format", "funky format texxxxxt!!J!J");
+                //await TopLevel.GetTopLevel(MpAvWindowManager.MainWindow).Clipboard.SetDataObjectSafeAsync(test);
+            });
+
+        public ICommand GenericTestCommand2 => new MpAsyncCommand(
+            async () => {
+                var sw = Stopwatch.StartNew();
+                var ci_table = MpDb.GetAsyncTable<MpCopyItem>();
+                int total_count = await ci_table.CountAsync();
+                MpConsole.WriteLine($"Total count: {total_count} time: {sw.ElapsedMilliseconds}");
+                sw.Restart();
+
+
+                var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
+
+                MpConsole.WriteLine($"Total fetch time: {sw.ElapsedMilliseconds}");
+
+                while (true) {
+                    await Task.Delay(100);
+                }
+
             });
         #endregion
     }

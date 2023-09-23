@@ -165,6 +165,7 @@
                           ClipToBounds="True"
                           HorizontalAlignment="Stretch"
                           Classes.append="{Binding IsAppendNotifier}"
+                          Classes.appendpaused="{Binding IsAppendPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                           Classes.trashOrDeleting="{Binding IsTrashOrDeleting}"
                           Classes.popout="{Binding IsWindowOpen}"
                           Classes.transOpen="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen}"
@@ -320,8 +321,8 @@
 
                     <Image.Transitions>
                         <Transitions>
-                            <EffectTransition Property="Effect"
-                                              Duration="0:0:0.5" />
+                            <!--<EffectTransition Property="Effect"
+                                              Duration="0:0:0.5" />-->
                         </Transitions>
                     </Image.Transitions>
 

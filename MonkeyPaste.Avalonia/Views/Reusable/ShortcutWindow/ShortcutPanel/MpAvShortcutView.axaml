@@ -68,6 +68,7 @@
         <local:MpAvShortcutLabel x:Name="ShortcutLabel"
                                  HorizontalAlignment="Center"
                                  KeyGesture="{Binding KeyGroups}" />
+      
         <Button x:Name="RecordButton"
                 Margin="3"
                 Padding="0,2"

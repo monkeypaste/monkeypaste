@@ -128,6 +128,7 @@ function processEffectAllowed(e) {
     let from_host = true;
     if (e.fromHost === undefined && !isNullOrUndefined(e.dataTransfer)) {
         effect_str = e.dataTransfer.effectAllowed;
+        from_host = false;
     } else if (!isNullOrUndefined(e.effectAllowed_override)) {
         effect_str = e.effectAllowed_override;
     } else {

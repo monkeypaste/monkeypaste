@@ -14,8 +14,7 @@
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvMessageNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
-        Classes="notificationWindow fadeIn fadeOut msg"
-        Classes.animX="{Binding IsOpenAnimated}">
+        Classes="notificationWindow fadeIn fadeOut msg slideIn resizable">
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             BorderThickness="7"
