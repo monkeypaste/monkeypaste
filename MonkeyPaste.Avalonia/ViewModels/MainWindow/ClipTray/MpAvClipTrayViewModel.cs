@@ -2063,6 +2063,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(ScrollVector):
+                    QueryCommand.Execute(ScrollVector);
+                    break;
                 case nameof(IsBusy):
                     OnPropertyChanged(nameof(IsAnyBusy));
                     break;
@@ -3983,32 +3986,51 @@ namespace MonkeyPaste.Avalonia {
             });
             #endregion
         }
+
+        #region Repeater Test
+        public Vector ScrollVector { get; set; }
+        List<MpCopyItem> _allQueryModels = new List<MpCopyItem>();
+
+        private async Task RepeaterQueryAsync(object offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) {
+            if (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg == null) {
+                IsRequerying = true;
+                await Mp.Services.Query.QueryForTotalCountAsync(true);
+                IsRequerying = false;
+                Items.ForEach(x => x.TriggerUnloadedNotification(true));
+                ScrollVector = new Vector();
+            } else if (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is not Vector) {
+                return;
+            }
+            IsQuerying = true;
+            int sidx = GetQueryIdxFromScrollOffset(ScrollVector.X, ScrollVector.Y);
+            int eidx = GetQueryIdxFromScrollOffset(ScrollVector.X + ObservedQueryTrayScreenWidth, ScrollVector.Y + ObservedQueryTrayScreenHeight);
+            int actual_eidx = eidx;
+            eidx += (eidx - sidx) * 2;
+            eidx = Math.Min(Mp.Services.Query.TotalAvailableItemsInQuery - 1, eidx);
+
+            MpConsole.WriteLine($"sidx: {sidx} scr eidx: {actual_eidx} load eidx: {eidx}");
+            int to_add = eidx - Items.Count;
+            while (to_add > 0) {
+                Items.Add(new MpAvClipTileViewModel(this));
+                to_add--;
+            }
+            var cil = await Mp.Services.Query.FetchPageAsync(sidx, eidx);
+            for (int i = sidx; i < eidx; i++) {
+                if (IsRequerying) {
+                    return;
+                }
+                await Items[i].InitializeAsync(cil[i - sidx], i);
+            }
+
+            IsQuerying = false;
+            IsRequerying = false;
+        }
+
+        #endregion
+
         public MpIAsyncCommand<object> QueryCommand => new MpAsyncCommand<object>(
             async (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) => {
-                IsQuerying = true;
-                IsRequerying = true;
-
-                var ml = await Mp.Services.Query.QueryForModelsAsync();
-                IsQuerying = false;
-                IsRequerying = false;
-                Items.Clear();
-                Dispatcher.UIThread.Post(async () => {
-                    foreach (var (m, idx) in ml.WithIndex()) {
-                        var ctvm = await CreateClipTileViewModelAsync(m, idx);
-                        if (IsQuerying) {
-                            return;
-                        }
-                        Items.Add(ctvm);
-                        MpConsole.WriteLine($"Item count: {idx}");
-                    }
-                    OnPropertyChanged(nameof(Items));
-
-                });
-                return;
-
-
                 if (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is not List<List<int>> ranges) {
-
                     await PerformQueryAsync(offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg);
                     return;
                 }

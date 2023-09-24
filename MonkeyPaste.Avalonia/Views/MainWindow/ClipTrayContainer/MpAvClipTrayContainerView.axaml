@@ -20,7 +20,7 @@
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  TILE OPACITY TRANSITION  -->
-        <Style Selector="ListBox.clipTilListBox > ListBoxItem">
+        <Style Selector="ListBox.clipTilListBox > ListBoxItem, Border#QueryTrayContainerBorder local|MpAvClipTileView">
             <Setter Property="Transitions">
                 <Transitions>
                     <DoubleTransition Property="Opacity"
@@ -85,7 +85,7 @@
 
         <!--  TILE LBI SIZE  -->
 
-        <Style Selector="ListBox.clipTileListBox > ListBoxItem"
+        <Style Selector="ListBox.clipTileListBox > ListBoxItem, Border#QueryTrayContainerBorder local|MpAvClipTileView"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Padding"
                     Value="{StaticResource TileInnerSpacing}" />
@@ -107,14 +107,14 @@
 
 
         <!--  HOVER FROZEN  -->
-        <Style Selector="ListBox.queryListBox > ListBoxItem:pointerover local|MpAvClipBorder#ClipTileContainerBorder.frozen"
+        <Style Selector="ListBox.queryListBox > ListBoxItem:pointerover local|MpAvClipBorder#ClipTileContainerBorder.frozen, Border#QueryTrayContainerBorder local|MpAvClipBorder#ClipTileContainerBorder.frozen"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
                     Value="{StaticResource ThemeAccent5Color}" />
         </Style>
 
         <!--  HOVER IMPLICIT  -->
-        <Style Selector="ListBox.clipTileListBox > ListBoxItem local|MpAvClipBorder#ClipTileContainerBorder.implicitHover"
+        <Style Selector="ListBox.clipTileListBox > ListBoxItem local|MpAvClipBorder#ClipTileContainerBorder.implicitHover, Border#QueryTrayContainerBorder local|MpAvClipBorder#ClipTileContainerBorder.implicitHover"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
                     Value="{StaticResource ThemeAccent5Color}" />

@@ -9,7 +9,7 @@
     </Styles.Resources>
 
     <!--  TILE BUSY OVERLAY VISIBILITY  -->
-    <Style Selector="ListBox.queryListBox > ListBoxItem Border#TileBusyOverlay"
+    <Style Selector="ListBox.queryListBox > ListBoxItem Border#TileBusyOverlay, Border#QueryTrayContainerBorder Border#TileBusyOverlay"
            x:DataType="local:MpAvClipTileViewModel">
         <Setter Property="IsVisible">
             <Setter.Value>

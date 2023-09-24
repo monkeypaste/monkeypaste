@@ -1,5 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -28,11 +30,33 @@ namespace MonkeyPaste.Avalonia {
             Instance = this;
 
             InitializeComponent();
-
             this.AttachedToVisualTree += MpAvQueryTrayView_AttachedToVisualTree;
+
+
+            if (this.FindControl<ScrollViewer>("QueryRepeaterScrollViewer") is ScrollViewer sv) {
+                sv.AddHandler(PointerWheelChangedEvent, QueryRepeaterScrollViewer_PointerWheelChanged, RoutingStrategies.Tunnel);
+            }
 
         }
 
+        private void QueryRepeaterScrollViewer_PointerWheelChanged(object sender, PointerWheelEventArgs e) {
+            if (sender is not ScrollViewer sv //||
+                                              //!BindingContext.CanScroll
+                ) {
+                return;
+            }
+            e.Handled = true;
+            double multiplier = 120;
+            var s = BindingContext.ScrollVector.ToPortablePoint();
+            if (BindingContext.LayoutType == MpClipTrayLayoutType.Stack) {
+                if (BindingContext.ListOrientation == Orientation.Horizontal) {
+                    s.X += e.Delta.Y * multiplier;
+                } else {
+                    s.Y += e.Delta.Y * multiplier;
+                }
+            }
+            BindingContext.ScrollVector = s.ToAvVector();
+        }
 
         private void MpAvQueryTrayView_AttachedToVisualTree(object sender, global::Avalonia.VisualTreeAttachmentEventArgs e) {
             InitDnd();
