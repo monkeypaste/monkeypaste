@@ -28,7 +28,7 @@
         </Style>
 
         <!--  TILE POSIITONING/VISIBILITY  -->
-      
+
         <Style Selector="ListBox.queryListBox > ListBoxItem"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Canvas.Left"
@@ -126,7 +126,7 @@
                 local:MpAvSizeObserverExtension.IsEnabled="True"
                 local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedQueryTrayScreenWidth, Mode=TwoWay}"
                 local:MpAvSizeObserverExtension.ObservedHeight="{Binding ObservedQueryTrayScreenHeight, Mode=TwoWay}">
-            <local:MpAvPagingScrollViewer x:Name="ClipTrayScrollViewer"
+            <!--<local:MpAvPagingScrollViewer x:Name="ClipTrayScrollViewer"
                                           HorizontalScrollBarVisibility="{Binding IsQueryHorizontalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
                                           VerticalScrollBarVisibility="{Binding IsQueryVerticalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
                                           IsScrollInertiaEnabled="False"
@@ -202,7 +202,46 @@
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>
-            </local:MpAvPagingScrollViewer>
+            </local:MpAvPagingScrollViewer>-->
+            <ScrollViewer HorizontalScrollBarVisibility="{Binding IsQueryHorizontalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
+                          VerticalScrollBarVisibility="{Binding IsQueryVerticalScrollBarVisible, Converter={x:Static local:MpAvBoolToScrollBarVisibilityConverter.Instance}, ConverterParameter=AUTO|HIDDEN}"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          AllowAutoHide="True"
+                          Width="{Binding $parent.Bounds.Width}"
+                          Height="{Binding $parent.Bounds.Height}">
+                <ItemsRepeater ItemsSource="{Binding Items}"
+                               Margin="0,20">
+                    <ItemsRepeater.Layout>
+                        <StackLayout Spacing="3"
+                                     Orientation="Horizontal" />
+                    </ItemsRepeater.Layout>
+                    <ItemsRepeater.ItemTemplate>
+                        <DataTemplate>
+                            <!--<Border Margin="10"
+                                    CornerRadius="5"
+                                    BorderBrush="Blue"
+                                    BorderThickness="1"
+                                    Padding="5">
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding CopyItemTitle}" />
+                                    <TextBlock Margin="5,0"
+                                               FontWeight="Bold"
+                                               TextWrapping="Wrap"
+                                               MaxWidth="260"
+                                               MaxHeight="220"
+                                               Text="{Binding CopyItemData}" />
+                                </StackPanel>
+                            </Border>-->
+                            <local:MpAvClipTileView UseLayoutRounding="True"
+                                                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                                                    local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                                    local:MpAvBoundsObserverExtension.IsEnabled="True"
+                                                    local:MpAvBoundsObserverExtension.ObservedBounds="{Binding ObservedBounds, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </ScrollViewer>
         </Border>
 
 
@@ -286,7 +325,7 @@
                              ElementName="QueryTrayContainerBorder" />
                     <Binding>
                         <Binding.Source>
-                            <sys:Double>0.9191</sys:Double>
+                            <sys:Double>0.75</sys:Double>
                         </Binding.Source>
                     </Binding>
                 </MultiBinding>

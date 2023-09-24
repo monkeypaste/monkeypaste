@@ -180,6 +180,72 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
+
+                    case MpPortableDataFormats.CefText:
+                        // BUG somehow text/plain is getting converted to bytes
+                        // when setting clipboard (like editor clipboard copy)
+                        // so if bytes convert to text...
+                        if (data is byte[] cefTextBytes &&
+                            cefTextBytes.ToDecodedString() is string cefPlainText) {
+                            data = cefPlainText;
+                        }
+                        switch (paramType) {
+                            case CoreOleParamType.TEXTPLAIN_R_MAXCHARCOUNT: {
+                                    if (data is string text) {
+                                        int max_length = int.Parse(paramVal);
+                                        if (text.Length > max_length) {
+                                            nfl = new List<MpPluginUserNotificationFormat>() {
+                                            Util.CreateNotification(
+                                                MpPluginNotificationType.PluginResponseWarning,
+                                                "Max Char Count Reached",
+                                                $"{format} limit is '{max_length}' and data was '{text.Length}'",
+                                                "CoreClipboardWriter")
+                                        };
+                                            data = text.Substring(0, max_length);
+                                        }
+                                    }
+                                }
+
+                                break;
+                            case CoreOleParamType.TEXTPLAIN_R_IGNORE: {
+                                    if (paramVal.ParseOrConvertToBool(false) is bool ignText &&
+                                    ignText) {
+                                        data = null;
+                                        AddIgnoreNotification(ref nfl, format);
+
+                                    } else {
+                                        return data;
+                                    }
+                                }
+
+                                break;
+                            case CoreOleParamType.TEXTPLAIN_W_MAXCHARCOUNT: {
+                                    if (data is string text) {
+                                        int max_length = paramVal.ParseOrConvertToInt(int.MaxValue);
+                                        if (text.Length > max_length) {
+                                            nfl = new List<MpPluginUserNotificationFormat>() {
+                                            Util.CreateNotification(
+                                                MpPluginNotificationType.PluginResponseWarning,
+                                                "Max Char Count Reached",
+                                                $"{format} limit is '{max_length}' and data was '{text.Length}'",
+                                                "CoreClipboardWriter")
+                                        };
+                                            data = text.Substring(0, max_length);
+                                        }
+                                    }
+                                }
+
+                                break;
+                            case CoreOleParamType.TEXT_W_IGNORE: {
+                                    if (paramVal.ParseOrConvertToBool(false) is bool textImg &&
+                                        textImg) {
+                                        data = null;
+                                    }
+                                }
+
+                                break;
+                        }
+                        break;
                     case MpPortableDataFormats.AvPNG:
                         switch (paramType) {
 

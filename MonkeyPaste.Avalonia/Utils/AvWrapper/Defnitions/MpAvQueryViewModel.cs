@@ -3,6 +3,7 @@ using MonkeyPaste.Common;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -92,6 +93,24 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private IEnumerable<int> _allIds = null;
+        public async Task<IEnumerable<MpCopyItem>> QueryForModelsAsync() {
+            int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            _pageTools.SetTotalCount(total_count);
+            _allIds = await MpContentQuery.FetchItemIdsAsync(this, 0, total_count, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+
+            var allItems = await MpDb.GetAsyncTable<MpCopyItem>().ToListAsync();
+            var result = _allIds.Select(x => allItems.FirstOrDefault(y => y.Id == x));
+            return result;
+            //var result =
+            //    await Task.WhenAll(
+            //    _allIds
+            //    .GroupBy(x => _allIds.IndexOf(x) % 5000)
+            //    .Select(x =>
+            //      MpDb.GetAsyncTable<MpCopyItem>().Where(y => x.Contains(y.Id)).ToListAsync()));
+            //return result.SelectMany(x => x);
+
+        }
         public async Task QueryForTotalCountAsync(bool isRequery) {
             int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
             _pageTools.SetTotalCount(total_count);

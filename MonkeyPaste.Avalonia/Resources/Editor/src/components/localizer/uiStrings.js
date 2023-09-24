@@ -37,5 +37,6 @@ var UiStrings = {
 	EditorAppendResumeLabel: `Resume appending to clipboard`,
 	EditorPasteButtonAppendBeginLabel: `Append...`,
 	EditorPasteButtonLabel: `Paste`,
+	EditorCommonBusyLabel: `Please wait...`,
 
 };

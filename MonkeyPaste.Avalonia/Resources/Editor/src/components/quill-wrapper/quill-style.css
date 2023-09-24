@@ -7,18 +7,18 @@
     fill: var(--editortoolbarbuttoncolor) !important;
 }
 
-.ql-stroke.locked {
+button.locked .ql-stroke {
     stroke: var(--insertselectcolor) !important;
 }
 
-.ql-fill.locked, .ql-path.locked {
+button.locked .ql-fill, button.locked .ql-path {
     fill: var(--insertselectcolor) !important;
 }
-.ql-stroke.toggled:not(.locked) {
+button.toggled:not(.locked) .ql-stroke {
     stroke: var(--optselectcolor) !important;
 }
 
-.ql-fill.toggled:not(.locked), .ql-path.toggled:not(.locked) {
+button.toggled:not(.locked) .ql-fill, button.toggled:not(.locked).ql-path {
     fill: var(--optselectcolor) !important;
 }
 

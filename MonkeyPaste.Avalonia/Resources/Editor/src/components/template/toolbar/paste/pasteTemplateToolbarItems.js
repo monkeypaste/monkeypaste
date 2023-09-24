@@ -355,10 +355,6 @@ function updatePasteElementInteractivity() {
 
     const is_selector_have_opts = isPasteTemplateHaveOptions();
 
-
-    //let can_paste = paste_t_defs.filter(x => !isTemplateReadyToPaste(x)).length == 0;
-    let can_paste = true;
-
     let inactive_template_button_classes = 'hidden';
     //let inactive_template_button_classes = 'disabled';
     //if (getTemplateDefs().length == 0) {
@@ -398,12 +394,6 @@ function updatePasteElementInteractivity() {
         getPasteEditFocusTemplateButtonElement().classList.add(inactive_template_button_classes);
         //getPasteValueTextAreaElement().classList.add(inactive_template_button_classes);
         //getPasteTemplateHintContainerElement().classList.add(inactive_template_button_classes);
-	}
-
-    if (can_paste) {
-        getPasteButtonElement().classList.remove('disabled');
-    } else {
-        getPasteButtonElement().classList.add('disabled');
 	}
 
     return can_edit;

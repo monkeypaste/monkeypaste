@@ -14,7 +14,7 @@ function getBusySpinnerMenuItem() {
             icon: 'spinner',
             iconFgColor: 'dimgray',
             iconClasses: 'rotate',
-            label: 'Loading...'
+            label: UiStrings.EditorCommonBusyLabel
         }
     ];
 }

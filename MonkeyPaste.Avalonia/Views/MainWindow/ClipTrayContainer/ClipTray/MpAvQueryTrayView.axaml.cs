@@ -1,15 +1,9 @@
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Layout;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -47,7 +41,10 @@ namespace MonkeyPaste.Avalonia {
         #region Drop
 
         private void InitDnd() {
-            var ctrlb = this.FindControl<ListBox>("ClipTrayListBox");
+            if (this.FindControl<ListBox>("ClipTrayListBox") is not ListBox ctrlb) {
+                return;
+            }
+
             DragDrop.SetAllowDrop(ctrlb, true);
             ctrlb.AddHandler(DragDrop.DragEnterEvent, DragEnter);
             ctrlb.AddHandler(DragDrop.DragOverEvent, DragOver);

@@ -7,7 +7,6 @@
 function initPasteAppendToolbarItems() {
 	hidePasteAppendToolbar();
 	updatePasteAppendToolbar();
-	attachAppendButtonHandlers();
 }
 
 
@@ -104,11 +103,11 @@ function getAppendButtonLookup2() {
 			elm: getPasteAppendToggleManualButtonElement(),
 			enabledInfo: {
 				svgKey: 'scope',
-				ttText: `${UiStrings.EditorAppendNonManualModeLabel}`
+				ttText: `${UiStrings.EditorAppendNonManualModeLabel} ${getShortcutEncStr(globals.APD_MANUAL_SCT_IDX)}`
 			},
 			disabledInfo: {
 				svgKey: 'scope',
-				ttText: `${UiStrings.EditorAppendManualModeLabel}`
+				ttText: `${UiStrings.EditorAppendManualModeLabel} ${getShortcutEncStr(globals.APD_MANUAL_SCT_IDX)}`
 			},
 			handler: function (e) {
 				onPasteAppendOptButtonClick(e, 'manual');
@@ -180,22 +179,6 @@ function isShowingPasteAppendPopupOptElement() {
 // #endregion State
 
 // #region Actions
-function attachAppendButtonHandlers() {
-	//addClickOrKeyClickEventListener(getPasteAppendBeginButtonElement(), onAppendBeginButtonClickOrKey);
-	//addClickOrKeyClickEventListener(getPasteAppendToggleInlineButtonElement(), onAppendToggleInlineButtonClickOrKey);
-	//addClickOrKeyClickEventListener(getPasteAppendToggleManualButtonElement(), onAppendToggleManualButtonClickOrKey);
-	//addClickOrKeyClickEventListener(getPasteAppendToggleBeforeButtonElement(), onAppendToggleBeforeButtonClickOrKey);
-
-	//addClickOrKeyClickEventListener(getPasteAppendPauseAppendButtonElement(), onPauseAppendButtonClickOrKey);
-	//addClickOrKeyClickEventListener(getPasteAppendStopAppendButtonElement(), onStopAppendButtonClickOrKey);
-
-	//if (globals.ContentItemType == 'FileList') {
-	//	getPasteAppendToggleInlineButtonElement().classList.add('disabled');
-	//} else {
-	//	getPasteAppendToggleInlineButtonElement().classList.remove('disabled');
-	//}
-}
-
 
 function showPasteAppendToolbar() {
 	getPasteAppendToolbarContainerElement().classList.add('expanded');
@@ -233,6 +216,7 @@ function updatePasteAppendToolbar() {
 		elm.addEventListener('click', onPasteAppendToolbarButtonClick);
 		//addClickOrKeyClickEventListener(elm, onClickHandler);
 	}
+	scrollToAppendIdx();
 	drawOverlay();
 }
 
@@ -326,7 +310,6 @@ function onPasteAppendOptButtonClick(e, type) {
 			disableAppendMode(false);
 			break;
 	}
-	scrollToAppendIdx();
 	updatePasteAppendToolbar();
 }
 

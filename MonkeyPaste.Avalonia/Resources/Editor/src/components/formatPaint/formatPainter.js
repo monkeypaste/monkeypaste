@@ -28,22 +28,30 @@ function getCurPaintFormat() {
 // #region State
 
 function isFormatPaintToggled() {
-	const is_toggled = Array.from(getFormatPaintToolbarElement().querySelectorAll('path'))[0].classList.contains('toggled');
+	const is_toggled = getFormatPaintToolbarElement().classList.contains('toggled');
 	return is_toggled;
 }
 
 function isFormatPaintLocked() {
-	const is_toggled = Array.from(getFormatPaintToolbarElement().querySelectorAll('path'))[0].classList.contains('locked');
+	const is_toggled = getFormatPaintToolbarElement().classList.contains('locked');
 	return is_toggled;
 }
 
 // #endregion State
 
 // #region Actions
-function setFormatPaintToolbarButtonToggleState(isToggled,isLocked = false) {
-	let fp_svg_path_elms = Array.from(getFormatPaintToolbarElement().querySelectorAll('path'));
-	fp_svg_path_elms.forEach(x => isToggled ? x.classList.add('toggled') : x.classList.remove('toggled'));
-	fp_svg_path_elms.forEach(x => isLocked ? x.classList.add('locked') : x.classList.remove('locked'));
+function setFormatPaintToolbarButtonToggleState(isToggled, isLocked) {
+	isToggled ?
+		getFormatPaintToolbarElement().classList.add('toggled') :
+		getFormatPaintToolbarElement().classList.remove('toggled');
+
+	isLocked ?
+		getFormatPaintToolbarElement().classList.add('locked') :
+		getFormatPaintToolbarElement().classList.remove('locked');
+
+	//let fp_svg_path_elms = Array.from(getFormatPaintToolbarElement().querySelectorAll('path'));
+	//fp_svg_path_elms.forEach(x => isToggled ? x.classList.add('toggled') : x.classList.remove('toggled'));
+	//fp_svg_path_elms.forEach(x => isLocked ? x.classList.add('locked') : x.classList.remove('locked'));
 }
 
 function paintFormatOnSelection() {
@@ -68,7 +76,7 @@ function enableFormatPaint(isLocked) {
 }
 
 function disableFormatPaint() {
-	setFormatPaintToolbarButtonToggleState(false);
+	setFormatPaintToolbarButtonToggleState(false,false);
 	globals.CurPaintFormat = null;
 
 	getEditorElement().removeEventListener('mouseup', onEditorSelChangedForFormatPaint);
@@ -79,22 +87,16 @@ function disableFormatPaint() {
 // #region Event Handlers
 
 function onFormatPaintToolbarButtonClick(e) {
-	if (e.detail == 1) {
-		if (isFormatPaintToggled()) {
-			disableFormatPaint();
-		} else {
-			enableFormatPaint();
-		}
+	if (isFormatPaintToggled()) {
+		disableFormatPaint();
 		return;
 	}
-	if (!isFormatPaintToggled()) {
-		return;
-	}
-	if (e.detail == 2) {
-		enableFormatPaint(true);
-		return;
-	}
-	disableFormatPaint();	
+	let is_locking =
+		e.detail == 2 ||
+		e.ctrlKey ||
+		e.altKey;
+
+	enableFormatPaint(is_locking);
 }
 
 function onEditorSelChangedForFormatPaint(e) {

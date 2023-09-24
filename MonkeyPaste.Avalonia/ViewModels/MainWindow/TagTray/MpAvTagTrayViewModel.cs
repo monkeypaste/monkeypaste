@@ -681,7 +681,7 @@ namespace MonkeyPaste.Avalonia {
 
                 _selectedItemId = tagId;
                 Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
-
+                OnPropertyChanged(nameof(LastSelectedActiveItem));
                 OnPropertyChanged(nameof(SelectedItem));
                 OnPropertyChanged(nameof(SelectedPinnedItem));
 

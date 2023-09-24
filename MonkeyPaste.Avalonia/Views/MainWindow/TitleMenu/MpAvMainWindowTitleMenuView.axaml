@@ -19,6 +19,15 @@
     <local:MpAvUserControl.Styles>
         <!--  BUTTONS  -->
 
+        <Style Selector="Border#MinimizeBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+
+        <Style Selector="Button:pointerover Border#MinimizeBorder">
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeGrayAccent2Color}" />
+        </Style>
         <Style Selector="PathIcon">
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeInteractiveColor}" />
@@ -132,7 +141,7 @@
         <StackPanel x:Name="LeftStackPanel"
                     Orientation="Horizontal"
                     HorizontalAlignment="Left">
-            <!--  Settings Toggle Button  -->
+            <!--  SETTINGS BUTTON  -->
 
             <ToggleButton x:Name="SettingsToggleButton"
                           Classes="noBg noHoverBg"
@@ -146,15 +155,38 @@
                 <PathIcon Data="{StaticResource CogSvg}" />
             </ToggleButton>
 
-            <ToggleButton x:Name="LockToggleButton"
+            <!--  LOCK BUTTON  -->            <ToggleButton x:Name="LockToggleButton"
+                          IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=OneWay}"
                           Command="{Binding ToggleMainWindowLockCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                           CommandParameter="{Binding $self}"
                           Classes="noBg noHoverBg">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Lock" />
+                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.MainWindowTitleLockLabel}"
+                                           InputGestureText="{Binding ., ConverterParameter=ToggleMainWindowLocked, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
                 </ToolTip.Tip>
                 <PathIcon Data="{StaticResource LockOutlineSvg}" />
             </ToggleButton>
+
+            <!--  MINIMIZE BUTTON  -->
+
+            <Button x:Name="MinimizeMainWindowButton"
+                    Margin="5,0,0,0"
+                    Width="20"
+                    Height="20"
+                    Command="{Binding ForceMinimizeMainWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
+                    Classes="noBg noHoverBg noBorder noHoverBorder">
+                <ToolTip.Tip>
+                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonMinimizeWindowLabel}"
+                                           InputGestureText="{Binding ., ConverterParameter=HideMainWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}" />
+                </ToolTip.Tip>
+                <Border x:Name="MinimizeBorder"
+                        CornerRadius="5"
+                        Height="5"
+                        Width="15"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center" />
+
+            </Button>
         </StackPanel>
 
         <!--  MIDDLE (DRAG HANDLE)  -->

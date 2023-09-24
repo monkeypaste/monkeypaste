@@ -2041,6 +2041,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Force Minimize Main Window.
+        /// </summary>
+        public static string MpShortcutType_ForceMinimizeMainWindow {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ForceMinimizeMainWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide Main Window.
         /// </summary>
         public static string MpShortcutType_HideMainWindow {
@@ -2244,6 +2253,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpShortcutType_ToggleAppendLineMode {
             get {
                 return ResourceManager.GetString("MpShortcutType_ToggleAppendLineMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Append Manual Mode.
+        /// </summary>
+        public static string MpShortcutType_ToggleAppendManualMode {
+            get {
+                return ResourceManager.GetString("MpShortcutType_ToggleAppendManualMode", resourceCulture);
             }
         }
         

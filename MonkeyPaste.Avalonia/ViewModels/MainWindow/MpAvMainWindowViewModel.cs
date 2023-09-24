@@ -1087,7 +1087,7 @@ namespace MonkeyPaste.Avalonia {
                 break;
             }
 
-            await HideMainWindowCommand.ExecuteAsync();
+            await HideMainWindowCommand.ExecuteAsync(null);
 
             // only show in taskbar once initial/hidden show is complete
             MpAvWindowManager.MainWindow.Bind(
@@ -1176,8 +1176,19 @@ namespace MonkeyPaste.Avalonia {
                 return canShow;
             });
 
-        public MpIAsyncCommand HideMainWindowCommand => new MpAsyncCommand(
+        public MpIAsyncCommand ForceMinimizeMainWindowCommand => new MpAsyncCommand(
             async () => {
+                if (IsMainWindowLocked) {
+                    ToggleMainWindowLockCommand.Execute(null);
+                }
+                await HideMainWindowCommand.ExecuteAsync("force");
+            },
+            () => {
+                return IsMainWindowOpen;
+            });
+
+        public MpIAsyncCommand<object> HideMainWindowCommand => new MpAsyncCommand<object>(
+            async (args) => {
                 Dispatcher.UIThread.VerifyAccess();
                 if (IsMainWindowClosing && IsMainWindowAnimating()) {
                     return;
@@ -1193,11 +1204,15 @@ namespace MonkeyPaste.Avalonia {
                 }
                 FinishMainWindowHide();
             },
-            () => {
+            (args) => {
                 if (Mp.Services != null &&
                     Mp.Services.PlatformInfo != null &&
                     !Mp.Services.PlatformInfo.IsDesktop) {
                     return false;
+                }
+                if (args.ToStringOrEmpty() == "force") {
+                    // always hide
+                    return true;
                 }
 
                 AnalyzeWindowState("hide");

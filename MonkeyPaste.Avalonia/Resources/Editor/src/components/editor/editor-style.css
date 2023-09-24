@@ -36,13 +36,18 @@
     padding-bottom: var(--appendpad);
 }
 
-
-
-#editor.no-select > .ql-editor {
-    user-select: none;
-    pointer-events: none;
+#editor.unwrap {
+    overflow: auto;
+}
+#editor.unwrap .ql-editor {
+    white-space: nowrap !important;
+    overflow: visible;
 }
 
+/*.unwrap.size-check > .ql-editor {
+        min-width: 808080px;
+        min-height: 808080px !important;
+}*/
 
 .show-scrollbars {
     overflow: auto !important;
@@ -50,12 +55,19 @@
 }
 
     .show-scrollbars > .ql-editor {
-        overflow: hidden !important;
+        overflow: visible !important;
     }
 
 .hide-scrollbars {
     overflow: hidden !important;
 }
+
+
+#editor.no-select > .ql-editor {
+    user-select: none;
+    pointer-events: none;
+}
+
 
 .no-select {
     cursor: default;

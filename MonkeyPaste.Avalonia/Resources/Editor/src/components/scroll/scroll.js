@@ -177,42 +177,10 @@ function showAllScrollbars() {
 
 function unwrapContentScroll() {
     getEditorContainerElement().classList.add('unwrap');
-    if (globals.ContentItemType != 'Text') {
-        // don't actually change anything for files or images
-        // but keep the class
-        updateAllElements();
-        return;
-    }
-    getEditorContainerElement().classList.add('size-check');
-
-    let actual_content_width = 0;
-    let actual_content_height = 0;
-    let lines = getLineCount();
-    for (var i = 0; i < lines; i++) {
-        let line_rect = getLineRect(i, false);
-        actual_content_width = Math.max(actual_content_width, line_rect.width);
-        actual_content_height += line_rect.height;
-    }
-    let editor_elm = getEditorElement();
-    let cnt_rect = getEditorContainerRect();
-    // add 100 in case template at the end ( i think its from extra spaces or somethign...)
-    let adjusted_editor_width = Math.max(cnt_rect.width, actual_content_width + 100);
-    let adjusted_editor_height = actual_content_height;// Math.max(actual_content_height, cnt_rect.height);
-
-    getEditorContainerElement().classList.remove('size-check');
-    editor_elm.style.minWidth = `${adjusted_editor_width}px`;
-    editor_elm.style.minHeight = `${adjusted_editor_height}px`;
     updateAllElements();
 }
 function wrapContentScroll() {
     getEditorContainerElement().classList.remove('unwrap');
-    if (globals.ContentItemType != 'Text') {
-        updateAllElements();
-        return;
-    }
-    let editor_elm = getEditorElement();
-    editor_elm.style.minWidth = '';
-    editor_elm.style.minHeight = '';
     updateAllElements();
 }
 function scrollToHome() {

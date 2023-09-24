@@ -139,10 +139,10 @@ namespace MonkeyPaste.Avalonia {
                             MpShortcutType.ToggleAppendPreMode,
                             MpAvClipTrayViewModel.Instance.ToggleAppendPreModeCommand
                         },
-                        //{
-                        //    MpShortcutType.ToggleAppendManualMode,
-                        //    MpAvClipTrayViewModel.Instance.ToggleAppendManualModeCommand
-                        //},
+                        {
+                            MpShortcutType.ToggleAppendManualMode,
+                            MpAvClipTrayViewModel.Instance.ToggleAppendManualModeCommand
+                        },
                         {
                             MpShortcutType.ToggleAppendPaused,
                             MpAvClipTrayViewModel.Instance.ToggleAppendPausedCommand
@@ -291,6 +291,10 @@ namespace MonkeyPaste.Avalonia {
                         {
                             MpShortcutType.PermanentlyDelete,
                             MpAvClipTrayViewModel.Instance.PermanentlyDeleteSelectedClipFromShortcutCommand
+                        },
+                        {
+                            MpShortcutType.ForceMinimizeMainWindow,
+                            MpAvMainWindowViewModel.Instance.ForceMinimizeMainWindowCommand
                         }
                     };
                 }
@@ -1026,7 +1030,7 @@ namespace MonkeyPaste.Avalonia {
             }
             _keyboardGestureHelper.AddKeyDown(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
-            MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' PRESSED");
+            //MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' PRESSED");
             Dispatcher.UIThread.Post(() => HandleGlobalKeyEvents(keyStr, true));
             if (!IsShortcutsEnabled) {
                 return;
@@ -1090,7 +1094,7 @@ namespace MonkeyPaste.Avalonia {
         private void Hook_KeyTyped(object sender, KeyboardHookEventArgs e) {
             //HandleReleaseOrTyped(e, false);≡
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
-            MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' TYPED");
+            //MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' TYPED");
         }
 
         private void HandleReleaseOrTyped(KeyboardHookEventArgs e, bool isRelease) {
@@ -1103,7 +1107,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
-            MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' RELEASED");
+            //MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' RELEASED");
             Dispatcher.UIThread.Post(() => HandleGlobalKeyEvents(keyStr, false));
             if (!IsShortcutsEnabled) {
                 return;

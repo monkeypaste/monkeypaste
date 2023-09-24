@@ -18,6 +18,7 @@ namespace MonkeyPaste {
         Task QueryForTotalCountAsync(bool isRequery);
 
         Task<int> FetchItemOffsetIdxAsync(int ciid);
+        Task<IEnumerable<MpCopyItem>> QueryForModelsAsync();
 
         void NotifyQueryChanged(bool forceRequery = false);
 

@@ -51,14 +51,6 @@ body {
     /*white-space: pre-wrap;*/
 }
 
-.unwrap {
-    white-space: nowrap !important;
-    overflow: auto;
-}
-.unwrap.size-check > .ql-editor {
-        min-width: 808080px;
-        min-height: 808080px !important;
-}
 
 ::selection {
     background-color: var(--selbgcolor);

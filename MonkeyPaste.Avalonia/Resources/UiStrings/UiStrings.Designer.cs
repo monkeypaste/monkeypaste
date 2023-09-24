@@ -196,6 +196,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last active app unknown. Switch to intended app to monkey paste..
+        /// </summary>
+        public static string ClipTilePasteButtonDisabledTooltip {
+            get {
+                return ResourceManager.GetString("ClipTilePasteButtonDisabledTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste to: &lt;em&gt;&lt;i class=&quot;paste-tooltip-suffix&quot;&gt;{0}&lt;/i&gt;&lt;/em&gt;.
+        /// </summary>
+        public static string ClipTilePasteButtonTooltip {
+            get {
+                return ResourceManager.GetString("ClipTilePasteButtonTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tags.
         /// </summary>
         public static string ClipTileTagContextMenuLabel {
@@ -282,6 +300,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonEnableLabel {
             get {
                 return ResourceManager.GetString("CommonEnableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimize.
+        /// </summary>
+        public static string CommonMinimizeWindowLabel {
+            get {
+                return ResourceManager.GetString("CommonMinimizeWindowLabel", resourceCulture);
             }
         }
         
@@ -466,6 +493,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please wait....
+        /// </summary>
+        public static string EditorCommonBusyLabel {
+            get {
+                return ResourceManager.GetString("EditorCommonBusyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Append....
         /// </summary>
         public static string EditorPasteButtonAppendBeginLabel {
@@ -558,6 +594,15 @@ namespace MonkeyPaste.Avalonia {
         public static string GestureProfileInternal {
             get {
                 return ResourceManager.GetString("GestureProfileInternal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lock.
+        /// </summary>
+        public static string MainWindowTitleLockLabel {
+            get {
+                return ResourceManager.GetString("MainWindowTitleLockLabel", resourceCulture);
             }
         }
         

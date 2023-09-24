@@ -2362,21 +2362,29 @@ namespace MonkeyPaste.Avalonia {
                 // TODO? add plain text paste toolbar? (tip of an iceburg)
                 return;
             }
-            if (e != null) {
+            if (e == null) {
+                // unknown paste app
+                CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
+                    pasteButtonTooltipText = UiStrings.ClipTilePasteButtonDisabledTooltip
+                };
+            } else {
+                bool is_custom =
+                    MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e)
+                        is MpAvAppViewModel avm &&
+                    avm != null &&
+                    !avm.OleFormatInfos.IsDefault;
+
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
                     pasteButtonTooltipText =
+                        string.Format(
+                            UiStrings.ClipTilePasteButtonTooltip,
                         string.IsNullOrEmpty(e.ApplicationName) ?
                             e.MainWindowTitle :
-                            e.ApplicationName,
+                            e.ApplicationName),
                     pasteButtonIconBase64 = e.MainWindowIconBase64,
                     infoId = e.ProcessPath,
-                    isFormatDefault = true
+                    isFormatDefault = !is_custom
                 };
-                if (MpAvAppCollectionViewModel.Instance.GetAppByProcessInfo(e) is MpAvAppViewModel avm) {
-                    CurPasteInfoMessage.isFormatDefault = avm.OleFormatInfos.IsDefault;
-                }
-            } else {
-                CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage();
             }
 
             string msg = $"enableSubSelection_ext('{CurPasteInfoMessage.SerializeJsonObjectToBase64()}')";
@@ -3626,7 +3634,9 @@ namespace MonkeyPaste.Avalonia {
                 if (new_head_idx < 0) {
                     return false;
                 }
-                if (QueryCommand.CanExecute(ScrollOffset)) {
+                bool can_query = QueryCommand.CanExecute(ScrollOffset);
+                MpConsole.WriteLine($"Empty query screen detected. Can fix (iprq): {can_query}");
+                if (can_query) {
                     QueryCommand.Execute(ScrollOffset);
                     return true;
                 }
@@ -3917,7 +3927,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsQueryEmpty));
 
             sw.Stop();
-            MpConsole.WriteLine($"Update tray of {Items.Count} items took: " + sw.ElapsedMilliseconds);
+            MpConsole.WriteLine($"Update tray of {recycle_idxs.Count} items took: " + sw.ElapsedMilliseconds);
 
             if (isRequery) {
                 ForceScrollOffset(MpPoint.Zero, "requery");
@@ -3975,6 +3985,27 @@ namespace MonkeyPaste.Avalonia {
         }
         public MpIAsyncCommand<object> QueryCommand => new MpAsyncCommand<object>(
             async (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg) => {
+                IsQuerying = true;
+                IsRequerying = true;
+
+                var ml = await Mp.Services.Query.QueryForModelsAsync();
+                IsQuerying = false;
+                IsRequerying = false;
+                Items.Clear();
+                Dispatcher.UIThread.Post(async () => {
+                    foreach (var (m, idx) in ml.WithIndex()) {
+                        var ctvm = await CreateClipTileViewModelAsync(m, idx);
+                        if (IsQuerying) {
+                            return;
+                        }
+                        Items.Add(ctvm);
+                        MpConsole.WriteLine($"Item count: {idx}");
+                    }
+                    OnPropertyChanged(nameof(Items));
+
+                });
+                return;
+
 
                 if (offsetIdx_Or_ScrollOffset_Or_AddToTail_Arg is not List<List<int>> ranges) {
 
@@ -4496,7 +4527,6 @@ namespace MonkeyPaste.Avalonia {
                 isAppendManualMode = IsAppendManualMode,
                 isAppendPaused = IsAppendPaused,
                 isAppendPreMode = IsAppendPreMode,
-                isDataTransferDestFormattingEnabled = MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled,
                 appendData = data
             };
         }

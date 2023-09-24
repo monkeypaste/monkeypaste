@@ -47,6 +47,40 @@ function getPasteToolbarHeight() {
 
 // #region Setters
 
+function setPasteButtonContent(new_paste_icon_key_or_base64, tooltip) {
+    let new_paste_icon_elm = null;
+    if (isNullOrEmpty(new_paste_icon_key_or_base64)) {
+        new_paste_icon_elm = createSvgElement('paste', 'svg-icon paste-toolbar-icon');
+    } else if (new_paste_icon_key_or_base64 == 'spinner') {
+        new_paste_icon_elm = createSvgElement('spinner', 'svg-icon paste-toolbar-icon rotate');
+    } else {
+        new_paste_icon_elm = document.createElement('img');
+        new_paste_icon_elm.src = `data:image/png;base64,${new_paste_icon_key_or_base64}`;
+    }
+    let paste_icon_elm = getPasteButtonElement().children[0];
+    getPasteButtonElement().replaceChild(new_paste_icon_elm, paste_icon_elm);
+    getPasteButtonElement().setAttribute('hover-tooltip', tooltip);
+
+}
+
+function setPasteButtonState(isEnabled, isCustom) {
+    if (isEnabled) {
+        getPasteButtonElement().classList.remove('disabled');
+        getPasteButtonPopupExpanderElement().classList.remove('disabled');
+    } else {
+        getPasteButtonElement().classList.add('disabled');
+        getPasteButtonPopupExpanderElement().classList.add('disabled');
+    }
+    if (isCustom === undefined) {
+        // when pasting
+        return;
+    }
+
+    isCustom ?
+        getPasteButtonAndModeContainerElement().classList.add('custom') :
+        getPasteButtonAndModeContainerElement().classList.remove('custom');
+}
+
 // #endregion Setters
 
 // #region State
@@ -127,41 +161,18 @@ function updatePasteButtonInfo(pasteButtonInfoObj) {
     let new_paste_tooltip_info_part = pasteButtonInfoObj ? pasteButtonInfoObj.pasteButtonTooltipText : 'Unknown';
     let new_paste_info_id = pasteButtonInfoObj ? pasteButtonInfoObj.infoId : null;
     let new_paste_info_is_default = pasteButtonInfoObj ? pasteButtonInfoObj.isFormatDefault : true;
-    const new_paste_tooltip = `Paste to: <em><i class="paste-tooltip-suffix">${new_paste_tooltip_info_part}</i></em>`;
-    setPasteButtonContent(new_paste_icon_base64, new_paste_tooltip);
-    
-    getPasteButtonAndModeContainerElement().classList.remove('custom');
-    getPasteButtonElement().classList.remove('disabled');
-    getPasteButtonPopupExpanderElement().classList.remove('disabled');
-    let is_disabled = isNullOrWhiteSpace(new_paste_info_id);
-    if (is_disabled) {
-        getPasteButtonElement().classList.add('disabled');
-        getPasteButtonPopupExpanderElement().classList.add('disabled');
-    } else {
-        if (!new_paste_info_is_default) {
-            getPasteButtonAndModeContainerElement().classList.add('custom');
-        }
-    }
+    //const new_paste_tooltip = `Paste to: <em><i class="paste-tooltip-suffix">${new_paste_tooltip_info_part}</i></em>`;
+    setPasteButtonContent(new_paste_icon_base64, new_paste_tooltip_info_part);
+
+    let is_enabled = !isNullOrWhiteSpace(new_paste_info_id);
+    let is_custom = is_enabled && !new_paste_info_is_default;
+    setPasteButtonState(is_enabled, is_custom);
+
     globals.LastRecvdPasteInfoMsgObj = pasteButtonInfoObj;
     globals.CurPasteInfoId = new_paste_info_id;
     log('paste button updated. tooltip set to: ' + new_paste_tooltip_info_part);
 }
 
-function setPasteButtonContent(new_paste_icon_key_or_base64, tooltip) {
-    let new_paste_icon_elm = null;
-    if (isNullOrEmpty(new_paste_icon_key_or_base64)) {
-        new_paste_icon_elm = createSvgElement('paste', 'svg-icon paste-toolbar-icon');
-    } else if (new_paste_icon_key_or_base64 == 'spinner') {
-        new_paste_icon_elm = createSvgElement('spinner', 'svg-icon paste-toolbar-icon rotate');
-    } else {
-        new_paste_icon_elm = document.createElement('img');
-        new_paste_icon_elm.src = `data:image/png;base64,${new_paste_icon_key_or_base64}`;
-    }
-    let paste_icon_elm = getPasteButtonElement().children[0];
-    getPasteButtonElement().replaceChild(new_paste_icon_elm, paste_icon_elm);
-    getPasteButtonElement().setAttribute('hover-tooltip', tooltip);
-
-}
 
 function unexpandPasteButton(fromHost = false) {
     getPasteButtonPopupExpanderElement().classList.remove('expanded');
@@ -183,7 +194,7 @@ function expandPasteButton(fromHost = false) {
 }
 
 function startPasteButtonBusy() {
-    setPasteButtonContent('spinner', 'Please wait...');
+    setPasteButtonContent('spinner', UiStrings.EditorCommonBusyLabel);
     getPasteButtonElement().classList.add('disabled');
     getPasteButtonPopupExpanderElement().classList.add('disabled');
     getEditorContainerElement().classList.add('pasting');

@@ -91,11 +91,12 @@ namespace MonkeyPaste.Avalonia {
             if (diffs.Any()) {
                 // either new/missing entries or values changed
                 MpConsole.WriteLine("Enums Changed! Here are diffs: ", true);
-                diffs.ForEach(x => MpConsole.WriteLine($"'{x.Key}'=>'{x.Value}'"));
+                diffs.ForEach(x => MpConsole.WriteLine($"'{x.Key}'=>'{x.Value}'", stampless: true));
                 MpDebug.Break($"CAUTION! Enum uistrings changed. If not planned terminate but note diffs before and fix because its about to be overwriten...");
                 string target_path = ActualEnumUiResxResourcePath;
                 target_path = CreateEnumResx(target_path);
-                // NOTE! Clean and rebuild before re-running
+                // NOTE! EnumUiStrings should NOT have designer.cs after shutdown.
+                // Add empty row and save to generate, then clean and rebuild before re-running
                 Mp.Services.ShutdownHelper.ShutdownApp($"Enum UI strings updated at path '{target_path}'");
             } else {
                 MpConsole.WriteLine($"Enum Ui strings match. All appears well");
@@ -107,11 +108,10 @@ namespace MonkeyPaste.Avalonia {
             try {
                 if (resx_path.IsFile()) {
                     MpFileIo.DeleteFile(resx_path);
-                    string resx_cs_path = $"{resx_path}.Designer.cs";
-                    if (resx_cs_path.IsFile()) {
-                        // need to remove code file also
-                        MpFileIo.DeleteFile(resx_cs_path);
-                    }
+                    string resx_cs_path = resx_path.Replace(".resx", ".Designer.cs");
+                    MpDebug.Assert(resx_cs_path.IsFile(), $"EnumUi str error, cannot find designer file '{resx_cs_path}'");
+                    // need to remove code file also
+                    MpFileIo.DeleteFile(resx_cs_path);
                 }
                 using MemoryStream ms = new MemoryStream();
                 using ResXResourceWriter oWriter = new ResXResourceWriter(resx_path);
@@ -123,6 +123,7 @@ namespace MonkeyPaste.Avalonia {
                 code_elu.ForEach(x => oWriter.AddResource(x.Key, x.Value));
                 oWriter.Generate();
                 oWriter.Close();
+                MpConsole.WriteLine($"EnumUiStrings created successfully at path '{resx_path}'");
                 return resx_path;
             }
             catch (Exception ex) {

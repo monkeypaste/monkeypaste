@@ -788,13 +788,15 @@ var globals = {
 	APD_INSERT_SCT_IDX: 0,
 	APD_LINE_SCT_IDX: 1,
 	APD_PRE_SCT_IDX: 2,
-	APD_PAUSED_SCT_IDX: 3,
+	APD_MANUAL_SCT_IDX: 3,
+	APD_PAUSED_SCT_IDX: 4,
 
 	SHORTCUT_TYPES: [
 		'ToggleAppendInsertMode',
 		'ToggleAppendLineMode',
 		'ToggleAppendPreMode',
-		'ToggleAppendPaused'
+		'ToggleAppendManualMode',
+		'ToggleAppendPaused',
 	],
 
 	ShortcutKeysLookup: {},

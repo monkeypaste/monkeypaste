@@ -165,11 +165,11 @@ namespace MonkeyPaste.Avalonia {
                 sb.AppendLine($"Result: Downs: {_downs.Count} DownCheckers: {_downChecker.Count} Gesture: '{GetCurrentGesture()}'");
                 orphan_msg = sb.ToString();
                 MpConsole.WriteLine(orphan_msg);
-                Mp.Services.NotificationBuilder.ShowMessageAsync(
-                           title: $"Orphans Detected",
-                           body: orphan_msg,
-                           iconSourceObj: "KeyboardImage",
-                           maxShowTimeMs: 10_000).FireAndForgetSafeAsync();
+                //Mp.Services.NotificationBuilder.ShowMessageAsync(
+                //           title: $"Orphans Detected",
+                //           body: orphan_msg,
+                //           iconSourceObj: "KeyboardImage",
+                //           maxShowTimeMs: 10_000).FireAndForgetSafeAsync();
             }
 #endif
             _downChecker.Add(new Tuple<T, DateTime>(key, DateTime.Now));

@@ -45,6 +45,10 @@ function initDefaults(defaultsObj) {
 	if(isNullOrUndefined(defaultsObj)) {
 		return;
 	}
+	if (!isNullOrUndefined(defaultsObj.isDataTransferDestFormattingEnabled)) {
+		globals.isDataTransferDestFormattingEnabled = defaultsObj.isDataTransferDestFormattingEnabled;
+	}
+		
 	if (!isNullOrUndefined(defaultsObj.maxUndo)) {
 		globals.MaxUndoLimit = defaultsObj.maxUndo;
 	}

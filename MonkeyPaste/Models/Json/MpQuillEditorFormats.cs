@@ -32,6 +32,7 @@ namespace MonkeyPaste {
         public double bgOpacity { get; set; }
 
         public int maxUndo { get; set; }
+        public bool isDataTransferDestFormattingEnabled { get; set; } = true;
 
         // fragment 'MpQuillEditorShortcutKeystringMessage'
         public string shortcutFragmentStr { get; set; }
@@ -274,7 +275,6 @@ namespace MonkeyPaste {
         public bool isAppendManualMode { get; set; }
         public bool isAppendPaused { get; set; }
         public bool isAppendPreMode { get; set; }
-        public bool isDataTransferDestFormattingEnabled { get; set; } = true;
 
         public int appendDocIdx { get; set; }
         public int appendDocLength { get; set; }

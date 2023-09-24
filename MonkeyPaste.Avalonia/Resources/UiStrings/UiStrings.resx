@@ -541,4 +541,19 @@
   <data name="NotificationOptionHideLabel" xml:space="preserve">
     <value>Hide</value>
   </data>
+  <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
+    <value>Last active app unknown. Switch to intended app to monkey paste.</value>
+  </data>
+  <data name="ClipTilePasteButtonTooltip" xml:space="preserve">
+    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+  </data>
+  <data name="CommonMinimizeWindowLabel" xml:space="preserve">
+    <value>Minimize</value>
+  </data>
+  <data name="EditorCommonBusyLabel" xml:space="preserve">
+    <value>Please wait...</value>
+  </data>
+  <data name="MainWindowTitleLockLabel" xml:space="preserve">
+    <value>Lock</value>
+  </data>
 </root>

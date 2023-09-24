@@ -1117,7 +1117,8 @@ namespace MonkeyPaste.Avalonia {
                 currentTheme = MpAvPrefViewModel.Instance.ThemeType != MpThemeType.Dark ? MpThemeType.Light.ToString().ToLower() : MpThemeType.Dark.ToString().ToLower(),
                 bgOpacity = MpAvPrefViewModel.Instance.GlobalBgOpacity,
                 maxUndo = MpAvPrefViewModel.Instance.MaxUndoLimit,
-                shortcutFragmentStr = MpAvShortcutCollectionViewModel.Instance.EditorShortcutsMsgBase64
+                shortcutFragmentStr = MpAvShortcutCollectionViewModel.Instance.EditorShortcutsMsgBase64,
+                isDataTransferDestFormattingEnabled = MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled
             };
         }
 

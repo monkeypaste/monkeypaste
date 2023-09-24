@@ -482,7 +482,7 @@ namespace MonkeyPaste {
 #endif
             bool? success = connect_success ? isNewDb : null;
             if (success.IsTrue()) {
-                //await InitDbSettingsAsync();
+                await InitDbSettingsAsync();
             }
             return success;
         }
@@ -1034,8 +1034,9 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
                  new string[] {"31e0a078-e80b-4d31-b236-2a585d6352cf", "Control+,", MpShortcutType.ShowSettings.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"5143ed80-a50a-41b9-9979-5e00c084560d", "Control+P", MpShortcutType.TogglePinned.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"755a4d0e-d26a-42cf-89a3-6c5710bd2e4c", "Control+O", MpShortcutType.OpenInWindow.ToString(), MpRoutingType.Internal.ToString()},
-                 //new string[] {"728bfb06-1d96-441c-b710-efee383138be", "Control+G", MpShortcutType.ToggleAppendManualMode.ToString(), MpRoutingType.Internal.ToString()},
-                 new string[] { "2025c6eb-2e89-4fa7-a69b-37f0eb4c0281", "Control+Delete", MpShortcutType.PermanentlyDelete.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"093d5f34-971c-4b87-b15b-aab682300900", "Control+Escape", MpShortcutType.ForceMinimizeMainWindow.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"728bfb06-1d96-441c-b710-efee383138be", "Control+G", MpShortcutType.ToggleAppendManualMode.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"2025c6eb-2e89-4fa7-a69b-37f0eb4c0281", "Control+Delete", MpShortcutType.PermanentlyDelete.ToString(), MpRoutingType.Internal.ToString()},
             };
 
             foreach (var defaultShortcut in defaultShortcutDefinitions) {

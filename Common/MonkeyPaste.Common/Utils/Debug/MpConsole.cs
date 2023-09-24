@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace MonkeyPaste.Common {
     public static class MpConsole {
@@ -61,28 +62,30 @@ namespace MonkeyPaste.Common {
         }
 
 
-        public static void WriteLine(string line, bool pad_pre = false, bool pad_post = false, MpLogLevel level = MpLogLevel.Debug) {
+        public static void WriteLine(string line, bool pad_pre = false, bool pad_post = false, bool stampless = false, MpLogLevel level = MpLogLevel.Debug) {
             if (!CanLog(level)) {
                 return;
             }
-            line = line == null ? string.Empty : line;
-            string str = line.ToString();
-            str = $"[{DateTime.Now}] {str}";
+            var sb = new StringBuilder();
+            if (!stampless) {
+                sb.Append($"{GetLogStamp(level)}");
+            }
+            sb.Append(line.ToStringOrEmpty());
             if (LogToConsole) {
-                WriteLineWrapper(str, false, pad_pre, pad_post, level);
+                WriteLineWrapper(sb.ToString(), false, pad_pre, pad_post, level);
             }
             if (LogToFile) {
-                WriteLineToFile(str);
+                WriteLineToFile(sb.ToString());
             }
         }
 
-        public static void WriteTraceLine(object line, object ex = null, MpLogLevel level = MpLogLevel.Debug, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
+        public static void WriteTraceLine(object line, object ex = null, MpLogLevel level = MpLogLevel.Error, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
             if (!CanLog(level)) {
                 return;
             }
             line = line == null ? string.Empty : line;
 
-            line = $"[{DateTime.Now.ToString()}] {line}";
+            line = $"{GetLogStamp(level)} {line}";
             if (LogToConsole) {
                 WriteLineWrapper("", true);
                 WriteLineWrapper(@"-----------------------------------------------------------------------", true);
@@ -118,6 +121,10 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Private Methods
+
+        private static string GetLogStamp(MpLogLevel level) {
+            return $"[{DateTime.Now.ToShortTimeString()}-{level}] ";
+        }
 
         private static void LogException(object ex, bool isTrace = true, bool recursive = true, int depth = 0) {
             if (ex == null) {
