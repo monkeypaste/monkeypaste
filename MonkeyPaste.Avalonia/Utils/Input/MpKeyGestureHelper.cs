@@ -159,17 +159,18 @@ namespace MonkeyPaste.Avalonia {
                 diff.ToList().ForEach(x => _downChecker.Remove(_downChecker.FirstOrDefault(y => y.Item1.Equals(x))));
                 ClearCurrentGesture();
             }
-#if DEBUG
+#if DEBUG && !WINDOWS
+            // NOTE orphan ntf is annoying but need see if other plats do it too, windows is confirmed
             if (sb.ToString() is string orphan_msg &&
                 !string.IsNullOrEmpty(orphan_msg)) {
                 sb.AppendLine($"Result: Downs: {_downs.Count} DownCheckers: {_downChecker.Count} Gesture: '{GetCurrentGesture()}'");
                 orphan_msg = sb.ToString();
                 MpConsole.WriteLine(orphan_msg);
-                //Mp.Services.NotificationBuilder.ShowMessageAsync(
-                //           title: $"Orphans Detected",
-                //           body: orphan_msg,
-                //           iconSourceObj: "KeyboardImage",
-                //           maxShowTimeMs: 10_000).FireAndForgetSafeAsync();
+                Mp.Services.NotificationBuilder.ShowMessageAsync(
+                           title: $"Orphans Detected",
+                           body: orphan_msg,
+                           iconSourceObj: "KeyboardImage",
+                           maxShowTimeMs: 10_000).FireAndForgetSafeAsync();
             }
 #endif
             _downChecker.Add(new Tuple<T, DateTime>(key, DateTime.Now));

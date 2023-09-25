@@ -248,6 +248,42 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public MpAvClipTileViewModel NextNonPlaceholder {
+            get {
+                var next_nn = Next;
+                while (true) {
+                    if (next_nn == null) {
+                        break;
+                    }
+                    if (next_nn.IsPinPlaceholder) {
+                        next_nn = next_nn.Next;
+                        continue;
+                    }
+                    return next_nn;
+                }
+                return null;
+            }
+        }
+        public MpAvClipTileViewModel PrevNonPlaceholder {
+            get {
+                var next_nn = Next;
+                while (true) {
+                    if (next_nn == null) {
+                        break;
+                    }
+                    if (next_nn.IsPinPlaceholder) {
+                        next_nn = next_nn.Next;
+                        continue;
+                    }
+                    return next_nn;
+                }
+                return null;
+            }
+        }
+
+        public MpAvClipTileViewModel NearestNonPlaceholderNeighbor =>
+            NextNonPlaceholder == null ? PrevNonPlaceholder : NextNonPlaceholder;
+
         public MpAvClipTileViewModel Next {
             get {
                 if (IsPlaceholder || Parent == null || IsWindowOpen) {
@@ -659,10 +695,6 @@ namespace MonkeyPaste.Avalonia {
 
         public int RowIdx { get; private set; }
         public int ColIdx { get; private set; }
-        public bool IsTrashing { get; set; }
-        public bool IsDeleting { get; set; }
-        public bool IsTrashOrDeleting =>
-            IsTrashing || IsDeleting;
         public bool IsFinalClosingState { get; set; }
         public bool IsPopoutCloseRequireConfirm { get; set; }
         public bool CanShowContextMenu { get; set; } = true;
@@ -708,6 +740,18 @@ namespace MonkeyPaste.Avalonia {
                     return Parent.PinOpCopyItemId == PinPlaceholderCopyItemId;
                 }
                 return Parent.PinOpCopyItemId == CopyItemId;
+            }
+        }
+
+        public bool IsTrashOpTile {
+            get {
+                if (Parent == null) {
+                    return false;
+                }
+                if (IsPinPlaceholder) {
+                    return Parent.TrashOpCopyItemId == PinPlaceholderCopyItemId;
+                }
+                return Parent.TrashOpCopyItemId == CopyItemId;
             }
         }
         public bool IsTitleReadOnly { get; set; } = true;
@@ -867,6 +911,9 @@ namespace MonkeyPaste.Avalonia {
                 if (IsAppendNotifier ||
                     IsFrozen ||
                     !IsContentReadOnly ||
+                    (!IsPinned &&
+                        (MpAvTagTrayViewModel.Instance.TrashTagViewModel != null &&
+                         MpAvTagTrayViewModel.Instance.TrashTagViewModel.IsSelected)) ||
                     (TransactionCollectionViewModel != null && TransactionCollectionViewModel.IsTransactionPaneOpen)) {
                     return false;
                 }
@@ -1697,7 +1744,7 @@ namespace MonkeyPaste.Avalonia {
                         if (!IsWindowOpen &&
                             IsContentReadOnly &&
                             IsSubSelectionEnabled &&
-                            (Parent == null || !Parent.IsUnpinning)) {
+                            !IsPinOpTile) {
                             DisableSubSelectionCommand.Execute(null);
                         }
                     }
@@ -1942,9 +1989,11 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsFrozen):
                     OnPropertyChanged(nameof(IsResizerEnabled));
                     break;
-                case nameof(IsTrashing):
-                case nameof(IsDeleting):
-                    OnPropertyChanged(nameof(IsTrashOrDeleting));
+                case nameof(IsTrashed):
+                    if (IsTrashed) {
+                        IsContentReadOnly = true;
+                        IsSubSelectionEnabled = false;
+                    }
                     break;
             }
         }
@@ -2375,7 +2424,9 @@ namespace MonkeyPaste.Avalonia {
                     MpDebug.Break();
                     return;
                 }
-                var mpdo = await ds.GetDataObjectAsync();
+                var mpdo = await ds.GetDataObjectAsync(
+                    formats: GetOleFormats(false));
+
                 if (mpdo == null) {
                     // is none selected?
                     MpDebug.Break();

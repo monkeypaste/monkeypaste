@@ -505,6 +505,9 @@ namespace MonkeyPaste.Avalonia {
             IDataObject ido,
             bool ignorePlugins,
             bool ignoreClipboardChange = false) {
+            if (isDnd) {
+
+            }
             // if ido provided carry use provided pi if exits
             MpPortableProcessInfo active_pi =
                 ido == null ? null : ido.Get(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT) as MpPortableProcessInfo;
@@ -612,6 +615,14 @@ namespace MonkeyPaste.Avalonia {
                 !avdo.ContainsData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT)) {
                 // only attach process info if not 
                 avdo.Set(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, active_pi.Clone());
+            }
+            if (ido != null) {
+                // merge any internal formats into output that were present in input AND
+                // not handled by plugins
+                ido
+                    .GetAllDataFormats()
+                    .Where(x => !avdo.ContainsData(x) && MpPortableDataFormats.InternalFormats.Contains(x))
+                    .ForEach(x => avdo.SetData(x, ido.Get(x)));
             }
             if (ignoreClipboardChange && was_cb_monitoring) {
                 Mp.Services.ClipboardMonitor.StartMonitor(true);

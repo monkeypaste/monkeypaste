@@ -107,7 +107,7 @@
 
 
         <!--  HOVER FROZEN  -->
-        <Style Selector="ListBox.queryListBox > ListBoxItem:pointerover local|MpAvClipBorder#ClipTileContainerBorder.frozen, Border#QueryTrayContainerBorder local|MpAvClipBorder#ClipTileContainerBorder.frozen"
+        <Style Selector="ListBox.queryListBox > ListBoxItem:pointerover local|MpAvClipBorder#ClipTileContainerBorder.frozen"
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="BorderBrush"
                     Value="{StaticResource ThemeAccent5Color}" />

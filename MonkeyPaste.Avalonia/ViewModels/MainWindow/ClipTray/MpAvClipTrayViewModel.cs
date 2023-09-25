@@ -1128,7 +1128,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsUnpinning { get; set; }
+        public int TrashOpCopyItemId { get; set; }
         public int PinOpCopyItemId { get; set; } = -1;
 
         public bool IsAutoEditEnabled =>
@@ -1842,8 +1842,10 @@ namespace MonkeyPaste.Avalonia {
                 }
                 // only after add or (un)link to trash/favorites
 
-                await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);
-                await DeleteItemByCopyItemIdAsync(cap_info.ToBeRemoved_ciid);
+                await TrashOrDeleteCopyItemIdAsycn(cap_info.ToBeTrashed_ciid, false, true);
+                await TrashOrDeleteCopyItemIdAsycn(cap_info.ToBeRemoved_ciid, true, true);
+                //await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);
+                //await DeleteItemByCopyItemIdAsync(cap_info.ToBeRemoved_ciid);
 
                 // refresh cap for view changes
                 var updated_cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync();
@@ -2063,6 +2065,12 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(TrashOpCopyItemId):
+                    AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsTrashOpTile)));
+                    break;
+                case nameof(PinOpCopyItemId):
+                    AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsPinOpTile)));
+                    break;
                 case nameof(ScrollVector):
                     QueryCommand.Execute(ScrollVector);
                     break;
@@ -2439,82 +2447,86 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-        private async Task TrashItemByCopyItemIdAsync(int ciid) {
+        private async Task TrashOrDeleteCopyItemIdAsycn(int ciid, bool isDelete, bool ignorePostSel = false) {
             if (ciid == 0) {
                 return;
             }
-            MpAvClipTileViewModel trashed_ctvm = AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid);
-            if (trashed_ctvm != null) {
+            //TrashOpCopyItemId = ciid;
+            int ciid_to_select = -1;
+            MpAvClipTileViewModel tod_ctvm = AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid);
+            if (tod_ctvm != null) {
                 // flag fade out in view
-                trashed_ctvm.IsTrashing = true;
-            }
-
-            // add link to trash tag which caches ciid
-            await MpAvTagTrayViewModel.Instance.TrashTagViewModel
-                .LinkCopyItemCommand.ExecuteAsync(ciid);
-
-            MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
-
-            if (trashed_ctvm == null) {
-                return;
-            }
-            bool needs_query_refresh = true;
-            if (trashed_ctvm.IsPinned) {
-                needs_query_refresh = trashed_ctvm.HasPinPlaceholder;
-                await UnpinTileCommand.ExecuteAsync(trashed_ctvm);
-            } else {
-                // NOTE! this is trying to fix intermittent empty content write thats been happending
-                // but SHOULD be part of query to unload that item but not sure, hard to isolate maybe 
-                // a timing thing (especially when it gets hot)
-                trashed_ctvm.TriggerUnloadedNotification(true);
-            }
-            if (needs_query_refresh) {
-                // needs requery to remove placeholder
-                // or the frozen trash item (when query is not trash query)
-                // is used
-                while (IsAnyBusy) { await Task.Delay(100); }
-
-                if (trashed_ctvm != null) {
-                    // cleanup state
-                    trashed_ctvm.IsTrashing = false;
+                if (!ignorePostSel && tod_ctvm.NearestNonPlaceholderNeighbor != null) {
+                    ciid_to_select = tod_ctvm.NearestNonPlaceholderNeighbor.CopyItemId;
                 }
             }
-            // trigger in place requery to remove trashed item
-            QueryCommand.Execute(string.Empty);
-        }
 
-        private async Task DeleteItemByCopyItemIdAsync(int ciid) {
-            if (ciid == 0) {
-                return;
+            if (!isDelete) {
+                // add link to trash tag which caches ciid
+                await MpAvTagTrayViewModel.Instance.TrashTagViewModel
+                    .LinkCopyItemCommand.ExecuteAsync(ciid);
+
+                MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
             }
-            MpAvClipTileViewModel to_delete_ctvm = AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid);
-            if (to_delete_ctvm != null) {
-                // flag fade out in view
-                to_delete_ctvm.IsDeleting = true;
-            }
-            while (IsBusy) { await Task.Delay(100); }
 
-            IsBusy = true;
+            //bool needs_query_refresh = !tod_ctvm.IsPinned || tod_ctvm.PlaceholderForThisPinnedItem != null;
+            if (isDelete) {
+                while (IsBusy) { await Task.Delay(100); }
 
-            if (to_delete_ctvm == null) {
-                var to_delete_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
-                if (to_delete_ci != null) {
-                    await to_delete_ci.DeleteFromDatabaseAsync();
+                IsBusy = true;
+
+                if (tod_ctvm == null) {
+                    var to_delete_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
+                    if (to_delete_ci != null) {
+                        await to_delete_ci.DeleteFromDatabaseAsync();
+                    }
+                } else {
+                    await tod_ctvm.CopyItem.DeleteFromDatabaseAsync();
                 }
+
+                await ProcessAccountCapsAsync(MpAccountCapCheckType.Remove, ciid);
+
             } else {
-                await to_delete_ctvm.CopyItem.DeleteFromDatabaseAsync();
+                if (tod_ctvm == null) {
+                    return;
+                }
+
+                if (tod_ctvm.IsPinned) {
+                    await UnpinTileCommand.ExecuteAsync(tod_ctvm);
+                } else {
+                    // NOTE! this is trying to fix intermittent empty content write thats been happending
+                    // but SHOULD be part of query to unload that item but not sure, hard to isolate maybe 
+                    // a timing thing (especially when it gets hot)
+                    //tod_ctvm.TriggerUnloadedNotification(true);
+                }
             }
 
-            await ProcessAccountCapsAsync(MpAccountCapCheckType.Remove, ciid);
-
-            if (to_delete_ctvm != null) {
-                // cleanup state
-                to_delete_ctvm.IsDeleting = false;
-            }
 
             //db delete event is handled in clip tile
             IsBusy = false;
+
+            if (ciid_to_select > 0 &&
+                AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid_to_select)
+                    is MpAvClipTileViewModel to_select_ctvm) {
+                to_select_ctvm.IsSelected = true;
+            }
+
+            // trigger in place requery to remove trashed item
+            //if (needs_query_refresh) {
+            //    // needs requery to remove placeholder
+            //    // or the frozen trash item (when query is not trash query)
+            //    // is used
+            //    while (!QueryCommand.CanExecute(string.Empty)) {
+            //        await Task.Delay(100);
+            //    }
+            //    QueryCommand.Execute(string.Empty);
+            //}
+            while (IsQuerying) { await Task.Delay(100); }
+
+            TrashOpCopyItemId = -1;
+
         }
+
         private async Task RefreshQueryPageOffsetsAsync() {
             await Task.Delay(0);
             //return;
@@ -2928,19 +2940,19 @@ namespace MonkeyPaste.Avalonia {
         private async Task<MpCopyItem> AddItemFromDataObjectAsync(MpAvDataObject avdo, bool is_copy = false) {
             try {
                 await MpFifoAsyncQueue.WaitByConditionAsync(
-                lockObj: _addDataObjectContentLock,
-                time_out_ms: ADD_CONTENT_TIMEOUT_MS,
-                waitWhenTrueFunc: () => {
-                    bool is_waiting =
-                        IsAddingClipboardItem ||
-                        MpAvPlainHtmlConverter.Instance.IsBusy ||
-                        !Mp.Services.StartupState.IsCoreLoaded;
-                    if (is_waiting) {
-                        MpConsole.WriteLine($"waiting to add item to cliptray...(IsAddingClipboardItem:{IsAddingClipboardItem},MpAvPlainHtmlConverter.Instance.IsBusy:{MpAvPlainHtmlConverter.Instance.IsBusy},Mp.Services.StartupState.IsCoreLoaded:{Mp.Services.StartupState.IsCoreLoaded})");
-                    }
-                    return is_waiting;
-                },
-                debug_label: "Add Content Queue Item");
+                    lockObj: _addDataObjectContentLock,
+                    time_out_ms: ADD_CONTENT_TIMEOUT_MS,
+                    waitWhenTrueFunc: () => {
+                        bool is_waiting =
+                            IsAddingClipboardItem ||
+                            MpAvPlainHtmlConverter.Instance.IsBusy ||
+                            !Mp.Services.StartupState.IsCoreLoaded;
+                        if (is_waiting) {
+                            MpConsole.WriteLine($"waiting to add item to cliptray...(IsAddingClipboardItem:{IsAddingClipboardItem},MpAvPlainHtmlConverter.Instance.IsBusy:{MpAvPlainHtmlConverter.Instance.IsBusy},Mp.Services.StartupState.IsCoreLoaded:{Mp.Services.StartupState.IsCoreLoaded})");
+                        }
+                        return is_waiting;
+                    },
+                    debug_label: "Add Content Queue Item");
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Add content ex. Probably too hot outside. ", ex);
@@ -3321,6 +3333,7 @@ namespace MonkeyPaste.Avalonia {
                  OnPropertyChanged(nameof(IsAnyTilePinned));
                  ctvm_to_pin.OnPropertyChanged(nameof(ctvm_to_pin.IsPinned));
                  ctvm_to_pin.OnPropertyChanged(nameof(ctvm_to_pin.IsPlaceholder));
+                 ctvm_to_pin.OnPropertyChanged(nameof(ctvm_to_pin.IsPinPlaceholder));
 
                  if (query_ctvm_to_pin != null &&
                     ctvm_to_pin_query_idx >= 0
@@ -3335,6 +3348,13 @@ namespace MonkeyPaste.Avalonia {
                  }
 
                  PinOpCopyItemId = -1;
+
+                 if (ctvm_to_pin_query_idx >= 0) {
+                     while (!QueryCommand.CanExecute(string.Empty)) {
+                         await Task.Delay(100);
+                     }
+                     QueryCommand.Execute(string.Empty);
+                 }
 
                  OnPropertyChanged(nameof(Items));
                  OnPropertyChanged(nameof(PinnedItems));
@@ -3369,6 +3389,7 @@ namespace MonkeyPaste.Avalonia {
                      MpDebug.Break($"No pin tile found for placeholder ciid {pin_placeholder_ctvm.PinPlaceholderCopyItemId} at queryIdx {pin_placeholder_ctvm.QueryOffsetIdx}");
                      return;
                  }
+
                  unpinned_ctvm.StoreSelectionStateCommand.Execute(null);
                  await unpinned_ctvm.PersistContentStateCommand.ExecuteAsync(null);
 
@@ -3387,7 +3408,7 @@ namespace MonkeyPaste.Avalonia {
                          return;
                      }
                  }
-                 IsUnpinning = true;
+                 PinOpCopyItemId = unpinned_ctvm.CopyItemId;
 
                  PinnedItems.Remove(unpinned_ctvm);
                  unpinned_ctvm.IsContentReadOnly = true;
@@ -3452,7 +3473,7 @@ namespace MonkeyPaste.Avalonia {
                  } else {
                      to_select_ctvm.IsSelected = true;
                  }
-                 IsUnpinning = false;
+                 PinOpCopyItemId = -1;
                  UpdateEmptyPropertiesAsync().FireAndForgetSafeAsync(this);
              },
             (args) => {
@@ -4232,18 +4253,25 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand RestoreSelectedClipCommand => new MpAsyncCommand(
             async () => {
+                int restore_ciid = SelectedItem.CopyItemId;
                 if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
                     // user at cblock
-                    ProcessAccountCapsAsync(MpAccountCapCheckType.RestoreBlock, SelectedItem.CopyItemId).FireAndForgetSafeAsync(this);
+                    ProcessAccountCapsAsync(MpAccountCapCheckType.RestoreBlock, restore_ciid).FireAndForgetSafeAsync(this);
                     return;
                 }
+                TrashOpCopyItemId = restore_ciid;
+                //SelectedItem.TriggerUnloadedNotification(false);
+
                 // unlink from trash tag (triggers 
                 await MpAvTagTrayViewModel.Instance.TrashTagViewModel
-                .UnlinkCopyItemCommand.ExecuteAsync(SelectedItem.CopyItemId);
+                .UnlinkCopyItemCommand.ExecuteAsync(restore_ciid);
 
-                MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
+                while (IsQuerying) { await Task.Delay(100); }
+                TrashOpCopyItemId = -1;
+
+                //MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
                 // trigger in place requery to restore trashed item
-                QueryCommand.Execute(string.Empty);
+                //QueryCommand.Execute(string.Empty);
 
             },
             () => {
@@ -4254,14 +4282,14 @@ namespace MonkeyPaste.Avalonia {
                 if (!can_restore) {
                     MpConsole.WriteLine("RestoreSelectedClipCommand CanExecute: " + can_restore);
                     MpConsole.WriteLine("SelectedItem: " + (SelectedItem == null ? "IS NULL" : "NOT NULL"));
-                    MpConsole.WriteLine($"SelectedItem: Trashed: {SelectedItem.IsTrashed}");
+                    MpConsole.WriteLine($"SelectedItem: Trashed: {(SelectedItem == null ? "NULL" : SelectedItem.IsTrashed)}");
                 }
                 return can_restore;
             });
 
         public MpIAsyncCommand TrashSelectedClipCommand => new MpAsyncCommand(
             async () => {
-                await TrashItemByCopyItemIdAsync(SelectedItem.CopyItemId);
+                await TrashOrDeleteCopyItemIdAsycn(SelectedItem.CopyItemId, false);
             },
             () => {
                 bool can_trash = SelectedItem != null && !SelectedItem.IsTrashed;
@@ -4276,7 +4304,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public MpIAsyncCommand DeleteSelectedClipCommand => new MpAsyncCommand(
             async () => {
-                await DeleteItemByCopyItemIdAsync(SelectedItem.CopyItemId);
+                await TrashOrDeleteCopyItemIdAsycn(SelectedItem.CopyItemId, true);
             },
             () => {
                 bool can_delete =
@@ -4291,7 +4319,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PermanentlyDeleteSelectedClipFromShortcutCommand => new MpAsyncCommand(
             async () => {
-                await DeleteItemByCopyItemIdAsync(SelectedItem.CopyItemId);
+                await TrashOrDeleteCopyItemIdAsycn(SelectedItem.CopyItemId, true);
             },
             () => {
                 bool can_delete =

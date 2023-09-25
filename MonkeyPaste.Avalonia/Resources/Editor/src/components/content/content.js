@@ -356,13 +356,13 @@ function transferContent(dt, source_doc_range, dest_doc_range, source) {
 	}
 	return result;
 }
-function convertContentToFormats(selectionOnly, formats) {
+async function convertContentToFormatsAsync(selectionOnly, formats) {
 	updateQuill();
 	let items = null;
 	if (globals.ContentItemType == 'Text') {
-		items = convertTextContentToFormats(selectionOnly, formats);
+		items = await convertTextContentToFormatsAsync(selectionOnly, formats);
 	} else if (globals.ContentItemType == 'FileList') {
-		items = convertFileListContentToFormats(selectionOnly, formats);
+		items = await convertFileListContentToFormatsAsync(selectionOnly, formats);
 	} else if (globals.ContentItemType == 'Image') {
 		items = convertImageContentToFormats(selectionOnly, formats);
 	}

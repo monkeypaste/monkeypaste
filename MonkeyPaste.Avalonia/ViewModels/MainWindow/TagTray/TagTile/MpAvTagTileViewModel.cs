@@ -1173,6 +1173,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (IsTrashTag && !Parent.TrashedCopyItemIds.Contains(ciid)) {
                     Parent.TrashedCopyItemIds.Add(ciid);
+                    MpAvClipTrayViewModel.Instance.AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsTrashed)));
                 }
 
             } else {
@@ -1187,6 +1188,7 @@ namespace MonkeyPaste.Avalonia {
 
                 if (IsTrashTag && Parent.TrashedCopyItemIds.Contains(ciid)) {
                     Parent.TrashedCopyItemIds.Remove(ciid);
+                    MpAvClipTrayViewModel.Instance.AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsTrashed)));
                 }
             }
 

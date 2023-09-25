@@ -593,6 +593,11 @@ var globals = {
 
 	// #endregion
 
+	// #region IMAGES
+	BASE64_IMG_SRC_PREFIX: 'data:image/png;base64,',
+	BASE64_IMG_REMOVE: `iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAFdSURBVFhH7ZZNasMwFIQfpblBeqwuE7LvIosGusnhmkXJRQJdBHqAQnf56TfwHBz52bFiF7rQwOAfPc2MZCTZCgoK/jW+zZ5OZlt4gPuD2dybWkHd4mj25X0+zmZTb8oHAlsEznUSYuXNDVD/ltbzbuPN+dAoAsETfPWSCwi2TmtFZuPHS/KB0T4SVQgMLyFkzrtGndfuvCwf+uaRaEWFwKAx7XXS/uxy9wGTlUYciXdRfeDSZYYBIY20dwhqjwR/8e7jQNMdmaVU0NHNK/QJkTvtD37tBYof/bYVBJj47bhg9OE6T6lPABv7xCDIHNHQMKJC6HN592FArHOdd3FwCMwXkbCoUcIlJrf2iZnL5UOnWiAo86t1znPrPoHGp5flA9HwMKqbV9B0p7Xi0MNI5/mVIO9a13kUggDv3pwPBKYYbjQKrjt482Chz0zTrj4y56fm/h+SgoKCv4fZL5aNtQNpHdf1AAAAAElFTkSuQmCC`,
+	// #endregion
+
 	// #region INPUT
 
 	// #region KEYBOARD
@@ -734,7 +739,7 @@ var globals = {
 	CurPasteInfoId: null,
 	LastRecvdPasteInfoMsgObj: null,
 	PasteButtonBusyStartDt: null,
-	MinPasteBusyMs: 1000,
+	MinPasteBusyMs: 500,
 	// #endregion
 
 	// #endregion

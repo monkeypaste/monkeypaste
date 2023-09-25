@@ -1,11 +1,11 @@
 ﻿
-function contentDataObjectRequest_ext_ntf(contentReqMsgStr_base64) {
+async function contentDataObjectRequestAsync_ext_ntf(contentReqMsgStr_base64) {
 	// input 'MpQuillContentDataObjectRequestMessage'
 	// output 'MpQuillContentDataObjectResponseMessage' (with 'MpQuillHostDataItemFragment' items)
 
-	log('contentDataObjectRequest_ext_ntf: ' + contentReqMsgStr_base64);
+	log('contentDataObjectRequestAsync_ext_ntf: ' + contentReqMsgStr_base64);
 	let req = toJsonObjFromBase64Str(contentReqMsgStr_base64);
-	let items = convertContentToFormats(req.selectionOnly, req.formats);
+	let items = await convertContentToFormatsAsync(req.selectionOnly, req.formats);
 	let respObj = {
 		dataItems: items,
 		isAllContent: isAllSelected(),

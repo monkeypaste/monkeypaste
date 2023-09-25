@@ -129,18 +129,7 @@ namespace MonkeyPaste.Common {
 
         public override string ToString() {
             var sb = new StringBuilder();
-            //sb.AppendLine("-------------------------------------------------");
-            //foreach (var kvp in DataFormatLookup) {
-            //    sb.AppendLine($"Format '{kvp.Key.Name}':");
-            //    if (kvp.Value is IEnumerable<object> objl) {
-            //        objl.ForEach(x => sb.AppendLine(x.ToStringOrEmpty()));
-            //    } else {
-            //        sb.AppendLine($"'{kvp.Value.ToStringOrEmpty().ToPrettyPrintJson()}'");
-            //    }
-
-            //}
-            //sb.AppendLine("-------------------------------------------------");
-            DataFormatLookup.ForEach(x => sb.AppendLine(x.Key.Name));
+            DataFormatLookup.ForEach(x => sb.Append(x.Key.Name + "|"));
             return sb.ToString();
         }
 

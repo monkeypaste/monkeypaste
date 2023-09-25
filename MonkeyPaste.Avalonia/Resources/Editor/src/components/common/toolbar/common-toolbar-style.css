@@ -58,7 +58,12 @@ input[type=button] {
 .resizer {
     /* All resizers are positioned absolutely inside the element */
     position: absolute;
+    background-color: var(--editortoolbarbuttoncolor);
 }
+.resizer:hover {
+    background-color: var(--hovercolor);
+}
+
 
 /* Placed at the top side */
 .resizer-t {
@@ -77,22 +82,6 @@ input[type=button] {
     width: 100%;
 }
 
-.resize-x-handle-flip {
-    transform: rotateX(180deg);
-    resize: horizontal;
-    overflow: auto;
-    width: 200px;
-    background: lightcyan;
-}
-
-.x-text-flip-back {
-    transform: rotateX(180deg);
-}
-.vertical-scroll {
-    min-height: 20px;
-    resize: vertical;
-    overflow: auto;
-}
 
 .input-wrapper {
     display: inline-block;

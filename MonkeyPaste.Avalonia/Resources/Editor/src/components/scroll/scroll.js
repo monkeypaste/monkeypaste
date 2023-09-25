@@ -24,7 +24,17 @@ function getEditorHorizontalScrollBarHeight() {
 }
 
 function getScrollableElements() {
-    let scroll_elms = [getEditorContainerElement()];
+    let scroll_elms = [getEditorContainerElement(), getFindReplaceContainerElement()];
+
+    if (isFontSizeDropDownOpen()) {
+        scroll_elms.push(getFontSizeDropDownElement());
+    }
+    if (isFontFamilyDropDownOpen()) {
+        scroll_elms.push(getFontFamilyDropDownElement());
+    }
+    if (isShowingFindReplaceToolbar()) {
+        //scroll_elms.push(getFindReplaceContainerElement());
+    }
 
     let table_elms = getTableElements();
     for (var i = 0; i < length; i++) {

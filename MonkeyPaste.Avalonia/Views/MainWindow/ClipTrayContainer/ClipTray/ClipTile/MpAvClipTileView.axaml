@@ -23,9 +23,9 @@
 
         <!--  TRASH OR DELETE OPACITY (hides clunky state changes)  -->
 
-        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.trashOrDeleting">
-            <Setter Property="Opacity"
-                    Value="0" />
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.trashOpTile">
+            <Setter Property="IsVisible"
+                    Value="False" />
         </Style>
 
         <!--  DETAIL COLOR  -->
@@ -159,6 +159,8 @@
             </Setter>
         </Style>
 
+        <!--  FROZEN HIDES  -->
+
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
@@ -166,7 +168,7 @@
                           HorizontalAlignment="Stretch"
                           Classes.append="{Binding IsAppendNotifier}"
                           Classes.appendpaused="{Binding IsAppendPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                          Classes.trashOrDeleting="{Binding IsTrashOrDeleting}"
+                          Classes.trashOpTile="{Binding IsTrashOpTile}"
                           Classes.popout="{Binding IsWindowOpen}"
                           Classes.transOpen="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen}"
                           Classes.hasVertContentScroll="{Binding IsVerticalScrollbarVisibile}"
@@ -227,10 +229,27 @@
 
             <local:MpAvClipTileTitleView x:Name="TileTitleView"
                                          Grid.Row="0"
-                                         Height="{Binding MaxTitleHeight, FallbackValue=40, TargetNullValue=40}"
+                                         IsVisible="{Binding IsTitleVisible}"
+                                         Height="{Binding MaxTitleHeight, FallbackValue=0, TargetNullValue=0}"
                                          HorizontalAlignment="Stretch"
-                                         VerticalAlignment="Stretch"
-                                         IsVisible="{Binding IsTitleVisible}" />
+                                         VerticalAlignment="Stretch">
+                <!--<local:MpAvClipTileTitleView.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="!IsSelected"
+                                 Source="{x:Static local:MpAvPrefViewModel.Instance}" />
+                      <Binding Path="ShowContentTitles"
+                                 Source="{x:Static local:MpAvPrefViewModel.Instance}" />
+                        <Binding Path="!IsAppendNotifier" />
+                        <Binding Path="!IsFrozen"
+                                 FallbackValue="False"
+                                 TargetNullValue="False" />
+                        <Binding Path="IsContentReadOnly" />
+                        <Binding Path="!TransactionCollectionViewModel.IsTransactionPaneOpen"
+                                 FallbackValue="False"
+                                 TargetNullValue="False" />
+                    </MultiBinding>
+                </local:MpAvClipTileTitleView.IsVisible>-->
+            </local:MpAvClipTileTitleView>
 
             <!--  CONTENT  -->
             <local:MpAvClipTileContentView x:Name="ClipTileContentView"

@@ -8,20 +8,6 @@
 
 // #region Getters
 
-async function testScreenshot(sel) {
-    var gapped_base64Str = null;
-
-    getDocRangeAsImageAsync(sel)
-        .then((result) => {
-            gapped_base64Str = result;
-        });
-
-    while (gapped_base64Str == null) {
-        await delay(100);
-    }
-    log(gapped_base64Str);
-}
-
 async function getDocRangeAsImageAsync(sel) {
     // from https://stackoverflow.com/a/41585230/105028
     let crop_rects = null;
@@ -62,9 +48,9 @@ async function getDocRangeAsImageAsync(sel) {
     //editor_elm.style.height = 'auto';
     //editor_elm.style.overflow = 'visible';
 
-    html2canvas(editor_elm, h2c_options)
-        .then(imgCanvas => {
-            var imgSrcVal = null;
+    let imgCanvas = await html2canvas(editor_elm, h2c_options);
+        //.then(imgCanvas => {
+            let imgSrcVal = null;
             if (crop_rects && crop_rects.length > 1) {
                 // NOTE not sure why but canvas is bigger than total_rect so get ratio
                 let scale_x = imgCanvas.width / total_rect.width;
@@ -110,11 +96,11 @@ async function getDocRangeAsImageAsync(sel) {
 
             //window.scrollX = oldScrollX;
             //window.scrollY = oldScrollY;
-        });
+       // });
 
-    while (base64Str == null) {
-        await delay(100);
-    }
+    //while (base64Str == null) {
+    //    await delay(100);
+    //}
 
     return base64Str;
 }

@@ -3,6 +3,7 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -509,34 +510,48 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand RestoreAllTrashCommand => new MpAsyncCommand(
-            async () => {
-                var confirm_result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+        private async Task EmptyOrRestoreAllTrashedItemsAsync(bool isRestore) {
+            var confirm_result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                     title: UiStrings.CommonNtfConfirmTitle,
-                    message: $"Are you sure you want to restore all {TrashedCopyItemIds.Count} item(s)?",
+                    message: $"Are you sure you want to {(isRestore ? "restore" : "permanently delete")} all {TrashedCopyItemIds.Count} item(s)?",
                     owner: MpAvWindowManager.MainWindow,
                     iconResourceObj: "WarningImage");
 
-                if (!confirm_result) {
-                    // canceled restore all
-                    return;
-                }
+            if (!confirm_result) {
+                // canceled empty trash
+                return;
+            }
 
+            IEnumerable to_delete =
+                isRestore ?
+                await MpDataModelProvider.GetCopyItemTagsForTagAsync(MpTag.TrashTagId) :
+                await MpDataModelProvider.GetCopyItemsByIdListAsync(TrashedCopyItemIds);
 
-                var to_delete_citl = await MpDataModelProvider.GetCopyItemTagsForTagAsync(MpTag.TrashTagId);
-                await Task.WhenAll(to_delete_citl.Select(x => x.DeleteFromDatabaseAsync()));
+            if (LastActiveId == MpTag.TrashTagId) {
+                MpAvClipTrayViewModel.Instance
+                    .AllItems
+                    .Where(x => TrashedCopyItemIds.Contains(x.CopyItemId))
+                    .ForEach(x => x.TriggerUnloadedNotification(true));
+            }
 
-                while (IsAnyBusy) {
+            await Task.WhenAll(to_delete.Cast<MpDbModelBase>().Select(x => x.DeleteFromDatabaseAsync()));
+
+            while (IsAnyBusy) {
+                await Task.Delay(100);
+            }
+            UpdateAllClipCountsAsync().FireAndForgetSafeAsync();
+
+            if (LastActiveId == MpTag.TrashTagId) {
+                while (!MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(string.Empty)) {
                     await Task.Delay(100);
                 }
-                UpdateAllClipCountsAsync().FireAndForgetSafeAsync();
-                if (LastActiveId == MpTag.TrashTagId) {
-                    while (!MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(string.Empty)) {
-                        await Task.Delay(100);
-                    }
 
-                    MpAvClipTrayViewModel.Instance.QueryCommand.Execute(string.Empty);
-                }
+                MpAvClipTrayViewModel.Instance.QueryCommand.Execute(string.Empty);
+            }
+        }
+        public ICommand RestoreAllTrashCommand => new MpAsyncCommand(
+            async () => {
+                await EmptyOrRestoreAllTrashedItemsAsync(true);
             },
             () => {
                 bool can_restore = TrashedCopyItemIds.Any() && !Mp.Services.AccountTools.IsContentAddPausedByAccount;
@@ -550,32 +565,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand EmptyTrashCommand => new MpAsyncCommand(
             async () => {
-                var confirm_result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                    title: UiStrings.CommonNtfConfirmTitle,
-                    message: $"Are you sure you want to permanently delete all {TrashedCopyItemIds.Count} item(s)?",
-                    owner: MpAvWindowManager.MainWindow,
-                    iconResourceObj: "WarningImage");
-
-                if (!confirm_result) {
-                    // canceled empty trash
-                    return;
-                }
-
-                var to_delete_cil = await MpDataModelProvider.GetCopyItemsByIdListAsync(TrashedCopyItemIds);
-                await Task.WhenAll(to_delete_cil.Select(x => x.DeleteFromDatabaseAsync()));
-
-                while (IsAnyBusy) {
-                    await Task.Delay(100);
-                }
-                UpdateAllClipCountsAsync().FireAndForgetSafeAsync();
-
-                if (LastActiveId == MpTag.TrashTagId) {
-                    while (!MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(string.Empty)) {
-                        await Task.Delay(100);
-                    }
-
-                    MpAvClipTrayViewModel.Instance.QueryCommand.Execute(string.Empty);
-                }
+                await EmptyOrRestoreAllTrashedItemsAsync(false);
             },
             () => {
                 bool can_empty = TrashedCopyItemIds.Any();

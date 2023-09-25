@@ -124,6 +124,8 @@ function getSelectedFileItemIdxs() {
 	return idxs;
 }
 
+
+
 function getSelectedFileListRowElements() {
 	return getFileListRowElements().filter(x => x.classList.contains('selected'));
 }
@@ -174,44 +176,144 @@ function isMultiFileSelectEnabled() {
 
 // #region Actions
 
+
+// #region FileItem Create
 function createFileList() {
-	const delete_img_base64 = `iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxMAAAsTAQCanBgAAAFdSURBVFhH7ZZNasMwFIQfpblBeqwuE7LvIosGusnhmkXJRQJdBHqAQnf56TfwHBz52bFiF7rQwOAfPc2MZCTZCgoK/jW+zZ5OZlt4gPuD2dybWkHd4mj25X0+zmZTb8oHAlsEznUSYuXNDVD/ltbzbuPN+dAoAsETfPWSCwi2TmtFZuPHS/KB0T4SVQgMLyFkzrtGndfuvCwf+uaRaEWFwKAx7XXS/uxy9wGTlUYciXdRfeDSZYYBIY20dwhqjwR/8e7jQNMdmaVU0NHNK/QJkTvtD37tBYof/bYVBJj47bhg9OE6T6lPABv7xCDIHNHQMKJC6HN592FArHOdd3FwCMwXkbCoUcIlJrf2iZnL5UOnWiAo86t1znPrPoHGp5flA9HwMKqbV9B0p7Xi0MNI5/mVIO9a13kUggDv3pwPBKYYbjQKrjt482Chz0zTrj4y56fm/h+SgoKCv4fZL5aNtQNpHdf1AAAAAElFTkSuQmCC`;
-	let file_list_tbody_inner_html = '';
-	for (var i = 0; i < globals.FileListItems.length; i++) {
-		let row_id = getTableItemIdentifier('row');
-		let fp = globals.FileListItems[i].filePath;
-		let fp_icon = globals.FileListItems[i].fileIconBase64;
-		let file_item_tr_outer_html =
-			'<tr class="file-list-row" data-row="' + row_id + '">' +
-			// ICON COLUMN
-			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
-			'<p class="qlbt-cell-line" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
-			'<img class="file-list-icon" src="data:image/png;base64,' + fp_icon + '">' +
-			'</p></td>' +
-			// PATH COLUMN
-			'<td class="file-list-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
-			'<p class="qlbt-cell-line ql-align-right file-list-path-block" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
-			`<a class="link-type-fileorfolder file-list-path ql-font-consolas ql-align-right" href="${getPathUri(fp)}">${formatFilePathDisplayValue(fp)}</a>` +
-			'</p></td>' +
-			// REMOVE COLUMN
-			'<td class="file-list-cell file-list-remove-cell" data-row="' + row_id + '" rowspan="1" colspan="1">' +
-			'<p class="qlbt-cell-line ql-align-center" data-row="' + row_id + '" data-cell="' + getTableItemIdentifier('cell') + '" data-rowspan="1" data-colspan="1">' +
-			'<a class="link-type-delete-item file-list-remove ql-align-center"><img src="data:image/png;base64,' + delete_img_base64 + '"></a>' +
-			'</p></td>' +
-			'</tr>';
-		file_list_tbody_inner_html += file_item_tr_outer_html;
-
-	}
-	let file_list_table_html =
-		'<div id="fileListTableDiv" class="quill-better-table-wrapper">' +
-		'<table class="quill-better-table file-list-table">' +
-		'<colgroup><col class="file-list-icon-col"><col class="file-list-path-col"><col class="file-list-remove-col"></colgroup>' +
-		'<tbody>' + file_list_tbody_inner_html + '</tbody></table></div>';
-
-	setRootHtml(file_list_table_html);
+	setRootElement(createFileListTableElement());
 	addFileEventHandlers();
 }
+function createFileListTableElement() {
+	// CONTAINER
+	let cnt_elm = document.createElement('div');
+	cnt_elm.setAttribute('id', 'fileListTableDiv');
+	cnt_elm.classList.add('quill-better-table-wrapper');
 
+	// TABLE
+	let tbl_elm = document.createElement('table');
+	cnt_elm.appendChild(tbl_elm);
+	tbl_elm.classList.add('quill-better-table', 'file-list-table');
+
+	// COLGROUPS
+	let cg_elm = document.createElement('colgroup');
+	tbl_elm.appendChild(cg_elm);
+	['file-list-icon-col', 'file-list-path-col', 'file-list-remove-col']
+		.forEach(x => {
+			let col_elm = document.createElement('col');
+			col_elm.classList.add(x);
+			cg_elm.appendChild(col_elm);
+		});
+
+	// TABLE BODY
+	let tb_elm = document.createElement('tbody');
+	tbl_elm.appendChild(tb_elm);
+
+	// ROWS
+	for (var i = 0; i < globals.FileListItems.length; i++) {
+		let fp = globals.FileListItems[i].filePath;
+		let fp_icon = globals.FileListItems[i].fileIconBase64;
+		tbl_elm.appendChild(createFileListRowElement(fp, fp_icon));
+	}
+
+	return cnt_elm;
+}
+
+function createFileListRowElement(fp, fp_icon) {
+	let row_id = getTableItemIdentifier('row');
+
+	// ROW
+	let tr_elm = document.createElement('tr');
+	tr_elm.classList.add('file-list-row');
+	tr_elm.setAttribute('data-row', row_id);
+
+	// ICON
+	tr_elm.appendChild(createFileListIconCell(row_id, fp_icon));
+
+	// PATH
+	tr_elm.appendChild(createFileListPathCell(row_id, fp));
+
+	// REMOVE
+	tr_elm.appendChild(createFileListRemoveCell(row_id));
+
+	return tr_elm;
+} 
+
+function createFileListIconCell(row_id, fp_icon) {
+	// CELL
+	let td_icon_elm = createFileListCellElement(row_id);
+
+	// PARAGRAPH
+	let p_elm = createFileListParagraphElement(row_id);
+	td_icon_elm.appendChild(p_elm);
+
+	// ICON
+	let img_elm = document.createElement('img');
+	p_elm.appendChild(img_elm);
+	img_elm.classList.add('file-list-icon');
+	img_elm.setAttribute('src', `${globals.BASE64_IMG_SRC_PREFIX}${fp_icon}`);
+
+	return td_icon_elm;
+}
+function createFileListPathCell(row_id, fp) {
+	// CELL
+	let td_path_elm = createFileListCellElement(row_id);
+
+	// PARAGRAPH
+	let p_elm = createFileListParagraphElement(row_id);
+	td_path_elm.appendChild(p_elm);
+	p_elm.classList.add('ql-align-right', 'file-list-path-block');
+
+	// PATH ANCHOR
+	let a_elm = document.createElement('a');
+	p_elm.appendChild(a_elm);
+	a_elm.classList.add('link-type-fileorfolder', 'file-list-path', 'ql-font-consolas', 'ql-align-right');
+	a_elm.innerText = formatFilePathDisplayValue(fp);
+
+	return td_path_elm;
+}
+
+
+function createFileListRemoveCell(row_id) {
+	// CELL
+	let td_remove_elm = createFileListCellElement(row_id);
+	td_remove_elm.classList.add('file-list-remove-cell');
+
+	// PARAGRAPH
+	let p_elm = createFileListParagraphElement(row_id);
+	td_remove_elm.appendChild(p_elm);
+	p_elm.classList.add('ql-align-center')
+
+	// REMOVE ANCHOR
+	let a_elm = document.createElement('a');
+	p_elm.appendChild(a_elm);
+	a_elm.classList.add('link-type-delete-item', 'file-list-remove', 'ql-align-center');
+
+	// REMOVE ICON
+	let img_elm = document.createElement('img');
+	a_elm.appendChild(img_elm);
+	img_elm.setAttribute('src', `${globals.BASE64_IMG_SRC_PREFIX}${globals.BASE64_IMG_REMOVE}`);
+
+	return td_remove_elm;
+}
+
+function createFileListCellElement(row_id) {
+	let cell_elm = document.createElement('td');
+	cell_elm.classList.add('file-list-cell');
+	cell_elm.setAttribute('data-row', row_id);
+	cell_elm.setAttribute('rowspan', 1);
+	cell_elm.setAttribute('colspan', 1);
+	return cell_elm;
+}
+
+function createFileListParagraphElement(row_id) {
+	let p_elm = document.createElement('p');
+	p_elm.classList.add('qlbt-cell-line');
+	p_elm.setAttribute('data-row', row_id);
+	p_elm.setAttribute('data-cell', getTableItemIdentifier('cell'));
+	p_elm.setAttribute('rowspan', 1);
+	p_elm.setAttribute('colspan', 1);
+	return p_elm;
+}
+// #endregion
 function formatFilePathDisplayValue(fp) {
 	let fp_parts = [];
 	if (fp.includes('\\')) {
@@ -226,7 +328,7 @@ function formatFilePathDisplayValue(fp) {
 }
 
 
-function convertFileListContentToFormats(selectionOnly, formats) {
+async function convertFileListContentToFormatsAsync(selectionOnly, formats) {
 	// NOTE (at least currently) selection is ignored for file items
 	let items = [];
 	for (var i = 0; i < formats.length; i++) {
@@ -244,13 +346,14 @@ function convertFileListContentToFormats(selectionOnly, formats) {
 		} else if (isImageFormat(lwc_format)) {
 			// BUG this ignores selected items cause its confusing and won't really be needed
 
-			// trigger async screenshot notification where host needs 
+			// trigger async screenshot notification where host needs
 			// to null and wait for value to avoid async issues
-			getDocRangeAsImageAsync(getContentRange())
-				.then((result) => {
-					onCreateContentScreenShot_ntf(result);
-				});
-			data = globals.PLACEHOLDER_DATAOBJECT_TEXT;
+			//getDocRangeAsImageAsync(getContentRange())
+			//	.then((result) => {
+			//		onCreateContentScreenShot_ntf(result);
+			//	});
+			//data = globals.PLACEHOLDER_DATAOBJECT_TEXT;
+			data = await getDocRangeAsImageAsync(getContentRange());
 		} else if (isCsvFormat(lwc_format)) {
 			data = getFileListContentData(selectionOnly).split(globals.DefaultCsvProps.RowSeparator).join(',');
 		} else if (isFileListFormat(lwc_format)) {

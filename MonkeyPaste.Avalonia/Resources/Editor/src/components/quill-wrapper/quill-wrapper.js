@@ -153,9 +153,14 @@ function setTextInRange(range, text, source = 'api', decodeTemplates = false) {
 	insertText(range.index, text, source, decodeTemplates);
 }
 
-function setRootHtml(html) {
-	globals.quill.root.innerHTML = html;
-	globals.quill.update();
+function setRootHtml(htmlStr) {
+	globals.quill.root.innerHTML = htmlStr;
+	updateQuill();
+}
+
+function setRootElement(elm) {
+	globals.quill.root.replaceChildren(elm);
+	updateQuill();
 }
 
 function setRootText(text) {

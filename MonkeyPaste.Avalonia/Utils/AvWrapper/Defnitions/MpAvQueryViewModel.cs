@@ -94,6 +94,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Repeat Query
+        const bool STORE_QUERY_IDS = true;
         private IEnumerable<int> _allIds = new List<int>();
         public async Task<List<MpCopyItem>> QueryForModelsAsync() {
             int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
@@ -127,7 +128,10 @@ namespace MonkeyPaste.Avalonia {
         public async Task QueryForTotalCountAsync(bool isRequery) {
             int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
             _pageTools.SetTotalCount(total_count);
-            _allIds = await MpContentQuery.FetchItemIdsAsync(this, 0, total_count, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            if (STORE_QUERY_IDS) {
+                _allIds = await MpContentQuery.FetchItemIdsAsync(this, 0, total_count, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            }
+
 
             if (isRequery) {
                 _requeryCount++;
@@ -141,19 +145,21 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task<List<int>> FetchPageIdsAsync(int offset, int limit) {
-            //var items = await MpContentQuery.FetchItemIdsAsync(this, offset, limit, Mp.Services.ContentQueryTools.GetOmittedContentIds());
-            //return items;
-            await Task.Delay(0);
-            return _allIds.Skip(offset).Take(limit).ToList();
+            if (STORE_QUERY_IDS) {
+                return _allIds.Where(x => !Mp.Services.ContentQueryTools.GetOmittedContentIds().Contains(x)).Skip(offset).Take(limit).ToList();
+            }
+            var items = await MpContentQuery.FetchItemIdsAsync(this, offset, limit, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            return items;
         }
         public async Task<int> FetchItemOffsetIdxAsync(int ciid) {
-            //if (ciid <= 0) {
-            //    return -1;
-            //}
-            //int offset_idx = await MpContentQuery.FetchItemOffsetAsync(this, ciid, Mp.Services.ContentQueryTools.GetOmittedContentIds());
-            //return offset_idx;
-            await Task.Delay(0);
-            return _allIds.IndexOf(ciid);
+            if (STORE_QUERY_IDS) {
+                return _allIds.Where(x => !Mp.Services.ContentQueryTools.GetOmittedContentIds().Contains(x)).IndexOf(ciid);
+            }
+            if (ciid <= 0) {
+                return -1;
+            }
+            int offset_idx = await MpContentQuery.FetchItemOffsetAsync(this, ciid, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            return offset_idx;
         }
 
         public void RestoreProviderValues() {

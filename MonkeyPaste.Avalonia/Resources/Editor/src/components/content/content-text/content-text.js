@@ -766,7 +766,7 @@ function isPointInRange(p, range) {
 
 // #region Actions
 
-function convertTextContentToFormats(selectionOnly, formats) {
+async function convertTextContentToFormatsAsync(selectionOnly, formats) {
 	let sel = selectionOnly ? getDocSelection(true) : { index: 0, length: getDocLength() };
 	let items = [];
 	for (var i = 0; i < formats.length; i++) {
@@ -796,13 +796,15 @@ function convertTextContentToFormats(selectionOnly, formats) {
 		} else if (isCsvFormat(lwc_format) && isContentATable()) {
 			data = getTablesCsv(lwc_format, null, selectionOnly);
 		} else if (isImageFormat(lwc_format)) {
-			// trigger async screenshot notification where host needs 
+			data = await getDocRangeAsImageAsync(sel);
+
+			// trigger async screenshot notification where host needs
 			// to null and wait for value to avoid async issues
-			getDocRangeAsImageAsync(sel)
-				.then((result) => {
-					onCreateContentScreenShot_ntf(result);
-				});
-			data = globals.PLACEHOLDER_DATAOBJECT_TEXT;
+			//getDocRangeAsImageAsync(sel)
+			//	.then((result) => {
+			//		onCreateContentScreenShot_ntf(result);
+			//	});
+			//data = globals.PLACEHOLDER_DATAOBJECT_TEXT;
 		} 
 		if (!data || data == '') {
 			continue;

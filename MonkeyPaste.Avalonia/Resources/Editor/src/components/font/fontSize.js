@@ -2,6 +2,7 @@
 // #region Life Cycle
 
 function initFontSizes() {
+    addClickOrKeyClickEventListener(getFontSizeToolbarElement(), onFontSizeToolbarElementClick);
 }
 
 
@@ -20,14 +21,25 @@ function registerFontSizes() {
 // #endregion Life Cycle
 
 // #region Getters
-
-function getFontPickerToolbarContainerElement() {
-    return document.getElementsByClassName('ql-size ql-picker')[0];
+function getFontSizeToolbarElement() {
+    let ff_picker_elms = Array.from(document.querySelectorAll('.ql-size.ql-picker'));
+    if (ff_picker_elms.length == 0) {
+        return null;
+    }
+    return ff_picker_elms[0];
 }
-function getFontPickerOptionsContainerElement() {
-    // should only be accessed when toolbar is opened
 
-    return getFontPickerToolbarContainerElement().getElementsByClassName('ql-picker-options')[0];
+function getFontSizeDropDownElement() {
+    let ff_picker_elms = Array.from(document.querySelectorAll('.ql-size.ql-picker.ql-expanded'));
+    if (ff_picker_elms.length == 0) {
+        return null;
+    }
+    let ff_picker_elm = ff_picker_elms[0];
+    let ff_opt_elms = Array.from(ff_picker_elm.querySelectorAll('.ql-picker-options'));
+    if (ff_opt_elms.length == 0) {
+        return null;
+    }
+    return ff_opt_elms[0];
 }
 // #endregion Getters
 
@@ -37,6 +49,9 @@ function getFontPickerOptionsContainerElement() {
 
 // #region State
 
+function isFontSizeDropDownOpen() {
+    return getFontSizeDropDownElement() != null;
+}
 // #endregion State
 
 // #region Actions
@@ -80,6 +95,10 @@ function updateFontSizePickerToSelection(forcedSize = null, sel = null) {
 // #endregion Actions
 
 // #region Event Handlers
+
+function onFontSizeToolbarElementClick(e) {
+    updateScrollBarSizeAndPositions();
+}
 
 // #endregion Event Handlers
 

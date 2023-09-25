@@ -278,7 +278,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             _lastDataObjectResp = null;
-            SendMessage($"contentDataObjectRequest_ext_ntf('{contentDataReq.SerializeJsonObjectToBase64()}')");
+            SendMessage($"contentDataObjectRequestAsync_ext_ntf('{contentDataReq.SerializeJsonObjectToBase64()}')");
             while (_lastDataObjectResp == null) {
                 // wait for binding handler to receive 
                 await Task.Delay(100);
@@ -336,15 +336,15 @@ namespace MonkeyPaste.Avalonia {
                 avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
                 // TODO add colorized ascii maybe as html and rtf!!
             } else if (!ignore_ss) {
-                if (use_placeholders) {
-                    avdo.SetData(MpPortableDataFormats.AvPNG, MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString());
+                //if (use_placeholders) {
+                //    avdo.SetData(MpPortableDataFormats.AvPNG, MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString());
 
-                    Dispatcher.UIThread.Post(async () => {
-                        await SetScreenShotAsync(avdo);
-                    });
-                } else {
-                    await SetScreenShotAsync(avdo);
-                }
+                //    Dispatcher.UIThread.Post(async () => {
+                //        await SetScreenShotAsync(avdo);
+                //    });
+                //} else {
+                //    await SetScreenShotAsync(avdo);
+                //}
             }
 
             await avdo.MapAllPseudoFormatsAsync();

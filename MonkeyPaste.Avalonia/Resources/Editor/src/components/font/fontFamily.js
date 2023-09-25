@@ -45,7 +45,6 @@ function initFontFamilyPicker() {
     }
 }
 
-
 function initFontWhiteList() {
     if (Quill === undefined) {
         /// host load error case
@@ -164,6 +163,20 @@ function getFontFamilyCssStr(ff) {
 
     return fontFamilyDropDownCssTemplateStr + ' ' + fontFamilyContentTemplateStr;
 }
+
+function getFontFamilyDropDownElement() {
+    let ff_picker_elms = Array.from(document.querySelectorAll('.ql-font.ql-picker.ql-expanded'));
+    if (ff_picker_elms.length == 0) {
+        return null;
+    }
+    let ff_picker_elm = ff_picker_elms[0];
+    let ff_opt_elms = Array.from(ff_picker_elm.querySelectorAll('.ql-picker-options'));
+    if (ff_opt_elms.length == 0) {
+        return null;
+    }
+    return ff_opt_elms[0];
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -175,6 +188,10 @@ function setDocRangeFontFamily(range, ff_dv) {
 // #endregion Setters
 
 // #region State
+
+function isFontFamilyDropDownOpen() {
+    return getFontFamilyDropDownElement() != null;
+}
 
 // #endregion State
 
@@ -264,6 +281,7 @@ function onFontFamilyToolbarButtonClick(e) {
     getFontFamilyToolbarPicker().classList.remove('hidden');    
     updateFontFamilyPickerItemsToSelection();
     window.addEventListener('mousedown', onTempFontFamilyWindowClick, true);
+    updateScrollBarSizeAndPositions();
 }
 
 function onTempFontFamilyWindowClick(e) {

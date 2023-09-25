@@ -246,6 +246,7 @@
                 Background="Transparent">
             <Border.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!IsRequerying" />
                     <Binding Path="IsQueryEmpty" />
                     <Binding Path="!IsVisible"
                              ElementName="QueryTrayBusyOuterBorder" />
