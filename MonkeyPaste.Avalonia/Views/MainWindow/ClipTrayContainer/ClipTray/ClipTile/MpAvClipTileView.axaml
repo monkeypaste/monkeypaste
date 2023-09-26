@@ -168,7 +168,6 @@
                           HorizontalAlignment="Stretch"
                           Classes.append="{Binding IsAppendNotifier}"
                           Classes.appendpaused="{Binding IsAppendPaused, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
-                          Classes.trashOpTile="{Binding IsTrashOpTile}"
                           Classes.popout="{Binding IsWindowOpen}"
                           Classes.transOpen="{Binding TransactionCollectionViewModel.IsTransactionPaneOpen}"
                           Classes.hasVertContentScroll="{Binding IsVerticalScrollbarVisibile}"

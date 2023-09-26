@@ -1,15 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Media;
-using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.LogicalTree;
 using Avalonia.Xaml.Interactivity;
-using MonkeyPaste;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -89,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void OnAttached() {
             base.OnAttached();
-            AssociatedObject.Initialized += AssociatedObject_Initialized;
+            AssociatedObject.Loaded += AssociatedObject_Initialized;
         }
 
         private void AssociatedObject_Initialized(object sender, EventArgs e) {
@@ -106,9 +100,10 @@ namespace MonkeyPaste.Avalonia {
             bool changed = _matchCount != count;
             _matchCount = count;
             if (changed) {
+                // webview sets count silent before finding or it'll confuse selector about total count
+                // because textboxes are faster and old webview count still will be set
                 MatchCountChanged?.Invoke(this, _matchCount);
             }
-
         }
 
         protected async Task AttachToSelectorAsync() {
@@ -127,31 +122,38 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected async Task<MpAvHighlightSelectorBehavior> FindSelectorAsync(int timeout = 10_000) {
-            var sw = Stopwatch.StartNew();
-            while (true) {
-                if (AssociatedObject != null && AssociatedObject.DataContext != null) {
-                    break;
-                }
-                if (sw.ElapsedMilliseconds >= 10_000) {
-                    break;
-                }
-                await Task.Delay(100);
-            }
-            MpAvClipTileView ctv = null;
-            var parent = AssociatedObject.Parent;
-            while (true) {
-                if (parent is MpAvClipTileView parent_ctv) {
-                    ctv = parent_ctv;
-                    break;
-                }
-                if (parent == null) {
-                    break;
-                }
-                parent = parent.Parent;
-            }
-            if (ctv == null) {
+            //var sw = Stopwatch.StartNew();
+            //while (true) {
+            //    if (AssociatedObject != null && AssociatedObject.DataContext != null) {
+            //        break;
+            //    }
+            //    if (sw.ElapsedMilliseconds >= 10_000) {
+            //        break;
+            //    }
+            //    await Task.Delay(100);
+            //}
+            //MpAvClipTileView ctv = null;
+            //var parent = AssociatedObject.Parent;
+            //while (true) {
+            //    if (parent is MpAvClipTileView parent_ctv) {
+            //        ctv = parent_ctv;
+            //        break;
+            //    }
+            //    if (parent == null) {
+            //        break;
+            //    }
+            //    parent = parent.Parent;
+            //}
+            await Task.Delay(0);
+            if (AssociatedObject == null ||
+                AssociatedObject.GetLogicalAncestors().OfType<MpAvClipTileView>().FirstOrDefault()
+                    is not MpAvClipTileView ctv) {
                 return null;
             }
+            //}
+            //if ( ctv == null) {
+            //    return null;
+            //}
             if (Interaction.GetBehaviors(ctv).OfType<MpAvHighlightSelectorBehavior>()
                 .FirstOrDefault() is MpAvHighlightSelectorBehavior hsb) {
                 return hsb;

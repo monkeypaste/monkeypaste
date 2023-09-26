@@ -149,6 +149,7 @@
     <sys:String x:Key="EmptyImage">avares://MonkeyPaste.Avalonia/Assets/Images/transparent.png</sys:String>
     <sys:String x:Key="EllipsesImage">avares://MonkeyPaste.Avalonia/Assets/Images/ellipses.png</sys:String>
     <sys:String x:Key="Dots2x10Image">avares://MonkeyPaste.Avalonia/Assets/Images/dots_2x10.png</sys:String>
+    <sys:String x:Key="Dots1x3Image">avares://MonkeyPaste.Avalonia/Assets/Images/dots_1x3.png</sys:String>
     <sys:String x:Key="Dots3x1Image">avares://MonkeyPaste.Avalonia/Assets/Images/dots_3x1.png</sys:String>
     <sys:String x:Key="WandImage">avares://MonkeyPaste.Avalonia/Assets/Images/wand.png</sys:String>
     <sys:String x:Key="IndentImage">avares://MonkeyPaste.Avalonia/Assets/Images/indent.png</sys:String>

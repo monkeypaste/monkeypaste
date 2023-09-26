@@ -1,18 +1,13 @@
-﻿using Avalonia.Controls;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvContentWebViewHighlightBehavior : MpAvHighlightBehaviorBase<Control> {
+    public class MpAvContentWebViewHighlightBehavior : MpAvHighlightBehaviorBase<MpAvContentWebView> {
 
         private MpTextRange _contentRange;
         protected override MpTextRange ContentRange {
@@ -30,7 +25,11 @@ namespace MonkeyPaste.Avalonia {
             MpContentQueryBitFlags.Annotations |
             MpContentQueryBitFlags.Content;
         public override async Task FindHighlightingAsync() {
-            int matchCount = 0;
+            SetMatchCount(0);
+            while (!AssociatedObject.IsEditorLoaded) {
+                await Task.Delay(100);
+            }
+            int match_count = 0;
             bool can_match =
                 Mp.Services.Query.Infos
                 .Any(x => x.QueryFlags.HasContentMatchFilterFlag());
@@ -42,11 +41,11 @@ namespace MonkeyPaste.Avalonia {
                     while (wv.SearchResponse == null) {
                         await Task.Delay(100);
                     }
-                    matchCount = wv.SearchResponse.rangeCount;
+                    match_count = wv.SearchResponse.rangeCount;
                     wv.SearchResponse = null;
                 }
             }
-            SetMatchCount(matchCount);
+            SetMatchCount(match_count);
         }
 
         public override async Task ApplyHighlightingAsync() {

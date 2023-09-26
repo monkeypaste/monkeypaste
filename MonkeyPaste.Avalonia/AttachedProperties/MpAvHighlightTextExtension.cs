@@ -17,11 +17,15 @@ namespace MonkeyPaste.Avalonia {
 
         private static IBrush _DefaultInactiveHighlightBrush =>
             Mp.Services == null || Mp.Services.PlatformResource == null ?
-                null : Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1BgColor.ToString()).AdjustAlpha(_DefaultOpacity).ToAvBrush();
+                null :
+            Brushes.Yellow;
+        //Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent1BgColor.ToString()).AdjustAlpha(_DefaultOpacity).ToAvBrush();
 
         private static IBrush _DefaultActiveHighlightBrush =>
         Mp.Services == null || Mp.Services.PlatformResource == null ?
-            null : Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent3Color.ToString()).AdjustAlpha(_DefaultOpacity).ToAvBrush();
+            null :
+            Brushes.Lime;
+        //Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeAccent3Color.ToString()).AdjustAlpha(_DefaultOpacity).ToAvBrush();
         #endregion
 
         #region Statics
@@ -65,11 +69,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             void RangeInfoViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-                if (!e.PropertyName.StartsWith(nameof(MpIHighlightTextRangesInfoViewModel))) {
-                    return;
+                if (e.PropertyName.Contains(nameof(MpIHighlightTextRangesInfoViewModel)) ||
+                    e.PropertyName == nameof(MpIHighlightTextRangesInfoViewModel.ActiveHighlightIdx) ||
+                    e.PropertyName == nameof(MpIHighlightTextRangesInfoViewModel.HighlightRanges)) {
+                    UpdateHighlights(element);
                 }
                 //MpConsole.WriteLine($"highlight prop changed: '{e.PropertyName}'");
-                UpdateHighlights(element);
             }
 
             if (e.OldValue is MpIHighlightTextRangesInfoViewModel old_htrivm) {

@@ -30,7 +30,6 @@
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                         <Binding Path="!IsWindowOpen" />
                         <Binding Path="!IsAppendNotifier" />
-                        <Binding Path="!IsTrashOpTile" />
                     </MultiBinding>
                 </Setter.Value>
             </Setter>

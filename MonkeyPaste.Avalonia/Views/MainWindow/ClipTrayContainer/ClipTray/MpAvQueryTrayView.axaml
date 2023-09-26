@@ -16,16 +16,18 @@
     <local:MpAvUserControl.Styles>
 
 
+        <!--  PIN PLACHOLDER DBL CLICK  -->
+
         <!--  Requery tile opacity  -->
 
-        <Style Selector="ListBox.queryListBox.notrequerying > ListBoxItem">
+        <!--<Style Selector="ListBox.queryListBox.notrequerying > ListBoxItem">
             <Setter Property="Opacity"
                     Value="1" />
         </Style>
         <Style Selector="ListBox.queryListBox.requerying > ListBoxItem">
             <Setter Property="Opacity"
                     Value="0" />
-        </Style>
+        </Style>-->
 
         <!--  TILE POSIITONING/VISIBILITY  -->
 
@@ -35,7 +37,9 @@
                     Value="{Binding TrayX}" />
             <Setter Property="Canvas.Top"
                     Value="{Binding TrayY}" />
-            <Setter Property="Opacity">
+            <Setter Property="Opacity"
+                    Value="{Binding IsPlaceholder, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}" />
+            <!--<Setter Property="Opacity">
                 <Setter.Value>
                     <MultiBinding Converter="{x:Static local:MpAvMultiBoolToDoubleConverter.Instance}"
                                   ConverterParameter="And|0|1">
@@ -44,7 +48,7 @@
                                  Source="{x:Static local:MpAvClipTrayViewModel.Instance}" />
                     </MultiBinding>
                 </Setter.Value>
-            </Setter>
+            </Setter>-->
         </Style>
 
         <!--  EMPTY TEXTBLOCK  -->

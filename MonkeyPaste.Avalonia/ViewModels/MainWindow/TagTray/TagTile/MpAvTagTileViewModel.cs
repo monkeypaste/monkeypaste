@@ -1219,9 +1219,12 @@ namespace MonkeyPaste.Avalonia {
 
             Dispatcher.UIThread.VerifyAccess();
 
-            foreach (MpAvTagTileViewModel this_or_ancestor_ttvm in SelfAndAllAncestors) {
-                await this_or_ancestor_ttvm.UpdateClipCountAsync();
-
+            if (is_cap_related) {
+                await Parent.UpdateAllClipCountsAsync();
+            } else {
+                foreach (MpAvTagTileViewModel this_or_ancestor_ttvm in SelfAndAllAncestors) {
+                    await this_or_ancestor_ttvm.UpdateClipCountAsync();
+                }
             }
 
             // await notify so IsBusy doesn't trip
@@ -1240,9 +1243,9 @@ namespace MonkeyPaste.Avalonia {
                     // NOTE infer link/unlink by +/- id
                     await MpAvClipTrayViewModel.Instance.ProcessAccountCapsAsync(MpAccountCapCheckType.Link, TagId * (isLink ? 1 : -1));
                 }
-
                 while (!MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(string.Empty)) { await Task.Delay(100); }
                 MpAvClipTrayViewModel.Instance.QueryCommand.Execute(string.Empty);
+
             });
 
         }

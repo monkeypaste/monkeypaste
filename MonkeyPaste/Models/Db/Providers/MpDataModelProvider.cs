@@ -90,6 +90,14 @@ namespace MonkeyPaste {
             return result[0];
         }
 
+        public static async Task DeleteItemAsync<T>(int id) where T : new() {
+            MpDbModelBase dbm = await GetItemAsync<T>(id) as MpDbModelBase;
+            if (dbm == null) {
+                return;
+            }
+            await dbm.DeleteFromDatabaseAsync();
+        }
+
         public static T GetItem<T>(int id) where T : new() {
             string table_name = typeof(T).ToString().Replace("MonkeyPaste.", string.Empty);
             string pk_name = $"pk_{table_name}Id";

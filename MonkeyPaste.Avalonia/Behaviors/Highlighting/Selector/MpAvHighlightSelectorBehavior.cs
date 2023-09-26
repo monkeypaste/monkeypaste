@@ -1,17 +1,9 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Input;
-using Avalonia.Media;
-using Avalonia.Threading;
 using Avalonia.Xaml.Interactivity;
-using MonkeyPaste;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -99,10 +91,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
         protected override void OnAttached() {
             base.OnAttached();
-
             AssociatedObject.DataContextChanged += AssociatedObject_DataContextChanged;
-
-
         }
         protected override void OnDetaching() {
             if (AssociatedObject != null) {
@@ -141,12 +130,15 @@ namespace MonkeyPaste.Avalonia {
             PerformHighlighting().FireAndForgetSafeAsync();
         }
 
-        private void HighlightBehavior_MatchCountChanged(object sender, int matchCount) {
-            UpdateActiveIdx();
-            int totalCount = Items.Sum(x => x.MatchCount);
+        private void CheckMatchCount() {
+            int totalCount = Items.Where(x => x.MatchCount >= 0).Sum(x => x.MatchCount);
             if (totalCount > 1) {
                 MpAvSearchBoxViewModel.Instance.NotifyHasMultipleMatches();
             }
+        }
+        private void HighlightBehavior_MatchCountChanged(object sender, int matchCount) {
+            UpdateActiveIdx();
+            //CheckMatchCount();
         }
 
         private void Hlr_SelIdxChanged(object sender, int e) {
@@ -164,11 +156,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case MpMessageType.RequeryCompleted:
-                    Reset();
-                    await PerformHighlighting();
-                    break;
                 case MpMessageType.JumpToIdxCompleted:
-                    //await Task.Delay(500);
                     await PerformHighlighting();
                     break;
             }
@@ -177,6 +165,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         private async Task PerformHighlighting() {
+            Reset();
             if (!IsHighlightDataAvailable) {
                 // avoid long running task on content webview which reloads content
                 // when no search info provides highlighting
@@ -202,8 +191,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (AssociatedObject == null ||
-                AssociatedObject.BindingContext == null ||
-                !AssociatedObject.BindingContext.IsEditorLoaded) {
+                AssociatedObject.BindingContext == null) {
                 // NOTE this happens when popout is unloading and it has highlighting
                 return;
             }
@@ -211,6 +199,8 @@ namespace MonkeyPaste.Avalonia {
             await Task.WhenAll(
                 EnabledItems
                 .Select(x => x.FindHighlightingAsync()));
+
+            CheckMatchCount();
 
             SelectedHighlighterIdx = 0;
             if (EnabledItems.All(x => x.MatchCount == 0)) {
@@ -223,8 +213,8 @@ namespace MonkeyPaste.Avalonia {
 
         private bool IsRegionEnabled(MpIHighlightRegion hr) {
             return
-                Mp.Services.Query.Infos
-                .Any(x => x.QueryFlags.HasAnyFlag(hr.AcceptanceFlags));
+            Mp.Services.Query.Infos
+            .Any(x => x.QueryFlags.HasAnyFlag(hr.AcceptanceFlags));
         }
 
         private void Reset() {
@@ -283,13 +273,16 @@ namespace MonkeyPaste.Avalonia {
             if (!IsActive) {
                 return;
             }
+            if (AssociatedObject.BindingContext.CopyItemTitle == "Test_99,999") {
+
+            }
             int next_idx = SelectedMatchIdx + 1;
             if (next_idx >= SelectedItem.MatchCount) {
                 SelectNextItem();
             } else {
                 SelectedItem.SelectedIdx = next_idx;
             }
-            EnabledItems.ForEach(x => x.ApplyHighlightingAsync());
+            EnabledItems.ForEach(x => x.ApplyHighlightingAsync().FireAndForgetSafeAsync());
         }
         private void SelectPreviousMatch() {
             if (!IsActive) {
@@ -302,7 +295,7 @@ namespace MonkeyPaste.Avalonia {
                 SelectedItem.SelectedIdx = prev_idx;
             }
 
-            EnabledItems.ForEach(x => x.ApplyHighlightingAsync());
+            EnabledItems.ForEach(x => x.ApplyHighlightingAsync().FireAndForgetSafeAsync());
         }
         #endregion
 

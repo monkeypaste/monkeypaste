@@ -56,6 +56,9 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvQueryViewModel _instance;
         public static MpAvQueryViewModel Instance => _instance ?? (_instance = new MpAvQueryViewModel());
 
+        [JsonIgnore]
+        private IEnumerable<int> OmittedIds =>
+            Mp.Services.ContentQueryTools.GetOmittedContentIds();
         #endregion
 
         #region Interfaces
@@ -97,9 +100,9 @@ namespace MonkeyPaste.Avalonia {
         const bool STORE_QUERY_IDS = true;
         private IEnumerable<int> _allIds = new List<int>();
         public async Task<List<MpCopyItem>> QueryForModelsAsync() {
-            int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            int total_count = await MpContentQuery.QueryForTotalCountAsync(this, OmittedIds);
             _pageTools.SetTotalCount(total_count);
-            _allIds = await MpContentQuery.FetchItemIdsAsync(this, 0, total_count, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            _allIds = await MpContentQuery.FetchItemIdsAsync(this, 0, total_count, OmittedIds);
 
             var allItems = await MpDb.GetAsyncTable<MpCopyItem>().ToListAsync();
             var result = _allIds.Select(x => allItems.FirstOrDefault(y => y.Id == x));
@@ -108,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public async Task<List<MpCopyItem>> FetchPageAsync(int offset, int limit) {
             if (_allIds == null) {
-                _allIds = await MpContentQuery.FetchItemIdsAsync(this, 0, _pageTools.TotalCount, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+                _allIds = await MpContentQuery.FetchItemIdsAsync(this, 0, _pageTools.TotalCount, OmittedIds);
             }
             var all = await
                 MpDb.GetAsyncTable<MpCopyItem>()
@@ -126,10 +129,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public async Task QueryForTotalCountAsync(bool isRequery) {
-            int total_count = await MpContentQuery.QueryForTotalCountAsync(this, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            int total_count = await MpContentQuery.QueryForTotalCountAsync(this, OmittedIds);
             _pageTools.SetTotalCount(total_count);
             if (STORE_QUERY_IDS) {
-                _allIds = await MpContentQuery.FetchItemIdsAsync(this, 0, total_count, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+                _allIds = await MpContentQuery.FetchItemIdsAsync(this, 0, total_count, OmittedIds);
             }
 
 
@@ -138,7 +141,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_requeryCount % OPTIMIZE_PER_REQUERY_COUNT == 0) {
                     // this is to improve db perf.
                     // see https://www.sqlite.org/pragma.html#pragma_optimize
-                    MpDb.PerformDbOptimizationAsync().FireAndForgetSafeAsync();
+                    //MpDb.PerformDbOptimizationAsync().FireAndForgetSafeAsync();
                 }
             }
 
@@ -146,19 +149,19 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<List<int>> FetchPageIdsAsync(int offset, int limit) {
             if (STORE_QUERY_IDS) {
-                return _allIds.Where(x => !Mp.Services.ContentQueryTools.GetOmittedContentIds().Contains(x)).Skip(offset).Take(limit).ToList();
+                return _allIds.Where(x => !OmittedIds.Contains(x)).Skip(offset).Take(limit).ToList();
             }
-            var items = await MpContentQuery.FetchItemIdsAsync(this, offset, limit, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            var items = await MpContentQuery.FetchItemIdsAsync(this, offset, limit, OmittedIds);
             return items;
         }
         public async Task<int> FetchItemOffsetIdxAsync(int ciid) {
             if (STORE_QUERY_IDS) {
-                return _allIds.Where(x => !Mp.Services.ContentQueryTools.GetOmittedContentIds().Contains(x)).IndexOf(ciid);
+                return _allIds.Where(x => !OmittedIds.Contains(x)).IndexOf(ciid);
             }
             if (ciid <= 0) {
                 return -1;
             }
-            int offset_idx = await MpContentQuery.FetchItemOffsetAsync(this, ciid, Mp.Services.ContentQueryTools.GetOmittedContentIds());
+            int offset_idx = await MpContentQuery.FetchItemOffsetAsync(this, ciid, OmittedIds);
             return offset_idx;
         }
 

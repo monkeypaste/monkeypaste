@@ -1127,8 +1127,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
-        public int TrashOpCopyItemId { get; set; }
         public int PinOpCopyItemId { get; set; } = -1;
 
         public bool IsAutoEditEnabled =>
@@ -1980,24 +1978,27 @@ namespace MonkeyPaste.Avalonia {
                 QueryCommand.Execute(string.Empty);
 
                 OnPropertyChanged(nameof(IsQueryEmpty));
-            } else if (e is MpCopyItemTag cit &&
-                        MpAvTagTrayViewModel.Instance.LastSelectedActiveItem is MpAvTagTileViewModel sttvm &&
-                        sttvm.IsLinkTag &&
-                        !sttvm.IsAllTag) {
-
-                // check if unlink is part of current query
-                bool is_part_of_query =
-                    sttvm
-                    .SelfAndAllDescendants
-                    .Cast<MpAvTagTileViewModel>()
-                    .Select(x => x.TagId)
-                    .Any(x => x == cit.TagId);
-
-                if (is_part_of_query) {
-                    // when unlinked item is part of current query remove its qidx and do a reset query
-                    Mp.Services.Query.NotifyQueryChanged();
-                }
             }
+            //else if (e is MpCopyItemTag cit &&
+            //            MpAvTagTrayViewModel.Instance.LastSelectedActiveItem is MpAvTagTileViewModel sttvm &&
+            //            sttvm.IsLinkTag &&
+            //            !sttvm.IsTrashTag &&
+            //            !sttvm.IsAllTag) {
+
+            //    // check if unlink is part of current query
+            //    bool is_part_of_query =
+            //        sttvm
+            //        .SelfAndAllDescendants
+            //        .Cast<MpAvTagTileViewModel>()
+            //        .Select(x => x.TagId)
+            //        .Any(x => x == cit.TagId);
+
+            //    if (is_part_of_query) {
+            //        // when unlinked item is part of current query remove its qidx and do a reset query
+            //        Mp.Services.Query.NotifyQueryChanged();
+            //        //QueryCommand.Execute(string.Empty);
+            //    }
+            //}
         }
 
         #region Sync Events
@@ -2065,9 +2066,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvClipTrayViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(TrashOpCopyItemId):
-                    AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsTrashOpTile)));
-                    break;
                 case nameof(PinOpCopyItemId):
                     AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsPinOpTile)));
                     break;
@@ -2145,6 +2143,9 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
                 case nameof(HasScrollVelocity):
+                    if (HasScrollVelocity) {
+
+                    }
                     //MpPlatformWrapper.Services.Cursor.IsCursorFrozen = HasScrollVelocity;
 
                     //if (HasScrollVelocity) {
@@ -2333,7 +2334,7 @@ namespace MonkeyPaste.Avalonia {
                     QueryCommand.Execute(null);
                     break;
                 case MpMessageType.SubQueryChanged:
-                    QueryCommand.Execute(ScrollOffset);
+                    QueryCommand.Execute(string.Empty);
                     break;
                 case MpMessageType.TotalQueryCountChanged:
                     OnPropertyChanged(nameof(IsQueryEmpty));
@@ -2451,80 +2452,28 @@ namespace MonkeyPaste.Avalonia {
             if (ciid == 0) {
                 return;
             }
-            //TrashOpCopyItemId = ciid;
-            int ciid_to_select = -1;
-            MpAvClipTileViewModel tod_ctvm = AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid);
-            if (tod_ctvm != null) {
+
+            if (AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid)
+                    is MpAvClipTileViewModel tod_ctvm) {
                 // flag fade out in view
                 if (!ignorePostSel && tod_ctvm.NearestNonPlaceholderNeighbor != null) {
-                    ciid_to_select = tod_ctvm.NearestNonPlaceholderNeighbor.CopyItemId;
+                    //tod_ctvm.NearestNonPlaceholderNeighbor.IsSelected = true;
+                    await tod_ctvm.NearestNonPlaceholderNeighbor.FocusContainerAsync(NavigationMethod.Directional); ;
                 }
+                RemoveItemCommand.Execute(tod_ctvm);
             }
-
-            if (!isDelete) {
-                // add link to trash tag which caches ciid
-                await MpAvTagTrayViewModel.Instance.TrashTagViewModel
-                    .LinkCopyItemCommand.ExecuteAsync(ciid);
-
-                MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
-            }
-
-            //bool needs_query_refresh = !tod_ctvm.IsPinned || tod_ctvm.PlaceholderForThisPinnedItem != null;
             if (isDelete) {
-                while (IsBusy) { await Task.Delay(100); }
+                //while (IsBusy) { await Task.Delay(100); }
 
-                IsBusy = true;
-
-                if (tod_ctvm == null) {
-                    var to_delete_ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(ciid);
-                    if (to_delete_ci != null) {
-                        await to_delete_ci.DeleteFromDatabaseAsync();
-                    }
-                } else {
-                    await tod_ctvm.CopyItem.DeleteFromDatabaseAsync();
-                }
-
+                //IsBusy = true;
+                await MpDataModelProvider.DeleteItemAsync<MpCopyItem>(ciid);
                 await ProcessAccountCapsAsync(MpAccountCapCheckType.Remove, ciid);
 
             } else {
-                if (tod_ctvm == null) {
-                    return;
-                }
-
-                if (tod_ctvm.IsPinned) {
-                    await UnpinTileCommand.ExecuteAsync(tod_ctvm);
-                } else {
-                    // NOTE! this is trying to fix intermittent empty content write thats been happending
-                    // but SHOULD be part of query to unload that item but not sure, hard to isolate maybe 
-                    // a timing thing (especially when it gets hot)
-                    //tod_ctvm.TriggerUnloadedNotification(true);
-                }
+                // add link to trash tag which caches ciid
+                await MpAvTagTrayViewModel.Instance.TrashTagViewModel
+                    .LinkCopyItemCommand.ExecuteAsync(ciid);
             }
-
-
-            //db delete event is handled in clip tile
-            IsBusy = false;
-
-            if (ciid_to_select > 0 &&
-                AllActiveItems.FirstOrDefault(x => x.CopyItemId == ciid_to_select)
-                    is MpAvClipTileViewModel to_select_ctvm) {
-                to_select_ctvm.IsSelected = true;
-            }
-
-            // trigger in place requery to remove trashed item
-            //if (needs_query_refresh) {
-            //    // needs requery to remove placeholder
-            //    // or the frozen trash item (when query is not trash query)
-            //    // is used
-            //    while (!QueryCommand.CanExecute(string.Empty)) {
-            //        await Task.Delay(100);
-            //    }
-            //    QueryCommand.Execute(string.Empty);
-            //}
-            while (IsQuerying) { await Task.Delay(100); }
-
-            TrashOpCopyItemId = -1;
-
         }
 
         private async Task RefreshQueryPageOffsetsAsync() {
@@ -2852,10 +2801,8 @@ namespace MonkeyPaste.Avalonia {
 
 
             if (target_ctvm != null) {
-                //SelectedItem = target_ctvm;
                 target_ctvm.IsSelected = true;
-            } else {
-
+                await target_ctvm.FocusContainerAsync(NavigationMethod.Directional);
             }
             IsArrowSelecting = false;
         }
@@ -3775,7 +3722,7 @@ namespace MonkeyPaste.Avalonia {
             #region TotalCount Query & Offset Calc
 
             IsInPlaceRequerying = isInPlaceRequery;
-            IsBusy = !isLoadMore && !isLoadRange;
+            IsBusy = !isLoadMore && !isLoadRange && !isInPlaceRequery && !is_empty_query;
             IsQuerying = true;
 
             if (IsSubQuerying) {
@@ -4063,7 +4010,6 @@ namespace MonkeyPaste.Avalonia {
             },
             (offsetIdx_Or_ScrollOffset_Arg) => {
                 return
-                    //!IsAnyBusy && 
                     !IsRequerying &&
                     !IsQuerying;
             });
@@ -4250,7 +4196,31 @@ namespace MonkeyPaste.Avalonia {
                 return args is int || args is string;
             });
 
+        public ICommand RemoveItemCommand => new MpCommand<object>(
+            (args) => {
+                MpAvClipTileViewModel ctvm_to_remove = args as MpAvClipTileViewModel;
+                if (ctvm_to_remove is null && args is int ciid) {
+                    ctvm_to_remove = AllItems.FirstOrDefault(x => x.CopyItemId == ciid);
+                }
+                if (ctvm_to_remove == null) {
+                    return;
+                }
 
+                if (ctvm_to_remove.IsPinned) {
+                    if (ctvm_to_remove.PlaceholderForThisPinnedItem != null &&
+                        ctvm_to_remove.PlaceholderForThisPinnedItem.QueryOffsetIdx is int ppqidx) {
+                        Items.Remove(ctvm_to_remove.PlaceholderForThisPinnedItem);
+                        Items.Where(x => x.QueryOffsetIdx > ppqidx).ForEach(x => x.UpdateQueryOffset(x.QueryOffsetIdx - 1));
+                        Items.Add(new MpAvClipTileViewModel(this));
+                    }
+                    PinnedItems.Remove(ctvm_to_remove);
+                } else {
+                    int qidx = ctvm_to_remove.QueryOffsetIdx;
+                    Items.Remove(ctvm_to_remove);
+                    Items.Where(x => x.QueryOffsetIdx > qidx).ForEach(x => x.UpdateQueryOffset(x.QueryOffsetIdx - 1));
+                    Items.Add(new MpAvClipTileViewModel(this));
+                }
+            });
         public ICommand RestoreSelectedClipCommand => new MpAsyncCommand(
             async () => {
                 int restore_ciid = SelectedItem.CopyItemId;
@@ -4259,19 +4229,11 @@ namespace MonkeyPaste.Avalonia {
                     ProcessAccountCapsAsync(MpAccountCapCheckType.RestoreBlock, restore_ciid).FireAndForgetSafeAsync(this);
                     return;
                 }
-                TrashOpCopyItemId = restore_ciid;
-                //SelectedItem.TriggerUnloadedNotification(false);
+                RemoveItemCommand.Execute(restore_ciid);
 
-                // unlink from trash tag (triggers 
+                // unlink from trash tag 
                 await MpAvTagTrayViewModel.Instance.TrashTagViewModel
                 .UnlinkCopyItemCommand.ExecuteAsync(restore_ciid);
-
-                while (IsQuerying) { await Task.Delay(100); }
-                TrashOpCopyItemId = -1;
-
-                //MpAvTagTrayViewModel.Instance.UpdateAllClipCountsAsync().FireAndForgetSafeAsync(this);
-                // trigger in place requery to restore trashed item
-                //QueryCommand.Execute(string.Empty);
 
             },
             () => {
@@ -4354,6 +4316,10 @@ namespace MonkeyPaste.Avalonia {
 
                     if (SelectedItem != null) {
                         MpConsole.WriteLine("IsHostWindowActive: " + SelectedItem.IsHostWindowActive);
+                        MpConsole.WriteLine("IsTitleReadOnly: " + SelectedItem.IsTitleReadOnly);
+                        MpConsole.WriteLine("IsContentReadOnly: " + SelectedItem.IsContentReadOnly);
+                        MpConsole.WriteLine("IsSubSelectionEnabled: " + SelectedItem.IsSubSelectionEnabled);
+                        MpConsole.WriteLine("IsFocusWithin: " + SelectedItem.IsFocusWithin);
                     }
                 }
                 return can_delete;

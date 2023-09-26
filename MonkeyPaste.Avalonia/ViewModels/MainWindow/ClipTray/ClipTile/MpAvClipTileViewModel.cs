@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -692,9 +693,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #endregion
-
-        public int RowIdx { get; private set; }
-        public int ColIdx { get; private set; }
         public bool IsFinalClosingState { get; set; }
         public bool IsPopoutCloseRequireConfirm { get; set; }
         public bool CanShowContextMenu { get; set; } = true;
@@ -743,17 +741,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsTrashOpTile {
-            get {
-                if (Parent == null) {
-                    return false;
-                }
-                if (IsPinPlaceholder) {
-                    return Parent.TrashOpCopyItemId == PinPlaceholderCopyItemId;
-                }
-                return Parent.TrashOpCopyItemId == CopyItemId;
-            }
-        }
         public bool IsTitleReadOnly { get; set; } = true;
 
         private bool _isContentReadOnly = true;
@@ -1229,14 +1216,14 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvClipTileViewModel() : this(null) {
-            IsBusy = true;
+            //IsBusy = true;
         }
 
         public MpAvClipTileViewModel(MpAvClipTrayViewModel parent) : base(parent) {
             TileCreatedDateTime = DateTime.Now;
             PropertyChanged += MpAvClipTileViewModel_PropertyChanged;
             FileItemCollectionViewModel = new MpAvFileItemCollectionViewModel(this);
-            IsBusy = true;
+            //IsBusy = true;
         }
 
         #endregion
@@ -1246,8 +1233,8 @@ namespace MonkeyPaste.Avalonia {
             MpCopyItem ci,
             int queryOffset = -1,
             bool isRestoringSelection = false) {
+            //IsBusy = true;
             await Task.Delay(1);
-            IsBusy = true;
 
             bool is_query_item = queryOffset >= 0;
             bool is_pinned_item = !is_query_item && ci != null && ci.Id > 0;
@@ -1610,9 +1597,6 @@ namespace MonkeyPaste.Avalonia {
             _queryOffsetIdx = forceOffsetIdx;
             MpAvPersistentClipTilePropertiesHelper.UpdateQueryOffsetIdx(CopyItemId, _queryOffsetIdx);
             OnPropertyChanged(nameof(QueryOffsetIdx));
-            if (Parent != null) {
-                (RowIdx, ColIdx) = Parent.GetGridLocFromQueryIdx(_queryOffsetIdx);
-            }
         }
         public int GetRecyclePriority(bool? isLoadMoreTail) {
             if (Parent == null) {
@@ -1753,6 +1737,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(CopyItem):
                     OnPropertyChanged(nameof(IsPlaceholder));
+                    OnPropertyChanged(nameof(CopyItemId));
                     break;
                 case nameof(PinPlaceholderCopyItemId):
                     OnPropertyChanged(nameof(IsPlaceholder));
@@ -2062,6 +2047,27 @@ namespace MonkeyPaste.Avalonia {
 
             _contentView = null;
             return pow;
+        }
+
+        public async Task<bool> FocusContainerAsync(NavigationMethod focusType, bool selectOnFocus = false) {
+            if (GetContentView() is not Control c) {
+                return false;
+            }
+            Control to_focus = null;
+            if (c.GetVisualAncestor<ListBoxItem>() is ListBoxItem lbi) {
+                to_focus = lbi;
+            } else if (c.GetVisualAncestor<MpAvWindow>() is MpAvWindow w) {
+                to_focus = w;
+            }
+            if (to_focus == null) {
+                return false;
+            }
+            bool success = await to_focus.TrySetFocusAsync(focusType);
+            if (success) {
+                IsSelected = true;
+            }
+            MpConsole.WriteLine($"Focusing '{this}' with method '{focusType}' {success.ToTestResultLabel()}");
+            return success;
         }
 
         public async Task<bool> ClosePopoutAsync() {
@@ -2418,6 +2424,9 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand CopyToClipboardCommand => new MpAsyncCommand(
             async () => {
+                if (IsTitleFocused) {
+                    return;
+                }
                 //IsBusy = true;
                 var ds = GetContentView() as MpAvIContentDragSource;
                 if (ds == null) {

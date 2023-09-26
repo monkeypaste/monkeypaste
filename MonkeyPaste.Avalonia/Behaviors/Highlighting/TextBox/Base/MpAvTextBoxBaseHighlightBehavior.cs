@@ -1,11 +1,9 @@
 ﻿
 
 using Avalonia.Controls;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -42,6 +40,24 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected abstract bool CanMatch();
+
+        public override async Task ApplyHighlightingAsync() {
+            await base.ApplyHighlightingAsync();
+            if (AssociatedObject == null ||
+                AssociatedObject.DataContext is not MpIHighlightTextRangesInfoViewModel htrivm) {
+                return;
+            }
+            htrivm.ActiveHighlightIdx = SelectedIdx;
+        }
+        public override void ClearHighlighting() {
+            base.ClearHighlighting();
+            if (AssociatedObject == null ||
+                AssociatedObject.DataContext is not MpIHighlightTextRangesInfoViewModel htrivm) {
+                return;
+            }
+            htrivm.HighlightRanges.Clear();
+            htrivm.ActiveHighlightIdx = -1;
+        }
 
 
         public override async Task FindHighlightingAsync() {

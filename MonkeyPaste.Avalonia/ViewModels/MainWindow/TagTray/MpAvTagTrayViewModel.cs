@@ -3,7 +3,6 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -522,32 +521,20 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            IEnumerable to_delete =
+            // either MpCopyItemTag or MpCopyItem
+            IEnumerable<MpDbModelBase> to_delete =
                 isRestore ?
                 await MpDataModelProvider.GetCopyItemTagsForTagAsync(MpTag.TrashTagId) :
                 await MpDataModelProvider.GetCopyItemsByIdListAsync(TrashedCopyItemIds);
 
-            if (LastActiveId == MpTag.TrashTagId) {
-                MpAvClipTrayViewModel.Instance
-                    .AllItems
-                    .Where(x => TrashedCopyItemIds.Contains(x.CopyItemId))
-                    .ForEach(x => x.TriggerUnloadedNotification(true));
-            }
+
 
             await Task.WhenAll(to_delete.Cast<MpDbModelBase>().Select(x => x.DeleteFromDatabaseAsync()));
-
-            while (IsAnyBusy) {
-                await Task.Delay(100);
+            if (TrashTagViewModel.IsActiveTag) {
+                Mp.Services.Query.NotifyQueryChanged(true);
             }
-            UpdateAllClipCountsAsync().FireAndForgetSafeAsync();
+            await UpdateAllClipCountsAsync();
 
-            if (LastActiveId == MpTag.TrashTagId) {
-                while (!MpAvClipTrayViewModel.Instance.QueryCommand.CanExecute(string.Empty)) {
-                    await Task.Delay(100);
-                }
-
-                MpAvClipTrayViewModel.Instance.QueryCommand.Execute(string.Empty);
-            }
         }
         public ICommand RestoreAllTrashCommand => new MpAsyncCommand(
             async () => {

@@ -133,6 +133,9 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        public static string ToTestResultLabel(this bool success) {
+            return success ? "SUCCEEDED" : "FAILED";
+        }
         public static int ComputeLevenshteinDistance(this string s, string t) {
             // from 'https://stackoverflow.com/a/6944095/105028' 
             if (string.IsNullOrEmpty(s)) {

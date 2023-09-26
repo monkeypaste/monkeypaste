@@ -2,7 +2,6 @@
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -544,38 +543,28 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand ShowAppSelectorFlyoutCommand => new MpCommand<object>(
             (args) => {
-                var appFlyout = new MenuFlyout() {
-                    ItemsSource =
-                        Items
+                if (args is not Control c) {
+                    return;
+                }
+                var mivml = new MpAvMenuItemViewModel() {
+                    SubItems = Items
                         .Where(x => !CustomClipboardItems.Contains(x) && !string.IsNullOrWhiteSpace(x.AppName))
                         .OrderBy(x => x.AppName)
-                        .Select(x => new MenuItem() {
-                            Icon = new Image() {
-                                Width = 20,
-                                Height = 20,
-                                Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert(x.IconId, null, null, null) as Bitmap
-                            },
+                        .Select(x => new MpAvMenuItemViewModel() {
+                            IconSourceObj = x.IconId,
                             Header = x.AppName,
                             Command = AddOrUpdateAppClipboardShortcutCommand,
                             CommandParameter = x
-                        }).AsEnumerable<object>()
-                        .Union(new object[] {
-                            new Separator(),
-                            new MenuItem() {
-                                Icon = new Image() {
-                                    Source = MpAvIconSourceObjToBitmapConverter.Instance.Convert("Dots3x1Image", null, null, null) as Bitmap,
-                                    RenderTransform = new RotateTransform() {
-                                        Angle = 90
-                                    }
-                                },
+                        }).Union(new[] {
+                            new MpAvMenuItemViewModel() {
+                                HasLeadingSeparator = true,
+                                IconSourceObj = "Dots1x3Image",
                                 Header = "Add App",
                                 Command = AddAppWithAssignClipboardShortcutCommand
                             }
                         }).ToList()
                 };
-                var ddb = args as DropDownButton;
-                Flyout.SetAttachedFlyout(ddb, appFlyout);
-                Flyout.ShowAttachedFlyout(ddb);
+                MpAvMenuView.ShowMenu(c, mivml, showByPointer: false, placementMode: PlacementMode.Right, popupAnchor: PopupAnchor.Left);
             });
 
         public ICommand DeleteAppClipboardShortcutsCommand => new MpAsyncCommand<object>(

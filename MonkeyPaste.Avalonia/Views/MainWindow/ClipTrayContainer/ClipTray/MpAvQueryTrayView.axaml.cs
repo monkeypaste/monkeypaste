@@ -201,6 +201,20 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #region Pin Placeholder
+        public void Pin_placeholder_lbi_PointerPressed(object sender, PointerPressedEventArgs e) {
+            e.Handled = true;
+            if (e.ClickCount == 2) {
+                // attemp to unpin pin placeholder tile using click location
+                MpAvClipTrayViewModel.Instance.UnpinTileCommand.Execute(BindingContext);
+            }
+        }
+        public void Pin_placeholder_lbi_PointerReleased(object sender, PointerReleasedEventArgs e) {
+            e.Handled = true;
+        }
+
+        #endregion
+
         #region Auto Scroll
 
         private void StartAutoScroll() {

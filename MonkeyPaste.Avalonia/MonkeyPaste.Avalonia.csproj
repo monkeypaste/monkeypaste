@@ -349,6 +349,7 @@
     <None Remove="Assets\Images\desc_white.png" />
     <None Remove="Assets\Images\device.png" />
     <None Remove="Assets\Images\dots.png" />
+    <None Remove="Assets\Images\dots_1x3.png" />
     <None Remove="Assets\Images\dots_2x10.png" />
     <None Remove="Assets\Images\dots_2x2.png" />
     <None Remove="Assets\Images\dots_2x5.png" />
@@ -447,6 +448,7 @@
     <None Remove="Assets\Images\rename.png" />
     <None Remove="Assets\Images\replace.png" />
     <None Remove="Assets\Images\reset.png" />
+    <None Remove="Assets\Images\resize_backup2\dots_1x3.png" />
     <None Remove="Assets\Images\resize_backup2\doubleSidedArrow.png" />
     <None Remove="Assets\Images\robotclaw.png" />
     <None Remove="Assets\Images\RoundedTexture.png" />
@@ -679,6 +681,9 @@
     <AvaloniaResource Include="Assets\Images\closewindow.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\dots_1x3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\draganddrop.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -743,6 +748,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\recyclebin.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\resize_backup2\dots_1x3.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\resize_backup2\doubleSidedArrow.png">
