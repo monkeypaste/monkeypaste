@@ -556,4 +556,28 @@
   <data name="MainWindowTitleLockLabel" xml:space="preserve">
     <value>Lock</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SettingsAccountTabLabel" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="SettingsHelpTabLabel" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="SettingsInteropTabLabel" xml:space="preserve">
+    <value>Interop</value>
+  </data>
+  <data name="SettingsPrefTabLabel" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="SettingsResetAllButtonLabel" xml:space="preserve">
+    <value>Reset All</value>
+  </data>
+  <data name="SettingsSearchWatermark" xml:space="preserve">
+    <value>Filter...</value>
+  </data>
+  <data name="SettingsShortcutTabLabel" xml:space="preserve">
+    <value>Shortcuts</value>
+  </data>
 </root>

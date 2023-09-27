@@ -20,6 +20,7 @@ function initQuill(editorId = '#editor', toolbarId = '#editorToolbar') {
 			userOnly: false,
 			maxStack: globals.MaxUndoLimit < 0 ? Number.MAX_SAFE_INTEGER : globals.MaxUndoLimit
 		},
+		formats: 'background',
 		modules: {
 			toolbar: toolbarId,
 			//syntax: {
@@ -79,12 +80,15 @@ function getRootHtml() {
 	return globals.quill.root.innerHTML;
 }
 
-function getHtml(range, encodeHtmlEntities = true) {
+function getHtml(range, encodeHtmlEntities = true, omitThemeColors = true) {
 	if (globals.ContentItemType != 'Text') {
 		return getRootHtml();
 	}
 	range = isNullOrUndefined(range) ? { index: 0, length: getDocLength() } : range;
 	let delta = getDelta(range);
+	if (omitThemeColors) {
+		delta = omitThemeColorsFromDelta(delta);
+	}
 
 	if (encodeHtmlEntities) {
 		delta = encodeHtmlEntitiesInDeltaInserts(delta);
@@ -93,11 +97,6 @@ function getHtml(range, encodeHtmlEntities = true) {
 	return htmlStr;
 }
 
-function getSelectedHtml() {
-	let selection = getDocSelection();
-	let sel_html = getHtml(selection);
-	return sel_html;
-}
 
 function getHtmlWithTables(sel) {
 	sel = cleanDocRange(sel);
@@ -144,6 +143,7 @@ function getFormatAtDocIdx(docIdx) {
 function getFormatForDocRange(docRange) {
 	return globals.quill.getFormat(docRange);
 }
+
 // #endregion Getters
 
 // #region Setters

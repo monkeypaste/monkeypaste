@@ -8,11 +8,16 @@
 function getDelta(rangeObj) {
 	// NOTE if quill is not enabled it return empty contents
 	let wasEnabled = globals.quill.isEnabled();
-	globals.quill.enable(true);
+	if (!wasEnabled) {
+		globals.quill.enable(true);
+	}
+	
 	rangeObj = rangeObj == null ? { index: 0, length: getDocLength() } : rangeObj;
 
 	let delta = globals.quill.getContents(rangeObj.index, rangeObj.length);
-	globals.quill.enable(wasEnabled);
+	if (!wasEnabled) {
+		globals.quill.enable(false);
+	}
 
 	return delta;
 }
@@ -70,7 +75,7 @@ function convertDeltaToHtml(delta, encodeHtmlEntities) {
 
 	
 	let cfg = {
-		//inlineStyles: true,
+		inlineStyles: true,
 		//allowBackgroundClasses: true,
 		customCssClasses: onCustomCssClasses,
 		customTagAttributes: onCustomTagAttributes,

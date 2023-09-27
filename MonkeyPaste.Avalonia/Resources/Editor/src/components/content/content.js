@@ -164,15 +164,7 @@ function initContentClassStyle() {
 	getEditorContainerElement().classList.remove('file-list-content');
 }
 function initContentClassAttributes() {
-	const Parchment = Quill.imports.parchment;
-	let suppressWarning = true;
-	let config = {
-		scope: Parchment.Scope.ANY,
-	};
-	globals.ContentClassAttrb = new Parchment.ClassAttributor('contentType',globals.CONTENT_CLASS_PREFIX, config);
-
-	Quill.register(globals.LinkTypeAttrb, suppressWarning);
-
+	globals.ContentClassAttrb = registerClassAttributor('contentType', globals.CONTENT_CLASS_PREFIX, globals.Parchment.Scope.ANY);
 }
 // #endregion Life Cycle
 

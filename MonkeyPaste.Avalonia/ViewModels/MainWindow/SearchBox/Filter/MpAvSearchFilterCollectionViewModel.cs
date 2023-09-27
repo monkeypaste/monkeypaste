@@ -139,6 +139,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        MpContentQueryBitFlags FiltersOnPopupOpen { get; set; }
         public MpContentQueryBitFlags FilterType {
             get {
                 MpContentQueryBitFlags ft = MpContentQueryBitFlags.None;
@@ -187,10 +188,14 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(IsPopupMenuOpen):
                     if (IsPopupMenuOpen) {
+                        FiltersOnPopupOpen = FilterType;
                         break;
                     }
-                    //MpPrefViewModel.Instance.LastQueryInfoJson =
-                    //    Mp.Services.Query.SerializeJsonObject();
+                    if (FilterType != FiltersOnPopupOpen) {
+                        // wait to requery on popup close only if filters have changed
+                        Parent.PerformSearchCommand.Execute(null);
+
+                    }
                     break;
             }
         }
@@ -199,12 +204,6 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(sfvm.IsChecked):
                     ValidateFilters(sfvm);
-                    if (IsPopupMenuOpen) {
-                        // pass focus back to search box to trigger unexpand when clicked away
-                        //Parent.IsTextBoxFocused = true;
-                        // let search update query as filters change
-                        Parent.PerformSearchCommand.Execute(null);
-                    }
                     break;
             }
         }
@@ -260,8 +259,6 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 Filters.ForEach(x => x.IsChecked = MpSearchCriteriaItem.DefaultSimpleFilters.HasFlag(x.FilterType));
             });
-
-
 
         #endregion
     }

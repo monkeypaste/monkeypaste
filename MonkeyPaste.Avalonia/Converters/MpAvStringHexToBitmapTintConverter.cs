@@ -41,9 +41,6 @@ namespace MonkeyPaste.Avalonia {
             if (!IS_DYNAMIC_TINT_ENABLED) {
                 return MpAvIconSourceObjToBitmapConverter.Instance.Convert(value, targetType, parameter, culture);
             }
-            if (value.ToStringOrEmpty() == "EggImage") {
-
-            }
 
             if (MpAvThemeViewModel.Instance.IsColoredImageResource(value)) {
                 // ignore tinting known color images or db images (since colors unknown)

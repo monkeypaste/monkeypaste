@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,7 +27,18 @@ namespace MonkeyPaste.Avalonia {
             MpContentQueryBitFlags.Content;
         public override async Task FindHighlightingAsync() {
             SetMatchCount(0);
+            var sw = Stopwatch.StartNew();
             while (!AssociatedObject.IsEditorLoaded) {
+                if (AssociatedObject.BindingContext.IsPlaceholder) {
+                    // this is likely a tile that was filtered out of query
+                    // by new search criteria and will block here until
+                    // it needs to be used again so vacate
+                    return;
+                }
+                if (sw.ElapsedMilliseconds > 5_000) {
+                    // what is the state of the view/view model leading to time out here?
+                    return;
+                }
                 await Task.Delay(100);
             }
             int match_count = 0;

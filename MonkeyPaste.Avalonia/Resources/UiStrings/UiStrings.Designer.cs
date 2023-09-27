@@ -832,6 +832,78 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string SettingsAccountTabLabel {
+            get {
+                return ResourceManager.GetString("SettingsAccountTabLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string SettingsHelpTabLabel {
+            get {
+                return ResourceManager.GetString("SettingsHelpTabLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interop.
+        /// </summary>
+        public static string SettingsInteropTabLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropTabLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preferences.
+        /// </summary>
+        public static string SettingsPrefTabLabel {
+            get {
+                return ResourceManager.GetString("SettingsPrefTabLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset All.
+        /// </summary>
+        public static string SettingsResetAllButtonLabel {
+            get {
+                return ResourceManager.GetString("SettingsResetAllButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter....
+        /// </summary>
+        public static string SettingsSearchWatermark {
+            get {
+                return ResourceManager.GetString("SettingsSearchWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shortcuts.
+        /// </summary>
+        public static string SettingsShortcutTabLabel {
+            get {
+                return ResourceManager.GetString("SettingsShortcutTabLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Action.
         /// </summary>
         public static string ShortcutDataGridActionHeader {

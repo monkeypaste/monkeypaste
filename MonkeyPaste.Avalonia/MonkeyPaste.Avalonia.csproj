@@ -533,7 +533,9 @@
     <None Remove="Resources\Editor\src\components\italic\italic.js" />
     <None Remove="resources\editor\src\components\localizer\localizer.js" />
     <None Remove="resources\editor\src\components\localizer\uiStrings.js" />
+    <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
+    <None Remove="resources\editor\src\components\theme\theme.js" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
@@ -1418,6 +1420,8 @@
     <Folder Include="Resources\Editor\src\components\bold\" />
     <Folder Include="Resources\Editor\src\components\formatPaint\" />
     <Folder Include="Resources\Editor\src\components\localizer\" />
+    <Folder Include="Resources\Editor\src\components\quill-wrapper\parchment\" />
+    <Folder Include="Resources\Editor\src\components\theme\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />
@@ -1611,8 +1615,11 @@
     <Compile Update="Views\SettingsWindow\Tabs\Preferences\Item\MpAvSettingsFrameView.axaml.cs">
       <DependentUpon>MpAvSettingsFrameView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\SettingsWindow\Tabs\Security\MpAvSecurityView.axaml.cs">
-      <DependentUpon>MpAvSecurityView.axaml</DependentUpon>
+    <Compile Update="Views\SettingsWindow\Tabs\Interop\MpAvInteropView.axaml.cs">
+      <DependentUpon>MpAvInteropView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Interop\MpAvInteropView.axaml.cs">
+      <DependentUpon>MpAvInteropView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Shortcuts\MpAvShortcutsView.axaml.cs">
       <DependentUpon>MpAvShortcutsView.axaml</DependentUpon>

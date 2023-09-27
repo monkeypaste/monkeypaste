@@ -12,26 +12,8 @@ function initFontColorToolbarItems() {
 }
 
 function initFontColorClassAttributes() {
-	const Parchment = Quill.imports.parchment;
-	let suppressWarning = true;
-	let config = {
-		scope: Parchment.Scope.INLINE,
-	};
-	globals.FontColorOverrideAttrb = new Parchment.ClassAttributor('fontColorOverride', 'font-color-override', config);
-	globals.FontBgColorOverrideAttrb = new Parchment.ClassAttributor('fontBgColorOverride', 'font-bg-color-override', config);
-
-	//FontColorOverrideBgAttrb = new Parchment.ClassAttributor('fontColorOverrideBg', 'font-color-override-bg', config);
-	//FontColorValueBgAttrb = new Parchment.ClassAttributor('fontColorValueBg', 'font-color-value-bg', config);
-
-	//FontColorOverrideFgAttrb = new Parchment.ClassAttributor('fontColorOverrideFg', 'font-color-override-fg', config);
-	//FontColorValueFgAttrb = new Parchment.ClassAttributor('fontColorValueFg', 'font-color-value-fg', config);
-
-	Quill.register(globals.FontColorOverrideAttrb, suppressWarning);
-	Quill.register(globals.FontBgColorOverrideAttrb, suppressWarning);
-	//Quill.register(FontColorOverrideBgAttrb, suppressWarning);
-	//Quill.register(FontColorValueBgAttrb, suppressWarning);
-	//Quill.register(FontColorOverrideFgAttrb, suppressWarning);
-	//Quill.register(FontColorValueFgAttrb, suppressWarning);
+	globals.FontColorOverrideAttrb = registerClassAttributor('fontColorOverride', 'font-color-override', globals.Parchment.Scope.INLINE);
+	globals.FontBgColorOverrideAttrb = registerClassAttributor('fontBgColorOverride', 'font-bg-color-override', globals.Parchment.Scope.INLINE);
 }
 // #endregion Life Cycle
 
@@ -85,6 +67,27 @@ function setFontBackgroundToolbarButtonColor(bg_hex_color,fg_hex_color) {
 // #endregion Setters
 
 // #region State
+
+function isFontColorOverriden(attr) {
+	if (!attr) {
+		return false;
+	}
+	if (attr['fontColorOverride'] == 'on' &&
+		attr['color'] !== undefined) {
+		return true;
+	}
+	return false;
+}
+function isFontBgColorOverriden(attr) {
+	if (!attr) {
+		return false;
+	}
+	if (attr['fontBgColorOverride'] == 'on' &&
+		attr['background'] !== undefined) {
+		return true;
+	}
+	return false;
+}
 
 // #endregion State
 
@@ -151,13 +154,18 @@ function onFontColorOrBgColorPaletteItemClick(chex) {
 	// to get current color (to update bg btn) need the forward idx
 	const font_sel_doc_idx = getSelDocIdxForFontColor();
 	let bg_chex = null;
-	let fg_chex = null
+	let fg_chex = null;
+	let source = 'api';
 	if (globals.ColorPaletteAnchorElement == getFontBackgroundToolbarButton()) {
-		formatDocRange(sel, { background: chex, 'font-bg-color-override':'on' });
+		// remove theme override if preset
+		removeThemeAttrFromDocRange(sel, true, source);
+		formatDocRange(sel, { background: chex, 'font-bg-color-override': 'on' }, source);
 		bg_chex = chex;
 		fg_chex = getFontHexColorAtDocIdx(font_sel_doc_idx);
 	} else {
-		formatDocRange(sel, { color: chex, 'font-color-override': 'on' });
+		// remove theme override if preset
+		removeThemeAttrFromDocRange(sel, false, source);
+		formatDocRange(sel, { color: chex, 'font-color-override': 'on' }, source);
 		bg_chex = getFontHexBgColorAtDocIdx(font_sel_doc_idx);
 		fg_chex = chex;
 	}

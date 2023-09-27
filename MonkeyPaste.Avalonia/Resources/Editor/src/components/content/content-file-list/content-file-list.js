@@ -33,14 +33,7 @@ function loadFileListContent(itemDataStr) {
 }
 
 function initFileListClassAttrb() {
-	const Parchment = Quill.imports.parchment;
-	let suppressWarning = true;
-	let config = {
-		scope: Parchment.Scope.ANY,
-	};
-	globals.FileListClassAttrb = new Parchment.ClassAttributor('fileList', 'file-list', config);
-
-	Quill.register(globals.FileListClassAttrb, suppressWarning);
+	globals.FileListClassAttrb = registerClassAttributor('fileList', 'file-list', globals.Parchment.Scope.ANY);
 }
 // #endregion Life Cycle
 

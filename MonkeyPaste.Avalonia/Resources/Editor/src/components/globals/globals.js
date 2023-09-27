@@ -248,7 +248,6 @@ var globals = {
 
 	IgnoreNextSelectionChange: false,
 	SuppressContentChangedNtf: false,
-	EditorTheme: 'light',
 	IsToolbarsLoaded: false,
 	// #endregion
 
@@ -998,6 +997,14 @@ var globals = {
 
 	// #endregion
 
+	// #region THEME
+
+	EditorTheme: 'light',
+	ThemeColorOverrideAttrb: null,
+	ThemeBgColorOverrideAttrb: null,
+
+	// #endregion
+
 	// #region TOOLTIPS
 	IsTooltipToolbarEnabled: false,
 	IsTooltipOverlayEnabled: true,
@@ -1006,6 +1013,9 @@ var globals = {
 }
 
 function initGlobals() {
+	globals.Parchment = Quill.imports.parchment;
+	globals.Delta = Quill.imports.delta;
+
 	globals.ENCODED_TEMPLATE_REGEXP = new RegExp(globals.ENCODED_TEMPLATE_OPEN_TOKEN + ".*?" + globals.ENCODED_TEMPLATE_CLOSE_TOKEN, "");
 	globals.ENCODED_LIST_ITEM_REGEXP = new RegExp(globals.ENCODED_LIST_ITEM_OPEN_TOKEN + ".*?" + globals.ENCODED_LIST_ITEM_CLOSE_TOKEN, "");
 

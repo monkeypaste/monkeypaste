@@ -515,24 +515,6 @@ function getBlockElementAtDocIdx(docIdx) {
 	return null;
 }
 
-function getHtmlFromDocRange(docRange) {
-	let old_sel = getDocSelection();
-
-	globals.IgnoreNextSelectionChange = true;
-
-	setDocSelection(docRange.index, docRange.length, 'silent');
-	let rangeHtml = getSelectedHtml();
-
-	globals.IgnoreNextSelectionChange = true;
-	setDocSelection(old_sel.index, old_sel.length, 'silent');
-
-	if (globals.IgnoreNextSelectionChange) {
-		log('Hey! setSelection by silent doesnt trigger sel change event');
-		globals.IgnoreNextSelectionChange = false;
-	}
-	return rangeHtml;
-}
-
 function getElementDocRange(elm) {
 	const ignore_text_node = elm.nodeType != 3;
 	let elm_blot = quillFindBlot(elm);

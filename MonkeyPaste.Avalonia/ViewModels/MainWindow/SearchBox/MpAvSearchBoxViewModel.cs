@@ -324,7 +324,7 @@ namespace MonkeyPaste.Avalonia {
 
             });
 
-        public ICommand HandleSearchFilterButtonClickCommand => new MpCommand<object>(
+        public ICommand ShowSimpleSearchFilterPopupMenuCommand => new MpCommand<object>(
             (args) => {
                 if (!IsExpanded) {
                     ToggleIsSearchBoxExpandedCommand.Execute(null);

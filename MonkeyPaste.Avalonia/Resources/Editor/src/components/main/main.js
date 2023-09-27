@@ -5,6 +5,7 @@ function initMain(initObj) {
 		globals.EnvName = initObj && initObj.envName ? initObj.envName : globals.WindowsEnv;
 		initGlobals();
 		initDefaults(initObj.defaults);
+		initTheme();
 		//initExceptionHandler();
 
 		if (initObj.isConverter) {

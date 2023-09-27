@@ -211,7 +211,7 @@
                             VerticalAlignment="Stretch"
                             MinWidth="{StaticResource SearchIconSize}"
                             MinHeight="{StaticResource SearchIconSize}"
-                            Command="{Binding HandleSearchFilterButtonClickCommand}"
+                            Command="{Binding ShowSimpleSearchFilterPopupMenuCommand}"
                             CommandParameter="{Binding $self}"
                             local:MpAvDropExtension.IsEnabled="True"
                             local:MpAvDropExtension.DragEnterCommand="{Binding ExpandFromDragCommand}"
@@ -274,7 +274,6 @@
                                                    Classes="TextBoxButton square"
                                                    Height="20"
                                                    Grid.Column="0"
-                                                   Margin="5"
                                                    ClearCommand="{Binding ClearTextCommand}"
                                                    VerticalAlignment="Center">
                             <local:MpAvClearTextButton.IsVisible>

@@ -22,7 +22,7 @@
                 <StackPanel Classes="header expander"
                             Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhiteColor}" />
+                           Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
                                Text="Commands" />
                 </StackPanel>
@@ -41,7 +41,7 @@
                 <StackPanel Classes="header expander"
                             Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeWhiteColor}" />
+                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
                                Text="Custom Clipboard Commands" />
                     <local:MpAvToolTipInfoHintView ToolTipText="#p#Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.#p##p#Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)" />

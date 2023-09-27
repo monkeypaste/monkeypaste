@@ -8,14 +8,7 @@ function initLinks() {
 }
 
 function initLinkClassAttributes() {
-    const Parchment = Quill.imports.parchment;
-    let suppressWarning = true;
-    let config = {
-        scope: Parchment.Scope.INLINE,
-    };
-    globals.LinkTypeAttrb = new Parchment.ClassAttributor('linkType', 'link-type', config);
-
-    Quill.register(globals.LinkTypeAttrb, suppressWarning);
+    globals.LinkTypeAttrb = registerClassAttributor('linkType', 'link-type', globals.Parchment.Scope.INLINE);
 }
 
 

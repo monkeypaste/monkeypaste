@@ -1,11 +1,5 @@
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Markup.Xaml;
-using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -23,18 +17,5 @@ namespace MonkeyPaste.Avalonia {
             BindingContext.OnPropertyChanged(nameof(BindingContext.IsExpanded));
             this?.InvalidateAll();
         }
-
-        private void SearchBox_KeyUp(object sender, global::Avalonia.Input.KeyEventArgs e) {
-            if (e.Key == Key.Enter) {
-                if (sender is Control control &&
-                    control.GetVisualDescendant<TextBox>() is TextBox tb) {
-                    tb.SelectAll();
-                }
-                e.Handled = true;
-                BindingContext.PerformSearchCommand.Execute(null);
-
-            }
-        }
-
     }
 }

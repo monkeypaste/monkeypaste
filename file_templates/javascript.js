@@ -1,7 +1,3 @@
-// #region Globals
-
-// #endregion Globals
-
 // #region Life Cycle
 
 // #endregion Life Cycle
