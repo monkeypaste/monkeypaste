@@ -6,6 +6,7 @@ using System.Management;
 using System.Linq;
 using System.ComponentModel;
 using System.Security.Principal;
+using System.Collections.Generic;
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;
 using static MonkeyPaste.Common.Wpf.WinApi;
@@ -35,6 +36,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
         public bool IsThisAppAdmin { get; private set; } = false;
+
+        public override IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos =>
+            GetOpenWindows()
+            .GroupBy(x => x.Key)
+            .Select(x => new MpPortableProcessInfo() {
+                ApplicationName = GetAppNameByProessPath(x.Key),
+                ProcessPath = x.Key
+            });
         #endregion
 
         #region Constructors
@@ -341,6 +350,55 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteLine("IsProcessAdmin error: " + ex.ToString());
                 return true;
             }
+        }
+
+        private IDictionary<string, IntPtr> GetOpenWindows() {
+            IntPtr shellWindow = GetShellWindow();
+            Dictionary<string, IntPtr> windows = new Dictionary<string, IntPtr>();
+
+            EnumWindows(delegate (IntPtr hWnd, int lParam) {
+                if (hWnd == shellWindow) {
+                    return true;
+                }
+                if (!IsWindowVisible(hWnd)) {
+                    return true;
+                }
+
+                try {
+                    GetWindowThreadProcessId(hWnd, out uint pid);
+                    var process = Process.GetProcessById((int)pid);
+                    if (process.MainWindowHandle == IntPtr.Zero) {
+                        return true;
+                    }
+
+                    int length = WinApi.GetWindowTextLength(hWnd);
+
+                    if (length == 0 || !WinApi.IsWindow(hWnd)) {
+                        return true;
+                    }
+
+                    //if(MpHelpers.IsThisAppAdmin()) {
+                    //    process.WaitForInputIdle(100);
+                    //}
+
+                    //StringBuilder builder = new StringBuilder(length);
+                    //WinApi.GetWindowText(hWnd, builder, length + 1);
+                    string process_path = GetProcessPath(hWnd);
+                    if (string.IsNullOrEmpty(process_path)) {
+                        return true;
+                    }
+                    windows.AddOrReplace(process_path, hWnd);
+                }
+                catch (InvalidOperationException ex) {
+                    // no graphical interface
+                    MpConsole.WriteLine("OpenWindowGetter, ignoring non GUI window w/ error: " + ex.ToString());
+                }
+
+                return true;
+
+            }, 0);
+
+            return windows;
         }
 
         #endregion

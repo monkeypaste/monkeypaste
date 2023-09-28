@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace MonkeyPaste.Common {
 
@@ -12,6 +10,7 @@ namespace MonkeyPaste.Common {
         MpPortableProcessInfo GetProcessInfoFromScreenPoint(MpPoint pixelPoint);
         MpPortableProcessInfo LastProcessInfo { get; }
         MpPortableProcessInfo ThisAppProcessInfo { get; }
+        IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos { get; }
         nint SetActiveProcess(nint handle);
 
         event EventHandler<MpPortableProcessInfo> OnAppActivated;

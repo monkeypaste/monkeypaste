@@ -806,7 +806,7 @@ namespace MonkeyPaste.Common {
                 text.EndsWith("</html>", StringComparison.InvariantCultureIgnoreCase);
         }
         public static string ToHtmlDocumentFromTextOrPartialHtml(this string text) {
-            return $"<html><head></head><body>{text}</body></html>";
+            return $"<html><body>{text}</body></html>";
         }
         public static bool IsStringMayContainEnvVars(this string text) {
             string envTokenRegExStr = @"%\w*%{1}";

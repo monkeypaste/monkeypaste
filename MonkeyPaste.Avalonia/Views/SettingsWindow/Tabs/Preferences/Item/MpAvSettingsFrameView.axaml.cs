@@ -1,15 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
-using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvSettingsFrameView : MpAvUserControl<MpAvSettingsFrameViewModel> {
@@ -17,6 +12,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvSettingsFrameView() {
             InitializeComponent();
+
             var pplb = this
                 .FindControl<MpAvParameterCollectionView>("ParameterCollectionView")
                 .FindControl<ListBox>("PluginParameterListBox");

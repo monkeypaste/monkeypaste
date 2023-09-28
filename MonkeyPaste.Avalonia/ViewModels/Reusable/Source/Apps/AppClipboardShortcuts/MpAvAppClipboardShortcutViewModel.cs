@@ -1,9 +1,6 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -136,6 +133,9 @@ namespace MonkeyPaste.Avalonia {
                 // canceled
                 return false;
             }
+            if (ClipboardShortcuts == null) {
+                ClipboardShortcuts = await MpAppClipboardShortcuts.CreateAsync(appId: Parent.AppId);
+            }
             ShortcutCmdKeyString = result_tuple.Item1;
             while (IsBusy) {
                 await Task.Delay(100);
@@ -178,23 +178,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        //public ICommand AddOrUpdateAppClipboardShortcutCommand => new MpCommand(
-        //    () => {
-        //        ShowAssignDialogAsync().FireAndForgetSafeAsync(this);
-        //    });
 
-        //public ICommand DeleteAppClipboardShortcutsCommand => new MpAsyncCommand(
-        //    async () => {
-        //        var result = await Mp.Services.NativeMessageBox.ShowYesNoCancelMessageBoxAsync(
-        //            title: $"Confirm",
-        //            message: $"Are you sure want to remove the paste shortcut for '{Parent.AppName}'",
-        //            iconResourceObj: Parent.IconId);
-        //        if (result.IsNull()) {
-        //            // canceled
-        //            return;
-        //        }
-        //        PasteCmdKeyString = null;
-        //    });
+
+        public ICommand RecordShortcutCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                await ShowAssignDialogAsync();
+            });
         #endregion
     }
 

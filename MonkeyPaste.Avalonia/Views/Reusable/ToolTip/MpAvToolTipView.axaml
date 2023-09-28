@@ -72,6 +72,7 @@
 
 
             <av:HtmlLabel x:Name="ToolTipHtmlPanel"
+                          MaxWidth="300"
                           local:MpAvHtmlStylerExtension.IsEnabled="True"
                           local:MpAvHtmlStylerExtension.DefaultFontSize="14"
                           IsVisible="{Binding ToolTipHtml, ElementName=ToolTipView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"

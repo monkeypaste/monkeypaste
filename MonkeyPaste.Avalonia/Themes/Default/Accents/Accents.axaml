@@ -18,9 +18,7 @@
         <sys:String x:Key="DefaultEditableFontFamily">Arial</sys:String>
         <sys:String x:Key="DefaultReadOnlyFontFamily">Segoe UI</sys:String>
 
-        <SolidColorBrush x:Key="HitTestableTransparent"
-                         Color="Black"
-                         Opacity="0.01" />
+        <SolidColorBrush x:Key="HitTestableTransparent" Color="Black" Opacity="0.01" />
 
         <SolidColorBrush x:Key="EnabledHighlightBrush">Lime</SolidColorBrush>
         <SolidColorBrush x:Key="DisabledHighlightBrush">Red</SolidColorBrush>
@@ -74,342 +72,149 @@
 
         <!--  BRUSHES  -->
 
-        <SolidColorBrush x:Key="ThemeBlackBrush"
-                         Color="{DynamicResource ThemeBlackColor}" />
-        <SolidColorBrush x:Key="ThemeWhiteBrush"
-                         Color="{DynamicResource ThemeWhiteColor}" />
+        <SolidColorBrush x:Key="ThemeBlackBrush" Color="{DynamicResource ThemeBlackColor}" />
+        <SolidColorBrush x:Key="ThemeWhiteBrush" Color="{DynamicResource ThemeWhiteColor}" />
 
-        <SolidColorBrush x:Key="ThemeBrush"
-                         Color="{DynamicResource ThemeColor}" />
+        <SolidColorBrush x:Key="ThemeBrush" Color="{DynamicResource ThemeColor}" />
 
-        <SolidColorBrush x:Key="ThemeInteractiveBrush"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
-        <SolidColorBrush x:Key="ThemeInteractiveBgBrush"
-                         Color="{DynamicResource ThemeInteractiveBgColor}" />
+        <SolidColorBrush x:Key="ThemeInteractiveBrush" Color="{DynamicResource ThemeInteractiveColor}" />
+        <SolidColorBrush x:Key="ThemeInteractiveBgBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />
 
-        <SolidColorBrush x:Key="ThemeNoAccentBrush"
-                         Color="{DynamicResource ThemeNoAccentColor}" />
-        <SolidColorBrush x:Key="ThemeAccent1Brush"
-                         Color="{DynamicResource ThemeAccent1Color}" />
-        <SolidColorBrush x:Key="ThemeAccent1BgBrush"
-                         Color="{DynamicResource ThemeAccent1BgColor}" />
-        <SolidColorBrush x:Key="ThemeAccent2Brush"
-                         Color="{DynamicResource ThemeAccent2Color}" />
-        <SolidColorBrush x:Key="ThemeAccent2BgBrush"
-                         Color="{DynamicResource ThemeAccent2BgColor}" />
-        <SolidColorBrush x:Key="ThemeAccent3Brush"
-                         Color="{DynamicResource ThemeAccent3Color}" />
-        <SolidColorBrush x:Key="ThemeAccent3BgBrush"
-                         Color="{DynamicResource ThemeAccent3BgColor}" />
-        <SolidColorBrush x:Key="ThemeAccent4Brush"
-                         Color="{DynamicResource ThemeAccent4Color}" />
-        <SolidColorBrush x:Key="ThemeAccent4BgBrush"
-                         Color="{DynamicResource ThemeAccent4BgColor}" />
-        <SolidColorBrush x:Key="ThemeAccent5Brush"
-                         Color="{DynamicResource ThemeAccent5Color}" />
-        <SolidColorBrush x:Key="ThemeAccent5BgBrush"
-                         Color="{DynamicResource ThemeAccent5BgColor}" />
+        <SolidColorBrush x:Key="ThemeNoAccentBrush" Color="{DynamicResource ThemeNoAccentColor}" />
+        <SolidColorBrush x:Key="ThemeAccent1Brush" Color="{DynamicResource ThemeAccent1Color}" />
+        <SolidColorBrush x:Key="ThemeAccent1BgBrush" Color="{DynamicResource ThemeAccent1BgColor}" />
+        <SolidColorBrush x:Key="ThemeAccent2Brush" Color="{DynamicResource ThemeAccent2Color}" />
+        <SolidColorBrush x:Key="ThemeAccent2BgBrush" Color="{DynamicResource ThemeAccent2BgColor}" />
+        <SolidColorBrush x:Key="ThemeAccent3Brush" Color="{DynamicResource ThemeAccent3Color}" />
+        <SolidColorBrush x:Key="ThemeAccent3BgBrush" Color="{DynamicResource ThemeAccent3BgColor}" />
+        <SolidColorBrush x:Key="ThemeAccent4Brush" Color="{DynamicResource ThemeAccent4Color}" />
+        <SolidColorBrush x:Key="ThemeAccent4BgBrush" Color="{DynamicResource ThemeAccent4BgColor}" />
+        <SolidColorBrush x:Key="ThemeAccent5Brush" Color="{DynamicResource ThemeAccent5Color}" />
+        <SolidColorBrush x:Key="ThemeAccent5BgBrush" Color="{DynamicResource ThemeAccent5BgColor}" />
 
-        <SolidColorBrush x:Key="ThemeCompliment1Brush"
-                         Color="{DynamicResource ThemeCompliment1Color}" />
-        <SolidColorBrush x:Key="ThemeCompliment1DarkBrush"
-                         Color="{DynamicResource ThemeCompliment1DarkColor}" />
+        <SolidColorBrush x:Key="ThemeCompliment1Brush" Color="{DynamicResource ThemeCompliment1Color}" />
+        <SolidColorBrush x:Key="ThemeCompliment1DarkBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" />
 
-        <SolidColorBrush x:Key="ThemeCompliment2Brush"
-                         Color="{DynamicResource ThemeCompliment2Color}" />
-        <SolidColorBrush x:Key="ThemeCompliment2DarkBrush"
-                         Color="{DynamicResource ThemeCompliment2DarkColor}" />
+        <SolidColorBrush x:Key="ThemeCompliment2Brush" Color="{DynamicResource ThemeCompliment2Color}" />
+        <SolidColorBrush x:Key="ThemeCompliment2DarkBrush" Color="{DynamicResource ThemeCompliment2DarkColor}" />
 
-        <SolidColorBrush x:Key="ThemeCompliment3Brush"
-                         Color="{DynamicResource ThemeCompliment3Color}" />
-        <SolidColorBrush x:Key="ThemeCompliment3DarkBrush"
-                         Color="{DynamicResource ThemeCompliment3DarkColor}" />
+        <SolidColorBrush x:Key="ThemeCompliment3Brush" Color="{DynamicResource ThemeCompliment3Color}" />
+        <SolidColorBrush x:Key="ThemeCompliment3DarkBrush" Color="{DynamicResource ThemeCompliment3DarkColor}" />
 
-        <SolidColorBrush x:Key="ThemeCompliment4Brush"
-                         Color="{DynamicResource ThemeCompliment4Color}" />
-        <SolidColorBrush x:Key="ThemeCompliment4DarkBrush"
-                         Color="{DynamicResource ThemeCompliment4DarkColor}" />
+        <SolidColorBrush x:Key="ThemeCompliment4Brush" Color="{DynamicResource ThemeCompliment4Color}" />
+        <SolidColorBrush x:Key="ThemeCompliment4DarkBrush" Color="{DynamicResource ThemeCompliment4DarkColor}" />
 
-        <SolidColorBrush x:Key="ThemeCompliment5Brush"
-                         Color="{DynamicResource ThemeCompliment5Color}" />
-        <SolidColorBrush x:Key="ThemeCompliment5DarkBrush"
-                         Color="{DynamicResource ThemeCompliment5DarkColor}" />
-        <SolidColorBrush x:Key="ThemeCompliment5LighterBrush"
-                         Color="{DynamicResource ThemeCompliment5LighterColor}" />
+        <SolidColorBrush x:Key="ThemeCompliment5Brush" Color="{DynamicResource ThemeCompliment5Color}" />
+        <SolidColorBrush x:Key="ThemeCompliment5DarkBrush" Color="{DynamicResource ThemeCompliment5DarkColor}" />
+        <SolidColorBrush x:Key="ThemeCompliment5LighterBrush" Color="{DynamicResource ThemeCompliment5LighterColor}" />
 
-        <SolidColorBrush x:Key="ThemeGrayAccent1Brush"
-                         Color="{DynamicResource ThemeGrayAccent1Color}" />
-        <SolidColorBrush x:Key="ThemeGrayAccent2Brush"
-                         Color="{DynamicResource ThemeGrayAccent2Color}" />
-        <SolidColorBrush x:Key="ThemeGrayAccent3Brush"
-                         Color="{DynamicResource ThemeGrayAccent3Color}" />
+        <SolidColorBrush x:Key="ThemeGrayAccent1Brush" Color="{DynamicResource ThemeGrayAccent1Color}" />
+        <SolidColorBrush x:Key="ThemeGrayAccent2Brush" Color="{DynamicResource ThemeGrayAccent2Color}" />
+        <SolidColorBrush x:Key="ThemeGrayAccent3Brush" Color="{DynamicResource ThemeGrayAccent3Color}" />
 
         <!--  FLUENT OVERRIDES  -->
-        <SolidColorBrush x:Key="ButtonBackground"
-                         Color="{DynamicResource ThemeGrayAccent3Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ButtonForeground"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ButtonBorderBrush"
-                         Color="{DynamicResource ThemeGrayAccent2Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForeground" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBorderBrush" Color="{DynamicResource ThemeGrayAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="ButtonBackgroundPointerOver"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ButtonForegroundPointerOver"
-                         Color="{DynamicResource ThemeGrayAccent3Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="ButtonBorderBrushPressed"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ButtonBackgroundPressed"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ButtonForegroundPressed"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForegroundPressed" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="ButtonBackgroundDisabled"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ButtonForegroundDisabled"
-                         Color="{DynamicResource ThemeGrayAccent2Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ButtonBorderBrushDisabled"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{DynamicResource ThemeGrayAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="ComboBoxForeground"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ComboBoxBackground"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ComboBoxBorderBrush"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ComboBoxDropDownBackground"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxBackground" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundFocused"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxDropDownGlyphForegroundFocused" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="ComboBoxItemForeground"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ComboBoxItemBackground"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver"
-                         Color="{DynamicResource ThemeAccent5Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected"
-                         Color="{DynamicResource ThemeAccent5BgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxItemForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxItemBackground" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ComboBoxItemBackgroundSelected" Color="{DynamicResource ThemeAccent5BgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="TextControlForeground"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlBackground"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlBorderBrush"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlForegroundPointerOver"
-                         Color="{DynamicResource ThemeGrayAccent2Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlForegroundFocused"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlBackgroundFocused"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlBorderBrushFocused"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlPlaceholderForeground"
-                         Color="{DynamicResource ThemeGrayAccent3Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlPlaceholderForegroundFocused"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlBackground" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlForegroundPointerOver" Color="{DynamicResource ThemeGrayAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlForegroundFocused" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlPlaceholderForegroundFocused" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="TextControlButtonBackground"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlButtonBorderBrush"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlButtonForeground"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlButtonBackgroundPointerOver"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlButtonBorderBrushPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlButtonForegroundPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlButtonBackgroundPressed"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlButtonBorderBrushPressed"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlButtonForegroundPressed"
-                         Color="{DynamicResource ThemeAccent2Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlButtonBackground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlButtonBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlButtonForeground" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlButtonBackgroundPointerOver" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlButtonForegroundPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlButtonBackgroundPressed" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlButtonBorderBrushPressed" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlButtonForegroundPressed" Color="{DynamicResource ThemeAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="TextControlBackgroundPointerOver"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlPlaceholderForegroundPointerOver"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TextControlBorderBrushPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlPlaceholderForegroundPointerOver" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="MenuFlyoutPresenterBackground"
-                         Color="{DynamicResource ThemeGrayAccent3Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="MenuFlyoutItemBackground"
-                         Color="{DynamicResource ThemeGrayAccent3Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="MenuFlyoutItemForeground"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver"
-                         Color="{DynamicResource ThemeAccent5Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SystemControlForegroundBaseMediumLowBrush"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="MenuFlyoutSubItemChevron"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="MenuFlyoutSubItemChevronPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="MenuFlyoutSubItemChevronSubMenuOpened"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutItemBackground" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutItemForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutItemForegroundPointerOver" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SystemControlForegroundBaseMediumLowBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutSubItemChevron" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutSubItemChevronPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutSubItemChevronSubMenuOpened" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForeground"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForegroundPointerOver"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForeground" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="MenuFlyoutItemKeyboardAcceleratorTextForegroundPointerOver" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="ExpanderHeaderBackground"
-                         Color="{DynamicResource ThemeCompliment2DarkColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver"
-                         Color="{DynamicResource ThemeCompliment2DarkColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderHeaderBackgroundPressed"
-                         Color="{DynamicResource ThemeCompliment2DarkColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBackground" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBackgroundPressed" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="ExpanderHeaderForeground"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderHeaderForegroundPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderHeaderForegroundPressed"
-                         Color="{DynamicResource ThemeAccent2Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderForegroundPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderForegroundPressed" Color="{DynamicResource ThemeAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="ExpanderHeaderBorderBrush"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderHeaderBorderBrushPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderHeaderBorderBrushPressed"
-                         Color="{DynamicResource ThemeAccent2Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ExpanderHeaderBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="TreeViewItemForeground"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
+        <SolidColorBrush x:Key="TreeViewItemForeground" Color="{DynamicResource ThemeInteractiveColor}" />
 
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked"
-                         Color="{DynamicResource ThemeAccent5Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked"
-                         Color="{DynamicResource ThemeAccent5Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked"
-                         Color="{DynamicResource ThemeAccent5Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver"
-                         Color="{DynamicResource ThemeAccent5BgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="{DynamicResource ThemeAccent5BgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="TabItemHeaderForegroundUnselected"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TabItemHeaderForegroundUnselectedPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TabItemHeaderForegroundUnselectedPressed"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TabItemHeaderForegroundSelected"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPointerOver"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPressed"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundUnselected" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundUnselectedPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundUnselectedPressed" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundSelected" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPressed" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  SEPARATOR  -->
 
@@ -418,221 +223,129 @@
         <!--  GENERAL  -->
 
 
-        <SolidColorBrush x:Key="MainWindowBgBrush"
-                         Color="{DynamicResource ThemeColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="MainWindowBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  GRID SPLITTERS  -->
 
-        <SolidColorBrush x:Key="DefaultGridSplitterBrush"
-                         Color="{DynamicResource ThemeAccent5Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="DefaultGridSplitterBrush" Color="{DynamicResource ThemeAccent5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="SidebarGridSplitterBrush"
-                         Color="{DynamicResource ThemeAccent5BgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SidebarGridSplitterBrush" Color="{DynamicResource ThemeAccent5BgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="ClipTrayGridSplitterBrush"
-                         Color="{DynamicResource ThemeCompliment2DarkColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="ClipTrayGridSplitterBrush" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="HoverDefaultGridSplitterBgBrush"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="HoverDefaultGridSplitterBgBrush" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
         <!--  SIDEBAR BUTTONS  -->
-        <SolidColorBrush x:Key="SidebarButtonsBgBrush"
-                         Color="{DynamicResource ThemeGrayAccent3Color}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="SidebarButtonsBgBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ItemSource Item Bg  -->
-        <SolidColorBrush x:Key="SelectableItemDefaultBgBrush"
-                         Color="{DynamicResource ThemeCompliment5Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SelectableItemPointerOverBgBrush"
-                         Color="{DynamicResource ThemeCompliment5DarkColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SelectableItemSelectedBgBrush"
-                         Color="{DynamicResource ThemeCompliment5LighterColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SelectableItemDefaultBgBrush" Color="{DynamicResource ThemeCompliment5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SelectableItemPointerOverBgBrush" Color="{DynamicResource ThemeCompliment5DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SelectableItemSelectedBgBrush" Color="{DynamicResource ThemeCompliment5LighterColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  Disabled  -->
-        <SolidColorBrush x:Key="DisabledTextFgBrush"
-                         Color="{DynamicResource ThemeInteractiveColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="DisabledTextFgBrush" Color="{DynamicResource ThemeInteractiveColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="DisabledBgBrush"
-                         Color="{DynamicResource ThemeGrayAccent3Color}"
-                         Opacity="{DynamicResource GlobalDisabledOverlayOpacity}" />
+        <SolidColorBrush x:Key="DisabledBgBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalDisabledOverlayOpacity}" />
 
         <!--  Invalid  -->
-        <SolidColorBrush x:Key="DefaultInvalidBrush"
-                         Color="{DynamicResource ThemeAccent2BgColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="DefaultInvalidBrush" Color="{DynamicResource ThemeAccent2BgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  Warning  -->
-        <SolidColorBrush x:Key="DefaultWarningBrush1"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="DefaultWarningBrush2"
-                         Color="{DynamicResource ThemeBlackColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="DefaultWarningBrush1" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="DefaultWarningBrush2" Color="{DynamicResource ThemeBlackColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  Button Brush  -->
 
-        <SolidColorBrush x:Key="DefaultIconButtonBrush"
-                         Color="{DynamicResource ThemeGrayAccent2Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="DefaultIconButtonBrush" Color="{DynamicResource ThemeGrayAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
-        <SolidColorBrush x:Key="DefaultButtonBrush"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="HoverButtonBrush"
-                         Color="{DynamicResource ThemeGrayAccent3Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="DefaultButtonBrush" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="HoverButtonBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  Border Brush  -->
-        <SolidColorBrush x:Key="DefaultBorderBrush"
-                         Color="{DynamicResource ThemeGrayAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="HoverDefaultBorderBrush"
-                         Color="{DynamicResource ThemeAccent1Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="HoverSelectedBorderBrush"
-                         Color="{DynamicResource ThemeAccent3Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SelectedBorderBrush"
-                         Color="{DynamicResource ThemeAccent2Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="DefaultBorderBrush" Color="{DynamicResource ThemeGrayAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="HoverDefaultBorderBrush" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="HoverSelectedBorderBrush" Color="{DynamicResource ThemeAccent3Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SelectedBorderBrush" Color="{DynamicResource ThemeAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
 
 
         <!--  TITLE MENU  -->
-        <SolidColorBrush x:Key="TitleMenuActiveBgBrush"
-                         Color="{DynamicResource ThemeAccent1BgColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
-        <SolidColorBrush x:Key="TitleMenuInactiveBgBrush"
-                         Color="{DynamicResource ThemeGrayAccent3Color}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="TitleMenuActiveBgBrush" Color="{DynamicResource ThemeAccent1BgColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="TitleMenuInactiveBgBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  FILTER MENU  -->
 
         <!--  ADV SEARCH  -->
-        <SolidColorBrush x:Key="SearchCriteriaBgBrush"
-                         Color="{DynamicResource ThemeCompliment5Color}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SearchCriteriaHeaderBgBrush"
-                         Color="{DynamicResource ThemeCompliment5DarkColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SearchCriteriaRowBgBrush1"
-                         Color="{DynamicResource ThemeCompliment5LighterColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="SearchCriteriaRowBgBrush2"
-                         Color="{DynamicResource ThemeCompliment5DarkColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SearchCriteriaBgBrush" Color="{DynamicResource ThemeCompliment5Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SearchCriteriaHeaderBgBrush" Color="{DynamicResource ThemeCompliment5DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SearchCriteriaRowBgBrush1" Color="{DynamicResource ThemeCompliment5LighterColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+        <SolidColorBrush x:Key="SearchCriteriaRowBgBrush2" Color="{DynamicResource ThemeCompliment5DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
         <!--  SIDE BAR  -->
 
-        <SolidColorBrush x:Key="SidebarButtonGroupBgBrush"
-                         Color="{DynamicResource ThemeColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="SidebarButtonGroupBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  PARAMETERS  -->
 
-        <SolidColorBrush x:Key="PluginParameterItemBgBrush1"
-                         Color="{DynamicResource ThemeCompliment2Color}"
-                         Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
+        <SolidColorBrush x:Key="PluginParameterItemBgBrush1" Color="{DynamicResource ThemeCompliment2Color}" Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
 
-        <SolidColorBrush x:Key="PluginParameterItemBgBrush2"
-                         Color="{DynamicResource ThemeCompliment2Color}"
-                         Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
+        <SolidColorBrush x:Key="PluginParameterItemBgBrush2" Color="{DynamicResource ThemeCompliment2Color}" Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
 
-        <SolidColorBrush x:Key="PluginParameterItemHoverBgBrush"
-                         Color="{DynamicResource ThemeCompliment2DarkColor}"
-                         Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
+        <SolidColorBrush x:Key="PluginParameterItemHoverBgBrush" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveBgOpacity}" />
         <!--  TAG TREE  -->
-        <SolidColorBrush x:Key="TagTreeBgBrush"
-                         Color="{DynamicResource ThemeColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="TagTreeBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CLIPBOARD SIDEBAR  -->
 
-        <SolidColorBrush x:Key="ClipboardSidebarBgBrush"
-                         Color="{DynamicResource ThemeColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ClipboardSidebarBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ANALYZER SIDEBAR  -->
 
-        <SolidColorBrush x:Key="AnalyzerSidebarBgBrush"
-                         Color="{DynamicResource ThemeColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="AnalyzerSidebarBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  ACTION SIDEBAR  -->
 
-        <SolidColorBrush x:Key="ActionPropertyListBgBrush"
-                         Color="{DynamicResource ThemeColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
-        <SolidColorBrush x:Key="ActionDesignerBgBrush"
-                         Color="{DynamicResource ThemeGrayAccent3Color}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ActionPropertyListBgBrush" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ActionDesignerBgBrush" Color="{DynamicResource ThemeGrayAccent3Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  TAG TILE  -->
         <!--  BG  -->
-        <SolidColorBrush x:Key="TagTileBgColor"
-                         Color="Transparent" />
+        <SolidColorBrush x:Key="TagTileBgColor" Color="Transparent" />
 
-        <SolidColorBrush x:Key="TagTileSelectedBgColor"
-                         Color="DimGray" />
+        <SolidColorBrush x:Key="TagTileSelectedBgColor" Color="DimGray" />
 
-        <SolidColorBrush x:Key="TagTileHoverBgColor"
-                         Color="LightGray" />
+        <SolidColorBrush x:Key="TagTileHoverBgColor" Color="LightGray" />
         <!--  BORDER  -->
-        <SolidColorBrush x:Key="TagTileBorderColor"
-                         Color="Transparent" />
-        <SolidColorBrush x:Key="TagTileContextFocusBorderColor"
-                         Color="{DynamicResource ThemeAccent2Color}" />
+        <SolidColorBrush x:Key="TagTileBorderColor" Color="Transparent" />
+        <SolidColorBrush x:Key="TagTileContextFocusBorderColor" Color="{DynamicResource ThemeAccent2Color}" />
 
 
         <!--  CONTENT CONTAINER  -->
 
-        <SolidColorBrush x:Key="ContentTrayDragOverBgBrush"
-                         Color="{DynamicResource ThemeCompliment1DarkColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ContentTrayDragOverBgBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
         <!--  CLIP TRAY  -->
 
-        <SolidColorBrush x:Key="ClipTrayBgColor"
-                         Color="{DynamicResource ThemeColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ClipTrayBgColor" Color="{DynamicResource ThemeColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  PIN TRAY  -->
-        <SolidColorBrush x:Key="PinTrayBgBrush"
-                         Color="{DynamicResource ThemeCompliment1Color}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
-        <SolidColorBrush x:Key="PinTrayShadowBrush"
-                         Color="{DynamicResource ThemeCompliment1DarkColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="PinTrayBgBrush" Color="{DynamicResource ThemeCompliment1Color}" Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="PinTrayShadowBrush" Color="{DynamicResource ThemeCompliment1DarkColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
 
         <!--  CLIP TILE  -->
 
         <!--  TRANSACTION PANE  -->
 
-        <SolidColorBrush x:Key="ClipTileTransactionPaneBackgroundBrush"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ClipTileTransactionPaneBackgroundBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
         <!--  CONTENT  -->
-        <SolidColorBrush x:Key="ClipTileContentBackgroundBrush"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="{DynamicResource GlobalBgOpacity}" />
+        <SolidColorBrush x:Key="ClipTileContentBackgroundBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalBgOpacity}" />
 
-        <SolidColorBrush x:Key="ModalClipTileContentBackgroundBrush"
-                         Color="{DynamicResource ThemeInteractiveBgColor}"
-                         Opacity="1" />
+        <SolidColorBrush x:Key="ModalClipTileContentBackgroundBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="1" />
 
         <!--  BORDER  -->
         <!--  SETTINGS WINDOW  -->
-        <SolidColorBrush x:Key="SettingsWindowBgBrush"
-                         Color="{DynamicResource ThemeColor}" />
+        <SolidColorBrush x:Key="SettingsWindowBgBrush" Color="{DynamicResource ThemeColor}" />
 
 
         <!--  EFFECTS  -->
@@ -642,7 +355,7 @@
                           Color="{DynamicResource ThemeInteractiveColor}"
                           BlurRadius="0"
                           Opacity="0.0" />
-      
+
         <DropShadowEffect x:Key="ThemeDropShadow"
                           OffsetX="1"
                           OffsetY="1"
@@ -662,6 +375,13 @@
                           Color="{DynamicResource ThemeInteractiveBgColor}"
                           BlurRadius="3"
                           Opacity="0.8" />
+
+        <DropShadowEffect x:Key="ThemeBgDropBorder"
+                          OffsetX="2"
+                          OffsetY="2"
+                          Color="{DynamicResource ThemeInteractiveBgColor}"
+                          BlurRadius="0"
+                          Opacity="1" />
         <DropShadowEffect x:Key="ThemeBgGlow"
                           OffsetX="0"
                           OffsetY="0"

@@ -1,26 +1,34 @@
 ﻿using MonkeyPaste.Common;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppOleFormatMenuViewModel : MpAvAppOleMenuViewModelBase {
         #region Overrides
 
-        public override ICommand Command => new MpAsyncCommand(
-            async () => {
-                await Task.Delay(100);
-                //await Task.WhenAll(SubItems
-                //.OfType<MpAvAppOlePluginMenuViewModel>()
-                //.Where(x => x.IsChecked.IsTrueOrNull())
-                //.SelectMany(x => x.SubItems)
-                //.OfType<MpAvAppOlePluginMenuViewModel>()
-                //.SelectMany(x => x.SubItems)
-                //.OfType<MpAvAppOlePresetMenuViewModel>()
-                //.Distinct()
-                //.Select(x => (x.Command as MpIAsyncCommand).ExecuteAsync()));
+        public override ICommand Command => new MpAsyncCommand<object>(
+            async (args) => {
 
-                //RefreshChecks(true);
+                if (IsChecked.IsFalse()) {
+                    // format has no preset selected, select first in submenu
+                    if (SubItems.FirstOrDefault() is MpAvAppOlePluginMenuViewModel pmvm &&
+                        pmvm.SubItems.FirstOrDefault() is MpAvAppOlePresetMenuViewModel prmvm) {
+                        prmvm.Command.Execute(null);
+                    }
+                    return;
+                }
+                // for either partial/checked deselect all
+                SubItems
+                .OfType<MpAvAppOlePluginMenuViewModel>()
+                .Select(x => x.SubItems)
+                .OfType<MpAvAppOlePresetMenuViewModel>()
+                .Where(x => x.IsChecked.IsTrue())
+                .ForEach(x => x.Command.Execute(null));
+
+                if (args == null) {
+                    // was click source
+                    RefreshChecks(true);
+                }
             });
 
         public override string Header =>

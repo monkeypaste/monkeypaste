@@ -119,11 +119,5 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-
-        public ICommand ToggleCheckedCommand => new MpCommand(
-            () => {
-
-            });
-
     }
 }

@@ -28,9 +28,13 @@ namespace MonkeyPaste.Avalonia {
             if (valObj is T valT) {
                 return valT;
             }
+
             if (typeof(T) == typeof(string)) {
                 if (valObj is Color color) {
                     return (T)((object)color.ToPortableColor().ToHex(true));
+                }
+                if (valObj is SolidColorBrush scb) {
+                    return (T)(object)scb.Color.ToPortableColor().ToHex().AdjustAlpha(scb.Opacity);
                 }
             }
             if (typeof(T) == typeof(IBrush)) {
@@ -46,7 +50,11 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             }
-            MpDebug.Break($"Unimplemented resource converting from '{valObj.GetType}' to '{typeof(T)}'");
+            if (valObj != null) {
+                MpDebug.Break($"Unimplemented resource conversion from '{valObj.GetType()}' to '{typeof(T)}'");
+            } else {
+                MpDebug.Break($"Cannot find resource w/ key '{resourceKey}'");
+            }
             return default;
         }
 

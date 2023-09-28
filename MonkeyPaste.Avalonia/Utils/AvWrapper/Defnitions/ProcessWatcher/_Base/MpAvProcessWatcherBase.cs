@@ -1,13 +1,9 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Wpf;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -103,6 +99,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public abstract IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos { get; }
+
         #endregion
 
         #region Events
@@ -156,6 +154,10 @@ namespace MonkeyPaste.Avalonia {
 
         protected virtual string GetProcessApplicationName(nint hWnd) {
             string process_path = GetProcessPath(hWnd);
+            return GetAppNameByProessPath(process_path);
+        }
+
+        protected string GetAppNameByProessPath(string process_path) {
             string process_ext = Path.GetExtension(process_path);
             if (process_path.IsFile() &&
                 FileVersionInfo.GetVersionInfo(process_path) is FileVersionInfo fvi) {

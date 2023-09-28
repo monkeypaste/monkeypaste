@@ -12,6 +12,8 @@
         x:DataType="local:MpAvLoaderNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
+        xmlns:dd="using:My.Namespace"
+        d:DataContext="{x:Static dd:DesignData.ExampleViewModel}"
         Classes.IsClosing="{Binding IsClosing}"
         Classes="notificationWindow fadeIn fadeOut loader"
         Width="350"
@@ -113,10 +115,10 @@
         </Style>
     </Window.Styles>
     <Border x:Name="OuterBorder"
+            Classes="contrastBorder"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             BorderThickness="7"
-            BorderBrush="{DynamicResource ThemeWhiteColor}"
             Background="{DynamicResource ThemeColor}">
         <Grid x:Name="NotificationWindowContainerGrid">
             <Grid.ColumnDefinitions>
@@ -149,7 +151,7 @@
                            FontSize="26"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Left"
-                           Foreground="{DynamicResource ThemeWhiteColor}"
+                           Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                            FontWeight="SemiBold"
                            Text="{Binding Title}" />
                 <Border Grid.Row="0"
@@ -184,7 +186,7 @@
                             Width="220"
                             ClipToBounds="True"
                             BorderThickness="1"
-                            BorderBrush="{DynamicResource ThemeWhiteColor}"
+                            BorderBrush="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                             Background="Transparent"
                             Margin="0"
                             Padding="0">
@@ -254,7 +256,7 @@
                                        FontSize="12"
                                        VerticalAlignment="Bottom"
                                        TextAlignment="Right"
-                                       Foreground="{DynamicResource ThemeWhiteColor}"
+                                       Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                                        Text="{Binding}" />
                         </DataTemplate>
                     </TransitioningContentControl.ContentTemplate>
@@ -264,7 +266,7 @@
             <local:MpAvOptionsButton x:Name="OptsButton"
                                      Grid.Column="1"
                                      Classes="loader"
-                                     Foreground="{DynamicResource ThemeWhiteBrush}"
+                                     Foreground="{Binding $parent[Border].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                                      Command="{Binding ShowOptionsPopupCommand}"
                                      CommandParameter="{Binding $self}" />
         </Grid>

@@ -1,11 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -28,3 +25,4 @@ namespace MonkeyPaste.Avalonia {
         }
     }
 }
+

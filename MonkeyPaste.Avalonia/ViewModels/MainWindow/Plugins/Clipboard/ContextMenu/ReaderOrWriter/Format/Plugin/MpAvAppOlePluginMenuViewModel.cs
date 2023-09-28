@@ -8,26 +8,40 @@ namespace MonkeyPaste.Avalonia {
 
         public override ICommand Command => new MpAsyncCommand<object>(
             async (args) => {
-                if (IsChecked.IsTrueOrNull()) {
-                    var to_uncheck =
+                if (IsChecked.IsFalse()) {
+                    // plugin has no select presets for this format
+
+                    // deselect any selected sibling presets 
+                    (ParentObj as MpAvAppOleFormatMenuViewModel)
+                    .SubItems
+                    .Where(x => x != this)
+                    .OfType<MpAvAppOlePluginMenuViewModel>()
+                    .SelectMany(x => x.SubItems)
+                    .OfType<MpAvAppOlePresetMenuViewModel>()
+                    .Where(x => x.IsChecked.IsTrue())
+                    .ForEach(x => x.Command.Execute(null));
+
+                    //then select first child preset
                     SubItems
                     .OfType<MpAvAppOlePresetMenuViewModel>()
-                    .Where(x => x.IsChecked.IsTrue());
+                    .FirstOrDefault().Command.Execute(null);
 
-                    foreach (var pvm in to_uncheck) {
-                        await pvm.ClipboardPresetViewModel.TogglePresetIsEnabledCommand.ExecuteAsync(MenuArg);
+                    if (args == null) {
+                        // was click source
+                        RefreshChecks(true);
                     }
-                } else {
-                    // when false enable first item
-                    var to_check =
-                        SubItems
-                        .OfType<MpAvAppOlePresetMenuViewModel>()
-                        .FirstOrDefault(x => x.ClipboardPresetViewModel.IsDefault);
-                    MpDebug.Assert(to_check != null, $"Clipboard plugins not determining default right, maybe should fall back to first item?");
-
-                    await to_check.ClipboardPresetViewModel.TogglePresetIsEnabledCommand.ExecuteAsync(MenuArg);
+                    return;
                 }
-                RefreshChecks(true);
+
+                // for true/null partial/checked deselect all
+                SubItems
+                .OfType<MpAvAppOlePresetMenuViewModel>()
+                .Where(x => x.IsChecked.IsTrue())
+                .ForEach(x => x.Command.Execute(null));
+                if (args == null) {
+                    // was click source
+                    RefreshChecks(true);
+                }
             });
 
         public override string Header =>

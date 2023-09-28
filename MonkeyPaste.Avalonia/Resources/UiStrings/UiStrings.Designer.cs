@@ -859,11 +859,209 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Application.
+        /// </summary>
+        public static string SettingsInteropAddAppButtonLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAddAppButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Website.
+        /// </summary>
+        public static string SettingsInteropAddUrlButtonLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAddUrlButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Block?.
+        /// </summary>
+        public static string SettingsInteropAppBlockHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppBlockHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Some Monkey Paste features uses keyboard automation to trigger a copy event in  applications (like a console or shell for example). Add and/or select the app with the unique copy shortcut to ensure those features function properly.&lt;/p&gt;.
+        /// </summary>
+        public static string SettingsInteropAppCopyShortcutHeaderHint {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppCopyShortcutHeaderHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy Shortcut.
+        /// </summary>
+        public static string SettingsInteropAppCopyShortcutHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppCopyShortcutHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string SettingsInteropAppNameHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppNameHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customize.
+        /// </summary>
+        public static string SettingsInteropAppOleFormatDefaultButtonLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppOleFormatDefaultButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string SettingsInteropAppOleFormatNoopButtonLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppOleFormatNoopButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only the selected OLE (clipboard or drag-and-drop operation) presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used..
+        /// </summary>
+        public static string SettingsInteropAppOleFormatsHeaderHint {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppOleFormatsHeaderHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ole Formats.
+        /// </summary>
+        public static string SettingsInteropAppOleFormatsHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppOleFormatsHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.&lt;/p&gt;&lt;p&gt;Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)&lt;/p&gt;.
+        /// </summary>
+        public static string SettingsInteropAppPasteShortcutHeaderHint {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppPasteShortcutHeaderHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste Shortcut.
+        /// </summary>
+        public static string SettingsInteropAppPasteShortcutHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppPasteShortcutHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Readers.
+        /// </summary>
+        public static string SettingsInteropAppReadHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppReadHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All clipboard monitoring from rejected applications will be &lt;b&gt;ignored&lt;/b&gt;..
+        /// </summary>
+        public static string SettingsInteropAppRejectHeaderHint {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppRejectHeaderHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Known Applications.
+        /// </summary>
+        public static string SettingsInteropAppsLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Writers.
+        /// </summary>
+        public static string SettingsInteropAppWriteHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppWriteHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interop.
         /// </summary>
         public static string SettingsInteropTabLabel {
             get {
                 return ResourceManager.GetString("SettingsInteropTabLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Block Domain?.
+        /// </summary>
+        public static string SettingsInteropUrlBlockDomainHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropUrlBlockDomainHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Block Url?.
+        /// </summary>
+        public static string SettingsInteropUrlBlockUrlHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropUrlBlockUrlHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Domain.
+        /// </summary>
+        public static string SettingsInteropUrlDomainHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropUrlDomainHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source url recognition is dependant on the host applications clipboard support so rejection is not guaranteed :(.
+        /// </summary>
+        public static string SettingsInteropUrlHintText {
+            get {
+                return ResourceManager.GetString("SettingsInteropUrlHintText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url.
+        /// </summary>
+        public static string SettingsInteropUrlNameHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropUrlNameHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Websites.
+        /// </summary>
+        public static string SettingsInteropUrlsLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropUrlsLabel", resourceCulture);
             }
         }
         

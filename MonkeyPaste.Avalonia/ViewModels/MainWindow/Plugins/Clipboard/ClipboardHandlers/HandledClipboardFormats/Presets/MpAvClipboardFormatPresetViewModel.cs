@@ -462,6 +462,7 @@ namespace MonkeyPaste.Avalonia {
                     // format exists, remove
                     await avm.OleFormatInfos.RemoveAppOlePresetViewModelByPresetIdAsync(PresetId);
                 } else {
+
                     await avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(PresetId);
                 }
 

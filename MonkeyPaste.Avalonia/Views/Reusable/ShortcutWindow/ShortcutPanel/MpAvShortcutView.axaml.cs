@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using MonkeyPaste.Common;
 using PropertyChanged;
+using System;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -87,14 +88,25 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvShortcutView() {
             InitializeComponent();
-            //this.PointerEntered += MpAvShortcutView_PointerEntered;
-            this.PointerExited += MpAvShortcutView_PointerExited;
-            ShortcutLabel.PointerEntered += MpAvShortcutView_PointerEntered;
-            RecordButton.PointerExited += MpAvShortcutView_PointerExited;
+            this.GetObservable(RecordCommandProperty).Subscribe(value => OnRecordChanged());
+            this.GetObservable(RecordCommandParameterProperty).Subscribe(value => OnRecordChanged());
 
-            rb.AddHandler(PointerReleasedEvent, Rb_PointerPressed, RoutingStrategies.Tunnel);
+            //this.PointerExited += MpAvShortcutView_PointerExited;
+            //ShortcutLabel.PointerEntered += MpAvShortcutView_PointerEntered;
+            //RecordButton.PointerExited += MpAvShortcutView_PointerExited;
+
+            //rb.AddHandler(PointerReleasedEvent, Rb_PointerPressed, RoutingStrategies.Tunnel);
         }
-
+        private void OnRecordChanged() {
+            if (this.Content is not Control c) {
+                return;
+            }
+            if (RecordCommand != null && RecordCommand.CanExecute(RecordCommandParameter)) {
+                c.Classes.Add("recordable");
+            } else {
+                c.Classes.Remove("recordable");
+            }
+        }
 
         private void Rb_PointerPressed(object sender, global::Avalonia.Input.PointerReleasedEventArgs e) {
             if (!CanRecord) {

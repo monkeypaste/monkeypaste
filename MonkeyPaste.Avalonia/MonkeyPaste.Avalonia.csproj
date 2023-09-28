@@ -1603,6 +1603,9 @@
     <Compile Update="Views\Reusable\ToolTip\Hint\MpAvToolTipInfoHintView.axaml.cs">
       <DependentUpon>MpAvToolTipInfoHintView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Interop\OleFormatStrip\MpAvOleFormatStripView.axaml.cs">
+      <DependentUpon>MpAvOleFormatStripView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Preferences\MpAvSettingsFrameCollectionView.axaml.cs">
       <DependentUpon>MpAvSettingsFrameCollectionView.axaml</DependentUpon>
     </Compile>

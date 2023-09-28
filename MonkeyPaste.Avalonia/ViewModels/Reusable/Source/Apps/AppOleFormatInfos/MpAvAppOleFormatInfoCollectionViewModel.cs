@@ -1,8 +1,10 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppOleFormatInfoCollectionViewModel :
@@ -62,6 +64,8 @@ namespace MonkeyPaste.Avalonia {
             !IsWritersOnlyNoOp &&
             Writers.Any();
 
+
+
         public bool IsAnyBusy =>
             IsBusy || Items.Any(x => x.IsBusy);
 
@@ -71,7 +75,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors       
 
-        public MpAvAppOleFormatInfoCollectionViewModel(MpAvAppViewModel parent) : base(parent) { }
+        public MpAvAppOleFormatInfoCollectionViewModel(MpAvAppViewModel parent) : base(parent) {
+            Items.CollectionChanged += Items_CollectionChanged;
+        }
+
 
         #endregion
 
@@ -121,6 +128,7 @@ namespace MonkeyPaste.Avalonia {
                 await AddAppOlePresetViewModelByPresetIdAsync(isReader ? MpAppOlePreset.NO_OP_READER_ID : MpAppOlePreset.NO_OP_WRITER_ID);
             }
         }
+
         public async Task<MpAvAppOlePresetViewModel> AddAppOlePresetViewModelByPresetIdAsync(int presetId) {
 
             // NOTE ignoreFormat ignored for create, update after (but before adding)
@@ -137,22 +145,34 @@ namespace MonkeyPaste.Avalonia {
             }
             var aofivm = await CreateAppOlePresetViewModel(new_aofi);
 
-            if (aofivm.IsReaderAppPreset) {
-                if (aofivm.IsReaderNoOp) {
-                    MpDebug.Assert(Readers.Count == 0, $"No op reader error, all readers should be removed before adding no op");
-                } else if (IsReadersOnlyNoOp) {
-                    // remove no op reader
+            if (aofivm.IsNoOpReaderOrWriter) {
+                // before adding no op, get any presets for this format
+
+                var to_remove =
+                        Items
+                        .Where(x =>
+                            x.ClipboardPresetViewModel != null &&
+                            x.ClipboardPresetViewModel.FormatName == aofivm.ClipboardPresetViewModel.FormatName &&
+                            x.ClipboardPresetViewModel.IsReader == aofivm.IsReaderAppPreset)
+                        .Distinct();
+
+                // add no op BEFORE removing others so remove doesn't trigger default
+                Items.Add(aofivm);
+
+                // remove everything but no op for this format
+                foreach (var pmvm in to_remove) {
+                    await RemoveAppOlePresetViewModelByPresetIdAsync(pmvm.AppOlePresetId);
+                }
+
+            } else {
+                Items.Add(aofivm);
+                bool is_cur_no_op = aofivm.IsReaderAppPreset ? IsReadersOnlyNoOp : IsWritersOnlyNoOp;
+                if (is_cur_no_op) {
+                    // remove no op for this format
+                    int no_op_id = aofivm.IsReaderAppPreset ? MpAppOlePreset.NO_OP_READER_ID : MpAppOlePreset.NO_OP_WRITER_ID;
                     await RemoveAppOlePresetViewModelByPresetIdAsync(NoOpReader.PresetId);
                 }
-            } else {
-                if (aofivm.IsWriterNoOp) {
-                    MpDebug.Assert(Readers.Count == 0, $"No op writer error, all writers should be removed before adding no op");
-                } else if (IsWritersOnlyNoOp) {
-                    // remove no op writer
-                    await RemoveAppOlePresetViewModelByPresetIdAsync(NoOpWriter.PresetId);
-                }
             }
-            Items.Add(aofivm);
 
             return aofivm;
 
@@ -210,6 +230,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(IsReadersOnlyNoOp));
+            OnPropertyChanged(nameof(IsWritersOnlyNoOp));
+            OnPropertyChanged(nameof(Readers));
+            OnPropertyChanged(nameof(Writers));
+        }
         #endregion
 
         #region Commands
@@ -232,6 +260,31 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
 
+        public ICommand ShowOleFormatMenuCommand => new MpCommand<object>(
+            (args) => {
+                if (Parent == null) {
+                    return;
+                }
+                var c = args as Control;
+                string show_type = "full";
+                if (c == null && args is object[] argParts) {
+                    c = argParts[0] as Control;
+                    show_type = argParts[1] as string;
+                }
+
+
+                MpAvAppCollectionViewModel.Instance
+                .ShowAppPresetsContextMenuCommand
+                .Execute(new object[] {
+                    c,
+                    new MpPortableProcessInfo() {
+                        ProcessPath = Parent.AppPath
+                    },
+                    MpPoint.Zero,
+                    show_type
+                });
+
+            });
         #endregion
     }
 }

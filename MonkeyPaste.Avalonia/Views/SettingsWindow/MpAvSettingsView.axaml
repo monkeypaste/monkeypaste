@@ -13,20 +13,11 @@
                        x:DataType="local:MpAvSettingsViewModel"
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
+                       Background="{DynamicResource SettingsWindowBgBrush}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsView">
     <local:MpAvUserControl.Resources>
-        <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Stretch</HorizontalAlignment>
         <SolidColorBrush x:Key="DataGridCellFocusVisualPrimaryBrush">Transparent</SolidColorBrush>
         <SolidColorBrush x:Key="DataGridCellFocusVisualSecondaryBrush">Transparent</SolidColorBrush>
-        <SolidColorBrush x:Key="ExpanderHeaderForeground"
-                         Color="{DynamicResource ThemeWhiteColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderHeaderBorderBrush"
-                         Color="{DynamicResource ThemeWhiteColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
-        <SolidColorBrush x:Key="ExpanderChevronForeground"
-                         Color="{DynamicResource ThemeWhiteColor}"
-                         Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
     </local:MpAvUserControl.Resources>
 
@@ -34,38 +25,23 @@
         <!--  TABS  -->
         <Style Selector="RadioButton.tab">
             <Style.Resources>
-                <!--<CornerRadius x:Key="ControlCornerRadius">5,5,5,5</CornerRadius>-->
-                <SolidColorBrush x:Key="ToggleButtonBackground"
-                                 Color="{DynamicResource ThemeAccent5BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver"
-                                 Color="{DynamicResource ThemeAccent5Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed"
-                                 Color="{DynamicResource ThemeAccent2Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrush"
-                                 Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver"
-                                 Color="{DynamicResource ThemeAccent1Color}" />
-                <SolidColorBrush x:Key="ToggleButtonForeground"
-                                 Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundPointerOver"
-                                 Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBackground" Color="{DynamicResource ThemeAccent5BgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{DynamicResource ThemeAccent5Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
+                <SolidColorBrush x:Key="ToggleButtonForeground" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonForegroundPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
 
-                <SolidColorBrush x:Key="ToggleButtonBackgroundChecked"
-                                 Color="{DynamicResource ThemeAccent3BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver"
-                                 Color="{DynamicResource ThemeAccent3BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed"
-                                 Color="{DynamicResource ThemeAccent2Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked"
-                                 Color="{DynamicResource ThemeInteractiveColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver"
-                                 Color="{DynamicResource ThemeAccent1Color}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundChecked"
-                                 Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver"
-                                 Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource ThemeAccent3BgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource ThemeAccent3BgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource ThemeAccent2Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{DynamicResource ThemeInteractiveColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
+                <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
 
-                <Thickness x:Key="ToggleButtonBorderThemeThickness">5,5,5,5</Thickness>
+                <Thickness x:Key="ToggleButtonBorderThemeThickness">3</Thickness>
             </Style.Resources>
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
@@ -74,7 +50,7 @@
             <Setter Property="CornerRadius"
                     Value="10" />
             <Setter Property="Margin"
-                    Value="2.5,0" />
+                    Value="2.5,5,2.5,0" />
             <Setter Property="Padding"
                     Value="0" />
         </Style>
@@ -136,7 +112,48 @@
                     Value="50" />
         </Style>
 
-        <!--  HEADERS  -->
+        <!--  EXPANDERS  -->
+        <Style Selector="Expander.header">
+            <Style.Resources>
+                <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Stretch</HorizontalAlignment>
+                <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{Binding Source={DynamicResource ExpanderHeaderBackground}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+
+                <!--<SolidColorBrush x:Key="ExpanderHeaderForegroundPointerOver" Color="{Binding Source={DynamicResource ExpanderHeaderBackgroundPointerOver}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
+                <!--<SolidColorBrush x:Key="ExpanderHeaderForegroundPressed" Color="{Binding Source={DynamicResource ExpanderHeaderBackgroundPressed}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
+
+                <SolidColorBrush x:Key="ExpanderChevronForeground" Color="{Binding Source={DynamicResource ExpanderHeaderBackground}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+
+                <!--<SolidColorBrush x:Key="ExpanderHeaderBackground" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                <SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                <SolidColorBrush x:Key="ExpanderHeaderBackgroundPressed" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
+
+                <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                <!--<SolidColorBrush x:Key="ExpanderHeaderBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                <SolidColorBrush x:Key="ExpanderHeaderBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
+
+            </Style.Resources>
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="ExpandDirection"
+                    Value="Down" />
+            <Setter Property="CornerRadius"
+                    Value="10" />
+            <Setter Property="Margin"
+                    Value="10,0,20,0" />
+        </Style>
+
+
+        <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="FontSize"
+                    Value="20" />
+        </Style>
+
 
         <!--  HEADERS  -->
         <Style Selector="StackPanel.header">
@@ -145,7 +162,13 @@
         </Style>
         <Style Selector="TextBlock.header">
             <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeWhiteColor}" />
+                    Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+            <Setter Property="VerticalAlignment"
+                    Value="Bottom" />
+        </Style>
+        <Style Selector="TextBlock.expander.header">
+            <Setter Property="Foreground"
+                    Value="{Binding $parent[ToggleButton].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
             <Setter Property="VerticalAlignment"
                     Value="Bottom" />
         </Style>
@@ -192,29 +215,6 @@
                     Value="16" />
         </Style>
 
-        <!--  EXPANDERS  -->
-        <Style Selector="Expander">
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch" />
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Stretch" />
-            <Setter Property="ExpandDirection"
-                    Value="Down" />
-            <Setter Property="CornerRadius"
-                    Value="10" />
-            <Setter Property="Margin"
-                    Value="10,0,20,0" />
-        </Style>
-
-
-        <Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Left" />
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center" />
-            <Setter Property="FontSize"
-                    Value="20" />
-        </Style>
 
         <!--  DATAGRIDS  -->
         <Style Selector=":is(Border).filterDataGridContainer">
@@ -362,8 +362,7 @@
         <Style Selector="local|MpAvSettingsFrameView:pointerover,local|MpAvSettingsFrameView:focus-within">
             <Setter Property="Background">
                 <Setter.Value>
-                    <SolidColorBrush Color="White"
-                                     Opacity="0.05" />
+                    <SolidColorBrush Color="White" Opacity="0.05" />
                 </Setter.Value>
             </Setter>
         </Style>
@@ -382,8 +381,7 @@
                     Value="0,0,10,10" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <DockPanel LastChildFill="True"
-               Background="{DynamicResource SettingsWindowBgBrush}">
+    <DockPanel LastChildFill="True">
 
         <!--  TABS PANEL  -->
 

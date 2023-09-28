@@ -5,7 +5,6 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -28,6 +27,9 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvAppViewModel> FilteredItems =>
             Items
             .Where(x => (x as MpIFilterMatch).IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText));
+
+        public IEnumerable<MpAvAppViewModel> FilteredExternalItems =>
+            FilteredItems.Where(x => !x.IsThisApp);
 
         public IEnumerable<MpAvAppViewModel> CustomClipboardItems =>
             FilteredItems
@@ -269,6 +271,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(FilteredExternalItems));
             OnPropertyChanged(nameof(FilteredItems));
             OnPropertyChanged(nameof(CustomClipboardItems));
 
@@ -279,6 +282,7 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.SettingsFilterTextChanged:
                     OnPropertyChanged(nameof(FilteredItems));
+                    OnPropertyChanged(nameof(FilteredExternalItems));
                     break;
             }
         }
@@ -302,40 +306,14 @@ namespace MonkeyPaste.Avalonia {
             MpDebug.Assert(dups == null, "Dup apps found");
         }
 
-        private async Task<MpAvAppViewModel> AddOrSelectAppFromFileDialogAsync() {
-            string appPath = await Mp.Services.NativePathDialog.ShowFileDialogAsync(
-                    title: "Select application path",
-                    filters: null,
-                    resolveShortcutPath: true);
 
-            if (string.IsNullOrEmpty(appPath)) {
-                return null;
-            }
-            var pi = new MpPortableProcessInfo() { ProcessPath = appPath };
-            var avm = GetAppByProcessInfo(pi);
-            if (avm == null) {
-                var app = await Mp.Services.AppBuilder.CreateAsync(pi);
-                while (avm == null) {
-                    avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
-                    await Task.Delay(300);
-                }
-                avm.IsNew = true;
-            } else {
-                await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
-                        title: "Duplicate",
-                        message: $"App at path '{appPath}' already exists",
-                        iconResourceObj: "WarningImage");
-            }
-            return avm;
-        }
-
-        private MpAvIMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo(MpPortableProcessInfo ppi) {
+        private MpAvIMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo(MpPortableProcessInfo ppi, string show_type) {
             object menuArg = ppi;
             if (GetAppByProcessInfo(ppi) is MpAvAppViewModel avm) {
                 menuArg = avm;
             }
 
-            var root_menu = new MpAvAppOleRootMenuViewModel(menuArg);
+            var root_menu = new MpAvAppOleRootMenuViewModel(menuArg, show_type);
             return root_menu;
         }
         private MpAvMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo_old(MpPortableProcessInfo ppi) {
@@ -507,24 +485,52 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand AddAppCommand => new MpAsyncCommand(
-            async () => {
-                var avm = await AddOrSelectAppFromFileDialogAsync();
+        public MpIAsyncCommand<object> AddAppCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                string appPath = null;
+                if (args is string) {
+                    // picked from running (unknown) app popup 
+                    appPath = args.ToString();
+                } else {
+                    // add new clicked in app popup
+
+                    appPath = await Mp.Services.NativePathDialog.ShowFileDialogAsync(
+                        title: "Select application path",
+                        filters: null,
+                        resolveShortcutPath: true);
+
+                    if (string.IsNullOrEmpty(appPath)) {
+                        // canceled
+                        return;
+                    }
+                }
+                if (!appPath.IsFile()) {
+                    return;
+                }
+
+                var pi = new MpPortableProcessInfo() { ProcessPath = appPath };
+                var avm = GetAppByProcessInfo(pi);
+                if (avm == null) {
+                    // new app
+                    var app = await Mp.Services.AppBuilder.CreateAsync(pi);
+                    while (avm == null) {
+                        avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
+                        await Task.Delay(300);
+                    }
+                    avm.IsNew = true;
+                } else if (args is not string) {
+                    // user selected app already in grid (not in drop down) just let em know
+                    await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                            title: "Duplicate",
+                            message: $"App at path '{appPath}' already exists",
+                            iconResourceObj: "WarningImage");
+                }
+
                 if (avm == null) {
                     return;
                 }
 
                 SelectAppCommand.Execute(avm);
-            });
-
-        public ICommand AddAppWithAssignClipboardShortcutCommand => new MpAsyncCommand(
-            async () => {
-                var avm = await AddOrSelectAppFromFileDialogAsync();
-                if (avm == null) {
-                    // canceled app chooser dialg
-                    return;
-                }
-                AddOrUpdateAppClipboardShortcutCommand.Execute(avm);
             });
 
         public ICommand SelectAppCommand => new MpCommand<object>(
@@ -541,98 +547,68 @@ namespace MonkeyPaste.Avalonia {
                 }
                 SelectedItem = Items.FirstOrDefault(x => x.AppId == appId);
             });
-        public ICommand ShowAppSelectorFlyoutCommand => new MpCommand<object>(
+
+        public ICommand ShowAddAppPopupMenuCommand => new MpCommand<object>(
             (args) => {
                 if (args is not Control c) {
                     return;
                 }
                 var mivml = new MpAvMenuItemViewModel() {
-                    SubItems = Items
-                        .Where(x => !CustomClipboardItems.Contains(x) && !string.IsNullOrWhiteSpace(x.AppName))
-                        .OrderBy(x => x.AppName)
+                    SubItems =
+                        Mp.Services.ProcessWatcher
+                        .AllWindowProcessInfos
+                        .Where(x => GetAppByProcessInfo(x) == null && !string.IsNullOrEmpty(x.ApplicationName))
+                        .OrderBy(x => x.ApplicationName)
                         .Select(x => new MpAvMenuItemViewModel() {
-                            IconSourceObj = x.IconId,
-                            Header = x.AppName,
-                            Command = AddOrUpdateAppClipboardShortcutCommand,
-                            CommandParameter = x
+                            IconSourceObj = Mp.Services.IconBuilder.GetPathIconBase64(x.ProcessPath),
+                            Header = x.ApplicationName,
+                            Command = AddAppCommand,
+                            CommandParameter = x.ProcessPath
                         }).Union(new[] {
                             new MpAvMenuItemViewModel() {
                                 HasLeadingSeparator = true,
                                 IconSourceObj = "Dots1x3Image",
                                 Header = "Add App",
-                                Command = AddAppWithAssignClipboardShortcutCommand
+                                Command = AddAppCommand
                             }
                         }).ToList()
                 };
                 MpAvMenuView.ShowMenu(c, mivml, showByPointer: false, placementMode: PlacementMode.Right, popupAnchor: PopupAnchor.Left);
             });
 
-        public ICommand DeleteAppClipboardShortcutsCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                var avm = args as MpAvAppViewModel;
-                if (avm == null) {
-                    return;
-                }
-                MpDebug.Assert(avm.HasAnyShortcut, $"'avm' should has clipboard shortcuts to delete");
-
-                var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
-                    title: $"Confirm",
-                    message: $"Are you sure want to remove the paste shortcut for '{avm.AppName}'",
-                    iconResourceObj: avm.IconId);
-                if (!result) {
-                    // canceled
-                    return;
-                }
-                await avm.PasteShortcutViewModel.ClipboardShortcuts.DeleteFromDatabaseAsync();
-                await avm.InitializeAsync(avm.App);
-                OnPropertyChanged(nameof(CustomClipboardItems));
-            });
-
-        public ICommand AddOrUpdateAppClipboardShortcutCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                if (args is MpAvAppViewModel avm) {
-                    // app selected from shortcut dropdown
-                    MpDebug.Assert(!CustomClipboardItems.Contains(avm), $"{avm} should have been filtered out from this menu");
-                    await MpAppClipboardShortcuts.CreateAsync(
-                        appId: avm.AppId);
-                    await avm.InitializeAsync(avm.App);
-
-                    OnPropertyChanged(nameof(CustomClipboardItems));
-
-                    SelectAppCommand.Execute(avm);
-                    return;
-                }
-                if (args is not MpAvAppClipboardShortcutViewModel acsvm) {
-                    return;
-                }
-                await acsvm.ShowAssignDialogAsync();
-            });
-
         public ICommand ShowAppPresetsContextMenuCommand => new MpCommand<object>(
             (args) => {
+                string show_type = "full";
                 if (args is not object[] argParts ||
                     argParts[0] is not Control c ||
                     argParts[1] is not MpPortableProcessInfo pi ||
                     argParts[2] is not MpPoint offset) {
                     return;
                 }
+                if (argParts.Length == 4) {
+                    show_type = argParts[3] as string;
+                }
+
+                MpAvIMenuItemViewModel mivm = GetPasteInfoMenuItemsByProcessInfo(pi, show_type);
 
                 var cm = MpAvMenuView.ShowMenu(
                     c,
-                    GetPasteInfoMenuItemsByProcessInfo(pi),
+                    mivm,
                     showByPointer: false,
                     PlacementMode.TopEdgeAlignedLeft,
                     PopupAnchor.BottomRight,
                     offset);
 
-                void _cmInstance_MenuClosed(object sender, RoutedEventArgs e) {
-                    if (c.DataContext is MpAvClipTileViewModel ctvm &&
-                        ctvm.GetContentView() is MpAvContentWebView cwv) {
-                        cwv.SendMessage("unexpandPasteButtonPopup_ext()");
+                if (c is MpAvContentWebView) {
+                    void _cmInstance_MenuClosed(object sender, RoutedEventArgs e) {
+                        if (c.DataContext is MpAvClipTileViewModel ctvm &&
+                            ctvm.GetContentView() is MpAvContentWebView cwv) {
+                            cwv.SendMessage("unexpandPasteButtonPopup_ext()");
+                        }
+                        cm.Closed -= _cmInstance_MenuClosed;
                     }
-                    cm.Closed -= _cmInstance_MenuClosed;
+                    cm.Closed += _cmInstance_MenuClosed;
                 }
-                cm.Closed += _cmInstance_MenuClosed;
             });
         #endregion
     }

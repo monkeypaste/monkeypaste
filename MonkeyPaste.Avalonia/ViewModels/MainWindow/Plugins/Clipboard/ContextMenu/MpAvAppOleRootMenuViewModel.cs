@@ -27,13 +27,24 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvAppOleRootMenuViewModel(object menuArg) : base(null) {
+        public MpAvAppOleRootMenuViewModel(object menuArg) : this(menuArg, "full") { }
+        public MpAvAppOleRootMenuViewModel(object menuArg, string show_type) : base(null) {
             MenuArg = menuArg;
 
-            SubItems = new List<MpAvIMenuItemViewModel> {
-                new MpAvAppOleReaderOrWriterMenuViewModel(this, true),
-                new MpAvAppOleReaderOrWriterMenuViewModel(this, false)
-            };
+            if (show_type == "full") {
+                SubItems = new List<MpAvIMenuItemViewModel> {
+                    new MpAvAppOleReaderOrWriterMenuViewModel(this, true),
+                    new MpAvAppOleReaderOrWriterMenuViewModel(this, false)
+                };
+            } else if (show_type == "read") {
+                SubItems = new List<MpAvIMenuItemViewModel> {
+                    new MpAvAppOleReaderOrWriterMenuViewModel(this, true)
+                };
+            } else if (show_type == "write") {
+                SubItems = new List<MpAvIMenuItemViewModel> {
+                    new MpAvAppOleReaderOrWriterMenuViewModel(this, false)
+                };
+            }
         }
         #endregion
     }

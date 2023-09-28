@@ -24,11 +24,12 @@
                 <TextBlock Classes="frame header text"
                            Text="{Binding LabelText}" />
             </StackPanel>
-            <Border IsVisible="False" Classes="header frame labelUnderline_long" />
+            <Border IsVisible="False"
+                    Classes="header frame labelUnderline_long" />
             <local:MpAvParameterCollectionView x:Name="ParameterCollectionView"
                                                BorderThickness="1"
                                                CornerRadius="10"
-                                               BorderBrush="{DynamicResource ThemeWhiteColor}"
+                                               BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch" />
         </StackPanel>

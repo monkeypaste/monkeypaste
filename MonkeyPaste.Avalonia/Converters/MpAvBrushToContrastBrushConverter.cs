@@ -1,15 +1,17 @@
-﻿using Avalonia.Controls;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
 using Avalonia.Media;
+using MonkeyPaste.Common;
 using System;
 using System.Globalization;
-
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvBrushToContrastBrushConverter : IValueConverter {
         public static readonly MpAvBrushToContrastBrushConverter Instance = new();
 
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
+            if (parameter.ToStringOrEmpty() == "test") {
+
+            }
             if (MpAvColorToContrastColorConverter.Instance.Convert(value, targetType, parameter, culture) is Color color) {
                 return new SolidColorBrush() {
                     Color = color

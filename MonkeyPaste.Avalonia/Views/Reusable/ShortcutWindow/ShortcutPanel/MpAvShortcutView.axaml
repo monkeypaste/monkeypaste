@@ -13,6 +13,40 @@
                        x:Name="ShortcutView"
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutView">
     <local:MpAvUserControl.Styles>
+        <!--  - RECORD/ KEYGROUP TOGGLE  -->
+        <Style Selector="Grid#ContainerGrid local|MpAvShortcutLabel#ShortcutLabel">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid Button#RecordButton">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid TextBlock#EmptyTextBlock">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid.hasShortcut local|MpAvShortcutLabel#ShortcutLabel">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+        <Style Selector="Grid#ContainerGrid.hasShortcut TextBlock#EmptyTextBlock">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid.recordable:pointerover local|MpAvShortcutLabel#ShortcutLabel">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+
+        <Style Selector="Grid#ContainerGrid.recordable:pointerover Button#RecordButton">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
 
         <!--  RECORD ANIMATION  -->
         <Style Selector="Button#RecordButton:pointerover /template/ ContentPresenter">
@@ -53,23 +87,32 @@
             </Style.Animations>
         </Style>
 
+
+        <!--  EMPTY LABEL  -->
+        <Style Selector="TextBlock#EmptyShortcutTextBlock">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="ContainerGrid"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
+          Classes.hasShortcut="{Binding KeyGroups, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
           Background="{DynamicResource HitTestableTransparent}">
-        <TextBlock x:Name="EmptyTextBlock"
+        <TextBlock x:Name="EmptyShortcutTextBlock"
+                   Classes="emptyKeys"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    FontWeight="SemiBold"
                    FontStyle="Oblique"
-                   Foreground="White"
                    Text="{Binding EmptyText, ElementName=ShortcutView}" />
         <local:MpAvShortcutLabel x:Name="ShortcutLabel"
                                  HorizontalAlignment="Center"
                                  KeyGesture="{Binding KeyGroups}" />
-      
+
         <Button x:Name="RecordButton"
+                Command="{Binding RecordCommand, ElementName=ShortcutView}"
+                CommandParameter="{Binding RecordCommandParameter, ElementName=ShortcutView}"
                 Margin="3"
                 Padding="0,2"
                 HorizontalAlignment="Stretch"
@@ -89,6 +132,7 @@
                          VerticalAlignment="Stretch"
                          Width="{Binding $self.Bounds.Height}" />
                 <TextBlock x:Name="ClickTo_tb"
+                           Classes="recordLabel"
                            DockPanel.Dock="Right"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Right"

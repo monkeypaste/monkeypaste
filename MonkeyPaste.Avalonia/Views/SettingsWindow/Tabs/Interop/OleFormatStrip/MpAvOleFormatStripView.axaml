@@ -1,0 +1,41 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="750"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:Class="MonkeyPaste.Avalonia.MpAvOleFormatStripView">
+    <ItemsControl ItemsSource="{Binding}"
+                  MaxWidth="250"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="local:MpAvAppOlePresetViewModel">
+                <!--  NOTE cmd param set in interop style  -->
+                <Button Classes="noBg noHoverBg noBorder noHoverBorder"
+                        Background="{StaticResource HitTestableTransparent}"
+                        Command="{Binding Parent.ShowOleFormatMenuCommand}"
+                        CornerRadius="3"
+                        BorderThickness="1"
+                        BorderBrush="Black"
+                        Padding="2">
+                    <ToolTip.Tip>
+                        <local:MpAvToolTipView ToolTipText="{Binding ClipboardPresetViewModel.FullName}" />
+                    </ToolTip.Tip>
+                    <Image Source="{Binding ClipboardPresetViewModel.IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+                           Width="12"
+                           Height="12" />
+                </Button>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</local:MpAvUserControl>
