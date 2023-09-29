@@ -1,31 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Data.Converters;
-using MonkeyPaste.Common;
-using System;
+﻿using MonkeyPaste.Common;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvNullableBoolToUnsetValueConverter : IValueConverter {
-        public static readonly MpAvNullableBoolToUnsetValueConverter Instance = new();
-
-        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            if (value is bool boolVal) {
-                return boolVal;
-            }
-            return AvaloniaProperty.UnsetValue;
-
-        }
-
-        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
-            if (value is bool boolVal) {
-                return boolVal;
-            }
-            return null;
-        }
-    }
     public abstract class MpAvAppOleMenuViewModelBase : MpAvViewModelBase,
         MpAvIMenuItemViewModel {
         #region Interfaces
@@ -49,24 +27,23 @@ namespace MonkeyPaste.Avalonia {
         public virtual bool? IsChecked {
             get {
                 var checkable_sub_items = SubItems.OfType<MpAvAppOleMenuViewModelBase>();
-                //checkable_sub_items.ForEach(x => x.RefreshChecks(false));
 
                 bool? result =
                     checkable_sub_items.All(x => x.IsChecked.IsTrue()) ?
                         true :
                         checkable_sub_items.Any(x => x.IsChecked.IsTrueOrNull()) ?
                             null : false;
-                if (this is MpAvAppOleReaderOrWriterMenuViewModel) {
-
-                }
                 return result;
             }
         }
 
 
-        public abstract ICommand Command { get; }
+        ICommand MpAvIMenuItemViewModel.Command =>
+            CheckCommand;
         public abstract string Header { get; }
         public abstract object IconSourceObj { get; }
+
+        public abstract MpIAsyncCommand<object> CheckCommand { get; }
         #endregion
         #endregion
 
@@ -89,8 +66,10 @@ namespace MonkeyPaste.Avalonia {
                 return root;
             }
         }
+
         protected virtual object MenuArg =>
             (RelativeRoot.ParentObj as MpAvAppOleRootMenuViewModel).MenuArg;
+
         #endregion
 
         #region Constructors

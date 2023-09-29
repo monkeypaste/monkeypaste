@@ -307,7 +307,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        private MpAvIMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo(MpPortableProcessInfo ppi, string show_type) {
+        private MpAvAppOleRootMenuViewModel GetPasteInfoMenuItemsByProcessInfo(MpPortableProcessInfo ppi, string show_type) {
             object menuArg = ppi;
             if (GetAppByProcessInfo(ppi) is MpAvAppViewModel avm) {
                 menuArg = avm;
@@ -580,7 +580,7 @@ namespace MonkeyPaste.Avalonia {
             (args) => {
                 string show_type = "full";
                 if (args is not object[] argParts ||
-                    argParts[0] is not Control c ||
+                    argParts[0] is not Control source_control ||
                     argParts[1] is not MpPortableProcessInfo pi ||
                     argParts[2] is not MpPoint offset) {
                     return;
@@ -589,26 +589,46 @@ namespace MonkeyPaste.Avalonia {
                     show_type = argParts[3] as string;
                 }
 
-                MpAvIMenuItemViewModel mivm = GetPasteInfoMenuItemsByProcessInfo(pi, show_type);
+                MpAvAppOleRootMenuViewModel mivm = GetPasteInfoMenuItemsByProcessInfo(pi, show_type);
+                Control anchor_control = source_control;
+
+                if (source_control.GetVisualAncestor<MpAvOleFormatStripView>() is MpAvOleFormatStripView ofsv) {
+                    // settings format strip click
+                    // provided anchor_control is clicked button, use strip as anchor_control
+                    anchor_control = ofsv;
+                    if (source_control.DataContext is MpAvAppOlePresetViewModel clicked_format &&
+                        mivm.GetMenuPresetByPresetId(clicked_format.PresetId)
+                            is MpAvAppOlePresetMenuViewModel pvm) {
+                        // show ole menu opened to clicked preset
+                        MpAvAppOleMenuViewModelBase mvm = pvm.ParentObj as MpAvAppOleMenuViewModelBase;
+                        while (mvm != null) {
+                            mvm.IsSubMenuOpen = true;
+                            mvm = mvm.ParentObj as MpAvAppOleMenuViewModelBase;
+                        }
+                    }
+                }
 
                 var cm = MpAvMenuView.ShowMenu(
-                    c,
+                    anchor_control,
                     mivm,
                     showByPointer: false,
                     PlacementMode.TopEdgeAlignedLeft,
                     PopupAnchor.BottomRight,
                     offset);
 
-                if (c is MpAvContentWebView) {
-                    void _cmInstance_MenuClosed(object sender, RoutedEventArgs e) {
-                        if (c.DataContext is MpAvClipTileViewModel ctvm &&
-                            ctvm.GetContentView() is MpAvContentWebView cwv) {
-                            cwv.SendMessage("unexpandPasteButtonPopup_ext()");
-                        }
-                        cm.Closed -= _cmInstance_MenuClosed;
+                void _cmInstance_MenuClosed(object sender, RoutedEventArgs e) {
+                    cm.Closed -= _cmInstance_MenuClosed;
+
+                    if (source_control.DataContext is MpAvClipTileViewModel ctvm &&
+                        ctvm.GetContentView() is MpAvContentWebView cwv) {
+                        cwv.SendMessage("unexpandPasteButtonPopup_ext()");
                     }
-                    cm.Closed += _cmInstance_MenuClosed;
+
+                    if (GetAppByProcessInfo(pi) is MpAvAppViewModel avm) {
+                        avm.OleFormatInfos.CheckForCustomDefaultAsync().FireAndForgetSafeAsync();
+                    }
                 }
+                cm.Closed += _cmInstance_MenuClosed;
             });
         #endregion
     }

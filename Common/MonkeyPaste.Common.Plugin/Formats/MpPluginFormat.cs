@@ -27,6 +27,8 @@ namespace MonkeyPaste.Common.Plugin {
         [JsonIgnore]
         public object[] Components { get; set; } = null;
 
+        [JsonIgnore]
+        public bool IsManifestChangedFromBackup { get; set; }
 
         [JsonIgnore]
         public virtual MpPluginFormat backupCheckPluginFormat { get; set; }

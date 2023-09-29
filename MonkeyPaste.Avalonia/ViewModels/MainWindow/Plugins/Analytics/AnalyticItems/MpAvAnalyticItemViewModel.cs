@@ -390,6 +390,7 @@ namespace MonkeyPaste.Avalonia {
                 var naipvm = await CreatePresetViewModelAsync(preset);
                 Items.Add(naipvm);
             }
+            await MpAvPluginParameterBuilder.CleanupMissingParamsAsync(Items);
 
             OnPropertyChanged(nameof(Items));
 
@@ -556,6 +557,7 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine(sb.ToString());
             return false;
         }
+
 
         #endregion
 

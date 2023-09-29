@@ -4,7 +4,7 @@ using MonkeyPaste.Common.Plugin;
 
 namespace CoreOleHandler {
     public class CoreParamBuilder : MpISupportHeadlessClipboardComponentFormat {
-        const int DEF_MAX_TEXT = 100_000;
+        const int DEF_MAX_TEXT = -1;//10_000_000;
         const int MAX_MAX_TEXT = 1_000_000;
         string PluginGuid => "cf2ec03f-9edd-45e9-a605-2a2df71e03bd";
         string IconDir => @".\Resources\Images";
@@ -13,8 +13,8 @@ namespace CoreOleHandler {
                 (MpPortableDataFormats.Text,"Text",DEF_MAX_TEXT,"text.png"),
                 (MpPortableDataFormats.CefText,"Text (web)",DEF_MAX_TEXT,"text.png"),
                 (MpPortableDataFormats.AvRtf_bytes,"Rtf",DEF_MAX_TEXT,"rtf.png"),
-                (MpPortableDataFormats.AvHtml_bytes,"Html",DEF_MAX_TEXT,"html.png"),
-                (MpPortableDataFormats.CefHtml,"Html (web)",DEF_MAX_TEXT,"html.png"),
+                (MpPortableDataFormats.AvHtml_bytes,"Html",-1,"html.png"),
+                (MpPortableDataFormats.CefHtml,"Html (web)",-1,"html.png"),
                 (MpPortableDataFormats.LinuxSourceUrl,"Uri",-1,"html.png"),
                 (MpPortableDataFormats.AvPNG,"Png",-1,"bitmap.png"),
                 (MpPortableDataFormats.AvCsv,"Csv",DEF_MAX_TEXT,"csv.png"),

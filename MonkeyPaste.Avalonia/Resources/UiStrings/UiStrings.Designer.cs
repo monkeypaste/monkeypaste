@@ -832,15 +832,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string Settings {
-            get {
-                return ResourceManager.GetString("Settings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Account.
         /// </summary>
         public static string SettingsAccountTabLabel {
@@ -913,7 +904,16 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Customize.
+        ///   Looks up a localized string similar to Edit....
+        /// </summary>
+        public static string SettingsInteropAppOleFormatButtonPointerOverLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppOleFormatButtonPointerOverLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string SettingsInteropAppOleFormatDefaultButtonLabel {
             get {
@@ -936,15 +936,6 @@ namespace MonkeyPaste.Avalonia {
         public static string SettingsInteropAppOleFormatsHeaderHint {
             get {
                 return ResourceManager.GetString("SettingsInteropAppOleFormatsHeaderHint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Ole Formats.
-        /// </summary>
-        public static string SettingsInteropAppOleFormatsHeaderLabel {
-            get {
-                return ResourceManager.GetString("SettingsInteropAppOleFormatsHeaderLabel", resourceCulture);
             }
         }
         

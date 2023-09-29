@@ -1,29 +1,36 @@
 ﻿using MonkeyPaste.Common;
 using System.Linq;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppOleFormatMenuViewModel : MpAvAppOleMenuViewModelBase {
         #region Overrides
 
-        public override ICommand Command => new MpAsyncCommand<object>(
+        public override MpIAsyncCommand<object> CheckCommand => new MpAsyncCommand<object>(
             async (args) => {
+                // CASES:
+                // false - the first plugins first preset will goto checked
+                // true/null - all plugin formats will be toggled off
 
                 if (IsChecked.IsFalse()) {
                     // format has no preset selected, select first in submenu
                     if (SubItems.FirstOrDefault() is MpAvAppOlePluginMenuViewModel pmvm &&
                         pmvm.SubItems.FirstOrDefault() is MpAvAppOlePresetMenuViewModel prmvm) {
-                        prmvm.Command.Execute(null);
+                        await prmvm.CheckCommand.ExecuteAsync(this);
                     }
-                    return;
+                } else {
+                    // for either partial/checked deselect all
+                    var presets_to_deselect =
+                    SubItems
+                    .OfType<MpAvAppOlePluginMenuViewModel>()
+                    .SelectMany(x => x.SubItems)
+                    .OfType<MpAvAppOlePresetMenuViewModel>()
+                    .Where(x => x.IsChecked.IsTrue());
+
+                    foreach (var to_deselect in presets_to_deselect) {
+                        await to_deselect.CheckCommand.ExecuteAsync(this);
+                    }
                 }
-                // for either partial/checked deselect all
-                SubItems
-                .OfType<MpAvAppOlePluginMenuViewModel>()
-                .Select(x => x.SubItems)
-                .OfType<MpAvAppOlePresetMenuViewModel>()
-                .Where(x => x.IsChecked.IsTrue())
-                .ForEach(x => x.Command.Execute(null));
+
 
                 if (args == null) {
                     // was click source

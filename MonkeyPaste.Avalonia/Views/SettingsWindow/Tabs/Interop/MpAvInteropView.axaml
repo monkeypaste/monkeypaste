@@ -15,56 +15,39 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvInteropView">
     <local:MpAvUserControl.Styles>
 
-        <!--  DEFAULT OLE FORMAT BUTTON  -->
 
-        <Style Selector="DropDownButton#DefaultOrEmptyOleButton">
-            <Setter Property="Content">
-                <Setter.Value>
-                    <Template>
-                        <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatDefaultButtonLabel}" />
-                    </Template>
-                </Setter.Value>
-            </Setter>
+        <!--  OLE FORMAT BUTTON  -->
+
+        <Style Selector="DropDownButton.oleFormatButton /template/ PathIcon#DropDownGlyph">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+        <Style Selector="DropDownButton.oleFormatButton:pointerover /template/ PathIcon#DropDownGlyph">
+            <Setter Property="IsVisible"
+                    Value="True" />
         </Style>
 
-        <Style Selector="DropDownButton#DefaultOrEmptyOleButton.noop">
-            <Setter Property="Content">
-                <Setter.Value>
-                    <Template>
-                        <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
-                    </Template>
-                </Setter.Value>
-            </Setter>
+        <Style Selector="DropDownButton.oleFormatButton">
+            <Style.Resources>
+                <CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+                <Thickness x:Key="ButtonBorderThemeThickness">1.5</Thickness>
+            </Style.Resources>
+
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
         </Style>
+
+        <!--  FORMAT STRIP CMD ARG  -->
 
         <Style Selector="local|MpAvOleFormatStripView.read Button">
             <Setter Property="CommandParameter"
-                    Value="{Binding $parent[local:MpAvOleFormatStripView], ConverterParameter=read, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}" />
+                    Value="{Binding $self, ConverterParameter=read, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}" />
         </Style>
         <Style Selector="local|MpAvOleFormatStripView.write Button">
             <Setter Property="CommandParameter"
-                    Value="{Binding $parent[local:MpAvOleFormatStripView], ConverterParameter=write, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}" />
+                    Value="{Binding $self, ConverterParameter=write, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}" />
         </Style>
 
-        <!--<Style Selector="Grid.oleFormatContainer.custom DropDownButton">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
-        <Style Selector="Grid.oleFormatContainer.custom local|MpAvOleFormatStripView">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-
-        <Style Selector="DataGridCell:pointerover Grid.oleFormatContainer.custom DropDownButton">
-            <Setter Property="IsVisible"
-                    Value="True" />
-        </Style>
-
-        <Style Selector="DataGridCell:pointerover Grid.oleFormatContainer.custom local|MpAvOleFormatStripView">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>-->
     </local:MpAvUserControl.Styles>
     <StackPanel>
 
@@ -98,12 +81,12 @@
                         </DockPanel>
                     </DropDownButton>
                     <local:MpAvClipBorder Classes="filterDataGridContainer">
-
                         <!--  APP DATA GRID  -->
                         <DataGrid Grid.Row="1"
                                   x:Name="ExcludedAppDatagrid"
                                   ItemsSource="{Binding FilteredExternalItems}"
                                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+
                             <DataGrid.Columns>
 
                                 <!--  ICON  -->
@@ -231,24 +214,78 @@
 
                                                 <local:MpAvOleFormatStripView Classes="read"
                                                                               Cursor="Hand"
-                                                                              IsVisible="{Binding !IsVisible, ElementName=DefaultOrEmptyOleButton}"
                                                                               HorizontalAlignment="Center"
-                                                                              DataContext="{Binding Readers}" />
+                                                                              DataContext="{Binding Readers}">
+                                                    <local:MpAvOleFormatStripView.IsVisible>
+                                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                            <Binding Path="!IsVisible"
+                                                                     ElementName="DefaultOleButton" />
+                                                            <Binding Path="!IsVisible"
+                                                                     ElementName="NoopOleButton" />
+                                                        </MultiBinding>
+                                                    </local:MpAvOleFormatStripView.IsVisible>
+                                                </local:MpAvOleFormatStripView>
 
                                                 <!--  READER DEFAULT BUTTON  -->
 
-                                                <DropDownButton x:Name="DefaultOrEmptyOleButton"
-                                                                Classes="oleFormatButton defaultButton textOnlyButton contrastFg"
+                                                <DropDownButton x:Name="DefaultOleButton"
+                                                                Classes="oleFormatButton"
                                                                 Classes.noop="{Binding IsReadersOnlyNoOp}"
+                                                                HorizontalAlignment="Center"
+                                                                IsVisible="{Binding IsReaderDefault}"
+                                                                Command="{Binding ShowOleFormatMenuCommand}"
+                                                                CommandParameter="{Binding $self, ConverterParameter=read, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                                                    <DropDownButton.Resources>
+                                                        <SolidColorBrush x:Key="ButtonForeground">Blue</SolidColorBrush>
+                                                        <SolidColorBrush x:Key="ButtonBorderBrush">Blue</SolidColorBrush>
+
+                                                        <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
+                                                        <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground">White</SolidColorBrush>
+
+                                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Blue</SolidColorBrush>
+                                                        <SolidColorBrush x:Key="ButtonBackgroundPressed">White</SolidColorBrush>
+
+                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
+                                                        <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
+                                                    </DropDownButton.Resources>
+                                                    <DropDownButton.IsVisible>
+                                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                            <Binding Path="IsReaderDefault" />
+                                                            <Binding Path="!IsReadersOnlyNoOp" />
+                                                        </MultiBinding>
+                                                    </DropDownButton.IsVisible>
+
+                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatDefaultButtonLabel}" />
+                                                </DropDownButton>
+
+                                                <!--  READER NOOP BUTTON  -->
+
+                                                <DropDownButton x:Name="NoopOleButton"
+                                                                Classes="oleFormatButton"
                                                                 HorizontalAlignment="Center"
                                                                 Command="{Binding ShowOleFormatMenuCommand}"
                                                                 CommandParameter="{Binding $self, ConverterParameter=read, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                                                    <DropDownButton.Resources>
+                                                        <SolidColorBrush x:Key="ButtonForeground">Red</SolidColorBrush>
+                                                        <SolidColorBrush x:Key="ButtonBorderBrush">Red</SolidColorBrush>
+
+                                                        <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
+                                                        <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground">Black</SolidColorBrush>
+
+                                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Red</SolidColorBrush>
+                                                        <SolidColorBrush x:Key="ButtonBackgroundPressed">Black</SolidColorBrush>
+
+                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
+                                                        <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
+                                                    </DropDownButton.Resources>
+
                                                     <DropDownButton.IsVisible>
-                                                        <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                                                            <Binding Path="IsReaderDefault" />
+                                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                            <Binding Path="!IsReaderDefault" />
                                                             <Binding Path="IsReadersOnlyNoOp" />
                                                         </MultiBinding>
                                                     </DropDownButton.IsVisible>
+                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
                                                 </DropDownButton>
 
                                             </Grid>

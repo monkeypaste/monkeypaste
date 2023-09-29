@@ -556,9 +556,6 @@
   <data name="MainWindowTitleLockLabel" xml:space="preserve">
     <value>Lock</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value />
-  </data>
   <data name="SettingsAccountTabLabel" xml:space="preserve">
     <value>Account</value>
   </data>
@@ -620,16 +617,13 @@
     <value>Copy Shortcut</value>
   </data>
   <data name="SettingsInteropAppOleFormatDefaultButtonLabel" xml:space="preserve">
-    <value>Customize</value>
+    <value>Default</value>
   </data>
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
     <value>None</value>
   </data>
   <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
     <value>Only the selected OLE (clipboard or drag-and-drop operation) presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used.</value>
-  </data>
-  <data name="SettingsInteropAppOleFormatsHeaderLabel" xml:space="preserve">
-    <value>Ole Formats</value>
   </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
     <value>&lt;p&gt;Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.&lt;/p&gt;&lt;p&gt;Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)&lt;/p&gt;</value>
@@ -645,5 +639,8 @@
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
     <value>Writers</value>
+  </data>
+  <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
+    <value>Edit...</value>
   </data>
 </root>

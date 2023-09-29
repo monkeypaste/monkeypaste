@@ -381,11 +381,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // only once manifest is validated get manifest backup
-            plugin.backupCheckPluginFormat = GetLastLoadedBackupPluginFormat(plugin);
-            if (plugin.backupCheckPluginFormat == null) {
-                // initial backup create
-                plugin.backupCheckPluginFormat = CreateLastLoadedBackupPluginFormat(plugin);
-            }
+            UpdatePluginCache(plugin);
             return plugin;
         }
 
@@ -680,6 +676,18 @@ namespace MonkeyPaste.Avalonia {
             return objs.ToArray();
         }
 
+        #region Backup Cache
+
+        private static void UpdatePluginCache(MpPluginFormat plugin) {
+            plugin.backupCheckPluginFormat = GetLastLoadedBackupPluginFormat(plugin, out bool isOutOfDate);
+            plugin.IsManifestChangedFromBackup = isOutOfDate;
+
+            if (plugin.backupCheckPluginFormat == null) {
+                // initial backup create
+                plugin.backupCheckPluginFormat = CreateLastLoadedBackupPluginFormat(plugin);
+            }
+        }
+
         private static string GetCachedPluginFileName(MpPluginFormat plugin) {
             if (plugin == null || plugin.guid == null) {
                 return string.Empty;
@@ -687,7 +695,8 @@ namespace MonkeyPaste.Avalonia {
             return $"{plugin.guid}.json";
         }
 
-        public static MpPluginFormat GetLastLoadedBackupPluginFormat(MpPluginFormat plugin) {
+        public static MpPluginFormat GetLastLoadedBackupPluginFormat(MpPluginFormat plugin, out bool isBackupOutOfDate) {
+            isBackupOutOfDate = false;
             if (!PluginManifestBackupFolderPath.IsDirectory()) {
                 return null;
             }
@@ -697,18 +706,23 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
-            string backup_manifest_data = MpFileIo.ReadTextFromFile(backup_manifest_path);
-            if (!string.IsNullOrWhiteSpace(backup_manifest_data)) {
+            string plugin_json_str = plugin.SerializeJsonObject();
+            string backup_manifest_str = MpFileIo.ReadTextFromFile(backup_manifest_path);
+            // NOTE when backup doesn't match current manifest mark as out-of-date for reset in locators
+            isBackupOutOfDate = plugin_json_str != backup_manifest_str;
+            if (isBackupOutOfDate) {
+
+            }
+            if (!string.IsNullOrWhiteSpace(backup_manifest_str)) {
                 try {
-                    return MpJsonConverter.DeserializeObject<MpPluginFormat>(backup_manifest_data);
+                    return MpJsonConverter.DeserializeObject<MpPluginFormat>(backup_manifest_str);
                 }
                 catch (Exception ex) {
-                    MpConsole.WriteTraceLine($"Error deserializing backup manifest at path: '{backup_manifest_path}' with data: '{backup_manifest_data}' ex: ", ex);
+                    MpConsole.WriteTraceLine($"Error deserializing backup manifest at path: '{backup_manifest_path}' with data: '{backup_manifest_str}' ex: ", ex);
                 }
             }
 
             // no backup or it is corrupt
-            string plugin_json_str = plugin.SerializeJsonObject();
             MpFileIo.WriteTextToFile(backup_manifest_path, plugin_json_str, false);
 
             return MpJsonConverter.DeserializeObject<MpPluginFormat>(plugin_json_str);
@@ -731,6 +745,7 @@ namespace MonkeyPaste.Avalonia {
             return MpJsonConverter.DeserializeObject<MpPluginFormat>(plugin_json_str);
         }
 
+        #endregion
         #endregion
     }
 }

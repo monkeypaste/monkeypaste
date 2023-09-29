@@ -15,8 +15,9 @@ namespace MonkeyPaste.Avalonia {
             var db_presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(presetHost.PluginGuid);
 
             bool isNew = db_presets.Count == 0;
-            bool isManifestModified = db_presets.Any(x => x.ManifestLastModifiedDateTime < presetHost.PluginFormat.manifestLastModifiedDateTime);
-            bool needsReset = isNew || isManifestModified;
+            bool has_manifest_changed = presetHost.PluginFormat.IsManifestChangedFromBackup;
+            bool is_any_preset_out_of_date = db_presets.Any(x => x.ManifestLastModifiedDateTime < presetHost.PluginFormat.manifestLastModifiedDateTime);
+            bool needsReset = isNew || is_any_preset_out_of_date || has_manifest_changed;
             if (needsReset) {
 
                 while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {

@@ -49,6 +49,8 @@ namespace MonkeyPaste.Avalonia {
         // NOTE NoOp is primarily used to differentiate
         // a default app with one that has NO formats to read/write repectively
         // primarily used during deselect all but can also be intended i guess
+        public bool IsAllNoOp =>
+            IsReadersOnlyNoOp && IsWritersOnlyNoOp;
         public bool IsReadersOnlyNoOp =>
             Readers.Count == 1 &&
             NoOpReader != null;
@@ -56,15 +58,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsWritersOnlyNoOp =>
             Writers.Count == 1 &&
             NoOpWriter != null;
-        public bool HasCustomReaders =>
-            !IsReadersOnlyNoOp &&
-            Readers.Any();
-
-        public bool HasCustomWriters =>
-            !IsWritersOnlyNoOp &&
-            Writers.Any();
-
-
 
         public bool IsAnyBusy =>
             IsBusy || Items.Any(x => x.IsBusy);
@@ -121,6 +114,7 @@ namespace MonkeyPaste.Avalonia {
                 Items
                 .Where(x => x.IsReaderAppPreset == isReader && !x.IsNoOpReaderOrWriter)
                 .Count() == 1;
+
             await aopvm.AppOlePreset.DeleteFromDatabaseAsync();
             Items.Remove(aopvm);
             if (needs_no_op) {
@@ -136,48 +130,40 @@ namespace MonkeyPaste.Avalonia {
             MpAppOlePreset new_aofi = await MpAppOlePreset.CreateAsync(
                     appId: Parent.AppId,
                     presetId: presetId);
-            if (Items.FirstOrDefault(x => x.AppOlePresetId == new_aofi.Id) is MpAvAppOlePresetViewModel aopvm) {
+            if (Items.FirstOrDefault(x => x.AppOlePresetId == new_aofi.Id)
+                    is MpAvAppOlePresetViewModel aopvm) {
                 // preset is dup
-                MpDebug.Assert(new_aofi.WasDupOnCreate, $"app ole items and db out of sync");
+                MpDebug.Break($"app ole items and db out of sync");
                 return aopvm;
             } else {
                 MpDebug.Assert(!new_aofi.WasDupOnCreate, $"app ole items and db out of sync");
             }
             var aofivm = await CreateAppOlePresetViewModel(new_aofi);
 
-            if (aofivm.IsNoOpReaderOrWriter) {
-                // before adding no op, get any presets for this format
-
-                var to_remove =
-                        Items
-                        .Where(x =>
-                            x.ClipboardPresetViewModel != null &&
-                            x.ClipboardPresetViewModel.FormatName == aofivm.ClipboardPresetViewModel.FormatName &&
-                            x.ClipboardPresetViewModel.IsReader == aofivm.IsReaderAppPreset)
-                        .Distinct();
-
-                // add no op BEFORE removing others so remove doesn't trigger default
-                Items.Add(aofivm);
-
-                // remove everything but no op for this format
-                foreach (var pmvm in to_remove) {
-                    await RemoveAppOlePresetViewModelByPresetIdAsync(pmvm.AppOlePresetId);
-                }
-
-            } else {
-                Items.Add(aofivm);
-                bool is_cur_no_op = aofivm.IsReaderAppPreset ? IsReadersOnlyNoOp : IsWritersOnlyNoOp;
-                if (is_cur_no_op) {
-                    // remove no op for this format
-                    int no_op_id = aofivm.IsReaderAppPreset ? MpAppOlePreset.NO_OP_READER_ID : MpAppOlePreset.NO_OP_WRITER_ID;
+            if (aofivm.IsReaderAppPreset) {
+                if (aofivm.IsReaderNoOp) {
+                    MpDebug.Assert(Readers.Count == 0, $"No op reader error, all readers should be removed before adding no op");
+                } else if (IsReadersOnlyNoOp) {
+                    // remove no op reader
                     await RemoveAppOlePresetViewModelByPresetIdAsync(NoOpReader.PresetId);
                 }
+            } else {
+                if (aofivm.IsWriterNoOp) {
+                    MpDebug.Assert(Readers.Count == 0, $"No op writer error, all writers should be removed before adding no op");
+                } else if (IsWritersOnlyNoOp) {
+                    // remove no op writer
+                    await RemoveAppOlePresetViewModelByPresetIdAsync(NoOpWriter.PresetId);
+                }
             }
+            Items.Add(aofivm);
 
             return aofivm;
 
         }
         public bool IsFormatEnabledByPresetId(int presetId) {
+            if (presetId == 2) {
+
+            }
             return GetAppOleFormatInfoByPresetId(presetId) != null;
         }
         public MpAvAppOlePresetViewModel GetAppOleFormatInfoByPresetId(int presetId) {
@@ -185,6 +171,22 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             return Items.FirstOrDefault(x => x.PresetId == presetId);
+        }
+        public async Task CheckForCustomDefaultAsync() {
+            if (IsDefault || IsAllNoOp) {
+                return;
+            }
+            bool is_unique =
+                Items
+                .Select(x => x.PresetId)
+                .Difference(MpAvClipboardHandlerCollectionViewModel.Instance.EnabledFormats.Select(x => x.PresetId))
+                .Any();
+            if (is_unique) {
+                return;
+            }
+            // app settings have gone back to current default state, remove all so its clearly default and treated as such
+            await Task.WhenAll(Items.Select(x => x.AppOlePreset.DeleteFromDatabaseAsync()));
+            Items.Clear();
         }
         #endregion
 
@@ -232,12 +234,21 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            RefreshOleStateProps();
+        }
+
+        private void RefreshOleStateProps() {
             OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(IsReaderDefault));
+            OnPropertyChanged(nameof(IsWriterDefault));
             OnPropertyChanged(nameof(IsReadersOnlyNoOp));
             OnPropertyChanged(nameof(IsWritersOnlyNoOp));
             OnPropertyChanged(nameof(Readers));
             OnPropertyChanged(nameof(Writers));
+
+
         }
+
         #endregion
 
         #region Commands

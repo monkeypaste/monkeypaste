@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Windows.Input;
+﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppOleRootMenuViewModel : MpAvAppOleMenuViewModelBase {
@@ -8,8 +9,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Overrides
 
+        public override MpIAsyncCommand<object> CheckCommand =>
+            null;
         public override MpMenuItemType MenuItemType => MpMenuItemType.Default;
-        public override ICommand Command => null;
 
         public override string Header =>
             "Formats";
@@ -45,6 +47,20 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvAppOleReaderOrWriterMenuViewModel(this, false)
                 };
             }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public MpAvAppOlePresetMenuViewModel GetMenuPresetByPresetId(int presetId) {
+            foreach (var opvm in SubItems.Cast<MpAvAppOleReaderOrWriterMenuViewModel>()) {
+                if (opvm.Presets.FirstOrDefault(y => y.ClipboardPresetViewModel.PresetId == presetId)
+                    is MpAvAppOlePresetMenuViewModel pvm) {
+                    return pvm;
+                }
+            }
+            return null;
         }
         #endregion
     }

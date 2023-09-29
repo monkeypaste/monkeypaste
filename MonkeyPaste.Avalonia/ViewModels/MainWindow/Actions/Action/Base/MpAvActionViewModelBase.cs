@@ -943,8 +943,7 @@ namespace MonkeyPaste.Avalonia {
                 var param_values = await MpAvPluginParameterValueLocator.LocateValuesAsync(
                     MpParameterHostType.Action, ActionId, this);
                 foreach (var param_format in param_values) {
-                    var param_vm =
-                        await CreateActionParameterViewModel(param_format);
+                    var param_vm = await CreateActionParameterViewModel(param_format);
                     ActionArgs.Add(param_vm);
                 }
 

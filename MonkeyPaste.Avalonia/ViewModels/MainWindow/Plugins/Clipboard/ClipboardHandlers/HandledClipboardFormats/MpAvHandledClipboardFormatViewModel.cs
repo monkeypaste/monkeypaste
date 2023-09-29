@@ -298,7 +298,7 @@ namespace MonkeyPaste.Avalonia {
                 var naipvm = await CreatePresetViewModelAsync(preset);
                 Items.Add(naipvm);
             }
-
+            await MpAvPluginParameterBuilder.CleanupMissingParamsAsync(Items);
             OnPropertyChanged(nameof(Items));
 
             while (Items.Any(x => x.IsBusy)) {
@@ -464,6 +464,20 @@ namespace MonkeyPaste.Avalonia {
             bool needs_fixing = error_notifications.Count > 0;
             MpDebug.Assert(!needs_fixing, sb.ToString());
             return isValid;
+        }
+
+        private async Task CleanupMissingParamsAsync() {
+            var presets_w_missing_params =
+                Items
+                .Where(x => x.Items.Any(x => x is MpAvMissingParameterViewModel));
+            foreach (var pvm in presets_w_missing_params) {
+                var missing_params = pvm.Items.OfType<MpAvMissingParameterViewModel>().ToList();
+                for (int i = 0; i < missing_params.Count; i++) {
+                    await missing_params[i].PresetValueModel.DeleteFromDatabaseAsync();
+                    pvm.Items.Remove(missing_params[i]);
+                }
+            }
+
         }
         #endregion
 

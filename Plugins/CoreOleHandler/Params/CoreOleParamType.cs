@@ -1,5 +1,6 @@
 ﻿namespace CoreOleHandler {
     public enum CoreOleParamType {
+        None = 0,
         //readers
         TEXT_R_MAXCHARCOUNT,
         TEXT_R_IGNORE,

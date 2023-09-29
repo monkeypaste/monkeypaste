@@ -1,44 +1,25 @@
 ﻿using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppOleReaderOrWriterMenuViewModel : MpAvAppOleMenuViewModelBase {
         #region Overrides
 
-        public override ICommand Command => new MpAsyncCommand<object>(
+        public override MpIAsyncCommand<object> CheckCommand => new MpAsyncCommand<object>(
             async (args) => {
+                // CASES:
+                // false - for every format, the first plugins first preset will goto checked
+                // true/null - all formats will be toggled off
 
-                MpAvAppViewModel avm = MenuArg as MpAvAppViewModel;
-                if (avm == null &&
-                    MenuArg is MpPortableProcessInfo pi) {
-                    avm = await MpAvAppCollectionViewModel.Instance.AddOrGetAppByProcessInfoAsync(pi);
+                // NOTE this level doesn't care about check state it always just
+                // passes behavior to formats
+                var formats =
+                    SubItems
+                    .OfType<MpAvAppOleFormatMenuViewModel>();
+                foreach (var format in formats) {
+                    await format.CheckCommand.ExecuteAsync(this);
                 }
-                int no_op_id = IsReader ? MpAppOlePreset.NO_OP_READER_ID : MpAppOlePreset.NO_OP_WRITER_ID;
-                if (IsChecked.IsFalse()) {
-                    // must be no op
-
-                    await avm.OleFormatInfos.RemoveAppOlePresetViewModelByPresetIdAsync(no_op_id);
-                } else {
-                    // check if custom
-                    if (!avm.OleFormatInfos.IsDefault) {
-                        // remove custom formats
-                        var to_uncheck =
-                            Presets
-                            .Where(x => x.IsChecked.IsTrue())
-                            .Distinct();
-
-                        foreach (var pmvm in to_uncheck) {
-                            if (pmvm.Command is MpAsyncCommand<object> acmd) {
-                                await acmd.ExecuteAsync(false);
-                            }
-                        }
-                    }
-                    // add no op
-                    await avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(no_op_id);
-                }
-
                 if (args == null) {
                     // was click source
                     RefreshChecks(true);

@@ -1,18 +1,34 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Plugin;
+﻿using MonkeyPaste.Common.Plugin;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginParameterBuilder {
-        public static async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(
-            MpAvViewModelBase parent,
-            MpParameterFormat pf) {
-            var result = await CreateParameterViewModelAsync_internal(pf.controlType, null, parent);
-            return result;
+        public static async Task CleanupMissingParamsAsync(IEnumerable<MpAvIParameterCollectionViewModel> phcvml) {
+            // let locator create missing params then delete and remove after loaded
+
+            var presets_w_missing_params =
+                phcvml
+                .Where(x => x.Items.Any(x => x is MpAvMissingParameterViewModel));
+            foreach (var pvm in presets_w_missing_params) {
+                var new_items = pvm.Items.ToList();
+                var missing_params = pvm.Items.OfType<MpAvMissingParameterViewModel>().ToList();
+                for (int i = 0; i < missing_params.Count; i++) {
+                    // delete missing parameter
+                    await missing_params[i].PresetValueModel.DeleteFromDatabaseAsync();
+                    new_items.Remove(missing_params[i]);
+                }
+                if (pvm.Items is ObservableCollection<MpAvParameterViewModelBase> pvmil) {
+                    // reset preset parameters to set w/o missing params
+                    pvmil.Clear();
+                    new_items.ForEach(x => pvmil.Add(x));
+                }
+            }
         }
+
         public static async Task<MpAvParameterViewModelBase> CreateParameterViewModelAsync(
             MpParameterValue aipv,
             MpIParameterHostViewModel host) {
@@ -20,8 +36,8 @@ namespace MonkeyPaste.Avalonia {
             var param = host.ComponentFormat.parameters.FirstOrDefault(x => x.paramId == aipv.ParamId);
             if (param == null) {
                 // must be a bug still with reset preset, check 
-                MpDebug.Break($"Reset preset error for host {host}");
-                return null;
+                //MpDebug.Break($"Reset preset error for host {host}");
+                return new MpAvMissingParameterViewModel(host as MpAvViewModelBase);
             }
             controlType = param.controlType;
             var result = await CreateParameterViewModelAsync_internal(controlType, aipv, host as MpAvViewModelBase);

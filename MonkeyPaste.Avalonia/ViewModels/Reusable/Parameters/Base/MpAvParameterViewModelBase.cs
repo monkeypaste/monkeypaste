@@ -3,17 +3,23 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Navigation;
 //using Newtonsoft.Json;
 //using SQLite;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvParameterViewModelBase :
+    public class MpAvMissingParameterViewModel : MpAvParameterViewModelBase {
+        public MpAvMissingParameterViewModel() : this(null) { }
+        public MpAvMissingParameterViewModel(MpAvViewModelBase parent) : base(null) {
+            ParameterFormat = new MpParameterFormat() {
+                isVisible = false
+            };
+        }
+    }
+    public abstract class MpAvParameterViewModelBase :
         MpAvViewModelBase<MpAvViewModelBase>,
         MpITreeItemViewModel,
         MpIFilterMatch,

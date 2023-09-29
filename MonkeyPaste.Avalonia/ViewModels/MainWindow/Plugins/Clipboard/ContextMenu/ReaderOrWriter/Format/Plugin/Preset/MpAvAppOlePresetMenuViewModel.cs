@@ -1,5 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppOlePresetMenuViewModel : MpAvAppOleMenuViewModelBase {
@@ -16,12 +15,14 @@ namespace MonkeyPaste.Avalonia {
                         avm.OleFormatInfos.IsReaderDefault :
                         avm.OleFormatInfos.IsWriterDefault;
                 if (is_default) {
-                    return true;
+                    //return true;
+
+                    return ClipboardPresetViewModel.IsEnabled;
                 }
                 return avm.OleFormatInfos.IsFormatEnabledByPresetId(ClipboardPresetViewModel.PresetId);
             }
         }
-        public override ICommand Command => new MpAsyncCommand<object>(
+        public override MpIAsyncCommand<object> CheckCommand => new MpAsyncCommand<object>(
             async (args) => {
                 await ClipboardPresetViewModel.TogglePresetIsEnabledCommand.ExecuteAsync(MenuArg);
                 if (args == null) {
@@ -36,6 +37,7 @@ namespace MonkeyPaste.Avalonia {
         public override object IconSourceObj =>
             ClipboardPresetViewModel.IconId;
 
+
         #endregion
 
         public MpAvClipboardFormatPresetViewModel ClipboardPresetViewModel { get; set; }
@@ -45,6 +47,12 @@ namespace MonkeyPaste.Avalonia {
             ClipboardPresetViewModel = preset;
             RelativeRoot.Presets.Add(this);
         }
+
+        #endregion
+
+        #region Private Methods
+
+
         #endregion
 
     }

@@ -1,43 +1,49 @@
 ﻿using MonkeyPaste.Common;
 using System.Linq;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAppOlePluginMenuViewModel : MpAvAppOleMenuViewModelBase {
         #region Overrides
 
-        public override ICommand Command => new MpAsyncCommand<object>(
+        public override MpIAsyncCommand<object> CheckCommand => new MpAsyncCommand<object>(
             async (args) => {
+                // CASES:
+                // false - all siblings are toggled off, then this plugins first preset will goto checked
+                // true/null - all formats will be toggled off
+
                 if (IsChecked.IsFalse()) {
                     // plugin has no select presets for this format
 
                     // deselect any selected sibling presets 
+                    var parent_sib_presets_to_deselect =
                     (ParentObj as MpAvAppOleFormatMenuViewModel)
                     .SubItems
                     .Where(x => x != this)
                     .OfType<MpAvAppOlePluginMenuViewModel>()
                     .SelectMany(x => x.SubItems)
                     .OfType<MpAvAppOlePresetMenuViewModel>()
-                    .Where(x => x.IsChecked.IsTrue())
-                    .ForEach(x => x.Command.Execute(null));
+                    .Where(x => x.IsChecked.IsTrue());
+
+                    foreach (var to_deselect in parent_sib_presets_to_deselect) {
+                        await to_deselect.CheckCommand.ExecuteAsync(this);
+                    }
 
                     //then select first child preset
+                    await SubItems
+                    .OfType<MpAvAppOlePresetMenuViewModel>()
+                    .FirstOrDefault().CheckCommand.ExecuteAsync(this);
+                } else {
+                    // for true/null partial/checked deselect all
+                    var presets_to_deselect =
                     SubItems
                     .OfType<MpAvAppOlePresetMenuViewModel>()
-                    .FirstOrDefault().Command.Execute(null);
+                    .Where(x => x.IsChecked.IsTrue());
 
-                    if (args == null) {
-                        // was click source
-                        RefreshChecks(true);
+                    foreach (var to_deselect in presets_to_deselect) {
+                        await to_deselect.CheckCommand.ExecuteAsync(this);
                     }
-                    return;
                 }
 
-                // for true/null partial/checked deselect all
-                SubItems
-                .OfType<MpAvAppOlePresetMenuViewModel>()
-                .Where(x => x.IsChecked.IsTrue())
-                .ForEach(x => x.Command.Execute(null));
                 if (args == null) {
                     // was click source
                     RefreshChecks(true);
@@ -49,7 +55,6 @@ namespace MonkeyPaste.Avalonia {
 
         public override object IconSourceObj =>
             ClipboardPluginViewModel.PluginIconId;
-
         #endregion
 
 

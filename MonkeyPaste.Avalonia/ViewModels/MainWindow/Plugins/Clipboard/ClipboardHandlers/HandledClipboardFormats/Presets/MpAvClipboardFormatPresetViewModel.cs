@@ -449,6 +449,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                     return;
                 }
+                // app preset toggle
+
                 bool cur_def_enabled = IsEnabled;
                 MpAvAppViewModel avm = args as MpAvAppViewModel;
 
@@ -458,11 +460,30 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpDebug.Assert(avm != null, $"Error toggling preset for arg '{args}'");
 
+                if (avm.OleFormatInfos.IsDefault) {
+                    // when avm is default that means it has NO formats stored so re-create
+                    // currently state before 'toggling'
+
+                    var default_preset_ids =
+                        MpAvClipboardHandlerCollectionViewModel.Instance
+                        .EnabledFormats
+                        .Select(x => x.PresetId);
+
+                    // CRITICAL SECTION
+                    // when avm becomes non-default and enabled presets are stored 
+                    // this should only happen ONCE so toggling in parallel is BAD
+                    foreach (var preset_id in default_preset_ids) {
+                        await avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(preset_id);
+                    }
+
+                    MpDebug.Assert(!avm.OleFormatInfos.IsDefault, $"app '{avm}' should have non-default ole at this point");
+                }
+
+
                 if (avm.OleFormatInfos.GetAppOleFormatInfoByPresetId(PresetId) is MpAvAppOlePresetViewModel aofivm) {
                     // format exists, remove
                     await avm.OleFormatInfos.RemoveAppOlePresetViewModelByPresetIdAsync(PresetId);
                 } else {
-
                     await avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(PresetId);
                 }
 

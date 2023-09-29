@@ -35,12 +35,16 @@ function getRandomColor() {
 }
 
 function getRandomPaletteColor() {
-    let color_idx = Math.floor(Math.random() * globals.ContentColors.length - 1);
-    while (get2dIdx(color_idx, globals.COLOR_PALETTE_COL_COUNT)[1] == globals.COLOR_PALETTE_COL_COUNT - 1) {
-        // ignore last column
-        color_idx = Math.floor(Math.random() * globals.ContentColors.length - 1);
+    let result = null;
+    while (isNullOrUndefined(result)) {
+
+        let color_idx = Math.floor(Math.random() * globals.ContentColors.length - 1);
+        if (color_idx % (globals.COLOR_PALETTE_COL_COUNT - 1) == 0) {
+            color_idx = color_idx - 1;
+        }
+        result = globals.ContentColors[color_idx];
     }
-    return globals.ContentColors[color_idx];
+    return result;
 }
 
 function getColorObjType(color) {
@@ -150,37 +154,38 @@ function isRgbFuzzyBlackOrWhite(rgb) {
 
 // #region Actions
 
-function parseRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
+function parseRgba(colorObj) {
+    if (isString(colorObj) && colorObj.startsWith('var(')) {
+        return hexToRgba(getRandomPaletteColor());
+    }
+
     const fallback_rgba = { r: 0, g: 0, b: 0, a: 0 };
-    if (isNullOrUndefined(rgb_Or_rgba_Or_colorName_Or_hex_Str)) {
+    if (isNullOrUndefined(colorObj)) {
         return fallback_rgba;
     }
     let rgba = null;
-    if (isString(rgb_Or_rgba_Or_colorName_Or_hex_Str)) {
+    if (isString(colorObj)) {
         // is string
-        if (isNullOrWhiteSpace(rgb_Or_rgba_Or_colorName_Or_hex_Str)) {
+        if (isNullOrWhiteSpace(colorObj)) {
             return fallback_rgba;
         }
-        if (rgb_Or_rgba_Or_colorName_Or_hex_Str.startsWith('var(')) {
-            // css variable 
-            // (occurs in plain html conversion)
-            // NOTE since no way to get value or know its usage,
-            // and this probably a bad idea but substituting it for a random hex color
-            rgb_Or_rgba_Or_colorName_Or_hex_Str = getRandomPaletteColor()
+
+        if (colorObj === undefined) {
+            debugger;
         }
-        if (rgb_Or_rgba_Or_colorName_Or_hex_Str.startsWith('#')) {
+        if (colorObj.startsWith('#')) {
             // is hex color string
-            rgba = hexToRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str);
+            rgba = hexToRgba(colorObj);
             return rgba;
         }
-        let hex = colorNameToHex(rgb_Or_rgba_Or_colorName_Or_hex_Str);
+        let hex = colorNameToHex(colorObj);
         if (hex) {
             // is color name
             rgba = hexToRgba(hex);
             return rgba;
         }
         // rgb or rgba color
-        rgba = rgbaCssStrToRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str);
+        rgba = rgbaCssStrToRgba(colorObj);
         if (!rgba) {
             // what is the data?
             debugger;
@@ -188,11 +193,11 @@ function parseRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str) {
         }
         return rgba;
     }
-    if (rgb_Or_rgba_Or_colorName_Or_hex_Str.r === undefined) {
+    if (colorObj.r === undefined) {
         // what is the data?
         debugger;
     }
-    return rgb_Or_rgba_Or_colorName_Or_hex_Str;
+    return colorObj;
 }
 
 function rgbaToRgbaStyle(rgba) {
