@@ -15,7 +15,6 @@
                        x:Class="MonkeyPaste.Avalonia.MpAvInteropView">
     <local:MpAvUserControl.Styles>
 
-
         <!--  OLE FORMAT BUTTON  -->
 
         <Style Selector="DropDownButton.oleFormatButton /template/ PathIcon#DropDownGlyph">
@@ -29,7 +28,7 @@
 
         <Style Selector="DropDownButton.oleFormatButton">
             <Style.Resources>
-                <CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+                <!--<CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>-->
                 <Thickness x:Key="ButtonBorderThemeThickness">1.5</Thickness>
             </Style.Resources>
 
@@ -49,391 +48,628 @@
         </Style>
 
     </local:MpAvUserControl.Styles>
-    <StackPanel>
+    <StackPanel x:DataType="local:MpAvAppCollectionViewModel"
+                DataContext="{x:Static local:MpAvAppCollectionViewModel.Instance}">
 
-        <!--  APPS  -->
+        <!--  CLIPBOARD FORMATS  -->
+
         <Expander Classes="header">
+            <Expander.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="FilterText"
+                             Source="{x:Static local:MpAvSettingsViewModel.Instance}"
+                             Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                    <Binding Path="CustomClipboardFormatItems"
+                             Source="{x:Static local:MpAvAppCollectionViewModel.Instance}"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                </MultiBinding>
+            </Expander.IsVisible>
             <Expander.Header>
                 <StackPanel Classes="header expander"
                             Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                           Source="{Binding Source={StaticResource ClipboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
-                               Text="{x:Static local:UiStrings.SettingsInteropAppsLabel}" />
+                               Text="{x:Static local:UiStrings.SettingsInteropFormatsHeaderTitle}" />
+
+                    <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppOleFormatsHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
+
             <Expander.Content>
-                <DockPanel Classes="dataPanel"
-                           VerticalAlignment="Top"
-                           x:DataType="local:MpAvAppCollectionViewModel"
-                           DataContext="{x:Static local:MpAvAppCollectionViewModel.Instance}">
+                <DockPanel Classes="dataPanel">
 
                     <!--  ADD APP BUTTON  -->
 
-                    <DropDownButton DockPanel.Dock="Bottom"
-                                    HorizontalAlignment="Right"
-                                    Classes="defaultButton iconTextButton dataGridAddButton"
-                                    Command="{Binding AddAppCommand}">
+                    <DropDownButton Classes="defaultButton iconTextButton dataGridAddButton"
+                                    Command="{Binding ShowAddAppPopupMenuCommand}"
+                                    CommandParameter="{Binding $self, ConverterParameter=formats, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
                         <DockPanel>
-                            <Image DockPanel.Dock="Left"
-                                   Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            <Image Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                             <Label Content="{x:Static local:UiStrings.SettingsInteropAddAppButtonLabel}" />
                         </DockPanel>
                     </DropDownButton>
+
+                    <!--  FORMATS DATAGRID  -->
+
                     <local:MpAvClipBorder Classes="filterDataGridContainer">
-                        <!--  APP DATA GRID  -->
-                        <DataGrid Grid.Row="1"
-                                  x:Name="ExcludedAppDatagrid"
-                                  ItemsSource="{Binding FilteredExternalItems}"
-                                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                        <Grid>
+                            <DataGrid local:MpAvDataGridRefreshExtension.IsEnabled="False"
+                                      IsVisible="{Binding CustomClipboardFormatItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                      ItemsSource="{Binding CustomClipboardFormatItems}">
+                                <DataGrid.Columns>
 
-                            <DataGrid.Columns>
+                                    <!--  APP ICON  -->
 
-                                <!--  ICON  -->
+                                    <DataGridTemplateColumn Width="Auto"
+                                                            CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-                                <DataGridTemplateColumn Width="30"
-                                                        CanUserResize="False">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="local:MpAvAppViewModel">
-                                            <Image Width="15"
-                                                   Height="15"
-                                                   Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                    <!--  APP NAME  -->
+                                    <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropAppNameHeaderLabel}"
+                                                            CanUserSort="True"
+                                                            SortMemberPath="AppDisplayName"
+                                                            Width="150">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid Classes="marqueeContainer">
+                                                    <local:MpAvMarqueeTextBox Text="{Binding AppDisplayName}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-                                <!--  APP NAME  -->
-                                <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropAppNameHeaderLabel}"
-                                                        CanUserSort="True"
-                                                        SortMemberPath="AppName"
-                                                        Width="0.2*">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="local:MpAvAppViewModel">
-                                            <Grid Classes="marqueeContainer">
-                                                <local:MpAvMarqueeTextBox EditOnFocus="False"
-                                                                          DropShadowBrush="Transparent"
-                                                                          ReadOnlyForeground="Black"
-                                                                          SelectViewModelOnFocus="False"
-                                                                          NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                                                          NavigateUriCommandParameter="{Binding AppPath, Converter={x:Static local:MpAvFileToFolderPathConverter.Instance}}"
-                                                                          NavigateUriRequiredKeyString="Alt"
-                                                                          Text="{Binding AppName}">
+                                    <!--  READER FORMATS  -->
 
-                                                    <ToolTip.Tip>
-                                                        <local:MpAvToolTipView ToolTipText="{Binding AppPath, StringFormat='Alt Click to browse to \n {0}'}" />
-                                                    </ToolTip.Tip>
-                                                </local:MpAvMarqueeTextBox>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn CanUserSort="False"
+                                                            Width="0.5*">
+                                        <DataGridTemplateColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal"
+                                                            Spacing="5">
+                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppReadHeaderLabel}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.HeaderTemplate>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate DataType="local:MpAvAppViewModel">
+                                                <Grid Classes="oleFormatContainer"
+                                                      x:DataType="local:MpAvAppOleFormatInfoCollectionViewModel"
+                                                      Margin="3"
+                                                      DataContext="{Binding OleFormatInfos}">
 
-                                <!--  COPY SHORTCUT  -->
+                                                    <!--  READER CUSTOM STRIP  -->
 
-                                <DataGridTemplateColumn CanUserSort="True"
-                                                        SortMemberPath="CopyShortcutViewModel.ShortcutCmdKeyString"
-                                                        Width="Auto">
-                                    <DataGridTemplateColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal"
-                                                        Spacing="5">
-                                                <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderLabel}" />
-                                                <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderHint}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.HeaderTemplate>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="local:MpAvAppViewModel">
-                                            <Grid DataContext="{Binding CopyShortcutViewModel}"
-                                                  x:DataType="local:MpAvAppClipboardShortcutViewModel">
-                                                <local:MpAvShortcutView Classes="active"
-                                                                        Background="Transparent"
-                                                                        Margin="5"
-                                                                        HorizontalAlignment="Stretch"
-                                                                        VerticalAlignment="Stretch"
-                                                                        HorizontalContentAlignment="Center"
-                                                                        VerticalContentAlignment="Center"
-                                                                        RecordCommand="{Binding RecordShortcutCommand}" />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                                    <local:MpAvOleFormatStripView Classes="read"
+                                                                                  Cursor="Hand"
+                                                                                  IsVisible="{Binding !IsVisible, ElementName=NoopOleReaderButton}"
+                                                                                  HorizontalAlignment="Center"
+                                                                                  DataContext="{Binding Readers}" />
 
-                                <!--  PASTE SHORTCUT  -->
+                                                    <!--  READER NOOP BUTTON  -->
 
-                                <DataGridTemplateColumn CanUserSort="True"
-                                                        SortMemberPath="PasteShortcutViewModel.ShortcutCmdKeyString"
-                                                        Width="Auto">
-                                    <DataGridTemplateColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal"
-                                                        Spacing="5">
-                                                <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderLabel}" />
-                                                <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.HeaderTemplate>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="local:MpAvAppViewModel">
-                                            <Grid DataContext="{Binding PasteShortcutViewModel}"
-                                                  x:DataType="local:MpAvAppClipboardShortcutViewModel">
-                                                <local:MpAvShortcutView Classes="active"
-                                                                        Background="Transparent"
-                                                                        Margin="5"
-                                                                        HorizontalAlignment="Stretch"
-                                                                        VerticalAlignment="Stretch"
-                                                                        HorizontalContentAlignment="Center"
-                                                                        VerticalContentAlignment="Center"
-                                                                        RecordCommand="{Binding RecordShortcutCommand}" />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                                    <DropDownButton x:Name="NoopOleReaderButton"
+                                                                    Classes="oleFormatButton"
+                                                                    IsVisible="{Binding IsReadersOnlyNoOp}"
+                                                                    HorizontalAlignment="Center"
+                                                                    Command="{Binding ShowOleFormatMenuCommand}"
+                                                                    CommandParameter="{Binding $self, ConverterParameter=read, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                                                        <DropDownButton.Resources>
+                                                            <SolidColorBrush x:Key="ButtonForeground">Red</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonBorderBrush">Red</SolidColorBrush>
 
-                                <!--  READER FORMATS  -->
+                                                            <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground">Black</SolidColorBrush>
 
-                                <DataGridTemplateColumn CanUserSort="False"
-                                                        Width="Auto">
-                                    <DataGridTemplateColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal"
-                                                        Spacing="5">
-                                                <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppReadHeaderLabel}" />
-                                                <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppOleFormatsHeaderHint}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.HeaderTemplate>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="local:MpAvAppViewModel">
-                                            <Grid Classes="oleFormatContainer"
-                                                  x:DataType="local:MpAvAppOleFormatInfoCollectionViewModel"
-                                                  Margin="3"
-                                                  DataContext="{Binding OleFormatInfos}">
+                                                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Red</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonBackgroundPressed">Black</SolidColorBrush>
 
-                                                <!--  READER CUSTOM STRIP  -->
+                                                            <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
+                                                        </DropDownButton.Resources>
+                                                        <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
+                                                    </DropDownButton>
 
-                                                <local:MpAvOleFormatStripView Classes="read"
-                                                                              Cursor="Hand"
-                                                                              HorizontalAlignment="Center"
-                                                                              DataContext="{Binding Readers}">
-                                                    <local:MpAvOleFormatStripView.IsVisible>
-                                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                                            <Binding Path="!IsVisible"
-                                                                     ElementName="DefaultOleButton" />
-                                                            <Binding Path="!IsVisible"
-                                                                     ElementName="NoopOleButton" />
-                                                        </MultiBinding>
-                                                    </local:MpAvOleFormatStripView.IsVisible>
-                                                </local:MpAvOleFormatStripView>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-                                                <!--  READER DEFAULT BUTTON  -->
+                                    <!--  WRITER FORMATS  -->
 
-                                                <DropDownButton x:Name="DefaultOleButton"
-                                                                Classes="oleFormatButton"
-                                                                Classes.noop="{Binding IsReadersOnlyNoOp}"
-                                                                HorizontalAlignment="Center"
-                                                                IsVisible="{Binding IsReaderDefault}"
-                                                                Command="{Binding ShowOleFormatMenuCommand}"
-                                                                CommandParameter="{Binding $self, ConverterParameter=read, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
-                                                    <DropDownButton.Resources>
-                                                        <SolidColorBrush x:Key="ButtonForeground">Blue</SolidColorBrush>
-                                                        <SolidColorBrush x:Key="ButtonBorderBrush">Blue</SolidColorBrush>
+                                    <DataGridTemplateColumn CanUserSort="False"
+                                                            Width="0.5*">
+                                        <DataGridTemplateColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal"
+                                                            Spacing="5">
+                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppWriteHeaderLabel}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.HeaderTemplate>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate DataType="local:MpAvAppViewModel">
+                                                <Grid Classes="oleFormatContainer"
+                                                      x:DataType="local:MpAvAppOleFormatInfoCollectionViewModel"
+                                                      Margin="3"
+                                                      DataContext="{Binding OleFormatInfos}">
 
-                                                        <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
-                                                        <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground">White</SolidColorBrush>
+                                                    <!--  WRITER CUSTOM STRIP  -->
 
-                                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Blue</SolidColorBrush>
-                                                        <SolidColorBrush x:Key="ButtonBackgroundPressed">White</SolidColorBrush>
+                                                    <local:MpAvOleFormatStripView Classes="write"
+                                                                                  Cursor="Hand"
+                                                                                  IsVisible="{Binding !IsVisible, ElementName=NoopOleWriterButton}"
+                                                                                  HorizontalAlignment="Center"
+                                                                                  DataContext="{Binding Writers}" />
 
-                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
-                                                        <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
-                                                    </DropDownButton.Resources>
-                                                    <DropDownButton.IsVisible>
-                                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                                            <Binding Path="IsReaderDefault" />
-                                                            <Binding Path="!IsReadersOnlyNoOp" />
-                                                        </MultiBinding>
-                                                    </DropDownButton.IsVisible>
+                                                    <!--  WRITER NOOP BUTTON  -->
 
-                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatDefaultButtonLabel}" />
-                                                </DropDownButton>
+                                                    <DropDownButton x:Name="NoopOleWriterButton"
+                                                                    Classes="oleFormatButton"
+                                                                    IsVisible="{Binding IsWritersOnlyNoOp}"
+                                                                    HorizontalAlignment="Center"
+                                                                    Command="{Binding ShowOleFormatMenuCommand}"
+                                                                    CommandParameter="{Binding $self, ConverterParameter=write, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                                                        <DropDownButton.Resources>
+                                                            <SolidColorBrush x:Key="ButtonForeground">Red</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonBorderBrush">Red</SolidColorBrush>
 
-                                                <!--  READER NOOP BUTTON  -->
+                                                            <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground">Black</SolidColorBrush>
 
-                                                <DropDownButton x:Name="NoopOleButton"
-                                                                Classes="oleFormatButton"
-                                                                HorizontalAlignment="Center"
-                                                                Command="{Binding ShowOleFormatMenuCommand}"
-                                                                CommandParameter="{Binding $self, ConverterParameter=read, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
-                                                    <DropDownButton.Resources>
-                                                        <SolidColorBrush x:Key="ButtonForeground">Red</SolidColorBrush>
-                                                        <SolidColorBrush x:Key="ButtonBorderBrush">Red</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Red</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonBackgroundPressed">Black</SolidColorBrush>
 
-                                                        <SolidColorBrush x:Key="ButtonBackground">Transparent</SolidColorBrush>
-                                                        <SolidColorBrush x:Key="ComboBoxDropDownGlyphForeground">Black</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
+                                                            <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
+                                                        </DropDownButton.Resources>
+                                                        <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
+                                                    </DropDownButton>
 
-                                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Red</SolidColorBrush>
-                                                        <SolidColorBrush x:Key="ButtonBackgroundPressed">Black</SolidColorBrush>
-
-                                                        <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
-                                                        <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
-                                                    </DropDownButton.Resources>
-
-                                                    <DropDownButton.IsVisible>
-                                                        <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                                            <Binding Path="!IsReaderDefault" />
-                                                            <Binding Path="IsReadersOnlyNoOp" />
-                                                        </MultiBinding>
-                                                    </DropDownButton.IsVisible>
-                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
-                                                </DropDownButton>
-
-                                            </Grid>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-
-                                <DataGridTemplateColumn Width="100"
-                                                        CanUserSort="True"
-                                                        CanUserResize="False"
-                                                        SortMemberPath="IsRejected">
-
-                                    <DataGridTemplateColumn.HeaderTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal"
-                                                        Spacing="5">
-                                                <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppBlockHeaderLabel}" />
-                                                <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppRejectHeaderHint}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.HeaderTemplate>
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate DataType="local:MpAvAppViewModel">
-                                            <CheckBox Command="{Binding ToggleIsRejectedCommand}"
-                                                      IsChecked="{Binding IsRejected, Mode=OneWay}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
 
-                            </DataGrid.Columns>
-                        </DataGrid>
+                                    <!--  DELETE BUTTON  -->
+                                    <DataGridTemplateColumn Width="Auto"
+                                                            Header="{x:Static local:UiStrings.CommonDeleteLabel}"
+                                                            CanUserSort="False"
+                                                            CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button x:Name="DeleteAppPasteButton"
+                                                        Classes="defaultButton outline outlineOver"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Command="{Binding RemoveAppComponentCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
+                                                        CommandParameter="{Binding ., ConverterParameter=formats, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                                                    <Image Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                                </Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <TextBlock IsVisible="{Binding CustomClipboardFormatItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                       Classes="emptyTextBlock"
+                                       Text="{x:Static local:UiStrings.CommonEmptyListText}" />
+                        </Grid>
                     </local:MpAvClipBorder>
                 </DockPanel>
+
             </Expander.Content>
         </Expander>
 
-        <!--  WEBSITES  -->
+        <!--  CLIPBOARD SHORTCUTS  -->
         <Expander Classes="header">
+            <Expander.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="FilterText"
+                             Source="{x:Static local:MpAvSettingsViewModel.Instance}"
+                             Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                    <Binding Path="CustomClipboardShortcutItems"
+                             Source="{x:Static local:MpAvAppCollectionViewModel.Instance}"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                </MultiBinding>
+            </Expander.IsVisible>
+            <Expander.Header>
+                <StackPanel Classes="header expander">
+                    <Image Classes="expander header icon"
+                           Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    <TextBlock Classes="expander header"
+                               Text="{x:Static local:UiStrings.SettingsInteropShortcutsHeaderTitle}" />
+                    <local:MpAvToolTipInfoHintView Classes="expander header warning"
+                                                   ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
+                </StackPanel>
+            </Expander.Header>
+            <Expander.Content>
+                <DockPanel Classes="dataPanel">
+
+                    <!--  ADD APP BUTTON  -->
+
+                    <DropDownButton Classes="defaultButton iconTextButton dataGridAddButton"
+                                    Command="{Binding ShowAddAppPopupMenuCommand}"
+                                    CommandParameter="{Binding $self, ConverterParameter=shortcuts, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                        <DockPanel>
+                            <Image Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                            <Label Content="{x:Static local:UiStrings.SettingsInteropAddAppButtonLabel}" />
+                        </DockPanel>
+                    </DropDownButton>
+
+                    <!--  SHORTCUTS DATAGRID  -->
+
+                    <local:MpAvClipBorder Classes="filterDataGridContainer">
+                        <Grid>
+                            <DataGrid x:Name="ShortcutDatagrid"
+                                      local:MpAvDataGridRefreshExtension.IsEnabled="True"
+                                      IsVisible="{Binding CustomClipboardShortcutItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                      ItemsSource="{Binding CustomClipboardShortcutItems}">
+                                <DataGrid.Columns>
+
+                                    <!--  APP ICON  -->
+
+                                    <DataGridTemplateColumn Width="Auto"
+                                                            CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!--  APP NAME  -->
+                                    <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropAppNameHeaderLabel}"
+                                                            CanUserSort="True"
+                                                            SortMemberPath="AppDisplayName"
+                                                            Width="*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid Classes="marqueeContainer">
+                                                    <local:MpAvMarqueeTextBox Text="{Binding AppDisplayName}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+
+                                    <!--  COPY GESTURE VIEW  -->
+                                    <DataGridTemplateColumn Width="Auto">
+                                        <DataGridTemplateColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal"
+                                                            Spacing="5">
+                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderLabel}" />
+                                                    <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppCopyShortcutHeaderHint}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.HeaderTemplate>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid DataContext="{Binding CopyShortcutViewModel}"
+                                                      x:DataType="local:MpAvAppClipboardShortcutViewModel">
+                                                    <local:MpAvShortcutView RecordCommand="{Binding RecordShortcutCommand}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!--  PASTE GESTURE VIEW  -->
+                                    <DataGridTemplateColumn Width="Auto">
+                                        <DataGridTemplateColumn.HeaderTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal"
+                                                            Spacing="5">
+                                                    <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderLabel}" />
+                                                    <local:MpAvToolTipInfoHintView ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppPasteShortcutHeaderHint}" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.HeaderTemplate>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Grid DataContext="{Binding PasteShortcutViewModel}"
+                                                      x:DataType="local:MpAvAppClipboardShortcutViewModel">
+
+                                                    <local:MpAvShortcutView RecordCommand="{Binding RecordShortcutCommand}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!--  DELETE BUTTON  -->
+                                    <DataGridTemplateColumn Width="Auto"
+                                                            Header="{x:Static local:UiStrings.CommonDeleteLabel}"
+                                                            CanUserSort="False"
+                                                            CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button x:Name="DeleteAppPasteButton"
+                                                        Classes="defaultButton outline outlineOver"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Command="{Binding RemoveAppComponentCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
+                                                        CommandParameter="{Binding ., ConverterParameter=shortcuts, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                                                    <Image Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                                </Button>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <TextBlock IsVisible="{Binding CustomClipboardShortcutItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                       Classes="emptyTextBlock"
+                                       Text="{x:Static local:UiStrings.CommonEmptyListText}" />
+                        </Grid>
+                    </local:MpAvClipBorder>
+                </DockPanel>
+
+            </Expander.Content>
+        </Expander>
+
+        <!--  BLOCKED SOURCES  -->
+        <Expander Classes="header">
+
+            <Expander.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="IsVisible"
+                             ElementName="BlockedAppExpander" />
+                    <Binding Path="IsVisible"
+                             ElementName="BlockedUrlExpander" />
+                </MultiBinding>
+            </Expander.IsVisible>
             <Expander.Header>
                 <StackPanel Classes="header expander"
                             Orientation="Horizontal">
                     <Image Classes="expander header icon"
-                           Source="{Binding Source={StaticResource WebImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                           Source="{Binding Source={StaticResource ShieldImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
-                               Text="{x:Static local:UiStrings.SettingsInteropUrlsLabel}" />
+                               Text="{x:Static local:UiStrings.SettingsInteropRejectedHeaderTitle}" />
                     <local:MpAvToolTipInfoHintView Classes="expander header warning"
-                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropUrlHintText}" />
+                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppRejectHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
-            <DockPanel Classes="dataPanel"
-                       VerticalAlignment="Top"
-                       x:DataType="local:MpAvUrlCollectionViewModel"
-                       DataContext="{x:Static local:MpAvUrlCollectionViewModel.Instance}">
-                <Button DockPanel.Dock="Bottom"
-                        HorizontalAlignment="Right"
-                        Classes="defaultButton iconTextButton dataGridAddButton"
-                        Command="{Binding AddUrlCommand}">
-                    <DockPanel>
-                        <Image DockPanel.Dock="Left"
-                               Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                        <Label Content="{x:Static local:UiStrings.SettingsInteropAddUrlButtonLabel}" />
-                    </DockPanel>
-                </Button>
+            <Expander.Content>
 
-                <local:MpAvClipBorder Classes="filterDataGridContainer">
-                    <DataGrid x:Name="ExcludedUrlDatagrid"
-                              CanUserResizeColumns="True"
-                              ItemsSource="{Binding FilteredItems}"
-                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Width="30"
-                                                    CanUserResize="False">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvUrlViewModel">
-                                        <Image Width="15"
-                                               Height="15"
-                                               Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropUrlNameHeaderLabel}"
-                                                    CanUserSort="True"
-                                                    SortMemberPath="UrlPath"
-                                                    Width="*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvUrlViewModel">
-                                        <Grid Classes="marqueeContainer">
-                                            <local:MpAvMarqueeTextBox EditOnFocus="False"
-                                                                      DropShadowBrush="Transparent"
-                                                                      ReadOnlyForeground="Black"
-                                                                      Text="{Binding UrlPath}"
-                                                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
-                                                                      NavigateUriCommandParameter="{Binding UrlPath}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropUrlDomainHeaderLabel}"
-                                                    CanUserSort="True"
-                                                    SortMemberPath="UrlDomainPath"
-                                                    Width="Auto">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvUrlViewModel">
-                                        <Grid Classes="marqueeContainer">
-                                            <local:MpAvMarqueeTextBox EditOnFocus="False"
-                                                                      DropShadowBrush="Transparent"
-                                                                      ReadOnlyForeground="Black"
-                                                                      Text="{Binding UrlDomainPath}" />
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="120"
-                                                    CanUserResize="False"
-                                                    SortMemberPath="IsUrlRejected">
+                <StackPanel Spacing="10"
+                            Orientation="Vertical">
+                    <!--  BLOCKED APPS  -->
+                    <Expander x:Name="BlockedAppExpander"
+                              Classes="header">
+                        <Expander.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                                <Binding Path="FilterText"
+                                         Source="{x:Static local:MpAvSettingsViewModel.Instance}"
+                                         Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                                <Binding Path="RejectedItems"
+                                         Source="{x:Static local:MpAvAppCollectionViewModel.Instance}"
+                                         Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                            </MultiBinding>
+                        </Expander.IsVisible>
+                        <Expander.Header>
+                            <StackPanel Classes="header expander"
+                                        Orientation="Horizontal">
+                                <Image Classes="expander header icon"
+                                       Source="{Binding Source={StaticResource AppFrameImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                                <TextBlock Classes="expander header"
+                                           Text="{x:Static local:UiStrings.SettingsInteropRejectedAppsHeaderLabel}" />
+                            </StackPanel>
+                        </Expander.Header>
+                        <Expander.Content>
 
-                                <DataGridTemplateColumn.HeaderTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal"
-                                                    Spacing="5">
-                                            <TextBlock Text="{x:Static local:UiStrings.SettingsInteropUrlBlockUrlHeaderLabel}" />
+                            <DockPanel Classes="dataPanel">
 
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.HeaderTemplate>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvUrlViewModel">
-                                        <CheckBox Command="{Binding ToggleIsUrlRejectedCommand}"
-                                                  IsChecked="{Binding IsUrlRejected, Mode=OneWay}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="120"
-                                                    CanUserResize="False"
-                                                    SortMemberPath="IsDomainRejected"
-                                                    Header="{x:Static local:UiStrings.SettingsInteropUrlBlockDomainHeaderLabel}">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="local:MpAvUrlViewModel">
-                                        <CheckBox Command="{Binding ToggleIsDomainRejectedCommand}"
-                                                  IsChecked="{Binding IsDomainRejected, Mode=OneWay}" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </local:MpAvClipBorder>
-            </DockPanel>
+                                <!--  ADD APP BUTTON  -->
+
+                                <DropDownButton Classes="defaultButton iconTextButton dataGridAddButton"
+                                                Command="{Binding ShowAddAppPopupMenuCommand}"
+                                                CommandParameter="{Binding $self, ConverterParameter=rejects, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                                    <DockPanel>
+                                        <Image Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                        <Label Content="{x:Static local:UiStrings.SettingsInteropAddAppButtonLabel}" />
+                                    </DockPanel>
+                                </DropDownButton>
+
+                                <!--  REJECTED APPS DATAGRID  -->
+
+                                <local:MpAvClipBorder Classes="filterDataGridContainer">
+                                    <Grid>
+                                        <DataGrid local:MpAvDataGridRefreshExtension.IsEnabled="True"
+                                                  IsVisible="{Binding RejectedItems, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                  ItemsSource="{Binding RejectedItems}">
+                                            <DataGrid.Columns>
+
+                                                <!--  APP ICON  -->
+
+                                                <DataGridTemplateColumn Width="Auto"
+                                                                        CanUserResize="False">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Image Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+
+                                                <!--  APP NAME  -->
+                                                <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropAppNameHeaderLabel}"
+                                                                        CanUserSort="True"
+                                                                        SortMemberPath="AppDisplayName"
+                                                                        Width="*">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Grid Classes="marqueeContainer">
+                                                                <local:MpAvMarqueeTextBox Text="{Binding AppDisplayName}" />
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+
+                                                <!--  DELETE BUTTON  -->
+                                                <DataGridTemplateColumn Width="Auto"
+                                                                        Header="{x:Static local:UiStrings.CommonDeleteLabel}"
+                                                                        CanUserSort="False"
+                                                                        CanUserResize="False">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Button x:Name="DeleteAppPasteButton"
+                                                                    Classes="defaultButton outline outlineOver"
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"
+                                                                    Command="{Binding RemoveAppComponentCommand, Source={x:Static local:MpAvAppCollectionViewModel.Instance}}"
+                                                                    CommandParameter="{Binding ., ConverterParameter=rejects, Converter={x:Static local:MpAvObjectToObjectArrayConverter.Instance}}">
+                                                                <Image Source="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                                            </Button>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                        <TextBlock IsVisible="{Binding RejectedItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                   Classes="emptyTextBlock"
+                                                   Text="{x:Static local:UiStrings.CommonEmptyListText}" />
+                                    </Grid>
+                                </local:MpAvClipBorder>
+                            </DockPanel>
+
+                        </Expander.Content>
+                    </Expander>
+
+                    <!--  BLOCKED WEBSITES  -->
+                    <Expander x:Name="BlockedUrlExpander"
+                              Classes="header"
+                              x:DataType="local:MpAvUrlCollectionViewModel"
+                              DataContext="{x:Static local:MpAvUrlCollectionViewModel.Instance}">
+                        <Expander.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                                <Binding Path="FilterText"
+                                         Source="{x:Static local:MpAvSettingsViewModel.Instance}"
+                                         Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                                <Binding Path="RejectedItems"
+                                         Source="{x:Static local:MpAvUrlCollectionViewModel.Instance}"
+                                         Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                            </MultiBinding>
+                        </Expander.IsVisible>
+                        <Expander.Header>
+                            <StackPanel Classes="header expander"
+                                        Orientation="Horizontal">
+                                <Image Classes="expander header icon"
+                                       Source="{Binding Source={StaticResource GlobeImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                                <TextBlock Classes="expander header"
+                                           Text="{x:Static local:UiStrings.SettingsInteropRejectedUrlsHeaderLabel}" />
+                                <local:MpAvToolTipInfoHintView Classes="expander header warning"
+                                                               ToolTipText="{x:Static local:UiStrings.SettingsInteropUrlHintText}" />
+                            </StackPanel>
+                        </Expander.Header>
+                        <Expander.Content>
+                            <DockPanel Classes="dataPanel"
+                                       VerticalAlignment="Top"
+                                       x:DataType="local:MpAvUrlCollectionViewModel"
+                                       DataContext="{x:Static local:MpAvUrlCollectionViewModel.Instance}">
+                                <Button DockPanel.Dock="Bottom"
+                                        HorizontalAlignment="Right"
+                                        Classes="defaultButton iconTextButton dataGridAddButton"
+                                        Command="{Binding AddUrlCommand}">
+                                    <DockPanel>
+                                        <Image DockPanel.Dock="Left"
+                                               Source="{Binding Source={StaticResource AddImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                        <Label Content="{x:Static local:UiStrings.SettingsInteropAddUrlButtonLabel}" />
+                                    </DockPanel>
+                                </Button>
+
+                                <local:MpAvClipBorder Classes="filterDataGridContainer">
+                                    <DataGrid x:Name="ExcludedUrlDatagrid"
+                                              CanUserResizeColumns="True"
+                                              ItemsSource="{Binding FilteredItems}"
+                                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                                        <DataGrid.Columns>
+                                            <DataGridTemplateColumn Width="30"
+                                                                    CanUserResize="False">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate DataType="local:MpAvUrlViewModel">
+                                                        <Image Width="15"
+                                                               Height="15"
+                                                               Source="{Binding IconId, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropUrlNameHeaderLabel}"
+                                                                    CanUserSort="True"
+                                                                    SortMemberPath="UrlPath"
+                                                                    Width="*">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate DataType="local:MpAvUrlViewModel">
+                                                        <Grid Classes="marqueeContainer">
+                                                            <local:MpAvMarqueeTextBox EditOnFocus="False"
+                                                                                      DropShadowBrush="Transparent"
+                                                                                      ReadOnlyForeground="Black"
+                                                                                      Text="{Binding UrlPath}"
+                                                                                      NavigateUriCommand="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                                                                      NavigateUriCommandParameter="{Binding UrlPath}" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropUrlDomainHeaderLabel}"
+                                                                    CanUserSort="True"
+                                                                    SortMemberPath="UrlDomainPath"
+                                                                    Width="Auto">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate DataType="local:MpAvUrlViewModel">
+                                                        <Grid Classes="marqueeContainer">
+                                                            <local:MpAvMarqueeTextBox EditOnFocus="False"
+                                                                                      DropShadowBrush="Transparent"
+                                                                                      ReadOnlyForeground="Black"
+                                                                                      Text="{Binding UrlDomainPath}" />
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Width="120"
+                                                                    CanUserResize="False"
+                                                                    SortMemberPath="IsUrlRejected">
+
+                                                <DataGridTemplateColumn.HeaderTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Spacing="5">
+                                                            <TextBlock Text="{x:Static local:UiStrings.SettingsInteropUrlBlockUrlHeaderLabel}" />
+
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.HeaderTemplate>
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate DataType="local:MpAvUrlViewModel">
+                                                        <CheckBox Command="{Binding ToggleIsUrlRejectedCommand}"
+                                                                  IsChecked="{Binding IsUrlRejected, Mode=OneWay}" />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                            <DataGridTemplateColumn Width="120"
+                                                                    CanUserResize="False"
+                                                                    SortMemberPath="IsDomainRejected"
+                                                                    Header="{x:Static local:UiStrings.SettingsInteropUrlBlockDomainHeaderLabel}">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate DataType="local:MpAvUrlViewModel">
+                                                        <CheckBox Command="{Binding ToggleIsDomainRejectedCommand}"
+                                                                  IsChecked="{Binding IsDomainRejected, Mode=OneWay}" />
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </local:MpAvClipBorder>
+                            </DockPanel>
+
+                        </Expander.Content>
+                    </Expander>
+                </StackPanel>
+
+            </Expander.Content>
         </Expander>
     </StackPanel>
 </local:MpAvUserControl>

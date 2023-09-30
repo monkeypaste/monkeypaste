@@ -197,8 +197,8 @@ namespace MonkeyPaste.Avalonia {
 
             if (to_delete_cil != null && to_delete_cil.Any()) {
                 var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
-                    title: $"Remove associated clips?",
-                    message: $"Would you also like to remove all {to_delete_cil.Count()} clips from '{(isDomain ? UrlDomainPath : UrlPath)}'",
+                    title: UiStrings.NtfRejectRemoveClipsTitle,
+                    message: string.Format(UiStrings.NtfRejectRemoveClipsBody, to_delete_cil.Count(), (isDomain ? UrlDomainPath : UrlPath)),
                     iconResourceObj: IconId);
                 if (result.IsNull()) {
                     // flag as cancel so cmd will untoggle reject

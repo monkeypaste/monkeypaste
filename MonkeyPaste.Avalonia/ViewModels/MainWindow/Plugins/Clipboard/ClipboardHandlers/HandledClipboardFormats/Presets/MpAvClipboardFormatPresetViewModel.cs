@@ -464,17 +464,7 @@ namespace MonkeyPaste.Avalonia {
                     // when avm is default that means it has NO formats stored so re-create
                     // currently state before 'toggling'
 
-                    var default_preset_ids =
-                        MpAvClipboardHandlerCollectionViewModel.Instance
-                        .EnabledFormats
-                        .Select(x => x.PresetId);
-
-                    // CRITICAL SECTION
-                    // when avm becomes non-default and enabled presets are stored 
-                    // this should only happen ONCE so toggling in parallel is BAD
-                    foreach (var preset_id in default_preset_ids) {
-                        await avm.OleFormatInfos.AddAppOlePresetViewModelByPresetIdAsync(preset_id);
-                    }
+                    await avm.OleFormatInfos.CreateDefaultInfosAsync();
 
                     MpDebug.Assert(!avm.OleFormatInfos.IsDefault, $"app '{avm}' should have non-default ole at this point");
                 }

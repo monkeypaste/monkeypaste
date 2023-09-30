@@ -357,32 +357,10 @@ namespace MonkeyPaste.Avalonia {
             Dictionary<string, IntPtr> windows = new Dictionary<string, IntPtr>();
 
             EnumWindows(delegate (IntPtr hWnd, int lParam) {
-                if (hWnd == shellWindow) {
-                    return true;
-                }
-                if (!IsWindowVisible(hWnd)) {
-                    return true;
-                }
-
                 try {
-                    GetWindowThreadProcessId(hWnd, out uint pid);
-                    var process = Process.GetProcessById((int)pid);
-                    if (process.MainWindowHandle == IntPtr.Zero) {
+                    if (!IsHandleWindowProcess(hWnd)) {
                         return true;
                     }
-
-                    int length = WinApi.GetWindowTextLength(hWnd);
-
-                    if (length == 0 || !WinApi.IsWindow(hWnd)) {
-                        return true;
-                    }
-
-                    //if(MpHelpers.IsThisAppAdmin()) {
-                    //    process.WaitForInputIdle(100);
-                    //}
-
-                    //StringBuilder builder = new StringBuilder(length);
-                    //WinApi.GetWindowText(hWnd, builder, length + 1);
                     string process_path = GetProcessPath(hWnd);
                     if (string.IsNullOrEmpty(process_path)) {
                         return true;

@@ -149,7 +149,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else {
                 if (aofivm.IsWriterNoOp) {
-                    MpDebug.Assert(Readers.Count == 0, $"No op writer error, all writers should be removed before adding no op");
+                    MpDebug.Assert(Writers.Count == 0, $"No op writer error, all writers should be removed before adding no op");
                 } else if (IsWritersOnlyNoOp) {
                     // remove no op writer
                     await RemoveAppOlePresetViewModelByPresetIdAsync(NoOpWriter.PresetId);
@@ -185,6 +185,25 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             // app settings have gone back to current default state, remove all so its clearly default and treated as such
+            await Task.WhenAll(Items.Select(x => x.AppOlePreset.DeleteFromDatabaseAsync()));
+            Items.Clear();
+        }
+
+        public async Task CreateDefaultInfosAsync() {
+            var default_preset_ids =
+                        MpAvClipboardHandlerCollectionViewModel.Instance
+                        .EnabledFormats
+                        .Select(x => x.PresetId);
+
+            // CRITICAL SECTION
+            // when avm becomes non-default and enabled presets are stored 
+            // this should only happen ONCE so toggling in parallel is BAD
+            foreach (var preset_id in default_preset_ids) {
+                await AddAppOlePresetViewModelByPresetIdAsync(preset_id);
+            }
+        }
+
+        public async Task RemoveAllCustomInfoAsync() {
             await Task.WhenAll(Items.Select(x => x.AppOlePreset.DeleteFromDatabaseAsync()));
             Items.Clear();
         }
@@ -245,7 +264,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsWritersOnlyNoOp));
             OnPropertyChanged(nameof(Readers));
             OnPropertyChanged(nameof(Writers));
-
 
         }
 

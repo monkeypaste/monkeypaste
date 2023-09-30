@@ -56,7 +56,7 @@
         <DockPanel>
             <Image x:Name="PopupImage"
                    Grid.Column="0"
-                    DockPanel.Dock="Left"
+                   DockPanel.Dock="Left"
                    Height="25"
                    Width="25"
                    Source="{Binding SelectedIconResourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
@@ -92,6 +92,7 @@
                     CornerRadius="3"
                     Background="Transparent">
                 <local:MpAvMarqueeTextBox Padding="3"
+                                          MinWidth="80"
                                           Margin="7,3,0,0"
                                           EditOnFocus="False"
                                           IsReadOnly="True"

@@ -625,6 +625,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Would you also like to remove all {0} clips from &apos;{1}&apos;.
+        /// </summary>
+        public static string NtfRejectRemoveClipsBody {
+            get {
+                return ResourceManager.GetString("NtfRejectRemoveClipsBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Clips?.
+        /// </summary>
+        public static string NtfRejectRemoveClipsTitle {
+            get {
+                return ResourceManager.GetString("NtfRejectRemoveClipsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Credits:.
         /// </summary>
         public static string PluginBrowserCreditsLabel {
@@ -850,7 +868,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Application.
+        ///   Looks up a localized string similar to Add App.
         /// </summary>
         public static string SettingsInteropAddAppButtonLabel {
             get {
@@ -873,6 +891,51 @@ namespace MonkeyPaste.Avalonia {
         public static string SettingsInteropAppBlockHeaderLabel {
             get {
                 return ResourceManager.GetString("SettingsInteropAppBlockHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application.
+        /// </summary>
+        public static string SettingsInteropAppBrowseToAppFilterLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppBrowseToAppFilterLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse to app....
+        /// </summary>
+        public static string SettingsInteropAppBrowseToAppMenuItemLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppBrowseToAppMenuItemLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select application path.
+        /// </summary>
+        public static string SettingsInteropAppBrowseToAppPickerTitle {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppBrowseToAppPickerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove custom formats for {0}?.
+        /// </summary>
+        public static string SettingsInteropAppConfirmRemoveFormatsBody {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppConfirmRemoveFormatsBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove custom shortcuts for {1}.
+        /// </summary>
+        public static string SettingsInteropAppConfirmRemoveShortcutsBody {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppConfirmRemoveShortcutsBody", resourceCulture);
             }
         }
         
@@ -931,7 +994,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only the selected OLE (clipboard or drag-and-drop operation) presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used..
+        ///   Looks up a localized string similar to Only the selected presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used..
         /// </summary>
         public static string SettingsInteropAppOleFormatsHeaderHint {
             get {
@@ -976,15 +1039,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Known Applications.
-        /// </summary>
-        public static string SettingsInteropAppsLabel {
-            get {
-                return ResourceManager.GetString("SettingsInteropAppsLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Writers.
         /// </summary>
         public static string SettingsInteropAppWriteHeaderLabel {
@@ -994,7 +1048,52 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interop.
+        ///   Looks up a localized string similar to Formats.
+        /// </summary>
+        public static string SettingsInteropFormatsHeaderTitle {
+            get {
+                return ResourceManager.GetString("SettingsInteropFormatsHeaderTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apps.
+        /// </summary>
+        public static string SettingsInteropRejectedAppsHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropRejectedAppsHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rejected.
+        /// </summary>
+        public static string SettingsInteropRejectedHeaderTitle {
+            get {
+                return ResourceManager.GetString("SettingsInteropRejectedHeaderTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Websites.
+        /// </summary>
+        public static string SettingsInteropRejectedUrlsHeaderLabel {
+            get {
+                return ResourceManager.GetString("SettingsInteropRejectedUrlsHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shortcuts.
+        /// </summary>
+        public static string SettingsInteropShortcutsHeaderTitle {
+            get {
+                return ResourceManager.GetString("SettingsInteropShortcutsHeaderTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy &amp; Paste.
         /// </summary>
         public static string SettingsInteropTabLabel {
             get {
@@ -1044,15 +1143,6 @@ namespace MonkeyPaste.Avalonia {
         public static string SettingsInteropUrlNameHeaderLabel {
             get {
                 return ResourceManager.GetString("SettingsInteropUrlNameHeaderLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Websites.
-        /// </summary>
-        public static string SettingsInteropUrlsLabel {
-            get {
-                return ResourceManager.GetString("SettingsInteropUrlsLabel", resourceCulture);
             }
         }
         

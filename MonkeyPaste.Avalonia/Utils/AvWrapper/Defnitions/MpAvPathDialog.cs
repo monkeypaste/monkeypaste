@@ -1,8 +1,6 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Input.GestureRecognizers;
 using Avalonia.Platform.Storage;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.IO;

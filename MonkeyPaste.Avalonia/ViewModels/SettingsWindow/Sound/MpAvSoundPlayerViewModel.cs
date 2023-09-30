@@ -1,9 +1,9 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using NetCoreAudio;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -216,25 +216,27 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand PlayCustomSoundCommand => new MpAsyncCommand<object>(
             async (args) => {
+                await Dispatcher.UIThread.InvokeAsync(async () => {
+                    if (args is object[] argParts) {
+                        string sound_path = argParts[0] as string;
+                        double norm_sound_vol = (double)argParts[1];
+                        while (_player.Playing) {
+                            MpConsole.WriteLine($"Sound already playing, waiting to play '{sound_path}'...");
+                            await Task.Delay(100);
+                        }
 
-                if (args is object[] argParts) {
-                    string sound_path = argParts[0] as string;
-                    double norm_sound_vol = (double)argParts[1];
-                    while (_player.Playing) {
-                        MpConsole.WriteLine($"Sound already playing, waiting to play '{sound_path}'...");
-                        await Task.Delay(100);
+                        // sound played from action ntf
+                        await UpdateVolumeCommand.ExecuteAsync(norm_sound_vol);
+
+                        await _player.Play(sound_path);
+
+                        while (_player.Playing) {
+                            await Task.Delay(100);
+                        }
+                        await UpdateVolumeCommand.ExecuteAsync(null);
                     }
+                });
 
-                    // sound played from action ntf
-                    await UpdateVolumeCommand.ExecuteAsync(norm_sound_vol);
-
-                    await _player.Play(sound_path);
-
-                    while (_player.Playing) {
-                        await Task.Delay(100);
-                    }
-                    await UpdateVolumeCommand.ExecuteAsync(null);
-                }
             }, (args) => IsSoundEnabled);
         public ICommand PlaySoundNotificationCommand => new MpAsyncCommand<object>(
             async (args) => {

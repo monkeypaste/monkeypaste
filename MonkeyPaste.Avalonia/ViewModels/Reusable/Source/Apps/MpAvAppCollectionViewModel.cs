@@ -1,10 +1,11 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Interactivity;
-using Avalonia.Media;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -31,9 +32,17 @@ namespace MonkeyPaste.Avalonia {
         public IEnumerable<MpAvAppViewModel> FilteredExternalItems =>
             FilteredItems.Where(x => !x.IsThisApp);
 
-        public IEnumerable<MpAvAppViewModel> CustomClipboardItems =>
-            FilteredItems
+        public IEnumerable<MpAvAppViewModel> CustomClipboardShortcutItems =>
+            FilteredExternalItems
             .Where(x => x.HasAnyShortcut);
+
+        public IEnumerable<MpAvAppViewModel> CustomClipboardFormatItems =>
+            FilteredExternalItems
+            .Where(x => !x.OleFormatInfos.IsDefault);
+
+        public IEnumerable<MpAvAppViewModel> RejectedItems =>
+            FilteredExternalItems
+            .Where(x => x.IsRejected);
 
         public MpAvAppViewModel ThisAppViewModel =>
             Items.FirstOrDefault(x => x.AppId == MpDefaultDataModelTools.ThisAppId);
@@ -95,6 +104,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             ValidateAppViewModels();
+            UpdateComponentSources();
 
             IsBusy = false;
         }
@@ -146,7 +156,7 @@ namespace MonkeyPaste.Avalonia {
             return
                 Items
                 .FirstOrDefault(x =>
-                x.AppPath.ToLower() == ppi.ProcessPath.ToLower() &&
+                x.ToProcessInfo().IsValueEqual(ppi) &&
                 x.UserDeviceId == MpDefaultDataModelTools.ThisUserDeviceId);
         }
 
@@ -205,6 +215,12 @@ namespace MonkeyPaste.Avalonia {
             return app_vm.OleFormatInfos.Writers.Select(x => x.PresetId).ToArray();
         }
 
+
+        public void UpdateComponentSources() {
+            OnPropertyChanged(nameof(CustomClipboardFormatItems));
+            OnPropertyChanged(nameof(CustomClipboardShortcutItems));
+            OnPropertyChanged(nameof(RejectedItems));
+        }
         #endregion
 
         #region Protected Methods
@@ -223,7 +239,7 @@ namespace MonkeyPaste.Avalonia {
             } else if (e is MpAppClipboardShortcuts apsc &&
                 Items.FirstOrDefault(x => x.AppId == apsc.AppId) is MpAvAppViewModel avm) {
                 Dispatcher.UIThread.Post(() => {
-                    OnPropertyChanged(nameof(CustomClipboardItems));
+                    OnPropertyChanged(nameof(CustomClipboardShortcutItems));
                 });
             }
         }
@@ -232,7 +248,7 @@ namespace MonkeyPaste.Avalonia {
             if (e is MpAppClipboardShortcuts apsc &&
                 Items.FirstOrDefault(x => x.AppId == apsc.AppId) is MpAvAppViewModel avm) {
                 Dispatcher.UIThread.Post(() => {
-                    OnPropertyChanged(nameof(CustomClipboardItems));
+                    OnPropertyChanged(nameof(CustomClipboardShortcutItems));
                 });
             }
         }
@@ -245,7 +261,7 @@ namespace MonkeyPaste.Avalonia {
             } else if (e is MpAppClipboardShortcuts apsc &&
                 Items.FirstOrDefault(x => x.AppId == apsc.AppId) is MpAvAppViewModel shortcut_avm) {
                 Dispatcher.UIThread.Post(() => {
-                    OnPropertyChanged(nameof(CustomClipboardItems));
+                    OnPropertyChanged(nameof(CustomClipboardShortcutItems));
                 });
             }
         }
@@ -264,7 +280,7 @@ namespace MonkeyPaste.Avalonia {
                 //case nameof(LastActiveAppViewModel):
                 //    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsActiveProcess)));
                 //    break;
-                case nameof(CustomClipboardItems):
+                case nameof(CustomClipboardShortcutItems):
                     MpAvDataGridRefreshExtension.RefreshDataGrid(this);
                     break;
             }
@@ -273,7 +289,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(FilteredExternalItems));
             OnPropertyChanged(nameof(FilteredItems));
-            OnPropertyChanged(nameof(CustomClipboardItems));
+            OnPropertyChanged(nameof(CustomClipboardShortcutItems));
 
 
             ValidateAppViewModels();
@@ -316,223 +332,51 @@ namespace MonkeyPaste.Avalonia {
             var root_menu = new MpAvAppOleRootMenuViewModel(menuArg, show_type);
             return root_menu;
         }
-        private MpAvMenuItemViewModel GetPasteInfoMenuItemsByProcessInfo_old(MpPortableProcessInfo ppi) {
-            IBrush enabled_brush =
-                Mp.Services.PlatformResource
-                .GetResource<IBrush>(MpThemeResourceKey.ThemeAccent3Color.ToString())
-                .AdjustOpacity(0.3);
 
-            IBrush contains_enabled_brush =
-                Mp.Services.PlatformResource
-                .GetResource<IBrush>(MpThemeResourceKey.ThemeAccent4Color.ToString())
-                .AdjustOpacity(0.3);
-
-            MpAvAppViewModel avm = GetAppByProcessInfo(ppi);
-
-            bool IsPresetEnabled(MpAvClipboardFormatPresetViewModel y, MpAvAppViewModel avm) {
-                if (avm == null) {
-                    return y.IsEnabled;
+        private async Task AddOrRemoveAppComponentByTypeAsync(MpAvAppViewModel avm, string comp_type, bool isRemove) {
+            if (isRemove) {
+                switch (comp_type) {
+                    case "shortcuts":
+                        if (avm.ClipboardShortcutsId == 0) {
+                            break;
+                        }
+                        var cs = await MpDataModelProvider.GetItemAsync<MpAppClipboardShortcuts>(avm.ClipboardShortcutsId);
+                        if (cs == null) {
+                            // nothign to remove
+                            break;
+                        }
+                        await cs.DeleteFromDatabaseAsync();
+                        break;
+                    case "formats":
+                        await avm.OleFormatInfos.RemoveAllCustomInfoAsync();
+                        break;
+                    case "rejects":
+                        await avm.ToggleIsRejectedCommand.ExecuteAsync();
+                        break;
                 }
-                return avm.OleFormatInfos.IsFormatEnabledByPresetId(y.PresetId);
-            }
-
-            bool IsPluginContainEnabled(MpAvClipboardHandlerItemViewModel handler_plugin, string format, bool isReader, MpAvAppViewModel avm) {
-                var plugin_reader_or_writer_presets_by_format =
-                    handler_plugin.Items.Where(x => x.IsReader == isReader && x.HandledFormat == format).SelectMany(x => x.Items);
-                if (avm == null) {
-                    return plugin_reader_or_writer_presets_by_format.Any(x => x.IsEnabled);
+            } else {
+                // add
+                switch (comp_type) {
+                    case "shortcuts":
+                        _ = await MpAppClipboardShortcuts.CreateAsync(appId: avm.AppId);
+                        break;
+                    case "formats":
+                        await avm.OleFormatInfos.CreateDefaultInfosAsync();
+                        break;
+                    case "rejects":
+                        await avm.ToggleIsRejectedCommand.ExecuteAsync();
+                        break;
                 }
-                return plugin_reader_or_writer_presets_by_format.Any(x => avm.OleFormatInfos.IsFormatEnabledByPresetId(x.PresetId));
+
             }
 
-            bool IsFormatContainEnabled(string format, bool isReader, MpAvAppViewModel avm) {
-                var all_reader_or_writer_presets_by_format =
-                    MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets
-                    .Where(x => x.IsReader == isReader && x.ClipboardFormat.formatName == format);
 
-                if (avm == null) {
-                    return all_reader_or_writer_presets_by_format.Any(x => x.IsEnabled);
-                }
-                return all_reader_or_writer_presets_by_format.Any(x => avm.OleFormatInfos.IsFormatEnabledByPresetId(x.PresetId));
-            }
-
-            MpAvMenuItemViewModel GetPresetMenuItem(MpAvClipboardFormatPresetViewModel y) {
-                // NOTE when process is unknown or has no info, show default
-                // NOTE2 when process is known and HAS infos, only reflect its info no default
-
-                return new MpAvMenuItemViewModel() {
-                    Identifier = y,
-                    Header = y.Label,
-                    //IconSourceObj = y.IconId,
-                    //CheckedItemBgColor = enabled_brush,
-                    IconBorderHexColor = MpSystemColors.Black,
-                    IsCheckable = true,
-                    IsChecked = IsPresetEnabled(y, avm),
-                    Command = y.TogglePresetIsEnabledCommand,
-                    CommandParameter = avm == null ? ppi : avm
-                };
-            }
-
-            List<MpAvMenuItemViewModel> GetPluginPresets(bool isReader, MpAvHandledClipboardFormatViewModel hcfvm) {
-                var plugin_presets = hcfvm.Items.Where(x => x.IsReader == isReader).OrderBy(x => x.Label);
-
-                var plugin_presets_results = plugin_presets.Select(x => GetPresetMenuItem(x)).ToList();
-                plugin_presets_results.Add(new MpAvMenuItemViewModel() {
-                    HasLeadingSeparator = true,
-                    IconSourceObj = "CogImage",
-                    Header = "Manage...",
-                    Command = hcfvm.ManageClipboardHandlerCommand
-                });
-                return plugin_presets_results;
-            }
-
-            List<MpAvMenuItemViewModel> GetPluginsTree(bool isReader, string format) {
-                var presets = MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets.Where(x => x.IsReader == isReader && x.ClipboardFormat.formatName == format);
-                var plugins = presets
-                    .Select(x => x.Parent.Parent)
-                    .Distinct()
-                    .OrderBy(x => x.HandlerName)
-                    .Select(x => new MpAvMenuItemViewModel() {
-                        Identifier = x,
-                        TagObj = isReader,
-                        //IconSourceObj = x.PluginIconId,
-                        //ItemBgColor = IsPluginContainEnabled(x, format, isReader, avm) ? contains_enabled_brush : Brushes.Transparent,
-                        IsCheckable = true,
-                        IsChecked = IsPluginContainEnabled(x, format, isReader, avm) ? null : false,
-                        IconBorderHexColor = MpSystemColors.Black,
-                        Header = x.HandlerName,
-                        SubItems = GetPluginPresets(isReader, x.Items.FirstOrDefault(x => x.IsReader == isReader && x.HandledFormat == format))
-                    }).ToList();
-                return plugins;
-            }
-
-            List<MpAvMenuItemViewModel> GetFormatsTree(bool isReader) {
-                var presets = MpAvClipboardHandlerCollectionViewModel.Instance.AllPresets.Where(x => x.IsReader == isReader);
-
-                var formats = presets
-                    .Select(x => x.ClipboardFormat.formatName)
-                    .Distinct()
-                    .OrderBy(x => x);
-
-                var flat_formats = formats
-                        .Select(x => new MpAvMenuItemViewModel() {
-                            TagObj = presets.FirstOrDefault(y => y.ClipboardFormat.formatName == x).Parent.IsPrimaryFormat,
-                            //IconSourceObj = presets.FirstOrDefault(y => y.ClipboardFormat.formatName == x).IconId,
-                            //ItemBgColor = IsFormatContainEnabled(x, isReader, avm) ? contains_enabled_brush : Brushes.Transparent,
-                            Header = x,
-                            IconBorderHexColor = MpSystemColors.Black,
-                            IsCheckable = true,
-                            IsChecked = IsFormatContainEnabled(x, isReader, avm) ? null : false,
-                            SubItems = GetPluginsTree(isReader, x)
-                        }).ToList();
-
-                //var more_mi = new MpAvMenuItemViewModel() {
-                //    IconResourceKey = "PlusSolidImage",
-                //    IconTintHexStr = Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeGrayAccent1Color.ToString()),
-                //    Header = "More...",
-                //    ItemBgColor = flat_formats.Where(x => ((bool)x.TagObj) == false).Any(x => IsFormatContainEnabled(x.Header, isReader, avm)) ?
-                //        contains_enabled_brush : Brushes.Transparent,
-                //    SubItems = flat_formats.Where(x => ((bool)x.TagObj) == false).ToList()
-                //};
-                //return flat_formats
-                //        .Where(x => (bool)x.TagObj)
-                //        .Union(new[] { more_mi }).ToList();
-                return flat_formats;
-            }
-
-            /*
-            Structure 
-
-            Readers
-            |__Text
-                |__<Plugin Name>
-                    |__<Preset Name>
-                    |__Manage..
-            |__Image
-            |__Files
-            |__More...
-
-            Writers
-            |__Text
-                |__<Plugin Name>
-                    |__<Preset Name>
-                    |__Manage..
-            |__Image
-            |__Files
-            |__More...
-            */
-            var readers = GetFormatsTree(true);
-            var writers = GetFormatsTree(false);
-            return new MpAvMenuItemViewModel() {
-                SubItems = new List<MpAvMenuItemViewModel>() {
-                    new MpAvMenuItemViewModel() {
-                        IconResourceKey = "GlassesImage",
-                        IconTintHexStr = MpSystemColors.mintcream,
-                        Header = "Readers",
-                        SubItems = readers
-                    },
-                    new MpAvMenuItemViewModel() {
-                        HasLeadingSeparator = true,
-                        IconResourceKey = "PenImage",
-                        IconTintHexStr = MpSystemColors.peachpuff3,
-                        Header = "Writers",
-                        SubItems = writers
-                    },
-                }
-            };
+            await avm.InitializeAsync(avm.App);
+            UpdateComponentSources();
         }
         #endregion
 
         #region Commands
-
-        public MpIAsyncCommand<object> AddAppCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                string appPath = null;
-                if (args is string) {
-                    // picked from running (unknown) app popup 
-                    appPath = args.ToString();
-                } else {
-                    // add new clicked in app popup
-
-                    appPath = await Mp.Services.NativePathDialog.ShowFileDialogAsync(
-                        title: "Select application path",
-                        filters: null,
-                        resolveShortcutPath: true);
-
-                    if (string.IsNullOrEmpty(appPath)) {
-                        // canceled
-                        return;
-                    }
-                }
-                if (!appPath.IsFile()) {
-                    return;
-                }
-
-                var pi = new MpPortableProcessInfo() { ProcessPath = appPath };
-                var avm = GetAppByProcessInfo(pi);
-                if (avm == null) {
-                    // new app
-                    var app = await Mp.Services.AppBuilder.CreateAsync(pi);
-                    while (avm == null) {
-                        avm = Items.FirstOrDefault(x => x.AppPath.ToLower() == appPath.ToLower());
-                        await Task.Delay(300);
-                    }
-                    avm.IsNew = true;
-                } else if (args is not string) {
-                    // user selected app already in grid (not in drop down) just let em know
-                    await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
-                            title: "Duplicate",
-                            message: $"App at path '{appPath}' already exists",
-                            iconResourceObj: "WarningImage");
-                }
-
-                if (avm == null) {
-                    return;
-                }
-
-                SelectAppCommand.Execute(avm);
-            });
-
         public ICommand SelectAppCommand => new MpCommand<object>(
             (args) => {
                 int appId = 0;
@@ -548,32 +392,143 @@ namespace MonkeyPaste.Avalonia {
                 SelectedItem = Items.FirstOrDefault(x => x.AppId == appId);
             });
 
-        public ICommand ShowAddAppPopupMenuCommand => new MpCommand<object>(
-            (args) => {
-                if (args is not Control c) {
+        public MpIAsyncCommand<object> RemoveAppComponentCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (args is not object[] argParts) {
                     return;
                 }
+                var avm = argParts[0] as MpAvAppViewModel;
+                string comp_type_to_remove = argParts[1].ToStringOrEmpty();
+
+                string confirm_body = null;
+                switch (comp_type_to_remove) {
+                    case "rejects":
+                        // no confirm
+                        break;
+                    case "shortcuts":
+                        confirm_body = UiStrings.SettingsInteropAppConfirmRemoveShortcutsBody;
+                        break;
+                    case "formats":
+                        confirm_body = UiStrings.SettingsInteropAppConfirmRemoveFormatsBody;
+                        break;
+                }
+                if (confirm_body != null) {
+                    bool confirmed = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+                        title: UiStrings.CommonNtfConfirmTitle,
+                        message: string.Format(confirm_body, avm.AppDisplayName),
+                        iconResourceObj: "QuestionMarkImage");
+                    if (!confirmed) {
+                        // canceled
+                        return;
+                    }
+                }
+
+                await AddOrRemoveAppComponentByTypeAsync(avm, comp_type_to_remove, true);
+            });
+
+        public MpIAsyncCommand<object> AddAppComponentCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                MpPortableProcessInfo pi_to_add = null;
+
+                string comp_type_to_add = null;
+                if (args is string) {
+                    // show picker
+                    comp_type_to_add = args.ToString();
+                } else if (args is object[] argParts) {
+                    pi_to_add = argParts[0] as MpPortableProcessInfo;
+                    comp_type_to_add = argParts[1].ToString();
+                }
+                if (comp_type_to_add == null) {
+                    return;
+                }
+                if (pi_to_add == null) {
+                    List<FilePickerFileType> app_filter = null;
+                    if (OperatingSystem.IsWindows()) {
+                        app_filter = new List<FilePickerFileType>
+                            {
+                                new(UiStrings.SettingsInteropAppBrowseToAppFilterLabel)
+                                {
+                                    Patterns = new[] { "*.exe","*.lnk" }
+                                }
+                            };
+                    }
+                    string appPath = await Mp.Services.NativePathDialog.ShowFileDialogAsync(
+                        title: UiStrings.SettingsInteropAppBrowseToAppPickerTitle,
+                        filters: app_filter,
+                        resolveShortcutPath: true);
+
+                    if (string.IsNullOrEmpty(appPath)) {
+                        // canceled
+                        return;
+                    }
+                    pi_to_add = new MpPortableProcessInfo(appPath);
+                }
+                if (pi_to_add == null) {
+                    return;
+                }
+
+                var avm = await AddOrGetAppByProcessInfoAsync(pi_to_add);
+
+                await AddOrRemoveAppComponentByTypeAsync(avm, comp_type_to_add, false);
+
+                SelectAppCommand.Execute(avm);
+            });
+
+
+        public ICommand ShowAddAppPopupMenuCommand => new MpCommand<object>(
+            (args) => {
+                Control source_control = args as Control;
+                string add_type = "any";
+                if (source_control == null &&
+                    args is object[] argParts) {
+                    source_control = argParts[0] as Control;
+                    add_type = argParts[1] as string;
+                }
+                if (source_control == null) {
+                    return;
+                }
+
+                // always show running apps minus whats present by add type
+                IEnumerable<MpAvAppViewModel> exisiting_avml = null;
+                switch (add_type) {
+                    case "shortcuts":
+                        exisiting_avml = CustomClipboardShortcutItems;
+                        break;
+                    case "formats":
+                        exisiting_avml = CustomClipboardFormatItems;
+                        break;
+                    case "rejects":
+                        exisiting_avml = RejectedItems;
+                        break;
+                }
+
                 var mivml = new MpAvMenuItemViewModel() {
                     SubItems =
                         Mp.Services.ProcessWatcher
                         .AllWindowProcessInfos
-                        .Where(x => GetAppByProcessInfo(x) == null && !string.IsNullOrEmpty(x.ApplicationName))
+                        .Where(x => exisiting_avml.All(y => !y.ToProcessInfo().IsValueEqual(x)) && !x.IsValueEqual(ThisAppViewModel.ToProcessInfo()))
                         .OrderBy(x => x.ApplicationName)
                         .Select(x => new MpAvMenuItemViewModel() {
                             IconSourceObj = Mp.Services.IconBuilder.GetPathIconBase64(x.ProcessPath),
                             Header = x.ApplicationName,
-                            Command = AddAppCommand,
-                            CommandParameter = x.ProcessPath
+                            Command = AddAppComponentCommand,
+                            CommandParameter = new object[] { x, add_type }
                         }).Union(new[] {
                             new MpAvMenuItemViewModel() {
                                 HasLeadingSeparator = true,
                                 IconSourceObj = "Dots1x3Image",
-                                Header = "Add App",
-                                Command = AddAppCommand
+                                Header = UiStrings.SettingsInteropAppBrowseToAppMenuItemLabel,
+                                Command = AddAppComponentCommand,
+                                CommandParameter = add_type
                             }
                         }).ToList()
                 };
-                MpAvMenuView.ShowMenu(c, mivml, showByPointer: false, placementMode: PlacementMode.Right, popupAnchor: PopupAnchor.Left);
+                MpAvMenuView.ShowMenu(
+                    target: source_control,
+                    dc: mivml,
+                    showByPointer: false,
+                    placementMode: PlacementMode.RightEdgeAlignedTop,
+                    popupAnchor: PopupAnchor.TopLeft);
             });
 
         public ICommand ShowAppPresetsContextMenuCommand => new MpCommand<object>(
@@ -596,16 +551,16 @@ namespace MonkeyPaste.Avalonia {
                     // settings format strip click
                     // provided anchor_control is clicked button, use strip as anchor_control
                     anchor_control = ofsv;
-                    if (source_control.DataContext is MpAvAppOlePresetViewModel clicked_format &&
-                        mivm.GetMenuPresetByPresetId(clicked_format.PresetId)
-                            is MpAvAppOlePresetMenuViewModel pvm) {
-                        // show ole menu opened to clicked preset
-                        MpAvAppOleMenuViewModelBase mvm = pvm.ParentObj as MpAvAppOleMenuViewModelBase;
-                        while (mvm != null) {
-                            mvm.IsSubMenuOpen = true;
-                            mvm = mvm.ParentObj as MpAvAppOleMenuViewModelBase;
-                        }
-                    }
+                    //if (source_control.DataContext is MpAvAppOlePresetViewModel clicked_format &&
+                    //    mivm.GetMenuPresetByPresetId(clicked_format.PresetId)
+                    //        is MpAvAppOlePresetMenuViewModel pvm) {
+                    //    // show ole menu opened to clicked preset
+                    //    MpAvAppOleMenuViewModelBase mvm = pvm.ParentObj as MpAvAppOleMenuViewModelBase;
+                    //    while (mvm != null) {
+                    //        mvm.IsSubMenuOpen = true;
+                    //        mvm = mvm.ParentObj as MpAvAppOleMenuViewModelBase;
+                    //    }
+                    //}
                 }
 
                 var cm = MpAvMenuView.ShowMenu(
@@ -623,13 +578,15 @@ namespace MonkeyPaste.Avalonia {
                         ctvm.GetContentView() is MpAvContentWebView cwv) {
                         cwv.SendMessage("unexpandPasteButtonPopup_ext()");
                     }
+                }
 
-                    if (GetAppByProcessInfo(pi) is MpAvAppViewModel avm) {
-                        avm.OleFormatInfos.CheckForCustomDefaultAsync().FireAndForgetSafeAsync();
-                    }
+                void Cm_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+
                 }
                 cm.Closed += _cmInstance_MenuClosed;
+                cm.Closing += Cm_Closing;
             });
+
         #endregion
     }
 }

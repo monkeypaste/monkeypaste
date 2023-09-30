@@ -2,11 +2,12 @@
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
+
     public class MpAvAppViewModel :
         MpAvViewModelBase<MpAvAppCollectionViewModel>,
         MpIHoverableViewModel,
@@ -21,7 +22,8 @@ namespace MonkeyPaste.Avalonia {
             }
             return
                 AppName.ToLower().Contains(filter.ToLower()) ||
-                AppPath.ToLower().Contains(filter.ToLower());
+                AppPath.ToLower().Contains(filter.ToLower()) ||
+                OleFormatInfos.Items.Any(x => x.ClipboardPresetViewModel.FormatName.ToLower().Contains(filter.ToLower()));
         }
 
         #endregion
@@ -59,6 +61,12 @@ namespace MonkeyPaste.Avalonia {
                 return string.Empty;
             }
         }
+
+        public string AppDisplayName =>
+            string.IsNullOrEmpty(AppName) ?
+                Path.GetFileNameWithoutExtension(AppPath) :
+                AppName;
+
         #endregion
 
         #region State
@@ -163,7 +171,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsSubRejected => IsRejected;
         public int ClipboardShortcutsId { get; private set; }
         public MpApp App { get; set; }
 
@@ -215,8 +222,8 @@ namespace MonkeyPaste.Avalonia {
 
             if (clipsFromApp != null && clipsFromApp.Count > 0) {
                 var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
-                    title: $"Remove associated clips?",
-                    message: $"Would you also like to remove all {clipsFromApp.Count()} clips from '{AppName}'",
+                    title: UiStrings.NtfRejectRemoveClipsTitle,
+                    message: string.Format(UiStrings.NtfRejectRemoveClipsBody, clipsFromApp.Count(), AppName),
                     iconResourceObj: IconId);
                 if (result.IsNull()) {
                     // flag as cancel so cmd will untoggle reject
@@ -288,7 +295,42 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand ToggleIsRejectedCommand => new MpAsyncCommand(
+        public MpIAsyncCommand<object> AddNewAppComponentCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (Parent == null ||
+                    args is not string comp_type) {
+                    return;
+                }
+                switch (comp_type) {
+                    case "shortcuts":
+                        _ = await MpAppClipboardShortcuts.CreateAsync(appId: AppId);
+                        break;
+                }
+
+                await InitializeAsync(App);
+                Parent.UpdateComponentSources();
+            });
+
+        public MpIAsyncCommand<object> RemoveAppComponentCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (args is not string comp_type) {
+                    return;
+                }
+                switch (comp_type) {
+                    case "shortcuts":
+                        var cs = await MpDataModelProvider.GetItemAsync<MpAppClipboardShortcuts>(ClipboardShortcutsId);
+                        if (cs == null) {
+                            // nothign to remove
+                            return;
+                        }
+                        await cs.DeleteFromDatabaseAsync();
+                        break;
+                }
+                await InitializeAsync(App);
+                Parent.UpdateComponentSources();
+            });
+
+        public MpIAsyncCommand ToggleIsRejectedCommand => new MpAsyncCommand(
             async () => {
                 IsRejected = !IsRejected;
                 if (IsRejected) {

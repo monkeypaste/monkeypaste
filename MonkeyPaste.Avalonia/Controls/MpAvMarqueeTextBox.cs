@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region Overrides
-        protected override Type StyleKeyOverride => typeof(TextBox);
+        //protected override Type StyleKeyOverride => typeof(MpAvMarqueeTextBox);
         #endregion
 
 
@@ -315,8 +315,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static readonly StyledProperty<bool> EditOnFocusProperty =
             AvaloniaProperty.Register<MpAvMarqueeTextBox, bool>(
-                name: nameof(EditOnFocus),
-                defaultValue: true);
+                name: nameof(EditOnFocus));
 
         #endregion
 

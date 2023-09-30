@@ -696,7 +696,8 @@ namespace MonkeyPaste.Avalonia {
                             new object[] {
                                 this,
                                 MpPortableProcessInfo.Create(pasteInfoFormatsClickedMsg.infoId),
-                                new MpPoint(pasteInfoFormatsClickedMsg.offsetX,pasteInfoFormatsClickedMsg.offsetY)
+                                new MpPoint(pasteInfoFormatsClickedMsg.offsetX,pasteInfoFormatsClickedMsg.offsetY),
+                                "write"
                             });
                     }
                     break;

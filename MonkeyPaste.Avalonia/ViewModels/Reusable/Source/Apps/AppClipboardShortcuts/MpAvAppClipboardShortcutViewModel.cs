@@ -143,6 +143,7 @@ namespace MonkeyPaste.Avalonia {
             await InitializeAsync(ClipboardShortcuts);
             return true;
         }
+
         #endregion
 
         #region Private Methods

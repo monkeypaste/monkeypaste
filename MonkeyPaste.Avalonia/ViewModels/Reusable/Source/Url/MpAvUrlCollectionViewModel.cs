@@ -2,7 +2,6 @@
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -25,6 +24,10 @@ namespace MonkeyPaste.Avalonia {
             .Where(x => (x as MpIFilterMatch).IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText))
             .OrderBy(x => x.UrlDomainPath)
             .ThenBy(x => x.UrlTitle);
+
+        public IEnumerable<MpAvUrlViewModel> RejectedItems =>
+            FilteredItems
+            .Where(x => x.IsDomainRejected || x.IsUrlRejected);
 
         #endregion
 

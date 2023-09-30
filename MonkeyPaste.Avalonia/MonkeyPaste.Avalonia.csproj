@@ -328,6 +328,7 @@
     <None Remove="Assets\Images\check_partial.png" />
     <None Remove="Assets\Images\cleargrid.png" />
     <None Remove="Assets\Images\clipboard.png" />
+    <None Remove="Assets\Images\clipboardbw.png" />
     <None Remove="Assets\Images\clockarrow.png" />
     <None Remove="Assets\Images\Close.png" />
     <None Remove="Assets\Images\close1.png" />
@@ -675,6 +676,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\cef.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\clipboardbw.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\clockarrow.png">

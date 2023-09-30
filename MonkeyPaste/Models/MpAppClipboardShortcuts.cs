@@ -9,10 +9,10 @@ namespace MonkeyPaste {
         #region Columns
 
         [PrimaryKey, AutoIncrement]
-        [Column("pk_AppClipboardShortcutsId")]
+        [Column("pk_MpAppClipboardShortcutsId")]
         public override int Id { get; set; }
 
-        [Column("AppClipboardShortcutsGuid")]
+        [Column("MpAppClipboardShortcutsGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
 
         [Column("fk_MpAppId")]
