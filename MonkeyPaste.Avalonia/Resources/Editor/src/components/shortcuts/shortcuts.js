@@ -27,7 +27,7 @@ function initShortcuts(shortcutBase64MsgStr) {
                 globals.ShortcutKeysLookup[st] = shortcut_item.keys;
             }
         }
-        log('Init Shortcut Type: \'' + st + '\' keys: \'' + globals.ShortcutKeysLookup[st] + '\'');
+        //log('Init Shortcut Type: \'' + st + '\' keys: \'' + globals.ShortcutKeysLookup[st] + '\'');
     }   
 
 }

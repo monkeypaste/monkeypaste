@@ -80,15 +80,13 @@ function getRootHtml() {
 	return globals.quill.root.innerHTML;
 }
 
-function getHtml(range, encodeHtmlEntities = true, omitThemeColors = true) {
+function getHtml(range, encodeHtmlEntities = true) {
 	if (globals.ContentItemType != 'Text') {
 		return getRootHtml();
 	}
 	range = isNullOrUndefined(range) ? { index: 0, length: getDocLength() } : range;
 	let delta = getDelta(range);
-	if (omitThemeColors) {
-		delta = omitThemeColorsFromDelta(delta);
-	}
+	delta = restoreContentColorsFromDelta(delta);
 
 	if (encodeHtmlEntities) {
 		delta = encodeHtmlEntitiesInDeltaInserts(delta);
@@ -209,6 +207,25 @@ function quillFindBlotOffset(elm, bubble = false) {
 
 function formatDocRange(range, format, source = 'api') {
 	globals.quill.formatText(range.index, range.length, format, source);
+}
+
+function replaceFormatInDocRange(range, format, source = 'api') {
+	// get cur formatting
+	let replaced_format = getFormatForDocRange(range);
+	// set all orig formatting to false
+	let orig_keys = Object.keys(replaced_format);
+	for (var i = 0; i < orig_keys.length; i++) {
+		replaced_format[orig_keys[i]] = false;
+	}
+	// add or replace new formats
+	let new_keys = Object.keys(format);
+	for (var i = 0; i < new_keys.length; i++) {
+		replaced_format[new_keys[i]] = format[new_keys[i]];
+	}
+
+	formatDocRange(range, replaced_format, source);
+	let test = getFormatForDocRange(range);
+	return;
 }
 
 function formatSelection(format, value, source = 'api') {

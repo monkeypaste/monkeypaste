@@ -49,6 +49,12 @@ var globals = {
 	AppendCloseLabel: 'Finish appending',
 	// #endregion
 
+	// #region ATTRIBUTES
+
+	AllClassAttributes: [],
+	AllPlainAttributes: [],
+	// #endregion
+
 	// #region CLIPBOARD
 
 	PLACEHOLDER_DATAOBJECT_TEXT: '3acaaed7-862d-47f5-8614-3259d40fce4d',

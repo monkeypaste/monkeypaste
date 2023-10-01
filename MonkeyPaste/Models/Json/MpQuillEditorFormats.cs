@@ -40,6 +40,7 @@ namespace MonkeyPaste {
 
 
     public class MpQuillLoadContentRequestMessage : MpJsonObject {
+        public bool breakBeforeLoad { get; set; }
         public int contentId { get; set; }
         public bool isSubSelectionEnabled { get; set; }
         // fragment 'MpQuillPasteButtonInfoMessage'
@@ -154,6 +155,7 @@ namespace MonkeyPaste {
         public string data { get; set; }
         public string verifyText { get; set; }
         public string dataFormatType { get; set; }
+
         public bool isBase64 { get; set; }
     }
 

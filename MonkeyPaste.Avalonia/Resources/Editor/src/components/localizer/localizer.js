@@ -73,13 +73,13 @@ function localizeElement(elm, args) {
         // has content key
         let content_key = elm.getAttribute(globals.LOCALIZER_UI_STRING_CONTENT_ATTR_NAME);
         elm.innerHTML = UiStrings[content_key];
-        log('ui-content-key: ' + content_key + ' str: ' + elm.innerHTML);
+        //log('ui-content-key: ' + content_key + ' str: ' + elm.innerHTML);
     }
     if (elm.hasAttribute(globals.LOCALIZER_UI_STRING_TOOLTIP_ATTR_NAME)) {
         // has content key
         let tt_key = elm.getAttribute(globals.LOCALIZER_UI_STRING_TOOLTIP_ATTR_NAME);
         elm.setAttribute(globals.TOOLTIP_HOVER_ATTRB_NAME, UiStrings[tt_key]);
-        log('ui-tooltip-key: ' + tt_key + ' str: ' + UiStrings[tt_key]);
+        //log('ui-tooltip-key: ' + tt_key + ' str: ' + UiStrings[tt_key]);
     }
 }
 

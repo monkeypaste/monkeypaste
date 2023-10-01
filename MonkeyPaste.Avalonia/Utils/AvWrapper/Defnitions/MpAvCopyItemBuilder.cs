@@ -284,12 +284,22 @@ namespace MonkeyPaste.Avalonia {
                 inputTextFormat = "html";
                 itemType = MpCopyItemType.Text;
                 itemData = htmlStr;
+                if (avdo.ContainsData(MpPortableDataFormats.AvRtf_bytes)) {
+                    // NOTE this is a hack to know when html is rtf2html 
+                    // and maybe bad if somehow rtf and html are on the clipboard w/o being converted
+                    // but its so plain html converter knows the inner text is encoded
+                    inputTextFormat = "rtf2html";
+                }
             } else if (avdo.TryGetData(MpPortableDataFormats.CefHtml, out string cefHtmlStr)) {
 
                 // HTML (xml)
                 inputTextFormat = "html";
                 itemType = MpCopyItemType.Text;
                 itemData = cefHtmlStr;
+                if (avdo.ContainsData(MpPortableDataFormats.AvRtf_bytes)) {
+                    // see above note
+                    inputTextFormat = "rtf2html";
+                }
             } else if (avdo.ContainsData(MpPortableDataFormats.Text) &&
                         avdo.GetData(MpPortableDataFormats.Text) is string textStr) {
 

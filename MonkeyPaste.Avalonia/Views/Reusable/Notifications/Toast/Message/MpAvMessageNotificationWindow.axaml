@@ -14,7 +14,7 @@
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvMessageNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
-        Classes="notificationWindow fadeIn fadeOut msg slideIn resizable">
+        Classes="notificationWindow msg slideIn resizable">
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             BorderThickness="7"
@@ -22,67 +22,51 @@
             Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
             local:MpAvIsHoveringExtension.IsEnabled="True"
             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
-        <Grid x:Name="NotificationWindowContainerGrid"
-              ColumnDefinitions="0.15*,*,15"
-              RowDefinitions="Auto,*">
-            <Image x:Name="NotificationIconImage"
-                   Grid.Row="0"
-                   Grid.Column="0"
+        <Grid ColumnDefinitions="0.2*,0.8*,Auto">
+            <!--  ICON  -->
+            <Image Grid.Column="0"
+                   Classes="squareByWidth"
                    Margin="3"
                    HorizontalAlignment="Left"
-                   VerticalAlignment="Stretch"
+                   VerticalAlignment="Top"
                    IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                    Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
                    Stretch="Fill" />
-            <local:MpAvMarqueeTextBox Grid.Row="0"
-                                      Grid.Column="1"
-                                      AutoMarquee="True"
-                                      EditOnFocus="False"
-                                      MaxWidth="200"
-                                      MinHeight="30"
-                                      FontSize="20"
-                                      IsReadOnly="True"
-                                      IsMarqueeEnabled="True"
-                                      VerticalAlignment="Center"
-                                      HorizontalAlignment="Stretch"
-                                      HorizontalContentAlignment="Left"
-                                      VerticalContentAlignment="Top"
-                                      FontWeight="SemiBold"
-                                      Text="{Binding Title}" />
-            <Border Grid.Row="0"
-                    Grid.Column="1"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Bottom"
-                    BorderThickness="0"
-                    Margin="0,0,5,0"
-                    Background="{DynamicResource ThemeWhiteColor}"
-                    Height="1" />
+            <StackPanel Grid.Column="1"
+                        Orientation="Vertical"
+                        Spacing="3">
 
+                <!--  TITLE  -->
+                <local:MpAvMarqueeTextBox AutoMarquee="True"
+                                          EditOnFocus="False"
+                                          MinWidth="200"
+                                          MinHeight="30"
+                                          FontSize="24"
+                                          IsReadOnly="True"
+                                          IsMarqueeEnabled="True"
+                                          VerticalAlignment="Top"
+                                          HorizontalAlignment="Left"
+                                          HorizontalContentAlignment="Left"
+                                          VerticalContentAlignment="Top"
+                                          FontWeight="SemiBold"
+                                          Text="{Binding Title}" />
 
-            <local:MpAvOptionsButton Grid.Row="0"
-                                     Grid.Column="2"
-                                     Foreground="{DynamicResource ThemeWhiteColor}"
-                                     Command="{Binding ShowOptionsPopupCommand}"
-                                     CommandParameter="{Binding $self}" />
+                <!--  UNDERLINE  -->
 
-            <Border Grid.Row="1"
-                    Grid.Column="1"
-                    Grid.ColumnSpan="1"
-                    BorderThickness="1"
-                    BorderBrush="Transparent"
-                    MinHeight="50"
-                    HorizontalAlignment="Stretch"
-                    CornerRadius="5"
-                    Padding="10"
-                    Margin="3">
-                <Border.Background>
-                    <SolidColorBrush Color="Transparent"
-                                     Opacity="0.5" />
-                </Border.Background>
+                <Border HorizontalAlignment="Stretch"
+                        VerticalAlignment="Bottom"
+                        BorderThickness="0"
+                        Margin="0,0,0,0"
+                        Background="{DynamicResource ThemeWhiteColor}"
+                        Height="1" />
+
+                <!--  BODY  -->
+
                 <TextBlock HorizontalAlignment="Stretch"
                            VerticalAlignment="Center"
+                           MinHeight="50"
                            TextWrapping="WrapWithOverflow"
-                           FontSize="16"
+                           FontSize="14"
                            MaxHeight="250"
                            ScrollViewer.VerticalScrollBarVisibility="Auto"
                            FontWeight="SemiBold"
@@ -90,7 +74,16 @@
                            Focusable="True"
                            Foreground="{DynamicResource ThemeWhiteColor}"
                            Text="{Binding Body}" />
-            </Border>
+            </StackPanel>
+
+            <!--  OPTIONS BUTTON  -->
+
+            <local:MpAvOptionsButton Grid.Column="2"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Top"
+                                     Foreground="{DynamicResource ThemeWhiteColor}"
+                                     Command="{Binding ShowOptionsPopupCommand}"
+                                     CommandParameter="{Binding $self}" />
         </Grid>
     </Border>
 </Window>

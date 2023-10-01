@@ -77,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region Overrides
-        //protected override Type StyleKeyOverride => typeof(MpAvMarqueeTextBox);
+        protected override Type StyleKeyOverride => typeof(TextBox);
         #endregion
 
 
@@ -793,6 +793,9 @@ namespace MonkeyPaste.Avalonia {
         }
         private void SetTextBoxIsVisible(bool isTextBoxVisible) {
             Dispatcher.UIThread.Post(() => {
+                if (!VisualChildren.Any()) {
+                    VisualChildren.Add(new TextBox());
+                }
                 foreach (var c in VisualChildren) {
                     c.IsVisible = isTextBoxVisible;
                 }

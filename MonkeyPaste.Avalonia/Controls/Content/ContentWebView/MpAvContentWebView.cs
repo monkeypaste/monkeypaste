@@ -78,6 +78,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        public static bool BreakOnNextLoad = false;
+
         #endregion
 
         #region Interfaces
@@ -1132,6 +1134,7 @@ namespace MonkeyPaste.Avalonia {
                     isReadOnly = true,
                     isSubSelectionEnabled = false
                 };
+
             }
 
             var loadContentMsg = new MpQuillLoadContentRequestMessage() {
@@ -1140,10 +1143,11 @@ namespace MonkeyPaste.Avalonia {
                 contentType = BindingContext.CopyItemType.ToString(),
                 itemData = BindingContext.EditorFormattedItemData,
                 isReadOnly = BindingContext.IsContentReadOnly,
-                isSubSelectionEnabled = BindingContext.IsSubSelectionEnabled
+                isSubSelectionEnabled = BindingContext.IsSubSelectionEnabled,
+                breakBeforeLoad = BreakOnNextLoad
             };
-            var test1 = MpAvPersistentClipTilePropertiesHelper.IsPersistentIsSubSelectable_ById(BindingContext.CopyItemId, BindingContext.QueryOffsetIdx);
-            var test2 = MpAvPersistentClipTilePropertiesHelper.IsPersistentTileContentEditable_ById(BindingContext.CopyItemId, BindingContext.QueryOffsetIdx);
+            BreakOnNextLoad = false;
+
 
             if (isSearchEnabled) {
                 var searches =
@@ -1388,6 +1392,10 @@ namespace MonkeyPaste.Avalonia {
             }
 
             var loadContentMsg = GetLoadContentMessage(isSearchEnabled);
+            if (loadContentMsg.breakBeforeLoad) {
+                ShowDevTools();
+                await Task.Delay(5000);
+            }
             string msgStr = loadContentMsg.SerializeJsonObjectToBase64();
 
             SendMessage($"loadContentAsync_ext('{msgStr}')");

@@ -15,7 +15,7 @@ function initTemplateBlot() {
 
 function initTemplateEmbedBlot_quill2() {
     let Parchment = Quill.imports.parchment;
-    class TemplateEmbedBlot extends Parchment.EmbedBlot {
+    class TemplateEmbedBlot extends globals.Parchment.EmbedBlot {
         static blotName = 'template';
         static tagName = 'SPAN';
         static className = globals.TemplateEmbedClass;

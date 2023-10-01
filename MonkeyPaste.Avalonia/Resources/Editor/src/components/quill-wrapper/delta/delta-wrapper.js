@@ -75,8 +75,9 @@ function convertDeltaToHtml(delta, encodeHtmlEntities) {
 
 	
 	let cfg = {
-		inlineStyles: true,
+		//inlineStyles: true,
 		//allowBackgroundClasses: true,
+		//customCssStyles: onCustomCssStyles,
 		customCssClasses: onCustomCssClasses,
 		customTagAttributes: onCustomTagAttributes,
 		encodeHtml: encodeHtmlEntities
@@ -98,7 +99,7 @@ function convertHtmlToDelta(htmlStr) {
 	htmlStr = htmlStr.replaceAll('&nbsp;', whitespace_sub);
 
 	let htmlObj = { html: htmlStr };
-	var delta = globals.quill.clipboard.convert(htmlObj);
+	let delta = globals.quill.clipboard.convert(htmlObj);
 
 	delta = fixHtmlToDeltaWhitespaceSpecialEntities(delta, whitespace_sub);
 
@@ -266,6 +267,25 @@ function applyDelta(delta, source = 'api') {
 // #endregion Actions
 
 // #region Event Handlers
+function onCustomCssStyles(op) {
+	if (!isAnyThemeOverriden(op.attributes)) {
+		return ;
+	}
+	// THEME COLOR
+	let attr_obj = [];
+	if (isThemeColorOverriden(op.attributes)) {
+		// theme color
+		//attr_str.push({ 'color': op.attributes.themecoloroverride });
+		attr_obj.push(`color: ${op.attributes.themecoloroverride}`);
+	}
+	if (isThemeBgColorOverriden(op.attributes)) {
+		// theme bg color
+		//attr_str.push({ 'background': op.attributes.themebgcoloroverride });
+		//attr_str.background = op.attributes.themebgcoloroverride;
+		attr_obj.push(`background-color: ${op.attributes.themebgcoloroverride}`);
+	}
+	return attr_obj;
+}
 function onCustomCssClasses(op) {
 	if (!op ||
 		op.attributes === undefined) {
@@ -273,12 +293,31 @@ function onCustomCssClasses(op) {
 	}
 
 	let custom_classes = [];
+
 	if (op.attributes.fontBgColorOverride == 'on') {
 		custom_classes.push('font-bg-color-override-on');
 	}
 	if (op.attributes.fontColorOverride == 'on') {
 		custom_classes.push('font-color-override-on');
 	}
+
+	//for (var i = 0; i < globals.AllClassAttributes.length; i++) {
+	//	let cust_attr = globals.AllClassAttributes[i];
+	//	let attr_val = op.attributes[cust_attr.attrName];
+	//	if (attr_val === undefined ||
+	//		attr_val == 'off') {
+	//		continue;
+	//	}
+	//	if (!isString(attr_val)) {
+	//		throw new DOMException('custom css class error, only supports str val, not str for attr: ' + cust_attr.attrName);
+	//	}
+	//	if (custom_attr.attrName == 'link-type') {
+	//		debugger;
+	//	}
+	//	let custom_class = `${cust_attr.keyName}-${attr_val}`;
+	//	log('custom class added to html: ' + custom_class);
+	//	custom_classes.push(custom_class);
+	//}
 	return custom_classes;
 }
 function onCustomTagAttributes(op) {
@@ -311,7 +350,7 @@ function onCustomTagAttributes(op) {
 		//return `<li data-list="${li_type}">${li_val}</li>`;
 
 		return { 'data-list': li_type };
-	} else if (globals.TableDeltaAttrbs.some(x => op.attributes[x] !== undefined)) {
+	}  else if (globals.TableDeltaAttrbs.some(x => op.attributes[x] !== undefined)) {
 		// TABLES
 
 		if (op.attributes['table-col'] !== undefined) {

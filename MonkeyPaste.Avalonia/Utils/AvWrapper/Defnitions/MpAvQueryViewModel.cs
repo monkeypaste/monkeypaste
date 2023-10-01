@@ -97,7 +97,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         #region Repeat Query
-        const bool STORE_QUERY_IDS = true;
+        static bool STORE_QUERY_IDS => true;
         private IEnumerable<int> _allIds = new List<int>();
         public async Task<List<MpCopyItem>> QueryForModelsAsync() {
             int total_count = await MpContentQuery.QueryForTotalCountAsync(this, OmittedIds);

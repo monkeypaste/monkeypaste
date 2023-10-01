@@ -591,11 +591,14 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task RestoreAllEnabledAsync() {
             // NOTE this is only called on init and needs to wait for dependant vm's to load so wait here
-            //while (!Mp.Services.StartupState.IsPlatformLoaded) {
-            //    await Task.Delay(100);
-            //}
+            while (!Mp.Services.StartupState.IsCoreLoaded) {
+                await Task.Delay(100);
+            }
+
 
             IsRestoringEnabled = true;
+
+
 
             var enabled_triggers =
             Items

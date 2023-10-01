@@ -1,11 +1,17 @@
 // #region Life Cycle
 
 function initTheme() {
-    initThemeClassAttributes();
+    // THEME NOTES
+    // 1. nothing but original colors and user specified colors are stored in db
+    // 2. in load font color matcher swaps out original colors w/ theme adj colors
+    //    and stores orig in respective attribute
+    // 3. any access to html (getHtml) will show original/user altered colored html
+    initThemeAttributes();
 }
-function initThemeClassAttributes() {
-    globals.ThemeColorOverrideAttrb = registerClassAttributor('themeColorOverride', 'theme-color-override', globals.Parchment.Scope.INLINE);
-    globals.ThemeBgColorOverrideAttrb = registerClassAttributor('themeBgColorOverride', 'theme-bg-color-override', globals.Parchment.Scope.INLINE);
+
+function initThemeAttributes() {
+    globals.ThemeColorOverrideAttrb = registerPlainAttributor('themecoloroverride', 'themecoloroverride', globals.Parchment.Scope.INLINE);
+    globals.ThemeBgColorOverrideAttrb = registerPlainAttributor('themebgcoloroverride', 'themebgcoloroverride', globals.Parchment.Scope.INLINE);
 
 }
 // #endregion Life Cycle
@@ -16,24 +22,45 @@ function initThemeClassAttributes() {
 
 // #region Setters
 
+function setAttrThemeColorVal(attributes, colorVal, isBg) {
+    // store original color in theme attributes
+    let theme_attr = isBg ? 'themebgcoloroverride' : 'themecoloroverride';
+    let color_type_attr = isBg ? 'background' : 'color';
+    attributes[theme_attr] = attributes[color_type_attr];
+    attributes[color_type_attr] = colorVal;
+    return attributes;
+}
+
+function unsetAttrThemeColorVal(attributes, isBg) {
+    // store original color in theme attributes
+    let theme_attr = isBg ? 'themebgcoloroverride' : 'themecoloroverride';
+    let color_type_attr = isBg ? 'background' : 'color';
+    if (attributes[theme_attr] === undefined) {
+        return attributes;
+    }
+    attributes[color_type_attr] = attributes[theme_attr];
+    delete attributes[theme_attr];
+    return attributes;
+}
+
 // #endregion Setters
 
 // #region State
 
 function isThemeColorOverriden(attr) {
-    if (!attr) {
+    if (!attr || attr['themecoloroverride'] === undefined) {
         return false;
     }
-    if (attr['themeColorOverride'] == 'on') {
-        return true;
-    }
-    return false;
+    return true;
 }
 function isThemeBgColorOverriden(attr) {
-    if (!attr) {
+    if (!attr || attr['themebgcoloroverride'] === undefined) {
         return false;
     }
-    if (attr['themeBgColorOverride'] == 'on') {
+    return true;
+}
+function isAnyThemeOverriden(attr) {
+    if (isThemeColorOverriden(attr) || isThemeBgColorOverriden(attr)) {
         return true;
     }
     return false;
@@ -42,94 +69,75 @@ function isThemeBgColorOverriden(attr) {
 
 // #region Actions
 
-function omitThemeColorsFromDelta(delta) {
+function restoreContentColorsFromDelta(delta) {
     if (!delta || !Array.isArray(delta.ops)) {
         return delta;
     }
     for (var i = 0; i < delta.ops.length; i++) {
-        delta.ops[i] = omitThemeFromOp(delta.ops[i]);
+        delta.ops[i] = restoreContentColorsFromOp(delta.ops[i]);
     }
     return delta;
 }
 
-function omitThemeFromOp(op) {
+function restoreContentColorsFromOp(op) {
     if (!op || op.attributes === undefined) {
         return op;
     }
+
     if (isThemeBgColorOverriden(op.attributes)) {
-        delete op.attributes['themeBgColorOverride'];
-        delete op.attributes['background'];
-    }
+        op.attributes = unsetAttrThemeColorVal(op.attributes, true);
+    } 
     if (isThemeColorOverriden(op.attributes)) {
-        delete op.attributes['themeColorOverride'];
-        delete op.attributes['color'];
-    }
-    if (Object.keys(op.attributes).length == 0) {
-        // remove empty attr
-        delete op.attributes;
-    }
+        op.attributes = unsetAttrThemeColorVal(op.attributes, false);
+    } 
     return op;
 }
 function removeThemeAttrFromDocRange(range, isBg = false, source = 'api') {
     let range_format = getFormatForDocRange(range);
 
-    let theme_prop = isBg ? 'themeBgColorOverride' : 'themeColorOverride';
-    range_format[theme_prop] = 'off';
+    let theme_prop = isBg ? 'themebgcoloroverride' : 'themecoloroverride';
+    range_format[theme_prop] = false;
 
     formatDocRange(range, range_format, source);
+    let test = getFormatForDocRange(range);
+    return;
 }
 
-function adjustDeltaOpForTheme(op, node) {
+function adjustDeltaOpForTheme(op) {
     // NOTE based on theme fg/bg this adjusts non-user defined fg/bg colors
-    // to theme, when that happens the op gets a class blot put on it
-    // so when html is saved, that color is stripped because if theme
-    // changes but content doesn't it will appear that content changed
-    // and will resave it, which means EVERY item will resave when it loads
-    // and makes everything very slow
+    // to theme, when that happens the original color is stored in the an attr
 
-    if (!op) {
+    if (!op || !isString(op.insert)) {
         return op;
     }
-
-    if (op.attributes === undefined ||
-        op.attributes.color === undefined) {
-        if (op.insert !== undefined) {
-            if (op.attributes === undefined) {
-                op.attributes = {};
-            }
-            op.attributes.color = getElementComputedStyleProp(document.body, '--defcontentfgcolor');
-            op.attributes['theme-color-override'] = 'on';
-        } else {
-            return op;
-        }
+    if (op.attributes === undefined) {
+        op.attributes = {};
+    }
+    if (op.attributes.color === undefined) {
+        // op has text but no color info
+        // so set based on theme
+        let theme_fg = getElementComputedStyleProp(document.body, '--defcontentfgcolor');
+        op.attributes = setAttrThemeColorVal(op.attributes, theme_fg, false);
+    } else if (!hasUserFontColor(op.attributes) && !isThemeColorOverriden(op.attributes)) {
+        // when fg color is provided from content and is NOT user specified
+        let theme_fg = adjustFgToTheme(op.attributes.color);
+        op.attributes = setAttrThemeColorVal(op.attributes, theme_fg, false);
     }
 
-    if (!isFontBgColorOverriden(op.attributes) &&
+    if (!hasUserBgFontColor(op.attributes) &&
+        !isThemeBgColorOverriden(op.attributes) &&
         op.attributes.background !== undefined) {
         // when bg color is provided from content and is NOT user specified
-        let adj_bg = adjustBgToTheme(op.attributes.background, node);
-        if (op.attributes.background != adj_bg) {
-            op.attributes.background = adj_bg;
-            op.attributes['theme-bg-color-override'] = 'on';
-        }
-    }
-
-    if (!isFontColorOverriden(op.attributes) &&
-        op.attributes.color !== undefined) {
-        // when fg color is provided from content and is NOT user specified
-        let adj_fg = adjustFgToTheme(op.attributes.color, node);
-        if (op.attributes.background != adj_fg) {
-            op.attributes.color = adj_fg;
-            op.attributes['theme-color-override'] = 'on';
-        }
+        let theme_bg = adjustBgToTheme(op.attributes.background);
+        op.attributes = setAttrThemeColorVal(op.attributes, theme_bg, true);
     }
     return op;
 }
 
-function adjustBgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str, elm) {
+function adjustBgToTheme(bg_color_obj) {
     // NOTE l changes are just experimental atm, bg is uniformly set to transparent
     // (but this function is skipped if bg is user specified in editor)
-    let rgba = cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str);
+    let rgba = cleanColor(bg_color_obj);
     let hsl = rgb2hsl(rgba);
     if (globals.EditorTheme == 'light') {
         hsl.l = Math.max(hsl.l, 85);
@@ -143,8 +151,8 @@ function adjustBgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str, elm) {
     return css_rgba;
 }
 
-function adjustFgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str, elm) {
-    let rgba = cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str);
+function adjustFgToTheme(fg_color_obj) {
+    let rgba = cleanColor(fg_color_obj);
     let hsl = rgb2hsl(rgba);
     if (globals.EditorTheme == 'dark') {
         hsl.l = Math.max(hsl.l == 0 ? 100 : hsl.l, 75);
@@ -156,6 +164,16 @@ function adjustFgToTheme(rgb_Or_rgba_Or_colorName_Or_hex_Str, elm) {
 
     let css_rgba = rgbaToCssColor(adj_rgb);
     return css_rgba;
+}
+
+function applyThemeToDelta(delta) {
+    if (!delta || delta.ops === undefined || delta.ops.length == 0) {
+        return delta;
+    }
+    for (var i = 0; i < delta.ops.length; i++) {
+        delta.ops[i] = adjustDeltaOpForTheme(delta.ops[i]);
+    }
+    return delta;
 }
 // #endregion Actions
 

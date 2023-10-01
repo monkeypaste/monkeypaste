@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Interactivity;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
@@ -202,10 +203,17 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowSelectorMenuCommand => new MpCommand<object>(
             (args) => {
+                IsOpen = true;
 
-                MpAvMenuView.ShowMenu(
+                var cm = MpAvMenuView.ShowMenu(
                     target: args as Control,
                     dc: PopupMenu);
+
+                void Cm_OnClosed(object sender, RoutedEventArgs e) {
+                    cm.Closed -= Cm_OnClosed;
+                    IsOpen = false;
+                }
+                cm.Closed += Cm_OnClosed;
             });
         #endregion
     }

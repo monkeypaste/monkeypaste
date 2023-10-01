@@ -480,7 +480,11 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool HasInvoker<T>(this EventHandler<T> eventHandler, object invoker) {
-            return eventHandler.HasInvokers() && eventHandler.GetInvocationList().Any(x => x.Equals(invoker));
+            if (eventHandler == null) {
+                return false;
+            }
+            var invokers = eventHandler.GetInvocationList();
+            return eventHandler.HasInvokers() && invokers.Any(x => x.Equals(invoker));
         }
 
         #endregion

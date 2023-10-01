@@ -12,7 +12,7 @@
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
-        Classes="notificationWindow fadeIn fadeOut resizable"
+        Classes="notificationWindow resizable"
         Classes.userActionNotificationWindow="True">
     <Window.Styles>
         <!--  PARAM LISTBOXITEM  -->

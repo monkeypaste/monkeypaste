@@ -37,6 +37,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 		log('convertPlainHtml error! converter not initialized, returning null');
 		return null;
 	}
+	let needs_encoding = formatType != 'rtf2html';
 	const DO_VALIDATE = true;
 
 	log("Converting '" + formatType + "'. The data is: ");
@@ -57,11 +58,11 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 		// better table throws exception setting html so don't test table
 		output_html = getHtmlWithTables();
 	} else {
-		output_html = getHtml();
+		output_html = getHtml(null, needs_encoding);
 	}
 	if (isNullOrWhiteSpace(output_html)) {
 		// fallback and use delta2html, i think its a problem when there's only 1 block and content was plain text
-		output_html = getHtml();
+		output_html = getHtml(null, needs_encoding);
 	}
 
 	if (DO_VALIDATE && verifyText != null) {
@@ -74,6 +75,10 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 		const diff_idx = getFirstDifferenceIdx(verifyText, converted_text);
 		if (diff_idx < 0) {
 			log('conversion validate: PASSED');
+			if (!needs_encoding) {
+				// encode final output
+				output_html = getHtml(null, true);
+			}
 			const is_actual_inline_only = verifyText.indexOf('\n') < 0;
 			if (is_actual_inline_only) {
 				output_html = output_html.replace('<p', '<span').replace('p>','span>');
@@ -88,7 +93,8 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 			log('converted text:');
 			log(converted_text);
 			onException_ntf('conversion error.');
-			output_html = verifyText;
+			output_html = encodeHtmlSpecialEntitiesFromPlainText(verifyText);
+
 		}
 	}
 	let output_delta = convertHtmlToDelta(output_html);

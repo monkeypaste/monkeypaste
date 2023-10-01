@@ -5,9 +5,7 @@
     <Styles.Resources>
         <SolidColorBrush x:Key="TextControlBackground" Color="Transparent" />
         <sys:Double x:Key="TextControlThemeMinHeight">10</sys:Double>
-        <!--<sys:Double x:Key="TextControlThemeMinWidth">
-            0
-        </sys:Double>-->
+        <!--<sys:Double x:Key="TextControlThemeMinWidth">80</sys:Double>-->
     </Styles.Resources>
 
     <Style Selector="local|MpAvMarqueeTextBox:focus DataValidationErrors /template/ ScrollViewer ScrollBar">

@@ -6,7 +6,6 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -322,20 +321,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
-                var sw = Stopwatch.StartNew();
-                var ci_table = MpDb.GetAsyncTable<MpCopyItem>();
-                int total_count = await ci_table.CountAsync();
-                MpConsole.WriteLine($"Total count: {total_count} time: {sw.ElapsedMilliseconds}");
-                sw.Restart();
-
-
-                var cil = await MpDataModelProvider.GetItemsAsync<MpCopyItem>();
-
-                MpConsole.WriteLine($"Total fetch time: {sw.ElapsedMilliseconds}");
-
-                while (true) {
-                    await Task.Delay(100);
-                }
+                MpAvContentWebView.BreakOnNextLoad = true;
 
             });
         #endregion

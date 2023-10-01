@@ -123,7 +123,7 @@ namespace MonkeyPaste.Common {
         #region Private Methods
 
         private static string GetLogStamp(MpLogLevel level) {
-            return $"[{DateTime.Now.ToShortTimeString()}-{level}] ";
+            return $"[{DateTime.Now}-{level}] ";
         }
 
         private static void LogException(object ex, bool isTrace = true, bool recursive = true, int depth = 0) {

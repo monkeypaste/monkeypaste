@@ -11,7 +11,12 @@ async function loadContentAsync(
 	append_state,
 	annotationsJsonStr,
 	sel_state,
-	paste_button_info) {
+	paste_button_info,
+	break_before_load) {
+	if (break_before_load) {
+		log('breaking before load called...');
+		debugger;
+	}
 	// NOTE only called fromHost (or tester which calls _ext)
 	globals.IsLoadingContent = true;
 

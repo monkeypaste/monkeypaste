@@ -1,10 +1,8 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -85,6 +83,7 @@ namespace MonkeyPaste.Common.Wpf {
             foreach (var error in errors) {
                 MpConsole.WriteLine("rtf2html parse error: " + error);
             }
+            //return HttpUtility.HtmlDecode(encoded_html);
             return encoded_html;//HttpUtility.HtmlDecode(encoded_html);
         }
 
@@ -152,12 +151,17 @@ namespace MonkeyPaste.Common.Wpf {
             }
         }
 
+        private static string GetRunText(string text) {
+            return text.EncodeSpecialHtmlEntities();
+            //return text;
+        }
+
         private static HtmlNode ProcessRun(Run r, List<HtmlNode> children) {
             if (!r.Text.ContainsEncodedSpecialHtmlEntities()) {
                 // valid example "if (CopyItemData == "<p><br></p>" || CopyItemData == null)"
 
                 // no encoded entities to wrap with code tag so return encoded run
-                return _htmlDoc.CreateTextNode(r.Text.EncodeSpecialHtmlEntities());
+                return _htmlDoc.CreateTextNode(GetRunText(r.Text));
             }
             // example "{'>',"&gt;" },"
             // since there's encoded entities will need return a container node (span)
@@ -170,7 +174,7 @@ namespace MonkeyPaste.Common.Wpf {
                 if (match_idx > 0) {
                     // create lead run (in example "{'>',"")
                     string lead_text = r.Text.Substring(cur_idx, match_idx);
-                    HtmlNode lead_text_node = _htmlDoc.CreateTextNode(lead_text.EncodeSpecialHtmlEntities());
+                    HtmlNode lead_text_node = _htmlDoc.CreateTextNode(GetRunText(lead_text));
                     HtmlNode lead_text_node_wrapper_span = _htmlDoc.CreateElement("span");
                     lead_text_node_wrapper_span.AppendChild(lead_text_node);
                     span_node.AppendChild(lead_text_node_wrapper_span);
@@ -191,13 +195,13 @@ namespace MonkeyPaste.Common.Wpf {
             if (cur_idx < r.Text.Length) {
                 // create trailing run after encoded special entities
                 string trailing_text = r.Text.Substring(cur_idx);
-                HtmlNode trail_text_node = _htmlDoc.CreateTextNode(trailing_text.EncodeSpecialHtmlEntities());
+                HtmlNode trail_text_node = _htmlDoc.CreateTextNode(GetRunText(trailing_text));
                 HtmlNode trailing_text_node_wrapper_span = _htmlDoc.CreateElement("span");
                 trailing_text_node_wrapper_span.AppendChild(trail_text_node);
                 span_node.AppendChild(trailing_text_node_wrapper_span);
             }
 
-            string valid_check = r.Text.EncodeSpecialHtmlEntities();
+            string valid_check = GetRunText(r.Text);
             string test_check = span_node.InnerText;
             if (valid_check != test_check) {
                 MpConsole.WriteLine("Error encoding run.", true);

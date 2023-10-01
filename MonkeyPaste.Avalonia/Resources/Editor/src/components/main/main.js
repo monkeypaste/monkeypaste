@@ -132,12 +132,12 @@ function initDefaults(defaultsObj) {
 	if(!isNullOrUndefined(defaultsObj.defaultFontFamily)) {
 		setElementComputedStyleProp(document.body,'--defaultFontFamily',defaultsObj.defaultFontFamily);
 
-		log('font family set to: ' + getElementComputedStyleProp(document.body, '--defaultFontFamily'));
+		//log('font family set to: ' + getElementComputedStyleProp(document.body, '--defaultFontFamily'));
 	}
 	if (!isNullOrUndefined(defaultsObj.defaultFontSize)) {
 		globals.DefaultFontSize = Math.max(8, parseInt(defaultsObj.defaultFontSize)) + 'px';
 		setElementComputedStyleProp(document.body, '--defaultFontSize', globals.DefaultFontSize);
-		log('font size set to: '+getElementComputedStyleProp(document.body,'--defaultFontSize'));
+		//log('font size set to: '+getElementComputedStyleProp(document.body,'--defaultFontSize'));
 	}
 	if (!isNullOrUndefined(defaultsObj.isSpellCheckEnabled)) {
 		globals.IsSpellCheckEnabled = parseBool(defaultsObj.isSpellCheckEnabled);

@@ -1041,7 +1041,9 @@ namespace MonkeyPaste.Avalonia {
             //    OnActionComplete?.Invoke(this, args);
             //    return;
             //}
-            Task.Run(() => PerformActionAsync(args).FireAndForgetSafeAsync(this));
+            Dispatcher.UIThread.Post(async () => {
+                await PerformActionAsync(args);
+            });
         }
 
         public virtual async Task PerformActionAsync(object arg) {

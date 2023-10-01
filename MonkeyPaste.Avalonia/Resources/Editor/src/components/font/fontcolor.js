@@ -68,7 +68,7 @@ function setFontBackgroundToolbarButtonColor(bg_hex_color,fg_hex_color) {
 
 // #region State
 
-function isFontColorOverriden(attr) {
+function hasUserFontColor(attr) {
 	if (!attr) {
 		return false;
 	}
@@ -78,7 +78,7 @@ function isFontColorOverriden(attr) {
 	}
 	return false;
 }
-function isFontBgColorOverriden(attr) {
+function hasUserBgFontColor(attr) {
 	if (!attr) {
 		return false;
 	}

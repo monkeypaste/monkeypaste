@@ -60,7 +60,7 @@ function paintFormatOnSelection() {
 		return;
 	}
 
-	formatDocRange(sel, globals.CurPaintFormat, 'user');
+	replaceFormatInDocRange(sel, globals.CurPaintFormat, 'user');
 	if (!isFormatPaintLocked()) {
 		disableFormatPaint();
 	}

@@ -14,11 +14,12 @@ function initAllMatchers() {
     initWhitespaceMatcher();
 
     if (isPlainHtmlConverter()) {
+        initFontColorMatcher();
         return;
     }
     initSpecialCharacterMatcher();
-    initLinkMatcher();
     initFontColorMatcher();
+    initLinkMatcher();
     initFontFamilyMatcher();
     initFontSizeMatcher();
     initCheckableListMatcher();
@@ -126,20 +127,9 @@ function initCheckableListMatcher() {
     });
 }
 function initFontColorMatcher() {
-    if (Quill === undefined) {
-        /// host load error case
-        debugger;
-    }
-    let Delta = Quill.imports.delta;
-
     globals.quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
-        if (!delta || delta.ops === undefined || delta.ops.length == 0) {
-            return delta;
-        }
-        for (var i = 0; i < delta.ops.length; i++) {
-            delta.ops[i] = adjustDeltaOpForTheme(delta.ops[i], node);
-        }
-        return delta;
+        let result = applyThemeToDelta(delta);
+        return result;
     });
 }
 function initFontSizeMatcher() {
