@@ -361,7 +361,7 @@ function disableSubSelection(fromHost = false) {
 function onEditorFocus(e) {
 	log('editor got focus');
 	hideAllPopups();
-	getEditorElement().classList.add('focused');
+	getEditorContainerElement().classList.add('editor-focused');
 	drawOverlay();
 }
 
@@ -370,7 +370,7 @@ function onEditorBlur(e) {
 	//if (isTemplateFocused()) {
 	//	return;
 	//}
-	getEditorElement().classList.remove('focused');
+	getEditorContainerElement().classList.remove('editor-focused');
 	drawOverlay();
 }
 

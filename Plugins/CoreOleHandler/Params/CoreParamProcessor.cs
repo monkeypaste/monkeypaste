@@ -38,6 +38,8 @@ namespace CoreOleHandler {
                                                 "CoreClipboardWriter")
                                         };
                                             data = rtf.Substring(0, max_length);
+
+                                            throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{rtf.Length}'");
                                         }
                                     }
                                 }
@@ -63,7 +65,8 @@ namespace CoreOleHandler {
                                                 data,
                                                 new object[] {
                                                     MpPortableDataFormats.AvHtml_bytes,
-                                                    html_bytes } };
+                                                    html_bytes,
+                                                    MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT} };
                                     }
                                 }
                                 break;
@@ -84,6 +87,7 @@ namespace CoreOleHandler {
                                                 "CoreClipboardWriter")
                                         };
                                             data = html_str.Substring(0, max_length);
+                                            throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{html_str.Length}'");
                                         }
                                     }
                                 }
@@ -109,7 +113,8 @@ namespace CoreOleHandler {
                                                 data,
                                                 new object[] {
                                                     MpPortableDataFormats.AvRtf_bytes,
-                                                    rtf_bytes } };
+                                                    rtf_bytes,
+                                                    MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT} };
                                     }
                                 }
                                 break;
@@ -124,11 +129,12 @@ namespace CoreOleHandler {
                                             nfl = new List<MpPluginUserNotificationFormat>() {
                                             Util.CreateNotification(
                                                 MpPluginNotificationType.PluginResponseWarning,
-                                                "Max Char Count Reached",
-                                                $"Text limit is '{max_length}' and data was '{text.Length}'",
-                                                "CoreClipboardWriter")
-                                        };
+                                                    "Max Char Count Reached",
+                                                    $"Text limit is '{max_length}' and data was '{text.Length}'",
+                                                    "CoreClipboardWriter")
+                                            };
                                             data = text.Substring(0, max_length);
+                                            throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{text.Length}'");
                                         }
                                     }
                                 }
@@ -165,6 +171,8 @@ namespace CoreOleHandler {
                                                 "CoreClipboardWriter")
                                         };
                                             data = text.Substring(0, max_length);
+
+                                            throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{text.Length}'");
                                         }
                                     }
                                 }
@@ -202,6 +210,8 @@ namespace CoreOleHandler {
                                                 "CoreClipboardWriter")
                                         };
                                             data = text.Substring(0, max_length);
+
+                                            throw new CoreOleMaxLengthException("Max Length");
                                         }
                                     }
                                 }
@@ -231,6 +241,8 @@ namespace CoreOleHandler {
                                                 "CoreClipboardWriter")
                                         };
                                             data = text.Substring(0, max_length);
+
+                                            throw new CoreOleMaxLengthException("Max Length");
                                         }
                                     }
                                 }
@@ -334,6 +346,9 @@ namespace CoreOleHandler {
                 return data;
             }
             catch (Exception e) {
+                if (e is CoreOleException) {
+                    throw;
+                }
                 ex = e;
             }
             return data;

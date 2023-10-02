@@ -4,7 +4,6 @@ using SQLite;
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,7 +11,9 @@ namespace MonkeyPaste {
     public class MpDataObject : MpDbModelBase {
         #region Statics
         static string[] _IgnoredFormatNames = new string[] {
-            MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT
+            MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT,
+            MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT,
+            MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT,
             // TODO add more as needed when create breaks
         };
         #endregion

@@ -47,7 +47,9 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	if (formatType == 'text') {
 		setEditorText(dataStr, 'user');
 	} else {
-		const html_str = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr), 'text/html').body.innerHTML;
+		let html_str = needs_encoding ?
+			globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr), 'text/html').body.innerHTML :
+			dataStr;
 		setEditorHtml(html_str, 'user');
 	}
 	updateQuill();

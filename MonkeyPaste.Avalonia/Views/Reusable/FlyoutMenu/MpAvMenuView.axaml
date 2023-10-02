@@ -11,6 +11,8 @@
                     x:CompileBindings="True"
                     x:Class="MonkeyPaste.Avalonia.MpAvMenuView">
     <local:MpAvMenuView.Styles>
+      <!-- MENU ITEM -->
+      
         <Style Selector="MenuItem">
             <Setter Property="Padding"
                     Value="10,5,15,5" />
@@ -50,6 +52,7 @@
                     Value="{Binding Header}" />
         </Style>
 
+      <!-- CHECK BOXES -->
         <Style Selector="MenuItem CheckBox"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="Command"
@@ -60,6 +63,8 @@
                     Value="{StaticResource MenuItemCheckBox}" />
         </Style>
 
+      <!-- ICON -->
+      
         <Style Selector="MenuItem Image"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="IsVisible"
@@ -74,15 +79,24 @@
                     Value="16" />
             <Setter Property="Height"
                     Value="16" />
-            <!--<Setter Property="Effect"
-                    Value="drop-shadow(0 0 5 black)" />-->
         </Style>
 
-        <Style Selector="MenuItem.dark Image"
-               x:DataType="local:MpAvIMenuItemViewModel">
-            <!--<Setter Property="Effect"
-                    Value="drop-shadow(0 0 5 white)" />-->
-        </Style>
+      <!-- HEADER -->
+      
+      <Style Selector="MenuItem TextBlock.textheader"
+             x:DataType="local:MpAvIMenuItemViewModel">
+        <Setter Property="TextWrapping"
+                Value="WrapWithOverflow" />
+        <Setter Property="MaxWidth"
+                Value="200" />
+        <Setter Property="Text"
+                Value="{Binding Header}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveColor}" />
+      </Style>
+
+      <!-- SEPARATOR -->
+      
         <Style Selector="Separator">
             <Style.Resources>
                 <LinearGradientBrush x:Key="SystemControlForegroundBaseMediumLowBrush" StartPoint="0%,0%" EndPoint="100%,0%">
@@ -91,15 +105,6 @@
                     <GradientStop Offset="1" Color="Transparent" />
                 </LinearGradientBrush>
             </Style.Resources>
-        </Style>
-        <Style Selector="MenuItem TextBlock"
-               x:DataType="local:MpAvIMenuItemViewModel">
-            <Setter Property="TextWrapping"
-                    Value="WrapWithOverflow" />
-            <Setter Property="MaxWidth"
-                    Value="200" />
-            <Setter Property="Text"
-                    Value="{Binding Header}" />
         </Style>
     </local:MpAvMenuView.Styles>
     <local:MpAvMenuView.ItemsSource>
@@ -119,7 +124,7 @@
                                 <Image Classes="icon" />
                             </MenuItem.Icon>
                             <MenuItem.Header>
-                                <TextBlock Classes="header" />
+                                <TextBlock Classes="textheader" />
                             </MenuItem.Header>
                         </MenuItem>
                     </DataTemplate>
@@ -154,7 +159,7 @@
                                 <StackPanel Orientation="Horizontal"
                                             Spacing="10">
                                     <Image Classes="icon" />
-                                    <TextBlock Classes="header" />
+                                    <TextBlock Classes="textheader" />
                                 </StackPanel>
                             </MenuItem.Header>
                         </MenuItem>

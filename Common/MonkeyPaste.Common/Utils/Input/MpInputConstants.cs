@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace MonkeyPaste.Common {
+﻿namespace MonkeyPaste.Common {
     public static class MpInputConstants {
         public const string COMBO_SEPARATOR = "+";
         public const string SEQUENCE_SEPARATOR = "|";
@@ -19,6 +17,8 @@ namespace MonkeyPaste.Common {
         public const string ESCAPE_KEY_LITERAL = "Esc";
         public const string ENTER_KEY_LITERAL = "Enter";
         public const string CAPS_LOCK_KEY_LITERAL = "Caps Lock";
+
+        public const string BACKSPACE_KEY_LITERAL = "Backspace";
 
         // NOTE literals are ordered by priority (ie sharphook GesturePriority)
         public static string[] MOD_LITERALS =>

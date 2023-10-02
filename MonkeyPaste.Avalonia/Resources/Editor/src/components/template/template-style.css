@@ -38,7 +38,7 @@
     /*color:*/ 
 }
 
-#editor:not(.no-select) .ql-editor.focused .template-blot.template-blot-at-insert > span {
+#editor:not(.no-select).editor-focused .ql-editor .template-blot.template-blot-at-insert > span {
     color: var(--focuscolor) !important;
 }
 #editor:not(.no-select) .ql-editor .template-blot.focused > span {

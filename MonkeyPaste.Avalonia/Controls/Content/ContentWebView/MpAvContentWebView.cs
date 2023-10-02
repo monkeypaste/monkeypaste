@@ -1443,8 +1443,10 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
+            //Task.Run(() => {
             BindingContext.IgnoreHasModelChanged = true;
 
+            BindingContext.SearchableText = contentChanged_ntf.itemPlainText;
             BindingContext.CopyItemSize1 = contentChanged_ntf.itemSize1;
             BindingContext.CopyItemSize2 = contentChanged_ntf.itemSize2;
 
@@ -1486,7 +1488,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 });
             }
-            // }, DispatcherPriority.Background);
+            // });
 
         }
 

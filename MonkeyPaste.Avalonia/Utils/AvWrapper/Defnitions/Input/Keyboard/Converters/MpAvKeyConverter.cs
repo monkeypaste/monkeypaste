@@ -9,7 +9,7 @@ using System.Text;
 namespace MonkeyPaste.Avalonia {
     public class MpAvKeyConverter : MpIKeyConverterHub {
         #region Private Variables
-        private MpIKeyConverter<KeyCode> _globalConverter = new MpGlobalKeyConverter();
+        private MpIKeyConverter<KeyCode> _globalConverter = new MpAvSharpHookKeyConverter();
         private MpIKeyConverter<Key> _internalConverter = new MpAvInternalKeyConverter();
         #endregion
 

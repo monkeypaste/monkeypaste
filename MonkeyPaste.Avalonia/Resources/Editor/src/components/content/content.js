@@ -182,6 +182,7 @@ function getContentHandle() {
 function getContentAsMessage() {
 	updateQuill();
 	return {
+		itemPlainText: getContentPlainText(),
 		contentHeight: getContentHeight(),
 		editorWidth: getEditorWidth(),
 		editorHeight: getEditorHeight(),
@@ -191,6 +192,22 @@ function getContentAsMessage() {
 		hasTemplates: hasTemplates(),
 		hasEditableTable: hasEditableTable()
 	};
+}
+
+function getContentPlainText() {
+	// NOTE basically the same as content data
+	// except text type is plain text so 
+	// checksum makes sense
+	if (globals.ContentItemType == 'Text') {
+		return getText();
+	}
+	if (globals.ContentItemType == 'Image') {
+		return getImageContentData();
+	}
+	if (globals.ContentItemType == 'FileList') {
+		return getFileListContentData();
+	}
+	return '';
 }
 
 function getContentData() {

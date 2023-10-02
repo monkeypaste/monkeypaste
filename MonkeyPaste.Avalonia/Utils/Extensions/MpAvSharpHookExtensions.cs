@@ -143,6 +143,9 @@ namespace MonkeyPaste.Avalonia {
             if (key == KeyCode.VcNumPadEnter) {
                 return MpInputConstants.ENTER_KEY_LITERAL;
             }
+            if (key == KeyCode.VcEscape) {
+                return MpInputConstants.ESCAPE_KEY_LITERAL;
+            }
             if (key == KeyCode.VcNumPadDivide) {
                 return @"/";
             }
@@ -213,6 +216,12 @@ namespace MonkeyPaste.Avalonia {
                lks == MpInputConstants.SH_CAPS_LOCK_KEY_LITERAL.ToLower()) {
                 return KeyCode.VcCapsLock;
             }
+            if (lks == MpInputConstants.ENTER_KEY_LITERAL.ToLower()) {
+                return KeyCode.VcNumPadEnter;
+            }
+            if (lks == MpInputConstants.ESCAPE_KEY_LITERAL.ToLower()) {
+                return KeyCode.VcEscape;
+            }
             if (lks == "alt") {
                 return KeyCode.VcLeftAlt;//.LeftAlt;
             }
@@ -267,8 +276,8 @@ namespace MonkeyPaste.Avalonia {
             }
             string err_msg = $"Unhandled global key literal '{lks}'";
 #if DEBUG
-            throw new MpException(err_msg);
-#else
+            //throw new MpException(err_msg);
+            //#else
             MpConsole.WriteLine(err_msg);
             return KeyCode.VcUndefined;
 #endif

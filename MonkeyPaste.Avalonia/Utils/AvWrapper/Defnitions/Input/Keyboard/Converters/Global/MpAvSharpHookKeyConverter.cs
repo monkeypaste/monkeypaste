@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpGlobalKeyConverter : MpIKeyConverter<KeyCode> {
+    public class MpAvSharpHookKeyConverter : MpIKeyConverter<KeyCode> {
         public int GetKeyPriority(KeyCode key) {
             return key.GesturePriority();
         }

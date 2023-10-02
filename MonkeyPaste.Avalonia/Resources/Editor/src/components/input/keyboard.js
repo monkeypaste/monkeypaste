@@ -120,6 +120,13 @@ function updateGlobalModKeys(e) {
 
 function handleWindowKeyDown(e) {
 	if (!isWindowFocused()) {
+		if (isReadOnly()) {
+			log('NOTE! window not focused but received key down while read-only. rejecting: ' + e.key);
+			// ensure no input chars pass through in read only
+
+			e.stopPropagation();
+			e.preventDefault();
+		}
 		return;
 	}
 	let suppresKeyDown = true;

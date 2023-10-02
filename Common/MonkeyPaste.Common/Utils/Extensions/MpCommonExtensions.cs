@@ -587,7 +587,7 @@ namespace MonkeyPaste.Common {
                     Array.Copy(b, oldn, nb, 0, n - oldn);
                     try {
                         string internalEnc = Encoding.ASCII.GetString(nb);
-                        if (internalEnc == "UTF8") {
+                        if (internalEnc == "UTF8" || string.IsNullOrEmpty(internalEnc)) {
                             // BUG
                             // System.ArgumentException: ''UTF8' is not a supported encoding name.
                             // For information on defining a custom encoding,

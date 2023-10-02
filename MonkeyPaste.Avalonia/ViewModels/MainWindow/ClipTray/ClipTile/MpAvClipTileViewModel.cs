@@ -549,7 +549,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
+        public string SearchableText { get; set; }
         public bool IsAnimating { get; set; }
         bool IsContentChangeModelChange { get; set; }
         public bool CanDrop {
@@ -1243,6 +1243,7 @@ namespace MonkeyPaste.Avalonia {
                 (ci != null && CopyItemId == ci.Id) ||
                 (ci != null && PinPlaceholderCopyItemId == ci.Id && queryOffset >= 0);
 
+            SearchableText = null;
             _contentView = null;
             if (!is_reload) {
                 IsWindowOpen = false;
@@ -1883,7 +1884,7 @@ namespace MonkeyPaste.Avalonia {
                         //    return;
                         //}
                         Task.Run(async () => {
-                            await CopyItem.WriteToDatabaseAsync(IsContentChangeModelChange);
+                            await CopyItem.WriteToDatabaseAsync(IsContentChangeModelChange, IsContentChangeModelChange ? SearchableText : null);
                             Dispatcher.UIThread.Post(() => {
                                 // BUG i think this is a preview5 bug
                                 // something w/ WeakEvent has no obj ref

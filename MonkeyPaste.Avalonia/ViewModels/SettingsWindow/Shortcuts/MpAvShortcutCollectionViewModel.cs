@@ -37,8 +37,7 @@ namespace MonkeyPaste.Avalonia {
 
         private SimpleGlobalHook _hook;
 
-
-        private MpKeyGestureHelper<KeyCode> _keyboardGestureHelper = new MpKeyGestureHelper<KeyCode>();
+        private MpAvKeyGestureHelper<KeyCode> _keyboardGestureHelper = new MpAvKeyGestureHelper<KeyCode>();
         private MpAvShortcutViewModel _exact_match;
 
         #endregion
@@ -867,6 +866,8 @@ namespace MonkeyPaste.Avalonia {
 
         private void CreateGlobalInputHooks() {
             if (_hook == null) {
+
+                //_keyboardGestureHelper.StartChecker();
                 _hook = new SimpleGlobalHook();
 
                 if (IS_GLOBAL_KEYBOARD_INPUT_ENABLED) {
@@ -896,6 +897,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             _hook.RunAsync();
+
         }
 
 

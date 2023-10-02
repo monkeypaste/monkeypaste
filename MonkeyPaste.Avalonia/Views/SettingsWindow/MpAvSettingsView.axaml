@@ -41,7 +41,7 @@
                 <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
 
-                <Thickness x:Key="ToggleButtonBorderThemeThickness">3</Thickness>
+                <!--<Thickness x:Key="ToggleButtonBorderThemeThickness">1</Thickness>-->
             </Style.Resources>
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />

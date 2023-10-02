@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 
-        private MpKeyGestureHelper<KeyCode> _gestureHelper;
+        private MpAvKeyGestureHelper<KeyCode> _gestureHelper;
 
         private int _curShortcutId = 0;
         #endregion
@@ -223,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
 
             await Task.Delay(1);
             _curShortcutId = curShortcutId;
-            _gestureHelper = new MpKeyGestureHelper<KeyCode>() { ResetAfterGesture = true };
+            _gestureHelper = new MpAvKeyGestureHelper<KeyCode>() { ResetAfterGesture = true };
             KeyString = keyString;
             ShortcutDisplayName = shortcutName;
             IconResourceObj = iconResourceObj;

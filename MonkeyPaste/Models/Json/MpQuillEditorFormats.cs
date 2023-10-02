@@ -122,6 +122,7 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillEditorContentChangedMessage : MpJsonObject {
+        public string itemPlainText { get; set; }
         public string itemData { get; set; }
 
         public double contentHeight { get; set; } // NOTE ignoring width, it'll roughly be editorWidth unless wrapping is disabled like in dnd

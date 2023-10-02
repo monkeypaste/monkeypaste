@@ -347,6 +347,20 @@
         <!--  SETTINGS WINDOW  -->
         <SolidColorBrush x:Key="SettingsWindowBgBrush" Color="{DynamicResource ThemeColor}" />
 
+        <!--  TOGGLE SWITCH  -->
+
+        <SolidColorBrush x:Key="ToggleSwitchContentForeground" Color="White" Opacity="1" />
+        <SolidColorBrush x:Key="ToggleSwitchStrokeOff" Color="White" Opacity="1" />
+        <SolidColorBrush x:Key="ToggleSwitchFillOff" Color="Black" Opacity="1" />
+        <SolidColorBrush x:Key="ToggleSwitchKnobFillOff" Color="White" Opacity="1" />
+        <SolidColorBrush x:Key="ToggleSwitchStrokeOn" Color="White" Opacity="1" />
+        <SolidColorBrush x:Key="ToggleSwitchKnobFillOn" Color="White" Opacity="1" />
+
+        <SolidColorBrush x:Key="ToggleSwitchStrokeOffPointerOver" Color="White" Opacity="1" />
+        <SolidColorBrush x:Key="ToggleSwitchFillOffPointerOver" Color="Black" Opacity="1" />
+        <SolidColorBrush x:Key="ToggleSwitchKnobFillOffPointerOver" Color="White" Opacity="1" />
+        <SolidColorBrush x:Key="ToggleSwitchStrokeOnPointerOver" Color="White" Opacity="1" />
+        <SolidColorBrush x:Key="ToggleSwitchKnobFillOnPointerOver" Color="White" Opacity="1" />
 
         <!--  EFFECTS  -->
         <DropShadowEffect x:Key="EmptyDropShadow"

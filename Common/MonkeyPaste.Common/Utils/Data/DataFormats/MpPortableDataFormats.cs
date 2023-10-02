@@ -121,6 +121,8 @@ namespace MonkeyPaste.Common {
         public const string INTERNAL_PARAMETER_VALUE_FORMAT = "Mp Internal Parameter Value";
         public const string INTERNAL_PROCESS_INFO_FORMAT = "Mp Internal Process Info";
         public const string INTERNAL_FILE_LIST_FRAGMENT_FORMAT = "Mp Internal File List Fragment Format";
+        public const string INTERNAL_RTF_TO_HTML_FORMAT = "Mp Internal RTF To HTML Content Type";
+        public const string INTERNAL_HTML_TO_RTF_FORMAT = "Mp Internal HTML To RTF Content Type";
 
 
         // NOTE data object is not registered and only used to merge data objects
@@ -146,7 +148,9 @@ namespace MonkeyPaste.Common {
             INTERNAL_ACTION_ITEM_FORMAT,
             INTERNAL_PROCESS_INFO_FORMAT,
             INTERNAL_PARAMETER_VALUE_FORMAT,
-            INTERNAL_FILE_LIST_FRAGMENT_FORMAT
+            INTERNAL_FILE_LIST_FRAGMENT_FORMAT,
+            INTERNAL_RTF_TO_HTML_FORMAT,
+            INTERNAL_HTML_TO_RTF_FORMAT
         };
         #endregion
 

@@ -193,11 +193,21 @@ namespace MonkeyPaste {
 
         #region Public Methods
 
-        public async Task WriteToDatabaseAsync(bool isContentChangeWrite) {
-            await WriteToDb_internal(isContentChangeWrite);
+        public async Task WriteToDatabaseAsync(bool isItemDataChanged, string searchAndChecksumText) {
+            if (isItemDataChanged) {
+                // NOTE this is a workaround for initial loading and edge cases when search text is missing,
+                // just fallback and use slower method
+                MpDebug.Assert(searchAndChecksumText != null, $"Content change write w/o search text specified", true);
+                if (ItemType == MpCopyItemType.Text) {
+                    searchAndChecksumText = ItemData.ToPlainText();
+                } else {
+                    searchAndChecksumText = ItemData;
+                }
+            }
+            await WriteToDb_internal(searchAndChecksumText);
         }
         public override async Task WriteToDatabaseAsync() {
-            await WriteToDb_internal(false);
+            await WriteToDb_internal(null);
         }
 
         public override async Task DeleteFromDatabaseAsync() {
@@ -384,7 +394,8 @@ namespace MonkeyPaste {
 
         #region Private Methods
 
-        private async Task WriteToDb_internal(bool isContentChangeWrite) {
+        private async Task WriteToDb_internal(string searchAndChecksumText) {
+            bool isContentChangeWrite = searchAndChecksumText != null;
             if (IgnoreDb) {
                 MpConsole.WriteLine($"Db write for '{ToString()}' was ignored");
                 return;
@@ -396,28 +407,33 @@ namespace MonkeyPaste {
                 return;
             }
             MpDebug.Assert(IconId != MpDefaultDataModelTools.ThisAppIconId, $"This should be unknown icon id");
+            if (searchAndChecksumText != null) {
+                UpdateContentCheckSum(searchAndChecksumText);
+            }
             await base.WriteToDatabaseAsync();
 
-            if (ItemType == MpCopyItemType.FileList) {
-                // need to wait for files i think
-                await UpdateDataObjectAsync(isContentChangeWrite);
-                return;
+            if (searchAndChecksumText != null) {
+                if (ItemType == MpCopyItemType.FileList) {
+                    // need to wait for files i think
+                    await UpdateDataObjectAsync(searchAndChecksumText);
+                    return;
+                }
+                _ = Task.Run(() => UpdateDataObjectAsync(searchAndChecksumText));
             }
-            _ = Task.Run(() => UpdateDataObjectAsync(isContentChangeWrite));
         }
-        private async Task UpdateDataObjectAsync(bool isContentChangeWrite) {
+        private async Task UpdateDataObjectAsync(string searchAndChecksumText) {
             switch (ItemType) {
                 case MpCopyItemType.Image:
                     // TODO could use computer vision analytics here to get content/meta information
-                    if (isContentChangeWrite) {
-                        UpdateContentCheckSum(ItemData);
-                    }
+                    //if (isContentChangeWrite) {
+                    // UpdateContentCheckSum(ItemData);
+                    //}
                     return;
                 case MpCopyItemType.FileList:
-                    if (!isContentChangeWrite) {
-                        // only itemData updates affect dataObject
-                        break;
-                    }
+                    //if (!isContentChangeWrite) {
+                    // only itemData updates affect dataObject
+                    // break;
+                    //}
 
                     // update file plain text (fire and foreget, not needed later)
                     var fl_texts = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.Text);
@@ -448,53 +464,9 @@ namespace MonkeyPaste {
                                     dataObjectId: DataObjectId,
                                     itemFormat: MpPortableDataFormats.AvFiles,
                                     itemData: x)));
-
-                    UpdateContentCheckSum(ItemData);
-                    // NOTE below is bad when theres duplicates, real bad
-
-                    //var to_remove = doi_fpl.Where(x => !fpl.Contains(x.ItemData));
-                    //var to_add = fpl.Where(x => doi_fpl.All(y => y.ItemData != x));
-
-                    //if (to_remove.Any()) {
-                    //    await Task.WhenAll(to_remove.Select(x => x.DeleteFromDatabaseAsync()));
-                    //    to_remove.ForEach(x => MpConsole.WriteLine($"FileItem '{x.ItemData}' REMOVED from Copy Item '{Title}'"));
-                    //}
-                    //if (to_add.Any()) {
-                    //    // added file entries w/o icons
-                    //    var added_doil = await Task.WhenAll<MpDataObjectItem>(
-                    //        to_add.Select(x =>
-                    //            MpDataObjectItem.CreateAsync(
-                    //                dataObjectId: DataObjectId,
-                    //                itemFormat: MpPortableDataFormats.AvFiles,
-                    //                itemData: x)));
-
-                    //    foreach (var added_doi in added_doil) {
-                    //        if (added_doi.ItemData.IsFileOrDirectory()) {
-                    //            // use file system icon if available
-                    //            string fp_icon_base64_str = Mp.Services.IconBuilder.GetPathIconBase64(added_doi.ItemData);
-                    //            var fp_icon = await Mp.Services.IconBuilder.CreateAsync(fp_icon_base64_str);
-                    //            added_doi.ItemDataIconId = fp_icon.Id;
-                    //        } else {
-                    //            var doi_matches = await MpDataModelProvider.GetDataObjectItemsForFormatByDataAsync(MpPortableDataFormats.AvFiles, added_doi.ItemData);
-                    //            if (doi_matches.Any()) {
-                    //                // if item was imported use icon from imported doi
-                    //                added_doi.ItemDataIconId = doi_matches.FirstOrDefault().ItemDataIconId;
-                    //            } else {
-                    //                // missing file
-                    //                var fp_icon = await Mp.Services.IconBuilder.CreateAsync(MpBase64Images.MissingFile);
-                    //                added_doi.ItemDataIconId = fp_icon.Id;
-                    //            }
-                    //        }
-                    //        MpDebug.Assert(added_doi.ItemDataIconId != 0, "FileItem Icon create error");
-                    //    }
-                    //    // update added items w/ there icons
-                    //    await Task.WhenAll(added_doil.Select(x => x.WriteToDatabaseAsync()));
-
-                    //    to_add.ForEach(x => MpConsole.WriteLine($"FileItem '{x}' ADDED to Copy Item '{Title}'"));
-                    //}
                     return;
                 case MpCopyItemType.Text:
-                    string searchable_text = ItemData.ToPlainText("html");
+                    string searchable_text = searchAndChecksumText;//ItemData.ToPlainText("html");
                     var doil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.Text);
                     if (doil.Count == 0) {
                         doil.Add(new MpDataObjectItem() {
@@ -503,9 +475,9 @@ namespace MonkeyPaste {
                         });
                     }
                     MpDebug.Assert(doil.Count == 1, $"There should only be 1 text entry for dataobj but there are {doil.Count}");
-                    if (isContentChangeWrite) {
-                        UpdateContentCheckSum(searchable_text);
-                    }
+                    //if (isContentChangeWrite) {
+                    //    UpdateContentCheckSum(searchable_text);
+                    //}
                     doil[0].ItemData = searchable_text;
                     await doil[0].WriteToDatabaseAsync();
                     return;
@@ -513,17 +485,17 @@ namespace MonkeyPaste {
         }
 
         private void UpdateContentCheckSum(string checkSumSource) {
-            _ = Task.Run(async () => {
-                // NOTE this is always handled in bg, its not used in view
-                string newCheckSum = GetContentCheckSum(checkSumSource);
-                if (ContentCheckSum == newCheckSum) {
-                    // no change ignore
-                    return;
-                }
-                MpConsole.WriteLine($"Tile '{this}' checksum updated. From '{ContentCheckSum}' to '{newCheckSum}'");
-                ContentCheckSum = newCheckSum;
-                await WriteToDatabaseAsync();
-            });
+            //_ = Task.Run(async () => {
+            // NOTE this is always handled in bg, its not used in view
+            string newCheckSum = GetContentCheckSum(checkSumSource);
+            if (ContentCheckSum == newCheckSum) {
+                // no change ignore
+                return;
+            }
+            MpConsole.WriteLine($"Tile '{this}' checksum updated. From '{ContentCheckSum}' to '{newCheckSum}'");
+            ContentCheckSum = newCheckSum;
+            // await WriteToDatabaseAsync();
+            //});
         }
         #endregion
 

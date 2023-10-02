@@ -1697,6 +1697,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Utils\Input\KeyDownHelper\uwp\**" />    
     <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />    
     <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.uwp.cs" />    
   </ItemGroup>
@@ -1725,6 +1726,7 @@
     
     <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.uwp.cs" />
+    <Compile Include="Utils\Input\KeyDownHelper\uwp\**" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'BROWSER'">

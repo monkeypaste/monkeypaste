@@ -64,34 +64,47 @@ namespace CoreOleHandler {
 
             foreach (var read_format in readFormats) {
                 object data = await ReadDataObjectFormat(read_format, avdo);
+                bool is_valid = true;
                 if (!request.ignoreParams) {
                     foreach (var param in request.items) {
-                        data = CoreParamProcessor.ProcessParam(param, read_format, data, out var ex, out var param_nfl);
-                        if (ex != null) {
-                            exl.Add(ex);
-                        }
-                        if (param_nfl != null) {
-                            nfl.AddRange(param_nfl);
-                        }
-                        if (data == null) {
-                            // param omitted format, don't process rest of params
-                            break;
-                        }
-                        if (data is object[] dataParts &&
-                            dataParts[0] is object origData &&
-                            dataParts[1] is object[] convParts &&
-                            convParts[0] is string convFormat &&
-                            convParts[1] is object convData) {
-                            data = origData;
-                            if (!string.IsNullOrEmpty(convFormat) &&
-                                convData != null) {
-                                // add converted format to output
-                                read_output.SetData(convFormat, convData);
+                        try {
+
+                            data = CoreParamProcessor.ProcessParam(param, read_format, data, out var ex, out var param_nfl);
+
+                            if (ex != null) {
+                                exl.Add(ex);
+                            }
+                            if (param_nfl != null) {
+                                nfl.AddRange(param_nfl);
+                            }
+                            if (data == null) {
+                                // param omitted format, don't process rest of params
+                                break;
+                            }
+                            if (data is object[] dataParts &&
+                                dataParts[0] is object origData &&
+                                dataParts[1] is object[] convParts &&
+                                convParts[0] is string convFormat &&
+                                convParts[1] is object convData &&
+                                convParts[2] is string convFlagFormat) {
+                                data = origData;
+                                if (!string.IsNullOrEmpty(convFormat) &&
+                                    convData != null) {
+                                    // add converted format to output
+                                    read_output.SetData(convFormat, convData);
+                                    // add conversion flag for format
+                                    read_output.SetData(convFlagFormat, true);
+                                }
                             }
                         }
+                        catch (CoreOleException cex) {
+                            MpConsole.WriteTraceLine($"Param exception! format: '{read_format}'.", cex);
+                            is_valid = false;
+                        }
+
                     }
                 }
-                if (data == null) {
+                if (data == null || !is_valid) {
                     continue;
                 }
                 read_output.SetData(read_format, data);

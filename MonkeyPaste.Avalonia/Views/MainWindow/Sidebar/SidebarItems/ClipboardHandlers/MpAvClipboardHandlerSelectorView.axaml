@@ -99,7 +99,6 @@
                                                   IsChecked="{Binding IsFilterForWriters, Mode=TwoWay}" />-->
                                     <ToggleSwitch Grid.Column="1"
                                                   Margin="10,0,0,0"
-                                                  Foreground="{DynamicResource ThemeInteractiveColor}"
                                                   FontWeight="SemiBold"
                                                   IsChecked="{Binding IsFilterForWriters, Mode=TwoWay}"
                                                   OnContent="{x:Static local:UiStrings.ClipboardPluginFormatTypeWritersLabel}"
