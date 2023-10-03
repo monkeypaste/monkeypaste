@@ -59,6 +59,7 @@ namespace CoreOleHandler {
 
             List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
             List<Exception> exl = new List<Exception>();
+            List<object> conversion_results = null;
             var read_output = new MpAvDataObject();
             var readFormats = request.formats.Where(x => availableFormats.Contains(x));
 
@@ -83,18 +84,12 @@ namespace CoreOleHandler {
                             }
                             if (data is object[] dataParts &&
                                 dataParts[0] is object origData &&
-                                dataParts[1] is object[] convParts &&
-                                convParts[0] is string convFormat &&
-                                convParts[1] is object convData &&
-                                convParts[2] is string convFlagFormat) {
+                                dataParts[1] is object convData) {
                                 data = origData;
-                                if (!string.IsNullOrEmpty(convFormat) &&
-                                    convData != null) {
-                                    // add converted format to output
-                                    read_output.SetData(convFormat, convData);
-                                    // add conversion flag for format
-                                    read_output.SetData(convFlagFormat, true);
+                                if (conversion_results == null) {
+                                    conversion_results = new List<object>();
                                 }
+                                conversion_results.Add(convData);
                             }
                         }
                         catch (CoreOleException cex) {
@@ -108,6 +103,29 @@ namespace CoreOleHandler {
                     continue;
                 }
                 read_output.SetData(read_format, data);
+            }
+            if (conversion_results != null) {
+                foreach (var conversion_result in conversion_results) {
+                    if (conversion_result is object[] convParts &&
+                        convParts[0] is string convFormat &&
+                        convParts[1] is object convData &&
+                        convParts[2] is string convFlagFormat) {
+                        if (!string.IsNullOrEmpty(convFormat) &&
+                            convData != null
+                        //&& !read_output.ContainsData(convFormat)
+                        ) {
+                            // NOTE only use conversion if not part of data object
+                            // so if its provided it will always use provided
+
+                            // add converted format to output
+                            read_output.SetData(convFormat, convData);
+                            // add conversion flag for format
+                            read_output.SetData(convFlagFormat, true);
+                        }
+                    }
+
+
+                }
             }
 
             return new MpOlePluginResponse() {

@@ -137,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
                 // ignore repeat
                 return;
             }
-            MpConsole.WriteLine($"SHK DOWN '{key}'");
+            //MpConsole.WriteLine($"SHK DOWN '{key}'");
 
             if (ResetAfterGesture && !string.IsNullOrEmpty(_finalGesture)) {
                 Reset();
@@ -153,8 +153,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool RemoveKeyDown(TKeyStruct key) {
+            //MpConsole.WriteLine($"SHK UP '{key}'");
             key = ResolveKey(key);
-            MpConsole.WriteLine($"SHK UP '{key}'");
 
             ValidateUp(key);
 

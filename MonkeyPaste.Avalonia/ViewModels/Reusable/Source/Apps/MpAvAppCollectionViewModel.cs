@@ -509,7 +509,7 @@ namespace MonkeyPaste.Avalonia {
                         .Where(x => exisiting_avml.All(y => !y.ToProcessInfo().IsValueEqual(x)) && !x.IsValueEqual(ThisAppViewModel.ToProcessInfo()))
                         .OrderBy(x => x.ApplicationName)
                         .Select(x => new MpAvMenuItemViewModel() {
-                            IconSourceObj = Mp.Services.IconBuilder.GetPathIconBase64(x.ProcessPath),
+                            IconSourceObj = Mp.Services.IconBuilder.GetPathIconBase64(x.ProcessPath, x.Handle),
                             Header = x.ApplicationName,
                             Command = AddAppComponentCommand,
                             CommandParameter = new object[] { x, add_type }

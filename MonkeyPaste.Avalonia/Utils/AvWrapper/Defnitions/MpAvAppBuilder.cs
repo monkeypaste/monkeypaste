@@ -31,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
 
             // GET APP ICON
             if (string.IsNullOrEmpty(iconBase64)) {
-                iconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(processPath);
+                iconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(processPath, pi.Handle);
             }
 
             if (string.IsNullOrEmpty(iconBase64)) {

@@ -39,10 +39,11 @@ namespace MonkeyPaste.Avalonia {
 
         public override IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos =>
             GetOpenWindows()
-            .GroupBy(x => x.Key)
+            .GroupBy(x => (x.Key, x.Value))
             .Select(x => new MpPortableProcessInfo() {
-                ApplicationName = GetAppNameByProessPath(x.Key),
-                ProcessPath = x.Key
+                ApplicationName = GetAppNameByProessPath(x.Key.Key),
+                ProcessPath = x.Key.Key,
+                Handle = x.Key.Value
             });
         #endregion
 
@@ -136,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
                 ApplicationName = GetProcessApplicationName(handle),
                 MainWindowTitle = GetProcessTitle(handle)
             };
-            ppi.MainWindowIconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(ppi.ProcessPath);
+            ppi.MainWindowIconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(ppi.ProcessPath, ppi.Handle);
             return ppi;
         }
         protected override bool IsHandleWindowProcess(nint handle) {

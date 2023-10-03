@@ -11,8 +11,8 @@
                     x:CompileBindings="True"
                     x:Class="MonkeyPaste.Avalonia.MpAvMenuView">
     <local:MpAvMenuView.Styles>
-      <!-- MENU ITEM -->
-      
+        <!--  MENU ITEM  -->
+
         <Style Selector="MenuItem">
             <Setter Property="Padding"
                     Value="10,5,15,5" />
@@ -52,7 +52,7 @@
                     Value="{Binding Header}" />
         </Style>
 
-      <!-- CHECK BOXES -->
+        <!--  CHECK BOXES  -->
         <Style Selector="MenuItem CheckBox"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="Command"
@@ -63,8 +63,8 @@
                     Value="{StaticResource MenuItemCheckBox}" />
         </Style>
 
-      <!-- ICON -->
-      
+        <!--  ICON  -->
+
         <Style Selector="MenuItem Image"
                x:DataType="local:MpAvIMenuItemViewModel">
             <Setter Property="IsVisible"
@@ -81,22 +81,22 @@
                     Value="16" />
         </Style>
 
-      <!-- HEADER -->
-      
-      <Style Selector="MenuItem TextBlock.textheader"
-             x:DataType="local:MpAvIMenuItemViewModel">
-        <Setter Property="TextWrapping"
-                Value="WrapWithOverflow" />
-        <Setter Property="MaxWidth"
-                Value="200" />
-        <Setter Property="Text"
-                Value="{Binding Header}" />
-        <Setter Property="Foreground"
-                Value="{DynamicResource ThemeInteractiveColor}" />
-      </Style>
+        <!--  HEADER  -->
 
-      <!-- SEPARATOR -->
-      
+        <Style Selector="MenuItem TextBlock.textheader"
+               x:DataType="local:MpAvIMenuItemViewModel">
+            <Setter Property="TextWrapping"
+                    Value="WrapWithOverflow" />
+            <Setter Property="MaxWidth"
+                    Value="200" />
+            <Setter Property="Text"
+                    Value="{Binding Header}" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+
+        <!--  SEPARATOR  -->
+
         <Style Selector="Separator">
             <Style.Resources>
                 <LinearGradientBrush x:Key="SystemControlForegroundBaseMediumLowBrush" StartPoint="0%,0%" EndPoint="100%,0%">
@@ -136,9 +136,41 @@
                                   Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
-                                <CheckBox Classes="icon"
+                                <CheckBox Classes="icon invert"
                                           IsChecked="{Binding IsChecked, Mode=OneWay}"
-                                          IsThreeState="{Binding IsThreeState}" />
+                                          IsThreeState="{Binding IsThreeState}">
+                                    <CheckBox.Resources>
+
+                                        <CornerRadius x:Key="ControlCornerRadius">3,3,3,3</CornerRadius>
+                                        <Thickness x:Key="MenuIconPresenterMargin">0,0,0,0</Thickness>
+                                        <Thickness x:Key="MenuFlyoutItemThemePaddingNarrow">5,5,5,5</Thickness>
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="{DynamicResource ThemeAccent3Color}" />
+
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="{DynamicResource ThemeAccent3Color}" />
+
+                                        <SolidColorBrush x:Key="CheckBoxCheckForegroundStrokeIndeterminate" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckForegroundStrokeIndeterminatePointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
+
+                                        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundIndeterminate" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminate" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminate" Color="{DynamicResource ThemeInteractiveBgColor}" />
+
+                                        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundIndeterminatePointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminatePointerOver" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminatePointerOver" Color="{DynamicResource ThemeAccent3Color}" />
+
+                                        <SolidColorBrush x:Key="CheckBoxBackgroundStrokeIndeterminate" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxBackgroundStrokeIndeterminatePointerOver" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxForegroundStrokeIndeterminate" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxForegroundStrokeIndeterminatePointerOver" Color="{DynamicResource ThemeInteractiveColor}" />
+                                    </CheckBox.Resources>
+                                </CheckBox>
                             </MenuItem.Icon>
                         </MenuItem>
                     </DataTemplate>
@@ -151,9 +183,41 @@
                                   Classes.hasGesture="{Binding InputGestureText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}">
                             <MenuItem.Icon>
-                                <CheckBox Classes="icon"
+                                <CheckBox Classes="icon invert"
                                           IsChecked="{Binding IsChecked, Mode=OneWay}"
-                                          IsThreeState="{Binding IsThreeState}" />
+                                          IsThreeState="{Binding IsThreeState}">
+                                    <CheckBox.Resources>
+
+                                        <CornerRadius x:Key="ControlCornerRadius">3,3,3,3</CornerRadius>
+                                        <Thickness x:Key="MenuIconPresenterMargin">0,0,0,0</Thickness>
+                                        <Thickness x:Key="MenuFlyoutItemThemePaddingNarrow">5,5,5,5</Thickness>
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="{DynamicResource ThemeAccent3Color}" />
+
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="{DynamicResource ThemeAccent3Color}" />
+
+                                        <SolidColorBrush x:Key="CheckBoxCheckForegroundStrokeIndeterminate" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckForegroundStrokeIndeterminatePointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
+
+                                        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundIndeterminate" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminate" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminate" Color="{DynamicResource ThemeInteractiveBgColor}" />
+
+                                        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundIndeterminatePointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminatePointerOver" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminatePointerOver" Color="{DynamicResource ThemeAccent3Color}" />
+
+                                        <SolidColorBrush x:Key="CheckBoxBackgroundStrokeIndeterminate" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxBackgroundStrokeIndeterminatePointerOver" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxForegroundStrokeIndeterminate" Color="{DynamicResource ThemeInteractiveColor}" />
+                                        <SolidColorBrush x:Key="CheckBoxForegroundStrokeIndeterminatePointerOver" Color="{DynamicResource ThemeInteractiveColor}" />
+                                    </CheckBox.Resources>
+                                </CheckBox>
                             </MenuItem.Icon>
                             <MenuItem.Header>
                                 <StackPanel Orientation="Horizontal"

@@ -221,7 +221,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\AutoCompleteBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Control.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Dnd\Dnd.axaml" />
@@ -1378,7 +1377,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollViewer.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Border.axaml" />
-    <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvParameterItem.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvShortcut.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTagTile.axaml" />

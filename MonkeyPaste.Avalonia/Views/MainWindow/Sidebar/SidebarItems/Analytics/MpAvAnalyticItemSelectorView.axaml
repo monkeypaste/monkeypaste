@@ -101,7 +101,8 @@
                             </TransitioningContentControl.PageTransition>
                             <TransitioningContentControl.ContentTemplate>
                                 <DataTemplate DataType="local:MpAvIParameterCollectionViewModel">
-                                    <local:MpAvParameterCollectionView HorizontalAlignment="Stretch"
+                                    <local:MpAvParameterCollectionView local:MpAvContrastEffectiveBackgroundExtension.IsEnabled="True"
+                                                                       HorizontalAlignment="Stretch"
                                                                        VerticalAlignment="Stretch" />
                                 </DataTemplate>
                             </TransitioningContentControl.ContentTemplate>

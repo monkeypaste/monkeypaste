@@ -44,19 +44,17 @@
             VerticalAlignment="Stretch">
         <Grid>
             <Grid.ColumnDefinitions>
+              <!-- LABEL -->
                 <ColumnDefinition Width="100" />
+              <!-- DESCRIPTION -->
                 <ColumnDefinition Width="30" />
+              <!-- PARAMETER -->
                 <ColumnDefinition MinWidth="150"
                                   Width="*" />
+              <!-- REMEMBER -->
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <!--  LABEL & HINT  -->
-
-            <!--<DockPanel Grid.Column="0"
-                       LastChildFill="False"
-                       HorizontalAlignment="Stretch"
-                       VerticalAlignment="Top">-->
             <!--  LABEL  -->
 
             <TextBlock Grid.Column="0"
@@ -70,9 +68,7 @@
                        Margin="5,1,0,0"
                        Text="{Binding Label}" />
 
-            <!--
-                DESCRIPTION
-            -->
+            <!-- DESCRIPTION -->
 
             <local:MpAvToolTipInfoHintView Grid.Column="1"
                                            DockPanel.Dock="Right"
@@ -81,7 +77,6 @@
                                            VerticalAlignment="Top"
                                            HorizontalAlignment="Right"
                                            ToolTipText="{Binding Description}" />
-            <!--</DockPanel>-->
 
 
             <!--  PARAMETER  -->

@@ -221,6 +221,9 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             MpConsole.WriteLine($"Active Window Changed: {LastProcessInfo.MainWindowTitle}");
+            if (LastProcessInfo.MainWindowTitle.Contains("Libre")) {
+
+            }
             OnAppActivated?.Invoke(this, LastProcessInfo);
         }
 

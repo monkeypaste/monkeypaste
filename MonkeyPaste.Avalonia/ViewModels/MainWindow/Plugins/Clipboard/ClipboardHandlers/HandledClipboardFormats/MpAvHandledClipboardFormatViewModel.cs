@@ -500,6 +500,10 @@ namespace MonkeyPaste.Avalonia {
                  if (!IsSelected) {
                      Parent.SelectedItem = this;
                  }
+                 if (!Parent.IsSelected) {
+                     Parent.IsSelected = true;
+                 }
+
                  if (SelectedItem == null && Items.Count > 0) {
                      SelectedItem = Items.AggregateOrDefault((a, b) => a.LastSelectedDateTime > b.LastSelectedDateTime ? a : b);
                  }

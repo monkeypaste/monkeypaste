@@ -63,8 +63,8 @@ function getDataTransferHtmlFragment(dt) {
 
 function containsHtmlClipboardFragment(dataStr) {
     if (!isString(dataStr) ||
-        !dataStr.includes("<!--StartFragment-->") ||
-        !dataStr.includes("<!--EndFragment-->")) {
+        !dataStr.includes("StartFragment") ||
+        !dataStr.includes("EndFragment")) {
         return false;
     }
     return true;
@@ -99,9 +99,11 @@ function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
         }
         return cbData;
     }
+
     let sourceUrlToken = 'SourceURL:';
     let source_url_start_idx = cbDataStr.indexOf(sourceUrlToken) + sourceUrlToken.length;
-    if (source_url_start_idx >= 0) {
+    if (cbDataStr.includes(sourceUrlToken) &&
+        source_url_start_idx >= 0) {
         let source_url_length = substringByLength(cbDataStr, source_url_start_idx).indexOf(envNewLine());
         if (source_url_length >= 0) {
             let parsed_url = substringByLength(cbDataStr, source_url_start_idx, source_url_length);
@@ -119,20 +121,56 @@ function parseHtmlFromHtmlClipboardFragment(cbDataStr) {
     return cbData;
 }
 
+function parseHtmlFragmentVersion(cbDataStr) {
+    let version_parts = cbDataStr.split('Version:');
+    if (version_parts.length < 2) {
+        return null;
+    }
+    let version_num_parts = version_parts[1].split('\n');
+    if (version_num_parts.length < 2) {
+        return null;
+    }
+    return version_num_parts[0];
+}
 
 function cleanHtmlForFragmentMarkers(htmlStr) {
+
+    let version = parseHtmlFragmentVersion(htmlStr);
+    if (version == null) {
+        return htmlStr;
+    }
+    if (version.startsWith('0.9')) {
     // NOTE reading raw clipboard format html (at least from chrome on windows)
     // has line breaks at opening/closing of <body> tag which get picked up
     // so this pulls inner fragment out which will not have those
-    let htmlStartToken = '<!--StartFragment-->';
-    let htmlEndToken = '<!--EndFragment-->';
-    const frag_start_idx = htmlStr.indexOf(htmlStartToken);
-    if (frag_start_idx >= 0) {
-        let html_start_idx = frag_start_idx + htmlStartToken.length;
-        let html_end_idx = htmlStr.indexOf(htmlEndToken);
-        let html_length = html_end_idx - html_start_idx;
-        return substringByLength(htmlStr, html_start_idx, html_length);
+        let htmlStartToken = '<!--StartFragment-->';
+        let htmlEndToken = '<!--EndFragment-->';
+        const frag_start_idx = htmlStr.indexOf(htmlStartToken);
+        if (frag_start_idx >= 0) {
+            let html_start_idx = frag_start_idx + htmlStartToken.length;
+            let html_end_idx = htmlStr.indexOf(htmlEndToken);
+            let html_length = html_end_idx - html_start_idx;
+            return substringByLength(htmlStr, html_start_idx, html_length);
+        }
+    } else if (version.startsWith('1.0')) {
+        // just returning everything after EndFragment line
+        let end_html_line_parts = htmlStr.split('EndFragment:');
+        if (end_html_line_parts.length < 2) {
+            return null;
+        }
+        let next_line_parts = end_html_line_parts[1].split('\n');
+        if (next_line_parts.length < 2) {
+            return null;
+        }
+        next_line_parts.splice(0, 1);
+        let result = next_line_parts.join('\n');
+        return result;
+    } else {
+        log(`unknown html fragment type: ${version}`);
+        debugger;
+        return htmlStr;
     }
+    
 
     return htmlStr;
 }

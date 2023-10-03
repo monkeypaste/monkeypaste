@@ -1003,6 +1003,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag-and-drop into MonkeyPaste.
+        /// </summary>
+        public static string SettingsInteropAppOleNoopReaderTooltip {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppOleNoopReaderTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no assigned clipboard formats for this app. Automated paste or drag-and-drop from MonkeyPaste will have no affect (its empty data)..
+        /// </summary>
+        public static string SettingsInteropAppOleNoopWriterTooltip {
+            get {
+                return ResourceManager.GetString("SettingsInteropAppOleNoopWriterTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;p&gt;Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.&lt;/p&gt;&lt;p&gt;Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)&lt;/p&gt;.
         /// </summary>
         public static string SettingsInteropAppPasteShortcutHeaderHint {

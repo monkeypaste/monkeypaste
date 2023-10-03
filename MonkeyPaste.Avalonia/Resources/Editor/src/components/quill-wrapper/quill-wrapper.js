@@ -96,21 +96,25 @@ function getHtml(range, encodeHtmlEntities = true) {
 }
 
 
-function getHtmlWithTables(sel) {
-	sel = cleanDocRange(sel);
-	let dom_range = convertDocRangeToDomRange(sel);
+function getHtmlWithTables(range) {
+	if (isNullOrUndefined(range)) {
+		// BUG when using full range the below approach skips outer div/table and starts right on tr, dunno why
+		return getRootHtml();
+	}
+	range = isNullOrUndefined(range) ? { index: 0, length: getDocLength() } : range;
+	let dom_range = convertDocRangeToDomRange(range);
 	if (dom_range) {
 		let div = document.createElement('div');
 		let actual_contents = dom_range.cloneContents();
 
 		let start_elm = dom_range.startContainer;
 		if (start_elm.nodeType == 3) {
-			let start_block_parent_elm = getBlockElementAtDocIdx(sel.index);
+			let start_block_parent_elm = getBlockElementAtDocIdx(range.index);
 			dom_range.setStart(start_block_parent_elm, 0);
 		}
 		let end_elm = dom_range.endContainer;
 		if (end_elm.nodeType == 3) {
-			let end_block_parent_elm = getBlockElementAtDocIdx(sel.index + sel.length);
+			let end_block_parent_elm = getBlockElementAtDocIdx(range.index + range.length);
 			dom_range.setEnd(end_block_parent_elm, 0);
 		}
 

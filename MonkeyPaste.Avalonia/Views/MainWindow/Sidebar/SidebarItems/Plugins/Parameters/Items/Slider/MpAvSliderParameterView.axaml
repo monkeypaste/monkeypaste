@@ -12,43 +12,6 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
-    <local:MpAvUserControl.Resources>
-
-    </local:MpAvUserControl.Resources>
-    <local:MpAvUserControl.Styles>
-        <!--<Style Selector="Border#SliderBorder">
-        <Setter Property="BorderBrush"
-                Value="Black" />
-    </Style>
-    <Style Selector="Border#SliderBorder:pointerover">
-        <Setter Property="BorderBrush"
-                Value="{DynamicResource HoverDefaultBorderBrush}" />
-    </Style>-->
-        <!--<Style Selector="TextBox:not(:focus)">
-            <Setter Property="Background"
-                    Value="Transparent" />
-            <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveColor}" />
-        </Style>
-        <Style Selector="TextBox:not(:focus):pointerover">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeInteractiveBgColor}" />
-            --><!--<Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveColor}" />--><!--
-        </Style>
-        <Style Selector="TextBox:focus">
-            <Setter Property="Background"
-                    Value="{DynamicResource ThemeInteractiveBgColor}" />
-            <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveColor}" />
-        </Style>
-        <Style Selector="TextBox:not(:focus)">
-            <Setter Property="Background"
-                    Value="Transparent" />
-            <Setter Property="Foreground"
-                    Value="{DynamicResource ThemeInteractiveBgColor}" />
-        </Style>-->
-    </local:MpAvUserControl.Styles>
     <Border x:Name="SliderBorder"
             Classes.paramBorder="True"
             Classes.sliderBorder="True"
@@ -93,12 +56,15 @@
                     </MultiBinding>
                 </Rectangle.Width>
             </Rectangle>
+            <!--
+                local:MpAvLostFocusUpdateBindingExtension.Text="{Binding CurrentTypedValue, Mode=OneWay, StringFormat='{}{0:#,#.}'}"
+            -->
             <TextBox x:Name="SliderValueTextBox"
                      Classes="sliderTextBox"
                      Cursor="Ibeam"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      local:MpAvLostFocusUpdateBindingExtension.IsEnabled="True"
-                     local:MpAvLostFocusUpdateBindingExtension.Text="{Binding CurrentTypedValue, Mode=TwoWay, StringFormat='{}{0:#,#.}'}"
+                     local:MpAvLostFocusUpdateBindingExtension.Text="{Binding CurrentTypedValue, Mode=TwoWay}"
                      BorderThickness="0"
                      IsReadOnly="False"
                      HorizontalAlignment="Center"

@@ -17,4 +17,19 @@ namespace MonkeyPaste.Avalonia {
             throw new NotSupportedException();
         }
     }
+
+    public class MpAvObjectToCommaFormatedValueConverter : IValueConverter {
+        public static readonly MpAvObjectToCommaFormatedValueConverter Instance = new();
+
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture) {
+            if (value is bool boolVal) {
+                return !boolVal;
+            }
+            return null;
+        }
+
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) {
+            throw new NotSupportedException();
+        }
+    }
 }

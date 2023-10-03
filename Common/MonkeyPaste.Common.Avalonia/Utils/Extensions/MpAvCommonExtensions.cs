@@ -356,6 +356,42 @@ namespace MonkeyPaste.Common.Avalonia {
                 .Reverse()
                 .ForEach(x => x.BringIntoView());
         }
+
+        public static bool HasVisibleBackground(this Control c) {
+            if (c == null ||
+                c.GetBackground() is not IBrush bg ||
+                bg.Opacity == 0 ||
+                Brushes.Transparent.Equals(bg) ||
+                !c.IsVisible) {
+                return false;
+            }
+            return true;
+        }
+        public static IBrush GetBackground(this Control control) {
+            if (control is TemplatedControl tc) {
+                return tc.Background;
+            }
+            if (control is Border b) {
+                return b.Background;
+            }
+            return null;
+        }
+        public static IBrush GetEffectiveBackground(this Control control, out Control backgroundControl) {
+            backgroundControl = null;
+            Control cur_control = control;
+            while (cur_control != null) {
+                if (cur_control.HasVisibleBackground()) {
+                    // NOTE ignore transparent backgrounds
+                    backgroundControl = cur_control;
+                    return cur_control.GetBackground();
+                }
+                if (cur_control.Parent is not Control pc) {
+                    return null;
+                }
+                cur_control = pc;
+            }
+            return null;
+        }
         #endregion
 
         #region Text Box

@@ -95,7 +95,7 @@
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeInteractiveColor}" />
+                    Value="{Binding $parent[local:MpAvParameterCollectionView].Foreground}" />
             <Setter Property="BorderThickness"
                     Value="0,0,0,2" />
             <Setter Property="MaxWidth"
@@ -106,6 +106,8 @@
             <Setter Property="BorderThickness"
                     Value="0,0,0,0" />
         </Style>
+
+
     </local:MpAvUserControl.Styles>
     <Grid x:Name="ParameterContainerGrid"
           HorizontalAlignment="Stretch"
@@ -162,14 +164,6 @@
                  IsVisible="{Binding Items, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                  ItemsSource="{Binding Items}"
                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-            <ListBox.Resources>
-                <!--<SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
-                <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>-->
-            </ListBox.Resources>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Vertical"

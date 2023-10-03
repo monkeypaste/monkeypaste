@@ -38,7 +38,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 		return null;
 	}
 	let needs_encoding = formatType != 'rtf2html';
-	const DO_VALIDATE = true;
+	let DO_VALIDATE = true;
 
 	log("Converting '" + formatType + "'. The data is: ");
 	log(dataStr);
@@ -59,6 +59,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 		// delta-to-html doesn't convert tables
 		// better table throws exception setting html so don't test table
 		output_html = getHtmlWithTables();
+		DO_VALIDATE = false;
 	} else {
 		output_html = getHtml(null, needs_encoding);
 	}

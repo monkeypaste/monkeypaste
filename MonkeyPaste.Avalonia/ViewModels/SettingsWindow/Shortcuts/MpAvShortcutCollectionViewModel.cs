@@ -873,7 +873,7 @@ namespace MonkeyPaste.Avalonia {
                 if (IS_GLOBAL_KEYBOARD_INPUT_ENABLED) {
                     _hook.KeyPressed += Hook_KeyPressed;
                     _hook.KeyReleased += Hook_KeyReleased;
-                    _hook.KeyTyped += Hook_KeyTyped;
+                    //_hook.KeyTyped += Hook_KeyTyped;
                 }
 
                 if (IS_GLOBAL_MOUSE_INPUT_ENABLED) {

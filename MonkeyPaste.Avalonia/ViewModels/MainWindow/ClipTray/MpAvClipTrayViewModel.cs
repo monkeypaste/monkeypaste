@@ -708,26 +708,23 @@ namespace MonkeyPaste.Avalonia {
             // just always considering it now...
             double vsbw = ScrollBarFixedAxisSize; //QueryTrayVerticalScrollBarWidth;
             double hsbh = ScrollBarFixedAxisSize; //QueryTrayVerticalScrollBarWidth;
-            double qw = DEFAULT_ITEM_SIZE - vsbw - safe_pad;
-            double qh = DEFAULT_ITEM_SIZE - hsbh - safe_pad;
-            double pw = DEFAULT_ITEM_SIZE - safe_pad;
-            double ph = DEFAULT_ITEM_SIZE - safe_pad;
+            double w = DEFAULT_ITEM_SIZE - vsbw - safe_pad;
+            double h = DEFAULT_ITEM_SIZE - hsbh - safe_pad;
 
             if (ListOrientation == Orientation.Vertical) {
-                qh = DEFAULT_UNEXPANDED_HEIGHT;
-                ph = DEFAULT_UNEXPANDED_HEIGHT;
+                h = DEFAULT_UNEXPANDED_HEIGHT;
             } else if (LayoutType == MpClipTrayLayoutType.Grid &&
                         Mp.Services.Query.TotalAvailableItemsInQuery > CurGridFixedCount) {
                 // when there's multiple query rows shorten height a bit to 
                 // hint theres more there (if not multiple rows, don't shorten looks funny
-                qh *= 0.7;
+                h *= 0.7;
             }
 
-            _defaultQueryItemWidth = qw;
-            _defaultQueryItemHeight = qh;
+            _defaultQueryItemWidth = w;
+            _defaultQueryItemHeight = h;
 
-            _defaultPinItemWidth = pw;
-            _defaultPinItemHeight = ph;
+            _defaultPinItemWidth = w;
+            _defaultPinItemHeight = h;
 
             OnPropertyChanged(nameof(DefaultQueryItemWidth));
             OnPropertyChanged(nameof(DefaultQueryItemHeight));
@@ -2644,7 +2641,7 @@ namespace MonkeyPaste.Avalonia {
             ForceScrollOffsetY(newOffset.Y);
             IsForcingScroll = false;
             MpAvPagingListBoxExtension.ForceScrollOffset(newOffset);
-            MpConsole.WriteLine($"ScrollOffset forced from '{old_offset}' to '{newOffset}'");
+            //MpConsole.WriteLine($"ScrollOffset forced from '{old_offset}' to '{newOffset}'");
         }
         #endregion
 
@@ -3275,6 +3272,9 @@ namespace MonkeyPaste.Avalonia {
                          pinType == MpPinType.Window ?
                             MpAppendModeType.None :
                             appendType);
+                 } else {
+                     // reset pinned item size (may have been missed if init was before adding to 1 of the item collections)
+                     ctvm_to_pin.ResetTileSizeToDefaultCommand.Execute(null);
                  }
 
                  OnPropertyChanged(nameof(IsAnyTilePinned));
@@ -3285,6 +3285,7 @@ namespace MonkeyPaste.Avalonia {
                  if (query_ctvm_to_pin != null &&
                     ctvm_to_pin_query_idx >= 0
                     ) {
+                     // re-init queyr item to become pin-placeholder
                      await query_ctvm_to_pin.InitializeAsync(ctvm_to_pin.CopyItem, ctvm_to_pin_query_idx);
                  }
                  await Task.Delay(200);
@@ -3480,7 +3481,7 @@ namespace MonkeyPaste.Avalonia {
                 await AddItemFromDataObjectAsync(SelectedItem.CopyItem.ToAvDataObject());
 
                 IsBusy = false;
-            }, () => SelectedItem != null);
+            }, () => SelectedItem != null && SelectedItem.IsContentReadOnly);
 
 
         public ICommand AddNewItemsCommand => new MpAsyncCommand<object>(

@@ -710,8 +710,20 @@ namespace MonkeyPaste.Common {
             }
 
             Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
-            object safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
-            propertyInfo.SetValue(obj, safeValue, null);
+            object safeValue = newValue;
+            try {
+                safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"SetPropertyValue conversion error. ", ex);
+                safeValue = newValue;
+            }
+            try {
+                propertyInfo.SetValue(obj, safeValue, null);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"SetPropertyValue set value error. ", ex);
+            }
         }
         #endregion
 

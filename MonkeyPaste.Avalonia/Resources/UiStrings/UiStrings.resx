@@ -673,4 +673,10 @@
   <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
     <value>Are you sure you want to remove custom formats for {0}?</value>
   </data>
+  <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
+    <value>There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag-and-drop into MonkeyPaste</value>
+  </data>
+  <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
+    <value>There is no assigned clipboard formats for this app. Automated paste or drag-and-drop from MonkeyPaste will have no affect (its empty data).</value>
+  </data>
 </root>

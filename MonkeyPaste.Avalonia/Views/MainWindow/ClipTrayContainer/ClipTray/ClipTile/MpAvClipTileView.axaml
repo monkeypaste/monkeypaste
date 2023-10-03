@@ -106,8 +106,7 @@
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Background">
                 <Setter.Value>
-                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}"
-                                     Opacity="{DynamicResource GlobalBgOpacity}" />
+                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalBgOpacity}" />
                 </Setter.Value>
             </Setter>
         </Style>
@@ -115,8 +114,7 @@
                x:DataType="local:MpAvClipTileViewModel">
             <Setter Property="Background">
                 <Setter.Value>
-                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}"
-                                     Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                    <SolidColorBrush Color="{Binding CopyItemHexColor, Converter={x:Static local:MpAvStringHexToColorConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
                 </Setter.Value>
             </Setter>
         </Style>
@@ -287,8 +285,7 @@
                         </Transitions>
                     </Border.Transitions>
                     <Border.Background>
-                        <SolidColorBrush Color="Black"
-                                         Opacity="0.2" />
+                        <SolidColorBrush Color="Black" Opacity="0.2" />
                     </Border.Background>
                     <Image Stretch="UniformToFill"
                            Classes.shakeslow="{Binding IsHovering}"
@@ -314,10 +311,6 @@
                   IsVisible="{Binding IsPinPlaceholder}"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">
-                <Grid.Background>
-                    <SolidColorBrush Color="{DynamicResource ThemeInteractiveBgColor}"
-                                     Opacity="0.6" />
-                </Grid.Background>
                 <Grid.Transitions>
                     <Transitions>
                         <DoubleTransition Property="Opacity"
@@ -360,6 +353,7 @@
                 <TextBlock Grid.Row="1"
                            TextAlignment="Center"
                            TextWrapping="WrapWithOverflow"
+                           Opacity="{Binding IsHovering, ConverterParameter=1|0.2, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                            Margin="30,15,30,0"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Top">

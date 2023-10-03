@@ -3,59 +3,6 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-
-        <CornerRadius x:Key="ControlCornerRadius">3,3,3,3</CornerRadius>
-        <Thickness x:Key="MenuIconPresenterMargin">0,0,0,0</Thickness>
-        <Thickness x:Key="MenuFlyoutItemThemePaddingNarrow">5,5,5,5</Thickness>
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver"
-                         Color="{DynamicResource ThemeAccent3Color}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked"
-                         Color="{DynamicResource ThemeInteractiveBgColor}" />
-
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
-
-
-        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked"
-                         Color="{DynamicResource ThemeInteractiveBgColor}" />
-        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver"
-                         Color="{DynamicResource ThemeInteractiveBgColor}" />
-
-
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver"
-                         Color="{DynamicResource ThemeAccent3Color}" />
-
-        <SolidColorBrush x:Key="CheckBoxCheckForegroundStrokeIndeterminate"
-                         Color="{DynamicResource ThemeInteractiveBgColor}" />
-        <SolidColorBrush x:Key="CheckBoxCheckForegroundStrokeIndeterminatePointerOver"
-                         Color="{DynamicResource ThemeInteractiveBgColor}" />
-
-        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundIndeterminate"
-                         Color="{DynamicResource ThemeInteractiveBgColor}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminate"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminate"
-                         Color="{DynamicResource ThemeInteractiveBgColor}" />
-
-        <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundIndeterminatePointerOver"
-                         Color="{DynamicResource ThemeInteractiveBgColor}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminatePointerOver"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminatePointerOver"
-                         Color="{DynamicResource ThemeAccent3Color}" />
-
-        <SolidColorBrush x:Key="CheckBoxBackgroundStrokeIndeterminate"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
-        <SolidColorBrush x:Key="CheckBoxBackgroundStrokeIndeterminatePointerOver"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
-        <SolidColorBrush x:Key="CheckBoxForegroundStrokeIndeterminate"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
-        <SolidColorBrush x:Key="CheckBoxForegroundStrokeIndeterminatePointerOver"
-                         Color="{DynamicResource ThemeInteractiveColor}" />
         <ControlTheme x:Key="MenuItemCheckBox"
                       BasedOn="{StaticResource {x:Type CheckBox}}"
                       TargetType="CheckBox">

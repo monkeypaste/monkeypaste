@@ -172,6 +172,10 @@
                                                             <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
                                                             <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                                                         </DropDownButton.Resources>
+                                                        <ToolTip.Tip>
+                                                            <local:MpAvToolTipView Classes="warning"
+                                                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleNoopReaderTooltip}" />
+                                                        </ToolTip.Tip>
                                                         <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
                                                     </DropDownButton>
 
@@ -228,6 +232,10 @@
                                                             <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
                                                             <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                                                         </DropDownButton.Resources>
+                                                        <ToolTip.Tip>
+                                                            <local:MpAvToolTipView Classes="warning"
+                                                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppOleNoopWriterTooltip}" />
+                                                        </ToolTip.Tip>
                                                         <TextBlock Text="{x:Static local:UiStrings.SettingsInteropAppOleFormatNoopButtonLabel}" />
                                                     </DropDownButton>
 
@@ -328,7 +336,7 @@
                                     <DataGridTemplateColumn Header="{x:Static local:UiStrings.SettingsInteropAppNameHeaderLabel}"
                                                             CanUserSort="True"
                                                             SortMemberPath="AppDisplayName"
-                                                            Width="*">
+                                                            Width="0.3*">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid Classes="marqueeContainer">
@@ -340,7 +348,7 @@
 
 
                                     <!--  COPY GESTURE VIEW  -->
-                                    <DataGridTemplateColumn Width="Auto">
+                                    <DataGridTemplateColumn Width="0.25*">
                                         <DataGridTemplateColumn.HeaderTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal"
@@ -361,7 +369,7 @@
                                     </DataGridTemplateColumn>
 
                                     <!--  PASTE GESTURE VIEW  -->
-                                    <DataGridTemplateColumn Width="Auto">
+                                    <DataGridTemplateColumn Width="0.25*">
                                         <DataGridTemplateColumn.HeaderTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal"
