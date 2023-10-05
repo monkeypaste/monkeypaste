@@ -15,6 +15,6 @@
                        DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvHelpView">
     <cefnet:WebView HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
+                    VerticalAlignment="Stretch" 
                     InitialUrl="https://npp-user-manual.org/docs/session/" />
 </local:MpAvUserControl>

@@ -108,10 +108,9 @@ namespace MonkeyPaste.Avalonia {
             await Mp.InitAsync(new MpAvWrapper(this));
 
             if (MpAvPrefViewModel.Instance != null) {
-                if (MpAvPrefViewModel.Instance.LastStartupDateTime == null) {
+                if (!MpAvPrefViewModel.Instance.IsWelcomeComplete) {
                     StartupFlags |= MpStartupFlags.Initial;
                 }
-                MpAvPrefViewModel.Instance.LastStartupDateTime = MpAvPrefViewModel.Instance.StartupDateTime;
                 MpAvPrefViewModel.Instance.StartupDateTime = startup_datetime;
 
                 MpAvThemeViewModel.Instance.UpdateThemeResources();
@@ -139,6 +138,7 @@ namespace MonkeyPaste.Avalonia {
                 // once mw and all mw views are loaded load platform items
                 await LoadItemsAsync(PlatformItems);
                 MpConsole.WriteLine("Platform load complete");
+
                 LoadedDateTime = DateTime.Now;
 
                 if (Mp.Services.PlatformInfo.IsDesktop) {

@@ -225,6 +225,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\Control.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Dnd\Dnd.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\GridSplitter.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Image.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Label.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ListBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Border.axaml" />
@@ -504,6 +505,13 @@
     <None Remove="Assets\Images\wrench.png" />
     <None Remove="Assets\Images\yandexIcon.png" />
     <None Remove="Assets\Images\yinyang.png" />
+    <None Remove="Assets\Sounds\alert.wav" />
+    <None Remove="Assets\Sounds\blip.wav" />
+    <None Remove="Assets\Sounds\blip2.wav" />
+    <None Remove="Assets\Sounds\chime.wav" />
+    <None Remove="Assets\Sounds\Monkey1.wav" />
+    <None Remove="Assets\Sounds\Monkey2.wav" />
+    <None Remove="Assets\Sounds\ting.wav" />
     <None Remove="Assets\svg\align-center.svg" />
     <None Remove="Assets\svg\align-justify.svg" />
     <None Remove="Assets\svg\align-left.svg" />
@@ -523,7 +531,6 @@
     <None Remove="Assets\svg\text-insert-caret.svg" />
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
-    <None Remove="Resources\credits.txt" />
     <None Remove="Resources\Editor\images\delete.png" />
     <None Remove="resources\editor\ribbon.html" />
     <None Remove="resources\editor\src\components\bold\bold.js" />
@@ -536,6 +543,7 @@
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
     <None Remove="resources\editor\src\components\theme\theme.js" />
+    <None Remove="Resources\terms.html" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
@@ -1354,9 +1362,31 @@
     <AvaloniaResource Include="Assets\svg\text-insert-caret.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
-    <AvaloniaResource Include="Resources\credits.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />
+    <Content Include="Assets\Sounds\alert.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\blip.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\blip2.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\chime.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\Monkey1.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\Monkey2.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\ting.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\terms.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <AvaloniaResource Include="Themes\Default\Accents\Accents.axaml">
       
     </AvaloniaResource>
@@ -1605,6 +1635,9 @@
     <Compile Update="Views\Reusable\ToolTip\Hint\MpAvToolTipInfoHintView.axaml.cs">
       <DependentUpon>MpAvToolTipInfoHintView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SettingsWindow\Menu\MpAvSettingsMenuView.axaml.cs">
+      <DependentUpon>MpAvSettingsMenuView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Interop\OleFormatStrip\MpAvOleFormatStripView.axaml.cs">
       <DependentUpon>MpAvOleFormatStripView.axaml</DependentUpon>
     </Compile>
@@ -1635,30 +1668,6 @@
     <Compile Update="Views\Reusable\Notifications\Welcome\MpAvWelcomeWindow.axaml.cs">
       <DependentUpon>MpAvWelcomeWindow.axaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <None Update="Assets\Sounds\alert.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Sounds\blip.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Sounds\blip2.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Sounds\chime.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Sounds\Monkey1.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Sounds\Monkey2.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Assets\Sounds\ting.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   
   <ItemGroup>
@@ -1749,6 +1758,7 @@
   <ItemGroup>
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
   </ItemGroup>
+
 
   <ItemGroup>
     <Reference Include="CefNet">

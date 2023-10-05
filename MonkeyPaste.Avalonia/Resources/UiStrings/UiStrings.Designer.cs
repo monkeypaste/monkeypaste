@@ -61,6 +61,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string AboutWindowTitlePrefix {
+            get {
+                return ResourceManager.GetString("AboutWindowTitlePrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next to delete! Upgrade to avoid 💪🏽.
         /// </summary>
         public static string AccountNextRemoveToolTipText {
@@ -1274,6 +1283,195 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to reset all shortcuts? All custom shortcuts will be removed..
+        /// </summary>
+        public static string ShortcutsResetNtfMsg {
+            get {
+                return ResourceManager.GetString("ShortcutsResetNtfMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to change your shortcut routing profile to &apos;{0}&apos;.
+        /// </summary>
+        public static string ShortcutsRoutingProfileChangeNtfMsg {
+            get {
+                return ResourceManager.GetString("ShortcutsRoutingProfileChangeNtfMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string String {
+            get {
+                return ResourceManager.GetString("String", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Usernames and passwords for any test accounts needed to test the submission:.
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dependencies on other products:.
+        /// </summary>
+        public static string String10 {
+            get {
+                return ResourceManager.GetString("String10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string String11 {
+            get {
+                return ResourceManager.GetString("String11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string String2 {
+            get {
+                return ResourceManager.GetString("String2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steps to access features, modes, or content that may be hidden, conditional, or locked/limited:.
+        /// </summary>
+        public static string String3 {
+            get {
+                return ResourceManager.GetString("String3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copying more than 5 pieces of content (text, images or files) from any application (within reason, notepad would be a suitable one for testing) will not be restricted to 5 items. Then any subsequent cut/copy actions will add more content (it won&apos;t be restricted to 5 like free version)..
+        /// </summary>
+        public static string String4 {
+            get {
+                return ResourceManager.GetString("String4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steps to verify background audio usage:.
+        /// </summary>
+        public static string String5 {
+            get {
+                return ResourceManager.GetString("String5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audio playback volume is set to 0 by default (treated as muted). To hear it.
+        /// </summary>
+        public static string String6 {
+            get {
+                return ResourceManager.GetString("String6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1. open the Settings window (accessed from cog icon at top-left of the main window or right-clicking system tray icon and selecting &apos;Settings&apos;)..
+        /// </summary>
+        public static string String7 {
+            get {
+                return ResourceManager.GetString("String7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2. select the &quot;Preferences&quot; tab (should be by default) then scroll to the &quot;Sound&quot; panel and increase the volume slider of &quot;Notification Volume&quot;.
+        /// </summary>
+        public static string String8 {
+            get {
+                return ResourceManager.GetString("String8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3. A sample audio clip will play at selected volume.
+        /// </summary>
+        public static string String9 {
+            get {
+                return ResourceManager.GetString("String9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string TagDefaultAllLabel {
+            get {
+                return ResourceManager.GetString("TagDefaultAllLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Favorites.
+        /// </summary>
+        public static string TagDefaultFavoritesLabel {
+            get {
+                return ResourceManager.GetString("TagDefaultFavoritesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters.
+        /// </summary>
+        public static string TagDefaultFiltersLabel {
+            get {
+                return ResourceManager.GetString("TagDefaultFiltersLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formats.
+        /// </summary>
+        public static string TagDefaultFormatsLabel {
+            get {
+                return ResourceManager.GetString("TagDefaultFormatsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags.
+        /// </summary>
+        public static string TagDefaultTagsLabel {
+            get {
+                return ResourceManager.GetString("TagDefaultTagsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Today.
+        /// </summary>
+        public static string TagDefaultTodayLabel {
+            get {
+                return ResourceManager.GetString("TagDefaultTodayLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trash.
+        /// </summary>
+        public static string TagDefaultTrashLabel {
+            get {
+                return ResourceManager.GetString("TagDefaultTrashLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is a test &lt;b color=&quot;green&quot;&gt;test&lt;/b&gt; &lt;em color=&quot;red&quot;&gt;&lt;b&gt;test&lt;/b&lt;/em&gt; &lt;a color=&quot;pink&quot; href=&quot;https://www.google.com/&quot;&gt;test&lt;/a&gt;.
         /// </summary>
         public static string Test {
@@ -1436,11 +1634,20 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Easy RIght?.
+        ///   Looks up a localized string similar to Drop it here!.
         /// </summary>
-        public static string WelcomeDragToOpenFakeWindowLabel {
+        public static string WelcomeDragToOpenFakeWindowLabel1 {
             get {
-                return ResourceManager.GetString("WelcomeDragToOpenFakeWindowLabel", resourceCulture);
+                return ResourceManager.GetString("WelcomeDragToOpenFakeWindowLabel1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Easy Right?.
+        /// </summary>
+        public static string WelcomeDragToOpenFakeWindowLabel2 {
+            get {
+                return ResourceManager.GetString("WelcomeDragToOpenFakeWindowLabel2", resourceCulture);
             }
         }
         
@@ -1648,6 +1855,15 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeScrollToOpenTryButtonLabel {
             get {
                 return ResourceManager.GetString("WelcomeScrollToOpenTryButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string WindowsStoreUnlimitedAddOnTesterNote {
+            get {
+                return ResourceManager.GetString("WindowsStoreUnlimitedAddOnTesterNote", resourceCulture);
             }
         }
     }

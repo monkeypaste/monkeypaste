@@ -237,8 +237,8 @@
   <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop to and from the application.&lt;/p&gt;</value>
   </data>
-  <data name="WelcomeDragToOpenFakeWindowLabel" xml:space="preserve">
-    <value>Easy RIght?</value>
+  <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
+    <value>Drop it here!</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;This way, MonkeyPaste can be accessed&lt;br&gt; &lt;span color="red"&gt;without a click&lt;/span&gt; or even &lt;span color="red"&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
@@ -678,5 +678,77 @@
   </data>
   <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
     <value>There is no assigned clipboard formats for this app. Automated paste or drag-and-drop from MonkeyPaste will have no affect (its empty data).</value>
+  </data>
+  <data name="ShortcutsResetNtfMsg" xml:space="preserve">
+    <value>Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.</value>
+  </data>
+  <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
+    <value>Are you sure you want to change your shortcut routing profile to '{0}'</value>
+  </data>
+  <data name="TagDefaultAllLabel" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="TagDefaultFavoritesLabel" xml:space="preserve">
+    <value>Favorites</value>
+  </data>
+  <data name="TagDefaultFiltersLabel" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="TagDefaultFormatsLabel" xml:space="preserve">
+    <value>Formats</value>
+  </data>
+  <data name="TagDefaultTagsLabel" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagDefaultTodayLabel" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="TagDefaultTrashLabel" xml:space="preserve">
+    <value>Trash</value>
+  </data>
+  <data name="AboutWindowTitlePrefix" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
+    <value>Easy Right?</value>
+  </data>
+  <data name="String" xml:space="preserve">
+    <value />
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>Usernames and passwords for any test accounts needed to test the submission:</value>
+  </data>
+  <data name="String10" xml:space="preserve">
+    <value>Dependencies on other products:</value>
+  </data>
+  <data name="String11" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="String2" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="String3" xml:space="preserve">
+    <value>Steps to access features, modes, or content that may be hidden, conditional, or locked/limited:</value>
+  </data>
+  <data name="String4" xml:space="preserve">
+    <value>Copying more than 5 pieces of content (text, images or files) from any application (within reason, notepad would be a suitable one for testing) will not be restricted to 5 items. Then any subsequent cut/copy actions will add more content (it won't be restricted to 5 like free version).</value>
+  </data>
+  <data name="String5" xml:space="preserve">
+    <value>Steps to verify background audio usage:</value>
+  </data>
+  <data name="String6" xml:space="preserve">
+    <value>Audio playback volume is set to 0 by default (treated as muted). To hear it</value>
+  </data>
+  <data name="String7" xml:space="preserve">
+    <value>1. open the Settings window (accessed from cog icon at top-left of the main window or right-clicking system tray icon and selecting 'Settings').</value>
+  </data>
+  <data name="String8" xml:space="preserve">
+    <value>2. select the "Preferences" tab (should be by default) then scroll to the "Sound" panel and increase the volume slider of "Notification Volume"</value>
+  </data>
+  <data name="String9" xml:space="preserve">
+    <value>3. A sample audio clip will play at selected volume</value>
+  </data>
+  <data name="WindowsStoreUnlimitedAddOnTesterNote" xml:space="preserve">
+    <value />
   </data>
 </root>

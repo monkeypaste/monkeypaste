@@ -53,18 +53,31 @@
                 </Animation>
             </Style.Animations>
         </Style>
+
+        <!--  MW BACKGROUND  -->
+        <Style Selector="Border#PlaceholderWindow">
+            <Setter Property="Background"
+                    Value="{DynamicResource ClipTrayBgColor}" />
+        </Style>
+        <Style Selector="Border#PlaceholderWindow.dragover">
+            <Setter Property="Background"
+                    Value="{DynamicResource PinTrayBgBrush}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Canvas HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
-        <!--
-            Classes.show="{Binding FakeWindowState, ConverterParameter=Open, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-            Classes.hide="{Binding FakeWindowState, ConverterParameter=Close, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
-        -->
         <Border x:Name="PlaceholderWindow"
+                Classes.dragover="{Binding IsDragOver}"
+                Classes.dropped="{Binding IsDragOver}"
                 Width="{Binding $parent.Bounds.Width}"
                 Height="{Binding $parent.Bounds.Height}"
-                Canvas.Top="{Binding FakeWindowActualTop, Mode=TwoWay}"
-                Background="{DynamicResource ClipTrayBgColor}">
+                Canvas.Top="{Binding FakeWindowActualTop, Mode=TwoWay}">
+            <Border.Transitions>
+                <Transitions>
+                    <BrushTransition Property="Background"
+                                     Duration="0:0:0.5" />
+                </Transitions>
+            </Border.Transitions>
             <Viewbox Stretch="Uniform"
                      HorizontalAlignment="Center"
                      StretchDirection="Both"

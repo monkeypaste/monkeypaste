@@ -12,7 +12,6 @@ using System.Linq;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvHighlightTextExtension {
         #region Private Variables
-        private static double _DefaultOpacity = 0.5d;
         private static Dictionary<Control, MpAvTextHighlightAdorner> _AttachedControlAdornerLookup = new Dictionary<Control, MpAvTextHighlightAdorner>();
 
         private static IBrush _DefaultInactiveHighlightBrush =>

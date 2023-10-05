@@ -1038,4 +1038,13 @@
   <data name="MpContentOptionType_Color" xml:space="preserve">
     <value>Color</value>
   </data>
+  <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
+    <value>Primary</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
+    <value>Mouse</value>
+  </data>
+  <data name="MpMainWindowShowBehaviorType_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
 </root>

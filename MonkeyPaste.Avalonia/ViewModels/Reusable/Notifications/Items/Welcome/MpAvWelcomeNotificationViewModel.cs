@@ -378,6 +378,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void FinishWelcomeSetup() {
             IsWelcomeDone = true;
+            // NOTE this isn't flagged until DONE is clicked and assumes
+            // there's per-page validation (only needed for accounts atm I think)
+            MpAvPrefViewModel.Instance.IsWelcomeComplete = true;
+
             if (CurPointerGestureWindowViewModel != null) {
                 CurPointerGestureWindowViewModel.Destroy();
             }

@@ -182,6 +182,7 @@ function getContentHandle() {
 function getContentAsMessage() {
 	updateQuill();
 	return {
+		contentHandle: globals.ContentHandle,
 		itemPlainText: getContentPlainText(),
 		contentHeight: getContentHeight(),
 		editorWidth: getEditorWidth(),

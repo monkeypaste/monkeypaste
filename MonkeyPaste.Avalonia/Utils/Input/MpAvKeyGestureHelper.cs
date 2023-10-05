@@ -23,7 +23,7 @@ namespace MonkeyPaste.Avalonia {
         private List<TKeyStruct> _downs = new List<TKeyStruct>();
         private string _finalGesture = string.Empty;
 
-        private const bool LOG_ORPHANS =
+        private static bool LOG_ORPHANS =
 #if DEBUG && WINDOWS
             true;
 #elif DEBUG

@@ -32,12 +32,9 @@ function getScrollableElements() {
     if (isFontFamilyDropDownOpen()) {
         scroll_elms.push(getFontFamilyDropDownElement());
     }
-    if (isShowingFindReplaceToolbar()) {
-        //scroll_elms.push(getFindReplaceContainerElement());
-    }
 
     let table_elms = getTableElements();
-    for (var i = 0; i < length; i++) {
+    for (var i = 0; i < table_elms.length; i++) {
         scroll_elms.push(table_elms[i]);
     }
     return scroll_elms;

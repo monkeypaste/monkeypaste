@@ -1860,7 +1860,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                         //HasModelChanged = false;
                         //return;
-                        if (CopyItemData.IsNullOrWhitespaceHtmlString()) {
+                        if (IsContentReadOnly && CopyItemData.IsNullOrWhitespaceHtmlString()) {
                             // what IS this nasty shit??
                             MpDebug.Break($"Empty content write ignored", !MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED);
 

@@ -1,13 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using PropertyChanged;
 using System;
 
 namespace MonkeyPaste.Avalonia {
@@ -16,7 +11,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpAvAboutView() : base() {
             InitializeComponent();
-
         }
 
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e) {
@@ -29,13 +23,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void _dispatcherTimer_Tick(object sender, EventArgs e) {
-            var ctb = this.FindControl<TextBlock>("CreditsTextBlock");
+            var ctb = this.FindControl<Control>("CreditsTextBlock");
             if (ctb.IsPointerOver ||
                 BindingContext.IsOverCredits ||
                 ctb.Parent is not ScrollViewer sv) {
                 return;
             }
-            sv.ScrollByPointDelta(new MpPoint(0, 5));
+            sv.ScrollByPointDelta(new MpPoint(0, 1));
         }
 
     }

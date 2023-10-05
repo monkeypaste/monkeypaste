@@ -105,14 +105,6 @@
                 </Animation>
             </Style.Animations>
         </Style>
-        <Style Selector="Image#LogoImage">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-        </Style>
-        <Style Selector="Image#LogoImage:pointerover">
-            <Setter Property="Source"
-                    Value="{Binding Source={StaticResource MonkeyWinkImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-        </Style>
     </Window.Styles>
     <Border x:Name="OuterBorder"
             Classes="contrastBorder"
@@ -127,13 +119,11 @@
             </Grid.ColumnDefinitions>
             <Image x:Name="LogoImage"
                    Grid.Row="0"
-                   Effect="drop-shadow(0 0 11 white)"
                    Grid.Column="0"
-                   Classes="shakeOnce shakeOnceOver"
+                   Classes="applogo shakeOnce shakeOnceOver"
                    Width="72"
                    Height="72"
                    IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                   Stretch="Fill"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
                    Margin="10,10,0,10">

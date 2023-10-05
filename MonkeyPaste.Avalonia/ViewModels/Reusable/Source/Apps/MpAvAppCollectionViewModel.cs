@@ -579,12 +579,7 @@ namespace MonkeyPaste.Avalonia {
                         cwv.SendMessage("unexpandPasteButtonPopup_ext()");
                     }
                 }
-
-                void Cm_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-
-                }
                 cm.Closed += _cmInstance_MenuClosed;
-                cm.Closing += Cm_Closing;
             });
 
         #endregion

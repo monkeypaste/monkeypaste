@@ -439,7 +439,7 @@
                     <TextBlock Classes="expander header"
                                Text="{x:Static local:UiStrings.SettingsInteropRejectedHeaderTitle}" />
                     <local:MpAvToolTipInfoHintView Classes="expander header warning"
-                                                   ToolTipText="{x:Static local:UiStrings.SettingsInteropAppRejectHeaderHint}" />
+                                                   ToolTipHtml="{x:Static local:UiStrings.SettingsInteropAppRejectHeaderHint}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>

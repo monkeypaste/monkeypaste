@@ -37,7 +37,8 @@ namespace MonkeyPaste.Avalonia {
             nameof(MpAvPrefViewModel.Instance.GlobalBgOpacity),
         };
 
-        private string[] _hiddenParamIds = new string[] {
+        public string[] HiddenParamIds = new string[] {
+            nameof(MpAvPrefViewModel.Instance.NotificationSoundGroupIdx),
             nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup),
             nameof(MpAvPrefViewModel.Instance.UserLanguageCode),
             nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft)
@@ -418,7 +419,8 @@ namespace MonkeyPaste.Avalonia {
                                                 Enum.GetNames(typeof(MpMainWindowShowBehaviorType))
                                                 .Select(x=> new MpPluginParameterValueFormat() {
                                                     isDefault = MpAvPrefViewModel.Instance.MainWindowShowBehaviorType.ToLower() == x.ToLower(),
-                                                    value = x
+                                                    value = x,
+                                                    label = x.ToEnum<MpMainWindowShowBehaviorType>().EnumToUiString()
                                                 }).ToList()
                                         },
                                         new MpParameterFormat() {
@@ -958,10 +960,6 @@ namespace MonkeyPaste.Avalonia {
             // bind runtime params
 
             foreach (var fvm in Items) {
-                // hide baddies
-                fvm.PluginFormat.headless.parameters
-                    .Where(x => _hiddenParamIds.Contains(x.paramId.ToStringOrEmpty()))
-                    .ForEach(x => x.isVisible = false);
 
                 // create headless formats
                 fvm.Items = await Task.WhenAll(
@@ -980,7 +978,15 @@ namespace MonkeyPaste.Avalonia {
                     .Cast<MpAvButtonParameterViewModel>()
                     .ForEach(x => x.ClickCommand = ButtonParameterClickCommand);
 
+
+                foreach (var para_item in fvm.Items) {
+                    if (HiddenParamIds.Any(x => x == para_item.ParameterFormat.paramId)) {
+                        para_item.ParameterFormat.isVisible = false;
+                    }
+                }
+
             }
+
 
         }
         private void InitRuntimeParams() {

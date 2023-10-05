@@ -21,7 +21,7 @@ namespace MonkeyPaste.Avalonia {
             this.AddHandler(DragDrop.DragOverEvent, MpAvTopEdgeMarkerView_DragOver);
         }
         private void MpAvTopEdgeMarkerView_DragOver(object sender, DragEventArgs e) {
-            if (BindingContext.FakeWindowViewModel.FakeWindowState == MpFakeWindowState.Open) {
+            if (BindingContext.FakeWindowViewModel.FakeWindowActionType == MpFakeWindowActionType.Open) {
                 return;
             }
             BindingContext.FakeWindowViewModel.ToggleFakeWindowCommand.Execute(null);

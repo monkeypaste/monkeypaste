@@ -55,12 +55,14 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	updateQuill();
 
 	let output_html = '';
+
 	if (isTableInDocument()) {
 		// delta-to-html doesn't convert tables
-		// better table throws exception setting html so don't test table
 		output_html = getHtmlWithTables();
 		DO_VALIDATE = false;
 	} else {
+		// TODO? does html w/ lists need to skip validation too? 
+		// should probably check that but its hot and i'm done
 		output_html = getHtml(null, needs_encoding);
 	}
 	if (isNullOrWhiteSpace(output_html)) {

@@ -151,13 +151,14 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = false,
             };
 
-#if WINDOWS && DEBUG
+#if WINDOWS
+            MpAvToolWindow_Win32.InitToolWindow(gw.TryGetPlatformHandle().Handle);
             //MpAvToolWindow_Win32.SetAsNoHitTestWindow(gw.TryGetPlatformHandle().Handle);
 #endif
             return gw;
         }
         public void CheckForGesture() {
-            if (!IsGesturing || FakeWindowViewModel.FakeWindowState == MpFakeWindowState.Open) {
+            if (!IsGesturing || FakeWindowViewModel.FakeWindowActionType == MpFakeWindowActionType.Open) {
                 return;
             }
 

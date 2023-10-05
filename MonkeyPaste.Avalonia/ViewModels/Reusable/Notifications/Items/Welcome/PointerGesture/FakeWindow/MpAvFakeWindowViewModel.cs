@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -8,10 +10,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpFakeWindowState {
+    public enum MpFakeWindowActionType {
         None = 0,
         Open,
         Close
@@ -56,6 +57,11 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
+        bool IsFakeWindowVisible { get; set; } = true;
+        public bool IsDndEnabled =>
+            GestureType == MpPointGestureType.DragToOpen;
+        public bool IsDragOver { get; set; }
+        public bool HasDropped { get; set; }
         public MpPointGestureType GestureType =>
             Parent == null ? MpPointGestureType.None : Parent.GestureType;
 
@@ -68,7 +74,16 @@ namespace MonkeyPaste.Avalonia {
         bool IsClosed =>
             FakeWindowActualTop == FakeWindowStartTop;
 
-        public MpFakeWindowState FakeWindowState { get; set; } = MpFakeWindowState.None;
+        bool WasGestureCompleted {
+            get {
+                if (GestureType == MpPointGestureType.ScrollToOpen) {
+                    return IsFakeWindowVisible;
+                }
+                return HasDropped;
+            }
+        }
+
+        public MpFakeWindowActionType FakeWindowActionType { get; set; } = MpFakeWindowActionType.None;
 
         #endregion
 
@@ -77,7 +92,9 @@ namespace MonkeyPaste.Avalonia {
         public string FakeWindowLabel =>
            GestureType == MpPointGestureType.ScrollToOpen ?
                UiStrings.WelcomeScrollToOpenFakeWindowLabel :
-               UiStrings.WelcomeDragToOpenFakeWindowLabel;
+                HasDropped ?
+                    UiStrings.WelcomeDragToOpenFakeWindowLabel2 :
+                    UiStrings.WelcomeDragToOpenFakeWindowLabel1;
 
         public string FakeWindowDetail =>
             GestureType == MpPointGestureType.ScrollToOpen ?
@@ -92,7 +109,6 @@ namespace MonkeyPaste.Avalonia {
         public PixelRect FakeWindowScreenRect {
             get {
                 var fwr = MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext is MpAvWelcomeNotificationViewModel).Screens.Primary.WorkingArea;
-
                 int w = fwr.Width;
                 int h = (int)((double)fwr.Height * 0.3d);
                 int x = fwr.X;
@@ -120,19 +136,25 @@ namespace MonkeyPaste.Avalonia {
         public MpAvFakeWindowViewModel() : base(null) { }
         public MpAvFakeWindowViewModel(MpAvPointerGestureWindowViewModel parent) : base(parent) {
             PropertyChanged += MpAvFakeWindowViewModel_PropertyChanged;
-
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased += Instance_OnGlobalMouseReleased;
         }
 
 
-        public void Destroy() {
-            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased -= Instance_OnGlobalMouseReleased;
-            IsWindowOpen = false;
-        }
 
         #endregion
 
         #region Public Methods
+
+        public void ResetDropState() {
+            IsDragOver = false;
+            HasDropped = false;
+        }
+        public void Destroy() {
+            MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseReleased -= Instance_OnGlobalMouseReleased;
+            IsWindowOpen = false;
+            IsFakeWindowVisible = false;
+            ResetDropState();
+        }
         #endregion
 
         #region Protected Methods
@@ -144,6 +166,10 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvFakeWindowViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(GestureType):
+                    OnPropertyChanged(nameof(IsDndEnabled));
+                    break;
+                case nameof(HasDropped):
+                    OnPropertyChanged(nameof(FakeWindowLabel));
                     break;
                 case nameof(IsWindowOpen):
                     OnPropertyChanged(nameof(FakeWindowLabel));
@@ -159,17 +185,23 @@ namespace MonkeyPaste.Avalonia {
                 DataContext = this,
                 Content = new MpAvFakeWindowView(),
                 Background = Brushes.Transparent,
-                WindowState = WindowState.Normal,
                 ShowActivated = true,
                 CanResize = false,
+                WindowState = WindowState.Normal,
                 BorderThickness = new Thickness(0),
                 SystemDecorations = SystemDecorations.None,
                 TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent },
                 WindowStartupLocation = WindowStartupLocation.Manual,
                 ShowInTaskbar = false,
             };
-#if WINDOWS && DEBUG
-            MpAvToolWindow_Win32.SetAsNoHitTestWindow(fmw.TryGetPlatformHandle().Handle);
+            fmw.Bind(
+                Window.IsVisibleProperty,
+                new Binding() {
+                    Source = this,
+                    Path = nameof(IsFakeWindowVisible),
+                    Mode = BindingMode.TwoWay
+                });
+#if WINDOWS 
             MpAvToolWindow_Win32.InitToolWindow(fmw.TryGetPlatformHandle().Handle);
 #endif
             fmw.Position = FakeWindowScreenRect.Position;
@@ -177,15 +209,18 @@ namespace MonkeyPaste.Avalonia {
             fmw.Height = FakeWindowSize.Height;
             FakeWindowActualTop = FakeWindowStartTop;
 
-            //if (fmw.Content is MpAvFakeWindowView fwv &&
-            //    fwv.FindControl<Border>("PlaceholderWindow") is Border fwv_panel) {
-            //    Canvas.SetTop(fwv_panel, FakeWindowStartTop);
-            //} // check actual top is bound correct
             return fmw;
         }
 
         private void Instance_OnGlobalMouseReleased(object sender, bool e) {
             if (IsClosed) {
+                return;
+            }
+            if (IsDragOver) {
+                // this implies drop will happen/is happening, timing is weird
+                // so don't hide when dropping
+                IsDragOver = false;
+                HasDropped = true;
                 return;
             }
             ToggleFakeWindowCommand.Execute(null);
@@ -244,22 +279,30 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand ToggleFakeWindowCommand => new MpCommand<object>(
-            (args) => {
+        public ICommand ToggleFakeWindowCommand => new MpAsyncCommand<object>(
+            async (args) => {
                 if (!IsWindowOpen) {
                     var fw = CreateFakeMainWindow();
                     fw.ShowChild();
+                    IsFakeWindowVisible = false;
                     return;
                 }
-                switch (FakeWindowState) {
-                    case MpFakeWindowState.None:
-                    case MpFakeWindowState.Close:
-                        FakeWindowState = MpFakeWindowState.Open;
-                        AnimateMainWindowAsync(FakeWindowEndTop).FireAndForgetSafeAsync();
+                switch (FakeWindowActionType) {
+                    case MpFakeWindowActionType.None:
+                    case MpFakeWindowActionType.Close:
+                        FakeWindowActionType = MpFakeWindowActionType.Open;
+
+                        IsFakeWindowVisible = true;
+                        await AnimateMainWindowAsync(FakeWindowEndTop);
                         break;
-                    case MpFakeWindowState.Open:
-                        FakeWindowState = MpFakeWindowState.Close;
-                        AnimateMainWindowAsync(FakeWindowStartTop).FireAndForgetSafeAsync();
+                    case MpFakeWindowActionType.Open:
+                        FakeWindowActionType = MpFakeWindowActionType.Close;
+
+                        await AnimateMainWindowAsync(FakeWindowStartTop);
+                        IsFakeWindowVisible = false;
+                        if (WasGestureCompleted) {
+                            MpAvWelcomeNotificationViewModel.Instance.ToggleGestureDemoCommand.Execute(null);
+                        }
                         break;
                 }
 

@@ -699,7 +699,7 @@ namespace MonkeyPaste.Avalonia {
                                 this,
                                 MpPortableProcessInfo.Create(pasteInfoFormatsClickedMsg.infoId),
                                 new MpPoint(pasteInfoFormatsClickedMsg.offsetX,pasteInfoFormatsClickedMsg.offsetY),
-                                "write"
+                                "full"
                             });
                     }
                     break;
@@ -1426,6 +1426,12 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break($"Content changed resp was null");
                 return;
             }
+            if (BindingContext.PublicHandle != contentChanged_ntf.contentHandle) {
+                // BUG pinning item from query tray right after closing a pop out
+                // window used old window data and replaced new item's data with it
+                MpDebug.Break($"Content Handle mismatch for tile '{BindingContext}'. Ignoring model update.");
+                return;
+            }
 
             BindingContext.HasEditableTable = contentChanged_ntf.hasEditableTable;
             BindingContext.ActualContentHeight = contentChanged_ntf.contentHeight;
@@ -1453,7 +1459,9 @@ namespace MonkeyPaste.Avalonia {
             //Dispatcher.UIThread.Post(() => {
             if (contentChanged_ntf.itemData != null) {
                 bool is_empty = contentChanged_ntf.itemData.IsNullOrWhitespaceHtmlString();
-                if (is_empty && MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED) {
+                if (is_empty &&
+                    BindingContext.IsContentReadOnly &&
+                    MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED) {
                     // data's getting reset again
                     MpDebug.Break("data reset caught in webview process content changed. ignoring update");
                 } else {

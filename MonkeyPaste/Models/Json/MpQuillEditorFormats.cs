@@ -122,6 +122,7 @@ namespace MonkeyPaste {
     }
 
     public class MpQuillEditorContentChangedMessage : MpJsonObject {
+        public string contentHandle { get; set; }
         public string itemPlainText { get; set; }
         public string itemData { get; set; }
 

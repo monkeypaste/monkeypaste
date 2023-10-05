@@ -3,18 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpAccountCapCheckType {
-        None = 0,
-        Add,
-        Link,
-        RestoreBlock,
-        AddBlock,
-        Remove,
-        Init,
-        AccountTypeDowngraded,
-        AccountTypeUpgraded,
-    }
-    public class MpAvAccountTools : MpIAccountTools {
+    public partial class MpAvAccountTools : MpIAccountTools {
         #region Private Variables
         private MpContentCapInfo _lastCapInfo = new();
         private int _lastContentCount = 0;
@@ -235,6 +224,7 @@ order by LastCapRelatedDateTime limit 2
             int to_add = 2 - to_trash_result.Count;
             while (to_add > 0) {
                 to_trash_result.Add(0);
+                to_add--;
             }
             return to_trash_result;
         }
@@ -253,6 +243,7 @@ order by LastCapRelatedDateTime limit 2
             int to_add = 2 - to_remove_result.Count;
             while (to_add > 0) {
                 to_remove_result.Add(0);
+                to_add--;
             }
             return to_remove_result;
         }

@@ -1333,7 +1333,7 @@ namespace MonkeyPaste.Avalonia {
 
                 bool confirm = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                     title: UiStrings.CommonNtfConfirmTitle,
-                    message: $"Are you sure you want to change your shortcut routing profile to '{srpt}'",
+                    message: string.Format(UiStrings.ShortcutsRoutingProfileChangeNtfMsg, srpt),
                     iconResourceObj: "WarningImage");
                 if (!confirm) {
                     // user canceled, send change msg to update pref ui
@@ -1347,13 +1347,13 @@ namespace MonkeyPaste.Avalonia {
             var drpt = MpAvPrefViewModel.Instance.DefaultRoutingProfileType;
             bool result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                 title: UiStrings.CommonNtfConfirmTitle,
-                message: "Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.",
+                message: UiStrings.ShortcutsResetNtfMsg,
                 iconResourceObj: "WarningImage");
             if (!result) {
                 return;
             }
             Items.Clear();
-            await MpDb.ResetShortcutsAsync(drpt);
+            await Mp.Services.DefaultDataCreator.ResetShortcutsAsync();
             await InitShortcutsAsync();
         });
 

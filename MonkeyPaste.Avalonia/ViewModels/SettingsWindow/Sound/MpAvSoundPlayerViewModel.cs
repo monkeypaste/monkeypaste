@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,11 +63,31 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public string SoundResourceDir =>
+            Mp.Services == null ||
+            Mp.Services.PlatformInfo == null ?
+                null :
+                Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, "Assets", "Sounds");
 
-        public MpSoundGroupType SelectedSoundGroup { get; set; }
+        public string SoundResourceBackupDir =>
+            Mp.Services == null ||
+            Mp.Services.PlatformInfo == null ?
+                null :
+                Path.Combine(Mp.Services.PlatformInfo.StorageDir, "Sounds");
+
+        public MpSoundGroupType SelectedSoundGroup {
+            get => (MpSoundGroupType)MpAvPrefViewModel.Instance.NotificationSoundGroupIdx;
+            set {
+                if (SelectedSoundGroup != value) {
+                    MpAvPrefViewModel.Instance.NotificationSoundGroupIdx = (int)value;
+                    OnPropertyChanged(nameof(SelectedSoundGroup));
+                }
+            }
+        }
         public bool IsSoundEnabled =>
             IsOsSupported &&
-            MpAvPrefViewModel.Instance.IsSoundEnabled;
+            SelectedSoundGroup != MpSoundGroupType.None &&
+            MpAvPrefViewModel.Instance.NotificationSoundVolume > 0;
 
         #endregion
 
@@ -103,12 +122,6 @@ namespace MonkeyPaste.Avalonia {
 
             _soundPathLookup.Clear();
 
-            string player_dir = Path.GetDirectoryName(Assembly.GetAssembly(typeof(Player)).Location).TrimEnd('\\').TrimEnd('/');
-            string base_dir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\').TrimEnd('/');
-            if (player_dir != base_dir) {
-                // path mismatch
-                MpDebug.Break();
-            }
             for (int i = 0; i < Enum.GetNames(typeof(MpSoundNotificationType)).Length; i++) {
                 MpSoundNotificationType snt = (MpSoundNotificationType)i;
                 if (snt == MpSoundNotificationType.None) {
@@ -119,25 +132,45 @@ namespace MonkeyPaste.Avalonia {
                 // Sounds have no build action and are copied to output directory so path is resolved here
 
                 string resource_key = $"{SelectedSoundGroup}{snt}Sound";
-                string resource_val = Mp.Services.PlatformResource.GetResource(resource_key) as string;
-                if (string.IsNullOrEmpty(resource_val)) {
+                string sound_file_name = Mp.Services.PlatformResource.GetResource(resource_key) as string;
+                if (sound_file_name == null) {
                     continue;
                 }
-                //List<string> path_parts = new List<string>() { AppDomain.CurrentDomain.BaseDirectory };
-                //path_parts.AddRange(new Uri(resource_val).LocalPath.Split(@"/"));
-                //string sound_path = Path.Combine(path_parts.ToArray());
-                string sound_path = resource_val.ToPathFromAvResourceString();
-                if (sound_path.Length > MAX_PATH &&
-                    OperatingSystem.IsWindows()) {
-                    if (IsSoundEnabled) {
-                        // don't notify file length error if disabled...
+                string sound_path = Path.Combine(SoundResourceDir, sound_file_name);
 
-                        Mp.Services.NotificationBuilder.ShowMessageAsync(
-                            title: $"Error",
-                            body: $"Cannot load sound from path '{sound_path}' file path must be no more than '{MAX_PATH}' characters. You will need to move this apps folder to a higher directory to hear that sound.",
-                            msgType: MpNotificationType.FileIoWarning).FireAndForgetSafeAsync(this);
-                    }
+                if (!sound_path.IsFile()) {
+                    //error
+                    MpDebug.Break($"Sound load error. file not found '{sound_path}'");
                     continue;
+                }
+
+                if (sound_path.Length > MAX_WIN_SOUND_PATH_LEN &&
+                    OperatingSystem.IsWindows()) {
+                    // path too long for window due to MCI (windows) limitation.
+                    // substitute into storage dir on startup
+                    if (!SoundResourceBackupDir.IsDirectory()) {
+                        // this is intended for initial startup to fallback and store sounds in user storage
+                        if (MpFileIo.CreateDirectory(SoundResourceBackupDir)) {
+                            MpConsole.WriteLine($"Sound backup folder created successfully at '{SoundResourceBackupDir}'");
+                        } else {
+                            MpDebug.Break($"Sound load error. Cannot create backup dir '{SoundResourceBackupDir}'");
+                            continue;
+                        }
+                    }
+                    string backup_sound_path = Path.Combine(SoundResourceBackupDir, sound_file_name);
+                    if (backup_sound_path.Length > MAX_WIN_SOUND_PATH_LEN) {
+                        MpDebug.Break($"Sound load error. Backup is still too long.. path is '{backup_sound_path}' max length: {MAX_WIN_SOUND_PATH_LEN}");
+                        continue;
+                    }
+                    if (!backup_sound_path.IsFile()) {
+                        // initial create
+                        bool success = backup_sound_path == MpFileIo.CopyFileOrDirectory(sound_path, backup_sound_path, false);
+                        if (!success) {
+                            MpDebug.Break($"Sound load error. Cannot create backup to path '{backup_sound_path}'");
+                            continue;
+                        }
+                    }
+                    sound_path = backup_sound_path;
                 }
 
                 _soundPathLookup.Add(snt, sound_path);
@@ -155,6 +188,9 @@ namespace MonkeyPaste.Avalonia {
         private void MpSoundPlayerGroupCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(SelectedItemIdx):
+                    if (IsBusy) {
+                        break;
+                    }
                     MpAvPrefViewModel.Instance.NotificationSoundGroupIdx = SelectedItemIdx;
                     InitializeAsync().FireAndForgetSafeAsync(this);
                     break;
@@ -269,7 +305,7 @@ namespace MonkeyPaste.Avalonia {
 
 
 #if WINDOWS
-        const int MAX_PATH = 128;
+        const int MAX_WIN_SOUND_PATH_LEN = 128;
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         public static extern int GetShortPathName(
@@ -278,8 +314,8 @@ namespace MonkeyPaste.Avalonia {
             int shortPathLength);
 
         private static string GetShortPath(string path) {
-            var shortPath = new StringBuilder(MAX_PATH);
-            GetShortPathName(path, shortPath, MAX_PATH);
+            var shortPath = new StringBuilder(MAX_WIN_SOUND_PATH_LEN);
+            GetShortPathName(path, shortPath, MAX_WIN_SOUND_PATH_LEN);
             return shortPath.ToString();
         }
 #else

@@ -13,6 +13,12 @@
 
         #region Properties
 
+        #region State
+
+        public bool IsHelpEnabled =>
+            false;
+        #endregion
+
         #endregion
 
         #region Public Methods

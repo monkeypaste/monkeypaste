@@ -280,7 +280,10 @@ namespace MonkeyPaste.Avalonia {
             //#else
             MpConsole.WriteLine(err_msg);
             return KeyCode.VcUndefined;
+#else
+            return KeyCode.VcUndefined;
 #endif
+
         }
         public static bool IsSameKey(this KeyCode kc, KeyCode okc, bool unify_mods) {
             if (kc == okc) {

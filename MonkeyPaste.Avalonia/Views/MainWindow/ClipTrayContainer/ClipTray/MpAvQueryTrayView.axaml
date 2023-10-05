@@ -54,7 +54,7 @@
         <!--  EMPTY TEXTBLOCK  -->
 
         <!--  NO SEL  -->
-        <Style Selector="Border#QueryTrayEmptyContainer:not(.has_active_tag) TextBlock#EmptyNoSelTextBlock">
+        <Style Selector="Grid#QueryTrayContainerGrid:not(.requerying) Border#QueryTrayEmptyContainer:not(.has_active_tag) TextBlock#EmptyNoSelTextBlock">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>
@@ -76,7 +76,7 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Border#QueryTrayEmptyContainer.is_adv_active.is_adv_pending TextBlock#EmptyPendingTagTextBlock">
+        <Style Selector="Grid#QueryTrayContainerGrid:not(.requerying) Border#QueryTrayEmptyContainer.is_adv_active.is_adv_pending TextBlock#EmptyPendingTagTextBlock">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>
@@ -86,7 +86,7 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="Border#QueryTrayEmptyContainer.has_active_tag TextBlock#EmptyTagTextBlock">
+        <Style Selector="Grid#QueryTrayContainerGrid:not(.requerying) Border#QueryTrayEmptyContainer.has_active_tag TextBlock#EmptyTagTextBlock">
             <Setter Property="IsVisible"
                     Value="True" />
         </Style>
@@ -97,6 +97,7 @@
 
     </local:MpAvUserControl.Styles>
     <Grid x:Name="QueryTrayContainerGrid"
+          Classes.requerying="{Binding IsRequerying}"
           Margin="0"
           Background="Transparent">
         <Grid.RowDefinitions>
@@ -147,8 +148,6 @@
                                           Height="{Binding $parent.Bounds.Height}">
                 <ListBox x:Name="ClipTrayListBox"
                          Classes="clipTileListBox queryListBox"
-                         Classes.requerying="{Binding IsRequerying}"
-                         Classes.notrequerying="{Binding !IsRequerying}"
                          IsTextSearchEnabled="False"
                          Background="Transparent"
                          HorizontalAlignment="Left"

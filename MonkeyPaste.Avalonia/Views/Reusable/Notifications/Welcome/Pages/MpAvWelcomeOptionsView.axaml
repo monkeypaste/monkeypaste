@@ -64,15 +64,21 @@
         <Style Selector="Border.try"
                x:DataType="local:MpAvWelcomeNotificationViewModel">
             <Setter Property="BorderThickness"
-                    Value="0" />
+                    Value="2" />
             <Setter Property="CornerRadius"
                     Value="10" />
             <Setter Property="BorderBrush"
-                    Value="White" />
+                    Value="Transparent" />
             <Setter Property="VerticalAlignment"
                     Value="Center" />
             <Setter Property="Padding"
                     Value="10,3" />
+        </Style>
+
+        <Style Selector="Border.try:pointerover"
+               x:DataType="local:MpAvWelcomeNotificationViewModel">
+            <Setter Property="BorderBrush"
+                    Value="White" />
         </Style>
 
         <Style Selector=":is(Button).try TextBlock, Border.try TextBlock"

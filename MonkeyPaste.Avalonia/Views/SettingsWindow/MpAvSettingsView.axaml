@@ -22,75 +22,7 @@
     </local:MpAvUserControl.Resources>
 
     <local:MpAvUserControl.Styles>
-        <!--  TABS  -->
-        <Style Selector="RadioButton.tab">
-            <Style.Resources>
-                <SolidColorBrush x:Key="ToggleButtonBackground" Color="{DynamicResource ThemeAccent5BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{DynamicResource ThemeAccent5Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
-                <SolidColorBrush x:Key="ToggleButtonForeground" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
 
-                <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource ThemeAccent3BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource ThemeAccent3BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource ThemeAccent2Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{DynamicResource ThemeInteractiveColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
-
-                <!--<Thickness x:Key="ToggleButtonBorderThemeThickness">1</Thickness>-->
-            </Style.Resources>
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch" />
-            <Setter Property="VerticalAlignment"
-                    Value="Stretch" />
-            <Setter Property="CornerRadius"
-                    Value="10" />
-            <Setter Property="Margin"
-                    Value="2.5,5,2.5,0" />
-            <Setter Property="Padding"
-                    Value="0" />
-        </Style>
-
-        <Style Selector="RadioButton.tab.omitted">
-            <Setter Property="Cursor"
-                    Value="Arrow" />
-            <Setter Property="IsEnabled"
-                    Value="False" />
-            <Setter Property="Opacity"
-                    Value="0" />
-        </Style>
-
-        <Style Selector="RadioButton.tab Image">
-            <Setter Property="MinWidth"
-                    Value="30" />
-            <Setter Property="MinHeight"
-                    Value="30" />
-            <Setter Property="MaxWidth"
-                    Value="60" />
-            <Setter Property="MaxHeight"
-                    Value="60" />
-            <Setter Property="Stretch"
-                    Value="Uniform" />
-            <Setter Property="Margin"
-                    Value="0,10,0,0" />
-        </Style>
-
-        <Style Selector="RadioButton.tab Label">
-            <Setter Property="DockPanel.Dock"
-                    Value="Bottom" />
-            <Setter Property="HorizontalAlignment"
-                    Value="Center" />
-            <Setter Property="FontWeight"
-                    Value="SemiBold" />
-            <Setter Property="Margin"
-                    Value="5" />
-            <Setter Property="FontSize"
-                    Value="18" />
-        </Style>
         <Style Selector="Button.footer">
             <Setter Property="HorizontalContentAlignment"
                     Value="Center" />
@@ -432,136 +364,66 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Top"
+                    Orientation="Vertical">
 
-        <!--  TABS PANEL  -->
-
-        <Grid x:Name="HeaderContainer"
-              DockPanel.Dock="Top"
-              MaxHeight="250"
-              ColumnDefinitions="*,*,*,*,*"
-              RowDefinitions="Auto,50">
-
-            <!--  ACCOUNT  -->
-
-            <RadioButton Grid.Column="0"
-                         Classes.omitted="{Binding !IsTabButtonVisible0}"
-                         Theme="{StaticResource SwitchlessRadioButton}"
-                         Classes="tab fade"
-                         IsChecked="{Binding IsTabSelected[0], Mode=OneWay}"
-                         Command="{Binding SelectTabCommand}"
-                         CommandParameter="0">
-                <DockPanel>
-                    <Label Content="{x:Static local:UiStrings.SettingsAccountTabLabel}" />
-                    <Image Source="{Binding Source={StaticResource UserImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </DockPanel>
-            </RadioButton>
-
-            <!--  PREFS  -->
-
-            <RadioButton Grid.Column="1"
-                         Classes.omitted="{Binding !IsTabButtonVisible1}"
-                         Theme="{StaticResource SwitchlessRadioButton}"
-                         Classes="tab fade"
-                         IsChecked="{Binding IsTabSelected[1], Mode=OneWay}"
-                         Command="{Binding SelectTabCommand}"
-                         CommandParameter="1">
-                <DockPanel>
-                    <Label Content="{x:Static local:UiStrings.SettingsPrefTabLabel}" />
-                    <Image Source="{Binding Source={StaticResource SlidersImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </DockPanel>
-            </RadioButton>
-
-            <!--  INTEROP  -->
-
-            <RadioButton Grid.Column="2"
-                         Classes.omitted="{Binding !IsTabButtonVisible2}"
-                         Theme="{StaticResource SwitchlessRadioButton}"
-                         Classes="tab fade"
-                         IsChecked="{Binding IsTabSelected[2], Mode=OneWay}"
-                         Command="{Binding SelectTabCommand}"
-                         CommandParameter="2">
-                <DockPanel>
-                    <Label Content="{x:Static local:UiStrings.SettingsInteropTabLabel}" />
-                    <Image Source="{Binding Source={StaticResource ClipboardBwImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </DockPanel>
-            </RadioButton>
-
-            <!--  SHORTCUTS  -->
-
-            <RadioButton Grid.Column="3"
-                         Classes.omitted="{Binding !IsTabButtonVisible3}"
-                         Theme="{StaticResource SwitchlessRadioButton}"
-                         Classes="tab fade"
-                         IsChecked="{Binding IsTabSelected[3], Mode=OneWay}"
-                         Command="{Binding SelectTabCommand}"
-                         CommandParameter="3">
-                <DockPanel>
-                    <Label Content="{x:Static local:UiStrings.SettingsShortcutTabLabel}" />
-                    <Image Source="{Binding Source={StaticResource JoystickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </DockPanel>
-            </RadioButton>
-
-            <!--  HELP  -->
-
-            <RadioButton Grid.Column="4"
-                         Classes.omitted="{Binding !IsTabButtonVisible4}"
-                         Theme="{StaticResource SwitchlessRadioButton}"
-                         Classes="tab fade"
-                         IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"
-                         Command="{Binding SelectTabCommand}"
-                         CommandParameter="4">
-                <DockPanel>
-                    <Label Content="{x:Static local:UiStrings.SettingsHelpTabLabel}" />
-                    <Image Source="{Binding Source={StaticResource QuestionMarkBwImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                </DockPanel>
-            </RadioButton>
+            <!--  TABS PANEL  -->
+            <local:MpAvSettingsMenuView MaxHeight="200"
+                                        BorderThickness="0,0,0,1.5"
+                                        BorderBrush="Silver" />
 
             <!--  FILTER TEXTBOX  -->
-            <local:MpAvClipBorder Grid.Row="1"
-                                  Grid.ColumnSpan="6"
-                                  Margin="10,0"
-                                  Padding="0"
-                                  CornerRadius="10"
-                                  BorderBrush="{DynamicResource ThemeGrayAccent2Color}"
-                                  BorderThickness="1"
-                                  Background="{DynamicResource ThemeInteractiveBgColor}"
-                                  HorizontalAlignment="Right"
-                                  VerticalAlignment="Center"
-                                  VerticalContentAlignment="Center">
-                <Grid>
+            <Border Height="50"
+                    HorizontalAlignment="Stretch"
+                    BorderThickness="0,0,0,1.5"
+                    BorderBrush="Silver">
+                <local:MpAvClipBorder Grid.Row="1"
+                                      Grid.ColumnSpan="6"
+                                      Margin="10,0"
+                                      Padding="0"
+                                      CornerRadius="10"
+                                      BorderBrush="{DynamicResource ThemeGrayAccent2Color}"
+                                      BorderThickness="1"
+                                      Background="{DynamicResource ThemeInteractiveBgColor}"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"
+                                      VerticalContentAlignment="Center">
+                    <Grid>
 
-                    <!--  FILTER TEXTBOX  -->
+                        <!--  FILTER TEXTBOX  -->
 
-                    <AutoCompleteBox MinWidth="150"
-                                     MinHeight="30"
-                                     VerticalAlignment="Stretch"
-                                     BorderThickness="0"
-                                     Margin="0"
-                                     Padding="10,0,0,0"
-                                     IsTextCompletionEnabled="False"
-                                     MinimumPrefixLength="0"
-                                     MinimumPopulateDelay="0.25"
-                                     ItemsSource="{Binding RecentSettingsSearches}"
-                                     local:MpAvDelayedTextChangedExtension.IsEnabled="True"
-                                     local:MpAvDelayedTextChangedExtension.DelayMs="500"
-                                     local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
-                                     Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />
+                        <AutoCompleteBox MinWidth="150"
+                                         MinHeight="30"
+                                         VerticalAlignment="Stretch"
+                                         BorderThickness="0"
+                                         Margin="0"
+                                         Padding="10,0,0,0"
+                                         IsTextCompletionEnabled="False"
+                                         MinimumPrefixLength="0"
+                                         MinimumPopulateDelay="0.25"
+                                         ItemsSource="{Binding RecentSettingsSearches}"
+                                         local:MpAvDelayedTextChangedExtension.IsEnabled="True"
+                                         local:MpAvDelayedTextChangedExtension.DelayMs="500"
+                                         local:MpAvDelayedTextChangedExtension.Text="{Binding FilterText, Source={x:Static local:MpAvSettingsViewModel.Instance}, Mode=TwoWay}"
+                                         Watermark="{x:Static local:UiStrings.SettingsSearchWatermark}" />
 
 
-                    <!--  CLEAR FILTER BUTTON  -->
+                        <!--  CLEAR FILTER BUTTON  -->
 
-                    <local:MpAvClearTextButton x:Name="ClearSearchTextButton"
-                                               Classes="TextBoxButton square"
-                                               Height="20"
-                                               Margin="5"
-                                               IsVisible="{Binding FilterText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                               ClearCommand="{Binding ClearFilterTextCommand}"
-                                               HorizontalAlignment="Right"
-                                               VerticalAlignment="Center" />
-                </Grid>
-            </local:MpAvClipBorder>
-        </Grid>
+                        <local:MpAvClearTextButton x:Name="ClearSearchTextButton"
+                                                   Classes="TextBoxButton square"
+                                                   Height="20"
+                                                   Margin="5"
+                                                   IsVisible="{Binding FilterText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                   ClearCommand="{Binding ClearFilterTextCommand}"
+                                                   HorizontalAlignment="Right"
+                                                   VerticalAlignment="Center" />
+                    </Grid>
+                </local:MpAvClipBorder>
+            </Border>
 
+        </StackPanel>
+      
         <!--  Footer  -->
         <Border DockPanel.Dock="Bottom"
                 HorizontalAlignment="Stretch"

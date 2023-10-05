@@ -399,34 +399,6 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         protected override void Instance_OnItemUpdated(object sender, MpDbModelBase e) {
-            //bool wasChanged = false;
-            //if (int.TryParse(CommandParameter, out int cmd_param_int)) {
-            //    if (e is MpCopyItem ci) {
-            //        if (ShortcutType == MpShortcutType.PasteCopyItem &&
-            //            cmd_param_int == ci.Id) {
-            //            ShortcutDisplayName = $"Paste {ci.Title}";
-            //            wasChanged = true;
-            //        }
-            //    } else if (e is MpTag t) {
-            //        if (ShortcutType == MpShortcutType.SelectTag &&
-            //            cmd_param_int == t.Id) {
-            //            ShortcutDisplayName = $"Select {t.TagName}";
-            //            wasChanged = true;
-            //        }
-            //    } else if (e is MpPluginPreset aip) {
-            //        if (ShortcutType == MpShortcutType.AnalyzeCopyItemWithPreset &&
-            //            cmd_param_int == aip.Id) {
-            //            ShortcutDisplayName = $"User {aip.Label} analyzer";
-            //            wasChanged = true;
-            //        }
-            //    }
-            //}
-
-            //if (wasChanged) {
-            //    Task.Run(async () => {
-            //        await Shortcut.WriteToDatabaseAsync();
-            //    });
-            //}
             if (IsModelAffectThisShortcut(e)) {
                 Dispatcher.UIThread.Post(() => {
                     SetShortcutNameAsync().FireAndForgetSafeAsync(this);

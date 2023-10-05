@@ -1150,6 +1150,33 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active.
+        /// </summary>
+        public static string MpMainWindowShowBehaviorType_Active {
+            get {
+                return ResourceManager.GetString("MpMainWindowShowBehaviorType_Active", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mouse.
+        /// </summary>
+        public static string MpMainWindowShowBehaviorType_Mouse {
+            get {
+                return ResourceManager.GetString("MpMainWindowShowBehaviorType_Mouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary.
+        /// </summary>
+        public static string MpMainWindowShowBehaviorType_Primary {
+            get {
+                return ResourceManager.GetString("MpMainWindowShowBehaviorType_Primary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to And.
         /// </summary>
         public static string MpNextJoinOptionType_And {

@@ -2,14 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <!--  BASELINE SOUNDS  -->
-    <sys:String x:Key="MonkeySound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Monkey1.wav</sys:String>
+    <!--<sys:String x:Key="MonkeySound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Monkey1.wav</sys:String>
     <sys:String x:Key="TingSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Ting.wav</sys:String>
     <sys:String x:Key="ChimeSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/chime.wav</sys:String>
     <sys:String x:Key="AlertSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/alert.wav</sys:String>
     <sys:String x:Key="BlipSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/blip.wav</sys:String>
     <sys:String x:Key="SonarSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/blip2.wav</sys:String>
 
+    -->
     <!--  MINIMAL GROUP  -->
+    <!--
     <sys:String x:Key="MinimalCopySound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Ting.wav</sys:String>
     <sys:String x:Key="MinimalPasteSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/chime.wav</sys:String>
 
@@ -24,5 +26,30 @@
     <sys:String x:Key="MinimalAppendOnSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/blip2.wav</sys:String>
     <sys:String x:Key="MinimalAppendOffSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/blip.wav</sys:String>
 
-    <sys:String x:Key="MinimalLoadedSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Monkey1.wav</sys:String>
+    <sys:String x:Key="MinimalLoadedSound">avares://MonkeyPaste.Avalonia/Assets/Sounds/Monkey1.wav</sys:String>-->
+
+    <!--  BASELINE SOUNDS  -->
+    <sys:String x:Key="MonkeySound">Monkey1.wav</sys:String>
+    <sys:String x:Key="TingSound">Ting.wav</sys:String>
+    <sys:String x:Key="ChimeSound">chime.wav</sys:String>
+    <sys:String x:Key="AlertSound">alert.wav</sys:String>
+    <sys:String x:Key="BlipSound">blip.wav</sys:String>
+    <sys:String x:Key="SonarSound">blip2.wav</sys:String>
+
+    <!--  MINIMAL GROUP  -->
+    <sys:String x:Key="MinimalCopySound">Ting.wav</sys:String>
+    <sys:String x:Key="MinimalPasteSound">chime.wav</sys:String>
+
+    <sys:String x:Key="MinimalErrorSound">alert.wav</sys:String>
+
+    <sys:String x:Key="MinimalAutoCopyOnSound">blip2.wav</sys:String>
+    <sys:String x:Key="MinimalAutoCopyOffSound">blip.wav</sys:String>
+
+    <sys:String x:Key="MinimalMousePasteOnSound">blip2.wav</sys:String>
+    <sys:String x:Key="MinimalMousePasteOffSound">blip.wav</sys:String>
+
+    <sys:String x:Key="MinimalAppendOnSound">blip2.wav</sys:String>
+    <sys:String x:Key="MinimalAppendOffSound">blip.wav</sys:String>
+
+    <sys:String x:Key="MinimalLoadedSound">Monkey1.wav</sys:String>
 </ResourceDictionary>

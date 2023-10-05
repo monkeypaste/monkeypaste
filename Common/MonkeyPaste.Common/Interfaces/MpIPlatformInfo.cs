@@ -17,6 +17,7 @@
         string OsShortName { get; }
 
         string EditorPath { get; }
+        string TermsPath { get; }
 
         MpUserDeviceType OsType { get; }
     }

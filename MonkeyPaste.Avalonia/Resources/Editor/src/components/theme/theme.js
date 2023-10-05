@@ -119,17 +119,30 @@ function adjustDeltaOpForTheme(op) {
         let theme_fg = getElementComputedStyleProp(document.body, '--defcontentfgcolor');
         op.attributes = setAttrThemeColorVal(op.attributes, theme_fg, false);
     } else if (!hasUserFontColor(op.attributes) && !isThemeColorOverriden(op.attributes)) {
-        // when fg color is provided from content and is NOT user specified
-        let theme_fg = adjustFgToTheme(op.attributes.color);
-        op.attributes = setAttrThemeColorVal(op.attributes, theme_fg, false);
+        try {
+            // when fg color is provided from content and is NOT user specified
+            let theme_fg = adjustFgToTheme(op.attributes.color);
+            op.attributes = setAttrThemeColorVal(op.attributes, theme_fg, false);
+        } catch (ex) {
+            // error parsing color, use default
+            log('fg conv error: ' + ex);
+            let theme_fg = getElementComputedStyleProp(document.body, '--defcontentfgcolor');
+            op.attributes = setAttrThemeColorVal(op.attributes, theme_fg, false);
+        }
     }
 
     if (!hasUserBgFontColor(op.attributes) &&
         !isThemeBgColorOverriden(op.attributes) &&
         op.attributes.background !== undefined) {
-        // when bg color is provided from content and is NOT user specified
-        let theme_bg = adjustBgToTheme(op.attributes.background);
-        op.attributes = setAttrThemeColorVal(op.attributes, theme_bg, true);
+        try {
+            // when bg color is provided from content and is NOT user specified
+            let theme_bg = adjustBgToTheme(op.attributes.background);
+            op.attributes = setAttrThemeColorVal(op.attributes, theme_bg, true);
+        } catch (ex) {
+            // error parsing bg color, set to transparent
+            log('bg conv error: ' + ex);
+            op.attributes = setAttrThemeColorVal(op.attributes, 'transparent', true);
+        }
     }
     return op;
 }

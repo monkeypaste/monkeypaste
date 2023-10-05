@@ -680,6 +680,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                     await Task.Delay(100);
                 }
+                MpConsole.WriteLine($"Default trigger create started.");
+
                 // NOTE this must be called after analyzer collection has initialized
 
                 #region Annotate new text

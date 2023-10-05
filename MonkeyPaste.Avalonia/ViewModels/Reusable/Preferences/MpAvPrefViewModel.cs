@@ -48,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
             nameof(DefaultPluginIconId),
             nameof(UserEmail),
             nameof(DbCreateDateTime),
-            nameof(LastStartupDateTime),
+            nameof(IsWelcomeComplete),
             nameof(SslPrivateKey),
             nameof(SslPublicKey),
             nameof(SslCertExpirationDateTime),
@@ -331,7 +331,6 @@ namespace MonkeyPaste.Avalonia {
         public string ThemeTypeName { get; set; } = MpThemeType.Dark.ToString();
         public string ThemeColor { get; set; } = MpSystemColors.purple;
         public int NotificationSoundGroupIdx { get; set; } = (int)MpSoundGroupType.Minimal;
-        public bool IsSoundEnabled { get; set; } = false;
         public double NotificationSoundVolume { get; set; } = 0;
         public bool ShowInTaskbar { get; set; } = true;
         public bool ShowInTaskSwitcher { get; set; } = true;
@@ -465,7 +464,7 @@ namespace MonkeyPaste.Avalonia {
         public double MainWindowInitialHeight { get; set; } = 0;
 
         public DateTime StartupDateTime { get; set; } = DateTime.MinValue;
-        public DateTime? LastStartupDateTime { get; set; } = null;
+        public bool IsWelcomeComplete { get; set; }
 
         public string ClipTrayLayoutTypeName { get; set; } = MpClipTrayLayoutType.Stack.ToString();
 

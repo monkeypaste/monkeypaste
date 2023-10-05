@@ -5,6 +5,7 @@ namespace MonkeyPaste {
     public interface MpIPlatformWrapper : MpICommonTools {
         Task InitializeAsync();
 
+        MpIDefaultDataCreator DefaultDataCreator { get; set; }
         MpISslInfo SslInfo { get; set; }
         MpIWelcomeSetupInfo WelcomeSetupInfo { get; set; }
         MpIUserDeviceInfo ThisDeviceInfo { get; set; }

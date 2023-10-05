@@ -136,7 +136,9 @@ namespace MonkeyPaste.Avalonia {
 
         public IEnumerable<MpAvParameterViewModelBase> FilteredItems =>
             Items
-            .Where(x => (x as MpIFilterMatch).IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText));
+            .Where(x =>
+            (x as MpIFilterMatch).IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText) &&
+            !MpAvSettingsViewModel.Instance.HiddenParamIds.Contains(x.ParamId.ToStringOrEmpty()));
 
         public IList<MpAvParameterViewModelBase> Items { get; set; }
 

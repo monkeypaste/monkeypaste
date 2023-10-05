@@ -260,7 +260,7 @@ namespace MonkeyPaste.Avalonia {
                     // if user closes welcome window, pref file still exists
                     // so welcome still shows up but rest of app doesn't think its 
                     // initial startup. So delete storage dir here to clean everything up
-                    MpFileIo.DeleteDirectory(Mp.Services.PlatformInfo.StorageDir);
+                    //MpFileIo.DeleteDirectory(Mp.Services.PlatformInfo.StorageDir);
                 }
                 Mp.Services.ShutdownHelper.ShutdownApp($"systray cmd - '{args.ToStringOrEmpty("no detail (likely quit cmd) ")}'");
             });
@@ -304,14 +304,11 @@ namespace MonkeyPaste.Avalonia {
 
                 w.ShowChild();
             });
-        //private INotificationManager? _notificationManager;
-        //private INotificationManager NotificationManager => _notificationManager
-        //    ??= new WindowNotificationManager(TopLevel.GetTopLevel(MpAvWindowManager.MainWindow)!);
         public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
                 //await Task.Delay(1);
-                await MpTestDataBuilder.CreateTestDataAsync();
-                //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
+                //await MpTestDataBuilder.CreateTestDataAsync();
+                await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
                 //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
 

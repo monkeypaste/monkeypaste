@@ -160,6 +160,12 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public virtual string TermsPath {
+            get {
+                return Path.Combine(ExecutingDir, "Resources", "terms.html");
+            }
+        }
+
         public virtual string HelpPath {
             get {
                 if (OperatingSystem.IsBrowser()) {
