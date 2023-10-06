@@ -4,11 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
 
 namespace MonkeyPaste.Avalonia {
 
@@ -28,7 +26,8 @@ namespace MonkeyPaste.Avalonia {
 
     public class MpAvSoundPlayerViewModel : MpAvViewModelBase {
         #region Private Variables
-
+        private object _soundPlayerLock = new object();
+        const int MAX_WIN_SOUND_PATH_LEN = 128;
         private Player _player;
 
         //private SoundPlayer _soundPlayer = null;
@@ -84,10 +83,11 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public bool IsSoundEnabled =>
-            IsOsSupported &&
-            SelectedSoundGroup != MpSoundGroupType.None &&
+        bool IsMuted =>
             MpAvPrefViewModel.Instance.NotificationSoundVolume > 0;
+
+        public bool CanPlaySound =>
+            IsOsSupported;
 
         #endregion
 
@@ -247,30 +247,44 @@ namespace MonkeyPaste.Avalonia {
                 byte volume = (byte)((double)byte.MaxValue * new_norm_volue);
                 await _player.SetVolume(volume);
 
-            }, (args) => IsSoundEnabled);
+            }, (args) => IsOsSupported);
 
         public ICommand PlayCustomSoundCommand => new MpAsyncCommand<object>(
             async (args) => {
-                if (args is object[] argParts) {
-                    string sound_path = argParts[0] as string;
-                    double norm_sound_vol = (double)argParts[1];
-                    while (_player.Playing) {
-                        MpConsole.WriteLine($"Sound already playing, waiting to play '{sound_path}'...");
-                        await Task.Delay(100);
-                    }
-
-                    // sound played from action ntf
-                    await UpdateVolumeCommand.ExecuteAsync(norm_sound_vol);
-
-                    await _player.Play(sound_path);
-
-                    while (_player.Playing) {
-                        await Task.Delay(100);
-                    }
-                    await UpdateVolumeCommand.ExecuteAsync(null);
+                if (args is not object[] argParts) {
+                    return;
                 }
+                string sound_path_or_key = argParts[0] as string;
+                double norm_sound_vol = (double)argParts[1];
+                string sound_path = sound_path_or_key;
+                if (!sound_path.IsFile()) {
+                    string sound_file_name = Mp.Services.PlatformResource.GetResource<string>(sound_path_or_key);
+                    if (sound_file_name == null ||
+                    _soundPathLookup.Values.FirstOrDefault(x => x.ToLower().EndsWith(sound_file_name.ToLower())) is not string lookup_path ||
+                    !lookup_path.IsFile()) {
+                        MpDebug.Break($"Error loading sound from arg '{sound_path_or_key}'");
+                        return;
+                    }
+                    sound_path = lookup_path;
+                }
+                await MpFifoAsyncQueue.WaitByConditionAsync(
+                    lockObj: _soundPlayerLock,
+                    waitWhenTrueFunc: () => {
+                        return _player.Playing;
+                    },
+                    debug_label: $"Sound to play '{sound_path}'");
 
-            }, (args) => IsSoundEnabled);
+                // sound played from action ntf
+                await UpdateVolumeCommand.ExecuteAsync(norm_sound_vol);
+
+                await _player.Play(sound_path);
+
+                while (_player.Playing) {
+                    await Task.Delay(100);
+                }
+                await UpdateVolumeCommand.ExecuteAsync(null);
+
+            }, (args) => IsOsSupported);
         public ICommand PlaySoundNotificationCommand => new MpAsyncCommand<object>(
             async (args) => {
 
@@ -299,28 +313,10 @@ namespace MonkeyPaste.Avalonia {
 
             }, (args) => {
                 return
-                    IsSoundEnabled &&
-                    args is MpSoundNotificationType && SelectedSoundGroup != MpSoundGroupType.None;
+                    IsOsSupported &&
+                    args is MpSoundNotificationType &&
+                    !IsMuted;
             });
-
-
-#if WINDOWS
-        const int MAX_WIN_SOUND_PATH_LEN = 128;
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        public static extern int GetShortPathName(
-            [MarshalAs(UnmanagedType.LPTStr)] string path,
-            [MarshalAs(UnmanagedType.LPTStr)] StringBuilder shortPath,
-            int shortPathLength);
-
-        private static string GetShortPath(string path) {
-            var shortPath = new StringBuilder(MAX_WIN_SOUND_PATH_LEN);
-            GetShortPathName(path, shortPath, MAX_WIN_SOUND_PATH_LEN);
-            return shortPath.ToString();
-        }
-#else
-        const int MAX_PATH = int.MaxValue;
-#endif
 
         #endregion
     }

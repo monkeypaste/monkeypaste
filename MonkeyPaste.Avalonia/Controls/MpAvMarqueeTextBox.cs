@@ -629,7 +629,7 @@ namespace MonkeyPaste.Avalonia {
                     this.Cursor = new Cursor(StandardCursorType.No);
                 }
 
-                Dispatcher.UIThread.Post(this.InvalidateVisual);
+                this.Redraw();
             }
             _tb_mp = e.GetClientMousePoint(this);
             AnimateAsync().FireAndForgetSafeAsync();
@@ -666,7 +666,7 @@ namespace MonkeyPaste.Avalonia {
             base.OnPointerExited(e);
             this.Cursor = new Cursor(StandardCursorType.Arrow);
             if (NavigateUriCommand != null && IsReadOnly) {
-                Dispatcher.UIThread.Post(this.InvalidateVisual);
+                this.Redraw();
             }
             _tb_mp = null;
         }
@@ -713,7 +713,7 @@ namespace MonkeyPaste.Avalonia {
                 // BUG workaround for 'https://github.com/AvaloniaUI/Avalonia/issues/10057'
                 return;
             }
-            if (!IsVisible) {
+            if (context.IsUnsetValue() || !IsEffectivelyVisible) {
                 return;
             }
             if (IsReadOnly) {
@@ -789,7 +789,7 @@ namespace MonkeyPaste.Avalonia {
                 ttvm.TagNameWidth = _ftSize.Width;
 
             }
-            Dispatcher.UIThread.Post(InvalidateVisual);
+            this.Redraw();
         }
         private void SetTextBoxIsVisible(bool isTextBoxVisible) {
             Dispatcher.UIThread.Post(() => {
@@ -1014,7 +1014,7 @@ namespace MonkeyPaste.Avalonia {
                     if (Math.Abs(nLeft1) < deltaX || Math.Abs(nLeft2) < deltaX) {
                         _offsetX1 = 0;
                         _offsetX2 = bmp_width;
-                        Dispatcher.UIThread.Post(InvalidateVisual);
+                        this.Redraw();
 
                         _curLoopWaitMs = 0;
                         _distTraveled = 0;
@@ -1044,8 +1044,9 @@ namespace MonkeyPaste.Avalonia {
 
                 _offsetX1 = nLeft1;
                 _offsetX2 = nLeft2;
-
-                Dispatcher.UIThread.Post(InvalidateVisual);
+                if (IsEffectivelyVisible) {
+                    this.Redraw();
+                }
 
                 await Task.Delay(_delayMs);
             }

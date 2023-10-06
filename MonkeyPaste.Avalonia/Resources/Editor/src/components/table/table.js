@@ -196,10 +196,10 @@ function getBetterTableModule(forceInit = false) {
         isSubSelectionEnabled() &&
         (isNullOrUndefined(btm.tableSelection) || 
             isNullOrUndefined(btm.columnTool) ||
-            isNullOrUndefined(btm.getTable()))) {
+            isNullOrUndefined(btm.table))) {
         // force init through by quickly show/hiding ops
         let sel_cell_elm = getTableCellElementAtDocIdx(getDocSelection().index);
-        if (sel_cell_elm) {
+        if (sel_cell_elm && typeof btm.getOpsMenu === 'function') {
             let ops_elm = getBetterTableModule().getOpsMenu(sel_cell_elm);
             ops_elm.tableOperationMenu.domNode.remove();            
         }        
@@ -299,6 +299,14 @@ function getTableCellElementAtDocIdx(doc_idx) {
     return cur_elm;
 }
 
+function getTableCellAtEditorPoint(p) {
+    let doc_idx = getDocIdxFromPoint(p, -1);
+    if (!doc_idx || doc_idx < 0) {
+        return null;
+    }
+    return getTableCellAtDocIdx(doc_idx);
+}
+
 // #endregion Getters
 
 // #region Setters
@@ -375,7 +383,7 @@ function hasEditableTable() {
 
 // #region Actions
 
-function updateTableDragState(e) {
+function updateTableDragState(e, eventType) {
     // used to know if pointer down is already on a selected cell, in which case will allow for a drag event
     if (e == null) {
         // mouse up
@@ -388,6 +396,7 @@ function updateTableDragState(e) {
     }
     if (globals.IsTableDragSelecting != false) {
         // only null during confirmed cell drag
+
         return true;
     }
 

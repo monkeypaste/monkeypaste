@@ -214,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
             string formatted_target_path = Path.Combine(FileSystemPath, fn + fe);
 
             try {
-                File.Copy(unformatted_path, formatted_target_path);
+                MpFileIo.CopyFileOrDirectory(unformatted_path, formatted_target_path, forceOverwrite: true);
             }
             catch (Exception ex) {
                 // on io error, show ntf and allow for fix

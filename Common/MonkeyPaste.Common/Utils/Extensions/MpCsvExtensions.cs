@@ -37,5 +37,9 @@ namespace MonkeyPaste.Common {
             string csvStr = MpCsvToRichHtmlTableConverter.RichHtmlTableToCsv(str);
             return csvStr;
         }
+
+        public static bool IsStringRichHtmlTable(this string str) {
+            return str.StartsWith(MpCsvToRichHtmlTableConverter.RICH_HTML_TABLE_PREFIX);
+        }
     }
 }

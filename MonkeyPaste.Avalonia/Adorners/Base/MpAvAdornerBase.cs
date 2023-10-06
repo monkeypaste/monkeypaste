@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Threading;
 using PropertyChanged;
 
 namespace MonkeyPaste.Avalonia {
@@ -46,8 +45,7 @@ namespace MonkeyPaste.Avalonia {
             } else {
                 IsVisible = true;
             }
-            Dispatcher.UIThread.VerifyAccess();
-            this.InvalidateVisual();
+            this.Redraw();
         }
     }
 }

@@ -254,12 +254,12 @@ namespace MonkeyPaste.Avalonia {
 
         public void Clear() {
             IsVisible = false;
-            InvalidateVisual();
+            this.Redraw();
         }
         public void DrawHighlights(IEnumerable<(IBrush, Geometry)> gl) {
             _gl = gl;
             IsVisible = _gl != null && _gl.Any();
-            Dispatcher.UIThread.Post(InvalidateVisual);
+            this.Redraw();
         }
         public override void Render(DrawingContext context) {
             if (IsVisible) {

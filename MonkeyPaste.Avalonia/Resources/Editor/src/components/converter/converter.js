@@ -58,7 +58,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 
 	if (isTableInDocument()) {
 		// delta-to-html doesn't convert tables
-		output_html = getHtmlWithTables();
+		output_html = getHtml(null, needs_encoding);
 		DO_VALIDATE = false;
 	} else {
 		// TODO? does html w/ lists need to skip validation too? 

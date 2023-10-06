@@ -87,7 +87,7 @@ function showTooltipOverlay(targetElm, tooltipText) {
 				return;
 			}
 
-			if (isRunningInHost()) {
+			if (isRunningOnHost()) {
 				let target_loc = getRectCenter(cleanRect(targetElm.getBoundingClientRect()));
 				const sc_parts = parseShortcutTooltipParts(tooltipText);
 				let tt_html = null;
@@ -117,7 +117,7 @@ function showTooltipOverlay(targetElm, tooltipText) {
 
 function hideTooltipOverlay() {
 	globals.TooltipExitDt = Date.now();
-	if (isRunningInHost()) {
+	if (isRunningOnHost()) {
 		onShowToolTip_ntf(false);
 		return;
 	}
@@ -126,7 +126,7 @@ function hideTooltipOverlay() {
 
 
 function showTooltipToolbar(targetElm, htmlStr, showTimeMs = 0) {
-	if (isRunningInHost()) {
+	if (isRunningOnHost()) {
 		onShowToolTip_ntf(true, getRectCenter(cleanRect(targetElm.getBoundingClientRect())), htmlStr);
 		return;
 	}
@@ -152,7 +152,7 @@ function showTooltipToolbar(targetElm, htmlStr, showTimeMs = 0) {
 }
 
 function hideTooltipToolbar() {
-	if (isRunningInHost()) {
+	if (isRunningOnHost()) {
 		onShowToolTip_ntf(false);
 		return;
 	}

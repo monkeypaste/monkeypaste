@@ -1,4 +1,12 @@
-﻿function getOS() {
+﻿function isNumber(obj) {
+    if (isNullOrUndefined(obj) ||
+        typeof obj !== 'number' ||
+        isNaN(obj)) {
+        return false;
+    }
+    return true;
+}
+function getOS() {
     var userAgent = window.navigator.userAgent,
         platform = window.navigator?.userAgentData?.platform || window.navigator.platform,
         macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],

@@ -23,7 +23,7 @@ function isPoint(p) {
 	if (isNullOrUndefined(p)) {
 		return false;
 	}
-	return p.x !== undefined && p.y !== undefined;
+	return isNumber(p.x) && isNumber(p.y);;
 }
 // #endregion State
 

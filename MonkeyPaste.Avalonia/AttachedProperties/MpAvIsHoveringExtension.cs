@@ -4,7 +4,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
@@ -163,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
             //    tt.X = mp.X;
             //    tt.Y = mp.Y;
             //}
-            Dispatcher.UIThread.Post(c.InvalidateVisual);
+            c.Redraw();
         }
         #endregion
     }

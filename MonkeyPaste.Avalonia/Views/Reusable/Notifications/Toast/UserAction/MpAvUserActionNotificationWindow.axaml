@@ -12,7 +12,7 @@
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
         Classes.IsClosing="{Binding IsClosing}"
-        Classes="notificationWindow resizable"
+        Classes="notificationWindow resizable fadeIn fadeOut"
         Classes.userActionNotificationWindow="True">
     <Window.Styles>
         <!--  PARAM LISTBOXITEM  -->
@@ -81,7 +81,7 @@
 
             <local:MpAvMarqueeTextBox Grid.Row="0"
                                       Grid.Column="1"
-                                      AutoMarquee="True"
+                                      AutoMarquee="False"
                                       EditOnFocus="False"
                                       MinWidth="{Binding #TitleUnderline.Bounds.Width}"
                                       MaxWidth="{Binding #TitleUnderline.Bounds.Width}"

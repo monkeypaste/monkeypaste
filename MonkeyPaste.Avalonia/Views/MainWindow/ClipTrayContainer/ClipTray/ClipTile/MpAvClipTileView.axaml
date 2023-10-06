@@ -157,8 +157,15 @@
             </Setter>
         </Style>
 
-        <!--  FROZEN HIDES  -->
-
+        <!--  CAP OVERLAY  -->
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.nexttrash Border#AccountCapOverlayContainer Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource RecycleBinImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+        </Style>
+        <Style Selector="local|MpAvClipBorder#ClipTileContainerBorder.nextremove Border#AccountCapOverlayContainer Image">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource TrashCanImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <local:MpAvClipBorder x:Name="ClipTileContainerBorder"
@@ -179,6 +186,8 @@
                           Classes.frozen="{Binding IsFrozen}"
                           Classes.trashed="{Binding IsTrashed}"
                           Classes.drag="{Binding IsTileDragging}"
+                          Classes.nexttrash="{Binding IsNextTrashedByAccount}"
+                          Classes.nextremove="{Binding IsNextRemovedByAccount}"
                           Classes.capTooltip="{Binding IsVisible, ElementName=AccountCapOverlayContainer}"
                           Classes.userColor="{Binding CopyItemHexColor, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                           Classes.compatMode="{Binding !IsRichHtmlContentEnabled, Source={x:Static local:MpAvPrefViewModel.Instance}}"
@@ -287,17 +296,16 @@
                     <Border.Background>
                         <SolidColorBrush Color="Black" Opacity="0.2" />
                     </Border.Background>
-                    <Image Stretch="UniformToFill"
-                           Classes.shakeslow="{Binding IsHovering}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Width="50"
-                           Height="50"
-                           Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}">
-                        <Image.RenderTransform>
-                            <RotateTransform />
-                        </Image.RenderTransform>
-                    </Image>
+                  <Image Stretch="UniformToFill"
+                         Classes.shakeslow="{Binding IsHovering}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Width="50"
+                         Height="50">
+                    <Image.RenderTransform>
+                      <RotateTransform />
+                    </Image.RenderTransform>
+                  </Image>
                 </Border>
             </Border>
 

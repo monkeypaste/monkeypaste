@@ -134,6 +134,7 @@ button {
     font-weight: bolder;
     padding: 15px;
     margin: 0 5px;
+    display: flex;
     text-decoration: none;
     border-radius: var(--commonborderradius);
     border: solid var(--editableeditorbgcolor_opaque) 1px;

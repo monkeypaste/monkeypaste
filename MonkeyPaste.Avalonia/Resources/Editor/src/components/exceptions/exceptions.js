@@ -7,7 +7,7 @@
 function initExceptionHandler() {
     window.onerror = function (msg, url, line, column, error) {
         if (typeof onException_ntf === 'function') {
-            if (!isRunningInHost()) {
+            if (!isRunningOnHost()) {
                 debugger;
             }
             onException_ntf(msg, url, parseInt(line), parseInt(column), error);

@@ -418,14 +418,21 @@ function setTemplateElementColor(telm, tcolor) {
 }
 
 function setTemplateProperty_internal(tguid, tproperty, tpropertyValue) {
-    let did_property_change = null;
+    let did_property_change = false;
     var telms = getTemplateElements(tguid);
     for (var i = 0; i < telms.length; i++) {
         var telm = telms[i];
         if (telm.getAttribute('templateGuid') == tguid) {
-            if (did_property_change == null) {
-                did_property_change = telm.getAttribute(tproperty) == tpropertyValue;
+            if (telm.getAttribute(tproperty) == tpropertyValue) {
+                continue;
             }
+            if (tproperty == 'templateText' &&
+                telm.getAttribute('templateType') == 'datetime') {
+                // supress content change for datetime tick update
+                globals.SuppressContentChangedNtf = true;
+            }
+            did_property_change = true;
+
             telm.setAttribute(tproperty, tpropertyValue);
             if (tproperty == 'templateName') {
                 setTemplateElementText(telm, tpropertyValue);
@@ -433,6 +440,10 @@ function setTemplateProperty_internal(tguid, tproperty, tpropertyValue) {
                 setTemplateElementColor(telm, tpropertyValue)
             }            
         }
+    }
+    globals.SuppressContentChangedNtf = false;
+    if (!did_property_change) {
+        return false;
     }
     if (tproperty == 'templateColor') {
         setEditToolbarColorButtonColor(tpropertyValue);
@@ -442,7 +453,7 @@ function setTemplateProperty_internal(tguid, tproperty, tpropertyValue) {
     if (did_property_change == null) {
         did_property_change = false;
     }
-    return did_property_change;
+    return true;
 }
 
 function setTemplateBgColor(tguid, color_name_or_hex) {
@@ -810,6 +821,9 @@ function removeTemplateElement(telm) {
 }
 
 function clearTemplateFocus() {
+    if (!isTemplateFocused()) {
+        return;
+    }
     let telms = getTemplateElements(null,null);
     for (var i = 0; i < telms.length; i++) {
         let telm = telms[i];

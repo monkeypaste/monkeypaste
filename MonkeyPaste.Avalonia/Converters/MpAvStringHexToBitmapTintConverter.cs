@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
 
             MpAvWindowManager.AllWindows
                     .SelectMany(x => x.GetVisualDescendants<Image>())
-                    .ForEach(x => x.InvalidateVisual());
+                    .ForEach(x => x.Redraw());
         }
 
         #endregion
@@ -74,6 +74,9 @@ namespace MonkeyPaste.Avalonia {
                         }
                         //MpConsole.WriteLine($"Seed: '{randColorSeed}' Idx: {rand_idx}");
                         hex = MpSystemColors.ContentColors[rand_idx].RemoveHexAlpha();
+                    } else if (trk == MpThemeResourceKey.ThemeInteractiveColor_norand) {
+                        // only used by cap overlay currently
+                        hex = Mp.Services.PlatformResource.GetResource<string>(MpThemeResourceKey.ThemeInteractiveColor.ToString());
                     } else {
                         hex = Mp.Services.PlatformResource.GetResource<string>(trk.ToString());
                     }

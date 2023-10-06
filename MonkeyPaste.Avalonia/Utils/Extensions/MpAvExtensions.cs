@@ -25,6 +25,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region Controls
 
+        public static void Redraw(this Control control) {
+            try {
+                // NOTE trying to fix egl context bug, thinking this is executing
+
+                Dispatcher.UIThread.Post(control.InvalidateVisual);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error rendering control. ", ex);
+            }
+        }
+
         public static bool IsTextInputControl(this Control control) {
             // NOTE only returns true if control is in a state that would receive text
 
@@ -70,6 +81,11 @@ namespace MonkeyPaste.Avalonia {
 
         public static string ToPathFromAvResourceString(this string res_str) {
             // NOTE resource must be in same module (i think)
+            if (!res_str.IsStringResourcePath()) {
+                MpDebug.Break($"invalid resource uri '{res_str}'");
+                return null;
+            }
+
             List<string> path_parts = new List<string>() { AppDomain.CurrentDomain.BaseDirectory };
             path_parts.AddRange(new Uri(res_str).LocalPath.Split(@"/"));
             return Path.Combine(path_parts.ToArray());

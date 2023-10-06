@@ -6,7 +6,7 @@
 
 function initTemplateToolbarButton() {
     addClickOrKeyClickEventListener(getCreateTemplateToolbarButton(), onTemplateToolbarButtonClick);
-    getCreateTemplateToolbarButton().innerHTML = getSvgHtml('createtemplate');
+    //getCreateTemplateToolbarButton().innerHTML = getSvgHtml('createtemplate');
 }
 
 

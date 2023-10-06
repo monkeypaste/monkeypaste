@@ -299,11 +299,8 @@ namespace MonkeyPaste.Avalonia {
                     maxShowTimeMs: ToastDelayS * 1000).FireAndForgetSafeAsync(this);
             }
             if (IsAudible) {
-                string sound_path =
-                (Mp.Services.PlatformResource.GetResource(SoundResourceKey) as string).ToPathFromAvResourceString();
-
                 MpAvSoundPlayerViewModel.Instance
-                    .PlayCustomSoundCommand.Execute(new object[] { sound_path, SoundVolume });
+                    .PlayCustomSoundCommand.Execute(new object[] { SoundResourceKey, SoundVolume });
             }
 
             if (_isPreviewing) {

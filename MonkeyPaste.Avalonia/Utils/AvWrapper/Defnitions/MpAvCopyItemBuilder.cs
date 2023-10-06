@@ -235,7 +235,6 @@ namespace MonkeyPaste.Avalonia {
 
                 inputTextFormat = "html";
                 itemType = MpCopyItemType.Text;
-                //itemData = csvStr.ToRichText();
                 itemData = csvStr.CsvStrToRichHtmlTable();
 
                 //if (avdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) && 
@@ -289,6 +288,8 @@ namespace MonkeyPaste.Avalonia {
                     // fully html special entities are fully encoded which will lead
                     // to parsing issues if left as is or double encoding if not considered
                     inputTextFormat = "rtf2html";
+                }
+                if (itemData.IsStringRichHtmlTable()) {
                 }
             } else if (avdo.TryGetData(MpPortableDataFormats.CefHtml, out string cefHtmlStr)) {
 

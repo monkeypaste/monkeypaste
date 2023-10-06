@@ -265,7 +265,8 @@ namespace MonkeyPaste.Avalonia {
                         manifests_to_filter
                         .Cast<MpIFilterMatch>()
                         .Where(x => x.IsFilterMatch(FilterText))
-                        .Cast<MpManifestFormat>();
+                        .Cast<MpManifestFormat>()
+                        .OrderBy(x => x.title);
 
                 Items.Clear();
                 Selection.Clear();

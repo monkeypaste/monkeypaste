@@ -35,7 +35,7 @@ function setInputFocusable(isInputFocused) {
 // #region State
 
 function isWindowFocused() {
-	if (!isRunningInHost()) {
+	if (!isRunningOnHost()) {
 		return true;
 	}
 	if (document.hasFocus()) {

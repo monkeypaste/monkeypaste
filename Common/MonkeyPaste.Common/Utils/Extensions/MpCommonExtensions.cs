@@ -133,42 +133,17 @@ namespace MonkeyPaste.Common {
             return isDefault;
         }
 
-        public static int IndexOf<T>(this IEnumerable<T> source, Func<T, bool> predicate) {
-            int result = -1;
-            var enumerator = source.GetEnumerator();
 
-            while (enumerator.MoveNext()) {
-                result += 1;
-                if (predicate(enumerator.Current)) {
-                    if (enumerator is IDisposable) {
-                        (enumerator as IDisposable).Dispose();
-                    }
-                    return result;
-                }
-            }
-            if (enumerator is IDisposable) {
-                (enumerator as IDisposable).Dispose();
-            }
-            return -1;
+        public static int IndexOf<T>(this IEnumerable<T> obj, T value) {
+            return obj.IndexOf(value, null);
         }
 
-        public static int IndexOf<T>(this IEnumerable<T> source, T item) {
-            int result = -1;
-            var enumerator = source.GetEnumerator();
-
-            while (enumerator.MoveNext()) {
-                result += 1;
-                if (enumerator.Current.Equals(item)) {
-                    if (enumerator is IDisposable) {
-                        (enumerator as IDisposable).Dispose();
-                    }
-                    return result;
-                }
-            }
-            if (enumerator is IDisposable) {
-                (enumerator as IDisposable).Dispose();
-            }
-            return -1;
+        public static int IndexOf<T>(this IEnumerable<T> obj, T value, IEqualityComparer<T> comparer) {
+            comparer = comparer ?? EqualityComparer<T>.Default;
+            var found = obj
+                .Select((a, i) => new { a, i })
+                .FirstOrDefault(x => comparer.Equals(x.a, value));
+            return found == null ? -1 : found.i;
         }
 
         public static bool AddOrReplace<TKey, TValue>(this Dictionary<TKey, TValue> d, TKey key, TValue value) {

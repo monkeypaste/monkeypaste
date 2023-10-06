@@ -107,10 +107,6 @@ namespace MonkeyPaste {
                 return total_count;
             }
 
-            // item fetch
-            //string inner_query = $"SELECT RootId,{head_qi.GetSortField()} FROM ({sb}) {orderBy_clause}";
-            //string fetch_query = $"SELECT * FROM MpCopyItem WHERE pk_MpCopyItemId IN (SELECT DISTINCT RootId FROM ({inner_query})) {orderBy_clause} LIMIT {limit} OFFSET {offset}";
-
             // id fetch
             string inner_query = $"SELECT RootId,{head_qi.GetSortField()} FROM ({sb}) {orderBy_clause}";
             string fetch_query = $"SELECT DISTINCT RootId FROM ({inner_query}) LIMIT {limit} OFFSET {offset}";

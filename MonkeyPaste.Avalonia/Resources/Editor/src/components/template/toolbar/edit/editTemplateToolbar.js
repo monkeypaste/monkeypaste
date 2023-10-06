@@ -152,7 +152,7 @@ function deleteFocusTemplate() {
     if (!ft) {
         return;
     }
-    if (!isRunningInHost()) {
+    if (!isRunningOnHost()) {
         removeTemplatesByGuid(ftguid);
         hideEditTemplateToolbar(false, true);
         return;

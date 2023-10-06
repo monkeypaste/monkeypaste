@@ -151,6 +151,9 @@ function adjustBgToTheme(bg_color_obj) {
     // NOTE l changes are just experimental atm, bg is uniformly set to transparent
     // (but this function is skipped if bg is user specified in editor)
     let rgba = cleanColor(bg_color_obj);
+    if (!rgba) {
+        throw new DOMException('THeme bg conv. error cannot convert: ' + bg_color_obj);
+    }
     let hsl = rgb2hsl(rgba);
     if (globals.EditorTheme == 'light') {
         hsl.l = Math.max(hsl.l, 85);
@@ -166,6 +169,10 @@ function adjustBgToTheme(bg_color_obj) {
 
 function adjustFgToTheme(fg_color_obj) {
     let rgba = cleanColor(fg_color_obj);
+
+    if (!rgba) {
+        throw new DOMException('THeme fg conv. error cannot convert: ' + fg_color_obj);
+    }
     let hsl = rgb2hsl(rgba);
     if (globals.EditorTheme == 'dark') {
         hsl.l = Math.max(hsl.l == 0 ? 100 : hsl.l, 75);

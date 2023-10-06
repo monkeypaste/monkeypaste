@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task LoadContentAsync(bool isSearchEnabled = true) {
             // really dont need to do anything
-            this.InvalidateVisual();
+            this.Redraw();
             await Task.Delay(1);
         }
 

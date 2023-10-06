@@ -488,7 +488,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpMainWindowShowBehaviorType.Primary:
                     default:
                         // NOTE will need another monitor to build out non-primary display types
-                        int monitorIdx = Mp.Services.ScreenInfoCollection.Screens.IndexOf(x => x.IsPrimary);
+                        int monitorIdx = Mp.Services.ScreenInfoCollection.Screens.IndexOf(Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary));
                         _mainWindowScreen =
                             monitorIdx < 0 ?
                             Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault() :

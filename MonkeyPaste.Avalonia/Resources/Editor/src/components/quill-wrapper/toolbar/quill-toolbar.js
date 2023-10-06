@@ -17,6 +17,7 @@ function initEditorToolbarQuillOptions(quillOptions, toolbarId) {
 	}
 
 	Quill.register({ "modules/better-table": quillBetterTable }, true);
+	quillOptions.modules['table'] = false;
 	quillOptions.modules['better-table'] = {
 		operationMenu: {
 			items: {

@@ -55,7 +55,7 @@
                     Value="{DynamicResource ThemeAccent2Color}" />
         </Style>
 
-        <Style Selector="TextBlock.detailLabel">
+        <Style Selector=":is(TextBlock).detailLabel">
             <Setter Property="FontWeight"
                     Value="SemiBold" />
             <Setter Property="TextWrapping"
@@ -67,7 +67,7 @@
             <Setter Property="Margin"
                     Value="0,10,0,0" />
         </Style>
-        <Style Selector="TextBlock.detailInfo">
+        <Style Selector=":is(TextBlock).detailInfo">
             <Setter Property="TextWrapping"
                     Value="WrapWithOverflow" />
             <Setter Property="HorizontalAlignment"
@@ -77,7 +77,7 @@
             <Setter Property="Margin"
                     Value="0,10,0,0" />
         </Style>
-        <Style Selector="TextBlock.detailInfo,TextBlock.detailLabel">
+        <Style Selector=":is(TextBlock).detailInfo,:is(TextBlock).detailLabel">
             <Setter Property="Foreground"
                     Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
@@ -322,7 +322,7 @@
                                Source="{Binding IconBase64, Converter={x:Static local:MpAvStringBase64ToBitmapConverter.Instance}}" />
 
                         <!--  PLUGIN TITLE  -->
-                        <TextBlock x:Name="SelectedPluginTitleBlock"
+                        <SelectableTextBlock x:Name="SelectedPluginTitleBlock"
                                    Grid.Row="0"
                                    Grid.Column="1"
                                    Foreground="{DynamicResource ThemeInteractiveColor}"
@@ -343,7 +343,7 @@
                                 Command="{Binding ToggleIsPluginInstalledCommand}">
                             <Grid>
 
-                                <TextBlock IsVisible="{Binding !IsBusy}"
+                                <SelectableTextBlock IsVisible="{Binding !IsBusy}"
                                            Text="{Binding ToggleInstallText}" />
                                 <local:MpAvBusySpinnerView Width="15"
                                                            Height="15"
@@ -358,7 +358,7 @@
                                 Command="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
                                 CommandParameter="{Binding PluginDonateUri}"
                                 IsVisible="{Binding PluginDonateUri, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
-                            <TextBlock Text="{x:Static local:UiStrings.PluginBrowserDonateLabel}" />
+                            <SelectableTextBlock Text="{x:Static local:UiStrings.PluginBrowserDonateLabel}" />
                         </Button>
                     </StackPanel>
 
@@ -371,7 +371,7 @@
                             Command="{Binding UpdatePluginCommand}">
                         <Grid>
 
-                            <TextBlock IsVisible="{Binding !IsBusy}"
+                            <SelectableTextBlock IsVisible="{Binding !IsBusy}"
                                        Text="{x:Static local:UiStrings.PluginBrowserUpdateLabel}" />
                             <local:MpAvBusySpinnerView Width="15"
                                                        Height="15"
@@ -382,36 +382,36 @@
                     </Button>
 
                     <!--  DESCRIPTION  -->
-                    <TextBlock Grid.Row="3"
+                    <SelectableTextBlock Grid.Row="3"
                                Text="{x:Static local:UiStrings.PluginBrowserDescriptionLabel}"
                                Classes="detailLabel" />
-                    <TextBlock Grid.Row="4"
+                    <SelectableTextBlock Grid.Row="4"
                                Grid.ColumnSpan="2"
                                Text="{Binding PluginDescription}"
                                Classes="detailInfo" />
 
                     <!--  VERSION  -->
-                    <TextBlock Grid.Row="5"
+                    <SelectableTextBlock Grid.Row="5"
                                Grid.Column="0"
                                Classes="detailLabel"
                                Text="{x:Static local:UiStrings.PluginBrowserVersionLabel}" />
-                    <TextBlock Grid.Row="5"
+                    <SelectableTextBlock Grid.Row="5"
                                Grid.Column="1"
                                Classes="detailInfo"
                                Text="{Binding PluginVersion}" />
 
                     <!--  CREDITS  -->
-                    <TextBlock Grid.Row="6"
+                    <SelectableTextBlock Grid.Row="6"
                                Grid.Column="0"
                                Classes="detailLabel"
                                Text="{x:Static local:UiStrings.PluginBrowserCreditsLabel}" />
-                    <TextBlock Grid.Row="6"
+                    <SelectableTextBlock Grid.Row="6"
                                Grid.Column="1"
                                Classes="detailInfo"
                                Text="{Binding PluginCredits}" />
 
                     <!--  LICENSE URL  -->
-                    <TextBlock Grid.Row="7"
+                    <SelectableTextBlock Grid.Row="7"
                                Grid.Column="0"
                                Classes="detailLabel"
                                Text="{x:Static local:UiStrings.PluginBrowserLicenseLabel}" />
@@ -423,17 +423,17 @@
                                               NavigateUriCommandParameter="{Binding PluginLicenseUrl}" />
 
                     <!--  PUBLISHED  -->
-                    <TextBlock Grid.Row="8"
+                    <SelectableTextBlock Grid.Row="8"
                                Grid.Column="0"
                                Classes="detailLabel"
                                Text="{x:Static local:UiStrings.PluginBrowserPublishedLabel}" />
-                    <TextBlock Grid.Row="8"
+                    <SelectableTextBlock Grid.Row="8"
                                Grid.Column="1"
                                Classes="detailInfo"
                                Text="{Binding PluginPublishedDateTime, Converter={x:Static local:MpAvDateTimeToStringConverter.Instance}}" />
 
                     <!--  PROJECT URL  -->
-                    <TextBlock Grid.Row="9"
+                    <SelectableTextBlock Grid.Row="9"
                                Grid.Column="0"
                                Classes="detailLabel"
                                Text="{x:Static local:UiStrings.PluginBrowserProjectUrlLabel}" />
@@ -445,7 +445,7 @@
                                               NavigateUriCommandParameter="{Binding PluginProjectUrl}" />
 
                     <!--  ABUSE URL  -->
-                    <TextBlock Grid.Row="10"
+                    <SelectableTextBlock Grid.Row="10"
                                Grid.Column="0"
                                Classes="detailLabel"
                                Text="{x:Static local:UiStrings.PluginBrowserReportAbuseLabel}" />
@@ -457,11 +457,11 @@
                                               NavigateUriCommandParameter="{Binding PluginAbuseUrl}" />
 
                     <!--  TAGS  -->
-                    <TextBlock Grid.Row="11"
+                    <SelectableTextBlock Grid.Row="11"
                                Grid.Column="0"
                                Classes="detailLabel"
                                Text="{x:Static local:UiStrings.PluginBrowserTagsLabel}" />
-                    <TextBlock Grid.Row="11"
+                    <SelectableTextBlock Grid.Row="11"
                                Grid.Column="1"
                                Classes="detailInfo"
                                Text="{Binding PluginTags}" />
@@ -476,14 +476,14 @@
                         <TreeView.ItemTemplate>
                             <TreeDataTemplate x:DataType="local:MpAvPluginDependencyViewModel"
                                               ItemsSource="{Binding Items}">
-                                <TextBlock Classes="detailLabel"
+                                <SelectableTextBlock Classes="detailLabel"
                                            Text="{Binding LabelText}" />
                             </TreeDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
 
                     <!--  README VIEW  -->
-                    <TextBlock Grid.Row="13"
+                    <SelectableTextBlock Grid.Row="13"
                                Grid.Column="0"
                                Classes="detailLabel"
                                Text="{x:Static local:UiStrings.PluginBrowserReadMeLabel}" />

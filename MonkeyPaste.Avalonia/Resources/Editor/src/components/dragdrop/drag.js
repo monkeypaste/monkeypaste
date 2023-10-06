@@ -71,6 +71,8 @@ function onDragStart(e) {
     let sel = getDocSelection();
 
     if (globals.ContentItemType == 'Text' &&
+        isSubSelectionEnabled() &&
+        //isClassInElementPath(e.currentTarget, globals.TABLE_WRAPPER_CLASS_NAME)
         (getTableSelectedCells().length == 0 || globals.IsTableDragSelecting) &&
         (!sel || sel.length == 0)) {
         log('drag start rejected by selection state. selectable but w/o range');

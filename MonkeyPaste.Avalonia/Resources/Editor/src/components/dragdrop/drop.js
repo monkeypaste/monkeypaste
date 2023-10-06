@@ -216,7 +216,7 @@ function onDragOver(e) {
     }    
 
     // DROP EFFECT
-    if (isRunningInHost() && isDragging()) {
+    if (isRunningOnHost() && isDragging()) {
         // mod keys updated from host msg in updateGlobalModKeys
     } else {
         updateGlobalModKeys(e);
@@ -296,8 +296,7 @@ function onDrop(e) {
     log('drop attempting. mp ' + pointStr(globals.WindowMouseLoc) + ' mdp ' + pointStr(globals.WindowMouseDownLoc));
 
     let drag_dist =
-        isDragging() && isPoint(globals.WindowMouseLoc) && isPoint(globals.WindowMouseDownLoc) ?
-            dist(globals.WindowMouseLoc, globals.WindowMouseDownLoc) : null;
+        isDragging() ? getMouseDragDist() : null;
 
     updateWindowMouseState(e,'drop');    
 

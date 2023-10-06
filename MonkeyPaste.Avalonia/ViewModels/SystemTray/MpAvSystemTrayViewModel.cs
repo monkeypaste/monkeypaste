@@ -318,6 +318,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
+                await Task.Delay(1);
                 MpAvContentWebView.BreakOnNextLoad = true;
 
             });

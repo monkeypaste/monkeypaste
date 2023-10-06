@@ -344,6 +344,7 @@
 
         <!-- CREATE TEMPLATE -->
         <button id="createTemplateToolbarButton"
+                class="svg-key-tag"
                 hover-tooltip="New Template"></button>
         <div class="toolbar-separator"></div>
 
@@ -382,12 +383,12 @@
         <div class="toolbar-separator"></div>
 
         <!-- CREATE TABLE -->
-        <span id="createTableToolbarButton" class="ql-Table-Input ql-picker">
+        <span id="createTableToolbarButton" class="ql-Table-Input ql-picker hidden">
             <span id="createTableToolbarButtonLabel" class="ql-picker-label"></span>
             <span id="createTableToolbarButtonOptionsContainer" class="ql-picker-options hidden"></span>
         </span>
 
-        <div class="toolbar-separator"></div>
+        <div class="toolbar-separator hidden"></div>
 
         <!-- BLOCK QUOTE-->
         <button class="ql-blockquote hidden"></button>
@@ -541,6 +542,7 @@
                 hover-tooltip="Edit Details"
                 tabindex="5">
         </button>
+
         <!-- PASTE BUTTON/MODE CONTAINER -->
         <div id="pasteButtonAndModeContainer"
              class="right-align pasteButtonSpit">
@@ -548,8 +550,8 @@
             <!-- APPEND STATE CONTAINER -->
             <div id="pasteAppendToolbarContainer" class="hover-border append-toolbar-container">
                 <!-- APPEND BEGIN BUTTON -->
-                <button id="pasteAppendBeginButton" class="svg-key-stack unexpanded-only" hover-tooltip="Append"></button>
-                <div class="toolbar-separator unexpanded-only"></div>
+                <button id="pasteAppendBeginButton" class="svg-key-stack append unexpanded-only" hover-tooltip="Append"></button>
+                <div class="toolbar-separator append unexpanded-only"></div>
                 <!-- APPEND INSERT BUTTON -->
 
                 <button id="pasteAppendToggleInlineButton" class="svg-key-paragraph text-only" hover-tooltip="Inline"></button>

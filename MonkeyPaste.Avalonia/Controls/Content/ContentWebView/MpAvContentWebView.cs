@@ -1429,7 +1429,9 @@ namespace MonkeyPaste.Avalonia {
             if (BindingContext.PublicHandle != contentChanged_ntf.contentHandle) {
                 // BUG pinning item from query tray right after closing a pop out
                 // window used old window data and replaced new item's data with it
-                MpDebug.Break($"Content Handle mismatch for tile '{BindingContext}'. Ignoring model update.");
+                var actual_contexts = MpAvClipTrayViewModel.Instance.AllItems.Where(x => x.PublicHandle == contentChanged_ntf.contentHandle);
+
+                MpDebug.Break($"Content Handle mismatch for tile '{BindingContext}'. Ignoring model update.", true);
                 return;
             }
 
@@ -1449,7 +1451,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            //Task.Run(() => {
             BindingContext.IgnoreHasModelChanged = true;
 
             BindingContext.SearchableText = contentChanged_ntf.itemPlainText;
@@ -1780,12 +1781,12 @@ namespace MonkeyPaste.Avalonia {
 
         private void GrowView() {
             double nw = Math.Max(BindingContext.DesiredWidth, BindingContext.BoundWidth);
-            double nh = Math.Max(BindingContext.BoundHeight, BindingContext.BoundHeight);
+            double nh = Math.Max(BindingContext.BoundHeight, BindingContext.BoundHeight); //no change
             Resize(nw, nh);
         }
         private void ShrinkView() {
             double nw = Math.Min(BindingContext.DesiredWidth, BindingContext.BoundWidth);
-            double nh = Math.Min(BindingContext.BoundHeight, BindingContext.BoundHeight); //no change
+            double nh = Math.Min(BindingContext.MinHeight, BindingContext.BoundHeight);
             Resize(nw, nh);
         }
         private void Resize(double nw, double nh) {

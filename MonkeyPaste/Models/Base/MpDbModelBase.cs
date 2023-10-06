@@ -34,7 +34,8 @@ namespace MonkeyPaste {
         [JsonIgnore]
         [Ignore]
         public virtual string PublicHandle =>
-            (Id.ToString() + Guid).CheckSum().ToLower();
+         //Id.ToString(); 
+         (Id.ToString() + Guid).CheckSum().ToLower();
 
         [JsonIgnore]
         [Ignore]

@@ -1,19 +1,9 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
+﻿using Avalonia.Controls;
 using Avalonia.Platform;
-using Avalonia.Rendering;
-using Avalonia.Threading;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpAvIWebViewInterop {
@@ -89,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         void MpIWebViewHost.Render() {
-            Dispatcher.UIThread.Post(this.InvalidateVisual);
+            this.Redraw();
         }
 
 
@@ -105,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpIWebViewBindable Implementation
         public event EventHandler<string> OnNavigateRequest;
         public virtual void OnNavigated(string url) {
-            Dispatcher.UIThread.Post(this.InvalidateVisual);
+            this.Redraw();
         }
 
         #endregion

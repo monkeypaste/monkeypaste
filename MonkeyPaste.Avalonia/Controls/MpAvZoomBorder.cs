@@ -302,7 +302,7 @@ namespace MonkeyPaste.Avalonia {
                 _render_timer = new DispatcherTimer();
                 _render_timer.Interval = TimeSpan.FromMilliseconds(_RENDER_INTERVAL_MS);
                 _render_timer.Tick += (s, e) => {
-                    Dispatcher.UIThread.Post(InvalidateVisual);
+                    this.Redraw();
                 };
             }
 
@@ -388,7 +388,7 @@ namespace MonkeyPaste.Avalonia {
                     var mp = e.GetPosition(this).ToPortablePoint();
                     var v = _last_mp - mp;
                     TranslateOrigin(v.X, v.Y);
-                    Dispatcher.UIThread.Post(InvalidateVisual);
+                    this.Redraw();
                     _last_mp = mp;
                 }
             }

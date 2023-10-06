@@ -188,8 +188,8 @@ function parseRgba(colorObj) {
         rgba = rgbaCssStrToRgba(colorObj);
         if (!rgba) {
             // what is the data?
-            debugger;
-
+            //debugger;
+            return null;
         }
         return rgba;
     }
@@ -404,6 +404,9 @@ function cleanHexColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity, ignor
 
 function cleanColor(rgb_Or_rgba_Or_colorName_Or_hex_Str, forcedOpacity, outputType = 'rgbaObj') {
     let color = parseRgba(rgb_Or_rgba_Or_colorName_Or_hex_Str);
+    if (!color) {
+        return null;
+    }
     if (!isNullOrUndefined(forcedOpacity)) {
         color.a = forcedOpacity;
     }

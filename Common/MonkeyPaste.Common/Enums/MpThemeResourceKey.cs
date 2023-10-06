@@ -18,6 +18,7 @@
         ThemeWhiteColor,
 
         ThemeInteractiveColor,
+        ThemeInteractiveColor_norand, // only used for tinting to force actual fg color
         ThemeInteractiveBgColor,
 
         ThemeNoAccentColor,

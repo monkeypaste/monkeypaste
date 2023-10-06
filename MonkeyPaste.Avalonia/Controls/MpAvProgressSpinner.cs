@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Styling;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
@@ -18,7 +17,7 @@ namespace MonkeyPaste.Avalonia {
             PercentProperty.Changed.AddClassHandler<MpAvProgressSpinner>((x, y) => HandlePercentChanged(x));
         }
         private static void HandlePercentChanged(MpAvProgressSpinner ps) {
-            ps.InvalidateVisual();
+            ps.Redraw();
         }
 
         #endregion

@@ -132,7 +132,7 @@ function onAddOrUpdateTemplate_ntf(t) {
 
 function onException_ntf(ex_label,ex_msg) {
 	// output 'MpQuillExceptionMessage'
-	if (!isRunningInHost()) {
+	if (!isRunningOnHost()) {
 		debugger;
 	}
 	log('');

@@ -81,9 +81,15 @@ function getRootHtml() {
 }
 
 function getHtml(range, encodeHtmlEntities = true) {
-	if (globals.ContentItemType != 'Text') {
-		return getRootHtml();
+	if (globals.ContentItemType != 'Text' ||
+		(isTableInDocument() && isNullOrUndefined(range))) {
+		let root_html = getRootHtml();
+		if (encodeHtmlEntities) {
+			return encodeHtmlSpecialEntitiesFromHtmlDoc(root_html);
+		}
+		return root_html;
 	}
+
 	range = isNullOrUndefined(range) ? { index: 0, length: getDocLength() } : range;
 	let delta = getDelta(range);
 	delta = restoreContentColorsFromDelta(delta);

@@ -33,7 +33,6 @@ namespace MonkeyPaste.Avalonia {
                 //}
                 //MpConsole.Init();
 
-
 #if CEF_WV
                 MpAvCefNetApplication.Init();
 #endif

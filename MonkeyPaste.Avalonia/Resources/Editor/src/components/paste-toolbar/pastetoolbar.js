@@ -213,7 +213,7 @@ function endPasteButtonBusy() {
             updatePasteButtonInfo(globals.LastRecvdPasteInfoMsgObj);
             getEditorContainerElement().classList.remove('pasting');
             drawOverlay();
-            if (!isRunningInHost()) {
+            if (!isRunningOnHost()) {
                 alert(getText(getDocSelection(true), true));
             }
         });
@@ -226,7 +226,7 @@ function endPasteButtonBusy() {
 function onPasteButtonClickOrKeyDown(e) {
     startPasteButtonBusy();
 
-    if (!isRunningInHost()) {
+    if (!isRunningOnHost()) {
         endPasteButtonBusy();
     }
     

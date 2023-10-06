@@ -1454,6 +1454,7 @@
     <Folder Include="Resources\Editor\src\components\localizer\" />
     <Folder Include="Resources\Editor\src\components\quill-wrapper\parchment\" />
     <Folder Include="Resources\Editor\src\components\theme\" />
+    <Folder Include="Resources\Legal\Licenses\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />

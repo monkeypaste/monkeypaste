@@ -140,10 +140,6 @@ function isEditorElement(elm) {
 	return false;
 }
 
-function isRunningInHost() {
-	return typeof notifyException === 'function';
-}
-
 function isEditorHidden() {
 	let isHidden = getEditorContainerElement().classList.contains('hidden');
 	return isHidden;
@@ -386,6 +382,9 @@ function onEditorSelChanged(range, oldRange, source) {
 	return;
 }
 function onEditorTextChanged(delta, oldDelta, source) {
+	if (globals.SuppressContentChangedNtf) {
+		return;
+	}
 	log('editor text changed');
 	
 	updateAllElements();

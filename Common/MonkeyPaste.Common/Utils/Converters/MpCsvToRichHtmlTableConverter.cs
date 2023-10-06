@@ -1,7 +1,6 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -44,7 +43,7 @@ namespace MonkeyPaste.Common {
 
     }
     public static class MpCsvToRichHtmlTableConverter {
-
+        public const string RICH_HTML_TABLE_PREFIX = "<div class='quill-better-table-wrapper'>";
         public static string RichHtmlTableToCsv(string richHtmlTableStr, MpCsvFormatProperties csvProps = null) {
             csvProps = csvProps == null ? MpCsvFormatProperties.Default : csvProps;
 
@@ -112,7 +111,8 @@ namespace MonkeyPaste.Common {
             double tableWidth = colWidths.Sum();
 
             string tableHtmlStr = string.Format(
-                @"<div class='quill-better-table-wrapper'><table class='quill-better-table' style='width: {0}px'>{1}{2}</table></div>",
+                @"{0}<table class='quill-better-table' style='width: {1}px'>{2}{3}</table></div>",
+                RICH_HTML_TABLE_PREFIX,
                 tableWidth,
                 colGroupHtml,
                 tableBodyHtmlStr);

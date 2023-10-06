@@ -16,6 +16,13 @@ function initMouse() {
 
 // #region Getters
 
+function getMouseDragDist() {
+	if (isPoint(globals.WindowMouseLoc) &&
+		isPoint(globals.WindowMouseDownLoc)) {
+		return dist(globals.WindowMouseLoc, globals.WindowMouseDownLoc)
+	}
+	return null;
+}
 function getClientMousePos(e) {
 	if (!e || !e.clientX || !e.clientY) {
 		if (e && e.screenX && e.screenY) {
@@ -124,7 +131,7 @@ function onWindowDoubleClick(e) {
 }
 
 function onWindowContextMenu(e) {
-	if (!isRunningInHost()) {
+	if (!isRunningOnHost()) {
 		e.handled = false;
 		return;
 	}
@@ -168,7 +175,7 @@ function onWindowMouseDown(e) {
 	globals.SelectionOnMouseDown = getDocSelection();
 	if (e.buttons !== 2 && hasEditableTable()) {
 		// deal w/ table drag selection to supppress table select if on already selected cell
-		return updateTableDragState(e);
+		return updateTableDragState(e, 'down');
 	}
 }
 
@@ -176,6 +183,9 @@ function onWindowMouseMove(e) {
 	updateWindowMouseState(e,'move');
 	if (hasAnnotations()) {
 		onAnnotationWindowPointerMove(e);
+	}
+	if (globals.IsTableDragSelecting) {
+		//updateTableDragState(e, 'move');
 	}
 	updateSelCursor();
 }
@@ -195,6 +205,7 @@ function onWindowMouseUp(e) {
 	}
 
 	if (canContextMenuEventShowTableOpsMenu()) {
+		// ntf host to suppress context menu while in cell
 		onInternalContextMenuIsVisibleChanged_ntf(true);
 		globals.WasInternalContextMenuAbleToShow = true;
 	} else if (globals.WasInternalContextMenuAbleToShow) {
@@ -204,6 +215,6 @@ function onWindowMouseUp(e) {
 
 	updateWindowMouseState(e,'up');
 	globals.SelectionOnMouseDown = null;
-	updateTableDragState(null);
+	updateTableDragState(null,'up');
 }
 // #endregion Event Handlers

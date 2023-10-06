@@ -1,5 +1,4 @@
 using Avalonia;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
@@ -41,7 +40,7 @@ namespace MonkeyPaste.Avalonia {
                     if (ps.Percent > 1) {
                         ps.Percent = 0;
                     }
-                    ps.InvalidateVisual();
+                    ps.Redraw();
                 }
             });
         }

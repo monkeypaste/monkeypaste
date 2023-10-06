@@ -205,12 +205,17 @@ function onTemplateClick(e) {
         return;
     }
 
-
+    let drag_dist = getMouseDragDist();
+    if (!drag_dist || drag_dist > 5) {
+        // avoid false clicks since this is mouse up handler...
+        return;
+    }
     if (!isSubSelectionEnabled()) {
         log("Selection disabled so ignoring click on template " + value.templateGuid);
         return;
     }
     if (e.target.classList.contains('delete-template-button')) {
+        
         onTemplateDeleteButtonClick(e);
         return;
     }

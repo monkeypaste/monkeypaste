@@ -482,7 +482,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Parent == null) {
                     return 0;
                 }
-                if (Parent.LayoutType == MpClipTrayLayoutType.Grid && !IsWindowOpen) {
+                if (Parent.LayoutType == MpClipTrayLayoutType.Grid && !IsWindowOpen && !IsPinned) {
                     return BoundWidth;
                 }
                 if (!IsSubSelectionEnabled) {// || !IsWindowOpen) {
@@ -505,9 +505,9 @@ namespace MonkeyPaste.Avalonia {
                     return dw;
                 }
                 if (IsPinned) {
-                    return Math.Min(dw, Parent.ObservedPinTrayScreenWidth);
+                    return Math.Min(dw, Parent.ObservedPinTrayScreenWidth - Parent.ScrollBarFixedAxisSize);
                 }
-                return Math.Min(dw, Parent.ObservedQueryTrayScreenWidth);
+                return Math.Min(dw, Parent.ObservedQueryTrayScreenWidth - Parent.ScrollBarFixedAxisSize);
             }
         }
         public double EditableWidth {
@@ -1157,12 +1157,6 @@ namespace MonkeyPaste.Avalonia {
 
         public object IconResourceObj {
             get {
-                if (IsNextTrashedByAccount) {
-                    return MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY;
-                }
-                if (IsNextRemovedByAccount) {
-                    return MpContentCapInfo.NEXT_REMOVE_IMG_RESOURCE_KEY;
-                }
                 if (CopyItemType == MpCopyItemType.FileList &&
                     FileItemCollectionViewModel != null &&
                     FileItemCollectionViewModel.Items.Count > 0) {

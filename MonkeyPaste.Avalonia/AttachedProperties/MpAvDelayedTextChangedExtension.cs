@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using MonkeyPaste.Common;
 using System;
 using System.Threading.Tasks;
 
@@ -65,6 +64,7 @@ namespace MonkeyPaste.Avalonia {
                 control.Initialized -= Control_Initialized;
                 control.DetachedFromVisualTree -= Control_DetachedFromVisualTree;
                 if (control.Tag is IDisposable disposable) {
+                    // what is this why is disposable? could it make the egl exception?
                     disposable.Dispose();
                 }
             }

@@ -1042,7 +1042,12 @@ namespace MonkeyPaste.Avalonia {
             //    return;
             //}
             Dispatcher.UIThread.Post(async () => {
-                await PerformActionAsync(args);
+                try {
+                    await PerformActionAsync(args);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error performing action '{this}'.", ex);
+                }
             });
         }
 
@@ -1305,14 +1310,11 @@ namespace MonkeyPaste.Avalonia {
                     if (HasArgsChanged) {
                         HasArgsChanged = false;
 
-                        if (!IsValid) {
+                        if (!IsValid || IsTriggerEnabled) {
                             // NOTE only when args change and trigger is active or invalid already, 
                             // invoke validation to avoid unnecessary warnings during create or while
                             // its disabled
                             ValidateActionAsync().FireAndForgetSafeAsync(this);
-                        }
-                        if (IsTriggerEnabled) {
-                            RootTriggerActionViewModel.ReenableTriggerCommand.Execute(null);
                         }
                     }
                     break;

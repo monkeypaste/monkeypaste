@@ -33,6 +33,7 @@ namespace MonkeyPaste.Avalonia {
         private bool _isMainWindowOrientationChanging = false;
         private bool _isLayoutChanging = false;
         private object _addDataObjectContentLock = new object();
+        private object _capMsgLock = new object();
 
 
         private MpAvCopyItemBuilder _copyItemBuilder = new MpAvCopyItemBuilder();
@@ -1839,13 +1840,12 @@ namespace MonkeyPaste.Avalonia {
 
                 await TrashOrDeleteCopyItemIdAsycn(cap_info.ToBeTrashed_ciid, false, true);
                 await TrashOrDeleteCopyItemIdAsycn(cap_info.ToBeRemoved_ciid, true, true);
-                //await TrashItemByCopyItemIdAsync(cap_info.ToBeTrashed_ciid);
-                //await DeleteItemByCopyItemIdAsync(cap_info.ToBeRemoved_ciid);
 
                 // refresh cap for view changes
                 var updated_cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync();
             }
-            AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IconResourceObj)));
+            AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsNextRemovedByAccount)));
+            AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsNextTrashedByAccount)));
             AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsAnyNextCapByAccount)));
             _isProcessingCap = false;
 
@@ -2099,6 +2099,9 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(CanScroll));
                     break;
                 case nameof(CurGridFixedCount):
+                    if (LayoutType == MpClipTrayLayoutType.Stack) {
+                        break;
+                    }
                     ScrollToAnchor();
                     break;
                 case nameof(QueryTrayTotalTileWidth):

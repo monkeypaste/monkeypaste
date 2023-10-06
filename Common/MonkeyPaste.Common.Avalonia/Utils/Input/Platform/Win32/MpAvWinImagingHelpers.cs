@@ -36,7 +36,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 bitmapData.Stride);
 
             bmp.UnlockBits(bitmapData);
-            bmp.Dispose();
+            //bmp.Dispose();
             return avBmp;
         }
 

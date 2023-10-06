@@ -319,14 +319,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public virtual ICommand ReenableTriggerCommand => new MpAsyncCommand(
-            async () => {
-                await ValidateActionAsync();
-                DisableTrigger();
-                EnableTrigger();
-            }, () => {
-                return IsEnabled;
-            });
 
         public ICommand EnableTriggerCommand => new MpAsyncCommand(
             async () => {

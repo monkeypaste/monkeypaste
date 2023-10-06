@@ -22,7 +22,10 @@ function isRunningOnWebView2() {
 	return false;
 }
 function isRunningOnHost() {
-	return isRunningOnCef() || isRunningOnXam();
+	if (isRunningOnCef() || isRunningOnXam()) {
+		return true;
+	}
+	return false;
 }
 
 function isRunningOnCef() {
@@ -79,7 +82,10 @@ function sendMessage(fn, msg) {
 		return;
 	}
 
-	log("can't send message. type '" + fn + "' data '" + msg + "'");	
+	if (isRunningOnHost()) {
+		log("can't send message. type '" + fn + "' data '" + msg + "'");	
+	}
+	
 }
 // #endregion Actions
 

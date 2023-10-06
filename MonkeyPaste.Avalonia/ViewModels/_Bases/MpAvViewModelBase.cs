@@ -131,7 +131,11 @@ namespace MonkeyPaste.Avalonia {
             }
             model.SetPropertyValue(changedPropName, newVal);
             HasModelChanged = true;
+#if DEBUG
             MpConsole.WriteLine($"View Model '{this}' Model has changed (writing to db). Property: '{changedPropName}'{Environment.NewLine}OldVal:{Environment.NewLine}'{oldVal}'{Environment.NewLine}NewVal:{Environment.NewLine}'{newVal}'{Environment.NewLine}");
+#else
+            MpConsole.WriteLine($"View Model '{this}' Model has changed (writing to db). Property: '{changedPropName}'{Environment.NewLine}OldLen:{Environment.NewLine}'{oldVal.Length}'{Environment.NewLine}NewLen:{Environment.NewLine}'{newVal.Length}'{Environment.NewLine}");
+#endif
         }
 
         #region Undo/Redo
