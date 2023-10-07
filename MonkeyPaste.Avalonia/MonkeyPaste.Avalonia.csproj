@@ -1457,6 +1457,7 @@
     <Folder Include="Resources\Legal\Licenses\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
+    <Folder Include="Utils\AvWrapper\Defnitions\Account\NewFolder\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\_Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />

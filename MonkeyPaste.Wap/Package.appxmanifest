@@ -6,10 +6,14 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
 
+  <!--<Identity
+    Name="10843MonkeyLLC.MonkeyPaste"
+    Publisher="CN=Monkey LLC"
+    Version="1.0.2.0" />-->
   <Identity
     Name="10843MonkeyLLC.MonkeyPaste"
     Publisher="CN=359EAD65-2530-476F-82ED-8E549E87C6A6"
-    Version="1.0.1.0" />
+    Version="1.0.3.0" />
 
   <Properties>
     <DisplayName>MonkeyPaste</DisplayName>
@@ -38,7 +42,7 @@
         Square44x44Logo="Images\Square44x44Logo.png">
         <uap:DefaultTile Wide310x150Logo="Images\Wide310x150Logo.png"  Square71x71Logo="Images\SmallTile.png" Square310x310Logo="Images\LargeTile.png">
         </uap:DefaultTile >
-        <uap:SplashScreen Image="Images\SplashScreen.png" />
+        <uap:SplashScreen Image="Images\SplashScreen.png"  BackgroundColor="transparent"/>
         <uap:InitialRotationPreference>
           <uap:Rotation Preference="landscape"/>
           <uap:Rotation Preference="portrait"/>

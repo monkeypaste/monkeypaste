@@ -183,7 +183,7 @@ namespace MonkeyPaste.Avalonia {
                 string temp_package_zip = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), package_bytes, true);
 
                 // 
-                string temp_package_dir = Path.GetRandomFileName();
+                string temp_package_dir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
                 string pluginName = null;
                 // extract to ../Plugins
                 try {
@@ -262,6 +262,7 @@ namespace MonkeyPaste.Avalonia {
                 // install core plugins
                 await CheckAndInstallCorePluginsAsync();
             }
+
             //find plugin folder in main app folder
 
             if (!Directory.Exists(PluginRootFolderPath)) {
@@ -501,8 +502,8 @@ namespace MonkeyPaste.Avalonia {
         }
         private static object[] GetDllComponents(string dllPath, string pluginName, out Assembly component_assembly) {
             try {
-                //component_assembly = Assembly.LoadFrom(dllPath);
-                component_assembly = Assembly.Load(File.ReadAllBytes(dllPath));
+                component_assembly = Assembly.LoadFrom(dllPath);
+                //component_assembly = Assembly.Load(File.ReadAllBytes(dllPath));
             }
             catch (Exception rtle) {
                 throw new MpUserNotifiedException($"Plugin Compilation error '{pluginName}':" + Environment.NewLine + rtle);

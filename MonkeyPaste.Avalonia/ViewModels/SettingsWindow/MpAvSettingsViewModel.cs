@@ -1171,6 +1171,7 @@ namespace MonkeyPaste.Avalonia {
             IsTabButtonVisible0 = FilteredTabLookup[MpSettingsTabType.Account].Any();
             IsTabButtonVisible1 = FilteredTabLookup[MpSettingsTabType.Preferences].Any();
             IsTabButtonVisible2 =
+                string.IsNullOrEmpty(FilterText) ||
                 MpAvAppCollectionViewModel.Instance.FilteredExternalItems.Any() ||
                 MpAvUrlCollectionViewModel.Instance.FilteredItems.Any();
 

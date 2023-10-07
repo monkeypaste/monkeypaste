@@ -10,6 +10,7 @@
         string ExecutingDir { get; }
         string ExecutingPath { get; }
         string StorageDir { get; }
+        string LogDir { get; }
         bool IsDesktop { get; }
         bool IsMobile { get; }
         bool IsBrowser { get; }

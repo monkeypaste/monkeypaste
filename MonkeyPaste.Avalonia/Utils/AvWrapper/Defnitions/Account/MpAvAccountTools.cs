@@ -16,6 +16,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        private static MpAvAccountTools _instance;
+        public static MpAvAccountTools Instance => _instance ?? (_instance = new MpAvAccountTools());
         #endregion
 
         #region Interfaces

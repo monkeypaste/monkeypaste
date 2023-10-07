@@ -155,6 +155,7 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP
             BaseItems.AddRange(new[] {
                 //new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"),
+                new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger", Mp.Services.PlatformInfo),
                 new MpAvLoaderItemViewModel(typeof(MpAvEnumToUiStringResourceConverter), "Ui text"),
                 new MpAvLoaderItemViewModel(typeof(MpAvEditorUiStringBuilder), "Editor Ui text"),
                 new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), "System Tray"),
@@ -168,9 +169,7 @@ namespace MonkeyPaste.Avalonia {
                     //new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
-                    //new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger"),
                     new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),"Supported Clipboard Formats",Mp.Services.DataObjectRegistrar),
-                    //new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
                     new MpAvLoaderItemViewModel(typeof(MpPluginLoader), "Plugins"),
                     new MpAvLoaderItemViewModel(typeof(MpAvSoundPlayerViewModel), "Sound Player"),

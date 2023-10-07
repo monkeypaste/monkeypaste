@@ -43,9 +43,14 @@ namespace MonkeyPaste.Avalonia {
 #if DEBUG
                         suffix = "_DEBUG";
 #endif
+                        MpIThisAppInfo tai =
+                            Mp.Services == null ||
+                            Mp.Services.PlatformInfo == null ?
+                                new MpAvThisAppInfo() :
+                                Mp.Services.ThisAppInfo;
                         _storageDir = Path.Combine(
                             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                            Mp.Services.ThisAppInfo.ThisAppProductName + suffix);
+                            tai.ThisAppProductName + suffix);
                         if (!_storageDir.IsDirectory()) {
 
                             MpFileIo.CreateDirectory(_storageDir);
@@ -57,7 +62,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
+        public string LogDir =>
+            Path.Combine(StorageDir, "logs");
         public virtual string OsShortName {
             get {
                 if (OperatingSystem.IsWindows()) {

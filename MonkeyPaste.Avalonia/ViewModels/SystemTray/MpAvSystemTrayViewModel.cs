@@ -308,12 +308,13 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 //await Task.Delay(1);
                 //await MpTestDataBuilder.CreateTestDataAsync();
-                await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
+                //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
                 //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
 
                 //var test = new MpAvDataObject("Dat funky format", "funky format texxxxxt!!J!J");
                 //await TopLevel.GetTopLevel(MpAvWindowManager.MainWindow).Clipboard.SetDataObjectSafeAsync(test);
+                await MpAvAccountTools.Instance.SetupSubscriptionInfoAsync();
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(

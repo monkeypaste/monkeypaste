@@ -57,7 +57,8 @@
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <NoWarn>$(NoWarn);NU1702</NoWarn>
     <EntryPointProjectUniqueName>..\MonkeyPaste.Avalonia.Desktop\MonkeyPaste.Avalonia.Desktop.csproj</EntryPointProjectUniqueName>
-    <PackageCertificateThumbprint>2D72C1E0C607E253B2E74EA143AD9390BEA91D0A</PackageCertificateThumbprint>
+    <!--<PackageCertificateThumbprint>AA52E8AA7A6B5C5B6396C9BFF1D833CBED573E17</PackageCertificateThumbprint>-->
+    <PackageCertificateThumbprint>244D9CEDE25F59B7938200769D71A79EA22316EA</PackageCertificateThumbprint>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
@@ -67,6 +68,7 @@
     <AppInstallerUri>https://www.monkeypaste.com/install</AppInstallerUri>
     <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
     <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+    <PackageCertificateKeyFile>MonkeyPaste.Wap_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <AppxBundle>Always</AppxBundle>
@@ -104,6 +106,11 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\BadgeLogo.scale-100.png" />
+    <Content Include="Images\BadgeLogo.scale-125.png" />
+    <Content Include="Images\BadgeLogo.scale-150.png" />
+    <Content Include="Images\BadgeLogo.scale-200.png" />
+    <Content Include="Images\BadgeLogo.scale-400.png" />
     <Content Include="Images\LargeTile.scale-100.png" />
     <Content Include="Images\LargeTile.scale-125.png" />
     <Content Include="Images\LargeTile.scale-150.png" />
@@ -155,6 +162,7 @@
     <Content Include="Images\Wide310x150Logo.scale-150.png" />
     <Content Include="Images\Wide310x150Logo.scale-200.png" />
     <Content Include="Images\Wide310x150Logo.scale-400.png" />
+    <None Include="MonkeyPaste.Wap_TemporaryKey.pfx" />
     <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <Import Project="$(WapProjPath)\Microsoft.DesktopBridge.targets" />
@@ -164,4 +172,8 @@
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia.Desktop\MonkeyPaste.Avalonia.Desktop.csproj" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\cf2ec03f-9edd-45e9-a605-2a2df71e03bd.zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />
+    <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31.zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />
+  </Target>
 </Project>

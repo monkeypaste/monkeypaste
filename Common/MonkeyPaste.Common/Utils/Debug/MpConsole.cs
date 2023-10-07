@@ -19,11 +19,11 @@ namespace MonkeyPaste.Common {
         #region Properties
 
         public static MpLogLevel MinLogLevel =>
-#if DEBUG
+            //#if DEBUG
             MpLogLevel.Debug;
-#else
-            MpLogLevel.Error;
-#endif
+        //#else
+        //            MpLogLevel.Error;
+        //#endif
 
         public static bool HasInitialized { get; private set; } = false;
 
@@ -32,16 +32,27 @@ namespace MonkeyPaste.Common {
         public static bool LogToFile { get; set; } = true;
         public static bool LogToConsole { get; set; } = true;
 
-        public static string LogFilePath => Path.Combine(Directory.GetCurrentDirectory(), "consolelog.txt");
+        static string LogFileName =>
+            "mp.log";
+        static string LogFilePath { get; set; }
 
         #endregion
 
         #region Public Methods
 
-        public static void Init() {
+        public static void Init(MpIPlatformInfo pi) {
             if (HasInitialized) {
                 return;
             }
+            // NOTE on desktop cefnet MUST be initialized before basically anything (any services)
+            // or bizarre crashes occur. So cefnet creates a temp platform info to setup its logging
+            // and then initializes console w/ temp info so in main startup init has already happened 
+            pi = pi == null ? MpCommonTools.Services.PlatformInfo : pi;
+
+            LogFilePath =
+                Path.Combine(
+                pi.LogDir,
+                "mp.log");
             if (MpFileIo.IsFileInUse(LogFilePath)) {
                 return;
             }
@@ -50,8 +61,11 @@ namespace MonkeyPaste.Common {
                 return;
             }
             try {
-                if (File.Exists(LogFilePath)) {
-                    File.Delete(LogFilePath);
+                if (LogFilePath.IsFile()) {
+                    MpFileIo.DeleteFile(LogFilePath);
+                }
+                if (!pi.LogDir.IsDirectory()) {
+                    MpFileIo.CreateDirectory(pi.LogDir);
                 }
                 _logStream = new StreamWriter(File.Open(LogFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None));
             }

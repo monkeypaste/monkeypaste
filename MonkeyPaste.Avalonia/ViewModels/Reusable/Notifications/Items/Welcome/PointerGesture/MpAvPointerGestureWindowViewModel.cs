@@ -124,13 +124,20 @@ namespace MonkeyPaste.Avalonia {
 
 
         protected virtual void Instance_OnGlobalMouseWheelScroll(object sender, MpPoint e) {
-            CheckForGesture();
+            IsInGestureZone = MpAvMainWindowViewModel.IsPointerInTopEdgeZone();
+            OnPropertyChanged(nameof(EdgeBrush));
+            if (GestureType == MpPointGestureType.ScrollToOpen) {
+
+                CheckForGesture();
+            }
         }
 
         private void Instance_OnGlobalMouseMove(object sender, MpPoint e) {
             IsInGestureZone = MpAvMainWindowViewModel.IsPointerInTopEdgeZone();
             OnPropertyChanged(nameof(EdgeBrush));
-            CheckForGesture();
+            if (GestureType == MpPointGestureType.DragToOpen) {
+                CheckForGesture();
+            }
         }
 
         private MpAvWindow CreateTopEdgeMarkerWindow() {
@@ -158,6 +165,7 @@ namespace MonkeyPaste.Avalonia {
             return gw;
         }
         public void CheckForGesture() {
+
             if (!IsGesturing || FakeWindowViewModel.FakeWindowActionType == MpFakeWindowActionType.Open) {
                 return;
             }

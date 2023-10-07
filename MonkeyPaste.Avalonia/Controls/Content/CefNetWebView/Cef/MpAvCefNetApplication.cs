@@ -33,8 +33,21 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
-        public static string LogFilePath =>
-            Path.Combine(Directory.GetCurrentDirectory(), "debug.log");
+        private static string _logFilePath;
+        public static string LogFilePath {
+            get {
+                if (_logFilePath == null) {
+                    MpIPlatformInfo pi =
+                        Mp.Services == null ||
+                        Mp.Services.PlatformInfo == null ?
+                            new MpAvPlatformInfo_desktop() :
+                            Mp.Services.PlatformInfo;
+                    MpConsole.Init(pi);
+                    _logFilePath = Path.Combine(pi.LogDir, "cef.log");
+                }
+                return _logFilePath;
+            }
+        }
 
         public static string CefFrameworkFolderName =>
             $"cef_{_pinfo.OsShortName}";
@@ -164,7 +177,7 @@ namespace MonkeyPaste.Avalonia {
                 //settings.CommandLineArgsDisabled = true;
                 settings.WindowlessRenderingEnabled = true;
             }
-
+            settings.LogFile = LogFilePath;
             settings.LocalesDirPath = localDirPath;
             settings.ResourcesDirPath = resourceDirPath;
             settings.LogSeverity = CefLogSeverity.Error;
@@ -246,6 +259,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public static void ResetCefNetLogging() {
+
             if (LogFilePath.IsFile()) {
                 MpFileIo.DeleteFile(LogFilePath);
             }

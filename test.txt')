@@ -1,0 +1,6 @@
+-drag over no-select shouldn't show paste toolbar
+-drag leave should disable sel if was no sel on drag enter
+
+-add min-delay for end paste state change in editor (1s)
+-title not unhiding (may also be a template thing)
+-on first tag select it scrolls to end not to first item (i think this is from templates in query page somehow)

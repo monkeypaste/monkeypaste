@@ -29,7 +29,7 @@ namespace MonkeyPaste.Avalonia {
                 new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", UiStrings.TagDefaultTagsLabel, MpSystemColors.lemonchiffon2, 1,-1, tracked,synced, 0, MpTagType.Group},
                 new object[] { "287140cc-2f9a-4bc6-a88d-c5b836f1a340", UiStrings.TagDefaultAllLabel, MpSystemColors.blue1, 0,1, tracked,synced, MpTag.FiltersTagId, MpTagType.Link},
                 new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", UiStrings.TagDefaultFavoritesLabel, MpSystemColors.yellow1, 1,-1,tracked,synced, MpTag.CollectionsTagId, MpTagType.Link},
-                new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", UiStrings.TagDefaultFormatsLabel, MpSystemColors.forestgreen, 0,-1,tracked,synced, 0, MpTagType.Group},
+                new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", UiStrings.TagDefaultFiltersLabel, MpSystemColors.forestgreen, 0,-1,tracked,synced, 0, MpTagType.Group},
                 new object[] { "70db0f5c-a717-4bca-af2f-a7581aecc24d", UiStrings.TagDefaultTrashLabel, MpSystemColors.lightsalmon1, 2,-1,tracked,synced, 0, MpTagType.Link},
             };
             for (int i = 0; i < default_tags.Length; i++) {

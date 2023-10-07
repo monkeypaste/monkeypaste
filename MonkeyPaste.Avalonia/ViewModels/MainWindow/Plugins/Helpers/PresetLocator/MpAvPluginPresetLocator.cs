@@ -10,7 +10,7 @@ namespace MonkeyPaste.Avalonia {
         public static async Task<IEnumerable<MpPluginPreset>> LocatePresetsAsync(
             MpIParameterHostViewModel presetHost,
             bool enableOnReset = false,
-            bool showMessages = true) {
+            bool showMessages = false) {
 
             var db_presets = await MpDataModelProvider.GetPluginPresetsByPluginGuidAsync(presetHost.PluginGuid);
 
