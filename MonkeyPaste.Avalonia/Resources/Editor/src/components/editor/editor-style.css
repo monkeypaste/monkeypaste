@@ -40,14 +40,9 @@
     overflow: auto;
 }
 #editor.unwrap .ql-editor {
-    white-space: nowrap !important;
+    white-space: pre !important;
     overflow: visible;
 }
-
-/*.unwrap.size-check > .ql-editor {
-        min-width: 808080px;
-        min-height: 808080px !important;
-}*/
 
 .show-scrollbars {
     overflow: auto !important;

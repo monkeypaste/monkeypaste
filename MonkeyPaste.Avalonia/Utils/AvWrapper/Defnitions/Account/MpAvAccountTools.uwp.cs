@@ -102,8 +102,6 @@ namespace MonkeyPaste.Avalonia {
         public async Task SetupSubscriptionInfoAsync() {
             if (context == null) {
                 context = StoreContext.GetDefault();
-                var test = await context.GetAppLicenseAsync();
-                var test2 = context.User;
                 // If your app is a desktop app that uses the Desktop Bridge, you
                 // may need additional code to configure the StoreContext object.
                 // For more info, see https://aka.ms/storecontext-for-desktop.
@@ -114,6 +112,29 @@ namespace MonkeyPaste.Avalonia {
                 // Initialize the dialog using wrapper funcion for IInitializeWithWindow
                 WinRT.Interop.InitializeWithWindow.Initialize(context, hwnd);
 
+            }
+
+            var test = await context.GetAppLicenseAsync();
+            var test2 = context.User;
+            var test3 = await context.GetUserCollectionAsync(new[] { "Durable", "Consumable", "UnmanagedConsumable" });
+            string[] productKinds = { "Durable" };
+            List<String> filterList = new List<string>(productKinds);
+
+            // Specify the Store IDs of the products to retrieve.
+            string[] storeIds = new string[] { "9MZRBMH3JT75" };
+
+            StoreProductQueryResult queryResult =
+                await context.GetStoreProductsAsync(filterList, storeIds);
+            if (queryResult.ExtendedError != null) {
+                // The user may be offline or there might be some other server failure.
+                return;
+            }
+
+            foreach (KeyValuePair<string, StoreProduct> item in queryResult.Products) {
+                // Access the Store info for the product.
+                StoreProduct product = item.Value;
+
+                // Use members of the product object to access info for the product...
             }
 
             bool userOwnsSubscription = await CheckIfUserHasSubscriptionAsync();

@@ -7,13 +7,13 @@
     opacity: 0;
 }
 
-.drop {
+/*.drop {
     white-space: nowrap !important;
     overflow: auto;
-}
+}*/
 
-    .drop > .ql-editor {
-        /* NOTE only temporary, adjusted to actual width after layout update in auto scroll*/
-        width: 808080px;
+    /*.drop > .ql-editor {*/
+         /*NOTE only temporary, adjusted to actual width after layout update in auto scroll*/
+        /*width: 808080px;
         height: 808080px !important;
-    }
+    }*/

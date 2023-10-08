@@ -47,8 +47,17 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	if (formatType == 'text') {
 		setEditorText(dataStr, 'user');
 	} else {
+		let html_doc = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr), 'text/html');
+
+		// images aren't converted so if present in content its composite
+		let is_composite =
+			Array.from(html_doc.querySelectorAll('img')).length > 0;
+		if (is_composite) {
+			// for mixed content ignore validations
+			DO_VALIDATE = false;
+		}
 		let html_str = needs_encoding ?
-			globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr), 'text/html').body.innerHTML :
+			html_doc.body.innerHTML :
 			dataStr;
 		setEditorHtml(html_str, 'user');
 	}

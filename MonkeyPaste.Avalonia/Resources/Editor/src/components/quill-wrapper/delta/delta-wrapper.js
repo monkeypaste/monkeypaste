@@ -217,10 +217,9 @@ function encodeHtmlEntitiesInDeltaInserts(delta) {
 	if (delta && delta.ops !== undefined) {
 		// unescape html special entities only if they were just escaped
 		for (var i = 0; i < delta.ops.length; i++) {
-			if (delta.ops[i].insert === undefined) {
-				continue;
+			if (isString(delta.ops[i].insert)) {
+				delta.ops[i].insert = encodeHtmlSpecialEntitiesFromPlainText(delta.ops[i].insert);
 			}
-			delta.ops[i].insert = encodeHtmlSpecialEntitiesFromPlainText(delta.ops[i].insert);
 		}
 	}
 	return delta;

@@ -729,6 +729,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
         #region Window Animation Helpers
         private void SetupMainWindowSize(bool isOrientationChange = false) {
             switch (MainWindowOrientationType) {

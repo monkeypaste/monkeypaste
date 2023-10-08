@@ -845,6 +845,7 @@ namespace MonkeyPaste.Avalonia {
                     await UpdateSortOrderAsync();
                     SelectedTrigger = null;
                 } else {
+                    child_to_delete_avm.ParentActionViewModel.OnActionComplete -= child_to_delete_avm.OnActionInvoked;
                     await child_to_delete_avm.ParentActionViewModel.UpdateSortOrderAsync();
                 }
 

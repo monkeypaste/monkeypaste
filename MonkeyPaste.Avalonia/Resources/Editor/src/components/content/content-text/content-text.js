@@ -20,8 +20,15 @@ function loadTextContent(itemDataStr) {
 	// xml works
 	// templates lost
 	let delta = convertHtmlToDelta(itemDataStr);
-	delta = decodeHtmlEntitiesInDeltaInserts(delta);
-	setContents(delta,'silent');
+	let is_composite =
+		delta.ops.filter(x => x.insert !== undefined && x.insert.image !== undefined).length > 0;
+	if (is_composite) {
+		setEditorHtml(itemDataStr, 'silent');
+	} else {
+		delta = decodeHtmlEntitiesInDeltaInserts(delta);
+		setContents(delta, 'silent');
+	}
+	
 
 	loadTemplates();
 	loadLinkHandlers();
