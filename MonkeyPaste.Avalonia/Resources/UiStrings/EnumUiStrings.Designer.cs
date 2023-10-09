@@ -1960,6 +1960,33 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string MpShortcutAssignmentClearButtonType_Clear {
+            get {
+                return ResourceManager.GetString("MpShortcutAssignmentClearButtonType_Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string MpShortcutAssignmentClearButtonType_Delete {
+            get {
+                return ResourceManager.GetString("MpShortcutAssignmentClearButtonType_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string MpShortcutAssignmentClearButtonType_None {
+            get {
+                return ResourceManager.GetString("MpShortcutAssignmentClearButtonType_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string MpShortcutRoutingProfileType_Custom {
@@ -2793,6 +2820,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpUserAccountType_Standard {
             get {
                 return ResourceManager.GetString("MpUserAccountType_Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        public static string MpUserAccountType_Test {
+            get {
+                return ResourceManager.GetString("MpUserAccountType_Test", resourceCulture);
             }
         }
         

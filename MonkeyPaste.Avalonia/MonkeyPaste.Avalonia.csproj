@@ -1640,6 +1640,9 @@
     <Compile Update="Views\SettingsWindow\Menu\MpAvSettingsMenuView.axaml.cs">
       <DependentUpon>MpAvSettingsMenuView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Account\MpAvAccountView.axaml.cs">
+      <DependentUpon>MpAvAccountView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Interop\OleFormatStrip\MpAvOleFormatStripView.axaml.cs">
       <DependentUpon>MpAvOleFormatStripView.axaml</DependentUpon>
     </Compile>

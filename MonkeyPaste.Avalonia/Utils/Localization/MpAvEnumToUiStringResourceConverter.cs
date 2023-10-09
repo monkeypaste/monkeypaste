@@ -48,6 +48,7 @@ namespace MonkeyPaste.Avalonia {
                 typeof(MpUserAccountType),
                 typeof(MpContentOptionType),
                 typeof(MpMainWindowShowBehaviorType),
+                typeof(MpShortcutAssignmentClearButtonType),
             };
 
         private static Dictionary<Type, string> _UniqueNones = new Dictionary<Type, string>() {

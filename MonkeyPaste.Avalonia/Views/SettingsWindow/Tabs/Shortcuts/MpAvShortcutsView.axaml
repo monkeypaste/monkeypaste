@@ -13,7 +13,13 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvShortcutCollectionViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvShortcutsView">
-    <StackPanel>
+    <local:MpAvUserControl.Styles>
+        <Style Selector="local|MpAvShortcutDataGridView.internal DataGridTemplateColumn#RoutingTypeColumn">
+            <Setter Property="IsVisible"
+                    Value="False" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <StackPanel Classes="expandersContainer">
 
         <!--  APPLICATION SHORTCUTS  -->
 
@@ -25,11 +31,46 @@
                     <Image Classes="expander header icon"
                            Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
-                               Text="Commands" />
+                               Text="{x:Static local:UiStrings.SettingsShortcutsAppCommandHeaderText}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
-                <local:MpAvShortcutDataGridView DataContext="{Binding FilteredItems}" />
+                <local:MpAvShortcutDataGridView Classes="internal"
+                                                DataContext="{Binding FilteredAppItems}" />
+            </Expander.Content>
+        </Expander>
+
+        <!--  GLOBAL SHORTCUTS  -->
+
+        <Expander Classes="header">
+            <Expander.Header>
+                <StackPanel Classes="header expander"
+                            Orientation="Horizontal">
+                    <Image Classes="expander header icon"
+                           Source="{Binding Source={StaticResource GlobeImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    <TextBlock Classes="expander header"
+                               Text="{x:Static local:UiStrings.SettingsShortcutsGlobalCommandHeaderText}" />
+                </StackPanel>
+            </Expander.Header>
+            <Expander.Content>
+                <local:MpAvShortcutDataGridView DataContext="{Binding FilteredGlobalItems}" />
+            </Expander.Content>
+        </Expander>
+
+        <!--  CUSTOM SHORTCUTS  -->
+
+        <Expander Classes="header">
+            <Expander.Header>
+                <StackPanel Classes="header expander"
+                            Orientation="Horizontal">
+                    <Image Classes="expander header icon"
+                           Source="{Binding Source={StaticResource JoystickImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    <TextBlock Classes="expander header"
+                               Text="{x:Static local:UiStrings.SettingsShortcutsCustomCommandHeaderText}" />
+                </StackPanel>
+            </Expander.Header>
+            <Expander.Content>
+                <local:MpAvShortcutDataGridView DataContext="{Binding FilteredCustomItems}" />
             </Expander.Content>
         </Expander>
     </StackPanel>

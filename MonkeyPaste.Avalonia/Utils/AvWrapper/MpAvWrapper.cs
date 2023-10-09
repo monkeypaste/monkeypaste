@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Startup Set Services 
+        public MpIDebugBreakHelper DebugBreakHelper { get; set; }
         public MpIDefaultDataCreator DefaultDataCreator { get; set; }
         public MpIUserAgentProvider UserAgentProvider { get; set; }
         public MpIShutdownTools ShutdownHelper { get; set; }
@@ -157,6 +158,7 @@ namespace MonkeyPaste.Avalonia {
             AppBuilder = new MpAvAppBuilder();
             SourceRefTools = new MpAvSourceRefTools();
             TransactionBuilder = new MpAvTransactionReporter();
+            DebugBreakHelper = new MpAvDebugBreakHelper();
 
             FocusMonitor = MpAvFocusManager.Instance as MpIFocusMonitor;
 
@@ -182,6 +184,8 @@ namespace MonkeyPaste.Avalonia {
             NotificationManager = MpAvNotificationWindowManager.Instance;
 
             PlatformShorcuts = new MpAvPlatformShortcuts();
+
+            await AccountTools.InitAsync();
         }
 
         #endregion

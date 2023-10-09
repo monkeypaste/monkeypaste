@@ -16,7 +16,13 @@ namespace MonkeyPaste.Avalonia {
         None,
         InternalCommand,
         CanBeGlobalCommand,
+        AppCopy,
         AppPaste
+    }
+    public enum MpShortcutAssignmentClearButtonType {
+        None = 0,
+        Clear,
+        Delete
     }
 
     public class MpAvAssignShortcutViewModel :
@@ -54,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
                 Topmost = true,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("KeyboardImage", typeof(WindowIcon), null, null) as WindowIcon,
-                Title = "Assign Shortcut".ToWindowTitleText(),
+                Title = UiStrings.ShortcutAssignWindowTitle.ToWindowTitleText(),
                 Content = new MpAvAssignShortcutView()
             };
             ascw.Classes.Add("assignWindow");
@@ -71,13 +77,8 @@ namespace MonkeyPaste.Avalonia {
 
             var result = await ascw.ShowChildDialogWithResultAsync(owner);
 
-
-            if (result is bool assignResult && assignResult && ascw.DataContext is MpAvAssignShortcutViewModel ascwvm) {
-                MpRoutingType routing_type = MpRoutingType.None;
-                if (ascwvm.AssignmentType != MpShortcutAssignmentType.AppPaste) {
-                    routing_type = ascwvm.SelectedRoutingType;
-                }
-                return new Tuple<string, MpRoutingType>(ascwvm.KeyString, routing_type);
+            if (result is bool assignResult && assignResult) {
+                return new Tuple<string, MpRoutingType>(scavm.KeyString, scavm.SelectedRoutingType);
             }
             return null;
         }
@@ -127,10 +128,17 @@ namespace MonkeyPaste.Avalonia {
             SelectedRoutingType != MpRoutingType.Internal &&
             SelectedRoutingType != MpRoutingType.None &&
             CanBeGlobal;
-        public bool CanBeGlobal { get; set; }
-        public MpRoutingType SelectedRoutingType =>
-            (MpRoutingType)SelectedRoutingTypeIdx;
-
+        public bool CanBeGlobal =>
+            AssignmentType == MpShortcutAssignmentType.CanBeGlobalCommand;
+        public MpRoutingType SelectedRoutingType {
+            get => (MpRoutingType)SelectedRoutingTypeIdx;
+            set {
+                if (SelectedRoutingType != value) {
+                    SelectedRoutingTypeIdx = (int)value;
+                    OnPropertyChanged(nameof(SelectedRoutingType));
+                }
+            }
+        }
         private int _selectedRoutingTypeIdx;
         public int SelectedRoutingTypeIdx {
             get => _selectedRoutingTypeIdx;
@@ -139,12 +147,20 @@ namespace MonkeyPaste.Avalonia {
                     // ignore none or ui init crap (-1 idx)
                     return;
                 }
+                if ((SelectedRoutingType == MpRoutingType.Internal && !CanBeGlobal)) {
+                    // avoid hidden routing type combobox changing internal type
+                    // when app cmd
+                    return;
+                }
                 if (_selectedRoutingTypeIdx != value) {
                     _selectedRoutingTypeIdx = value;
                     OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
                 }
             }
         }
+        public bool IsAppClipboardAssignment =>
+            AssignmentType == MpShortcutAssignmentType.AppCopy ||
+            AssignmentType == MpShortcutAssignmentType.AppPaste;
         public MpShortcutAssignmentType AssignmentType { get; set; }
         public bool IsEmpty =>
             string.IsNullOrEmpty(KeyString);
@@ -162,25 +178,19 @@ namespace MonkeyPaste.Avalonia {
 
         public object IconResourceObj { get; set; }
 
-        private string _clearButtonLabel = "hidden";
-        public string ClearButtonLabel {
-            get {
-                if (_clearButtonLabel == "hidden") {
-                    return IsUserDefinedShortcut ?
-                            "Delete" :
-                            _curShortcutId > 0 ?
-                                "Clear" :
-                                string.Empty;
-                }
-                return _clearButtonLabel;
-            }
-            set {
-                if (_clearButtonLabel != value) {
-                    _clearButtonLabel = value;
-                    OnPropertyChanged(nameof(ClearButtonLabel));
-                }
-            }
-        }
+        public MpShortcutAssignmentClearButtonType ClearButtonType =>
+            IsUserDefinedShortcut ?
+                MpShortcutAssignmentClearButtonType.Delete :
+                _curShortcutId > 0 ?
+                    MpShortcutAssignmentClearButtonType.Clear :
+                    IsEmpty ?
+                        MpShortcutAssignmentClearButtonType.None :
+                        MpShortcutAssignmentClearButtonType.Clear;
+
+        public string ClearButtonLabel =>
+            ClearButtonType == MpShortcutAssignmentClearButtonType.None ?
+                string.Empty :
+                ClearButtonType.EnumToUiString();
 
         #endregion
 
@@ -231,19 +241,17 @@ namespace MonkeyPaste.Avalonia {
 
             IsUserDefinedShortcut = MpAvShortcutCollectionViewModel.Instance.Items.Any(x => x.ShortcutId == _curShortcutId && x.IsCustom);
 
-            if (AssignmentType == MpShortcutAssignmentType.CanBeGlobalCommand) {
-                CanBeGlobal = true;
-                if (MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == curShortcutId) is MpAvShortcutViewModel svm) {
-                    SelectedRoutingTypeIdx = svm.SelectedRoutingTypeIdx;
-                } else {
-                    // default globals to passive routing
-                    SelectedRoutingTypeIdx = RoutingTypes.IndexOf(MpRoutingType.Passive.ToString());
-                }
-
+            if (IsAppClipboardAssignment) {
+                // no scvm
+                SelectedRoutingType = MpRoutingType.None;
+            } else if (MpAvShortcutCollectionViewModel.Instance.Items.FirstOrDefault(x => x.ShortcutId == curShortcutId) is MpAvShortcutViewModel svm) {
+                // existing scvm, use its routing
+                SelectedRoutingType = svm.RoutingType;
             } else {
-                CanBeGlobal = false;
-                SelectedRoutingTypeIdx = 0;
+                // new sc, either passive (global) or internal
+                SelectedRoutingType = CanBeGlobal ? MpRoutingType.Passive : MpRoutingType.Internal;
             }
+            OnPropertyChanged(nameof(CanBeGlobal));
             OnPropertyChanged(nameof(IsGlobal));
             OnPropertyChanged(nameof(KeyString));
             OnPropertyChanged(nameof(KeyItems));
@@ -280,28 +288,28 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private bool Validate() {
-            //when KeysString changes check full system for duplicates, ignoring order of combinations
+            //when KeysString changes check full system for duplicates
             WarningString = string.Empty;
             WarningString2 = string.Empty;
             DuplicatedShortcutViewModel = null;
-            if (string.IsNullOrEmpty(KeyString)) {
-                return true;
-            }
+            OnPropertyChanged(nameof(ClearButtonLabel));
 
             switch (AssignmentType) {
                 case MpShortcutAssignmentType.CanBeGlobalCommand:
                 case MpShortcutAssignmentType.InternalCommand:
                     return ValidateCommandShortcut();
+                case MpShortcutAssignmentType.AppCopy:
                 case MpShortcutAssignmentType.AppPaste:
-                    return ValidateAppPasteShortcut();
-                case MpShortcutAssignmentType.None:
-                    ClearButtonLabel = IsEmpty ? "hidden" : "Clear";
-                    break;
+                    return ValidateAppClipboardShortcut();
             }
             return true;
         }
 
         private bool ValidateCommandShortcut() {
+            if (string.IsNullOrEmpty(KeyString)) {
+                return true;
+            }
+
             //iterate over ALL shortcuts
             string assign_keystr = KeyString.ToLower();
             DuplicatedShortcutViewModel =
@@ -311,7 +319,9 @@ namespace MonkeyPaste.Avalonia {
                     x.KeyList.Count > 0 &&
                     assign_keystr == x.KeyString.ToLower());
             if (DuplicatedShortcutViewModel != null) {
-                WarningString = $"This combination conflicts with '{DuplicatedShortcutViewModel.ShortcutDisplayName}' which will be cleared if saved";
+                WarningString = string.Format(
+                    UiStrings.ShortcutAssignDuplicateWarning,
+                    DuplicatedShortcutViewModel.ShortcutDisplayName);
             }
 
             var gesture = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(assign_keystr).FirstOrDefault();
@@ -321,16 +331,21 @@ namespace MonkeyPaste.Avalonia {
 
             int input_count = gesture.Where(x => !x.IsModKey()).Count();
             if (input_count != 1) {
-                WarningString2 = $"Shortcut must contain ONE and only ONE input key. (Any key that is not {string.Join(",", MpInputConstants.MOD_LITERALS)})";
+                WarningString2 = UiStrings.ShortcutAssignInvalidGestureWarning;
             }
             return string.IsNullOrEmpty(WarningString2);
         }
 
-        private bool ValidateAppPasteShortcut() {
-            if (KeyString.ToLower() == Mp.Services.PlatformShorcuts.PasteKeys.ToLower()) {
-                WarningString = $"This is the default paste shortcut for the '{Mp.Services.PlatformInfo.OsType}' platform. It does not need to be set.";
-                return false;
+        private bool ValidateAppClipboardShortcut() {
+            if (string.IsNullOrEmpty(KeyString)) {
+                if (IsAppClipboardAssignment) {
+                    // don't allow empty app clipboard shortcuts
+                    WarningString2 = UiStrings.ShortcutAssignEmptyAppClipboardShortcutWarning;
+                    return false;
+                }
+                return true;
             }
+
             return true;
         }
 

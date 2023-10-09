@@ -28,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             //if (parameter != null) {
-            //    return visible ? Visibility.Visible : Visibility.Hidden;
+            //    return visible ? Visibility.Visible : Visibility.None;
             //}
             return isTrue;
         }

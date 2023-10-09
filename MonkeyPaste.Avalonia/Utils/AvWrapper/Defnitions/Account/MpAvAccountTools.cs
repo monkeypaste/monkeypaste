@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -178,17 +179,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
+        #region State
         public bool IsContentAddPausedByAccount { get; private set; }
         public MpContentCapInfo LastCapInfo => _lastCapInfo;
+
+        #endregion
+
+        #region Model
+
+        #endregion
+
         #endregion
 
         #region Constructors
         #endregion
 
         #region Public Methods
-        public MpAvAccountTools() {
-            Init();
-        }
+        public MpAvAccountTools() { }
         #endregion
 
         #region Protected Methods
@@ -250,10 +258,28 @@ order by LastCapRelatedDateTime limit 2
             return to_remove_result;
         }
 
+        private async Task<MpUserAccountType> GetAccountTypeAsync() {
+            await Task.Delay(0);
+
+            return MpUserAccountType.None;
+        }
+        private async Task<MpUserAccountType> GetServerAccountTypeAsync() {
+            await Task.Delay(0);
+            // TODO if pref has user cred query server for account type here
+
+            return MpUserAccountType.None;
+        }
 
         #endregion
 
         #region Commands
+        public MpIAsyncCommand<object> PurchaseSubscriptionCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (args is not MpUserAccountType to_purchase_uat) {
+                    return;
+                }
+                await PerformPlatformPurchaseAsync(to_purchase_uat);
+            });
         #endregion
     }
 }

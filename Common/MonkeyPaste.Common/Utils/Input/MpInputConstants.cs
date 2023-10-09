@@ -20,6 +20,11 @@
 
         public const string BACKSPACE_KEY_LITERAL = "Backspace";
 
+        public const string WIN_META_KEY_LITERAL = "Win";
+        public const string LINUX_META_KEY_LITERAL = "Meta";
+        public const string MAC_META_KEY_LITERAL = "Meta";
+
+
         // NOTE literals are ordered by priority (ie sharphook GesturePriority)
         public static string[] MOD_LITERALS =>
             new string[] {

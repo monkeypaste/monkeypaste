@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Threading;
+﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
 using SharpHook.Native;
 using System;
@@ -172,23 +171,23 @@ namespace MonkeyPaste.Avalonia {
                 if (!CanBeGlobalShortcut) {
                     return;
                 }
-                if (Mp.Services.FocusMonitor.FocusElement is Control c) {
-                    bool reject = true;
-                    if (c.DataContext is MpAvAssignShortcutViewModel) {
-                        reject = false;
-                    } else if (c is DataGrid dg && dg.SelectedItem is MpAvShortcutViewModel svm && svm.ShortcutId == ShortcutId) {
-                        reject = false;
-                    }
-                    if (reject) {
-                        return;
-                    }
-                    if (SelectedRoutingTypeIdx != value) {
-                        value = Math.Max(0, value);
-                        //RoutingType = RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
-                        RoutingType = (MpRoutingType)value;//RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
-                        OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
-                    }
+                //if (Mp.Services.FocusMonitor.FocusElement is Control c) {
+                //    bool reject = true;
+                //    if (c.DataContext is MpAvAssignShortcutViewModel) {
+                //        reject = false;
+                //    } else if (c is DataGrid dg && dg.SelectedItem is MpAvShortcutViewModel svm && svm.ShortcutId == ShortcutId) {
+                //        reject = false;
+                //    }
+                //    if (reject) {
+                //        return;
+                //    }
+                if (SelectedRoutingTypeIdx != value) {
+                    value = Math.Max(0, value);
+                    //RoutingType = RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
+                    RoutingType = (MpRoutingType)value;//RoutingTypes[value].ToString().ToEnum<MpRoutingType>();
+                    OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
                 }
+                //}
 
             }
         }

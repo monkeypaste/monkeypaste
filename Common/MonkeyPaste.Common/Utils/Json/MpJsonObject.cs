@@ -1,14 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Text;
 
 namespace MonkeyPaste.Common {
-    public abstract class MpJsonObject : MpIJsonObject, MpIJsonBase64Object, ICloneable {
-        #region Statics
-
-
-        #endregion
-
+    public abstract class MpJsonObject : MpIJsonObject, MpIJsonBase64Object {
         public virtual string SerializeJsonObject() {
             return this.SerializeJsonObject(null);
         }
@@ -27,16 +21,5 @@ namespace MonkeyPaste.Common {
         public override string ToString() {
             return SerializeJsonObject();
         }
-
-        public virtual object Clone() {
-            string this_json = this.SerializeJsonObject();
-            return JsonConvert.DeserializeObject(this_json);
-        }
-    }
-
-    public abstract class MpJsonObject<T> where T : class {
-        [JsonIgnore]
-        public T Parent { get; set; }
-
     }
 }

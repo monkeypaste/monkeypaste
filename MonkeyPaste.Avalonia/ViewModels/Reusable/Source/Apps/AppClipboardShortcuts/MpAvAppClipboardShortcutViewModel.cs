@@ -126,7 +126,8 @@ namespace MonkeyPaste.Avalonia {
                     shortcutName: $"Record {(IsCopyShortcut ? "copy" : "paste")} shortcut for '{Parent.AppName}'",
                     keys: ShortcutCmdKeyString,
                     curShortcutId: 0,
-                    assignmentType: MpShortcutAssignmentType.AppPaste, Parent.IconId,
+                    assignmentType: IsCopyShortcut ? MpShortcutAssignmentType.AppCopy : MpShortcutAssignmentType.AppPaste,
+                    iconResourceObj: Parent.IconId,
                     owner: MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == MpAvSettingsViewModel.Instance));
 
             if (result_tuple == null || result_tuple.Item1 == null) {

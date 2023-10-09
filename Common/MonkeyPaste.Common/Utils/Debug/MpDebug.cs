@@ -23,8 +23,9 @@ namespace MonkeyPaste.Common {
             }
 #if DEBUG
             if (Debugger.IsAttached) {
-
+                MpCommonTools.Services.DebugBreakHelper.HandlePreBreak();
                 Debugger.Break();
+                MpCommonTools.Services.DebugBreakHelper.HandlePostBreak();
             }
 #endif
         }

@@ -751,4 +751,37 @@
   <data name="WindowsStoreUnlimitedAddOnTesterNote" xml:space="preserve">
     <value />
   </data>
+  <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
+    <value>Double Click to unpin </value>
+  </data>
+  <data name="SettingsShortcutsAppCommandHeaderText" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
+    <value>This combination conflicts with '{0}' which will be cleared if saved.</value>
+  </data>
+  <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
+    <value>A shortcut must be provided.</value>
+  </data>
+  <data name="ShortcutAssignGlobalHint" xml:space="preserve">
+    <value>This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications.</value>
+  </data>
+  <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
+    <value>Shortcut must contain ONE and only ONE input key.Any key that is not:</value>
+  </data>
+  <data name="ShortcutAssignRecordLabel" xml:space="preserve">
+    <value>Press any key to record...</value>
+  </data>
+  <data name="ShortcutAssignWindowTitle" xml:space="preserve">
+    <value>Assign Shortcut</value>
+  </data>
 </root>

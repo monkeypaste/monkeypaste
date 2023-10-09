@@ -296,16 +296,16 @@
                     <Border.Background>
                         <SolidColorBrush Color="Black" Opacity="0.2" />
                     </Border.Background>
-                  <Image Stretch="UniformToFill"
-                         Classes.shakeslow="{Binding IsHovering}"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Width="50"
-                         Height="50">
-                    <Image.RenderTransform>
-                      <RotateTransform />
-                    </Image.RenderTransform>
-                  </Image>
+                    <Image Stretch="UniformToFill"
+                           Classes.shakeslow="{Binding IsHovering}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Width="50"
+                           Height="50">
+                        <Image.RenderTransform>
+                            <RotateTransform />
+                        </Image.RenderTransform>
+                    </Image>
                 </Border>
             </Border>
 
@@ -369,7 +369,7 @@
                         <InlineCollection>
                             <Run Foreground="{DynamicResource ThemeAccent2Color}"
                                  FontWeight="Bold"
-                                 Text="Double Click to unpin " />
+                                 Text="{x:Static local:UiStrings.ClipTilePinPlaceHolderLabelPrefix}" />
                             <Run Text="{Binding PinPlaceholderLabel, StringFormat='\'{0}\''}" />
                         </InlineCollection>
                     </TextBlock.Inlines>

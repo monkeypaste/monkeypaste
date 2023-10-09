@@ -1,0 +1,200 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="750"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvSettingsViewModel"
+                       x:DataType="local:MpAvSettingsViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
+                       x:Class="MonkeyPaste.Avalonia.MpAvAccountView">
+    <local:MpAvUserControl.Resources>
+        <LinearGradientBrush x:Key="RainbowBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="Red" />
+                <GradientStop Offset="0.5" Color="Green" />
+                <GradientStop Offset="1" Color="Blue" />
+            </LinearGradientBrush.GradientStops>
+            <LinearGradientBrush.Transform>
+                <RotateTransform />
+            </LinearGradientBrush.Transform>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="StainlessSteelBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <GradientStop Offset="0.36" Color="{DynamicResource ThemeInteractiveColor}" />
+                <GradientStop Offset="0.77" Color="{DynamicResource ThemeInteractiveColor}" />
+                <GradientStop Offset="1" Color="{DynamicResource ThemeInteractiveBgColor}" />
+            </LinearGradientBrush.GradientStops>
+            <LinearGradientBrush.Transform>
+                <RotateTransform />
+            </LinearGradientBrush.Transform>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="ThemedRainbowBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="{DynamicResource ThemeAccent1Color}" />
+                <GradientStop Offset="0.25" Color="{DynamicResource ThemeAccent2Color}" />
+                <GradientStop Offset="0.5" Color="{DynamicResource ThemeAccent3Color}" />
+                <GradientStop Offset="0.75" Color="{DynamicResource ThemeAccent4Color}" />
+                <GradientStop Offset="1.0" Color="{DynamicResource ThemeAccent5Color}" />
+            </LinearGradientBrush.GradientStops>
+            <LinearGradientBrush.Transform>
+                <RotateTransform />
+            </LinearGradientBrush.Transform>
+        </LinearGradientBrush>
+    </local:MpAvUserControl.Resources>
+    <local:MpAvUserControl.Styles>
+        <!--  OUTER BORDER  -->
+        <Style Selector="Border#OuterBorder">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource StainlessSteelBrush}" />
+        </Style>
+
+        <Style Selector="Border#OuterBorder:pointerover">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource RainbowBrush}" />
+        </Style>
+
+        <Style Selector="Border#OuterBorder.selected">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource ThemedRainbowBrush}" />
+        </Style>
+
+        <!--  ICON BORDER  -->
+        <Style Selector="RadioButton#AcctTypeButton Border.iconContainer">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeInteractiveColor}" />
+        </Style>
+
+        <Style Selector="RadioButton#AcctTypeButton:pointerover Border.iconContainer">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent1Color}" />
+        </Style>
+
+        <Style Selector="RadioButton#AcctTypeButton:checked Border.iconContainer">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent3Color}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <Grid ColumnDefinitions="0.5*,0.5*">
+        <!--  CURRENT ACCOUNT INFO AND SERVER REGISRATION STATE  -->
+        <Border Background="Orange"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch" />
+        <!--  UPGRADE INFO THING  -->
+        <Border x:DataType="local:MpAvWelcomeNotificationViewModel"
+                DataContext="{x:Static local:MpAvWelcomeNotificationViewModel.Instance}"
+                Grid.Column="1"
+                Background="Pink"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <Grid>
+                <!--  UPGRADE BUTTON  -->
+                <Button Classes="defaultButton textOnlyButton"
+                        IsVisible="{Binding !IsAccountOptSelected}"
+                        Command="{Binding SelectAccountCommand}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                    <Button.Resources>
+                        <Thickness x:Key="ButtonPadding">20,10,20,10</Thickness>
+                    </Button.Resources>
+                    <TextBlock Text="Upgrade!" />
+                </Button>
+                <!--  SUBSCRIPTION ITEMS  -->
+                <Border Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        IsVisible="{Binding IsAccountOptSelected}">
+                    <ItemsControl x:DataType="local:MpAvWelcomeOptionGroupViewModel"
+                                  DataContext="{Binding AccountViewModel}"
+                                  ItemsSource="{Binding Items}"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <!--  ACCOUNT TYPE ITEM OUTER BORDER  -->
+                                <Border x:Name="OuterBorder"
+                                        Classes.selected="{Binding IsChecked}"
+                                        local:MpAvIsHoveringExtension.IsEnabled="True"
+                                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                        local:MpAvIsHoveringExtension.IsBorderFollowEnabled="True"
+                                        CornerRadius="5"
+                                        BorderThickness="4"
+                                        Margin="0,0,0,10"
+                                        MaxHeight="70"
+                                        Background="{StaticResource HitTestableTransparent}">
+                                    <!--  ACCOUNT TYPE BUTTON  -->
+                                    <RadioButton x:Name="AcctTypeButton"
+                                                 Classes="defaultButton"
+                                                 Theme="{StaticResource SwitchlessRadioButton}"
+                                                 GroupName="GestureProfile"
+                                                 CornerRadius="7"
+                                                 Margin="5"
+                                                 Padding="5"
+                                                 HorizontalAlignment="Stretch"
+                                                 HorizontalContentAlignment="Stretch"
+                                                 MinHeight="35"
+                                                 Command="{Binding ToggleOptionCommand}"
+                                                 IsChecked="{Binding IsChecked, Mode=OneWay}">
+                                        <DockPanel HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch">
+                                            <!--  ACCOUNT TYPE ICON BORDER  -->
+                                            <Border Classes="iconContainer"
+                                                    CornerRadius="5"
+                                                    BorderThickness="2"
+                                                    Margin="5"
+                                                    Padding="5"
+                                                    DockPanel.Dock="Left">
+                                                <Image Width="30"
+                                                       Height="30"
+                                                       Stretch="UniformToFill"
+                                                       Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                            </Border>
+
+                                            <StackPanel Margin="10,0,0,0"
+                                                        Spacing="5">
+                                                <!--  ACCOUNT TYPE NAME  -->
+
+                                                <TextBlock HorizontalAlignment="Stretch"
+                                                           VerticalAlignment="Center"
+                                                           TextAlignment="Left"
+                                                           FontSize="20"
+                                                           FontWeight="SemiBold"
+                                                           Text="{Binding LabelText}" />
+
+                                                <!--  ACCOUNT TYPE INFO  -->
+                                                <TextBlock HorizontalAlignment="Stretch"
+                                                           VerticalAlignment="Center"
+                                                           TextWrapping="WrapWithOverflow"
+                                                           MaxWidth="200"
+                                                           TextAlignment="Left"
+                                                           FontSize="14"
+                                                           Text="{Binding DescriptionText}" />
+
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </RadioButton>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </Grid>
+
+        </Border>
+
+    </Grid>
+</local:MpAvUserControl>

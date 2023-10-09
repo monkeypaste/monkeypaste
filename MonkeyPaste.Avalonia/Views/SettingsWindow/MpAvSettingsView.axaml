@@ -324,7 +324,7 @@
         </Style>
 
         <!--  SECURITY/SHORTCUT CONTAINER PANELS  -->
-        <Style Selector="local|MpAvShortcutsView > StackPanel, local|MpAvInteropView > StackPanel">
+        <Style Selector="StackPanel.expandersContainer">
             <Setter Property="Margin"
                     Value="0,20,0,0" />
             <Setter Property="Spacing"
@@ -423,7 +423,7 @@
             </Border>
 
         </StackPanel>
-      
+
         <!--  Footer  -->
         <Border DockPanel.Dock="Bottom"
                 HorizontalAlignment="Stretch"
@@ -451,9 +451,9 @@
                 <TransitioningContentControl.DataTemplates>
 
                     <local:MpAvSettingsTabDataTemplateSelector>
-                        <DataTemplate x:Key="AccountTemplate"
-                                      x:DataType="local:MpAvSettingsViewModel">
-                            <local:MpAvSettingsFrameCollectionView DataContext="{Binding FilteredAccountFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
+                        <DataTemplate x:Key="AccountTemplate">
+                            <!--<local:MpAvSettingsFrameCollectionView DataContext="{Binding FilteredAccountFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />-->
+                            <local:MpAvAccountView />
                         </DataTemplate>
                         <DataTemplate x:Key="PreferencesTemplate"
                                       x:DataType="local:MpAvSettingsViewModel">

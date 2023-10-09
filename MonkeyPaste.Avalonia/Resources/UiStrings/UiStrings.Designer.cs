@@ -223,6 +223,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Double Click to unpin .
+        /// </summary>
+        public static string ClipTilePinPlaceHolderLabelPrefix {
+            get {
+                return ResourceManager.GetString("ClipTilePinPlaceHolderLabelPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tags.
         /// </summary>
         public static string ClipTileTagContextMenuLabel {
@@ -1201,11 +1210,101 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application.
+        /// </summary>
+        public static string SettingsShortcutsAppCommandHeaderText {
+            get {
+                return ResourceManager.GetString("SettingsShortcutsAppCommandHeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string SettingsShortcutsCustomCommandHeaderText {
+            get {
+                return ResourceManager.GetString("SettingsShortcutsCustomCommandHeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global.
+        /// </summary>
+        public static string SettingsShortcutsGlobalCommandHeaderText {
+            get {
+                return ResourceManager.GetString("SettingsShortcutsGlobalCommandHeaderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shortcuts.
         /// </summary>
         public static string SettingsShortcutTabLabel {
             get {
                 return ResourceManager.GetString("SettingsShortcutTabLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This combination conflicts with &apos;{0}&apos; which will be cleared if saved..
+        /// </summary>
+        public static string ShortcutAssignDuplicateWarning {
+            get {
+                return ResourceManager.GetString("ShortcutAssignDuplicateWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A shortcut must be provided..
+        /// </summary>
+        public static string ShortcutAssignEmptyAppClipboardShortcutWarning {
+            get {
+                return ResourceManager.GetString("ShortcutAssignEmptyAppClipboardShortcutWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications..
+        /// </summary>
+        public static string ShortcutAssignGlobalHint {
+            get {
+                return ResourceManager.GetString("ShortcutAssignGlobalHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global.
+        /// </summary>
+        public static string ShortcutAssignGlobalLabel {
+            get {
+                return ResourceManager.GetString("ShortcutAssignGlobalLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shortcut must contain ONE and only ONE input key.Any key that is not:.
+        /// </summary>
+        public static string ShortcutAssignInvalidGestureWarning {
+            get {
+                return ResourceManager.GetString("ShortcutAssignInvalidGestureWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press any key to record....
+        /// </summary>
+        public static string ShortcutAssignRecordLabel {
+            get {
+                return ResourceManager.GetString("ShortcutAssignRecordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign Shortcut.
+        /// </summary>
+        public static string ShortcutAssignWindowTitle {
+            get {
+                return ResourceManager.GetString("ShortcutAssignWindowTitle", resourceCulture);
             }
         }
         

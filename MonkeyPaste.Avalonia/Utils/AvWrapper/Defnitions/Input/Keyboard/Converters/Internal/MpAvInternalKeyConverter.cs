@@ -42,6 +42,12 @@ namespace MonkeyPaste.Avalonia {
             if (lks == MpInputConstants.BACKSPACE_KEY_LITERAL.ToLower()) {
                 return Key.Back;
             }
+            if (lks == MpInputConstants.META_KEY_LITERAL.ToLower() ||
+                lks == MpInputConstants.WIN_META_KEY_LITERAL.ToLower() ||
+                lks == MpInputConstants.MAC_META_KEY_LITERAL.ToLower() ||
+                lks == MpInputConstants.LINUX_META_KEY_LITERAL.ToLower()) {
+                return Key.LWin;
+            }
 
             if (lks == "alt") {
                 return Key.LeftAlt;//.LeftAlt;
@@ -125,6 +131,15 @@ namespace MonkeyPaste.Avalonia {
             }
             if (key == Key.Back) {
                 return MpInputConstants.BACKSPACE_KEY_LITERAL;
+            }
+            if (key == Key.LWin || key == Key.RWin) {
+#if WINDOWS
+                return MpInputConstants.WIN_META_KEY_LITERAL;
+#elif LINUX
+                return MpInputConstants.LINUX_META_KEY_LITERAL;
+#elif MAC
+                return MpInputConstants.MAC_META_KEY_LITERAL;
+#endif
             }
 
             if (key == Key.OemSemicolon) {

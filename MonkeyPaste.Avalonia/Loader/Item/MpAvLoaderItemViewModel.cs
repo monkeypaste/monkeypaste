@@ -22,7 +22,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task LoadItemAsync(bool static_fallback = false) {
-            if (ItemType == typeof(MpPluginLoader)) {
+            if (ItemType == typeof(MpAvAccountTools)) {
 
             }
             object itemObj = null;

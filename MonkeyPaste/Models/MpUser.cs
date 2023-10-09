@@ -1,7 +1,5 @@
-﻿using MonkeyPaste.Common;
-using SQLite;
+﻿using SQLite;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -11,7 +9,8 @@ namespace MonkeyPaste {
         Standard,
         Unlimited,
         Trial,
-        Admin
+        Admin,
+        Test
     }
 
     public class MpUser :

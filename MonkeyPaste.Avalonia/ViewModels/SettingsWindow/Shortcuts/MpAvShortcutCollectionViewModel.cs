@@ -100,6 +100,17 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public ObservableCollection<MpAvShortcutViewModel> FilteredItems { get; private set; } = new ObservableCollection<MpAvShortcutViewModel>();
 
+        public IEnumerable<MpAvShortcutViewModel> FilteredAppItems =>
+            FilteredItems
+            .Where(x => !x.CanBeGlobalShortcut && !x.IsCustom);
+        public IEnumerable<MpAvShortcutViewModel> FilteredGlobalItems =>
+            FilteredItems
+            .Where(x => x.CanBeGlobalShortcut && !x.IsCustom);
+
+        public IEnumerable<MpAvShortcutViewModel> FilteredCustomItems =>
+            FilteredItems
+            .Where(x => x.IsCustom);
+
         public IEnumerable<MpAvShortcutViewModel> AvailableItems =>
             MpAvMainWindowViewModel.Instance.IsAnyAppWindowActive ?
                 Items :
@@ -391,6 +402,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         public MpShortcutRoutingProfileType RoutingProfileType { get; private set; }
+
         #endregion
 
         #endregion
@@ -446,7 +458,6 @@ namespace MonkeyPaste.Avalonia {
             PropertyChanged += MpAvShortcutCollectionViewModel_PropertyChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
-
 
 
         #endregion
@@ -574,7 +585,22 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
+        public void RefreshFilters() {
+            OnPropertyChanged(nameof(FilteredAppItems));
+            OnPropertyChanged(nameof(FilteredGlobalItems));
+            OnPropertyChanged(nameof(FilteredCustomItems));
+            FilteredItems.ForEach(x => x.OnPropertyChanged(nameof(x.SelectedRoutingTypeIdx)));
+        }
 
+        public void PauseGlobalHooks() {
+            // NOTE called before debug break wrapper
+            DisposeGlobalInputHooks();
+            _keyboardGestureHelper.ClearCurrentGesture();
+        }
+
+        public void ResumeGlobalHooks() {
+            CreateGlobalInputHooks();
+        }
         #endregion
 
         #region Protected Methods
@@ -641,6 +667,12 @@ namespace MonkeyPaste.Avalonia {
                     break;
             }
         }
+
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            OnPropertyChanged(nameof(Items));
+            UpdateFilteredItems();
+        }
+
         private async Task InitShortcutsAsync() {
             Dispatcher.UIThread.VerifyAccess();
             //using mainwindow, map all saved shortcuts to their commands
@@ -688,14 +720,13 @@ namespace MonkeyPaste.Avalonia {
                         Task.WhenAll(Items.Where(x => x.IsCustom).Select(x => x.SetShortcutNameAsync())).FireAndForgetSafeAsync(this);
                     });
                     break;
+                case MpMessageType.PreDebugBreak:
+                    PauseGlobalHooks();
+                    break;
+                case MpMessageType.PostDebugBreak:
+                    ResumeGlobalHooks();
+                    break;
             }
-        }
-
-        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            OnPropertyChanged(nameof(Items));
-            UpdateFilteredItems();
-            //OnPropertyChanged(nameof(InternalApplicationShortcuts));
-            //OnPropertyChanged(nameof(CustomShortcuts));
         }
         private async Task<MpAvShortcutViewModel> CreateShortcutViewModel(MpShortcut sc, ICommand comamnd) {
             MpAvShortcutViewModel nscvm = new MpAvShortcutViewModel(this);
@@ -719,7 +750,7 @@ namespace MonkeyPaste.Avalonia {
         private void UpdateFilteredItems() {
             int selected_scid = SelectedItem == null ? 0 : SelectedItem.ShortcutId;
             FilteredItems.Clear();
-            foreach (var scvm in Items) {
+            foreach (var scvm in Items.OrderBy(x => x.ShortcutDisplayName)) {
                 if (scvm.IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText)) {
                     FilteredItems.Add(scvm);
                 }
@@ -728,6 +759,7 @@ namespace MonkeyPaste.Avalonia {
                 FilteredItems.All(x => x.ShortcutId != selected_scid)) {
                 SelectedItem = null;
             }
+            RefreshFilters();
         }
 
         #region Routing Profile
@@ -897,7 +929,6 @@ namespace MonkeyPaste.Avalonia {
             }
 
             _hook.RunAsync();
-
         }
 
 

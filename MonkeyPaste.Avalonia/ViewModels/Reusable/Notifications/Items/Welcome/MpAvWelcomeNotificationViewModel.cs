@@ -92,6 +92,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool IsAccountOptSelected =>
+            CurPageType == MpWelcomePageType.Account;
         public override bool WantsTopmost =>
             false;
         //CurOptGroupViewModel == null ||
@@ -509,6 +511,10 @@ namespace MonkeyPaste.Avalonia {
                 CurPointerGestureWindowViewModel.ShowGestureWindowCommand.Execute(null);
             });
 
+        public ICommand SelectAccountCommand => new MpCommand(
+            () => {
+                CurPageType = MpWelcomePageType.Account;
+            });
         #endregion
 
     }

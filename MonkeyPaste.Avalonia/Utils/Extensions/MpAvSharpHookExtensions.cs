@@ -146,6 +146,15 @@ namespace MonkeyPaste.Avalonia {
             if (key == KeyCode.VcEscape) {
                 return MpInputConstants.ESCAPE_KEY_LITERAL;
             }
+            if (key == KeyCode.VcLeftMeta || key == KeyCode.VcRightMeta) {
+#if WINDOWS
+                return MpInputConstants.WIN_META_KEY_LITERAL;
+#elif LINUX
+                return MpInputConstants.LINUX_META_KEY_LITERAL;
+#elif MAC
+                return MpInputConstants.MAC_META_KEY_LITERAL;
+#endif
+            }
             if (key == KeyCode.VcNumPadDivide) {
                 return @"/";
             }
@@ -221,6 +230,12 @@ namespace MonkeyPaste.Avalonia {
             }
             if (lks == MpInputConstants.ESCAPE_KEY_LITERAL.ToLower()) {
                 return KeyCode.VcEscape;
+            }
+            if (lks == MpInputConstants.META_KEY_LITERAL.ToLower() ||
+                lks == MpInputConstants.WIN_META_KEY_LITERAL.ToLower() ||
+                lks == MpInputConstants.MAC_META_KEY_LITERAL.ToLower() ||
+                lks == MpInputConstants.LINUX_META_KEY_LITERAL.ToLower()) {
+                return KeyCode.VcLeftMeta;
             }
             if (lks == "alt") {
                 return KeyCode.VcLeftAlt;//.LeftAlt;

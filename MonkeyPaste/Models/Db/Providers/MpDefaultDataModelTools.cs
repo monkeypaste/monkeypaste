@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -117,7 +118,7 @@ namespace MonkeyPaste {
             if (thisUserDevice == null) {
                 // reset error
                 var test = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
-                MpDebug.Break();
+                MpDebug.Break($"Missing user device '{Mp.Services.ThisDeviceInfo.ThisDeviceGuid}'");
             }
             ThisUserDeviceId = thisUserDevice.Id;
             ThisUserDeviceGuid = thisUserDevice.Guid;
@@ -125,7 +126,16 @@ namespace MonkeyPaste {
             // THIS APP
 
             var thisApp = await MpDataModelProvider.GetAppByMembersAsync(Mp.Services.PlatformInfo.ExecutingPath, string.Empty, ThisUserDeviceId);
-            MpDebug.Assert(thisApp != null && thisApp.Id == ThisAppId, $"ThisApp should be id={ThisAppId}");
+            if (thisApp == null) {
+                var firstApp = await MpDataModelProvider.GetItemAsync<MpApp>(ThisAppId);
+                if (firstApp == null) {
+                    MpDebug.Break($"No thisApp record found using path '{Mp.Services.PlatformInfo.ExecutingPath}'");
+                } else {
+                    string stored_exe_name = Path.GetFileName(firstApp.AppPath);
+                    string running_exe_name = Path.GetFileName(Mp.Services.PlatformInfo.ExecutingPath);
+                    MpDebug.Assert(stored_exe_name.ToLower() == running_exe_name.ToLower(), $"ThisApp should be Id=1. But path '{firstApp.AppPath}' was found instead");
+                }
+            }
 
 
             // THIS ICON

@@ -1,25 +1,70 @@
 ﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Services.Store;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvAccountTools {
+        #region Private Variables
+        private bool _isContextWindowInitialized = false;
+        //StoreProduct subscriptionStoreProduct;
 
-        private Dictionary<MpUserAccountType, string> _accountTypeProductIdLookup;
-        Dictionary<MpUserAccountType, string> AccountTypeProductIdLookup {
+        // Assign this variable to the Store ID of your subscription add-on.
+        //private string subscriptionStoreId = "9N5X8R1C9CR4"; // unlimited-monthly
+        #endregion
+
+        #region Constants
+        #endregion
+
+        #region Statics
+        #endregion
+
+        #region Interfaces
+        #endregion
+
+        #region Properties
+
+        StoreContext _context;
+        StoreContext context {
             get {
-                if (_accountTypeProductIdLookup == null) {
-                    _accountTypeProductIdLookup = new() {
-                        {MpUserAccountType.Free,"f921e300-6325-4574-a850-a896a31c816f" },
-                        {MpUserAccountType.Standard,"5d8f2bac-662c-4075-a3e9-0495a7757a3d" },
-                        {MpUserAccountType.Unlimited,"ba104e40-7859-478a-890b-f308678ca0bc" },
-                        {MpUserAccountType.Trial,"f0ae6390-93fd-4055-9442-afb45b21dd63" },
-                        {MpUserAccountType.Admin,"e67c9b90-3746-4986-9f1e-82ff8877cf52" }
+                if (_context == null) {
+                    _context = StoreContext.GetDefault();
+                }
+
+                if (!_isContextWindowInitialized &&
+                    MpAvWindowManager.MainWindow != null) {
+                    nint hwnd = MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle;
+                    if (hwnd != nint.Zero) {
+                        // from https://aka.ms/storecontext-for-desktop.
+                        WinRT.Interop.InitializeWithWindow.Initialize(_context, hwnd);
+                        _isContextWindowInitialized = true;
+                    }
+                }
+
+                return _context;
+            }
+        }
+
+        private Dictionary<string, MpUserAccountType> _accountTypeAddOnStoreIdLookup;
+        Dictionary<string, MpUserAccountType> AccountTypeAddOnStoreIdLookup {
+            get {
+                if (_accountTypeAddOnStoreIdLookup == null) {
+                    _accountTypeAddOnStoreIdLookup = new() {
+                        //9MZRBMH3JT75/0010
+
+                        {"9PMDM0QVHJCS", MpUserAccountType.Test   },
+                        {"9N5X8R1C9CR4", MpUserAccountType.Unlimited },
+
+                        //{MpUserAccountType.Free,"f921e300-6325-4574-a850-a896a31c816f" },
+                        //{MpUserAccountType.Standard,"5d8f2bac-662c-4075-a3e9-0495a7757a3d" },
+                        //{MpUserAccountType.Unlimited,"ba104e40-7859-478a-890b-f308678ca0bc" },
+                        //{MpUserAccountType.Trial,"f0ae6390-93fd-4055-9442-afb45b21dd63" },
+                        //{MpUserAccountType.Admin,"e67c9b90-3746-4986-9f1e-82ff8877cf52" }
                     };
                 }
-                return _accountTypeProductIdLookup;
+                return _accountTypeAddOnStoreIdLookup;
             }
         }
 
@@ -43,157 +88,59 @@ namespace MonkeyPaste.Avalonia {
                 return _accountTypeProductPriceTierLookup;
             }
         }
+        #endregion
 
+        #region Constructors
+        #endregion
 
-        private StoreContext context = null;
-        StoreProduct subscriptionStoreProduct;
-
-        // Assign this variable to the Store ID of your subscription add-on.
-        private string subscriptionStoreId = "9N5X8R1C9CR4"; // unlimited-monthly
-
-        public async void PurchaseAddOnAsync(string storeId) {
-            if (context == null) {
-                context = StoreContext.GetDefault();
-                // If your app is a desktop app that uses the Desktop Bridge, you
-                // may need additional code to configure the StoreContext object.
-                // For more info, see https://aka.ms/storecontext-for-desktop.
+        #region Public Methods
+        public async Task InitAsync() {
+            if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
+                return;
             }
-
-            //workingProgressRing.IsActive = true;
-            StorePurchaseResult result = await context.RequestPurchaseAsync(storeId);
-            //workingProgressRing.IsActive = false;
-
-            // Capture the error message for the operation, if any.
-            string extendedError = string.Empty;
-            if (result.ExtendedError != null) {
-                extendedError = result.ExtendedError.Message;
-            }
-
-            MpConsole.WriteLine($"Purchase result: {result.Status}");
-
-            switch (result.Status) {
-                case StorePurchaseStatus.AlreadyPurchased:
-                    //textBlock.Text = "The user has already purchased the product.";
-                    break;
-
-                case StorePurchaseStatus.Succeeded:
-                    //textBlock.Text = "The purchase was successful.";
-                    break;
-
-                case StorePurchaseStatus.NotPurchased:
-                    //textBlock.Text = "The purchase did not complete. The user may have cancelled the purchase. ExtendedError: " + extendedError;
-                    break;
-
-                case StorePurchaseStatus.NetworkError:
-                    //textBlock.Text = "The purchase was unsuccessful due to a network error. ExtendedError: " + extendedError;
-                    break;
-
-                case StorePurchaseStatus.ServerError:
-                    //textBlock.Text = "The purchase was unsuccessful due to a server error. ExtendedError: " + extendedError;
-                    break;
-
-                default:
-                    //textBlock.Text = "The purchase was unsuccessful due to an unknown error. ExtendedError: " + extendedError;
-                    break;
-            }
+            await RefreshAccountTypeAsync();
         }
+        #endregion
 
-        // This is the entry point method for the example.
-        public async Task SetupSubscriptionInfoAsync() {
-            if (context == null) {
-                context = StoreContext.GetDefault();
-                // If your app is a desktop app that uses the Desktop Bridge, you
-                // may need additional code to configure the StoreContext object.
-                // For more info, see https://aka.ms/storecontext-for-desktop.
+        #region Protected Methods
+        #endregion
 
-                // Obtain window handle by passing in pointer to the window object
-                //nint hwnd = WinRT.Interop.WindowNative.GetWindowHandle(windowObject);
-                nint hwnd = MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle;
-                // Initialize the dialog using wrapper funcion for IInitializeWithWindow
-                WinRT.Interop.InitializeWithWindow.Initialize(context, hwnd);
+        #region Private Methods
+        private async Task RefreshAccountTypeAsync() {
+            MpUserAccountType acct_type = MpUserAccountType.Free;
 
-            }
-
-            var test = await context.GetAppLicenseAsync();
-            var test2 = context.User;
-            var test3 = await context.GetUserCollectionAsync(new[] { "Durable", "Consumable", "UnmanagedConsumable" });
-            string[] productKinds = { "Durable" };
-            List<String> filterList = new List<string>(productKinds);
-
-            // Specify the Store IDs of the products to retrieve.
-            string[] storeIds = new string[] { "9MZRBMH3JT75" };
-
-            StoreProductQueryResult queryResult =
-                await context.GetStoreProductsAsync(filterList, storeIds);
-            if (queryResult.ExtendedError != null) {
-                // The user may be offline or there might be some other server failure.
-                return;
-            }
-
-            foreach (KeyValuePair<string, StoreProduct> item in queryResult.Products) {
-                // Access the Store info for the product.
-                StoreProduct product = item.Value;
-
-                // Use members of the product object to access info for the product...
-            }
-
-            bool userOwnsSubscription = await CheckIfUserHasSubscriptionAsync();
-            if (userOwnsSubscription) {
-                // Unlock all the subscription add-on features here.
-                return;
-            }
-
-            // Get the StoreProduct that represents the subscription add-on.
-            subscriptionStoreProduct = await GetSubscriptionProductAsync();
-            if (subscriptionStoreProduct == null) {
-                StoreProductResult spr = await context.GetStoreProductForCurrentAppAsync();
-                if (spr != null &&
-                    spr.Product != null) {
-                    subscriptionStoreProduct = spr.Product;
-                } else {
-                    return;
+            MpUserAccountFormat store_lic = await GetStoreUserLicenseInfoAsync();
+            if (store_lic == default) {
+                MpUserAccountType server_lic = await GetServerAccountTypeAsync();
+                if (server_lic != MpUserAccountType.None) {
+                    acct_type = server_lic;
                 }
-                return;
-            }
-
-            // Check if the first SKU is a trial and notify the customer that a trial is available.
-            // If a trial is available, the Skus array will always have 2 purchasable SKUs and the
-            // first one is the trial. Otherwise, this array will only have one SKU.
-            StoreSku sku = subscriptionStoreProduct.Skus[0];
-            if (sku.SubscriptionInfo.HasTrialPeriod) {
-                // You can display the subscription trial info to the customer here. You can use 
-                // sku.SubscriptionInfo.TrialPeriod and sku.SubscriptionInfo.TrialPeriodUnit 
-                // to get the trial details.
             } else {
-                // You can display the subscription purchase info to the customer here. You can use 
-                // sku.SubscriptionInfo.BillingPeriod and sku.SubscriptionInfo.BillingPeriodUnit
-                // to provide the renewal details.
+                if (store_lic.IsActive) {
+                    acct_type = store_lic.AccountType;
+                }
             }
-
-            // Prompt the customer to purchase the subscription.
-            await PromptUserToPurchaseAsync();
-            return;
+            if (acct_type == MpUserAccountType.Test) {
+                acct_type = TEST_ACCOUNT_TYPE;
+            }
+            SetAccountType(acct_type);
         }
 
-        private async Task<bool> CheckIfUserHasSubscriptionAsync() {
+        private async Task<MpUserAccountFormat> GetStoreUserLicenseInfoAsync() {
             StoreAppLicense appLicense = await context.GetAppLicenseAsync();
-
-            // Check if the customer has the rights to the subscription.
             foreach (var addOnLicense in appLicense.AddOnLicenses) {
                 StoreLicense license = addOnLicense.Value;
-                if (license.SkuStoreId.StartsWith(subscriptionStoreId)) {
-                    if (license.IsActive) {
-                        // The expiration date is available in the license.ExpirationDate property.
-                        return true;
-                    }
+                if (AccountTypeAddOnStoreIdLookup.TryGetValue(license.SkuStoreId, out MpUserAccountType platAcctType)) {
+                    return new MpUserAccountFormat() {
+                        AccountType = platAcctType,
+                        IsActive = license.IsActive,
+                        ExpireOffset = license.ExpirationDate
+                    };
                 }
             }
-
-            // The customer does not have a license to the subscription.
-            return false;
+            return null;
         }
-
-        private async Task<StoreProduct> GetSubscriptionProductAsync() {
+        private async Task<StoreProduct> GetAddOnByStoreIdAsync(string storeId) {
             // Load the sellable add-ons for this app and check if the trial is still 
             // available for this customer. If they previously acquired a trial they won't 
             // be able to get a trial again, and the StoreProduct.Skus property will 
@@ -210,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
             // Look for the product that represents the subscription.
             foreach (var item in result.Products) {
                 StoreProduct product = item.Value;
-                if (product.StoreId == subscriptionStoreId) {
+                if (product.StoreId == storeId) {
                     return product;
                 }
             }
@@ -218,11 +165,16 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("The subscription was not found.");
             return null;
         }
+        private async Task PerformPlatformPurchaseAsync(MpUserAccountType uat) {
+            var acc_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value == uat);
+            if (string.IsNullOrEmpty(acc_kvp.Key)) {
+                return;
+            }
+            StoreProduct sp = await GetAddOnByStoreIdAsync(acc_kvp.Key);
 
-        private async Task PromptUserToPurchaseAsync() {
             // Request a purchase of the subscription product. If a trial is available it will be offered 
             // to the customer. Otherwise, the non-trial SKU will be offered.
-            StorePurchaseResult result = await subscriptionStoreProduct.RequestPurchaseAsync();
+            StorePurchaseResult result = await sp.RequestPurchaseAsync();
 
             // Capture the error message for the operation, if any.
             string extendedError = string.Empty;
@@ -234,24 +186,28 @@ namespace MonkeyPaste.Avalonia {
                 case StorePurchaseStatus.Succeeded:
                     // Show a UI to acknowledge that the customer has purchased your subscription 
                     // and unlock the features of the subscription. 
+                    SetAccountType(uat);
                     break;
 
+                case StorePurchaseStatus.AlreadyPurchased:
+                    MpConsole.WriteLine("The customer already owns this subscription. ExtendedError: " + extendedError);
+                    SetAccountType(uat);
+                    break;
                 case StorePurchaseStatus.NotPurchased:
-                    MpConsole.WriteLine("The purchase did not complete. " +
-                        "The customer may have cancelled the purchase. ExtendedError: " + extendedError);
+                    MpConsole.WriteLine("The purchase did not complete. The customer may have cancelled the purchase. ExtendedError: " + extendedError);
                     break;
 
                 case StorePurchaseStatus.ServerError:
                 case StorePurchaseStatus.NetworkError:
-                    MpConsole.WriteLine("The purchase was unsuccessful due to a server or network error. " +
-                        "ExtendedError: " + extendedError);
+                    MpConsole.WriteLine("The purchase was unsuccessful due to a server or network error. ExtendedError: " + extendedError);
                     break;
 
-                case StorePurchaseStatus.AlreadyPurchased:
-                    MpConsole.WriteLine("The customer already owns this subscription." +
-                            "ExtendedError: " + extendedError);
-                    break;
             }
         }
+        #endregion
+
+        #region Commands
+        #endregion
+
     }
 }

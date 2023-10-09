@@ -25,7 +25,7 @@ namespace MonkeyPaste {
         string AccountStateInfo { get; }
         MpUserAccountType CurrentAccountType { get; }
 
-        void Init();
+        Task InitAsync();
         Task<MpContentCapInfo> RefreshCapInfoAsync();
         int GetContentCapacity(MpUserAccountType acctType);
         int GetTrashCapacity(MpUserAccountType acctType);

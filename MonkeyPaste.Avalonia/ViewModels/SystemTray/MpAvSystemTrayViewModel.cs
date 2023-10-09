@@ -306,7 +306,8 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
-                //await Task.Delay(1);
+                await Task.Delay(1);
+                Mp.Services.DebugBreakHelper.ToggleBreak();
                 //await MpTestDataBuilder.CreateTestDataAsync();
                 //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
@@ -314,7 +315,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //var test = new MpAvDataObject("Dat funky format", "funky format texxxxxt!!J!J");
                 //await TopLevel.GetTopLevel(MpAvWindowManager.MainWindow).Clipboard.SetDataObjectSafeAsync(test);
-                await MpAvAccountTools.Instance.SetupSubscriptionInfoAsync();
+                //await MpAvAccountTools.Instance.SetupSubscriptionInfoAsync();
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(

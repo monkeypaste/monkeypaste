@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvShortcutExtensions {
 
+        public static IEnumerable<MpAvShortcutKeyGroupViewModel> ToKeyItems(this IEnumerable<string> keysArray, out string keystring) {
+            keystring = string.Join(MpInputConstants.COMBO_SEPARATOR, keysArray);
+            return keystring.ToKeyItems();
+        }
         public static IEnumerable<MpAvShortcutKeyGroupViewModel> ToKeyItems(this string keyString) {
             var keyItems = new List<MpAvShortcutKeyGroupViewModel>();
             if (string.IsNullOrEmpty(keyString)) {

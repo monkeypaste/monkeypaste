@@ -4,10 +4,6 @@ using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvWelcomeOptionGroupViewModel : MpAvViewModelBase<MpAvWelcomeNotificationViewModel> {
-
-
-
-
         #region Private Variables
         #endregion
 

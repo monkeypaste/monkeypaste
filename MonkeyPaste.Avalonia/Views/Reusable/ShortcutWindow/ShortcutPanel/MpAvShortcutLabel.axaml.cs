@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using PropertyChanged;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 
@@ -67,6 +68,9 @@ namespace MonkeyPaste.Avalonia {
             } else if (KeyGesture is string keystr) {
                 keys = keystr;
                 sclb.ItemsSource = keystr.ToKeyItems();
+            } else if (KeyGesture is IEnumerable<string> key_arr) {
+                // used for mod keys in assign warning
+                sclb.ItemsSource = key_arr.ToKeyItems(out keys);
             }
             if (!string.IsNullOrEmpty(keys) &&
                 MpAvKeyStringToIsGlobalBoolConverterConverter.Instance.Convert(keys, null, null, null) is bool isGlobal &&

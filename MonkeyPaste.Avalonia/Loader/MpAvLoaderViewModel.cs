@@ -156,6 +156,7 @@ namespace MonkeyPaste.Avalonia {
             BaseItems.AddRange(new[] {
                 //new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"),
                 new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger", Mp.Services.PlatformInfo),
+
                 new MpAvLoaderItemViewModel(typeof(MpAvEnumToUiStringResourceConverter), "Ui text"),
                 new MpAvLoaderItemViewModel(typeof(MpAvEditorUiStringBuilder), "Editor Ui text"),
                 new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), "System Tray"),

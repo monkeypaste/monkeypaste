@@ -5,6 +5,7 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:common="using:MonkeyPaste.Common"
                        xmlns:dd="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
                        Background="{DynamicResource ThemeInteractiveBgColor}"
                        mc:Ignorable="d"
@@ -164,12 +165,12 @@
                     HorizontalAlignment="Center">
             <local:MpAvToolTipInfoHintView Classes="warning"
                                            VerticalAlignment="Center"
-                                           ToolTipText="This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications." />
+                                           ToolTipText="{x:Static local:UiStrings.ShortcutAssignGlobalHint}" />
             <TextBlock FontSize="16"
                        VerticalAlignment="Center"
                        Foreground="{DynamicResource ThemeInteractiveColor}"
                        FontWeight="SemiBold"
-                       Text="Global" />
+                       Text="{x:Static local:UiStrings.ShortcutAssignGlobalLabel}" />
 
         </StackPanel>
 
@@ -186,7 +187,7 @@
                 <local:MpAvShortcutView IsVisible="{Binding !IsEmpty}" />
                 <Border Classes="empty"
                         IsVisible="{Binding IsEmpty}">
-                    <TextBlock Text="Press any key to record..." />
+                    <TextBlock Text="{x:Static local:UiStrings.ShortcutAssignRecordLabel}" />
                 </Border>
             </Grid>
         </Border>
@@ -207,7 +208,25 @@
                 IsVisible="{Binding WarningString2, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
             <DockPanel>
                 <Image DockPanel.Dock="Left" />
-                <TextBlock Text="{Binding WarningString2}" />
+                <!--<TextBlock Text="{Binding WarningString2}" />-->
+                <Grid>
+                    <!--  EMPTY APP CLIPBOARD SC WARNING  -->
+                    <TextBlock IsVisible="{Binding IsAppClipboardAssignment}"
+                               Text="{Binding WarningString2}" />
+                    <TextBlock IsVisible="{Binding !IsAppClipboardAssignment}">
+                        <TextBlock.Inlines>
+                            <InlineCollection>
+                                <!--  DUP PREFIX  -->
+                                <Run Text="{Binding WarningString2}" />
+                                <!--  NON-INPUT KEYS  -->
+                                <InlineUIContainer>
+                                    <local:MpAvShortcutLabel Classes="menuItemGesture"
+                                                             KeyGesture="{x:Static common:MpInputConstants.MOD_LITERALS}" />
+                                </InlineUIContainer>
+                            </InlineCollection>
+                        </TextBlock.Inlines>
+                    </TextBlock>
+                </Grid>
             </DockPanel>
         </Border>
 

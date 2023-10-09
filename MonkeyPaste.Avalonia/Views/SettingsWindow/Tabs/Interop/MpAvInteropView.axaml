@@ -49,6 +49,7 @@
 
     </local:MpAvUserControl.Styles>
     <StackPanel x:DataType="local:MpAvAppCollectionViewModel"
+                Classes="expandersContainer"
                 DataContext="{x:Static local:MpAvAppCollectionViewModel.Instance}">
 
         <!--  CLIPBOARD FORMATS  -->

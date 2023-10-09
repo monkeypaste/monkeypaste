@@ -1020,6 +1020,9 @@
   <data name="MpUserAccountType_Admin" xml:space="preserve">
     <value>Admin</value>
   </data>
+  <data name="MpUserAccountType_Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
   <data name="MpContentOptionType_None" xml:space="preserve">
     <value />
   </data>
@@ -1046,5 +1049,14 @@
   </data>
   <data name="MpMainWindowShowBehaviorType_Active" xml:space="preserve">
     <value>Active</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
 </root>
