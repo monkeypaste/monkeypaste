@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,14 +29,6 @@ namespace MonkeyPaste.Avalonia {
 #endif
         }
 
-        public string AccountStateInfo {
-            get {
-                if (CurrentAccountType == MpUserAccountType.Unlimited) {
-                    return $"{CurrentAccountType}-(Total {_lastContentCount})";
-                }
-                return $"{CurrentAccountType} - ({_lastContentCount} total / {GetContentCapacity(CurrentAccountType)} capacity {(GetContentCapacity(CurrentAccountType) - _lastContentCount)} remaining)";
-            }
-        }
         public void SetAccountType(MpUserAccountType newType) {
             // NOTE this maybe a good all around interface method, not sure though
             bool changed = CurrentAccountType != newType;
@@ -45,6 +36,14 @@ namespace MonkeyPaste.Avalonia {
                 bool is_upgrade = (int)newType > (int)CurrentAccountType;
                 CurrentAccountType = newType;
                 MpMessenger.SendGlobal(is_upgrade ? MpMessageType.AccountUpgrade : MpMessageType.AccountDowngrade);
+            }
+        }
+        public string AccountStateInfo {
+            get {
+                if (CurrentAccountType == MpUserAccountType.Unlimited) {
+                    return $"{CurrentAccountType}-(Total {_lastContentCount})";
+                }
+                return $"{CurrentAccountType} - ({_lastContentCount} total / {GetContentCapacity(CurrentAccountType)} capacity {(GetContentCapacity(CurrentAccountType) - _lastContentCount)} remaining)";
             }
         }
         public MpUserAccountType CurrentAccountType { get; private set; } = TEST_ACCOUNT_TYPE;
@@ -80,22 +79,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public decimal GetAccountRate(MpUserAccountType acctType, bool isMonthly) {
-            // TODO This probably needs to be async and query server
-            // TODO2 rates will need to be converted to appropriate currency
-
-            switch (acctType) {
-                case MpUserAccountType.Trial:
-                case MpUserAccountType.Free:
-                case MpUserAccountType.Admin:
-                case MpUserAccountType.None:
-                default:
-                    return 0;
-                case MpUserAccountType.Standard:
-                    return isMonthly ? 0.99m : 9.99m;
-                case MpUserAccountType.Unlimited:
-                    return isMonthly ? 2.99m : 29.99m;
+        public string GetAccountRate(MpUserAccountType acctType, bool isMonthly) {
+            if (AccountTypePriceLookup.TryGetValue((acctType, isMonthly), out string rate)) {
+                return rate;
             }
+            return "???";
         }
 
         public async Task<MpContentCapInfo> RefreshCapInfoAsync() {
@@ -181,6 +169,14 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
+        Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new Dictionary<(MpUserAccountType, bool), string>() {
+            {(MpUserAccountType.Free,false),"Free" },
+            {(MpUserAccountType.Free,true),"Free" },
+            {(MpUserAccountType.Standard,false),"$0.99" },
+            {(MpUserAccountType.Standard,true),"$9.99" },
+            {(MpUserAccountType.Unlimited,false),"$2.99" },
+            {(MpUserAccountType.Unlimited,true),"$29.99" }
+        };
         public bool IsContentAddPausedByAccount { get; private set; }
         public MpContentCapInfo LastCapInfo => _lastCapInfo;
 
@@ -197,6 +193,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
         public MpAvAccountTools() { }
+
+        public async Task<MpUserAccountFormat> GetUserAccountAsync() {
+            var acct = await GetStoreUserLicenseInfoAsync();
+            if (acct == null) {
+                acct = await GetServerAccountTypeAsync();
+                if (acct == null) {
+                    acct = new MpUserAccountFormat() {
+                        AccountType = MpUserAccountType.Free
+                    };
+                }
+            }
+            return acct;
+        }
+        public async Task PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly) {
+            await PerformPlatformPurchaseAsync(uat, isMonthly);
+        }
         #endregion
 
         #region Protected Methods
@@ -258,28 +270,13 @@ order by LastCapRelatedDateTime limit 2
             return to_remove_result;
         }
 
-        private async Task<MpUserAccountType> GetAccountTypeAsync() {
-            await Task.Delay(0);
-
-            return MpUserAccountType.None;
-        }
-        private async Task<MpUserAccountType> GetServerAccountTypeAsync() {
+        private async Task<MpUserAccountFormat> GetServerAccountTypeAsync() {
             await Task.Delay(0);
             // TODO if pref has user cred query server for account type here
-
-            return MpUserAccountType.None;
+            return null;
         }
 
         #endregion
 
-        #region Commands
-        public MpIAsyncCommand<object> PurchaseSubscriptionCommand => new MpAsyncCommand<object>(
-            async (args) => {
-                if (args is not MpUserAccountType to_purchase_uat) {
-                    return;
-                }
-                await PerformPlatformPurchaseAsync(to_purchase_uat);
-            });
-        #endregion
     }
 }

@@ -47,15 +47,15 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private Dictionary<string, MpUserAccountType> _accountTypeAddOnStoreIdLookup;
-        Dictionary<string, MpUserAccountType> AccountTypeAddOnStoreIdLookup {
+        private Dictionary<string, (MpUserAccountType, bool)> _accountTypeAddOnStoreIdLookup;
+        Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup {
             get {
                 if (_accountTypeAddOnStoreIdLookup == null) {
                     _accountTypeAddOnStoreIdLookup = new() {
                         //9MZRBMH3JT75/0010
 
-                        {"9PMDM0QVHJCS", MpUserAccountType.Test   },
-                        {"9N5X8R1C9CR4", MpUserAccountType.Unlimited },
+                        {"9PMDM0QVHJCS", (MpUserAccountType.Test,false)   },
+                        {"9N5X8R1C9CR4", (MpUserAccountType.Unlimited, true) },
 
                         //{MpUserAccountType.Free,"f921e300-6325-4574-a850-a896a31c816f" },
                         //{MpUserAccountType.Standard,"5d8f2bac-662c-4075-a3e9-0495a7757a3d" },
@@ -96,9 +96,23 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public async Task InitAsync() {
             if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
+                await RefreshPricingInfoAsync();
                 return;
             }
-            await RefreshAccountTypeAsync();
+            await RefreshUserAccountStateAsync();
+        }
+
+        public async Task RefreshPricingInfoAsync() {
+            AccountTypePriceLookup.Clear();
+            foreach (var at in AccountTypeAddOnStoreIdLookup) {
+                var sp = await GetAddOnByStoreIdAsync(at.Key);
+                AccountTypePriceLookup.Add(at.Value, sp.Price.FormattedPrice);
+            }
+        }
+        public async Task<MpUserAccountFormat> RefreshUserAccountStateAsync() {
+            var acct = await GetUserAccountAsync();
+            SetAccountType(acct.AccountType);
+            return acct;
         }
         #endregion
 
@@ -106,33 +120,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private async Task RefreshAccountTypeAsync() {
-            MpUserAccountType acct_type = MpUserAccountType.Free;
-
-            MpUserAccountFormat store_lic = await GetStoreUserLicenseInfoAsync();
-            if (store_lic == default) {
-                MpUserAccountType server_lic = await GetServerAccountTypeAsync();
-                if (server_lic != MpUserAccountType.None) {
-                    acct_type = server_lic;
-                }
-            } else {
-                if (store_lic.IsActive) {
-                    acct_type = store_lic.AccountType;
-                }
-            }
-            if (acct_type == MpUserAccountType.Test) {
-                acct_type = TEST_ACCOUNT_TYPE;
-            }
-            SetAccountType(acct_type);
-        }
 
         private async Task<MpUserAccountFormat> GetStoreUserLicenseInfoAsync() {
             StoreAppLicense appLicense = await context.GetAppLicenseAsync();
             foreach (var addOnLicense in appLicense.AddOnLicenses) {
                 StoreLicense license = addOnLicense.Value;
-                if (AccountTypeAddOnStoreIdLookup.TryGetValue(license.SkuStoreId, out MpUserAccountType platAcctType)) {
+                if (AccountTypeAddOnStoreIdLookup.TryGetValue(license.SkuStoreId, out var acctTypeTup)) {
+
                     return new MpUserAccountFormat() {
-                        AccountType = platAcctType,
+                        AccountType = acctTypeTup.Item1,
+                        IsMonthly = acctTypeTup.Item2,
                         IsActive = license.IsActive,
                         ExpireOffset = license.ExpirationDate
                     };
@@ -165,8 +162,8 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("The subscription was not found.");
             return null;
         }
-        private async Task PerformPlatformPurchaseAsync(MpUserAccountType uat) {
-            var acc_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value == uat);
+        private async Task PerformPlatformPurchaseAsync(MpUserAccountType uat, bool isMonthly) {
+            var acc_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value == (uat, isMonthly));
             if (string.IsNullOrEmpty(acc_kvp.Key)) {
                 return;
             }

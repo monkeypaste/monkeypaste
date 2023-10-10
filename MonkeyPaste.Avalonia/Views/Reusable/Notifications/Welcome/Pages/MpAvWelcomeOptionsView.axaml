@@ -137,6 +137,16 @@
         <TextBlock Classes="description"
                    Text="{Binding Caption}" />
 
+      <!-- ACCT MONTLY TOGGLE -->
+        <ToggleSwitch x:Name="MonthlyToggleButton"
+                      Classes="defaultButton"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      IsVisible="{Binding IsAccountOptSelected, FallbackValue=False, TargetNullValue=False}"
+                      IsChecked="{Binding IsAccountMonthEnabled, Mode=TwoWay, FallbackValue=True, TargetNullValue=True}"
+                      FontWeight="SemiBold"
+                      OnContent="{x:Static local:UiStrings.WelcomeAccountMonthlySwitchEnabled}"
+                      OffContent="{x:Static local:UiStrings.WelcomeAccountMonthlySwitchDisabled}" />
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Center"
@@ -184,7 +194,7 @@
                                            Height="160"
                                            Margin="0,0,0,10"
                                            Stretch="UniformToFill"
-                                           Source="{Binding IconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                                           Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
                                 </DockPanel>
                             </RadioButton>
                         </Border>
@@ -242,8 +252,26 @@
             </TransitioningContentControl.PageTransition>
             <TransitioningContentControl.ContentTemplate>
                 <DataTemplate>
-                    <TextBlock Classes="description"
-                               Text="{Binding DescriptionText}" />
+                    <Grid>
+                        <!--  ACCOUNT TYPE DESCRIPTION  -->
+
+                        <TextBlock Classes="description"
+                                   IsVisible="{Binding Parent.IsAccountOptSelected}">
+                            <TextBlock.Inlines>
+                                <InlineCollection>
+                                    <Run Text="{Binding DescriptionText2}"
+                                         Foreground="Green"
+                                         FontWeight="SemiBold" />
+                                    <Run Text="{Binding DescriptionText}" />
+                                </InlineCollection>
+                            </TextBlock.Inlines>
+                        </TextBlock>
+
+                        <!--  STANDARD DESCRIPTION  -->
+                        <TextBlock Classes="description"
+                                   IsVisible="{Binding !Parent.IsAccountOptSelected}"
+                                   Text="{Binding DescriptionText}" />
+                    </Grid>
                 </DataTemplate>
             </TransitioningContentControl.ContentTemplate>
         </TransitioningContentControl>

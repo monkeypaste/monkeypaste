@@ -119,7 +119,7 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task InitAsync() {
 
-            await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification();
+            await MpAvWelcomeNotificationViewModel.ShowWelcomeNotificationAsync();
 
             CreateLoaderItems();
 

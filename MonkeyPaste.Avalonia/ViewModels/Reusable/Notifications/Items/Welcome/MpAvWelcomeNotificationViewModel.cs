@@ -1,7 +1,5 @@
 ﻿using MonkeyPaste.Common;
-using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -27,7 +25,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        public static async Task ShowWelcomeNotification(bool forceShow = false) {
+        public static async Task ShowWelcomeNotificationAsync(bool forceShow = false) {
+            await MpAvAccountViewModel.Instance.InitializeAsync();
             await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                 new MpNotificationFormat() {
                     ForceShow = forceShow,
@@ -94,6 +93,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public bool IsAccountOptSelected =>
             CurPageType == MpWelcomePageType.Account;
+        public bool IsAccountMonthEnabled { get; set; } = true;
         public override bool WantsTopmost =>
             false;
         //CurOptGroupViewModel == null ||
@@ -175,6 +175,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsPrimaryChecked));
                     break;
                 case nameof(CurPageType):
+                    OnPropertyChanged(nameof(IsAccountOptSelected));
                     OnPropertyChanged(nameof(WantsTopmost));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     CurOptGroupViewModel.OnPropertyChanged(nameof(CurOptGroupViewModel.IsGestureGroup));
@@ -198,6 +199,14 @@ namespace MonkeyPaste.Avalonia {
 
                     CurOptGroupViewModel.WasVisited = true;
                     break;
+                case nameof(IsAccountMonthEnabled):
+                    if (AccountViewModel == null) {
+                        break;
+                    }
+                    AccountViewModel.Items =
+                        MpAvAccountViewModel.Instance
+                        .ToWelcomeOptionGroup(IsAccountMonthEnabled).Items;
+                    break;
             }
         }
 
@@ -214,62 +223,9 @@ namespace MonkeyPaste.Avalonia {
             #endregion
 
             #region Account
-            string account_help_url = @"https://www.monkeypaste.com/help#recycling";
-            string monthly_color = MpSystemColors.yellowgreen.RemoveHexAlpha();
-            string yearly_color = MpSystemColors.olivedrab.RemoveHexAlpha();
-            string line_break = Environment.NewLine;
 
-            AccountViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.Account) {
-                Title = UiStrings.WelcomeAccountTitle,
-                Caption = UiStrings.WelcomeAccountCaption
-            };
-            AccountViewModel.Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,null) {
-                        IconSourceObj = "LoginImage",
-                        LabelText = UiStrings.WelcomeAccountLabel1,
-                        DescriptionText = UiStrings.WelcomeAccountDescription1
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Free) {
-                        IconSourceObj = "StarOutlineImage",
-                        LabelText = UiStrings.WelcomeAccountLabel2,
-                        DescriptionText =
-                            string.Format(
-                                UiStrings.WelcomeAccountDescription2,
-                                Mp.Services.AccountTools.GetContentCapacity(MpUserAccountType.Free),
-                                Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Free),
-                                account_help_url)
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Standard) {
-                        IconSourceObj = "StarYellowImage",
-                        LabelText = UiStrings.WelcomeAccountLabel3,
-                        DescriptionText =
-                            string.Format(
-                                UiStrings.WelcomeAccountDescription3,
-                                new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID).CurrencySymbol,
-                                Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Standard,true),
-                                Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Standard,false),
-                                Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Standard),
-                                line_break,
-                                account_help_url,
-                                monthly_color,
-                                yearly_color)
-                    },
-                    new MpAvWelcomeOptionItemViewModel(this,MpUserAccountType.Unlimited) {
-                        IsChecked = true,
-                        IconSourceObj = "TrophyImage",
-                        LabelText = UiStrings.WelcomeAccountLabel4,
-                        DescriptionText =
-                            string.Format(
-                                UiStrings.WelcomeAccountDescription4,
-                                new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID).CurrencySymbol,
-                                Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Unlimited,true),
-                                Mp.Services.AccountTools.GetAccountRate(MpUserAccountType.Unlimited,false),
-                                line_break,
-                                account_help_url,
-                                monthly_color,
-                                yearly_color)
-                    },
-                };
+            AccountViewModel = MpAvAccountViewModel.Instance.ToWelcomeOptionGroup(IsAccountMonthEnabled);
+
             #endregion
 
             #region LoginLoad
@@ -511,10 +467,6 @@ namespace MonkeyPaste.Avalonia {
                 CurPointerGestureWindowViewModel.ShowGestureWindowCommand.Execute(null);
             });
 
-        public ICommand SelectAccountCommand => new MpCommand(
-            () => {
-                CurPageType = MpWelcomePageType.Account;
-            });
         #endregion
 
     }

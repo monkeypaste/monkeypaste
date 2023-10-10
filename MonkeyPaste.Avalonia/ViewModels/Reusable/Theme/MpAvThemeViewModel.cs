@@ -79,6 +79,7 @@ namespace MonkeyPaste.Avalonia {
             "spellcheck.png",
             "staryellow.png",
             "text.png",
+            "trophy.png",
             "warning.png",
             "yandexicon.png",
         };

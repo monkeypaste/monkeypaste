@@ -107,33 +107,6 @@
                     Background="{DynamicResource ThemeWhiteColor}"
                     Height="1" />
 
-            <!--<StackPanel Grid.Row="0"
-                        Grid.Column="1"
-                        Orientation="Vertical"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Top">
-                <TextBlock Grid.Row="0"
-                           Grid.Column="1"
-                           VerticalAlignment="Top"
-                           HorizontalAlignment="Stretch"
-                           TextAlignment="Left"
-                           FontSize="24"
-                           Foreground="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
-                           FontWeight="SemiBold"
-                           TextWrapping="WrapWithOverflow"
-                           Text="{Binding Title}" />
-
-            -->
-            <!--  TITLE UNDERLINE  -->
-            <!--
-
-                <Border VerticalAlignment="Top"
-                        HorizontalAlignment="Stretch"
-                        Classes="labelUnderline labelUnderline_long"
-                        Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
-                        BorderThickness="0" />
-            </StackPanel>-->
-
 
             <!--  MESSAGE BODY  -->
             <ContentControl Grid.Row="1"
@@ -255,7 +228,7 @@
                                    Margin="5"
                                    VerticalAlignment="Center"
                                    Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow}" />
-                            <TextBlock Text="Upgrade"
+                            <TextBlock Text="{x:Static local:UiStrings.AccountUpgradeButtonText}"
                                        VerticalAlignment="Center"
                                        Foreground="White"
                                        FontWeight="SemiBold" />
@@ -272,45 +245,45 @@
                         Command="{Binding LearnMoreCommand}">
                     <Border Background="Blue"
                             Padding="7,5">
-                        <TextBlock Text="Learn More..."
+                        <TextBlock Text="{x:Static local:UiStrings.AccountLearnMoreButtonText}"
                                    VerticalAlignment="Center"
                                    Foreground="White"
                                    FontWeight="SemiBold" />
                     </Border>
                 </Button>
                 <!--  Ignore, Retry, Fix, Shutdown states  -->
-                <Button Content="Ignore"
+                <Button Content="{x:Static local:UiStrings.UserActionIgnoreButtonText}"
                         IsVisible="{Binding ShowIgnoreButton}"
                         Command="{Binding IgnoreCommand}" />
                 <Button x:Name="RetryButton"
-                        Content="Retry"
+                        Content="{x:Static local:UiStrings.UserActionRetryButtonText}"
                         IsVisible="{Binding ShowRetryButton}"
                         Command="{Binding RetryCommand}" />
                 <Button x:Name="FixButton"
-                        Content="Fix"
+                        Content="{x:Static local:UiStrings.UserActionFixButtonText}"
                         IsVisible="{Binding ShowFixButton}"
                         VerticalAlignment="Top"
                         Command="{Binding FixWrapperCommand}" />
-                <Button Content="Shutdown"
+                <Button Content="{x:Static local:UiStrings.UserActionShutdownButtonText}"
                         IsVisible="{Binding ShowShutdownButton}"
                         Command="{Binding ShutdownCommand}" />
                 <!--  Yes, No, Cancel or Ok, Cancel States  -->
-                <Button Content="Yes"
+                <Button Content="{x:Static local:UiStrings.UserActionYesButtonText}"
                         IsDefault="{Binding ShowYesButton}"
                         Command="{Binding YesCommand}"
                         IsVisible="{Binding ShowYesButton}" />
-                <Button Content="No"
+                <Button Content="{x:Static local:UiStrings.UserActionNoButtonText}"
                         Command="{Binding NoCommand}"
                         IsVisible="{Binding ShowNoButton}" />
-                <Button Content="Ok"
+                <Button Content="{x:Static local:UiStrings.UserActionOkButtonText}"
                         IsDefault="{Binding ShowOkButton}"
                         Command="{Binding OkCommand}"
                         IsVisible="{Binding ShowOkButton}" />
-                <Button Content="Submit"
+                <Button Content="{x:Static local:UiStrings.UserActionSubmitButtonText}"
                         IsDefault="{Binding ShowSubmitButton}"
                         Command="{Binding SubmitCommand}"
                         IsVisible="{Binding ShowSubmitButton}" />
-                <Button Content="Cancel"
+                <Button Content="{x:Static local:UiStrings.UserActionCancelButtonText}"
                         Command="{Binding CancelCommand}"
                         IsVisible="{Binding ShowCancelButton}" />
             </StackPanel>

@@ -70,6 +70,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Learn More....
+        /// </summary>
+        public static string AccountLearnMoreButtonText {
+            get {
+                return ResourceManager.GetString("AccountLearnMoreButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next to delete! Upgrade to avoid 💪🏽.
         /// </summary>
         public static string AccountNextRemoveToolTipText {
@@ -84,6 +93,15 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountNextTrashToolTipText {
             get {
                 return ResourceManager.GetString("AccountNextTrashToolTipText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade.
+        /// </summary>
+        public static string AccountUpgradeButtonText {
+            get {
+                return ResourceManager.GetString("AccountUpgradeButtonText", resourceCulture);
             }
         }
         
@@ -1580,6 +1598,87 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string UserActionCancelButtonText {
+            get {
+                return ResourceManager.GetString("UserActionCancelButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fix.
+        /// </summary>
+        public static string UserActionFixButtonText {
+            get {
+                return ResourceManager.GetString("UserActionFixButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore.
+        /// </summary>
+        public static string UserActionIgnoreButtonText {
+            get {
+                return ResourceManager.GetString("UserActionIgnoreButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string UserActionNoButtonText {
+            get {
+                return ResourceManager.GetString("UserActionNoButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        public static string UserActionOkButtonText {
+            get {
+                return ResourceManager.GetString("UserActionOkButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        public static string UserActionRetryButtonText {
+            get {
+                return ResourceManager.GetString("UserActionRetryButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shutdown.
+        /// </summary>
+        public static string UserActionShutdownButtonText {
+            get {
+                return ResourceManager.GetString("UserActionShutdownButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Submit.
+        /// </summary>
+        public static string UserActionSubmitButtonText {
+            get {
+                return ResourceManager.GetString("UserActionSubmitButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string UserActionYesButtonText {
+            get {
+                return ResourceManager.GetString("UserActionYesButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No features are limited by subscription, only storage capacity and can be changed at anytime..
         /// </summary>
         public static string WelcomeAccountCaption {
@@ -1589,74 +1688,74 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restore your existing account....
-        /// </summary>
-        public static string WelcomeAccountDescription1 {
-            get {
-                return ResourceManager.GetString("WelcomeAccountDescription1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Content and archive is limited to {0} and {1} clips respectively. No syncing capabilities are enabled..
         /// </summary>
-        public static string WelcomeAccountDescription2 {
+        public static string WelcomeAccountFreeDescription {
             get {
-                return ResourceManager.GetString("WelcomeAccountDescription2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}{1}/{0}{2} (monthly/annually) {4} Content is limited to {3} clips with an unlimited archive and syncing across all devices. .
-        /// </summary>
-        public static string WelcomeAccountDescription3 {
-            get {
-                return ResourceManager.GetString("WelcomeAccountDescription3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}{1}/{0}{2} (monthly/annually) {3} Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices..
-        /// </summary>
-        public static string WelcomeAccountDescription4 {
-            get {
-                return ResourceManager.GetString("WelcomeAccountDescription4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Restore.
-        /// </summary>
-        public static string WelcomeAccountLabel1 {
-            get {
-                return ResourceManager.GetString("WelcomeAccountLabel1", resourceCulture);
+                return ResourceManager.GetString("WelcomeAccountFreeDescription", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Free.
         /// </summary>
-        public static string WelcomeAccountLabel2 {
+        public static string WelcomeAccountFreeLabel {
             get {
-                return ResourceManager.GetString("WelcomeAccountLabel2", resourceCulture);
+                return ResourceManager.GetString("WelcomeAccountFreeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yearly.
+        /// </summary>
+        public static string WelcomeAccountMonthlySwitchDisabled {
+            get {
+                return ResourceManager.GetString("WelcomeAccountMonthlySwitchDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monthly.
+        /// </summary>
+        public static string WelcomeAccountMonthlySwitchEnabled {
+            get {
+                return ResourceManager.GetString("WelcomeAccountMonthlySwitchEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore your existing account....
+        /// </summary>
+        public static string WelcomeAccountRestoreDescription {
+            get {
+                return ResourceManager.GetString("WelcomeAccountRestoreDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        public static string WelcomeAccountRestoreLabel {
+            get {
+                return ResourceManager.GetString("WelcomeAccountRestoreLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allows up to {2} clips of content and unlimited archive with syncing available across all devices. .
+        /// </summary>
+        public static string WelcomeAccountStandardDescription {
+            get {
+                return ResourceManager.GetString("WelcomeAccountStandardDescription", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Standard.
         /// </summary>
-        public static string WelcomeAccountLabel3 {
+        public static string WelcomeAccountStandardLabel {
             get {
-                return ResourceManager.GetString("WelcomeAccountLabel3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unlimited.
-        /// </summary>
-        public static string WelcomeAccountLabel4 {
-            get {
-                return ResourceManager.GetString("WelcomeAccountLabel4", resourceCulture);
+                return ResourceManager.GetString("WelcomeAccountStandardLabel", resourceCulture);
             }
         }
         
@@ -1666,6 +1765,24 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeAccountTitle {
             get {
                 return ResourceManager.GetString("WelcomeAccountTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices..
+        /// </summary>
+        public static string WelcomeAccountUnlimitedDescription {
+            get {
+                return ResourceManager.GetString("WelcomeAccountUnlimitedDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlimited.
+        /// </summary>
+        public static string WelcomeAccountUnlimitedLabel {
+            get {
+                return ResourceManager.GetString("WelcomeAccountUnlimitedLabel", resourceCulture);
             }
         }
         

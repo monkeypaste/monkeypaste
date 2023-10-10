@@ -221,7 +221,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        //public string ResetOrDeleteLabel => $"{(CanDelete ? "Delete" : "Reset")} '{Label}'";
+        //public string ResetOrDeleteLabel => $"{(CanDelete ? "Delete" : "Reset")} '{LabelText}'";
         #endregion
 
         #region State
@@ -503,7 +503,7 @@ namespace MonkeyPaste.Avalonia {
             var aipvm = sender as MpAvParameterViewModelBase;
             //if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
             //    if ((IsExecuting && aipvm.IsExecuteParameter) || !aipvm.IsExecuteParameter) { 
-            //        aipvm.ValidationMessage = $"{aipvm.Label} is required";
+            //        aipvm.ValidationMessage = $"{aipvm.LabelText} is required";
             //    }
             //} else {
             //    aipvm.ValidationMessage = string.Empty;

@@ -18,6 +18,8 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
+        <!--  EXPANDER FILTERING  -->
+
     </local:MpAvUserControl.Styles>
     <StackPanel Classes="expandersContainer">
 
@@ -25,6 +27,15 @@
 
         <Expander Classes="header"
                   IsExpanded="True">
+            <Expander.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="FilterText"
+                             Source="{x:Static local:MpAvSettingsViewModel.Instance}"
+                             Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                    <Binding Path="FilteredAppItems"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                </MultiBinding>
+            </Expander.IsVisible>
             <Expander.Header>
                 <StackPanel Classes="header expander"
                             Orientation="Horizontal">
@@ -43,6 +54,15 @@
         <!--  GLOBAL SHORTCUTS  -->
 
         <Expander Classes="header">
+            <Expander.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="FilterText"
+                             Source="{x:Static local:MpAvSettingsViewModel.Instance}"
+                             Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                    <Binding Path="FilteredGlobalItems"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                </MultiBinding>
+            </Expander.IsVisible>
             <Expander.Header>
                 <StackPanel Classes="header expander"
                             Orientation="Horizontal">
@@ -60,6 +80,15 @@
         <!--  CUSTOM SHORTCUTS  -->
 
         <Expander Classes="header">
+            <Expander.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="FilterText"
+                             Source="{x:Static local:MpAvSettingsViewModel.Instance}"
+                             Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                    <Binding Path="FilteredCustomItems"
+                             Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                </MultiBinding>
+            </Expander.IsVisible>
             <Expander.Header>
                 <StackPanel Classes="header expander"
                             Orientation="Horizontal">

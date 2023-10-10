@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
         //                throw new MpUserNotifiedException("Http Plugin Component does not exist");
         //            }
 
-        //            var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(urlPath, preset.Label);                    
+        //            var url = await MpPlatformWrapper.Services.UrlBuilder.CreateAsync(urlPath, preset.LabelText);                    
 
         //            var httpTrans = await MpHttpTransaction.Create(
         //                presetId: preset.Id,
@@ -98,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
         //                if (pluginFormat.ioType.isCli) {
         //                    var pluginProcessInfo = new MpPortableProcessInfo() {
         //                        ProcessPath = processPath,
-        //                        MainWindowTitle = preset.Label
+        //                        MainWindowTitle = preset.LabelText
         //                    };
         //                    var app = await MpPlatformWrapper.Services.AppBuilder.CreateAsync(pluginProcessInfo);
 

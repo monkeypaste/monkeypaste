@@ -327,7 +327,7 @@ namespace MonkeyPaste.Avalonia {
         //    Items
         //    .Where(x => x is MpAvTriggerActionViewModelBase)
         //    .Cast<MpAvTriggerActionViewModelBase>()
-        //    .OrderBy(x => x.Label);
+        //    .OrderBy(x => x.LabelText);
 
         public MpAvTriggerActionViewModelBase SelectedTrigger { get; set; }
         public MpAvActionViewModelBase FocusAction { get; set; }

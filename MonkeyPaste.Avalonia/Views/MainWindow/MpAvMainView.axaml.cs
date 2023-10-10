@@ -426,6 +426,7 @@ namespace MonkeyPaste.Avalonia {
             var tmv_wohb = tmv.FindControl<Button>("WindowOrientationHandleButton");
             var tmv_rsp = tmv.FindControl<StackPanel>("RightStackPanel");
             var tmv_gltb = tmv.FindControl<Control>("GridLayoutToggleButton");
+            var tmv_min_btn = tmv.FindControl<Button>("MinimizeMainWindowButton");
 
             var tmv_zoom_slider_cg = tmv.FindControl<Grid>("ZoomSliderContainerGrid");
             var tmv_zoom_slider_track_b = tmv.FindControl<Border>("ZoomTrackLine");
@@ -511,6 +512,7 @@ namespace MonkeyPaste.Avalonia {
                 tmv_zoom_slider_val_btn.Height = tmvm.DefaultTitleMenuFixedLength * 0.5;
 
                 tmv_gltb.Margin = new Thickness(10, 0, 0, 0);
+                tmv_min_btn.Margin = new Thickness(5, 0, 0, 0);
                 //tmv_zoom_slider_val_btn.HorizontalAlignment = HorizontalAlignment.Center;
                 //tmv_zoom_slider_val_btn.VerticalAlignment = VerticalAlignment.Stretch;
             } else {
@@ -595,6 +597,7 @@ namespace MonkeyPaste.Avalonia {
                 tmv_zoom_slider_val_btn.Height = tmvm.ZoomSliderValueLength;
 
                 tmv_gltb.Margin = new Thickness(0, 10, 0, 0);
+                tmv_min_btn.Margin = new Thickness(0, 0, 0, 0);
             }
             tmv.PositionZoomValueButton();
         }

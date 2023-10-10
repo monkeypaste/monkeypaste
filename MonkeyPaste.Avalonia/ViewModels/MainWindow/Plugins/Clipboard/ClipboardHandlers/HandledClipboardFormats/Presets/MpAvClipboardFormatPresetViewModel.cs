@@ -399,7 +399,7 @@ namespace MonkeyPaste.Avalonia {
             var aipvm = sender as MpAvParameterViewModelBase;
             //var aipvm = sender as MpAvParameterViewModelBase;
             //if (aipvm.IsRequired && string.IsNullOrWhiteSpace(aipvm.CurrentValue)) {
-            //    aipvm.ValidationMessage = $"{aipvm.Label} is required";
+            //    aipvm.ValidationMessage = $"{aipvm.LabelText} is required";
             //} else {
             //    aipvm.ValidationMessage = string.Empty;
             //}

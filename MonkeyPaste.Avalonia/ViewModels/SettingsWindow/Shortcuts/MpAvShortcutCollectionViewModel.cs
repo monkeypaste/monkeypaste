@@ -325,6 +325,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public bool IsGlobalHooksPaused { get; private set; }
+
         // NOTE this needs to be updated when shortcuts changed
         // to avoid re-serializing it for every tile
         private string _editorShortcutsMsgBase64;
@@ -403,6 +405,11 @@ namespace MonkeyPaste.Avalonia {
 
         public MpShortcutRoutingProfileType RoutingProfileType { get; private set; }
 
+        #endregion
+
+        #region Appearance
+        public string HookPauseLabel =>
+            $"Toggle Global Hooks {(IsGlobalHooksPaused ? "ON" : "OFF")}";
         #endregion
 
         #endregion
@@ -591,16 +598,6 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(FilteredCustomItems));
             FilteredItems.ForEach(x => x.OnPropertyChanged(nameof(x.SelectedRoutingTypeIdx)));
         }
-
-        public void PauseGlobalHooks() {
-            // NOTE called before debug break wrapper
-            DisposeGlobalInputHooks();
-            _keyboardGestureHelper.ClearCurrentGesture();
-        }
-
-        public void ResumeGlobalHooks() {
-            CreateGlobalInputHooks();
-        }
         #endregion
 
         #region Protected Methods
@@ -719,12 +716,6 @@ namespace MonkeyPaste.Avalonia {
                     Dispatcher.UIThread.Post(() => {
                         Task.WhenAll(Items.Where(x => x.IsCustom).Select(x => x.SetShortcutNameAsync())).FireAndForgetSafeAsync(this);
                     });
-                    break;
-                case MpMessageType.PreDebugBreak:
-                    PauseGlobalHooks();
-                    break;
-                case MpMessageType.PostDebugBreak:
-                    ResumeGlobalHooks();
                     break;
             }
         }
@@ -1318,6 +1309,32 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
+        public ICommand ToggleGlobalHooksCommand => new MpCommand<object>(
+            (args) => {
+                if (args is bool boolArg &&
+                    boolArg == IsGlobalHooksPaused) {
+                    // already in debug state
+
+                    MpConsole.WriteLine($"Global hook change rejected. State: {IsGlobalHooksPaused} args: {args}");
+                    return;
+                }
+                if (IsGlobalHooksPaused) {
+                    //resume
+                    CreateGlobalInputHooks();
+                    IS_GLOBAL_KEYBOARD_INPUT_ENABLED = true;
+                    IS_GLOBAL_MOUSE_INPUT_ENABLED = true;
+                    IsGlobalHooksPaused = false;
+                    MpConsole.WriteLine($"Global hooks resumed. args: {args}");
+                } else {
+                    // pause
+                    DisposeGlobalInputHooks();
+                    _keyboardGestureHelper.ClearCurrentGesture();
+                    IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
+                    IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
+                    IsGlobalHooksPaused = true;
+                    MpConsole.WriteLine($"Global hooks paused. args: {args}");
+                }
+            });
 
         public ICommand ShowAssignShortcutDialogCommand => new MpAsyncCommand<object>(
             async (args) => {

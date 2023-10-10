@@ -150,6 +150,12 @@ namespace MonkeyPaste.Avalonia {
                             Command = NavigateToCefNetUriCommand,
                         },
                         new MpAvMenuItemViewModel() {
+                            HeaderSrcObj = MpAvShortcutCollectionViewModel.Instance,
+                            HeaderPropPath = nameof(MpAvShortcutCollectionViewModel.Instance.HookPauseLabel),
+                            CommandSrcObj = MpAvShortcutCollectionViewModel.Instance,
+                            CommandPath = nameof(MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand)
+                        },
+                        new MpAvMenuItemViewModel() {
                             Header = "Test Command 1",
                             Command = GenericTestCommand1,
                         },
@@ -307,9 +313,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand1 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                Mp.Services.DebugBreakHelper.ToggleBreak();
+                //Mp.Services.DebugBreakHelper.ToggleBreak();
                 //await MpTestDataBuilder.CreateTestDataAsync();
-                //await MpAvWelcomeNotificationViewModel.ShowWelcomeNotification(true);
+                await MpAvWelcomeNotificationViewModel.ShowWelcomeNotificationAsync(true);
                 //await MpAvPlainHtmlConverter.Instance.ConverterWebView.ReloadAsync();
                 //NotificationManager.Show(new Notification("Warning", "There is one o more invalid path.", NotificationType.Information));
 

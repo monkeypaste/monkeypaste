@@ -157,7 +157,7 @@
             <Setter Property="FontSize"
                     Value="24" />
             <Setter Property="Effect"
-                    Value="{DynamicResource ThemeBgGlow}" />
+                    Value="{DynamicResource ThemeGlow}" />
         </Style>
 
 
@@ -441,8 +441,15 @@
         </Border>
         <!--  Content  -->
         <ScrollViewer BringIntoViewOnFocusChange="False">
+            <ScrollViewer.Transitions>
+                <Transitions>
+                    <VectorTransition Property="Offset"
+                                      Duration="0:0:0.5" />
+                </Transitions>
+
+            </ScrollViewer.Transitions>
             <TransitioningContentControl x:Name="SettingsTransitioningContentControl"
-                                         Margin="10,5"
+                                         Margin="10,5,20,5"
                                          DataContext="{Binding}"
                                          Content="{Binding SelectedTabIdx}">
                 <TransitioningContentControl.PageTransition>

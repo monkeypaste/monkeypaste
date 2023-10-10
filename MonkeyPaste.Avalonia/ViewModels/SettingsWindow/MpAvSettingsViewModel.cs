@@ -1426,7 +1426,7 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand SelectTabCommand => new MpCommand<object>(
             (args) => {
-                int tab_idx = (int)DEFAULT_SELECTED_TAB;
+                int tab_idx = SelectedTabIdx < 0 ? (int)DEFAULT_SELECTED_TAB : SelectedTabIdx;
                 string focus_param_id = null;
                 if (args is object[] argParts) {
                     tab_idx = (int)((MpSettingsTabType)argParts[0]);

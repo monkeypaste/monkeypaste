@@ -3,21 +3,12 @@
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvDebugBreakHelper : MpIDebugBreakHelper {
-        bool is_paused = false;
         public void HandlePreBreak() {
-            MpAvShortcutCollectionViewModel.Instance.PauseGlobalHooks();
+            MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand.Execute(true);
         }
 
         public void HandlePostBreak() {
-            MpAvShortcutCollectionViewModel.Instance.ResumeGlobalHooks();
-        }
-        public void ToggleBreak() {
-            if (is_paused) {
-                HandlePostBreak();
-            } else {
-                HandlePreBreak();
-            }
-            is_paused = !is_paused;
+            MpAvShortcutCollectionViewModel.Instance.ToggleGlobalHooksCommand.Execute(false);
         }
     }
 }

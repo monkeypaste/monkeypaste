@@ -116,6 +116,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         #endregion
+        public string DescriptionText2 { get; set; }
 
         #endregion
         #endregion

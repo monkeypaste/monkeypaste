@@ -132,28 +132,29 @@
   <data name="WelcomeAccountCaption" xml:space="preserve">
     <value>No features are limited by subscription, only storage capacity and can be changed at anytime.</value>
   </data>
-  <data name="WelcomeAccountDescription1" xml:space="preserve">
+  <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
     <value>Restore your existing account...</value>
   </data>
-  <data name="WelcomeAccountDescription2" xml:space="preserve">
+  <data name="WelcomeAccountFreeDescription" xml:space="preserve">
     <value>Content and archive is limited to {0} and {1} clips respectively. No syncing capabilities are enabled.</value>
+    <comment>Description formats all use same format from content cap, trash cap, standard cap</comment>
   </data>
-  <data name="WelcomeAccountDescription3" xml:space="preserve">
-    <value>{0}{1}/{0}{2} (monthly/annually) {4} Content is limited to {3} clips with an unlimited archive and syncing across all devices. </value>
+  <data name="WelcomeAccountStandardDescription" xml:space="preserve">
+    <value>Allows up to {2} clips of content and unlimited archive with syncing available across all devices. </value>
   </data>
-  <data name="WelcomeAccountDescription4" xml:space="preserve">
-    <value>{0}{1}/{0}{2} (monthly/annually) {3} Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices.</value>
+  <data name="WelcomeAccountUnlimitedDescription" xml:space="preserve">
+    <value>Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices.</value>
   </data>
-  <data name="WelcomeAccountLabel1" xml:space="preserve">
+  <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
     <value>Restore</value>
   </data>
-  <data name="WelcomeAccountLabel2" xml:space="preserve">
+  <data name="WelcomeAccountFreeLabel" xml:space="preserve">
     <value>Free</value>
   </data>
-  <data name="WelcomeAccountLabel3" xml:space="preserve">
+  <data name="WelcomeAccountStandardLabel" xml:space="preserve">
     <value>Standard</value>
   </data>
-  <data name="WelcomeAccountLabel4" xml:space="preserve">
+  <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
     <value>Unlimited</value>
   </data>
   <data name="WelcomeAccountTitle" xml:space="preserve">
@@ -783,5 +784,44 @@
   </data>
   <data name="ShortcutAssignWindowTitle" xml:space="preserve">
     <value>Assign Shortcut</value>
+  </data>
+  <data name="AccountLearnMoreButtonText" xml:space="preserve">
+    <value>Learn More...</value>
+  </data>
+  <data name="AccountUpgradeButtonText" xml:space="preserve">
+    <value>Upgrade</value>
+  </data>
+  <data name="UserActionCancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="UserActionFixButtonText" xml:space="preserve">
+    <value>Fix</value>
+  </data>
+  <data name="UserActionIgnoreButtonText" xml:space="preserve">
+    <value>Ignore</value>
+  </data>
+  <data name="UserActionNoButtonText" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="UserActionOkButtonText" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="UserActionRetryButtonText" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="UserActionShutdownButtonText" xml:space="preserve">
+    <value>Shutdown</value>
+  </data>
+  <data name="UserActionSubmitButtonText" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="UserActionYesButtonText" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="WelcomeAccountMonthlySwitchDisabled" xml:space="preserve">
+    <value>Yearly</value>
+  </data>
+  <data name="WelcomeAccountMonthlySwitchEnabled" xml:space="preserve">
+    <value>Monthly</value>
   </data>
 </root>

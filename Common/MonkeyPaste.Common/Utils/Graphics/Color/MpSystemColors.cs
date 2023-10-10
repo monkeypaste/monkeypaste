@@ -115,6 +115,7 @@ namespace MonkeyPaste.Common {
             "blue2",
             "blue4",
             "blueviolet",
+            "bronze",
             "brown",
             "brown1",
             "brown2",
@@ -621,6 +622,8 @@ namespace MonkeyPaste.Common {
         public static string blue2 => "#FF0000EE";
         public static string blue4 => "#FF00008B";
         public static string blueviolet => "#FF8A2BE2";
+        // Added
+        public static string bronze => "#FFCD7F32";
         public static string brown => "#FFA52A2A";
         public static string brown1 => "#FFFF4040";
         public static string brown2 => "#FFEE3B3B";

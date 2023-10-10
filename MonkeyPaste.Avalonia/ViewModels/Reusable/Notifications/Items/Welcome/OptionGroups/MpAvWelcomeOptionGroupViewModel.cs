@@ -33,6 +33,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsGestureGroup =>
             WelcomePageType == MpWelcomePageType.ScrollWheel ||
             WelcomePageType == MpWelcomePageType.DragToOpen;
+
         #endregion
 
         #region Appearance

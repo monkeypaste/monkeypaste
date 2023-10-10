@@ -376,7 +376,7 @@ namespace MonkeyPaste.Avalonia {
             //            MpConsole.WriteLine(CompareData);
             //            MpConsole.WriteTraceLine(ex);
 
-            //            ValidationText = $"Error performing action '{RootTriggerActionViewModel.Label}/{Label}': {ex}";
+            //            ValidationText = $"Error performing action '{RootTriggerActionViewModel.LabelText}/{LabelText}': {ex}";
             //            ShowValidationNotification();
             //        }
             //    } else if (ao.OutputData != null) {

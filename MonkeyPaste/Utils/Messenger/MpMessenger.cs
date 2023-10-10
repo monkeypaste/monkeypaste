@@ -144,9 +144,6 @@ namespace MonkeyPaste {
         Loaded, //has context (object)
         Busy,
         NotBusy,
-
-        PreDebugBreak,
-        PostDebugBreak,
     }
 
     public static class MpMessenger {

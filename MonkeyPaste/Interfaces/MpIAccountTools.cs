@@ -29,7 +29,7 @@ namespace MonkeyPaste {
         Task<MpContentCapInfo> RefreshCapInfoAsync();
         int GetContentCapacity(MpUserAccountType acctType);
         int GetTrashCapacity(MpUserAccountType acctType);
-        decimal GetAccountRate(MpUserAccountType acctType, bool isMonthly);
+        string GetAccountRate(MpUserAccountType acctType, bool isMonthly);
         void SetAccountType(MpUserAccountType newType);
     }
 }
