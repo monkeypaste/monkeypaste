@@ -47,47 +47,18 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private Dictionary<string, (MpUserAccountType, bool)> _accountTypeAddOnStoreIdLookup;
-        Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup {
-            get {
-                if (_accountTypeAddOnStoreIdLookup == null) {
-                    _accountTypeAddOnStoreIdLookup = new() {
-                        //9MZRBMH3JT75/0010
+        Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup { get; } =
+            new Dictionary<string, (MpUserAccountType, bool)>() {
+                {"9PMDM0QVHJCS", (MpUserAccountType.Free, false)   },
+                {"9N5X8R1C9CR4", (MpUserAccountType.Unlimited, true) },
 
-                        {"9PMDM0QVHJCS", (MpUserAccountType.Test,false)   },
-                        {"9N5X8R1C9CR4", (MpUserAccountType.Unlimited, true) },
+                //{"9PP3W114BHL5", (MpUserAccountType.Standard, true) },
+                //{"9N41GXV5HQQ2", (MpUserAccountType.Standard, false) },
 
-                        //{MpUserAccountType.Free,"f921e300-6325-4574-a850-a896a31c816f" },
-                        //{MpUserAccountType.Standard,"5d8f2bac-662c-4075-a3e9-0495a7757a3d" },
-                        //{MpUserAccountType.Unlimited,"ba104e40-7859-478a-890b-f308678ca0bc" },
-                        //{MpUserAccountType.Trial,"f0ae6390-93fd-4055-9442-afb45b21dd63" },
-                        //{MpUserAccountType.Admin,"e67c9b90-3746-4986-9f1e-82ff8877cf52" }
-                    };
-                }
-                return _accountTypeAddOnStoreIdLookup;
-            }
-        }
+                //{"9PGVZ60KMDQ7", (MpUserAccountType.Unlimited, true) },
+                //{"9NN60Z6FX02H", (MpUserAccountType.Unlimited, false) }
+            };
 
-        private Dictionary<MpUserAccountType, string> _accountTypeProductPriceTierLookup;
-        Dictionary<MpUserAccountType, string> AccountTypeProductPriceTierLookup {
-            get {
-                // Each price tier corresponds to a unique numerical identifier,
-                // which can be used with the Store submission API.
-
-                // full list:
-                // https://partner.microsoft.com/en-us/dashboard/availability/api/product/9N5X8R1C9CR4/submissions/1152921505696858501/tiers/download?category=consumer
-                if (_accountTypeProductPriceTierLookup == null) {
-                    _accountTypeProductPriceTierLookup = new() {
-                        {MpUserAccountType.Free,"1" },
-                        {MpUserAccountType.Standard,"1012" }, // $0.99
-                        {MpUserAccountType.Unlimited,"1032" }, // $2.99
-                        {MpUserAccountType.Trial,"1" },
-                        {MpUserAccountType.Admin,"1" }
-                    };
-                }
-                return _accountTypeProductPriceTierLookup;
-            }
-        }
         #endregion
 
         #region Constructors
@@ -109,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                 AccountTypePriceLookup.Add(at.Value, sp.Price.FormattedPrice);
             }
         }
-        public async Task<MpUserAccountFormat> RefreshUserAccountStateAsync() {
+        public async Task<MpUserAccountStateFormat> RefreshUserAccountStateAsync() {
             var acct = await GetUserAccountAsync();
             SetAccountType(acct.AccountType);
             return acct;
@@ -121,22 +92,44 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpUserAccountFormat> GetStoreUserLicenseInfoAsync() {
+        private async Task<MpUserAccountStateFormat> GetStoreUserLicenseInfoAsync() {
+            // get users current ms store state
             StoreAppLicense appLicense = await context.GetAppLicenseAsync();
-            foreach (var addOnLicense in appLicense.AddOnLicenses) {
-                StoreLicense license = addOnLicense.Value;
-                if (AccountTypeAddOnStoreIdLookup.TryGetValue(license.SkuStoreId, out var acctTypeTup)) {
+            KeyValuePair<string, StoreLicense> user_storeid_license_kvp = default;
+            if (appLicense
+                .AddOnLicenses
+                .Where(x => x.Value.IsActive)
+                .OrderByDescending(x => (int)AccountTypeAddOnStoreIdLookup[x.Value.SkuStoreId].Item1)
+                .FirstOrDefault() is var active_kvp) {
+                // found most significant active license 
+                user_storeid_license_kvp = active_kvp;
+            } else if (appLicense
+                .AddOnLicenses
+                .Where(x => !x.Value.IsActive)
+                .OrderByDescending(x => (int)AccountTypeAddOnStoreIdLookup[x.Value.SkuStoreId].Item1)
+                .FirstOrDefault() is var inactive_kvp) {
 
-                    return new MpUserAccountFormat() {
-                        AccountType = acctTypeTup.Item1,
-                        IsMonthly = acctTypeTup.Item2,
-                        IsActive = license.IsActive,
-                        ExpireOffset = license.ExpirationDate
-                    };
-                }
+                // find most significant inactive license 
+                user_storeid_license_kvp = inactive_kvp;
             }
+            if (user_storeid_license_kvp.IsDefault()) {
+                // no ms store license found
+                return null;
+            }
+
+            if (AccountTypeAddOnStoreIdLookup
+                .TryGetValue(user_storeid_license_kvp.Value.SkuStoreId, out var acct_type_tup)) {
+                return new MpUserAccountStateFormat() {
+                    AccountType = acct_type_tup.Item1,
+                    IsMonthly = acct_type_tup.Item2,
+                    IsActive = user_storeid_license_kvp.Value.IsActive,
+                    ExpireOffset = user_storeid_license_kvp.Value.ExpirationDate
+                };
+            }
+            MpDebug.Break($"User license error. Cannot find internal ref to ms store id '{user_storeid_license_kvp.Value.SkuStoreId}'");
             return null;
         }
+
         private async Task<StoreProduct> GetAddOnByStoreIdAsync(string storeId) {
             // Load the sellable add-ons for this app and check if the trial is still 
             // available for this customer. If they previously acquired a trial they won't 

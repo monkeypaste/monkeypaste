@@ -824,4 +824,7 @@
   <data name="WelcomeAccountMonthlySwitchEnabled" xml:space="preserve">
     <value>Monthly</value>
   </data>
+  <data name="AccountTrialButtonText" xml:space="preserve">
+    <value>Try for free!</value>
+  </data>
 </root>

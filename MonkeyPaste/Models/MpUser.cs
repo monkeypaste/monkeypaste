@@ -8,9 +8,6 @@ namespace MonkeyPaste {
         Free,
         Standard,
         Unlimited,
-        Trial,
-        Admin,
-        Test
     }
 
     public class MpUser :

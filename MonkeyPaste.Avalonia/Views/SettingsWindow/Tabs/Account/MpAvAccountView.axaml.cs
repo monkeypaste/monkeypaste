@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvAccountView : MpAvUserControl<MpAvAccountViewModel> {
+    public partial class MpAvAccountView : MpAvUserControl<MpAvSubcriptionPurchaseViewModel> {
         public MpAvAccountView() {
             InitializeComponent();
         }

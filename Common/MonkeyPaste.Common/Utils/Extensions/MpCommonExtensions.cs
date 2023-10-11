@@ -127,12 +127,6 @@ namespace MonkeyPaste.Common {
             }
             return source;
         }
-        public static bool IsDefault<T>(this T value) where T : struct {
-            bool isDefault = value.Equals(default(T));
-
-            return isDefault;
-        }
-
 
         public static int IndexOf<T>(this IEnumerable<T> obj, T value) {
             return obj.IndexOf(value, null);
@@ -837,6 +831,14 @@ namespace MonkeyPaste.Common {
 
             MpDebug.Break($"Unknown obj type '{obj.GetType()}', cannot convert bool. Returning 0");
             return false;
+        }
+        #endregion
+
+        #region Generics
+        public static bool IsDefault<T>(this T value) where T : struct {
+            bool isDefault = value.Equals(default(T));
+
+            return isDefault;
         }
         #endregion
 

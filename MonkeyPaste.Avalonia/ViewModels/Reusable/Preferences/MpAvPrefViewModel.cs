@@ -316,7 +316,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Account
 
-        public string UserEmail { get; set; } = "tkefauver@gmail.com";
+        public string UserEmail { get; set; }
+        public string Password { get; set; }
 
 #if DEBUG
         public MpUserAccountType TestAccountType { get; set; } = MpUserAccountType.Free;

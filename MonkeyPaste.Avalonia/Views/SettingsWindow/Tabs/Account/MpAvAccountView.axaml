@@ -9,10 +9,10 @@
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvAccountViewModel"
-                       x:DataType="local:MpAvAccountViewModel"
+                       x:TypeArguments="local:MpAvSubcriptionPurchaseViewModel"
+                       x:DataType="local:MpAvSubcriptionPurchaseViewModel"
                        x:CompileBindings="True"
-                       DataContext="{x:Static local:MpAvAccountViewModel.Instance}"
+                       DataContext="{x:Static local:MpAvSubcriptionPurchaseViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvAccountView">
     <local:MpAvUserControl.Resources>
         <LinearGradientBrush x:Key="RainbowBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
@@ -118,7 +118,7 @@
                         <local:MpAvAccountPurchaseTemplateSelector>
                             <!--  SHOW BUTTON  -->
                             <DataTemplate x:Key="ShowButtonTemplate"
-                                          x:DataType="local:MpAvAccountViewModel">
+                                          x:DataType="local:MpAvSubcriptionPurchaseViewModel">
                                 <ToggleButton Classes="defaultButton textOnlyButton"
                                               IsChecked="{Binding IsSubscriptionPanelVisible, Mode=TwoWay}"
                                               HorizontalAlignment="Center"
@@ -132,7 +132,7 @@
                             <!--  SUBSCRIPTION PANEL  -->
 
                             <DataTemplate x:Key="SubscriptionPanelTemplate"
-                                          x:DataType="local:MpAvAccountViewModel">
+                                          x:DataType="local:MpAvSubcriptionPurchaseViewModel">
                                 <Border Margin="10"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch">

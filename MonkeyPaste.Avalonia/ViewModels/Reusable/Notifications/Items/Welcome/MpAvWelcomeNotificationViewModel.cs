@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
         public static async Task ShowWelcomeNotificationAsync(bool forceShow = false) {
-            await MpAvAccountViewModel.Instance.InitializeAsync();
+            await MpAvSubcriptionPurchaseViewModel.Instance.InitializeAsync();
             await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                 new MpNotificationFormat() {
                     ForceShow = forceShow,
@@ -93,11 +93,10 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public bool IsAccountOptSelected =>
             CurPageType == MpWelcomePageType.Account;
-        public bool IsAccountMonthEnabled { get; set; } = true;
+        public bool IsAccountMonthEnabled { get; set; } = false;
         public override bool WantsTopmost =>
             false;
-        //CurOptGroupViewModel == null ||
-        //!CurOptGroupViewModel.IsGestureGroup;
+
         public bool IsGestureDemoOpen { get; set; }
         public bool IsPrimaryChecked =>
             PrimaryItem == CheckedItem;
@@ -204,7 +203,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     AccountViewModel.Items =
-                        MpAvAccountViewModel.Instance
+                        MpAvSubcriptionPurchaseViewModel.Instance
                         .ToWelcomeOptionGroup(IsAccountMonthEnabled).Items;
                     break;
             }
@@ -224,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
 
             #region Account
 
-            AccountViewModel = MpAvAccountViewModel.Instance.ToWelcomeOptionGroup(IsAccountMonthEnabled);
+            AccountViewModel = MpAvSubcriptionPurchaseViewModel.Instance.ToWelcomeOptionGroup(IsAccountMonthEnabled);
 
             #endregion
 

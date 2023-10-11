@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -13,6 +15,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
         const MpUserAccountType TEST_ACCOUNT_TYPE = MpUserAccountType.Free;
+
+        const int MAX_FREE_CLIP_COUNT = 5;
+        const int MAX_STANDARD_CLIP_COUNT = 1000;
+        const int MAX_UNLIMITED_CLIP_COUNT = -1;
+
+        const int MAX_FREE_TRASH_COUNT = 20;
+        const int MAX_STANDARD_TRASH_COUNT = -1;
+        const int MAX_UNLIMITED_TRASH_COUNT = -1;
+
         #endregion
 
         #region Statics
@@ -51,13 +62,11 @@ namespace MonkeyPaste.Avalonia {
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {
                 case MpUserAccountType.Free:
-                    return 5;// 100;
+                    return MAX_FREE_CLIP_COUNT;
                 case MpUserAccountType.Standard:
-                    return 1000;
-                case MpUserAccountType.Trial:
+                    return MAX_STANDARD_CLIP_COUNT;
                 case MpUserAccountType.Unlimited:
-                case MpUserAccountType.Admin:
-                    return -1;
+                    return MAX_UNLIMITED_CLIP_COUNT;
                 default:
                 case MpUserAccountType.None:
                     return 0;
@@ -67,12 +76,11 @@ namespace MonkeyPaste.Avalonia {
         public int GetTrashCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {
                 case MpUserAccountType.Free:
-                    return 20;
+                    return MAX_FREE_TRASH_COUNT;
                 case MpUserAccountType.Standard:
-                case MpUserAccountType.Trial:
+                    return MAX_STANDARD_TRASH_COUNT;
                 case MpUserAccountType.Unlimited:
-                case MpUserAccountType.Admin:
-                    return -1;
+                    return MAX_UNLIMITED_TRASH_COUNT;
                 default:
                 case MpUserAccountType.None:
                     return 0;
@@ -170,12 +178,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new Dictionary<(MpUserAccountType, bool), string>() {
-            {(MpUserAccountType.Free,false),"Free" },
             {(MpUserAccountType.Free,true),"Free" },
-            {(MpUserAccountType.Standard,false),"$0.99" },
-            {(MpUserAccountType.Standard,true),"$9.99" },
-            {(MpUserAccountType.Unlimited,false),"$2.99" },
-            {(MpUserAccountType.Unlimited,true),"$29.99" }
+            {(MpUserAccountType.Free,false),"Free" },
+            {(MpUserAccountType.Standard,true),"$0.99" },
+            {(MpUserAccountType.Standard,false),"$9.99" },
+            {(MpUserAccountType.Unlimited,true),"$2.99" },
+            {(MpUserAccountType.Unlimited,false),"$29.99" }
         };
         public bool IsContentAddPausedByAccount { get; private set; }
         public MpContentCapInfo LastCapInfo => _lastCapInfo;
@@ -194,20 +202,96 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public MpAvAccountTools() { }
 
-        public async Task<MpUserAccountFormat> GetUserAccountAsync() {
+        public async Task<MpUserAccountStateFormat> GetUserAccountAsync() {
             var acct = await GetStoreUserLicenseInfoAsync();
+            bool logged_in = await LoginUserAsync(acct);
             if (acct == null) {
-                acct = await GetServerAccountTypeAsync();
-                if (acct == null) {
-                    acct = new MpUserAccountFormat() {
-                        AccountType = MpUserAccountType.Free
-                    };
-                }
+                // anonymous
+                acct = new MpUserAccountStateFormat() {
+                    AccountType = MpUserAccountType.Free
+                };
             }
+            MpConsole.WriteLine($"login {logged_in.ToTestResultLabel()}");
             return acct;
         }
         public async Task PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly) {
             await PerformPlatformPurchaseAsync(uat, isMonthly);
+        }
+
+        public async Task<bool> RegisterUserAsync(string email, string password, MpUserAccountStateFormat uasf) {
+            MpAvPrefViewModel.Instance.UserEmail = null;
+            MpDebug.Assert(string.IsNullOrEmpty(MpAvPrefViewModel.Instance.UserEmail), $"Account reg error, email already set to '{MpAvPrefViewModel.Instance.UserEmail}'");
+            MpDebug.Assert(string.IsNullOrEmpty(MpAvPrefViewModel.Instance.Password), $"Account reg error, password already set");
+
+            string register_url = $"https://www.monkeypaste.com/accounts/register.php";
+            string response = await PostDataToUrlAsync(
+                url: register_url,
+                keyValuePairs: new Dictionary<string, string>() {
+                    {"email",email },
+                    {"username",email },
+                    {"password",password },
+                    {"confirm_password",password },
+                    {"device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
+                    {"sub_type", uasf.GetSubscriptionTypeString() },
+                    {"expires_utc_dt", uasf.ExpireOffset.ToString() },
+                }); ;
+            bool success = response == "[SUCCESS]";
+            if (success) {
+                MpAvPrefViewModel.Instance.UserEmail = email;
+                MpAvPrefViewModel.Instance.Password = password;
+                MpConsole.WriteLine($"Registration successful for user '{email}' deviceid '{MpDefaultDataModelTools.ThisUserDeviceGuid}' acct_type '{uasf.GetSubscriptionTypeString()}'");
+            }
+            return success;
+        }
+
+        private async Task<bool> LoginUserAsync(MpUserAccountStateFormat uasf) {
+            if (string.IsNullOrEmpty(MpAvPrefViewModel.Instance.UserEmail) ||
+                uasf == null) {
+                // no acct
+                return false;
+            }
+
+            string login_url = $"https://www.monkeypaste.com/accounts/login.php";
+            string response = await PostDataToUrlAsync(
+                url: login_url,
+                keyValuePairs: new Dictionary<string, string>() {
+                    {"username",MpAvPrefViewModel.Instance.UserEmail },
+                    {"password",MpAvPrefViewModel.Instance.Password },
+                    {"device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
+                    {"sub_type", uasf.GetSubscriptionTypeString() },
+                    {"expires_utc_dt", uasf.ExpireOffset.ToString() },
+                });
+
+            return response == "[SUCCESS]";
+        }
+
+        async Task<string> PostDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs) {
+            // from https://stackoverflow.com/a/62640006/105028
+            using (HttpClient httpClient = new HttpClient())
+            using (MultipartFormDataContent formDataContent = new MultipartFormDataContent()) {
+                // Create Form Values
+                //KeyValuePair<string, string>[] keyValuePairs = new[] {
+                //    new KeyValuePair<string, string>("format_source", "abc"),
+                //    new KeyValuePair<string, string>("format_target", "xyz")
+                //};
+
+                // Loop Each KeyValuePair Item And Add It To The MultipartFormDataContent.
+                foreach (var keyValuePair in keyValuePairs) {
+                    formDataContent.Add(new StringContent(keyValuePair.Value), keyValuePair.Key);
+                }
+
+                // Post Request And Wait For The Response.
+                HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(url, formDataContent);
+
+                // Check If Successful Or Not.
+                if (httpResponseMessage.IsSuccessStatusCode) {
+                    // Return Byte Array To The Caller.
+                    return await httpResponseMessage.Content.ReadAsStringAsync();
+                } else {
+                    // Throw Some Sort of Exception?
+                    return default;
+                }
+            }
         }
         #endregion
 
@@ -229,7 +313,7 @@ order by LastCapRelatedDateTime limit 2
 
             var to_trash_result = await MpDb.QueryScalarsAsync<int>(to_trash_query, MpTag.TrashTagId, MpTag.FavoritesTagId, 0);
             if (to_trash_result.Count < 2) {
-                // no non-favorited items to trash or next to trash has no result,
+                // no non-favorited items to trash or next to trash has no response,
 
                 // requery allowing favorites
                 int to_trash_ciid = to_trash_result.Count == 1 ? to_trash_result[0] : 0;
@@ -270,11 +354,6 @@ order by LastCapRelatedDateTime limit 2
             return to_remove_result;
         }
 
-        private async Task<MpUserAccountFormat> GetServerAccountTypeAsync() {
-            await Task.Delay(0);
-            // TODO if pref has user cred query server for account type here
-            return null;
-        }
 
         #endregion
 

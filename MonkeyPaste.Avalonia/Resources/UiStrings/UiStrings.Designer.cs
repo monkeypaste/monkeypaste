@@ -97,6 +97,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Try for free!.
+        /// </summary>
+        public static string AccountTrialButtonText {
+            get {
+                return ResourceManager.GetString("AccountTrialButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upgrade.
         /// </summary>
         public static string AccountUpgradeButtonText {

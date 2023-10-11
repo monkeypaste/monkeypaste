@@ -2788,15 +2788,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Admin.
-        /// </summary>
-        public static string MpUserAccountType_Admin {
-            get {
-                return ResourceManager.GetString("MpUserAccountType_Admin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Free.
         /// </summary>
         public static string MpUserAccountType_Free {
@@ -2820,24 +2811,6 @@ namespace MonkeyPaste.Avalonia {
         public static string MpUserAccountType_Standard {
             get {
                 return ResourceManager.GetString("MpUserAccountType_Standard", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Test.
-        /// </summary>
-        public static string MpUserAccountType_Test {
-            get {
-                return ResourceManager.GetString("MpUserAccountType_Test", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Trial.
-        /// </summary>
-        public static string MpUserAccountType_Trial {
-            get {
-                return ResourceManager.GetString("MpUserAccountType_Trial", resourceCulture);
             }
         }
         

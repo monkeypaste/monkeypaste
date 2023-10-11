@@ -14,7 +14,7 @@ namespace MonkeyPaste.Avalonia {
             }
             string key = showPanel ? "SubscriptionPanelTemplate" : "ShowButtonTemplate";
             if (AvailableTemplates[key].Build(param) is Control c) {
-                c.DataContext = MpAvAccountViewModel.Instance;
+                c.DataContext = MpAvSubcriptionPurchaseViewModel.Instance;
                 return c;
             }
             return null;
