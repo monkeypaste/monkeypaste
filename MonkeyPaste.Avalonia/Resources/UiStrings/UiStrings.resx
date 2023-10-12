@@ -749,9 +749,6 @@
   <data name="String9" xml:space="preserve">
     <value>3. A sample audio clip will play at selected volume</value>
   </data>
-  <data name="WindowsStoreUnlimitedAddOnTesterNote" xml:space="preserve">
-    <value />
-  </data>
   <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
     <value>Double Click to unpin </value>
   </data>
@@ -826,5 +823,65 @@
   </data>
   <data name="AccountTrialButtonText" xml:space="preserve">
     <value>Try for free!</value>
+  </data>
+  <data name="AccountBillingCycleLabel" xml:space="preserve">
+    <value>Billing Cycle</value>
+  </data>
+  <data name="AccountConfirmPasswordLabel" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="AccountEmailLabel" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="AccountLoginButtonText" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="AccountLoginFailedText" xml:space="preserve">
+    <value>Login Failed :(</value>
+  </data>
+  <data name="AccountLoginSuccessfulText" xml:space="preserve">
+    <value>Login Sucessful!</value>
+  </data>
+  <data name="AccountLogoutButtonText" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="AccountNextPaymentDateLabel" xml:space="preserve">
+    <value>Next Payment</value>
+  </data>
+  <data name="AccountPasswordLabel" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AccountRegisterButtonText" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
+    <value>Email is not valid</value>
+  </data>
+  <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
+    <value>Passwords do not match.</value>
+  </data>
+  <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
+    <value>Password must be a minimum of {0} characters.</value>
+  </data>
+  <data name="AccountRegistrationRegisterFailedText" xml:space="preserve">
+    <value>Error. Registration failed. Check your connection and try again later.</value>
+  </data>
+  <data name="AccountRegistrationRememberLabel" xml:space="preserve">
+    <value>Remember?</value>
+  </data>
+  <data name="AccountRegistrationSuccessText" xml:space="preserve">
+    <value>Registration successful!</value>
+  </data>
+  <data name="AccountResetPasswordLabel" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
+  <data name="CommonDateFormat" xml:space="preserve">
+    <value>MMM d, yyyy</value>
+  </data>
+  <data name="CommonDateTimeFormat" xml:space="preserve">
+    <value>MMM d, h:mm tt</value>
+  </data>
+  <data name="CommonTimestampFormat" xml:space="preserve">
+    <value>MM/dd/yyyy hh:mm tt</value>
   </data>
 </root>

@@ -161,7 +161,8 @@ namespace MonkeyPaste.Avalonia {
                 new MpAvLoaderItemViewModel(typeof(MpAvEditorUiStringBuilder), "Editor Ui text"),
                 new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), "System Tray"),
                 new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
-                new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
+                //new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
+                new MpAvLoaderItemViewModel(typeof(MpAvAccountTools), "Profile"),
             }.ToList());
 #endif
 

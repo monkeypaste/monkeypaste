@@ -80,8 +80,8 @@ namespace MonkeyPaste.Avalonia {
                 AccountTypePriceLookup.Add(at.Value, sp.Price.FormattedPrice);
             }
         }
-        public async Task<MpUserAccountStateFormat> RefreshUserAccountStateAsync() {
-            var acct = await GetUserAccountAsync();
+        public async Task<MpSubscriptionFormat> RefreshUserAccountStateAsync() {
+            var acct = await GetUserSubscriptionAsync();
             SetAccountType(acct.AccountType);
             return acct;
         }
@@ -92,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpUserAccountStateFormat> GetStoreUserLicenseInfoAsync() {
+        private async Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync() {
             // get users current ms store state
             StoreAppLicense appLicense = await context.GetAppLicenseAsync();
             KeyValuePair<string, StoreLicense> user_storeid_license_kvp = default;
@@ -114,16 +114,16 @@ namespace MonkeyPaste.Avalonia {
             }
             if (user_storeid_license_kvp.IsDefault()) {
                 // no ms store license found
-                return null;
+                return MpSubscriptionFormat.Default;
             }
 
             if (AccountTypeAddOnStoreIdLookup
                 .TryGetValue(user_storeid_license_kvp.Value.SkuStoreId, out var acct_type_tup)) {
-                return new MpUserAccountStateFormat() {
+                return new MpSubscriptionFormat() {
                     AccountType = acct_type_tup.Item1,
                     IsMonthly = acct_type_tup.Item2,
                     IsActive = user_storeid_license_kvp.Value.IsActive,
-                    ExpireOffset = user_storeid_license_kvp.Value.ExpirationDate
+                    ExpireOffsetUtc = user_storeid_license_kvp.Value.ExpirationDate
                 };
             }
             MpDebug.Break($"User license error. Cannot find internal ref to ms store id '{user_storeid_license_kvp.Value.SkuStoreId}'");

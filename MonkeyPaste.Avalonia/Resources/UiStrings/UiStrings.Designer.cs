@@ -70,11 +70,83 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Billing Cycle.
+        /// </summary>
+        public static string AccountBillingCycleLabel {
+            get {
+                return ResourceManager.GetString("AccountBillingCycleLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string AccountConfirmPasswordLabel {
+            get {
+                return ResourceManager.GetString("AccountConfirmPasswordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email.
+        /// </summary>
+        public static string AccountEmailLabel {
+            get {
+                return ResourceManager.GetString("AccountEmailLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Learn More....
         /// </summary>
         public static string AccountLearnMoreButtonText {
             get {
                 return ResourceManager.GetString("AccountLearnMoreButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in.
+        /// </summary>
+        public static string AccountLoginButtonText {
+            get {
+                return ResourceManager.GetString("AccountLoginButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login Failed :(.
+        /// </summary>
+        public static string AccountLoginFailedText {
+            get {
+                return ResourceManager.GetString("AccountLoginFailedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login Sucessful!.
+        /// </summary>
+        public static string AccountLoginSuccessfulText {
+            get {
+                return ResourceManager.GetString("AccountLoginSuccessfulText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log out.
+        /// </summary>
+        public static string AccountLogoutButtonText {
+            get {
+                return ResourceManager.GetString("AccountLogoutButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next Payment.
+        /// </summary>
+        public static string AccountNextPaymentDateLabel {
+            get {
+                return ResourceManager.GetString("AccountNextPaymentDateLabel", resourceCulture);
             }
         }
         
@@ -93,6 +165,87 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountNextTrashToolTipText {
             get {
                 return ResourceManager.GetString("AccountNextTrashToolTipText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string AccountPasswordLabel {
+            get {
+                return ResourceManager.GetString("AccountPasswordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string AccountRegisterButtonText {
+            get {
+                return ResourceManager.GetString("AccountRegisterButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email is not valid.
+        /// </summary>
+        public static string AccountRegistrationInvalidEmailText {
+            get {
+                return ResourceManager.GetString("AccountRegistrationInvalidEmailText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passwords do not match..
+        /// </summary>
+        public static string AccountRegistrationPasswordMismatchValidationText {
+            get {
+                return ResourceManager.GetString("AccountRegistrationPasswordMismatchValidationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be a minimum of {0} characters..
+        /// </summary>
+        public static string AccountRegistrationPasswordValidationText {
+            get {
+                return ResourceManager.GetString("AccountRegistrationPasswordValidationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error. Registration failed. Check your connection and try again later..
+        /// </summary>
+        public static string AccountRegistrationRegisterFailedText {
+            get {
+                return ResourceManager.GetString("AccountRegistrationRegisterFailedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember?.
+        /// </summary>
+        public static string AccountRegistrationRememberLabel {
+            get {
+                return ResourceManager.GetString("AccountRegistrationRememberLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registration successful!.
+        /// </summary>
+        public static string AccountRegistrationSuccessText {
+            get {
+                return ResourceManager.GetString("AccountRegistrationSuccessText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Password.
+        /// </summary>
+        public static string AccountResetPasswordLabel {
+            get {
+                return ResourceManager.GetString("AccountResetPasswordLabel", resourceCulture);
             }
         }
         
@@ -295,6 +448,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MMM d, yyyy.
+        /// </summary>
+        public static string CommonDateFormat {
+            get {
+                return ResourceManager.GetString("CommonDateFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MMM d, h:mm tt.
+        /// </summary>
+        public static string CommonDateTimeFormat {
+            get {
+                return ResourceManager.GetString("CommonDateTimeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string CommonDeleteLabel {
@@ -435,6 +606,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonSettingsTitle {
             get {
                 return ResourceManager.GetString("CommonSettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MM/dd/yyyy hh:mm tt.
+        /// </summary>
+        public static string CommonTimestampFormat {
+            get {
+                return ResourceManager.GetString("CommonTimestampFormat", resourceCulture);
             }
         }
         
@@ -2080,15 +2260,6 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeScrollToOpenTryButtonLabel {
             get {
                 return ResourceManager.GetString("WelcomeScrollToOpenTryButtonLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string WindowsStoreUnlimitedAddOnTesterNote {
-            get {
-                return ResourceManager.GetString("WindowsStoreUnlimitedAddOnTesterNote", resourceCulture);
             }
         }
     }

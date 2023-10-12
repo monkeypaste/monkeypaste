@@ -1467,6 +1467,9 @@
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\Reusable\TextBoxes\" />
+    <Folder Include="Views\SettingsWindow\Tabs\Account\User\Login\" />
+    <Folder Include="Views\SettingsWindow\Tabs\Account\User\Status\" />
+    <Folder Include="Views\SettingsWindow\Tabs\Account\User\Registration\" />
   </ItemGroup>
   
   
@@ -1647,6 +1650,12 @@
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Account\MpAvAccountView.axaml.cs">
       <DependentUpon>MpAvAccountView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Account\Subscription\MpAvSubscriptionView.axaml.cs">
+      <DependentUpon>MpAvSubscriptionView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Account\User\MpAvUserView.axaml.cs">
+      <DependentUpon>MpAvUserView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Interop\OleFormatStrip\MpAvOleFormatStripView.axaml.cs">
       <DependentUpon>MpAvOleFormatStripView.axaml</DependentUpon>

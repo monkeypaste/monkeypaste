@@ -1,8 +1,9 @@
 CREATE TABLE account (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) NOT NULL UNIQUE,
-    username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    confirm_key VARCHAR(50) NULL,
+    reset_key VARCHAR(50) NULL,
     created_dt DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 

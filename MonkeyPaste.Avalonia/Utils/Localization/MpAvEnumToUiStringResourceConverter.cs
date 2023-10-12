@@ -13,6 +13,7 @@ namespace MonkeyPaste.Avalonia {
         // enums: (all enum to labels, maybe missing some ToStrings() in places...._
         private static Type[] _UiEnums = new Type[] {
                 // enum to label
+                typeof(MpBillingCycleType),
                 typeof(MpNotificationType),
                 typeof(MpShortcutType),
                 typeof(MpContentQueryPropertyPathType),

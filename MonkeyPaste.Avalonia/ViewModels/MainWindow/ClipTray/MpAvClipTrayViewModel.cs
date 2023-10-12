@@ -4970,7 +4970,7 @@ namespace MonkeyPaste.Avalonia {
         //        //    pt));
         //        //MpAvClipTrayViewModel.Instance.ClearClipSelection();
         //        //IsSelected = true;
-        //        //MpHelpers.CreateEmail(MpJsonPreferenceIO.Instance.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+        //        //MpHelpers.CreateEmail(MpJsonPreferenceIO.Instance.AccountEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         //    },
         //    () => {
         //        return !IsAnyEditingClipTile && SelectedItem != null;

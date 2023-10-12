@@ -187,6 +187,42 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Monthly.
+        /// </summary>
+        public static string MpBillingCycleType_Monthly {
+            get {
+                return ResourceManager.GetString("MpBillingCycleType_Monthly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string MpBillingCycleType_None {
+            get {
+                return ResourceManager.GetString("MpBillingCycleType_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permanent.
+        /// </summary>
+        public static string MpBillingCycleType_Permanent {
+            get {
+                return ResourceManager.GetString("MpBillingCycleType_Permanent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yearly.
+        /// </summary>
+        public static string MpBillingCycleType_Yearly {
+            get {
+                return ResourceManager.GetString("MpBillingCycleType_Yearly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bitmap.
         /// </summary>
         public static string MpClipboardFormatType_Bitmap {

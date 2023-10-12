@@ -185,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
 
             PlatformShorcuts = new MpAvPlatformShortcuts();
 
-            await AccountTools.InitAsync();
+            await MpDb.InitAsync();
         }
 
         #endregion

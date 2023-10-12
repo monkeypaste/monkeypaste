@@ -208,8 +208,8 @@ namespace MonkeyPaste.Avalonia {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.UserEmail),
-                                            isVisible = !string.IsNullOrEmpty(MpAvPrefViewModel.Instance.UserEmail),
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountEmail),
+                                            isVisible = !string.IsNullOrEmpty(MpAvPrefViewModel.Instance.AccountEmail),
                                             controlType = MpParameterControlType.TextBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             isReadOnly = true,
@@ -217,8 +217,8 @@ namespace MonkeyPaste.Avalonia {
                                             values =new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
                                                     isDefault = true,
-                                                    value = string.IsNullOrEmpty(MpAvPrefViewModel.Instance.UserEmail) ?
-                                                        "Unavailable":MpAvPrefViewModel.Instance.UserEmail
+                                                    value = string.IsNullOrEmpty(MpAvPrefViewModel.Instance.AccountEmail) ?
+                                                        "Unavailable":MpAvPrefViewModel.Instance.AccountEmail
                                                 },
                                             }
                                         },

@@ -206,7 +206,7 @@ namespace MonkeyPaste.Avalonia {
                     !Mp.Services.StartupState.IsReady) {
                     return $"Please wait {Mp.Services.ThisAppInfo.ThisAppProductName} is loading...";
                 }
-                return $"[{MpAvPrefViewModel.Instance.UserEmail}] {Mp.Services.AccountTools.AccountStateInfo.Replace(" - ", Environment.NewLine)}";
+                return $"[{MpAvPrefViewModel.Instance.AccountEmail}] {Mp.Services.AccountTools.AccountStateInfo.Replace(" - ", Environment.NewLine)}";
             }
         }
 
@@ -323,10 +323,10 @@ namespace MonkeyPaste.Avalonia {
                 //await TopLevel.GetTopLevel(MpAvWindowManager.MainWindow).Clipboard.SetDataObjectSafeAsync(test);
                 //await MpAvAccountTools.Instance.SetupSubscriptionInfoAsync();
                 bool success = await MpAvAccountTools.Instance.RegisterUserAsync(
-                    "test@test.com", "password",
-                    new MpUserAccountStateFormat() {
+                    "test@test.com", "password", true,
+                    new MpSubscriptionFormat() {
                         AccountType = MpUserAccountType.Unlimited,
-                        ExpireOffset = DateTime.Now.AddDays(30),
+                        ExpireOffsetUtc = DateTime.Now.AddDays(30),
                         IsActive = true,
                         IsMonthly = false
                     });

@@ -34,26 +34,23 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public MpUserAccountType CurrentAccountType =>
-            Mp.Services.AccountTools.CurrentAccountType;
-
         public bool IsSubscriptionPanelVisible { get; set; } = true;
         public bool IsMonthlyEnabled { get; set; } = false;
-        public bool IsContentAddPausedByAccount { get; private set; }
         public bool CanBuy {
             get {
                 if (SelectedItem == null) {
                     return false;
                 }
-                if (UserAccount.IsYearly && UserAccount.IsActive) {
+                var ua = MpAvAccountViewModel.Instance;
+                if (ua.IsYearly && ua.IsActive) {
                     return false;
                 }
-                if ((int)SelectedItem.AccountType > (int)UserAccount.AccountType) {
+                if ((int)SelectedItem.AccountType > (int)ua.AccountType) {
                     // allow higher
                     return true;
                 }
-                if ((int)SelectedItem.AccountType == (int)UserAccount.AccountType) {
-                    if (UserAccount.IsMonthly && !IsMonthlyEnabled) {
+                if ((int)SelectedItem.AccountType == (int)ua.AccountType) {
+                    if (!ua.IsYearly && !IsMonthlyEnabled) {
                         // allow monthly to yearly
                         return true;
                     }
@@ -65,7 +62,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Model
-        public MpUserAccountStateFormat UserAccount { get; private set; }
         #endregion
 
         #endregion
@@ -73,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvSubcriptionPurchaseViewModel() {
             PropertyChanged += MpAvAccountViewModel_PropertyChanged;
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
+            InitializeAsync().FireAndForgetSafeAsync();
         }
 
         #endregion
@@ -83,7 +79,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync() {
             IsBusy = true;
 
-            UserAccount = await MpAvAccountTools.Instance.GetUserAccountAsync();
+            await MpAvAccountTools.Instance.RefreshPricingInfoAsync();
 
             Items.Clear();
 
@@ -96,6 +92,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 .Select(x => CreateAccountItemViewModelAsync(x)));
             acct_vml.ForEach(x => Items.Add(x));
+
+            Items.ForEach(x => x.IsChecked = x.AccountType == Mp.Services.AccountTools.CurrentAccountType);
             OnPropertyChanged(nameof(Items));
             IsBusy = false;
         }
@@ -128,14 +126,6 @@ namespace MonkeyPaste.Avalonia {
             var aivm = new MpAvSubscriptionItemViewModel(this);
             await aivm.InitializeAsync(acctType);
             return aivm;
-        }
-        private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.SettingsWindowOpened:
-                    Items.ForEach(x => x.IsChecked = x.AccountType == Mp.Services.AccountTools.CurrentAccountType);
-                    MpAvAccountTools.Instance.RefreshPricingInfoAsync().FireAndForgetSafeAsync();
-                    break;
-            }
         }
         #endregion
 

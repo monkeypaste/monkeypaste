@@ -379,7 +379,7 @@ namespace MonkeyPaste.Avalonia {
                     .ShowSettingsWindowCommand.Execute(
                     new object[] {
                         MpSettingsTabType.Account,
-                        nameof(MpAvPrefViewModel.Instance.UserEmail) });
+                        nameof(MpAvPrefViewModel.Instance.AccountEmail) });
                 DialogResult = MpNotificationDialogResultType.Dismiss;
             });
 
@@ -389,7 +389,7 @@ namespace MonkeyPaste.Avalonia {
                     .ShowSettingsWindowCommand.Execute(
                     new object[] {
                         MpSettingsTabType.Account,
-                        nameof(MpAvPrefViewModel.Instance.UserEmail) });
+                        nameof(MpAvPrefViewModel.Instance.AccountEmail) });
                 DialogResult = MpNotificationDialogResultType.Dismiss;
             });
 

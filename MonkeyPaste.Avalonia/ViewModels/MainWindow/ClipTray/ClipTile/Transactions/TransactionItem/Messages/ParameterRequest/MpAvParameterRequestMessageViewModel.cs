@@ -1,7 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,7 +28,7 @@ namespace MonkeyPaste.Avalonia {
                 return new MpAvMenuItemViewModel() {
                     ParentObj = this,
                     Header =
-                        MpAvDateTimeToStringConverter.Instance.Convert(Parent.TransactionDateTime, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null) as string,
+                        MpAvDateTimeToStringConverter.Instance.Convert(Parent.TransactionDateTime, null, null, null) as string,
                     IconSourceObj = PresetViewModel.IconId,
                     SubItems = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {

@@ -39,6 +39,12 @@
                 Value="True" />
     </Style>
 
+    <Style Selector="TextBox.password">
+
+        <Setter Property="PasswordChar"
+                Value="●" />
+    </Style>
+
     <!--<Style Selector="TextBox.clearButton /template/ Button">
         <Setter Property="CornerRadius"
                 Value="7" />

@@ -14,6 +14,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
+        public const int MIN_PASSWORD_LENGTH = 6;
+
+        const string SUCCESS_PREFIX = "[SUCCESS]";
         const MpUserAccountType TEST_ACCOUNT_TYPE = MpUserAccountType.Free;
 
         const int MAX_FREE_CLIP_COUNT = 5;
@@ -34,11 +37,11 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIAccountTools Implementation
-        public void Init() {
-#if DEBUG
-            SetAccountType(MpAvPrefViewModel.Instance.TestAccountType);
-#endif
-        }
+        //        public void Init() {
+        //#if DEBUG
+        //            SetAccountType(MpAvPrefViewModel.Instance.TestAccountType);
+        //#endif
+        //        }
 
         public void SetAccountType(MpUserAccountType newType) {
             // NOTE this maybe a good all around interface method, not sure though
@@ -202,12 +205,20 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public MpAvAccountTools() { }
 
-        public async Task<MpUserAccountStateFormat> GetUserAccountAsync() {
+        public bool IsValidEmail(string email) {
+            return MpRegEx.RegExLookup[MpRegExType.ExactEmail].IsMatch(email);
+        }
+
+        public bool IsValidPassword(string str) {
+            return str != null && str.Length >= MIN_PASSWORD_LENGTH;
+        }
+
+        public async Task<MpSubscriptionFormat> GetUserSubscriptionAsync() {
             var acct = await GetStoreUserLicenseInfoAsync();
             bool logged_in = await LoginUserAsync(acct);
             if (acct == null) {
                 // anonymous
-                acct = new MpUserAccountStateFormat() {
+                acct = new MpSubscriptionFormat() {
                     AccountType = MpUserAccountType.Free
                 };
             }
@@ -218,64 +229,69 @@ namespace MonkeyPaste.Avalonia {
             await PerformPlatformPurchaseAsync(uat, isMonthly);
         }
 
-        public async Task<bool> RegisterUserAsync(string email, string password, MpUserAccountStateFormat uasf) {
-            MpAvPrefViewModel.Instance.UserEmail = null;
-            MpDebug.Assert(string.IsNullOrEmpty(MpAvPrefViewModel.Instance.UserEmail), $"Account reg error, email already set to '{MpAvPrefViewModel.Instance.UserEmail}'");
-            MpDebug.Assert(string.IsNullOrEmpty(MpAvPrefViewModel.Instance.Password), $"Account reg error, password already set");
+        public async Task<bool> RegisterUserAsync(
+            string email,
+            string password,
+            bool remember,
+            MpSubscriptionFormat uasf) {
+            MpAvPrefViewModel.Instance.AccountEmail = null;
+            MpDebug.Assert(string.IsNullOrEmpty(MpAvPrefViewModel.Instance.AccountEmail), $"Account reg error, email already set to '{MpAvPrefViewModel.Instance.AccountEmail}'");
+            MpDebug.Assert(string.IsNullOrEmpty(MpAvPrefViewModel.Instance.AccountPassword), $"Account reg error, password already set");
 
             string register_url = $"https://www.monkeypaste.com/accounts/register.php";
             string response = await PostDataToUrlAsync(
                 url: register_url,
                 keyValuePairs: new Dictionary<string, string>() {
                     {"email",email },
-                    {"username",email },
                     {"password",password },
                     {"confirm_password",password },
                     {"device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
                     {"sub_type", uasf.GetSubscriptionTypeString() },
-                    {"expires_utc_dt", uasf.ExpireOffset.ToString() },
+                    {"expires_utc_dt", uasf.ExpireOffsetUtc.ToString() },
                 }); ;
             bool success = response == "[SUCCESS]";
             if (success) {
-                MpAvPrefViewModel.Instance.UserEmail = email;
-                MpAvPrefViewModel.Instance.Password = password;
+                MpAvPrefViewModel.Instance.AccountEmail = email;
+                MpAvPrefViewModel.Instance.AccountPassword = password;
                 MpConsole.WriteLine($"Registration successful for user '{email}' deviceid '{MpDefaultDataModelTools.ThisUserDeviceGuid}' acct_type '{uasf.GetSubscriptionTypeString()}'");
             }
             return success;
         }
 
-        private async Task<bool> LoginUserAsync(MpUserAccountStateFormat uasf) {
-            if (string.IsNullOrEmpty(MpAvPrefViewModel.Instance.UserEmail) ||
+        private async Task<bool> LoginUserAsync(MpSubscriptionFormat uasf) {
+            if (string.IsNullOrEmpty(MpAvPrefViewModel.Instance.AccountEmail) ||
                 uasf == null) {
                 // no acct
                 return false;
             }
 
             string login_url = $"https://www.monkeypaste.com/accounts/login.php";
+            string sub_type = uasf.GetSubscriptionTypeString();
+            string expires_utc_dt = uasf.ExpireOffsetUtc.ToString();
             string response = await PostDataToUrlAsync(
                 url: login_url,
                 keyValuePairs: new Dictionary<string, string>() {
-                    {"username",MpAvPrefViewModel.Instance.UserEmail },
-                    {"password",MpAvPrefViewModel.Instance.Password },
-                    {"device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
-                    {"sub_type", uasf.GetSubscriptionTypeString() },
-                    {"expires_utc_dt", uasf.ExpireOffset.ToString() },
+                    { "email",MpAvPrefViewModel.Instance.AccountEmail },
+                    { "password",MpAvPrefViewModel.Instance.AccountPassword },
+                    { "device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
+                    { "sub_type", sub_type },
+                    { "expires_utc_dt", expires_utc_dt }
                 });
 
-            return response == "[SUCCESS]";
+            if (response.StartsWith(SUCCESS_PREFIX) &&
+                response.Replace(SUCCESS_PREFIX, string.Empty) is string updateText &&
+                updateText.Split(",") is string[] updateParts) {
+                // login and server updated
+                MpDebug.Assert(updateParts.Length == 2, $"Login reponse error. Should be 'type,expire_dt' but is '{updateText}'");
+                return true;
+            }
+            return false;
         }
 
         async Task<string> PostDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs) {
             // from https://stackoverflow.com/a/62640006/105028
             using (HttpClient httpClient = new HttpClient())
             using (MultipartFormDataContent formDataContent = new MultipartFormDataContent()) {
-                // Create Form Values
-                //KeyValuePair<string, string>[] keyValuePairs = new[] {
-                //    new KeyValuePair<string, string>("format_source", "abc"),
-                //    new KeyValuePair<string, string>("format_target", "xyz")
-                //};
-
-                // Loop Each KeyValuePair Item And Add It To The MultipartFormDataContent.
                 foreach (var keyValuePair in keyValuePairs) {
                     formDataContent.Add(new StringContent(keyValuePair.Value), keyValuePair.Key);
                 }

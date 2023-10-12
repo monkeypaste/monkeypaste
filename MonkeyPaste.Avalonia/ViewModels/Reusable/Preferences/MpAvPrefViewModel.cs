@@ -46,7 +46,7 @@ namespace MonkeyPaste.Avalonia {
         private string[] _OmittedResetPropertyNames = new string[] {
             nameof(ThisDeviceGuid),
             nameof(DefaultPluginIconId),
-            nameof(UserEmail),
+            nameof(AccountEmail),
             nameof(DbCreateDateTime),
             nameof(IsWelcomeComplete),
             nameof(SslPrivateKey),
@@ -316,8 +316,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Account
 
-        public string UserEmail { get; set; }
-        public string Password { get; set; }
+        public string AccountEmail { get; set; }
+        public string AccountPassword { get; set; }
 
 #if DEBUG
         public MpUserAccountType TestAccountType { get; set; } = MpUserAccountType.Free;

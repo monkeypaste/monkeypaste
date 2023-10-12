@@ -100,7 +100,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
         public MpUserAccountType AccountType { get; private set; }
-        public MpUserAccountStateFormat UserAccountFormat { get; set; }
         #endregion
 
         #endregion
@@ -115,7 +114,6 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public async Task InitializeAsync(MpUserAccountType accountType) {
             await Task.Delay(1);
-            //UserAccountFormat = await MpAvAccountTools.Instance.Get
             AccountType = accountType;
             OnPropertyChanged(nameof(IconSourceObj));
         }

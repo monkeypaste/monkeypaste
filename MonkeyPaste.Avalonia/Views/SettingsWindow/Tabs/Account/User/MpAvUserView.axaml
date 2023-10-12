@@ -1,0 +1,254 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="750"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       x:TypeArguments="local:MpAvAccountViewModel"
+                       x:DataType="local:MpAvAccountViewModel"
+                       x:CompileBindings="True"
+                       DataContext="{x:Static local:MpAvAccountViewModel.Instance}"
+                       x:Class="MonkeyPaste.Avalonia.MpAvUserView">
+    <local:MpAvUserControl.Styles>
+        <!--  STATUS LABELS  -->
+        <Style Selector="TextBlock.status.label">
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="FontSize"
+                    Value="16" />
+            <Setter Property="TextAlignment"
+                    Value="Right" />
+        </Style>
+        <Style Selector="TextBlock.status.data">
+            <Setter Property="FontSize"
+                    Value="16" />
+            <Setter Property="FontStyle"
+                    Value="Italic" />
+            <Setter Property="TextAlignment"
+                    Value="Left" />
+        </Style>
+
+        <!--  FORM INPUTS  -->
+        <Style Selector="TextBox:not(.valid)">
+            <Setter Property="BorderBrush"
+                    Value="Red" />
+        </Style>
+        <Style Selector="TextBox.formInput">
+            <Setter Property="Wid"
+                    Value="16" />
+
+          <Setter Property="FontSize"
+                    Value="16" />
+
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="TextAlignment"
+                    Value="Left" />
+        </Style>
+        <Style Selector="TextBox:not(.valid)">
+            <Setter Property="BorderBrush"
+                    Value="Red" />
+        </Style>
+
+
+        <!--  VALIDATION  -->
+        <Style Selector="TextBlock.invalid">
+            <Setter Property="FontSize"
+                    Value="12" />
+            <Setter Property="Foreground"
+                    Value="Red" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Left" />
+            <Setter Property="TextAlignment"
+                    Value="Left" />
+        </Style>
+        <Style Selector="TextBlock.payment">
+            <Setter Property="FontSize"
+                    Value="16" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+
+    <Border HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+        <TransitioningContentControl Grid.Row="1"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch"
+                                     HorizontalContentAlignment="Stretch"
+                                     VerticalContentAlignment="Top"
+                                     DataContext="{Binding}"
+                                     Content="{Binding CurrentPageType}">
+            <TransitioningContentControl.PageTransition>
+                <CrossFade Duration="0:00:00.250" />
+            </TransitioningContentControl.PageTransition>
+            <TransitioningContentControl.DataTemplates>
+                <local:MpAvUserTemplateSelector>
+                    <!--  REGISTER  -->
+                    <DataTemplate x:Key="RegisterTemplate"
+                                  x:DataType="local:MpAvAccountRegistrationViewModel">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Bottom"
+                                    Classes="defaultButton textOnlyButton"
+                                    HorizontalAlignment="Right"
+                                    Content="{x:Static local:UiStrings.AccountRegisterButtonText}"
+                                    Command="{Binding RegisterAccountCommand}" />
+                            <StackPanel Spacing="5"
+                                        HorizontalAlignment="Center">
+                                <!--  EMAIL  -->
+                                <TextBox x:Name="EmailTextBox"
+                                         Classes="formInput"
+                                         Classes.valid="{Binding IsEmailValid}"
+                                         Watermark="{x:Static local:UiStrings.AccountEmailLabel}"
+                                         Text="{Binding Email, Mode=TwoWay}" />
+                                <TextBlock Classes="invalid"
+                                           IsVisible="{Binding !IsEmailValid}"
+                                           Text="{Binding EmailValidationMessage}" />
+
+                                <!--  PASSWORD  -->
+                                <TextBox x:Name="PasswordTextBox"
+                                         Classes="formInput password revealPasswordButton"
+                                         Classes.valid="{Binding IsPasswordValid}"
+                                         Watermark="{x:Static local:UiStrings.AccountPasswordLabel}"
+                                         Text="{Binding Password, Mode=TwoWay}" />
+                                <TextBlock Classes="invalid"
+                                           IsVisible="{Binding !IsPasswordValid}"
+                                           Text="{Binding PasswordValidationMessage}" />
+
+                                <!--  CONFIRM PASSWORD  -->
+                                <TextBox x:Name="ConfirmPasswordTextBox"
+                                         Classes="formInput password revealPasswordButton"
+                                         Classes.valid="{Binding IsPasswordValid}"
+                                         Watermark="{x:Static local:UiStrings.AccountConfirmPasswordLabel}"
+                                         Text="{Binding ConfirmPassword, Mode=TwoWay}" />
+
+                                <CheckBox Content="{x:Static local:UiStrings.AccountRegistrationRememberLabel}"
+                                          IsChecked="{Binding Remember, Mode=TwoWay}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </DataTemplate>
+
+                    <!--  LOGIN  -->
+                    <DataTemplate x:Key="LoginTemplate"
+                                  x:DataType="local:MpAvAccountLoginViewModel">
+                        <DockPanel>
+                            <Button DockPanel.Dock="Bottom"
+                                    Classes="defaultButton textOnlyButton"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{x:Static local:UiStrings.AccountLoginButtonText}"
+                                    Command="{Binding LoginCommand}" />
+
+                            <StackPanel Spacing="5"
+                                        HorizontalAlignment="Center">
+                                <!--  EMAIL  -->
+                                <TextBox x:Name="EmailTextBox"
+                                         Classes="formInput"
+                                         Classes.valid="{Binding IsEmailValid}"
+                                         Watermark="{x:Static local:UiStrings.AccountEmailLabel}"
+                                         Text="{Binding Email, Mode=TwoWay}" />
+                                <TextBlock Classes="invalid"
+                                           IsVisible="{Binding !IsEmailValid}"
+                                           Text="{Binding EmailValidationMessage}" />
+
+                                <!--  PASSWORD  -->
+                                <TextBox x:Name="PasswordTextBox"
+                                         Classes="formInput password revealPasswordButton"
+                                         Classes.valid="{Binding IsPasswordValid}"
+                                         Watermark="{x:Static local:UiStrings.AccountPasswordLabel}"
+                                         Text="{Binding Password, Mode=TwoWay}" />
+                                <TextBlock Classes="invalid"
+                                           IsVisible="{Binding !IsPasswordValid}"
+                                           Text="{Binding PasswordValidationMessage}" />
+
+                                <CheckBox Content="{x:Static local:UiStrings.AccountRegistrationRememberLabel}"
+                                          IsChecked="{Binding Remember, Mode=TwoWay}" />
+                            </StackPanel>
+                        </DockPanel>
+                    </DataTemplate>
+
+                    <!--  STATUS  -->
+                    <DataTemplate x:Key="StatusTemplate"
+                                  x:DataType="local:MpAvAccountViewModel">
+
+                        <DockPanel>
+                            <Button DockPanel.Dock="Bottom"
+                                    Classes="defaultButton textOnlyButton"
+                                    HorizontalAlignment="Right"
+                                    Content="{x:Static local:UiStrings.AccountLogoutButtonText}"
+                                    Command="{Binding LogOutCommand}" />
+                            <StackPanel Spacing="5"
+                                        HorizontalAlignment="Center">
+                                <Grid ColumnDefinitions="50,*"
+                                      RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                                    <!--  EMAIL  -->
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="0"
+                                               Classes="status label"
+                                               Text="{x:Static local:UiStrings.AccountEmailLabel}" />
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="0"
+                                               Classes="status data"
+                                               Text="{Binding AccountEmail}" />
+
+                                    <!--  SUB TYPE  -->
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="1"
+                                               Classes="status label"
+                                               Text="{x:Static local:UiStrings.AccountEmailLabel}" />
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="1"
+                                               Classes="status data"
+                                               Text="{Binding AccountTypeLabel}" />
+
+                                    <!--  BILLING CYCLE  -->
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="2"
+                                               Classes="status label"
+                                               Text="{x:Static local:UiStrings.AccountBillingCycleLabel}" />
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="2"
+                                               Classes="status data"
+                                               Text="{Binding BillingCycleLabel}" />
+
+                                    <!--  NEXT PAYMENT  -->
+                                    <TextBlock Grid.Column="0"
+                                               Grid.Row="3"
+                                               Classes="status label"
+                                               Text="{x:Static local:UiStrings.AccountNextPaymentDateLabel}" />
+                                    <TextBlock Grid.Column="1"
+                                               Grid.Row="3"
+                                               Classes="status data payment"
+                                               Classes.invalid="{Binding IsPaymentPastDue}"
+                                               Text="{Binding NextPaymentDisplayValue}" />
+
+                                    <!--  ACCT COMMANDS  -->
+                                    <StackPanel Grid.ColumnSpan="2"
+                                                Grid.Row="4"
+                                                Orientation="Horizontal"
+                                                HorizontalAlignment="Center">
+                                        <!--  LOGOUT  -->
+                                        <Button Classes="defaultButton textOnlyButton"
+                                                Command="{Binding LogOutCommand}">
+                                            <TextBlock Text="{x:Static local:UiStrings.AccountLogoutButtonText}" />
+                                        </Button>
+
+                                        <!--  RESET  -->
+                                        <Button Classes="defaultButton textOnlyButton"
+                                                Command="{Binding ResetAccountPasswordCommand}">
+                                            <TextBlock Text="{x:Static local:UiStrings.AccountResetPasswordLabel}" />
+                                        </Button>
+
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </DockPanel>
+                    </DataTemplate>
+                </local:MpAvUserTemplateSelector>
+            </TransitioningContentControl.DataTemplates>
+        </TransitioningContentControl>
+    </Border>
+</local:MpAvUserControl>

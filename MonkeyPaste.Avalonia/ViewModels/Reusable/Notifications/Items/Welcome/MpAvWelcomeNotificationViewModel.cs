@@ -26,13 +26,22 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
         public static async Task ShowWelcomeNotificationAsync(bool forceShow = false) {
-            await MpAvSubcriptionPurchaseViewModel.Instance.InitializeAsync();
-            await Mp.Services.NotificationBuilder.ShowNotificationAsync(
-                new MpNotificationFormat() {
-                    ForceShow = forceShow,
-                    NotificationType = MpNotificationType.Welcome,
-                    MaxShowTimeMs = -1
-                });
+            bool will_show =
+                forceShow ||
+                //!Instance.IsDoNotShowType ||
+                !MpAvPrefViewModel.Instance.IsWelcomeComplete;
+
+            if (will_show) {
+                await MpAvSubcriptionPurchaseViewModel.Instance.InitializeAsync();
+                Instance.InitWelcomeItems();
+                await Mp.Services.NotificationBuilder.ShowNotificationAsync(
+                    new MpNotificationFormat() {
+                        ForceShow = forceShow,
+                        NotificationType = MpNotificationType.Welcome,
+                        MaxShowTimeMs = -1
+                    });
+            }
+
         }
 
         private static MpAvWelcomeNotificationViewModel _instance;
@@ -141,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
             MpDebug.Assert(_instance == null, "Only 1 welcome vm should be created");
             _instance = this;
             MpConsole.WriteLine("Greeting vm created");
-            InitWelcomeItems();
+            //InitWelcomeItems();
         }
 
         #endregion

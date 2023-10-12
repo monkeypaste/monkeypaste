@@ -359,7 +359,7 @@ namespace MonkeyPaste.Avalonia {
                 switch ((MpCopyItemDetailType)SelectedDetailIdx) {
                     //created
                     case MpCopyItemDetailType.DateTimeCreated:
-                        DetailTooltipText = MpAvDateTimeToStringConverter.Instance.Convert(CopyDateTime, null, MpAvDateTimeToStringConverter.LITERAL_DATE_TIME_FORMAT, null) as string;
+                        DetailTooltipText = MpAvDateTimeToStringConverter.Instance.Convert(CopyDateTime, null, null, null) as string;
                         detailText = string.Format(UiStrings.ClipTileDetailCreated, CopyDateTime.ToReadableTimeSpan());
                         break;
                     case MpCopyItemDetailType.DataSize:
