@@ -1,73 +1,119 @@
 <?php
-// Initialize the session
-session_start();
- 
-// Check if the user is logged in, otherwise redirect to login page
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
-    exit;
-}
- 
-// Include config file
-require_once __DIR__ . '/../../src/lib/bootstrap.php';
- 
-// Define variables and initialize with empty values
-$new_password = $confirm_password = "";
-$new_password_err = $confirm_password_err = "";
- 
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-    // Validate new password
-    if(empty(trim($_POST["new_password"]))){
-        $new_password_err = "Please enter the new password.";     
-    } elseif(strlen(trim($_POST["new_password"])) < 6){
-        $new_password_err = "Password must have atleast 6 characters.";
-    } else{
-        $new_password = trim($_POST["new_password"]);
-    }
-    
-    // Validate confirm password
-    if(empty(trim($_POST["confirm_password"]))){
-        $confirm_password_err = "Please confirm the password.";
-    } else{
-        $confirm_password = trim($_POST["confirm_password"]);
-        if(empty($new_password_err) && ($new_password != $confirm_password)){
-            $confirm_password_err = "Password did not match.";
-        }
-    }
-        
-    // Check input errors before updating the database
-    if(empty($new_password_err) && empty($confirm_password_err)){
-        // Prepare an update statement
-        $sql = "UPDATE account SET password = ? WHERE id = ?";
-        
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "si", $param_password, $param_id);
-            
-            // Set parameters
-            $param_password = password_hash($new_password, PASSWORD_DEFAULT);
-            $param_id = $_SESSION["id"];
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Password updated successfully. Destroy the session, and redirect to login page
-                session_destroy();
-                header("location: login.php");
-                exit();
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
 
-            // Close statement
-            mysqli_stmt_close($stmt);
+require_once __DIR__ . '/../../src/lib/bootstrap.php';
+
+
+function find_resetable_account(string $reset_code, string $email)
+{
+
+    $sql = 'SELECT id, username, reset_code, reset_expiry < now() as expired
+            FROM account
+            WHERE email=:email';
+
+    $statement = db()->prepare($sql);
+
+    $statement->bindValue(':email', $email);
+    $statement->execute();
+
+    $account = $statement->fetch(PDO::FETCH_ASSOC);
+
+    if ($account) {
+        // already expired, delete the in active account with expired reset code
+        if ((int)$account['expired'] === 1) {
+            exit_w_error("reset expired");
         }
+        // verify the password
+        if(password_verify($reset_code, $account['reset_code'])) {
+            return $account;
+        }  
+    } 
+
+    return null;
+}
+
+function reset_account_password(int $id, string $password): bool
+{
+    $sql = 'UPDATE account
+            SET reset_code = :reset_code, password = :password
+            WHERE id=:id';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':id', $id, PDO::PARAM_INT);
+    $statement->bindValue(':reset_code', NULL);
+    $statement->bindValue(':password', password_hash($password, PASSWORD_BCRYPT));
+
+    return $statement->execute();
+}
+
+function process_errors($errors, $password) {
+    if(!isset($_SESSION)) {
+        return;
+    }
+    $_SESSION["password_err"] = $errors != NULL && array_key_exists('password',$errors) ? $errors['password']:"";
+    $_SESSION["password2_err"] = $errors != NULL && array_key_exists('password2',$errors) ? $errors['password2']:"";
+    $_SESSION["new_password"] = $password;
+}
+
+session_start();
+if (is_get_request()) 
+{    
+    $_SESSION["new_password"] = $_SESSION["password_err"] = $_SESSION["password2_err"] = "";
+
+    $fields = [
+        'email' => 'string | required',
+        'reset_code' => 'string | required'
+    ];
+    
+    $errors = [];
+    $inputs = [];
+    [$inputs, $errors] = filter($_GET, $fields);
+
+    if ($errors) {
+        if(CAN_TEST) {
+            printerr($errors);
+        }
+        exit_w_error("param error");
+    }
+
+    $account = find_resetable_account($inputs['reset_code'], $inputs['email']);
+    if($account == NULL) {
+        exit_w_error("account not found or no reset requested");
+    }
+
+    $_SESSION['accid'] = $account['id'];
+} else if(is_post_request()) {
+    $fields = [
+        'password' => 'string | required | secure',
+        'password2' => 'string | required | same: password',
+    ];
+    
+    $errors = [];
+    $inputs = [];
+    [$inputs, $errors] = filter($_POST, $fields);
+
+    if ($errors) {
+        if(CAN_TEST) {
+            //printerr($errors);
+        }
+        process_errors($errors,$inputs['password']);
+        //exit_w_error("param error");
+    } else {
+        // println("about to reset...");
+        // var_dump($_SESSION);
+        $success = reset_account_password($_SESSION['accid'],$inputs['password']);
+        if($success) {
+            exit_success();
+        }
+        process_errors(["password"=>"error","password2"=>""],$inputs['password']);
     }
     
-    // Close connection
-    mysqli_close($link);
+    
+    //exit_w_error("error");
+
+} else {    
+    exit_w_error("invalid params");
 }
+
 ?>
  
 <!DOCTYPE html>
@@ -88,17 +134,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
             <div class="form-group">
                 <label>New Password</label>
-                <input type="password" name="new_password" class="form-control <?php echo (!empty($new_password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $new_password; ?>">
-                <span class="invalid-feedback"><?php echo $new_password_err; ?></span>
+                <input type="password" name="password" class="form-control <?php echo (!empty($_SESSION["password_err"])) ? 'is-invalid' : ''; ?>" value="<?php echo $_SESSION["new_password"]; ?>">
+                <span class="invalid-feedback"><?php echo $_SESSION["password_err"]; ?></span>
             </div>
             <div class="form-group">
                 <label>Confirm Password</label>
-                <input type="password" name="confirm_password" class="form-control <?php echo (!empty($confirm_password_err)) ? 'is-invalid' : ''; ?>">
-                <span class="invalid-feedback"><?php echo $confirm_password_err; ?></span>
+                <input type="password" name="password2" class="form-control <?php echo (!empty($_SESSION["password2_err"])) ? 'is-invalid' : ''; ?>">
+                <span class="invalid-feedback"><?php echo $_SESSION["password2_err"]; ?></span>
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Submit">
-                <a class="btn btn-link ml-2" href="welcome.php">Cancel</a>
+                <!-- <a class="btn btn-link ml-2" href="welcome.php">Cancel</a> -->
             </div>
         </form>
     </div>    

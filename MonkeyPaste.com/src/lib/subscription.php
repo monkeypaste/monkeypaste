@@ -1,14 +1,25 @@
 <?php
 
-function find_subscription(int $accid, string $device_guid):bool {
-    $sql = 'SELECT *
-            FROM subscription
-            WHERE fk_account_id=:accid AND device_guid=:device_guid';
+function find_account_by_username(string $username)
+{
+    $sql = 'SELECT id, username, password
+            FROM account
+            WHERE username=:username';
 
     $statement = db()->prepare($sql);
+    $statement->bindValue(':username', $username, PDO::PARAM_STR);
+    $statement->execute();
 
-    $statement->bindValue(':accid', $accid, PDO::PARAM_INT);
-    $statement->bindValue(':device_guid', $device_guid);
+    return $statement->fetch(PDO::FETCH_ASSOC);
+}
+function find_account_by_email(string $email)
+{
+    $sql = 'SELECT *
+            FROM account
+            WHERE email=:email';
+
+    $statement = db()->prepare($sql);
+    $statement->bindValue(':email', $email);
     $statement->execute();
 
     return $statement->fetch(PDO::FETCH_ASSOC);
@@ -32,11 +43,6 @@ function update_subscription(string $device_guid,string $sub_type,string $expire
 
 function add_subscription(int $accid, string $device_guid, string $sub_type, string $expires_utc_dt, string $detail1, string $detail2, string $detail3)
 {
-    if(find_subscription($accid,$device_guid)) {
-        echo 'Error subscription already exists';
-        return false;
-    }
-
     $sql = 'INSERT INTO subscription(fk_account_id, device_guid, sub_type, expires_utc_dt, detail1, detail2, detail3)
                                 VALUES(:accid, :device_guid, :sub_type, :expires_utc_dt, :detail1, :detail2, :detail3)';
 

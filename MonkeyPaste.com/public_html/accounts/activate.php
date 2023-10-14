@@ -2,10 +2,10 @@
 
 require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
-function find_unverified_user(string $activation_code, string $email)
+function find_unverified_account(string $activation_code, string $email)
 {
 
-    $sql = 'SELECT id, activation_code, activation_expiry < now() as expired
+    $sql = 'SELECT id, username, activation_code, activation_expiry < now() as expired
             FROM account
             WHERE active = 0 AND email=:email';
 
@@ -14,23 +14,23 @@ function find_unverified_user(string $activation_code, string $email)
     $statement->bindValue(':email', $email);
     $statement->execute();
 
-    $user = $statement->fetch(PDO::FETCH_ASSOC);
+    $account = $statement->fetch(PDO::FETCH_ASSOC);
 
-    if ($user) {
-        // already expired, delete the in active user with expired activation code
-        if ((int)$user['expired'] === 1) {
-            delete_user_by_id($user['id']);
+    if ($account) {
+        // already expired, delete the in active account with expired activation code
+        if ((int)$account['expired'] === 1) {
+            delete_account_by_id($account['id']);
             return null;
         }
         // verify the password
-        if (password_verify($activation_code, $user['activation_code'])) {
-            return $user;
-        }
-    }
+        if(password_verify($activation_code, $account['activation_code'])) {
+            return $account;
+        }  
+    } 
 
     return null;
 }
-function delete_user_by_id(int $id, int $active = 0)
+function delete_account_by_id(int $id, int $active = 0)
 {
     $sql = 'DELETE FROM account
             WHERE id =:id and active=:active';
@@ -42,29 +42,51 @@ function delete_user_by_id(int $id, int $active = 0)
     return $statement->execute();
 }
 
-function activate_user(int $user_id): bool
+function activate_account(int $id): bool
 {
     $sql = 'UPDATE account
-            SET active = 1,
-                activated_dt = CURRENT_TIMESTAMP
+            SET active = 1, activated_dt = now()
             WHERE id=:id';
 
     $statement = db()->prepare($sql);
-    $statement->bindValue(':id', $user_id, PDO::PARAM_INT);
+    $statement->bindValue(':id', $id, PDO::PARAM_INT);
 
     return $statement->execute();
 }
+$account = NULL;
 
-if(!is_post_request()) {    
-    echo ERROR_MSG;
-    exit(0);
-}
+if (is_get_request()) {
 
-$user = find_unverified_user($_POST['activation_code'], $_POST['email']);
+    // sanitize the email & activation code
+    [$inputs, $errors] = filter($_GET, [
+        'email' => 'string | required | email',
+        'activation_code' => 'string | required'
+    ]);
+    if($errors) {
+        redirect_to('error.php');
+    }
 
-if ($user && activate_user($user['id'])) {
-    echo SUCCESS_MSG;
+    $account = find_unverified_account($inputs['activation_code'], $inputs['email']);
+    if (!$account || !activate_account($account['id'])) {        
+        redirect_to('error.php');
+    }
 } else {
-    echo ERROR_MSG;
+    redirect_to('error.php');
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body{ font: 14px sans-serif; text-align: center; }
+
+    </style>
+</head>
+<body>
+    <h1 class="my-5">Hi, <b style="color:green;"><?php echo $account["username"]; ?></b>. Activation successful!</h1>
+    <p>You can close this window now...</p>
+</body>
+</html>

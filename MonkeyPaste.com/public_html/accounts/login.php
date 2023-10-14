@@ -3,32 +3,18 @@
 // Include config file
 require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
-function find_account_by_username(string $username)
-{
-    $sql = 'SELECT id, username, password
-            FROM account
-            WHERE username=:username';
-
-    $statement = db()->prepare($sql);
-    $statement->bindValue(':username', $username, PDO::PARAM_STR);
-    $statement->execute();
-
-    return $statement->fetch(PDO::FETCH_ASSOC);
-}
 
 function login(string $username, string $password): bool
 {
-    $user = find_account_by_username($username);
+    $account = find_account_by_username($username);
 
-    // if user found, check the password
-    if ($user && password_verify($password, $user['password']) && $user['active'] == 1) {
+    // if account found, check the password
+    if ($account && password_verify($password, $account['password']) && $account['active'] == 1) {
 
         // prevent session fixation attack
         session_regenerate_id();
-
-        // set username in the session
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['user_id']  = $user['id'];
+        $_SESSION['username'] = $account['username'];
+        $_SESSION['user_id']  = $account['id'];
 
         return true;
     }
@@ -40,7 +26,6 @@ $success = login($_POST['username'], $_POST['password']);
 if($success) {
     $success = update_subscription($_POST['device_guid'], $_POST['sub_type'], $_POST['expires_utc_dt']);
     if($success) {
-        send_activation_email($_POST['email'],$activation_code);
         echo SUCCESS_MSG;
         exit(0);
     }

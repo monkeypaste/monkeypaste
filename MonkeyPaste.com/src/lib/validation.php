@@ -10,8 +10,8 @@ const DEFAULT_VALIDATION_ERRORS = [
     'alphanumeric' => 'The %s should have only letters and numbers',
     'secure' => 'The %s must have between 8 and 64 characters and contain at least one number, one upper case letter, one lower case letter and one special character',
     'unique' => 'The %s already exists',
+    'datetime' => 'The %s is not a datetime'
 ];
-
 
 /**
  * Validate
@@ -194,8 +194,12 @@ function is_secure(array $data, string $field): bool
     return preg_match($pattern, $data[$field]);
 }
 
-
-
+function is_datetime(array $data, string $field):bool {
+    if (!isset($data[$field])) {
+        return false;
+    }
+    return (strtotime($data[$field]) !== false);
+}
 
 /**
  * Return true if the $value is unique in the column of a table
