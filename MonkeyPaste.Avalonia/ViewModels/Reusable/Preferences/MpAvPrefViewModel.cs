@@ -93,6 +93,30 @@ namespace MonkeyPaste.Avalonia {
         public static string PreferencesPathBackup =>
             $"{PreferencesPath}.{PREF_BACKUP_PATH_EXT}";
 
+
+        [JsonIgnore]
+        public static string arg1 {
+            get {
+                if (!PreferencesPath.IsFile()) {
+                    using (File.Create(PreferencesPath)) { }
+                }
+                return new FileInfo(PreferencesPath).CreationTimeUtc.ToString();
+            }
+        }
+        [JsonIgnore]
+        public static string arg2 =>
+            MpAvPrefViewModel.Instance.DbCreateDateTime.ToString();
+
+        [JsonIgnore]
+        public static string arg3 {
+            get {
+                if (!PreferencesPathBackup.IsFile()) {
+                    using (File.Create(PreferencesPathBackup)) { }
+                }
+                return new FileInfo(PreferencesPathBackup).CreationTimeUtc.ToString();
+            }
+        }
+
         #endregion
 
         #region Interfaces
@@ -166,6 +190,7 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         public string SslCertSubject { get; set; } = "CN=127.0.01";
         #endregion
+
 
         [JsonIgnore]
         public string LocalStoragePath =>
@@ -600,19 +625,6 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        private static string GetPrefPassword() {
-            if (!PreferencesPath.IsFile()) {
-                using (File.Create(PreferencesPath)) { }
-            }
-            return new FileInfo(PreferencesPath).CreationTimeUtc.ToString();
-        }
-
-        private static string GetBackupPrefPassword() {
-            if (!PreferencesPathBackup.IsFile()) {
-                using (File.Create(PreferencesPathBackup)) { }
-            }
-            return new FileInfo(PreferencesPathBackup).CreationTimeUtc.ToString();
-        }
         private static async Task LoadPrefsAsync() {
             IsLoading = true;
 
@@ -660,7 +672,7 @@ namespace MonkeyPaste.Avalonia {
             raw_str = MpFileIo.ReadTextFromFile(from_backup ? PreferencesPathBackup : PreferencesPath);
             if (IsEncrypted(raw_str)) {
                 try {
-                    raw_str = MpEncryption.SimpleDecryptWithPassword(raw_str, from_backup ? GetBackupPrefPassword() : GetPrefPassword());
+                    raw_str = MpEncryption.SimpleDecryptWithPassword(raw_str, from_backup ? arg3 : arg1);
                 }
                 catch (Exception ex) {
                     MpConsole.WriteTraceLine($"Error decrypting pref file '{PreferencesPath}'", ex);
@@ -675,8 +687,8 @@ namespace MonkeyPaste.Avalonia {
 
             string backupStr = prefStr;
             if (encrypt) {
-                prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, GetPrefPassword());
-                backupStr = MpEncryption.SimpleEncryptWithPassword(backupStr, GetBackupPrefPassword());
+                prefStr = MpEncryption.SimpleEncryptWithPassword(prefStr, arg1);
+                backupStr = MpEncryption.SimpleEncryptWithPassword(backupStr, arg3);
             }
 
             MpFileIo.WriteTextToFile(PreferencesPath, prefStr, false);

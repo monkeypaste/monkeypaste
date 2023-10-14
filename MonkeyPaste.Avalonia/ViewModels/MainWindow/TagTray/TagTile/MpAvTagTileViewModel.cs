@@ -1198,6 +1198,14 @@ namespace MonkeyPaste.Avalonia {
                 if (ci == null) {
                     // NOTE item will no longer exist if unlink is part of copyitem.delete
                     MpDebug.Assert(!isLink, $"Error adding link to unknown item ciid {ciid}. Can only be null if unlinking");
+                    if (isLink) {
+                        // this seems to happen on ci builder error, delete link since item doesn't exist
+                        var cit = await MpDataModelProvider.GetCopyItemTagForTagAsync(ciid, TagId);
+                        if (cit != null) {
+                            await MpDataModelProvider.DeleteItemAsync<MpCopyItemTag>(cit.Id);
+                        }
+
+                    }
                     return;
                 }
                 Mp.Services.TransactionBuilder.ReportTransactionAsync(

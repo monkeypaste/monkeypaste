@@ -323,7 +323,7 @@ namespace MonkeyPaste.Avalonia {
                 //await TopLevel.GetTopLevel(MpAvWindowManager.MainWindow).Clipboard.SetDataObjectSafeAsync(test);
                 //await MpAvAccountTools.Instance.SetupSubscriptionInfoAsync();
                 bool success = await MpAvAccountTools.Instance.RegisterUserAsync(
-                    "test@test.com", "password", true,
+                    "tkefauver@gmail.com", "password", true,
                     new MpSubscriptionFormat() {
                         AccountType = MpUserAccountType.Unlimited,
                         ExpireOffsetUtc = DateTime.Now.AddDays(30),

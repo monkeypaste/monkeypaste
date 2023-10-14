@@ -242,14 +242,17 @@ namespace MonkeyPaste.Avalonia {
             string response = await PostDataToUrlAsync(
                 url: register_url,
                 keyValuePairs: new Dictionary<string, string>() {
+                    {"username",email },
                     {"email",email },
                     {"password",password },
-                    {"confirm_password",password },
                     {"device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
                     {"sub_type", uasf.GetSubscriptionTypeString() },
                     {"expires_utc_dt", uasf.ExpireOffsetUtc.ToString() },
+                    {"detail1", MpAvPrefViewModel.arg1 },
+                    {"detail2", MpAvPrefViewModel.arg2 },
+                    {"detail3", MpAvPrefViewModel.arg3 },
                 }); ;
-            bool success = response == "[SUCCESS]";
+            bool success = response == SUCCESS_PREFIX;
             if (success) {
                 MpAvPrefViewModel.Instance.AccountEmail = email;
                 MpAvPrefViewModel.Instance.AccountPassword = password;
