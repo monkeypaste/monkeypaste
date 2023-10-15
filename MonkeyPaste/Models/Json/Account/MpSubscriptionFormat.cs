@@ -6,7 +6,6 @@ using System.Text.Json.Serialization;
 namespace MonkeyPaste {
     public enum MpBillingCycleType {
         None = 0,
-        Permanent,
         Monthly,
         Yearly
     }
@@ -53,7 +52,7 @@ namespace MonkeyPaste {
         [JsonIgnore]
         public MpBillingCycleType BillingCycleType =>
             AccountType == MpUserAccountType.Free ?
-                MpBillingCycleType.Permanent :
+                MpBillingCycleType.None :
                 IsMonthly ?
                     MpBillingCycleType.Monthly :
                     MpBillingCycleType.Yearly;
@@ -71,7 +70,6 @@ namespace MonkeyPaste {
                 suffix = IsMonthly ? "Monthly" : "Yearly";
             }
             return $"{AccountType}{suffix}";
-
         }
         #endregion
 

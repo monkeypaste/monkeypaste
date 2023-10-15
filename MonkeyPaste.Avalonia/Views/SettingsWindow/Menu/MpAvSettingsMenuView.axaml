@@ -15,19 +15,23 @@
             <Style.Resources>
                 <SolidColorBrush x:Key="ToggleButtonBackground" Color="{DynamicResource ThemeAccent5BgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{DynamicResource ThemeAccent5Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundPressed" Color="{DynamicResource ThemeAccent4Color}" />
                 <SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" />
                 <SolidColorBrush x:Key="ToggleButtonForeground" Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonForegroundPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonForegroundPressed" Color="{DynamicResource ThemeInteractiveBgColor}" />
 
                 <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource ThemeAccent3BgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource ThemeAccent3BgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource ThemeAccent2Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource ThemeAccent4BgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{DynamicResource ThemeInteractiveColor}" />
                 <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource ThemeAccent2Color}" />
                 <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPressed" Color="{DynamicResource ThemeInteractiveBgColor}" />
 
                 <!--<Thickness x:Key="ToggleButtonBorderThemeThickness">1</Thickness>-->
             </Style.Resources>

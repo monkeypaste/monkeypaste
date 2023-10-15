@@ -4,12 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-//using Yolov5Net.Scorer;
-//using Yolov5Net.Scorer.Models;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using System.Threading.Tasks;
 using Yolov5Net.Scorer;
 using Yolov5Net.Scorer.Models;
 

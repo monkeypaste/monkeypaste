@@ -69,7 +69,8 @@ namespace MonkeyPaste.Avalonia {
             { typeof(MpDateTimeOptionType), UiStrings.SearchCriteriaDefaultOptionLabel },
             { typeof(MpDateBeforeUnitType), UiStrings.SearchCriteriaDefaultOptionLabel },
             { typeof(MpDateAfterUnitType), UiStrings.SearchCriteriaDefaultOptionLabel },
-            { typeof(MpTimeSpanWithinUnitType), UiStrings.SearchCriteriaDefaultOptionLabel }
+            { typeof(MpTimeSpanWithinUnitType), UiStrings.SearchCriteriaDefaultOptionLabel },
+            { typeof(MpBillingCycleType), UiStrings.AccountBillingCycleNoneLabel },
         };
 
         static string EnumUiResxFileName =>

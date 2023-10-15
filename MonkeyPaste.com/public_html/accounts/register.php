@@ -48,7 +48,8 @@ $testdata = [
     'email' => "tkefauver@gmail.com",
     'password' => '*1Password',
     'device_guid' => 'TEST GUID',
-    'sub_type' => 'StandardMonthly',
+    'sub_type' => 'Standard',
+    'monthly' => '0',
     'expires_utc_dt' => getFormattedDateTimeStr(date('Y-m-d H:i:s', time() + 1 * 24 * 60 * 60)),
     'detail1' => 'test_detail1',
     'detail2' => 'test_detail2',
@@ -59,8 +60,10 @@ $fields = [
     'username' => 'string | required | alphanumeric | between: 3, 25 | unique: account, username',
     'email' => 'email | required | email | unique: account, email',
     'password' => 'string | required | secure',
+    'password2' => 'string | required | secure | same: password',
     'device_guid' => 'string | required',
     'sub_type' => 'string | required',
+    'monthly' => 'string | required',
     'expires_utc_dt' => 'string | required | datetime',
     'detail1' => 'string | required',
     'detail2' => 'string | required',
@@ -84,8 +87,7 @@ if (is_post_request())
 
 
 if ($errors) {
-    printerr($errors);
-    exit(0);
+    exit_w_errors($errors);
 }
 
 $activation_code = generate_activation_code();
@@ -93,7 +95,7 @@ $success = register_user($inputs['username'], $inputs['email'], $inputs['passwor
 if ($success) {
     // account created, add subscription 
     $new_account_id = db()->lastInsertId();
-    $success = add_subscription($new_account_id, $inputs['device_guid'], $inputs['sub_type'], $inputs['expires_utc_dt'], $inputs['detail1'], $inputs['detail2'], $inputs['detail3']);
+    $success = add_subscription($new_account_id, $inputs['device_guid'], $inputs['sub_type'], $inputs['monthly'] == "1", $inputs['expires_utc_dt'], $inputs['detail1'], $inputs['detail2'], $inputs['detail3']);
     if ($success) {
         send_activation_email($inputs['username'], $inputs['email'], $activation_code);
         echo SUCCESS_MSG;

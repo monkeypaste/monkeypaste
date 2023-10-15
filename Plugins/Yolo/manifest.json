@@ -91,7 +91,7 @@
         "unitType": "PlainText",
         "isExecuteParameter": false,
         "isSharedValue": false,
-        "confirmToRemember": true,
+        "canRemember": true,
         "isRequired": false,
         "isVisible": true,
         "paramId": 5

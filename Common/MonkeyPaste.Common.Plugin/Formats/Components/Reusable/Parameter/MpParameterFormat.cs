@@ -16,6 +16,7 @@ namespace MonkeyPaste.Common.Plugin {
         FileChooser,
         DirectoryChooser,
         PasswordBox,
+        DateTimePicker,
         Radio,
         ComponentPicker,
         ShortcutRecorder,
@@ -29,6 +30,8 @@ namespace MonkeyPaste.Common.Plugin {
         Decimal,
         PlainText,
         RichText,
+        Date,
+        Time,
         //CredentialText,
         Html,
         Image,
@@ -108,7 +111,7 @@ namespace MonkeyPaste.Common.Plugin {
         public bool isVisible { get; set; } = true;
         public bool isReadOnly { get; set; } = false;
         public bool isRequired { get; set; } = false;
-        public bool confirmToRemember { get; set; } = false;
+        public bool canRemember { get; set; } = false;
 
         //TextBox
         public int maxLength { get; set; } = int.MaxValue;
@@ -189,12 +192,13 @@ namespace MonkeyPaste.Common.Plugin {
         public bool isDefault { get; set; } = false;
 
         public MpPluginParameterValueFormat() { }
-        public MpPluginParameterValueFormat(string serializedValue) : this(serializedValue, string.Empty, false) { }
-        public MpPluginParameterValueFormat(string serializedValue, bool _isDef) : this(serializedValue, string.Empty, _isDef) { }
-        public MpPluginParameterValueFormat(string serializedValue, string _label, bool _isDef) {
-            value = serializedValue;
-            label = _label;
-            isDefault = _isDef;
+        public MpPluginParameterValueFormat(string val) : this(val, string.Empty, false) { }
+        public MpPluginParameterValueFormat(string val, bool isDefault) : this(val, string.Empty, isDefault) { }
+        public MpPluginParameterValueFormat(string val, string label) : this(val, label, false) { }
+        public MpPluginParameterValueFormat(string val, string label, bool isDefault) {
+            value = val;
+            this.label = label;
+            this.isDefault = isDefault;
         }
     }
 

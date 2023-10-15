@@ -908,7 +908,7 @@ namespace MonkeyPaste.Avalonia {
                     _hook.MouseDragged += Hook_MouseDragged;
                 }
                 if (IS_GLOBAL_INPUT_LOGGING_ENABLED) {
-                    var logSource = LogSource.Register(minLevel: LogLevel.Debug);
+                    var logSource = LogSource.RegisterOrGet(minLevel: LogLevel.Debug);
                     logSource.MessageLogged += OnMessageLogged;
 
                     void OnMessageLogged(object? sender, LogEventArgs e) =>

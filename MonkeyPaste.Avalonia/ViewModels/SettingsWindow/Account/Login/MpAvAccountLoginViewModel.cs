@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvAccountLoginViewModel : MpAvViewModelBase<MpAvAccountViewModel> {
@@ -94,13 +95,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public MpIAsyncCommand LoginCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand LoginCommand => new MpCommand(
+            () => {
                 WasLoginSuccessful = null;
                 if (!Validate()) {
                     return;
                 }
-                WasLoginSuccessful = await MpAvAccountTools.Instance.RegisterUserAsync(Email, Password, Remember, Parent.UserAccount);
+                //WasLoginSuccessful = await MpAvAccountTools.Instance.RegisterUserAsync(Email, Password, Remember, Parent.UserAccount);
                 Parent.RefreshAccountPage();
             },
             () => {

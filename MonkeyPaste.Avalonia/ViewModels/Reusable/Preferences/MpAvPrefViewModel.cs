@@ -1,7 +1,9 @@
 ﻿using MonkeyPaste.Common;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using PropertyChanged;
+//using Newtonsoft.Json;
+//using Newtonsoft.Json.Converters;
+//using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +12,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -46,7 +49,11 @@ namespace MonkeyPaste.Avalonia {
         private string[] _OmittedResetPropertyNames = new string[] {
             nameof(ThisDeviceGuid),
             nameof(DefaultPluginIconId),
-            nameof(AccountEmail),
+            //nameof(AccountUsername),
+            //nameof(AccountEmail),
+            //nameof(AccountType),
+            //nameof(AccountBillingCycleType),
+            //nameof(AccountPassword),
             nameof(DbCreateDateTime),
             nameof(IsWelcomeComplete),
             nameof(SslPrivateKey),
@@ -341,8 +348,21 @@ namespace MonkeyPaste.Avalonia {
 
         #region Account
 
+        public string AccountUsername { get; set; }
         public string AccountEmail { get; set; }
         public string AccountPassword { get; set; }
+        [JsonIgnore]
+        public string AccountPassword2 { get; set; }
+        [JsonIgnore]
+        public MpUserAccountState AccountState { get; set; } = MpUserAccountState.Unregistered;
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MpUserAccountType AccountType { get; set; } = MpUserAccountType.Free;
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MpBillingCycleType AccountBillingCycleType { get; set; } = MpBillingCycleType.None;
+
+        public DateTime AccountNextPaymentDateTime { get; set; }
 
 #if DEBUG
         public MpUserAccountType TestAccountType { get; set; } = MpUserAccountType.Free;

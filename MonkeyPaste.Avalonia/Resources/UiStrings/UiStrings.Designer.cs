@@ -79,6 +79,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Never.
+        /// </summary>
+        public static string AccountBillingCycleNoneLabel {
+            get {
+                return ResourceManager.GetString("AccountBillingCycleNoneLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string AccountConfirmPasswordLabel {
@@ -106,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log in.
+        ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string AccountLoginButtonText {
             get {
@@ -151,7 +160,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next to delete! Upgrade to avoid 💪🏽.
+        ///   Looks up a localized string similar to Next to delete! Upgrade to avoid..
         /// </summary>
         public static string AccountNextRemoveToolTipText {
             get {
@@ -160,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next to trash! Upgrade to avoid 💪🏽.
+        ///   Looks up a localized string similar to Next to trash! Upgrade to avoid..
         /// </summary>
         public static string AccountNextTrashToolTipText {
             get {

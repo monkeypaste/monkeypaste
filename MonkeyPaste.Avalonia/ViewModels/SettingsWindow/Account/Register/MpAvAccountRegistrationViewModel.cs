@@ -104,14 +104,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand RegisterAccountCommand => new MpAsyncCommand(
-            async () => {
+        public ICommand RegisterAccountCommand => new MpCommand(
+            () => {
                 WasRegistrationSuccessful = null;
                 if (!Validate()) {
                     return;
                 }
-                WasRegistrationSuccessful = await MpAvAccountTools.Instance.RegisterUserAsync(
-                    Email, Password, Remember, Parent.UserAccount);
+                //WasRegistrationSuccessful = await MpAvAccountTools.Instance.RegisterUserAsync(
+                //    Email, Password, Remember, Parent.UserAccount);
                 Parent.RefreshAccountPage();
             },
             () => {

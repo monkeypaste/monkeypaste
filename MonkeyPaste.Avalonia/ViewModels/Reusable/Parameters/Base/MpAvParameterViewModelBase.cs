@@ -11,14 +11,6 @@ using System.Windows.Input;
 //using SQLite;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvMissingParameterViewModel : MpAvParameterViewModelBase {
-        public MpAvMissingParameterViewModel() : this(null) { }
-        public MpAvMissingParameterViewModel(MpAvViewModelBase parent) : base(null) {
-            ParameterFormat = new MpParameterFormat() {
-                isVisible = false
-            };
-        }
-    }
     public abstract class MpAvParameterViewModelBase :
         MpAvViewModelBase<MpAvViewModelBase>,
         MpITreeItemViewModel,
@@ -119,6 +111,10 @@ namespace MonkeyPaste.Avalonia {
         public object CurrentTypedValue {
             get {
                 switch (UnitType) {
+                    case MpParameterValueUnitType.Date:
+                        return DateTimeValue;
+                    case MpParameterValueUnitType.Time:
+                        return TimeSpanValue;
                     case MpParameterValueUnitType.Bool:
                         return BoolValue;
                     case MpParameterValueUnitType.ActionComponentId:
@@ -141,6 +137,30 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public TimeSpan TimeSpanValue {
+            get {
+                return CurrentValue.ParseOrConvertToTimeSpan(0);
+            }
+            set {
+                if (TimeSpanValue != value) {
+                    CurrentValue = value.ParseOrConvertToLong().ToString();
+                    OnPropertyChanged(nameof(TimeSpanValue));
+                    OnPropertyChanged(nameof(CurrentValue));
+                }
+            }
+        }
+        public DateTime DateTimeValue {
+            get {
+                return CurrentValue.ParseOrConvertToDateTime(0);
+            }
+            set {
+                if (DateTimeValue != value) {
+                    CurrentValue = value.ParseOrConvertToLong().ToString();
+                    OnPropertyChanged(nameof(DateTimeValue));
+                    OnPropertyChanged(nameof(CurrentValue));
+                }
+            }
+        }
         public double DoubleValue {
             get {
                 return CurrentValue.ParseOrConvertToDouble(0);
@@ -191,7 +211,7 @@ namespace MonkeyPaste.Avalonia {
                 if (ParameterFormat == null) {
                     return false;
                 }
-                return ParameterFormat.confirmToRemember;
+                return ParameterFormat.canRemember;
             }
         }
 

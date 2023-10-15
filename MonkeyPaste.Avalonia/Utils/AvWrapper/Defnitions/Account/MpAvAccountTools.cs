@@ -5,6 +5,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+    public enum MpUserAccountState {
+        Connected,
+        Disconnected,
+        Unregistered
+    }
+
     public partial class MpAvAccountTools : MpIAccountTools {
         #region Private Variables
         private MpContentCapInfo _lastCapInfo = new();
@@ -215,7 +221,17 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpSubscriptionFormat> GetUserSubscriptionAsync() {
             var acct = await GetStoreUserLicenseInfoAsync();
-            bool logged_in = await LoginUserAsync(acct);
+            if (acct != default) {
+                MpAvPrefViewModel.Instance.AccountType = acct.AccountType;
+                MpAvPrefViewModel.Instance.AccountNextPaymentDateTime = acct.ExpireOffsetUtc.UtcDateTime;
+                MpAvPrefViewModel.Instance.AccountBillingCycleType =
+                    acct.AccountType == MpUserAccountType.Free ?
+                        MpBillingCycleType.None :
+                        acct.IsMonthly ?
+                            MpBillingCycleType.Monthly :
+                            MpBillingCycleType.Yearly;
+            }
+            bool logged_in = await LoginUserAsync();
             if (acct == null) {
                 // anonymous
                 acct = new MpSubscriptionFormat() {
@@ -229,56 +245,43 @@ namespace MonkeyPaste.Avalonia {
             await PerformPlatformPurchaseAsync(uat, isMonthly);
         }
 
-        public async Task<bool> RegisterUserAsync(
-            string email,
-            string password,
-            bool remember,
-            MpSubscriptionFormat uasf) {
-            MpAvPrefViewModel.Instance.AccountEmail = null;
-            MpDebug.Assert(string.IsNullOrEmpty(MpAvPrefViewModel.Instance.AccountEmail), $"Account reg error, email already set to '{MpAvPrefViewModel.Instance.AccountEmail}'");
-            MpDebug.Assert(string.IsNullOrEmpty(MpAvPrefViewModel.Instance.AccountPassword), $"Account reg error, password already set");
-
+        public async Task<bool> RegisterUserAsync() {
             string register_url = $"https://www.monkeypaste.com/accounts/register.php";
             string response = await PostDataToUrlAsync(
                 url: register_url,
                 keyValuePairs: new Dictionary<string, string>() {
-                    {"username",email },
-                    {"email",email },
-                    {"password",password },
+                    {"username", MpAvPrefViewModel.Instance.AccountUsername },
+                    {"email", MpAvPrefViewModel.Instance.AccountEmail },
+                    {"password", MpAvPrefViewModel.Instance.AccountPassword },
+                    {"password2", MpAvPrefViewModel.Instance.AccountPassword2 },
                     {"device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
-                    {"sub_type", uasf.GetSubscriptionTypeString() },
-                    {"expires_utc_dt", uasf.ExpireOffsetUtc.ToString() },
+                    {"sub_type", MpAvPrefViewModel.Instance.AccountType.ToString() },
+                    {"monthly", MpAvPrefViewModel.Instance.AccountBillingCycleType == MpBillingCycleType.Monthly ? "1":"0" },
+                    {"expires_utc_dt", MpAvPrefViewModel.Instance.AccountNextPaymentDateTime.ToString() },
                     {"detail1", MpAvPrefViewModel.arg1 },
                     {"detail2", MpAvPrefViewModel.arg2 },
                     {"detail3", MpAvPrefViewModel.arg3 },
-                }); ;
+                });
             bool success = response == SUCCESS_PREFIX;
             if (success) {
-                MpAvPrefViewModel.Instance.AccountEmail = email;
-                MpAvPrefViewModel.Instance.AccountPassword = password;
-                MpConsole.WriteLine($"Registration successful for user '{email}' deviceid '{MpDefaultDataModelTools.ThisUserDeviceGuid}' acct_type '{uasf.GetSubscriptionTypeString()}'");
+                MpConsole.WriteLine($"Registration successful for user '{MpAvPrefViewModel.Instance.AccountEmail}' deviceid '{MpDefaultDataModelTools.ThisUserDeviceGuid}' acct_type '{MpAvPrefViewModel.Instance.AccountType}'");
             }
+
+
             return success;
         }
 
-        private async Task<bool> LoginUserAsync(MpSubscriptionFormat uasf) {
-            if (string.IsNullOrEmpty(MpAvPrefViewModel.Instance.AccountEmail) ||
-                uasf == null) {
-                // no acct
-                return false;
-            }
-
+        public async Task<bool> LoginUserAsync() {
             string login_url = $"https://www.monkeypaste.com/accounts/login.php";
-            string sub_type = uasf.GetSubscriptionTypeString();
-            string expires_utc_dt = uasf.ExpireOffsetUtc.ToString();
             string response = await PostDataToUrlAsync(
                 url: login_url,
                 keyValuePairs: new Dictionary<string, string>() {
-                    { "email",MpAvPrefViewModel.Instance.AccountEmail },
-                    { "password",MpAvPrefViewModel.Instance.AccountPassword },
-                    { "device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
-                    { "sub_type", sub_type },
-                    { "expires_utc_dt", expires_utc_dt }
+                    {"username", MpAvPrefViewModel.Instance.AccountUsername },
+                    {"password", MpAvPrefViewModel.Instance.AccountPassword },
+                    {"device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
+                    {"sub_type", MpAvPrefViewModel.Instance.AccountType.ToString() },
+                    {"monthly", MpAvPrefViewModel.Instance.AccountBillingCycleType == MpBillingCycleType.Monthly ? "1":"0" },
+                    {"expires_utc_dt", MpAvPrefViewModel.Instance.AccountNextPaymentDateTime.ToString() },
                 });
 
             if (response.StartsWith(SUCCESS_PREFIX) &&
@@ -291,7 +294,13 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        async Task<string> PostDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs) {
+        #endregion
+
+        #region Protected Methods
+        #endregion
+
+        #region Private Methods
+        private async Task<string> PostDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs) {
             // from https://stackoverflow.com/a/62640006/105028
             using (HttpClient httpClient = new HttpClient())
             using (MultipartFormDataContent formDataContent = new MultipartFormDataContent()) {
@@ -308,17 +317,12 @@ namespace MonkeyPaste.Avalonia {
                     return await httpResponseMessage.Content.ReadAsStringAsync();
                 } else {
                     // Throw Some Sort of Exception?
-                    return default;
+                    return string.Empty;
                 }
             }
         }
-        #endregion
 
-        #region Protected Methods
-        #endregion
-
-        #region Private Methods
-
+        #region Cap
         private async Task<List<int>> GetNowAndNextToTrashAsync() {
             // select oldest and next oldest created item not in trash(5) and not in favorites(3) [fallbacks] and not 
             string to_trash_query = @"
@@ -372,6 +376,8 @@ order by LastCapRelatedDateTime limit 2
             }
             return to_remove_result;
         }
+
+        #endregion
 
 
         #endregion

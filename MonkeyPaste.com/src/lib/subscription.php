@@ -41,16 +41,17 @@ function update_subscription(string $device_guid,string $sub_type,string $expire
     return $statement->execute();
 }
 
-function add_subscription(int $accid, string $device_guid, string $sub_type, string $expires_utc_dt, string $detail1, string $detail2, string $detail3)
+function add_subscription(int $accid, string $device_guid, string $sub_type, bool $is_monthly, string $expires_utc_dt, string $detail1, string $detail2, string $detail3)
 {
-    $sql = 'INSERT INTO subscription(fk_account_id, device_guid, sub_type, expires_utc_dt, detail1, detail2, detail3)
-                                VALUES(:accid, :device_guid, :sub_type, :expires_utc_dt, :detail1, :detail2, :detail3)';
+    $sql = 'INSERT INTO subscription(fk_account_id, device_guid, sub_type, monthly, expires_utc_dt, detail1, detail2, detail3)
+                                VALUES(:accid, :device_guid, :sub_type, :is_monthly, :expires_utc_dt, :detail1, :detail2, :detail3)';
 
     $statement = db()->prepare($sql);
 
     $statement->bindValue(':accid', $accid, PDO::PARAM_INT);
     $statement->bindValue(':device_guid', $device_guid);
     $statement->bindValue(':sub_type', $sub_type);
+    $statement->bindValue(':is_monthly', (int)$is_monthly, PDO::PARAM_INT);
     $statement->bindValue(':expires_utc_dt', getFormattedDateTimeStr($expires_utc_dt));
     $statement->bindValue(':detail1', $detail1);
     $statement->bindValue(':detail2', $detail2);

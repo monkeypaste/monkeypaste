@@ -335,10 +335,10 @@
     <value>Save</value>
   </data>
   <data name="AccountNextRemoveToolTipText" xml:space="preserve">
-    <value>Next to delete! Upgrade to avoid 💪🏽</value>
+    <value>Next to delete! Upgrade to avoid.</value>
   </data>
   <data name="AccountNextTrashToolTipText" xml:space="preserve">
-    <value>Next to trash! Upgrade to avoid 💪🏽</value>
+    <value>Next to trash! Upgrade to avoid.</value>
   </data>
   <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
     <value>Files</value>
@@ -834,7 +834,7 @@
     <value>Email</value>
   </data>
   <data name="AccountLoginButtonText" xml:space="preserve">
-    <value>Log in</value>
+    <value>Login</value>
   </data>
   <data name="AccountLoginFailedText" xml:space="preserve">
     <value>Login Failed :(</value>
@@ -883,5 +883,8 @@
   </data>
   <data name="CommonTimestampFormat" xml:space="preserve">
     <value>MM/dd/yyyy hh:mm tt</value>
+  </data>
+  <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
+    <value>Never</value>
   </data>
 </root>

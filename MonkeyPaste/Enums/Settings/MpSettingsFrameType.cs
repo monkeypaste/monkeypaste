@@ -1,7 +1,9 @@
 ﻿namespace MonkeyPaste {
     public enum MpSettingsFrameType {
         None = 0,
-        Account, //1 X
+        Login,
+        Status, //1 X
+        Register,
         Theme, //2 X
         Fonts, //3
         Sound, //2

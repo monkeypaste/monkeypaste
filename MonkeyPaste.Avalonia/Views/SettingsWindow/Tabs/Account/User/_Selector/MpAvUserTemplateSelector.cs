@@ -13,7 +13,8 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
             string key = $"{upt}Template";
-            if (AvailableTemplates[key].Build(param) is not Control c) {
+            if (!AvailableTemplates.ContainsKey(key) ||
+                AvailableTemplates[key].Build(param) is not Control c) {
                 return null;
             }
             if (upt == MpUserPageType.Register) {

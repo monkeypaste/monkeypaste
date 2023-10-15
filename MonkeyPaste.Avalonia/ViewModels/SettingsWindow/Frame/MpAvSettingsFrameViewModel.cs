@@ -32,7 +32,11 @@ namespace MonkeyPaste.Avalonia {
         public object IconResourceObj {
             get {
                 switch (FrameType) {
-                    case MpSettingsFrameType.Account:
+                    case MpSettingsFrameType.Register:
+                        return "GlobeImage";
+                    case MpSettingsFrameType.Login:
+                        return "WebImage";
+                    case MpSettingsFrameType.Status:
                         return "UserImage";
                     case MpSettingsFrameType.Theme:
                         return "BrushImage";

@@ -44,14 +44,14 @@
             VerticalAlignment="Stretch">
         <Grid>
             <Grid.ColumnDefinitions>
-              <!-- LABEL -->
+                <!--  LABEL  -->
                 <ColumnDefinition Width="100" />
-              <!-- DESCRIPTION -->
+                <!--  DESCRIPTION  -->
                 <ColumnDefinition Width="30" />
-              <!-- PARAMETER -->
+                <!--  PARAMETER  -->
                 <ColumnDefinition MinWidth="150"
                                   Width="*" />
-              <!-- REMEMBER -->
+                <!--  REMEMBER  -->
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -68,7 +68,7 @@
                        Margin="5,1,0,0"
                        Text="{Binding Label}" />
 
-            <!-- DESCRIPTION -->
+            <!--  DESCRIPTION  -->
 
             <local:MpAvToolTipInfoHintView Grid.Column="1"
                                            DockPanel.Dock="Right"
@@ -122,6 +122,13 @@
                         <DataTemplate x:Key="ComboBoxParameterTemplate"
                                       DataType="local:MpAvSingleEnumerableParameterViewModel">
                             <local:MpAvComboBoxParameterView />
+                        </DataTemplate>
+
+                        <!--  DateTime Parameter  -->
+
+                        <DataTemplate x:Key="DateTimeParameterTemplate"
+                                      DataType="local:MpAvDateTimeParameterViewModel">
+                            <local:MpAvDateTimeParameterView />
                         </DataTemplate>
 
                         <!--  TextBox Parameter  -->

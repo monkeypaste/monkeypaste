@@ -12,7 +12,7 @@ function login(string $username, string $password): bool
     if ($account && password_verify($password, $account['password']) && $account['active'] == 1) {
 
         // prevent session fixation attack
-        session_regenerate_id();
+        //session_regenerate_id();
         $_SESSION['username'] = $account['username'];
         $_SESSION['user_id']  = $account['id'];
 

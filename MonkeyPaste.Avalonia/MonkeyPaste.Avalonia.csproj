@@ -1570,6 +1570,9 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\Button\MpAvButtonParameterView.axaml.cs">
       <DependentUpon>MpAvButtonParameterView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\DateTime\MpAvDateTimeParameterView.axaml.cs">
+      <DependentUpon>MpAvDateTimeParameterView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\ShortcutRecorder\MpAvShortcutRecorderParameterView.axaml.cs">
       <DependentUpon>MpAvShortcutRecorderParameterView.axaml</DependentUpon>
     </Compile>
@@ -1709,7 +1712,7 @@
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.2" />
     <PackageReference Include="Markdig" Version="0.33.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
-    <PackageReference Include="SharpHook" Version="5.0.0" />
+    <PackageReference Include="SharpHook" Version="5.1.1" />
     <PackageReference Include="System.Management" Version="7.0.2" />
     <PackageReference Include="NetCoreAudio" Version="1.7.0" />
     <PackageReference Include="System.Speech" Version="7.0.0" />

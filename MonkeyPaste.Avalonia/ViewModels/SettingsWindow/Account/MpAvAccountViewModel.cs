@@ -47,11 +47,17 @@ namespace MonkeyPaste.Avalonia {
             HasBillingCycle ?
                 NextPaymentUtc.ToLocalTime().ToString(UiStrings.CommonDateFormat) :
                 "♾️";
-
+        public string LoginResultMessage =>
+            WasLoginSuccessful.IsNull() ?
+                string.Empty :
+                WasLoginSuccessful.Value ?
+                    UiStrings.AccountLoginSuccessfulText :
+                    UiStrings.AccountLoginFailedText;
 
         #endregion
 
         #region State
+
         public bool HasBillingCycle =>
             BillingCycleType == MpBillingCycleType.Monthly ||
             BillingCycleType == MpBillingCycleType.Yearly;
@@ -67,14 +73,18 @@ namespace MonkeyPaste.Avalonia {
             !string.IsNullOrEmpty(AccountEmail) &&
             !string.IsNullOrEmpty(AccountPassword);
 
+        public bool? WasLoginSuccessful { get; set; }
         #endregion
 
         #region Model
 
+        public string AccountUsername =>
+            MpAvPrefViewModel.Instance.AccountUsername;
         public string AccountEmail =>
             MpAvPrefViewModel.Instance.AccountEmail;
         public string AccountPassword =>
             MpAvPrefViewModel.Instance.AccountPassword;
+
 
         public bool IsActive {
             get {
@@ -175,6 +185,16 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return IsRegistered;
             });
+
+        //public MpIAsyncCommand LoginCommand => new MpAsyncCommand(
+        //    async () => {
+        //        WasLoginSuccessful = null;
+        //        WasLoginSuccessful = await MpAvAccountTools.Instance.RegisterUserAsync(AccountEmail, AccountPassword, Remember, Parent.UserAccount);
+        //        RefreshAccountPage();
+        //    },
+        //    () => {
+        //        return CanAttempLogin;
+        //    });
 
         public ICommand LogOutCommand => new MpCommand(
             () => {

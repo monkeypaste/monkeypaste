@@ -698,6 +698,43 @@ namespace MonkeyPaste.Common {
 
         #region Object
 
+
+        public static DateTime ParseOrConvertToDateTime(this object obj, object fallback = null) {
+            if (obj == default) {
+                if (obj == fallback) {
+                    return default;
+                }
+                return fallback.ParseOrConvertToDateTime(fallback);
+            }
+            if (obj == fallback) {
+                if (fallback == null) {
+                    return default;
+                }
+            }
+            if (obj is DateTime dt) {
+                return dt;
+            }
+
+            // stored as ticks
+            long ticks = obj.ParseOrConvertToLong(fallback);
+            return new DateTime(ticks);
+        }
+        public static TimeSpan ParseOrConvertToTimeSpan(this object obj, object fallback = null) {
+            if (obj == default) {
+                if (obj == fallback) {
+                    return default;
+                }
+                return fallback.ParseOrConvertToTimeSpan(fallback);
+            }
+            if (obj == fallback) {
+                if (fallback == null) {
+                    return default;
+                }
+            }
+            // stored as ticks
+            long ticks = obj.ParseOrConvertToLong(fallback);
+            return TimeSpan.FromTicks(ticks);
+        }
         public static double ParseOrConvertToDouble(this object obj, object fallback = null) {
             if (obj == null) {
                 if (obj == fallback) {
@@ -727,6 +764,10 @@ namespace MonkeyPaste.Common {
             if (obj is bool boolObj) {
                 return boolObj ? 1 : 0;
             }
+
+            if (obj is TimeSpan tsObj) {
+                return (double)tsObj.Ticks;
+            }
             if (obj is string strObj) {
                 if (string.IsNullOrEmpty(strObj)) {
                     if (obj == fallback) {
@@ -749,6 +790,34 @@ namespace MonkeyPaste.Common {
             MpDebug.Break($"Unknown obj type '{obj.GetType()}', cannot convert double. Returning 0");
             return 0;
         }
+        public static long ParseOrConvertToLong(this object obj, object fallback = null) {
+            if (obj == null) {
+                if (obj == fallback) {
+                    return 0;
+                }
+                return fallback.ParseOrConvertToLong(fallback);
+            }
+            if (obj == fallback) {
+                if (fallback == null) {
+                    return 0;
+                }
+            }
+            if (obj is long lngObj) {
+                return lngObj;
+            }
+            if (obj is TimeSpan ts) {
+                return ts.Ticks;
+            }
+            if (obj is DateTime dt) {
+                return dt.Ticks;
+            }
+            if (obj is string strObj && long.TryParse(strObj, out long lngVal)) {
+                return lngVal;
+            }
+
+            return obj.ParseOrConvertToInt(fallback);
+        }
+
         public static int ParseOrConvertToInt(this object obj, object fallback = null) {
             if (obj == null) {
                 if (obj == fallback) {
@@ -779,6 +848,12 @@ namespace MonkeyPaste.Common {
             }
             if (obj is bool boolObj) {
                 return boolObj ? 1 : 0;
+            }
+            if (obj is TimeSpan tsObj) {
+                return (int)tsObj.Ticks;
+            }
+            if (obj is long lngObj) {
+                return (int)lngObj;
             }
             if (obj is string strObj) {
                 return (int)obj.ParseOrConvertToDouble(fallback);

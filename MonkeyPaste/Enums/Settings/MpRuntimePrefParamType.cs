@@ -7,9 +7,8 @@
         ResetNtf,
         ResetPluginCache,
         AccountRegister,
-        AccountSignIn,
-        AccountClick,
-        AccountSignOut,
+        AccountLogin,
+        AccountLogout,
         ThemeHexColor,
         ChangeDbPassword,
         ClearDbPassword

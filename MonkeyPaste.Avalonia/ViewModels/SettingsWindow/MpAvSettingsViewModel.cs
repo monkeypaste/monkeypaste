@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -26,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
         MpISettingsTools {
         #region Private Variables
 
-        private string[] _reinitContentParams = new string[] {
+        private string[] _reinitContentParams => new string[] {
             nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
             nameof(MpAvPrefViewModel.Instance.DefaultEditableFontFamily),
             nameof(MpAvPrefViewModel.Instance.IsDataTransferDestinationFormattingEnabled),
@@ -37,7 +36,7 @@ namespace MonkeyPaste.Avalonia {
             nameof(MpAvPrefViewModel.Instance.GlobalBgOpacity),
         };
 
-        public string[] HiddenParamIds = new string[] {
+        public string[] HiddenParamIds => new string[] {
             nameof(MpAvPrefViewModel.Instance.NotificationSoundGroupIdx),
             nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup),
             nameof(MpAvPrefViewModel.Instance.UserLanguageCode),
@@ -49,7 +48,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region CONSTANTS
 
-        public const MpSettingsTabType DEFAULT_SELECTED_TAB = MpSettingsTabType.Preferences;
+        public const MpSettingsTabType DEFAULT_SELECTED_TAB = MpSettingsTabType.Account;
         #endregion
 
         #region Statics
@@ -203,42 +202,135 @@ namespace MonkeyPaste.Avalonia {
                 {
                     MpSettingsTabType.Account,
                     new [] {
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Account) {
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Status) {
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AccountEmail),
-                                            isVisible = !string.IsNullOrEmpty(MpAvPrefViewModel.Instance.AccountEmail),
                                             controlType = MpParameterControlType.TextBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             isReadOnly = true,
                                             label = "Email",
-                                            values =new List<MpPluginParameterValueFormat>() {
-                                                new MpPluginParameterValueFormat() {
-                                                    isDefault = true,
-                                                    value = string.IsNullOrEmpty(MpAvPrefViewModel.Instance.AccountEmail) ?
-                                                        "Unavailable":MpAvPrefViewModel.Instance.AccountEmail
-                                                },
-                                            }
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountEmail)
                                         },
                                         new MpParameterFormat() {
-                                            paramId = MpRuntimePrefParamType.ChangeAccountType.ToString(),
-                                            controlType = MpParameterControlType.ComboBox,
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountUsername),
+                                            controlType = MpParameterControlType.TextBox,
                                             unitType = MpParameterValueUnitType.PlainText,
-                                            label = "Status",
-                                            values =
-                                                Enum.GetNames(typeof(MpUserAccountType))
-                                                .Select((x,idx)=> new MpPluginParameterValueFormat() {
-                                                    isDefault = Mp.Services.AccountTools.CurrentAccountType.ToString() == x,
-                                                    value = x,
-                                                    label = x.ToEnum<MpUserAccountType>().EnumToUiString()
-                                                }).ToList()
+                                            isReadOnly = true,
+                                            label = "User Name",
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
                                         },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountType),
+                                            controlType = MpParameterControlType.TextBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            isReadOnly = true,
+                                            label = "Subscription",
+                                            value = new MpPluginParameterValueFormat(
+                                                val: MpAvPrefViewModel.Instance.AccountType.ToString(),
+                                                label: MpAvPrefViewModel.Instance.AccountType.EnumToUiString())
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountBillingCycleType),
+                                            controlType = MpParameterControlType.TextBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            isReadOnly = true,
+                                            label = "Billing Cycle",
+                                            value = new MpPluginParameterValueFormat(
+                                                val: MpAvPrefViewModel.Instance.AccountBillingCycleType.ToString(),
+                                                label: MpAvPrefViewModel.Instance.AccountBillingCycleType.EnumToUiString())
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountNextPaymentDateTime),
+                                            controlType = MpParameterControlType.TextBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            isReadOnly = true,
+                                            label = "Next Payment",
+                                            value = new MpPluginParameterValueFormat(
+                                                MpAvPrefViewModel.Instance.AccountBillingCycleType == MpBillingCycleType.None ?
+                                                    MpBillingCycleType.None.EnumToUiString() :
+                                                    MpAvPrefViewModel.Instance.AccountNextPaymentDateTime.ToString(UiStrings.CommonDateFormat))
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.AccountLogout.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            value = new MpPluginParameterValueFormat("Logout","Logout",true)
+                                        }
                                     }
                                 }
                             }
-                        }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Login) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountUsername),
+                                            controlType = MpParameterControlType.TextBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "User Name",
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountPassword),
+                                            controlType = MpParameterControlType.PasswordBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "Password",
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword)
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.AccountRegister.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            value = new MpPluginParameterValueFormat("Login","Login",true)
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Register) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountEmail),
+                                            controlType = MpParameterControlType.TextBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "Email",
+                                            pattern = MpRegEx.RegExLookup[MpRegExType.ExactEmail].ToString(),
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountEmail)
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountUsername),
+                                            controlType = MpParameterControlType.TextBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "User Name",
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountPassword),
+                                            controlType = MpParameterControlType.PasswordBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "Password",
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword)
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountPassword2),
+                                            controlType = MpParameterControlType.PasswordBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "Confirm",
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword2)
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.AccountRegister.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            value = new MpPluginParameterValueFormat("Register","Register",true)
+                                        }
+                                    }
+                                }
+                            }
+                        },
                     }
 
                 },
@@ -925,7 +1017,7 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ResetShortcuts.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            label = "App GestureProfile",
+                                            label = "Gesture Profile",
                                             description = "All application shortcuts will be reset to their default key gestures.",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
@@ -1296,7 +1388,7 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region Account Type
+        #region Remember Account 
 
         private void SetAccountType(MpUserAccountType at) {
             Dispatcher.UIThread.VerifyAccess();
@@ -1360,7 +1452,7 @@ namespace MonkeyPaste.Avalonia {
             if (cb == null) {
                 return;
             }
-            var cbil = cb.GetLogicalDescendants().OfType<ComboBoxItem>();
+            var cbil = cb.GetLogicalDescendants<ComboBoxItem>();
             foreach (var cbi in cbil) {
                 if (cbi.DataContext is MpAvEnumerableParameterValueViewModel epvvm) {
                     cbi.FontFamily = MpAvStringToFontFamilyConverter.Instance.Convert(epvvm.Value, null, null, null) as FontFamily;
@@ -1642,6 +1734,38 @@ namespace MonkeyPaste.Avalonia {
                     case MpRuntimePrefParamType.ResetShortcuts:
                         MpAvShortcutCollectionViewModel.Instance.ResetAllShortcutsCommand.Execute(null);
                         break;
+
+                    case MpRuntimePrefParamType.AccountRegister: {
+                            if (MpAvPrefViewModel.Instance.AccountState != MpUserAccountState.Unregistered) {
+                                return;
+                            }
+                            var result = await MpAvAccountTools.Instance.RegisterUserAsync();
+                            if (result) {
+                                MpAvPrefViewModel.Instance.AccountState = MpUserAccountState.Disconnected;
+                            }
+                            break;
+                        }
+
+                    case MpRuntimePrefParamType.AccountLogin: {
+                            if (MpAvPrefViewModel.Instance.AccountState != MpUserAccountState.Disconnected) {
+                                return;
+                            }
+                            var result = await MpAvAccountTools.Instance.LoginUserAsync();
+                            if (result) {
+                                MpAvPrefViewModel.Instance.AccountState = MpUserAccountState.Connected;
+                            }
+                            break;
+                        }
+
+                    case MpRuntimePrefParamType.AccountLogout: {
+                            if (MpAvPrefViewModel.Instance.AccountState != MpUserAccountState.Connected) {
+                                return;
+                            }
+                            MpAvPrefViewModel.Instance.AccountState = MpUserAccountState.Disconnected;
+
+                            break;
+                        }
+
                 }
             });
 
