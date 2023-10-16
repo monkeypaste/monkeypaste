@@ -50,7 +50,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public string DescriptionTemplate {
+        string DescriptionTemplate {
             get {
                 switch (AccountType) {
                     case MpUserAccountType.None:
@@ -66,17 +66,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public string MonthlyRateText =>
-            Mp.Services.AccountTools.GetAccountRate(AccountType, true);
 
-        public string YearlyRateText =>
-            Mp.Services.AccountTools.GetAccountRate(AccountType, false);
-
-        public string RateText =>
-            Parent == null ||
-            Parent.IsMonthlyEnabled ?
-                MonthlyRateText :
-                YearlyRateText;
         public string DescriptionText {
             get {
                 return string.Format(
@@ -86,16 +76,61 @@ namespace MonkeyPaste.Avalonia {
                     Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Standard));
             }
         }
+        string MonthlyRateText =>
+            Mp.Services.AccountTools.GetAccountRate(AccountType, true);
+
+        string YearlyRateText =>
+            Mp.Services.AccountTools.GetAccountRate(AccountType, false);
+
+        public string RateText =>
+            IsMonthlyEnabled ?
+                MonthlyRateText :
+                YearlyRateText;
+
+        string MonthlyTrialText =>
+            HasMonthlyTrial ?
+                string.Format(UiStrings.AccountFreeTrialLabel, MonthlyTrialDayCount) :
+                null;
+
+        string YearlyTrialText =>
+            HasYearlyTrial ?
+                string.Format(UiStrings.AccountFreeTrialLabel, YearlyTrialDayCount) :
+                null;
+
+        public string TrialText =>
+            IsMonthlyEnabled ?
+                MonthlyTrialText :
+                YearlyTrialText;
 
         #endregion
 
         #region State
+
+        public bool IsMonthlyEnabled =>
+            Parent != null && Parent.IsMonthlyEnabled;
+
         public bool IsVisible =>
             AccountType != MpUserAccountType.None;
         public bool IsTrialAvailable => true;
 
         public bool IsChecked { get; set; }
         public bool IsHovering { get; set; }
+
+        public bool HasTrial =>
+            IsMonthlyEnabled ?
+                HasMonthlyTrial :
+                HasYearlyTrial;
+
+        bool HasMonthlyTrial =>
+            MonthlyTrialDayCount > 0;
+        bool HasYearlyTrial =>
+            YearlyTrialDayCount > 0;
+
+        int MonthlyTrialDayCount =>
+            MpAvAccountTools.Instance.GetSubscriptionTrialLength(AccountType, true);
+
+        int YearlyTrialDayCount =>
+            MpAvAccountTools.Instance.GetSubscriptionTrialLength(AccountType, false);
         #endregion
 
         #region Model
@@ -121,7 +156,9 @@ namespace MonkeyPaste.Avalonia {
             return new MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel.Instance, AccountType) {
                 IconSourceObj = IconSourceObj,
                 LabelText = LabelText,
+                LabelText2 = isMonthly ? MonthlyTrialText : YearlyTrialText,
                 DescriptionText = DescriptionText,
+                DescriptionText2 = isMonthly ? MonthlyRateText : YearlyRateText,
                 IsChecked = AccountType == MpUserAccountType.Unlimited
             };
         }

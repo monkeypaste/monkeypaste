@@ -887,4 +887,7 @@
   <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
     <value>Never</value>
   </data>
+  <data name="AccountFreeTrialLabel" xml:space="preserve">
+    <value>Free {0}-Day Trial</value>
+  </data>
 </root>

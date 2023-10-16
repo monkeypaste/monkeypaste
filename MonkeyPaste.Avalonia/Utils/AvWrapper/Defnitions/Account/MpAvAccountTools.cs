@@ -33,6 +33,8 @@ namespace MonkeyPaste.Avalonia {
         const int MAX_STANDARD_TRASH_COUNT = -1;
         const int MAX_UNLIMITED_TRASH_COUNT = -1;
 
+        const int DEFAULT_UNLIMITED_TRIAL_DAY_COUNT = 7;
+
         #endregion
 
         #region Statics
@@ -100,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
             if (AccountTypePriceLookup.TryGetValue((acctType, isMonthly), out string rate)) {
                 return rate;
             }
-            return "???";
+            return string.Empty;
         }
 
         public async Task<MpContentCapInfo> RefreshCapInfoAsync() {
@@ -187,13 +189,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new Dictionary<(MpUserAccountType, bool), string>() {
-            {(MpUserAccountType.Free,true),"Free" },
-            {(MpUserAccountType.Free,false),"Free" },
+            {(MpUserAccountType.Free,true),"$0.00" },
+            {(MpUserAccountType.Free,false),"$0.00" },
             {(MpUserAccountType.Standard,true),"$0.99" },
             {(MpUserAccountType.Standard,false),"$9.99" },
             {(MpUserAccountType.Unlimited,true),"$2.99" },
             {(MpUserAccountType.Unlimited,false),"$29.99" }
         };
+
+        Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new Dictionary<(MpUserAccountType, bool), int>() {
+            {(MpUserAccountType.Unlimited,true),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT },
+            {(MpUserAccountType.Unlimited,false),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT }
+        };
+
         public bool IsContentAddPausedByAccount { get; private set; }
         public MpContentCapInfo LastCapInfo => _lastCapInfo;
 
@@ -241,9 +249,24 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine($"login {logged_in.ToTestResultLabel()}");
             return acct;
         }
-        public async Task PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly) {
-            await PerformPlatformPurchaseAsync(uat, isMonthly);
+        public int GetSubscriptionTrialLength(MpUserAccountType uat, bool isMonthly) {
+            if (AccountTypeTrialAvailabilityLookup.TryGetValue((uat, isMonthly), out int dayCount)) {
+                return dayCount;
+            }
+            return 0;
         }
+
+        public async Task<bool?> PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly) {
+            if (uat == MpUserAccountType.None ||
+                uat == MpUserAccountType.Free) {
+                // ignore free or none
+                return true;
+            }
+            var result = await PerformPlatformPurchaseAsync(uat, isMonthly);
+            return result;
+        }
+
+
 
         public async Task<bool> RegisterUserAsync() {
             string register_url = $"https://www.monkeypaste.com/accounts/register.php";

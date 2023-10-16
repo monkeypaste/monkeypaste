@@ -8,6 +8,8 @@
                   xmlns:pcl="using:MonkeyPaste"
                   Classes="fadeOut welcome welcomeGrow"
                   x:Class="MonkeyPaste.Avalonia.MpAvWelcomeWindow"
+                  x:CompileBindings="False"
+                  x:DataType="local:MpAvWelcomeNotificationViewModel"
                   local:MpAvMoveWindowExtension.IsEnabled="True"
                   Background="Transparent"
                   WindowStartupLocation="CenterScreen"

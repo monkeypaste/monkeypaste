@@ -21,11 +21,18 @@ namespace MonkeyPaste.Common {
             if (asException) {
                 throw new Exception(args.ToString());
             }
+            BreakAll(true, true);
+        }
+        public static void BreakAll(bool pre, bool post) {
 #if DEBUG
             if (Debugger.IsAttached) {
-                MpCommonTools.Services.DebugBreakHelper.HandlePreBreak();
+                if (pre) {
+                    MpCommonTools.Services.DebugBreakHelper.HandlePreBreak();
+                }
                 Debugger.Break();
-                MpCommonTools.Services.DebugBreakHelper.HandlePostBreak();
+                if (post) {
+                    MpCommonTools.Services.DebugBreakHelper.HandlePostBreak();
+                }
             }
 #endif
         }

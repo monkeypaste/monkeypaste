@@ -5,6 +5,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="using:MonkeyPaste.Avalonia"
              mc:Ignorable="d"
+             x:CompileBindings="True"
              d:DesignWidth="800"
              d:DesignHeight="450"
              x:DataType="local:MpAvSettingsViewModel"

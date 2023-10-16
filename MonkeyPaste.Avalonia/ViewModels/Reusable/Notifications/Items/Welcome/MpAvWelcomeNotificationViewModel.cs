@@ -100,8 +100,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public bool IsAccountOptSelected =>
-            CurPageType == MpWelcomePageType.Account;
+        public bool IsAccountOptSelected { get; set; }
+
         public bool IsAccountMonthEnabled { get; set; } = false;
         public override bool WantsTopmost =>
             false;
@@ -183,6 +183,7 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsPrimaryChecked));
                     break;
                 case nameof(CurPageType):
+                    IsAccountOptSelected = CurPageType == MpWelcomePageType.Account;
                     OnPropertyChanged(nameof(IsAccountOptSelected));
                     OnPropertyChanged(nameof(WantsTopmost));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
@@ -207,13 +208,23 @@ namespace MonkeyPaste.Avalonia {
 
                     CurOptGroupViewModel.WasVisited = true;
                     break;
+                case nameof(IsAccountOptSelected):
+                    if (IsAccountOptSelected) {
+                        //MpDebug.BreakAll(true, false);
+                    }
+                    break;
                 case nameof(IsAccountMonthEnabled):
                     if (AccountViewModel == null) {
                         break;
                     }
-                    AccountViewModel.Items =
-                        MpAvSubcriptionPurchaseViewModel.Instance
-                        .ToWelcomeOptionGroup(IsAccountMonthEnabled).Items;
+                    var sel_item = AccountViewModel.Items.FirstOrDefault(x => x.IsChecked);
+                    MpUserAccountType sel_item_type = sel_item == null ? MpUserAccountType.Unlimited : (MpUserAccountType)sel_item.OptionId;
+                    foreach (var (optvm, idx) in AccountViewModel.Items.WithIndex()) {
+                        optvm.IsOptionVisible =
+                            IsAccountMonthEnabled ? idx >= 4 : idx < 4;
+                        optvm.IsChecked = optvm.IsOptionVisible &&
+                            (MpUserAccountType)optvm.OptionId == sel_item_type;
+                    }
                     break;
             }
         }
@@ -232,7 +243,7 @@ namespace MonkeyPaste.Avalonia {
 
             #region Account
 
-            AccountViewModel = MpAvSubcriptionPurchaseViewModel.Instance.ToWelcomeOptionGroup(IsAccountMonthEnabled);
+            AccountViewModel = MpAvSubcriptionPurchaseViewModel.Instance.ToWelcomeOptionGroup();
 
             #endregion
 
@@ -342,7 +353,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void FinishWelcomeSetup() {
+        private async void FinishWelcomeSetup() {
             IsWelcomeDone = true;
             // NOTE this isn't flagged until DONE is clicked and assumes
             // there's per-page validation (only needed for accounts atm I think)
@@ -355,15 +366,17 @@ namespace MonkeyPaste.Avalonia {
             // ACCOUNT TYPE
 
             MpUserAccountType acct_type = MpUserAccountType.Free;
+            MpDebug.Assert(AccountViewModel.Items.Where(x => x.IsChecked).Count() <= 1, $"Account selection not single");
             if (AccountViewModel.Items.FirstOrDefault(x => x.IsChecked) is MpAvWelcomeOptionItemViewModel sel_acct_vm &&
                 sel_acct_vm.OptionId is MpUserAccountType sel_acct_type) {
                 // NOTE to work around login failures or no selection, just default to free i guess
-                acct_type = sel_acct_type;
+                bool? success = await MpAvAccountTools.Instance.PurchaseSubscriptionAsync(sel_acct_type, AccountViewModel.Items.IndexOf(sel_acct_vm) >= 4);
+                if (success.IsTrue()) {
+                    acct_type = sel_acct_type;
+                }
+                // TODO test IAP window if it doesn't 
+                // display errors need to show something here if non-true
             }
-
-#if DEBUG
-            MpAvPrefViewModel.Instance.TestAccountType = acct_type;
-#endif
 
             Mp.Services.AccountTools.SetAccountType(acct_type);
 

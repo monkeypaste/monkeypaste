@@ -5,6 +5,8 @@
                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                        xmlns:local="using:MonkeyPaste.Avalonia"
+                       x:DataType="local:MpAvWelcomeOptionGroupViewModel"
+                       x:CompileBindings="True"
                        x:TypeArguments="local:MpAvWelcomeOptionGroupViewModel"
                        x:Class="MonkeyPaste.Avalonia.MpAvWelcomeOptionsView"
                        mc:Ignorable="d"
@@ -12,27 +14,32 @@
                        d:DesignWidth="400"
                        d:DesignHeight="300">
     <local:MpAvUserControl.Styles>
-        <Style Selector=":is(Visual).effectTrans">
-            <Setter Property="Effect"
-                    Value="drop-shadow(0 0 0 black)" />
-        </Style>
         <!--  OPTION BUTTONS  -->
 
-        <Style Selector="RadioButton.gestureButton:pointerover">
-            <Setter Property="Effect"
-                    Value="drop-shadow(5 5 15 black)" />
+        <Style Selector="RadioButton.gestureButton">
+            <Style.Resources>
+                <SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" />
+
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="RoyalBlue" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource ThemeAccent2Color}" />
+
+                <Thickness x:Key="ToggleButtonBorderThemeThickness">2.5</Thickness>
+            </Style.Resources>
         </Style>
         <Style Selector="RadioButton.gestureButton:pointerover Image, RadioButton.gestureButton:checked Image">
-            <Setter Property="Effect"
-                    Value="drop-shadow(0 0 7 white)" />
+            <!--<Setter Property="Effect"
+                    Value="drop-shadow(5 5 7 black)" />-->
         </Style>
         <Style Selector="RadioButton.gestureButton:pointerover TextBlock">
-            <Setter Property="Effect"
-                    Value="drop-shadow(0 0 3 white)" />
+            <!--<Setter Property="Effect"
+                    Value="drop-shadow(0 0 3 white)" />-->
         </Style>
         <Style Selector="RadioButton.gestureButton:checked TextBlock">
-            <Setter Property="Effect"
-                    Value="drop-shadow(0 0 3 black)" />
+            <!--<Setter Property="Effect"
+                    Value="drop-shadow(0 0 3 white)" />-->
         </Style>
 
         <!--  CAPTION COLOR  -->
@@ -116,6 +123,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <StackPanel Orientation="Vertical"
+                MinHeight="500"
                 Spacing="20"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
@@ -137,16 +145,24 @@
         <TextBlock Classes="description"
                    Text="{Binding Caption}" />
 
-      <!-- ACCT MONTLY TOGGLE -->
+        <!--  ACCT MONTLY TOGGLE  -->
         <ToggleSwitch x:Name="MonthlyToggleButton"
+                      DataContext="{x:Static local:MpAvWelcomeNotificationViewModel.Instance}"
+                      x:DataType="local:MpAvWelcomeNotificationViewModel"
                       Classes="defaultButton"
+                      Foreground="Black"
+                      FontSize="16"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"
-                      IsVisible="{Binding IsAccountOptSelected, FallbackValue=False, TargetNullValue=False}"
-                      IsChecked="{Binding IsAccountMonthEnabled, Mode=TwoWay, FallbackValue=True, TargetNullValue=True}"
+                      IsVisible="{Binding IsAccountOptSelected}"
+                      IsChecked="{Binding IsAccountMonthEnabled, Mode=TwoWay}"
                       FontWeight="SemiBold"
                       OnContent="{x:Static local:UiStrings.WelcomeAccountMonthlySwitchEnabled}"
-                      OffContent="{x:Static local:UiStrings.WelcomeAccountMonthlySwitchDisabled}" />
+                      OffContent="{x:Static local:UiStrings.WelcomeAccountMonthlySwitchDisabled}">
+            <ToggleSwitch.Resources>
+
+            </ToggleSwitch.Resources>
+        </ToggleSwitch>
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Center"
@@ -159,45 +175,78 @@
                           VerticalAlignment="Center">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
+                        <StackPanel ClipToBounds="False"
+                                    Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border local:MpAvIsHoveringExtension.IsEnabled="True"
-                                local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                Classes="rejectWindowMove"
-                                IsHitTestVisible="True"
-                                Background="{StaticResource HitTestableTransparent}">
-                            <RadioButton Classes="defaultButton gestureButton effectTrans"
-                                         Theme="{StaticResource SwitchlessRadioButton}"
-                                         GroupName="GestureProfile"
-                                         CornerRadius="7"
-                                         Margin="15"
-                                         Padding="15,15,15,5"
-                                         Width="200"
-                                         Height="230"
-                                         HorizontalContentAlignment="Center"
-                                         VerticalContentAlignment="Center"
-                                         IsHitTestVisible="{Binding IsHitTestable}"
-                                         Command="{Binding ToggleOptionCommand}"
-                                         IsChecked="{Binding IsChecked, Mode=OneWay}">
-                                <DockPanel HorizontalAlignment="Stretch"
-                                           VerticalAlignment="Stretch">
-                                    <TextBlock DockPanel.Dock="Bottom"
-                                               HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Bottom"
+                        <Grid IsVisible="{Binding IsOptionVisible, Mode=OneWay}">
+                            <!--  OPTION BUTTON  -->
+
+                            <Border local:MpAvIsHoveringExtension.IsEnabled="True"
+                                    local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                    Classes="rejectWindowMove"
+                                    Background="{StaticResource HitTestableTransparent}">
+                                <RadioButton Classes="defaultButton gestureButton effectTrans"
+                                             Theme="{StaticResource SwitchlessRadioButton}"
+                                             GroupName="GestureProfile"
+                                             CornerRadius="7"
+                                             Margin="15"
+                                             Padding="15,15,15,5"
+                                             Width="200"
+                                             Height="230"
+                                             HorizontalContentAlignment="Center"
+                                             VerticalContentAlignment="Center"
+                                             Command="{Binding ToggleOptionCommand}"
+                                             IsChecked="{Binding IsChecked, Mode=OneWay}">
+                                    <DockPanel HorizontalAlignment="Stretch"
+                                               VerticalAlignment="Stretch">
+                                        <TextBlock DockPanel.Dock="Bottom"
+                                                   HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Bottom"
+                                                   TextAlignment="Center"
+                                                   FontSize="20"
+                                                   Text="{Binding LabelText}" />
+                                        <Image Width="160"
+                                               Height="160"
+                                               Margin="0,0,0,10"
+                                               Stretch="UniformToFill"
+                                               Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+                                    </DockPanel>
+                                </RadioButton>
+                            </Border>
+
+                            <!--  TRIAL BADGE  -->
+
+                            <Border x:Name="FreeTrialOuterContainer"
+                                    Classes="rejectWindowMove"
+                                    Margin="0,10,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Background="Crimson"
+                                    CornerRadius="7"
+                                    IsVisible="{Binding LabelText2, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
+                                <Border.RenderTransform>
+                                    <TransformGroup>
+                                        <!--<TranslateTransform X="0" Y="-50" />-->
+                                        <!--<RotateTransform Angle="45" />-->
+                                    </TransformGroup>
+                                </Border.RenderTransform>
+                                <Border BorderBrush="White"
+                                        BorderThickness="3"
+                                        CornerRadius="{Binding $parent.CornerRadius}"
+                                        Margin="3"
+                                        Padding="7,5">
+                                    <TextBlock FontWeight="SemiBold"
+                                               FontSize="14"
+                                               Foreground="WhiteSmoke"
+                                               Text="{Binding LabelText2}"
                                                TextAlignment="Center"
-                                               FontSize="20"
-                                               Text="{Binding LabelText}" />
-                                    <Image Width="160"
-                                           Height="160"
-                                           Margin="0,0,0,10"
-                                           Stretch="UniformToFill"
-                                           Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
-                                </DockPanel>
-                            </RadioButton>
-                        </Border>
+                                               TextWrapping="NoWrap" />
+                                </Border>
+                            </Border>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -245,27 +294,26 @@
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Top"
                                      MinHeight="120"
+                                     ClipToBounds="False"
                                      Classes.checked="{Binding IsPrimaryChecked, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}"
                                      Content="{Binding PrimaryItem, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}">
             <TransitioningContentControl.PageTransition>
                 <CrossFade Duration="0:00:00.500" />
             </TransitioningContentControl.PageTransition>
             <TransitioningContentControl.ContentTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="local:MpAvWelcomeOptionItemViewModel">
                     <Grid>
                         <!--  ACCOUNT TYPE DESCRIPTION  -->
+                        <StackPanel IsVisible="{Binding Parent.IsAccountOptSelected}">
+                            <TextBlock Classes="description"
+                                       Text="{Binding DescriptionText}" />
+                            <TextBlock Classes="description"
+                                       IsVisible="{Binding DescriptionText2, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                       Text="{Binding DescriptionText2}"
+                                       Foreground="Green"
+                                       FontWeight="SemiBold" />
+                        </StackPanel>
 
-                        <TextBlock Classes="description"
-                                   IsVisible="{Binding Parent.IsAccountOptSelected}">
-                            <TextBlock.Inlines>
-                                <InlineCollection>
-                                    <Run Text="{Binding DescriptionText2}"
-                                         Foreground="Green"
-                                         FontWeight="SemiBold" />
-                                    <Run Text="{Binding DescriptionText}" />
-                                </InlineCollection>
-                            </TextBlock.Inlines>
-                        </TextBlock>
 
                         <!--  STANDARD DESCRIPTION  -->
                         <TextBlock Classes="description"

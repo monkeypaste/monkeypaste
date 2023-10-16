@@ -37,7 +37,7 @@ namespace MonkeyPaste.Avalonia {
                     MpAvWindowManager.MainWindow != null) {
                     nint hwnd = MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle;
                     if (hwnd != nint.Zero) {
-                        // from https://aka.ms/storecontext-for-desktop.
+                        // from https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials#desktop
                         WinRT.Interop.InitializeWithWindow.Initialize(_context, hwnd);
                         _isContextWindowInitialized = true;
                     }
@@ -49,14 +49,14 @@ namespace MonkeyPaste.Avalonia {
 
         Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup { get; } =
             new Dictionary<string, (MpUserAccountType, bool)>() {
-                {"9PMDM0QVHJCS", (MpUserAccountType.Free, false)   },
-                {"9N5X8R1C9CR4", (MpUserAccountType.Unlimited, true) },
+                //{"9PMDM0QVHJCS", (MpUserAccountType.Free, false)   },
+                //{"9N5X8R1C9CR4", (MpUserAccountType.Unlimited, true) },
 
-                //{"9PP3W114BHL5", (MpUserAccountType.Standard, true) },
-                //{"9N41GXV5HQQ2", (MpUserAccountType.Standard, false) },
+                {"9PP3W114BHL5", (MpUserAccountType.Standard, true) },
+                {"9N41GXV5HQQ2", (MpUserAccountType.Standard, false) },
 
-                //{"9PGVZ60KMDQ7", (MpUserAccountType.Unlimited, true) },
-                //{"9NN60Z6FX02H", (MpUserAccountType.Unlimited, false) }
+                {"9PGVZ60KMDQ7", (MpUserAccountType.Unlimited, true) },
+                {"9NN60Z6FX02H", (MpUserAccountType.Unlimited, false) }
             };
 
         #endregion
@@ -67,17 +67,34 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
         public async Task InitAsync() {
             if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
-                await RefreshPricingInfoAsync();
+                await RefreshAddOnInfoAsync();
                 return;
             }
             await RefreshUserAccountStateAsync();
         }
 
-        public async Task RefreshPricingInfoAsync() {
+        public async Task RefreshAddOnInfoAsync() {
+            AccountTypeTrialAvailabilityLookup.Clear();
             AccountTypePriceLookup.Clear();
             foreach (var at in AccountTypeAddOnStoreIdLookup) {
                 var sp = await GetAddOnByStoreIdAsync(at.Key);
-                AccountTypePriceLookup.Add(at.Value, sp.Price.FormattedPrice);
+                AccountTypePriceLookup.AddOrReplace(at.Value, sp.Price.FormattedRecurrencePrice);
+
+                if (sp.Skus.Count < 2) {
+                    // no trial available
+                    // example https://learn.microsoft.com/en-us/windows/uwp/monetize/enable-subscription-add-ons-for-your-app#purchase-a-subscription-add-on
+                    continue;
+                }
+                var trial_sku = sp.Skus[0];
+                if (trial_sku.SubscriptionInfo.HasTrialPeriod) {
+                    // presumes either weekly or monthly (currently 1 week)
+                    int unit_to_days =
+                        trial_sku.SubscriptionInfo.TrialPeriodUnit == StoreDurationUnit.Week ?
+                            7 :
+                            30;
+                    int trial_day_count = (int)trial_sku.SubscriptionInfo.TrialPeriod * unit_to_days;
+                    AccountTypeTrialAvailabilityLookup.AddOrReplace(at.Value, trial_day_count);
+                }
             }
         }
         public async Task<MpSubscriptionFormat> RefreshUserAccountStateAsync() {
@@ -155,12 +172,18 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("The subscription was not found.");
             return null;
         }
-        private async Task PerformPlatformPurchaseAsync(MpUserAccountType uat, bool isMonthly) {
-            var acc_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value == (uat, isMonthly));
-            if (string.IsNullOrEmpty(acc_kvp.Key)) {
-                return;
+        private async Task<bool?> PerformPlatformPurchaseAsync(MpUserAccountType uat, bool isMonthly) {
+            // returns:
+            // true: successful purchase, already purchased or free
+            // false: purchase failed, error
+            // null: canceled
+
+            var storeid_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value == (uat, isMonthly));
+            if (string.IsNullOrEmpty(storeid_kvp.Key)) {
+                return false;
             }
-            StoreProduct sp = await GetAddOnByStoreIdAsync(acc_kvp.Key);
+
+            StoreProduct sp = await GetAddOnByStoreIdAsync(storeid_kvp.Key);
 
             // Request a purchase of the subscription product. If a trial is available it will be offered 
             // to the customer. Otherwise, the non-trial SKU will be offered.
@@ -177,21 +200,20 @@ namespace MonkeyPaste.Avalonia {
                     // Show a UI to acknowledge that the customer has purchased your subscription 
                     // and unlock the features of the subscription. 
                     SetAccountType(uat);
-                    break;
+                    return true;
 
                 case StorePurchaseStatus.AlreadyPurchased:
                     MpConsole.WriteLine("The customer already owns this subscription. ExtendedError: " + extendedError);
                     SetAccountType(uat);
-                    break;
+                    return true;
                 case StorePurchaseStatus.NotPurchased:
                     MpConsole.WriteLine("The purchase did not complete. The customer may have cancelled the purchase. ExtendedError: " + extendedError);
-                    break;
-
+                    return null;
+                default:
                 case StorePurchaseStatus.ServerError:
                 case StorePurchaseStatus.NetworkError:
                     MpConsole.WriteLine("The purchase was unsuccessful due to a server or network error. ExtendedError: " + extendedError);
-                    break;
-
+                    return false;
             }
         }
         #endregion

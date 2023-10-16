@@ -106,6 +106,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Free {0}-Day Trial.
+        /// </summary>
+        public static string AccountFreeTrialLabel {
+            get {
+                return ResourceManager.GetString("AccountFreeTrialLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Learn More....
         /// </summary>
         public static string AccountLearnMoreButtonText {

@@ -19,7 +19,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
-
+        public bool IsOptionVisible { get; set; } = true;
         public bool IsGestureItem =>
             Parent != null &&
             (Parent.CurPageType == MpWelcomePageType.ScrollWheel ||
@@ -27,6 +27,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsMultiRadioItem =>
             Parent != null &&
+            Parent.CurOptGroupViewModel != null &&
+            Parent.CurOptGroupViewModel.Items != null &&
             Parent.CurOptGroupViewModel.Items.Count > 1;
 
         public bool IsHovering { get; set; }
@@ -94,6 +96,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        public string LabelText2 { get; set; }
         #endregion
 
         #region Description
@@ -171,6 +175,10 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand ToggleOptionCommand => new MpCommand<object>(
             (args) => {
+                if (!IsHitTestable) {
+                    // only handled internally to keep pointer feedback
+                    return;
+                }
                 if (IsChecked) {
                     UncheckOptionCommand.Execute(args);
                 } else {

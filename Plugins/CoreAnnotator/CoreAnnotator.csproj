@@ -41,7 +41,7 @@
     
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PreLinkEvent">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <!-- NOTE! core ole uses PostBuildEvent and this uses PreLinkEvent to (attempt) to prevent collisions w/ each other-->
     <ItemGroup>
       <BuildOutputFiles Include="$(TargetDir)\**\*.*" />

@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,8 +26,15 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public ObservableCollection<MpAvSubscriptionItemViewModel> Items { get; } = new ObservableCollection<MpAvSubscriptionItemViewModel>();
 
-        public MpAvSubscriptionItemViewModel SelectedItem =>
-            Items.FirstOrDefault(x => x.IsChecked);
+        public MpAvSubscriptionItemViewModel SelectedItem {
+            get => Items.FirstOrDefault(x => x.IsChecked);
+            set {
+                if (SelectedItem != value) {
+                    Items.ForEach(x => x.IsChecked = x == value);
+                    OnPropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
         #endregion
         #region Appearance
 
@@ -69,7 +77,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvSubcriptionPurchaseViewModel() {
             PropertyChanged += MpAvAccountViewModel_PropertyChanged;
-            InitializeAsync().FireAndForgetSafeAsync();
+            //InitializeAsync().FireAndForgetSafeAsync();
         }
 
         #endregion
@@ -77,34 +85,40 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
+            if (IsBusy) {
+                return;
+            }
             IsBusy = true;
 
-            await MpAvAccountTools.Instance.RefreshPricingInfoAsync();
+            await MpAvAccountTools.Instance.RefreshAddOnInfoAsync();
 
             Items.Clear();
-
-            var acct_vml = await Task.WhenAll(
-                new[] {
-                    MpUserAccountType.None,
-                    MpUserAccountType.Free,
-                    MpUserAccountType.Standard,
-                    MpUserAccountType.Unlimited,
-                }
-                .Select(x => CreateAccountItemViewModelAsync(x)));
-            acct_vml.ForEach(x => Items.Add(x));
-
-            Items.ForEach(x => x.IsChecked = x.AccountType == Mp.Services.AccountTools.CurrentAccountType);
+            int test = typeof(MpUserAccountType).Length();
+            for (int i = 0; i < 4; i++) {
+                var aivm = await CreateAccountItemViewModelAsync((MpUserAccountType)i);
+                Items.Add(aivm);
+            }
+            SelectedItem = Items.FirstOrDefault(x => x.AccountType == Mp.Services.AccountTools.CurrentAccountType);
             OnPropertyChanged(nameof(Items));
             IsBusy = false;
         }
-        public MpAvWelcomeOptionGroupViewModel ToWelcomeOptionGroup(bool isMonthly) {
-            return new MpAvWelcomeOptionGroupViewModel(
+        public MpAvWelcomeOptionGroupViewModel ToWelcomeOptionGroup() {
+            // NOTE yearly comes first
+            var wogvm = new MpAvWelcomeOptionGroupViewModel(
                 MpAvWelcomeNotificationViewModel.Instance,
                 MpWelcomePageType.Account) {
                 Title = UiStrings.WelcomeAccountTitle,
-                Caption = UiStrings.WelcomeAccountCaption,
-                Items = Items.Select(x => x.ToWelcomeOptionItem(isMonthly)).ToList()
+                Caption = UiStrings.WelcomeAccountCaption
             };
+            wogvm.Items = new List<MpAvWelcomeOptionItemViewModel>();
+            foreach (var item in Items) {
+                wogvm.Items.Add(item.ToWelcomeOptionItem(false));
+            }
+            foreach (var item in Items) {
+                wogvm.Items.Add(item.ToWelcomeOptionItem(true));
+                wogvm.Items.Last().IsOptionVisible = false;
+            }
+            return wogvm;
         }
         #endregion
 
@@ -114,7 +128,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvAccountViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsMonthlyEnabled):
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.RateText)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsMonthlyEnabled)));
                     break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(CanBuy));
