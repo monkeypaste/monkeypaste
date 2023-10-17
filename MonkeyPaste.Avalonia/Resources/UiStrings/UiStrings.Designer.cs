@@ -160,6 +160,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Monthly.
+        /// </summary>
+        public static string AccountMonthlyLabel {
+            get {
+                return ResourceManager.GetString("AccountMonthlyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next Payment.
         /// </summary>
         public static string AccountNextPaymentDateLabel {
@@ -192,6 +201,33 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountPasswordLabel {
             get {
                 return ResourceManager.GetString("AccountPasswordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem performing your purchase. Checking your connection and settings may help. Would you like to try again?.
+        /// </summary>
+        public static string AccountPurchaseErrorCaption {
+            get {
+                return ResourceManager.GetString("AccountPurchaseErrorCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account has been upgraded to {0}/{1}..
+        /// </summary>
+        public static string AccountPurchaseSuccessfulCaption {
+            get {
+                return ResourceManager.GetString("AccountPurchaseSuccessfulCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pruchase Successful!.
+        /// </summary>
+        public static string AccountPurchaseSuccessfulTitle {
+            get {
+                return ResourceManager.GetString("AccountPurchaseSuccessfulTitle", resourceCulture);
             }
         }
         
@@ -282,6 +318,15 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountUpgradeButtonText {
             get {
                 return ResourceManager.GetString("AccountUpgradeButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yearly.
+        /// </summary>
+        public static string AccountYearlyLabel {
+            get {
+                return ResourceManager.GetString("AccountYearlyLabel", resourceCulture);
             }
         }
         
@@ -448,6 +493,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection failed..
+        /// </summary>
+        public static string CommonConnectionFailedCaption {
+            get {
+                return ResourceManager.GetString("CommonConnectionFailedCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string CommonCopyOpLabel {
@@ -538,6 +592,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string CommonErrorLabel {
+            get {
+                return ResourceManager.GetString("CommonErrorLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minimize.
         /// </summary>
         public static string CommonMinimizeWindowLabel {
@@ -597,6 +660,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonResetLabel {
             get {
                 return ResourceManager.GetString("CommonResetLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        public static string CommonRetryLabel {
+            get {
+                return ResourceManager.GetString("CommonRetryLabel", resourceCulture);
             }
         }
         
@@ -1909,24 +1981,6 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeAccountFreeLabel {
             get {
                 return ResourceManager.GetString("WelcomeAccountFreeLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Yearly.
-        /// </summary>
-        public static string WelcomeAccountMonthlySwitchDisabled {
-            get {
-                return ResourceManager.GetString("WelcomeAccountMonthlySwitchDisabled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Monthly.
-        /// </summary>
-        public static string WelcomeAccountMonthlySwitchEnabled {
-            get {
-                return ResourceManager.GetString("WelcomeAccountMonthlySwitchEnabled", resourceCulture);
             }
         }
         

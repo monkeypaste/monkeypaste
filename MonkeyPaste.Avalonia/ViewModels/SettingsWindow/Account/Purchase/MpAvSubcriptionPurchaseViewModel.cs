@@ -1,9 +1,10 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSubcriptionPurchaseViewModel : MpAvViewModelBase {
@@ -44,9 +45,12 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public bool IsSubscriptionPanelVisible { get; set; } = true;
         public bool IsMonthlyEnabled { get; set; } = false;
+        public bool IsStoreAvailable =>
+            !Items.All(x => string.IsNullOrEmpty(x.RateText) || x.RateText == MpAvAccountTools.EMPTY_RATE_TEXT);
+
         public bool CanBuy {
             get {
-                if (SelectedItem == null) {
+                if (SelectedItem == null || !IsStoreAvailable) {
                     return false;
                 }
                 var ua = MpAvAccountViewModel.Instance;
@@ -77,7 +81,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvSubcriptionPurchaseViewModel() {
             PropertyChanged += MpAvAccountViewModel_PropertyChanged;
-            //InitializeAsync().FireAndForgetSafeAsync();
+
         }
 
         #endregion
@@ -90,16 +94,18 @@ namespace MonkeyPaste.Avalonia {
             }
             IsBusy = true;
 
+            var sw = Stopwatch.StartNew();
             await MpAvAccountTools.Instance.RefreshAddOnInfoAsync();
-
+            MpConsole.WriteLine($"AddOn Refresh: {sw.ElapsedMilliseconds}ms");
             Items.Clear();
             int test = typeof(MpUserAccountType).Length();
             for (int i = 0; i < 4; i++) {
                 var aivm = await CreateAccountItemViewModelAsync((MpUserAccountType)i);
                 Items.Add(aivm);
             }
-            SelectedItem = Items.FirstOrDefault(x => x.AccountType == Mp.Services.AccountTools.CurrentAccountType);
+            SelectedItem = Items.FirstOrDefault(x => x.AccountType == MpAvAccountViewModel.Instance.AccountType);
             OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(IsStoreAvailable));
             IsBusy = false;
         }
         public MpAvWelcomeOptionGroupViewModel ToWelcomeOptionGroup() {
@@ -141,15 +147,75 @@ namespace MonkeyPaste.Avalonia {
             await aivm.InitializeAsync(acctType);
             return aivm;
         }
+
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.SettingsWindowOpened:
+                    break;
+            }
+        }
+
         #endregion
 
         #region Commands
-        public ICommand UpgradeAccountCommand => new MpAsyncCommand(
+        public MpIAsyncCommand ReinitializeCommand => new MpAsyncCommand(
             async () => {
-                // TODO if there's an active subscription (on microsoft at least) 
-                // need to either automate or explain that current must be cancelled and then subscribe (i think)
+                Dispatcher.UIThread.VerifyAccess();
+                await InitializeAsync();
+            });
 
-                await MpAvAccountTools.Instance.PurchaseSubscriptionAsync(SelectedItem.AccountType, IsMonthlyEnabled);
+        public MpIAsyncCommand<object> PurchaseSubscriptionCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                if (MpAvPrefViewModel.Instance.AccountType != MpUserAccountType.Free) {
+                    // TODO if there's an active subscription (on microsoft at least) 
+                    // need to either automate or explain that current must be cancelled and then subscribe (i think)
+                }
+                bool is_monthly = false;
+                MpUserAccountType purchase_uat = MpUserAccountType.None;
+                if (args is object[] argParts &&
+                    argParts[0] is MpUserAccountType welcome_purchase_uat &&
+                    argParts[1] is bool welcome_is_monthly) {
+                    purchase_uat = welcome_purchase_uat;
+                    is_monthly = welcome_is_monthly;
+                } else if (SelectedItem != null) {
+                    purchase_uat = SelectedItem.AccountType;
+                    is_monthly = IsMonthlyEnabled;
+                }
+                if (purchase_uat == MpUserAccountType.None) {
+                    return;
+                }
+
+
+                // NOTE to work around login failures or no selection, just default to free i guess
+                bool? success = await MpAvAccountTools.Instance.PurchaseSubscriptionAsync(purchase_uat, is_monthly);
+                if (success.IsTrue()) {
+
+                    await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                        title: UiStrings.AccountPurchaseSuccessfulTitle,
+                        message: string.Format(
+                            UiStrings.AccountPurchaseSuccessfulCaption,
+                            purchase_uat.EnumToUiString(),
+                            is_monthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel),
+                        iconResourceObj: "MonkeyWinkImage");
+
+                    // refresh account vm w/ new license
+                    await MpAvAccountViewModel.Instance.InitializeAsync();
+                    return;
+                }
+
+                if (success.IsFalse()) {
+                    // error
+                    bool retry = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+                        title: UiStrings.CommonErrorLabel,
+                        message: UiStrings.AccountPurchaseErrorCaption,
+                        iconResourceObj: "WarningImage");
+                    if (retry) {
+                        // opted to try again
+                        await PurchaseSubscriptionCommand.ExecuteAsync(args);
+                    }
+                    return;
+                }
+
             });
         #endregion
     }

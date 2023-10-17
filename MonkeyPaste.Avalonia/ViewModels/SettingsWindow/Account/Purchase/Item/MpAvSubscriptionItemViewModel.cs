@@ -23,9 +23,9 @@ namespace MonkeyPaste.Avalonia {
                     case MpUserAccountType.None:
                         return "LoginImage";
                     case MpUserAccountType.Free:
-                        return new object[] { "bronze", "StarYellowImage" };
+                        return "StarGoldImage";
                     case MpUserAccountType.Standard:
-                        return new object[] { "gold1", "StarYellowImage" };
+                        return "StarYellow2Image";
                     case MpUserAccountType.Unlimited:
                         return "TrophyImage";
                     default:
@@ -71,16 +71,16 @@ namespace MonkeyPaste.Avalonia {
             get {
                 return string.Format(
                     DescriptionTemplate,
-                    Mp.Services.AccountTools.GetContentCapacity(MpUserAccountType.Free),
-                    Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Free),
-                    Mp.Services.AccountTools.GetTrashCapacity(MpUserAccountType.Standard));
+                    MpAvAccountTools.Instance.GetContentCapacity(MpUserAccountType.Free),
+                    MpAvAccountTools.Instance.GetTrashCapacity(MpUserAccountType.Free),
+                    MpAvAccountTools.Instance.GetTrashCapacity(MpUserAccountType.Standard));
             }
         }
         string MonthlyRateText =>
-            Mp.Services.AccountTools.GetAccountRate(AccountType, true);
+            MpAvAccountTools.Instance.GetAccountRate(AccountType, true);
 
         string YearlyRateText =>
-            Mp.Services.AccountTools.GetAccountRate(AccountType, false);
+            MpAvAccountTools.Instance.GetAccountRate(AccountType, false);
 
         public string RateText =>
             IsMonthlyEnabled ?
@@ -111,11 +111,11 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsVisible =>
             AccountType != MpUserAccountType.None;
-        public bool IsTrialAvailable => true;
 
         public bool IsChecked { get; set; }
         public bool IsHovering { get; set; }
 
+        public bool IsTrialAvailable => true;
         public bool HasTrial =>
             IsMonthlyEnabled ?
                 HasMonthlyTrial :
@@ -150,6 +150,8 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync(MpUserAccountType accountType) {
             await Task.Delay(1);
             AccountType = accountType;
+            OnPropertyChanged(nameof(MonthlyRateText));
+            OnPropertyChanged(nameof(YearlyRateText));
             OnPropertyChanged(nameof(IconSourceObj));
         }
         public MpAvWelcomeOptionItemViewModel ToWelcomeOptionItem(bool isMonthly) {
@@ -159,7 +161,7 @@ namespace MonkeyPaste.Avalonia {
                 LabelText2 = isMonthly ? MonthlyTrialText : YearlyTrialText,
                 DescriptionText = DescriptionText,
                 DescriptionText2 = isMonthly ? MonthlyRateText : YearlyRateText,
-                IsChecked = AccountType == MpUserAccountType.Unlimited
+                IsChecked = AccountType == MpUserAccountType.Unlimited && !isMonthly
             };
         }
         #endregion

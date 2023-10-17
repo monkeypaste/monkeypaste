@@ -1,7 +1,5 @@
 ﻿//using Avalonia.Win32;
 
-using System.Threading.Tasks;
-
 namespace MonkeyPaste {
     public class MpContentCapInfo {
         public const string NEXT_TRASH_IMG_RESOURCE_KEY = "RecycleBinImage";
@@ -18,18 +16,18 @@ namespace MonkeyPaste {
             return $"ToTrash: {ToBeTrashed_ciid} NextTrash: {NextToBeTrashed_ciid} ToRemove: {ToBeRemoved_ciid} NextRemove: {NextToBeRemoved_ciid}";
         }
     }
-    public interface MpIAccountTools {
-        bool IsContentAddPausedByAccount { get; }
+    //public interface MpIAccountTools {
+    //    bool IsContentAddPausedByAccount { get; }
 
-        MpContentCapInfo LastCapInfo { get; }
-        string AccountStateInfo { get; }
-        MpUserAccountType CurrentAccountType { get; }
+    //    MpContentCapInfo LastCapInfo { get; }
+    //    string AccountStateInfo { get; }
+    //    MpUserAccountType CurrentAccountType { get; }
 
-        Task InitAsync();
-        Task<MpContentCapInfo> RefreshCapInfoAsync();
-        int GetContentCapacity(MpUserAccountType acctType);
-        int GetTrashCapacity(MpUserAccountType acctType);
-        string GetAccountRate(MpUserAccountType acctType, bool isMonthly);
-        void SetAccountType(MpUserAccountType newType);
-    }
+    //    Task InitAsync();
+    //    Task<MpContentCapInfo> RefreshCapInfoAsync();
+    //    int GetContentCapacity(MpUserAccountType acctType);
+    //    int GetTrashCapacity(MpUserAccountType acctType);
+    //    string GetAccountRate(MpUserAccountType acctType, bool isMonthly);
+    //    void SetAccountType(MpUserAccountType newType);
+    //}
 }

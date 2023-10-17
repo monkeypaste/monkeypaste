@@ -206,7 +206,7 @@ namespace MonkeyPaste.Avalonia {
                     !Mp.Services.StartupState.IsReady) {
                     return $"Please wait {Mp.Services.ThisAppInfo.ThisAppProductName} is loading...";
                 }
-                return $"[{MpAvPrefViewModel.Instance.AccountEmail}] {Mp.Services.AccountTools.AccountStateInfo.Replace(" - ", Environment.NewLine)}";
+                return $"[{MpAvPrefViewModel.Instance.AccountEmail}] {MpAvAccountTools.Instance.AccountStateInfo.Replace(" - ", Environment.NewLine)}";
             }
         }
 

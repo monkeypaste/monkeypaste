@@ -23,7 +23,7 @@ namespace MonkeyPaste.Common {
             }
             BreakAll(true, true);
         }
-        public static void BreakAll(bool pre, bool post) {
+        public static void BreakAll(bool pre = true, bool post = false) {
 #if DEBUG
             if (Debugger.IsAttached) {
                 if (pre) {

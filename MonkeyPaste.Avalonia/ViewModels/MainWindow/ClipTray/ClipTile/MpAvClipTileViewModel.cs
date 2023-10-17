@@ -597,12 +597,12 @@ namespace MonkeyPaste.Avalonia {
         public bool IsNextTrashedByAccount =>
             Parent != null &&
             CopyItemId != 0 &&
-            Mp.Services.AccountTools.LastCapInfo.NextToBeTrashed_ciid == CopyItemId;
+            MpAvAccountTools.Instance.LastCapInfo.NextToBeTrashed_ciid == CopyItemId;
 
         public bool IsNextRemovedByAccount =>
             Parent != null &&
             CopyItemId != 0 &&
-            Mp.Services.AccountTools.LastCapInfo.NextToBeRemoved_ciid == CopyItemId;
+            MpAvAccountTools.Instance.LastCapInfo.NextToBeRemoved_ciid == CopyItemId;
 
         public bool IsAnyNextCapByAccount =>
             IsNextTrashedByAccount || IsNextRemovedByAccount;

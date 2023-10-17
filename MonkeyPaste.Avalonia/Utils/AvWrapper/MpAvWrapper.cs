@@ -48,7 +48,6 @@ namespace MonkeyPaste.Avalonia {
         public MpILoadOnLoginTools LoadOnLoginTools { get; set; }
         public MpIPlatformUserInfo PlatformUserInfo { get; set; }
         public MpIThisAppInfo ThisAppInfo { get; set; }
-        public MpIAccountTools AccountTools { get; set; }
         public MpIMainThreadMarshal MainThreadMarshal { get; set; }
         public MpIColorQueryTools ColorQueryTools { get; set; }
 
@@ -146,7 +145,6 @@ namespace MonkeyPaste.Avalonia {
             ShareTools = new MpAvShare();
             NotificationBuilder = new MpAvNotificationBuilder();
             LoadOnLoginTools = new MpAvLoginLoadTools();
-            AccountTools = new MpAvAccountTools();
             ColorQueryTools = new MpAvColorQueryTools();
             NativePathDialog = new MpAvPathDialog();
             UserProvidedFileExts = MpAvPrefViewModel.Instance;

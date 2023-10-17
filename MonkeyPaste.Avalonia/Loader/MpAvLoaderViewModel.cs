@@ -162,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
                 new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), "System Tray"),
                 new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
                 //new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
-                new MpAvLoaderItemViewModel(typeof(MpAvAccountTools), "Profile"),
+                new MpAvLoaderItemViewModel(typeof(MpAvAccountViewModel), "Profile"),
             }.ToList());
 #endif
 

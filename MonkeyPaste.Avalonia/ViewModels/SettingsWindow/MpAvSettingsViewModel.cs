@@ -1139,19 +1139,6 @@ namespace MonkeyPaste.Avalonia {
                     }
                 },
                 {
-                    MpRuntimePrefParamType.ChangeAccountType.ToString(),
-                    (piv) => {
-                        if(piv.GetVisualDescendant<ComboBox>() is not ComboBox cmb) {
-                            return;
-                        }
-                        void AccountTypeSelectionChanged(object sender, SelectionChangedEventArgs e) {
-                            MpUserAccountType sel_type = (MpUserAccountType)cmb.SelectedIndex;
-                            Mp.Services.AccountTools.SetAccountType(sel_type);
-                        }
-                        cmb.SelectionChanged += AccountTypeSelectionChanged;
-                    }
-                },
-                {
                     nameof(MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled),
                     (piv) => {
                         
@@ -1192,10 +1179,6 @@ namespace MonkeyPaste.Avalonia {
             switch (msg) {
                 case MpMessageType.ShortcutRoutingProfileChanged:
                     SetRoutingProfileType(MpAvShortcutCollectionViewModel.Instance.RoutingProfileType);
-                    break;
-                case MpMessageType.AccountDowngrade:
-                case MpMessageType.AccountUpgrade:
-                    SetAccountType(Mp.Services.AccountTools.CurrentAccountType);
                     break;
             }
         }
@@ -1390,13 +1373,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Remember Account 
 
-        private void SetAccountType(MpUserAccountType at) {
-            Dispatcher.UIThread.VerifyAccess();
-            if (GetParameterControlByParamId<ComboBox>(MpRuntimePrefParamType.ChangeAccountType.ToString()) is not ComboBox cmb) {
-                return;
-            }
-            cmb.SelectedIndex = (int)at;
-        }
         #endregion
 
         #region Clear Password

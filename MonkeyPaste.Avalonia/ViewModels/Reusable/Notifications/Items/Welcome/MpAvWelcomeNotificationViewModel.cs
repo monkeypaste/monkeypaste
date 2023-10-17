@@ -31,6 +31,7 @@ namespace MonkeyPaste.Avalonia {
                 //!Instance.IsDoNotShowType ||
                 !MpAvPrefViewModel.Instance.IsWelcomeComplete;
 
+            await MpAvAccountViewModel.Instance.InitializeAsync();
             if (will_show) {
                 await MpAvSubcriptionPurchaseViewModel.Instance.InitializeAsync();
                 Instance.InitWelcomeItems();
@@ -191,7 +192,7 @@ namespace MonkeyPaste.Avalonia {
                     CloseGestureDemo();
                     switch (CurPageType) {
                         case MpWelcomePageType.Account:
-                            var test = Mp.Services.AccountTools;
+                            var test = MpAvAccountTools.Instance;
                             var sel_acct_vm = AccountViewModel.Items.FirstOrDefault(x => x.IsChecked);
                             if (sel_acct_vm.OptionId == null) {
                                 // TODO show login/restore thing here
@@ -222,8 +223,8 @@ namespace MonkeyPaste.Avalonia {
                     foreach (var (optvm, idx) in AccountViewModel.Items.WithIndex()) {
                         optvm.IsOptionVisible =
                             IsAccountMonthEnabled ? idx >= 4 : idx < 4;
-                        optvm.IsChecked = optvm.IsOptionVisible &&
-                            (MpUserAccountType)optvm.OptionId == sel_item_type;
+                        MpUserAccountType uat = (MpUserAccountType)optvm.OptionId;
+                        optvm.IsChecked = optvm.IsOptionVisible && uat == sel_item_type;
                     }
                     break;
             }
@@ -333,7 +334,7 @@ namespace MonkeyPaste.Avalonia {
 
             #region Db Password
             DbPasswordViewModel = new MpAvWelcomeOptionGroupViewModel(this, MpWelcomePageType.DbPassword) {
-                SplashIconSourceObj = "LockImage",
+                SplashIconSourceObj = "ShieldImage",
                 Title = UiStrings.WelcomeDbPasswordTitle,
                 Caption = UiStrings.WelcomeDbPasswordCaption,
             };
@@ -354,31 +355,22 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async void FinishWelcomeSetup() {
-            IsWelcomeDone = true;
-            // NOTE this isn't flagged until DONE is clicked and assumes
-            // there's per-page validation (only needed for accounts atm I think)
-            MpAvPrefViewModel.Instance.IsWelcomeComplete = true;
-
             if (CurPointerGestureWindowViewModel != null) {
                 CurPointerGestureWindowViewModel.Destroy();
             }
 
             // ACCOUNT TYPE
-
+            bool is_monthly = false;
             MpUserAccountType acct_type = MpUserAccountType.Free;
             MpDebug.Assert(AccountViewModel.Items.Where(x => x.IsChecked).Count() <= 1, $"Account selection not single");
             if (AccountViewModel.Items.FirstOrDefault(x => x.IsChecked) is MpAvWelcomeOptionItemViewModel sel_acct_vm &&
                 sel_acct_vm.OptionId is MpUserAccountType sel_acct_type) {
-                // NOTE to work around login failures or no selection, just default to free i guess
-                bool? success = await MpAvAccountTools.Instance.PurchaseSubscriptionAsync(sel_acct_type, AccountViewModel.Items.IndexOf(sel_acct_vm) >= 4);
-                if (success.IsTrue()) {
-                    acct_type = sel_acct_type;
-                }
-                // TODO test IAP window if it doesn't 
-                // display errors need to show something here if non-true
+                acct_type = sel_acct_type;
+                is_monthly = AccountViewModel.Items.IndexOf(sel_acct_vm) >= 4;
             }
+            await MpAvSubcriptionPurchaseViewModel.Instance.PurchaseSubscriptionCommand
+                .ExecuteAsync(new object[] { acct_type, is_monthly });
 
-            Mp.Services.AccountTools.SetAccountType(acct_type);
 
             // LOGIN LOAD
             bool loadOnLogin =
@@ -415,6 +407,12 @@ namespace MonkeyPaste.Avalonia {
             if (!IsDbPasswordIgnored) {
                 Mp.Services.DbInfo.DbPassword = DbPassword;
             }
+
+
+            IsWelcomeDone = true;
+            // NOTE this isn't flagged until DONE is clicked and assumes
+            // there's per-page validation (only needed for accounts atm I think)
+            MpAvPrefViewModel.Instance.IsWelcomeComplete = true;
         }
 
         private void CloseGestureDemo() {

@@ -16,7 +16,7 @@ namespace MonkeyPaste {
         MpIContentBuilder ContentBuilder { get; set; }
         MpIPlatformUserInfo PlatformUserInfo { get; set; }
         MpISettingsTools SettingsTools { get; set; }
-        MpIAccountTools AccountTools { get; set; }
+        //MpIAccountTools AccountTools { get; set; }
         MpIDownKeyHelper KeyDownHelper { get; set; }
         MpIShortcutGestureLocator ShortcutGestureLocator { get; set; }
         MpIColorQueryTools ColorQueryTools { get; set; }

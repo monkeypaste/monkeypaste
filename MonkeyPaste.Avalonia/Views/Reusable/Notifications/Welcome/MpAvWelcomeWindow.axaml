@@ -125,18 +125,6 @@
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
 
-            <!--  TITLE HEADER  -->
-
-            <TextBlock Grid.Row="0"
-                       Effect="drop-shadow(0 0 7 white)"
-                       DataContext="{Binding CurOptGroupViewModel}"
-                       HorizontalAlignment="Stretch"
-                       VerticalAlignment="Center"
-                       TextAlignment="Center"
-                       FontSize="60"
-                       Foreground="DimGray"
-                       Text="{Binding Title}" />
-
 
             <!--  WINDOW BUTTONS  -->
             <StackPanel x:Name="WindowButtonPanel"
@@ -161,7 +149,8 @@
 
             <!--  CONTENT  -->
 
-            <TransitioningContentControl Grid.Row="1"
+            <TransitioningContentControl Grid.Row="0"
+                                         Grid.RowSpan="2"
                                          HorizontalAlignment="Stretch"
                                          VerticalAlignment="Stretch"
                                          HorizontalContentAlignment="Center"
@@ -169,40 +158,16 @@
                                          DataContext="{Binding}"
                                          Content="{Binding CurPageIdx}">
                 <TransitioningContentControl.PageTransition>
-                    <CrossFade Duration="0:00:00.250" />
+                    <CrossFade Duration="0:00:00.50" />
                 </TransitioningContentControl.PageTransition>
-                <TransitioningContentControl.DataTemplates>
-                    <local:MpAvWelcomeContentTemplateSelector>
-                        <!--  DEFAULT RADIO BUTTONS  -->
-                        <DataTemplate x:Key="OptionsTemplate"
-                                      x:DataType="local:MpAvWelcomeNotificationViewModel">
-                            <local:MpAvWelcomeOptionsView HorizontalContentAlignment="Center"
-                                                          VerticalContentAlignment="Center" />
-                        </DataTemplate>
-                        <!--  DB PASSWORD  -->
-
-                        <DataTemplate x:Key="DbPasswordTemplate"
-                                      x:DataType="local:MpAvWelcomeNotificationViewModel">
-                            <Grid RowDefinitions="Auto,Auto"
-                                  HorizontalAlignment="Center">
-
-                                <!--  CAPTION  -->
-                                <TextBlock Grid.Row="0"
-                                           Classes="description"
-                                           Margin="0,0,0,20"
-                                           Text="{Binding DbPasswordViewModel.Caption}" />
-
-                                <!--  SET PASSWORD VIEW  -->
-
-                                <local:MpAvSetPasswordView Grid.Row="1"
-                                                           ShowDialogButtons="False"
-                                                           AutoFilledPassword="{Binding AutoFillPassword}"
-                                                           ConfirmedPassword="{Binding DbPassword}"
-                                                           IsPasswordValid="{Binding IsDbPasswordValid}" />
-                            </Grid>
-                        </DataTemplate>
-                    </local:MpAvWelcomeContentTemplateSelector>
-                </TransitioningContentControl.DataTemplates>
+                <TransitioningContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <local:MpAvWelcomeOptionsView x:DataType="local:MpAvWelcomeNotificationViewModel"
+                                                      DataContext="{Binding CurOptGroupViewModel, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}"
+                                                      HorizontalContentAlignment="Center"
+                                                      VerticalContentAlignment="Center" />
+                    </DataTemplate>
+                </TransitioningContentControl.ContentTemplate>
             </TransitioningContentControl>
 
             <!--  WIZARD NAV  -->

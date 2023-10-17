@@ -22,7 +22,7 @@
                 <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
                 <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" />
 
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="RoyalBlue" />
+                <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
                 <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource ThemeAccent2Color}" />
 
@@ -41,6 +41,7 @@
             <!--<Setter Property="Effect"
                     Value="drop-shadow(0 0 3 white)" />-->
         </Style>
+
 
         <!--  CAPTION COLOR  -->
         <Style Selector="TransitioningContentControl#CaptionContainer TextBlock">
@@ -121,32 +122,72 @@
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource BellImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </Style>
+
+        <!--  SPLASH IMG  -->
+
+        <Style Selector="Image.splash">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Stretch"
+                    Value="Uniform" />
+        </Style>
+
+        <Style Selector="Image.splash.greeting">
+            <Setter Property="Width"
+                    Value="200" />
+            <Setter Property="Height"
+                    Value="200" />
+            <Setter Property="Effect"
+                    Value="drop-shadow(0 0 25 black)" />
+        </Style>
+        <Style Selector="Image.splash.dbpassword">
+            <Setter Property="Width"
+                    Value="100" />
+            <Setter Property="Height"
+                    Value="100" />
+            <Setter Property="Margin"
+                    Value="50,20,50,20" />
+            <Setter Property="Effect"
+                    Value="drop-shadow(0 0 20 black)" />
+        </Style>
     </local:MpAvUserControl.Styles>
-    <StackPanel Orientation="Vertical"
-                MinHeight="500"
-                Spacing="20"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch">
+    <!--  outer spacing was 20  -->
+    <Grid RowDefinitions="100,Auto,Auto,Auto,Auto,Auto"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
+
+        <!--  TITLE HEADER  -->
+
+        <TextBlock Grid.Row="0"
+                   Loaded="Title_Loaded"
+                   ClipToBounds="False"
+                   Effect="drop-shadow(0 0 7 white)"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   TextAlignment="Center"
+                   FontSize="60"
+                   Foreground="DimGray"
+                   Text="{Binding Title}" />
 
         <!--  SPLASH IMAGE  -->
 
-        <Image Width="200"
-               Height="200"
-               Margin="25"
-               Classes="fadeIn"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               Stretch="Uniform"
-               Effect="drop-shadow(0 0 25 black)"
-               Source="{Binding SplashIconSourceObj, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+        <Image Grid.Row="1"
+               Classes="splash fadeIn"
+               Classes.greeting="{Binding WelcomePageType, ConverterParameter=Greeting, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+               Classes.dbpassword="{Binding WelcomePageType, ConverterParameter=DbPassword, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+               Source="{Binding SplashIconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}"
                IsVisible="{Binding SplashIconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
 
         <!--  CAPTION  -->
-        <TextBlock Classes="description"
+        <TextBlock Grid.Row="2"
+                   Classes="description"
                    Text="{Binding Caption}" />
 
         <!--  ACCT MONTLY TOGGLE  -->
         <ToggleSwitch x:Name="MonthlyToggleButton"
+                      Grid.Row="3"
                       DataContext="{x:Static local:MpAvWelcomeNotificationViewModel.Instance}"
                       x:DataType="local:MpAvWelcomeNotificationViewModel"
                       Classes="defaultButton"
@@ -157,20 +198,19 @@
                       IsVisible="{Binding IsAccountOptSelected}"
                       IsChecked="{Binding IsAccountMonthEnabled, Mode=TwoWay}"
                       FontWeight="SemiBold"
-                      OnContent="{x:Static local:UiStrings.WelcomeAccountMonthlySwitchEnabled}"
-                      OffContent="{x:Static local:UiStrings.WelcomeAccountMonthlySwitchDisabled}">
-            <ToggleSwitch.Resources>
+                      OnContent="{x:Static local:UiStrings.AccountMonthlyLabel}"
+                      OffContent="{x:Static local:UiStrings.AccountYearlyLabel}" />
 
-            </ToggleSwitch.Resources>
-        </ToggleSwitch>
+        <!--  OPTION BUTTONS  -->
 
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Spacing="50">
+        <Grid Grid.Row="4"
+              IsVisible="{Binding !IsVisible, ElementName=PasswordContainer}"
+              ColumnDefinitions="Auto,Auto,Auto"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+
             <!--  OPTION BUTTONS  -->
-            <ItemsControl DockPanel.Dock="Top"
-                          ItemsSource="{Binding Items}"
+            <ItemsControl ItemsSource="{Binding Items}"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center">
                 <ItemsControl.ItemsPanel>
@@ -190,7 +230,6 @@
                                     Background="{StaticResource HitTestableTransparent}">
                                 <RadioButton Classes="defaultButton gestureButton effectTrans"
                                              Theme="{StaticResource SwitchlessRadioButton}"
-                                             GroupName="GestureProfile"
                                              CornerRadius="7"
                                              Margin="15"
                                              Padding="15,15,15,5"
@@ -198,7 +237,7 @@
                                              Height="230"
                                              HorizontalContentAlignment="Center"
                                              VerticalContentAlignment="Center"
-                                             Command="{Binding ToggleOptionCommand}"
+                                             Command="{Binding CheckOptionCommand}"
                                              IsChecked="{Binding IsChecked, Mode=OneWay}">
                                     <DockPanel HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch">
@@ -252,7 +291,9 @@
             </ItemsControl>
 
             <!--  TRY GESTURE BUTTON  -->
-            <ToggleButton IsVisible="{Binding IsGestureGroup}"
+            <ToggleButton Grid.Column="1"
+                          Margin="50,0,0,0"
+                          IsVisible="{Binding IsGestureGroup}"
                           HorizontalAlignment="Right"
                           VerticalAlignment="Center"
                           IsChecked="{Binding IsGestureDemoOpen, Mode=OneWay, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}"
@@ -263,7 +304,11 @@
                     <Image />
                 </DockPanel>
             </ToggleButton>
-            <Border Classes="try rejectWindowMove">
+
+            <!--  DRAG-TO-OPEN SOURCE  -->
+            <Border Grid.Column="2"
+                    Margin="50,0,0,0"
+                    Classes="try rejectWindowMove">
                 <Border.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.And}">
                         <Binding Path="IsGestureGroup" />
@@ -286,15 +331,30 @@
                     </Image>
                 </DockPanel>
             </Border>
-        </StackPanel>
-        <!--  GESTURE CAPTION  -->
+        </Grid>
+
+        <!--  PASSWORD BOX  -->
+        <Border x:Name="PasswordContainer"
+                Grid.Row="4"
+                DataContext="{x:Static local:MpAvWelcomeNotificationViewModel.Instance}"
+                x:DataType="local:MpAvWelcomeNotificationViewModel"
+                IsVisible="{Binding CurPageType, ConverterParameter=DbPassword, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}">
+            <local:MpAvSetPasswordView Grid.Row="3"
+                                       ShowDialogButtons="False"
+                                       AutoFilledPassword="{Binding AutoFillPassword}"
+                                       ConfirmedPassword="{Binding DbPassword}"
+                                       IsPasswordValid="{Binding IsDbPasswordValid}" />
+        </Border>
+
+        <!--  OPTION CAPTION  -->
 
         <TransitioningContentControl x:Name="CaptionContainer"
+                                     Grid.Row="5"
                                      DockPanel.Dock="Bottom"
                                      HorizontalAlignment="Center"
                                      VerticalAlignment="Top"
-                                     MinHeight="120"
                                      ClipToBounds="False"
+                                     MinHeight="100"
                                      Classes.checked="{Binding IsPrimaryChecked, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}"
                                      Content="{Binding PrimaryItem, Source={x:Static local:MpAvWelcomeNotificationViewModel.Instance}}">
             <TransitioningContentControl.PageTransition>
@@ -302,27 +362,18 @@
             </TransitioningContentControl.PageTransition>
             <TransitioningContentControl.ContentTemplate>
                 <DataTemplate x:DataType="local:MpAvWelcomeOptionItemViewModel">
-                    <Grid>
-                        <!--  ACCOUNT TYPE DESCRIPTION  -->
-                        <StackPanel IsVisible="{Binding Parent.IsAccountOptSelected}">
-                            <TextBlock Classes="description"
-                                       Text="{Binding DescriptionText}" />
-                            <TextBlock Classes="description"
-                                       IsVisible="{Binding DescriptionText2, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                                       Text="{Binding DescriptionText2}"
-                                       Foreground="Green"
-                                       FontWeight="SemiBold" />
-                        </StackPanel>
-
-
-                        <!--  STANDARD DESCRIPTION  -->
+                    <StackPanel>
                         <TextBlock Classes="description"
-                                   IsVisible="{Binding !Parent.IsAccountOptSelected}"
                                    Text="{Binding DescriptionText}" />
-                    </Grid>
+                        <TextBlock Classes="description"
+                                   IsVisible="{Binding DescriptionText2, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                   Text="{Binding DescriptionText2}"
+                                   Foreground="Green"
+                                   FontWeight="SemiBold" />
+                    </StackPanel>
                 </DataTemplate>
             </TransitioningContentControl.ContentTemplate>
         </TransitioningContentControl>
-    </StackPanel>
+    </Grid>
 
 </local:MpAvUserControl>

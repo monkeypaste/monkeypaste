@@ -136,7 +136,7 @@ namespace MonkeyPaste.Avalonia {
                             new MpAvMenuItemViewModel() {
                                 Header = @"Restore",
                                 IconResourceKey =
-                                    Mp.Services.AccountTools.IsContentAddPausedByAccount ?
+                                    MpAvAccountTools.Instance.IsContentAddPausedByAccount ?
                                         MpContentCapInfo.ADD_BLOCKED_RESOURCE_KEY :
                                         "ResetImage",
                                 Command = RestoreSelectedClipCommand,
@@ -1740,14 +1740,14 @@ namespace MonkeyPaste.Avalonia {
 
             _isProcessingCap = true;
 
-            string last_cap_info = Mp.Services.AccountTools.LastCapInfo.ToString();
-            var cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync();
+            string last_cap_info = MpAvAccountTools.Instance.LastCapInfo.ToString();
+            MpUserAccountType account_type = MpAvAccountViewModel.Instance.AccountType;
+            var cap_info = await MpAvAccountTools.Instance.RefreshCapInfoAsync(account_type);
             MpConsole.WriteLine($"Account cap refreshed. SourceControl: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
             MpConsole.WriteLine(cap_info.ToString(), false, true);
 
-            MpUserAccountType account_type = Mp.Services.AccountTools.CurrentAccountType;
-            int cur_content_cap = Mp.Services.AccountTools.GetContentCapacity(account_type);
-            int cur_trash_cap = Mp.Services.AccountTools.GetTrashCapacity(account_type);
+            int cur_content_cap = MpAvAccountTools.Instance.GetContentCapacity(account_type);
+            int cur_trash_cap = MpAvAccountTools.Instance.GetTrashCapacity(account_type);
             int cap_msg_timeout = 5_000;
 
             bool apply_changes = false;
@@ -1796,7 +1796,7 @@ namespace MonkeyPaste.Avalonia {
                         MpNotificationType.ContentAddBlockedByAccount :
                         MpNotificationType.ContentRestoreBlockedByAccount;
 
-                if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
+                if (MpAvAccountTools.Instance.IsContentAddPausedByAccount) {
                     // no linking changes, add will be blocked
                     cap_msg_title_suffix = $"{block_prefix} Blocked";
                     cap_msg_sb.AppendLine($"Trash or unlink something from 'Favorites' to add more.");
@@ -1842,7 +1842,7 @@ namespace MonkeyPaste.Avalonia {
                 await TrashOrDeleteCopyItemIdAsycn(cap_info.ToBeRemoved_ciid, true, true);
 
                 // refresh cap for view changes
-                var updated_cap_info = await Mp.Services.AccountTools.RefreshCapInfoAsync();
+                var updated_cap_info = await MpAvAccountTools.Instance.RefreshCapInfoAsync(account_type);
             }
             AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsNextRemovedByAccount)));
             AllActiveItems.ForEach(x => x.OnPropertyChanged(nameof(x.IsNextTrashedByAccount)));
@@ -2907,10 +2907,10 @@ namespace MonkeyPaste.Avalonia {
             }
 
             IsAddingClipboardItem = true;
-            if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
+            if (MpAvAccountTools.Instance.IsContentAddPausedByAccount) {
                 MpConsole.WriteLine($"Add content blocked, acct capped. Ensuring accuracy...");
                 await ProcessAccountCapsAsync(MpAccountCapCheckType.AddBlock, avdo);
-                if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
+                if (MpAvAccountTools.Instance.IsContentAddPausedByAccount) {
                     MpConsole.WriteLine($"Add content blocked confirmed.");
                     IsAddingClipboardItem = false;
                     return null;
@@ -4228,7 +4228,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand RestoreSelectedClipCommand => new MpAsyncCommand(
             async () => {
                 int restore_ciid = SelectedItem.CopyItemId;
-                if (Mp.Services.AccountTools.IsContentAddPausedByAccount) {
+                if (MpAvAccountTools.Instance.IsContentAddPausedByAccount) {
                     // user at cblock
                     ProcessAccountCapsAsync(MpAccountCapCheckType.RestoreBlock, restore_ciid).FireAndForgetSafeAsync(this);
                     return;

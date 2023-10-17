@@ -541,11 +541,11 @@ namespace MonkeyPaste.Avalonia {
                 await EmptyOrRestoreAllTrashedItemsAsync(true);
             },
             () => {
-                bool can_restore = TrashedCopyItemIds.Any() && !Mp.Services.AccountTools.IsContentAddPausedByAccount;
+                bool can_restore = TrashedCopyItemIds.Any() && !MpAvAccountTools.Instance.IsContentAddPausedByAccount;
                 if (!can_restore) {
                     MpConsole.WriteLine("EmptyTrashCommand CanExecute: " + can_restore);
                     MpConsole.WriteLine($"TrashedCopyItemId Count: {TrashedCopyItemIds.Count}");
-                    MpConsole.WriteLine($"IsContentAddPausedByAccount: {Mp.Services.AccountTools.IsContentAddPausedByAccount}");
+                    MpConsole.WriteLine($"IsContentAddPausedByAccount: {MpAvAccountTools.Instance.IsContentAddPausedByAccount}");
                 }
                 return can_restore;
             });

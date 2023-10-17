@@ -265,9 +265,9 @@
                   x:DataType="local:MpAvTagTileViewModel">
                 <TextBlock x:Name="EmptyNoSelTextBlock"
                            Text="{x:Static local:UiStrings.QueryTrayNoSelection}"
-                           Classes="disabled emptyTrayText" />
+                           Classes="disabled emptyOverlayText" />
                 <TextBlock x:Name="EmptyTagTextBlock"
-                           Classes="disabled emptyTrayText">
+                           Classes="disabled emptyOverlayText">
                     <TextBlock.Text>
                         <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
                             <Binding>
@@ -286,7 +286,7 @@
                     </TextBlock.Text>
                 </TextBlock>
                 <TextBlock x:Name="EmptyPendingTagTextBlock"
-                           Classes="disabled emptyTrayText">
+                           Classes="disabled emptyOverlayText">
                     <TextBlock.Text>
                         <MultiBinding Converter="{x:Static local:MpAvMultiStringAppendConverter.Instance}">
                             <Binding>

@@ -115,7 +115,7 @@
                     IsVisible="{Binding InternalPinnedItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                     Background="Transparent">
                 <TextBlock Text="Pin or Drop any media here!"
-                           Classes="disabled emptyTrayText" />
+                           Classes="disabled emptyOverlayText" />
             </Border>
 
             <!--  UNPIN All /Busy  -->

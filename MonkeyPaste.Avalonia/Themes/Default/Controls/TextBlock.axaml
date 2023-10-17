@@ -44,4 +44,28 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+
+
+    <!--  EMPTY TEXT  -->
+    <Style Selector="TextBlock.emptyOverlayText">
+        <Setter Property="FontSize"
+                Value="42" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveColor}" />
+        <Setter Property="Margin"
+                Value="20" />
+        <Setter Property="TextWrapping"
+                Value="WrapWithOverflow" />
+        <Setter Property="TextAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="VerticalAlignment"
+                Value="Center" />
+        <Setter Property="ClipToBounds"
+                Value="False" />
+        <Setter Property="Effect"
+                Value="{DynamicResource ThemeBgGlow}" />
+    </Style>
 </Styles>

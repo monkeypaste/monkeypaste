@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Threading;
+using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,8 +35,8 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (!_isContextWindowInitialized &&
-                    MpAvWindowManager.MainWindow != null) {
-                    nint hwnd = MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle;
+                    MpAvWindowManager.ActiveWindow is MpAvWindow w) {
+                    nint hwnd = w.TryGetPlatformHandle().Handle;
                     if (hwnd != nint.Zero) {
                         // from https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials#desktop
                         WinRT.Interop.InitializeWithWindow.Initialize(_context, hwnd);
@@ -65,19 +66,24 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public async Task InitAsync() {
-            if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
-                await RefreshAddOnInfoAsync();
-                return;
-            }
-            await RefreshUserAccountStateAsync();
-        }
 
         public async Task RefreshAddOnInfoAsync() {
             AccountTypeTrialAvailabilityLookup.Clear();
             AccountTypePriceLookup.Clear();
+
+            StoreProductQueryResult spqr =
+                await context.GetAssociatedStoreProductsAsync(new string[] { "Durable" });
+
+            if (spqr.ExtendedError != null) {
+                MpConsole.WriteLine($"AddOn Error: {spqr.ExtendedError}");
+                return;
+            }
+
             foreach (var at in AccountTypeAddOnStoreIdLookup) {
-                var sp = await GetAddOnByStoreIdAsync(at.Key);
+                var spkvp = spqr.Products.FirstOrDefault(x => x.Value.StoreId == at.Key);
+                MpDebug.Assert(!spkvp.IsDefault(), $"AddOn not found StoreId: '{at.Key}'");
+
+                StoreProduct sp = spkvp.Value;
                 AccountTypePriceLookup.AddOrReplace(at.Value, sp.Price.FormattedRecurrencePrice);
 
                 if (sp.Skus.Count < 2) {
@@ -97,9 +103,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public async Task<MpSubscriptionFormat> RefreshUserAccountStateAsync() {
+        public async Task<MpSubscriptionFormat> GetUserAccountStateAsync() {
             var acct = await GetUserSubscriptionAsync();
-            SetAccountType(acct.AccountType);
             return acct;
         }
         #endregion
@@ -177,6 +182,7 @@ namespace MonkeyPaste.Avalonia {
             // true: successful purchase, already purchased or free
             // false: purchase failed, error
             // null: canceled
+            Dispatcher.UIThread.VerifyAccess();
 
             var storeid_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value == (uat, isMonthly));
             if (string.IsNullOrEmpty(storeid_kvp.Key)) {
@@ -184,7 +190,10 @@ namespace MonkeyPaste.Avalonia {
             }
 
             StoreProduct sp = await GetAddOnByStoreIdAsync(storeid_kvp.Key);
-
+            if (sp == null) {
+                // likely offline
+                return false;
+            }
             // Request a purchase of the subscription product. If a trial is available it will be offered 
             // to the customer. Otherwise, the non-trial SKU will be offered.
             StorePurchaseResult result = await sp.RequestPurchaseAsync();
@@ -199,12 +208,12 @@ namespace MonkeyPaste.Avalonia {
                 case StorePurchaseStatus.Succeeded:
                     // Show a UI to acknowledge that the customer has purchased your subscription 
                     // and unlock the features of the subscription. 
-                    SetAccountType(uat);
+                    //SetAccountType(uat);
                     return true;
 
                 case StorePurchaseStatus.AlreadyPurchased:
                     MpConsole.WriteLine("The customer already owns this subscription. ExtendedError: " + extendedError);
-                    SetAccountType(uat);
+                    //SetAccountType(uat);
                     return true;
                 case StorePurchaseStatus.NotPurchased:
                     MpConsole.WriteLine("The purchase did not complete. The customer may have cancelled the purchase. ExtendedError: " + extendedError);

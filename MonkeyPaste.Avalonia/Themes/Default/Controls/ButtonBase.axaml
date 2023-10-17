@@ -18,6 +18,19 @@
                 Value="Center" />
     </Style>
 
+    <Style Selector=":is(Button).defaultButton">
+        <Setter Property="Transitions">
+            <Transitions>
+                <TransformOperationsTransition Property="RenderTransform"
+                                               Duration="0:0:.075" />
+            </Transitions>
+        </Setter>
+    </Style>
+    <Style Selector=":is(Button).defaultButton:pressed">
+        <Setter Property="RenderTransform"
+                Value="scale(0.98)" />
+    </Style>
+
     <Style Selector=":is(Button).noBg">
         <Setter Property="Padding"
                 Value="0" />
@@ -55,11 +68,11 @@
     <Style Selector=":is(Button).defaultButton TextBlock">
         <Setter Property="VerticalAlignment"
                 Value="Center" />
-      <!--<Setter Property="ClipToBounds"
+        <!--<Setter Property="ClipToBounds"
                 Value="False" />-->
     </Style>
-  
-  <Style Selector=":is(Button).defaultButton:not(.textOnlyButton) TextBlock">
+
+    <Style Selector=":is(Button).defaultButton:not(.textOnlyButton) TextBlock">
         <Setter Property="Margin"
                 Value="7,0,0,0" />
     </Style>

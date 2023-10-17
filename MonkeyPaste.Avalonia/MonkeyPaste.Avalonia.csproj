@@ -473,9 +473,11 @@
     <None Remove="Assets\Images\spellcheck.png" />
     <None Remove="Assets\Images\spinner.png" />
     <None Remove="Assets\Images\spreadsheet.png" />
+    <None Remove="Assets\Images\stargold.png" />
     <None Remove="Assets\Images\staroutline.png" />
     <None Remove="Assets\Images\starsolid.png" />
     <None Remove="Assets\Images\staryellow.png" />
+    <None Remove="Assets\Images\staryellow2.png" />
     <None Remove="Assets\Images\tag.png" />
     <None Remove="Assets\Images\text.png" />
     <None Remove="Assets\Images\Texture.bmp" />
@@ -779,6 +781,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\spinner.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\stargold.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\staryellow.png">
@@ -1222,6 +1227,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\starsolid.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\staryellow2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\tag.png">

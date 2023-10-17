@@ -144,8 +144,6 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvGestureProfileItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsHovering):
-                case nameof(IsChecked):
-
                     OnPropertyChanged(nameof(IsHitTestable));
                     OnPropertyChanged(nameof(LabelText));
                     OnPropertyChanged(nameof(DescriptionText));
@@ -155,6 +153,22 @@ namespace MonkeyPaste.Avalonia {
                         Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
                     }
                     break;
+                case nameof(IsChecked):
+                    if (IsChecked) {
+
+                    } else {
+
+                    }
+                    OnPropertyChanged(nameof(IsHitTestable));
+                    OnPropertyChanged(nameof(LabelText));
+                    OnPropertyChanged(nameof(DescriptionText));
+                    OnPropertyChanged(nameof(IconSourceObj));
+
+                    if (Parent != null) {
+                        Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
+                    }
+                    break;
+
             }
         }
         #endregion
@@ -162,9 +176,10 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         public ICommand CheckOptionCommand => new MpCommand<object>(
             (args) => {
-                Parent.CurOptGroupViewModel.Items.ForEach(x => x.IsChecked = x == this);
-            }, (args) => {
-                return !IsChecked;
+                if (IsChecked) {
+                    return;
+                }
+                Parent.CurOptGroupViewModel.SelectedItem = this;
             });
 
         public ICommand UncheckOptionCommand => new MpCommand<object>(
@@ -175,15 +190,15 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand ToggleOptionCommand => new MpCommand<object>(
             (args) => {
-                if (!IsHitTestable) {
-                    // only handled internally to keep pointer feedback
-                    return;
-                }
-                if (IsChecked) {
-                    UncheckOptionCommand.Execute(args);
-                } else {
-                    CheckOptionCommand.Execute(args);
-                }
+                //if (!IsHitTestable) {
+                //    // only handled internally to keep pointer feedback
+                //    return;
+                //}
+                //if (IsChecked) {
+                //    UncheckOptionCommand.Execute(args);
+                //} else {
+                //    CheckOptionCommand.Execute(args);
+                //}
             });
 
         #endregion

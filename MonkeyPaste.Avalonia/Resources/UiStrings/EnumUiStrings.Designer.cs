@@ -196,20 +196,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Never.
         /// </summary>
         public static string MpBillingCycleType_None {
             get {
                 return ResourceManager.GetString("MpBillingCycleType_None", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Permanent.
-        /// </summary>
-        public static string MpBillingCycleType_Permanent {
-            get {
-                return ResourceManager.GetString("MpBillingCycleType_Permanent", resourceCulture);
             }
         }
         
@@ -1834,15 +1825,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account.
-        /// </summary>
-        public static string MpSettingsFrameType_Account {
-            get {
-                return ResourceManager.GetString("MpSettingsFrameType_Account", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Content.
         /// </summary>
         public static string MpSettingsFrameType_Content {
@@ -1897,6 +1879,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string MpSettingsFrameType_Login {
+            get {
+                return ResourceManager.GetString("MpSettingsFrameType_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         public static string MpSettingsFrameType_None {
@@ -1911,6 +1902,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpSettingsFrameType_Password {
             get {
                 return ResourceManager.GetString("MpSettingsFrameType_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string MpSettingsFrameType_Register {
+            get {
+                return ResourceManager.GetString("MpSettingsFrameType_Register", resourceCulture);
             }
         }
         
@@ -1947,6 +1947,15 @@ namespace MonkeyPaste.Avalonia {
         public static string MpSettingsFrameType_Startup {
             get {
                 return ResourceManager.GetString("MpSettingsFrameType_Startup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string MpSettingsFrameType_Status {
+            get {
+                return ResourceManager.GetString("MpSettingsFrameType_Status", resourceCulture);
             }
         }
         

@@ -85,147 +85,175 @@
                     Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <StackPanel>
+    <Grid>
+        <!--  SUBSCRIPTION CONTAINER  -->
 
-        <!--  ACCT MONTLY TOGGLE  -->
-        <ToggleSwitch x:Name="MonthlyToggleButton"
-                      Classes="defaultButton"
-                      HorizontalAlignment="Right"
-                      VerticalAlignment="Center"
-                      IsChecked="{Binding IsMonthlyEnabled, Mode=TwoWay, FallbackValue=True, TargetNullValue=True}"
-                      FontWeight="SemiBold"
-                      OnContent="{x:Static local:UiStrings.WelcomeAccountMonthlySwitchEnabled}"
-                      OffContent="{x:Static local:UiStrings.WelcomeAccountMonthlySwitchDisabled}" />
-        <Border Margin="10"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch">
-            <StackPanel Spacing="10">
+        <StackPanel x:Name="SubscriptionContainer"
+                    IsVisible="{Binding IsStoreAvailable}">
 
-                <!--  SUBSCRIPTION ITEMS  -->
+            <!--  ACCT MONTLY TOGGLE  -->
+            <ToggleSwitch x:Name="MonthlyToggleButton"
+                          Classes="defaultButton"
+                          HorizontalAlignment="Right"
+                          VerticalAlignment="Center"
+                          IsChecked="{Binding IsMonthlyEnabled, Mode=TwoWay, FallbackValue=True, TargetNullValue=True}"
+                          FontWeight="SemiBold"
+                          OnContent="{x:Static local:UiStrings.AccountMonthlyLabel}"
+                          OffContent="{x:Static local:UiStrings.AccountYearlyLabel}" />
+            <Border Margin="10"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <StackPanel Spacing="10">
 
-                <ItemsControl x:Name="AccountTypeItemsControl"
-                              ItemsSource="{Binding Items}"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <!--  ACCOUNT TYPE ITEM OUTER BORDER  -->
-                            <Border x:Name="OuterBorder"
-                                    IsVisible="{Binding IsVisible}"
-                                    Classes.selected="{Binding IsChecked}"
-                                    local:MpAvIsHoveringExtension.IsEnabled="True"
-                                    local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                    local:MpAvIsHoveringExtension.IsBorderFollowEnabled="True"
-                                    CornerRadius="7"
-                                    BorderThickness="2.5"
-                                    Margin="0,0,0,10"
-                                    MaxHeight="100"
-                                    Background="{StaticResource HitTestableTransparent}">
-                                <!--  ACCOUNT TYPE BUTTON  -->
-                                <RadioButton x:Name="AcctTypeButton"
-                                             GroupName="AcctTypeGroup"
-                                             Classes="defaultButton"
-                                             Theme="{StaticResource SwitchlessRadioButton}"
-                                             CornerRadius="7"
-                                             Margin="0"
-                                             Padding="5"
-                                             HorizontalAlignment="Stretch"
-                                             HorizontalContentAlignment="Stretch"
-                                             MinHeight="35"
-                                             IsChecked="{Binding IsChecked, Mode=TwoWay}">
-                                    <DockPanel HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Stretch">
-                                        <!--  ACCOUNT TYPE ICON BORDER  -->
-                                        <Border DockPanel.Dock="Left"
-                                                Classes="iconContainer squareByHeight"
-                                                CornerRadius="7"
-                                                BorderThickness="2"
-                                                VerticalAlignment="Top"
-                                                Margin="5"
-                                                Padding="5">
-                                            <Image Width="30"
-                                                   Height="30"
-                                                   Stretch="UniformToFill"
-                                                   Source="{Binding IconSourceObj, ConverterParameter=test, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
-                                        </Border>
+                    <!--  SUBSCRIPTION ITEMS  -->
 
-                                        <!--  RATE  -->
-                                        <TextBlock DockPanel.Dock="Right"
-                                                   HorizontalAlignment="Left"
-                                                   VerticalAlignment="Center"
-                                                   TextWrapping="NoWrap"
-                                                   TextAlignment="Right"
-                                                   FontWeight="SemiBold"
-                                                   FontStyle="Italic"
-                                                   FontSize="20"
-                                                   Text="{Binding RateText}" />
+                    <ItemsControl x:Name="AccountTypeItemsControl"
+                                  ItemsSource="{Binding Items}"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <!--  ACCOUNT TYPE ITEM OUTER BORDER  -->
+                                <Border x:Name="OuterBorder"
+                                        IsVisible="{Binding IsVisible}"
+                                        Classes.selected="{Binding IsChecked}"
+                                        local:MpAvIsHoveringExtension.IsEnabled="True"
+                                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
+                                        local:MpAvIsHoveringExtension.IsBorderFollowEnabled="True"
+                                        CornerRadius="7"
+                                        BorderThickness="2.5"
+                                        Margin="0,0,0,10"
+                                        MaxHeight="100"
+                                        Background="{StaticResource HitTestableTransparent}">
+                                    <!--  ACCOUNT TYPE BUTTON  -->
+                                    <RadioButton x:Name="AcctTypeButton"
+                                                 GroupName="AcctTypeGroup"
+                                                 Classes="defaultButton"
+                                                 Theme="{StaticResource SwitchlessRadioButton}"
+                                                 CornerRadius="7"
+                                                 Margin="0"
+                                                 Padding="5"
+                                                 HorizontalAlignment="Stretch"
+                                                 HorizontalContentAlignment="Stretch"
+                                                 MinHeight="35"
+                                                 IsChecked="{Binding IsChecked, Mode=TwoWay}">
+                                        <DockPanel HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Stretch">
+                                            <!--  ACCOUNT TYPE ICON BORDER  -->
+                                            <Border DockPanel.Dock="Left"
+                                                    Classes="iconContainer squareByHeight"
+                                                    CornerRadius="7"
+                                                    BorderThickness="2"
+                                                    VerticalAlignment="Top"
+                                                    Margin="5"
+                                                    Padding="5">
+                                                <Image Width="30"
+                                                       Height="30"
+                                                       Stretch="UniformToFill"
+                                                       Source="{Binding IconSourceObj, ConverterParameter=test, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+                                            </Border>
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Spacing="5">
-                                            <!--  ACCOUNT TYPE NAME  -->
-
-                                            <TextBlock HorizontalAlignment="Stretch"
+                                            <!--  RATE  -->
+                                            <TextBlock DockPanel.Dock="Right"
+                                                       HorizontalAlignment="Left"
                                                        VerticalAlignment="Center"
+                                                       TextWrapping="NoWrap"
                                                        TextAlignment="Right"
-                                                       Width="120"
-                                                       FontSize="20"
                                                        FontWeight="SemiBold"
-                                                       Text="{Binding LabelText}" />
+                                                       FontStyle="Italic"
+                                                       FontSize="20"
+                                                       Text="{Binding RateText}" />
 
-                                            <!--  ACCOUNT TYPE INFO  -->
-                                            <TextBlock HorizontalAlignment="Stretch"
-                                                       VerticalAlignment="Center"
-                                                       TextWrapping="WrapWithOverflow"
-                                                       MaxWidth="200"
-                                                       TextAlignment="Left"
-                                                       FontSize="12"
-                                                       Text="{Binding DescriptionText}" />
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="5">
+                                                <!--  ACCOUNT TYPE NAME  -->
 
-                                        </StackPanel>
-                                    </DockPanel>
-                                </RadioButton>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                                <TextBlock HorizontalAlignment="Stretch"
+                                                           VerticalAlignment="Center"
+                                                           TextAlignment="Right"
+                                                           Width="120"
+                                                           FontSize="20"
+                                                           FontWeight="SemiBold"
+                                                           Text="{Binding LabelText}" />
 
-                <!--  BUY BUTTON  -->
-                <Button x:Name="BuyButton"
-                        Loaded="BuyButton_Loaded"
-                        Classes="defaultButton"
-                        HorizontalAlignment="Center"
-                        IsVisible="{Binding CanBuy}"
-                        Command="{Binding UpgradeAccountCommand}">
-                    <Button.Resources>
-                        <Thickness x:Key="ButtonPadding">20,10,20,10</Thickness>
+                                                <!--  ACCOUNT TYPE INFO  -->
+                                                <TextBlock HorizontalAlignment="Stretch"
+                                                           VerticalAlignment="Center"
+                                                           TextWrapping="WrapWithOverflow"
+                                                           MaxWidth="200"
+                                                           TextAlignment="Left"
+                                                           FontSize="12"
+                                                           Text="{Binding DescriptionText}" />
 
-                        <SolidColorBrush x:Key="ButtonBackground">Green</SolidColorBrush>
-                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Lime</SolidColorBrush>
-                        <SolidColorBrush x:Key="ButtonBackgroundPressed">White</SolidColorBrush>
+                                            </StackPanel>
+                                        </DockPanel>
+                                    </RadioButton>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                        <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
-                        <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
-                    </Button.Resources>
-                    <DockPanel>
-                        <Image DockPanel.Dock="Left"
-                               Width="30"
-                               Height="30"
-                               Margin="5"
-                               VerticalAlignment="Center"
-                               Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow}" />
-                        <TextBlock Text="{x:Static local:UiStrings.AccountUpgradeButtonText}"
-                                   FontSize="20"
+                    <!--  BUY BUTTON  -->
+                    <Button x:Name="BuyButton"
+                            Loaded="BuyButton_Loaded"
+                            Classes="defaultButton"
+                            HorizontalAlignment="Center"
+                            IsVisible="{Binding CanBuy}"
+                            Command="{Binding PurchaseSubscriptionCommand}">
+                        <Button.Resources>
+                            <Thickness x:Key="ButtonPadding">20,10,20,10</Thickness>
+
+                            <SolidColorBrush x:Key="ButtonBackground">Green</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Lime</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonBackgroundPressed">White</SolidColorBrush>
+
+                            <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
+                            <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
+                        </Button.Resources>
+                        <DockPanel>
+                            <Image DockPanel.Dock="Left"
+                                   Width="30"
+                                   Height="30"
+                                   Margin="5"
                                    VerticalAlignment="Center"
-                                   Foreground="White"
-                                   FontWeight="SemiBold" />
-                    </DockPanel>
-                </Button>
-            </StackPanel>
-        </Border>
-    </StackPanel>
+                                   Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow}" />
+                            <TextBlock Text="{x:Static local:UiStrings.AccountUpgradeButtonText}"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       FontWeight="SemiBold" />
+                        </DockPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <!--  OFFLINE OVERLAY  -->
+        <StackPanel IsVisible="{Binding !IsVisible, ElementName=SubscriptionContainer}"
+                    Spacing="10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <TextBlock Text="{x:Static local:UiStrings.CommonConnectionFailedCaption}"
+                       Classes="emptyOverlayText" />
+            <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       IsVisible="{Binding IsBusy}"
+                                       Width="70"
+                                       Height="70" />
+            <Button Classes="defaultButton textOnlyButton"
+                    IsVisible="{Binding !IsBusy}"
+                    Command="{Binding ReinitializeCommand}">
+                <Button.Resources>
+                    <Thickness x:Key="ButtonPadding">10,3,10,3</Thickness>
+                </Button.Resources>
+                <TextBlock Text="{x:Static local:UiStrings.CommonRetryLabel}"
+                           Classes="emptyOverlayText" />
+            </Button>
+        </StackPanel>
+    </Grid>
 </local:MpAvUserControl>

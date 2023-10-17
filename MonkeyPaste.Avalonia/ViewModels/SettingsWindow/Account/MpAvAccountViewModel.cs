@@ -74,6 +74,11 @@ namespace MonkeyPaste.Avalonia {
             !string.IsNullOrEmpty(AccountPassword);
 
         public bool? WasLoginSuccessful { get; set; }
+
+        public bool CanLogin =>
+            !WasLoginSuccessful.IsTrue() &&
+            !string.IsNullOrEmpty(AccountUsername) &&
+            !string.IsNullOrEmpty(AccountPassword);
         #endregion
 
         #region Model
@@ -84,7 +89,35 @@ namespace MonkeyPaste.Avalonia {
             MpAvPrefViewModel.Instance.AccountEmail;
         public string AccountPassword =>
             MpAvPrefViewModel.Instance.AccountPassword;
+        public MpUserAccountType AccountType {
+            get => MpAvPrefViewModel.Instance.AccountType;
+            private set {
+                if (AccountType != value) {
+                    MpAvPrefViewModel.Instance.AccountType = value;
+                    OnPropertyChanged(nameof(AccountType));
+                }
+            }
+        }
 
+        public MpBillingCycleType BillingCycleType {
+            get => MpAvPrefViewModel.Instance.AccountBillingCycleType;
+            private set {
+                if (BillingCycleType != value) {
+                    MpAvPrefViewModel.Instance.AccountBillingCycleType = value;
+                    OnPropertyChanged(nameof(BillingCycleType));
+                }
+            }
+        }
+
+        public DateTime NextPaymentUtc {
+            get => MpAvPrefViewModel.Instance.AccountNextPaymentDateTime;
+            private set {
+                if (NextPaymentUtc != value) {
+                    MpAvPrefViewModel.Instance.AccountNextPaymentDateTime = value;
+                    OnPropertyChanged(nameof(NextPaymentUtc));
+                }
+            }
+        }
 
         public bool IsActive {
             get {
@@ -95,50 +128,44 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsYearly {
-            get {
-                if (UserAccount == null) {
-                    return false;
-                }
-                return UserAccount.IsYearly;
-            }
-        }
+        public bool IsYearly =>
+            BillingCycleType == MpBillingCycleType.Yearly;
 
-        public DateTimeOffset NextPaymentUtc {
-            get {
-                if (UserAccount == null) {
-                    return DateTimeOffset.MaxValue;
-                }
-                return UserAccount.ExpireOffsetUtc;
-            }
-        }
+        //public DateTimeOffset NextPaymentUtc {
+        //    get {
+        //        if (UserAccount == null) {
+        //            return DateTimeOffset.MaxValue;
+        //        }
+        //        return UserAccount.ExpireOffsetUtc;
+        //    }
+        //}
 
-        public MpBillingCycleType BillingCycleType {
-            get {
-                if (UserAccount == null) {
-                    return MpBillingCycleType.None;
-                }
-                return UserAccount.BillingCycleType;
-            }
-        }
+        //public MpBillingCycleType BillingCycleType {
+        //    get {
+        //        if (UserAccount == null) {
+        //            return MpBillingCycleType.None;
+        //        }
+        //        return UserAccount.BillingCycleType;
+        //    }
+        //}
 
-        public MpUserAccountType AccountType {
-            get {
-                if (UserAccount == null) {
-                    return MpUserAccountType.None;
-                }
-                return UserAccount.AccountType;
-            }
-        }
+        //public MpUserAccountType AccountType {
+        //    get {
+        //        if (UserAccount == null) {
+        //            return MpUserAccountType.None;
+        //        }
+        //        return UserAccount.AccountType;
+        //    }
+        //}
         public MpSubscriptionFormat UserAccount { get; private set; }
         #endregion
         #endregion
 
         #region Constructors
         public MpAvAccountViewModel() : base() {
+            MpDebug.Assert(_instance == null, $"Account singleton error");
             RegistrationViewModel = new MpAvAccountRegistrationViewModel(this);
             LoginViewModel = new MpAvAccountLoginViewModel(this);
-            InitializeAsync().FireAndForgetSafeAsync();
         }
         #endregion
 
@@ -146,7 +173,19 @@ namespace MonkeyPaste.Avalonia {
         public async Task InitializeAsync() {
             IsBusy = true;
 
-            UserAccount = await MpAvAccountTools.Instance.GetUserSubscriptionAsync();
+            var acct = await MpAvAccountTools.Instance.GetUserSubscriptionAsync();
+            if (acct != default) {
+                AccountType = acct.AccountType;
+                NextPaymentUtc = acct.ExpireOffsetUtc.UtcDateTime;
+                BillingCycleType =
+                    acct.AccountType == MpUserAccountType.Free ?
+                        MpBillingCycleType.None :
+                        acct.IsMonthly ?
+                            MpBillingCycleType.Monthly :
+                            MpBillingCycleType.Yearly;
+            }
+
+            await LoginCommand.ExecuteAsync();
 
             RefreshAccountPage();
 
@@ -174,6 +213,16 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+
+        private void SetAccountType(MpUserAccountType newType) {
+            // NOTE this maybe a good all around interface method, not sure though
+            bool changed = AccountType != newType;
+            if (changed) {
+                bool is_upgrade = (int)newType > (int)AccountType;
+                AccountType = newType;
+                MpMessenger.SendGlobal(is_upgrade ? MpMessageType.AccountUpgrade : MpMessageType.AccountDowngrade);
+            }
+        }
         #endregion
 
         #region Commands
@@ -186,15 +235,14 @@ namespace MonkeyPaste.Avalonia {
                 return IsRegistered;
             });
 
-        //public MpIAsyncCommand LoginCommand => new MpAsyncCommand(
-        //    async () => {
-        //        WasLoginSuccessful = null;
-        //        WasLoginSuccessful = await MpAvAccountTools.Instance.RegisterUserAsync(AccountEmail, AccountPassword, Remember, Parent.UserAccount);
-        //        RefreshAccountPage();
-        //    },
-        //    () => {
-        //        return CanAttempLogin;
-        //    });
+        public MpIAsyncCommand LoginCommand => new MpAsyncCommand(
+            async () => {
+                WasLoginSuccessful = await MpAvAccountTools.Instance.LoginUserAsync();
+                MpConsole.WriteLine($"login {WasLoginSuccessful.Value.ToTestResultLabel()}");
+                RefreshAccountPage();
+            }, () => {
+                return CanLogin;
+            });
 
         public ICommand LogOutCommand => new MpCommand(
             () => {

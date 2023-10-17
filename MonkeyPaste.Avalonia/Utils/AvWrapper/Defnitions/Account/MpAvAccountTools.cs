@@ -11,7 +11,7 @@ namespace MonkeyPaste.Avalonia {
         Unregistered
     }
 
-    public partial class MpAvAccountTools : MpIAccountTools {
+    public partial class MpAvAccountTools {
         #region Private Variables
         private MpContentCapInfo _lastCapInfo = new();
         private int _lastContentCount = 0;
@@ -20,6 +20,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
+        public const string EMPTY_RATE_TEXT = "???";
         public const int MIN_PASSWORD_LENGTH = 6;
 
         const string SUCCESS_PREFIX = "[SUCCESS]";
@@ -51,24 +52,28 @@ namespace MonkeyPaste.Avalonia {
         //#endif
         //        }
 
-        public void SetAccountType(MpUserAccountType newType) {
-            // NOTE this maybe a good all around interface method, not sure though
-            bool changed = CurrentAccountType != newType;
-            if (changed) {
-                bool is_upgrade = (int)newType > (int)CurrentAccountType;
-                CurrentAccountType = newType;
-                MpMessenger.SendGlobal(is_upgrade ? MpMessageType.AccountUpgrade : MpMessageType.AccountDowngrade);
-            }
-        }
+
         public string AccountStateInfo {
             get {
-                if (CurrentAccountType == MpUserAccountType.Unlimited) {
-                    return $"{CurrentAccountType}-(Total {_lastContentCount})";
+                if (MpAvAccountViewModel.Instance == null) {
+                    return string.Empty;
                 }
-                return $"{CurrentAccountType} - ({_lastContentCount} total / {GetContentCapacity(CurrentAccountType)} capacity {(GetContentCapacity(CurrentAccountType) - _lastContentCount)} remaining)";
+                var uat = MpAvAccountViewModel.Instance.AccountType;
+                if (uat == MpUserAccountType.Unlimited) {
+                    return $"{uat}-(Total {_lastContentCount})";
+                }
+                return $"{uat} - ({_lastContentCount} total / {GetContentCapacity(uat)} capacity {(GetContentCapacity(uat) - _lastContentCount)} remaining)";
             }
         }
-        public MpUserAccountType CurrentAccountType { get; private set; } = TEST_ACCOUNT_TYPE;
+
+        public MpUserAccountType CurrentAccountType {
+            get => MpAvPrefViewModel.Instance.AccountType;
+            private set {
+                if (CurrentAccountType != value) {
+                    MpAvPrefViewModel.Instance.AccountType = value;
+                }
+            }
+        }
 
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {
@@ -99,13 +104,18 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string GetAccountRate(MpUserAccountType acctType, bool isMonthly) {
+            if (acctType == MpUserAccountType.None ||
+                acctType == MpUserAccountType.Free) {
+                return string.Empty;
+            }
             if (AccountTypePriceLookup.TryGetValue((acctType, isMonthly), out string rate)) {
                 return rate;
             }
-            return string.Empty;
+            // NOTE this should only happen when not offline
+            return EMPTY_RATE_TEXT;
         }
 
-        public async Task<MpContentCapInfo> RefreshCapInfoAsync() {
+        public async Task<MpContentCapInfo> RefreshCapInfoAsync(MpUserAccountType cur_uat) {
             int new_content_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.AllTagId);
             int new_trash_count = await MpDataModelProvider.GetCopyItemCountByTagIdAsync(MpTag.TrashTagId);
             bool has_changed = new_content_count != _lastContentCount || new_trash_count != _lastTrashCount;
@@ -115,7 +125,7 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.AccountInfoChanged);
             }
 
-            int content_cap = GetContentCapacity(CurrentAccountType);
+            int content_cap = GetContentCapacity(cur_uat);
             if (content_cap < 0) {
                 // unlimited, no need to check trash
                 _lastCapInfo = new MpContentCapInfo();
@@ -158,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
             // trash cap 100 actual 99 (needs next)
             // trash cap 100 actual 100 (both)
             // trash cap 100, actual 4 (none)
-            int trash_cap = GetTrashCapacity(CurrentAccountType);
+            int trash_cap = GetTrashCapacity(cur_uat);
             int cur_trash_diff = trash_cap - totalTrash;
             bool needs_trash_cap_info = cur_trash_diff < 1;
             bool is_1_before_trash_cap = cur_trash_diff == 0;
@@ -189,17 +199,17 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
         Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new Dictionary<(MpUserAccountType, bool), string>() {
-            {(MpUserAccountType.Free,true),"$0.00" },
-            {(MpUserAccountType.Free,false),"$0.00" },
-            {(MpUserAccountType.Standard,true),"$0.99" },
-            {(MpUserAccountType.Standard,false),"$9.99" },
-            {(MpUserAccountType.Unlimited,true),"$2.99" },
-            {(MpUserAccountType.Unlimited,false),"$29.99" }
+            //{(MpUserAccountType.Free,true),"$0.00" },
+            //{(MpUserAccountType.Free,false),"$0.00" },
+            //{(MpUserAccountType.Standard,true),"$0.99" },
+            //{(MpUserAccountType.Standard,false),"$9.99" },
+            //{(MpUserAccountType.Unlimited,true),"$2.99" },
+            //{(MpUserAccountType.Unlimited,false),"$29.99" }
         };
 
         Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new Dictionary<(MpUserAccountType, bool), int>() {
-            {(MpUserAccountType.Unlimited,true),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT },
-            {(MpUserAccountType.Unlimited,false),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT }
+            //{(MpUserAccountType.Unlimited,true),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT },
+            //{(MpUserAccountType.Unlimited,false),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT }
         };
 
         public bool IsContentAddPausedByAccount { get; private set; }
@@ -229,24 +239,6 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpSubscriptionFormat> GetUserSubscriptionAsync() {
             var acct = await GetStoreUserLicenseInfoAsync();
-            if (acct != default) {
-                MpAvPrefViewModel.Instance.AccountType = acct.AccountType;
-                MpAvPrefViewModel.Instance.AccountNextPaymentDateTime = acct.ExpireOffsetUtc.UtcDateTime;
-                MpAvPrefViewModel.Instance.AccountBillingCycleType =
-                    acct.AccountType == MpUserAccountType.Free ?
-                        MpBillingCycleType.None :
-                        acct.IsMonthly ?
-                            MpBillingCycleType.Monthly :
-                            MpBillingCycleType.Yearly;
-            }
-            bool logged_in = await LoginUserAsync();
-            if (acct == null) {
-                // anonymous
-                acct = new MpSubscriptionFormat() {
-                    AccountType = MpUserAccountType.Free
-                };
-            }
-            MpConsole.WriteLine($"login {logged_in.ToTestResultLabel()}");
             return acct;
         }
         public int GetSubscriptionTrialLength(MpUserAccountType uat, bool isMonthly) {

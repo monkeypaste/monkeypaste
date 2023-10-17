@@ -1,5 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -20,6 +21,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region View Models
         public IList<MpAvWelcomeOptionItemViewModel> Items { get; set; }
+
+        public MpAvWelcomeOptionItemViewModel SelectedItem {
+            get => Items.FirstOrDefault(x => x.IsChecked);
+            set {
+                if (SelectedItem != value) {
+                    Items.ForEach(x => x.IsChecked = x == value);
+                    OnPropertyChanged(nameof(SelectedItem));
+                }
+            }
+        }
         #endregion
 
         #region State
@@ -48,7 +59,16 @@ namespace MonkeyPaste.Avalonia {
         public MpAvWelcomeOptionGroupViewModel() : this(null) { }
         public MpAvWelcomeOptionGroupViewModel(MpAvWelcomeNotificationViewModel parent) : base(parent) { }
         public MpAvWelcomeOptionGroupViewModel(MpAvWelcomeNotificationViewModel parent, MpWelcomePageType pageType) : this(parent) {
+            PropertyChanged += MpAvWelcomeOptionGroupViewModel_PropertyChanged;
             WelcomePageType = pageType;
+        }
+
+        private void MpAvWelcomeOptionGroupViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(SelectedItem):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsChecked)));
+                    break;
+            }
         }
         #endregion
 

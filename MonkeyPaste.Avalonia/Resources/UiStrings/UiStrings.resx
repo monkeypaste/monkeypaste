@@ -815,10 +815,10 @@
   <data name="UserActionYesButtonText" xml:space="preserve">
     <value>Yes</value>
   </data>
-  <data name="WelcomeAccountMonthlySwitchDisabled" xml:space="preserve">
+  <data name="AccountYearlyLabel" xml:space="preserve">
     <value>Yearly</value>
   </data>
-  <data name="WelcomeAccountMonthlySwitchEnabled" xml:space="preserve">
+  <data name="AccountMonthlyLabel" xml:space="preserve">
     <value>Monthly</value>
   </data>
   <data name="AccountTrialButtonText" xml:space="preserve">
@@ -889,5 +889,23 @@
   </data>
   <data name="AccountFreeTrialLabel" xml:space="preserve">
     <value>Free {0}-Day Trial</value>
+  </data>
+  <data name="AccountPurchaseErrorCaption" xml:space="preserve">
+    <value>There was a problem performing your purchase. Checking your connection and settings may help. Would you like to try again?</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
+    <value>Your account has been upgraded to {0}/{1}.</value>
+  </data>
+  <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
+    <value>Pruchase Successful!</value>
+  </data>
+  <data name="CommonErrorLabel" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="CommonConnectionFailedCaption" xml:space="preserve">
+    <value>Connection failed.</value>
+  </data>
+  <data name="CommonRetryLabel" xml:space="preserve">
+    <value>Retry</value>
   </data>
 </root>
