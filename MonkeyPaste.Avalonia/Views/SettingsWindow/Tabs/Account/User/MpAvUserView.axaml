@@ -1,55 +1,55 @@
-<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
-                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       mc:Ignorable="d"
-                       d:DesignWidth="800"
-                       d:DesignHeight="750"
-                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                       xmlns:local="using:MonkeyPaste.Avalonia"
-                       xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
-                       xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvSettingsViewModel"
-                       x:DataType="local:MpAvSettingsViewModel"
-                       x:CompileBindings="True"
-                       DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
-                       x:Class="MonkeyPaste.Avalonia.MpAvUserView">
-    <local:MpAvUserControl.Styles>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="750"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
+             xmlns:pcl="using:MonkeyPaste"
+             x:Class="MonkeyPaste.Avalonia.MpAvUserView">
+    <UserControl.Styles>
         <!--  ACCOUNT FRAME VISIBILITY (ORDER: connected,disconnected,unregistered)  -->
 
         <!--  CONNECTED  -->
-        <Style Selector="local|MpAvSettingsFrameCollectionView.connected local|MpAvSettingsFrameView:nth-child(2)">
+        <!--<Style Selector="local|MpAvSettingsFrameCollectionView.connected ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(2)">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="local|MpAvSettingsFrameCollectionView.connected local|MpAvSettingsFrameView:nth-child(3)">
+        <Style Selector="local|MpAvSettingsFrameCollectionView.connected ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(3)">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
 
+        -->
         <!--  DISCONNECTED  -->
-        <Style Selector="local|MpAvSettingsFrameCollectionView.disconnected local|MpAvSettingsFrameView:nth-child(1)">
+        <!--
+        <Style Selector="local|MpAvSettingsFrameCollectionView.disconnected ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(1)">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="local|MpAvSettingsFrameCollectionView.disconnected local|MpAvSettingsFrameView:nth-child(3)">
+        <Style Selector="local|MpAvSettingsFrameCollectionView.disconnected ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(3)">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
 
+        -->
         <!--  UNREGISTERED  -->
-        <Style Selector="local|MpAvSettingsFrameCollectionView.unregistered local|MpAvSettingsFrameView:nth-child(1)">
+        <!--
+        <Style Selector="local|MpAvSettingsFrameCollectionView.unregistered ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(1)">
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-        <Style Selector="local|MpAvSettingsFrameCollectionView.unregistered local|MpAvSettingsFrameView:nth-child(2)">
+        <Style Selector="local|MpAvSettingsFrameCollectionView.unregistered ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(2)">
             <Setter Property="IsVisible"
                     Value="False" />
-        </Style>
+        </Style>-->
 
-    </local:MpAvUserControl.Styles>
-    <local:MpAvSettingsFrameCollectionView Classes.connected="{Binding AccountState, ConverterParameter=Connected, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}, Source={x:Static local:MpAvPrefViewModel.Instance}}"
-                                           Classes.disconnected="{Binding AccountState, ConverterParameter=Disconnected, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}, Source={x:Static local:MpAvPrefViewModel.Instance}}"
-                                           Classes.unregistered="{Binding AccountState, ConverterParameter=Unregistered, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}, Source={x:Static local:MpAvPrefViewModel.Instance}}"
-                                           DataContext="{Binding FilteredAccountFrames}" />
-</local:MpAvUserControl>
+    </UserControl.Styles>
+    <local:MpAvSettingsFrameCollectionView Classes.connected="{Binding AccountState, ConverterParameter=Connected, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}, Source={x:Static local:MpAvAccountViewModel.Instance}}"
+                                           Classes.disconnected="{Binding AccountState, ConverterParameter=Disconnected, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}, Source={x:Static local:MpAvAccountViewModel.Instance}}"
+                                           Classes.unregistered="{Binding AccountState, ConverterParameter=Unregistered, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}, Source={x:Static local:MpAvAccountViewModel.Instance}}"
+                                           DataContext="{Binding FilteredAccountFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
+</UserControl>

@@ -23,12 +23,13 @@
     </local:MpAvUserControl.Styles>
     <Border x:Name="QueryItemGridContainer"
             Classes="paramBorder">
-        <Grid>
+        <Grid Margin="0,0,10,0">
 
             <!--  TEXTBOX  -->
 
             <TextBox x:Name="ContentQueryTextBox"
                      Classes="dnd"
+                     IsReadOnly="{Binding IsReadOnly}"
                      AcceptsReturn="True"
                      TextWrapping="Wrap"
                      MaxHeight="400"
@@ -50,12 +51,21 @@
                 <local:MpAvClearTextButton x:Name="ClearButton"
                                            Grid.Column="0"
                                            Classes="TextBoxButton square"
-                                           IsVisible="{Binding Text, ElementName=ContentQueryTextBox, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                            Height="20"
                                            ClearCommand="{Binding ClearQueryCommand}"
                                            ClearCommandParameter="{Binding .}"
                                            HorizontalAlignment="Right"
-                                           VerticalAlignment="Center" />
+                                           VerticalAlignment="Center">
+                    <local:MpAvClearTextButton.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="Text"
+                                     ElementName="ContentQueryTextBox"
+                                     Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                            <Binding Path="!IsReadOnly"
+                                     ElementName="ContentQueryTextBox" />
+                        </MultiBinding>
+                    </local:MpAvClearTextButton.IsVisible>
+                </local:MpAvClearTextButton>
 
                 <!--  FILTER BUTTON  -->
 

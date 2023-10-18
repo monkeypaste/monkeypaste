@@ -194,7 +194,7 @@ function expandPasteButton(fromHost = false) {
 }
 
 function startPasteButtonBusy() {
-    setPasteButtonContent('spinner', UiStrings.EditorCommonBusyLabel);
+    setPasteButtonContent('spinner', UiStrings.CommonBusyLabel);
     getPasteButtonElement().classList.add('disabled');
     getPasteButtonPopupExpanderElement().classList.add('disabled');
     getEditorContainerElement().classList.add('pasting');

@@ -810,9 +810,9 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to Please wait....
         /// </summary>
-        public static string EditorCommonBusyLabel {
+        public static string CommonBusyLabel {
             get {
-                return ResourceManager.GetString("EditorCommonBusyLabel", resourceCulture);
+                return ResourceManager.GetString("CommonBusyLabel", resourceCulture);
             }
         }
         

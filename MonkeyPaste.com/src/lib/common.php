@@ -9,6 +9,8 @@ const SUCCESS_MSG = '[SUCCESS]';
 const ERROR_MSG = '[ERROR]';
 const CAN_TEST = true;
 
+const TOMORROW_TICKS = 1 * 24 * 60 * 60;
+
 function generate_activation_code(): string
 {
     return bin2hex(random_bytes(16));
@@ -35,8 +37,8 @@ function is_get_request(): bool
 {
     return strtoupper($_SERVER['REQUEST_METHOD']) === 'GET';
 }
-function exit_success() {
-    echo SUCCESS_MSG;
+function exit_success($msg = "") {
+    echo SUCCESS_MSG.$msg;
     exit(0);
 }
 

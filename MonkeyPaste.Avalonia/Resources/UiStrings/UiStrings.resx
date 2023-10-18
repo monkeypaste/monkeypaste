@@ -551,7 +551,7 @@
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
     <value>Minimize</value>
   </data>
-  <data name="EditorCommonBusyLabel" xml:space="preserve">
+  <data name="CommonBusyLabel" xml:space="preserve">
     <value>Please wait...</value>
   </data>
   <data name="MainWindowTitleLockLabel" xml:space="preserve">

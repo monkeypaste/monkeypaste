@@ -1212,7 +1212,7 @@ namespace MonkeyPaste.Avalonia {
             var sw = new MpAvWindow() {
                 ShowInTaskbar = true,
                 Width = 1000,
-                Height = 500,
+                Height = 620,
                 Title = UiStrings.CommonSettingsTitle.ToWindowTitleText(),
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -1712,33 +1712,17 @@ namespace MonkeyPaste.Avalonia {
                         break;
 
                     case MpRuntimePrefParamType.AccountRegister: {
-                            if (MpAvPrefViewModel.Instance.AccountState != MpUserAccountState.Unregistered) {
-                                return;
-                            }
-                            var result = await MpAvAccountTools.Instance.RegisterUserAsync();
-                            if (result) {
-                                MpAvPrefViewModel.Instance.AccountState = MpUserAccountState.Disconnected;
-                            }
+                            MpAvAccountViewModel.Instance.RegisterCommand.Execute(null);
                             break;
                         }
 
                     case MpRuntimePrefParamType.AccountLogin: {
-                            if (MpAvPrefViewModel.Instance.AccountState != MpUserAccountState.Disconnected) {
-                                return;
-                            }
-                            var result = await MpAvAccountTools.Instance.LoginUserAsync();
-                            if (result) {
-                                MpAvPrefViewModel.Instance.AccountState = MpUserAccountState.Connected;
-                            }
+                            MpAvAccountViewModel.Instance.LoginCommand.Execute(null);
                             break;
                         }
 
                     case MpRuntimePrefParamType.AccountLogout: {
-                            if (MpAvPrefViewModel.Instance.AccountState != MpUserAccountState.Connected) {
-                                return;
-                            }
-                            MpAvPrefViewModel.Instance.AccountState = MpUserAccountState.Disconnected;
-
+                            MpAvAccountViewModel.Instance.LogoutCommand.Execute(null);
                             break;
                         }
 

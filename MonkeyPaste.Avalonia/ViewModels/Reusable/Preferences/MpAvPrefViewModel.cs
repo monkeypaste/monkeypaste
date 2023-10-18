@@ -17,12 +17,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
-    public enum MpTrashCleanupModeType {
-        Never,
-        Daily,
-        Weekly,
-        Monthly
-    }
 
     public class MpAvPrefViewModel :
         MpAvViewModelBase,
@@ -353,8 +347,6 @@ namespace MonkeyPaste.Avalonia {
         public string AccountPassword { get; set; }
         [JsonIgnore]
         public string AccountPassword2 { get; set; }
-        [JsonIgnore]
-        public MpUserAccountState AccountState { get; set; } = MpUserAccountState.Unregistered;
 
         [JsonConverter(typeof(StringEnumConverter))]
         public MpUserAccountType AccountType { get; set; } = MpUserAccountType.Free;

@@ -50,7 +50,9 @@ namespace MonkeyPaste.Avalonia {
 
         public bool CanBuy {
             get {
-                if (SelectedItem == null || !IsStoreAvailable) {
+                if (SelectedItem == null ||
+                    !IsStoreAvailable ||
+                    SelectedItem.AccountType == MpUserAccountType.Free) {
                     return false;
                 }
                 var ua = MpAvAccountViewModel.Instance;
@@ -81,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvSubcriptionPurchaseViewModel() {
             PropertyChanged += MpAvAccountViewModel_PropertyChanged;
-
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
 
         #endregion
@@ -151,6 +153,9 @@ namespace MonkeyPaste.Avalonia {
         private void ReceivedGlobalMessage(MpMessageType msg) {
             switch (msg) {
                 case MpMessageType.SettingsWindowOpened:
+                    if (!IsStoreAvailable) {
+                        InitializeAsync().FireAndForgetSafeAsync();
+                    }
                     break;
             }
         }

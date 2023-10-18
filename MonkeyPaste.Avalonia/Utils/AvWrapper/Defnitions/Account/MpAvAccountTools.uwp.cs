@@ -103,18 +103,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public async Task<MpSubscriptionFormat> GetUserAccountStateAsync() {
-            var acct = await GetUserSubscriptionAsync();
-            return acct;
-        }
-        #endregion
-
-        #region Protected Methods
-        #endregion
-
-        #region Private Methods
-
-        private async Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync() {
+        public async Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync() {
             // get users current ms store state
             StoreAppLicense appLicense = await context.GetAppLicenseAsync();
             KeyValuePair<string, StoreLicense> user_storeid_license_kvp = default;
@@ -149,8 +138,17 @@ namespace MonkeyPaste.Avalonia {
                 };
             }
             MpDebug.Break($"User license error. Cannot find internal ref to ms store id '{user_storeid_license_kvp.Value.SkuStoreId}'");
-            return null;
+            return MpSubscriptionFormat.Default;
         }
+
+        #endregion
+
+        #region Protected Methods
+        #endregion
+
+        #region Private Methods
+
+
 
         private async Task<StoreProduct> GetAddOnByStoreIdAsync(string storeId) {
             // Load the sellable add-ons for this app and check if the trial is still 

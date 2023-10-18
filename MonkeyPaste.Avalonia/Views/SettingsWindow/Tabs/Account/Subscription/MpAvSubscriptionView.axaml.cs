@@ -1,9 +1,7 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using MonkeyPaste.Common.Avalonia;
 using System;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvSubscriptionView : MpAvUserControl<MpAvSubcriptionPurchaseViewModel> {
@@ -19,21 +17,12 @@ namespace MonkeyPaste.Avalonia {
             OnBuyButtonIsVisibleChanged(buyButton);
         }
         private async void OnBuyButtonIsVisibleChanged(Control buyButton) {
-            if (!buyButton.IsVisible ||
-                this.GetVisualAncestor<ScrollViewer>() is not ScrollViewer sv) {
-                return;
-            }
-            //Dispatcher.UIThread.Post(async () => {
-            //    while(true) {
-            //        if(sv.Offset)
-            //    }
-
-            // BUG calling bringIntoView doesn't do anything on button, so scrolling to end
-            // cause its at the bottom
-
-            await Task.Delay(300);
-            sv.ScrollToEnd();
-            //});
+            //if (!buyButton.IsVisible ||
+            //    this.GetVisualAncestor<ScrollViewer>() is not ScrollViewer sv) {
+            //    return;
+            //}
+            //await Task.Delay(300);
+            //sv.ScrollToEnd();
         }
     }
 }

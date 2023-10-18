@@ -59,7 +59,18 @@ namespace MonkeyPaste.Avalonia {
         public int SelectionStart { get; set; }
         public int SelectionEnd { get; set; }
         public string SelectedPlainText {
-            get => Text.Substring(Math.Min(SelectionStart, SelectionEnd), SelectionLength);
+            get {
+                if (string.IsNullOrEmpty(Text)) {
+                    return string.Empty;
+                }
+                try {
+                    return Text.Substring(Math.Min(SelectionStart, SelectionEnd), SelectionLength);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"SelectedText error.", ex);
+                    return string.Empty;
+                }
+            }
             set {
                 int actual_start_idx = Math.Min(SelectionStart, SelectionEnd);
                 string pre_text = Text.Substring(actual_start_idx);

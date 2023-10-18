@@ -1,5 +1,5 @@
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvUserView : MpAvUserControl<MpAvSettingsViewModel> {
+    public partial class MpAvUserView : MpAvUserControl {
         public MpAvUserView() {
             InitializeComponent();
         }

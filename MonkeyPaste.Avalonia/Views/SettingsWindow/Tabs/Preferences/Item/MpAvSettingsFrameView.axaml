@@ -15,7 +15,7 @@
                        IsVisible="{Binding IsVisible}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameView">
     <local:MpAvClipBorder Padding="5">
-        <StackPanel Spacing="5">
+        <Grid RowDefinitions="Auto,*">
             <StackPanel Classes="header frame"
                         Orientation="Horizontal">
                 <Image Classes="frame header icon"
@@ -24,15 +24,14 @@
                 <TextBlock Classes="frame header text"
                            Text="{Binding LabelText}" />
             </StackPanel>
-            <Border IsVisible="False"
-                    Classes="header frame labelUnderline_long" />
             <local:MpAvParameterCollectionView x:Name="ParameterCollectionView"
+                                               Grid.Row="1"
                                                BorderThickness="1"
                                                CornerRadius="10"
                                                BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Stretch" />
-        </StackPanel>
+        </Grid>
     </local:MpAvClipBorder>
 
 </local:MpAvUserControl>

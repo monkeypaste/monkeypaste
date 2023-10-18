@@ -17,7 +17,10 @@ namespace MonkeyPaste.Common {
             return new T();
         }
 
-        public static T DeserializeBase64Object<T>(object obj, Encoding enc = null, JsonSerializerSettings settings = null) where T : new() {
+        public static T DeserializeBase64Object<T>(object obj, Encoding enc = null) where T : new() {
+            return DeserializeBase64Object<T>(obj, enc, null);
+        }
+        private static T DeserializeBase64Object<T>(object obj, Encoding enc = null, JsonSerializerSettings settings = null) where T : new() {
             if (obj is string objBase64Str && !string.IsNullOrWhiteSpace(objBase64Str)) {
                 try {
 

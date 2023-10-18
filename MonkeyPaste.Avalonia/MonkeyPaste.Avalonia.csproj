@@ -1465,7 +1465,6 @@
     <Folder Include="Resources\Legal\Licenses\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
-    <Folder Include="Utils\AvWrapper\Defnitions\Account\NewFolder\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\_Base\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
@@ -1475,9 +1474,6 @@
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\Reusable\TextBoxes\" />
-    <Folder Include="Views\SettingsWindow\Tabs\Account\User\Login\" />
-    <Folder Include="Views\SettingsWindow\Tabs\Account\User\Status\" />
-    <Folder Include="Views\SettingsWindow\Tabs\Account\User\Registration\" />
   </ItemGroup>
   
   

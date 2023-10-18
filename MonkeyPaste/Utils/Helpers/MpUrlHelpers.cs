@@ -20,10 +20,15 @@ namespace MonkeyPaste {
     }
 
     public static class MpUrlHelpers {
-        private static DomainParser _domainParser;
-
+        #region Constants
         public const int MAX_DOT_NET_URL_LENGTH = 65519;
+        #endregion
 
+        #region Statics
+        private static DomainParser _domainParser;
+        #endregion
+
+        #region Public Methods
         public static async Task<MpUrlProperties> DiscoverUrlPropertiesAsync(string url = "") {
             if (string.IsNullOrWhiteSpace(url)) {
                 return null;
@@ -71,6 +76,11 @@ namespace MonkeyPaste {
             string url_lwc = url.ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
             return url_lwc.StartsWith("about:blank");
         }
+
+
+        #endregion
+
+        #region Private Methods
         private static string GetFullyFormattedUrl(string str) {
             // reading linux moz url source pads every character of url w/ empty character
             // but trying to trim it doesn't work this manually parses string for actual characters
@@ -297,5 +307,7 @@ namespace MonkeyPaste {
 
             return new Tuple<string, string>(icon_base64, title);
         }
+
+        #endregion
     }
 }

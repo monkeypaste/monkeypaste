@@ -1,5 +1,8 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -13,9 +16,13 @@ namespace MonkeyPaste.Avalonia {
     }
     public class MpAvAccountViewModel : MpAvViewModelBase {
         #region Private Variables
+        private MpUserAccountType _lastAccountType;
         #endregion
 
         #region Constants
+        const string SUCCESS_PREFIX = "[SUCCESS]";
+        const string REGISTER_URL = "https://www.monkeypaste.com/accounts/register.php";
+        const string LOGIN_URL = "https://www.monkeypaste.com/accounts/login.php";
         #endregion
 
         #region Statics 
@@ -30,8 +37,7 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region View Models
-        public MpAvAccountRegistrationViewModel RegistrationViewModel { get; }
-        public MpAvAccountLoginViewModel LoginViewModel { get; }
+
         #endregion
 
         #region Appearance
@@ -47,12 +53,6 @@ namespace MonkeyPaste.Avalonia {
             HasBillingCycle ?
                 NextPaymentUtc.ToLocalTime().ToString(UiStrings.CommonDateFormat) :
                 "♾️";
-        public string LoginResultMessage =>
-            WasLoginSuccessful.IsNull() ?
-                string.Empty :
-                WasLoginSuccessful.Value ?
-                    UiStrings.AccountLoginSuccessfulText :
-                    UiStrings.AccountLoginFailedText;
 
         #endregion
 
@@ -66,22 +66,28 @@ namespace MonkeyPaste.Avalonia {
             HasBillingCycle && DateTime.UtcNow > NextPaymentUtc;
 
         public bool IsLoggedIn =>
-            UserAccount != MpSubscriptionFormat.Default;
-
-        public MpUserPageType CurrentPageType { get; set; }
+            AccountState == MpUserAccountState.Connected;
         public bool IsRegistered =>
-            !string.IsNullOrEmpty(AccountEmail) &&
-            !string.IsNullOrEmpty(AccountPassword);
+            AccountState != MpUserAccountState.Unregistered;
 
-        public bool? WasLoginSuccessful { get; set; }
 
-        public bool CanLogin =>
-            !WasLoginSuccessful.IsTrue() &&
-            !string.IsNullOrEmpty(AccountUsername) &&
-            !string.IsNullOrEmpty(AccountPassword);
+        public MpUserAccountState AccountState { get; private set; } = MpUserAccountState.Unregistered;
         #endregion
 
         #region Model
+
+        #region Request Args
+
+        Dictionary<string, string> RegisterRequestArgs =>
+            new Dictionary<string, string>() {
+                    {"username", MpAvPrefViewModel.Instance.AccountUsername },
+                    {"email", MpAvPrefViewModel.Instance.AccountEmail },
+                    {"password", MpAvPrefViewModel.Instance.AccountPassword },
+                    {"password2", MpAvPrefViewModel.Instance.AccountPassword2 },
+                };
+
+
+        #endregion
 
         public string AccountUsername =>
             MpAvPrefViewModel.Instance.AccountUsername;
@@ -93,6 +99,7 @@ namespace MonkeyPaste.Avalonia {
             get => MpAvPrefViewModel.Instance.AccountType;
             private set {
                 if (AccountType != value) {
+                    _lastAccountType = AccountType;
                     MpAvPrefViewModel.Instance.AccountType = value;
                     OnPropertyChanged(nameof(AccountType));
                 }
@@ -119,94 +126,32 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public bool IsActive {
-            get {
-                if (UserAccount == null) {
-                    return false;
-                }
-                return UserAccount.IsActive;
-            }
-        }
+        public bool IsActive =>
+            DateTime.UtcNow < NextPaymentUtc;
 
         public bool IsYearly =>
             BillingCycleType == MpBillingCycleType.Yearly;
 
-        //public DateTimeOffset NextPaymentUtc {
-        //    get {
-        //        if (UserAccount == null) {
-        //            return DateTimeOffset.MaxValue;
-        //        }
-        //        return UserAccount.ExpireOffsetUtc;
-        //    }
-        //}
-
-        //public MpBillingCycleType BillingCycleType {
-        //    get {
-        //        if (UserAccount == null) {
-        //            return MpBillingCycleType.None;
-        //        }
-        //        return UserAccount.BillingCycleType;
-        //    }
-        //}
-
-        //public MpUserAccountType AccountType {
-        //    get {
-        //        if (UserAccount == null) {
-        //            return MpUserAccountType.None;
-        //        }
-        //        return UserAccount.AccountType;
-        //    }
-        //}
-        public MpSubscriptionFormat UserAccount { get; private set; }
         #endregion
         #endregion
 
         #region Constructors
         public MpAvAccountViewModel() : base() {
             MpDebug.Assert(_instance == null, $"Account singleton error");
-            RegistrationViewModel = new MpAvAccountRegistrationViewModel(this);
-            LoginViewModel = new MpAvAccountLoginViewModel(this);
+            PropertyChanged += MpAvAccountViewModel_PropertyChanged;
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
+
         #endregion
 
         #region Public Methods
         public async Task InitializeAsync() {
             IsBusy = true;
 
-            var acct = await MpAvAccountTools.Instance.GetUserSubscriptionAsync();
-            if (acct != default) {
-                AccountType = acct.AccountType;
-                NextPaymentUtc = acct.ExpireOffsetUtc.UtcDateTime;
-                BillingCycleType =
-                    acct.AccountType == MpUserAccountType.Free ?
-                        MpBillingCycleType.None :
-                        acct.IsMonthly ?
-                            MpBillingCycleType.Monthly :
-                            MpBillingCycleType.Yearly;
-            }
-
-            await LoginCommand.ExecuteAsync();
-
-            RefreshAccountPage();
-
+            await LoginCommand.ExecuteAsync(null);
             IsBusy = false;
         }
 
-        public void RefreshAccountPage(MpUserPageType forcePage = MpUserPageType.None) {
-            if (forcePage != MpUserPageType.None) {
-                CurrentPageType = forcePage;
-                return;
-            }
-            if (IsRegistered) {
-                if (IsLoggedIn) {
-                    CurrentPageType = MpUserPageType.Status;
-                } else {
-                    CurrentPageType = MpUserPageType.Login;
-                }
-            } else {
-                CurrentPageType = MpUserPageType.Register;
-            }
-        }
         #endregion
 
         #region Protected Methods
@@ -214,13 +159,59 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void SetAccountType(MpUserAccountType newType) {
-            // NOTE this maybe a good all around interface method, not sure though
-            bool changed = AccountType != newType;
-            if (changed) {
-                bool is_upgrade = (int)newType > (int)AccountType;
-                AccountType = newType;
-                MpMessenger.SendGlobal(is_upgrade ? MpMessageType.AccountUpgrade : MpMessageType.AccountDowngrade);
+        private void MpAvAccountViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(AccountType):
+                    // NOTE this maybe a good all around interface method, not sure though
+                    bool changed = AccountType != _lastAccountType;
+                    if (changed) {
+                        bool is_upgrade = (int)_lastAccountType > (int)AccountType;
+                        MpMessenger.SendGlobal(is_upgrade ? MpMessageType.AccountUpgrade : MpMessageType.AccountDowngrade);
+                    }
+                    break;
+                case nameof(AccountState):
+                    UpdateAccountViews();
+                    break;
+            }
+        }
+
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.SettingsWindowOpened:
+
+                    UpdateAccountViews();
+                    break;
+            }
+        }
+        private bool ProcessServerResponse(string response, out Dictionary<string, string> args) {
+            response = response.ToStringOrEmpty();
+
+            if (response.StartsWith(SUCCESS_PREFIX) &&
+                response.SplitNoEmpty(SUCCESS_PREFIX) is string[] success_parts) {
+                args = success_parts.Length == 1 ? null : MpJsonConverter.DeserializeObject<Dictionary<string, string>>(success_parts[1]);
+                return true;
+            }
+            // error
+            args = MpJsonConverter.DeserializeObject<Dictionary<string, string>>(response);
+            return false;
+        }
+
+        private void ProcessResponseErrors(Dictionary<string, string> errors) {
+
+        }
+        private void UpdateAccountViews() {
+            foreach (var afvm in MpAvSettingsViewModel.Instance.FilteredAccountFrames) {
+                switch (afvm.FrameType) {
+                    case MpSettingsFrameType.Status:
+                        afvm.IsVisible = AccountState == MpUserAccountState.Connected;
+                        break;
+                    case MpSettingsFrameType.Login:
+                        afvm.IsVisible = AccountState == MpUserAccountState.Disconnected;
+                        break;
+                    case MpSettingsFrameType.Register:
+                        afvm.IsVisible = AccountState == MpUserAccountState.Unregistered;
+                        break;
+                }
             }
         }
         #endregion
@@ -228,32 +219,97 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
 
 
-        public ICommand ResetAccountPasswordCommand => new MpCommand(
-            () => {
+        public MpIAsyncCommand<object> LoginCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                // check platform store for subscription, if none found default is returned
+                MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
 
-            }, () => {
-                return IsRegistered;
+                var req_args = new Dictionary<string, string>() {
+                    {"username", MpAvPrefViewModel.Instance.AccountUsername },
+                    {"password", MpAvPrefViewModel.Instance.AccountPassword },
+                    {"device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
+                    {"sub_type", acct == MpSubscriptionFormat.Default ? AccountType.ToString() : acct.AccountType.ToString() },
+                    {"monthly", (acct == MpSubscriptionFormat.Default ? !IsYearly : acct.IsMonthly) ? "1":"0" },
+                    {"expires_utc_dt", acct == MpSubscriptionFormat.Default ? NextPaymentUtc.ToString() : acct.ExpireOffsetUtc.UtcDateTime.ToString() },
+                    {"detail1", MpAvPrefViewModel.arg1 },
+                    {"detail2", MpAvPrefViewModel.arg2 },
+                    {"detail3", MpAvPrefViewModel.arg3 },
+                };
+
+                var sw = Stopwatch.StartNew();
+                string resp = await MpHttpRequester.PostDataToUrlAsync(LOGIN_URL, req_args);
+
+                bool success = ProcessServerResponse(resp, out var resp_args);
+
+                MpConsole.WriteLine($"login {success.ToTestResultLabel()}. Time: {sw.ElapsedMilliseconds}ms");
+                if (success) {
+                    AccountType = resp_args["sub_type"].ToEnum<MpUserAccountType>();
+                    NextPaymentUtc =
+                        AccountType == MpUserAccountType.Free ?
+                            DateTime.MaxValue :
+                            DateTime.Parse(resp_args["expires_utc_dt"]);
+                    BillingCycleType =
+                        AccountType == MpUserAccountType.Free ?
+                            MpBillingCycleType.None :
+                            resp_args["monthly"] == "1" ?
+                                MpBillingCycleType.Monthly : MpBillingCycleType.Yearly;
+
+                    AccountState = MpUserAccountState.Connected;
+
+                    return;
+                }
+                ProcessResponseErrors(resp_args);
+
+                if (args is not Control anchor_c) {
+                    // startup login, no msg
+                    return;
+                }
+                bool retry = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+                         title: UiStrings.CommonErrorLabel,
+                         message: UiStrings.AccountLoginFailedText,
+                         iconResourceObj: "WarningImage",
+                         anchor: anchor_c);
+                if (retry) {
+                    // opted to try again
+                    await LoginCommand.ExecuteAsync(args);
+                }
+            }, (args) => {
+                return !IsLoggedIn;
             });
 
-        public MpIAsyncCommand LoginCommand => new MpAsyncCommand(
+
+        public MpIAsyncCommand RegisterCommand => new MpAsyncCommand(
             async () => {
-                WasLoginSuccessful = await MpAvAccountTools.Instance.LoginUserAsync();
-                MpConsole.WriteLine($"login {WasLoginSuccessful.Value.ToTestResultLabel()}");
-                RefreshAccountPage();
+                var sw = Stopwatch.StartNew();
+                string response = await MpHttpRequester.PostDataToUrlAsync(REGISTER_URL, RegisterRequestArgs);
+
+                bool success = ProcessServerResponse(response, out var resp_args);
+
+                MpConsole.WriteLine($"Registration {success.ToTestResultLabel()}. Time: {sw.ElapsedMilliseconds}ms");
+                if (success) {
+                    AccountState = MpUserAccountState.Disconnected;
+                }
+
+                ProcessResponseErrors(resp_args);
+                bool retry = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+                         title: UiStrings.CommonErrorLabel,
+                         message: UiStrings.AccountRegistrationRegisterFailedText,
+                         iconResourceObj: "WarningImage");
+                if (retry) {
+                    // opted to try again
+                    await RegisterCommand.ExecuteAsync();
+                }
             }, () => {
-                return CanLogin;
+                return !IsRegistered;
             });
 
-        public ICommand LogOutCommand => new MpCommand(
+
+        public ICommand LogoutCommand => new MpCommand(
             () => {
-                //MpAvPrefViewModel.Instance.AccountEmail = null;
-                //MpAvPrefViewModel.Instance.AccountPassword = null;
-                UserAccount = MpSubscriptionFormat.Default;
-                CurrentPageType = MpUserPageType.Login;
+                AccountState = MpUserAccountState.Disconnected;
             }, () => {
                 return IsLoggedIn;
             });
-
         #endregion
     }
 }

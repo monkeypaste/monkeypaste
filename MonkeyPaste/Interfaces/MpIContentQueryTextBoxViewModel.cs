@@ -2,6 +2,7 @@
 
 namespace MonkeyPaste {
     public interface MpIContentQueryTextBoxViewModel : MpITextSelectionRange {
+        bool IsReadOnly { get; }
         bool IsFieldButtonVisible { get; }
         bool IsActionParameter { get; set; }
         string ContentQuery { get; set; }
