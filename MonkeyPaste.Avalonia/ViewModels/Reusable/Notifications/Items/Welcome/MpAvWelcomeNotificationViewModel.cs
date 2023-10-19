@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpAvAccountViewModel.Instance.InitializeAsync();
             if (will_show) {
-                await MpAvSubcriptionPurchaseViewModel.Instance.InitializeAsync();
+                await MpAvSubscriptionPurchaseViewModel.Instance.InitializeAsync();
                 Instance.InitWelcomeItems();
                 await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                     new MpNotificationFormat() {
@@ -244,7 +244,7 @@ namespace MonkeyPaste.Avalonia {
 
             #region Account
 
-            AccountViewModel = MpAvSubcriptionPurchaseViewModel.Instance.ToWelcomeOptionGroup();
+            AccountViewModel = MpAvSubscriptionPurchaseViewModel.Instance.ToWelcomeOptionGroup();
 
             #endregion
 
@@ -368,7 +368,7 @@ namespace MonkeyPaste.Avalonia {
                 acct_type = sel_acct_type;
                 is_monthly = AccountViewModel.Items.IndexOf(sel_acct_vm) >= 4;
             }
-            await MpAvSubcriptionPurchaseViewModel.Instance.PurchaseSubscriptionCommand
+            await MpAvSubscriptionPurchaseViewModel.Instance.PurchaseSubscriptionCommand
                 .ExecuteAsync(new object[] { acct_type, is_monthly });
 
 

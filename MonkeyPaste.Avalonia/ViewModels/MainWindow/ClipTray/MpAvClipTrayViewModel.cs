@@ -1766,31 +1766,34 @@ namespace MonkeyPaste.Avalonia {
             if (source == MpAccountCapCheckType.Add) {
                 if (cap_info.ToBeTrashed_ciid > 0) {
                     cap_msg_icon = MpContentCapInfo.NEXT_TRASH_IMG_RESOURCE_KEY;
-                    cap_msg_title_suffix = $"Content Capacity Reached!";
+                    cap_msg_title_suffix = UiStrings.NtfCapContentReachedTitleSuffix;
                     cap_msg_sb.AppendLine(
-                        $"Max '{account_type.ToString()}' storage is {cur_content_cap}.");
+                        string.Format(UiStrings.NtfCapContentMaxStorageText, account_type.EnumToUiString(), cur_content_cap));
                 }
                 if (cap_info.ToBeRemoved_ciid > 0) {
                     cap_msg_icon = MpContentCapInfo.NEXT_REMOVE_IMG_RESOURCE_KEY;
                     if (string.IsNullOrEmpty(cap_msg_title_suffix)) {
-                        cap_msg_title_suffix = $"Archive Capacity Reached!";
+                        cap_msg_title_suffix = UiStrings.NtfCapTrashReachedTitleSuffix;
                     } else {
-                        cap_msg_title_suffix = $"Content & Archive Capacity Reached!";
+                        cap_msg_title_suffix = UiStrings.NtfCapBothReachedTitleSuffix;
                     }
                     cap_msg_sb.AppendLine(
-                        $"Max archive is {cur_trash_cap}.");
+                        string.Format(UiStrings.NtfCapTrashMaxStorageText, cur_trash_cap));
                 }
                 if (!string.IsNullOrEmpty(cap_msg_sb.ToString())) {
                     apply_changes = true;
                     cap_msg_type = MpNotificationType.ContentCapReached;
                     cap_msg_sb.AppendLine(string.Empty);
-                    cap_msg_sb.AppendLine($"* You can hide these warnings by clicking 'hide all' from the options menu above 🤎");
+                    cap_msg_sb.AppendLine(UiStrings.NtfCapHideHint);
                 }
 
             } else if (source == MpAccountCapCheckType.AddBlock || source == MpAccountCapCheckType.RestoreBlock) {
                 // block refresh called BEFORE an add would occur to check favorite count again and avoid delete
                 // since tag linking doesn't refresh caps, this does it when last add set account to block state
-                string block_prefix = source.ToString().Replace("Block", string.Empty);
+                //string block_prefix =  source.ToString().Replace("Block", string.Empty);
+                string block_prefix =
+                    source == MpAccountCapCheckType.AddBlock ?
+                        UiStrings.NtfCapBlockAddLabel : UiStrings.NtfCapBlockRestoreLabel;
                 MpNotificationType block_msg_type =
                     source == MpAccountCapCheckType.AddBlock ?
                         MpNotificationType.ContentAddBlockedByAccount :
@@ -1798,9 +1801,9 @@ namespace MonkeyPaste.Avalonia {
 
                 if (MpAvAccountTools.Instance.IsContentAddPausedByAccount) {
                     // no linking changes, add will be blocked
-                    cap_msg_title_suffix = $"{block_prefix} Blocked";
-                    cap_msg_sb.AppendLine($"Trash or unlink something from 'Favorites' to add more.");
-                    cap_msg_sb.AppendLine($"Max '{account_type.ToString()}' storage is {cur_content_cap}.");
+                    cap_msg_title_suffix = string.Format(UiStrings.NtfCapBlockSuffix, block_prefix);
+                    cap_msg_sb.AppendLine(string.Format(UiStrings.NtfCapBlockHint1, UiStrings.TagDefaultFavoritesLabel));
+                    cap_msg_sb.AppendLine(string.Format(UiStrings.NtfCapBlockHint2, account_type.EnumToUiString(), cur_content_cap));
                     cap_msg_icon = MpContentCapInfo.ADD_BLOCKED_RESOURCE_KEY;
                     cap_msg_type = block_msg_type;
                 } else {
@@ -1818,13 +1821,13 @@ namespace MonkeyPaste.Avalonia {
             } else if (source == MpAccountCapCheckType.AccountTypeDowngraded ||
                 source == MpAccountCapCheckType.AccountTypeUpgraded) {
                 cap_msg_type = MpNotificationType.AccountChanged;
-                cap_msg_title_suffix = " Account Now Active";
+                cap_msg_title_suffix = UiStrings.NtfCapAccountChangedTitleSuffix;
                 if (source == MpAccountCapCheckType.AccountTypeUpgraded) {
                     cap_msg_icon = "AppImage";
-                    cap_msg_sb.AppendLine($"Congratulations! Your content storage is now {(cur_content_cap < 0 ? "Unlimited" : cur_content_cap.ToString())}");
+                    cap_msg_sb.AppendLine(string.Format(UiStrings.NtfCapAccountUpgradeText, cur_content_cap < 0 ? "∞" : cur_content_cap.ToString()));
                 } else {
                     cap_msg_icon = "MonkeyWinkImage";
-                    cap_msg_sb.AppendLine($"Your content storage is now {cur_content_cap} but fret not! No data is lost after downgrading. Only new stuff will be evaluated.");
+                    cap_msg_sb.AppendLine(string.Format(UiStrings.NtfCapAccountDowngradeText, cur_content_cap));
                     cap_msg_timeout = 10_000;
                 }
             }
@@ -1854,7 +1857,7 @@ namespace MonkeyPaste.Avalonia {
             }
             Dispatcher.UIThread.Post(async () => {
                 var sw = Stopwatch.StartNew();
-                string title = $"'{account_type}' {cap_msg_title_suffix}";
+                string title = string.Format("'{0}' {1}", account_type.EnumToUiString(), cap_msg_title_suffix);
                 string msg = cap_msg_sb.ToString();
                 while (sw.ElapsedMilliseconds < 3_000) {
                     if (_isProcessingCap) {

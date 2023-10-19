@@ -2194,6 +2194,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Help.
+        /// </summary>
+        public static string MpShortcutType_OpenHelp {
+            get {
+                return ResourceManager.GetString("MpShortcutType_OpenHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open In Window.
         /// </summary>
         public static string MpShortcutType_OpenInWindow {

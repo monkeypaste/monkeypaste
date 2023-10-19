@@ -9,12 +9,12 @@
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvSettingsViewModel"
-                       x:DataType="local:MpAvSettingsViewModel"
+                       x:TypeArguments="local:MpAvHelpViewModel"
+                       x:DataType="local:MpAvHelpViewModel"
                        x:CompileBindings="True"
-                       DataContext="{x:Static local:MpAvSettingsViewModel.Instance}"
+                       DataContext="{x:Static local:MpAvHelpViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvHelpView">
     <cefnet:WebView HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch" 
-                    InitialUrl="https://npp-user-manual.org/docs/session/" />
+                    VerticalAlignment="Stretch"
+                    InitialUrl="https://www.monkeypaste.com/docs/welcome" />
 </local:MpAvUserControl>

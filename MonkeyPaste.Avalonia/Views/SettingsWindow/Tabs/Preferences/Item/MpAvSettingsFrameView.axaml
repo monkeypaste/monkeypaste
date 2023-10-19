@@ -30,7 +30,7 @@
                                                CornerRadius="10"
                                                BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                                                HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Stretch" />
+                                               VerticalAlignment="Top" />
         </Grid>
     </local:MpAvClipBorder>
 

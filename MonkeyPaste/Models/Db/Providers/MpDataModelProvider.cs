@@ -515,6 +515,25 @@ namespace MonkeyPaste {
             var result = await GetCopyItemTagDataAsync_internal(true, tid, ignore_descendants, tids_to_omit, ciids_to_omit, ignore_trash_if_not_tid);
             return (List<MpCopyItem>)result;
         }
+
+        public static async Task<List<MpCopyItem>> GetCopyItemsByQueryTagIdAsync(
+            int qtid,
+            MpIQueryInfo simple_qi,
+            bool desc,
+            MpContentSortType sort,
+            IEnumerable<int> trash_ciids) {
+            var qi = await MpSearchCriteriaItem.CreateQueryCriteriaAsync(qtid, desc, sort);
+            // NOTE need to use simple to work right so take current simple
+            simple_qi.SetNext(qi);
+            int total_count = await MpContentQuery.QueryForTotalCountAsync(simple_qi, trash_ciids);
+            var all_ids = await MpContentQuery.FetchItemIdsAsync(simple_qi, 0, total_count, trash_ciids);
+            // NOTE simp querys next is an auto property if next is null so unset so auto again
+            simple_qi.SetNext(null);
+
+            var allItems = await MpDb.GetAsyncTable<MpCopyItem>().ToListAsync();
+            var result = all_ids.Select(x => allItems.FirstOrDefault(y => y.Id == x));
+            return result.ToList();
+        }
         private static async Task<object> GetCopyItemTagDataAsync_internal(
             bool is_count,
             int tid,

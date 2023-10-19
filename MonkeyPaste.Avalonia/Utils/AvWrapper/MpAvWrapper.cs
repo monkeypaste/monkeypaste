@@ -30,8 +30,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIShutdownTools ShutdownHelper { get; set; }
         public MpIContentBuilder ContentBuilder { get; set; }
 
-        public MpISettingsTools SettingsTools { get; set; }
-
         public MpIDownKeyHelper KeyDownHelper { get; set; }
         public MpIContentQueryPage ContentQueryTools { get; set; }
         public MpITagQueryTools TagQueryTools { get; set; }

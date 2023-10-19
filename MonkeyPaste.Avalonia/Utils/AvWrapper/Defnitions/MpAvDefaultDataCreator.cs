@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
                             (int)MpDateTimeOptionType.After, //3 
                             (int)MpDateAfterUnitType.Yesterday} //1
                         .Select(x => x.ToString())),
-                matchValue: (-1).ToString());
+                matchValue: (0).ToString());
 
             var recent_tag_recreated_datetime_cri = await MpSearchCriteriaItem.CreateAsync(
                 tagId: recent_tag.Id,
@@ -99,7 +99,7 @@ namespace MonkeyPaste.Avalonia {
                             (int)MpDateTimeOptionType.After, //3 
                             (int)MpDateAfterUnitType.Yesterday} //1
                         .Select(x => x.ToString())),
-                matchValue: (-1).ToString());
+                matchValue: (0).ToString());
 
             #endregion
 
@@ -257,6 +257,7 @@ namespace MonkeyPaste.Avalonia {
                  new string[] {"093d5f34-971c-4b87-b15b-aab682300900", "Control+Escape", MpShortcutType.ForceMinimizeMainWindow.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"728bfb06-1d96-441c-b710-efee383138be", "Control+G", MpShortcutType.ToggleAppendManualMode.ToString(), MpRoutingType.Internal.ToString()},
                  new string[] {"2025c6eb-2e89-4fa7-a69b-37f0eb4c0281", "Control+Delete", MpShortcutType.PermanentlyDelete.ToString(), MpRoutingType.Internal.ToString()},
+                 new string[] {"518a1cb0-ffc1-4c06-b2bc-30aa29237d67", "F1", MpShortcutType.OpenHelp.ToString(), MpRoutingType.Internal.ToString()},
             };
 
             foreach (var defaultShortcut in defaultShortcutDefinitions) {

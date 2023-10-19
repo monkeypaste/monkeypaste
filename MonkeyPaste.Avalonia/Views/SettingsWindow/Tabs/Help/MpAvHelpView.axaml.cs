@@ -1,8 +1,5 @@
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
-
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvHelpView : MpAvUserControl<MpAvSettingsViewModel> {
+    public partial class MpAvHelpView : MpAvUserControl<MpAvHelpViewModel> {
         public MpAvHelpView() {
             InitializeComponent();
         }

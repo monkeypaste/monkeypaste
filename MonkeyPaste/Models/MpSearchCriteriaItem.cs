@@ -2,12 +2,14 @@
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     [Table("MpSearchCriteriaItem")]
     public class MpSearchCriteriaItem :
         MpDbModelBase,
+        MpIQueryInfo,
         MpIIsValueEqual<MpSearchCriteriaItem>,
         MpIClonableDbModel<MpSearchCriteriaItem> {
         #region Constants
@@ -17,6 +19,52 @@ namespace MonkeyPaste {
         #endregion
 
         #region Interfaces
+
+        #region MpIQueryInfo Implementation
+        public static async Task<MpIQueryInfo> CreateQueryCriteriaAsync(int query_tag_id, bool desc, MpContentSortType sort) {
+            var scil = await MpDataModelProvider.GetCriteriaItemsByTagIdAsync(query_tag_id);
+            scil = scil.OrderBy(x => x.SortOrderIdx).ToList();
+            foreach (var (sci, idx) in scil.WithIndex()) {
+                sci._isDescending = desc;
+                sci._sortType = sort;
+                sci._next = idx < scil.Count - 1 ? scil[idx + 1] : null;
+            }
+            return scil.FirstOrDefault();
+        }
+        void MpIQueryInfo.SetNext(MonkeyPaste.MpIQueryInfo next) {
+            _next = next;
+        }
+        private MpIQueryInfo _next;
+        MpIQueryInfo MpIQueryInfo.Next =>
+            _next;
+        private bool _isDescending;
+        bool MpIQueryInfo.IsDescending =>
+            _isDescending;
+
+        private MpContentSortType _sortType;
+        MpContentSortType MpIQueryInfo.SortType =>
+            _sortType;
+
+        MpContentQueryBitFlags MpIQueryInfo.QueryFlags =>
+            (MpContentQueryBitFlags)QueryFlagsValue;
+
+        MpQueryType MpIQueryInfo.QueryType =>
+            QueryType;
+        MpLogicalQueryType MpIQueryInfo.JoinType =>
+            JoinType;
+        int MpIQueryInfo.TagId =>
+            QueryTagId;
+        int MpIQueryInfo.SortOrderIdx =>
+            SortOrderIdx;
+        string MpITextMatchInfo.MatchValue => MatchValue;
+        bool MpITextMatchInfo.CaseSensitive =>
+            IsCaseSensitive;
+        bool MpITextMatchInfo.WholeWord =>
+            IsWholeWord;
+        bool MpITextMatchInfo.UseRegex =>
+            (this as MpIQueryInfo).QueryFlags.HasFlag(MpContentQueryBitFlags.Regex);
+
+        #endregion
 
         #region MpIIsValueEqual Implementation
 
@@ -77,6 +125,8 @@ namespace MonkeyPaste {
 
         [Column("e_MpQueryType")]
         public string QueryTypeName { get; set; } = MpQueryType.Advanced.ToString();
+
+        public long QueryFlagsValue { get; set; }
 
         public int IsCaseSensitiveValue { get; set; }
         public int IsWholeWordValue { get; set; }
@@ -183,7 +233,8 @@ namespace MonkeyPaste {
 
         public MpSearchCriteriaItem() : base() { }
 
-        public override async Task WriteToDatabaseAsync() {
+        public async Task WriteToDatabaseAsync(bool force_write = false) {
+            // NOTE forced write is to get query flags for readonly tags
             if (string.IsNullOrEmpty(Guid)) {
                 // handle save for pending query
                 Guid = System.Guid.NewGuid().ToString();
@@ -191,12 +242,17 @@ namespace MonkeyPaste {
             MpDebug.Assert(QueryTagId > 0, $"Unlinked search criteria writing");
 
             if (QueryTagId <= MpTag.MAX_READ_ONLY_TAG_ID &&
-                !Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
+                !force_write &&
+                Id > 0
+                ) {
                 // prevent altering recent, and format type query criterias
                 MpConsole.WriteLine($"Ignored writing read-only search criteria for tag id: {QueryTagId}");
                 return;
             }
             await base.WriteToDatabaseAsync();
+        }
+        public override async Task WriteToDatabaseAsync() {
+            await WriteToDatabaseAsync(false);
         }
         public override async Task DeleteFromDatabaseAsync() {
             if (QueryTagId <= MpTag.MAX_READ_ONLY_TAG_ID) {

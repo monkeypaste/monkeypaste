@@ -878,6 +878,56 @@ namespace MonkeyPaste.Avalonia {
                 }
             });
         }
+
+        public async Task<string> ConvertToFolderAsync(string parent_dir, string force_path = null) {
+            string tag_dir = force_path;
+            if (tag_dir == null) {
+                // create dir under parent using this tags name
+                tag_dir = MpFileIo.GetUniqueFileOrDirectoryPath(parent_dir, TagName);
+                if (!MpFileIo.CreateDirectory(tag_dir)) {
+                    MpDebug.Break($"Error creating tag dir at '{tag_dir}'");
+                    return "error";
+                }
+            } else {
+                // root tag folder already created 
+            }
+
+            List<MpCopyItem> cil;
+            if (IsQueryTag) {
+                cil = await MpDataModelProvider.GetCopyItemsByQueryTagIdAsync(
+                        TagId,
+                        MpAvQueryViewModel.Instance,
+                        MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending,
+                        MpAvClipTileSortFieldViewModel.Instance.SelectedSortType,
+                        Parent.TrashedCopyItemIds);
+            } else {
+                cil = await MpDataModelProvider.GetCopyItemsByTagIdAsync(TagId);
+            }
+            MpConsole.WriteLine($"ciids: {string.Join(",", cil.Select(x => x.Id))}");
+            foreach (var ci in cil) {
+                switch (ci.ItemType) {
+                    case MpCopyItemType.Text:
+                    case MpCopyItemType.Image:
+                        ci.ItemData.ToFile(forcePath: ci.GetDefaultFilePaths(dir: tag_dir).FirstOrDefault());
+                        break;
+                    case MpCopyItemType.FileList:
+                        foreach (var source_path in ci.ItemData.SplitByLineBreak()) {
+                            if (MpFileIo.GetFileOrDirectoryName(source_path) is string source_fn &&
+                                source_fn != null) {
+                                // ensure path exists and copy file 
+                                bool success = MpFileIo.CopyFileOrDirectory(source_path, MpFileIo.GetUniqueFileOrDirectoryPath(tag_dir, source_fn)) != null;
+                                MpDebug.Assert(success, $"Error copying file item {ci.ItemData}");
+                            }
+                        }
+                        break;
+                }
+            }
+            foreach (var cttvm in Items) {
+                await ConvertToFolderAsync(tag_dir);
+            }
+
+            return tag_dir;
+        }
         public override void DisposeViewModel() {
             base.DisposeViewModel();
             MpDb.SyncAdd -= MpDbObject_SyncAdd;

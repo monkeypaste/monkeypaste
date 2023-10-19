@@ -87,6 +87,8 @@
           VerticalAlignment="Stretch"
           Cursor="{Binding IsBusy, Converter={x:Static local:MpAvBoolToCursorConverter.Instance}, ConverterParameter=Wait|unset}">
         <TreeView x:Name="TagTreeView"
+                  local:MpAvHelpAnchorExtension.IsEnabled="True"
+                  local:MpAvHelpAnchorExtension.LinkType="Collections"
                   Classes="tagTree"
                   Classes.tagDrag="{Binding IsAnyDragging}"
                   Margin="5,10,20,0"

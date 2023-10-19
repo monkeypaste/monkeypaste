@@ -381,6 +381,9 @@
   <data name="MpShortcutType_ToggleAppendManualMode" xml:space="preserve">
     <value>Toggle Append Manual Mode</value>
   </data>
+  <data name="MpShortcutType_OpenHelp" xml:space="preserve">
+    <value>Open Help</value>
+  </data>
   <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
     <value>M A X_A P P_S H O R T C U T</value>
   </data>

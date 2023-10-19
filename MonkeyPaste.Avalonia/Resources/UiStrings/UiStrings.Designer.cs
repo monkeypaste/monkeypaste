@@ -223,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pruchase Successful!.
+        ///   Looks up a localized string similar to Purchase Successful!.
         /// </summary>
         public static string AccountPurchaseSuccessfulTitle {
             get {
@@ -489,6 +489,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonAddLabel {
             get {
                 return ResourceManager.GetString("CommonAddLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait....
+        /// </summary>
+        public static string CommonBusyLabel {
+            get {
+                return ResourceManager.GetString("CommonBusyLabel", resourceCulture);
             }
         }
         
@@ -808,15 +817,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please wait....
-        /// </summary>
-        public static string CommonBusyLabel {
-            get {
-                return ResourceManager.GetString("CommonBusyLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Append....
         /// </summary>
         public static string EditorPasteButtonAppendBeginLabel {
@@ -936,6 +936,141 @@ namespace MonkeyPaste.Avalonia {
         public static string NotificationOptionHideLabel {
             get {
                 return ResourceManager.GetString("NotificationOptionHideLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Acount Now Active.
+        /// </summary>
+        public static string NtfCapAccountChangedTitleSuffix {
+            get {
+                return ResourceManager.GetString("NtfCapAccountChangedTitleSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your content storage is now {cur_content_cap} but fret not! No data is lost after downgrading. Only new stuff will be evaluated..
+        /// </summary>
+        public static string NtfCapAccountDowngradeText {
+            get {
+                return ResourceManager.GetString("NtfCapAccountDowngradeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Congratulations! Your content storage is now {0}.
+        /// </summary>
+        public static string NtfCapAccountUpgradeText {
+            get {
+                return ResourceManager.GetString("NtfCapAccountUpgradeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string NtfCapBlockAddLabel {
+            get {
+                return ResourceManager.GetString("NtfCapBlockAddLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trash or unlink something from &apos;{0}&apos; to add more..
+        /// </summary>
+        public static string NtfCapBlockHint1 {
+            get {
+                return ResourceManager.GetString("NtfCapBlockHint1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max &apos;{0}&apos; storage is {1}..
+        /// </summary>
+        public static string NtfCapBlockHint2 {
+            get {
+                return ResourceManager.GetString("NtfCapBlockHint2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore.
+        /// </summary>
+        public static string NtfCapBlockRestoreLabel {
+            get {
+                return ResourceManager.GetString("NtfCapBlockRestoreLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Blocked.
+        /// </summary>
+        public static string NtfCapBlockSuffix {
+            get {
+                return ResourceManager.GetString("NtfCapBlockSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content &amp; Trash Capacity Reached!.
+        /// </summary>
+        public static string NtfCapBothReachedTitleSuffix {
+            get {
+                return ResourceManager.GetString("NtfCapBothReachedTitleSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max &apos;{0}&apos; storage is {1}..
+        /// </summary>
+        public static string NtfCapContentMaxStorageText {
+            get {
+                return ResourceManager.GetString("NtfCapContentMaxStorageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content Capacity Reached!.
+        /// </summary>
+        public static string NtfCapContentReachedTitleSuffix {
+            get {
+                return ResourceManager.GetString("NtfCapContentReachedTitleSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to * You can hide these warnings by clicking &apos;hide all&apos; from the options menu above..
+        /// </summary>
+        public static string NtfCapHideHint {
+            get {
+                return ResourceManager.GetString("NtfCapHideHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}.
+        /// </summary>
+        public static string NtfCapTitle {
+            get {
+                return ResourceManager.GetString("NtfCapTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Trash storage is {0}..
+        /// </summary>
+        public static string NtfCapTrashMaxStorageText {
+            get {
+                return ResourceManager.GetString("NtfCapTrashMaxStorageText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trash Capacity Reached!.
+        /// </summary>
+        public static string NtfCapTrashReachedTitleSuffix {
+            get {
+                return ResourceManager.GetString("NtfCapTrashReachedTitleSuffix", resourceCulture);
             }
         }
         

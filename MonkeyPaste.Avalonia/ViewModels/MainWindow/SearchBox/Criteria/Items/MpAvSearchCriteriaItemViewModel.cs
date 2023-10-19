@@ -71,8 +71,23 @@ namespace MonkeyPaste.Avalonia {
                 if (IsWholeWord) {
                     flags |= MpContentQueryBitFlags.WholeWord;
                 }
+                if ((MpContentQueryBitFlags)SearchCriteriaItem.QueryFlagsValue != flags) {
+                    long old_flags = SearchCriteriaItem.QueryFlagsValue;
+                    SearchCriteriaItem.QueryFlagsValue = (long)flags;
+                    if (IgnoreHasModelChanged && old_flags == 0) {
+                        // NOTE this should only really be needed for default queries 
+                        // because flags is built from ui and any other query will be
+                        // create from ui
+                        SearchCriteriaItem.WriteToDatabaseAsync(true).FireAndForgetSafeAsync();
+                    } else {
+                        HasModelChanged = true;
+                    }
+                }
                 return flags;
             }
+        }
+        void MpIQueryInfo.SetNext(MonkeyPaste.MpIQueryInfo next) {
+            //ignored
         }
 
         public MpIQueryInfo Next {

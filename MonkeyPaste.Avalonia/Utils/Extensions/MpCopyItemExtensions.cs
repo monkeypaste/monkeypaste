@@ -109,7 +109,7 @@ namespace MonkeyPaste.Avalonia {
                     return ci.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter);
             }
             dir = string.IsNullOrEmpty(dir) ? MpFileIo.GetThisAppRandomTempDir() : dir;
-            return new[] { MpFileIo.GetUniqueFileOrDirectoryName(dir, $"{ci.Title}{(isFragment ? "-Part" : string.Empty)}.{ext}") };
+            return new[] { MpFileIo.GetUniqueFileOrDirectoryPath(dir, $"{ci.Title}{(isFragment ? "-Part" : string.Empty)}.{ext}") };
         }
 
         public static MpQuillDelta ToDelta(this MpCopyItem ci) {

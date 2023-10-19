@@ -133,9 +133,25 @@
                     Value="False" />
         </Style>-->
 
+        <!--  HELP ANCHOR  -->
+        <Style Selector="Border#TagNameBorder.linkTag">
+            <Setter Property="local:MpAvHelpAnchorExtension.LinkType"
+                    Value="Tags" />
+        </Style>
+        <Style Selector="Border#TagNameBorder.linkTag.trashTag">
+            <Setter Property="local:MpAvHelpAnchorExtension.LinkType"
+                    Value="Trash" />
+        </Style>
+        <Style Selector="Border#TagNameBorder.queryTag">
+            <Setter Property="local:MpAvHelpAnchorExtension.LinkType"
+                    Value="Filters" />
+        </Style>
+        <Style Selector="Border#TagNameBorder:groupTag">
+            <Setter Property="local:MpAvHelpAnchorExtension.LinkType"
+                    Value="Groups" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Grid x:Name="TagViewContainerGrid"
-          Classes.bigVal=""
           local:MpAvIsHoveringExtension.IsEnabled="True"
           local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
           local:MpAvPointerCommandExtension.IsEnabled="True"
@@ -158,6 +174,7 @@
                 VerticalAlignment="Stretch"
                 HorizontalAlignment="Stretch"
                 MinHeight="20"
+                local:MpAvHelpAnchorExtension.IsEnabled="True"
                 Classes.drag="{Binding IsDragging}"
                 Classes.islinked="{Binding IsLinkedToSelectedClipTile}"
                 Classes.isselected="{Binding IsSelected}"
@@ -168,6 +185,8 @@
                 Classes.bigVal="{Binding TagClipCount, ConverterParameter=gt|4, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}"
                 Classes.linkTag="{Binding IsLinkTag}"
                 Classes.queryTag="{Binding IsQueryTag}"
+                Classes.groupTag="{Binding IsGroupTag}"
+                Classes.istrash="{Binding IsTrashTag}"
                 BorderThickness="1.5">
 
             <Border.Transitions>

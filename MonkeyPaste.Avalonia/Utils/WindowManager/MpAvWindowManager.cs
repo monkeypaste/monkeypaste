@@ -68,6 +68,9 @@ namespace MonkeyPaste.Avalonia {
             return null;
         }
 
+        public static MpAvWindow LocateWindow(MpPoint gmp) {
+            return AllWindows.FirstOrDefault(x => x.ScaledScreenRect().Contains(gmp));
+        }
         public static MpAvWindow LocateWindow(object dataContext) {
             if (!Dispatcher.UIThread.CheckAccess()) {
                 var result = Dispatcher.UIThread.Invoke(() => LocateWindow(dataContext));
@@ -83,6 +86,16 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
             return null;
+        }
+        public static Visual LocateVisual<T>(object dataContext) where T : Visual {
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                var result = Dispatcher.UIThread.Invoke(() => LocateWindow(dataContext));
+                return result;
+            }
+            return
+                AllWindows
+                .SelectMany(x => x.GetVisualDescendants<T>())
+                .FirstOrDefault(x => x.DataContext == dataContext);
         }
 
         public static string ToWindowTitleText(this string title) {

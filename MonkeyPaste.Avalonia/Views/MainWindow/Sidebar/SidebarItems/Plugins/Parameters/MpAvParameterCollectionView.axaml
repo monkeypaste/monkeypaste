@@ -114,12 +114,14 @@
           VerticalAlignment="Stretch"
           Classes.showSaveCancel="{Binding IsSaveCancelEnabled}"
           Classes.canSave="{Binding CanSaveOrCancel}">
+
+        <!--  CANCEL CHANGES BUTTON  -->
+
         <Button x:Name="CancelButon"
-                Width="{Binding $self.Bounds.Height}"
                 Command="{Binding CancelCommand}"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Classes="defaultButton saveOrCancelButton">
+                Classes="defaultButton saveOrCancelButton squareByHeight">
             <Grid RowDefinitions="25,15"
                   HorizontalAlignment="Stretch">
                 <Image Grid.Row="0"
@@ -133,12 +135,14 @@
                            Text="Cancel" />
             </Grid>
         </Button>
+
+        <!--  SAVE CHANGES BUTTON  -->
+
         <Button x:Name="SaveButon"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Width="{Binding $self.Bounds.Height}"
                 Command="{Binding SaveCommand}"
-                Classes="defaultButton saveOrCancelButton">
+                Classes="defaultButton saveOrCancelButton squareByHeight">
             <Grid RowDefinitions="25,15"
                   HorizontalAlignment="Stretch">
                 <Image Grid.Row="0"
@@ -151,6 +155,9 @@
                            Text="Save" />
             </Grid>
         </Button>
+
+        <!--  PARAM LISTBOX  -->
+
         <ListBox x:Name="PluginParameterListBox"
                  Grid.Row="1"
                  Padding="0"
@@ -179,7 +186,8 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <!--  IsEmpty Overlay  -->
+      
+        <!--  EMPTY OVERLAY  -->
 
         <Border HorizontalAlignment="Center"
                 VerticalAlignment="Center"

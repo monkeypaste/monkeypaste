@@ -117,6 +117,8 @@
         <Style Selector="TextBlock.header.frame">
             <Setter Property="FontSize"
                     Value="18" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
         </Style>
         <Style Selector="TextBlock.header.expander">
             <Setter Property="FontSize"

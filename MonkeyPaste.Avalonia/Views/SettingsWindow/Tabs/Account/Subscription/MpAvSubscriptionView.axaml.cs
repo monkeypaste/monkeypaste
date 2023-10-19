@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using System;
 
 namespace MonkeyPaste.Avalonia {
-    public partial class MpAvSubscriptionView : MpAvUserControl<MpAvSubcriptionPurchaseViewModel> {
+    public partial class MpAvSubscriptionView : MpAvUserControl<MpAvSubscriptionPurchaseViewModel> {
         public MpAvSubscriptionView() {
             InitializeComponent();
         }
@@ -16,13 +16,15 @@ namespace MonkeyPaste.Avalonia {
             buyButton.GetObservable(Control.IsVisibleProperty).Subscribe(value => OnBuyButtonIsVisibleChanged(buyButton));
             OnBuyButtonIsVisibleChanged(buyButton);
         }
-        private async void OnBuyButtonIsVisibleChanged(Control buyButton) {
-            //if (!buyButton.IsVisible ||
-            //    this.GetVisualAncestor<ScrollViewer>() is not ScrollViewer sv) {
-            //    return;
-            //}
+        private void OnBuyButtonIsVisibleChanged(Control buyButton) {
+            if (!buyButton.IsVisible
+                //|| this.GetVisualAncestor<ScrollViewer>() is not ScrollViewer sv
+                ) {
+                return;
+            }
             //await Task.Delay(300);
             //sv.ScrollToEnd();
+            buyButton.BringIntoView();
         }
     }
 }

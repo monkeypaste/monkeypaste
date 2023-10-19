@@ -1,0 +1,46 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+    <Styles.Resources>
+        <SolidColorBrush x:Key="FocusPulseBgBrush1" Color="{DynamicResource ThemeAccent5Color}" Opacity="1" />
+        <SolidColorBrush x:Key="FocusPulseBgBrush2" Color="{DynamicResource ThemeAccent5Color}" Opacity="0" />
+        <sys:TimeSpan x:Key="PulseDur">0:0:0.5</sys:TimeSpan>
+      <IterationCount x:Key="PulseCount">6</IterationCount>
+    </Styles.Resources>
+
+    <Style Selector=":is(TemplatedControl).pulse">
+        <!--  NOTE total dur needs to match theme vm value (notice iteraction counts 4)  -->
+        <Style.Animations>
+            <Animation Duration="{StaticResource PulseDur}"
+                       FillMode="Forward"
+                       IterationCount="{StaticResource PulseCount}">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Background"
+                            Value="{DynamicResource FocusPulseBgBrush1}" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Background"
+                            Value="{DynamicResource FocusPulseBgBrush2}" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+    <Style Selector=":is(Border).pulse">
+        <!--  NOTE total dur needs to match theme vm value (notice iteraction counts 4)  -->
+        <Style.Animations>
+            <Animation Duration="{StaticResource PulseDur}"
+                       FillMode="Forward"
+                       IterationCount="{StaticResource PulseCount}">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Background"
+                            Value="{DynamicResource FocusPulseBgBrush1}" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Background"
+                            Value="{DynamicResource FocusPulseBgBrush2}" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+</Styles>

@@ -375,21 +375,13 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand UpgradeCommand => new MpCommand(
             () => {
-                Mp.Services.SettingsTools
-                    .ShowSettingsWindowCommand.Execute(
-                    new object[] {
-                        MpSettingsTabType.Account,
-                        nameof(MpAvPrefViewModel.Instance.AccountEmail) });
+                MpAvSubscriptionPurchaseViewModel.Instance.NavigateToBuyUpgradeCommand.Execute(null);
                 DialogResult = MpNotificationDialogResultType.Dismiss;
             });
 
         public ICommand LearnMoreCommand => new MpCommand(
             () => {
-                Mp.Services.SettingsTools
-                    .ShowSettingsWindowCommand.Execute(
-                    new object[] {
-                        MpSettingsTabType.Account,
-                        nameof(MpAvPrefViewModel.Instance.AccountEmail) });
+                MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand.Execute(MpHelpLinkType.ContentLimits);
                 DialogResult = MpNotificationDialogResultType.Dismiss;
             });
 

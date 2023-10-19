@@ -217,6 +217,7 @@
     <AvaloniaXaml Remove="Themes\Default\Accents\Accents.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Defaults.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Fade.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Pulse.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Shake.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\AutoCompleteBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
@@ -1370,6 +1371,7 @@
     <AvaloniaResource Include="Assets\svg\text-insert-caret.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Include="Themes\Default\Controls\Animations\Pulse.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />
     <Content Include="Assets\Sounds\alert.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1463,6 +1465,7 @@
     <Folder Include="Resources\Editor\src\components\quill-wrapper\parchment\" />
     <Folder Include="Resources\Editor\src\components\theme\" />
     <Folder Include="Resources\Legal\Licenses\" />
+    <Folder Include="Resources\Help\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />

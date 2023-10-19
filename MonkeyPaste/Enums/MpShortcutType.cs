@@ -54,6 +54,7 @@
         PermanentlyDelete,
         ForceMinimizeMainWindow,
         ToggleAppendManualMode,
+        OpenHelp,
         // CUT-OFF 
         MAX_APP_SHORTCUT,
         //remaining are data (not context) driven using commandId

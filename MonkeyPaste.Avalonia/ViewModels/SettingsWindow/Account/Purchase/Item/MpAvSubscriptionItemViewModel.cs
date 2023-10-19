@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using Avalonia.Threading;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSubscriptionItemViewModel : MpAvViewModelBase<MpAvSubcriptionPurchaseViewModel> {
+    public class MpAvSubscriptionItemViewModel : MpAvViewModelBase<MpAvSubscriptionPurchaseViewModel> {
         #region Private Variables
         #endregion
 
@@ -105,6 +107,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool DoFocusPulse { get; set; }
 
         public bool IsMonthlyEnabled =>
             Parent != null && Parent.IsMonthlyEnabled;
@@ -140,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvSubscriptionItemViewModel(MpAvSubcriptionPurchaseViewModel parent) : base(parent) {
+        public MpAvSubscriptionItemViewModel(MpAvSubscriptionPurchaseViewModel parent) : base(parent) {
             PropertyChanged += MpAvAccountItemViewModel_PropertyChanged;
         }
 
@@ -178,6 +181,18 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                    break;
+                case nameof(DoFocusPulse):
+                    if (!DoFocusPulse) {
+                        break;
+                    }
+                    Dispatcher.UIThread.Post(async () => {
+                        var sw = Stopwatch.StartNew();
+                        while (sw.ElapsedMilliseconds < MpAvThemeViewModel.Instance.FocusPulseDurMs) {
+                            await Task.Delay(100);
+                        }
+                        DoFocusPulse = false;
+                    });
                     break;
             }
         }

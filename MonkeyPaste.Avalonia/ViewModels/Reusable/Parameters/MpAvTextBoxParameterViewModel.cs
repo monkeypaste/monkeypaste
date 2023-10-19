@@ -32,6 +32,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentQueryTextBoxViewModel Implementation
 
+        bool MpIContentQueryTextBoxViewModel.IsSecure =>
+            ControlType == MpParameterControlType.PasswordBox;
+
         public bool IsFieldButtonVisible =>
             UnitType == MpParameterValueUnitType.PlainTextContentQuery ||
             UnitType == MpParameterValueUnitType.RawDataContentQuery ||

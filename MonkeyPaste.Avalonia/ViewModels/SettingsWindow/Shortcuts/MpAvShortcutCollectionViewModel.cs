@@ -306,6 +306,10 @@ namespace MonkeyPaste.Avalonia {
                         {
                             MpShortcutType.ForceMinimizeMainWindow,
                             MpAvMainWindowViewModel.Instance.ForceMinimizeMainWindowCommand
+                        },
+                        {
+                            MpShortcutType.OpenHelp,
+                            MpAvHelpViewModel.Instance.NavigateToContextualHelpCommand
                         }
                     };
                 }

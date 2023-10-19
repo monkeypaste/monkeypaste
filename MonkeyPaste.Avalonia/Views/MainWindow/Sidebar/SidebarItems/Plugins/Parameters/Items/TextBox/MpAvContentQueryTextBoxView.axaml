@@ -12,6 +12,7 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <local:MpAvUserControl.Styles>
+        <!--  FILTER BUTTON ICON  -->
         <Style Selector="Button#FilterButton Image">
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource FilterImage}, ConverterParameter=ThemeInteractiveColor, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
@@ -20,16 +21,26 @@
             <Setter Property="Source"
                     Value="{Binding Source={StaticResource FilterImage}, ConverterParameter=ThemeAccent1Color, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
+        <!--  PASSWORD CHAR  -->
+        <Style Selector="TextBox.secure">
+            <Setter Property="PasswordChar"
+                    Value="⚫" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="QueryItemGridContainer"
             Classes="paramBorder">
-        <Grid Margin="0,0,10,0">
+        <Grid ColumnDefinitions="*,Auto,Auto">
 
             <!--  TEXTBOX  -->
 
             <TextBox x:Name="ContentQueryTextBox"
+                     Grid.Column="0"
+                     Grid.ColumnSpan="2"
                      Classes="dnd"
+                     Classes.secure="{Binding IsSecure}"
+                     Classes.revealPasswordButton="{Binding IsSecure}"
                      IsReadOnly="{Binding IsReadOnly}"
+                     local:MpAvSecureTextBoxExtension.IsEnabled="{Binding IsSecure}"
                      AcceptsReturn="True"
                      TextWrapping="Wrap"
                      MaxHeight="400"
@@ -41,46 +52,40 @@
                      Watermark="{Binding Watermark}"
                      Text="{Binding ContentQuery, Mode=TwoWay}" />
 
-            <StackPanel HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Margin="0,5,0,0"
-                        Orientation="Horizontal">
+            <!--  CLEAR TEXT BUTTON  -->
 
-                <!--  CLEAR TEXT BUTTON  -->
+            <local:MpAvClearTextButton x:Name="ClearButton"
+                                       Grid.Column="1"
+                                       Classes="TextBoxButton square"
+                                       Height="20"
+                                       ClearCommand="{Binding ClearQueryCommand}"
+                                       ClearCommandParameter="{Binding .}"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center">
+                <local:MpAvClearTextButton.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="Text"
+                                 ElementName="ContentQueryTextBox"
+                                 Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
+                        <Binding Path="!IsReadOnly"
+                                 ElementName="ContentQueryTextBox" />
+                    </MultiBinding>
+                </local:MpAvClearTextButton.IsVisible>
+            </local:MpAvClearTextButton>
 
-                <local:MpAvClearTextButton x:Name="ClearButton"
-                                           Grid.Column="0"
-                                           Classes="TextBoxButton square"
-                                           Height="20"
-                                           ClearCommand="{Binding ClearQueryCommand}"
-                                           ClearCommandParameter="{Binding .}"
-                                           HorizontalAlignment="Right"
-                                           VerticalAlignment="Center">
-                    <local:MpAvClearTextButton.IsVisible>
-                        <MultiBinding Converter="{x:Static BoolConverters.And}">
-                            <Binding Path="Text"
-                                     ElementName="ContentQueryTextBox"
-                                     Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
-                            <Binding Path="!IsReadOnly"
-                                     ElementName="ContentQueryTextBox" />
-                        </MultiBinding>
-                    </local:MpAvClearTextButton.IsVisible>
-                </local:MpAvClearTextButton>
+            <!--  FILTER BUTTON  -->
 
-                <!--  FILTER BUTTON  -->
-
-                <Button x:Name="FilterButton"
-                        Margin="0,0,5,0"
-                        Classes="defaultButton noBg noHoverBg noBorder"
-                        IsVisible="{Binding IsFieldButtonVisible}"
-                        HorizontalAlignment="Right"
-                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowQueryMenuCommand}"
-                        local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">
-                    <Image />
-                </Button>
-
-            </StackPanel>
+            <Button x:Name="FilterButton"
+                    Grid.Column="2"
+                    Margin="0,0,5,0"
+                    Classes="defaultButton noBg noHoverBg noBorder"
+                    IsVisible="{Binding IsFieldButtonVisible}"
+                    HorizontalAlignment="Right"
+                    local:MpAvPointerCommandExtension.IsEnabled="True"
+                    local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowQueryMenuCommand}"
+                    local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">
+                <Image />
+            </Button>
         </Grid>
     </Border>
 </local:MpAvUserControl>

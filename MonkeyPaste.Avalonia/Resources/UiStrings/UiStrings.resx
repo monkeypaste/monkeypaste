@@ -897,7 +897,7 @@
     <value>Your account has been upgraded to {0}/{1}.</value>
   </data>
   <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
-    <value>Pruchase Successful!</value>
+    <value>Purchase Successful!</value>
   </data>
   <data name="CommonErrorLabel" xml:space="preserve">
     <value>Error</value>
@@ -907,5 +907,54 @@
   </data>
   <data name="CommonRetryLabel" xml:space="preserve">
     <value>Retry</value>
+  </data>
+  <data name="NtfCapAccountChangedTitleSuffix" xml:space="preserve">
+    <value>Acount Now Active</value>
+  </data>
+  <data name="NtfCapAccountDowngradeText" xml:space="preserve">
+    <value>Your content storage is now {cur_content_cap} but fret not! No data is lost after downgrading. Only new stuff will be evaluated.</value>
+    <comment>Number</comment>
+  </data>
+  <data name="NtfCapAccountUpgradeText" xml:space="preserve">
+    <value>Congratulations! Your content storage is now {0}</value>
+    <comment>Number/∞</comment>
+  </data>
+  <data name="NtfCapBlockAddLabel" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="NtfCapBlockHint1" xml:space="preserve">
+    <value>Trash or unlink something from '{0}' to add more.</value>
+  </data>
+  <data name="NtfCapBlockHint2" xml:space="preserve">
+    <value>Max '{0}' storage is {1}.</value>
+    <comment>Account Type, Storage Count</comment>
+  </data>
+  <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="NtfCapBlockSuffix" xml:space="preserve">
+    <value>{0} Blocked</value>
+    <comment>Add/Restore</comment>
+  </data>
+  <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
+    <value>Content &amp; Trash Capacity Reached!</value>
+  </data>
+  <data name="NtfCapContentMaxStorageText" xml:space="preserve">
+    <value>Max '{0}' storage is {1}.</value>
+  </data>
+  <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
+    <value>Content Capacity Reached!</value>
+  </data>
+  <data name="NtfCapHideHint" xml:space="preserve">
+    <value>* You can hide these warnings by clicking 'hide all' from the options menu above.</value>
+  </data>
+  <data name="NtfCapTitle" xml:space="preserve">
+    <value>'{0}</value>
+  </data>
+  <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
+    <value>Max Trash storage is {0}.</value>
+  </data>
+  <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
+    <value>Trash Capacity Reached!</value>
   </data>
 </root>

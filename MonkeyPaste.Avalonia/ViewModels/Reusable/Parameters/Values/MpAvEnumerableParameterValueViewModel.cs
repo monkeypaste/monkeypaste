@@ -19,6 +19,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentQueryTextBoxViewModel Implementation
 
+        bool MpIContentQueryTextBoxViewModel.IsSecure =>
+            false;
         public bool IsFieldButtonVisible =>
             Parent == null ?
                 false :

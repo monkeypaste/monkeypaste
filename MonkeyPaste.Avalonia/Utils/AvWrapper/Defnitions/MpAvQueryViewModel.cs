@@ -213,11 +213,16 @@ namespace MonkeyPaste.Avalonia {
         public MpLogicalQueryType JoinType =>
             MpLogicalQueryType.Or;
 
+        private MpIQueryInfo _next;
         [JsonIgnore] // must be ignored cause criteria opt trees
         public MpIQueryInfo Next =>
+            _next != null ? _next :
             MpAvSearchCriteriaItemCollectionViewModel.Instance.IsAdvSearchActive ?
                 MpAvSearchCriteriaItemCollectionViewModel.Instance.HeadItem :
                 null;
+        public void SetNext(MpIQueryInfo next) {
+            _next = next;
+        }
 
         public int SortOrderIdx { get; set; } = 0;
 

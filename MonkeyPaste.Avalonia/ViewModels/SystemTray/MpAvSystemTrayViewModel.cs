@@ -330,6 +330,8 @@ namespace MonkeyPaste.Avalonia {
                 //        IsActive = true,
                 //        IsMonthly = false
                 //    });
+
+                //await Mp.Services.DefaultDataCreator.CreateDefaultDataAsync();
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(

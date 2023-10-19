@@ -9,10 +9,10 @@
                        xmlns:local="using:MonkeyPaste.Avalonia"
                        xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
                        xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvSubcriptionPurchaseViewModel"
-                       x:DataType="local:MpAvSubcriptionPurchaseViewModel"
+                       x:TypeArguments="local:MpAvSubscriptionPurchaseViewModel"
+                       x:DataType="local:MpAvSubscriptionPurchaseViewModel"
                        x:CompileBindings="True"
-                       DataContext="{x:Static local:MpAvSubcriptionPurchaseViewModel.Instance}"
+                       DataContext="{x:Static local:MpAvSubscriptionPurchaseViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSubscriptionView">
     <local:MpAvUserControl.Resources>
         <LinearGradientBrush x:Key="RainbowBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
@@ -56,6 +56,8 @@
         <Style Selector="Border#OuterBorder">
             <Setter Property="BorderBrush"
                     Value="{StaticResource StainlessSteelBrush}" />
+            <Setter Property="Background"
+                    Value="{StaticResource HitTestableTransparent}" />
         </Style>
 
         <Style Selector="Border#OuterBorder.selected">
@@ -129,14 +131,14 @@
                             <Border x:Name="OuterBorder"
                                     IsVisible="{Binding IsVisible}"
                                     Classes.selected="{Binding IsChecked}"
+                                    Classes.pulse="{Binding DoFocusPulse}"
                                     local:MpAvIsHoveringExtension.IsEnabled="True"
                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                                     local:MpAvIsHoveringExtension.IsBorderFollowEnabled="True"
                                     CornerRadius="7"
                                     BorderThickness="2.5"
                                     Margin="0,0,0,10"
-                                    MaxHeight="100"
-                                    Background="{StaticResource HitTestableTransparent}">
+                                    MaxHeight="100">
                                 <!--  ACCOUNT TYPE BUTTON  -->
                                 <RadioButton x:Name="AcctTypeButton"
                                              GroupName="AcctTypeGroup"
@@ -212,10 +214,17 @@
                     Grid.Row="2"
                     Loaded="BuyButton_Loaded"
                     Classes="defaultButton"
+                    Classes.pulse="{Binding UnlimitedItem.DoFocusPulse}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    IsVisible="{Binding CanBuy}"
+                    Opacity="{Binding CanBuy, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
                     Command="{Binding PurchaseSubscriptionCommand}">
+                <Button.Transitions>
+                    <Transitions>
+                        <DoubleTransition Property="Opacity"
+                                          Duration="0:0:0.5" />
+                    </Transitions>
+                </Button.Transitions>
                 <Button.Resources>
                     <Thickness x:Key="ButtonPadding">20,10,20,10</Thickness>
 

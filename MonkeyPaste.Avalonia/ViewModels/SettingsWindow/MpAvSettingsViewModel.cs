@@ -21,8 +21,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvViewModelBase,
         MpICloseWindowViewModel,
         MpIActiveWindowViewModel,
-        MpIWantsTopmostWindowViewModel,
-        MpISettingsTools {
+        MpIWantsTopmostWindowViewModel {
         #region Private Variables
 
         private string[] _reinitContentParams => new string[] {
@@ -171,8 +170,6 @@ namespace MonkeyPaste.Avalonia {
         public MpAvSettingsViewModel() : base() {
             MpAvPrefViewModel.Instance.PropertyChanged += MpPrefViewModel_Instance_PropertyChanged;
             PropertyChanged += MpAvSettingsWindowViewModel_PropertyChanged;
-
-            Mp.Services.SettingsTools = this;
 
             IsTabSelected = new ObservableCollection<bool>(Enumerable.Repeat(false, 6));
             IsTabSelected.CollectionChanged += IsTabSelected_CollectionChanged;
@@ -1492,8 +1489,10 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsWindowOpen = false;
             });
-        public ICommand SelectTabCommand => new MpCommand<object>(
-            (args) => {
+        public MpIAsyncCommand<object> SelectTabCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                Dispatcher.UIThread.VerifyAccess();
+
                 int tab_idx = SelectedTabIdx < 0 ? (int)DEFAULT_SELECTED_TAB : SelectedTabIdx;
                 string focus_param_id = null;
                 if (args is object[] argParts) {
@@ -1509,42 +1508,40 @@ namespace MonkeyPaste.Avalonia {
                     }
                     catch { }
                 }
-
-                if (focus_param_id != null &&
-                    GetParamAndFrameViewModelsByParamId(focus_param_id) is Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> focus_tuple) {
-                    //SelectedTabIdx = (int)focus_tuple.Item1.TabType;
-                    if (TabLookup.Any(x => x.Value.Contains(focus_tuple.Item1))) {
-                        var tab_kvp = TabLookup.FirstOrDefault(x => x.Value.Contains(focus_tuple.Item1));
-                        SelectedTabIdx = TabLookup.IndexOf(tab_kvp);
-                    } else {
-                        SelectedTabIdx = (int)DEFAULT_SELECTED_TAB;
-                    }
-
-                    Dispatcher.UIThread.Post(async () => {
-                        // clear search to ensure focus is visible
-                        FilterText = string.Empty;
-
-                        // wait for param to be in view...
-                        var param_view = GetParameterControlByParamId<MpAvPluginParameterItemView>(focus_param_id);
-                        while (true) {
-                            if (param_view != null && param_view.IsVisible) {
-                                break;
-                            }
-                            if (param_view == null) {
-                                param_view = GetParameterControlByParamId<MpAvPluginParameterItemView>(focus_param_id);
-                            }
-                            await Task.Delay(100);
-                        }
-                        focus_tuple.Item1.SelectedItem = focus_tuple.Item2;
-                        // wait a tid
-                        await Task.Delay(450);
-                        Dispatcher.UIThread.Post(param_view.BringIntoView, DispatcherPriority.Background);
-                        // select arg param and pulse
-                        param_view.BindingContext.DoFocusPulse = true;
-                    });
-                } else {
+                if (focus_param_id == null ||
+                    GetParamAndFrameViewModelsByParamId(focus_param_id)
+                    is not Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> focus_tuple) {
                     SelectedTabIdx = tab_idx;
+                    return;
                 }
+
+                if (TabLookup.Any(x => x.Value.Contains(focus_tuple.Item1))) {
+                    var tab_kvp = TabLookup.FirstOrDefault(x => x.Value.Contains(focus_tuple.Item1));
+                    SelectedTabIdx = TabLookup.IndexOf(tab_kvp);
+                } else {
+                    SelectedTabIdx = (int)DEFAULT_SELECTED_TAB;
+                }
+
+                // clear search to ensure focus is visible
+                FilterText = string.Empty;
+
+                // wait for param to be in view...
+                var param_view = GetParameterControlByParamId<MpAvPluginParameterItemView>(focus_param_id);
+                while (true) {
+                    if (param_view != null && param_view.IsVisible) {
+                        break;
+                    }
+                    if (param_view == null) {
+                        param_view = GetParameterControlByParamId<MpAvPluginParameterItemView>(focus_param_id);
+                    }
+                    await Task.Delay(100);
+                }
+                focus_tuple.Item1.SelectedItem = focus_tuple.Item2;
+                // wait a tid
+                await Task.Delay(450);
+                Dispatcher.UIThread.Post(param_view.BringIntoView, DispatcherPriority.Background);
+                // select arg param and pulse
+                param_view.BindingContext.DoFocusPulse = true;
             });
         public ICommand ToggleShowSettingsWindowCommand => new MpCommand<object>(
             (args) => {
@@ -1554,20 +1551,17 @@ namespace MonkeyPaste.Avalonia {
                 }
                 ShowSettingsWindowCommand.Execute(null);
             });
-        public ICommand ShowSettingsWindowCommand => new MpCommand<object>(
-            (args) => {
+        public MpIAsyncCommand<object> ShowSettingsWindowCommand => new MpAsyncCommand<object>(
+            async (args) => {
                 UpdateFilters();
-                SelectTabCommand.Execute(args);
                 if (IsWindowOpen) {
                     IsWindowActive = true;
-                    return;
-                }
-
-                if (Mp.Services.PlatformInfo.IsDesktop) {
+                } else if (Mp.Services.PlatformInfo.IsDesktop) {
                     var sw = CreateSettingsWindow();
                     sw.ShowChild();
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
                 }
+                await SelectTabCommand.ExecuteAsync(args);
             });
         public ICommand ButtonParameterClickCommand => new MpAsyncCommand<object>(
             async (args) => {

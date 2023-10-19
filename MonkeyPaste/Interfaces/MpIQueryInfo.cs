@@ -38,6 +38,7 @@ namespace MonkeyPaste {
 
     }
     public interface MpIQueryInfo : MpITextMatchInfo {
+        void SetNext(MpIQueryInfo next);
         MpQueryType QueryType { get; }
         MpLogicalQueryType JoinType { get; } // advanced
         MpIQueryInfo Next { get; } // advanced

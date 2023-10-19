@@ -7,6 +7,7 @@ namespace MonkeyPaste {
         bool IsActionParameter { get; set; }
         string ContentQuery { get; set; }
         string Watermark { get; }
+        bool IsSecure { get; }
         ICommand ClearQueryCommand { get; }
         ICommand ShowQueryMenuCommand { get; }
     }

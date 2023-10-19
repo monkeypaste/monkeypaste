@@ -11,45 +11,7 @@
              xmlns:pcl="using:MonkeyPaste"
              x:Class="MonkeyPaste.Avalonia.MpAvUserView">
     <UserControl.Styles>
-        <!--  ACCOUNT FRAME VISIBILITY (ORDER: connected,disconnected,unregistered)  -->
-
-        <!--  CONNECTED  -->
-        <!--<Style Selector="local|MpAvSettingsFrameCollectionView.connected ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(2)">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="local|MpAvSettingsFrameCollectionView.connected ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(3)">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
-        -->
-        <!--  DISCONNECTED  -->
-        <!--
-        <Style Selector="local|MpAvSettingsFrameCollectionView.disconnected ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(1)">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="local|MpAvSettingsFrameCollectionView.disconnected ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(3)">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-
-        -->
-        <!--  UNREGISTERED  -->
-        <!--
-        <Style Selector="local|MpAvSettingsFrameCollectionView.unregistered ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(1)">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>
-        <Style Selector="local|MpAvSettingsFrameCollectionView.unregistered ItemsControl#SettingsFrameItemsControl /template/ WrapPanel > ContentPresenter:nth-child(2)">
-            <Setter Property="IsVisible"
-                    Value="False" />
-        </Style>-->
-
     </UserControl.Styles>
-    <local:MpAvSettingsFrameCollectionView Classes.connected="{Binding AccountState, ConverterParameter=Connected, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}, Source={x:Static local:MpAvAccountViewModel.Instance}}"
-                                           Classes.disconnected="{Binding AccountState, ConverterParameter=Disconnected, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}, Source={x:Static local:MpAvAccountViewModel.Instance}}"
-                                           Classes.unregistered="{Binding AccountState, ConverterParameter=Unregistered, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}, Source={x:Static local:MpAvAccountViewModel.Instance}}"
+    <local:MpAvSettingsFrameCollectionView HorizontalAlignment="Stretch"
                                            DataContext="{Binding FilteredAccountFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />
 </UserControl>

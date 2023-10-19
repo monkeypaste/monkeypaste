@@ -419,6 +419,19 @@ namespace MonkeyPaste.Common.Avalonia {
         }
         #endregion
 
+        #region Window
+
+        public static MpRect ScaledScreenRect(this Window w) {
+            if (w == null) {
+                return MpRect.Empty;
+            }
+
+            MpPoint origin = w.PointToScreen(new Point()).ToPortablePoint(w.VisualPixelDensity());
+            MpSize size = w.PointToScreen(w.Bounds.BottomRight).ToPortablePoint(w.VisualPixelDensity()).ToPortableSize();
+            return new MpRect(origin, size);
+        }
+        #endregion
+
         #region MainWindow
 
         public static Window GetMainWindow(this Application? app) {

@@ -10,6 +10,18 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common {
     public static class MpFileIo {
+        private static string _tempDirPath;
+        public static string TempDirPath {
+            get {
+                if (_tempDirPath == null) {
+                    _tempDirPath = Path.Combine(Path.GetTempPath(), MpCommonTools.Services.ThisAppInfo.ThisAppProductName);
+                    if (!_tempDirPath.IsDirectory()) {
+                        MpDebug.Assert(CreateDirectory(_tempDirPath), $"Error creating temp dir at path '{_tempDirPath}'");
+                    }
+                }
+                return _tempDirPath;
+            }
+        }
 
         public static ReaderWriterLock locker = new ReaderWriterLock();
 
@@ -27,7 +39,7 @@ namespace MonkeyPaste.Common {
                 if (replaceIfExists) {
                     Directory.Delete(path, true);
                 } else if (createUniqueIfExists) {
-                    path = GetUniqueFileOrDirectoryName(Directory.GetParent(path).FullName, Path.GetDirectoryName(path));
+                    path = GetUniqueFileOrDirectoryPath(Directory.GetParent(path).FullName, Path.GetDirectoryName(path));
                 } else {
                     // nothing to do
                     return path;
@@ -121,10 +133,10 @@ namespace MonkeyPaste.Common {
                             }
                             catch (Exception ex) {
                                 MpConsole.WriteTraceLine("Error creating random temp subdirectory: " + ex);
-                                ofp = MpFileIo.GetUniqueFileOrDirectoryName(Path.GetDirectoryName(ofp), Path.GetFileName(ofp));
+                                ofp = MpFileIo.GetUniqueFileOrDirectoryPath(Path.GetDirectoryName(ofp), Path.GetFileName(ofp));
                             }
                         } else {
-                            ofp = MpFileIo.GetUniqueFileOrDirectoryName(Path.GetDirectoryName(ofp), Path.GetFileName(ofp));
+                            ofp = MpFileIo.GetUniqueFileOrDirectoryPath(Path.GetDirectoryName(ofp), Path.GetFileName(ofp));
                         }
 
                     }
@@ -352,7 +364,18 @@ namespace MonkeyPaste.Common {
             return false;
         }
 
-        public static string GetUniqueFileOrDirectoryName(
+        public static string GetFileOrDirectoryName(this string path) {
+            if (path.IsFile()) {
+                return Path.GetFileName(path);
+            }
+            if (path.IsDirectory()) {
+                return Path.GetDirectoryName(path);
+            }
+            // broken path
+            return null;
+        }
+
+        public static string GetUniqueFileOrDirectoryPath(
             string dir,
             string fileOrDirectoryName,
             string instanceSeparator = "_") {

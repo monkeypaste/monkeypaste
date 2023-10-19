@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSubcriptionPurchaseViewModel : MpAvViewModelBase {
+    public class MpAvSubscriptionPurchaseViewModel : MpAvViewModelBase {
         #region Private Variables
         #endregion
 
@@ -16,8 +16,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
-        private static MpAvSubcriptionPurchaseViewModel _instance;
-        public static MpAvSubcriptionPurchaseViewModel Instance => _instance ?? (_instance = new MpAvSubcriptionPurchaseViewModel());
+        private static MpAvSubscriptionPurchaseViewModel _instance;
+        public static MpAvSubscriptionPurchaseViewModel Instance => _instance ?? (_instance = new MpAvSubscriptionPurchaseViewModel());
         #endregion
 
         #region Interfaces
@@ -36,6 +36,8 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+        public MpAvSubscriptionItemViewModel UnlimitedItem =>
+            Items.FirstOrDefault(x => x.AccountType == MpUserAccountType.Unlimited);
         #endregion
         #region Appearance
 
@@ -81,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvSubcriptionPurchaseViewModel() {
+        public MpAvSubscriptionPurchaseViewModel() {
             PropertyChanged += MpAvAccountViewModel_PropertyChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
@@ -136,7 +138,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvAccountViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsMonthlyEnabled):
-                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsMonthlyEnabled)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.RateText)));
                     break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(CanBuy));
@@ -195,13 +197,15 @@ namespace MonkeyPaste.Avalonia {
                 bool? success = await MpAvAccountTools.Instance.PurchaseSubscriptionAsync(purchase_uat, is_monthly);
                 if (success.IsTrue()) {
 
-                    await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
-                        title: UiStrings.AccountPurchaseSuccessfulTitle,
-                        message: string.Format(
-                            UiStrings.AccountPurchaseSuccessfulCaption,
-                            purchase_uat.EnumToUiString(),
-                            is_monthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel),
-                        iconResourceObj: "MonkeyWinkImage");
+                    if (purchase_uat != MpUserAccountType.Free) {
+                        await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                            title: UiStrings.AccountPurchaseSuccessfulTitle,
+                            message: string.Format(
+                                UiStrings.AccountPurchaseSuccessfulCaption,
+                                purchase_uat.EnumToUiString(),
+                                is_monthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel),
+                            iconResourceObj: "MonkeyWinkImage");
+                    }
 
                     // refresh account vm w/ new license
                     await MpAvAccountViewModel.Instance.InitializeAsync();
@@ -221,6 +225,26 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
+            });
+
+        public MpIAsyncCommand NavigateToBuyUpgradeCommand => new MpAsyncCommand(
+            async () => {
+                // open/activate settings window and select acct tab...
+                await MpAvSettingsViewModel.Instance
+                .ShowSettingsWindowCommand.ExecuteAsync(MpSettingsTabType.Account);
+
+                // wait for store update
+                while (IsBusy) {
+                    await Task.Delay(100);
+                }
+                if (!IsStoreAvailable) {
+                    // no store available
+                    return;
+                }
+                // flag unlimited yearly to pulse
+                IsMonthlyEnabled = false;
+                SelectedItem = UnlimitedItem;
+                UnlimitedItem.DoFocusPulse = true;
             });
         #endregion
     }

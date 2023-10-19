@@ -1,33 +1,27 @@
-<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
-                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       mc:Ignorable="d"
-                       d:DesignWidth="800"
-                       d:DesignHeight="750"
-                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                       xmlns:local="using:MonkeyPaste.Avalonia"
-                       xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
-                       xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvSubcriptionPurchaseViewModel"
-                       x:DataType="local:MpAvSubcriptionPurchaseViewModel"
-                       x:CompileBindings="True"
-                       DataContext="{x:Static local:MpAvSubcriptionPurchaseViewModel.Instance}"
-                       x:Class="MonkeyPaste.Avalonia.MpAvAccountView">
-    <local:MpAvUserControl.Styles>
-    </local:MpAvUserControl.Styles>
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="750"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
+             xmlns:pcl="using:MonkeyPaste"
+             x:CompileBindings="True"
+             x:Class="MonkeyPaste.Avalonia.MpAvAccountView">
+    <UserControl.Styles>
+    </UserControl.Styles>
     <Grid ColumnDefinitions="0.5*,0.5*">
         <local:MpAvUserView Grid.Column="0"
-                            BorderThickness="0,0,5,0"
+                            BorderThickness="0,0,1.5,0"
+                            BorderBrush="Silver"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
-            <local:MpAvUserView.BorderBrush>
-                <SolidColorBrush Color="Black" Opacity="0.3" />
-            </local:MpAvUserView.BorderBrush>
-        </local:MpAvUserView>
+                            VerticalAlignment="Stretch" />
         <!--  UPGRADE INFO THING  -->
         <local:MpAvSubscriptionView Grid.Column="1"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch" />
     </Grid>
-</local:MpAvUserControl>
+</UserControl>
