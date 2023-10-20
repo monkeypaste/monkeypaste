@@ -14,7 +14,53 @@
                        x:CompileBindings="True"
                        DataContext="{x:Static local:MpAvHelpViewModel.Instance}"
                        x:Class="MonkeyPaste.Avalonia.MpAvHelpView">
-    <cefnet:WebView HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    InitialUrl="https://www.monkeypaste.com/docs/welcome" />
+    <Grid>
+        <local:MpAvWebView HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           LoadErrorInfo="{Binding LoadErrorInfo, Mode=TwoWay}"
+                           IsNavigating="{Binding IsBusy, Mode=TwoWay}"
+                           Opacity="{Binding IsOffline, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
+                           Background="{DynamicResource ThemeWhite}"
+                           Address="{Binding CurrentUrl, Mode=TwoWay}" />
+        <!--  OFFLINE OVERLAY  -->
+        <Grid RowDefinitions="Auto,*"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Top">
+            <Grid.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!IsBusy" />
+                    <Binding Path="IsOffline" />
+                </MultiBinding>
+            </Grid.IsVisible>
+            <TextBlock Text="{x:Static local:UiStrings.CommonConnectionFailedCaption}"
+                       Classes="emptyOverlayText" />
+            <Button Grid.Row="1"
+                    Classes="defaultButton textOnlyButton"
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding !IsBusy}"
+                    Command="{Binding NavigateToHelpLinkCommand}"
+                    CommandParameter="{Binding LastLinkType}">
+                <Button.Resources>
+                    <Thickness x:Key="ButtonPadding">10,3,10,3</Thickness>
+                </Button.Resources>
+                <TextBlock Text="{x:Static local:UiStrings.CommonRetryLabel}" />
+            </Button>
+        </Grid>
+
+        <!--  BUSY OVERLAY  -->
+        <Grid RowDefinitions="Auto,*"
+              IsVisible="{Binding IsBusy}"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Top">
+            <TextBlock Text="{x:Static local:UiStrings.CommonBusyLabel}"
+                       Classes="emptyOverlayText" />
+            <local:MpAvBusySpinnerView Grid.Row="1"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       IsVisible="{Binding IsBusy}"
+                                       Width="70"
+                                       Height="70" />
+        </Grid>
+
+    </Grid>
 </local:MpAvUserControl>

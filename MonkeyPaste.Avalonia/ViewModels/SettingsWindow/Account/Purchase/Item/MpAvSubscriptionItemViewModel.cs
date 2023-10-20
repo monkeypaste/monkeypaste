@@ -1,9 +1,9 @@
-﻿using Avalonia.Threading;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvSubscriptionItemViewModel : MpAvViewModelBase<MpAvSubscriptionPurchaseViewModel> {
+    public class MpAvSubscriptionItemViewModel :
+        MpAvViewModelBase<MpAvSubscriptionPurchaseViewModel>,
+        MpAvIPulseViewModel {
         #region Private Variables
         #endregion
 
@@ -115,7 +115,17 @@ namespace MonkeyPaste.Avalonia {
         public bool IsVisible =>
             AccountType != MpUserAccountType.None;
 
-        public bool IsChecked { get; set; }
+        public bool IsSelected {
+            get => Parent == null || Parent.SelectedItem != this ? false : true;
+            set {
+                if (IsSelected != value && value && Parent != null) {
+                    Parent.SelectedItem = this;
+                    OnPropertyChanged(nameof(IsSelected));
+                }
+            }
+
+        }
+
         public bool IsHovering { get; set; }
 
         public bool IsTrialAvailable => true;
@@ -176,23 +186,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvAccountItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(IsChecked):
-                    if (Parent == null) {
-                        break;
-                    }
-                    Parent.OnPropertyChanged(nameof(Parent.SelectedItem));
+                case nameof(IsSelected):
                     break;
                 case nameof(DoFocusPulse):
-                    if (!DoFocusPulse) {
-                        break;
-                    }
-                    Dispatcher.UIThread.Post(async () => {
-                        var sw = Stopwatch.StartNew();
-                        while (sw.ElapsedMilliseconds < MpAvThemeViewModel.Instance.FocusPulseDurMs) {
-                            await Task.Delay(100);
-                        }
-                        DoFocusPulse = false;
-                    });
+                    MpAvThemeViewModel.Instance.HandlePulse(this);
                     break;
             }
         }

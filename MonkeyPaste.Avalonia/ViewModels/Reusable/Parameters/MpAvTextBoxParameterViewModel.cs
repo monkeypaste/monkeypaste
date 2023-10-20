@@ -32,6 +32,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIContentQueryTextBoxViewModel Implementation
 
+        bool MpIContentQueryTextBoxViewModel.IsMultiline =>
+            ControlType == MpParameterControlType.MultiLineTextBox;
         bool MpIContentQueryTextBoxViewModel.IsSecure =>
             ControlType == MpParameterControlType.PasswordBox;
 
@@ -144,25 +146,23 @@ namespace MonkeyPaste.Avalonia {
 
             await base.InitializeAsync(aipv);
 
-            OnValidate += MpTextBoxParameterViewModel_OnValidate;
-            await Task.Delay(1);
-
             IsBusy = false;
         }
 
-        private void MpTextBoxParameterViewModel_OnValidate(object sender, EventArgs e) {
-            //if (!IsRequired) {
-            //    return true;
-            //}
-            //if (Parameter == null || CurrentValue == null) {
-            //    return false;
-            //}
+        protected override void MpAnalyticItemParameterViewModel_OnValidate(object sender, EventArgs e) {
+            base.MpAnalyticItemParameterViewModel_OnValidate(sender, e);
+            if (IsValidationOverrideEnabled) {
+                return;
+            }
             if (CurrentValue.Length < MinLength) {
-                ValidationMessage = $"{Label} must be at least {MinLength} characters";
+                ValidationMessage = string.Format(UiStrings.ParameterInvalidLengthCaption, Label, MinLength);
             } else if (CurrentValue.Length > MaxLength) {
-                ValidationMessage = $"{Label} can only be {MaxLength} characters";
+                ValidationMessage = string.Format(UiStrings.ParameterInvalidLengthCaption2, Label, MinLength);
             } else if (!string.IsNullOrEmpty(Pattern) && !Regex.IsMatch(CurrentValue, Pattern)) {
-                ValidationMessage = $"{Label} is invalid: Conditions are: '{PatternInfo}'";
+                ValidationMessage = PatternInfo;
+                if (string.IsNullOrWhiteSpace(ValidationMessage)) {
+                    ValidationMessage = string.Format(UiStrings.ParameterInvalidDefaultPatternInfoCaption, Label);
+                }
             } else {
                 ValidationMessage = string.Empty;
             }
@@ -191,7 +191,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpContentParameterViewModel_OnValidate(object sender, EventArgs e) {
             ValidationMessage = string.Empty;
-
             OnPropertyChanged(nameof(IsValid));
         }
 

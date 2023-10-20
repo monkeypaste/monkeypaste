@@ -24,12 +24,29 @@
         <!--  PASSWORD CHAR  -->
         <Style Selector="TextBox.secure">
             <Setter Property="PasswordChar"
-                    Value="⚫" />
+                    Value="•" />
+        </Style>
+        <Style Selector="TextBox.secure.dark">
+            <!--<Setter Property="PasswordChar"
+                    Value="○" />-->
+            <Setter Property="PasswordChar"
+                    Value="•" />
+        </Style>
+
+        <!--  WRAPPING  -->
+        <Style Selector="TextBox.multiline">
+            <Setter Property="AcceptsReturn"
+                    Value="True" />
+            <Setter Property="TextWrapping"
+                    Value="WrapWithOverflow" />
+            <Setter Property="MaxHeight"
+                    Value="400" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="QueryItemGridContainer"
             Classes="paramBorder">
-        <Grid ColumnDefinitions="*,Auto,Auto">
+        <Grid ColumnDefinitions="*,Auto,Auto"
+              Margin="0,0,10,0">
 
             <!--  TEXTBOX  -->
 
@@ -37,15 +54,14 @@
                      Grid.Column="0"
                      Grid.ColumnSpan="2"
                      Classes="dnd"
+                     Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}"
+                     Classes.multiline="{Binding IsMultiline}"
                      Classes.secure="{Binding IsSecure}"
                      Classes.revealPasswordButton="{Binding IsSecure}"
                      IsReadOnly="{Binding IsReadOnly}"
-                     local:MpAvSecureTextBoxExtension.IsEnabled="{Binding IsSecure}"
-                     AcceptsReturn="True"
-                     TextWrapping="Wrap"
-                     MaxHeight="400"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
+                     local:MpAvSecureTextBoxExtension.IsEnabled="{Binding IsSecure}"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
                      SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                      SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
@@ -69,6 +85,7 @@
                                  Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
                         <Binding Path="!IsReadOnly"
                                  ElementName="ContentQueryTextBox" />
+                        <Binding Path="!IsSecure" />
                     </MultiBinding>
                 </local:MpAvClearTextButton.IsVisible>
             </local:MpAvClearTextButton>

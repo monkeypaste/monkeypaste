@@ -52,6 +52,36 @@
         </LinearGradientBrush>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+        <!--  ACCOUNT TYPE LBI  -->
+        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem"
+               x:DataType="local:MpAvSubscriptionItemViewModel">
+            <Setter Property="IsVisible"
+                    Value="{Binding IsVisible}" />
+            <Setter Property="BorderThickness"
+                    Value="0" />
+            <Setter Property="Margin"
+                    Value="0,0,0,10" />
+            <Setter Property="Padding"
+                    Value="5" />
+            <Setter Property="MinHeight"
+                    Value="35" />
+            <Setter Property="MaxHeight"
+                    Value="100" />
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <Transitions>
+                        <TransformOperationsTransition Property="RenderTransform"
+                                                       Duration="0:0:.075" />
+                    </Transitions>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem:pressed">
+            <Setter Property="RenderTransform"
+                    Value="scale(0.98)" />
+        </Style>
+
         <!--  OUTER BORDER  -->
         <Style Selector="Border#OuterBorder">
             <Setter Property="BorderBrush"
@@ -60,23 +90,23 @@
                     Value="{StaticResource HitTestableTransparent}" />
         </Style>
 
-        <Style Selector="Border#OuterBorder.selected">
+        <Style Selector="ListBoxItem:selected Border#OuterBorder">
             <Setter Property="BorderBrush"
                     Value="{StaticResource ThemedRainbowBrush}" />
         </Style>
 
         <!--  ICON BORDER  -->
-        <Style Selector="RadioButton#AcctTypeButton Border.iconContainer">
+        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem Border.acctIcon">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeInteractiveColor}" />
         </Style>
 
-        <Style Selector="RadioButton#AcctTypeButton:pointerover Border.iconContainer">
+        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem:pointerover Border.acctIcon">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeAccent1Color}" />
         </Style>
 
-        <Style Selector="RadioButton#AcctTypeButton:checked Border.iconContainer">
+        <Style Selector="ListBox#AccountTypeListBox > ListBoxItem:checked Border.acctIcon">
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeAccent3Color}" />
         </Style>
@@ -114,107 +144,102 @@
 
             <!--  SUBSCRIPTION ITEMS  -->
 
-            <ItemsControl x:Name="AccountTypeItemsControl"
-                          Grid.Row="1"
-                          ItemsSource="{Binding Items}"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Top">
-                <ItemsControl.ItemsPanel>
+            <ListBox x:Name="AccountTypeListBox"
+                     Grid.Row="1"
+                     Background="Transparent"
+                     ItemsSource="{Binding Items}"
+                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Top">
+                <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.Resources>
+                    <SolidColorBrush x:Key="SystemControlHighlightListAccentLowBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="SystemControlHighlightListAccentMediumBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="SystemControlHighlightListAccentHighBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
+                    <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
+                </ListBox.Resources>
+                <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Viewbox>
                             <!--  ACCOUNT TYPE ITEM OUTER BORDER  -->
                             <Border x:Name="OuterBorder"
-                                    IsVisible="{Binding IsVisible}"
-                                    Classes.selected="{Binding IsChecked}"
                                     Classes.pulse="{Binding DoFocusPulse}"
                                     local:MpAvIsHoveringExtension.IsEnabled="True"
                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                                     local:MpAvIsHoveringExtension.IsBorderFollowEnabled="True"
                                     CornerRadius="7"
-                                    BorderThickness="2.5"
-                                    Margin="0,0,0,10"
-                                    MaxHeight="100">
-                                <!--  ACCOUNT TYPE BUTTON  -->
-                                <RadioButton x:Name="AcctTypeButton"
-                                             GroupName="AcctTypeGroup"
-                                             Classes="defaultButton"
-                                             Theme="{StaticResource SwitchlessRadioButton}"
-                                             CornerRadius="7"
-                                             Margin="0"
-                                             Padding="5"
-                                             HorizontalAlignment="Stretch"
-                                             HorizontalContentAlignment="Stretch"
-                                             MinHeight="35"
-                                             IsChecked="{Binding IsChecked, Mode=TwoWay}">
-                                    <DockPanel HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Stretch">
-                                        <!--  ACCOUNT TYPE ICON BORDER  -->
-                                        <Border DockPanel.Dock="Left"
-                                                Classes="iconContainer squareByHeight"
-                                                CornerRadius="7"
-                                                BorderThickness="2"
-                                                VerticalAlignment="Top"
-                                                Margin="5"
-                                                Padding="5">
-                                            <Image Width="30"
-                                                   Height="30"
-                                                   Stretch="UniformToFill"
-                                                   Source="{Binding IconSourceObj, ConverterParameter=test, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
-                                        </Border>
+                                    BorderThickness="2.5">
 
-                                        <!--  RATE  -->
-                                        <TextBlock DockPanel.Dock="Right"
-                                                   HorizontalAlignment="Left"
+                                <DockPanel HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch">
+
+                                    <!--  ACCOUNT TYPE ICON BORDER  -->
+
+                                    <Border DockPanel.Dock="Left"
+                                            Classes="acctIcon squareByHeight"
+                                            CornerRadius="7"
+                                            BorderThickness="2"
+                                            VerticalAlignment="Top"
+                                            Margin="5"
+                                            Padding="5">
+                                        <Image Width="30"
+                                               Height="30"
+                                               Stretch="UniformToFill"
+                                               Source="{Binding IconSourceObj, ConverterParameter=test, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+                                    </Border>
+
+                                    <!--  RATE  -->
+                                    <TextBlock DockPanel.Dock="Right"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               TextWrapping="NoWrap"
+                                               TextAlignment="Right"
+                                               FontWeight="SemiBold"
+                                               FontStyle="Italic"
+                                               FontSize="20"
+                                               MinWidth="100"
+                                               Text="{Binding RateText}" />
+
+                                    <StackPanel Orientation="Horizontal"
+                                                Spacing="5">
+                                        <!--  ACCOUNT TYPE NAME  -->
+
+                                        <TextBlock HorizontalAlignment="Stretch"
                                                    VerticalAlignment="Center"
-                                                   TextWrapping="NoWrap"
                                                    TextAlignment="Right"
-                                                   FontWeight="SemiBold"
-                                                   FontStyle="Italic"
+                                                   Width="120"
                                                    FontSize="20"
-                                                   MinWidth="100"
-                                                   Text="{Binding RateText}" />
+                                                   FontWeight="SemiBold"
+                                                   Text="{Binding LabelText}" />
 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Spacing="5">
-                                            <!--  ACCOUNT TYPE NAME  -->
+                                        <!--  ACCOUNT TYPE INFO  -->
+                                        <TextBlock HorizontalAlignment="Stretch"
+                                                   VerticalAlignment="Center"
+                                                   TextWrapping="WrapWithOverflow"
+                                                   MaxWidth="200"
+                                                   TextAlignment="Left"
+                                                   FontSize="12"
+                                                   Text="{Binding DescriptionText}" />
 
-                                            <TextBlock HorizontalAlignment="Stretch"
-                                                       VerticalAlignment="Center"
-                                                       TextAlignment="Right"
-                                                       Width="120"
-                                                       FontSize="20"
-                                                       FontWeight="SemiBold"
-                                                       Text="{Binding LabelText}" />
-
-                                            <!--  ACCOUNT TYPE INFO  -->
-                                            <TextBlock HorizontalAlignment="Stretch"
-                                                       VerticalAlignment="Center"
-                                                       TextWrapping="WrapWithOverflow"
-                                                       MaxWidth="200"
-                                                       TextAlignment="Left"
-                                                       FontSize="12"
-                                                       Text="{Binding DescriptionText}" />
-
-                                        </StackPanel>
-                                    </DockPanel>
-                                </RadioButton>
+                                    </StackPanel>
+                                </DockPanel>
                             </Border>
                         </Viewbox>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
             <!--  BUY BUTTON  -->
             <Button x:Name="BuyButton"
                     Grid.Row="2"
                     Loaded="BuyButton_Loaded"
                     Classes="defaultButton"
-                    Classes.pulse="{Binding UnlimitedItem.DoFocusPulse}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Opacity="{Binding CanBuy, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
@@ -235,7 +260,7 @@
                     <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
                     <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                 </Button.Resources>
-                <DockPanel>
+                <DockPanel Classes.pulse="{Binding UnlimitedItem.DoFocusPulse}">
                     <Image DockPanel.Dock="Left"
                            Width="30"
                            Height="30"

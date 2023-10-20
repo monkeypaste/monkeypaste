@@ -8,6 +8,7 @@ namespace MonkeyPaste {
         string ContentQuery { get; set; }
         string Watermark { get; }
         bool IsSecure { get; }
+        bool IsMultiline { get; }
         ICommand ClearQueryCommand { get; }
         ICommand ShowQueryMenuCommand { get; }
     }

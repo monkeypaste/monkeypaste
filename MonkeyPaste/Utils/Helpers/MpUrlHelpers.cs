@@ -22,6 +22,7 @@ namespace MonkeyPaste {
     public static class MpUrlHelpers {
         #region Constants
         public const int MAX_DOT_NET_URL_LENGTH = 65519;
+        public const string BLANK_URL = "about:blank";
         #endregion
 
         #region Statics
@@ -74,7 +75,7 @@ namespace MonkeyPaste {
                 return false;
             }
             string url_lwc = url.ToLower().Replace("http://", string.Empty).Replace("https://", string.Empty);
-            return url_lwc.StartsWith("about:blank");
+            return url_lwc.StartsWith(BLANK_URL);
         }
 
 

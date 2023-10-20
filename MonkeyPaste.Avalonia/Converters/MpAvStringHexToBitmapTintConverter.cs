@@ -41,9 +41,7 @@ namespace MonkeyPaste.Avalonia {
             if (!IS_DYNAMIC_TINT_ENABLED) {
                 return MpAvIconSourceObjToBitmapConverter.Instance.Convert(value, targetType, parameter, culture);
             }
-            if (value.ToStringOrEmpty().StartsWith("Trophy")) {
 
-            }
             object imgResourceObj = null;
             string hex = null;
             if (value is object[] valParts) {
@@ -70,10 +68,16 @@ namespace MonkeyPaste.Avalonia {
                 if (paramParts.FirstOrDefault(x => x.StartsWith("Theme")) is string theme_key &&
                     Enum.TryParse(theme_key, true, out MpThemeResourceKey trk)) {
                     if (trk == MpThemeResourceKey.ThemeInteractiveColor &&
-                        value.ToStringOrEmpty() is string randColorSeed) {
+                        value.ToStringOrEmpty() is string valueStr) {
                         // when image
                         int max = MpSystemColors.ContentColors.Count - 1;
-                        int len = randColorSeed.Length;
+                        int randColorSeed = valueStr.Length;
+                        if (valueStr.IsStringImageResourceKey() &&
+                            Mp.Services.PlatformResource.GetResource<string>(valueStr) is string res_path) {
+                            // when value is key add its resource path's length to vary color more
+                            randColorSeed += res_path.Length;
+                        }
+                        int len = randColorSeed;
                         int rand_idx = (int)((double)len).Wrap(0, max);
                         if (rand_idx % (MpSystemColors.COLOR_PALETTE_COLS - 1) == 0) {
                             // if rand color is last column (gray scale) bump it 

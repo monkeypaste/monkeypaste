@@ -369,6 +369,7 @@ namespace MonkeyPaste {
     public class MpQuillPasteButtonInfoMessage : MpJsonObject {
         public string pasteButtonIconBase64 { get; set; }
         public string pasteButtonTooltipText { get; set; }
+        public string pasteButtonTooltipHtml { get; set; }
         public string infoId { get; set; }
         public bool isFormatDefault { get; set; } = true;
     }

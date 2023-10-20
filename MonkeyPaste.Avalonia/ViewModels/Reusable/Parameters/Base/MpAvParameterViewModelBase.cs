@@ -3,7 +3,6 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,7 +16,8 @@ namespace MonkeyPaste.Avalonia {
         MpIFilterMatch,
         MpIAsyncCollectionObject,
         MpISelectableViewModel,
-        MpIHoverableViewModel {
+        MpIHoverableViewModel,
+        MpAvIPulseViewModel {
         #region Private Variables
         protected string _lastValue = string.Empty;
         #endregion
@@ -78,22 +78,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-
-        public string ParameterTooltipText {
-            get {
-                if (!IsValid) {
-                    return ValidationMessage;
-                }
-                if (ParameterFormat != null && !string.IsNullOrEmpty(ParameterFormat.description)) {
-                    return ParameterFormat.description;
-                }
-                return null;
-            }
-        }
-
         #endregion
 
         #region State
+        protected bool IsValidationOverrideEnabled { get; set; }
         public virtual bool IsAnyBusy =>
             IsBusy;
         public bool DoFocusPulse { get; set; }
@@ -319,6 +307,7 @@ namespace MonkeyPaste.Avalonia {
                         case MpParameterControlType.Button:
                         case MpParameterControlType.PasswordBox:
                         case MpParameterControlType.TextBox:
+                        case MpParameterControlType.MultiLineTextBox:
                         case MpParameterControlType.List:
                         case MpParameterControlType.ComboBox:
                             return MpParameterValueUnitType.PlainText;
@@ -519,6 +508,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(CurrentValue));
             OnPropertyChanged(nameof(IsExecuteParameter));
 
+            OnValidate += MpAnalyticItemParameterViewModel_OnValidate;
+
             await Task.Delay(1);
 
             IsBusy = wasBusy;
@@ -532,6 +523,15 @@ namespace MonkeyPaste.Avalonia {
                 aipvm.Parent.UpdateCanExecute();
             }
             return IsValid;
+        }
+
+        public void OverrideValidationMesage(string msg) {
+            IsValidationOverrideEnabled = true;
+            ValidationMessage = msg;
+        }
+        public void RemoveValidationOverride() {
+            IsValidationOverrideEnabled = false;
+            Validate();
         }
 
         public virtual string GetValidationMessage(bool isExecuting) {
@@ -585,21 +585,18 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(HasModelChanged));
                     break;
                 case nameof(DoFocusPulse):
-                    if (!DoFocusPulse) {
-                        break;
-                    }
-                    Dispatcher.UIThread.Post(async () => {
-                        var sw = Stopwatch.StartNew();
-                        while (sw.ElapsedMilliseconds < MpAvThemeViewModel.Instance.FocusPulseDurMs) {
-                            await Task.Delay(100);
-                        }
-                        DoFocusPulse = false;
-                    });
+                    MpAvThemeViewModel.Instance.HandlePulse(this);
                     break;
             }
             //Validate();
         }
 
+        protected virtual void MpAnalyticItemParameterViewModel_OnValidate(object sender, EventArgs e) {
+            if (IsValidationOverrideEnabled) {
+                return;
+            }
+            OnPropertyChanged(nameof(IsValid));
+        }
         protected bool CanSetModelValue() {
             if (IsConfirmRemember) {
                 if (IsRememberChecked) {

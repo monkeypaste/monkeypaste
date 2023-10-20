@@ -206,11 +206,21 @@ namespace MonkeyPaste.Common {
                 htmlStr.ToLower() == "<p><br/></p>";
         }
 
-        public static bool IsStringImageResourcePathOrKey(this string str) {
+        public static bool IsStringImageResourceKey(this string str) {
             if (string.IsNullOrWhiteSpace(str)) {
                 return false;
             }
             if (str.ToLower().EndsWith("image")) {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool IsStringImageResourcePathOrKey(this string str) {
+            if (string.IsNullOrWhiteSpace(str)) {
+                return false;
+            }
+            if (str.IsStringImageResourceKey()) {
                 return true;
             }
             if (str.ToLower().EndsWith("png")) {

@@ -95,7 +95,7 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="{Binding IsHelpEnabled, ConverterParameter=*|0, Converter={x:Static local:MpAvBoolToGridLengthConverter.Instance}, Source={x:Static local:MpAvHelpViewModel.Instance}}" />
+            <ColumnDefinition Width="{Binding IsHelpSettingsTabVisible, ConverterParameter=*|0, Converter={x:Static local:MpAvBoolToGridLengthConverter.Instance}, Source={x:Static local:MpAvHelpViewModel.Instance}}" />
         </Grid.ColumnDefinitions>
 
         <!--  ACCOUNT  -->

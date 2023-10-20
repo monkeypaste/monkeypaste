@@ -2,11 +2,14 @@
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
 
@@ -241,6 +244,18 @@ namespace MonkeyPaste.Avalonia {
             return _colorImageFileNames.Any(x => res_str.ToLower().EndsWith(x));
         }
 
+        public void HandlePulse(MpAvIPulseViewModel pvm) {
+            if (!pvm.DoFocusPulse) {
+                return;
+            }
+            Dispatcher.UIThread.Post(async () => {
+                var sw = Stopwatch.StartNew();
+                while (sw.ElapsedMilliseconds < FocusPulseDurMs) {
+                    await Task.Delay(100);
+                }
+                pvm.DoFocusPulse = false;
+            });
+        }
         #endregion
 
         #region Protected Methods

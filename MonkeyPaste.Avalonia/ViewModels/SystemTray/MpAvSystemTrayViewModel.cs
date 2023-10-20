@@ -6,6 +6,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -133,6 +134,14 @@ namespace MonkeyPaste.Avalonia {
                             CommandPath = nameof(MpAvSettingsViewModel.Instance.ShowSettingsWindowCommand),
                             //ShortcutArgs = new object[] { MpShortcutType.ShowSettings },
                             InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.ShowSettings),
+                            InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = UiStrings.SettingsHelpTabLabel,
+                            IconResourceKey = "QuestionMarkImage",
+                            CommandSrcObj = MpAvHelpViewModel.Instance,
+                            CommandPath = nameof(MpAvHelpViewModel.Instance.NavigateToHelpLinkCommand),
+                            InputGestureSrcObj = Mp.Services.ShortcutGestureLocator.LocateSourceByType(MpShortcutType.OpenHelp),
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
                         new MpAvMenuItemViewModel() {
@@ -332,6 +341,12 @@ namespace MonkeyPaste.Avalonia {
                 //    });
 
                 //await Mp.Services.DefaultDataCreator.CreateDefaultDataAsync();
+                var cil = await MpDataModelProvider.GetCopyItemsByQueryTagIdAsync(
+                        MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsImageFormatTag).TagId,
+                        MpAvQueryViewModel.Instance,
+                        MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending,
+                        MpAvClipTileSortFieldViewModel.Instance.SelectedSortType,
+                        MpAvTagTrayViewModel.Instance.TrashedCopyItemIds);
             });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(

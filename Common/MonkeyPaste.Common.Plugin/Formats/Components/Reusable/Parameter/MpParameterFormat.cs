@@ -7,6 +7,8 @@ namespace MonkeyPaste.Common.Plugin {
     public enum MpParameterControlType {
         None = 0,
         TextBox,
+        MultiLineTextBox,
+        PasswordBox,
         ComboBox,
         List,
         MultiSelectList,
@@ -15,7 +17,6 @@ namespace MonkeyPaste.Common.Plugin {
         Slider,
         FileChooser,
         DirectoryChooser,
-        PasswordBox,
         DateTimePicker,
         Radio,
         ComponentPicker,

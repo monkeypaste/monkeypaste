@@ -10,7 +10,6 @@ using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
-using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,33 +22,20 @@ using Avalonia.Platform;
 
 #if DESKTOP
 
-
 #if PLAT_WV
-using AvaloniaWebView; 
+        using AvaloniaWebView; 
 #elif CEF_WV
 
 using CefNet;
 using CefNet.Avalonia;
-using CefNet.Internal;
-//using WebViewControl.Avalonia;
 #endif
 
 #endif
+
 
 namespace MonkeyPaste.Avalonia {
-    [DoNotNotify]
     public class MpAvContentWebView :
-#if DESKTOP
-
-#if PLAT_WV
-        UserControl,
-#elif CEF_WV
-        WebView,
-#endif
-
-#else
-        MpAvNativeWebViewHost,
-#endif
+        MpAvWebView,
         MpIContentView,
         MpAvIContentWebViewDragSource,
         MpAvIResizableControl,
@@ -1008,9 +994,6 @@ namespace MonkeyPaste.Avalonia {
         }
 #elif CEF_WV
 
-        protected override WebViewGlue CreateWebViewGlue() {
-            return new MpAvCefNetWebViewGlue(this);
-        }
         protected override void Dispose(bool disposing) {
             if (disposing &&
                 BindingContext != null &&
@@ -1021,10 +1004,6 @@ namespace MonkeyPaste.Avalonia {
             base.Dispose(disposing);
         }
 
-        protected override void OnBrowserCreated(EventArgs e) {
-            base.OnBrowserCreated(e);
-            //Navigate(Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath());
-        }
 
         protected override void OnNavigated(NavigatedEventArgs e) {
             base.OnNavigated(e);

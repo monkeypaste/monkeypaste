@@ -18,7 +18,8 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIContentQueryTextBoxViewModel Implementation
-
+        bool MpIContentQueryTextBoxViewModel.IsMultiline =>
+            false;
         bool MpIContentQueryTextBoxViewModel.IsSecure =>
             false;
         public bool IsFieldButtonVisible =>

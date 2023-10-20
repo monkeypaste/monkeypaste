@@ -202,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             IsVisible = CurPasteInfoMessage.infoId != null,
-                            Header = $"Paste To '{CurPasteInfoMessage.pasteButtonTooltipText}'",
+                            Header = $"Paste To '{CurPasteInfoMessage.pasteButtonTooltipHtml}'",
                             //AltNavIdx = 0,
                             IconSourceObj = CurPasteInfoMessage.pasteButtonIconBase64,
                             Command = PasteSelectedClipTileFromContextMenuCommand,
@@ -2380,7 +2380,7 @@ namespace MonkeyPaste.Avalonia {
             if (e == null) {
                 // unknown paste app
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
-                    pasteButtonTooltipText = UiStrings.ClipTilePasteButtonDisabledTooltip
+                    pasteButtonTooltipHtml = UiStrings.ClipTilePasteButtonDisabledTooltip
                 };
             } else {
                 bool is_custom =
@@ -2390,9 +2390,16 @@ namespace MonkeyPaste.Avalonia {
                     !avm.OleFormatInfos.IsDefault;
 
                 CurPasteInfoMessage = new MpQuillPasteButtonInfoMessage() {
+                    pasteButtonTooltipHtml =
+                        string.Format(
+                            UiStrings.ClipTilePasteButtonTooltipHtml,
+                        string.IsNullOrEmpty(e.ApplicationName) ?
+                            e.MainWindowTitle :
+                            e.ApplicationName),
+
                     pasteButtonTooltipText =
                         string.Format(
-                            UiStrings.ClipTilePasteButtonTooltip,
+                            UiStrings.ClipTilePasteButtonTooltipText,
                         string.IsNullOrEmpty(e.ApplicationName) ?
                             e.MainWindowTitle :
                             e.ApplicationName),

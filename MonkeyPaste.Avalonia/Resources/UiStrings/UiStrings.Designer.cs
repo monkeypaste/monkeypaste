@@ -459,9 +459,18 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to Paste to: &lt;em&gt;&lt;i class=&quot;paste-tooltip-suffix&quot;&gt;{0}&lt;/i&gt;&lt;/em&gt;.
         /// </summary>
-        public static string ClipTilePasteButtonTooltip {
+        public static string ClipTilePasteButtonTooltipHtml {
             get {
-                return ResourceManager.GetString("ClipTilePasteButtonTooltip", resourceCulture);
+                return ResourceManager.GetString("ClipTilePasteButtonTooltipHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste to: &apos;{0}&apos;.
+        /// </summary>
+        public static string ClipTilePasteButtonTooltipText {
+            get {
+                return ResourceManager.GetString("ClipTilePasteButtonTooltipText", resourceCulture);
             }
         }
         
@@ -1089,6 +1098,33 @@ namespace MonkeyPaste.Avalonia {
         public static string NtfRejectRemoveClipsTitle {
             get {
                 return ResourceManager.GetString("NtfRejectRemoveClipsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is invalid.
+        /// </summary>
+        public static string ParameterInvalidDefaultPatternInfoCaption {
+            get {
+                return ResourceManager.GetString("ParameterInvalidDefaultPatternInfoCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} must be at least {1} characters.
+        /// </summary>
+        public static string ParameterInvalidLengthCaption {
+            get {
+                return ResourceManager.GetString("ParameterInvalidLengthCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} can only be {1} character.
+        /// </summary>
+        public static string ParameterInvalidLengthCaption2 {
+            get {
+                return ResourceManager.GetString("ParameterInvalidLengthCaption2", resourceCulture);
             }
         }
         

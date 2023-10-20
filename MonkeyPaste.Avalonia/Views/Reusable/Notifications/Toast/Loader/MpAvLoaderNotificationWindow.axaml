@@ -15,7 +15,7 @@
         xmlns:dd="using:My.Namespace"
         d:DataContext="{x:Static dd:DesignData.ExampleViewModel}"
         Classes.IsClosing="{Binding IsClosing}"
-        Classes="notificationWindow fadeIn fadeOut loader"
+        Classes="notificationWindow fadeOut loader"
         Width="350"
         Height="140">
     <Window.Resources>

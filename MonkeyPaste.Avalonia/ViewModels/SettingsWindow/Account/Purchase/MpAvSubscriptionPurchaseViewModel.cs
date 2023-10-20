@@ -27,15 +27,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
         public ObservableCollection<MpAvSubscriptionItemViewModel> Items { get; } = new ObservableCollection<MpAvSubscriptionItemViewModel>();
 
-        public MpAvSubscriptionItemViewModel SelectedItem {
-            get => Items.FirstOrDefault(x => x.IsChecked);
-            set {
-                if (SelectedItem != value) {
-                    Items.ForEach(x => x.IsChecked = x == value);
-                    OnPropertyChanged(nameof(SelectedItem));
-                }
-            }
-        }
+        public MpAvSubscriptionItemViewModel SelectedItem { get; set; }
         public MpAvSubscriptionItemViewModel UnlimitedItem =>
             Items.FirstOrDefault(x => x.AccountType == MpUserAccountType.Unlimited);
         #endregion
@@ -142,6 +134,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(SelectedItem):
                     OnPropertyChanged(nameof(CanBuy));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     break;
             }
         }

@@ -281,6 +281,8 @@
                         <Binding Path="!IsAnyBusy" />
                         <Binding Path="!IsPinPlaceholder" />
                         <Binding Path="IsAnyNextCapByAccount" />
+                        <Binding Path="!HideCapWarnings"
+                                 Source="{x:Static local:MpAvPrefViewModel.Instance}" />
                     </MultiBinding>
                 </Border.IsVisible>
                 <Border x:Name="AccountCapOverlay"

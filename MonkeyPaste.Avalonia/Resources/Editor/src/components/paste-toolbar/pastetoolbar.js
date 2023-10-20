@@ -158,7 +158,7 @@ function updatePasteButtonInfo(pasteButtonInfoObj) {
 
     let paste_icon_elm = getPasteButtonElement().children[0];
     let new_paste_icon_base64 = pasteButtonInfoObj ? pasteButtonInfoObj.pasteButtonIconBase64 : null;
-    let new_paste_tooltip_info_part = pasteButtonInfoObj ? pasteButtonInfoObj.pasteButtonTooltipText : 'Unknown';
+    let new_paste_tooltip_info_part = pasteButtonInfoObj ? pasteButtonInfoObj.pasteButtonTooltipHtml : 'Unknown';
     let new_paste_info_id = pasteButtonInfoObj ? pasteButtonInfoObj.infoId : null;
     let new_paste_info_is_default = pasteButtonInfoObj ? pasteButtonInfoObj.isFormatDefault : true;
     //const new_paste_tooltip = `Paste to: <em><i class="paste-tooltip-suffix">${new_paste_tooltip_info_part}</i></em>`;

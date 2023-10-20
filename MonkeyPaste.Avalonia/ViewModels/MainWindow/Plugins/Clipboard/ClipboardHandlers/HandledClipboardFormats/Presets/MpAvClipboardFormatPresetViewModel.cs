@@ -353,9 +353,6 @@ namespace MonkeyPaste.Avalonia {
             Items.Clear();
 
             Preset = aip;
-
-            //var presetValues = await PrepareParameterValueModelsAsync();
-
             var presetValues = await MpAvPluginParameterValueLocator.LocateValuesAsync(MpParameterHostType.Preset, PresetId, Parent);
 
             foreach (var paramVal in presetValues) {

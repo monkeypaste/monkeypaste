@@ -13,9 +13,6 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvPluginParameterItemView">
     <local:MpAvUserControl.Resources>
-        <!--<SolidColorBrush x:Key="CheckBoxBorderBrushUnchecked" Color="White" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="White" />
-        <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUncheckedPointerOver" Color="Yellow" />-->
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
     </local:MpAvUserControl.Styles>
@@ -26,9 +23,9 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <!--  LABEL  -->
-                <ColumnDefinition Width="100" />
+                <ColumnDefinition MinWidth="100" />
                 <!--  DESCRIPTION  -->
-                <ColumnDefinition Width="30" />
+                <ColumnDefinition MinWidth="30" />
                 <!--  PARAMETER  -->
                 <ColumnDefinition MinWidth="150"
                                   Width="*" />

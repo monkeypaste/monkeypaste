@@ -23,15 +23,12 @@
                     Value="{Binding $self.Text, Converter={x:Static local:MpAvStringToFontFamilyConverter.Instance}}" />
         </Style>
     </local:MpAvUserControl.Styles>
-    <Border Classes="paramBorder comboBoxBorder">
-        <ToolTip.Tip>
-            <local:MpAvToolTipView ToolTipText="{Binding ParameterTooltipText}" />
-        </ToolTip.Tip>
+    <Border Classes="paramBorder">
         <ComboBox ItemsSource="{Binding Items}"
                   SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
                   IsDropDownOpen="{Binding IsParameterDropDownOpen}"
                   HorizontalAlignment="Stretch"
-                  Margin="3"
+                  Margin="3,3,10,3"
                   MinWidth="80">
             <ComboBox.ItemTemplate>
                 <DataTemplate>

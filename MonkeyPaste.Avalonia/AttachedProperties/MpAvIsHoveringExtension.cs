@@ -6,12 +6,24 @@ using Avalonia.Input;
 using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System;
+using System.Windows.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvIsHoveringExtension {
+        #region Private Variables
+        private static DispatcherTimer _timer;
+        private static MpPoint _last_mp;
+        #endregion
+
+        #region Statics
         static MpAvIsHoveringExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
         }
+
+        #endregion
+
+        #region Properties
 
         #region IsBorderFollowEnabled AvaloniaProperty
         public static bool GetIsBorderFollowEnabled(AvaloniaObject obj) {
@@ -83,6 +95,8 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #endregion
+
         #region Private Methods
 
         private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
@@ -111,7 +125,8 @@ namespace MonkeyPaste.Avalonia {
             }
             SetIsHovering(control, true);
             if (GetIsBorderFollowEnabled(control)) {
-                control.PointerMoved += Tc_PointerMoved;
+                //control.PointerMoved += Tc_PointerMoved;
+                StartFollowTimer(control);
             }
         }
 
@@ -122,7 +137,9 @@ namespace MonkeyPaste.Avalonia {
             }
             SetIsHovering(control, false);
             if (GetIsBorderFollowEnabled(control)) {
-                control.PointerMoved -= Tc_PointerMoved;
+                //control.PointerMoved -= Tc_PointerMoved;
+                StopFollowTimer(control);
+                _last_mp = null;
             }
         }
 
@@ -130,41 +147,71 @@ namespace MonkeyPaste.Avalonia {
             if (sender is not Control c) {
                 return;
             }
-            Brush bb = null;
 
-            if (sender is TemplatedControl tc &&
-                tc.BorderBrush is Brush tc_bb) {
-                bb = tc_bb;
-            } else if (sender is Border b &&
-                b.BorderBrush is Brush b_bb) {
-                bb = b_bb;
-            }
-            if (bb == null) {
-                return;
-            }
             var mp = e.GetPosition(c).ToPortablePoint();
-            var rel_mp = mp / c.Bounds.Size.ToPortableSize().ToPortablePoint();
+            _last_mp = _last_mp == null ? mp : _last_mp;
 
-            //if (bb is LinearGradientBrush lgb) {
-            //    var rel_mp = mp / c.Bounds.Size.ToPortableSize().ToPortablePoint();
-            //    lgb.StartPoint = new RelativePoint(rel_mp.ToAvPoint(), RelativeUnit.Relative);
-            //}
+            var center = c.Bounds.ToPortableRect().Centroid();
+            double last_angle = center.AngleBetween(_last_mp);
+            double angle = center.AngleBetween(mp);
+            RotateBorderBrush(c, angle - last_angle, angle);
 
-
-            if (bb.Transform is RotateTransform rt) {
-                var center = c.Bounds.ToPortableRect().Centroid();
-                //rt.Angle = mp.AngleBetween(c.Bounds.BottomRight.ToPortablePoint());//.Wrap(0, 120);
-                rt.Angle = center.AngleBetween(mp);//.Wrap(0, 120);
-                //MpConsole.WriteLine($"new angle: {rt.Angle}");
-            }
-
-            //if (bb.Transform is TranslateTransform tt) {
-            //    tt.X = mp.X;
-            //    tt.Y = mp.Y;
-            //}
-            c.Redraw();
+            _last_mp = mp;
         }
         #endregion
+
+        private static void StartFollowTimer(Control c) {
+            void _timer_Tick(object sender, EventArgs e) {
+                RotateBorderBrush(_timer.Tag as Control, 5);
+            }
+            if (_timer == null) {
+                _timer = new DispatcherTimer() {
+                    Interval = TimeSpan.FromMilliseconds(20),
+                    IsEnabled = true
+                };
+                _timer.Tick += _timer_Tick;
+            }
+            _timer.Tag = c;
+            _timer.Start();
+        }
+
+
+        private static void StopFollowTimer(Control c) {
+            if (_timer == null) {
+                return;
+            }
+            _timer.Stop();
+        }
+
+        private static void RotateBorderBrush(Control c, double angle_delta, double? force_angle = null) {
+            Brush bb;
+
+            if (c is TemplatedControl tc &&
+                tc.BorderBrush is Brush tc_bb) {
+                bb = tc_bb;
+            } else if (c is Border b &&
+                b.BorderBrush is Brush b_bb) {
+                bb = b_bb;
+            } else {
+                MpDebug.Break($"Unhandled border follow control type '{c.GetType()}'");
+                return;
+            }
+
+            if (bb.Transform is not RotateTransform rt) {
+                MpDebug.Break($"Border follow error, bb must have rotate transform");
+                return;
+            }
+
+            if (force_angle.HasValue) {
+                rt.Angle = force_angle.Value;
+            } else {
+                rt.Angle += angle_delta;
+            }
+            rt.Angle = rt.Angle.Wrap(0, 360);
+            MpConsole.WriteLine($"Brush angle: {rt.Angle}");
+
+            c.Redraw();
+        }
     }
 
 }

@@ -6,7 +6,6 @@ using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -46,18 +45,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        protected async override void OnLoaded(RoutedEventArgs e) {
-            base.OnLoaded(e);
-            if (BindingContext.IsImageFormatTag || BindingContext.IsFavoritesTag) {
-                if (BindingContext.IsImageFormatTag) {
-                    await Task.Delay(1000);
-                }
-                string dir = Path.Combine(@"C:\Users\tkefauver\Desktop\test_watch_dir\test", BindingContext.TagName);
-                MpFileIo.CreateDirectory(dir);
-                MpDebug.BreakAll();
-                await BindingContext.ConvertToFolderAsync(dir);
-            }
-        }
 
         private void MpAvTagView_PointerPressed(object sender, PointerPressedEventArgs e) {
             if (!e.IsLeftPress(sender as Visual) ||
@@ -78,14 +65,6 @@ namespace MonkeyPaste.Avalonia {
                     BindingContext.IsPinTagDragging = IsPinTrayTagView();
 
                     var avdo = new MpAvDataObject(MpPortableDataFormats.INTERNAL_TAG_ITEM_FORMAT, BindingContext);
-
-                    string tmp_tag_folder_path = Path.Combine(MpFileIo.TempDirPath, BindingContext.TagName);
-                    if (tmp_tag_folder_path.IsFileOrDirectory()) {
-                        MpFileIo.DeleteFileOrDirectory(tmp_tag_folder_path);
-                    }
-                    var av_fpl = await new string[] { tmp_tag_folder_path }.ToAvFilesObjectAsync();
-                    avdo.SetData(MpPortableDataFormats.AvFiles, av_fpl);
-                    StartExternalDropWatcher(tmp_tag_folder_path);
                     var result = await MpAvDoDragDropWrapper.DoDragDropAsync(dragButton, e, avdo, DragDropEffects.Link | DragDropEffects.Copy);
 
                     if (BindingContext == null) {
@@ -118,30 +97,6 @@ namespace MonkeyPaste.Avalonia {
                 MIN_DISTANCE: 20);
         }
 
-        private void StartExternalDropWatcher(string tmp_tag_folder_path) {
-            MpDebug.Assert(MpFileIo.CreateDirectory(tmp_tag_folder_path), $"Error creating tmp tag dir at '{tmp_tag_folder_path}'");
-
-            MpConsole.WriteLine($"tmp dir: {tmp_tag_folder_path}");
-            Dispatcher.UIThread.Post(async () => {
-                bool created_files = false;
-                while (true) {
-                    if (!BindingContext.IsDragging) {
-                        break;
-                    }
-                    bool is_external =
-                        MpAvWindowManager.LocateWindow(MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation) == null;
-                    if (is_external && !created_files) {
-                        created_files = true;
-                        string output_path = await BindingContext.ConvertToFolderAsync(MpFileIo.TempDirPath, tmp_tag_folder_path);
-                        MpConsole.WriteLine($"Tag written to tmp path: {output_path}");
-                    }
-
-                    await Task.Delay(100);
-                }
-                //MpFileIo.DeleteDirectory(tmp_tag_folder_path);
-
-            });
-        }
 
         private void MpAvTagView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
             InitDnd();

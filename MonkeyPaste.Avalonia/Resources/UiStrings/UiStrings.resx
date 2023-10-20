@@ -545,7 +545,7 @@
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
     <value>Last active app unknown. Switch to intended app to monkey paste.</value>
   </data>
-  <data name="ClipTilePasteButtonTooltip" xml:space="preserve">
+  <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
     <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
@@ -956,5 +956,21 @@
   </data>
   <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
     <value>Trash Capacity Reached!</value>
+  </data>
+  <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
+    <value>{0} is invalid</value>
+    <comment>Label</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption" xml:space="preserve">
+    <value>{0} must be at least {1} characters</value>
+    <comment>Label, number</comment>
+  </data>
+  <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
+    <value>{0} can only be {1} character</value>
+    <comment>Label, number</comment>
+  </data>
+  <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
+    <value>Paste to: '{0}'</value>
+    <comment>Application Name</comment>
   </data>
 </root>

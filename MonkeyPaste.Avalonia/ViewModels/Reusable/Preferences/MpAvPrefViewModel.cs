@@ -379,6 +379,7 @@ namespace MonkeyPaste.Avalonia {
         public string DefaultEditableFontFamily { get; set; } = "Arial";
         public double DefaultFontSize { get; set; } = BASE_DEFAULT_FONT_SIZE;
 
+        public bool HideCapWarnings { get; set; }
         public bool ShowHints { get; set; } = true;
         public double GlobalBgOpacity { get; set; }
 #if DESKTOP

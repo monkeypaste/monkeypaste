@@ -3,6 +3,7 @@
         None = 0,
         Main,
         Settings,
+        Help,
         PopOut,
         Append,
         Toast,

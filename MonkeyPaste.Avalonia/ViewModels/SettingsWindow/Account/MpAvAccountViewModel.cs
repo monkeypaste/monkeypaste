@@ -65,6 +65,11 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPaymentPastDue =>
             HasBillingCycle && DateTime.UtcNow > NextPaymentUtc;
 
+        public bool CanLogin =>
+            !IsLoggedIn &&
+            !string.IsNullOrEmpty(AccountUsername) &&
+            !string.IsNullOrEmpty(AccountPassword);
+
         public bool IsLoggedIn =>
             AccountState == MpUserAccountState.Connected;
         public bool IsRegistered =>
@@ -185,6 +190,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private bool ProcessServerResponse(string response, out Dictionary<string, string> args) {
             response = response.ToStringOrEmpty();
+            ClearErrors();
 
             if (response.StartsWith(SUCCESS_PREFIX) &&
                 response.SplitNoEmpty(SUCCESS_PREFIX) is string[] success_parts) {
@@ -196,7 +202,26 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
+        private void ClearErrors() {
+            var param_tup = MpAvSettingsViewModel.Instance.GetParamAndFrameViewModelsByParamId(nameof(MpAvPrefViewModel.Instance.AccountEmail));
+            if (param_tup == null) {
+                // occurs on startup
+                return;
+            }
+            foreach (var pvm in param_tup.Item1.Items) {
+                pvm.RemoveValidationOverride();
+            }
+
+        }
+
         private void ProcessResponseErrors(Dictionary<string, string> errors) {
+            foreach (var error_kvp in errors) {
+                MpDebug.Assert(RegisterRequestArgs.ContainsKey(error_kvp.Key), $"Missing server input '{error_kvp.Key}'");
+                string param_id = RegisterRequestArgs[error_kvp.Key];
+                var param_tup = MpAvSettingsViewModel.Instance.GetParamAndFrameViewModelsByParamId(param_id);
+                MpDebug.Assert(param_tup != null && param_tup.Item2 != null, $"Could not locate param w/ id '{param_id}'");
+                param_tup.Item2.OverrideValidationMesage(error_kvp.Value);
+            }
 
         }
         private void UpdateAccountViews() {
@@ -274,7 +299,8 @@ namespace MonkeyPaste.Avalonia {
                     await LoginCommand.ExecuteAsync(args);
                 }
             }, (args) => {
-                return !IsLoggedIn;
+                //return !IsLoggedIn;
+                return CanLogin;
             });
 
 

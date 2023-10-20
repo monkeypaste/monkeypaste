@@ -1,8 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.VisualTree;
-using CefNet.Avalonia;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +15,11 @@ namespace MonkeyPaste.Avalonia {
         Filters,
         Trash
     }
-    public class MpAvHelpViewModel : MpAvViewModelBase {
+    public class MpAvHelpViewModel :
+        MpAvViewModelBase,
+        MpICloseWindowViewModel,
+        MpIActiveWindowViewModel,
+        MpIWantsTopmostWindowViewModel {
         #region Private Variables
 
         #endregion
@@ -27,14 +30,44 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvHelpViewModel Instance => _instance ?? (_instance = new MpAvHelpViewModel());
         #endregion
 
+        #region Interfaces
+
+        #region MpIWindowViewModel Implementatiosn
+        public MpWindowType WindowType =>
+            MpWindowType.Help;
+
+        public bool IsWindowOpen { get; set; }
+
+        #endregion
+
+        #region MpIWantsTopmostWindowViewModel Implementation 
+        public bool WantsTopmost =>
+            true;
+
+        #endregion
+
+        #region MpIActiveWindowViewModel Implementation
+        public bool IsWindowActive { get; set; }
+
+        #endregion
+
+        #endregion
+
         #region Properties
 
         #region State
+        public string LoadErrorInfo { get; set; }
 
-        public bool IsHelpEnabled =>
-            true;
+        public bool IsHelpSettingsTabVisible =>
+            false;
 
-        public string InitialUrl { get; set; }
+        public string CurrentUrl { get; set; }
+
+        public MpHelpLinkType LastLinkType { get; private set; }
+
+        public bool IsOffline =>
+            !string.IsNullOrEmpty(LoadErrorInfo);
+
         #endregion
 
         #region Model
@@ -54,10 +87,51 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvHelpViewModel() : base(null) { }
+        public MpAvHelpViewModel() : base(null) {
+            PropertyChanged += MpAvHelpViewModel_PropertyChanged;
+            CurrentUrl = OnlineHelpUriLookup[MpHelpLinkType.None];
+        }
+
         #endregion
 
         #region Public Methods
+        #endregion
+
+        #region Private Methods
+
+        private void MpAvHelpViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(LoadErrorInfo):
+                    OnPropertyChanged(nameof(IsOffline));
+                    break;
+            }
+        }
+
+        private MpAvWindow CreateHelpWindow() {
+            var w = new MpAvWindow() {
+                ShowInTaskbar = true,
+                Width = 1000,
+                Height = 620,
+                Title = UiStrings.SettingsHelpTabLabel.ToWindowTitleText(),
+                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("QuestionMarkImage", typeof(WindowIcon), null, null) as WindowIcon,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                DataContext = this,
+                Content = new MpAvHelpView()
+            };
+            w.Classes.Add("fadeIn");
+
+            void W_Opened(object sender, EventArgs e) {
+                w.Activate();
+            }
+            void W_Closed(object sender, EventArgs e) {
+                w.Opened -= W_Opened;
+                w.Closed -= W_Closed;
+            }
+
+            w.Opened += W_Opened;
+            w.Closed += W_Closed;
+            return w;
+        }
         #endregion
 
         #region Commands
@@ -68,13 +142,29 @@ namespace MonkeyPaste.Avalonia {
                 if (args is MpHelpLinkType argLink) {
                     hlt = argLink;
                 }
+                LastLinkType = hlt;
                 // open/activate settings window and select help tab...
-                await MpAvSettingsViewModel.Instance
-                    .ShowSettingsWindowCommand.ExecuteAsync(MpSettingsTabType.Help);
-                if (MpAvWindowManager.LocateVisual<MpAvHelpView>(this) is MpAvHelpView hv &&
-                    hv.GetVisualDescendant<WebView>() is WebView hwv) {
-                    hwv.Navigate(OnlineHelpUriLookup[hlt]);
+                if (IsHelpSettingsTabVisible) {
+                    await MpAvSettingsViewModel.Instance
+                        .ShowSettingsWindowCommand.ExecuteAsync(MpSettingsTabType.Help);
+                } else {
+                    if (IsWindowOpen) {
+                        IsWindowActive = true;
+                    } else if (Mp.Services.PlatformInfo.IsDesktop) {
+                        var sw = CreateHelpWindow();
+                        sw.ShowChild();
+                        MpMessenger.SendGlobal(MpMessageType.HelpWindowOpened);
+                    }
                 }
+
+                MpConsole.WriteLine($"Help navigating to type '{hlt}' at url '{OnlineHelpUriLookup[hlt]}'");
+
+                CurrentUrl = OnlineHelpUriLookup[hlt];
+
+                //if (MpAvWindowManager.LocateVisual<MpAvHelpView>(this) is MpAvHelpView hv &&
+                //    hv.GetVisualDescendant<WebView>() is WebView hwv) {
+                //    hwv.Navigate(OnlineHelpUriLookup[hlt]);
+                //}
             });
 
         public MpIAsyncCommand NavigateToContextualHelpCommand => new MpAsyncCommand(

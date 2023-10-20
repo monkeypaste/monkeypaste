@@ -296,6 +296,7 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = "Email",
                                             pattern = MpRegEx.RegExLookup[MpRegExType.ExactEmail].ToString(),
+                                            patternInfo = UiStrings.AccountRegistrationInvalidEmailText,
                                             value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountEmail)
                                         },
                                         new MpParameterFormat() {
@@ -570,6 +571,13 @@ namespace MonkeyPaste.Avalonia {
                                                     value = MpAvPrefViewModel.Instance.ShowHints.ToString()
                                                 }
                                             }
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.HideCapWarnings),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Hide Capacity Watermarks",
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.HideCapWarnings.ToString())
                                         },
                                     }
                                 }
@@ -1448,8 +1456,9 @@ namespace MonkeyPaste.Avalonia {
             return piv.GetVisualDescendant<T>();
         }
 
-        private Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId) {
-            if (Items.FirstOrDefault(
+        public Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId) {
+            if (Items != null &&
+                Items.FirstOrDefault(
                         x => x.Items.Any(
                             y => y.ParamId.ToString().ToLower() == paramId.ToLower()))
                         is MpAvSettingsFrameViewModel frame_vm &&
