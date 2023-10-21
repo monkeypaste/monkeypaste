@@ -63,10 +63,8 @@
                     Value="0,0,0,10" />
             <Setter Property="Padding"
                     Value="5" />
-            <Setter Property="MinHeight"
-                    Value="35" />
-            <Setter Property="MaxHeight"
-                    Value="100" />
+            <Setter Property="Height"
+                    Value="80" />
             <Setter Property="Transitions">
                 <Setter.Value>
                     <Transitions>
@@ -247,7 +245,7 @@
                 <Button.Transitions>
                     <Transitions>
                         <DoubleTransition Property="Opacity"
-                                          Duration="0:0:0.5" />
+                                          Duration="0:0:1.0" />
                     </Transitions>
                 </Button.Transitions>
                 <Button.Resources>

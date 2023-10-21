@@ -47,6 +47,12 @@ function getDefaultScrollEndOpts() {
 
 }
 
+function getElementsWithVisibleScrollbars() {
+    if (!isSubSelectionEnabled()) {
+        return [];
+    }
+    return getScrollableElements().filter(x => isScrollbarVisible(x));
+}
 // #endregion Getters
 
 // #region Setters
@@ -54,6 +60,39 @@ function getDefaultScrollEndOpts() {
 // #endregion Setters
 
 // #region State
+
+function isScrollbarVisible(scroll_elm) {
+    if (isVerticalScrollbarVisible(scroll_elm) || isHorizontalScrollbarVisible(scroll_elm)) {
+        return true;
+    }
+    return false;
+}
+function isVerticalScrollbarVisible(scroll_elm) {
+    if (!scroll_elm || scroll_elm.scrollHeight === undefined || scroll_elm.clientHeight == undefined) {
+        return false;
+    }
+    let overflow_prop = getElementComputedStyleProp(scroll_elm, 'overflow-y');
+    if (overflow_prop == 'hidden') {
+        return false;
+    }
+    if (scroll_elm.scrollHeight > scroll_elm.clientHeight) {
+        return true;
+    }
+    return false;
+}
+function isHorizontalScrollbarVisible(scroll_elm) {
+    if (!scroll_elm || scroll_elm.scrollWidth === undefined || scroll_elm.clientWidth == undefined) {
+        return false;
+    }
+    let overflow_prop = getElementComputedStyleProp(scroll_elm, 'overflow-x');
+    if (overflow_prop == 'hidden') {
+        return false;
+    }
+    if (scroll_elm.scrollWidth > scroll_elm.clientWidth) {
+        return true;
+    }
+    return false;
+}
 
 function didEditorScrollChange(old_scroll, new_scroll) {
     if (!old_scroll && !new_scroll) {
@@ -68,46 +107,7 @@ function didEditorScrollChange(old_scroll, new_scroll) {
     return old_scroll.left != new_scroll.left || old_scroll.top != new_scroll.top;
 }
 
-function isAnyVerticalScrollBarVisible() {
-    if (!isSubSelectionEnabled()) {
-        return false;
-    }
-    let scroll_elms = getScrollableElements();
-    for (var i = 0; i < scroll_elms.length; i++) {
-        let scroll_elm = scroll_elms[i];
-        if (!scroll_elm || scroll_elm.scrollHeight === undefined || scroll_elm.clientHeight == undefined) {
-            continue;
-        }
-        let overflow_prop = getElementComputedStyleProp(scroll_elm, 'overflow-x');
-        if (overflow_prop == 'hidden') {
-            continue;
-        }
-        if (scroll_elm.scrollHeight > scroll_elm.clientHeight) {
-            return true;
-        }
-    }
-    return false;
-}
-function isAnyHorizontalScrollBarVisible() {
-    if (!isSubSelectionEnabled()) {
-        return false;
-    }
-    let scroll_elms = getScrollableElements();
-    for (var i = 0; i < scroll_elms.length; i++) {
-        let scroll_elm = scroll_elms[i];
-        if (!scroll_elm || scroll_elm.scrollWidth === undefined || scroll_elm.clientWidth == undefined) {
-            continue;
-        }
-        let overflow_prop = getElementComputedStyleProp(scroll_elm, 'overflow-y');
-        if (overflow_prop == 'hidden') {
-            continue;
-        }
-        if (scroll_elm.scrollWidth > scroll_elm.clientWidth) {
-            return true;
-        }
-    }
-    return false;
-}
+
 
 
 // #endregion State
@@ -200,21 +200,38 @@ function scrollToEnd() {
 }
 
 function updateScrollBarSizeAndPositions() {
-    const cur_x_vis = isAnyHorizontalScrollBarVisible();
-    const cur_y_vis = isAnyVerticalScrollBarVisible();
-    if (cur_x_vis != globals.LastHorizontalScrollBarIsVisible ||
-        cur_y_vis != globals.LastVerticalScrollBarIsVisible) {
-        onScrollBarVisibilityChanged_ntf(cur_x_vis, cur_y_vis);
+    let vis_sb_elms = getElementsWithVisibleScrollbars();
+
+    if (diff(vis_sb_elms, globals.LastScrollBarElms).length > 0) {
+        for (var i = 0; i < vis_sb_elms.length; i++) {
+            let elm = vis_sb_elms[i];
+            elm.addEventListener('pointerenter', onPointerEnterScrollElm);
+            elm.addEventListener('pointerleave', onPointerLeaveScrollElm);
+            if (globals.WindowMouseLoc) {
+                if (isPointInRect(cleanRect(elm.getBoundingClientRect()), globals.WindowMouseLoc)) {
+                    // when scrollbar goes visible and pointer is already within, trigger enter
+                    onPointerEnterScrollElm({ currentTarget: elm });
+                }
+            }
+		}        
+
     }
-    globals.LastVerticalScrollBarIsVisible = cur_y_vis;
-    globals.LastHorizontalScrollBarIsVisible = cur_x_vis;
+    globals.LastScrollBarElms = vis_sb_elms;
 }
+
 
 // #endregion Actions
 
 // #region Event Handlers
 
-
+function onPointerEnterScrollElm(e) {
+    let has_x = isHorizontalScrollbarVisible(e.currentTarget);
+    let has_y = isVerticalScrollbarVisible(e.currentTarget);
+    onScrollBarVisibilityChanged_ntf(has_x, has_y);
+}
+function onPointerLeaveScrollElm(e) {
+    onScrollBarVisibilityChanged_ntf(false,false);
+}
 function onEditorContainerScroll(e) {
     updateFindReplaceRangeRects();
     drawOverlay();

@@ -1,8 +1,4 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Layout;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -17,9 +13,10 @@ namespace MonkeyPaste.Avalonia {
 
 
         #endregion
+
         public MpAvColorPickerView() : this(null) {
         }
-        public MpAvColorPickerView(string selHexColor) : base() {
+        public MpAvColorPickerView(string selHexColor, bool allow_alpha = false) : base() {
             InitializeComponent();
 
             var cancelbtn = this.FindControl<Button>("CancelButton");
@@ -31,15 +28,16 @@ namespace MonkeyPaste.Avalonia {
             if (selHexColor.IsStringHexColor()) {
                 selHexColor = new MpColor(selHexColor).ToHex(true);
             }
-            cp.IsAlphaEnabled = false;
-            cp.IsAlphaVisible = false;
+            cp.IsAlphaEnabled = allow_alpha;
+            cp.IsAlphaVisible = allow_alpha;
+
             cp.Color = string.IsNullOrEmpty(selHexColor) ?
                 //get
                 MpColorHelpers.GetRandomHexColor().ToPortableColor().ToHex(true).ToAvColor() :
                 selHexColor.ToAvColor();
         }
 
-        public MpAvColorPickerView(string selHexColor, string[] palette) : this(selHexColor) {
+        public MpAvColorPickerView(string selHexColor, string[] palette, bool allow_alpha = false) : this(selHexColor, allow_alpha) {
             if (palette == null || palette.Length == 0) {
                 return;
             }
@@ -59,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
         private void Okbtn_Click(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             if (this.GetVisualRoot() is MpAvWindow w) {
                 var cp = this.FindControl<ColorView>("Picker");
-                w.DialogResult = cp.Color.ToPortableColor().ToHex(true);
+                w.DialogResult = cp.Color.ToPortableColor().ToHex(!cp.IsAlphaEnabled);
                 w.Close();
             }
         }

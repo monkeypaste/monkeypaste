@@ -26,8 +26,6 @@ function initAllMatchers() {
     initTemplateMatcher();
 }
 
-
-
 function initTemplateMatcher() {
     if (Quill === undefined) {
         /// host load error case
@@ -61,6 +59,7 @@ function initSpecialCharacterMatcher() {
         return new Delta().insert(decodeHtmlSpecialEntities(node.data));
     });    
 }
+
 function initWhitespaceMatcher() {
     if (Quill === undefined) {
         /// host load error case

@@ -202,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             IsVisible = CurPasteInfoMessage.infoId != null,
-                            Header = $"Paste To '{CurPasteInfoMessage.pasteButtonTooltipHtml}'",
+                            Header = CurPasteInfoMessage.pasteButtonTooltipText,
                             //AltNavIdx = 0,
                             IconSourceObj = CurPasteInfoMessage.pasteButtonIconBase64,
                             Command = PasteSelectedClipTileFromContextMenuCommand,
@@ -471,11 +471,13 @@ namespace MonkeyPaste.Avalonia {
         public bool CanSelect =>
             ScrollVelocity.IsValueEqual(MpPoint.Zero);
 
+        public bool IsScrollDisabled { get; set; }
         public bool CanScroll {
             get {
                 //return true;
 
-                if (MpAvMainWindowViewModel.Instance.IsMainWindowOpening ||
+                if (IsScrollDisabled ||
+                    MpAvMainWindowViewModel.Instance.IsMainWindowOpening ||
                    !MpAvMainWindowViewModel.Instance.IsMainWindowOpen ||
                     IsRequerying/* ||
                    IsScrollingIntoView*/) {
@@ -490,6 +492,7 @@ namespace MonkeyPaste.Avalonia {
                     return true;
                 }
                 // TODO? giving item scroll priority maybe better by checking if content exceeds visible boundaries here
+
                 if ((HoverItem.IsAnyScrollbarVisible && HoverItem.IsSubSelectionEnabled) ||
                     (HoverItem.IsAnyScrollbarVisible && HoverItem.IsContentHovering) ||
                     HoverItem.TransactionCollectionViewModel.IsTransactionPaneOpen) {

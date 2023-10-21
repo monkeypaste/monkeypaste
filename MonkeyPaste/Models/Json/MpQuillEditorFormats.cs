@@ -108,9 +108,9 @@ namespace MonkeyPaste {
         public double editorWidth { get; set; }
         public double editorHeight { get; set; }
     }
-    public class MpQuillScrollBarVisibilityChangedNotification : MpJsonObject {
-        public bool isScrollBarXVisible { get; set; }
-        public bool isScrollBarYVisible { get; set; }
+    public class MpQuillOverrideScrollNotification : MpJsonObject {
+        public bool canScrollX { get; set; }
+        public bool canScrollY { get; set; }
     }
     public class MpQuillShowToolTipNotification : MpJsonObject {
         public string tooltipHtml { get; set; }

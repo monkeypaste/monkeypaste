@@ -71,7 +71,8 @@ namespace MonkeyPaste.Avalonia {
             string title = null,
             MpIUserColorViewModel ucvm = null,
             object owner = null,
-            string[] fixedPalette = null) {
+            string[] fixedPalette = null,
+            bool allowAlpha = false) {
             string result = await Dispatcher.UIThread.InvokeAsync(async () => {
                 MpConsole.WriteLine("Custom color menu opened");
                 owner = owner == null ? MpAvWindowManager.ActiveWindow : owner;
@@ -91,7 +92,7 @@ namespace MonkeyPaste.Avalonia {
                     CanResize = false,
                     SystemDecorations = SystemDecorations.Full,
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                    Content = new MpAvColorPickerView(selectedColor, fixedPalette),
+                    Content = new MpAvColorPickerView(selectedColor, fixedPalette, allowAlpha),
                 };
 
                 //if (owner is MpAvMainWindow) {

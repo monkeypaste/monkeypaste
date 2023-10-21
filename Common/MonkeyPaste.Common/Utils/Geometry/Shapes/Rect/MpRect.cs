@@ -35,6 +35,7 @@ namespace MonkeyPaste.Common {
 
         #region Properties
 
+
         #region Read-Only Properties
 
         public MpPoint TopLeft => new MpPoint(Left, Top);

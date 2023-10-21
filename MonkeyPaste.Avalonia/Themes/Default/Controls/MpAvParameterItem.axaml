@@ -12,9 +12,17 @@
         <Setter Property="BorderBrush"
                 Value="Transparent" />
     </Style>
-  <Style Selector="Border.paramBorder:not(.editableListBorder)">
+    <Style Selector="Border.paramBorder:not(.editableListBorder)">
         <Setter Property="Margin"
                 Value="10,2" />
+    </Style>
+    <Style Selector="Border.editableListBorder local|MpAvContentQueryTextBoxView Border#paramBorder">
+        <Setter Property="Margin"
+                Value="3,2,10,2" />
+    </Style>
+    <Style Selector="Border.editableListBorder local|MpAvContentQueryTextBoxView.canDelete Border#paramBorder">
+        <Setter Property="Margin"
+                Value="3,2,0,2" />
     </Style>
     <Style Selector="Border.paramBorder.sliderBorder">
         <Setter Property="BorderBrush"

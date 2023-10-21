@@ -56,12 +56,13 @@ function onContentChanged_ntf() {
 	sendMessage('notifyContentChanged', msgStr);
 }
 
-function onScrollBarVisibilityChanged_ntf(x_visible, y_visible) {
-	// output 'MpQuillScrollBarVisibilityChangedNotification'
+function onScrollBarVisibilityChanged_ntf(can_x, can_y) {
+	// output 'MpQuillOverrideScrollNotification'
 	const msg = {
-		isScrollBarXVisible: x_visible,
-		isScrollBarYVisible: y_visible
+		canScrollX: can_x,
+		canScrollY: can_y
 	};
+	log('can x: ' + can_x + ' can y: ' + can_y);
 	const msgStr = toBase64FromJsonObj(msg);
 	sendMessage('notifyScrollBarVisibilityChanged', msgStr);
 }

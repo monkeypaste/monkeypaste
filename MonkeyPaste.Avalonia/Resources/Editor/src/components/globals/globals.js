@@ -53,6 +53,7 @@ var globals = {
 
 	AllClassAttributes: [],
 	AllPlainAttributes: [],
+	AllStyleAttributes: [],
 	// #endregion
 
 	// #region CLIPBOARD
@@ -774,8 +775,7 @@ var globals = {
 
 	SuppressNextEditorScrollChangedNotification: false,
 
-	LastVerticalScrollBarIsVisible: false,
-	LastHorizontalScrollBarIsVisible: false,
+	LastScrollBarElms: [],
 	// #region AUTO SCROLL
 
 	AutoScrolledOffset: null,

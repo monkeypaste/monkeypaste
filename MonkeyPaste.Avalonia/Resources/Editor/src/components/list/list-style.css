@@ -11,14 +11,19 @@
     color: var(--defcontentfgcolor);
 }
 
-    .ql-editor li > .ql-ui:before {
+    .ql-editor li > .ql-ui::before {
         bottom: 0;
         left: 0;
         word-break: keep-all;
         padding: inherit;
         display: flex;
         justify-content: flex-end;
+        /*color: pink;*/
     }
+.ql-font-size-33 {
+    font-size: 33px;
+}
+    
 
 /*
 

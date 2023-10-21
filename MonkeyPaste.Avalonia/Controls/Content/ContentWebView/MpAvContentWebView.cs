@@ -460,10 +460,9 @@ namespace MonkeyPaste.Avalonia {
                 #region LAYOUT
 
                 case MpEditorBindingFunctionType.notifyScrollBarVisibilityChanged:
-                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillScrollBarVisibilityChangedNotification>(msgJsonBase64Str);
-                    if (ntf is MpQuillScrollBarVisibilityChangedNotification scrollbarVisibleMsg) {
-                        BindingContext.IsHorizontalScrollbarVisibile = scrollbarVisibleMsg.isScrollBarXVisible;
-                        BindingContext.IsVerticalScrollbarVisibile = scrollbarVisibleMsg.isScrollBarYVisible;
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillOverrideScrollNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillOverrideScrollNotification scrollbarVisibleMsg) {
+                        MpAvClipTrayViewModel.Instance.IsScrollDisabled = scrollbarVisibleMsg.canScrollY;
                     }
                     break;
 
@@ -705,7 +704,8 @@ namespace MonkeyPaste.Avalonia {
                             string pickerResult = await Mp.Services.CustomColorChooserMenuAsync.ShowCustomColorMenuAsync(
                                 selectedColor: showCustomColorPickerMsg.currentHexColor,
                                 title: showCustomColorPickerMsg.pickerTitle,
-                                owner: null);
+                                owner: null,
+                                allowAlpha: true);
 
                             var resp = new MpQuillCustomColorResultMessage() {
                                 customColorResult = pickerResult

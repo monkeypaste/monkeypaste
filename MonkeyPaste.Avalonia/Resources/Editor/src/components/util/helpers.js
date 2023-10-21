@@ -513,6 +513,12 @@ function generateGuid() {
         return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
 }
+function diff(arr1, arr2) {
+    return arr1.filter(x => !arr2.includes(x));
+}
+function generateShortGuid() {
+    return generateGuid().split('-')[0];
+}
 
 function parseBool(text) {
     return text == 'true';

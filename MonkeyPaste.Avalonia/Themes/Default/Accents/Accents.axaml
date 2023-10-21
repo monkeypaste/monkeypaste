@@ -4,6 +4,8 @@
        xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <Style.Resources>
         <sys:Double x:Key="NaN">NaN</sys:Double>
+        <!--<sys:Double x:Key="NegInf">NegativeInfinity</sys:Double>-->
+        <sys:Double x:Key="PosInf">Infinity</sys:Double>
 
         <sys:Double x:Key="GlobalBgOpacity_desktop">0.7</sys:Double>
         <sys:Double x:Key="GlobalBgOpacity_browser">1.0</sys:Double>

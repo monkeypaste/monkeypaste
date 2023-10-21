@@ -220,8 +220,20 @@ function formatDocRange(range, format, source = 'api') {
 }
 
 function replaceFormatInDocRange(range, format, source = 'api') {
+
+	// BUG if format differs after selection start it the change
+	// won't affect that different place so applying format to each
+	// idx by itself
+	for (var idx = range.index; idx < range.index+range.length-1; idx++) {
+		replaceFormatAtDocIdx(idx, format, source);
+	}
+	return;
+}
+
+function replaceFormatAtDocIdx(docIdx, format, source = 'api') {
 	// get cur formatting
-	let replaced_format = getFormatForDocRange(range);
+	let doc_idx_range = { index: docIdx, length: 1 };
+	let replaced_format = getFormatForDocRange(doc_idx_range);
 	// set all orig formatting to false
 	let orig_keys = Object.keys(replaced_format);
 	for (var i = 0; i < orig_keys.length; i++) {
@@ -232,10 +244,7 @@ function replaceFormatInDocRange(range, format, source = 'api') {
 	for (var i = 0; i < new_keys.length; i++) {
 		replaced_format[new_keys[i]] = format[new_keys[i]];
 	}
-
-	formatDocRange(range, replaced_format, source);
-	let test = getFormatForDocRange(range);
-	return;
+	formatDocRange(doc_idx_range, replaced_format, source);
 }
 
 function formatSelection(format, value, source = 'api') {

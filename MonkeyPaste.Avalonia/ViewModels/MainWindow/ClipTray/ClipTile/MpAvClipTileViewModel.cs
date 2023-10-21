@@ -1803,8 +1803,6 @@ namespace MonkeyPaste.Avalonia {
                     Parent.OnPropertyChanged(nameof(Parent.IsQueryHorizontalScrollBarVisible));
                     Parent.OnPropertyChanged(nameof(Parent.IsQueryVerticalScrollBarVisible));
 
-                    OnPropertyChanged(nameof(IsHorizontalScrollbarVisibile));
-                    OnPropertyChanged(nameof(IsVerticalScrollbarVisibile));
                     //IsSubSelectionEnabled = !IsContentReadOnly;
                     OnPropertyChanged(nameof(IsSubSelectionEnabled));
                     OnPropertyChanged(nameof(MinWidth));
@@ -1814,9 +1812,6 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsHorizontalScrollbarVisibile):
                 case nameof(IsVerticalScrollbarVisibile):
-                    if (IsAnyScrollbarVisible) {
-
-                    }
                     break;
                 case nameof(IsContextMenuOpen):
                     Parent.OnPropertyChanged(nameof(Parent.IsAnyTileContextMenuOpened));

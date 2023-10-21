@@ -5,71 +5,54 @@ function initLists() {
 	initCheckableList();
 	//initOrderedList();
 	addClickOrKeyClickEventListener(getListToolbarContainerElement(), onListToolbarButtonClick);
-
-	//getAlignEditorToolbarItemElement().innerHTML = getSvgHtml('align-left');
+	registerListBlot();
 }
 
 function registerListBlot() {
-	
-	//class MyListContainer extends ListContainer {
-	//	static tagName = ["OL", "UL"];
-	//	static defaultTag = "OL";
+	// from https://github.com/quilljs/quill/issues/409#issuecomment-1488435233
 
-	//	static create(value) {
-	//		return document.createElement(this.getTag(value));
-	//	}
+	const customFontFamilyAttributor = registerStyleAttributor('custom-family-attributor', 'font-family',null, true)
+	const customSizeAttributor = registerStyleAttributor('custom-size-attributor', 'font-size', null, true)
+	const customColorAttributor = registerStyleAttributor('custom-color-attributor', 'color', null, true)
 
-	//	static getTag(val) {
-	//		// Our "ql-list" values are "bullet" and "ordered"
-	//		const map = {
-	//			bullet: "UL",
-	//			ordered: "OL",
-	//		};
-	//		return map[val] || this.defaultTag;
-	//	}
+	const ListItemBlot = Quill.import('formats/list');
+	class CustomListItem extends ListItemBlot {
+		optimize(context) {
+			super.optimize(context);
+			if (this.children.length == 0) {
+				return;
+			}
+			const child = this.children.head;
+			const attributes = child?.attributes?.attributes;
 
-	//	checkMerge() {
-	//		// Only merge if the next list is the same type as this one
-	//		return (
-	//			super.checkMerge() &&
-	//			this.domNode.tagName === this.next.domNode.tagName
-	//		);
-	//	}
-	//}
+			if (attributes) {
+				for (const key in attributes) {
+					const element = attributes[key];
+					let name = element.keyName;
+					const value = element.value(child.domNode);
 
-	//class MyListItem extends ListItem {
-	//	static requiredContainer = MyListContainer;
+					if (name === 'color') {
+						super.format('custom-color-attributor', value);
+					}
+					else if (name === 'font-family') {
+						super.format('custom-family-attributor', value);
+					}
+					else if (name === 'font-size') {
+						super.format('custom-size-attributor', value);
+					}
+				}
+			} else {
+				super.format('custom-color-attributor', false);
+				super.format('custom-family-attributor', false);
+				super.format('custom-size-attributor', false);
+			}
+		}
+	}
 
-	//	static register() {
-	//		Quill.register(MyListContainer, true);
-	//	}
-
-	//	optimize(context) {
-	//		if (
-	//			this.statics.requiredContainer &&
-	//			!(this.parent instanceof this.statics.requiredContainer)
-	//		) {
-	//			// Insert the format value (bullet, ordered) into wrap arguments
-	//			this.wrap(
-	//				this.statics.requiredContainer.blotName,
-	//				MyListItem.formats(this.domNode)
-	//			);
-	//		}
-	//		super.optimize(context);
-	//	}
-
-	//	format(name, value) {
-	//		// If the list type is different, wrap this list item in a new MyListContainer of that type
-	//		if (
-	//			name === ListItem.blotName &&
-	//			value !== MyListItem.formats(this.domNode)
-	//		) {
-	//			this.wrap(this.statics.requiredContainer.blotName, value);
-	//		}
-	//		super.format(name, value);
-	//	}
-	//}
-
+	Quill.register(customColorAttributor, true);
+	Quill.register(customFontFamilyAttributor, true);
+	Quill.register(customSizeAttributor, true);
+	Quill.register(CustomListItem, true, true);
 }
 
 // #endregion Life Cycle
@@ -292,6 +275,34 @@ function updateAddListItemToolbarButtonIsEnabled() {
 			x.setAttribute('disabled',true);
 		}
 	});
+}
+
+function updateLists() {
+	let li_elms = getAllListItemElements();
+	for (var i = 0; i < li_elms.length; i++) {
+		let li_elm = li_elms[i];
+
+		let li_id = globals.ListItemIdAttrb.value(li_elm);
+		if (isNullOrEmpty(li_id)) {
+			// add li id
+			li_id = 'elm_' + generateShortGuid();
+			globals.ListItemIdAttrb.add(li_elm, li_id);
+
+		}
+		let li_style_id = 'style_' + li_id.split('elm_')[1];
+		let li_style_node = document.head.querySelector(`style[id="${li_style_id}"]`);
+		if (isNullOrUndefined(li_style_node)) {
+			// add li style elm
+			li_style_node = document.head.appendChild(document.createElement("style"));
+			li_style_node.setAttribute('id', li_style_id);
+
+			//li_style_node.innerHTML = `.ql-editor li#${li_id} > ql-ui::before {color: pink !important;}`;
+			li_style_node.innerHTML = `.ql-editor li#${li_id} > ql-ui::before {font-size: 32px !important;}`;
+		} else {
+
+		}
+	}
+    
 }
 // #endregion Actions
 

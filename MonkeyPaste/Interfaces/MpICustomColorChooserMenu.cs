@@ -10,6 +10,7 @@ namespace MonkeyPaste {
             string title = null,
             MpIUserColorViewModel ucvm = null,
             object owner = null,
-            string[] fixedPalette = null);
+            string[] fixedPalette = null,
+            bool allowAlpha = false);
     }
 }
