@@ -3,6 +3,7 @@ using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -21,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
         const string SUCCESS_PREFIX = "[SUCCESS]";
+        const string ERROR_PREFIX = "[ERROR]";
         const string REGISTER_URL = "https://www.monkeypaste.com/accounts/register.php";
         const string LOGIN_URL = "https://www.monkeypaste.com/accounts/login.php";
         #endregion
@@ -70,6 +72,13 @@ namespace MonkeyPaste.Avalonia {
             !string.IsNullOrEmpty(AccountUsername) &&
             !string.IsNullOrEmpty(AccountPassword);
 
+        public bool IsFree =>
+            AccountType == MpUserAccountType.Free;
+        public bool IsStandard =>
+            AccountType == MpUserAccountType.Standard;
+        public bool IsUnlimited =>
+            AccountType == MpUserAccountType.Unlimited;
+
         public bool IsLoggedIn =>
             AccountState == MpUserAccountState.Connected;
         public bool IsRegistered =>
@@ -83,12 +92,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Request Args
 
-        Dictionary<string, string> RegisterRequestArgs =>
-            new Dictionary<string, string>() {
-                    {"username", MpAvPrefViewModel.Instance.AccountUsername },
-                    {"email", MpAvPrefViewModel.Instance.AccountEmail },
-                    {"password", MpAvPrefViewModel.Instance.AccountPassword },
-                    {"password2", MpAvPrefViewModel.Instance.AccountPassword2 },
+        Dictionary<string, (string, string)> RegisterRequestArgs =>
+            new Dictionary<string, (string, string)>() {
+                    {"username", (nameof(MpAvPrefViewModel.Instance.AccountUsername),MpAvPrefViewModel.Instance.AccountUsername) },
+                    {"email", (nameof(MpAvPrefViewModel.Instance.AccountEmail),MpAvPrefViewModel.Instance.AccountEmail) },
+                    {"password", (nameof(MpAvPrefViewModel.Instance.AccountPassword),MpAvPrefViewModel.Instance.AccountPassword) },
+                    {"password2", (nameof(MpAvPrefViewModel.Instance.AccountPassword2), MpAvPrefViewModel.Instance.AccountPassword2) },
                 };
 
 
@@ -194,8 +203,12 @@ namespace MonkeyPaste.Avalonia {
 
             if (response.StartsWith(SUCCESS_PREFIX) &&
                 response.SplitNoEmpty(SUCCESS_PREFIX) is string[] success_parts) {
-                args = success_parts.Length == 1 ? null : MpJsonConverter.DeserializeObject<Dictionary<string, string>>(success_parts[1]);
+                args = success_parts.Length <= 1 ? null : MpJsonConverter.DeserializeObject<Dictionary<string, string>>(success_parts[1]);
                 return true;
+            }
+            if (response.StartsWith(ERROR_PREFIX) &&
+                response.SplitNoEmpty(ERROR_PREFIX) is string[] error_parts) {
+                response = string.Join(string.Empty, error_parts.Skip(1));
             }
             // error
             args = MpJsonConverter.DeserializeObject<Dictionary<string, string>>(response);
@@ -215,9 +228,12 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void ProcessResponseErrors(Dictionary<string, string> errors) {
+            if (errors == null) {
+                return;
+            }
             foreach (var error_kvp in errors) {
                 MpDebug.Assert(RegisterRequestArgs.ContainsKey(error_kvp.Key), $"Missing server input '{error_kvp.Key}'");
-                string param_id = RegisterRequestArgs[error_kvp.Key];
+                string param_id = RegisterRequestArgs[error_kvp.Key].Item1;
                 var param_tup = MpAvSettingsViewModel.Instance.GetParamAndFrameViewModelsByParamId(param_id);
                 MpDebug.Assert(param_tup != null && param_tup.Item2 != null, $"Could not locate param w/ id '{param_id}'");
                 param_tup.Item2.OverrideValidationMesage(error_kvp.Value);
@@ -239,6 +255,15 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+
+        private void SetButtonBusy(bool is_login, bool is_busy) {
+            var param_id = is_login ? MpRuntimePrefParamType.AccountLogin.ToString() : MpRuntimePrefParamType.AccountRegister.ToString();
+            if (MpAvSettingsViewModel.Instance.GetParamAndFrameViewModelsByParamId(param_id) is var kvp && kvp != null && kvp.Item2 != null) {
+                kvp.Item2.IsBusy = is_busy;
+            } else {
+                // MpDebug.BreakAll();
+            }
+        }
         #endregion
 
         #region Commands
@@ -247,6 +272,7 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand<object> LoginCommand => new MpAsyncCommand<object>(
             async (args) => {
                 // check platform store for subscription, if none found default is returned
+                SetButtonBusy(true, true);
                 MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
 
                 var req_args = new Dictionary<string, string>() {
@@ -264,6 +290,7 @@ namespace MonkeyPaste.Avalonia {
                 var sw = Stopwatch.StartNew();
                 string resp = await MpHttpRequester.PostDataToUrlAsync(LOGIN_URL, req_args);
 
+                SetButtonBusy(true, false);
                 bool success = ProcessServerResponse(resp, out var resp_args);
 
                 MpConsole.WriteLine($"login {success.ToTestResultLabel()}. Time: {sw.ElapsedMilliseconds}ms");
@@ -280,7 +307,6 @@ namespace MonkeyPaste.Avalonia {
                                 MpBillingCycleType.Monthly : MpBillingCycleType.Yearly;
 
                     AccountState = MpUserAccountState.Connected;
-
                     return;
                 }
                 ProcessResponseErrors(resp_args);
@@ -306,14 +332,20 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand RegisterCommand => new MpAsyncCommand(
             async () => {
+                SetButtonBusy(false, true);
                 var sw = Stopwatch.StartNew();
-                string response = await MpHttpRequester.PostDataToUrlAsync(REGISTER_URL, RegisterRequestArgs);
-
+                string response = await MpHttpRequester.PostDataToUrlAsync(REGISTER_URL, RegisterRequestArgs.ToDictionary(x => x.Key, x => x.Value.Item2));
+                SetButtonBusy(false, false);
                 bool success = ProcessServerResponse(response, out var resp_args);
 
                 MpConsole.WriteLine($"Registration {success.ToTestResultLabel()}. Time: {sw.ElapsedMilliseconds}ms");
                 if (success) {
                     AccountState = MpUserAccountState.Disconnected;
+                    Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
+                         title: UiStrings.AccountPurchaseSuccessfulTitle,
+                         message: UiStrings.AccountRegistrationSuccessText,
+                         iconResourceObj: "MonkeyWinkImage").FireAndForgetSafeAsync();
+                    return;
                 }
 
                 ProcessResponseErrors(resp_args);

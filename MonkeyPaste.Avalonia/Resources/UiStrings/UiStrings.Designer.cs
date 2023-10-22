@@ -286,7 +286,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Registration successful!.
+        ///   Looks up a localized string similar to Registration successful! To login just confirm the activation email..
         /// </summary>
         public static string AccountRegistrationSuccessText {
             get {

@@ -37,13 +37,10 @@
                             Value="1" />
                     <Setter Property="HorizontalAlignment"
                             Value="Stretch" />
-                    <!--<Setter Property="IsSelected"
-                            Value="{Binding IsSelected, Mode=OneWay}" />-->
                     <Setter Property="Cursor"
                             Value="Hand" />
-                </Style>
-
-                <Style Selector="ListBoxItem:selected">
+                    <Setter Property="IsTabStop"
+                            Value="True" />
                 </Style>
             </ListBox.Styles>
             <ListBox.ItemTemplate>

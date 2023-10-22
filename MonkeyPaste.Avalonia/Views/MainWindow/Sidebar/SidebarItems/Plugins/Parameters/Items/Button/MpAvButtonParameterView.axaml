@@ -12,11 +12,24 @@
                        d:DesignHeight="450"
                        d:DesignWidth="800">
     <Border Classes="paramBorder">
-        <Button Classes="defaultButton textOnlyButton"
-                HorizontalAlignment="Center"
+        <Button Classes="defaultButton param"
+                HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Command="{Binding ClickCommand}"
-                CommandParameter="{Binding CurrentValue}"
-                Content="{Binding Title}" />
+                CommandParameter="{Binding ClickCommandParameter}">
+            <Grid>
+                <TextBlock IsVisible="{Binding !IsBusy}"
+                           Text="{Binding Title}" />
+                <StackPanel IsVisible="{Binding IsBusy}"
+                            Orientation="Horizontal"
+                            Spacing="5">
+                    <local:MpAvBusySpinnerView HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Width="20"
+                                               Height="20" />
+                    <TextBlock Text="{x:Static local:UiStrings.CommonBusyLabel}" />
+                </StackPanel>
+            </Grid>
+        </Button>
     </Border>
 </local:MpAvUserControl>

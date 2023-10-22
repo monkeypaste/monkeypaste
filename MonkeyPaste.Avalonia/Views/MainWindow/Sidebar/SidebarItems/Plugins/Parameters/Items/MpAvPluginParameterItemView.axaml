@@ -23,9 +23,9 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <!--  LABEL  -->
-                <ColumnDefinition MinWidth="100" />
+                <ColumnDefinition Width="100" />
                 <!--  DESCRIPTION  -->
-                <ColumnDefinition MinWidth="30" />
+                <ColumnDefinition Width="30" />
                 <!--  PARAMETER  -->
                 <ColumnDefinition MinWidth="150"
                                   Width="*" />

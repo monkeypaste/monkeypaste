@@ -1,12 +1,15 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
-using Avalonia.Markup.Xaml;
-using MonkeyPaste.Common;
 using PropertyChanged;
 using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
+
+    public enum MpTooltipHintType {
+        Info,
+        Warning,
+        Error
+    }
     [DoNotNotify]
     public partial class MpAvToolTipInfoHintView : MpAvUserControl<object> {
         #region ToolTipText Direct Avalonia Property

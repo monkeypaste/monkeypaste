@@ -13,6 +13,21 @@
                        d:DesignHeight="450"
                        x:Class="MonkeyPaste.Avalonia.MpAvParameterCollectionView">
     <local:MpAvUserControl.Resources>
+
+        <LinearGradientBrush x:Key="HorizEdgeFade_white" StartPoint="0%,0%" EndPoint="100%,0%">
+            <GradientStop Offset="0" Color="Transparent" />
+            <GradientStop Offset="0.3" Color="{DynamicResource ThemeWhiteColor}" />
+            <GradientStop Offset="0.7" Color="{DynamicResource ThemeWhiteColor}" />
+            <GradientStop Offset="1" Color="Transparent" />
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="HorizEdgeFade_black" StartPoint="0%,0%" EndPoint="100%,0%">
+            <GradientStop Offset="0" Color="Transparent" />
+            <GradientStop Offset="0.3" Color="{DynamicResource ThemeBlackColor}" />
+            <GradientStop Offset="0.7" Color="{DynamicResource ThemeBlackColor}" />
+            <GradientStop Offset="1" Color="Transparent" />
+        </LinearGradientBrush>
+
         <sys:TimeSpan x:Key="FadeTimeSpan">
             0:0:0.2
         </sys:TimeSpan>
@@ -94,12 +109,14 @@
                     Value="0,7" />
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
+            <!--<Setter Property="BorderBrush"
+                    Value="{Binding $parent[local:MpAvParameterCollectionView].Foreground}" />-->
             <Setter Property="BorderBrush"
-                    Value="{Binding $parent[local:MpAvParameterCollectionView].Foreground}" />
+                    Value="{StaticResource HorizEdgeFade_white}" />
             <Setter Property="BorderThickness"
                     Value="0,0,0,2" />
-            <Setter Property="MaxWidth"
-                    Value="300" />
+            <!--<Setter Property="MaxWidth"
+                    Value="300" />-->
         </Style>
 
         <Style Selector="ListBox#PluginParameterListBox > ListBoxItem:nth-last-child()">
@@ -186,7 +203,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-      
+
         <!--  EMPTY OVERLAY  -->
 
         <Border HorizontalAlignment="Center"

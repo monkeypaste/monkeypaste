@@ -342,7 +342,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //await Mp.Services.DefaultDataCreator.CreateDefaultDataAsync();
                 var cil = await MpDataModelProvider.GetCopyItemsByQueryTagIdAsync(
-                        MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsImageFormatTag).TagId,
+                        MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsTextFormatTag).TagId,
                         MpAvQueryViewModel.Instance,
                         MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending,
                         MpAvClipTileSortFieldViewModel.Instance.SelectedSortType,
@@ -352,7 +352,8 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
-                MpAvContentWebView.BreakOnNextLoad = true;
+                //MpAvContentWebView.BreakOnNextLoad = true;
+                MpAvSubscriptionPurchaseViewModel.Instance.UnlimitedItem.DoFocusPulse = true;
 
             });
         #endregion

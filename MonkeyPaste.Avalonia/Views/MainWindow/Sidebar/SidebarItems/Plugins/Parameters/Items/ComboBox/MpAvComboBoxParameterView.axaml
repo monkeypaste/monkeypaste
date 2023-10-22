@@ -24,7 +24,8 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Border Classes="paramBorder">
-        <ComboBox ItemsSource="{Binding Items}"
+        <ComboBox Classes="param"
+                  ItemsSource="{Binding Items}"
                   SelectedIndex="{Binding SelectedItemIdx, Mode=TwoWay}"
                   IsDropDownOpen="{Binding IsParameterDropDownOpen}"
                   HorizontalAlignment="Stretch"

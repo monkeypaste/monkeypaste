@@ -60,7 +60,7 @@
                 local:MpAvLostFocusUpdateBindingExtension.Text="{Binding CurrentTypedValue, Mode=OneWay, StringFormat='{}{0:#,#.}'}"
             -->
             <TextBox x:Name="SliderValueTextBox"
-                     Classes="sliderTextBox"
+                     Classes="sliderTextBox param"
                      Cursor="Ibeam"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      local:MpAvLostFocusUpdateBindingExtension.IsEnabled="True"

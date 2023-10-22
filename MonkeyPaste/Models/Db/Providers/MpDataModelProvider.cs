@@ -524,11 +524,14 @@ namespace MonkeyPaste {
             IEnumerable<int> trash_ciids) {
             var qi = await MpSearchCriteriaItem.CreateQueryCriteriaAsync(qtid, desc, sort);
             // NOTE need to use simple to work right so take current simple
-            simple_qi.SetNext(qi);
-            int total_count = await MpContentQuery.QueryForTotalCountAsync(simple_qi, trash_ciids);
-            var all_ids = await MpContentQuery.FetchItemIdsAsync(simple_qi, 0, total_count, trash_ciids);
-            // NOTE simp querys next is an auto property if next is null so unset so auto again
-            simple_qi.SetNext(null);
+            //simple_qi.SetNext(qi);
+            //int total_count = await MpContentQuery.QueryForTotalCountAsync(simple_qi, trash_ciids);
+            //var all_ids = await MpContentQuery.FetchItemIdsAsync(simple_qi, 0, total_count, trash_ciids);
+            //// NOTE simp querys next is an auto property if next is null so unset so auto again
+            //simple_qi.SetNext(null);
+
+            int total_count = await MpContentQuery.QueryForTotalCountAsync(qi, trash_ciids);
+            var all_ids = await MpContentQuery.FetchItemIdsAsync(qi, 0, total_count, trash_ciids);
 
             var allItems = await MpDb.GetAsyncTable<MpCopyItem>().ToListAsync();
             var result = all_ids.Select(x => allItems.FirstOrDefault(y => y.Id == x));

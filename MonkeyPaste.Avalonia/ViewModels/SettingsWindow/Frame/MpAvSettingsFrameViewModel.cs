@@ -164,6 +164,8 @@ namespace MonkeyPaste.Avalonia {
 
 
         public bool IsVisible { get; set; } = true;
+
+        public MpTooltipHintType FrameHintType { get; set; }
         #endregion
 
         #region Layout
@@ -175,6 +177,7 @@ namespace MonkeyPaste.Avalonia {
         public int SortOrderIdx =>
             (int)FrameType;
 
+        public string FrameHint { get; set; }
         #endregion
         #endregion
 

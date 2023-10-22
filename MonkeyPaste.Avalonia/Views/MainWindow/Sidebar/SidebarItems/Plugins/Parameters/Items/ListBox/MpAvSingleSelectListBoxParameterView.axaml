@@ -26,6 +26,13 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      MaxWidth="{Binding Bounds.Width, ElementName=ListContainerBorder}"
                      MinWidth="80">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem"
+                           x:DataType="local:MpAvEnumerableParameterValueViewModel">
+                        <Setter Property="IsTabStop"
+                                Value="True" />
+                    </Style>
+                </ListBox.Styles>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border BorderThickness="1"

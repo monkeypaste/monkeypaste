@@ -111,6 +111,7 @@
                                  KeyGesture="{Binding KeyGroups}" />
 
         <Button x:Name="RecordButton"
+                Classes="param"
                 Command="{Binding RecordCommand, ElementName=ShortcutView}"
                 CommandParameter="{Binding RecordCommandParameter, ElementName=ShortcutView}"
                 Margin="3"

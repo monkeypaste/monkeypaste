@@ -192,6 +192,10 @@ namespace MonkeyPaste.Avalonia {
                 // likely offline
                 return false;
             }
+            if (!_isContextWindowInitialized) {
+                // window handle error, should probably not happen but dunno
+                return false;
+            }
             // Request a purchase of the subscription product. If a trial is available it will be offered 
             // to the customer. Otherwise, the non-trial SKU will be offered.
             StorePurchaseResult result = await sp.RequestPurchaseAsync();

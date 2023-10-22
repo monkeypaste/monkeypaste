@@ -38,6 +38,18 @@
             </LinearGradientBrush.Transform>
         </LinearGradientBrush>
 
+        <LinearGradientBrush x:Key="GoldBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <GradientStop Offset="0.36" Color="{DynamicResource ThemeAccent1Color}" />
+                <GradientStop Offset="0.77" Color="{DynamicResource ThemeAccent1Color}" />
+                <GradientStop Offset="1" Color="{DynamicResource ThemeInteractiveBgColor}" />
+            </LinearGradientBrush.GradientStops>
+            <LinearGradientBrush.Transform>
+                <RotateTransform />
+            </LinearGradientBrush.Transform>
+        </LinearGradientBrush>
+
         <LinearGradientBrush x:Key="ThemedRainbowBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Offset="0" Color="{DynamicResource ThemeAccent1Color}" />
@@ -59,12 +71,6 @@
                     Value="{Binding IsVisible}" />
             <Setter Property="BorderThickness"
                     Value="0" />
-            <Setter Property="Margin"
-                    Value="0,0,0,10" />
-            <Setter Property="Padding"
-                    Value="5" />
-            <Setter Property="Height"
-                    Value="80" />
             <Setter Property="Transitions">
                 <Setter.Value>
                     <Transitions>
@@ -89,6 +95,11 @@
         </Style>
 
         <Style Selector="ListBoxItem:selected Border#OuterBorder">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource GoldBrush}" />
+        </Style>
+
+        <Style Selector="ListBoxItem:selected Border#OuterBorder.canbuy">
             <Setter Property="BorderBrush"
                     Value="{StaticResource ThemedRainbowBrush}" />
         </Style>
@@ -161,12 +172,17 @@
                     <SolidColorBrush x:Key="SystemControlHighlightListLowBrush">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="SystemControlHighlightListMediumBrush">Transparent</SolidColorBrush>
                     <SolidColorBrush x:Key="SystemControlHighlightListHighBrush">Transparent</SolidColorBrush>
+                    <Thickness x:Key="ListBoxItemPadding">0,1,5,10</Thickness>
                 </ListBox.Resources>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Viewbox>
+                        <Viewbox Stretch="UniformToFill"
+                                 ClipToBounds="False">
                             <!--  ACCOUNT TYPE ITEM OUTER BORDER  -->
                             <Border x:Name="OuterBorder"
+                                    Height="85"
+                                    Padding="10,0,10,0"
+                                    Classes.canbuy="{Binding CanBuy}"
                                     Classes.pulse="{Binding DoFocusPulse}"
                                     local:MpAvIsHoveringExtension.IsEnabled="True"
                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
@@ -183,8 +199,7 @@
                                             Classes="acctIcon squareByHeight"
                                             CornerRadius="7"
                                             BorderThickness="2"
-                                            VerticalAlignment="Top"
-                                            Margin="5"
+                                            VerticalAlignment="Center"
                                             Padding="5">
                                         <Image Width="30"
                                                Height="30"
@@ -193,19 +208,36 @@
                                     </Border>
 
                                     <!--  RATE  -->
-                                    <TextBlock DockPanel.Dock="Right"
-                                               HorizontalAlignment="Left"
-                                               VerticalAlignment="Center"
-                                               TextWrapping="NoWrap"
-                                               TextAlignment="Right"
-                                               FontWeight="SemiBold"
-                                               FontStyle="Italic"
-                                               FontSize="20"
-                                               MinWidth="100"
-                                               Text="{Binding RateText}" />
+                                    <TransitioningContentControl DockPanel.Dock="Right"
+                                                                 VerticalAlignment="Center"
+                                                                 Content="{Binding IsMonthlyEnabled}">
+                                        <TransitioningContentControl.PageTransition>
+                                            <PageSlide Orientation="Vertical"
+                                                       SlideOutEasing="BounceEaseOut"
+                                                       SlideInEasing="BounceEaseIn"
+                                                       Duration="0:00:00.500" />
+                                        </TransitioningContentControl.PageTransition>
+                                        <TransitioningContentControl.ContentTemplate>
+                                            <DataTemplate>
+                                                <Border>
+                                                    <TextBlock x:DataType="local:MpAvSubscriptionItemViewModel"
+                                                               DataContext="{Binding $parent[ListBoxItem].DataContext}"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center"
+                                                               TextWrapping="NoWrap"
+                                                               TextAlignment="Right"
+                                                               FontWeight="SemiBold"
+                                                               FontStyle="Italic"
+                                                               FontSize="20"
+                                                               MinWidth="100"
+                                                               Text="{Binding RateText}" />
+                                                </Border>
+                                            </DataTemplate>
+                                        </TransitioningContentControl.ContentTemplate>
+                                    </TransitioningContentControl>
 
                                     <StackPanel Orientation="Horizontal"
-                                                Spacing="5">
+                                                Spacing="15">
                                         <!--  ACCOUNT TYPE NAME  -->
 
                                         <TextBlock HorizontalAlignment="Stretch"
@@ -218,11 +250,11 @@
 
                                         <!--  ACCOUNT TYPE INFO  -->
                                         <TextBlock HorizontalAlignment="Stretch"
-                                                   VerticalAlignment="Center"
+                                                   VerticalAlignment="Stretch"
                                                    TextWrapping="WrapWithOverflow"
                                                    MaxWidth="200"
                                                    TextAlignment="Left"
-                                                   FontSize="12"
+                                                   FontSize="13"
                                                    Text="{Binding DescriptionText}" />
 
                                     </StackPanel>
@@ -235,13 +267,19 @@
 
             <!--  BUY BUTTON  -->
             <Button x:Name="BuyButton"
+                    x:DataType="local:MpAvSubscriptionItemViewModel"
+                    DataContext="{Binding SelectedItem}"
+                    Classes.shake="{Binding DoFocusPulse}"
                     Grid.Row="2"
                     Loaded="BuyButton_Loaded"
                     Classes="defaultButton"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Opacity="{Binding CanBuy, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
-                    Command="{Binding PurchaseSubscriptionCommand}">
+                    Command="{Binding Parent.PurchaseSubscriptionCommand}">
+                <Button.RenderTransform>
+                    <RotateTransform />
+                </Button.RenderTransform>
                 <Button.Transitions>
                     <Transitions>
                         <DoubleTransition Property="Opacity"
@@ -249,7 +287,7 @@
                     </Transitions>
                 </Button.Transitions>
                 <Button.Resources>
-                    <Thickness x:Key="ButtonPadding">20,10,20,10</Thickness>
+                    <Thickness x:Key="ButtonPadding">20,5,20,5</Thickness>
 
                     <SolidColorBrush x:Key="ButtonBackground">Green</SolidColorBrush>
                     <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Lime</SolidColorBrush>
@@ -258,7 +296,7 @@
                     <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
                     <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                 </Button.Resources>
-                <DockPanel Classes.pulse="{Binding UnlimitedItem.DoFocusPulse}">
+                <DockPanel>
                     <Image DockPanel.Dock="Left"
                            Width="30"
                            Height="30"

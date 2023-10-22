@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSubscriptionItemViewModel :
@@ -104,6 +105,19 @@ namespace MonkeyPaste.Avalonia {
                 MonthlyTrialText :
                 YearlyTrialText;
 
+
+        public string PrePurchaseMessage {
+            get {
+                if (!CanBuy ||
+                    MpAvAccountViewModel.Instance.IsFree ||
+                    !OperatingSystem.IsWindows()) {
+                    return string.Empty;
+                }
+                // microsoft doesn't allow directly change subscription
+                // need to cancel current and then buy new (or I guess it won't work? should test...don't pay though?)
+                return "Windows Store doesn't allow directly changing your subscription. You will need to cancel your plan in order to buy this one.";
+            }
+        }
         #endregion
 
         #region State
@@ -144,6 +158,33 @@ namespace MonkeyPaste.Avalonia {
 
         int YearlyTrialDayCount =>
             MpAvAccountTools.Instance.GetSubscriptionTrialLength(AccountType, false);
+
+        public bool CanBuy {
+            get {
+                if (Parent == null ||
+                    !Parent.IsStoreAvailable ||
+                    AccountType == MpUserAccountType.Free) {
+                    return false;
+                }
+                var ua = MpAvAccountViewModel.Instance;
+                if (ua.IsYearly && ua.IsActive) {
+                    return false;
+                }
+                if ((int)AccountType > (int)ua.AccountType) {
+                    // allow higher
+                    return true;
+                }
+                if ((int)AccountType == (int)ua.AccountType) {
+                    if (!ua.IsYearly && !IsMonthlyEnabled) {
+                        // allow monthly to yearly
+                        return true;
+                    }
+
+                }
+                return false;
+            }
+        }
+
         #endregion
 
         #region Model

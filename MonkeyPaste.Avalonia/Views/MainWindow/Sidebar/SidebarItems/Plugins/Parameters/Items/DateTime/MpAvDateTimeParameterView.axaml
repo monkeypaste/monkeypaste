@@ -14,11 +14,13 @@
     <Border Classes="paramBorder">
         <Grid>
 
-            <TimePicker IsVisible="{Binding IsTimePicker}"
+            <TimePicker Classes="param"
+                        IsVisible="{Binding IsTimePicker}"
                         SelectedTime="{Binding TimeSpanValue, Mode=TwoWay}"
                         ClockIdentifier="12HourClock" />
 
-            <DatePicker IsVisible="{Binding IsDatePicker}"
+            <DatePicker Classes="param"
+                        IsVisible="{Binding IsDatePicker}"
                         SelectedDate="{Binding DateTimeValue, Mode=TwoWay, Converter={x:Static local:MpAvDateTimeToDateTimeOffsetConverter.Instance}}" />
 
         </Grid>

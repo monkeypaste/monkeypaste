@@ -870,7 +870,7 @@
     <value>Remember?</value>
   </data>
   <data name="AccountRegistrationSuccessText" xml:space="preserve">
-    <value>Registration successful!</value>
+    <value>Registration successful! To login just confirm the activation email.</value>
   </data>
   <data name="AccountResetPasswordLabel" xml:space="preserve">
     <value>Reset Password</value>

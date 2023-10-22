@@ -14,21 +14,35 @@
                        x:CompileBindings="True"
                        IsVisible="{Binding IsVisible}"
                        x:Class="MonkeyPaste.Avalonia.MpAvSettingsFrameView">
-    <local:MpAvClipBorder Padding="5">
+    <UserControl.Styles>
+    </UserControl.Styles>
+    <local:MpAvClipBorder Padding="5"
+                          BorderThickness="0"
+                          CornerRadius="10"
+                          BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}">
         <Grid RowDefinitions="Auto,*">
-            <StackPanel Classes="header frame"
-                        Orientation="Horizontal">
-                <Image Classes="frame header icon"
-                       IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
-                       Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
-                <TextBlock Classes="frame header text"
-                           Text="{Binding LabelText}" />
+            <StackPanel Orientation="Vertical"
+                        Spacing="5">
+                <StackPanel Classes="header frame"
+                            Orientation="Horizontal">
+                    <Image Classes="frame header icon"
+                           IsVisible="{Binding IconResourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                           Source="{Binding IconResourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    <TextBlock Classes="frame header text"
+                               Text="{Binding LabelText}" />
+                    <local:MpAvToolTipInfoHintView ToolTipText="{Binding FrameHint}"
+                                                   Classes.info="{Binding FrameHintType, ConverterParameter=Info, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                                                   Classes.warning="{Binding FrameHintType, ConverterParameter=Warning, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                                                   Classes.error="{Binding FrameHintType, ConverterParameter=Error, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}"
+                                                   IsVisible="{Binding FrameHint, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}" />
+
+                </StackPanel>
+
+                <Border Classes="labelUnderline"
+                        Margin="0" />
             </StackPanel>
             <local:MpAvParameterCollectionView x:Name="ParameterCollectionView"
                                                Grid.Row="1"
-                                               BorderThickness="1"
-                                               CornerRadius="10"
-                                               BorderBrush="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}"
                                                HorizontalAlignment="Stretch"
                                                VerticalAlignment="Top" />
         </Grid>

@@ -52,7 +52,7 @@ namespace AltOleHandler {
                     unitType = MpParameterValueUnitType.Integer,
                     minimum = 1,
                     maximum = int.MaxValue,
-                    value = new MpPluginParameterValueFormat(tup.Item3.ToString(), true),
+                    value = new MpPluginParameterValueFormat(tup.Item3.ToString()),
                     paramId = GetParamId(format, isReader, "maxcharcount")
                 });
             }

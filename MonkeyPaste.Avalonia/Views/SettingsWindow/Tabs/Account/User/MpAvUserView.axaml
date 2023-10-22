@@ -11,6 +11,14 @@
              xmlns:pcl="using:MonkeyPaste"
              x:Class="MonkeyPaste.Avalonia.MpAvUserView">
     <UserControl.Styles>
+        <Style Selector="local|MpAvSettingsFrameView">
+            <Setter Property="Width"
+                    Value="450" />
+        </Style>
+        <Style Selector="ListBox#PluginParameterListBox > ListBoxItem">
+            <Setter Property="MaxWidth"
+                    Value="{StaticResource PosInf}" />
+        </Style>
     </UserControl.Styles>
     <local:MpAvSettingsFrameCollectionView HorizontalAlignment="Stretch"
                                            DataContext="{Binding FilteredAccountFrames, Source={x:Static local:MpAvSettingsViewModel.Instance}}" />

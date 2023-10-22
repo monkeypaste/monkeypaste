@@ -50,7 +50,7 @@ function process_errors($errors, $password) {
         return;
     }
     $_SESSION["password_err"] = $errors != NULL && array_key_exists('password',$errors) ? $errors['password']:"";
-    $_SESSION["password2_err"] = $errors != NULL && array_key_exists('password2',$errors) ? $errors['password2']:"";
+    $_SESSION["password2_err"] = $errors != NULL && array_key_exists('confirm',$errors) ? $errors['confirm']:"";
     $_SESSION["new_password"] = $password;
 }
 
@@ -84,7 +84,7 @@ if (is_get_request())
 } else if(is_post_request()) {
     $fields = [
         'password' => 'string | required | secure',
-        'password2' => 'string | required | same: password',
+        'confirm' => 'string | required | same: password',
     ];
     
     $errors = [];
@@ -104,7 +104,7 @@ if (is_get_request())
         if($success) {
             exit_success();
         }
-        process_errors(["password"=>"error","password2"=>""],$inputs['password']);
+        process_errors(["password"=>"error","confirm"=>""],$inputs['password']);
     }
     
     
@@ -139,7 +139,7 @@ if (is_get_request())
             </div>
             <div class="form-group">
                 <label>Confirm Password</label>
-                <input type="password" name="password2" class="form-control <?php echo (!empty($_SESSION["password2_err"])) ? 'is-invalid' : ''; ?>">
+                <input type="password" name="confirm" class="form-control <?php echo (!empty($_SESSION["password2_err"])) ? 'is-invalid' : ''; ?>">
                 <span class="invalid-feedback"><?php echo $_SESSION["password2_err"]; ?></span>
             </div>
             <div class="form-group">

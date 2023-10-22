@@ -40,7 +40,7 @@
         <Setter Property="Margin"
                 Value="3,0,0,0" />
         <Setter Property="FontSize"
-                Value="12" />
+                Value="14" />
         <Setter Property="HorizontalAlignment"
                 Value="Stretch" />
     </Style>
@@ -50,6 +50,15 @@
     </Style>
     <Style Selector="local|MpAvPluginParameterItemView.invalid Border.paramBorder">
         <Setter Property="BorderBrush"
-                Value="{DynamicResource DefaultInvalidBrush}" />
+                Value="Red" />
+        <Setter Property="BorderThickness"
+                Value="2.5" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+    </Style>
+
+    <Style Selector="Border.paramBorder :is(Control).param">
+        <Setter Property="IsTabStop"
+                Value="True" />
     </Style>
 </Styles>

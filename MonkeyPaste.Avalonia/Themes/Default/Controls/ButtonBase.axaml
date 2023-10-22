@@ -16,6 +16,8 @@
                 Value="SemiBold" />
         <Setter Property="HorizontalContentAlignment"
                 Value="Center" />
+        <Setter Property="IsTabStop"
+                Value="True" />
     </Style>
 
     <Style Selector=":is(Button).defaultButton">

@@ -4,13 +4,20 @@
 require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
 
-function login(string $username, string $password): bool
+function login(string $username, string $password, array &$errors): bool
 {
+    if($errors == null) {
+        $errors = [];            
+    }
+
     $account = find_account_by_username($username);
 
     // if account found, check the password
-    if ($account && password_verify($password, $account['password']) && $account['active'] == 1) {
-
+    if ($account && password_verify($password, $account['password'])) {
+        if($account['active'] == 0) {
+            $errors['username'] = 'Please confirm account before logging in';
+            return false;
+        }
         // prevent session fixation attack
         //session_regenerate_id();
         $_SESSION['username'] = $account['username'];
@@ -18,6 +25,7 @@ function login(string $username, string $password): bool
 
         return true;
     }
+    $errors['username'] = 'Login failed';
 
     return false;
 }
@@ -65,7 +73,7 @@ if (is_post_request())
 if ($errors) {
     exit_w_errors($errors);
 }
-$success = login($inputs['username'], $inputs['password']);
+$success = login($inputs['username'], $inputs['password'],$errors);
 
 if($success) {
     // login successful
@@ -76,5 +84,6 @@ if($success) {
     }
     exit_success($resp);
 }
-exit_w_error();
+
+exit_w_errors($errors);
 ?>

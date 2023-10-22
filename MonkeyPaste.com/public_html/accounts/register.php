@@ -47,14 +47,14 @@ $testdata = [
     'username' => 'tkefauver',
     'email' => "tkefauver@gmail.com",
     'password' => '*1Password',
-    'password2' => '*1Password',
+    'confirm' => '*1Password',
 ];
 
 $fields = [
     'username' => 'string | required | alphanumeric | between: 3, 25 | unique: account, username',
     'email' => 'email | required | email | unique: account, email',
     'password' => 'string | required | secure',
-    'password2' => 'string | required | secure | same: password',
+    'confirm' => 'string | required | secure | same: password',
 ];
 
 $errors = [];

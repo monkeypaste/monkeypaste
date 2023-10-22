@@ -86,7 +86,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public IEnumerable<MpAvSettingsFrameViewModel> Items =>
-            TabLookup.SelectMany(x => x.Value);
+            TabLookup == null ? null : TabLookup.SelectMany(x => x.Value);
 
         public Dictionary<MpSettingsTabType, IEnumerable<MpAvSettingsFrameViewModel>> TabLookup { get; set; }
         public Dictionary<MpSettingsTabType, IEnumerable<MpAvSettingsFrameViewModel>> FilteredTabLookup =>
@@ -253,7 +253,7 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountLogout.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            value = new MpPluginParameterValueFormat("Logout","Logout",true)
+                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountLogout.ToString(),"Logout")
                                         }
                                     }
                                 }
@@ -278,15 +278,16 @@ namespace MonkeyPaste.Avalonia {
                                             value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword)
                                         },
                                         new MpParameterFormat() {
-                                            paramId = MpRuntimePrefParamType.AccountRegister.ToString(),
+                                            paramId = MpRuntimePrefParamType.AccountLogin.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            value = new MpPluginParameterValueFormat("Login","Login",true)
+                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountLogin.ToString(),"Login")
                                         }
                                     }
                                 }
                             }
                         },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Register) {
+                            FrameHint = "Registration is cool right?",
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
@@ -323,7 +324,7 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountRegister.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            value = new MpPluginParameterValueFormat("Register","Register",true)
+                                            value = new MpPluginParameterValueFormat() {label = "Register"}
                                         }
                                     }
                                 }
@@ -943,7 +944,7 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.CheckBox,
                                             unitType = MpParameterValueUnitType.Bool,
                                             label = "Show on drag to top of screen",
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop.ToString(),true)
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop.ToString())
                                         }
                                     }
                                 }
@@ -1216,8 +1217,8 @@ namespace MonkeyPaste.Avalonia {
         private MpAvWindow CreateSettingsWindow() {
             var sw = new MpAvWindow() {
                 ShowInTaskbar = true,
-                Width = 1000,
-                Height = 620,
+                Width = 1050,
+                Height = 650,
                 Title = UiStrings.CommonSettingsTitle.ToWindowTitleText(),
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,

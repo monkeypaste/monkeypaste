@@ -53,7 +53,7 @@
             <TextBox x:Name="ContentQueryTextBox"
                      Grid.Column="0"
                      Grid.ColumnSpan="2"
-                     Classes="dnd"
+                     Classes="dnd param"
                      Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}"
                      Classes.multiline="{Binding IsMultiline}"
                      Classes.secure="{Binding IsSecure}"

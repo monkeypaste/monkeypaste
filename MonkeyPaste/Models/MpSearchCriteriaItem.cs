@@ -53,7 +53,7 @@ namespace MonkeyPaste {
         MpLogicalQueryType MpIQueryInfo.JoinType =>
             JoinType;
         int MpIQueryInfo.TagId =>
-            QueryTagId;
+            MpTag.AllTagId;
         int MpIQueryInfo.SortOrderIdx =>
             SortOrderIdx;
         string MpITextMatchInfo.MatchValue => MatchValue;

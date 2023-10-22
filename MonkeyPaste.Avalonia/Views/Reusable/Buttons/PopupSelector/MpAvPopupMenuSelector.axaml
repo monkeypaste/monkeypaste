@@ -43,6 +43,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Button x:Name="ContainerButton"
+            Classes="param"
             Cursor="Hand"
             Padding="0,5"
             CornerRadius="10"

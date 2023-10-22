@@ -1481,6 +1481,11 @@
   
   
   <ItemGroup>
+    <Compile Update="Resources\Legal\Attributions.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Attributions.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\UiStrings\EnumUiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -1811,6 +1816,10 @@
   </ItemGroup>-->
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Legal\Attributions.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Attributions.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumUiStrings.Designer.cs</LastGenOutput>

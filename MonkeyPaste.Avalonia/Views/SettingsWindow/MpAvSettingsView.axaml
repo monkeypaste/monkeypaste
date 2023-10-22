@@ -38,7 +38,7 @@
         <Style Selector="local|MpAvSettingsFrameView">
             <Setter Property="Margin"
                     Value="10" />
-            <Setter Property="Width"
+            <Setter Property="MinWidth"
                     Value="300" />
             <Setter Property="MinHeight"
                     Value="50" />
@@ -95,6 +95,10 @@
 
 
         <!--  HEADERS  -->
+        <Style Selector="StackPanel.header.frame">
+            <Setter Property="Margin"
+                    Value="0,0,0,3" />
+        </Style>
         <Style Selector="StackPanel.header">
             <Setter Property="Spacing"
                     Value="5" />

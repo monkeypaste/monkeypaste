@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvSecureTextBoxExtension {
@@ -88,7 +87,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             tb.Unloaded += Tb_Unloaded;
-            tb.AddHandler(TextBox.PointerPressedEvent, Tb_Reject_Context_PointerPressed_Handler, RoutingStrategies.Tunnel);
             tb.AddHandler(TextBox.CuttingToClipboardEvent, Tb_Reject_Cut_Handler, RoutingStrategies.Tunnel);
             tb.AddHandler(TextBox.CopyingToClipboardEvent, Tb_Reject_Copy_Handler, RoutingStrategies.Tunnel);
             if (tb.ContextMenu != null) {
@@ -105,7 +103,6 @@ namespace MonkeyPaste.Avalonia {
             }
             tb.Loaded -= Tb_Loaded;
             tb.Unloaded -= Tb_Unloaded;
-            tb.RemoveHandler(TextBox.PointerPressedEvent, Tb_Reject_Context_PointerPressed_Handler);
             tb.RemoveHandler(TextBox.CuttingToClipboardEvent, Tb_Reject_Cut_Handler);
             tb.RemoveHandler(TextBox.CopyingToClipboardEvent, Tb_Reject_Copy_Handler);
 
@@ -122,14 +119,6 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             e.Cancel = true;
-        }
-        private static void Tb_Reject_Context_PointerPressed_Handler(object sender, global::Avalonia.Input.PointerPressedEventArgs e) {
-            if (sender is not TextBox tb ||
-                !e.IsRightPress(tb) ||
-                GetIsContextMenuEnabled(tb)) {
-                return;
-            }
-            e.Handled = true;
         }
 
         private static void Tb_Reject_Cut_Handler(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {

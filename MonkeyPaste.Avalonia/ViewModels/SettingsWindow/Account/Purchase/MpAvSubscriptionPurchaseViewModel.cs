@@ -42,31 +42,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsStoreAvailable =>
             !Items.All(x => string.IsNullOrEmpty(x.RateText) || x.RateText == MpAvAccountTools.EMPTY_RATE_TEXT);
 
-        public bool CanBuy {
-            get {
-                if (SelectedItem == null ||
-                    !IsStoreAvailable ||
-                    SelectedItem.AccountType == MpUserAccountType.Free) {
-                    return false;
-                }
-                var ua = MpAvAccountViewModel.Instance;
-                if (ua.IsYearly && ua.IsActive) {
-                    return false;
-                }
-                if ((int)SelectedItem.AccountType > (int)ua.AccountType) {
-                    // allow higher
-                    return true;
-                }
-                if ((int)SelectedItem.AccountType == (int)ua.AccountType) {
-                    if (!ua.IsYearly && !IsMonthlyEnabled) {
-                        // allow monthly to yearly
-                        return true;
-                    }
 
-                }
-                return false;
-            }
-        }
         #endregion
 
         #region Model
@@ -131,9 +107,10 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(IsMonthlyEnabled):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.RateText)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsMonthlyEnabled)));
                     break;
                 case nameof(SelectedItem):
-                    OnPropertyChanged(nameof(CanBuy));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.CanBuy)));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsSelected)));
                     break;
             }

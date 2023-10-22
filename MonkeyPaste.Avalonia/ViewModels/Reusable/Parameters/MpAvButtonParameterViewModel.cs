@@ -14,6 +14,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
+        #region State
+
+        public object ClickCommandParameter => // NOTE when value not provided, use paramId
+            CurrentValue == null ||
+            CurrentValue.ToString() == string.Empty ?
+                ParamId : CurrentValue;
+        #endregion
+
         #region Appearance
 
         private string _title;
