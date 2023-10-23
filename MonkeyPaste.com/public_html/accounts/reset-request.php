@@ -39,11 +39,11 @@ function reset_account_password(int $id, string $reset_code, int $expiry = 1 * 2
 }
 
 $testdata = [
-    'email' => "tkefauver@gmail.com",
+    'username' => "tombo",
 ];
 
 $fields = [
-    'email' => 'string | required',
+    'username' => 'string | required',
 ];
 
 $errors = [];
@@ -65,7 +65,7 @@ if ($errors) {
     exit_w_error("param error");
 }
 
-$account = find_account_by_email($inputs['email']);
+$account = find_account_by_username($inputs['username']);
 if($account == NULL) {
     exit_w_error("account not found.");
 }
@@ -73,8 +73,6 @@ if($account['active'] === 0) {
     exit_w_error("account not activated");
 }
 $reset_code = generate_activation_code();
-println("reset code: ".$reset_code);
-println("accid: ".$account['id']);
 $success = reset_account_password($account['id'],$reset_code);
 if(!$success) {
     exit_w_error("error");

@@ -90,13 +90,13 @@ namespace MonkeyPaste.Avalonia {
 
         public Dictionary<MpSettingsTabType, IEnumerable<MpAvSettingsFrameViewModel>> TabLookup { get; set; }
         public Dictionary<MpSettingsTabType, IEnumerable<MpAvSettingsFrameViewModel>> FilteredTabLookup =>
-            TabLookup.ToDictionary(x => x.Key, x => x.Value.Where(x => x.FilteredItems.Any()));
+            TabLookup == null ? null : TabLookup.ToDictionary(x => x.Key, x => x.Value.Where(x => x.FilteredItems.Any()));
 
         public IEnumerable<MpAvSettingsFrameViewModel> FilteredAccountFrames =>
-            FilteredTabLookup[MpSettingsTabType.Account];
+            FilteredTabLookup == null ? null : FilteredTabLookup[MpSettingsTabType.Account];
 
         public IEnumerable<MpAvSettingsFrameViewModel> FilteredPreferenceFrames =>
-            FilteredTabLookup[MpSettingsTabType.Preferences];
+             FilteredTabLookup == null ? null : FilteredTabLookup[MpSettingsTabType.Preferences];
         public MpAvSettingsFrameViewModel SelectedItem {
             get =>
                 Items
@@ -276,6 +276,11 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = "Password",
                                             value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword)
+                                        },
+                                       new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.AccountResetPassword.ToString(),
+                                            controlType = MpParameterControlType.Hyperlink,
+                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountResetPassword.ToString(),"Forgot Passwprd?")
                                         },
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountLogin.ToString(),
@@ -1721,7 +1726,11 @@ namespace MonkeyPaste.Avalonia {
                         }
 
                     case MpRuntimePrefParamType.AccountLogin: {
-                            MpAvAccountViewModel.Instance.LoginCommand.Execute(null);
+                            MpAvAccountViewModel.Instance.LoginCommand.Execute("click");
+                            break;
+                        }
+                    case MpRuntimePrefParamType.AccountResetPassword: {
+                            MpAvAccountViewModel.Instance.ResetPasswordRequestCommand.Execute(null);
                             break;
                         }
 

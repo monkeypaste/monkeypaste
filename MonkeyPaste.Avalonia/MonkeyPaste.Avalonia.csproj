@@ -503,6 +503,7 @@
     <None Remove="Assets\Images\user2.png" />
     <None Remove="Assets\Images\wand.png" />
     <None Remove="Assets\Images\warning.png" />
+    <None Remove="Assets\Images\warningtime.png" />
     <None Remove="Assets\Images\web.png" />
     <None Remove="Assets\Images\whitecircle.png" />
     <None Remove="Assets\Images\wrench.png" />
@@ -1303,6 +1304,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\warning.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\warningtime.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\web.png">

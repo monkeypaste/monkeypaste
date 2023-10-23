@@ -2,12 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpHttpRequester {
 
-        public static async Task<string> PostDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs, int timeout_ms = 10_000) {
+        public static async Task<string> SubmitPostDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs, int timeout_ms = 10_000) {
             // from https://stackoverflow.com/a/62640006/105028
             using (HttpClient httpClient = new HttpClient())
             using (MultipartFormDataContent formDataContent = new MultipartFormDataContent()) {
@@ -33,6 +34,26 @@ namespace MonkeyPaste.Avalonia {
                     return string.Empty;
                 }
             }
+        }
+
+        public static async Task<string> SubmitGetDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs, int timeout_ms = 10_000) {
+            var sb = new StringBuilder();
+
+            if (keyValuePairs != null) {
+                sb.Append("?");
+                foreach (var (kvp, idx) in keyValuePairs.WithIndex()) {
+                    if (!string.IsNullOrEmpty(kvp.Key)) {
+                        sb.Append(kvp.Key);
+                        sb.Append("=");
+                    }
+                    sb.Append(kvp.Value);
+                    if (idx < keyValuePairs.Count - 1) {
+                        sb.Append("&");
+                    }
+                }
+            }
+            string result = await MpFileIo.ReadTextFromUriAsync(url + sb.ToString(), timeoutMs: timeout_ms);
+            return result;
         }
     }
 }

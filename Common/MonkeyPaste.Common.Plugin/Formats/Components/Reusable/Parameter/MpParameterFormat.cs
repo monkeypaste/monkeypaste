@@ -21,6 +21,7 @@ namespace MonkeyPaste.Common.Plugin {
         Radio,
         ComponentPicker,
         ShortcutRecorder,
+        Hyperlink,
         Button
     }
 

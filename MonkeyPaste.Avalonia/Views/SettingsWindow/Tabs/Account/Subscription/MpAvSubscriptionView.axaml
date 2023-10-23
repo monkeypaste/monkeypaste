@@ -94,12 +94,19 @@
                     Value="{StaticResource HitTestableTransparent}" />
         </Style>
 
+        <Style Selector="Border#OuterBorder.unlimited">
+            <Setter Property="local:MpAvIsHoveringExtension.IsBorderTimerEnabled"
+                    Value="True" />
+            <Setter Property="local:MpAvIsHoveringExtension.TimerDeltaAngle"
+                    Value="1.5" />
+        </Style>
+
         <Style Selector="ListBoxItem:selected Border#OuterBorder">
             <Setter Property="BorderBrush"
                     Value="{StaticResource GoldBrush}" />
         </Style>
 
-        <Style Selector="ListBoxItem:selected Border#OuterBorder.canbuy">
+        <Style Selector="ListBoxItem:not(:selected) Border#OuterBorder.unlimited">
             <Setter Property="BorderBrush"
                     Value="{StaticResource ThemedRainbowBrush}" />
         </Style>
@@ -184,9 +191,10 @@
                                     Padding="10,0,10,0"
                                     Classes.canbuy="{Binding CanBuy}"
                                     Classes.pulse="{Binding DoFocusPulse}"
+                                    Classes.unlimited="{Binding IsUnlimited}"
                                     local:MpAvIsHoveringExtension.IsEnabled="True"
                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                    local:MpAvIsHoveringExtension.IsBorderFollowEnabled="True"
+                                    local:MpAvIsHoveringExtension.IsBorderFollowEnabled="False"
                                     CornerRadius="7"
                                     BorderThickness="2.5">
 

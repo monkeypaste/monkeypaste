@@ -4,6 +4,7 @@ using Avalonia.Data.Converters;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvTemplateDictionaryToItemsSourceConverter : Dictionary<string, IDataTemplate>, IValueConverter {
@@ -45,8 +46,16 @@ namespace MonkeyPaste.Avalonia {
                     continue;
                 }
                 if (mivm.HasLeadingSeparator &&
+                    mil.Any() &&
                     this["Separator"].Build(mivm) is Control sep) {
                     mil.Add(sep);
+                } else if (mivm is MpAvMenuItemViewModel mivm_obj &&
+                            mivm_obj.IsSeparator) {
+                    if (mil.Any() &&
+                       this["Separator"].Build(mivm) is Control sep2) {
+                        mil.Add(sep2);
+                    }
+                    continue;
                 }
                 mil.Add(GetMenuItem(mivm));
             }

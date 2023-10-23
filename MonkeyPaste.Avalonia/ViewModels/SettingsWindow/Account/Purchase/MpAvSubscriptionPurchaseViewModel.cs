@@ -143,24 +143,32 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> PurchaseSubscriptionCommand => new MpAsyncCommand<object>(
             async (args) => {
-                if (MpAvPrefViewModel.Instance.AccountType != MpUserAccountType.Free) {
+                if (MpAvAccountViewModel.Instance.AccountType != MpUserAccountType.Free) {
                     // TODO if there's an active subscription (on microsoft at least) 
                     // need to either automate or explain that current must be cancelled and then subscribe (i think)
                 }
                 bool is_monthly = false;
-                MpUserAccountType purchase_uat = MpUserAccountType.None;
+                MpAvSubscriptionItemViewModel purchase_vm = null;
                 if (args is object[] argParts &&
                     argParts[0] is MpUserAccountType welcome_purchase_uat &&
                     argParts[1] is bool welcome_is_monthly) {
-                    purchase_uat = welcome_purchase_uat;
+                    purchase_vm = Items.FirstOrDefault(x => x.AccountType == welcome_purchase_uat);
                     is_monthly = welcome_is_monthly;
                 } else if (SelectedItem != null) {
-                    purchase_uat = SelectedItem.AccountType;
+                    purchase_vm = SelectedItem;
                     is_monthly = IsMonthlyEnabled;
                 }
-                if (purchase_uat == MpUserAccountType.None) {
+                if (purchase_vm == null) {
                     return;
                 }
+                if (!string.IsNullOrEmpty(purchase_vm.PrePurchaseMessage)) {
+                    // theres store specific logic user should know before attempting purchase,
+                    await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                            title: UiStrings.AccountPrePurchaseNtfTitle,
+                            message: purchase_vm.PrePurchaseMessage,
+                            iconResourceObj: "WarningImage");
+                }
+                MpUserAccountType purchase_uat = SelectedItem.AccountType;
 
 
                 // NOTE to work around login failures or no selection, just default to free i guess

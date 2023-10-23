@@ -103,6 +103,11 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
+        public async Task<bool> CanConnectToStoreAsync() {
+            var storeid_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault();
+            StoreProduct sp = await GetAddOnByStoreIdAsync(storeid_kvp.Key);
+            return sp != null;
+        }
         public async Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync() {
             // get users current ms store state
             StoreAppLicense appLicense = await context.GetAppLicenseAsync();

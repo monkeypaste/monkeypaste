@@ -137,6 +137,13 @@
                             <local:MpAvButtonParameterView />
                         </DataTemplate>
 
+                        <!--  Hyperlink Parameter  -->
+
+                        <DataTemplate x:Key="HyperlinkParameterTemplate"
+                                      DataType="local:MpAvButtonParameterViewModel">
+                            <local:MpAvButtonParameterView />
+                        </DataTemplate>
+
                         <!--  Slider Parameter  -->
 
                         <DataTemplate x:Key="SliderParameterTemplate"

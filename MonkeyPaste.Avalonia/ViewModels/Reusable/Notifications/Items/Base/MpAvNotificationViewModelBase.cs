@@ -46,7 +46,8 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.AnalyzerTimeout:
                 case MpNotificationType.InvalidRequest:
                 case MpNotificationType.InvalidResponse:
-                case MpNotificationType.TrialExpired:
+                case MpNotificationType.AccountLoginFailed:
+                case MpNotificationType.SubscriptionExpired:
                 case MpNotificationType.PluginResponseWarning:
                 case MpNotificationType.FileIoWarning:
                     return MpNotificationLayoutType.Warning;
@@ -281,7 +282,7 @@ namespace MonkeyPaste.Avalonia {
             !ForceShow &&
             MpAvPrefViewModel.Instance != null &&
             MpAvPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
-                    .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                    .SplitNoEmpty(",")
                     .Select(x => Convert.ToInt32(x))
                     .Any(x => x == (int)NotificationType);
         public bool IsFadeDelayFrozen =>

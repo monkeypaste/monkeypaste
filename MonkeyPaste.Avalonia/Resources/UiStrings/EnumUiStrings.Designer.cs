@@ -1249,6 +1249,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account Login Failed.
+        /// </summary>
+        public static string MpNotificationType_AccountLoginFailed {
+            get {
+                return ResourceManager.GetString("MpNotificationType_AccountLoginFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Alert Action.
         /// </summary>
         public static string MpNotificationType_AlertAction {
@@ -1573,20 +1582,20 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Subscription Expired.
+        /// </summary>
+        public static string MpNotificationType_SubscriptionExpired {
+            get {
+                return ResourceManager.GetString("MpNotificationType_SubscriptionExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trash Cap Reached.
         /// </summary>
         public static string MpNotificationType_TrashCapReached {
             get {
                 return ResourceManager.GetString("MpNotificationType_TrashCapReached", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Trial Expired.
-        /// </summary>
-        public static string MpNotificationType_TrialExpired {
-            get {
-                return ResourceManager.GetString("MpNotificationType_TrialExpired", resourceCulture);
             }
         }
         

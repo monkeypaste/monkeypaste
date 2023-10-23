@@ -74,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
                     naipvm = new MpAvCheckBoxParameterViewModel(parent);
                     break;
                 case MpParameterControlType.Button:
+                case MpParameterControlType.Hyperlink:
                     naipvm = new MpAvButtonParameterViewModel(parent);
                     break;
                 case MpParameterControlType.Slider:

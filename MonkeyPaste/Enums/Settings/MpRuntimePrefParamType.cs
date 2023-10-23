@@ -8,6 +8,7 @@
         AccountRegister,
         AccountLogin,
         AccountLogout,
+        AccountResetPassword,
         ThemeHexColor,
         ChangeDbPassword,
         ClearDbPassword

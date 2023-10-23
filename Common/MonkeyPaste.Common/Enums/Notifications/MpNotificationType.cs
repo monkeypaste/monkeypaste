@@ -4,13 +4,15 @@
         // Loader
         Loader,
 
+        SubscriptionExpired,
+        AccountLoginFailed,
+
         // Message
         DbError,
         Help,
         PluginUpdated,
         Message,
         AppModeChange,
-        TrialExpired,
 
         ContentCapReached,
         TrashCapReached,

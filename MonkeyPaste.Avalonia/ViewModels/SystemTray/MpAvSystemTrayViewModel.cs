@@ -215,7 +215,7 @@ namespace MonkeyPaste.Avalonia {
                     !Mp.Services.StartupState.IsReady) {
                     return $"Please wait {Mp.Services.ThisAppInfo.ThisAppProductName} is loading...";
                 }
-                return $"[{MpAvPrefViewModel.Instance.AccountEmail}] {MpAvAccountTools.Instance.AccountStateInfo.Replace(" - ", Environment.NewLine)}";
+                return $"[{MpAvPrefViewModel.Instance.AccountEmail}] {MpAvAccountViewModel.Instance.AccountStateInfo.Replace(" - ", Environment.NewLine)}";
             }
         }
 
@@ -353,7 +353,8 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 await Task.Delay(1);
                 //MpAvContentWebView.BreakOnNextLoad = true;
-                MpAvSubscriptionPurchaseViewModel.Instance.UnlimitedItem.DoFocusPulse = true;
+                //MpAvSubscriptionPurchaseViewModel.Instance.UnlimitedItem.DoFocusPulse = true;
+                MpAvAccountViewModel.Instance.ResetAccountCommand.Execute(null);
 
             });
         #endregion

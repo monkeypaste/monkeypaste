@@ -11,11 +11,24 @@
                        mc:Ignorable="d"
                        d:DesignHeight="450"
                        d:DesignWidth="800">
+    <local:MpAvUserControl.Styles>
+        <Style Selector="Button.param"
+               x:DataType="local:MpAvButtonParameterViewModel">
+            <Setter Property="Command"
+                    Value="{Binding ClickCommand}" />
+        </Style>
+        <Style Selector="Button.param.link.trynav"
+               x:DataType="local:MpAvButtonParameterViewModel">
+            <Setter Property="Command"
+                    Value="{Binding NavigateToUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
     <Border Classes="paramBorder">
         <Button Classes="defaultButton param"
+                Classes.link="{Binding IsLink}"
+                Classes.trynav="{Binding ClickCommand, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
-                Command="{Binding ClickCommand}"
                 CommandParameter="{Binding ClickCommandParameter}">
             <Grid>
                 <TextBlock IsVisible="{Binding !IsBusy}"

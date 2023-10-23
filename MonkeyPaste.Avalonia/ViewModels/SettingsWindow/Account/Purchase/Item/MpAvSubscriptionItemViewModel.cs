@@ -115,7 +115,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 // microsoft doesn't allow directly change subscription
                 // need to cancel current and then buy new (or I guess it won't work? should test...don't pay though?)
-                return "Windows Store doesn't allow directly changing your subscription. You will need to cancel your plan in order to buy this one.";
+                return UiStrings.AccountPrePurchaseWindowsNtfCaption;
             }
         }
         #endregion
@@ -159,6 +159,8 @@ namespace MonkeyPaste.Avalonia {
         int YearlyTrialDayCount =>
             MpAvAccountTools.Instance.GetSubscriptionTrialLength(AccountType, false);
 
+        public bool IsUnlimited =>
+            AccountType == MpUserAccountType.Unlimited;
         public bool CanBuy {
             get {
                 if (Parent == null ||
@@ -167,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
                     return false;
                 }
                 var ua = MpAvAccountViewModel.Instance;
-                if (ua.IsYearly && ua.IsActive) {
+                if (ua.IsYearly && !ua.IsExpired) {
                     return false;
                 }
                 if ((int)AccountType > (int)ua.AccountType) {

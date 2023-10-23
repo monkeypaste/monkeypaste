@@ -106,6 +106,42 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The payment for your {0} subscription was due {1} and has not been received. Please update your payment information..
+        /// </summary>
+        public static string AccountExpiredNtfLocalCaption {
+            get {
+                return ResourceManager.GetString("AccountExpiredNtfLocalCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The payment for your {0} subscription was due {1} and has not been received. Please connect to the internet on the device with your subscription and restart in order to continue using your {0} plan.
+        /// </summary>
+        public static string AccountExpiredNtfOfflineCaption {
+            get {
+                return ResourceManager.GetString("AccountExpiredNtfOfflineCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The payment for your {0} subscription was due {1} and has not been received. Please open MonkeyPaste on the device with your subscription and restart to continue using your {0} plan..
+        /// </summary>
+        public static string AccountExpiredNtfRemoteCaption {
+            get {
+                return ResourceManager.GetString("AccountExpiredNtfRemoteCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Expired.
+        /// </summary>
+        public static string AccountExpiredNtfTitle {
+            get {
+                return ResourceManager.GetString("AccountExpiredNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Free {0}-Day Trial.
         /// </summary>
         public static string AccountFreeTrialLabel {
@@ -133,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login Failed :(.
+        ///   Looks up a localized string similar to Login for account &apos;{0}&apos; failed..
         /// </summary>
         public static string AccountLoginFailedText {
             get {
@@ -201,6 +237,24 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountPasswordLabel {
             get {
                 return ResourceManager.GetString("AccountPasswordLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note.
+        /// </summary>
+        public static string AccountPrePurchaseNtfTitle {
+            get {
+                return ResourceManager.GetString("AccountPrePurchaseNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows Store doesn&apos;t allow directly changing your subscription. You will need to cancel your plan in order to buy this one..
+        /// </summary>
+        public static string AccountPrePurchaseWindowsNtfCaption {
+            get {
+                return ResourceManager.GetString("AccountPrePurchaseWindowsNtfCaption", resourceCulture);
             }
         }
         
@@ -291,6 +345,15 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountRegistrationSuccessText {
             get {
                 return ResourceManager.GetString("AccountRegistrationSuccessText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your password has been reset. Please check your email and follow the link to change your password..
+        /// </summary>
+        public static string AccountResetPasswordCaption {
+            get {
+                return ResourceManager.GetString("AccountResetPasswordCaption", resourceCulture);
             }
         }
         

@@ -19,6 +19,7 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
         static MpAvIsHoveringExtension() {
             IsEnabledProperty.Changed.AddClassHandler<Control>((x, y) => HandleIsEnabledChanged(x, y));
+            IsBorderTimerEnabledProperty.Changed.AddClassHandler<Control>((x, y) => OnIsBorderTimerEnabledChanged(x, y));
         }
 
         #endregion
@@ -40,6 +41,44 @@ namespace MonkeyPaste.Avalonia {
                 false,
                 false,
                 BindingMode.TwoWay);
+        #endregion
+
+        #region IsBorderTimerEnabled AvaloniaProperty
+        public static bool GetIsBorderTimerEnabled(AvaloniaObject obj) {
+            return obj.GetValue(IsBorderTimerEnabledProperty);
+        }
+
+        public static void SetIsBorderTimerEnabled(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsBorderTimerEnabledProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsBorderTimerEnabledProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsBorderTimerEnabled",
+                false);
+
+        private static void OnIsBorderTimerEnabledChanged(Control c, AvaloniaPropertyChangedEventArgs e) {
+            if (GetIsBorderTimerEnabled(c)) {
+                StartFollowTimer(c);
+            } else {
+                StopFollowTimer(c);
+            }
+        }
+        #endregion
+
+        #region TimerDeltaAngle AvaloniaProperty
+        public static double GetTimerDeltaAngle(AvaloniaObject obj) {
+            return obj.GetValue(TimerDeltaAngleProperty);
+        }
+
+        public static void SetTimerDeltaAngle(AvaloniaObject obj, double value) {
+            obj.SetValue(TimerDeltaAngleProperty, value);
+        }
+
+        public static readonly AttachedProperty<double> TimerDeltaAngleProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, double>(
+                "TimerDeltaAngle",
+                5);
 
         #endregion
 
@@ -101,7 +140,12 @@ namespace MonkeyPaste.Avalonia {
 
         private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
             if (s is Control control) {
+
+                if (GetIsBorderTimerEnabled(control)) {
+                    StartFollowTimer(control);
+                }
                 control.DetachedFromVisualTree += DetachedToVisualHandler;
+
                 control.PointerEntered += PointerEnterHandler;
                 control.PointerExited += PointerLeaveHandler;
                 if (e == null) {
@@ -116,6 +160,10 @@ namespace MonkeyPaste.Avalonia {
                 control.DetachedFromVisualTree -= DetachedToVisualHandler;
                 control.PointerEntered -= PointerEnterHandler;
                 control.PointerExited -= PointerLeaveHandler;
+
+                if (GetIsBorderTimerEnabled(control)) {
+                    StopFollowTimer(control);
+                }
             }
         }
 
@@ -125,8 +173,7 @@ namespace MonkeyPaste.Avalonia {
             }
             SetIsHovering(control, true);
             if (GetIsBorderFollowEnabled(control)) {
-                //control.PointerMoved += Tc_PointerMoved;
-                StartFollowTimer(control);
+                control.PointerMoved += Tc_PointerMoved;
             }
         }
 
@@ -137,14 +184,14 @@ namespace MonkeyPaste.Avalonia {
             }
             SetIsHovering(control, false);
             if (GetIsBorderFollowEnabled(control)) {
-                //control.PointerMoved -= Tc_PointerMoved;
-                StopFollowTimer(control);
+                control.PointerMoved -= Tc_PointerMoved;
                 _last_mp = null;
             }
         }
 
         private static void Tc_PointerMoved(object sender, PointerEventArgs e) {
-            if (sender is not Control c) {
+            if (sender is not Control c ||
+                !GetIsBorderFollowEnabled(c)) {
                 return;
             }
 
@@ -162,7 +209,7 @@ namespace MonkeyPaste.Avalonia {
 
         private static void StartFollowTimer(Control c) {
             void _timer_Tick(object sender, EventArgs e) {
-                RotateBorderBrush(_timer.Tag as Control, 5);
+                RotateBorderBrush(_timer.Tag as Control, GetTimerDeltaAngle(c));
             }
             if (_timer == null) {
                 _timer = new DispatcherTimer() {
@@ -208,7 +255,7 @@ namespace MonkeyPaste.Avalonia {
                 rt.Angle += angle_delta;
             }
             rt.Angle = rt.Angle.Wrap(0, 360);
-            MpConsole.WriteLine($"Brush angle: {rt.Angle}");
+            //MpConsole.WriteLine($"Brush angle: {rt.Angle}");
 
             c.Redraw();
         }

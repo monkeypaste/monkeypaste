@@ -86,6 +86,7 @@ namespace MonkeyPaste.Avalonia {
             "text.png",
             "trophy.png",
             "warning.png",
+            "warningtime.png",
             "yandexicon.png",
         };
 

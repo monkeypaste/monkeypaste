@@ -51,59 +51,37 @@ namespace MonkeyPaste.Avalonia {
         //        }
 
 
-        public string AccountStateInfo {
-            get {
-                if (MpAvAccountViewModel.Instance == null) {
-                    return string.Empty;
-                }
-                var uat = MpAvAccountViewModel.Instance.AccountType;
-                if (uat == MpUserAccountType.Unlimited) {
-                    return $"{uat}-(Total {_lastContentCount})";
-                }
-                return $"{uat} - ({_lastContentCount} total / {GetContentCapacity(uat)} capacity {(GetContentCapacity(uat) - _lastContentCount)} remaining)";
-            }
-        }
 
-        public MpUserAccountType CurrentAccountType {
-            get => MpAvPrefViewModel.Instance.AccountType;
-            private set {
-                if (CurrentAccountType != value) {
-                    MpAvPrefViewModel.Instance.AccountType = value;
-                }
-            }
-        }
+        public int LastContentCount =>
+            _lastContentCount;
+
 
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {
+                default:
                 case MpUserAccountType.Free:
                     return MAX_FREE_CLIP_COUNT;
                 case MpUserAccountType.Standard:
                     return MAX_STANDARD_CLIP_COUNT;
                 case MpUserAccountType.Unlimited:
                     return MAX_UNLIMITED_CLIP_COUNT;
-                default:
-                case MpUserAccountType.None:
-                    return 0;
             }
         }
 
         public int GetTrashCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {
+                default:
                 case MpUserAccountType.Free:
                     return MAX_FREE_TRASH_COUNT;
                 case MpUserAccountType.Standard:
                     return MAX_STANDARD_TRASH_COUNT;
                 case MpUserAccountType.Unlimited:
                     return MAX_UNLIMITED_TRASH_COUNT;
-                default:
-                case MpUserAccountType.None:
-                    return 0;
             }
         }
 
         public string GetAccountRate(MpUserAccountType acctType, bool isMonthly) {
-            if (acctType == MpUserAccountType.None ||
-                acctType == MpUserAccountType.Free) {
+            if (acctType == MpUserAccountType.Free) {
                 return string.Empty;
             }
             if (AccountTypePriceLookup.TryGetValue((acctType, isMonthly), out string rate)) {

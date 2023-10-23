@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Properties
+
         #endregion
 
         #region Constructors

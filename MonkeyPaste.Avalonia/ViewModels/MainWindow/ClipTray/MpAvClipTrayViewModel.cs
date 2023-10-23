@@ -1744,7 +1744,7 @@ namespace MonkeyPaste.Avalonia {
             _isProcessingCap = true;
 
             string last_cap_info = MpAvAccountTools.Instance.LastCapInfo.ToString();
-            MpUserAccountType account_type = MpAvAccountViewModel.Instance.AccountType;
+            MpUserAccountType account_type = MpAvAccountViewModel.Instance.WorkingAccountType;
             var cap_info = await MpAvAccountTools.Instance.RefreshCapInfoAsync(account_type);
             MpConsole.WriteLine($"Account cap refreshed. SourceControl: '{source}' Args: '{arg.ToStringOrDefault()}' Info:", true);
             MpConsole.WriteLine(cap_info.ToString(), false, true);

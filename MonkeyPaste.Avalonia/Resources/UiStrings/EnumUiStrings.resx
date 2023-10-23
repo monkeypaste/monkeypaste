@@ -147,8 +147,11 @@
   <data name="MpNotificationType_AppModeChange" xml:space="preserve">
     <value>App Mode Change</value>
   </data>
-  <data name="MpNotificationType_TrialExpired" xml:space="preserve">
-    <value>Trial Expired</value>
+  <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
+    <value>Subscription Expired</value>
+  </data>
+  <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
+    <value>Account Login Failed</value>
   </data>
   <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
     <value>Content Cap Reached</value>

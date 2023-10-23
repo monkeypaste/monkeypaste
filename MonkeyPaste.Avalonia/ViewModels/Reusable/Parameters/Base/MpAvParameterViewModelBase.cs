@@ -308,6 +308,7 @@ namespace MonkeyPaste.Avalonia {
                         case MpParameterControlType.PasswordBox:
                         case MpParameterControlType.TextBox:
                         case MpParameterControlType.MultiLineTextBox:
+                        case MpParameterControlType.Hyperlink:
                         case MpParameterControlType.List:
                         case MpParameterControlType.ComboBox:
                             return MpParameterValueUnitType.PlainText;

@@ -837,7 +837,8 @@
     <value>Login</value>
   </data>
   <data name="AccountLoginFailedText" xml:space="preserve">
-    <value>Login Failed :(</value>
+    <value>Login for account '{0}' failed.</value>
+    <comment>Username</comment>
   </data>
   <data name="AccountLoginSuccessfulText" xml:space="preserve">
     <value>Login Sucessful!</value>
@@ -972,5 +973,29 @@
   <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
     <value>Paste to: '{0}'</value>
     <comment>Application Name</comment>
+  </data>
+  <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
+    <value>The payment for your {0} subscription was due {1} and has not been received. Please update your payment information.</value>
+    <comment>Subscription Type, Date</comment>
+  </data>
+  <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
+    <value>The payment for your {0} subscription was due {1} and has not been received. Please connect to the internet on the device with your subscription and restart in order to continue using your {0} plan</value>
+    <comment>Subscription Type, Date</comment>
+  </data>
+  <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
+    <value>The payment for your {0} subscription was due {1} and has not been received. Please open MonkeyPaste on the device with your subscription and restart to continue using your {0} plan.</value>
+    <comment>Subscription Type, Date</comment>
+  </data>
+  <data name="AccountExpiredNtfTitle" xml:space="preserve">
+    <value>Account Expired</value>
+  </data>
+  <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
+    <value>Windows Store doesn't allow directly changing your subscription. You will need to cancel your plan in order to buy this one.</value>
+  </data>
+  <data name="AccountResetPasswordCaption" xml:space="preserve">
+    <value>Your password has been reset. Please check your email and follow the link to change your password.</value>
   </data>
 </root>

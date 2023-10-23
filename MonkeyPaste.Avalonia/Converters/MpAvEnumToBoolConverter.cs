@@ -7,7 +7,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly MpAvEnumToBoolConverter Instance = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            if(value == null ||
+            if (value == null ||
                 value.ToString() is not string valStr ||
                 parameter is not string paramStr) {
                 return false;

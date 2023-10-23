@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using MonkeyPaste.Common.Plugin;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -20,6 +21,10 @@ namespace MonkeyPaste.Avalonia {
             CurrentValue == null ||
             CurrentValue.ToString() == string.Empty ?
                 ParamId : CurrentValue;
+
+        public bool IsLink =>
+            ControlType == MpParameterControlType.Hyperlink;
+
         #endregion
 
         #region Appearance
