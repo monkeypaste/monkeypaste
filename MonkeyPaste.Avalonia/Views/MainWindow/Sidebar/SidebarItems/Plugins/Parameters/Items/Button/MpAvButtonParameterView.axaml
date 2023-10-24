@@ -24,9 +24,10 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Border Classes="paramBorder">
+      <!-- NOTE when control is hyperlink and cmd is not set it'll use CurrentValue as Nav uri  -->
         <Button Classes="defaultButton param"
                 Classes.link="{Binding IsLink}"
-                Classes.trynav="{Binding ClickCommand, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                Classes.trynav="{Binding ClickCommand, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 CommandParameter="{Binding ClickCommandParameter}">

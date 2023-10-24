@@ -133,7 +133,8 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                 }
-                if (MpAvWindowManager.MainWindow.IsActive) {
+                if (MpAvWindowManager.MainWindow != null &&
+                    MpAvWindowManager.MainWindow.IsActive) {
                     MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
                 }
                 NavigateToUri(uri);

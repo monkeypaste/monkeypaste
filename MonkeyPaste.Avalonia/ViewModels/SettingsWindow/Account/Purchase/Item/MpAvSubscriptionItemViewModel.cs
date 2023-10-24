@@ -2,6 +2,11 @@
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+    public static class MpAvAccountExtensions {
+        public static bool IsPaidType(this MpUserAccountType uat) {
+            return uat == MpUserAccountType.Standard || uat == MpUserAccountType.Unlimited;
+        }
+    }
     public class MpAvSubscriptionItemViewModel :
         MpAvViewModelBase<MpAvSubscriptionPurchaseViewModel>,
         MpAvIPulseViewModel {
@@ -80,10 +85,14 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         string MonthlyRateText =>
-            MpAvAccountTools.Instance.GetAccountRate(AccountType, true);
+            AccountType.IsPaidType() ?
+            MpAvAccountTools.Instance.GetAccountRate(AccountType, true) :
+            string.Empty;
 
         string YearlyRateText =>
-            MpAvAccountTools.Instance.GetAccountRate(AccountType, false);
+            AccountType.IsPaidType() ?
+            MpAvAccountTools.Instance.GetAccountRate(AccountType, false) :
+            string.Empty;
 
         public string RateText =>
             IsMonthlyEnabled ?
@@ -115,6 +124,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 // microsoft doesn't allow directly change subscription
                 // need to cancel current and then buy new (or I guess it won't work? should test...don't pay though?)
+                // from https://learn.microsoft.com/en-us/windows/uwp/monetize/enable-subscription-add-ons-for-your-app#unsupported-scenarios
                 return UiStrings.AccountPrePurchaseWindowsNtfCaption;
             }
         }
@@ -137,8 +147,8 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsSelected));
                 }
             }
-
         }
+
 
         public bool IsHovering { get; set; }
 
@@ -219,6 +229,10 @@ namespace MonkeyPaste.Avalonia {
                 DescriptionText2 = isMonthly ? MonthlyRateText : YearlyRateText,
                 IsChecked = AccountType == MpUserAccountType.Unlimited && !isMonthly
             };
+        }
+
+        public override string ToString() {
+            return $"Subscription Type: {AccountType}";
         }
         #endregion
 

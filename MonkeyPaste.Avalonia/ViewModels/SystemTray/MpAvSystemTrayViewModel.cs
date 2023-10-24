@@ -347,7 +347,8 @@ namespace MonkeyPaste.Avalonia {
                         MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending,
                         MpAvClipTileSortFieldViewModel.Instance.SelectedSortType,
                         MpAvTagTrayViewModel.Instance.TrashedCopyItemIds);
-            });
+            }) {
+        };
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {

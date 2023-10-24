@@ -178,11 +178,20 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login Sucessful!.
+        ///   Looks up a localized string similar to Login sucessful!.
         /// </summary>
         public static string AccountLoginSuccessfulText {
             get {
                 return ResourceManager.GetString("AccountLoginSuccessfulText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string AccountLoginWindowTitle {
+            get {
+                return ResourceManager.GetString("AccountLoginWindowTitle", resourceCulture);
             }
         }
         

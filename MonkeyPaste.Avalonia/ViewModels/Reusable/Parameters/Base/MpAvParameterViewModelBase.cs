@@ -529,6 +529,8 @@ namespace MonkeyPaste.Avalonia {
         public void OverrideValidationMesage(string msg) {
             IsValidationOverrideEnabled = true;
             ValidationMessage = msg;
+            //OnPropertyChanged(nameof(IsValid));
+            //Validate();
         }
         public void RemoveValidationOverride() {
             IsValidationOverrideEnabled = false;
@@ -593,9 +595,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected virtual void MpAnalyticItemParameterViewModel_OnValidate(object sender, EventArgs e) {
-            if (IsValidationOverrideEnabled) {
-                return;
-            }
+            //if (IsValidationOverrideEnabled) {
+            //    return;
+            //}
             OnPropertyChanged(nameof(IsValid));
         }
         protected bool CanSetModelValue() {

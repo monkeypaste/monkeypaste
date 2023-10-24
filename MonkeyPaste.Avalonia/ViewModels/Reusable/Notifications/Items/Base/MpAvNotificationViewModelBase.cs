@@ -283,8 +283,8 @@ namespace MonkeyPaste.Avalonia {
             MpAvPrefViewModel.Instance != null &&
             MpAvPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr
                     .SplitNoEmpty(",")
-                    .Select(x => Convert.ToInt32(x))
-                    .Any(x => x == (int)NotificationType);
+                    .Select(x => x.ToEnum<MpNotificationType>())
+                    .Any(x => x == NotificationType);
         public bool IsFadeDelayFrozen =>
             MaxShowTimeMs > 0 &&
             (IsHovering || IsPinned || IsPopupMenuOpen);
@@ -478,7 +478,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(DoNotShowAgain):
                     if (DoNotShowAgain) {
-                        MpAvPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr += NotificationId + ",";
+                        MpAvPrefViewModel.Instance.DoNotShowAgainNotificationIdCsvStr += $"{NotificationType},";
                         // show loop checks if DoNotShowAgain is true to hide
                     }
                     break;

@@ -139,7 +139,7 @@ namespace MonkeyPaste.Avalonia {
         #region View Models
 
         public IEnumerable<MpAvParameterViewModelBase> FilteredItems =>
-            Items
+            Items == null ? null : Items
             .Where(x =>
             (x as MpIFilterMatch).IsFilterMatch(MpAvSettingsViewModel.Instance.FilterText) &&
             !MpAvSettingsViewModel.Instance.HiddenParamIds.Contains(x.ParamId.ToStringOrEmpty()));

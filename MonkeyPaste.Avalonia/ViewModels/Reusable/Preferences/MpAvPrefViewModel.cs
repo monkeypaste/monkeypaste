@@ -342,6 +342,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Account
 
+        public DateTime LastLoginDateTimeUtc { get; set; } = DateTime.MinValue;
         public string AccountUsername { get; set; }
         public string AccountEmail { get; set; }
         public string AccountPassword { get; set; }

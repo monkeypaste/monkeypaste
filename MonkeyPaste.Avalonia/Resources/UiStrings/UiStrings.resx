@@ -841,7 +841,7 @@
     <comment>Username</comment>
   </data>
   <data name="AccountLoginSuccessfulText" xml:space="preserve">
-    <value>Login Sucessful!</value>
+    <value>Login sucessful!</value>
   </data>
   <data name="AccountLogoutButtonText" xml:space="preserve">
     <value>Log out</value>
@@ -997,5 +997,8 @@
   </data>
   <data name="AccountResetPasswordCaption" xml:space="preserve">
     <value>Your password has been reset. Please check your email and follow the link to change your password.</value>
+  </data>
+  <data name="AccountLoginWindowTitle" xml:space="preserve">
+    <value>Login</value>
   </data>
 </root>

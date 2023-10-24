@@ -103,7 +103,8 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public bool IsAccountOptSelected { get; set; }
 
-        public bool IsAccountMonthEnabled { get; set; } = false;
+        public bool IsAccountMonthlyChecked { get; set; } = false;
+        public bool IsAccountMonthToggleEnabled { get; set; } = true;
         public override bool WantsTopmost =>
             false;
 
@@ -214,7 +215,7 @@ namespace MonkeyPaste.Avalonia {
                         //MpDebug.BreakAll(true, false);
                     }
                     break;
-                case nameof(IsAccountMonthEnabled):
+                case nameof(IsAccountMonthlyChecked):
                     if (AccountViewModel == null) {
                         break;
                     }
@@ -222,7 +223,7 @@ namespace MonkeyPaste.Avalonia {
                     MpUserAccountType sel_item_type = sel_item == null ? MpUserAccountType.Unlimited : (MpUserAccountType)sel_item.OptionId;
                     foreach (var (optvm, idx) in AccountViewModel.Items.WithIndex()) {
                         optvm.IsOptionVisible =
-                            IsAccountMonthEnabled ? idx >= 4 : idx < 4;
+                            IsAccountMonthlyChecked ? idx >= 4 : idx < 4;
                         MpUserAccountType uat = (MpUserAccountType)optvm.OptionId;
                         optvm.IsChecked = optvm.IsOptionVisible && uat == sel_item_type;
                     }

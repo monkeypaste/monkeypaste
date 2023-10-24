@@ -90,7 +90,7 @@ namespace MonkeyPaste.Avalonia {
 
         public Dictionary<MpSettingsTabType, IEnumerable<MpAvSettingsFrameViewModel>> TabLookup { get; set; }
         public Dictionary<MpSettingsTabType, IEnumerable<MpAvSettingsFrameViewModel>> FilteredTabLookup =>
-            TabLookup == null ? null : TabLookup.ToDictionary(x => x.Key, x => x.Value.Where(x => x.FilteredItems.Any()));
+            TabLookup == null ? null : TabLookup.ToDictionary(x => x.Key, x => x.Value.Where(x => x.FilteredItems != null && x.FilteredItems.Any()));
 
         public IEnumerable<MpAvSettingsFrameViewModel> FilteredAccountFrames =>
             FilteredTabLookup == null ? null : FilteredTabLookup[MpSettingsTabType.Account];
@@ -159,8 +159,24 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool IsLoginOnly =>
+            MpAvWelcomeNotificationViewModel.Instance.IsWindowOpen;
+
         public ObservableCollection<bool> IsTabSelected { get; set; }
 
+        #endregion
+
+        #region Appearance
+
+        public GridLength AccountColumnWidth =>
+            IsLoginOnly ?
+                new GridLength(1, GridUnitType.Star) :
+                new GridLength(0.5, GridUnitType.Star);
+
+        public GridLength SubscriptionColumnWidth =>
+            IsLoginOnly ?
+                new GridLength(0) :
+                new GridLength(0.5, GridUnitType.Star);
         #endregion
 
         #endregion
@@ -1075,10 +1091,11 @@ namespace MonkeyPaste.Avalonia {
                                     ppvf.value : string.Empty
                             }, fvm)));
 
-                // map button cmds (currently only in system frame)
+                // map button cmds 
                 fvm.Items
-                    .Where(x => x.ControlType == MpParameterControlType.Button)
-                    .Cast<MpAvButtonParameterViewModel>()
+                    //.Where(x => x.ControlType == MpParameterControlType.Button || x.ControlType == MpParameterControlType.Hyperlink)
+                    //.Cast<MpAvButtonParameterViewModel>()
+                    .OfType<MpAvButtonParameterViewModel>()
                     .ForEach(x => x.ClickCommand = ButtonParameterClickCommand);
 
 
@@ -1220,17 +1237,35 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpAvWindow CreateSettingsWindow() {
-            var sw = new MpAvWindow() {
-                ShowInTaskbar = true,
-                Width = 1050,
-                Height = 650,
-                Title = UiStrings.CommonSettingsTitle.ToWindowTitleText(),
-                Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                DataContext = this,
-                Content = new MpAvSettingsView()
-            };
-            sw.Classes.Add("fadeIn");
+            MpAvWindow sw = null;
+            if (IsLoginOnly) {
+                sw = new MpAvWindow() {
+                    ShowInTaskbar = false,
+                    MinWidth = 200,
+                    MinHeight = 200,
+                    Width = 500,
+                    Height = 280,
+                    CanResize = false,
+                    SizeToContent = SizeToContent.Manual,
+                    Title = UiStrings.AccountLoginWindowTitle.ToWindowTitleText(),
+                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LoginImage", typeof(WindowIcon), null, null) as WindowIcon,
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    DataContext = this,
+                    Content = new MpAvSettingsView(),
+                };
+            } else {
+                sw = new MpAvWindow() {
+                    ShowInTaskbar = true,
+                    Width = 1050,
+                    Height = 650,
+                    Title = UiStrings.CommonSettingsTitle.ToWindowTitleText(),
+                    Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
+                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    DataContext = this,
+                    Content = new MpAvSettingsView(),
+                };
+                sw.Classes.Add("fadeIn");
+            }
 
             void Sw_Opened(object sender, EventArgs e) {
                 sw.Activate();
@@ -1390,21 +1425,24 @@ namespace MonkeyPaste.Avalonia {
 
         private void SetupPasswordButtons() {
             Dispatcher.UIThread.VerifyAccess();
-            var clear_pwd_param_tuple = GetParamAndFrameViewModelsByParamId(MpRuntimePrefParamType.ClearDbPassword.ToString());
-            clear_pwd_param_tuple.Item2.IsEnabled = Mp.Services.DbInfo.HasUserDefinedPassword;
+            if (TryGetParamAndFrameViewModelsByParamId(MpRuntimePrefParamType.ClearDbPassword.ToString(), out var clear_pwd_param_tuple)) {
+                clear_pwd_param_tuple.Item2.IsEnabled = Mp.Services.DbInfo.HasUserDefinedPassword;
+            }
 
-            var change_pwd_param_tuple = GetParamAndFrameViewModelsByParamId(MpRuntimePrefParamType.ChangeDbPassword.ToString());
-            if (change_pwd_param_tuple.Item2 is MpAvButtonParameterViewModel bpvm) {
-                bpvm.Title =
-                    Mp.Services.DbInfo.HasUserDefinedPassword ? "Change" : "Set";
+            if (TryGetParamAndFrameViewModelsByParamId(MpRuntimePrefParamType.ChangeDbPassword.ToString(), out var change_pwd_param_tuple)) {
+                if (change_pwd_param_tuple.Item2 is MpAvButtonParameterViewModel bpvm) {
+                    bpvm.Title =
+                        Mp.Services.DbInfo.HasUserDefinedPassword ? "Change" : "Set";
+                }
             }
         }
         #endregion
 
         private void ProcessListenOnStartupChanged() {
             Dispatcher.UIThread.VerifyAccess();
-            var add_startup_param_tupe = GetParamAndFrameViewModelsByParamId(nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup));
-            add_startup_param_tupe.Item2.IsEnabled = MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup;
+            if (TryGetParamAndFrameViewModelsByParamId(nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup), out var add_startup_param_tupe)) {
+                add_startup_param_tupe.Item2.IsEnabled = MpAvPrefViewModel.Instance.IsClipboardListeningOnStartup;
+            }
         }
 
         #region Font Helpers
@@ -1465,15 +1503,19 @@ namespace MonkeyPaste.Avalonia {
         public Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId) {
             if (Items != null &&
                 Items.FirstOrDefault(
-                        x => x.Items.Any(
-                            y => y.ParamId.ToString().ToLower() == paramId.ToLower()))
+                        x => x.Items != null && x.Items.Any(
+                            y => y.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower()))
                         is MpAvSettingsFrameViewModel frame_vm &&
-                        frame_vm.Items.FirstOrDefault(x => x.ParamId.ToString().ToLower() == paramId.ToLower())
+                        frame_vm.Items.FirstOrDefault(x => x.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower())
                         is MpAvParameterViewModelBase param_vm) {
                 MpDebug.Assert(param_vm.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower(), $"param assert failed '{paramId}'");
                 return new Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase>(frame_vm, param_vm);
             }
             return null;
+        }
+        public bool TryGetParamAndFrameViewModelsByParamId(string paramId, out Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> result) {
+            result = GetParamAndFrameViewModelsByParamId(paramId);
+            return result != null && result.Item1 != null && result.Item2 != null;
         }
         #endregion
 
@@ -1726,7 +1768,7 @@ namespace MonkeyPaste.Avalonia {
                         }
 
                     case MpRuntimePrefParamType.AccountLogin: {
-                            MpAvAccountViewModel.Instance.LoginCommand.Execute("click");
+                            MpAvAccountViewModel.Instance.LoginCommand.Execute(MpLoginSourceType.Click);
                             break;
                         }
                     case MpRuntimePrefParamType.AccountResetPassword: {

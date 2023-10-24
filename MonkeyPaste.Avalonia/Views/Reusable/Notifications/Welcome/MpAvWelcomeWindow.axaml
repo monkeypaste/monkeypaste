@@ -11,6 +11,7 @@
                   x:CompileBindings="False"
                   x:DataType="local:MpAvWelcomeNotificationViewModel"
                   local:MpAvMoveWindowExtension.IsEnabled="True"
+                  IsEnabled="{Binding !IsWindowOpen, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
                   Background="Transparent"
                   WindowStartupLocation="CenterScreen"
                   SizeToContent="Manual"

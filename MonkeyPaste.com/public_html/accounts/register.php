@@ -53,8 +53,8 @@ $testdata = [
 $fields = [
     'username' => 'string | required | alphanumeric | between: 3, 25 | unique: account, username',
     'email' => 'email | required | email | unique: account, email',
-    'password' => 'string | required | secure',
-    'confirm' => 'string | required | secure | same: password',
+    'password' => 'string | required | secure | same: confirm',
+    'confirm' => 'string | required | secure',
 ];
 
 $errors = [];
@@ -79,13 +79,8 @@ if ($errors) {
 $activation_code = generate_activation_code();
 $success = register_user($inputs['username'], $inputs['email'], $inputs['password'], $activation_code);
 if ($success) {
-    // account created, add subscription 
-    // $new_account_id = db()->lastInsertId();
-    // $success = add_subscription($new_account_id, $inputs['device_guid'], $inputs['sub_type'], $inputs['monthly'] == "1", $inputs['expires_utc_dt'], $inputs['detail1'], $inputs['detail2'], $inputs['detail3']);
-    //if ($success) {
-        send_activation_email($inputs['username'], $inputs['email'], $activation_code);
-        exit_success();
-    //}
+    send_activation_email($inputs['username'], $inputs['email'], $activation_code);
+    exit_success();
 }
 
 exit_w_error();

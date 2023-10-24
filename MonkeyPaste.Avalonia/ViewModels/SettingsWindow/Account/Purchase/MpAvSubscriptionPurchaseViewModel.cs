@@ -143,10 +143,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> PurchaseSubscriptionCommand => new MpAsyncCommand<object>(
             async (args) => {
-                if (MpAvAccountViewModel.Instance.AccountType != MpUserAccountType.Free) {
-                    // TODO if there's an active subscription (on microsoft at least) 
-                    // need to either automate or explain that current must be cancelled and then subscribe (i think)
-                }
                 bool is_monthly = false;
                 MpAvSubscriptionItemViewModel purchase_vm = null;
                 if (args is object[] argParts &&
@@ -161,6 +157,13 @@ namespace MonkeyPaste.Avalonia {
                 if (purchase_vm == null) {
                     return;
                 }
+
+                IsMonthlyEnabled = is_monthly;
+                if (!purchase_vm.CanBuy) {
+                    MpConsole.WriteLine($"Cannot buy {purchase_vm} monthly: {is_monthly}");
+                    return;
+                }
+
                 if (!string.IsNullOrEmpty(purchase_vm.PrePurchaseMessage)) {
                     // theres store specific logic user should know before attempting purchase,
                     await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(

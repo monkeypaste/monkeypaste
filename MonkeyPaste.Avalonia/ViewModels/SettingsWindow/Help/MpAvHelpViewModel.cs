@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -112,6 +111,7 @@ namespace MonkeyPaste.Avalonia {
                 ShowInTaskbar = true,
                 Width = 1000,
                 Height = 620,
+                ShowActivated = true,
                 Title = UiStrings.SettingsHelpTabLabel.ToWindowTitleText(),
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("QuestionMarkImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
@@ -119,17 +119,6 @@ namespace MonkeyPaste.Avalonia {
                 Content = new MpAvHelpView()
             };
             w.Classes.Add("fadeIn");
-
-            void W_Opened(object sender, EventArgs e) {
-                w.Activate();
-            }
-            void W_Closed(object sender, EventArgs e) {
-                w.Opened -= W_Opened;
-                w.Closed -= W_Closed;
-            }
-
-            w.Opened += W_Opened;
-            w.Closed += W_Closed;
             return w;
         }
         #endregion

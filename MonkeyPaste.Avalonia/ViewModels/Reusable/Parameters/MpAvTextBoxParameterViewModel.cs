@@ -154,9 +154,9 @@ namespace MonkeyPaste.Avalonia {
             if (IsValidationOverrideEnabled) {
                 return;
             }
-            if (CurrentValue.Length < MinLength) {
+            if (CurrentValue != null && CurrentValue.Length < MinLength) {
                 ValidationMessage = string.Format(UiStrings.ParameterInvalidLengthCaption, Label, MinLength);
-            } else if (CurrentValue.Length > MaxLength) {
+            } else if (CurrentValue != null && CurrentValue.Length > MaxLength) {
                 ValidationMessage = string.Format(UiStrings.ParameterInvalidLengthCaption2, Label, MinLength);
             } else if (!string.IsNullOrEmpty(Pattern) && !Regex.IsMatch(CurrentValue, Pattern)) {
                 ValidationMessage = PatternInfo;

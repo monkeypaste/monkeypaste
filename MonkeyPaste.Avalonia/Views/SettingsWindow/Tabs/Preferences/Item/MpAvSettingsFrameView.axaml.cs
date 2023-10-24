@@ -1,7 +1,5 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Threading;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Collections.ObjectModel;
@@ -43,26 +41,29 @@ namespace MonkeyPaste.Avalonia {
             if (e.Container is not ListBoxItem lbi) {
                 return;
             }
-            lbi.AttachedToVisualTree += Lbi_AttachedToVisualTree;
-            if (lbi.IsAttachedToVisualTree()) {
-                Lbi_AttachedToVisualTree(lbi, null);
+            lbi.Loaded += Lbi_Loaded;
+            if (lbi.IsLoaded) {
+                Lbi_Loaded(lbi, null);
             }
         }
 
-        private void Lbi_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+        private void Lbi_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             if (sender is not ListBoxItem lbi) {
                 return;
             }
             Dispatcher.UIThread.Post(async () => {
                 var ppiv = await lbi.GetVisualDescendantAsync<MpAvPluginParameterItemView>();
-                ppiv.AttachedToVisualTree += Ppiv_AttachedToVisualTree;
-                if (ppiv.IsAttachedToVisualTree()) {
-                    Ppiv_AttachedToVisualTree(ppiv, null);
+                if (ppiv == null) {
+                    return;
+                }
+                ppiv.Loaded += Ppiv_Loaded;
+                if (ppiv.IsLoaded) {
+                    Ppiv_Loaded(ppiv, null);
                 }
             });
         }
 
-        private void Ppiv_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+        private void Ppiv_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             if (sender is not MpAvPluginParameterItemView ppiv ||
                 ParamViews.Contains(ppiv)) {
                 return;

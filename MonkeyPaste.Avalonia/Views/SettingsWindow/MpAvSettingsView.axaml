@@ -370,7 +370,9 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <DockPanel LastChildFill="True">
-        <StackPanel DockPanel.Dock="Top"
+        <StackPanel x:Name="TabAndFilterPanel"
+                    IsVisible="{Binding !IsLoginOnly}"
+                    DockPanel.Dock="Top"
                     Orientation="Vertical">
 
             <!--  TABS PANEL  -->
@@ -431,7 +433,9 @@
         </StackPanel>
 
         <!--  Footer  -->
-        <Border DockPanel.Dock="Bottom"
+        <Border x:Name="FooterContainer"
+                IsVisible="{Binding !IsLoginOnly}"
+                DockPanel.Dock="Bottom"
                 HorizontalAlignment="Stretch"
                 BorderThickness="0,1.5,0,0"
                 BorderBrush="Silver"

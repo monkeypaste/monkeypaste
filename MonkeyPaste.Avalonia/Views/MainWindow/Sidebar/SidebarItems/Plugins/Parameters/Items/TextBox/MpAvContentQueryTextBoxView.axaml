@@ -25,6 +25,10 @@
         <Style Selector="TextBox.secure">
             <Setter Property="PasswordChar"
                     Value="•" />
+            <Setter Property="AcceptsTab"
+                    Value="False" />
+            <Setter Property="AcceptsReturn"
+                    Value="False" />
         </Style>
         <Style Selector="TextBox.secure.dark">
             <!--<Setter Property="PasswordChar"
@@ -71,6 +75,7 @@
             <!--  CLEAR TEXT BUTTON  -->
 
             <local:MpAvClearTextButton x:Name="ClearButton"
+                                       IsTabStop="false"
                                        Grid.Column="1"
                                        Classes="TextBoxButton square"
                                        Height="20"

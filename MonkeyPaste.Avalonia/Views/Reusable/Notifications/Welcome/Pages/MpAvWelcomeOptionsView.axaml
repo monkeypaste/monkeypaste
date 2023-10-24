@@ -16,7 +16,7 @@
     <local:MpAvUserControl.Styles>
         <!--  OPTION BUTTONS  -->
 
-        <Style Selector="RadioButton.gestureButton">
+        <Style Selector="RadioButton.optButton">
             <Style.Resources>
                 <SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
@@ -29,15 +29,19 @@
                 <Thickness x:Key="ToggleButtonBorderThemeThickness">2.5</Thickness>
             </Style.Resources>
         </Style>
-        <Style Selector="RadioButton.gestureButton:pointerover Image, RadioButton.gestureButton:checked Image">
+        <Style Selector="RadioButton.optButton.busy">
+            <Setter Property="Cursor"
+                    Value="Wait" />
+        </Style>
+        <Style Selector="RadioButton.optButton:pointerover Image, RadioButton.optButton:checked Image">
             <!--<Setter Property="Effect"
                     Value="drop-shadow(5 5 7 black)" />-->
         </Style>
-        <Style Selector="RadioButton.gestureButton:pointerover TextBlock">
+        <Style Selector="RadioButton.optButton:pointerover TextBlock">
             <!--<Setter Property="Effect"
                     Value="drop-shadow(0 0 3 white)" />-->
         </Style>
-        <Style Selector="RadioButton.gestureButton:checked TextBlock">
+        <Style Selector="RadioButton.optButton:checked TextBlock">
             <!--<Setter Property="Effect"
                     Value="drop-shadow(0 0 3 white)" />-->
         </Style>
@@ -195,8 +199,9 @@
                       FontSize="16"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Center"
+                      IsEnabled="{Binding IsAccountMonthToggleEnabled}"
                       IsVisible="{Binding IsAccountOptSelected}"
-                      IsChecked="{Binding IsAccountMonthEnabled, Mode=TwoWay}"
+                      IsChecked="{Binding IsAccountMonthlyChecked, Mode=TwoWay}"
                       FontWeight="SemiBold"
                       OnContent="{x:Static local:UiStrings.AccountMonthlyLabel}"
                       OffContent="{x:Static local:UiStrings.AccountYearlyLabel}" />
@@ -228,7 +233,8 @@
                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                                     Classes="rejectWindowMove"
                                     Background="{StaticResource HitTestableTransparent}">
-                                <RadioButton Classes="defaultButton gestureButton effectTrans"
+                                <RadioButton Classes="defaultButton optButton effectTrans"
+                                             Classes.busy="{Binding IsBusy}"
                                              Theme="{StaticResource SwitchlessRadioButton}"
                                              CornerRadius="7"
                                              Margin="15"
@@ -237,6 +243,7 @@
                                              Height="230"
                                              HorizontalContentAlignment="Center"
                                              VerticalContentAlignment="Center"
+                                             IsEnabled="{Binding IsEnabled}"
                                              Command="{Binding CheckOptionCommand}"
                                              IsChecked="{Binding IsChecked, Mode=OneWay}">
                                     <DockPanel HorizontalAlignment="Stretch"

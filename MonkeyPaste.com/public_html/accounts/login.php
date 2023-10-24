@@ -4,19 +4,15 @@
 require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
 
-function login(string $username, string $password, array &$errors): bool
+function login(string $username, string $password): bool
 {
-    if($errors == null) {
-        $errors = [];            
-    }
 
     $account = find_account_by_username($username);
 
     // if account found, check the password
     if ($account && password_verify($password, $account['password'])) {
         if($account['active'] == 0) {
-            $errors['username'] = 'Please confirm account before logging in';
-            return false;
+            exit_w_error('Please confirm account before logging in');
         }
         // prevent session fixation attack
         //session_regenerate_id();
@@ -25,7 +21,7 @@ function login(string $username, string $password, array &$errors): bool
 
         return true;
     }
-    $errors['username'] = 'Login failed';
+    exit_w_error('Login failed');
 
     return false;
 }
@@ -73,17 +69,17 @@ if (is_post_request())
 if ($errors) {
     exit_w_errors($errors);
 }
-$success = login($inputs['username'], $inputs['password'],$errors);
+$success = login($inputs['username'], $inputs['password']);
 
 if($success) {
     // login successful
     $resp = add_or_update_subscription($inputs['username'], $inputs['device_guid'], $inputs['sub_type'], $inputs['monthly'] == "1", $inputs['expires_utc_dt'], $inputs['detail1'], $inputs['detail2'], $inputs['detail3']);
     if($resp == NULL) {
         // error
-        exit_w_error();
+        exit_w_error('Error, please try again later.');
     }
     exit_success($resp);
 }
 
-exit_w_errors($errors);
+exit_w_error('Unknown error');
 ?>

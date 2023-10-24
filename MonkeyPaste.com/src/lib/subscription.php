@@ -120,7 +120,6 @@ function update_subscription(string $username, string $device_guid,string $sub_t
 
 function add_subscription(int $accid, string $device_guid, string $sub_type, bool $is_monthly, string $expires_utc_dt, string $detail1, string $detail2, string $detail3)
 {
-    println('add called');
     $sql = 'INSERT INTO subscription(fk_account_id, device_guid, sub_type, monthly, expires_utc_dt, detail1, detail2, detail3)
                                 VALUES(:accid, :device_guid, :sub_type, :is_monthly, :expires_utc_dt, :detail1, :detail2, :detail3)';
 

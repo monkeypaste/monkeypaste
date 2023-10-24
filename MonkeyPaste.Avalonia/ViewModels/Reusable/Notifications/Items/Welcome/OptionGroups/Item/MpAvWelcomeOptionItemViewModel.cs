@@ -31,27 +31,18 @@ namespace MonkeyPaste.Avalonia {
             Parent.CurOptGroupViewModel.Items != null &&
             Parent.CurOptGroupViewModel.Items.Count > 1;
 
+        bool IsExistingAccountItem =>
+            Parent != null &&
+            Parent.IsAccountOptSelected &&
+            Parent.CurOptGroupViewModel.Items != null &&
+            (Parent.CurOptGroupViewModel.Items.IndexOf(this) == 0 ||
+             Parent.CurOptGroupViewModel.Items.IndexOf(this) == 4);
+
         public bool IsHovering { get; set; }
         public bool IsChecked { get; set; }
+        public bool IsEnabled { get; set; } = true;
         public object OptionId { get; set; }
-        public bool IsHitTestable {
-            get {
-                if (Parent == null) {
-                    return false;
-                }
-                //if (IsGestureItem) {
-                //    // NOTE assumes gesture is 1 item
-                //    // allow click uncheck
-                //    // disable click check
-                //    return IsChecked;
-                //}
-                if (IsMultiRadioItem) {
-                    // disable unchecking checked
-                    return !IsChecked;
-                }
-                return true;
-            }
-        }
+
         #endregion
 
         #region Appearance
@@ -123,6 +114,7 @@ namespace MonkeyPaste.Avalonia {
         public string DescriptionText2 { get; set; }
 
         #endregion
+
         #endregion
 
         #region Constructors
@@ -141,10 +133,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private void MpAvGestureProfileItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private async void MpAvGestureProfileItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsHovering):
-                    OnPropertyChanged(nameof(IsHitTestable));
                     OnPropertyChanged(nameof(LabelText));
                     OnPropertyChanged(nameof(DescriptionText));
                     OnPropertyChanged(nameof(IconSourceObj));
@@ -155,11 +146,51 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsChecked):
                     if (IsChecked) {
+                        if (IsExistingAccountItem) {
+                            IsBusy = true;
+                            MpUserAccountType result_uat = await MpAvAccountViewModel.Instance.ShowExistingAccountLoginWindowAsync();
+                            IsBusy = false;
 
+                            switch (result_uat) {
+                                case MpUserAccountType.None:
+                                    // cancel (ensure acct btns work)
+                                    Parent.CurOptGroupViewModel.Items.ForEach(x => x.IsEnabled = true);
+                                    Parent.IsAccountMonthToggleEnabled = true;
+
+                                    // get cur unlim acct type item idx
+                                    int unlim_item_idx = (int)MpUserAccountType.Unlimited;
+                                    if (MpAvAccountViewModel.Instance.IsMonthly) {
+                                        unlim_item_idx += 4;
+                                    }
+                                    // put selection back to unlim
+
+                                    Parent.CurOptGroupViewModel.Items
+                                        .ForEach((x, idx) => x.IsChecked = idx == unlim_item_idx);
+                                    break;
+                                default:
+                                    // logged in
+
+                                    // get acct type item idx
+                                    int uat_item_idx = (int)result_uat;
+                                    if (MpAvAccountViewModel.Instance.IsMonthly) {
+                                        uat_item_idx += 4;
+                                    }
+
+                                    // toggle monthly to acct type
+                                    Parent.IsAccountMonthlyChecked = MpAvAccountViewModel.Instance.IsMonthly;
+                                    // select acct type
+                                    Parent.CurOptGroupViewModel.Items
+                                        .ForEach((x, idx) => x.IsChecked = idx == uat_item_idx);
+                                    // disable everything
+                                    Parent.CurOptGroupViewModel.Items
+                                        .ForEach((x, idx) => x.IsEnabled = false);
+                                    Parent.IsAccountMonthToggleEnabled = false;
+                                    break;
+                            }
+                        }
                     } else {
 
                     }
-                    OnPropertyChanged(nameof(IsHitTestable));
                     OnPropertyChanged(nameof(LabelText));
                     OnPropertyChanged(nameof(DescriptionText));
                     OnPropertyChanged(nameof(IconSourceObj));
@@ -174,31 +205,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Commands
-        public ICommand CheckOptionCommand => new MpCommand<object>(
-            (args) => {
+        public ICommand CheckOptionCommand => new MpCommand(
+            () => {
                 if (IsChecked) {
                     return;
                 }
                 Parent.CurOptGroupViewModel.SelectedItem = this;
-            });
-
-        public ICommand UncheckOptionCommand => new MpCommand<object>(
-            (args) => {
-                IsChecked = false;
-            }, (args) => {
-                return IsChecked && !IsMultiRadioItem;
-            });
-        public ICommand ToggleOptionCommand => new MpCommand<object>(
-            (args) => {
-                //if (!IsHitTestable) {
-                //    // only handled internally to keep pointer feedback
-                //    return;
-                //}
-                //if (IsChecked) {
-                //    UncheckOptionCommand.Execute(args);
-                //} else {
-                //    CheckOptionCommand.Execute(args);
-                //}
+            }, () => {
+                return IsEnabled;
             });
 
         #endregion

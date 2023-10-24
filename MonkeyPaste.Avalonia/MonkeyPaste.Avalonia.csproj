@@ -1479,6 +1479,7 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
+    <Folder Include="ViewModels\SettingsWindow\Account\NewFolder\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\Reusable\TextBoxes\" />
   </ItemGroup>
