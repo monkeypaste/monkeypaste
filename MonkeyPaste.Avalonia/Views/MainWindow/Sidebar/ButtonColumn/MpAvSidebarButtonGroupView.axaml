@@ -113,8 +113,6 @@
     </local:MpAvUserControl.Styles>
     <Grid x:Name="SidebarButtonGroupContainerGrid"
           Classes.horizontal="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-          IsTabStop="True"
-          TabIndex="0"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
           RowDefinitions="*,*,*,*,*">

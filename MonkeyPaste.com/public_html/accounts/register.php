@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
 function get_activate_email_msg_html($username, $activation_url): string 
 {
-    $msg = "Hi ".$username.", <br>Please click <a href='".$activation_url."'>here</a> to activate your account!<br><br>Thank you :)";
+    $msg = "Hi ".$username.", <br>Please click <a href='".$activation_url."'>here</a> to activate your account!<br><br>* The link will expire in 24 hours";
     return $msg;
 }
 
@@ -53,8 +53,19 @@ $testdata = [
 $fields = [
     'username' => 'string | required | alphanumeric | between: 3, 25 | unique: account, username',
     'email' => 'email | required | email | unique: account, email',
-    'password' => 'string | required | secure | same: confirm',
-    'confirm' => 'string | required | secure',
+    'password' => 'string | required | secure',
+    'confirm' => 'string | required | secure | same: password',
+    'agree' => 'string | required'
+];
+
+$messages = [
+    'confirm' => [
+        'required' => 'Please enter the password again',
+        'same' => 'The password does not match'
+    ],
+    'agree' => [
+        'required' => 'You need to agree to the term of services to register'
+    ]
 ];
 
 $errors = [];

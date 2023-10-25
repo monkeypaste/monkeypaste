@@ -41,4 +41,7 @@
 
     <!--  DND  -->
     <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Dnd/Dnd.axaml" />
+
+    <!--  NAV  -->
+    <StyleInclude Source="avares://MonkeyPaste.Avalonia/Themes/Default/Controls/Nav/TabNav.axaml" />
 </Styles>

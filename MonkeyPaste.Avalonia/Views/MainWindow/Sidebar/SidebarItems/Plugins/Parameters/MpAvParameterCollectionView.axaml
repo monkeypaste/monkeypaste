@@ -178,6 +178,7 @@
         <ListBox x:Name="PluginParameterListBox"
                  Grid.Row="1"
                  Padding="0"
+                 Classes="tabcontinue"
                  AutoScrollToSelectedItem="True"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Top"

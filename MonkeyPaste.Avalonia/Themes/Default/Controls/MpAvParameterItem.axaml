@@ -57,8 +57,15 @@
                 Value="5" />
     </Style>
 
-    <Style Selector="Border.paramBorder :is(Control).param">
-        <Setter Property="IsTabStop"
-                Value="True" />
+    <Style Selector="ListBox#PluginParameterListBox"
+           x:DataType="local:MpAvParameterViewModelBase">
+        <!--<Setter Property="KeyboardNavigation.TabOnceActiveElement"
+                Value="0" />-->
+    </Style>
+
+    <Style Selector="ListBox#PluginParameterListBox > ListBoxItem:nth-child(1) :is(Control).param"
+           x:DataType="local:MpAvParameterViewModelBase">
+        <Setter Property="KeyboardNavigation.TabIndex"
+                Value="0" />
     </Style>
 </Styles>

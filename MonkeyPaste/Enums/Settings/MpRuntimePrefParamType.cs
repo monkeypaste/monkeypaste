@@ -9,6 +9,7 @@
         AccountLogin,
         AccountLogout,
         AccountResetPassword,
+        AccountShowPrivacyPolicy,
         ThemeHexColor,
         ChangeDbPassword,
         ClearDbPassword

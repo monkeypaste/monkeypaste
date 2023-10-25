@@ -33,18 +33,6 @@
             <Setter Property="Cursor"
                     Value="Wait" />
         </Style>
-        <Style Selector="RadioButton.optButton:pointerover Image, RadioButton.optButton:checked Image">
-            <!--<Setter Property="Effect"
-                    Value="drop-shadow(5 5 7 black)" />-->
-        </Style>
-        <Style Selector="RadioButton.optButton:pointerover TextBlock">
-            <!--<Setter Property="Effect"
-                    Value="drop-shadow(0 0 3 white)" />-->
-        </Style>
-        <Style Selector="RadioButton.optButton:checked TextBlock">
-            <!--<Setter Property="Effect"
-                    Value="drop-shadow(0 0 3 white)" />-->
-        </Style>
 
 
         <!--  CAPTION COLOR  -->

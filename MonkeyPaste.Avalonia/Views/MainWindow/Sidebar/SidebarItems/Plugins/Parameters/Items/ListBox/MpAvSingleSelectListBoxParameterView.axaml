@@ -29,8 +29,8 @@
                 <ListBox.Styles>
                     <Style Selector="ListBoxItem"
                            x:DataType="local:MpAvEnumerableParameterValueViewModel">
-                        <Setter Property="IsTabStop"
-                                Value="True" />
+                        <!--<Setter Property="IsTabStop"
+                                Value="True" />-->
                     </Style>
                 </ListBox.Styles>
                 <ListBox.ItemTemplate>

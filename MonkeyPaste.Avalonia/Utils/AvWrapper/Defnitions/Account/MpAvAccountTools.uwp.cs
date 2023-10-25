@@ -50,14 +50,20 @@ namespace MonkeyPaste.Avalonia {
 
         Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup { get; } =
             new Dictionary<string, (MpUserAccountType, bool)>() {
-                //{"9PMDM0QVHJCS", (MpUserAccountType.Free, false)   },
-                //{"9N5X8R1C9CR4", (MpUserAccountType.Unlimited, true) },
+//#if DEBUG
+//                {"9N0M0CF894CV", (MpUserAccountType.Standard, true) },
+//                {"9NTBHV933F76", (MpUserAccountType.Standard, false) },
 
+//                {"9P06QJ00F7Q8", (MpUserAccountType.Unlimited, true) },
+//                {"9N2BVBP6MSP6", (MpUserAccountType.Unlimited, false) }
+//#else
                 {"9PP3W114BHL5", (MpUserAccountType.Standard, true) },
                 {"9N41GXV5HQQ2", (MpUserAccountType.Standard, false) },
 
                 {"9PGVZ60KMDQ7", (MpUserAccountType.Unlimited, true) },
                 {"9NN60Z6FX02H", (MpUserAccountType.Unlimited, false) }
+
+//#endif
             };
 
         #endregion

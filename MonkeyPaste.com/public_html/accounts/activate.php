@@ -16,19 +16,19 @@ function find_unverified_account(string $activation_code, string $email)
 
     $account = $statement->fetch(PDO::FETCH_ASSOC);
 
-    if ($account) {
-        // already expired, delete the in active account with expired activation code
-        if ((int)$account['expired'] === 1) {
-            delete_account_by_id($account['id']);
-            return null;
-        }
-        // verify the password
-        if(password_verify($activation_code, $account['activation_code'])) {
-            return $account;
-        }  
-    } 
-
-    return null;
+    if(!$account) {
+        return null;
+    }
+    
+    // already expired, delete the in active account with expired activation code
+    if ((int)$account['expired'] === 1) {
+        delete_account_by_id($account['id']);
+        return null;
+    }
+    // verify the password
+    if(password_verify($activation_code, $account['activation_code'])) {
+        return $account;
+    }  
 }
 function delete_account_by_id(int $id, int $active = 0)
 {

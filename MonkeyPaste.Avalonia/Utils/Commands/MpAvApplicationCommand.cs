@@ -1,8 +1,6 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Input;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -154,6 +152,7 @@ namespace MonkeyPaste.Avalonia {
             }, () => {
                 return MpAvWindowManager.ActiveWindow != null;
             });
+
         #endregion
     }
 }

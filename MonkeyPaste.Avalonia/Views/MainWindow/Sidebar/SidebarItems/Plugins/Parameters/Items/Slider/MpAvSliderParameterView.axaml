@@ -56,9 +56,6 @@
                     </MultiBinding>
                 </Rectangle.Width>
             </Rectangle>
-            <!--
-                local:MpAvLostFocusUpdateBindingExtension.Text="{Binding CurrentTypedValue, Mode=OneWay, StringFormat='{}{0:#,#.}'}"
-            -->
             <TextBox x:Name="SliderValueTextBox"
                      Classes="sliderTextBox param"
                      Cursor="Ibeam"

@@ -317,8 +317,8 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.TextBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = "Email",
-                                            pattern = MpRegEx.RegExLookup[MpRegExType.ExactEmail].ToString(),
-                                            patternInfo = UiStrings.AccountRegistrationInvalidEmailText,
+                                            //pattern = MpRegEx.RegExLookup[MpRegExType.ExactEmail].ToString(),
+                                            //patternInfo = UiStrings.AccountRegistrationInvalidEmailText,
                                             value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountEmail)
                                         },
                                         new MpParameterFormat() {
@@ -341,6 +341,18 @@ namespace MonkeyPaste.Avalonia {
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = "Confirm",
                                             value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword2)
+                                        },
+
+                                       new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.AccountShowPrivacyPolicy.ToString(),
+                                            controlType = MpParameterControlType.Hyperlink,
+                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountShowPrivacyPolicy.ToString(),"Privacy Policy")
+                                        },
+                                       new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountPrivacyPolicyAccepted),
+                                            controlType = MpParameterControlType.CheckBox,
+                                            unitType = MpParameterValueUnitType.Bool,
+                                            label = "Agree?"
                                         },
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountRegister.ToString(),
@@ -1773,6 +1785,10 @@ namespace MonkeyPaste.Avalonia {
                         }
                     case MpRuntimePrefParamType.AccountResetPassword: {
                             MpAvAccountViewModel.Instance.ResetPasswordRequestCommand.Execute(null);
+                            break;
+                        }
+                    case MpRuntimePrefParamType.AccountShowPrivacyPolicy: {
+                            MpAvAccountViewModel.Instance.ShowPrivacyPolicyCommand.Execute(null);
                             break;
                         }
 

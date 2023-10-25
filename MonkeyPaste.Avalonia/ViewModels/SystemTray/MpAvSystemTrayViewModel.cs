@@ -330,15 +330,7 @@ namespace MonkeyPaste.Avalonia {
 
                 //var test = new MpAvDataObject("Dat funky format", "funky format texxxxxt!!J!J");
                 //await TopLevel.GetTopLevel(MpAvWindowManager.MainWindow).Clipboard.SetDataObjectSafeAsync(test);
-                //await MpAvAccountTools.Instance.SetupSubscriptionInfoAsync();
-                //bool success = await MpAvAccountTools.Instance.RegisterUserAsync(
-                //    "tkefauver@gmail.com", "password", true,
-                //    new MpSubscriptionFormat() {
-                //        AccountType = MpUserAccountType.Unlimited,
-                //        ExpireOffsetUtc = DateTime.Now.AddDays(30),
-                //        IsActive = true,
-                //        IsMonthly = false
-                //    });
+
 
                 //await Mp.Services.DefaultDataCreator.CreateDefaultDataAsync();
                 var cil = await MpDataModelProvider.GetCopyItemsByQueryTagIdAsync(

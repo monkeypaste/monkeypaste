@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -31,12 +32,25 @@ namespace MonkeyPaste.Avalonia {
             Parent.CurOptGroupViewModel.Items != null &&
             Parent.CurOptGroupViewModel.Items.Count > 1;
 
-        bool IsExistingAccountItem =>
+        public bool IsAccountItem =>
             Parent != null &&
             Parent.IsAccountOptSelected &&
-            Parent.CurOptGroupViewModel.Items != null &&
+            Parent.CurOptGroupViewModel.Items != null;
+
+        public bool IsExistingAccountItem =>
+            IsAccountItem &&
             (Parent.CurOptGroupViewModel.Items.IndexOf(this) == 0 ||
              Parent.CurOptGroupViewModel.Items.IndexOf(this) == 4);
+
+        public bool IsStandardAccountItem =>
+            IsAccountItem &&
+            (Parent.CurOptGroupViewModel.Items.IndexOf(this) == 2 ||
+             Parent.CurOptGroupViewModel.Items.IndexOf(this) == 6);
+
+        public bool IsUnlimitedAccountItem =>
+            IsAccountItem &&
+            (Parent.CurOptGroupViewModel.Items.IndexOf(this) == 3 ||
+             Parent.CurOptGroupViewModel.Items.IndexOf(this) == 7);
 
         public bool IsHovering { get; set; }
         public bool IsChecked { get; set; }
@@ -133,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-        private async void MpAvGestureProfileItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        private void MpAvGestureProfileItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsHovering):
                     OnPropertyChanged(nameof(LabelText));
@@ -147,46 +161,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsChecked):
                     if (IsChecked) {
                         if (IsExistingAccountItem) {
-                            IsBusy = true;
-                            MpUserAccountType result_uat = await MpAvAccountViewModel.Instance.ShowExistingAccountLoginWindowAsync();
-                            IsBusy = false;
-
-                            switch (result_uat) {
-                                case MpUserAccountType.None:
-                                    // cancel (ensure acct btns work)
-                                    Parent.CurOptGroupViewModel.Items.ForEach(x => x.IsEnabled = true);
-                                    Parent.IsAccountMonthToggleEnabled = true;
-
-                                    // get cur unlim acct type item idx
-                                    int unlim_item_idx = (int)MpUserAccountType.Unlimited;
-                                    if (MpAvAccountViewModel.Instance.IsMonthly) {
-                                        unlim_item_idx += 4;
-                                    }
-                                    // put selection back to unlim
-
-                                    Parent.CurOptGroupViewModel.Items
-                                        .ForEach((x, idx) => x.IsChecked = idx == unlim_item_idx);
-                                    break;
-                                default:
-                                    // logged in
-
-                                    // get acct type item idx
-                                    int uat_item_idx = (int)result_uat;
-                                    if (MpAvAccountViewModel.Instance.IsMonthly) {
-                                        uat_item_idx += 4;
-                                    }
-
-                                    // toggle monthly to acct type
-                                    Parent.IsAccountMonthlyChecked = MpAvAccountViewModel.Instance.IsMonthly;
-                                    // select acct type
-                                    Parent.CurOptGroupViewModel.Items
-                                        .ForEach((x, idx) => x.IsChecked = idx == uat_item_idx);
-                                    // disable everything
-                                    Parent.CurOptGroupViewModel.Items
-                                        .ForEach((x, idx) => x.IsEnabled = false);
-                                    Parent.IsAccountMonthToggleEnabled = false;
-                                    break;
-                            }
+                            ShowExistingAccountFormAsync().FireAndForgetSafeAsync();
                         }
                     } else {
 
@@ -199,7 +174,56 @@ namespace MonkeyPaste.Avalonia {
                         Parent.OnPropertyChanged(nameof(Parent.PrimaryItem));
                     }
                     break;
+                case nameof(OptionId):
+                    OnPropertyChanged(nameof(IsAccountItem));
+                    OnPropertyChanged(nameof(IsExistingAccountItem));
+                    OnPropertyChanged(nameof(IsStandardAccountItem));
+                    OnPropertyChanged(nameof(IsUnlimitedAccountItem));
+                    break;
 
+            }
+        }
+
+        private async Task ShowExistingAccountFormAsync() {
+            IsBusy = true;
+            MpUserAccountType result_uat = await MpAvAccountViewModel.Instance.ShowExistingAccountLoginWindowAsync();
+            IsBusy = false;
+
+            switch (result_uat) {
+                case MpUserAccountType.None:
+                    // cancel (ensure acct btns work)
+                    Parent.CurOptGroupViewModel.Items.ForEach(x => x.IsEnabled = true);
+                    Parent.IsAccountMonthToggleEnabled = true;
+
+                    // get cur unlim acct type item idx
+                    int unlim_item_idx = (int)MpUserAccountType.Unlimited;
+                    if (MpAvAccountViewModel.Instance.IsMonthly) {
+                        unlim_item_idx += 4;
+                    }
+                    // put selection back to unlim
+
+                    Parent.CurOptGroupViewModel.Items
+                        .ForEach((x, idx) => x.IsChecked = idx == unlim_item_idx);
+                    break;
+                default:
+                    // logged in
+
+                    // get acct type item idx
+                    int uat_item_idx = (int)result_uat;
+                    if (MpAvAccountViewModel.Instance.IsMonthly) {
+                        uat_item_idx += 4;
+                    }
+
+                    // toggle monthly to acct type
+                    Parent.IsAccountMonthlyChecked = MpAvAccountViewModel.Instance.IsMonthly;
+                    // select acct type
+                    Parent.CurOptGroupViewModel.Items
+                        .ForEach((x, idx) => x.IsChecked = idx == uat_item_idx);
+                    // disable everything
+                    Parent.CurOptGroupViewModel.Items
+                        .ForEach((x, idx) => x.IsEnabled = false);
+                    Parent.IsAccountMonthToggleEnabled = false;
+                    break;
             }
         }
         #endregion

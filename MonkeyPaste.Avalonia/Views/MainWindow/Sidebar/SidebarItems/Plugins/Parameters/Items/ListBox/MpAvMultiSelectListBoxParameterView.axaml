@@ -39,8 +39,8 @@
                             Value="Stretch" />
                     <Setter Property="Cursor"
                             Value="Hand" />
-                    <Setter Property="IsTabStop"
-                            Value="True" />
+                    <!--<Setter Property="IsTabStop"
+                            Value="True" />-->
                 </Style>
             </ListBox.Styles>
             <ListBox.ItemTemplate>

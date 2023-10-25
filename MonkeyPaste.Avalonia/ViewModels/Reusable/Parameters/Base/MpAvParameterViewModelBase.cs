@@ -81,6 +81,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public int TabIdx {
+            get {
+                if (Parent is MpIParameterHostViewModel phvm) {
+                    return phvm.ComponentFormat.parameters.IndexOf(ParameterFormat);
+                }
+                return int.MaxValue;
+            }
+        }
         protected bool IsValidationOverrideEnabled { get; set; }
         public virtual bool IsAnyBusy =>
             IsBusy;

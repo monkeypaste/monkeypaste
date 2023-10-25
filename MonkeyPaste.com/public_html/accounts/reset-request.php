@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
 function get_reset_password_email_msg_html($username, $reset_url): string 
 {
-    $msg = "Hi ".$username.", <br>Please click <a href='".$reset_url."'>here</a> to reset your password.";
+    $msg = "Hi ".$username.", <br>Please click <a href='".$reset_url."'>here</a> to reset your password.<br><br>* The link will expire in 24 hours).";
     return $msg;
 }
 

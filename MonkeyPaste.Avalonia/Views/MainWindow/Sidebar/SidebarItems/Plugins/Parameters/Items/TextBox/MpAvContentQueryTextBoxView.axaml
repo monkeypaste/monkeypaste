@@ -46,6 +46,20 @@
             <Setter Property="MaxHeight"
                     Value="400" />
         </Style>
+
+        <!--  READ-ONLY  -->
+        <Style Selector="TextBox[IsReadOnly=true]">
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Effect"
+                    Value="drop-shadow(3 3 3 black)" />
+        </Style>
+        <Style Selector="TextBox[IsReadOnly=true].dark">
+            <Setter Property="Effect"
+                    Value="drop-shadow(3 3 3 white)" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="QueryItemGridContainer"
             Classes="paramBorder">
@@ -67,10 +81,11 @@
                      VerticalAlignment="Stretch"
                      local:MpAvSecureTextBoxExtension.IsEnabled="{Binding IsSecure}"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
+                     local:MpAvLostFocusUpdateBindingExtension.IsEnabled="True"
+                     local:MpAvLostFocusUpdateBindingExtension.Text="{Binding ContentQuery, Mode=TwoWay}"
                      SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                      SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
-                     Watermark="{Binding Watermark}"
-                     Text="{Binding ContentQuery, Mode=TwoWay}" />
+                     Watermark="{Binding Watermark}" />
 
             <!--  CLEAR TEXT BUTTON  -->
 

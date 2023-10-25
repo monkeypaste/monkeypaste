@@ -54,6 +54,8 @@ namespace MonkeyPaste.Avalonia {
         const string SUCCESS_PREFIX = "[SUCCESS]";
         const string ERROR_PREFIX = "[ERROR]";
 
+        const string PRIVACY_POLICY_URL = "https://www.monkeypaste.com/accounts/legal/privacy.html";
+
         const string PING_URL = "https://www.monkeypaste.com/accounts/ping.php";
         const string PING_RESPONSE = "Hello";
 
@@ -164,6 +166,7 @@ namespace MonkeyPaste.Avalonia {
                     {"email", (nameof(MpAvPrefViewModel.Instance.AccountEmail),MpAvPrefViewModel.Instance.AccountEmail) },
                     {"password", (nameof(MpAvPrefViewModel.Instance.AccountPassword),MpAvPrefViewModel.Instance.AccountPassword) },
                     {"confirm", (nameof(MpAvPrefViewModel.Instance.AccountPassword2), MpAvPrefViewModel.Instance.AccountPassword2) },
+                    {"agree", (nameof(MpAvPrefViewModel.Instance.AccountPrivacyPolicyAccepted), MpAvPrefViewModel.Instance.AccountPrivacyPolicyAccepted ? "1":"0") },
                 };
 
 
@@ -647,6 +650,11 @@ namespace MonkeyPaste.Avalonia {
 
             }, () => {
                 return !IsRegistered;
+            });
+
+        public ICommand ShowPrivacyPolicyCommand => new MpCommand(
+            () => {
+                MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(PRIVACY_POLICY_URL);
             });
 
         public ICommand ResetPasswordRequestCommand => new MpAsyncCommand(

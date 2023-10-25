@@ -24,6 +24,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Button x:Name="ClearButton"
+            KeyboardNavigation.IsTabStop="False"
             Classes="defaultButton noBg noHoverBg noBorder"
             Command="{Binding ClearCommand, ElementName=ClearTextButton}"
             CommandParameter="{Binding ClearCommandParameter, ElementName=ClearTextButton}">

@@ -96,20 +96,13 @@ if (is_get_request())
             //printerr($errors);
         }
         process_errors($errors,$inputs['password']);
-        //exit_w_error("param error");
     } else {
-        // println("about to reset...");
-        // var_dump($_SESSION);
         $success = reset_account_password($_SESSION['accid'],$inputs['password']);
         if($success) {
             exit_success();
         }
         process_errors(["password"=>"error","confirm"=>""],$inputs['password']);
     }
-    
-    
-    //exit_w_error("error");
-
 } else {    
     exit_w_error("invalid params");
 }
