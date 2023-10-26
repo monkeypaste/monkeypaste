@@ -2111,6 +2111,87 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Author(s).
+        /// </summary>
+        public static string TermsAuthorsInlineText {
+            get {
+                return ResourceManager.GetString("TermsAuthorsInlineText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is required that you accept the following license terms before continuing..
+        /// </summary>
+        public static string TermsIntroAppText {
+            get {
+                return ResourceManager.GetString("TermsIntroAppText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following package(s) require that you accept their license terms before installing..
+        /// </summary>
+        public static string TermsIntroPluginText {
+            get {
+                return ResourceManager.GetString("TermsIntroPluginText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I Decline.
+        /// </summary>
+        public static string TermsNoButtonText {
+            get {
+                return ResourceManager.GetString("TermsNoButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By clicking &quot;I Accept&quot;, you agree to the license terms for this application. If you do not agree to the terms, click &quot;I Decline&quot;..
+        /// </summary>
+        public static string TermsOutroAppText {
+            get {
+                return ResourceManager.GetString("TermsOutroAppText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By clicking &quot;I Accept&quot;, you agree to the license terms for the package(s) listed above. If you do not agree to the terms, click &quot;I Decline&quot;..
+        /// </summary>
+        public static string TermsOutroPluginText {
+            get {
+                return ResourceManager.GetString("TermsOutroPluginText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View License.
+        /// </summary>
+        public static string TermsViewLicenseButtonText {
+            get {
+                return ResourceManager.GetString("TermsViewLicenseButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Acceptance.
+        /// </summary>
+        public static string TermsWindowTitle {
+            get {
+                return ResourceManager.GetString("TermsWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I Accept.
+        /// </summary>
+        public static string TermsYesButtonText {
+            get {
+                return ResourceManager.GetString("TermsYesButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is a test &lt;b color=&quot;green&quot;&gt;test&lt;/b&gt; &lt;em color=&quot;red&quot;&gt;&lt;b&gt;test&lt;/b&lt;/em&gt; &lt;a color=&quot;pink&quot; href=&quot;https://www.google.com/&quot;&gt;test&lt;/a&gt;.
         /// </summary>
         public static string Test {

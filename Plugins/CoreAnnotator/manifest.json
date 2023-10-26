@@ -46,11 +46,11 @@
         "label": "File Or Folder",
         "controlType": "CheckBox",
         "unitType": "Bool",
-        "isVisible": true,
+        "isVisible": false,
         "paramId": 3,
         "values": [
           {
-            "value": "true",
+            "value": "false",
             "isDefault": true
           }
         ]
@@ -125,11 +125,11 @@
         "description": "Attempts to be general use but may not always be accurate depending on locale.",
         "controlType": "CheckBox",
         "unitType": "Bool",
-        "isVisible": true,
+        "isVisible": false,
         "paramId": 9,
         "values": [
           {
-            "value": "true",
+            "value": "false",
             "isDefault": true
           }
         ]

@@ -86,7 +86,8 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWelcomeNotificationViewModel.Instance,
                 MpWelcomePageType.Account) {
                 Title = UiStrings.WelcomeAccountTitle,
-                Caption = UiStrings.WelcomeAccountCaption
+                Caption = UiStrings.WelcomeAccountCaption,
+                NeedsSkip = !IsStoreAvailable
             };
             wogvm.Items = new List<MpAvWelcomeOptionItemViewModel>();
             foreach (var item in Items) {

@@ -50,12 +50,21 @@ namespace MonkeyPaste.Avalonia {
         public DateTime? OpenDateTime { get; set; }
         public object DialogResult { get; set; }
 
+        private MpWindowType _windowType = MpWindowType.None;
         public MpWindowType WindowType {
             get {
+                if (_windowType != MpWindowType.None) {
+                    return _windowType;
+                }
                 if (DataContext is MpIWindowViewModel cwvm) {
                     return cwvm.WindowType;
                 }
                 return MpWindowType.None;
+            }
+            set {
+                if (WindowType != value) {
+                    _windowType = value;
+                }
             }
         }
 

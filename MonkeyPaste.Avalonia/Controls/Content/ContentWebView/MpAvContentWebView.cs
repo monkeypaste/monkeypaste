@@ -370,8 +370,11 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIWebViewBindingResponseHandler Implementation
 
         private string _lastContentHandle = null;
-        public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
-            bool is_new_content = _lastContentHandle == contentHandle;
+        public virtual void HandleBindingNotification(
+            MpEditorBindingFunctionType notificationType,
+            string msgJsonBase64Str,
+            string contentHandle) {
+            bool is_new_content = _lastContentHandle != contentHandle;
             _lastContentHandle = contentHandle;
             if (!this.IsAttachedToVisualTree()) {
                 NeedsEvalJsCleared = true;

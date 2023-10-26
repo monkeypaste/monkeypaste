@@ -1001,4 +1001,31 @@
   <data name="AccountLoginWindowTitle" xml:space="preserve">
     <value>Login</value>
   </data>
+  <data name="TermsAuthorsInlineText" xml:space="preserve">
+    <value>Author(s)</value>
+  </data>
+  <data name="TermsIntroAppText" xml:space="preserve">
+    <value>It is required that you accept the following license terms before continuing.</value>
+  </data>
+  <data name="TermsIntroPluginText" xml:space="preserve">
+    <value>The following package(s) require that you accept their license terms before installing.</value>
+  </data>
+  <data name="TermsNoButtonText" xml:space="preserve">
+    <value>I Decline</value>
+  </data>
+  <data name="TermsOutroAppText" xml:space="preserve">
+    <value>By clicking "I Accept", you agree to the license terms for this application. If you do not agree to the terms, click "I Decline".</value>
+  </data>
+  <data name="TermsOutroPluginText" xml:space="preserve">
+    <value>By clicking "I Accept", you agree to the license terms for the package(s) listed above. If you do not agree to the terms, click "I Decline".</value>
+  </data>
+  <data name="TermsViewLicenseButtonText" xml:space="preserve">
+    <value>View License</value>
+  </data>
+  <data name="TermsWindowTitle" xml:space="preserve">
+    <value>License Acceptance</value>
+  </data>
+  <data name="TermsYesButtonText" xml:space="preserve">
+    <value>I Accept</value>
+  </data>
 </root>

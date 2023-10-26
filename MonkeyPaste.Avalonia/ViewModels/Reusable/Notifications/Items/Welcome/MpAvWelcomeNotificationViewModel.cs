@@ -21,7 +21,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
         private const string PRE_ESTABLISHED_USER_DB_PWD_TEXT = "<^&user has already set a password^&>";
-
         #endregion
 
         #region Statics
@@ -340,6 +339,7 @@ namespace MonkeyPaste.Avalonia {
                 Caption = UiStrings.WelcomeDbPasswordCaption,
             };
             #endregion
+
         }
         private async Task BeginWelcomeSetupAsync() {
             IsWelcomeDone = false;
@@ -360,17 +360,37 @@ namespace MonkeyPaste.Avalonia {
                 CurPointerGestureWindowViewModel.Destroy();
             }
 
-            // ACCOUNT TYPE
-            bool is_monthly = false;
-            MpUserAccountType acct_type = MpUserAccountType.Free;
-            MpDebug.Assert(AccountViewModel.Items.Where(x => x.IsChecked).Count() <= 1, $"Account selection not single");
-            if (AccountViewModel.Items.FirstOrDefault(x => x.IsChecked) is MpAvWelcomeOptionItemViewModel sel_acct_vm &&
-                sel_acct_vm.OptionId is MpUserAccountType sel_acct_type) {
-                acct_type = sel_acct_type;
-                is_monthly = AccountViewModel.Items.IndexOf(sel_acct_vm) >= 4;
+            // TERMS AGGREEMENT
+            bool agreed = await MpAvTermsView.ShowTermsAgreementWindowAsync(
+                new MpAvTermsAgreementCollectionViewModel() {
+                    IntroText = UiStrings.TermsIntroAppText,
+                    OutroText = UiStrings.TermsOutroAppText,
+                    Items = new[] {
+                        new MpAvTermsAgreementViewModel() {
+                            Author = Mp.Services.ThisAppInfo.ThisAppCompanyName,
+                            PackageName = Mp.Services.ThisAppInfo.ThisAppProductName,
+                            LicenseUri = Mp.Services.PlatformInfo.TermsPath.ToFileSystemUriFromPath()
+                        }
+                    }.ToList()
+                });
+            if (!agreed) {
+                Mp.Services.ShutdownHelper.ShutdownApp("declined terms");
+                return;
             }
-            await MpAvSubscriptionPurchaseViewModel.Instance.PurchaseSubscriptionCommand
-                .ExecuteAsync(new object[] { acct_type, is_monthly });
+
+            // ACCOUNT TYPE
+            if (!AccountViewModel.NeedsSkip) {
+                bool is_monthly = false;
+                MpUserAccountType acct_type = MpUserAccountType.Free;
+                MpDebug.Assert(AccountViewModel.Items.Where(x => x.IsChecked).Count() <= 1, $"Account selection not single");
+                if (AccountViewModel.Items.FirstOrDefault(x => x.IsChecked) is MpAvWelcomeOptionItemViewModel sel_acct_vm &&
+                    sel_acct_vm.OptionId is MpUserAccountType sel_acct_type) {
+                    acct_type = sel_acct_type;
+                    is_monthly = AccountViewModel.Items.IndexOf(sel_acct_vm) >= 4;
+                }
+                await MpAvSubscriptionPurchaseViewModel.Instance.PurchaseSubscriptionCommand
+                    .ExecuteAsync(new object[] { acct_type, is_monthly });
+            }
 
 
             // LOGIN LOAD
@@ -431,6 +451,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectNextPageCommand => new MpCommand(
             () => {
                 CurPageType = (MpWelcomePageType)((int)CurPageType + 1);
+                if (CurOptGroupViewModel.NeedsSkip) {
+                    SelectNextPageCommand.Execute(null);
+                }
             },
             () => {
                 return CanSelectNext;
@@ -438,6 +461,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SelectPrevPageCommand => new MpCommand(
             () => {
                 CurPageType = (MpWelcomePageType)((int)CurPageType - 1);
+                if (CurOptGroupViewModel.NeedsSkip) {
+                    SelectPrevPageCommand.Execute(null);
+                }
             },
             () => {
                 return CanSelectPrevious;

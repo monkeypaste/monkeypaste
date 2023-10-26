@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <ApplicationName>MonkeyPaste</ApplicationName>
-    <ApplicationAuthor>Tommy K</ApplicationAuthor>
+    <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
     <ApplicationVersionMajor>0.1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0.1</ApplicationVersionMinor>
     <ApplicationVersion>$(ApplicationVersionMajor)$(ApplicationVersionMinor)</ApplicationVersion>

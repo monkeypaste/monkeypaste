@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia {
         const string SUCCESS_PREFIX = "[SUCCESS]";
         const string ERROR_PREFIX = "[ERROR]";
 
-        const string PRIVACY_POLICY_URL = "https://www.monkeypaste.com/accounts/legal/privacy.html";
+        const string PRIVACY_POLICY_URL = "https://www.monkeypaste.com/legal/privacy.html";
 
         const string PING_URL = "https://www.monkeypaste.com/accounts/ping.php";
         const string PING_RESPONSE = "Hello";

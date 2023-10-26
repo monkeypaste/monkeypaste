@@ -34,6 +34,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool NeedsSkip { get; set; }
         public MpWelcomePageType WelcomePageType { get; private set; }
         public bool WasVisited { get; set; }
 

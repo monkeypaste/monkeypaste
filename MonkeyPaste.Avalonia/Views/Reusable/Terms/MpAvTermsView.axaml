@@ -1,0 +1,130 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             xmlns:pcl="using:MonkeyPaste"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:CompileBindings="True"
+             x:DataType="local:MpAvTermsAgreementCollectionViewModel"
+             x:Name="TermsView"
+             x:Class="MonkeyPaste.Avalonia.MpAvTermsView">
+    <UserControl.Styles>
+        <Style Selector="Button.dialog">
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="FontSize"
+                    Value="16" />
+        </Style>
+    </UserControl.Styles>
+    <Grid Margin="3"
+          Background="Silver"
+          RowDefinitions="Auto,*,Auto,30"
+          ColumnDefinitions="0.5*,0.5*">
+
+        <!--  INTRO TEXT  -->
+
+        <TextBlock Grid.Row="0"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   TextWrapping="WrapWithOverflow"
+                   Margin="3,10,3,10"
+                   Text="{Binding IntroText}" />
+
+        <!--  LICENSES LIST  -->
+
+        <ItemsControl Grid.Row="1"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      Margin="5,0"
+                      BorderThickness="1"
+                      BorderBrush="DimGray"
+                      ItemsSource="{Binding Items}"
+                      Background="Transparent">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="local:MpAvTermsAgreementViewModel">
+                    <StackPanel Margin="1,1,1,5">
+                        <!--  AUTHOR AND PACKAGE ROW  -->
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="5">
+                            <TextBlock FontWeight="SemiBold"
+                                       Text="{Binding PackageName}" />
+                            <TextBlock Text="{x:Static local:UiStrings.TermsAuthorsInlineText}" />
+                            <TextBlock Text="{Binding Author}" />
+                        </StackPanel>
+                        <!--  LICENSE LINK  -->
+                        <Button Classes="link"
+                                Command="{Binding OpenFileUriCommand, Source={x:Static local:MpAvUriNavigator.Instance}}"
+                                CommandParameter="{Binding LicenseUri}">
+                            <TextBlock Text="{x:Static local:UiStrings.TermsViewLicenseButtonText}" />
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <!--  OUTRO TEXT  -->
+
+        <TextBlock Grid.Row="2"
+                   Grid.Column="0"
+                   Grid.ColumnSpan="2"
+                   TextWrapping="WrapWithOverflow"
+                   Margin="3,10,3,10"
+                   Text="{Binding OutroText}" />
+
+        <!--  NO BUTTON  -->
+
+        <Button x:Name="NoButton"
+                Classes="dialog "
+                TabIndex="1"
+                Grid.Row="3"
+                Grid.Column="0">
+            <Button.Resources>
+                <CornerRadius x:Key="ControlCornerRadius">0,0,0,0</CornerRadius>
+                <Thickness x:Key="ButtonPadding">0,0,0,0</Thickness>
+
+                <SolidColorBrush x:Key="ButtonBackground">Crimson</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Salmon</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPressed">Red</SolidColorBrush>
+
+                <SolidColorBrush x:Key="ButtonForeground">White</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPointerOver">White</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPressed">White</SolidColorBrush>
+            </Button.Resources>
+            <TextBlock Text="{x:Static local:UiStrings.TermsNoButtonText}" />
+        </Button>
+
+        <!--  YES BUTTON  -->
+
+        <Button x:Name="YesButton"
+                Classes="dialog"
+                TabIndex="0"
+                Grid.Row="3"
+                Grid.Column="1">
+            <Button.Resources>
+                <CornerRadius x:Key="ControlCornerRadius">0,0,0,0</CornerRadius>
+                <Thickness x:Key="ButtonPadding">0,0,0,0</Thickness>
+
+                <SolidColorBrush x:Key="ButtonBackground">LimeGreen</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPointerOver">Green</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonBackgroundPressed">Lime</SolidColorBrush>
+
+                <SolidColorBrush x:Key="ButtonForeground">Black</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
+                <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
+            </Button.Resources>
+            <TextBlock Text="{x:Static local:UiStrings.TermsYesButtonText}" />
+        </Button>
+
+    </Grid>
+</UserControl>

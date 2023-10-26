@@ -389,7 +389,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 	
 	updateAllElements();
 
-	if (!globals.IsLoaded) {
+	if (!globals.IsLoaded || globals.IsLoadingContent) {
 		return;
 	}
 	addHistoryItem(delta, oldDelta);
@@ -398,7 +398,7 @@ function onEditorTextChanged(delta, oldDelta, source) {
 		updateTemplatesAfterTextChanged();
 	}
 
-	loadLinkHandlers();
+	loadLinkHandlers(true);
 	populateFindReplaceResults();
 
 	let suppress_text_change_ntf = globals.SuppressContentChangedNtf;

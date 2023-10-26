@@ -132,6 +132,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvWebView() {
+            if (this is MpAvContentWebView) {
+                // avoid everything this does, weird errors in content view stuck waiting for domload
+                return;
+            }
             this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged());
 #if DESKTOP
             Navigating += MpAvWebView_Navigating;

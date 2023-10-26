@@ -39,6 +39,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	}
 	let needs_encoding = formatType != 'rtf2html';
 	let DO_VALIDATE = true;
+	let ENFORCE_VALIDATE = true;
 
 	log("Converting '" + formatType + "'. The data is: ");
 	log(dataStr);
@@ -87,7 +88,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 			converted_text = trimQuillTrailingLineEndFromText(converted_text);
 		}
 		const diff_idx = getFirstDifferenceIdx(verifyText, converted_text);
-		if (diff_idx < 0) {
+		if (!ENFORCE_VALIDATE || diff_idx < 0) {
 			log('conversion validate: PASSED');
 			if (!needs_encoding) {
 				// encode final output

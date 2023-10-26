@@ -86,5 +86,14 @@ namespace MonkeyPaste.Avalonia.Resources.Legal {
                 return ResourceManager.GetString("bolt.png", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NONE.
+        /// </summary>
+        internal static string gavel_png {
+            get {
+                return ResourceManager.GetString("gavel.png", resourceCulture);
+            }
+        }
     }
 }

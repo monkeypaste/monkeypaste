@@ -215,7 +215,6 @@
     <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidAsset Remove="Assets\Images\burlap.png" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Accents.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Accents\Gradients.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Defaults.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Fade.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Pulse.axaml" />
@@ -251,7 +250,6 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ToolTip.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Window.axaml" />
-    <AvaloniaXaml Remove="Themes\Default\Controls\_DefaultControls.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Default.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\MpAvSidebarContainerView.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\Actions\Properties\MpAvActionPropertyListBoxView.axaml" />
@@ -385,6 +383,7 @@
     <None Remove="Assets\Images\forward_black.png" />
     <None Remove="Assets\Images\frame_grip.png" />
     <None Remove="Assets\Images\frame_grip_org.png" />
+    <None Remove="Assets\Images\gavel.png" />
     <None Remove="Assets\Images\ghost.png" />
     <None Remove="Assets\Images\glasses.png" />
     <None Remove="Assets\Images\global.png" />
@@ -713,6 +712,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\font.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Images\gavel.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Assets\Images\ghost.png">
@@ -1444,9 +1446,6 @@
     <AvaloniaResource Include="Themes\Default\Controls\TextBlock.axaml">
       
     </AvaloniaResource>
-    <AvaloniaResource Include="Themes\Default\Controls\_DefaultControls.axaml">
-      
-    </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Controls\ButtonBase.axaml">
       
     </AvaloniaResource>
@@ -1485,6 +1484,7 @@
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
     <Folder Include="ViewModels\SettingsWindow\Account\NewFolder\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
+    <Folder Include="Views\Reusable\P\" />
     <Folder Include="Views\Reusable\TextBoxes\" />
   </ItemGroup>
   
@@ -1665,6 +1665,9 @@
     </Compile>
     <Compile Update="Views\Reusable\Spinners\MpAvBusySpinnerView.axaml.cs">
       <DependentUpon>MpAvBusySpinnerView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Reusable\Terms\MpAvTermsView.axaml.cs">
+      <DependentUpon>MpAvTermsView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\ToolTip\Hint\MpAvToolTipInfoHintView.axaml.cs">
       <DependentUpon>MpAvToolTipInfoHintView.axaml</DependentUpon>

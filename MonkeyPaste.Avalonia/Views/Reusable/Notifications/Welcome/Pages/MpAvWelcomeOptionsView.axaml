@@ -13,6 +13,56 @@
                        ClipToBounds="False"
                        d:DesignWidth="400"
                        d:DesignHeight="300">
+    <local:MpAvUserControl.Resources>
+        <!--<LinearGradientBrush x:Key="RainbowBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="Red" />
+                <GradientStop Offset="0.5" Color="Green" />
+                <GradientStop Offset="1" Color="Blue" />
+            </LinearGradientBrush.GradientStops>
+            <LinearGradientBrush.Transform>
+                <RotateTransform />
+            </LinearGradientBrush.Transform>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="StainlessSteelBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <GradientStop Offset="0.36" Color="{DynamicResource ThemeInteractiveColor}" />
+                <GradientStop Offset="0.77" Color="{DynamicResource ThemeInteractiveColor}" />
+                <GradientStop Offset="1" Color="{DynamicResource ThemeInteractiveBgColor}" />
+            </LinearGradientBrush.GradientStops>
+            <LinearGradientBrush.Transform>
+                <RotateTransform />
+            </LinearGradientBrush.Transform>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="GoldBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <GradientStop Offset="0.36" Color="{DynamicResource ThemeAccent1Color}" />
+                <GradientStop Offset="0.77" Color="{DynamicResource ThemeAccent1Color}" />
+                <GradientStop Offset="1" Color="{DynamicResource ThemeInteractiveBgColor}" />
+            </LinearGradientBrush.GradientStops>
+            <LinearGradientBrush.Transform>
+                <RotateTransform />
+            </LinearGradientBrush.Transform>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="ThemedRainbowBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
+            <LinearGradientBrush.GradientStops>
+                <GradientStop Offset="0" Color="{DynamicResource ThemeAccent1Color}" />
+                <GradientStop Offset="0.25" Color="{DynamicResource ThemeAccent2Color}" />
+                <GradientStop Offset="0.5" Color="{DynamicResource ThemeAccent3Color}" />
+                <GradientStop Offset="0.75" Color="{DynamicResource ThemeAccent4Color}" />
+                <GradientStop Offset="1.0" Color="{DynamicResource ThemeAccent5Color}" />
+            </LinearGradientBrush.GradientStops>
+            <LinearGradientBrush.Transform>
+                <RotateTransform />
+            </LinearGradientBrush.Transform>
+        </LinearGradientBrush>-->
+
+    </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  OPTION BUTTONS  -->
 
@@ -35,6 +85,36 @@
         </Style>
 
 
+
+        <Style Selector="RadioButton.optButton.busy">
+            <Setter Property="Cursor"
+                    Value="Wait" />
+        </Style>
+
+        <!--  UNLIM OPT  -->
+
+        <Style Selector="Border.optContainer">
+            <Setter Property="BorderBrush"
+                    Value="Transparent" />
+        </Style>
+        <Style Selector="Border.unlim">
+            <!--<Setter Property="local:MpAvIsHoveringExtension.IsBorderFollowEnabled"
+                    Value="True" />-->
+            <Setter Property="local:MpAvIsHoveringExtension.IsBorderTimerEnabled"
+                    Value="True" />
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource ThemedRainbowBrush}" />
+        </Style>
+
+        <Style Selector="Border.unlim:not(.sel)">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource GoldBrush}" />
+        </Style>
+
+        <Style Selector="Border.unlim > RadioButton">
+            <Setter Property="BorderThickness"
+                    Value="0" />
+        </Style>
         <!--  CAPTION COLOR  -->
         <Style Selector="TransitioningContentControl#CaptionContainer TextBlock">
             <Setter Property="Foreground"
@@ -131,6 +211,8 @@
                     Value="200" />
             <Setter Property="Height"
                     Value="200" />
+            <Setter Property="Margin"
+                    Value="0,0,0,20" />
             <Setter Property="Effect"
                     Value="drop-shadow(0 0 25 black)" />
         </Style>
@@ -219,16 +301,22 @@
 
                             <Border local:MpAvIsHoveringExtension.IsEnabled="True"
                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
-                                    Classes="rejectWindowMove"
-                                    Background="{StaticResource HitTestableTransparent}">
+                                    Classes="rejectWindowMove optContainer"
+                                    Classes.unlim="{Binding IsUnlimitedAccountItem}"
+                                    Classes.sel="{Binding IsChecked}"
+                                    Background="{StaticResource HitTestableTransparent}"
+                                    BorderThickness="2.5"
+                                    CornerRadius="7"
+                                    Margin="15">
                                 <RadioButton Classes="defaultButton optButton effectTrans"
                                              Classes.busy="{Binding IsBusy}"
                                              Theme="{StaticResource SwitchlessRadioButton}"
-                                             CornerRadius="7"
-                                             Margin="15"
-                                             Padding="15,15,15,5"
+                                             Padding="15"
                                              Width="200"
                                              Height="230"
+                                             CornerRadius="7"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Stretch"
                                              HorizontalContentAlignment="Center"
                                              VerticalContentAlignment="Center"
                                              IsEnabled="{Binding IsEnabled}"

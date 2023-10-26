@@ -13,7 +13,7 @@ function initLinkClassAttributes() {
 
 
 
-function loadLinkHandlers() {
+function loadLinkHandlers(fromTextChanged) {
     let a_elms = Array.from(getEditorElement().querySelectorAll('a'));
     for (var i = 0; i < a_elms.length; i++) {
         let link_elm = a_elms[i];
@@ -26,7 +26,13 @@ function loadLinkHandlers() {
         link_elm.addEventListener('pointerleave', onLinkPointerLeave, true);
 
         if (link_elm.getAttribute('href') == 'about:blank') {
+            if (!isNullOrUndefined(fromTextChanged) && fromTextChanged) {
+                globals.SuppressContentChangedNtf = true;
+            }
             link_elm.setAttribute('href', 'javascript:;');
+            if (!isNullOrUndefined(fromTextChanged) && fromTextChanged) {
+                globals.SuppressContentChangedNtf = false;
+            }
         }
     }
 }

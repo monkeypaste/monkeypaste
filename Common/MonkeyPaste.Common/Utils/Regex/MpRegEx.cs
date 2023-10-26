@@ -43,6 +43,7 @@ namespace MonkeyPaste.Common {
 
         private static Dictionary<MpRegExType, string> _regExStrings = new Dictionary<MpRegExType, string>{
             {MpRegExType.None,string.Empty },
+            // NOTE!! fileOrFolder doesnt work
             //@"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.()~!@#$%^&=+';,{}\[\]]+)+(\.("+KnownFileExtensions+@")|(\\|\w))$",
             {MpRegExType.FileOrFolder, "(?:\\/|[a-zA-Z]:\\\\)(?:[\\w\\-]+(?:\\/|\\\\))*[\\w\\-]+(?:\\.[\\w]+)?"},
             

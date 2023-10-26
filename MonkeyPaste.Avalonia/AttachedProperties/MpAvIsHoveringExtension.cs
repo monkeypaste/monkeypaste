@@ -7,12 +7,14 @@ using Avalonia.Media;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
+using System.Collections.Generic;
 using System.Windows.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvIsHoveringExtension {
         #region Private Variables
-        private static DispatcherTimer _timer;
+        private static Dictionary<Control, DispatcherTimer> _timers = new Dictionary<Control, DispatcherTimer>();
+        //private static DispatcherTimer _timer;
         private static MpPoint _last_mp;
         #endregion
 
@@ -78,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<double> TimerDeltaAngleProperty =
             AvaloniaProperty.RegisterAttached<object, Control, double>(
                 "TimerDeltaAngle",
-                5);
+                3);
 
         #endregion
 
@@ -206,28 +208,34 @@ namespace MonkeyPaste.Avalonia {
             _last_mp = mp;
         }
         #endregion
+        private static void UpdateFollowTimer(Control c, bool stop) {
 
-        private static void StartFollowTimer(Control c) {
-            void _timer_Tick(object sender, EventArgs e) {
-                RotateBorderBrush(_timer.Tag as Control, GetTimerDeltaAngle(c));
-            }
-            if (_timer == null) {
-                _timer = new DispatcherTimer() {
-                    Interval = TimeSpan.FromMilliseconds(20),
-                    IsEnabled = true
-                };
-                _timer.Tick += _timer_Tick;
-            }
-            _timer.Tag = c;
-            _timer.Start();
         }
-
-
-        private static void StopFollowTimer(Control c) {
-            if (_timer == null) {
+        private static void StartFollowTimer(Control c) {
+            if (!_timers.ContainsKey(c)) {
+                var dt = new DispatcherTimer() {
+                    Interval = TimeSpan.FromMilliseconds(20),
+                    IsEnabled = true,
+                    Tag = c
+                };
+                dt.Tick += _timer_Tick;
+                _timers.Add(c, dt);
+            }
+            _timers[c].Start();
+        }
+        private static void _timer_Tick(object sender, EventArgs e) {
+            if (sender is not DispatcherTimer dt ||
+                dt.Tag is not Control c) {
                 return;
             }
-            _timer.Stop();
+            RotateBorderBrush(c, GetTimerDeltaAngle(c));
+        }
+
+        private static void StopFollowTimer(Control c) {
+            if (_timers.TryGetValue(c, out var dt)) {
+                dt.Stop();
+            }
+            _timers.Remove(c);
         }
 
         private static void RotateBorderBrush(Control c, double angle_delta, double? force_angle = null) {

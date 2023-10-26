@@ -60,6 +60,7 @@ namespace MonkeyPaste.Avalonia {
             "duckduckgoicon.png",
             "error.png",
             "folder.png",
+            "gavel.png",
             "ghost.png",
             "global.png",
             "graph.png",

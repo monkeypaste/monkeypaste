@@ -39,11 +39,11 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private void NavigateToUri(Uri uri) {
+        private void NavigateToUri(Uri uri, bool ignoreScheme = false) {
             if (uri == null) {
                 return;
             }
-            if (uri.Scheme == Uri.UriSchemeFile) {
+            if (!ignoreScheme && uri.Scheme == Uri.UriSchemeFile) {
                 NavigateToPath(uri.LocalPath);
                 return;
             }
@@ -107,8 +107,16 @@ namespace MonkeyPaste.Avalonia {
 
         #region Commands
 
-        public ICommand NavigateToUriCommand => new MpAsyncCommand<object>(
+        public ICommand OpenFileUriCommand => new MpAsyncCommand<object>(
             async (args) => {
+                if (args is string argStr) {
+                    args = new object[] { argStr, false, true };
+                }
+                await NavigateToUriCommand.ExecuteAsync(args);
+            });
+        public MpIAsyncCommand<object> NavigateToUriCommand => new MpAsyncCommand<object>(
+            async (args) => {
+                bool openFile = false;
                 bool needsConfirm = false;
                 Uri uri = null;
                 if (args is Uri) {
@@ -116,11 +124,15 @@ namespace MonkeyPaste.Avalonia {
                 } else if (args is string argStr) {
                     uri = ParseUriFromArgStr(argStr);
                 } else if (args is object[] argParts &&
-                            argParts.Length == 2 &&
+                            argParts.Length >= 2 &&
                             argParts[0] is string uriStr &&
                             argParts[1] is bool confirmArg) {
                     uri = ParseUriFromArgStr(uriStr);
                     needsConfirm = confirmArg;
+                    if (argParts.Length == 3 &&
+                        argParts[2] is bool open_it && open_it) {
+                        openFile = true;
+                    }
                 }
                 if (needsConfirm) {
                     var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
@@ -137,7 +149,7 @@ namespace MonkeyPaste.Avalonia {
                     MpAvWindowManager.MainWindow.IsActive) {
                     MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
                 }
-                NavigateToUri(uri);
+                NavigateToUri(uri, openFile);
                 await Task.Delay(2_000);
                 MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
             });
