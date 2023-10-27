@@ -217,6 +217,8 @@ namespace MonkeyPaste.Avalonia {
             Items.FirstOrDefault(x => x.TagId == MpTag.FiltersTagId);
         public MpAvTagTileViewModel TrashTagViewModel =>
             Items.FirstOrDefault(x => x.TagId == MpTag.TrashTagId);
+        public MpAvTagTileViewModel AllTagViewModel =>
+            Items.FirstOrDefault(x => x.TagId == MpTag.AllTagId);
 
         #endregion
 

@@ -26,7 +26,6 @@ using Avalonia.Platform;
         using AvaloniaWebView; 
 #elif CEF_WV
 
-using CefNet;
 using CefNet.Avalonia;
 #endif
 
@@ -369,7 +368,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpAvIWebViewBindingResponseHandler Implementation
 
-        private string _lastContentHandle = null;
+        private string _lastContentHandle { get; set; } = null;
         public virtual void HandleBindingNotification(
             MpEditorBindingFunctionType notificationType,
             string msgJsonBase64Str,
@@ -396,6 +395,7 @@ namespace MonkeyPaste.Avalonia {
 
                 case MpEditorBindingFunctionType.notifyDomLoaded:
                     IsDomLoaded = true;
+                    LoadEditorAsync().FireAndForgetSafeAsync();
                     break;
                 case MpEditorBindingFunctionType.notifyInitComplete:
                     IsEditorInitialized = true;
@@ -1008,21 +1008,21 @@ namespace MonkeyPaste.Avalonia {
         }
 
 
-        protected override void OnNavigated(NavigatedEventArgs e) {
-            base.OnNavigated(e);
-            if (MpUrlHelpers.IsBlankUrl(e.Url)) {
-                return;
-            }
-            LoadEditorAsync().FireAndForgetSafeAsync();
-        }
+        //protected override async void OnNavigated(NavigatedEventArgs e) {
+        //    base.OnNavigated(e);
+        //    if (MpUrlHelpers.IsBlankUrl(e.Url)) {
+        //        return;
+        //    }
+        //    //await LoadEditorAsync();
+        //}
 #else
-        public override void OnNavigated(string url) {
-            base.OnNavigated(url);
-            if (MpUrlHelpers.IsBlankUrl(url)) {
-                return;
-            }
-            LoadEditorAsync().FireAndForgetSafeAsync();
-        }
+        //public override void OnNavigated(string url) {
+        //    base.OnNavigated(url);
+        //    if (MpUrlHelpers.IsBlankUrl(url)) {
+        //        return;
+        //    }
+        //    LoadEditorAsync().FireAndForgetSafeAsync();
+        //}
 #endif
 
         #endregion
@@ -1245,18 +1245,20 @@ namespace MonkeyPaste.Avalonia {
             while (!IsDomLoaded) {
                 // wait for Navigate(EditorPath)
                 await Task.Delay(100);
-                if (sw.ElapsedMilliseconds > 30_000) {
+                if (sw.ElapsedMilliseconds > 15_000) {
                     // BUG found this stuck here, i think it makes the ObjectDisposedException
                     // would be nice to infer state  but just letting it load to see if its ok
                     //MpDebug.Break($"editor timeout, should open its dev tools");
                     //IsDomLoaded = true;
                     //ShowDevTools();
-                    return;
+                    MpDebug.BreakAll();
+                    break;
                 }
             }
 #else
             await Task.Delay(1);
 #endif
+            MpConsole.WriteLine($"waited for domload: {sw.ElapsedMilliseconds}ms");
             var req = GetInitMessage();
             SendMessage($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
         }

@@ -47,6 +47,7 @@
         ModalOkCancelMessageBox,
         ModalOkMessageBox,
         ModalTextBoxOkCancelMessageBox,
+        ModalRememberableTextBoxOkCancelMessageBox,
         ModalProgressCancelMessageBox,
 
         ConfirmEndAppend,

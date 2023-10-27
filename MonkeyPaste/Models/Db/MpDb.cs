@@ -136,7 +136,7 @@ namespace MonkeyPaste {
             return sb.ToString();
         }
 
-        public static async Task<bool> ChangeDbPasswordAsync(string new_password) {
+        public static async Task<bool> ChangeDbPasswordAsync(string new_password, bool remember) {
             // run test in case this is before db initialized
             bool can_change = await TestDbConnectionAsync();
             if (!can_change) {
@@ -151,14 +151,14 @@ namespace MonkeyPaste {
                 if (is_clearing_pwd) {
                     // user cleared db password
                     // Null DbInfo pwd to activate default
-                    Mp.Services.DbInfo.DbPassword = null;
+                    Mp.Services.DbInfo.SetPassword(null, remember);
                     new_password = Mp.Services.DbInfo.DbPassword;
                 }
                 string rekey_query = $"PRAGMA rekey = '{new_password}'";
                 var rekey_result = await QueryScalarAsync<object>(rekey_query);
                 if (!is_clearing_pwd) {
                     // set new pwd
-                    Mp.Services.DbInfo.DbPassword = new_password;
+                    Mp.Services.DbInfo.SetPassword(new_password, remember);
                 }
 
                 var success = await TestDbConnectionAsync();
@@ -457,12 +457,13 @@ namespace MonkeyPaste {
                 int curAttemptNum = 0;
                 int maxAttempts = 3;
                 while (curAttemptNum < maxAttempts) {
-                    dbInfo.DbPassword = await GetDbPasswordAsync(curAttemptNum, maxAttempts);
-                    if (dbInfo.DbPassword == null) {
+                    var result = await GetDbPasswordAsync(curAttemptNum, maxAttempts);
+                    if (result.IsDefault()) {
                         // user canceled
                         Mp.Services.ShutdownHelper.ShutdownApp("canceled db password");
                         return null;
                     }
+                    dbInfo.SetPassword(result.Item1, result.Item2);
                     await _connectionAsync.CloseAsync();
                     _connectionAsync = null;
                     await CreateConnectionAsync(dbPath);
@@ -808,15 +809,14 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             }
         }
 
-        private static async Task<string> GetDbPasswordAsync(int attemptNum, int maxAttempts) {
+        private static async Task<(string, bool)> GetDbPasswordAsync(int attemptNum, int maxAttempts) {
             if (attemptNum >= maxAttempts) {
-                return null;
+                return default;
             }
             int remaining = maxAttempts - attemptNum;
-            string result = await Mp.Services.PlatformMessageBox.ShowTextBoxMessageBoxAsync(
+            var result = await Mp.Services.PlatformMessageBox.ShowRememberableTextBoxMessageBoxAsync(
                 title: $"Enter Password",
                 passwordChar: '●',
-
                 message: $"{remaining} attempt{(remaining == 0 ? string.Empty : "s")} remaining",
                 iconResourceObj: "LockImage",
                 ntfType: MpNotificationType.DbPasswordInput);

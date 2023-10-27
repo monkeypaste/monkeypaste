@@ -896,6 +896,7 @@
   </data>
   <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
     <value>Your account has been upgraded to {0}/{1}.</value>
+    <comment>Subscription Type, Billing Cycle</comment>
   </data>
   <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
     <value>Purchase Successful!</value>
@@ -1027,5 +1028,32 @@
   </data>
   <data name="TermsYesButtonText" xml:space="preserve">
     <value>I Accept</value>
+  </data>
+  <data name="AccountActiveLabel" xml:space="preserve">
+    <value>ACTIVE</value>
+  </data>
+  <data name="AccountOfflineLabel" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="AccountUnregisteredLabel" xml:space="preserve">
+    <value>Unregistered</value>
+  </data>
+  <data name="DbPasswordCancelLabel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DbPasswordConfirmWatermark" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="DbPasswordDoneLabel" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="DbPasswordMismatch" xml:space="preserve">
+    <value>⚠️ Passwords do not match</value>
+  </data>
+  <data name="DbPasswordRememberLabel" xml:space="preserve">
+    <value>Remember?</value>
+  </data>
+  <data name="DbPasswordWatermark" xml:space="preserve">
+    <value>Password</value>
   </data>
 </root>

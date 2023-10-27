@@ -19,17 +19,22 @@ namespace MonkeyPaste.Common {
         #region Properties
 
         public static MpLogLevel MinLogLevel =>
-            //#if DEBUG
+#if DEBUG
             MpLogLevel.Debug;
-        //#else
-        //            MpLogLevel.Error;
-        //#endif
+#else
+            MpLogLevel.Error;
+#endif
 
         public static bool HasInitialized { get; private set; } = false;
 
         public static double MaxLogFileSizeInMegaBytes = 3.25;
 
-        public static bool LogToFile { get; set; } = true;
+        public static bool LogToFile =>
+#if DEBUG
+            false;
+#else
+            true;
+#endif
         public static bool LogToConsole { get; set; } = true;
 
         static string LogFileName =>
@@ -52,7 +57,8 @@ namespace MonkeyPaste.Common {
             LogFilePath =
                 Path.Combine(
                 pi.LogDir,
-                "mp.log");
+                LogFileName);
+
             if (MpFileIo.IsFileInUse(LogFilePath)) {
                 return;
             }
@@ -227,7 +233,7 @@ namespace MonkeyPaste.Common {
         }
 
         private static bool CanLog(MpLogLevel level) {
-            return (int)level <= (int)MinLogLevel;
+            return (int)level >= (int)MinLogLevel;
         }
         #endregion
     }

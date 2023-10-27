@@ -34,6 +34,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalYesNoCancelMessageBox:
                 case MpNotificationType.ModalYesNoMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
+                case MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
                 case MpNotificationType.ExecuteParametersRequest:
@@ -73,6 +74,7 @@ namespace MonkeyPaste.Avalonia {
                     return MpNotificationButtonsType.YesNoCancel;
                 case MpNotificationType.ModalYesNoMessageBox:
                     return MpNotificationButtonsType.YesNo;
+                case MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.DbPasswordInput:
                     return MpNotificationButtonsType.TextBoxOkCancel;
@@ -115,6 +117,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalOkCancelMessageBox:
                 case MpNotificationType.ModalOkMessageBox:
                 case MpNotificationType.ModalContentFormatDegradation:
+                case MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
                 case MpNotificationType.Welcome:
@@ -134,6 +137,7 @@ namespace MonkeyPaste.Avalonia {
                 case MpNotificationType.ModalContentFormatDegradation:
                 case MpNotificationType.ModalTextBoxOkCancelMessageBox:
                 case MpNotificationType.ModalProgressCancelMessageBox:
+                case MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox:
                 case MpNotificationType.Welcome:
                     return true;
                 default:

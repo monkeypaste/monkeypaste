@@ -1,7 +1,6 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
 using System;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -138,6 +137,39 @@ namespace MonkeyPaste.Avalonia {
                 return result;
             }
             return null;
+        }
+        public async Task<(string, bool)> ShowRememberableInputResultNotificationAsync(
+            string title,
+            string body,
+            string currentInput = null,
+            string placeholderText = null,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null,
+            char passwordChar = default,
+            MpNotificationType ntfType = MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox) {
+            MpNotificationFormat nf = new MpNotificationFormat() {
+                Title = title,
+                Body = body,
+                OtherArgs = currentInput,
+                Detail = placeholderText,
+                AnchorTarget = anchor,
+                NotificationType = ntfType,
+                PasswordChar = passwordChar,
+                IconSourceObj = iconResourceObj,
+                CanRemember = true,
+                Owner = owner
+            };
+            var nvm = await CreateNotifcationViewModelAsync(nf);
+            if (nvm is not MpAvUserActionNotificationViewModel uanvm) {
+                return default;
+            }
+            string result = await uanvm.ShowInputResultNotificationAsync();
+            if (result == null) {
+                // cancel
+                return default;
+            }
+            return (result, uanvm.RememberInputText);
         }
         public async Task<MpNotificationDialogResultType> ShowNotificationAsync(MpINotificationFormat inf) {
             var nf = inf as MpNotificationFormat;

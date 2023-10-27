@@ -4,7 +4,6 @@ using Avalonia.Layout;
 using CefNet.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -215,7 +214,7 @@ namespace MonkeyPaste.Avalonia {
                     !Mp.Services.StartupState.IsReady) {
                     return $"Please wait {Mp.Services.ThisAppInfo.ThisAppProductName} is loading...";
                 }
-                return $"[{MpAvPrefViewModel.Instance.AccountEmail}] {MpAvAccountViewModel.Instance.AccountStateInfo.Replace(" - ", Environment.NewLine)}";
+                return MpAvAccountViewModel.Instance.AccountStateInfo;
             }
         }
 

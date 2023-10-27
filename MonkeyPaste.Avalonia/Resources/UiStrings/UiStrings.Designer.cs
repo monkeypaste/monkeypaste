@@ -70,6 +70,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ACTIVE.
+        /// </summary>
+        public static string AccountActiveLabel {
+            get {
+                return ResourceManager.GetString("AccountActiveLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Billing Cycle.
         /// </summary>
         public static string AccountBillingCycleLabel {
@@ -241,6 +250,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Offline.
+        /// </summary>
+        public static string AccountOfflineLabel {
+            get {
+                return ResourceManager.GetString("AccountOfflineLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string AccountPasswordLabel {
@@ -381,6 +399,15 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountTrialButtonText {
             get {
                 return ResourceManager.GetString("AccountTrialButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unregistered.
+        /// </summary>
+        public static string AccountUnregisteredLabel {
+            get {
+                return ResourceManager.GetString("AccountUnregisteredLabel", resourceCulture);
             }
         }
         
@@ -813,6 +840,60 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonUnpinItemLabel {
             get {
                 return ResourceManager.GetString("CommonUnpinItemLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string DbPasswordCancelLabel {
+            get {
+                return ResourceManager.GetString("DbPasswordCancelLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string DbPasswordConfirmWatermark {
+            get {
+                return ResourceManager.GetString("DbPasswordConfirmWatermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        public static string DbPasswordDoneLabel {
+            get {
+                return ResourceManager.GetString("DbPasswordDoneLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ⚠️ Passwords do not match.
+        /// </summary>
+        public static string DbPasswordMismatch {
+            get {
+                return ResourceManager.GetString("DbPasswordMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember?.
+        /// </summary>
+        public static string DbPasswordRememberLabel {
+            get {
+                return ResourceManager.GetString("DbPasswordRememberLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string DbPasswordWatermark {
+            get {
+                return ResourceManager.GetString("DbPasswordWatermark", resourceCulture);
             }
         }
         

@@ -22,20 +22,6 @@
                     Value="{Binding Source={StaticResource FilterImage}, ConverterParameter=ThemeAccent1Color, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
         </Style>
         <!--  PASSWORD CHAR  -->
-        <Style Selector="TextBox.secure">
-            <Setter Property="PasswordChar"
-                    Value="•" />
-            <Setter Property="AcceptsTab"
-                    Value="False" />
-            <Setter Property="AcceptsReturn"
-                    Value="False" />
-        </Style>
-        <Style Selector="TextBox.secure.dark">
-            <!--<Setter Property="PasswordChar"
-                    Value="○" />-->
-            <Setter Property="PasswordChar"
-                    Value="•" />
-        </Style>
 
         <!--  WRAPPING  -->
         <Style Selector="TextBox.multiline">
@@ -48,17 +34,11 @@
         </Style>
 
         <!--  READ-ONLY  -->
-        <Style Selector="TextBox[IsReadOnly=true]">
-            <Setter Property="BorderBrush"
-                    Value="Transparent" />
-            <Setter Property="Background"
-                    Value="Transparent" />
-            <Setter Property="Effect"
-                    Value="drop-shadow(3 3 3 black)" />
-        </Style>
-        <Style Selector="TextBox[IsReadOnly=true].dark">
-            <Setter Property="Effect"
-                    Value="drop-shadow(3 3 3 white)" />
+        <Style Selector="TextBlock#ReadOnlyBlock.multiline">
+            <Setter Property="TextWrapping"
+                    Value="WrapWithOverflow" />
+            <Setter Property="MaxHeight"
+                    Value="400" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="QueryItemGridContainer"
@@ -71,21 +51,27 @@
             <TextBox x:Name="ContentQueryTextBox"
                      Grid.Column="0"
                      Grid.ColumnSpan="2"
+                     IsVisible="{Binding !IsReadOnly}"
                      Classes="dnd param"
-                     Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}"
                      Classes.multiline="{Binding IsMultiline}"
-                     Classes.secure="{Binding IsSecure}"
+                     Classes.password="{Binding IsSecure}"
                      Classes.revealPasswordButton="{Binding IsSecure}"
-                     IsReadOnly="{Binding IsReadOnly}"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
-                     local:MpAvSecureTextBoxExtension.IsEnabled="{Binding IsSecure}"
                      local:MpAvIsFocusedExtension.IsEnabled="True"
-                     local:MpAvLostFocusUpdateBindingExtension.IsEnabled="True"
-                     local:MpAvLostFocusUpdateBindingExtension.Text="{Binding ContentQuery, Mode=TwoWay}"
                      SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
                      SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
-                     Watermark="{Binding Watermark}" />
+                     Watermark="{Binding Watermark}"
+                     Text="{Binding ContentQuery, Mode=TwoWay}" />
+
+            <TextBlock x:Name="ReadOnlyBlock"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       FontSize="{Binding FontSize, ElementName=ContentQueryTextBox}"
+                       IsVisible="{Binding IsReadOnly}"
+                       Classes.multiline="{Binding IsMultiline}"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch" />
 
             <!--  CLEAR TEXT BUTTON  -->
 
@@ -103,8 +89,7 @@
                         <Binding Path="Text"
                                  ElementName="ContentQueryTextBox"
                                  Converter="{x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}" />
-                        <Binding Path="!IsReadOnly"
-                                 ElementName="ContentQueryTextBox" />
+                        <Binding Path="!IsReadOnly" />
                         <Binding Path="!IsSecure" />
                     </MultiBinding>
                 </local:MpAvClearTextButton.IsVisible>
@@ -121,6 +106,13 @@
                     local:MpAvPointerCommandExtension.IsEnabled="True"
                     local:MpAvPointerCommandExtension.LeftPressCommand="{Binding ShowQueryMenuCommand}"
                     local:MpAvPointerCommandExtension.LeftPressCommandParameter="{Binding $self}">
+                <Button.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="IsFieldButtonVisible" />
+                        <Binding Path="!IsReadOnly" />
+                        <Binding Path="!IsSecure" />
+                    </MultiBinding>
+                </Button.IsVisible>
                 <Image />
             </Button>
         </Grid>

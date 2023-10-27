@@ -42,6 +42,10 @@
                     Value="300" />
             <Setter Property="MinHeight"
                     Value="50" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeWhiteBrush}" />
         </Style>
 
         <!--  EXPANDERS  -->

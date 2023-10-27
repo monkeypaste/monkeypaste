@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
                 var aivm = await CreateAccountItemViewModelAsync((MpUserAccountType)i);
                 Items.Add(aivm);
             }
-            SelectedItem = Items.FirstOrDefault(x => x.AccountType == MpAvAccountViewModel.Instance.AccountType);
+
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(IsStoreAvailable));
             IsBusy = false;
@@ -109,6 +109,7 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(IsMonthlyEnabled):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.RateText)));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsMonthlyEnabled)));
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.MatchesAccount)));
                     break;
                 case nameof(SelectedItem):
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.CanBuy)));
@@ -172,7 +173,7 @@ namespace MonkeyPaste.Avalonia {
                             message: purchase_vm.PrePurchaseMessage,
                             iconResourceObj: "WarningImage");
                 }
-                MpUserAccountType purchase_uat = SelectedItem.AccountType;
+                MpUserAccountType purchase_uat = purchase_vm.AccountType;
 
 
                 // NOTE to work around login failures or no selection, just default to free i guess

@@ -20,6 +20,11 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Constants
+        // NOTE needs to match converter.js version
+        public const string CONVERTER_CONTENT_HANDLE = "[CONVERTER]";
+        #endregion
+
         #region Statics
 
         private static MpAvPlainHtmlConverter _instance;

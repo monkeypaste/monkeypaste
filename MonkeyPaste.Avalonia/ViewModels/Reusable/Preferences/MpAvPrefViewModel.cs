@@ -458,6 +458,7 @@ namespace MonkeyPaste.Avalonia {
         #region Security
         public bool IsSettingsEncrypted { get; set; } = true; // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 
+        public string RememberedDbPassword { get; set; }
         //public string DbPassword { get; set; } = ENCRYPT_DB ? MpPasswordGenerator.GetRandomPassword() : null;
         #endregion
 

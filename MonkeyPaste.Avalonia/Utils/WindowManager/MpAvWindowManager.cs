@@ -30,6 +30,21 @@ namespace MonkeyPaste.Avalonia {
         public static bool IsAnyActive =>
             ActiveWindow != null;
 
+        public static nint PrimaryHandle {
+            get {
+                MpAvWindow w = null;
+                if (MainWindow != null) {
+                    w = MainWindow;
+                } else if (AllWindows.OrderBy(x => (int)x.WindowType).FirstOrDefault() is MpAvWindow ow) {
+                    w = ow;
+                }
+                if (w == null) {
+                    return nint.Zero;
+                }
+                return w.TryGetPlatformHandle().Handle;
+            }
+        }
+
         #endregion
 
         static MpAvWindowManager() {

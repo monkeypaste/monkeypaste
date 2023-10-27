@@ -17,10 +17,10 @@
 
         <LinearGradientBrush x:Key="StainlessSteelBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
             <LinearGradientBrush.GradientStops>
-                <GradientStop Offset="0" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <GradientStop Offset="0.36" Color="{DynamicResource ThemeInteractiveColor}" />
-                <GradientStop Offset="0.77" Color="{DynamicResource ThemeInteractiveColor}" />
-                <GradientStop Offset="1" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <GradientStop Offset="0" Color="Gainsboro" />
+                <GradientStop Offset="0.36" Color="White" />
+                <GradientStop Offset="0.77" Color="White" />
+                <GradientStop Offset="1" Color="Gainsboro" />
             </LinearGradientBrush.GradientStops>
             <LinearGradientBrush.Transform>
                 <RotateTransform />
@@ -29,10 +29,12 @@
 
         <LinearGradientBrush x:Key="GoldBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
             <LinearGradientBrush.GradientStops>
-                <GradientStop Offset="0" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <GradientStop Offset="0.36" Color="{DynamicResource ThemeAccent1Color}" />
-                <GradientStop Offset="0.77" Color="{DynamicResource ThemeAccent1Color}" />
-                <GradientStop Offset="1" Color="{DynamicResource ThemeInteractiveBgColor}" />
+                <GradientStop Offset="0" Color="Gainsboro" />
+                <GradientStop Offset="0.2" Color="White" />
+                <GradientStop Offset="0.36" Color="Gold" />
+                <GradientStop Offset="0.77" Color="Gold" />
+                <GradientStop Offset="0.9" Color="White" />
+                <GradientStop Offset="1" Color="Gainsboro" />
             </LinearGradientBrush.GradientStops>
             <LinearGradientBrush.Transform>
                 <RotateTransform />

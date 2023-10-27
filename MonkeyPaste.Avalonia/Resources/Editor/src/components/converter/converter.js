@@ -2,7 +2,13 @@
 // #region Life Cycle
 
 function initPlainHtmlConverter() {
-	getEditorContainerElement().classList.add('html-converter');
+	// NOTE needs to match plainhtmlconverter.cs version
+	globals.ContentHandle = '[CONVERTER]';
+
+	if (!isRunningOnHost()) {
+		document.head.getElementsByTagName('title')[0].innerText = 'Editor (converter)';
+		getEditorContainerElement().classList.add('html-converter');
+	}
 
 	globals.quill = initQuill();
 	initClipboard();
@@ -33,6 +39,8 @@ function isPlainHtmlConverter() {
 
 // #region Actions
 function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
+	let stop = startStopwatch('conversion time');
+
 	if (!globals.IsConverterLoaded) {
 		log('convertPlainHtml error! converter not initialized, returning null');
 		return null;
@@ -41,14 +49,14 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	let DO_VALIDATE = true;
 	let ENFORCE_VALIDATE = true;
 
-	log("Converting '" + formatType + "'. The data is: ");
-	log(dataStr);
+	//log("Converting '" + formatType + "'. The data is: ");
+	//log(dataStr);
 
 
 	if (formatType == 'text') {
 		setEditorText(dataStr, 'user');
 	} else {
-		let html_doc = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr), 'text/html');
+		let html_doc = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(toAscii(dataStr)), 'text/html');
 
 		// images aren't converted so if present in content its composite
 		let is_composite =
@@ -84,8 +92,17 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 		verifyText = toAscii(verifyText.replaceAll(`\r\n`, `\n`));
 		let converted_text = toAscii(getText());
 		if (!verifyText.endsWith('\n')) {
-			// when actual text doesn't end w/ newline make sure quills newline is removed
-			converted_text = trimQuillTrailingLineEndFromText(converted_text);
+			// BUG1 when actual text doesn't end w/ newline make sure quills newline is removed
+			// BUG2 dom parser adding TWO extra new lines to html fragment of html text so
+			// removing extras until match or letting it fail still if not the case
+			let last_conv_char = converted_text.charAt(converted_text.length - 1);
+			while (last_conv_char == '\n') {
+				converted_text = trimQuillTrailingLineEndFromText(converted_text);
+				if (converted_text.length == 0) {
+					break;
+				}
+				last_conv_char = converted_text.charAt(converted_text.length - 1);
+			}
 		}
 		const diff_idx = getFirstDifferenceIdx(verifyText, converted_text);
 		if (!ENFORCE_VALIDATE || diff_idx < 0) {
@@ -100,12 +117,15 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 			}
 		} else {
 			log('conversion validate: FAILED');
-			log('first diff_idx: ' + diff_idx);
-			log('base length: ' + verifyText.length);
-			log('converted length: ' + converted_text.length);
-			log('base text:')
+			let first_verify_diff_char = getEscapedStr(verifyText.charAt(diff_idx));
+			let first_actual_diff_char = getEscapedStr(converted_text.charAt(diff_idx));
+
+			log(`first diff: idx ${diff_idx} verify: '${first_verify_diff_char}' conv: '${first_actual_diff_char}'`);
+			log('verify length: ' + verifyText.length);
+			log('conv length: ' + converted_text.length);
+			log('verify text:')
 			log(verifyText);
-			log('converted text:');
+			log('conv text:');
 			log(converted_text);
 			onException_ntf('conversion error.');
 			output_html = encodeHtmlSpecialEntitiesFromPlainText(verifyText);
@@ -114,9 +134,10 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	}
 	let output_delta = convertHtmlToDelta(output_html);
 		
-	log('');
-	log('RichHtml: ');
-	log(output_html);
+	//log('');
+	//log('RichHtml: ');
+	//log(output_html);
+	stop();
 	return {
 		html: output_html,
 		delta: output_delta,

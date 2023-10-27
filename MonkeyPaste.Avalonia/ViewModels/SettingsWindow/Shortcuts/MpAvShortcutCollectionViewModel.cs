@@ -24,7 +24,18 @@ namespace MonkeyPaste.Avalonia {
         MpIShortcutGestureLocator,
         MpIDndUserCancelNotifier {
 
+        #region Constants
+
+        #endregion
+
         #region Statics
+
+        static bool LOAD_W_GLOBAL_HOOKS_TOGGLED_ON =
+#if DEBUG
+            false;
+#else
+            true;
+#endif
         static bool IS_GLOBAL_INPUT_LOGGING_ENABLED { get; set; } = false;
         static bool IS_GLOBAL_MOUSE_INPUT_ENABLED { get; set; } = true;
         static bool IS_GLOBAL_KEYBOARD_INPUT_ENABLED { get; set; } = true;
@@ -330,7 +341,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsGlobalHooksPaused { get; private set; }
+        public bool IsGlobalHooksPaused => _hook == null;
 
         // NOTE this needs to be updated when shortcuts changed
         // to avoid re-serializing it for every tile
@@ -702,7 +713,9 @@ namespace MonkeyPaste.Avalonia {
                     UpdateFilteredItems();
                     break;
                 case MpMessageType.MainWindowLoadComplete:
-                    StartInputListener();
+                    if (LOAD_W_GLOBAL_HOOKS_TOGGLED_ON) {
+                        StartInputListener();
+                    }
                     break;
                 case MpMessageType.MainWindowClosed:
                     IsApplicationShortcutsEnabled = false;
@@ -1068,7 +1081,7 @@ namespace MonkeyPaste.Avalonia {
             string down_gesture = _keyboardGestureHelper.GetCurrentGesture();
             _exact_match =
                 AvailableItems
-                .FirstOrDefault(x => x.KeyString == down_gesture);
+                .FirstOrDefault(x => x.IsMatch(down_gesture));
 
             if (MpAvPrefViewModel.Instance.IsAutoSearchEnabled &&
                 MpAvWindowManager.MainWindow != null &&
@@ -1158,6 +1171,10 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
+            if (_exact_match.RoutingType == MpRoutingType.Override) {
+                // since overrides exclusive, clear other downs
+                _keyboardGestureHelper.ClearCurrentGesture();
+            }
             // store local ref to match in case its reset during sim
             MpAvShortcutViewModel match_to_execute = _exact_match;
 
@@ -1328,7 +1345,6 @@ namespace MonkeyPaste.Avalonia {
                     CreateGlobalInputHooks();
                     IS_GLOBAL_KEYBOARD_INPUT_ENABLED = true;
                     IS_GLOBAL_MOUSE_INPUT_ENABLED = true;
-                    IsGlobalHooksPaused = false;
                     MpConsole.WriteLine($"Global hooks resumed. args: {args}");
                 } else {
                     // pause
@@ -1336,7 +1352,6 @@ namespace MonkeyPaste.Avalonia {
                     _keyboardGestureHelper.ClearCurrentGesture();
                     IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
                     IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
-                    IsGlobalHooksPaused = true;
                     MpConsole.WriteLine($"Global hooks paused. args: {args}");
                 }
             });

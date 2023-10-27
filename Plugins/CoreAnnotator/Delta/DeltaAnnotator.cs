@@ -1,6 +1,5 @@
 ﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Plugin;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -42,21 +41,23 @@ namespace CoreAnnotator {
         private static MpQuillDelta AnnotateType(string pt, MpRegExType annotationRegExType) {
             MpQuillDelta delta = new MpQuillDelta() { ops = new List<Op>() };
 
-            if (annotationRegExType == MpRegExType.None ||
-                (int)annotationRegExType > MpRegEx.MAX_ANNOTATION_REGEX_TYPE) {
+            if (annotationRegExType == MpRegExType.None) {
                 return delta;
             }
 
             Regex regex = MpRegEx.RegExLookup[annotationRegExType];
             MatchCollection mc = regex.Matches(pt);
             foreach (Match m in mc) {
-                //foreach (Group mg in m.Groups) {
-                //    foreach (Capture c in mg.Captures) {
                 MpConsole.WriteLine($"Annotation match: Type: {annotationRegExType} Value: {m.Value} Idx: {m.Index} Length: {m.Length}");
 
+                var attr = GetLinkAttributes(annotationRegExType, m.Value);
+                if (attr == null) {
+                    // bad match
+                    continue;
+                }
                 Op op = new Op() {
                     format = new DeltaRange() { index = m.Index, length = m.Length },
-                    attributes = GetLinkAttributes(annotationRegExType, m.Value)
+                    attributes = attr
                 };
 
                 delta.ops.Add(op);
@@ -67,9 +68,13 @@ namespace CoreAnnotator {
         }
 
         private static Attributes GetLinkAttributes(MpRegExType annotationRegExType, string match) {
+            string href = GetLinkHref(annotationRegExType, match);
+            if (string.IsNullOrEmpty(href)) {
+                return null;
+            }
             var attr = new Attributes() {
                 linkType = annotationRegExType.ToString().ToLower(),
-                link = GetLinkHref(annotationRegExType, match)
+                link = href
             };
             if (annotationRegExType == MpRegExType.HexColor) {
                 var color = new MpColor(match);
@@ -89,18 +94,7 @@ namespace CoreAnnotator {
                 case MpRegExType.Email:
                     href_value = $"mailto:{match}";
                     break;
-                case MpRegExType.FileOrFolder:
-                    if (Uri.IsWellFormedUriString(match, UriKind.Absolute)) {
-                        href_value = new Uri(match).AbsoluteUri;
-                    } else if (match.ToFileSystemUriFromPath() is string path_uri &&
-                        Uri.IsWellFormedUriString(path_uri, UriKind.Absolute)) {
-                        href_value = path_uri;
-                    } else {
-                        href_value = string.Empty;
-                    }
-                    break;
                 case MpRegExType.PhoneNumber:
-                case MpRegExType.StreetAddress:
                 case MpRegExType.Currency:
                     href_value = $"https://www.google.com/search?q={match}";
                     break;

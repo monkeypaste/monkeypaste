@@ -24,7 +24,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Border Classes="paramBorder">
-      <!-- NOTE when control is hyperlink and cmd is not set it'll use CurrentValue as Nav uri  -->
+        <!--  NOTE when control is hyperlink and cmd is not set it'll use CurrentValue as Nav uri  -->
         <Button Classes="defaultButton param"
                 Classes.link="{Binding IsLink}"
                 Classes.trynav="{Binding ClickCommand, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
@@ -33,6 +33,7 @@
                 CommandParameter="{Binding ClickCommandParameter}">
             <Grid>
                 <TextBlock IsVisible="{Binding !IsBusy}"
+                           Margin="0"
                            Text="{Binding Title}" />
                 <StackPanel IsVisible="{Binding IsBusy}"
                             Orientation="Horizontal"

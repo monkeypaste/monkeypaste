@@ -1,14 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using Avalonia.Threading;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
 using System.Reactive.Linq;
-using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -73,6 +69,21 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region RememberPassword AvaloniaProperty
+
+        public bool RememberPassword {
+            get { return GetValue(RememberPasswordProperty); }
+            set { SetValue(RememberPasswordProperty, value); }
+        }
+
+        public static readonly StyledProperty<bool> RememberPasswordProperty =
+            AvaloniaProperty.Register<MpAvSetPasswordView, bool>(
+                name: nameof(RememberPassword),
+                defaultValue: false,
+                defaultBindingMode: BindingMode.TwoWay);
+
+        #endregion
+
         #endregion
 
         public MpAvSetPasswordView() : base() {
@@ -129,6 +140,7 @@ namespace MonkeyPaste.Avalonia {
             if (TopLevel.GetTopLevel(this) is not MpAvWindow w) {
                 return;
             }
+
             w.DialogResult = this.FindControl<TextBox>("PasswordBox1").Text;
             if (w.DialogResult == null) {
                 // ensure null is only returned on cancel

@@ -27,6 +27,10 @@ namespace MonkeyPaste.Avalonia {
                 bool is_null = !(value as int?).HasValue;
                 return is_null ? flip : !flip;
             }
+            if (value is char charVal) {
+                var test = charVal == default ? flip : !flip;
+                return test;
+            }
             if (value is int intVal) {
                 return intVal <= 0 ? flip : !flip;
             }

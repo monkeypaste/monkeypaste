@@ -30,6 +30,7 @@ namespace MonkeyPaste {
 
         public ICommand FixCommand { get; set; }
         public object FixCommandArgs { get; set; }
+        public bool CanRemember { get; set; }
 
         public object OtherArgs { get; set; } // used to pass MpIloader to loader notification
 

@@ -8,10 +8,13 @@
         AccountRegister,
         AccountLogin,
         AccountLogout,
+        AccountShowLogin,
+        AccountShowRegister,
         AccountResetPassword,
         AccountShowPrivacyPolicy,
         ThemeHexColor,
         ChangeDbPassword,
-        ClearDbPassword
+        ClearDbPassword,
+        ForgetDbPassword
     }
 }

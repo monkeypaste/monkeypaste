@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<double> TimerDeltaAngleProperty =
             AvaloniaProperty.RegisterAttached<object, Control, double>(
                 "TimerDeltaAngle",
-                3);
+                0.5);
 
         #endregion
 
@@ -248,12 +248,12 @@ namespace MonkeyPaste.Avalonia {
                 b.BorderBrush is Brush b_bb) {
                 bb = b_bb;
             } else {
-                MpDebug.Break($"Unhandled border follow control type '{c.GetType()}'");
+                //MpDebug.Break($"Unhandled border follow control type '{c.GetType()}'");
                 return;
             }
 
             if (bb.Transform is not RotateTransform rt) {
-                MpDebug.Break($"Border follow error, bb must have rotate transform");
+                //MpDebug.Break($"Border follow error, bb must have rotate transform");
                 return;
             }
 

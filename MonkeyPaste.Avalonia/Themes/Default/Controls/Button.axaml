@@ -6,7 +6,7 @@
     </Styles.Resources>
     <Style Selector="Button.link">
         <Setter Property="Foreground"
-                Value="SkyBlue" />
+                Value="DodgerBlue" />
         <Setter Property="Padding"
                 Value="0" />
         <Setter Property="Cursor"

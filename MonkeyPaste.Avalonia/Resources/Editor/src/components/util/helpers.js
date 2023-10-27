@@ -1,4 +1,22 @@
-﻿function isNumber(obj) {
+﻿function getEscapedStr(str) {
+    let esc_str = JSON.stringify(str);
+    return substringByLength(esc_str, 1, esc_str.length - 2);
+}
+function startStopwatch(label = '') {
+    // Get the current time
+    var startTime = new Date();
+
+    // Return a function that can be used to stop the stopwatch
+    return function () {
+        // Get the elapsed time
+        var endTime = new Date();
+        var elapsedTime = endTime - startTime;
+
+        // Do something with the elapsed time
+        console.log(label+" Elapsed time: " + elapsedTime);
+    };
+}
+function isNumber(obj) {
     if (isNullOrUndefined(obj) ||
         typeof obj !== 'number' ||
         isNaN(obj)) {

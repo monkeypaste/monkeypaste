@@ -373,6 +373,8 @@ function onCopy(e) {
 
 function onPaste(e) {
     if (!isRunningOnHost()) {
+        let test = e.clipboardData.getData('text/plain');
+        let test2 = e.clipboardData.getData('text/html');
         e.handled = false;
         return;
     }

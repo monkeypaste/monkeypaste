@@ -54,23 +54,11 @@ $fields = [
     'username' => 'string | required | alphanumeric | between: 3, 25 | unique: account, username',
     'email' => 'email | required | email | unique: account, email',
     'password' => 'string | required | secure',
-    'confirm' => 'string | required | secure | same: password',
-    'agree' => 'string | required'
-];
-
-$messages = [
-    'confirm' => [
-        'required' => 'Please enter the password again',
-        'same' => 'The password does not match'
-    ],
-    'agree' => [
-        'required' => 'You need to agree to the term of services to register'
-    ]
+    'confirm' => 'string | required | secure | same: password'
 ];
 
 $errors = [];
 $inputs = [];
-
 if (is_post_request()) 
 {    
     [$inputs, $errors] = filter($_POST, $fields);

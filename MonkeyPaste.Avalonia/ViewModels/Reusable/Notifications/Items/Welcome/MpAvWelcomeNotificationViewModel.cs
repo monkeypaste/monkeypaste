@@ -139,6 +139,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string AutoFillPassword { get; set; }
         public string DbPassword { get; set; }
+        public bool RememberDbPassword { get; set; }
         public string WelcomeTitle =>
             CurPageType.ToString();
 
@@ -426,7 +427,7 @@ namespace MonkeyPaste.Avalonia {
 
             // DB PASSWORD
             if (!IsDbPasswordIgnored) {
-                Mp.Services.DbInfo.DbPassword = DbPassword;
+                await MpDb.ChangeDbPasswordAsync(DbPassword, RememberDbPassword);
             }
 
 
@@ -434,6 +435,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE this isn't flagged until DONE is clicked and assumes
             // there's per-page validation (only needed for accounts atm I think)
             MpAvPrefViewModel.Instance.IsWelcomeComplete = true;
+
         }
 
         private void CloseGestureDemo() {

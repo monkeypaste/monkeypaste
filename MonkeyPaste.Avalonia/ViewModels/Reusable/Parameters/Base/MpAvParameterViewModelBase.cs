@@ -71,8 +71,19 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Business Logic
+        private string _validationMessage = string.Empty;
+        public string ValidationMessage {
+            get => _validationMessage;
+            set {
+                if (ValidationMessage != value) {
+                    if (Label == "Email") {
 
-        public string ValidationMessage { get; set; } = string.Empty;
+                    }
+                    _validationMessage = value;
+                    OnPropertyChanged(nameof(ValidationMessage));
+                }
+            }
+        }
 
         #endregion
 
@@ -537,7 +548,7 @@ namespace MonkeyPaste.Avalonia {
         public void OverrideValidationMesage(string msg) {
             IsValidationOverrideEnabled = true;
             ValidationMessage = msg;
-            //OnPropertyChanged(nameof(IsValid));
+            OnPropertyChanged(nameof(IsValid));
             //Validate();
         }
         public void RemoveValidationOverride() {
@@ -577,10 +588,10 @@ namespace MonkeyPaste.Avalonia {
                     Validate();
                     break;
                 case nameof(ValidationMessage):
-                    if (!string.IsNullOrEmpty(ValidationMessage)) {
+                    if (Label == "Email") {
 
-                        MpConsole.WriteLine($"Validation Msg Changed to '{ValidationMessage}'");
                     }
+                    MpConsole.WriteLine($"'{Label}' Validation Msg Changed to '{ValidationMessage}'");
                     OnPropertyChanged(nameof(IsValid));
                     break;
                 case nameof(IsSelected):

@@ -392,6 +392,12 @@ namespace MonkeyPaste.Avalonia {
             ShortcutDisplayName = await ShortcutType.GetShortcutTitleAsync(CommandParameter);
         }
 
+        public bool IsMatch(string keystr) {
+            if (RoutingType != MpRoutingType.Override) {
+                return keystr == KeyString;
+            }
+            return keystr.SplitNoEmpty(MpInputConstants.COMBO_SEPARATOR).Any(x => x == KeyString);
+        }
 
         #endregion
 

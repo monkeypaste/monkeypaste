@@ -170,25 +170,40 @@
 
             <!--  TEXTBOX (Optional)  -->
 
-            <Border Grid.Row="2"
-                    Grid.Column="1"
-                    IsVisible="{Binding ShowTextBox}"
-                    BorderThickness="2"
-                    BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
-                    Background="{DynamicResource ThemeInteractiveBgColor}"
-                    Margin="5,0,10,10"
-                    CornerRadius="7"
-                    Padding="3"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center">
-                <TextBox Watermark="{Binding Detail}"
-                         PasswordChar="{Binding PasswordChar}"
-                         TextAlignment="Left"
-                         FontSize="14"
-                         Padding="3"
-                         BorderThickness="0"
-                         Text="{Binding BoundInputText, Mode=TwoWay}" />
-            </Border>
+            <Grid Grid.Row="2"
+                  Grid.Column="1"
+                  IsVisible="{Binding ShowTextBox}"
+                  RowDefinitions="Auto,Auto">
+                <Border BorderThickness="2"
+                        BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
+                        Background="{DynamicResource ThemeInteractiveBgColor}"
+                        Margin="0,0,5,3"
+                        CornerRadius="7"
+                        Padding="3"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center">
+                    <TextBox Grid.Row="0"
+                             Watermark="{Binding Detail}"
+                             PasswordChar="{Binding PasswordChar}"
+                             Classes.password="{Binding PasswordChar, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                             Classes.revealPasswordButton="{Binding PasswordChar, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                             TextAlignment="Left"
+                             FontSize="14"
+                             Padding="3"
+                             BorderThickness="0"
+                             Text="{Binding BoundInputText, Mode=TwoWay}" />
+                </Border>
+                <StackPanel Grid.Row="1"
+                            Spacing="2"
+                            Orientation="Horizontal"
+                            IsVisible="{Binding CanRemember}">
+                    <Label Foreground="White"
+                           VerticalAlignment="Center"
+                           Content="{x:Static local:UiStrings.DbPasswordRememberLabel}" />
+                    <CheckBox x:Name="RememberCheckbox"
+                              IsChecked="{Binding RememberInputText, Mode=TwoWay}" />
+                </StackPanel>
+            </Grid>
             <!--  PROGRESS (Optional)  -->
             <Border Grid.Row="2"
                     Grid.Column="0"

@@ -44,5 +44,16 @@ namespace MonkeyPaste.Common {
             object owner = null,
             char passwordChar = default,
             MpNotificationType ntfType = MpNotificationType.ModalTextBoxOkCancelMessageBox);
+
+        Task<(string, bool)> ShowRememberableTextBoxMessageBoxAsync(
+            string title,
+            string message,
+            string currentText = null,
+            string placeholderText = null,
+            object anchor = null,
+            object iconResourceObj = null,
+            object owner = null,
+            char passwordChar = default,
+            MpNotificationType ntfType = MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox);
     }
 }

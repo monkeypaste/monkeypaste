@@ -2964,6 +2964,7 @@ namespace MonkeyPaste.Avalonia {
                 }
             } else {
                 await ProcessAccountCapsAsync(MpAccountCapCheckType.Add);
+                MpAvTagTrayViewModel.Instance.AllTagViewModel.UpdateClipCountAsync().FireAndForgetSafeAsync();
             }
 
             if (AppendClipTileViewModel == null &&

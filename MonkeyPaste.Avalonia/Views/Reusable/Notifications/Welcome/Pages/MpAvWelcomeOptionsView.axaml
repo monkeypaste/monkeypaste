@@ -106,7 +106,7 @@
                     Value="{StaticResource ThemedRainbowBrush}" />
         </Style>
 
-        <Style Selector="Border.unlim:not(.sel)">
+        <Style Selector="Border.unlim:pointerover:not(.sel)">
             <Setter Property="BorderBrush"
                     Value="{StaticResource GoldBrush}" />
         </Style>
@@ -424,6 +424,7 @@
                 IsVisible="{Binding CurPageType, ConverterParameter=DbPassword, Converter={x:Static local:MpAvEnumToBoolConverter.Instance}}">
             <local:MpAvSetPasswordView Grid.Row="3"
                                        ShowDialogButtons="False"
+                                       RememberPassword="{Binding RememberDbPassword}"
                                        AutoFilledPassword="{Binding AutoFillPassword}"
                                        ConfirmedPassword="{Binding DbPassword}"
                                        IsPasswordValid="{Binding IsDbPasswordValid}" />

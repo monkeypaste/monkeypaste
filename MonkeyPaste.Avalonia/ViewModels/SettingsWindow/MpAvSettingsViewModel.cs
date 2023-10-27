@@ -275,50 +275,21 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Login) {
-                            PluginFormat = new MpPluginFormat() {
-                                headless = new MpHeadlessPluginFormat() {
-                                    parameters = new List<MpParameterFormat>() {
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountUsername),
-                                            controlType = MpParameterControlType.TextBox,
-                                            unitType = MpParameterValueUnitType.PlainText,
-                                            label = "User Name",
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountPassword),
-                                            controlType = MpParameterControlType.PasswordBox,
-                                            unitType = MpParameterValueUnitType.PlainText,
-                                            label = "Password",
-                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword)
-                                        },
-                                       new MpParameterFormat() {
-                                            paramId = MpRuntimePrefParamType.AccountResetPassword.ToString(),
-                                            controlType = MpParameterControlType.Hyperlink,
-                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountResetPassword.ToString(),"Forgot Passwprd?")
-                                        },
-                                        new MpParameterFormat() {
-                                            paramId = MpRuntimePrefParamType.AccountLogin.ToString(),
-                                            controlType = MpParameterControlType.Button,
-                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountLogin.ToString(),"Login")
-                                        }
-                                    }
-                                }
-                            }
-                        },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Register) {
                             FrameHint = "Registration is cool right?",
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
                                     parameters = new List<MpParameterFormat>() {
                                         new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.AccountShowLogin.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            value = new MpPluginParameterValueFormat() {label = "Existing Account?"}
+                                        },
+                                        new MpParameterFormat() {
                                             paramId = nameof(MpAvPrefViewModel.Instance.AccountEmail),
                                             controlType = MpParameterControlType.TextBox,
                                             unitType = MpParameterValueUnitType.PlainText,
                                             label = "Email",
-                                            //pattern = MpRegEx.RegExLookup[MpRegExType.ExactEmail].ToString(),
-                                            //patternInfo = UiStrings.AccountRegistrationInvalidEmailText,
                                             value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountEmail)
                                         },
                                         new MpParameterFormat() {
@@ -348,16 +319,47 @@ namespace MonkeyPaste.Avalonia {
                                             controlType = MpParameterControlType.Hyperlink,
                                             value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountShowPrivacyPolicy.ToString(),"Privacy Policy")
                                         },
-                                       new MpParameterFormat() {
-                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountPrivacyPolicyAccepted),
-                                            controlType = MpParameterControlType.CheckBox,
-                                            unitType = MpParameterValueUnitType.Bool,
-                                            label = "Agree?"
-                                        },
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountRegister.ToString(),
                                             controlType = MpParameterControlType.Button,
                                             value = new MpPluginParameterValueFormat() {label = "Register"}
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.Login) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.AccountShowRegister.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            value = new MpPluginParameterValueFormat() {label = "Need to Register?"}
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountUsername),
+                                            controlType = MpParameterControlType.TextBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "User Name",
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountUsername)
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.AccountPassword),
+                                            controlType = MpParameterControlType.PasswordBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = "Password",
+                                            value = new MpPluginParameterValueFormat(MpAvPrefViewModel.Instance.AccountPassword)
+                                        },
+                                       new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.AccountResetPassword.ToString(),
+                                            controlType = MpParameterControlType.Hyperlink,
+                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountResetPassword.ToString(),"Forgot Passwprd?")
+                                        },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.AccountLogin.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountLogin.ToString(),"Login")
                                         }
                                     }
                                 }
@@ -1032,6 +1034,12 @@ namespace MonkeyPaste.Avalonia {
                                                 }
                                             }
                                         },
+                                        new MpParameterFormat() {
+                                            paramId = MpRuntimePrefParamType.ForgetDbPassword.ToString(),
+                                            controlType = MpParameterControlType.Button,
+                                            label = "Forget Password",
+                                            value = new MpPluginParameterValueFormat() {label="Forget"}
+                                        },
                                     }
                                 }
                             }
@@ -1043,7 +1051,7 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ResetNtf.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            label = "None Notifications",
+                                            label = "Restore Notifications",
                                             description = "All ignored notifications previously set.",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
@@ -1056,7 +1064,7 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.ResetShortcuts.ToString(),
                                             controlType = MpParameterControlType.Button,
-                                            label = "Gesture Profile",
+                                            label = "Reset Shortcuts",
                                             description = "All application shortcuts will be reset to their default key gestures.",
                                             values = new List<MpPluginParameterValueFormat>() {
                                                 new MpPluginParameterValueFormat() {
@@ -1447,6 +1455,9 @@ namespace MonkeyPaste.Avalonia {
                         Mp.Services.DbInfo.HasUserDefinedPassword ? "Change" : "Set";
                 }
             }
+            if (TryGetParamAndFrameViewModelsByParamId(MpRuntimePrefParamType.ForgetDbPassword.ToString(), out var forget_pwd_param_tuple)) {
+                forget_pwd_param_tuple.Item2.IsEnabled = MpAvPrefViewModel.Instance.RememberedDbPassword != null;
+            }
         }
         #endregion
 
@@ -1514,7 +1525,9 @@ namespace MonkeyPaste.Avalonia {
 
         public Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId) {
             if (Items != null &&
-                Items.FirstOrDefault(
+                Items
+                .OrderByDescending(x => x.IsVisible ? 1 : 0)
+                .FirstOrDefault(
                         x => x.Items != null && x.Items.Any(
                             y => y.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower()))
                         is MpAvSettingsFrameViewModel frame_vm &&
@@ -1661,12 +1674,13 @@ namespace MonkeyPaste.Avalonia {
                             };
 
                             var result = await cpw.ShowChildDialogWithResultAsync(MpAvWindowManager.LocateWindow(this));
-                            if (result is not string new_pwd || new_pwd == null) {
+                            if (result is not string new_pwd || new_pwd == null ||
+                                cpw.Content is not MpAvSetPasswordView spv) {
                                 // user cancel or closed window
                                 break;
                             }
 
-                            var success = await MpDb.ChangeDbPasswordAsync(new_pwd);
+                            bool success = await MpDb.ChangeDbPasswordAsync(new_pwd, spv.RememberPassword);
                             SetupPasswordButtons();
 
                             if (!success) {
@@ -1678,6 +1692,19 @@ namespace MonkeyPaste.Avalonia {
 
                             break;
                         }
+                    case MpRuntimePrefParamType.ForgetDbPassword: {
+                            var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
+                                    title: UiStrings.CommonNtfConfirmTitle,
+                                    message: "Are you sure you want to forget the password?",
+                                    iconResourceObj: "QuestionMarkImage");
+                            if (!result) {
+                                return;
+                            }
+                            Mp.Services.DbInfo.SetPassword(Mp.Services.DbInfo.DbPassword, false);
+                            SetupPasswordButtons();
+
+                            break;
+                        }
                     case MpRuntimePrefParamType.ClearDbPassword: {
                             var result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
                                 title: UiStrings.CommonNtfConfirmTitle,
@@ -1686,7 +1713,7 @@ namespace MonkeyPaste.Avalonia {
                             if (!result) {
                                 return;
                             }
-                            await MpDb.ChangeDbPasswordAsync(null);
+                            await MpDb.ChangeDbPasswordAsync(null, true);
                             SetupPasswordButtons();
                             break;
                         }
@@ -1794,6 +1821,15 @@ namespace MonkeyPaste.Avalonia {
 
                     case MpRuntimePrefParamType.AccountLogout: {
                             MpAvAccountViewModel.Instance.LogoutCommand.Execute(null);
+                            break;
+                        }
+
+                    case MpRuntimePrefParamType.AccountShowRegister: {
+                            MpAvAccountViewModel.Instance.ShowRegisterPanelCommand.Execute(null);
+                            break;
+                        }
+                    case MpRuntimePrefParamType.AccountShowLogin: {
+                            MpAvAccountViewModel.Instance.ShowLoginPanelCommand.Execute(null);
                             break;
                         }
 

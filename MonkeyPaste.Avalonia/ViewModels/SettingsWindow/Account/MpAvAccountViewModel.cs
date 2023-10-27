@@ -104,13 +104,18 @@ namespace MonkeyPaste.Avalonia {
 
         public string AccountStateInfo {
             get {
+                string offline = MpAvSubscriptionPurchaseViewModel.Instance.IsStoreAvailable ?
+                    string.Empty : $"{UiStrings.AccountOfflineLabel} ";
+                string acct_name = IsRegistered ? AccountUsername : UiStrings.AccountUnregisteredLabel;
                 int content_count = MpAvAccountTools.Instance.LastContentCount;
                 int cap_count = MpAvAccountTools.Instance.GetContentCapacity(AccountType);
                 if (AccountType == MpUserAccountType.Unlimited) {
                     return $"{AccountType} - (Total {content_count})";
                 }
                 return string.Format(
-                    @"{0} - ({1} total {2} capacity {3} remaining)",
+                    @"{0} [{1}] {2} - ({3} total {4} capacity {5} remaining)",
+                    offline,
+                    acct_name,
                     AccountType,
                     content_count,
                     cap_count,
@@ -122,8 +127,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        bool HasConfirmedAccount =>
-            MpAvPrefViewModel.Instance.LastLoginDateTimeUtc > DateTime.MinValue;
         public bool HasBillingCycle =>
             BillingCycleType == MpBillingCycleType.Monthly ||
             BillingCycleType == MpBillingCycleType.Yearly;
@@ -132,7 +135,6 @@ namespace MonkeyPaste.Avalonia {
             HasBillingCycle && DateTime.UtcNow > NextPaymentUtc;
 
         public bool CanLogin =>
-            !IsLoggedIn &&
             !string.IsNullOrEmpty(AccountUsername) &&
             !string.IsNullOrEmpty(AccountPassword);
 
@@ -146,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsLoggedIn =>
             AccountState == MpUserAccountState.Connected;
         public bool IsRegistered =>
-            AccountState != MpUserAccountState.Unregistered;
+            MpAvPrefViewModel.Instance.LastLoginDateTimeUtc > DateTime.MinValue;
 
         public MpUserAccountType WorkingAccountType =>
             IsExpired ? MpUserAccountType.Free : AccountType;
@@ -166,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
                     {"email", (nameof(MpAvPrefViewModel.Instance.AccountEmail),MpAvPrefViewModel.Instance.AccountEmail) },
                     {"password", (nameof(MpAvPrefViewModel.Instance.AccountPassword),MpAvPrefViewModel.Instance.AccountPassword) },
                     {"confirm", (nameof(MpAvPrefViewModel.Instance.AccountPassword2), MpAvPrefViewModel.Instance.AccountPassword2) },
-                    {"agree", (nameof(MpAvPrefViewModel.Instance.AccountPrivacyPolicyAccepted), MpAvPrefViewModel.Instance.AccountPrivacyPolicyAccepted ? "1":"0") },
+                    //{"agree", (nameof(MpAvPrefViewModel.Instance.AccountPrivacyPolicyAccepted), MpAvPrefViewModel.Instance.AccountPrivacyPolicyAccepted ? "1":"0") },
                 };
 
 
@@ -311,6 +313,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private bool ProcessServerResponse(string response, out Dictionary<string, string> args) {
             response = response.ToStringOrEmpty();
+            MpConsole.WriteLine($"Server response: '{response}'", level: MpLogLevel.Error);
             string msg_suffix = string.Empty;
             bool success = false;
             ClearErrors();
@@ -322,6 +325,8 @@ namespace MonkeyPaste.Avalonia {
             } else if (response.StartsWith(ERROR_PREFIX) &&
                 response.SplitNoEmpty(ERROR_PREFIX) is string[] error_parts) {
                 msg_suffix = string.Join(string.Empty, error_parts);
+            } else {
+                msg_suffix = response;
             }
 
             args = MpJsonConverter.DeserializeObject<Dictionary<string, string>>(msg_suffix);
@@ -375,14 +380,14 @@ namespace MonkeyPaste.Avalonia {
             }
             foreach (var afvm in MpAvSettingsViewModel.Instance.FilteredAccountFrames) {
                 switch (afvm.FrameType) {
-                    case MpSettingsFrameType.Status:
-                        afvm.IsVisible = AccountState == MpUserAccountState.Connected;
+                    case MpSettingsFrameType.Register:
+                        afvm.IsVisible = AccountState == MpUserAccountState.Unregistered;
                         break;
                     case MpSettingsFrameType.Login:
                         afvm.IsVisible = AccountState == MpUserAccountState.Disconnected;
                         break;
-                    case MpSettingsFrameType.Register:
-                        afvm.IsVisible = AccountState == MpUserAccountState.Unregistered;
+                    case MpSettingsFrameType.Status:
+                        afvm.IsVisible = AccountState == MpUserAccountState.Connected;// || IsSubscriptionDevice;
                         break;
                 }
             }
@@ -449,7 +454,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case MpAccountNtfType.RegistrationError:
                     title = UiStrings.CommonErrorLabel;
-                    msg = UiStrings.AccountRegistrationRegisterFailedText;
+                    msg = args[0],// UiStrings.AccountRegistrationRegisterFailedText;
                     icon = "ErrorImage";
                     break;
                 case MpAccountNtfType.RegistrationSuccessful:
@@ -547,7 +552,21 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        private void UpdateAccountState(MpUserAccountState acct_state, MpUserAccountType acct_type, DateTime expires, bool monthly, bool is_sub_device) {
 
+            IsSubscriptionDevice = is_sub_device;
+            AccountType = acct_type;
+            NextPaymentUtc =
+                AccountType == MpUserAccountType.Free ?
+                    DateTime.MaxValue :
+                    expires;
+            BillingCycleType =
+                AccountType == MpUserAccountType.Free ?
+                    MpBillingCycleType.None :
+                    monthly ?
+                        MpBillingCycleType.Monthly : MpBillingCycleType.Yearly;
+            AccountState = acct_state;
+        }
         #endregion
 
         #region Commands
@@ -566,59 +585,73 @@ namespace MonkeyPaste.Avalonia {
                 MpLoginSourceType login_type = (MpLoginSourceType)args;
 
                 SetButtonBusy(MpRuntimePrefParamType.AccountLogin, true);
-                MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
 
+                MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
+                bool is_sub_device = acct != MpSubscriptionFormat.Default;
+                MpUserAccountType acct_type = AccountType;
+                bool monthly = !IsYearly;
+                DateTime expires = NextPaymentUtc;
+
+                if (is_sub_device) {
+                    // this device has active subscription
+                    acct_type = acct.AccountType;
+                    monthly = !acct.IsYearly;
+                    expires = acct.ExpireOffsetUtc.DateTime;
+                }
 
                 var req_args = new Dictionary<string, (string, string)>() {
                     {"username", (nameof(MpAvPrefViewModel.Instance.AccountUsername),MpAvPrefViewModel.Instance.AccountUsername) },
                     {"password", (nameof(MpAvPrefViewModel.Instance.AccountPassword),MpAvPrefViewModel.Instance.AccountPassword) },
                     {"device_guid", (nameof(MpDefaultDataModelTools.ThisUserDeviceGuid), MpDefaultDataModelTools.ThisUserDeviceGuid) },
-                    {"sub_type", (null,acct == MpSubscriptionFormat.Default ? AccountType.ToString() : acct.AccountType.ToString())},
-                    {"monthly", (null, (acct == MpSubscriptionFormat.Default ? !IsYearly : acct.IsMonthly) ? "1" : "0")},
-                    {"expires_utc_dt", (null,acct == MpSubscriptionFormat.Default? NextPaymentUtc.ToString() : acct.ExpireOffsetUtc.UtcDateTime.ToString())},
                     {"detail1", (null,MpAvPrefViewModel.arg1)},
                     {"detail2", (null,MpAvPrefViewModel.arg2)},
                     {"detail3", (null,MpAvPrefViewModel.arg3)},
+                    {"sub_type",(null, acct_type.ToString())},
+                    {"monthly", (null, monthly ? "1" : "0")},
+                    {"expires_utc_dt", (null, expires.ToString())},
                 };
 
                 var sw = Stopwatch.StartNew();
-                string resp = await MpHttpRequester.SubmitPostDataToUrlAsync(LOGIN_BASE_URL, req_args.ToDictionary(x => x.Key, x => x.Value.Item2));
+                string resp = null;
+
+                if (CanLogin) {
+                    // NOTE avoid unnecessary requests for unregistered users
+                    resp = await MpHttpRequester.SubmitPostDataToUrlAsync(LOGIN_BASE_URL, req_args.ToDictionary(x => x.Key, x => x.Value.Item2));
+                }
 
                 SetButtonBusy(MpRuntimePrefParamType.AccountLogin, false);
 
                 bool success = ProcessServerResponse(resp, out var resp_args);
 
                 MpConsole.WriteLine($"login {success.ToTestResultLabel()}. Time: {sw.ElapsedMilliseconds}ms");
+                MpUserAccountState acct_state = MpUserAccountState.Unregistered;
                 if (success) {
                     MpDebug.Assert(resp_args != null, $"subscription error, login resp wrong");
-                    AccountType = resp_args["sub_type"].ToEnum<MpUserAccountType>();
-                    NextPaymentUtc =
-                        AccountType == MpUserAccountType.Free ?
-                            DateTime.MaxValue :
-                            DateTime.Parse(resp_args["expires_utc_dt"]);
-                    BillingCycleType =
-                        AccountType == MpUserAccountType.Free ?
-                            MpBillingCycleType.None :
-                            resp_args["monthly"] == "1" ?
-                                MpBillingCycleType.Monthly : MpBillingCycleType.Yearly;
 
-                    IsSubscriptionDevice = AccountType == acct.AccountType;
-                    AccountState = MpUserAccountState.Connected;
+                    acct_type = resp_args["sub_type"].ToEnum<MpUserAccountType>();
+                    expires = DateTime.Parse(resp_args["expires_utc_dt"]);
+                    monthly = resp_args["monthly"] == "1";
+
+                    acct_state = MpUserAccountState.Connected;
                     if (login_type == MpLoginSourceType.Click) {
                         ShowAccountNotficationAsync(MpAccountNtfType.LoginSuccessful).FireAndForgetSafeAsync();
                     }
                     StartExpirationTimer();
+                } else {
+                    acct_state = IsRegistered ? MpUserAccountState.Disconnected : MpUserAccountState.Unregistered;
+                }
+                UpdateAccountState(acct_state, acct_type, expires, monthly, is_sub_device);
+                if (success) {
                     return;
                 }
 
-                AccountState = MpUserAccountState.Disconnected;
                 // user offline or unregistered
                 StartExpirationTimer();
 
                 if (login_type == MpLoginSourceType.Timer) {
                     return;
                 }
-                if (login_type == MpLoginSourceType.Init && !HasConfirmedAccount) {
+                if (login_type == MpLoginSourceType.Init && !IsRegistered) {
                     return;
                 }
                 ProcessResponseErrors(
@@ -628,7 +661,7 @@ namespace MonkeyPaste.Avalonia {
                 StartAttemptLoginTimer();
             }, (args) => {
                 //return !IsLoggedIn;
-                return CanLogin && args is MpLoginSourceType;
+                return !IsLoggedIn && args is MpLoginSourceType;
             });
 
         public MpIAsyncCommand RegisterCommand => new MpAsyncCommand(
@@ -685,6 +718,16 @@ namespace MonkeyPaste.Avalonia {
                 AccountState = MpUserAccountState.Disconnected;
             }, () => {
                 return IsLoggedIn;
+            });
+
+        public ICommand ShowRegisterPanelCommand => new MpCommand(
+            () => {
+                AccountState = MpUserAccountState.Unregistered;
+            });
+
+        public ICommand ShowLoginPanelCommand => new MpCommand(
+            () => {
+                AccountState = MpUserAccountState.Disconnected;
             });
 
         #endregion

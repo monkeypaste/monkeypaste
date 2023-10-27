@@ -6,10 +6,11 @@ namespace MonkeyPaste {
         string DbFileName { get; }
         string DbDir { get; }
         string DbPath { get; }
-        string DbPassword { get; set; }
+        string DbPassword { get; }
         bool HasUserDefinedPassword { get; }
 
         DateTime? DbCreateDateTime { get; set; }
+        void SetPassword(string pwd, bool remember);
     }
 
 }

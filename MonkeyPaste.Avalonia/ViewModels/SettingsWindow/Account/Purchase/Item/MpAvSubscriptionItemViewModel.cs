@@ -197,6 +197,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        public bool MatchesAccount =>
+            AccountType == MpAvAccountViewModel.Instance.AccountType &&
+            IsMonthlyEnabled == MpAvAccountViewModel.Instance.IsMonthly;
+
         #endregion
 
         #region Model

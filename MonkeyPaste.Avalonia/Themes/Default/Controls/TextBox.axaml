@@ -39,10 +39,15 @@
                 Value="True" />
     </Style>
 
-    <Style Selector="TextBox.password">
-
+    <Style Selector=":is(TextBox).password">
+        <Setter Property="AcceptsTab"
+                Value="False" />
+        <Setter Property="AcceptsReturn"
+                Value="False" />
         <Setter Property="PasswordChar"
-                Value="●" />
+                Value="•" />
+        <Setter Property="local:MpAvSecureTextBoxExtension.IsEnabled"
+                Value="True" />
     </Style>
 
     <!--<Style Selector="TextBox.clearButton /template/ Button">

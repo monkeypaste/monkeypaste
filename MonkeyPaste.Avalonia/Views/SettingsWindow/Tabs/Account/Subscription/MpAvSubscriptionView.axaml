@@ -41,10 +41,8 @@
 
         <!--  OUTER BORDER  -->
         <Style Selector="Border#OuterBorder">
-            <!--<Setter Property="BorderBrush"
-                    Value="{StaticResource StainlessSteelBrush}" />-->
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeWhite}" />
+                    Value="{DynamicResource ThemeWhiteBrush}" />
             <Setter Property="Background"
                     Value="{StaticResource HitTestableTransparent}" />
         </Style>
@@ -52,13 +50,21 @@
         <Style Selector="Border#OuterBorder.unlimited">
             <Setter Property="local:MpAvIsHoveringExtension.IsBorderTimerEnabled"
                     Value="True" />
-            <Setter Property="local:MpAvIsHoveringExtension.TimerDeltaAngle"
-                    Value="1.5" />
+        </Style>
+
+        <Style Selector="ListBoxItem:pointerover:not(:selected) Border#OuterBorder">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent1Color}" />
+        </Style>
+
+        <Style Selector="ListBoxItem:pointerover:not(:selected) Border#OuterBorder.unlimited">
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource GoldBrush}" />
         </Style>
 
         <Style Selector="ListBoxItem:selected Border#OuterBorder">
             <Setter Property="BorderBrush"
-                    Value="{StaticResource GoldBrush}" />
+                    Value="{DynamicResource ThemeAccent3Color}" />
         </Style>
 
         <Style Selector="ListBoxItem:not(:selected) Border#OuterBorder.unlimited">
@@ -157,18 +163,39 @@
                                            VerticalAlignment="Stretch">
 
                                     <!--  ACCOUNT TYPE ICON BORDER  -->
+                                    <Grid RowDefinitions="*,Auto"
+                                          DockPanel.Dock="Left"
+                                          VerticalAlignment="Center">
+                                        <Border Classes="acctIcon squareByHeight"
+                                                CornerRadius="7"
+                                                BorderThickness="2"
+                                                Padding="5">
+                                            <Image Width="30"
+                                                   Height="30"
+                                                   Stretch="UniformToFill"
+                                                   Source="{Binding IconSourceObj, ConverterParameter=test, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
+                                        </Border>
 
-                                    <Border DockPanel.Dock="Left"
-                                            Classes="acctIcon squareByHeight"
-                                            CornerRadius="7"
-                                            BorderThickness="2"
-                                            VerticalAlignment="Center"
-                                            Padding="5">
-                                        <Image Width="30"
-                                               Height="30"
-                                               Stretch="UniformToFill"
-                                               Source="{Binding IconSourceObj, ConverterParameter=test, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}" />
-                                    </Border>
+                                        <!--  IS ACTIVE LABEL  -->
+                                        <Border Grid.Row="1"
+                                                HorizontalAlignment="Stretch"
+                                                IsVisible="{Binding MatchesAccount}"
+                                                Margin="0,3,0,0"
+                                                CornerRadius="7"
+                                                Background="Blue">
+                                            <TextBlock Grid.Row="1"
+                                                       HorizontalAlignment="Stretch"
+                                                       TextAlignment="Center"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="8"
+                                                       Foreground="White"
+                                                       Text="{x:Static local:UiStrings.AccountActiveLabel}" />
+                                        </Border>
+
+                                    </Grid>
+
+
+
 
                                     <!--  RATE  -->
                                     <TransitioningContentControl DockPanel.Dock="Right"
@@ -213,7 +240,7 @@
 
                                         <!--  ACCOUNT TYPE INFO  -->
                                         <TextBlock HorizontalAlignment="Stretch"
-                                                   VerticalAlignment="Stretch"
+                                                   VerticalAlignment="Center"
                                                    TextWrapping="WrapWithOverflow"
                                                    MaxWidth="200"
                                                    TextAlignment="Left"
@@ -230,16 +257,14 @@
 
             <!--  BUY BUTTON  -->
             <Button x:Name="BuyButton"
-                    x:DataType="local:MpAvSubscriptionItemViewModel"
-                    DataContext="{Binding SelectedItem}"
-                    Classes.shake="{Binding DoFocusPulse}"
                     Grid.Row="2"
                     Loaded="BuyButton_Loaded"
                     Classes="defaultButton"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Opacity="{Binding CanBuy, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"
-                    Command="{Binding Parent.PurchaseSubscriptionCommand}">
+                    IsVisible="{Binding SelectedItem, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                    Opacity="{Binding SelectedItem.CanBuy, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}, FallbackValue=0, TargetNullValue=0}"
+                    Command="{Binding PurchaseSubscriptionCommand}">
                 <Button.RenderTransform>
                     <RotateTransform />
                 </Button.RenderTransform>
@@ -259,7 +284,8 @@
                     <SolidColorBrush x:Key="ButtonForegroundPointerOver">Black</SolidColorBrush>
                     <SolidColorBrush x:Key="ButtonForegroundPressed">Black</SolidColorBrush>
                 </Button.Resources>
-                <DockPanel>
+                <DockPanel DataContext="{Binding SelectedItem}"
+                           x:DataType="local:MpAvSubscriptionItemViewModel">
                     <Image DockPanel.Dock="Left"
                            Width="30"
                            Height="30"

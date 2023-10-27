@@ -837,7 +837,12 @@ function hideAllTemplateContextMenus() {
     hideCreateTemplateToolbarContextMenu();
 }
 
-function decodeInsertedTemplates(insertIdx, plainText, source = 'silent') {
+function decodeInsertedTemplates(insertIdx, plainText, source = 'api') {
+    if (plainText.indexOf(globals.ENCODED_TEMPLATE_OPEN_TOKEN) < 0) {
+        // no templates, avoid processing its very slow (N^2)
+        insertText(insertIdx, plainText, source, false);
+        return;
+    }
     // parse all text for encoded templates
     // parse inserted text for [tguid,tiguid] and replace w/ template blot and mark for update
     for (var i = 0; i < plainText.length; i++) {

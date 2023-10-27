@@ -12,7 +12,6 @@ namespace MonkeyPaste.Avalonia {
         MpAvContentWebView,
         MpIPlainHtmlConverterView {
         #region Private Variables
-
         private MpQuillConvertPlainHtmlToQuillHtmlResponseMessage _lastPlainHtmlConvertedResp = null;
         #endregion
 

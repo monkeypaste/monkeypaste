@@ -59,13 +59,20 @@
 
     <Style Selector="ListBox#PluginParameterListBox"
            x:DataType="local:MpAvParameterViewModelBase">
-        <!--<Setter Property="KeyboardNavigation.TabOnceActiveElement"
-                Value="0" />-->
+        <Setter Property="KeyboardNavigation.TabNavigation"
+                Value="Local" />
+    </Style>
+    <Style Selector="ListBox#PluginParameterListBox > ListBoxItem, ListBox#PluginParameterListBox > ListBoxItem :is(Control):not(.param)"
+           x:DataType="local:MpAvParameterViewModelBase">
+        <Setter Property="IsTabStop"
+                Value="False" />
     </Style>
 
-    <Style Selector="ListBox#PluginParameterListBox > ListBoxItem:nth-child(1) :is(Control).param"
+    <Style Selector="ListBox#PluginParameterListBox > ListBoxItem :is(Control).param"
            x:DataType="local:MpAvParameterViewModelBase">
         <Setter Property="KeyboardNavigation.TabIndex"
-                Value="0" />
+                Value="{Binding TabIdx}" />
+        <Setter Property="KeyboardNavigation.IsTabStop"
+                Value="True" />
     </Style>
 </Styles>

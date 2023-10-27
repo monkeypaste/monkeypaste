@@ -50,6 +50,7 @@ namespace MonkeyPaste.Avalonia {
         public MpNotificationDialogResultType DialogResult { get; private set; }
         public string InputResult { get; private set; }
         public string BoundInputText { get; set; }
+        public bool RememberInputText { get; set; }
 
         public string ValidationText { get; set; }
 
@@ -60,6 +61,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
+        public bool CanRemember {
+            get {
+                if (NotificationFormat == null) {
+                    return default;
+                }
+                return NotificationFormat.CanRemember;
+            }
+        }
         public char PasswordChar {
             get {
                 if (NotificationFormat == null) {
@@ -267,7 +276,11 @@ namespace MonkeyPaste.Avalonia {
             }
             HideNotification();
 
-            return InputResult;
+            // NOTE ensure null only returned by cancel
+            return DialogResult == MpNotificationDialogResultType.Cancel ?
+                null :
+                InputResult == null ?
+                string.Empty : InputResult;
         }
 
         #endregion

@@ -151,10 +151,12 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void MpAnalyticItemParameterViewModel_OnValidate(object sender, EventArgs e) {
             base.MpAnalyticItemParameterViewModel_OnValidate(sender, e);
-            if (IsValidationOverrideEnabled) {
-                return;
+            if (Label == "Email") {
+
             }
-            if (CurrentValue != null && CurrentValue.Length < MinLength) {
+            if (IsValidationOverrideEnabled) {
+
+            } else if (CurrentValue != null && CurrentValue.Length < MinLength) {
                 ValidationMessage = string.Format(UiStrings.ParameterInvalidLengthCaption, Label, MinLength);
             } else if (CurrentValue != null && CurrentValue.Length > MaxLength) {
                 ValidationMessage = string.Format(UiStrings.ParameterInvalidLengthCaption2, Label, MinLength);
@@ -189,10 +191,6 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void MpContentParameterViewModel_OnValidate(object sender, EventArgs e) {
-            ValidationMessage = string.Empty;
-            OnPropertyChanged(nameof(IsValid));
-        }
 
         #endregion
 

@@ -35,13 +35,10 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 if (!_isContextWindowInitialized &&
-                    MpAvWindowManager.ActiveWindow is MpAvWindow w) {
-                    nint hwnd = w.TryGetPlatformHandle().Handle;
-                    if (hwnd != nint.Zero) {
-                        // from https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials#desktop
-                        WinRT.Interop.InitializeWithWindow.Initialize(_context, hwnd);
-                        _isContextWindowInitialized = true;
-                    }
+                    MpAvWindowManager.PrimaryHandle != nint.Zero) {
+                    // from https://learn.microsoft.com/en-us/windows/uwp/monetize/in-app-purchases-and-trials#desktop
+                    WinRT.Interop.InitializeWithWindow.Initialize(_context, MpAvWindowManager.PrimaryHandle);
+                    _isContextWindowInitialized = true;
                 }
 
                 return _context;
@@ -50,20 +47,20 @@ namespace MonkeyPaste.Avalonia {
 
         Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup { get; } =
             new Dictionary<string, (MpUserAccountType, bool)>() {
-//#if DEBUG
-//                {"9N0M0CF894CV", (MpUserAccountType.Standard, true) },
-//                {"9NTBHV933F76", (MpUserAccountType.Standard, false) },
+#if DEBUG
+                {"9N0M0CF894CV", (MpUserAccountType.Standard, true) },
+                {"9NTBHV933F76", (MpUserAccountType.Standard, false) },
 
-//                {"9P06QJ00F7Q8", (MpUserAccountType.Unlimited, true) },
-//                {"9N2BVBP6MSP6", (MpUserAccountType.Unlimited, false) }
-//#else
+                {"9P06QJ00F7Q8", (MpUserAccountType.Unlimited, true) },
+                {"9N2BVBP6MSP6", (MpUserAccountType.Unlimited, false) }
+#else
                 {"9PP3W114BHL5", (MpUserAccountType.Standard, true) },
                 {"9N41GXV5HQQ2", (MpUserAccountType.Standard, false) },
 
                 {"9PGVZ60KMDQ7", (MpUserAccountType.Unlimited, true) },
                 {"9NN60Z6FX02H", (MpUserAccountType.Unlimited, false) }
 
-//#endif
+#endif
             };
 
         #endregion
@@ -120,15 +117,15 @@ namespace MonkeyPaste.Avalonia {
             KeyValuePair<string, StoreLicense> user_storeid_license_kvp = default;
             if (appLicense
                 .AddOnLicenses
-                .Where(x => x.Value.IsActive)
-                .OrderByDescending(x => (int)AccountTypeAddOnStoreIdLookup[x.Value.SkuStoreId].Item1)
+                .Where(x => x.Value.IsActive && AccountTypeAddOnStoreIdLookup.ContainsKey(ParseSkuStoreId(x)))
+                .OrderByDescending(x => (int)AccountTypeAddOnStoreIdLookup[ParseSkuStoreId(x)].Item1)
                 .FirstOrDefault() is var active_kvp) {
                 // found most significant active license 
                 user_storeid_license_kvp = active_kvp;
             } else if (appLicense
                 .AddOnLicenses
-                .Where(x => !x.Value.IsActive)
-                .OrderByDescending(x => (int)AccountTypeAddOnStoreIdLookup[x.Value.SkuStoreId].Item1)
+                .Where(x => !x.Value.IsActive && AccountTypeAddOnStoreIdLookup.ContainsKey(ParseSkuStoreId(x)))
+                .OrderByDescending(x => (int)AccountTypeAddOnStoreIdLookup[ParseSkuStoreId(x)].Item1)
                 .FirstOrDefault() is var inactive_kvp) {
 
                 // find most significant inactive license 
@@ -140,7 +137,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (AccountTypeAddOnStoreIdLookup
-                .TryGetValue(user_storeid_license_kvp.Value.SkuStoreId, out var acct_type_tup)) {
+                .TryGetValue(ParseSkuStoreId(user_storeid_license_kvp), out var acct_type_tup)) {
                 return new MpSubscriptionFormat() {
                     AccountType = acct_type_tup.Item1,
                     IsMonthly = acct_type_tup.Item2,
@@ -148,7 +145,7 @@ namespace MonkeyPaste.Avalonia {
                     ExpireOffsetUtc = user_storeid_license_kvp.Value.ExpirationDate
                 };
             }
-            MpDebug.Break($"User license error. Cannot find internal ref to ms store id '{user_storeid_license_kvp.Value.SkuStoreId}'");
+            MpDebug.Break($"User license error. Cannot find internal ref to ms store id '{ParseSkuStoreId(user_storeid_license_kvp)}'");
             return MpSubscriptionFormat.Default;
         }
 
@@ -203,6 +200,7 @@ namespace MonkeyPaste.Avalonia {
                 // likely offline
                 return false;
             }
+            MpDebug.Assert(_isContextWindowInitialized, "StoreContext not initialized");
             if (!_isContextWindowInitialized) {
                 // window handle error, should probably not happen but dunno
                 return false;
@@ -237,6 +235,13 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine("The purchase was unsuccessful due to a server or network error. ExtendedError: " + extendedError);
                     return false;
             }
+        }
+
+        private string ParseSkuStoreId(KeyValuePair<string, StoreLicense> kvp) {
+            if (kvp.Value == null || string.IsNullOrEmpty(kvp.Value.SkuStoreId)) {
+                return string.Empty;
+            }
+            return kvp.Value.SkuStoreId.SplitNoEmpty(@"/")[0];
         }
         #endregion
 

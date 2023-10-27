@@ -109,5 +109,19 @@ namespace MonkeyPaste.Avalonia {
                                     ntfType: ntfType);
             return result;
         }
+
+        public async Task<(string, bool)> ShowRememberableTextBoxMessageBoxAsync(string title, string message, string currentText = null, string placeholderText = null, object anchor = null, object iconResourceObj = null, object owner = null, char passwordChar = default, MpNotificationType ntfType = MpNotificationType.ModalRememberableTextBoxOkCancelMessageBox) {
+            var result = await Mp.Services.NotificationBuilder.ShowRememberableInputResultNotificationAsync(
+                                    title: title,
+                                    body: message,
+                                    currentInput: currentText,
+                                    placeholderText: placeholderText,
+                                    iconResourceObj: iconResourceObj,
+                                    anchor: anchor,
+                                    owner: owner,
+                                    passwordChar: passwordChar,
+                                    ntfType: ntfType);
+            return result;
+        }
     }
 }

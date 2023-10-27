@@ -22,7 +22,7 @@
         "controlType": "TextBox",
         "unitType": "RawDataContentQuery",
         "isVisible": false,
-        "paramId": 1,
+        "paramId": "content",
         "values": [
           {
             "value": "{ItemData}"
@@ -35,23 +35,10 @@
         "controlType": "TextBox",
         "unitType": "PlainTextContentQuery",
         "isVisible": false,
-        "paramId": 2,
+        "paramId": "plaintext",
         "values": [
           {
             "value": "{ItemData}"
-          }
-        ]
-      },
-      {
-        "label": "File Or Folder",
-        "controlType": "CheckBox",
-        "unitType": "Bool",
-        "isVisible": false,
-        "paramId": 3,
-        "values": [
-          {
-            "value": "false",
-            "isDefault": true
           }
         ]
       },
@@ -60,7 +47,7 @@
         "controlType": "CheckBox",
         "unitType": "Bool",
         "isVisible": true,
-        "paramId": 4,
+        "paramId": "Url",
         "values": [
           {
             "value": "true",
@@ -73,7 +60,7 @@
         "controlType": "CheckBox",
         "unitType": "Bool",
         "isVisible": true,
-        "paramId": 5,
+        "paramId": "Email",
         "values": [
           {
             "value": "true",
@@ -86,7 +73,7 @@
         "controlType": "CheckBox",
         "unitType": "Bool",
         "isVisible": true,
-        "paramId": 6,
+        "paramId": "PhoneNumber",
         "values": [
           {
             "value": "true",
@@ -99,7 +86,7 @@
         "controlType": "CheckBox",
         "unitType": "Bool",
         "isVisible": true,
-        "paramId": 7,
+        "paramId": "Currency",
         "values": [
           {
             "value": "true",
@@ -112,28 +99,14 @@
         "controlType": "CheckBox",
         "unitType": "Bool",
         "isVisible": true,
-        "paramId": 8,
+        "paramId": "HexColor",
         "values": [
           {
             "value": "true",
             "isDefault": true
           }
         ]
-      },
-      {
-        "label": "Street Address",
-        "description": "Attempts to be general use but may not always be accurate depending on locale.",
-        "controlType": "CheckBox",
-        "unitType": "Bool",
-        "isVisible": false,
-        "paramId": 9,
-        "values": [
-          {
-            "value": "false",
-            "isDefault": true
-          }
-        ]
-      }
+      }      
     ],
     "presets": [
       {
@@ -142,31 +115,23 @@
         "description": "All text annotations are enabled",
         "values": [
           {
-            "paramId": 3,
+            "paramId": "Url",
             "value": "true"
           },
           {
-            "paramId": 4,
+            "paramId": "Email",
             "value": "true"
           },
           {
-            "paramId": 5,
+            "paramId": "PhoneNumber",
             "value": "true"
           },
           {
-            "paramId": 6,
+            "paramId": "Currency",
             "value": "true"
           },
           {
-            "paramId": 7,
-            "value": "true"
-          },
-          {
-            "paramId": 8,
-            "value": "true"
-          },
-          {
-            "paramId": 9,
+            "paramId": "HexColor",
             "value": "true"
           }
         ]
