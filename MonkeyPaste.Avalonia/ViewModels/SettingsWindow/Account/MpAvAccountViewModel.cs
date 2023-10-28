@@ -28,17 +28,18 @@ namespace MonkeyPaste.Avalonia {
     }
     public enum MpAccountNtfType {
         None = 0,
-        LoginSuccessful,
+        ExistingLoginSuccessful,
         LoginFailedUser,
         LoginFailedStartup,
+        ResetSent,
+        ResetError,
         RegistrationSuccessful,
         RegistrationError,
         AccountExpiredLocal,
         AccountExpiredRemote,
         AccountExpiredOffline,
-        ResetSent,
-        ResetError
     }
+
     public class MpAvAccountViewModel :
         MpAvViewModelBase {
         #region Private Variables
@@ -54,17 +55,16 @@ namespace MonkeyPaste.Avalonia {
         const string SUCCESS_PREFIX = "[SUCCESS]";
         const string ERROR_PREFIX = "[ERROR]";
 
-        const string PRIVACY_POLICY_URL = "https://www.monkeypaste.com/legal/privacy.html";
-
-        const string PING_URL = "https://www.monkeypaste.com/accounts/ping.php";
-        const string PING_RESPONSE = "Hello";
-
-        const string REGISTER_BASE_URL = "https://www.monkeypaste.com/accounts/register.php";
-        const string LOGIN_BASE_URL = "https://www.monkeypaste.com/accounts/login.php";
-        const string RESET_PASSWORD_BASE_URL = "https://www.monkeypaste.com/accounts/reset-request.php";
         #endregion
 
         #region Statics 
+
+        static string PRIVACY_POLICY_URL = $"{MpServerConstants.DOMAIN_URL}/legal/privacy.html";
+
+        static string REGISTER_BASE_URL = $"{MpServerConstants.DOMAIN_URL}/accounts/register.php";
+        static string LOGIN_BASE_URL = $"{MpServerConstants.DOMAIN_URL}/accounts/login.php";
+        static string RESET_PASSWORD_BASE_URL = $"{MpServerConstants.DOMAIN_URL}/accounts/reset-request.php";
+
         private static MpAvAccountViewModel _instance;
         public static MpAvAccountViewModel Instance => _instance ?? (_instance = new MpAvAccountViewModel());
 
@@ -134,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsPaymentPastDue =>
             HasBillingCycle && DateTime.UtcNow > NextPaymentUtc;
 
-        public bool CanLogin =>
+        public bool CanAttemptLogin =>
             !string.IsNullOrEmpty(AccountUsername) &&
             !string.IsNullOrEmpty(AccountPassword);
 
@@ -170,6 +170,16 @@ namespace MonkeyPaste.Avalonia {
                     {"confirm", (nameof(MpAvPrefViewModel.Instance.AccountPassword2), MpAvPrefViewModel.Instance.AccountPassword2) },
                     //{"agree", (nameof(MpAvPrefViewModel.Instance.AccountPrivacyPolicyAccepted), MpAvPrefViewModel.Instance.AccountPrivacyPolicyAccepted ? "1":"0") },
                 };
+
+        Dictionary<string, string> GetStatusArgs() {
+            return new Dictionary<string, string>() {
+                    {nameof(MpAvPrefViewModel.Instance.AccountUsername),MpAvPrefViewModel.Instance.AccountUsername },
+                    {nameof(MpAvPrefViewModel.Instance.AccountEmail),MpAvPrefViewModel.Instance.AccountEmail) },
+                    {nameof(MpAvPrefViewModel.Instance.AccountType),MpAvPrefViewModel.Instance.AccountType.EnumToUiString()) },
+                    {nameof(MpAvPrefViewModel.Instance.AccountBillingCycleType), BillingCycleType.EnumToUiString()) },
+                    {nameof(MpAvPrefViewModel.Instance.AccountNextPaymentDateTime), NextPaymentDisplayValue) },
+                };
+        }
 
 
         #endregion
@@ -243,7 +253,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        public async Task<MpUserAccountType> ShowExistingAccountLoginWindowAsync() {
+        public async Task ShowExistingAccountLoginWindowAsync() {
             MpDebug.Assert(MpAvWelcomeNotificationViewModel.Instance.IsWindowOpen, $"Existing acct window error. Only supposed to be used during welcome");
 
             AccountState = MpUserAccountState.Disconnected;
@@ -252,24 +262,21 @@ namespace MonkeyPaste.Avalonia {
             await svm.ShowSettingsWindowCommand.ExecuteAsync(MpSettingsTabType.Account);
 
 
-            while (true) {
-                if (!svm.IsWindowOpen) {
-                    // closed window ie cancel
-                    ResetAccountPrefs();
-                    AccountState = MpUserAccountState.Unregistered;
-                    return MpUserAccountType.None;
-                }
-                if (AccountState == MpUserAccountState.Connected) {
-                    // login successful show confirmation and close window to return welcome
-                    await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                         title: string.Empty,
-                         message: UiStrings.AccountLoginSuccessfulText,
-                         iconResourceObj: "MonkeyWinkImage");
-                    svm.IsWindowOpen = false;
-                    return AccountType;
-                }
-                await Task.Delay(300);
-            }
+            //while (true) {
+            //    if (!svm.IsWindowOpen) {
+            //        // closed window ie cancel
+            //        ResetAccountPrefs();
+            //        AccountState = MpUserAccountState.Unregistered;
+            //        return MpUserAccountType.None;
+            //    }
+            //    if (AccountState == MpUserAccountState.Connected) {
+            //        // login successful show confirmation and close window to return welcome
+            //        ShowAccountNotficationAsync(MpAccountNtfType.ExistingLoginSuccessful).FireAndForgetSafeAsync();
+            //        svm.IsWindowOpen = false;
+            //        return AccountType;
+            //    }
+            //    await Task.Delay(300);
+            //}
         }
         #endregion
 
@@ -293,9 +300,19 @@ namespace MonkeyPaste.Avalonia {
                     switch (AccountState) {
                         case MpUserAccountState.Connected:
                             MpAvPrefViewModel.Instance.LastLoginDateTimeUtc = DateTime.UtcNow;
-                            StartExpirationTimer();
+
+                            if (!MpAvPrefViewModel.Instance.IsWelcomeComplete &&
+                                MpAvWindowManager.LocateWindow(MpAvSettingsViewModel.Instance) is MpAvWindow stw) {
+                                Dispatcher.UIThread.Post(async () => {
+                                    await ShowAccountNotficationAsync(MpAccountNtfType.ExistingLoginSuccessful);
+                                    // close login window programmatically
+                                    stw.Close();
+                                    MpAvWelcomeNotificationViewModel.Instance.SelectNextPageCommand.Execute(null);
+                                });
+                            }
                             break;
                     }
+                    MpMessenger.SendGlobal(MpMessageType.AccountStateChanged);
                     break;
             }
         }
@@ -354,10 +371,11 @@ namespace MonkeyPaste.Avalonia {
             if (errors == null) {
                 return;
             }
+            MpSettingsFrameType frameType = GetNtfParamFrame(ntf_type);
             var err_sb = new StringBuilder();
             foreach (var error_kvp in errors) {
                 if (param_id_lookup.TryGetValue(error_kvp.Key, out string param_id)) {
-                    if (MpAvSettingsViewModel.Instance.TryGetParamAndFrameViewModelsByParamId(param_id, out var param_tup)) {
+                    if (MpAvSettingsViewModel.Instance.TryGetParamAndFrameViewModelsByParamId(frameType, param_id, out var param_tup)) {
                         param_tup.Item2.OverrideValidationMesage(error_kvp.Value);
                     } else {
                         MpConsole.WriteLine($"Cannot find settings param '{param_id}'");
@@ -374,6 +392,25 @@ namespace MonkeyPaste.Avalonia {
             }
             ShowAccountNotficationAsync(ntf_type, err_str).FireAndForgetSafeAsync();
         }
+        private MpSettingsFrameType GetNtfParamFrame(MpAccountNtfType ntfType) {
+            switch (ntfType) {
+                case MpAccountNtfType.ExistingLoginSuccessful:
+                case MpAccountNtfType.LoginFailedStartup:
+                case MpAccountNtfType.LoginFailedUser:
+                case MpAccountNtfType.ResetSent:
+                case MpAccountNtfType.ResetError:
+                    return MpSettingsFrameType.Login;
+                case MpAccountNtfType.RegistrationError:
+                case MpAccountNtfType.RegistrationSuccessful:
+                    return MpSettingsFrameType.Register;
+                case MpAccountNtfType.AccountExpiredLocal:
+                case MpAccountNtfType.AccountExpiredRemote:
+                case MpAccountNtfType.AccountExpiredOffline:
+                    return MpSettingsFrameType.Status;
+                default:
+                    return MpSettingsFrameType.None;
+            }
+        }
         private void UpdateAccountViews() {
             if (MpAvSettingsViewModel.Instance.FilteredAccountFrames == null) {
                 return;
@@ -387,7 +424,14 @@ namespace MonkeyPaste.Avalonia {
                         afvm.IsVisible = AccountState == MpUserAccountState.Disconnected;
                         break;
                     case MpSettingsFrameType.Status:
-                        afvm.IsVisible = AccountState == MpUserAccountState.Connected;// || IsSubscriptionDevice;
+                        var status_args = GetStatusArgs();
+                        foreach (var pvm in afvm.Items) {
+                            if (status_args.TryGetValue(pvm.ParamId.ToStringOrEmpty(), out string param_val)) {
+                                pvm.CurrentValue = param_val;
+                            } else {
+                                MpConsole.WriteLine($"no reg status param for update '{pvm.ParamId}'");
+                            }
+                        }
                         break;
                 }
             }
@@ -412,13 +456,6 @@ namespace MonkeyPaste.Avalonia {
             MpAvPrefViewModel.Instance.AccountNextPaymentDateTime = DateTime.MaxValue;
         }
 
-        private async Task<bool> CheckIfServerIsAvailableAsync() {
-            string resp = await MpFileIo.ReadTextFromUriAsync(PING_URL);
-            string test = await MpFileIo.ReadTextFromUriAsync(@"https://www.monkeypaste.com/accounts/blah.php");
-            MpDebug.BreakAll();
-            return resp == PING_RESPONSE;
-
-        }
 
         private async Task ShowAccountNotficationAsync(MpAccountNtfType ant, params string[] args) {
             string title = null;
@@ -426,6 +463,8 @@ namespace MonkeyPaste.Avalonia {
             object icon = null;
             MpNotificationType ntf_type = MpNotificationType.None;
             switch (ant) {
+                default:
+                    return;
                 case MpAccountNtfType.AccountExpiredRemote:
                 case MpAccountNtfType.AccountExpiredOffline:
                 case MpAccountNtfType.AccountExpiredLocal:
@@ -436,30 +475,31 @@ namespace MonkeyPaste.Avalonia {
                         ant == MpAccountNtfType.AccountExpiredRemote ?
                         UiStrings.AccountExpiredNtfRemoteCaption :
                         UiStrings.AccountExpiredNtfOfflineCaption;
-                    msg = string.Format(msg, AccountType, NextPaymentDisplayValue);
+                    msg = string.Format(msg, AccountType.EnumToUiString(), NextPaymentDisplayValue);
                     ntf_type = MpNotificationType.SubscriptionExpired;
                     break;
                 case MpAccountNtfType.LoginFailedUser:
                 case MpAccountNtfType.LoginFailedStartup:
-                    title = UiStrings.CommonErrorLabel;
-                    msg = string.Format(UiStrings.AccountLoginFailedText, AccountUsername);
+                    title = UiStrings.AccountLoginFailedTitle;
+                    msg = UiStrings.AccountLoginFailedText;
                     icon = "ErrorImage";
                     if (ant == MpAccountNtfType.LoginFailedStartup) {
                         ntf_type = MpNotificationType.AccountLoginFailed;
                     }
                     break;
-                case MpAccountNtfType.LoginSuccessful:
-                    title = UiStrings.AccountLoginSuccessfulText;
+                case MpAccountNtfType.ExistingLoginSuccessful:
+                    title = UiStrings.AccountExistingLoginTitle;
+                    msg = string.Format(UiStrings.AccountExistingLoginText, AccountType.EnumToUiString(), BillingCycleType.EnumToUiString());
                     icon = "MonkeyWinkImage";
                     break;
                 case MpAccountNtfType.RegistrationError:
-                    title = UiStrings.CommonErrorLabel;
-                    msg = args[0],// UiStrings.AccountRegistrationRegisterFailedText;
+                    title = UiStrings.AccountRegistrationFailedTitle;
+                    msg = args[0];
                     icon = "ErrorImage";
                     break;
                 case MpAccountNtfType.RegistrationSuccessful:
-                    msg = string.Empty;
-                    title = UiStrings.AccountRegistrationSuccessText;
+                    title = UiStrings.AccountRegistrationSuccessfulNtfTitle;
+                    msg = UiStrings.AccountRegistrationSuccessText;
                     icon = "MonkeyWinkImage";
                     break;
                 case MpAccountNtfType.ResetSent:
@@ -468,7 +508,7 @@ namespace MonkeyPaste.Avalonia {
                     icon = "MonkeyWinkImage";
                     break;
                 case MpAccountNtfType.ResetError:
-                    title = UiStrings.CommonErrorLabel;
+                    title = UiStrings.AccountResetPasswordErrorTitle;
                     msg = UiStrings.CommonConnectionFailedCaption;
                     icon = "ErrorImage";
                     break;
@@ -574,14 +614,6 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> LoginCommand => new MpAsyncCommand<object>(
             async (args) => {
-                // cases:
-                // -This device has subscription
-                // -Another device has subscription
-                // -There is no account info
-                // -There is no subscription
-                // -There is no connection to store
-                // -There is no connection to server
-                // -There is no connection at all
                 MpLoginSourceType login_type = (MpLoginSourceType)args;
 
                 SetButtonBusy(MpRuntimePrefParamType.AccountLogin, true);
@@ -614,7 +646,13 @@ namespace MonkeyPaste.Avalonia {
                 var sw = Stopwatch.StartNew();
                 string resp = null;
 
-                if (CanLogin) {
+                bool try_login = CanAttemptLogin;
+                if (try_login && !MpAvPrefViewModel.Instance.IsWelcomeComplete && login_type != MpLoginSourceType.Click) {
+                    // workaround to prevent login timer if trying existing account and fails or canceling during welcome
+                    try_login = false;
+                }
+
+                if (try_login) {
                     // NOTE avoid unnecessary requests for unregistered users
                     resp = await MpHttpRequester.SubmitPostDataToUrlAsync(LOGIN_BASE_URL, req_args.ToDictionary(x => x.Key, x => x.Value.Item2));
                 }
@@ -633,20 +671,16 @@ namespace MonkeyPaste.Avalonia {
                     monthly = resp_args["monthly"] == "1";
 
                     acct_state = MpUserAccountState.Connected;
-                    if (login_type == MpLoginSourceType.Click) {
-                        ShowAccountNotficationAsync(MpAccountNtfType.LoginSuccessful).FireAndForgetSafeAsync();
-                    }
-                    StartExpirationTimer();
                 } else {
                     acct_state = IsRegistered ? MpUserAccountState.Disconnected : MpUserAccountState.Unregistered;
                 }
                 UpdateAccountState(acct_state, acct_type, expires, monthly, is_sub_device);
+                StartExpirationTimer();
                 if (success) {
                     return;
                 }
 
                 // user offline or unregistered
-                StartExpirationTimer();
 
                 if (login_type == MpLoginSourceType.Timer) {
                     return;
@@ -658,7 +692,9 @@ namespace MonkeyPaste.Avalonia {
                     login_type == MpLoginSourceType.Init ? MpAccountNtfType.LoginFailedStartup : MpAccountNtfType.LoginFailedUser,
                     req_args.ToDictionary(x => x.Key, x => x.Value.Item1), resp_args);
 
-                StartAttemptLoginTimer();
+                if (IsRegistered) {
+                    StartAttemptLoginTimer();
+                }
             }, (args) => {
                 //return !IsLoggedIn;
                 return !IsLoggedIn && args is MpLoginSourceType;
@@ -693,10 +729,10 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ResetPasswordRequestCommand => new MpAsyncCommand(
             async () => {
                 SetButtonBusy(MpRuntimePrefParamType.AccountResetPassword, true);
-                var req_args = new Dictionary<string, string>() {
-                    {"username", AccountUsername }
+                var req_args = new Dictionary<string, (string, string)>() {
+                    {"username", (nameof(MpAvPrefViewModel.Instance.AccountUsername),MpAvPrefViewModel.Instance.AccountUsername) },
                 };
-                string resp = await MpHttpRequester.SubmitPostDataToUrlAsync(RESET_PASSWORD_BASE_URL, req_args);
+                string resp = await MpHttpRequester.SubmitPostDataToUrlAsync(RESET_PASSWORD_BASE_URL, req_args.ToDictionary(x => x.Key, x => x.Value.Item2));
                 SetButtonBusy(MpRuntimePrefParamType.AccountResetPassword, false);
 
                 bool success = ProcessServerResponse(resp, out var resp_args);
@@ -704,7 +740,7 @@ namespace MonkeyPaste.Avalonia {
                     ShowAccountNotficationAsync(MpAccountNtfType.ResetSent).FireAndForgetSafeAsync();
                     return;
                 }
-                ShowAccountNotficationAsync(MpAccountNtfType.ResetError).FireAndForgetSafeAsync();
+                ProcessResponseErrors(MpAccountNtfType.ResetError, req_args.ToDictionary(x => x.Key, x => x.Value.Item1), resp_args);
             });
 
         public ICommand ResetAccountCommand => new MpCommand(

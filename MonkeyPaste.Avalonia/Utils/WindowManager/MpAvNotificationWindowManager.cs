@@ -54,7 +54,14 @@ namespace MonkeyPaste.Avalonia {
             if (dc is not MpAvNotificationViewModelBase nvmb) {
                 return;
             }
-            nvmb.IsClosing = true;
+            if (MpAvThemeViewModel.IS_WINDOW_FADE_ENABLED) {
+                nvmb.IsClosing = true;
+            } else if (_windows.FirstOrDefault(x => x.DataContext == dc) is MpAvWindow w) {
+                w.Close();
+            } else {
+                MpDebug.Break($"Error cannot find/close ntf window {dc}");
+            }
+
         }
 
         #endregion

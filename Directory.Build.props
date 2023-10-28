@@ -28,12 +28,15 @@
     <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants)</DefineConstants>
+    <LocalServerUrl>https://localhost</LocalServerUrl>
+    <RemoteServerUrl>https://www.monkeypaste.com</RemoteServerUrl>
   </PropertyGroup>
 
 
   <!-- CUSTOM PROPERTIES -->
 
   <PropertyGroup>
+    <!-- DEFAULTS (OVERRIDEN BY CONDITIONS) -->
     <CefPlatformDir>cef\cef_win</CefPlatformDir>
     <IsDesktop>false</IsDesktop>
     <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
@@ -45,6 +48,7 @@
   </PropertyGroup>
   
   <!-- DYNAMIC PROPERTIES-->
+
   
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->

@@ -496,6 +496,13 @@ namespace MonkeyPaste.Avalonia {
                         IsClosing = false;
                     }
                     break;
+                case nameof(IsWindowOpen):
+                    if (IsWindowOpen) {
+
+                    } else {
+
+                    }
+                    break;
             }
         }
         #endregion

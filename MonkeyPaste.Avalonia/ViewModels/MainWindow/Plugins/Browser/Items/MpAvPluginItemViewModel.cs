@@ -15,8 +15,19 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        public const string DEFAULT_LICENSE_URL = @"https://www.monkeypaste.com/license";
-        public const string ABUSE_BASE_URL = @"https://www.monkeypaste.com/plugins/abuse?id=";
+        public const string DEFAULT_LICENSE_URL =
+#if LOCAL_SERVER
+            @"https://localhost/license";
+#else
+            @"https://www.monkeypaste.com/license";
+#endif
+
+        public const string ABUSE_BASE_URL =
+#if LOCAL_SERVER
+            @"https://localhost/plugins/abuse?id=";
+#else
+            @"https://www.monkeypaste.com/plugins/abuse?id=";
+#endif
         #endregion
 
         #region Statics

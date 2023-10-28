@@ -1,24 +1,29 @@
-﻿using MonkeyPaste.Common;
+﻿using MonkeyPaste.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste.Avalonia {
+namespace MonkeyPaste.Common {
     public static class MpHttpRequester {
         //const int TIMEOUT_MS = 10_000;
         //private static HttpClient httpClient = new HttpClient() {
         //    Timeout = TimeSpan.FromMilliseconds(TIMEOUT_MS)
         //};
-        public static async Task<string> SubmitPostDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs, int timeout_ms = 10_000) {
+        public static async Task<string> SubmitPostDataToUrlAsync(string url, Dictionary<string, string> keyValuePairs, int timeout_ms = 10_000, bool add_debug = MpServerConstants.IS_SERVER_LOCAL) {
             // from https://stackoverflow.com/a/62640006/105028
             using (HttpClient httpClient = new HttpClient())
             using (MultipartFormDataContent formDataContent = new MultipartFormDataContent()) {
-                httpClient.Timeout = TimeSpan.FromMilliseconds(timeout_ms);
                 try {
                     foreach (var keyValuePair in keyValuePairs) {
                         formDataContent.Add(new StringContent(keyValuePair.Value.ToStringOrEmpty()), keyValuePair.Key);
+                    }
+                    if (add_debug) {
+                        formDataContent.Add(new StringContent("1"), "XDEBUG_SESSION");
+                        httpClient.Timeout = TimeSpan.FromMinutes(30);
+                    } else {
+                        httpClient.Timeout = TimeSpan.FromMilliseconds(timeout_ms);
                     }
                     // Post Request And Wait For The Response.
                     HttpResponseMessage httpResponseMessage = await httpClient.PostAsync(url, formDataContent);

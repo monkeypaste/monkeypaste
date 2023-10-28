@@ -152,6 +152,7 @@ namespace MonkeyPaste.Avalonia {
             MpDebug.Assert(_instance == null, "Only 1 welcome vm should be created");
             _instance = this;
             MpConsole.WriteLine("Greeting vm created");
+            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
             //InitWelcomeItems();
         }
 
@@ -172,6 +173,7 @@ namespace MonkeyPaste.Avalonia {
             base.HideNotification();
             IsWindowOpen = false;
         }
+
         #endregion
 
         #region Protected Methods
@@ -355,7 +357,25 @@ namespace MonkeyPaste.Avalonia {
                 await Task.Delay(100);
             }
         }
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.AccountStateChanged:
+                    if (!IsWindowOpen || MpAvAccountViewModel.Instance.AccountState != MpUserAccountState.Connected) {
+                        break;
+                    }
+                    // after connecting to an existing account toggle monthly and sel account...
+                    var AccountType = MpAvAccountViewModel.Instance.AccountType;
+                    var monthly = MpAvAccountViewModel.Instance.IsMonthly;
 
+                    int acct_idx = (int)AccountType + (monthly ? 4 : 0);
+                    IsAccountMonthlyChecked = monthly;
+                    IsAccountMonthToggleEnabled = false;
+                    AccountViewModel.SelectedItem = AccountViewModel.Items[acct_idx];
+                    AccountViewModel.Items.ForEach(x => x.IsEnabled = false);
+                    break;
+
+            }
+        }
         private async void FinishWelcomeSetup() {
             if (CurPointerGestureWindowViewModel != null) {
                 CurPointerGestureWindowViewModel.Destroy();

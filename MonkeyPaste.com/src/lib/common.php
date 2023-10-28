@@ -1,13 +1,11 @@
 <?php 
 
-const APP_URL = 'https://www.monkeypaste.com';
 const ACCOUNTS_URL = APP_URL.'/accounts';
 
 const NO_REPLY_EMAIL_ADDRESS = 'no-reply@monkeypaste.com';
 
 const SUCCESS_MSG = '[SUCCESS]';
 const ERROR_MSG = '[ERROR]';
-const CAN_TEST = true;
 
 const TOMORROW_TICKS = 1 * 24 * 60 * 60;
 

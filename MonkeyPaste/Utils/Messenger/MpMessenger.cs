@@ -138,6 +138,7 @@ namespace MonkeyPaste {
 
         AccountDowngrade,
         AccountUpgrade,
+        AccountStateChanged,
         AccountInfoChanged,
 
         ThemeChanged,

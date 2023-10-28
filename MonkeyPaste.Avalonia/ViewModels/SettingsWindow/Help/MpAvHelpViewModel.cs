@@ -72,13 +72,13 @@ namespace MonkeyPaste.Avalonia {
         #region Model
 
         Dictionary<MpHelpLinkType, string> OnlineHelpUriLookup => new() {
-            {MpHelpLinkType.None, @"https://www.monkeypaste.com/docs/welcome" },
-            {MpHelpLinkType.ContentLimits, @"https://www.monkeypaste.com/docs/account/#content-limits" },
-            {MpHelpLinkType.Collections, @"https://www.monkeypaste.com/docs/collections/" },
-            {MpHelpLinkType.Tags, @"https://www.monkeypaste.com/docs/collections/tags" },
-            {MpHelpLinkType.Groups, @"https://www.monkeypaste.com/docs/collections/groups" },
-            {MpHelpLinkType.Filters, @"https://www.monkeypaste.com/docs/collections/filters" },
-            {MpHelpLinkType.Trash, @"https://www.monkeypaste.com/docs/collections/trash" },
+            {MpHelpLinkType.None, $"{MpServerConstants.DOMAIN_URL}/docs/welcome" },
+            {MpHelpLinkType.ContentLimits, $"{MpServerConstants.DOMAIN_URL}/docs/account/#content-limits" },
+            {MpHelpLinkType.Collections, $"{MpServerConstants.DOMAIN_URL}/docs/collections/" },
+            {MpHelpLinkType.Tags, $"{MpServerConstants.DOMAIN_URL}/docs/collections/tags" },
+            {MpHelpLinkType.Groups, $"{MpServerConstants.DOMAIN_URL}/docs/collections/groups" },
+            {MpHelpLinkType.Filters, $"{MpServerConstants.DOMAIN_URL}/docs/collections/filters" },
+            {MpHelpLinkType.Trash, $"{MpServerConstants.DOMAIN_URL}/docs/collections/trash" },
         };
 
         #endregion

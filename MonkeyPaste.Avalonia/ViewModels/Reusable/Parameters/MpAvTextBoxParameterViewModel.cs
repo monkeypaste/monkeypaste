@@ -183,7 +183,7 @@ namespace MonkeyPaste.Avalonia {
             switch (e.PropertyName) {
                 case nameof(SelectionLength):
                 case nameof(SelectionStart):
-                    MpConsole.WriteLine($"Start: {SelectionStart} Length: {SelectionLength}");
+                    //MpConsole.WriteLine($"Start: {SelectionStart} Length: {SelectionLength}");
                     break;
                 case nameof(CurrentValue):
                     (this as MpIContentQueryTextBoxViewModel).OnPropertyChanged(nameof(MpIContentQueryTextBoxViewModel.ContentQuery));

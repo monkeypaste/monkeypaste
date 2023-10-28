@@ -3,7 +3,6 @@
 // Include config file
 require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
-
 function login(string $username, string $password): bool
 {
 
@@ -16,8 +15,8 @@ function login(string $username, string $password): bool
         }
         // prevent session fixation attack
         //session_regenerate_id();
-        $_SESSION['username'] = $account['username'];
-        $_SESSION['user_id']  = $account['id'];
+        // $_SESSION['username'] = $account['username'];
+        // $_SESSION['user_id']  = $account['id'];
 
         return true;
     }
@@ -32,8 +31,8 @@ $testdata = [
     'password' => '*1Password',
     'device_guid' => 'TEST GUID',
     'sub_type' => 'Standard',
-    'monthly' => '0',
-    'expires_utc_dt' => getFormattedDateTimeStr(date('Y-m-d H:i:s', time() + 1 * 24 * 60 * 60)),
+    'monthly' => '1',
+    'expires_utc_dt' => '11/29/2023 7:00:00 PM',//getFormattedDateTimeStr(date('Y-m-d H:i:s', time() + 1 * 24 * 60 * 60)),
     'detail1' => 'test_detail1',
     'detail2' => 'test_detail2',
     'detail3' => 'test_detail3'

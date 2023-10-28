@@ -39,7 +39,7 @@ function reset_account_password(int $id, string $reset_code, int $expiry = 1 * 2
 }
 
 $testdata = [
-    'username' => "tombo",
+    'username' => "tkefauver",
 ];
 
 $fields = [
@@ -67,10 +67,10 @@ if ($errors) {
 
 $account = find_account_by_username($inputs['username']);
 if($account == NULL) {
-    exit_w_error("account not found.");
+    exit_w_error("Account not found.");
 }
 if($account['active'] === 0) {
-    exit_w_error("account not activated");
+    exit_w_error("You must activate your account before you can reset your password.");
 }
 $reset_code = generate_activation_code();
 $success = reset_account_password($account['id'],$reset_code);

@@ -269,6 +269,12 @@ namespace MonkeyPaste.Avalonia {
                                         new MpParameterFormat() {
                                             paramId = MpRuntimePrefParamType.AccountLogout.ToString(),
                                             controlType = MpParameterControlType.Button,
+//                                            isVisible =
+//#if DEBUG
+//                                            true,
+//#else
+//                                            false,
+//#endif
                                             value = new MpPluginParameterValueFormat(MpRuntimePrefParamType.AccountLogout.ToString(),"Logout")
                                         }
                                     }
@@ -1260,12 +1266,12 @@ namespace MonkeyPaste.Avalonia {
             MpAvWindow sw = null;
             if (IsLoginOnly) {
                 sw = new MpAvWindow() {
-                    ShowInTaskbar = false,
+                    ShowInTaskbar = true,
                     MinWidth = 200,
                     MinHeight = 200,
                     Width = 500,
-                    Height = 280,
-                    CanResize = false,
+                    Height = 320,
+                    CanResize = true,
                     SizeToContent = SizeToContent.Manual,
                     Title = UiStrings.AccountLoginWindowTitle.ToWindowTitleText(),
                     Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LoginImage", typeof(WindowIcon), null, null) as WindowIcon,
@@ -1523,22 +1529,30 @@ namespace MonkeyPaste.Avalonia {
             return piv.GetVisualDescendant<T>();
         }
 
-        public Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId) {
-            if (Items != null &&
-                Items
-                .OrderByDescending(x => x.IsVisible ? 1 : 0)
-                .FirstOrDefault(
-                        x => x.Items != null && x.Items.Any(
-                            y => y.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower()))
-                        is MpAvSettingsFrameViewModel frame_vm &&
-                        frame_vm.Items.FirstOrDefault(x => x.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower())
-                        is MpAvParameterViewModelBase param_vm) {
-                MpDebug.Assert(param_vm.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower(), $"param assert failed '{paramId}'");
-                return new Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase>(frame_vm, param_vm);
+        public Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> GetParamAndFrameViewModelsByParamId(string paramId, MpSettingsFrameType frameType = MpSettingsFrameType.None) {
+            if (Items == null) {
+                return null;
+            }
+            foreach (var sfvm in Items) {
+                if (sfvm.Items == null) {
+                    continue;
+                }
+                if (frameType != MpSettingsFrameType.None && sfvm.FrameType != frameType) {
+                    continue;
+                }
+                if (sfvm.Items.FirstOrDefault(x => x.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower())
+                    is MpAvParameterViewModelBase param_vm) {
+                    MpDebug.Assert(param_vm.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower(), $"param assert failed '{paramId}'");
+                    return new Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase>(sfvm, param_vm);
+                }
             }
             return null;
         }
         public bool TryGetParamAndFrameViewModelsByParamId(string paramId, out Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> result) {
+            result = GetParamAndFrameViewModelsByParamId(paramId);
+            return result != null && result.Item1 != null && result.Item2 != null;
+        }
+        public bool TryGetParamAndFrameViewModelsByParamId(MpSettingsFrameType frameType, string paramId, out Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> result) {
             result = GetParamAndFrameViewModelsByParamId(paramId);
             return result != null && result.Item1 != null && result.Item2 != null;
         }

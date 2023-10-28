@@ -180,51 +180,58 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(IsStandardAccountItem));
                     OnPropertyChanged(nameof(IsUnlimitedAccountItem));
                     break;
+                case nameof(IsEnabled):
+                    if (IsEnabled) {
+
+                    } else {
+
+                    }
+                    break;
 
             }
         }
 
         private async Task ShowExistingAccountFormAsync() {
             IsBusy = true;
-            MpUserAccountType result_uat = await MpAvAccountViewModel.Instance.ShowExistingAccountLoginWindowAsync();
+            await MpAvAccountViewModel.Instance.ShowExistingAccountLoginWindowAsync();
             IsBusy = false;
 
-            switch (result_uat) {
-                case MpUserAccountType.None:
-                    // cancel (ensure acct btns work)
-                    Parent.CurOptGroupViewModel.Items.ForEach(x => x.IsEnabled = true);
-                    Parent.IsAccountMonthToggleEnabled = true;
+            //switch (result_uat) {
+            //    case MpUserAccountType.None:
+            //        // cancel (ensure acct btns work)
+            //        Parent.CurOptGroupViewModel.Items.ForEach(x => x.IsEnabled = true);
+            //        Parent.IsAccountMonthToggleEnabled = true;
 
-                    // get cur unlim acct type item idx
-                    int unlim_item_idx = (int)MpUserAccountType.Unlimited;
-                    if (MpAvAccountViewModel.Instance.IsMonthly) {
-                        unlim_item_idx += 4;
-                    }
-                    // put selection back to unlim
+            //        // get cur unlim acct type item idx
+            //        int unlim_item_idx = (int)MpUserAccountType.Unlimited;
+            //        if (MpAvAccountViewModel.Instance.IsMonthly) {
+            //            unlim_item_idx += 4;
+            //        }
+            //        // put selection back to unlim
 
-                    Parent.CurOptGroupViewModel.Items
-                        .ForEach((x, idx) => x.IsChecked = idx == unlim_item_idx);
-                    break;
-                default:
-                    // logged in
+            //        Parent.CurOptGroupViewModel.Items
+            //            .ForEach((x, idx) => x.IsChecked = idx == unlim_item_idx);
+            //        break;
+            //    default:
+            //        // logged in
 
-                    // get acct type item idx
-                    int uat_item_idx = (int)result_uat;
-                    if (MpAvAccountViewModel.Instance.IsMonthly) {
-                        uat_item_idx += 4;
-                    }
+            //        // get acct type item idx
+            //        int uat_item_idx = (int)result_uat;
+            //        if (MpAvAccountViewModel.Instance.IsMonthly) {
+            //            uat_item_idx += 4;
+            //        }
 
-                    // toggle monthly to acct type
-                    Parent.IsAccountMonthlyChecked = MpAvAccountViewModel.Instance.IsMonthly;
-                    // select acct type
-                    Parent.CurOptGroupViewModel.Items
-                        .ForEach((x, idx) => x.IsChecked = idx == uat_item_idx);
-                    // disable everything
-                    Parent.CurOptGroupViewModel.Items
-                        .ForEach((x, idx) => x.IsEnabled = false);
-                    Parent.IsAccountMonthToggleEnabled = false;
-                    break;
-            }
+            //        // toggle monthly to acct type
+            //        Parent.IsAccountMonthlyChecked = MpAvAccountViewModel.Instance.IsMonthly;
+            //        // select acct type
+            //        Parent.CurOptGroupViewModel.Items
+            //            .ForEach((x, idx) => x.IsChecked = idx == uat_item_idx);
+            //        // disable everything
+            //        Parent.CurOptGroupViewModel.Items
+            //            .ForEach((x, idx) => x.IsEnabled = false);
+            //        Parent.IsAccountMonthToggleEnabled = false;
+            //        break;
+            //}
         }
         #endregion
 

@@ -713,7 +713,7 @@ namespace MonkeyPaste.Avalonia {
             // write backup after succesful save
             MpFileIo.WriteTextToFile(PreferencesPathBackup, backupStr, false);
 
-            MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
+            //MpConsole.WriteLine("Preferences Updated Total Ms: " + sw.ElapsedMilliseconds);
         }
         private static async Task CreateDefaultPrefsAsync(bool isReset = false) {
             MpConsole.WriteLine("Pref file was either missing, empty or this is initial startup. (re)creating");

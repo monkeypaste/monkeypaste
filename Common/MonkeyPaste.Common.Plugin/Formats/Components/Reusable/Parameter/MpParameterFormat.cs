@@ -194,7 +194,7 @@ namespace MonkeyPaste.Common.Plugin {
         public bool isDefault { get; set; } = false;
 
         public MpPluginParameterValueFormat() { }
-        public MpPluginParameterValueFormat(string val) : this(val, string.Empty, false) { }
+        public MpPluginParameterValueFormat(string val) : this(val, string.Empty, true) { }
         public MpPluginParameterValueFormat(string val, bool isDefault) : this(val, string.Empty, isDefault) { }
         public MpPluginParameterValueFormat(string val, string label) : this(val, label, false) { }
         public MpPluginParameterValueFormat(string val, string label, bool isDefault) {

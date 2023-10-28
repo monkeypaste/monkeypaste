@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        const string ACCOUNT_HELP_URI = @"https://www.monkeypaste.com/help#recycling";
+        static string ACCOUNT_HELP_URI = $"{MpServerConstants.DOMAIN_URL}/help#recycling";
         #endregion
 
         #region Statics

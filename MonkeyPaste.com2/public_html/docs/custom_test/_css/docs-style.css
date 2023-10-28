@@ -1,0 +1,11 @@
+
+main {
+    display: flex;
+    margin: 0 auto;
+}
+
+aside {
+    margin-right: 10px;
+    overflow: scroll;
+    max-width: 35%;
+}

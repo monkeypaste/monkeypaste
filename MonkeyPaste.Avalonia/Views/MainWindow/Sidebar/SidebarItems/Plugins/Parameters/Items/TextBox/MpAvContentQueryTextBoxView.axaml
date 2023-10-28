@@ -67,6 +67,8 @@
             <TextBlock x:Name="ReadOnlyBlock"
                        Grid.Column="0"
                        Grid.ColumnSpan="2"
+                       Text="{Binding CurrentValue}"
+                       Foreground="{DynamicResource ThemeWhite}"
                        FontSize="{Binding FontSize, ElementName=ContentQueryTextBox}"
                        IsVisible="{Binding IsReadOnly}"
                        Classes.multiline="{Binding IsMultiline}"

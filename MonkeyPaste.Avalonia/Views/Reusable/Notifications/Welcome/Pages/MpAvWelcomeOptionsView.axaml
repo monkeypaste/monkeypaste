@@ -14,54 +14,6 @@
                        d:DesignWidth="400"
                        d:DesignHeight="300">
     <local:MpAvUserControl.Resources>
-        <!--<LinearGradientBrush x:Key="RainbowBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
-            <LinearGradientBrush.GradientStops>
-                <GradientStop Offset="0" Color="Red" />
-                <GradientStop Offset="0.5" Color="Green" />
-                <GradientStop Offset="1" Color="Blue" />
-            </LinearGradientBrush.GradientStops>
-            <LinearGradientBrush.Transform>
-                <RotateTransform />
-            </LinearGradientBrush.Transform>
-        </LinearGradientBrush>
-
-        <LinearGradientBrush x:Key="StainlessSteelBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
-            <LinearGradientBrush.GradientStops>
-                <GradientStop Offset="0" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <GradientStop Offset="0.36" Color="{DynamicResource ThemeInteractiveColor}" />
-                <GradientStop Offset="0.77" Color="{DynamicResource ThemeInteractiveColor}" />
-                <GradientStop Offset="1" Color="{DynamicResource ThemeInteractiveBgColor}" />
-            </LinearGradientBrush.GradientStops>
-            <LinearGradientBrush.Transform>
-                <RotateTransform />
-            </LinearGradientBrush.Transform>
-        </LinearGradientBrush>
-
-        <LinearGradientBrush x:Key="GoldBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
-            <LinearGradientBrush.GradientStops>
-                <GradientStop Offset="0" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <GradientStop Offset="0.36" Color="{DynamicResource ThemeAccent1Color}" />
-                <GradientStop Offset="0.77" Color="{DynamicResource ThemeAccent1Color}" />
-                <GradientStop Offset="1" Color="{DynamicResource ThemeInteractiveBgColor}" />
-            </LinearGradientBrush.GradientStops>
-            <LinearGradientBrush.Transform>
-                <RotateTransform />
-            </LinearGradientBrush.Transform>
-        </LinearGradientBrush>
-
-        <LinearGradientBrush x:Key="ThemedRainbowBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
-            <LinearGradientBrush.GradientStops>
-                <GradientStop Offset="0" Color="{DynamicResource ThemeAccent1Color}" />
-                <GradientStop Offset="0.25" Color="{DynamicResource ThemeAccent2Color}" />
-                <GradientStop Offset="0.5" Color="{DynamicResource ThemeAccent3Color}" />
-                <GradientStop Offset="0.75" Color="{DynamicResource ThemeAccent4Color}" />
-                <GradientStop Offset="1.0" Color="{DynamicResource ThemeAccent5Color}" />
-            </LinearGradientBrush.GradientStops>
-            <LinearGradientBrush.Transform>
-                <RotateTransform />
-            </LinearGradientBrush.Transform>
-        </LinearGradientBrush>-->
-
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
         <!--  OPTION BUTTONS  -->
@@ -106,6 +58,7 @@
                     Value="{StaticResource ThemedRainbowBrush}" />
         </Style>
 
+
         <Style Selector="Border.unlim:pointerover:not(.sel)">
             <Setter Property="BorderBrush"
                     Value="{StaticResource GoldBrush}" />
@@ -114,6 +67,10 @@
         <Style Selector="Border.unlim > RadioButton">
             <Setter Property="BorderThickness"
                     Value="0" />
+        </Style>
+        <Style Selector="Border.frozen.sel">
+            <Setter Property="Background"
+                    Value="SkyBlue" />
         </Style>
         <!--  CAPTION COLOR  -->
         <Style Selector="TransitioningContentControl#CaptionContainer TextBlock">
@@ -299,11 +256,13 @@
                         <Grid IsVisible="{Binding IsOptionVisible, Mode=OneWay}">
                             <!--  OPTION BUTTON  -->
 
-                            <Border local:MpAvIsHoveringExtension.IsEnabled="True"
+                            <Border local:MpAvIsHoveringExtension.IsEnabled="{Binding IsEnabled}"
                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                                     Classes="rejectWindowMove optContainer"
                                     Classes.unlim="{Binding IsUnlimitedAccountItem}"
                                     Classes.sel="{Binding IsChecked}"
+                                    Classes.frozem="{Binding !IsEnabled}"
+                                    IsHitTestVisible="{Binding IsEnabled}"
                                     Background="{StaticResource HitTestableTransparent}"
                                     BorderThickness="2.5"
                                     CornerRadius="7"
@@ -311,6 +270,7 @@
                                 <RadioButton Classes="defaultButton optButton effectTrans"
                                              Classes.busy="{Binding IsBusy}"
                                              Theme="{StaticResource SwitchlessRadioButton}"
+                                             IsEnabled="{Binding IsEnabled}"
                                              Padding="15"
                                              Width="200"
                                              Height="230"
@@ -319,7 +279,6 @@
                                              VerticalAlignment="Stretch"
                                              HorizontalContentAlignment="Center"
                                              VerticalContentAlignment="Center"
-                                             IsEnabled="{Binding IsEnabled}"
                                              Command="{Binding CheckOptionCommand}"
                                              IsChecked="{Binding IsChecked, Mode=OneWay}">
                                     <DockPanel HorizontalAlignment="Stretch"

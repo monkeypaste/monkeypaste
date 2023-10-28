@@ -70,6 +70,7 @@ namespace MonkeyPaste.Avalonia {
             "joystickative.png",
             "joystickative2.png",
             "monkey.png",
+            "monkeywink.png",
             "noentry.png",
             "private.png",
             "pindown.png",
@@ -95,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-
+        public const bool IS_WINDOW_FADE_ENABLED = true;
         public const double PHI = 1.618033988749894d;
         #endregion
 

@@ -184,7 +184,7 @@
                                                 CornerRadius="7"
                                                 Background="Blue">
                                             <TextBlock Grid.Row="1"
-                                                       HorizontalAlignment="Stretch"
+                                                       HorizontalAlignment="Center"
                                                        TextAlignment="Center"
                                                        FontWeight="SemiBold"
                                                        FontSize="8"

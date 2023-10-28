@@ -115,6 +115,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your subscription is now set to {0}/{1}..
+        /// </summary>
+        public static string AccountExistingLoginText {
+            get {
+                return ResourceManager.GetString("AccountExistingLoginText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Found.
+        /// </summary>
+        public static string AccountExistingLoginTitle {
+            get {
+                return ResourceManager.GetString("AccountExistingLoginTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The payment for your {0} subscription was due {1} and has not been received. Please update your payment information..
         /// </summary>
         public static string AccountExpiredNtfLocalCaption {
@@ -178,7 +196,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login for account &apos;{0}&apos; failed..
+        ///   Looks up a localized string similar to Check your connection and try again..
         /// </summary>
         public static string AccountLoginFailedText {
             get {
@@ -187,11 +205,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login sucessful!.
+        ///   Looks up a localized string similar to Login Failed.
         /// </summary>
-        public static string AccountLoginSuccessfulText {
+        public static string AccountLoginFailedTitle {
             get {
-                return ResourceManager.GetString("AccountLoginSuccessfulText", resourceCulture);
+                return ResourceManager.GetString("AccountLoginFailedTitle", resourceCulture);
             }
         }
         
@@ -322,6 +340,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Registration Failed.
+        /// </summary>
+        public static string AccountRegistrationFailedTitle {
+            get {
+                return ResourceManager.GetString("AccountRegistrationFailedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email is not valid.
         /// </summary>
         public static string AccountRegistrationInvalidEmailText {
@@ -349,15 +376,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error. Registration failed. Check your connection and try again later..
-        /// </summary>
-        public static string AccountRegistrationRegisterFailedText {
-            get {
-                return ResourceManager.GetString("AccountRegistrationRegisterFailedText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Remember?.
         /// </summary>
         public static string AccountRegistrationRememberLabel {
@@ -367,7 +385,16 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Registration successful! To login just confirm the activation email..
+        ///   Looks up a localized string similar to Registration successful!.
+        /// </summary>
+        public static string AccountRegistrationSuccessfulNtfTitle {
+            get {
+                return ResourceManager.GetString("AccountRegistrationSuccessfulNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check your email to confirm your account.
         /// </summary>
         public static string AccountRegistrationSuccessText {
             get {
@@ -381,6 +408,15 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountResetPasswordCaption {
             get {
                 return ResourceManager.GetString("AccountResetPasswordCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Error.
+        /// </summary>
+        public static string AccountResetPasswordErrorTitle {
+            get {
+                return ResourceManager.GetString("AccountResetPasswordErrorTitle", resourceCulture);
             }
         }
         
