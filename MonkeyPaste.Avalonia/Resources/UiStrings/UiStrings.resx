@@ -1068,4 +1068,10 @@
   <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
     <value>Reset Error</value>
   </data>
+  <data name="AccountSubscriptionTabName" xml:space="preserve">
+    <value>Subscription</value>
+  </data>
+  <data name="AccountWhatsNewTabName" xml:space="preserve">
+    <value>What's New</value>
+  </data>
 </root>

@@ -20,6 +20,21 @@
             <Setter Property="BorderBrush"
                     Value="Transparent" />
         </Style>
+        <!--  TAB CONTROL  -->
+        <Style Selector="StackPanel.tab">
+            <Setter Property="Spacing"
+                    Value="3" />
+        </Style>
+        <Style Selector="StackPanel.tab Image">
+            <Setter Property="Width"
+                    Value="15" />
+            <Setter Property="Height"
+                    Value="15" />
+        </Style>
+        <Style Selector="StackPanel.tab TextBlock">
+            <Setter Property="FontSize"
+                    Value="12" />
+        </Style>
     </UserControl.Styles>
     <Grid x:Name="AccountOuterContainer">
         <Grid.ColumnDefinitions>
@@ -33,8 +48,50 @@
                             HorizontalContentAlignment="Center"
                             VerticalAlignment="Stretch" />
         <!--  UPGRADE INFO THING  -->
-        <local:MpAvSubscriptionView Grid.Column="1"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch" />
+        <TabControl x:Name="RightPaneTabControl"
+                    TabStripPlacement="Bottom"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+            <TabControl.Resources>
+                <sys:Double x:Key="TabItemHeaderFontSize">14</sys:Double>
+                <sys:Double x:Key="TabStripItemMinHeight">20</sys:Double>
+            </TabControl.Resources>
+            <!--  WHATS NEW TAB  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Classes="tab"
+                                Orientation="Horizontal">
+                        <Image Width="15"
+                               Height="15"
+                               Source="{Binding Source={StaticResource AppImage}, ConverterParameter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        <TextBlock Text="{x:Static local:UiStrings.AccountWhatsNewTabName}" />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <local:MpAvWebView HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   Address="https://www.monkeypaste.com" />
+
+            </TabItem>
+
+            <!--  SUBSCRIPTION TAB  -->
+            <TabItem IsSelected="True">
+                <TabItem.Header>
+                    <StackPanel Classes="tab"
+                                Orientation="Horizontal">
+                        <Image Width="15"
+                               Height="15"
+                               Source="{Binding Source={StaticResource BananasImage}, ConverterParameter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        <TextBlock Text="{x:Static local:UiStrings.AccountSubscriptionTabName}" />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <local:MpAvSubscriptionView Grid.Column="1"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch" />
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </UserControl>

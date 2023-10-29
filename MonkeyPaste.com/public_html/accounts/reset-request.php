@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
-function get_reset_password_email_msg_html($username, $reset_url): string 
+function get_reset_password_email_msg_html($username, $reset_url): string
 {
-    $msg = "Hi ".$username.", <br>Please click <a href='".$reset_url."'>here</a> to reset your password.<br><br>* The link will expire in 24 hours).";
+    $msg = "Hi " . $username . ", <br>Please click <a href='" . $reset_url . "'>here</a> to reset your password.<br><br>* The link will expire in 24 hours).";
     return $msg;
 }
 
@@ -16,7 +16,7 @@ function send_reset_email(string $username, string $email, string $reset_code)
     $message = get_reset_password_email_msg_html($username, $reset_link);
     // email header
 
-    $headers  = "From: " . strip_tags(NO_REPLY_EMAIL_ADDRESS) . "\r\n";
+    $headers = "From: " . strip_tags(NO_REPLY_EMAIL_ADDRESS) . "\r\n";
     $headers .= "Reply-To: " . strip_tags(NO_REPLY_EMAIL_ADDRESS) . "\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
@@ -49,35 +49,32 @@ $fields = [
 $errors = [];
 $inputs = [];
 
-if (is_post_request()) 
-{    
+if (is_post_request()) {
     [$inputs, $errors] = filter($_POST, $fields);
-} else if(CAN_TEST && isset($testdata)) {
+} else if (CAN_TEST && isset($testdata)) {
     [$inputs, $errors] = filter($testdata, $fields);
-} else {    
+} else {
     exit_w_error("invalid params");
 }
 
 if ($errors) {
-    if(CAN_TEST) {
+    if (CAN_TEST) {
         printerr($errors);
     }
     exit_w_error("param error");
 }
 
 $account = find_account_by_username($inputs['username']);
-if($account == NULL) {
+if ($account == null) {
     exit_w_error("Account not found.");
 }
-if($account['active'] === 0) {
+if ($account['active'] === 0) {
     exit_w_error("You must activate your account before you can reset your password.");
 }
 $reset_code = generate_activation_code();
-$success = reset_account_password($account['id'],$reset_code);
-if(!$success) {
+$success = reset_account_password($account['id'], $reset_code);
+if (!$success) {
     exit_w_error("error");
 }
-send_reset_email($account['username'],$account['email'],$reset_code);
-exit_success();
-
-?>
+send_reset_email($account['username'], $account['email'], $reset_code);
+exit_w_success();

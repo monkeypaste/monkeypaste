@@ -430,6 +430,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Subscription.
+        /// </summary>
+        public static string AccountSubscriptionTabName {
+            get {
+                return ResourceManager.GetString("AccountSubscriptionTabName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Try for free!.
         /// </summary>
         public static string AccountTrialButtonText {
@@ -453,6 +462,15 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountUpgradeButtonText {
             get {
                 return ResourceManager.GetString("AccountUpgradeButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What&apos;s New.
+        /// </summary>
+        public static string AccountWhatsNewTabName {
+            get {
+                return ResourceManager.GetString("AccountWhatsNewTabName", resourceCulture);
             }
         }
         

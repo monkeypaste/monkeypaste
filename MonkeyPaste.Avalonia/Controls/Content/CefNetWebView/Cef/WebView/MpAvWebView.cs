@@ -3,8 +3,6 @@ using System;
 using PropertyChanged;
 using MonkeyPaste.Common;
 using Avalonia.Data;
-using Avalonia.Threading;
-using System.Threading.Tasks;
 
 #if DESKTOP
 
@@ -40,6 +38,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
 
         #region Private Variables
+        private bool _isBrowserCreated = false;
         #endregion
 
         #region Constants
@@ -75,19 +74,10 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void OnAddressChanged() {
-            if (!Uri.IsWellFormedUriString(Address, UriKind.Absolute)) {
+            if (!Uri.IsWellFormedUriString(Address, UriKind.Absolute) || !_isBrowserCreated) {
                 return;
             }
-            Dispatcher.UIThread.Post(async () => {
-                while (true) {
-                    if (AliveBrowserObject != null &&
-                        !AliveBrowserObject.IsLoading) {
-                        break;
-                    }
-                    await Task.Delay(100);
-                }
-                Navigate(Address);
-            });
+            Navigate(Address);
         }
 
         #endregion
@@ -156,6 +146,12 @@ namespace MonkeyPaste.Avalonia {
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
         }
+        protected override void OnBrowserCreated(EventArgs e) {
+            base.OnBrowserCreated(e);
+            _isBrowserCreated = true;
+            OnAddressChanged();
+        }
+
 #endif
 
         #endregion

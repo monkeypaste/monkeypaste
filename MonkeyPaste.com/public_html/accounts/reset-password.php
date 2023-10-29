@@ -2,7 +2,6 @@
 
 require_once __DIR__ . '/../../src/lib/bootstrap.php';
 
-
 function find_resetable_account(string $reset_code, string $email)
 {
 
@@ -19,14 +18,14 @@ function find_resetable_account(string $reset_code, string $email)
 
     if ($account) {
         // already expired, delete the in active account with expired reset code
-        if ((int)$account['expired'] === 1) {
+        if ((int) $account['expired'] === 1) {
             exit_w_error("reset expired");
         }
         // verify the password
-        if(password_verify($reset_code, $account['reset_code'])) {
+        if (password_verify($reset_code, $account['reset_code'])) {
             return $account;
-        }  
-    } 
+        }
+    }
 
     return null;
 }
@@ -39,76 +38,76 @@ function reset_account_password(int $id, string $password): bool
 
     $statement = db()->prepare($sql);
     $statement->bindValue(':id', $id, PDO::PARAM_INT);
-    $statement->bindValue(':reset_code', NULL);
+    $statement->bindValue(':reset_code', null);
     $statement->bindValue(':password', password_hash($password, PASSWORD_BCRYPT));
 
     return $statement->execute();
 }
 
-function process_errors($errors, $password) {
-    if(!isset($_SESSION)) {
+function process_errors($errors, $password)
+{
+    if (!isset($_SESSION)) {
         return;
     }
-    $_SESSION["password_err"] = $errors != NULL && array_key_exists('password',$errors) ? $errors['password']:"";
-    $_SESSION["password2_err"] = $errors != NULL && array_key_exists('confirm',$errors) ? $errors['confirm']:"";
+    $_SESSION["password_err"] = $errors != null && array_key_exists('password', $errors) ? $errors['password'] : "";
+    $_SESSION["password2_err"] = $errors != null && array_key_exists('confirm', $errors) ? $errors['confirm'] : "";
     $_SESSION["new_password"] = $password;
 }
 
 session_start();
-if (is_get_request()) 
-{    
+if (is_get_request()) {
     $_SESSION["new_password"] = $_SESSION["password_err"] = $_SESSION["password2_err"] = "";
 
     $fields = [
         'email' => 'string | required',
-        'reset_code' => 'string | required'
+        'reset_code' => 'string | required',
     ];
-    
+
     $errors = [];
     $inputs = [];
     [$inputs, $errors] = filter($_GET, $fields);
 
     if ($errors) {
-        if(CAN_TEST) {
+        if (CAN_TEST) {
             printerr($errors);
         }
         exit_w_error("param error");
     }
 
     $account = find_resetable_account($inputs['reset_code'], $inputs['email']);
-    if($account == NULL) {
+    if ($account == null) {
         exit_w_error("account not found or no reset requested");
     }
 
     $_SESSION['accid'] = $account['id'];
-} else if(is_post_request()) {
+} else if (is_post_request()) {
     $fields = [
         'password' => 'string | required | secure',
         'confirm' => 'string | required | same: password',
     ];
-    
+
     $errors = [];
     $inputs = [];
     [$inputs, $errors] = filter($_POST, $fields);
 
     if ($errors) {
-        if(CAN_TEST) {
+        if (CAN_TEST) {
             //printerr($errors);
         }
-        process_errors($errors,$inputs['password']);
+        process_errors($errors, $inputs['password']);
     } else {
-        $success = reset_account_password($_SESSION['accid'],$inputs['password']);
-        if($success) {
-            exit_success();
+        $success = reset_account_password($_SESSION['accid'], $inputs['password']);
+        if ($success) {
+            exit_w_success();
         }
-        process_errors(["password"=>"error","confirm"=>""],$inputs['password']);
+        process_errors(["password" => "error", "confirm" => ""], $inputs['password']);
     }
-} else {    
+} else {
     exit_w_error("invalid params");
 }
 
 ?>
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -124,7 +123,7 @@ if (is_get_request())
     <div class="wrapper">
         <h2>Reset Password</h2>
         <p>Please fill out this form to reset your password.</p>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group">
                 <label>New Password</label>
                 <input type="password" name="password" class="form-control <?php echo (!empty($_SESSION["password_err"])) ? 'is-invalid' : ''; ?>" value="<?php echo $_SESSION["new_password"]; ?>">
@@ -140,6 +139,6 @@ if (is_get_request())
                 <!-- <a class="btn btn-link ml-2" href="welcome.php">Cancel</a> -->
             </div>
         </form>
-    </div>    
+    </div>
 </body>
 </html>

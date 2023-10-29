@@ -159,8 +159,11 @@ namespace MonkeyPaste.Avalonia {
                 if (purchase_vm == null) {
                     return;
                 }
-
+                MpUserAccountType purchase_uat = purchase_vm.AccountType;
                 IsMonthlyEnabled = is_monthly;
+                if (purchase_uat == MpUserAccountType.Free) {
+                    return;
+                }
                 if (!purchase_vm.CanBuy) {
                     MpConsole.WriteLine($"Cannot buy {purchase_vm} monthly: {is_monthly}");
                     return;
@@ -173,25 +176,14 @@ namespace MonkeyPaste.Avalonia {
                             message: purchase_vm.PrePurchaseMessage,
                             iconResourceObj: "WarningImage");
                 }
-                MpUserAccountType purchase_uat = purchase_vm.AccountType;
 
 
                 // NOTE to work around login failures or no selection, just default to free i guess
                 bool? success = await MpAvAccountTools.Instance.PurchaseSubscriptionAsync(purchase_uat, is_monthly);
                 if (success.IsTrue()) {
 
-                    if (purchase_uat != MpUserAccountType.Free) {
-                        await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
-                            title: UiStrings.AccountPurchaseSuccessfulTitle,
-                            message: string.Format(
-                                UiStrings.AccountPurchaseSuccessfulCaption,
-                                purchase_uat.EnumToUiString(),
-                                is_monthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel),
-                            iconResourceObj: "MonkeyWinkImage");
-                    }
 
-                    // refresh account vm w/ new license
-                    await MpAvAccountViewModel.Instance.InitializeAsync();
+                    await MpAvAccountViewModel.Instance.SubscribeCommand.ExecuteAsync(purchase_uat);
                     return;
                 }
 
