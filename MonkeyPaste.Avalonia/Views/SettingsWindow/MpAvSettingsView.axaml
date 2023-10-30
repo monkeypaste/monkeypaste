@@ -52,7 +52,8 @@
         <Style Selector="Expander.header">
             <Style.Resources>
                 <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Stretch</HorizontalAlignment>
-                <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{Binding Source={DynamicResource ExpanderHeaderBackground}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                <!--<SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{Binding Source={DynamicResource ExpanderHeaderBackground}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />-->
+                <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{DynamicResource ThemeWhite}" />
                 <SolidColorBrush x:Key="ExpanderContentBackground" Color="{DynamicResource ThemeGrayAccent2Color}" Opacity="0.3" />
 
                 <!--<SolidColorBrush x:Key="ExpanderHeaderForegroundPointerOver" Color="{Binding Source={DynamicResource ExpanderHeaderBackgroundPointerOver}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
@@ -487,7 +488,7 @@
                             <local:MpAvShortcutsView />
                         </DataTemplate>
                         <DataTemplate x:Key="HelpTemplate">
-                            <local:MpAvHelpView />
+                            <local:MpAvWebPageView DataContext="{x:Static local:MpAvHelpViewModel.Instance}" />
                         </DataTemplate>
                     </local:MpAvSettingsTabDataTemplateSelector>
                 </TransitioningContentControl.DataTemplates>

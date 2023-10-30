@@ -1821,19 +1821,7 @@ namespace MonkeyPaste.Avalonia {
 
                     }
                 }
-            } else if (source == MpAccountCapCheckType.AccountTypeDowngraded ||
-                source == MpAccountCapCheckType.AccountTypeUpgraded) {
-                cap_msg_type = MpNotificationType.AccountChanged;
-                cap_msg_title_suffix = UiStrings.NtfCapAccountChangedTitleSuffix;
-                if (source == MpAccountCapCheckType.AccountTypeUpgraded) {
-                    cap_msg_icon = "AppImage";
-                    cap_msg_sb.AppendLine(string.Format(UiStrings.NtfCapAccountUpgradeText, cur_content_cap < 0 ? "∞" : cur_content_cap.ToString()));
-                } else {
-                    cap_msg_icon = "MonkeyWinkImage";
-                    cap_msg_sb.AppendLine(string.Format(UiStrings.NtfCapAccountDowngradeText, cur_content_cap));
-                    cap_msg_timeout = 10_000;
-                }
-            }
+            } 
 
             if (apply_changes) {
                 if (cap_info.ToBeTrashed_ciid > 0) {
@@ -2364,10 +2352,6 @@ namespace MonkeyPaste.Avalonia {
                         cwv.SendMessage($"pasteOrDropCompleteResponse_ext()");
                     }
                     CurPasteOrDragItem = null;
-                    break;
-                case MpMessageType.AccountDowngrade:
-                case MpMessageType.AccountUpgrade:
-                    ProcessAccountCapsAsync(msg == MpMessageType.AccountUpgrade ? MpAccountCapCheckType.AccountTypeUpgraded : MpAccountCapCheckType.AccountTypeDowngraded).FireAndForgetSafeAsync();
                     break;
             }
         }

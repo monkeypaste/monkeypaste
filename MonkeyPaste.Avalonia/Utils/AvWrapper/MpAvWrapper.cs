@@ -180,11 +180,6 @@ namespace MonkeyPaste.Avalonia {
             NotificationManager = MpAvNotificationWindowManager.Instance;
 
             PlatformShorcuts = new MpAvPlatformShortcuts();
-
-            //if (MpAvPrefViewModel.Instance.IsWelcomeComplete) {
-            await MpDb.InitAsync();
-            //}
-
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,13 +39,15 @@ namespace MonkeyPaste.Avalonia {
         AccountExpiredLocal,
         AccountExpiredRemote,
         AccountExpiredOffline,
-        SubscriptionSuccessful,
+        PurchaseCompleted,
+        SubscriptionUpgraded,
+        SubscriptionDowngraded,
     }
-
     public class MpAvAccountViewModel :
         MpAvViewModelBase {
         #region Private Variables
         private MpUserAccountType _lastAccountType;
+        private MpBillingCycleType _lastBillingCycleType;
         private DispatcherTimer _expiration_timer;
         private DispatcherTimer _attempt_login_timer;
 
@@ -60,11 +63,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics 
 
-        static string PRIVACY_POLICY_URL = $"{MpServerConstants.DOMAIN_URL}/legal/privacy.html";
-        static string SUBSCRIBE_URI = $"{MpServerConstants.DOMAIN_URL}/accounts/subscribe.php";
-        static string REGISTER_BASE_URL = $"{MpServerConstants.DOMAIN_URL}/accounts/register.php";
-        static string LOGIN_BASE_URL = $"{MpServerConstants.DOMAIN_URL}/accounts/login.php";
-        static string RESET_PASSWORD_BASE_URL = $"{MpServerConstants.DOMAIN_URL}/accounts/reset-request.php";
+        static string PRIVACY_POLICY_URL = $"{MpServerConstants.LEGAL_BASE_URL}/privacy.html";
+
+        static string SUBSCRIBE_URI = $"{MpServerConstants.ACCOUNTS_BASE_URL}/subscribe.php";
+        static string REGISTER_BASE_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/register.php";
+        static string LOGIN_BASE_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/login.php";
+        static string RESET_PASSWORD_BASE_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/reset-request.php";
 
         private static MpAvAccountViewModel _instance;
         public static MpAvAccountViewModel Instance => _instance ?? (_instance = new MpAvAccountViewModel());
@@ -72,6 +76,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+
+
         #endregion
 
         #region Properties
@@ -91,8 +98,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
 
-        public string AccountTypeLabel =>
-            AccountType.EnumToUiString();
+        public string ContentCapacityDisplayValue =>
+            ContentCapacity < 0 ?
+                UiStrings.AccountUnlimitedDisplayText :
+                ContentCapacity.ToString();
+        public string TrashCapacityDisplayValue =>
+            TrashCapacity < 0 ?
+                UiStrings.AccountUnlimitedDisplayText :
+                TrashCapacity.ToString();
 
         public string BillingCycleLabel =>
             BillingCycleType.EnumToUiString();
@@ -101,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
         public string NextPaymentDisplayValue =>
             HasBillingCycle ?
                 NextPaymentUtc.ToLocalTime().ToString(UiStrings.CommonDateFormat) :
-                "♾️";
+                UiStrings.AccountFreeNextPaymentDisplayText;
 
         public string AccountStateInfo {
             get {
@@ -110,7 +123,7 @@ namespace MonkeyPaste.Avalonia {
                 string acct_name = IsRegistered ? AccountUsername : UiStrings.AccountUnregisteredLabel;
                 int content_count = MpAvAccountTools.Instance.LastContentCount;
                 int cap_count = MpAvAccountTools.Instance.GetContentCapacity(AccountType);
-                if (AccountType != MpUserAccountType.Unlimited) {
+                if (AccountType == MpUserAccountType.Unlimited) {
                     return $"{AccountType} - (Total {content_count})";
                 }
                 return string.Format(
@@ -128,6 +141,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
+        public int ContentCapacity =>
+            MpAvAccountTools.Instance.GetContentCapacity(AccountType);
+        public int TrashCapacity =>
+            MpAvAccountTools.Instance.GetTrashCapacity(AccountType);
         public bool HasBillingCycle =>
             BillingCycleType == MpBillingCycleType.Monthly ||
             BillingCycleType == MpBillingCycleType.Yearly;
@@ -156,6 +173,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         public bool IsSubscriptionDevice { get; private set; }
+
+        public int AccountPriority =>
+            MpAvAccountTools.Instance.GetAccountPriority(AccountType, BillingCycleType == MpBillingCycleType.Monthly);
         public MpUserAccountState AccountState { get; private set; } = MpUserAccountState.Unregistered;
         #endregion
 
@@ -163,8 +183,16 @@ namespace MonkeyPaste.Avalonia {
 
         public string AccountUsername => MpAvPrefViewModel.Instance.AccountUsername;
 
-        public string AccountEmail =>
-            MpAvPrefViewModel.Instance.AccountEmail;
+        public string AccountEmail {
+            get => MpAvPrefViewModel.Instance.AccountEmail;
+            set {
+                if (AccountEmail != value) {
+                    MpAvPrefViewModel.Instance.AccountEmail = value;
+                    OnPropertyChanged(nameof(AccountEmail));
+                }
+            }
+        }
+
         public string AccountPassword =>
             MpAvPrefViewModel.Instance.AccountPassword;
 
@@ -179,12 +207,11 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-
-
         public MpBillingCycleType BillingCycleType {
             get => MpAvPrefViewModel.Instance.AccountBillingCycleType;
             private set {
                 if (BillingCycleType != value) {
+                    _lastBillingCycleType = BillingCycleType;
                     MpAvPrefViewModel.Instance.AccountBillingCycleType = value;
                     OnPropertyChanged(nameof(BillingCycleType));
                 }
@@ -217,6 +244,9 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvAccountViewModel() : base() {
             MpDebug.Assert(_instance == null, $"Account singleton error");
+            _lastAccountType = AccountType;
+            _lastBillingCycleType = BillingCycleType;
+
             PropertyChanged += MpAvAccountViewModel_PropertyChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
@@ -228,6 +258,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
             await LoginCommand.ExecuteAsync(MpLoginSourceType.Init);
             IsBusy = false;
+            IsLoaded = true;
         }
 
         public async Task ShowExistingAccountLoginWindowAsync() {
@@ -237,23 +268,6 @@ namespace MonkeyPaste.Avalonia {
             var svm = MpAvSettingsViewModel.Instance;
             await svm.InitAsync();
             await svm.ShowSettingsWindowCommand.ExecuteAsync(MpSettingsTabType.Account);
-
-
-            //while (true) {
-            //    if (!svm.IsWindowOpen) {
-            //        // closed window ie cancel
-            //        ResetAccountPrefs();
-            //        AccountState = MpUserAccountState.Unregistered;
-            //        return MpUserAccountType.None;
-            //    }
-            //    if (AccountState == MpUserAccountState.Connected) {
-            //        // login successful show confirmation and close window to return welcome
-            //        ShowAccountNotficationAsync(MpAccountNtfType.ExistingLoginSuccessful).FireAndForgetSafeAsync();
-            //        svm.IsWindowOpen = false;
-            //        return AccountType;
-            //    }
-            //    await Task.Delay(300);
-            //}
         }
         #endregion
 
@@ -264,18 +278,8 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvAccountViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
-                case nameof(AccountType):
-                    // NOTE this maybe a good all around interface method, not sure though
-                    bool changed = AccountType != _lastAccountType;
-                    if (changed) {
-                        bool is_upgrade = (int)_lastAccountType > (int)AccountType;
-                        MpMessenger.SendGlobal(is_upgrade ? MpMessageType.AccountUpgrade : MpMessageType.AccountDowngrade);
-
-                        MpMessenger.SendGlobal(MpMessageType.AccountStateChanged);
-                        MpMessenger.SendGlobal(MpMessageType.AccountInfoChanged);
-                    }
-                    break;
                 case nameof(AccountState):
+                    MpConsole.WriteLine($"Account State changed to '{AccountState}'");
                     UpdateAccountViews();
                     switch (AccountState) {
                         case MpUserAccountState.Connected:
@@ -292,8 +296,6 @@ namespace MonkeyPaste.Avalonia {
                             }
                             break;
                     }
-                    MpMessenger.SendGlobal(MpMessageType.AccountStateChanged);
-                    MpMessenger.SendGlobal(MpMessageType.AccountInfoChanged);
                     break;
             }
         }
@@ -446,9 +448,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         private async Task ShowAccountNotficationAsync(MpAccountNtfType ant, params string[] args) {
-            string title = null;
-            string msg = null;
-            object icon = null;
+            string title;
+            string msg;
+            object icon;
             MpNotificationType ntf_type = MpNotificationType.None;
             switch (ant) {
                 default:
@@ -500,12 +502,34 @@ namespace MonkeyPaste.Avalonia {
                     msg = UiStrings.CommonConnectionFailedCaption;
                     icon = "ErrorImage";
                     break;
-                case MpAccountNtfType.SubscriptionSuccessful:
+                case MpAccountNtfType.PurchaseCompleted:
                     title = UiStrings.AccountPurchaseSuccessfulTitle;
                     msg = string.Format(
                                 UiStrings.AccountPurchaseSuccessfulCaption,
                                 AccountType.EnumToUiString(),
                                 IsMonthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel);
+                    icon = "MonkeyWinkImage";
+                    break;
+                case MpAccountNtfType.SubscriptionUpgraded:
+                    ntf_type = MpNotificationType.AccountChanged;
+                    title = UiStrings.NtfCapAccountChangedTitle;
+                    msg = string.Format(
+                                UiStrings.NtfCapAccountUpgradeText,
+                                AccountType.EnumToUiString(),
+                                IsMonthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel,
+                                ContentCapacityDisplayValue,
+                                TrashCapacityDisplayValue);
+                    icon = "MonkeyWinkImage";
+                    break;
+                case MpAccountNtfType.SubscriptionDowngraded:
+                    ntf_type = MpNotificationType.AccountChanged;
+                    title = UiStrings.NtfCapAccountChangedTitle;
+                    msg = string.Format(
+                                UiStrings.NtfCapAccountDowngradeText,
+                                AccountType.EnumToUiString(),
+                                IsMonthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel,
+                                ContentCapacityDisplayValue,
+                                TrashCapacityDisplayValue);
                     icon = "MonkeyWinkImage";
                     break;
             }
@@ -588,8 +612,8 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private void UpdateAccountState(MpUserAccountState acct_state, MpUserAccountType acct_type, DateTime expires, bool monthly, bool is_sub_device) {
-
+        private void UpdateAccountState(MpUserAccountState acct_state, MpUserAccountType acct_type, DateTime expires, bool monthly, bool is_sub_device, string email) {
+            AccountEmail = email;
             IsSubscriptionDevice = is_sub_device;
             AccountType = acct_type;
             NextPaymentUtc =
@@ -602,6 +626,26 @@ namespace MonkeyPaste.Avalonia {
                     monthly ?
                         MpBillingCycleType.Monthly : MpBillingCycleType.Yearly;
             AccountState = acct_state;
+
+            // update sys tray tooltip
+            MpMessenger.SendGlobal(MpMessageType.AccountInfoChanged);
+
+            CheckForAccountChange();
+        }
+
+        private void CheckForAccountChange() {
+            int old_val = MpAvAccountTools.Instance.GetAccountPriority(_lastAccountType, _lastBillingCycleType == MpBillingCycleType.Monthly);
+            int new_val = AccountPriority;
+            if (old_val == new_val) {
+                // no change
+                return;
+            }
+
+            MpAccountNtfType change_type = new_val > old_val ? MpAccountNtfType.SubscriptionUpgraded : MpAccountNtfType.SubscriptionDowngraded;
+            ShowAccountNotficationAsync(change_type).FireAndForgetSafeAsync();
+
+            // if welcome active this will disable subscription items and nav forward
+            MpMessenger.SendGlobal(MpMessageType.AccountStateChanged);
         }
 
         #endregion
@@ -630,7 +674,7 @@ namespace MonkeyPaste.Avalonia {
                 bool success = ProcessServerResponse(resp, out var resp_args);
                 await InitializeAsync();
                 if (success) {
-                    ShowAccountNotficationAsync(MpAccountNtfType.SubscriptionSuccessful).FireAndForgetSafeAsync();
+                    ShowAccountNotficationAsync(MpAccountNtfType.PurchaseCompleted).FireAndForgetSafeAsync();
                     return;
                 }
 #if DEBUG
@@ -651,6 +695,7 @@ namespace MonkeyPaste.Avalonia {
                 MpUserAccountType acct_type = AccountType;
                 bool monthly = !IsYearly;
                 DateTime expires = NextPaymentUtc;
+                string email = MpAvPrefViewModel.Instance.AccountEmail;
 
                 if (is_sub_device) {
                     // this device has active subscription
@@ -662,7 +707,7 @@ namespace MonkeyPaste.Avalonia {
                 var req_args = new Dictionary<string, (string, string)>() {
                     {"username", (nameof(MpAvPrefViewModel.Instance.AccountUsername),MpAvPrefViewModel.Instance.AccountUsername) },
                     {"password", (nameof(MpAvPrefViewModel.Instance.AccountPassword),MpAvPrefViewModel.Instance.AccountPassword) },
-                    {"device_guid", (nameof(MpDefaultDataModelTools.ThisUserDeviceGuid), MpDefaultDataModelTools.ThisUserDeviceGuid) },
+                    {"device_guid", (nameof(MpDefaultDataModelTools.ThisUserDeviceGuid), MpAvPrefViewModel.Instance.ThisDeviceGuid) },
                     {"detail1", (null,MpAvPrefViewModel.arg1)},
                     {"detail2", (null,MpAvPrefViewModel.arg2)},
                     {"detail3", (null,MpAvPrefViewModel.arg3)},
@@ -701,12 +746,13 @@ namespace MonkeyPaste.Avalonia {
                     acct_type = resp_args["sub_type"].ToEnum<MpUserAccountType>();
                     expires = DateTime.Parse(resp_args["expires_utc_dt"]);
                     monthly = resp_args["monthly"] == "1";
+                    email = resp_args["email"];
 
                     acct_state = MpUserAccountState.Connected;
                 } else {
                     acct_state = IsRegistered ? MpUserAccountState.Disconnected : MpUserAccountState.Unregistered;
                 }
-                UpdateAccountState(acct_state, acct_type, expires, monthly, is_sub_device);
+                UpdateAccountState(acct_state, acct_type, expires, monthly, is_sub_device, email);
                 StartExpirationTimer();
                 if (success) {
                     return;

@@ -1,5 +1,6 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
+require('dotenv').config();
 
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
@@ -11,11 +12,11 @@ const config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  url: 'https://monkeypaste.com',
+  url: "https://localhost",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   //baseUrl: `C:/Users/tkefauver/Source/Repos/MonkeyPaste/MonkeyPaste.com/build/`,
-  baseUrl: `/`,
+  baseUrl: "/docs/build",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.

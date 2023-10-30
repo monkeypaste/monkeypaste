@@ -69,7 +69,7 @@
 
         <Style Selector="ListBoxItem:not(:selected) Border#OuterBorder.unlimited">
             <Setter Property="BorderBrush"
-                    Value="{StaticResource ThemedRainbowBrush}" />
+                    Value="{StaticResource RainbowBrush}" />
         </Style>
 
         <!--  ICON BORDER  -->
@@ -150,7 +150,7 @@
                             <Border x:Name="OuterBorder"
                                     Height="85"
                                     Padding="10,0,10,0"
-                                    Classes.canbuy="{Binding CanBuy}"
+                                    IsEnabled="{Binding CanBuy}"
                                     Classes.pulse="{Binding DoFocusPulse}"
                                     Classes.unlimited="{Binding IsUnlimited}"
                                     local:MpAvIsHoveringExtension.IsEnabled="True"

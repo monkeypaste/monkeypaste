@@ -135,15 +135,15 @@
   <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
     <value>Restore your existing account...</value>
   </data>
-  <data name="WelcomeAccountFreeDescription" xml:space="preserve">
-    <value>Content and archive is limited to {0} and {1} clips respectively. No syncing capabilities are enabled.</value>
+  <data name="AccountFreeDescription" xml:space="preserve">
+    <value>Content and trash are limited to {0} and {1} clips respectively.</value>
     <comment>Description formats all use same format from content cap, trash cap, standard cap</comment>
   </data>
-  <data name="WelcomeAccountStandardDescription" xml:space="preserve">
-    <value>Allows up to {2} clips of content and unlimited archive with syncing available across all devices. </value>
+  <data name="AccountStandardDescription" xml:space="preserve">
+    <value>Allows up to {2} clips of content and unlimited trash storage. </value>
   </data>
-  <data name="WelcomeAccountUnlimitedDescription" xml:space="preserve">
-    <value>Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices.</value>
+  <data name="AccountUnlimitedDescription" xml:space="preserve">
+    <value>Unrestricted and unlimited content and trash storage.</value>
   </data>
   <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
     <value>Restore</value>
@@ -903,16 +903,16 @@
   <data name="CommonRetryLabel" xml:space="preserve">
     <value>Retry</value>
   </data>
-  <data name="NtfCapAccountChangedTitleSuffix" xml:space="preserve">
-    <value>Acount Now Active</value>
+  <data name="NtfCapAccountChangedTitle" xml:space="preserve">
+    <value>Account Changed</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>Your content storage is now {cur_content_cap} but fret not! No data is lost after downgrading. Only new stuff will be evaluated.</value>
-    <comment>Number</comment>
+    <value>Your subscription is now {0}/{1} with {2} content and {3} trash storage. \n But fret not! No data is lost after downgrading. Only new stuff will be evaluated.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>Congratulations! Your content storage is now {0}</value>
-    <comment>Number/∞</comment>
+    <value>Congratulations! Your subscription is now {0}/{1} with {2} content and {3} trash storage.</value>
+    <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockAddLabel" xml:space="preserve">
     <value>Add</value>
@@ -1073,5 +1073,11 @@
   </data>
   <data name="AccountWhatsNewTabName" xml:space="preserve">
     <value>What's New</value>
+  </data>
+  <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="AccountUnlimitedDisplayText" xml:space="preserve">
+    <value>Unlimited</value>
   </data>
 </root>

@@ -32,6 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
             await MpAvAccountViewModel.Instance.InitializeAsync();
             if (will_show) {
+                await MpDb.InitAsync();
                 await MpAvSubscriptionPurchaseViewModel.Instance.InitializeAsync();
                 Instance.InitWelcomeItems();
                 await Mp.Services.NotificationBuilder.ShowNotificationAsync(

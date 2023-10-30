@@ -7,8 +7,13 @@
         <LinearGradientBrush x:Key="RainbowBrush" SpreadMethod="Repeat" TransformOrigin="50%,50%" StartPoint="0%,0%" EndPoint="100%,100%">
             <LinearGradientBrush.GradientStops>
                 <GradientStop Offset="0" Color="Red" />
-                <GradientStop Offset="0.5" Color="Green" />
-                <GradientStop Offset="1" Color="Blue" />
+                <GradientStop Offset="0.14" Color="Orange" />
+                <GradientStop Offset="0.28" Color="Yellow" />
+                <GradientStop Offset="0.42" Color="Green" />
+                <GradientStop Offset="0.56" Color="Blue" />
+                <GradientStop Offset="0.7" Color="Indigo" />
+                <GradientStop Offset="0.8" Color="Violet" />
+                <GradientStop Offset="0.94" Color="Red" />
             </LinearGradientBrush.GradientStops>
             <LinearGradientBrush.Transform>
                 <RotateTransform />

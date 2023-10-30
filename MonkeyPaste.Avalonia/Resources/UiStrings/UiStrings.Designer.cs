@@ -169,6 +169,24 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Content and trash are limited to {0} and {1} clips respectively..
+        /// </summary>
+        public static string AccountFreeDescription {
+            get {
+                return ResourceManager.GetString("AccountFreeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Never.
+        /// </summary>
+        public static string AccountFreeNextPaymentDisplayText {
+            get {
+                return ResourceManager.GetString("AccountFreeNextPaymentDisplayText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Free {0}-Day Trial.
         /// </summary>
         public static string AccountFreeTrialLabel {
@@ -430,6 +448,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allows up to {2} clips of content and unlimited trash storage. .
+        /// </summary>
+        public static string AccountStandardDescription {
+            get {
+                return ResourceManager.GetString("AccountStandardDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Subscription.
         /// </summary>
         public static string AccountSubscriptionTabName {
@@ -444,6 +471,24 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountTrialButtonText {
             get {
                 return ResourceManager.GetString("AccountTrialButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unrestricted and unlimited content and trash storage..
+        /// </summary>
+        public static string AccountUnlimitedDescription {
+            get {
+                return ResourceManager.GetString("AccountUnlimitedDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlimited.
+        /// </summary>
+        public static string AccountUnlimitedDisplayText {
+            get {
+                return ResourceManager.GetString("AccountUnlimitedDisplayText", resourceCulture);
             }
         }
         
@@ -1156,16 +1201,16 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Acount Now Active.
+        ///   Looks up a localized string similar to Account Changed.
         /// </summary>
-        public static string NtfCapAccountChangedTitleSuffix {
+        public static string NtfCapAccountChangedTitle {
             get {
-                return ResourceManager.GetString("NtfCapAccountChangedTitleSuffix", resourceCulture);
+                return ResourceManager.GetString("NtfCapAccountChangedTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your content storage is now {cur_content_cap} but fret not! No data is lost after downgrading. Only new stuff will be evaluated..
+        ///   Looks up a localized string similar to Your subscription is now {0}/{1} with {2} content and {3} trash storage. \n But fret not! No data is lost after downgrading. Only new stuff will be evaluated..
         /// </summary>
         public static string NtfCapAccountDowngradeText {
             get {
@@ -1174,7 +1219,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Congratulations! Your content storage is now {0}.
+        ///   Looks up a localized string similar to Congratulations! Your subscription is now {0}/{1} with {2} content and {3} trash storage..
         /// </summary>
         public static string NtfCapAccountUpgradeText {
             get {
@@ -2426,15 +2471,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Content and archive is limited to {0} and {1} clips respectively. No syncing capabilities are enabled..
-        /// </summary>
-        public static string WelcomeAccountFreeDescription {
-            get {
-                return ResourceManager.GetString("WelcomeAccountFreeDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Free.
         /// </summary>
         public static string WelcomeAccountFreeLabel {
@@ -2462,15 +2498,6 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allows up to {2} clips of content and unlimited archive with syncing available across all devices. .
-        /// </summary>
-        public static string WelcomeAccountStandardDescription {
-            get {
-                return ResourceManager.GetString("WelcomeAccountStandardDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Standard.
         /// </summary>
         public static string WelcomeAccountStandardLabel {
@@ -2485,15 +2512,6 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeAccountTitle {
             get {
                 return ResourceManager.GetString("WelcomeAccountTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unrestricted, unlimited storage (optimized for efficiency with millions of items) with syncing across all devices..
-        /// </summary>
-        public static string WelcomeAccountUnlimitedDescription {
-            get {
-                return ResourceManager.GetString("WelcomeAccountUnlimitedDescription", resourceCulture);
             }
         }
         

@@ -70,6 +70,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
+        public string GetStoreSubscriptionUrl(MpUserAccountType uat, bool isMonthly) {
+            var kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value.Item1 == uat && x.Value.Item2 == isMonthly);
+            if (kvp.IsDefault()) {
+                return null;
+            }
+            return $"https://account.microsoft.com/services/{kvp.Key}/details#billing";
+        }
+
         public async Task RefreshAddOnInfoAsync() {
             AccountTypeTrialAvailabilityLookup.Clear();
             AccountTypePriceLookup.Clear();

@@ -60,6 +60,9 @@ namespace MonkeyPaste {
         #region Public Methods
 
         public static async Task InitAsync() {
+            if (IsLoaded) {
+                return;
+            }
             var sw = new Stopwatch();
             sw.Start();
 

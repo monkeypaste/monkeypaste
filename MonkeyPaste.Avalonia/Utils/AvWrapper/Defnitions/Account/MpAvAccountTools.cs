@@ -55,6 +55,15 @@ namespace MonkeyPaste.Avalonia {
         public int LastContentCount =>
             _lastContentCount;
 
+        public int GetAccountPriority(MpUserAccountType uat, bool isMonthly) {
+            if (uat == MpUserAccountType.Free) {
+                return 0;
+            }
+            if (uat == MpUserAccountType.Standard) {
+                return isMonthly ? 1 : 2;
+            }
+            return isMonthly ? 3 : 4;
+        }
 
         public int GetContentCapacity(MonkeyPaste.MpUserAccountType acctType) {
             switch (acctType) {

@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpSettingsFrameType.Search:
                         return "SearchImage";
                     case MpSettingsFrameType.Content:
-                        return "BananaBwImage";
+                        return "BananaImage";
                     case MpSettingsFrameType.DragAndDrop:
                         return "DragAndDropImage";
                     case MpSettingsFrameType.Shortcuts:

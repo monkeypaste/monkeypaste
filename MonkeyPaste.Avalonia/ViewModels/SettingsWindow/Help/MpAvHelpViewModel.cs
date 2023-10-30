@@ -1,8 +1,12 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
+using WindowStartupLocation = Avalonia.Controls.WindowStartupLocation;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpHelpLinkType {
@@ -14,8 +18,14 @@ namespace MonkeyPaste.Avalonia {
         Filters,
         Trash
     }
+    public interface MpAvIWebPageViewModel : MpIViewModel, MpIPassiveAsyncObject {
+        string CurrentUrl { get; }
+        ICommand ReloadCommand { get; }
+        object ReloadCommandParameter { get; }
+    }
     public class MpAvHelpViewModel :
         MpAvViewModelBase,
+        MpAvIWebPageViewModel,
         MpICloseWindowViewModel,
         MpIActiveWindowViewModel,
         MpIWantsTopmostWindowViewModel {
@@ -30,6 +40,14 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+
+        #region MpAvIWebPageViewModel Implementatiosn
+        ICommand MpAvIWebPageViewModel.ReloadCommand =>
+            NavigateToHelpLinkCommand;
+        object MpAvIWebPageViewModel.ReloadCommandParameter =>
+            LastLinkType;
+
+        #endregion
 
         #region MpIWindowViewModel Implementatiosn
         public MpWindowType WindowType =>
@@ -55,7 +73,6 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
-        public string LoadErrorInfo { get; set; }
 
         public bool IsHelpSettingsTabVisible =>
             false;
@@ -64,21 +81,18 @@ namespace MonkeyPaste.Avalonia {
 
         public MpHelpLinkType LastLinkType { get; private set; }
 
-        public bool IsOffline =>
-            !string.IsNullOrEmpty(LoadErrorInfo);
-
         #endregion
 
         #region Model
 
         Dictionary<MpHelpLinkType, string> OnlineHelpUriLookup => new() {
-            {MpHelpLinkType.None, $"{MpServerConstants.DOMAIN_URL}/docs/welcome" },
-            {MpHelpLinkType.ContentLimits, $"{MpServerConstants.DOMAIN_URL}/docs/account/#content-limits" },
-            {MpHelpLinkType.Collections, $"{MpServerConstants.DOMAIN_URL}/docs/collections/" },
-            {MpHelpLinkType.Tags, $"{MpServerConstants.DOMAIN_URL}/docs/collections/tags" },
-            {MpHelpLinkType.Groups, $"{MpServerConstants.DOMAIN_URL}/docs/collections/groups" },
-            {MpHelpLinkType.Filters, $"{MpServerConstants.DOMAIN_URL}/docs/collections/filters" },
-            {MpHelpLinkType.Trash, $"{MpServerConstants.DOMAIN_URL}/docs/collections/trash" },
+            {MpHelpLinkType.None, $"{MpServerConstants.DOCS_BASE_URL}/welcome" },
+            {MpHelpLinkType.ContentLimits, $"{MpServerConstants.DOCS_BASE_URL}/account/#content-limits" },
+            {MpHelpLinkType.Collections, $"{MpServerConstants.DOCS_BASE_URL}/collections/" },
+            {MpHelpLinkType.Tags, $"{MpServerConstants.DOCS_BASE_URL}/collections/tags" },
+            {MpHelpLinkType.Groups, $"{MpServerConstants.DOCS_BASE_URL}/collections/groups" },
+            {MpHelpLinkType.Filters, $"{MpServerConstants.DOCS_BASE_URL}/collections/filters" },
+            {MpHelpLinkType.Trash, $"{MpServerConstants.DOCS_BASE_URL}/collections/trash" },
         };
 
         #endregion
@@ -88,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvHelpViewModel() : base(null) {
             PropertyChanged += MpAvHelpViewModel_PropertyChanged;
-            CurrentUrl = OnlineHelpUriLookup[MpHelpLinkType.None];
+            CurrentUrl = GetHelpUrl(MpHelpLinkType.None);
         }
 
         #endregion
@@ -99,11 +113,8 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvHelpViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(LoadErrorInfo):
-                    OnPropertyChanged(nameof(IsOffline));
-                    break;
-            }
+            //switch (e.PropertyName) {
+            //}
         }
 
         private MpAvWindow CreateHelpWindow() {
@@ -116,10 +127,27 @@ namespace MonkeyPaste.Avalonia {
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("QuestionMarkImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 DataContext = this,
-                Content = new MpAvHelpView()
+                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeWhiteColor.ToString()),
+                Content = new MpAvWebPageView()
             };
             w.Classes.Add("fadeIn");
             return w;
+        }
+
+        private void InitHelpStyle() {
+            if (MpAvWindowManager.LocateWindow(this) is not MpAvWindow w ||
+                w.GetVisualDescendant<MpAvWebView>() is not MpAvWebView wv) {
+                return;
+            }
+            MpAvDocusaurusHelpers.LoadMainOnlyAsync(wv).FireAndForgetSafeAsync();
+        }
+
+        private string GetHelpUrl(MpHelpLinkType hlt) {
+            if (!OnlineHelpUriLookup.ContainsKey(hlt)) {
+                hlt = MpHelpLinkType.None;
+            }
+            string url = OnlineHelpUriLookup[hlt];
+            return url + MpAvDocusaurusHelpers.GetThemeUrlAttrb(MpAvPrefViewModel.Instance.IsThemeDark);
         }
         #endregion
 
@@ -131,6 +159,7 @@ namespace MonkeyPaste.Avalonia {
                 if (args is MpHelpLinkType argLink) {
                     hlt = argLink;
                 }
+
                 LastLinkType = hlt;
                 // open/activate settings window and select help tab...
                 if (IsHelpSettingsTabVisible) {
@@ -148,12 +177,11 @@ namespace MonkeyPaste.Avalonia {
 
                 MpConsole.WriteLine($"Help navigating to type '{hlt}' at url '{OnlineHelpUriLookup[hlt]}'");
 
-                CurrentUrl = OnlineHelpUriLookup[hlt];
+                //ensure reload
+                CurrentUrl = MpUrlHelpers.BLANK_URL;
+                CurrentUrl = GetHelpUrl(hlt);
 
-                //if (MpAvWindowManager.LocateVisual<MpAvHelpView>(this) is MpAvHelpView hv &&
-                //    hv.GetVisualDescendant<WebView>() is WebView hwv) {
-                //    hwv.Navigate(OnlineHelpUriLookup[hlt]);
-                //}
+                InitHelpStyle();
             });
 
         public MpIAsyncCommand NavigateToContextualHelpCommand => new MpAsyncCommand(

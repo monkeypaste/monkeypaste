@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
-  <!-- FIXES SCROLL STUTTER WHEN ATTACHED TO VIEW -->
+    <!--  FIXES SCROLL STUTTER WHEN ATTACHED TO VIEW  -->
     <Style Selector="local|MpAvTagTreeView, local|MpAvTagTreeView :is(Control)">
         <Setter Property="ScrollViewer.BringIntoViewOnFocusChange"
                 Value="False" />
@@ -10,5 +10,29 @@
                 Value="False" />
         <Setter Property="ScrollViewer.IsScrollInertiaEnabled"
                 Value="False" />
+    </Style>
+    <!--  KEYBOARD SELECT & RENAME  -->
+    <Style Selector="TreeView#TagTreeView TreeViewItem"
+           x:DataType="local:MpAvTagTileViewModel">
+        <Setter Property="local:MpAvKeyboardCommandExtension.IsEnabled"
+                Value="True" />
+        <Setter Property="local:MpAvKeyboardCommandExtension.IsEventHandled"
+                Value="True" />
+        <Setter Property="local:MpAvKeyboardCommandExtension.EnterCommand"
+                Value="{Binding SelectThisTagCommand}" />
+        <Setter Property="local:MpAvKeyboardCommandExtension.EnterCommandParameter"
+                Value="{Binding $self}" />
+    </Style>
+
+    <Style Selector="ListBox#TagTray ListBoxItem"
+           x:DataType="local:MpAvTagTileViewModel">
+        <Setter Property="local:MpAvKeyboardCommandExtension.IsEnabled"
+                Value="True" />
+        <Setter Property="local:MpAvKeyboardCommandExtension.IsEventHandled"
+                Value="True" />
+        <Setter Property="local:MpAvKeyboardCommandExtension.EnterCommand"
+                Value="{Binding SelectThisTagCommand}" />
+        <Setter Property="local:MpAvKeyboardCommandExtension.EnterCommandParameter"
+                Value="{Binding $self}" />
     </Style>
 </Styles>

@@ -64,11 +64,11 @@ namespace MonkeyPaste.Avalonia {
                     case MpUserAccountType.None:
                         return UiStrings.WelcomeAccountRestoreDescription;
                     case MpUserAccountType.Free:
-                        return UiStrings.WelcomeAccountFreeDescription;
+                        return UiStrings.AccountFreeDescription;
                     case MpUserAccountType.Standard:
-                        return UiStrings.WelcomeAccountStandardDescription;
+                        return UiStrings.AccountStandardDescription;
                     case MpUserAccountType.Unlimited:
-                        return UiStrings.WelcomeAccountUnlimitedDescription;
+                        return UiStrings.AccountUnlimitedDescription;
                     default:
                         return $"Unknown description for type '{AccountType}'";
                 }
@@ -169,31 +169,17 @@ namespace MonkeyPaste.Avalonia {
         int YearlyTrialDayCount =>
             MpAvAccountTools.Instance.GetSubscriptionTrialLength(AccountType, false);
 
+        int SubscriptionPriority =>
+            MpAvAccountTools.Instance.GetAccountPriority(AccountType, IsMonthlyEnabled);
         public bool IsUnlimited =>
             AccountType == MpUserAccountType.Unlimited;
         public bool CanBuy {
             get {
                 if (Parent == null ||
-                    !Parent.IsStoreAvailable ||
-                    AccountType == MpUserAccountType.Free) {
+                    !Parent.IsStoreAvailable) {
                     return false;
                 }
-                var ua = MpAvAccountViewModel.Instance;
-                if (ua.IsYearly && !ua.IsExpired) {
-                    return false;
-                }
-                if ((int)AccountType > (int)ua.AccountType) {
-                    // allow higher
-                    return true;
-                }
-                if ((int)AccountType == (int)ua.AccountType) {
-                    if (!ua.IsYearly && !IsMonthlyEnabled) {
-                        // allow monthly to yearly
-                        return true;
-                    }
-
-                }
-                return false;
+                return SubscriptionPriority > MpAvAccountViewModel.Instance.AccountPriority;
             }
         }
 

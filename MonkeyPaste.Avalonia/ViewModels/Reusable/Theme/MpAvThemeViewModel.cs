@@ -96,11 +96,12 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        public const bool IS_WINDOW_FADE_ENABLED = true;
         public const double PHI = 1.618033988749894d;
         #endregion
 
         #region Statics
+        public static bool IS_WINDOW_FADE_ENABLED = true;
+
         private static MpAvThemeViewModel _instance;
         public static MpAvThemeViewModel Instance => _instance ?? (_instance = new MpAvThemeViewModel());
 

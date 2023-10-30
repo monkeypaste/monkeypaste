@@ -69,9 +69,10 @@
                     </StackPanel>
                 </TabItem.Header>
 
-                <local:MpAvWebView HorizontalAlignment="Stretch"
-                                   VerticalAlignment="Stretch"
-                                   Address="https://www.monkeypaste.com" />
+                <local:MpAvWebPageView HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       Background="{DynamicResource ThemeInteractiveBgColor}"
+                                       DataContext="{x:Static local:MpAvWhatsNewViewModel.Instance}" />
 
             </TabItem>
 

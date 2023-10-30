@@ -259,6 +259,7 @@
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml" />
     <AvaloniaXaml Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml" />
+    <AvaloniaXaml Remove="Views\SettingsWindow\Tabs\Help\MpAvHelpView.axaml" />
     <None Remove="Assets\Cursors\copy.png" />
     <None Remove="Assets\Cursors\hand_closed.png" />
     <None Remove="Assets\Cursors\hand_open.png" />
@@ -600,6 +601,7 @@
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
     <Compile Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml.cs" />
+    <Compile Remove="Views\SettingsWindow\Tabs\Help\MpAvHelpView.axaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -1482,10 +1484,10 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
-    <Folder Include="ViewModels\SettingsWindow\Account\NewFolder\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\Reusable\P\" />
     <Folder Include="Views\Reusable\TextBoxes\" />
+    <Folder Include="Views\SettingsWindow\Tabs\Help\" />
   </ItemGroup>
   
   
@@ -1684,14 +1686,14 @@
     <Compile Update="Views\SettingsWindow\Tabs\Account\User\MpAvUserView.axaml.cs">
       <DependentUpon>MpAvUserView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\SettingsWindow\Tabs\Account\WhatsNew\MpAvWebPageView.axaml.cs">
+      <DependentUpon>MpAvWebPageView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Interop\OleFormatStrip\MpAvOleFormatStripView.axaml.cs">
       <DependentUpon>MpAvOleFormatStripView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Preferences\MpAvSettingsFrameCollectionView.axaml.cs">
       <DependentUpon>MpAvSettingsFrameCollectionView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\SettingsWindow\Tabs\Help\MpAvHelpView.axaml.cs">
-      <DependentUpon>MpAvHelpView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\SettingsWindow\Tabs\Preferences\Item\MpAvSettingsFrameView.axaml.cs">
       <DependentUpon>MpAvSettingsFrameView.axaml</DependentUpon>
@@ -1813,6 +1815,13 @@
     <Reference Include="CefNet.Avalonia">
       <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <AvaloniaXaml Update="Views\SettingsWindow\Tabs\Account\WhatsNew\MpAvWebPageView.axaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaXaml>
   </ItemGroup>
 
   <!--<ItemGroup>

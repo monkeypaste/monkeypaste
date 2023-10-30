@@ -619,7 +619,6 @@ namespace MonkeyPaste.Avalonia {
                     ttvm.PinSortIdx = PinnedItems.Count();
                 }
                 OnPropertyChanged(nameof(ttvm.IsModelPinned));
-
                 OnPropertyChanged(nameof(PinnedItems));
                 OnPropertyChanged(nameof(IsNavButtonsVisible));
                 MpMessenger.SendGlobal(MpMessageType.FilterItemSizeChanged);

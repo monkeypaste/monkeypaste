@@ -6,8 +6,6 @@
         RestoreBlock,
         AddBlock,
         Remove,
-        Init,
-        AccountTypeDowngraded,
-        AccountTypeUpgraded,
+        Init
     }
 }

@@ -14,68 +14,6 @@
         <!--  TABS  -->
         <Style Selector="RadioButton.tab">
             <Style.Resources>
-                <!--<Color x:Key="tb_edge">Black</Color>
-                <Color x:Key="tbc_edge">Gainsboro</Color>
-                <sys:Double x:Key="Offset1">0</sys:Double>
-                <sys:Double x:Key="Offset2">0.3</sys:Double>
-                <sys:Double x:Key="Offset3">0.7</sys:Double>
-                <sys:Double x:Key="Offset4">1</sys:Double>
-
-                <LinearGradientBrush x:Key="ToggleButtonBackground" StartPoint="0%,0%" EndPoint="100%,0%">
-                    <GradientStop Offset="{StaticResource Offset1}" Color="{StaticResource tb_edge}" />
-                    <GradientStop Offset="{StaticResource Offset2}" Color="{DynamicResource ThemeAccent5BgColor}" />
-                    <GradientStop Offset="{StaticResource Offset3}" Color="{DynamicResource ThemeAccent5BgColor}" />
-                    <GradientStop Offset="{StaticResource Offset4}" Color="{StaticResource tb_edge}" />
-                </LinearGradientBrush>
-
-                <LinearGradientBrush x:Key="ToggleButtonBackgroundPointerOver" StartPoint="0%,0%" EndPoint="100%,0%">
-                    <GradientStop Offset="{StaticResource Offset1}" Color="{StaticResource tb_edge}" />
-                    <GradientStop Offset="{StaticResource Offset2}" Color="{DynamicResource ThemeAccent5Color}" />
-                    <GradientStop Offset="{StaticResource Offset3}" Color="{DynamicResource ThemeAccent5Color}" />
-                    <GradientStop Offset="{StaticResource Offset4}" Color="{StaticResource tb_edge}" />
-                </LinearGradientBrush>
-
-                <LinearGradientBrush x:Key="ToggleButtonBackgroundPressed" StartPoint="0%,0%" EndPoint="100%,0%">
-                    <GradientStop Offset="{StaticResource Offset1}" Color="{StaticResource tb_edge}" />
-                    <GradientStop Offset="{StaticResource Offset2}" Color="{DynamicResource ThemeAccent4Color}" />
-                    <GradientStop Offset="{StaticResource Offset3}" Color="{DynamicResource ThemeAccent4Color}" />
-                    <GradientStop Offset="{StaticResource Offset4}" Color="{StaticResource tb_edge}" />
-                </LinearGradientBrush>
-                <SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" />
-                <SolidColorBrush x:Key="ToggleButtonForeground" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundPressed" Color="{DynamicResource ThemeInteractiveBgColor}" />
-
-
-                <LinearGradientBrush x:Key="ToggleButtonBackgroundChecked" StartPoint="0%,0%" EndPoint="100%,0%">
-                    <GradientStop Offset="{StaticResource Offset1}" Color="{StaticResource tbc_edge}" />
-                    <GradientStop Offset="{StaticResource Offset2}" Color="{DynamicResource ThemeAccent3BgColor}" />
-                    <GradientStop Offset="{StaticResource Offset3}" Color="{DynamicResource ThemeAccent3BgColor}" />
-                    <GradientStop Offset="{StaticResource Offset4}" Color="{StaticResource tbc_edge}" />
-                </LinearGradientBrush>
-
-                <LinearGradientBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" StartPoint="0%,0%" EndPoint="100%,0%">
-                    <GradientStop Offset="{StaticResource Offset1}" Color="{StaticResource tbc_edge}" />
-                    <GradientStop Offset="{StaticResource Offset2}" Color="{DynamicResource ThemeAccent3BgColor}" />
-                    <GradientStop Offset="{StaticResource Offset3}" Color="{DynamicResource ThemeAccent3BgColor}" />
-                    <GradientStop Offset="{StaticResource Offset4}" Color="{StaticResource tbc_edge}" />
-                </LinearGradientBrush>
-
-                <LinearGradientBrush x:Key="ToggleButtonBackgroundCheckedPressed" StartPoint="0%,0%" EndPoint="100%,0%">
-                    <GradientStop Offset="{StaticResource Offset1}" Color="{StaticResource tbc_edge}" />
-                    <GradientStop Offset="{StaticResource Offset2}" Color="{DynamicResource ThemeAccent4BgColor}" />
-                    <GradientStop Offset="{StaticResource Offset3}" Color="{DynamicResource ThemeAccent4BgColor}" />
-                    <GradientStop Offset="{StaticResource Offset4}" Color="{StaticResource tbc_edge}" />
-                </LinearGradientBrush>
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{DynamicResource ThemeInteractiveColor}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{DynamicResource ThemeAccent1Color}" />
-                <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource ThemeAccent2Color}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
-                <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPressed" Color="{DynamicResource ThemeInteractiveBgColor}" />-->
-
                 <SolidColorBrush x:Key="ToggleButtonBackground" Color="{DynamicResource ThemeAccent5BgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{DynamicResource ThemeAccent5Color}" />
                 <SolidColorBrush x:Key="ToggleButtonBackgroundPressed" Color="{DynamicResource ThemeAccent4Color}" />

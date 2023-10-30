@@ -136,8 +136,6 @@ namespace MonkeyPaste {
         TagTileNotificationAdded,
         TagTileNotificationRemoved,
 
-        AccountDowngrade,
-        AccountUpgrade,
         AccountStateChanged,
         AccountInfoChanged,
 
