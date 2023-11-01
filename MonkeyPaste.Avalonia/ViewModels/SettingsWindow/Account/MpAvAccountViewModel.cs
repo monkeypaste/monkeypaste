@@ -51,6 +51,12 @@ namespace MonkeyPaste.Avalonia {
         private DispatcherTimer _expiration_timer;
         private DispatcherTimer _attempt_login_timer;
 
+        private MpSubscriptionFormat _dummySubscription = new MpSubscriptionFormat() {
+            AccountType = MpUserAccountType.Unlimited,
+            IsMonthly = true,
+            ExpireOffsetUtc = DateTime.UtcNow - TimeSpan.FromDays(2)
+        };
+
         #endregion
 
         #region Constants
@@ -127,13 +133,13 @@ namespace MonkeyPaste.Avalonia {
 
                 string offline = IsServerAvailable ? string.Empty : $"{UiStrings.AccountOfflineLabel} ";
                 string acct_name = IsRegistered ? AccountUsername : UiStrings.AccountUnregisteredLabel;
-                string line_1 = string.Format(@"{0} [{1}] {2}", offline, acct_name, AccountType.EnumToUiString());
+                string line_1 = string.Format(@"{0} [{1}] {2}", offline, acct_name, WorkingAccountType.EnumToUiString());
 
 
                 int content_count = MpAvAccountTools.Instance.LastContentCount;
-                int cap_count = MpAvAccountTools.Instance.GetContentCapacity(AccountType);
+                int cap_count = Math.Max(content_count, MpAvAccountTools.Instance.GetContentCapacity(WorkingAccountType));
                 string line_2;
-                if (AccountType == MpUserAccountType.Unlimited) {
+                if (WorkingAccountType == MpUserAccountType.Unlimited) {
                     line_2 = string.Format(@"({0} {1})", content_count, UiStrings.AccountInfoTotalText);
                 } else {
                     line_2 = string.Format(
@@ -245,7 +251,7 @@ namespace MonkeyPaste.Avalonia {
         bool HasShownExpiredNtf { get; set; } = false;
 
         public bool IsExpired =>
-            DateTime.UtcNow > NextPaymentUtc;
+            DateTime.UtcNow > NextPaymentUtc + TimeSpan.FromDays(1);
 
         public bool IsYearly =>
             BillingCycleType == MpBillingCycleType.Yearly;
@@ -282,6 +288,113 @@ namespace MonkeyPaste.Avalonia {
             var svm = MpAvSettingsViewModel.Instance;
             await svm.InitAsync();
             await svm.ShowSettingsWindowCommand.ExecuteAsync(MpSettingsTabType.Account);
+        }
+
+        public async Task ShowAccountNotficationAsync(MpAccountNtfType ant, params string[] args) {
+            string title;
+            string msg;
+            object icon;
+            int show_time = MpNotificationFormat.MAX_MESSAGE_DISPLAY_MS;
+            MpNotificationType ntf_type = MpNotificationType.None;
+            switch (ant) {
+                default:
+                    return;
+                case MpAccountNtfType.AccountExpiredRemote:
+                case MpAccountNtfType.AccountExpiredOffline:
+                case MpAccountNtfType.AccountExpiredLocal:
+                    icon = "WarningTimeImage";
+                    title = UiStrings.AccountExpiredNtfTitle;
+                    msg = ant == MpAccountNtfType.AccountExpiredLocal ?
+                        UiStrings.AccountExpiredNtfLocalCaption :
+                        ant == MpAccountNtfType.AccountExpiredRemote ?
+                        UiStrings.AccountExpiredNtfRemoteCaption :
+                        UiStrings.AccountExpiredNtfOfflineCaption;
+                    msg = string.Format(msg, AccountType.EnumToUiString(), NextPaymentDisplayValue);
+                    ntf_type = MpNotificationType.SubscriptionExpired;
+                    show_time = 10_000;
+                    break;
+                case MpAccountNtfType.LoginFailedUser:
+                case MpAccountNtfType.LoginFailedStartup:
+                    title = UiStrings.AccountLoginFailedTitle;
+                    msg = UiStrings.AccountLoginFailedText;
+                    icon = "ErrorImage";
+                    if (ant == MpAccountNtfType.LoginFailedStartup) {
+                        ntf_type = MpNotificationType.AccountLoginFailed;
+                    }
+                    break;
+                case MpAccountNtfType.ExistingLoginSuccessful:
+                    title = UiStrings.AccountExistingLoginTitle;
+                    msg = string.Format(UiStrings.AccountExistingLoginText, AccountType.EnumToUiString(), BillingCycleType.EnumToUiString());
+                    icon = "MonkeyWinkImage";
+                    break;
+                case MpAccountNtfType.RegistrationError:
+                    title = UiStrings.AccountRegistrationFailedTitle;
+                    msg = args[0];
+                    icon = "ErrorImage";
+                    break;
+                case MpAccountNtfType.RegistrationSuccessful:
+                    title = UiStrings.AccountRegistrationSuccessfulNtfTitle;
+                    msg = UiStrings.AccountRegistrationSuccessText;
+                    icon = "MonkeyWinkImage";
+                    break;
+                case MpAccountNtfType.ResetSent:
+                    title = UiStrings.AccountResetPasswordLabel;
+                    msg = UiStrings.AccountResetPasswordCaption;
+                    icon = "MonkeyWinkImage";
+                    break;
+                case MpAccountNtfType.ResetError:
+                    title = UiStrings.AccountResetPasswordErrorTitle;
+                    msg = UiStrings.CommonConnectionFailedCaption;
+                    icon = "ErrorImage";
+                    break;
+                case MpAccountNtfType.PurchaseCompleted:
+                    title = UiStrings.AccountPurchaseSuccessfulTitle;
+                    msg = string.Format(
+                                UiStrings.AccountPurchaseSuccessfulCaption,
+                                AccountType.EnumToUiString(),
+                                IsMonthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel);
+                    icon = "MonkeyWinkImage";
+                    break;
+                case MpAccountNtfType.SubscriptionUpgraded:
+                    if (!MpAvPrefViewModel.Instance.IsWelcomeComplete) {
+                        return;
+                    }
+                    ntf_type = MpNotificationType.AccountChanged;
+                    title = UiStrings.NtfCapAccountChangedTitle;
+                    msg = string.Format(
+                                UiStrings.NtfCapAccountUpgradeText,
+                                AccountType.EnumToUiString(),
+                                IsMonthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel,
+                                ContentCapacityDisplayValue,
+                                TrashCapacityDisplayValue);
+                    icon = "MonkeyWinkImage";
+                    break;
+                case MpAccountNtfType.SubscriptionDowngraded:
+                    ntf_type = MpNotificationType.AccountChanged;
+                    title = UiStrings.NtfCapAccountChangedTitle;
+                    msg = string.Format(
+                                UiStrings.NtfCapAccountDowngradeText,
+                                AccountType.EnumToUiString(),
+                                IsMonthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel,
+                                ContentCapacityDisplayValue,
+                                TrashCapacityDisplayValue);
+                    icon = "MonkeyWinkImage";
+                    break;
+            }
+
+            if (ntf_type == MpNotificationType.None) {
+                await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
+                         title: title,
+                         message: msg,
+                         iconResourceObj: icon);
+            } else {
+                await Mp.Services.NotificationBuilder.ShowMessageAsync(
+                       title: title,
+                       body: msg,
+                       msgType: ntf_type,
+                       iconSourceObj: icon,
+                       maxShowTimeMs: show_time);
+            }
         }
         #endregion
 
@@ -439,6 +552,13 @@ namespace MonkeyPaste.Avalonia {
             foreach (var pvm in sfvm.Items) {
                 if (status_args.TryGetValue(pvm.ParamId.ToStringOrEmpty(), out string param_val)) {
                     pvm.CurrentValue = param_val;
+                    if (pvm.ParamId.ToStringOrEmpty() == nameof(MpAvPrefViewModel.Instance.AccountNextPaymentDateTime)) {
+                        if (IsExpired) {
+                            pvm.ValidationMessage = UiStrings.AccountExpiredStatusTooltip;
+                        } else {
+                            pvm.ValidationMessage = string.Empty;
+                        }
+                    }
                 } else {
                     MpConsole.WriteLine($"no reg status param for update '{pvm.ParamId}'");
                 }
@@ -463,113 +583,6 @@ namespace MonkeyPaste.Avalonia {
             MpAvPrefViewModel.Instance.AccountBillingCycleType = MpBillingCycleType.None;
             MpAvPrefViewModel.Instance.AccountNextPaymentDateTime = DateTime.MaxValue;
         }
-
-
-        private async Task ShowAccountNotficationAsync(MpAccountNtfType ant, params string[] args) {
-            string title;
-            string msg;
-            object icon;
-            MpNotificationType ntf_type = MpNotificationType.None;
-            switch (ant) {
-                default:
-                    return;
-                case MpAccountNtfType.AccountExpiredRemote:
-                case MpAccountNtfType.AccountExpiredOffline:
-                case MpAccountNtfType.AccountExpiredLocal:
-                    icon = "WarningTimeImage";
-                    title = UiStrings.AccountExpiredNtfTitle;
-                    msg = ant == MpAccountNtfType.AccountExpiredLocal ?
-                        UiStrings.AccountExpiredNtfLocalCaption :
-                        ant == MpAccountNtfType.AccountExpiredRemote ?
-                        UiStrings.AccountExpiredNtfRemoteCaption :
-                        UiStrings.AccountExpiredNtfOfflineCaption;
-                    msg = string.Format(msg, AccountType.EnumToUiString(), NextPaymentDisplayValue);
-                    ntf_type = MpNotificationType.SubscriptionExpired;
-                    break;
-                case MpAccountNtfType.LoginFailedUser:
-                case MpAccountNtfType.LoginFailedStartup:
-                    title = UiStrings.AccountLoginFailedTitle;
-                    msg = UiStrings.AccountLoginFailedText;
-                    icon = "ErrorImage";
-                    if (ant == MpAccountNtfType.LoginFailedStartup) {
-                        ntf_type = MpNotificationType.AccountLoginFailed;
-                    }
-                    break;
-                case MpAccountNtfType.ExistingLoginSuccessful:
-                    title = UiStrings.AccountExistingLoginTitle;
-                    msg = string.Format(UiStrings.AccountExistingLoginText, AccountType.EnumToUiString(), BillingCycleType.EnumToUiString());
-                    icon = "MonkeyWinkImage";
-                    break;
-                case MpAccountNtfType.RegistrationError:
-                    title = UiStrings.AccountRegistrationFailedTitle;
-                    msg = args[0];
-                    icon = "ErrorImage";
-                    break;
-                case MpAccountNtfType.RegistrationSuccessful:
-                    title = UiStrings.AccountRegistrationSuccessfulNtfTitle;
-                    msg = UiStrings.AccountRegistrationSuccessText;
-                    icon = "MonkeyWinkImage";
-                    break;
-                case MpAccountNtfType.ResetSent:
-                    title = UiStrings.AccountResetPasswordLabel;
-                    msg = UiStrings.AccountResetPasswordCaption;
-                    icon = "MonkeyWinkImage";
-                    break;
-                case MpAccountNtfType.ResetError:
-                    title = UiStrings.AccountResetPasswordErrorTitle;
-                    msg = UiStrings.CommonConnectionFailedCaption;
-                    icon = "ErrorImage";
-                    break;
-                case MpAccountNtfType.PurchaseCompleted:
-                    title = UiStrings.AccountPurchaseSuccessfulTitle;
-                    msg = string.Format(
-                                UiStrings.AccountPurchaseSuccessfulCaption,
-                                AccountType.EnumToUiString(),
-                                IsMonthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel);
-                    icon = "MonkeyWinkImage";
-                    break;
-                case MpAccountNtfType.SubscriptionUpgraded:
-                    if (!MpAvPrefViewModel.Instance.IsWelcomeComplete) {
-                        return;
-                    }
-                    ntf_type = MpNotificationType.AccountChanged;
-                    title = UiStrings.NtfCapAccountChangedTitle;
-                    msg = string.Format(
-                                UiStrings.NtfCapAccountUpgradeText,
-                                AccountType.EnumToUiString(),
-                                IsMonthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel,
-                                ContentCapacityDisplayValue,
-                                TrashCapacityDisplayValue);
-                    icon = "MonkeyWinkImage";
-                    break;
-                case MpAccountNtfType.SubscriptionDowngraded:
-                    ntf_type = MpNotificationType.AccountChanged;
-                    title = UiStrings.NtfCapAccountChangedTitle;
-                    msg = string.Format(
-                                UiStrings.NtfCapAccountDowngradeText,
-                                AccountType.EnumToUiString(),
-                                IsMonthly ? UiStrings.AccountMonthlyLabel : UiStrings.AccountYearlyLabel,
-                                ContentCapacityDisplayValue,
-                                TrashCapacityDisplayValue);
-                    icon = "MonkeyWinkImage";
-                    break;
-            }
-
-            if (ntf_type == MpNotificationType.None) {
-                await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
-                         title: title,
-                         message: msg,
-                         iconResourceObj: icon);
-            } else {
-                await Mp.Services.NotificationBuilder.ShowMessageAsync(
-                       title: title,
-                       body: msg,
-                       msgType: ntf_type,
-                       iconSourceObj: icon);
-            }
-        }
-
-
         private void StartExpirationTimer() {
             if (_expiration_timer != null) {
                 return;
@@ -578,35 +591,38 @@ namespace MonkeyPaste.Avalonia {
                 Interval = TimeSpan.FromMinutes(EXPIRATION_TIMER_CHECK_M),
                 IsEnabled = true
             };
-            _expiration_timer.Tick += CheckExpiration_tick;
+            _expiration_timer.Tick += (s, e) => PerformExpirationCheck();
             _expiration_timer.Start();
-
-            void CheckExpiration_tick(object sender, EventArgs e) {
-                if (!IsExpired) {
-                    return;
-                }
-
-                if (!HasShownExpiredNtf) {
-                    MpAccountNtfType ant = MpAccountNtfType.None;
-
-                    if (IsLoggedIn) {
-                        // verified acct is expired
-                        if (IsSubscriptionDevice) {
-                            // this device has subscription
-                            ant = MpAccountNtfType.AccountExpiredLocal;
-                        } else {
-                            // another device has subscription
-                            ant = MpAccountNtfType.AccountExpiredRemote;
-                        }
-                    } else {
-                        // offline expired
-                        ant = MpAccountNtfType.AccountExpiredOffline;
-                    }
-                    ShowAccountNotficationAsync(ant).FireAndForgetSafeAsync();
-                    HasShownExpiredNtf = true;
-                }
-
+            PerformExpirationCheck();
+        }
+        private async void PerformExpirationCheck() {
+            if (!IsExpired || HasShownExpiredNtf) {
+                return;
             }
+            HasShownExpiredNtf = true;
+
+            // wait for mw to finish loading
+            while (!Mp.Services.StartupState.IsReady) {
+                await Task.Delay(100);
+            }
+
+            MpAccountNtfType ant = MpAccountNtfType.None;
+
+            if (IsServerAvailable) {
+                // verified acct is expired
+                if (IsSubscriptionDevice) {
+                    // this device has subscription
+                    ant = MpAccountNtfType.AccountExpiredLocal;
+                } else {
+                    // another device has subscription
+                    ant = MpAccountNtfType.AccountExpiredRemote;
+                }
+            } else {
+                // offline expired
+                ant = MpAccountNtfType.AccountExpiredOffline;
+            }
+            ShowAccountNotficationAsync(ant).FireAndForgetSafeAsync();
+            HasShownExpiredNtf = true;
         }
         private void StartAttemptLoginTimer() {
             if (_attempt_login_timer != null) {
@@ -725,7 +741,9 @@ namespace MonkeyPaste.Avalonia {
 
                 SetButtonBusy(MpRuntimePrefParamType.AccountLogin, true);
 
-                MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
+                //MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
+                MpSubscriptionFormat acct = _dummySubscription;
+
                 bool is_sub_device = acct != MpSubscriptionFormat.Default;
                 MpUserAccountType acct_type = AccountType;
                 bool monthly = !IsYearly;
@@ -743,6 +761,7 @@ namespace MonkeyPaste.Avalonia {
                     {"username", (nameof(MpAvPrefViewModel.Instance.AccountUsername),MpAvPrefViewModel.Instance.AccountUsername) },
                     {"password", (nameof(MpAvPrefViewModel.Instance.AccountPassword),MpAvPrefViewModel.Instance.AccountPassword) },
                     {"device_guid", (nameof(MpDefaultDataModelTools.ThisUserDeviceGuid), MpAvPrefViewModel.Instance.ThisDeviceGuid) },
+                    {"machine_name",(null,Environment.MachineName) },
                     {"detail1", (null,MpAvPrefViewModel.arg1)},
                     {"detail2", (null,MpAvPrefViewModel.arg2)},
                     {"detail3", (null,MpAvPrefViewModel.arg3)},

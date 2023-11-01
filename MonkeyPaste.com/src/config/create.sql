@@ -21,6 +21,7 @@ CREATE TABLE device (
   id int(11) NOT NULL AUTO_INCREMENT,
   fk_account_id int(11) NOT NULL,
   device_guid varchar(50) NOT NULL,
+  device_name varchar(255) NOT NULL,
   detail1 varchar(50) NOT NULL,
   detail2 varchar(50) NOT NULL,
   detail3 varchar(50) NOT NULL,

@@ -13,6 +13,14 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Common {
     public static class MpCommonExtensions {
 
+        #region DateTime
+
+        public static string ToTickChecksum(this DateTime dt) {
+            return dt.Ticks.ToString().CheckSum();
+        }
+
+        #endregion
+
         #region Collections
 
         public static void AddRangeOrDefault<T>(this IList<T> list, IEnumerable<T> range) {

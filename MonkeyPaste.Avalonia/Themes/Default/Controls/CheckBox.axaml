@@ -1,0 +1,11 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia">
+
+    <Style Selector="CheckBox:unchecked /template/ Border#NormalRectangle, CheckBox:checked /template/ Border#NormalRectangle">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource ThemeInteractiveColor}" />
+    </Style>
+
+</Styles>

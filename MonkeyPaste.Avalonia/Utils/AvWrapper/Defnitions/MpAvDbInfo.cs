@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
                     if (DbCreateDateTime == null) {
                         DbCreateDateTime = new FileInfo(DbPath).CreationTimeUtc;
                     }
-                    return DbCreateDateTime.ToStringOrEmpty();
+                    return DbCreateDateTime.Value.ToTickChecksum();
                 }
                 return _dbPassword;
             }

@@ -151,7 +151,7 @@
             </StackPanel>
             <!--  ROUTING COMBOBOX  -->
             <ComboBox x:Name="RoutingSelectorComboBox"
-                      Classes="hideFirst"
+                      Classes="hideFirst hideSecond"
                       Margin="10,5"
                       ItemsSource="{Binding RoutingTypes}"
                       SelectedIndex="{Binding SelectedRoutingTypeIdx, Mode=TwoWay}" />
@@ -219,10 +219,10 @@
                                 <!--  DUP PREFIX  -->
                                 <Run Text="{Binding WarningString2}" />
                                 <!--  NON-INPUT KEYS  -->
-                                <InlineUIContainer>
+                                <!--<InlineUIContainer>
                                     <local:MpAvShortcutLabel Classes="menuItemGesture"
                                                              KeyGesture="{x:Static common:MpInputConstants.MOD_LITERALS}" />
-                                </InlineUIContainer>
+                                </InlineUIContainer>-->
                             </InlineCollection>
                         </TextBlock.Inlines>
                     </TextBlock>

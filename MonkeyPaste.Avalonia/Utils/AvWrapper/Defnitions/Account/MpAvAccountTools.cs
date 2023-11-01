@@ -91,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
 
         public string GetAccountRate(MpUserAccountType acctType, bool isMonthly) {
             if (acctType == MpUserAccountType.Free) {
-                return string.Empty;
+                return "$0.00";
             }
             if (AccountTypePriceLookup.TryGetValue((acctType, isMonthly), out string rate)) {
                 return rate;

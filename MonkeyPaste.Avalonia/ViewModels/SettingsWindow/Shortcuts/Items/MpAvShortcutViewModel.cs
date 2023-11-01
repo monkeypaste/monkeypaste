@@ -126,8 +126,9 @@ namespace MonkeyPaste.Avalonia {
         public bool CanDelete =>
             IsCustom;
 
+
         public bool CanReset =>
-            !IsCustom && KeyString != DefaultKeyString;
+            !IsCustom && (KeyString != DefaultKeyString || RoutingType != DefaultRoutingType);
 
         public bool CanDeleteOrReset =>
             CanDelete || CanReset;
@@ -215,21 +216,25 @@ namespace MonkeyPaste.Avalonia {
                 }
             }
         }
-        public string DefaultKeyString {
+        (string, MpRoutingType) _defaultInfo;
+        (string, MpRoutingType) DefaultInfo {
             get {
-                if (Shortcut == null) {
-                    return String.Empty;
+                if (IsCustom) {
+                    return default;
                 }
-                return Shortcut.DefaultKeyString;
-            }
-            set {
-                if (DefaultKeyString != value) {
-                    Shortcut.DefaultKeyString = value;
-                    HasModelChanged = true;
-                    OnPropertyChanged(nameof(DefaultKeyString));
+                if (_defaultInfo.IsDefault()) {
+                    var def_ref = MpAvDefaultDataCreator.DefaultShortcutDefinitions.FirstOrDefault(x => x[2] == ShortcutType.ToString());
+                    MpDebug.Assert(def_ref != null, $"Shortcut error, cannot find default def for '{ShortcutType}'");
+                    _defaultInfo.Item1 = def_ref[1];
+                    _defaultInfo.Item2 = def_ref[3].ToEnum<MpRoutingType>();
                 }
+                return _defaultInfo;
             }
         }
+        public MpRoutingType DefaultRoutingType =>
+            DefaultInfo.Item2;
+        public string DefaultKeyString =>
+            DefaultInfo.Item1;
 
         public string CommandParameter {
             get {
@@ -375,6 +380,7 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IsEmpty));
             OnPropertyChanged(nameof(KeyString));
             OnPropertyChanged(nameof(SelectedRoutingTypeIdx));
+            OnPropertyChanged(nameof(CanDeleteOrReset));
         }
 
 
@@ -393,7 +399,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsMatch(string keystr) {
-            if (RoutingType != MpRoutingType.Override) {
+            if (RoutingType != MpRoutingType.ExclusiveOverride) {
                 return keystr == KeyString;
             }
             return keystr.SplitNoEmpty(MpInputConstants.COMBO_SEPARATOR).Any(x => x == KeyString);
@@ -482,6 +488,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return typeof(MpShortcut);
         }
+
         #endregion
 
         #region Commands
@@ -504,9 +511,9 @@ namespace MonkeyPaste.Avalonia {
                 }
             },
             () => {
+                bool is_this_app_active = MpAvMainWindowViewModel.Instance.IsAnyAppWindowActive;
                 bool canPerformShortcut = true;
-                if (!IsGlobal &&
-                    !MpAvMainWindowViewModel.Instance.IsAnyAppWindowActive) {
+                if (!IsGlobal && !is_this_app_active) {
 
                     canPerformShortcut = false;
                 }
@@ -520,13 +527,15 @@ namespace MonkeyPaste.Avalonia {
                 return canPerformShortcut;
             });
 
-        public ICommand DeleteOrResetThisShortcutCommand => new MpCommand(
-            () => {
+        public ICommand DeleteOrResetThisShortcutCommand => new MpAsyncCommand(
+            async () => {
                 if (IsCustom) {
-                    Parent.DeleteShortcutCommand.Execute(this);
-                    return;
+                    await Parent.DeleteShortcutCommand.ExecuteAsync(this);
+                } else {
+
+                    await Parent.ResetShortcutCommand.ExecuteAsync(this);
                 }
-                Parent.ResetShortcutCommand.Execute(this);
+                Parent.RefreshFilters();
             },
             () => {
                 return Parent != null && IsCustom ? CanDelete : CanReset;

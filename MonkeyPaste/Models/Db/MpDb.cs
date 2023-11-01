@@ -481,9 +481,6 @@ namespace MonkeyPaste {
             }
 
             MpConsole.WriteLine($"Db {(isNewDb ? "CREATED" : "CONNECTED")} at '{dbPath}'");
-#if DEBUG
-            MpConsole.WriteLine($"Db Password: '{dbPass}'");
-#endif
             bool? success = connect_success ? isNewDb : null;
             if (success.IsTrue()) {
                 await InitDbSettingsAsync();

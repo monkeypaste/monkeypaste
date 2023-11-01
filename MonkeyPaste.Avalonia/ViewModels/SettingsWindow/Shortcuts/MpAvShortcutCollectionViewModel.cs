@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
         static bool LOAD_W_GLOBAL_HOOKS_TOGGLED_ON =
 #if DEBUG
-            false;
+            true;
 #else
             true;
 #endif
@@ -176,10 +176,6 @@ namespace MonkeyPaste.Avalonia {
                         {
                             MpShortcutType.ToggleRightClickPasteMode,
                             MpAvClipTrayViewModel.Instance.ToggleRightClickPasteCommand
-                        },
-                        {
-                            MpShortcutType.ToggleDropWidgetEnabled,
-                            MpAvExternalDropWindowViewModel.Instance.ToggleIsDropWidgetEnabledCommand
                         },
                         {
                             MpShortcutType.PasteSelectedItems,
@@ -573,6 +569,10 @@ namespace MonkeyPaste.Avalonia {
                 }
                 await scvm.InitializeAsync(scvm.Shortcut, scvm.ShortcutCommand);
             }
+            if (scvm != null) {
+                // update reset button enabled
+                scvm.OnPropertyChanged(nameof(scvm.CanDeleteOrReset));
+            }
 
             return shortcutKeyString;
         }
@@ -613,6 +613,8 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(FilteredGlobalItems));
             OnPropertyChanged(nameof(FilteredCustomItems));
             FilteredItems.ForEach(x => x.OnPropertyChanged(nameof(x.SelectedRoutingTypeIdx)));
+            FilteredItems.ForEach(x => x.OnPropertyChanged(nameof(x.RoutingType)));
+            FilteredItems.ForEach(x => x.OnPropertyChanged(nameof(x.CanDeleteOrReset)));
         }
         #endregion
 
@@ -783,7 +785,7 @@ namespace MonkeyPaste.Avalonia {
                 return MpShortcutRoutingProfileType.Custom;
             }
 
-            return MpShortcutRoutingProfileType.Global;
+            return MpShortcutRoutingProfileType.Default;
         }
 
         private async Task SetShortcutRoutingToProfileTypeAsync(MpShortcutRoutingProfileType new_profile_type) {
@@ -907,8 +909,6 @@ namespace MonkeyPaste.Avalonia {
 
         private void CreateGlobalInputHooks() {
             if (_hook == null) {
-
-                //_keyboardGestureHelper.StartChecker();
                 _hook = new SimpleGlobalHook();
 
                 if (IS_GLOBAL_KEYBOARD_INPUT_ENABLED) {
@@ -1068,6 +1068,10 @@ namespace MonkeyPaste.Avalonia {
 
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
             //MpConsole.WriteLine($" [HOOK KEY] {e.RawEvent}");
+            if (Mp.Services.KeyStrokeSimulator.IsSimulatingKey(e.Data.KeyCode)) {
+                MpConsole.WriteLine($"Simulated Key[{e.Data.KeyCode}] Press IGNORED");
+                return;
+            }
             _keyboardGestureHelper.AddKeyDown(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
             MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' PRESSED");
@@ -1128,17 +1132,10 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Hook_KeyReleased(object sender, KeyboardHookEventArgs e) {
-            HandleReleaseOrTyped(e, true);
-        }
-
-        private void Hook_KeyTyped(object sender, KeyboardHookEventArgs e) {
-            //HandleReleaseOrTyped(e, false);≡
-            string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
-            //MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' TYPED");
-        }
-
-        private void HandleReleaseOrTyped(KeyboardHookEventArgs e, bool isRelease) {
-            //MpConsole.WriteLine($" [HOOK KEY] {e.RawEvent}");
+            if (Mp.Services.KeyStrokeSimulator.IsSimulatingKey(e.Data.KeyCode)) {
+                MpConsole.WriteLine($"Simulated Key[{e.Data.KeyCode}] Release IGNORED");
+                return;
+            }
             bool was_down = _keyboardGestureHelper.RemoveKeyDown(e.Data.KeyCode);
             if (!was_down) {
                 // NOTE typed receives up before release for input keys
@@ -1174,13 +1171,13 @@ namespace MonkeyPaste.Avalonia {
             // store local ref to match in case its reset during sim
             MpAvShortcutViewModel match_to_execute = _exact_match;
 
-            if (match_to_execute.RoutingType == MpRoutingType.Bubble) {
+            if (match_to_execute.RoutingType == MpRoutingType.Pre) {
                 Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
             }
             Dispatcher.UIThread.Invoke(() => {
                 match_to_execute.PerformShortcutCommand.Execute(null);
             });
-            if (match_to_execute.RoutingType == MpRoutingType.Tunnel) {
+            if (match_to_execute.RoutingType == MpRoutingType.Post) {
                 Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(new[] { new[] { e.Data.KeyCode }.ToList() }.ToList());
             }
         }
@@ -1354,7 +1351,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvDataGridRefreshExtension.RefreshDataGrid(this);
             });
 
-        public ICommand DeleteShortcutCommand => new MpCommand<object>(
+        public MpIAsyncCommand<object> DeleteShortcutCommand => new MpAsyncCommand<object>(
             async (args) => {
                 //MpConsole.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
                 var scvm = args as MpAvShortcutViewModel;
@@ -1363,12 +1360,13 @@ namespace MonkeyPaste.Avalonia {
             }, (args) => args is MpAvShortcutViewModel svm && svm.CanDelete);
 
 
-        public ICommand ResetShortcutCommand => new MpCommand<object>(
+        public MpIAsyncCommand<object> ResetShortcutCommand => new MpAsyncCommand<object>(
             async (args) => {
                 //MpConsole.WriteLine("Reset row: " + SelectedShortcutIndex);
 
                 var scvm = args as MpAvShortcutViewModel;
-                scvm.KeyString = scvm.Shortcut.DefaultKeyString;
+                scvm.KeyString = scvm.DefaultKeyString;
+                scvm.RoutingType = scvm.DefaultRoutingType;
                 await scvm.InitializeAsync(scvm.Shortcut, scvm.ShortcutCommand);
                 await scvm.Shortcut.WriteToDatabaseAsync();
             }, (args) => args is MpAvShortcutViewModel svm && !string.IsNullOrEmpty(svm.DefaultKeyString));

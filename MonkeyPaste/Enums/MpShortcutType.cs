@@ -1,18 +1,10 @@
 ﻿namespace MonkeyPaste {
-    public enum MpShortcutGroupType {
-        None = 0,
-        Window,
-        Navigation,
-        Content,
-        Selection
-    }
     public enum MpShortcutType {
         None = 0,
         // GLOBALS
         ToggleMainWindow,
         ToggleAutoCopyMode,
         ToggleRightClickPasteMode,
-        ToggleDropWidgetEnabled,
         ToggleListenToClipboard,
         ToggleAppendInsertMode,
         ToggleAppendLineMode,

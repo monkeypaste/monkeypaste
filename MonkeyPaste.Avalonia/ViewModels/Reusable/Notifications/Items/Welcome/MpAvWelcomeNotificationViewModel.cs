@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
             await MpAvAccountViewModel.Instance.InitializeAsync();
             if (will_show) {
                 await MpDb.InitAsync();
-                await MpAvSubscriptionPurchaseViewModel.Instance.InitializeAsync();
+                await MpAvSubscriptionPurchaseViewModel.Instance.InitializeAsync(); ;
                 Instance.InitWelcomeItems();
                 await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                     new MpNotificationFormat() {
@@ -103,7 +103,8 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public bool IsTermsWindowOpen { get; set; }
         public bool IsAccountOptSelected { get; set; }
-
+        bool IsExistingSubscriptionDetected { get; set; }
+        bool HasShownExistingSubscriptionNtf { get; set; }
         public bool IsAccountMonthlyChecked { get; set; } = false;
         public bool IsAccountMonthToggleEnabled { get; set; } = true;
         public override bool WantsTopmost =>
@@ -197,14 +198,13 @@ namespace MonkeyPaste.Avalonia {
                     CloseGestureDemo();
                     switch (CurPageType) {
                         case MpWelcomePageType.Account:
-                            var test = MpAvAccountTools.Instance;
-                            var sel_acct_vm = AccountViewModel.Items.FirstOrDefault(x => x.IsChecked);
-                            if (sel_acct_vm.OptionId == null) {
-                                // TODO show login/restore thing here
-
-                                return;
+                            if (HasShownExistingSubscriptionNtf ||
+                                !IsExistingSubscriptionDetected) {
+                                // no local existing subscription detected or ntf already shown
+                                break;
                             }
-                            // TODO when not free, trigger platform subscription stuff here
+                            MpAvAccountViewModel.Instance.ShowAccountNotficationAsync(MpAccountNtfType.ExistingLoginSuccessful).FireAndForgetSafeAsync();
+                            HasShownExistingSubscriptionNtf = true;
                             break;
                         case MpWelcomePageType.ScrollWheel:
                         case MpWelcomePageType.DragToOpen:
@@ -223,6 +223,7 @@ namespace MonkeyPaste.Avalonia {
                     if (AccountViewModel == null) {
                         break;
                     }
+                    // when changing monthly keep sel type the same
                     var sel_item = AccountViewModel.Items.FirstOrDefault(x => x.IsChecked);
                     MpUserAccountType sel_item_type = sel_item == null ? MpUserAccountType.Unlimited : (MpUserAccountType)sel_item.OptionId;
                     foreach (var (optvm, idx) in AccountViewModel.Items.WithIndex()) {
@@ -250,7 +251,15 @@ namespace MonkeyPaste.Avalonia {
             #region Account
 
             AccountViewModel = MpAvSubscriptionPurchaseViewModel.Instance.ToWelcomeOptionGroup();
-
+            if (AccountViewModel.Items.FirstOrDefault(x => !string.IsNullOrEmpty(x.LabelText3))
+                is MpAvWelcomeOptionItemViewModel active_woivm &&
+                AccountViewModel.Items.IndexOf(active_woivm) is int active_idx &&
+                active_idx >= 4 is bool is_active_monthly) {
+                // existing subscription detected, toggle monthly to show it
+                IsAccountMonthlyChecked = is_active_monthly;
+                AccountViewModel.SelectedItem = AccountViewModel.Items[active_idx];
+                IsExistingSubscriptionDetected = true;
+            }
             #endregion
 
             #region LoginLoad
@@ -287,7 +296,7 @@ namespace MonkeyPaste.Avalonia {
                         DescriptionText = UiStrings.WelcomeGestureProfileDescription1
                     },
                     new MpAvWelcomeOptionItemViewModel(this,true) {
-                        IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Global,
+                        IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Default,
                         IconSourceObj = "GlobeImage",
                         LabelText = UiStrings.WelcomeGestureProfileLabel2,
                         DescriptionText = UiStrings.WelcomeGestureProfileDescription2
@@ -427,7 +436,7 @@ namespace MonkeyPaste.Avalonia {
             // SHORTCUT PROFILE
             MpAvPrefViewModel.Instance.DefaultRoutingProfileType =
                 GestureProfilesViewModel.Items.FirstOrDefault(x => x.OptionId is bool boolVal && boolVal).IsChecked ?
-                    MpShortcutRoutingProfileType.Global :
+                    MpShortcutRoutingProfileType.Default :
                     MpShortcutRoutingProfileType.Internal;
 
             // SCROLL-TO-OPEN
@@ -479,11 +488,6 @@ namespace MonkeyPaste.Avalonia {
                 CurPageType = (MpWelcomePageType)((int)CurPageType + 1);
                 if (CurOptGroupViewModel.NeedsSkip) {
                     SelectNextPageCommand.Execute(null);
-                }
-                if (CurPageType == MpWelcomePageType.Account) {
-                    Mp.Services.NotificationBuilder.ShowMessageAsync(
-                        title: "TEST",
-                        body: "This is a test").FireAndForgetSafeAsync();
                 }
             },
             () => {

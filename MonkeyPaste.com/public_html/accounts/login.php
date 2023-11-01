@@ -33,16 +33,18 @@ function is_new_device(string $device_guid): bool
 function add_account_device(
     int $acct_id,
     string $device_guid,
+    string $machine_name,
     string $detail1,
     string $detail2,
     string $detail3) {
 
-    $sql = 'INSERT INTO device (fk_account_id, device_guid, detail1, detail2, detail3)
-            VALUES (:fk_account_id, :device_guid, :detail1, :detail2, :detail3)';
+    $sql = 'INSERT INTO device (fk_account_id, device_guid, machine_name, detail1, detail2, detail3)
+            VALUES (:fk_account_id, :device_guid, :machine_name, :detail1, :detail2, :detail3)';
 
     $statement = db()->prepare($sql);
     $statement->bindValue(':fk_account_id', $acct_id, PDO::PARAM_INT);
     $statement->bindValue(':device_guid', $device_guid);
+    $statement->bindValue(':machine_name', $machine_name);
     $statement->bindValue(':detail1', $detail1);
     $statement->bindValue(':detail2', $detail2);
     $statement->bindValue(':detail3', $detail3);
@@ -78,6 +80,7 @@ $testdata_w_sub = [
     'username' => 'tkefauver',
     'password' => '*1Password',
     'device_guid' => 'TEST GUID SUBSCRIPTION',
+    'machine_name' => 'TEST MACHINE NAME W/ SUB',
     'detail1' => 'test_detail1',
     'detail2' => 'test_detail2',
     'detail3' => 'test_detail3',
@@ -90,6 +93,7 @@ $testdata_no_sub = [
     'username' => 'tkefauver',
     'password' => '*1Password',
     'device_guid' => 'TEST GUID OTHER',
+    'machine_name' => 'TEST MACHINE NAME NO SUB',
     'detail1' => 'test_detail1',
     'detail2' => 'test_detail2',
     'detail3' => 'test_detail3',
@@ -101,6 +105,7 @@ $fields = [
     'username' => 'string | required',
     'password' => 'string | required',
     'device_guid' => 'string | required',
+    'machine_name' => 'string | required',
     'detail1' => 'string | required',
     'detail2' => 'string | required',
     'detail3' => 'string | required',
@@ -138,6 +143,7 @@ if (is_new_device($inputs['device_guid'])) {
     add_account_device(
         $account['id'],
         $inputs['device_guid'],
+        $inputs['machine_name'],
         $inputs['detail1'],
         $inputs['detail2'],
         $inputs['detail3']);

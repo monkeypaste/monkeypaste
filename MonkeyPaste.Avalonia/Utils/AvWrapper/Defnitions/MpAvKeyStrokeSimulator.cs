@@ -10,6 +10,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvKeyStrokeSimulator : MpIKeyStrokeSimulator {
         #region Private Variable
         private EventSimulator _eventSimulator;
+        private List<KeyCode> _simualtedDowns = new List<KeyCode>();
         #endregion
 
         #region Constants
@@ -21,7 +22,12 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIKeyStrokeSimulator Implementation
-
+        public bool IsSimulatingKey<T>(T key) {
+            if (key is not KeyCode kc) {
+                throw new NotSupportedException("Must be sharphook keycode");
+            }
+            return _simualtedDowns.Contains(kc.GetUnifiedKey());
+        }
         public bool SimulateKeyStrokeSequence(string keystr) {
             var seq = Mp.Services.KeyConverter.ConvertStringToKeySequence<KeyCode>(keystr);
             bool success = SimulateKeyStrokeSequence(seq);
@@ -30,8 +36,6 @@ namespace MonkeyPaste.Avalonia {
 
         public bool SimulateKeyStrokeSequence<T>(IReadOnlyList<IReadOnlyList<T>> gesture) {
             if (typeof(T) != typeof(KeyCode)) {
-                throw new NotSupportedException("Must be sharphook keycode");
-                throw new NotSupportedException("Must be sharphook keycode");
                 throw new NotSupportedException("Must be sharphook keycode");
             }
             if (gesture == null) {
@@ -120,10 +124,16 @@ namespace MonkeyPaste.Avalonia {
         private UioHookResult SimulateKey(KeyCode key, bool isDown) {
             MpConsole.WriteLine($"SIM {(isDown ? "DOWN" : "UP")}: {key}");
 
-            UioHookResult result =
-                isDown ?
-                _eventSimulator.SimulateKeyPress(key) :
-                _eventSimulator.SimulateKeyRelease(key);
+            UioHookResult result;
+            if (isDown) {
+                // NOTE adding is down BEFORE simulating
+                _simualtedDowns.Add(key);
+                result = _eventSimulator.SimulateKeyPress(key);
+            } else {
+                result = _eventSimulator.SimulateKeyRelease(key);
+                // NOTE removing is down AFTER simulating
+                _simualtedDowns.Remove(key);
+            }
 
             if (result != UioHookResult.Success) {
                 MpConsole.WriteLine($"Error {(isDown ? "pressing" : "releasing")} key: '{key}' in seq: '{Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { key } })}' error: '{result}'");

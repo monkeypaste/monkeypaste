@@ -1789,11 +1789,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bubble.
+        ///   Looks up a localized string similar to Exclusive Override.
         /// </summary>
-        public static string MpRoutingType_Bubble {
+        public static string MpRoutingType_ExclusiveOverride {
             get {
-                return ResourceManager.GetString("MpRoutingType_Bubble", resourceCulture);
+                return ResourceManager.GetString("MpRoutingType_ExclusiveOverride", resourceCulture);
             }
         }
         
@@ -1834,11 +1834,20 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tunnel.
+        ///   Looks up a localized string similar to Post.
         /// </summary>
-        public static string MpRoutingType_Tunnel {
+        public static string MpRoutingType_Post {
             get {
-                return ResourceManager.GetString("MpRoutingType_Tunnel", resourceCulture);
+                return ResourceManager.GetString("MpRoutingType_Post", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pre.
+        /// </summary>
+        public static string MpRoutingType_Pre {
+            get {
+                return ResourceManager.GetString("MpRoutingType_Pre", resourceCulture);
             }
         }
         
@@ -2059,11 +2068,11 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Global.
+        ///   Looks up a localized string similar to Default.
         /// </summary>
-        public static string MpShortcutRoutingProfileType_Global {
+        public static string MpShortcutRoutingProfileType_Default {
             get {
-                return ResourceManager.GetString("MpShortcutRoutingProfileType_Global", resourceCulture);
+                return ResourceManager.GetString("MpShortcutRoutingProfileType_Default", resourceCulture);
             }
         }
         
@@ -2424,15 +2433,6 @@ namespace MonkeyPaste.Avalonia {
         public static string MpShortcutType_ToggleContentReadOnly {
             get {
                 return ResourceManager.GetString("MpShortcutType_ToggleContentReadOnly", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Toggle Drop Widget Enabled.
-        /// </summary>
-        public static string MpShortcutType_ToggleDropWidgetEnabled {
-            get {
-                return ResourceManager.GetString("MpShortcutType_ToggleDropWidgetEnabled", resourceCulture);
             }
         }
         

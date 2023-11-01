@@ -101,12 +101,15 @@ namespace MonkeyPaste.Avalonia {
                 if (!PreferencesPath.IsFile()) {
                     using (File.Create(PreferencesPath)) { }
                 }
-                return new FileInfo(PreferencesPath).CreationTimeUtc.ToString();
+                return new FileInfo(PreferencesPath).CreationTimeUtc.ToTickChecksum();
             }
         }
         [JsonIgnore]
         public static string arg2 =>
-            MpAvPrefViewModel.Instance.DbCreateDateTime.ToString();
+            Instance == null ||
+            !Instance.DbCreateDateTime.HasValue ?
+                string.Empty :
+                Instance.DbCreateDateTime.Value.ToTickChecksum();
 
         [JsonIgnore]
         public static string arg3 {
@@ -114,7 +117,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!PreferencesPathBackup.IsFile()) {
                     using (File.Create(PreferencesPathBackup)) { }
                 }
-                return new FileInfo(PreferencesPathBackup).CreationTimeUtc.ToString();
+                return new FileInfo(PreferencesPathBackup).CreationTimeUtc.ToTickChecksum();
             }
         }
 
@@ -174,7 +177,13 @@ namespace MonkeyPaste.Avalonia {
         #region Application Properties
 
         #region User/Device
-        public string ThisDeviceGuid { get; set; } = System.Guid.NewGuid().ToString();
+        public string ThisDeviceGuid { get; set; } =
+#if DEBUG
+            System.Guid.NewGuid().ToString();
+#else
+            System.Guid.NewGuid().ToString();
+#endif
+
 
         public int LastLoggedInUserId { get; set; } = 0;
 
@@ -335,7 +344,7 @@ namespace MonkeyPaste.Avalonia {
         #region Welcome Properties
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public MpShortcutRoutingProfileType DefaultRoutingProfileType { get; set; } = MpShortcutRoutingProfileType.Global;
+        public MpShortcutRoutingProfileType DefaultRoutingProfileType { get; set; } = MpShortcutRoutingProfileType.Default;
 
 
         #endregion
@@ -724,8 +733,7 @@ namespace MonkeyPaste.Avalonia {
 
                     if (ValidatePrefData(backup_str)) {
                         // pref is corrupt, check it and backup etc.
-                        MpDebug.Break($"Pref corrupt or missing but backup ok");
-                        //MpFileIo.WriteTextToFile(PreferencesPath, backup_str, false);
+                        //MpDebug.Break($"Pref corrupt or missing but backup ok");
                         WriteToDisk(backup_str, encrypt);
                         await InitAsync(_prefPath, _dbInfo, _osInfo);
                         return;
@@ -743,6 +751,9 @@ namespace MonkeyPaste.Avalonia {
                     Instance.ThisDeviceGuid = discovered_device_guid;
                 }
             } else {
+                _ = arg1;
+                await Task.Delay(500 + MpRandom.Rand.Next(1000));
+                _ = arg3;
                 _instance = new MpAvPrefViewModel();
             }
 

@@ -12,7 +12,6 @@
                 case MpShortcutType.ToggleAutoCopyMode:
                 case MpShortcutType.ToggleRightClickPasteMode:
                 case MpShortcutType.ToggleListenToClipboard:
-                case MpShortcutType.ToggleDropWidgetEnabled:
                 // USER
                 case MpShortcutType.PasteCopyItem:
                 case MpShortcutType.InvokeTrigger:
@@ -48,9 +47,9 @@
             }
 
             switch (profile) {
-                case MpShortcutRoutingProfileType.Global:
+                case MpShortcutRoutingProfileType.Default:
                     if (st == MpShortcutType.ToggleMainWindow) {
-                        return MpRoutingType.Override;
+                        return MpRoutingType.ExclusiveOverride;
                     }
                     return MpRoutingType.Passive;
                 default:

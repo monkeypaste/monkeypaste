@@ -294,6 +294,11 @@ namespace MonkeyPaste.Avalonia {
             DuplicatedShortcutViewModel = null;
             OnPropertyChanged(nameof(ClearButtonLabel));
 
+            if (_gestureHelper.Downs.Count > 0) {
+                // only validate after gesture
+                return true;
+            }
+
             switch (AssignmentType) {
                 case MpShortcutAssignmentType.CanBeGlobalCommand:
                 case MpShortcutAssignmentType.InternalCommand:
@@ -331,7 +336,12 @@ namespace MonkeyPaste.Avalonia {
 
             int input_count = gesture.Where(x => !x.IsModKey()).Count();
             if (input_count != 1) {
+                // multi-input key warning
                 WarningString2 = UiStrings.ShortcutAssignInvalidGestureWarning;
+            } else if (SelectedRoutingType == MpRoutingType.ExclusiveOverride &&
+                        gesture.Count > 1) {
+                // mulit key exclusive override warning
+                WarningString2 = UiStrings.ShortcutAssignExclusiveOverrideMultiKeyWarning;
             }
             return string.IsNullOrEmpty(WarningString2);
         }

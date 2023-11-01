@@ -126,9 +126,6 @@
   <data name="ProductDescription" xml:space="preserve">
     <value>The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential.</value>
   </data>
-  <data name="Test" xml:space="preserve">
-    <value>This is a test &lt;b color="green"&gt;test&lt;/b&gt; &lt;em color="red"&gt;&lt;b&gt;test&lt;/b&lt;/em&gt; &lt;a color="pink" href="https://www.google.com/"&gt;test&lt;/a&gt;</value>
-  </data>
   <data name="WelcomeAccountCaption" xml:space="preserve">
     <value>No features are limited by subscription, only storage capacity and can be changed at anytime.</value>
   </data>
@@ -194,7 +191,7 @@
     <value>Internal</value>
   </data>
   <data name="WelcomeGestureProfileLabel2" xml:space="preserve">
-    <value>Global</value>
+    <value>Default</value>
   </data>
   <data name="WelcomeGestureProfileTitle" xml:space="preserve">
     <value>Gesture Profile</value>
@@ -419,7 +416,7 @@
     <value>Action</value>
   </data>
   <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
-    <value>Routing</value>
+    <value>Global Routing</value>
   </data>
   <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
     <value>Shortcut</value>
@@ -432,27 +429,12 @@
 	&lt;li&gt;
 		&lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
 	&lt;li&gt;
-		&lt;b&gt;Global&lt;/b&gt;The default shortcut configuration where all global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color="green"&gt;give it a try&lt;/span&gt;
+		&lt;b&gt;Default&lt;/b&gt; All global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color="green"&gt;give it a try&lt;/span&gt;
 	&lt;/li&gt;
 &lt;/ul&gt;</value>
   </data>
   <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-	&lt;li&gt;
-		&lt;b&gt;Internal&lt;/b&gt; In app shortcuts, are not globally enabled&lt;/li&gt;
-	&lt;li&gt;
-		&lt;b&gt;Direct&lt;/b&gt; Gesture will &lt;b&gt;
-			&lt;i&gt;override&lt;/i&gt;
-		&lt;/b&gt; the input, ie. it will &lt;b style="foreground: #FF0000"&gt;not&lt;/b&gt; be received by active application. &lt;/li&gt;
-	&lt;li&gt;
-		&lt;b&gt;Bubble&lt;/b&gt; Gesture will execute &lt;b&gt;
-			&lt;i&gt;after&lt;/i&gt;
-		&lt;/b&gt; active application &lt;/li&gt;
-	&lt;li&gt;
-		&lt;b&gt;Tunnel&lt;/b&gt; Gesture will execute &lt;b&gt;
-			&lt;i&gt;before&lt;/i&gt;
-		&lt;/b&gt; active application &lt;/li&gt;
-&lt;/ul&gt;</value>
+    <value>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Passive&lt;/b&gt;A shortcut MonkeyPaste will listen for in any application.&lt;/p&gt;&lt;p&gt;*This is the&lt;i&gt;only&lt;/i&gt;option on Linux for now.&lt;p&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pre&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Post&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Override&lt;/b&gt;When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will&lt;i&gt;hide&lt;/i&gt;that key press from application-level input.&lt;/p&gt;&lt;p&gt;This option will guarantee the shortcut is triggered without conflicts to the active application.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Exclusive Override&lt;/b&gt;This is a special type of override mode designed for the Caps Lock key. It only allows&lt;b&gt;one&lt;/b&gt;key (non-modifier) for its assignment.&lt;/p&gt;&lt;p&gt;In normal override mode Caps Lock can become&lt;i&gt;stuck on&lt;/i&gt;when pressed in combination with other keys.&lt;/p&gt;&lt;p&gt;So no matter what other keys are down, if a&lt;b&gt;Hotkey&lt;/b&gt;shortcut is pressed it will be overriden and prevent it from becoming&lt;i&gt;stuck on&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</value>
   </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Disable</value>
@@ -712,42 +694,6 @@
   </data>
   <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
     <value>Easy Right?</value>
-  </data>
-  <data name="String" xml:space="preserve">
-    <value />
-  </data>
-  <data name="String1" xml:space="preserve">
-    <value>Usernames and passwords for any test accounts needed to test the submission:</value>
-  </data>
-  <data name="String10" xml:space="preserve">
-    <value>Dependencies on other products:</value>
-  </data>
-  <data name="String11" xml:space="preserve">
-    <value>None</value>
-  </data>
-  <data name="String2" xml:space="preserve">
-    <value>None</value>
-  </data>
-  <data name="String3" xml:space="preserve">
-    <value>Steps to access features, modes, or content that may be hidden, conditional, or locked/limited:</value>
-  </data>
-  <data name="String4" xml:space="preserve">
-    <value>Copying more than 5 pieces of content (text, images or files) from any application (within reason, notepad would be a suitable one for testing) will not be restricted to 5 items. Then any subsequent cut/copy actions will add more content (it won't be restricted to 5 like free version).</value>
-  </data>
-  <data name="String5" xml:space="preserve">
-    <value>Steps to verify background audio usage:</value>
-  </data>
-  <data name="String6" xml:space="preserve">
-    <value>Audio playback volume is set to 0 by default (treated as muted). To hear it</value>
-  </data>
-  <data name="String7" xml:space="preserve">
-    <value>1. open the Settings window (accessed from cog icon at top-left of the main window or right-clicking system tray icon and selecting 'Settings').</value>
-  </data>
-  <data name="String8" xml:space="preserve">
-    <value>2. select the "Preferences" tab (should be by default) then scroll to the "Sound" panel and increase the volume slider of "Notification Volume"</value>
-  </data>
-  <data name="String9" xml:space="preserve">
-    <value>3. A sample audio clip will play at selected volume</value>
   </data>
   <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
     <value>Double Click to unpin </value>
@@ -1089,5 +1035,14 @@
   </data>
   <data name="AccountInfoTotalText" xml:space="preserve">
     <value>total</value>
+  </data>
+  <data name="AccountExpiredStatusTooltip" xml:space="preserve">
+    <value>Your payment is past due. </value>
+  </data>
+  <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
+    <value>Exclusive override shortcuts may only contain ONE key and that key can not be a modifier key.</value>
+  </data>
+  <data name="AccountExpiredLabel" xml:space="preserve">
+    <value>Expired</value>
   </data>
 </root>

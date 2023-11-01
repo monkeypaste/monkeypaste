@@ -110,6 +110,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvAccountViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(IsMonthlyEnabled):
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.TrialText)));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.RateText)));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.IsMonthlyEnabled)));
                     Items.ForEach(x => x.OnPropertyChanged(nameof(x.MatchesAccount)));

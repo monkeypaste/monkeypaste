@@ -222,6 +222,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\AutoCompleteBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ComboBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Control.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Dnd\Dnd.axaml" />
@@ -1387,6 +1388,7 @@
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Accents\Gradients.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Pulse.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Nav\TabNav.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />
     <Content Include="Assets\Sounds\alert.wav">

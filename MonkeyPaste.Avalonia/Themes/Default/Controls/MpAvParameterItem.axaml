@@ -53,6 +53,8 @@
                 Value="10" />
     </Style>
 
+    <!--  VALIDATION  -->
+
     <Style Selector="local|MpAvPluginParameterItemView.invalid">
         <Setter Property="BorderBrush"
                 Value="Red" />
@@ -61,6 +63,8 @@
         <Setter Property="CornerRadius"
                 Value="3" />
     </Style>
+
+    <!--  TAB NAV  -->
 
     <Style Selector="ListBox#PluginParameterListBox"
            x:DataType="local:MpAvParameterViewModelBase">

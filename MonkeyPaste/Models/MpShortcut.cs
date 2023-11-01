@@ -2,7 +2,6 @@
 using SQLite;
 
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
@@ -21,7 +20,6 @@ namespace MonkeyPaste {
         public string CommandParameter { get; set; } = null;
 
         public string KeyString { get; set; } = string.Empty;
-        public string DefaultKeyString { get; set; } = string.Empty;
 
         public string RouteTypeName { get; set; }
 
@@ -96,8 +94,7 @@ namespace MonkeyPaste {
         public static async Task<MpShortcut> CreateAsync(
             //string shortcutLabel = "",
             string keyString = "",
-            string defKeyString = "",
-            MpRoutingType routeType = MpRoutingType.Bubble,
+            MpRoutingType routeType = MpRoutingType.Passive,
             MpShortcutType shortcutType = MpShortcutType.None,
             string commandParameter = null,
             string guid = "",
@@ -110,9 +107,7 @@ namespace MonkeyPaste {
                 throw new Exception("Needs keystring");
             }
 
-            //shortcutLabel = string.IsNullOrEmpty(shortcutLabel) ? shortcutType.EnumToLabel() : shortcutLabel;
             guid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid().ToString() : guid;
-            defKeyString = string.IsNullOrEmpty(defKeyString) ? keyString : defKeyString;
 
             var dupShortcut = await MpDataModelProvider.GetShortcutAsync(shortcutType.ToString(), commandParameter);
             if (dupShortcut != null) {
@@ -128,9 +123,7 @@ namespace MonkeyPaste {
             }
             var newShortcut = new MpShortcut() {
                 ShortcutGuid = System.Guid.Parse(guid),
-                //ShortcutLabel = shortcutLabel,
                 KeyString = keyString,
-                DefaultKeyString = defKeyString,
                 RoutingType = routeType,
                 ShortcutType = shortcutType,
                 CommandParameter = commandParameter,

@@ -132,6 +132,11 @@ namespace MonkeyPaste.Avalonia {
             await LoadItemsAsync(CoreItems);
             IsCoreLoaded = true;
             MpConsole.WriteLine("Core load complete");
+#if DEBUG
+            MpConsole.WriteLine($"Pref Password: '{MpAvPrefViewModel.arg1}'");
+            MpConsole.WriteLine($"Backup Pref Password: '{MpAvPrefViewModel.arg3}'");
+            MpConsole.WriteLine($"Db Password: '{MpAvPrefViewModel.arg2}'");
+#endif
         }
         public async Task FinishLoaderAsync() {
             await Dispatcher.UIThread.InvokeAsync(async () => {

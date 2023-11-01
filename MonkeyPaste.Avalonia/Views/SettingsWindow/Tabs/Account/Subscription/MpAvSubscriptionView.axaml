@@ -92,10 +92,54 @@
                     Value="{DynamicResource ThemeAccent3Color}" />
         </Style>
 
-        <!--  TEXT COLOR -->
+        <!--  TEXT COLOR  -->
         <Style Selector="TextBlock">
             <Setter Property="Foreground"
                     Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+        </Style>
+
+        <!--  BADGE  -->
+        <Style Selector="Border.badge">
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="Margin"
+                    Value="0,3,0,0" />
+            <Setter Property="CornerRadius"
+                    Value="7" />
+        </Style>
+
+        <Style Selector="Border.active">
+            <Setter Property="Background"
+                    Value="Blue" />
+        </Style>
+        <Style Selector="Border.expired">
+            <Setter Property="Background"
+                    Value="Yellow" />
+        </Style>
+
+        <Style Selector="Border.badge TextBlock">
+            <Setter Property="HorizontalAlignment"
+                    Value="Center" />
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+            <Setter Property="FontWeight"
+                    Value="SemiBold" />
+            <Setter Property="FontSize"
+                    Value="9" />
+        </Style>
+        <Style Selector="Border.badge:not(.expired) TextBlock">
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+        <Style Selector="Border.badge.expired TextBlock">
+            <Setter Property="Foreground"
+                    Value="Black" />
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.AccountExpiredLabel}" />
+        </Style>
+        <Style Selector="Border.badge.active TextBlock">
+            <Setter Property="Text"
+                    Value="{x:Static local:UiStrings.AccountActiveLabel}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <Grid>
@@ -180,18 +224,11 @@
 
                                         <!--  IS ACTIVE LABEL  -->
                                         <Border Grid.Row="1"
-                                                HorizontalAlignment="Stretch"
+                                                Classes="badge"
                                                 IsVisible="{Binding MatchesAccount}"
-                                                Margin="0,3,0,0"
-                                                CornerRadius="7"
-                                                Background="Blue">
-                                            <TextBlock Grid.Row="1"
-                                                       HorizontalAlignment="Center"
-                                                       TextAlignment="Center"
-                                                       FontWeight="SemiBold"
-                                                       FontSize="8"
-                                                       Foreground="White"
-                                                       Text="{x:Static local:UiStrings.AccountActiveLabel}" />
+                                                Classes.active="{Binding !IsExpired, Source={x:Static local:MpAvAccountViewModel.Instance}}"
+                                                Classes.expired="{Binding IsExpired, Source={x:Static local:MpAvAccountViewModel.Instance}}">
+                                            <TextBlock />
                                         </Border>
 
                                     </Grid>
@@ -211,10 +248,11 @@
                                         </TransitioningContentControl.PageTransition>
                                         <TransitioningContentControl.ContentTemplate>
                                             <DataTemplate>
-                                                <Border>
-                                                    <TextBlock x:DataType="local:MpAvSubscriptionItemViewModel"
-                                                               DataContext="{Binding $parent[ListBoxItem].DataContext}"
-                                                               HorizontalAlignment="Left"
+                                                <Grid x:DataType="local:MpAvSubscriptionItemViewModel"
+                                                      DataContext="{Binding $parent[ListBoxItem].DataContext}"
+                                                      RowDefinitions="*,Auto">
+                                                    <!--  RATE TEXT  -->
+                                                    <TextBlock HorizontalAlignment="Left"
                                                                VerticalAlignment="Center"
                                                                TextWrapping="NoWrap"
                                                                TextAlignment="Right"
@@ -223,7 +261,17 @@
                                                                FontSize="20"
                                                                MinWidth="100"
                                                                Text="{Binding RateText}" />
-                                                </Border>
+                                                    <!--  TRIAL BADGE  -->
+                                                    <Border Grid.Row="1"
+                                                            Classes="badge"
+                                                            HorizontalAlignment="Right"
+                                                            Padding="5,0"
+                                                            IsVisible="{Binding TrialText, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                                            Background="Crimson">
+                                                        <TextBlock Foreground="White"
+                                                                   Text="{Binding TrialText}" />
+                                                    </Border>
+                                                </Grid>
                                             </DataTemplate>
                                         </TransitioningContentControl.ContentTemplate>
                                     </TransitioningContentControl>

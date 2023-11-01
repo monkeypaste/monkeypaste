@@ -133,6 +133,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expired.
+        /// </summary>
+        public static string AccountExpiredLabel {
+            get {
+                return ResourceManager.GetString("AccountExpiredLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The payment for your {0} subscription was due {1} and has not been received. Please update your payment information..
         /// </summary>
         public static string AccountExpiredNtfLocalCaption {
@@ -165,6 +174,15 @@ namespace MonkeyPaste.Avalonia {
         public static string AccountExpiredNtfTitle {
             get {
                 return ResourceManager.GetString("AccountExpiredNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your payment is past due. .
+        /// </summary>
+        public static string AccountExpiredStatusTooltip {
+            get {
+                return ResourceManager.GetString("AccountExpiredStatusTooltip", resourceCulture);
             }
         }
         
@@ -2011,6 +2029,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exclusive override shortcuts may only contain ONE key and that key can not be a modifier key..
+        /// </summary>
+        public static string ShortcutAssignExclusiveOverrideMultiKeyWarning {
+            get {
+                return ResourceManager.GetString("ShortcutAssignExclusiveOverrideMultiKeyWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications..
         /// </summary>
         public static string ShortcutAssignGlobalHint {
@@ -2065,7 +2092,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Routing.
+        ///   Looks up a localized string similar to Global Routing.
         /// </summary>
         public static string ShortcutDataGridRoutingHeader {
             get {
@@ -2096,7 +2123,9 @@ namespace MonkeyPaste.Avalonia {
         ///	&lt;li&gt;
         ///		&lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
         ///	&lt;li&gt;
-        ///		&lt;b&gt;Global&lt;/b&gt;The default shortcut configuration where all global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color=&quot;red&quot;&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color=&quot;green&quot;&gt;give it a try&lt;/s [rest of string was truncated]&quot;;.
+        ///		&lt;b&gt;Default&lt;/b&gt; All global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color=&quot;red&quot;&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color=&quot;green&quot;&gt;give it a try&lt;/span&gt;
+        ///	&lt;/li&gt;
+        ///&lt;/ul&gt;.
         /// </summary>
         public static string ShortcutRoutingProfileTypeHint {
             get {
@@ -2105,22 +2134,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;ul&gt;
-        ///	&lt;li&gt;
-        ///		&lt;b&gt;Internal&lt;/b&gt; In app shortcuts, are not globally enabled&lt;/li&gt;
-        ///	&lt;li&gt;
-        ///		&lt;b&gt;Direct&lt;/b&gt; Gesture will &lt;b&gt;
-        ///			&lt;i&gt;override&lt;/i&gt;
-        ///		&lt;/b&gt; the input, ie. it will &lt;b style=&quot;foreground: #FF0000&quot;&gt;not&lt;/b&gt; be received by active application. &lt;/li&gt;
-        ///	&lt;li&gt;
-        ///		&lt;b&gt;Bubble&lt;/b&gt; Gesture will execute &lt;b&gt;
-        ///			&lt;i&gt;after&lt;/i&gt;
-        ///		&lt;/b&gt; active application &lt;/li&gt;
-        ///	&lt;li&gt;
-        ///		&lt;b&gt;Tunnel&lt;/b&gt; Gesture will execute &lt;b&gt;
-        ///			&lt;i&gt;before&lt;/i&gt;
-        ///		&lt;/b&gt; active application &lt;/li&gt;
-        ///&lt;/ul&gt;.
+        ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Passive&lt;/b&gt;A shortcut MonkeyPaste will listen for in any application.&lt;/p&gt;&lt;p&gt;*This is the&lt;i&gt;only&lt;/i&gt;option on Linux for now.&lt;p&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pre&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Post&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Override&lt;/b&gt;When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will&lt;i&gt; [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ShortcutRoutingTypeHint {
             get {
@@ -2143,114 +2157,6 @@ namespace MonkeyPaste.Avalonia {
         public static string ShortcutsRoutingProfileChangeNtfMsg {
             get {
                 return ResourceManager.GetString("ShortcutsRoutingProfileChangeNtfMsg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string String {
-            get {
-                return ResourceManager.GetString("String", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Usernames and passwords for any test accounts needed to test the submission:.
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dependencies on other products:.
-        /// </summary>
-        public static string String10 {
-            get {
-                return ResourceManager.GetString("String10", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to None.
-        /// </summary>
-        public static string String11 {
-            get {
-                return ResourceManager.GetString("String11", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to None.
-        /// </summary>
-        public static string String2 {
-            get {
-                return ResourceManager.GetString("String2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Steps to access features, modes, or content that may be hidden, conditional, or locked/limited:.
-        /// </summary>
-        public static string String3 {
-            get {
-                return ResourceManager.GetString("String3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Copying more than 5 pieces of content (text, images or files) from any application (within reason, notepad would be a suitable one for testing) will not be restricted to 5 items. Then any subsequent cut/copy actions will add more content (it won&apos;t be restricted to 5 like free version)..
-        /// </summary>
-        public static string String4 {
-            get {
-                return ResourceManager.GetString("String4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Steps to verify background audio usage:.
-        /// </summary>
-        public static string String5 {
-            get {
-                return ResourceManager.GetString("String5", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Audio playback volume is set to 0 by default (treated as muted). To hear it.
-        /// </summary>
-        public static string String6 {
-            get {
-                return ResourceManager.GetString("String6", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 1. open the Settings window (accessed from cog icon at top-left of the main window or right-clicking system tray icon and selecting &apos;Settings&apos;)..
-        /// </summary>
-        public static string String7 {
-            get {
-                return ResourceManager.GetString("String7", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 2. select the &quot;Preferences&quot; tab (should be by default) then scroll to the &quot;Sound&quot; panel and increase the volume slider of &quot;Notification Volume&quot;.
-        /// </summary>
-        public static string String8 {
-            get {
-                return ResourceManager.GetString("String8", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 3. A sample audio clip will play at selected volume.
-        /// </summary>
-        public static string String9 {
-            get {
-                return ResourceManager.GetString("String9", resourceCulture);
             }
         }
         
@@ -2395,15 +2301,6 @@ namespace MonkeyPaste.Avalonia {
         public static string TermsYesButtonText {
             get {
                 return ResourceManager.GetString("TermsYesButtonText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This is a test &lt;b color=&quot;green&quot;&gt;test&lt;/b&gt; &lt;em color=&quot;red&quot;&gt;&lt;b&gt;test&lt;/b&lt;/em&gt; &lt;a color=&quot;pink&quot; href=&quot;https://www.google.com/&quot;&gt;test&lt;/a&gt;.
-        /// </summary>
-        public static string Test {
-            get {
-                return ResourceManager.GetString("Test", resourceCulture);
             }
         }
         
@@ -2696,7 +2593,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Global.
+        ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string WelcomeGestureProfileLabel2 {
             get {

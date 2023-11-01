@@ -37,11 +37,11 @@
 
         <Style Selector="Button#ResetOrDeleteButton Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource ResetImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding Source={StaticResource ResetImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=force|ThemeInteractiveColor}" />
         </Style>
         <Style Selector="Button#ResetOrDeleteButton.canDelete Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                    Value="{Binding Source={StaticResource DeleteImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}}, ConverterParameter=force|ThemeInteractiveColor}" />
         </Style>
     </local:MpAvUserControl.Styles>
     <local:MpAvClipBorder Classes="filterDataGridContainer">
@@ -88,11 +88,14 @@
                         </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox Classes="routingBox hideFirst"
-                                          HorizontalAlignment="Center"
-                                          IsEnabled="{Binding CanBeGlobalShortcut}"
-                                          SelectedIndex="{Binding SelectedRoutingTypeIdx}"
-                                          ItemsSource="{Binding RoutingTypes}" />
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           MaxWidth="100"
+                                           FontSize="14"
+                                           TextWrapping="WrapWithOverflow"
+                                           TextAlignment="Center"
+                                           FontWeight="SemiBold"
+                                           Text="{Binding RoutingType, Converter={x:Static local:MpAvEnumToUiStringConverter.Instance}}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -127,10 +130,12 @@
                             <DataTemplate>
                                 <Button x:Name="ResetOrDeleteButton"
                                         Classes.canDelete="{Binding CanDelete}"
-                                        Classes="defaultButton outline outlineOver"
-                                        Classes.disabled="{Binding CanDeleteOrReset}"
+                                        Classes="defaultButton outline outlineOver resetdelete"
+                                        IsEnabled="{Binding CanDeleteOrReset}"
                                         HorizontalAlignment="Center"
-                                        Command="{Binding DeleteOrResetThisShortcutCommand}">
+                                        local:MpAvPointerCommandExtension.IsEnabled="True"
+                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding DeleteOrResetThisShortcutCommand}"
+                                        local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel">
                                     <Image />
                                 </Button>
                             </DataTemplate>
