@@ -3,13 +3,18 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <sys:TimeSpan x:Key="FadeDur">0:0:0.4</sys:TimeSpan>
+        <sys:TimeSpan x:Key="SlideDur">0:0:0.0</sys:TimeSpan>
+
+        <!--<sys:TimeSpan x:Key="FadeDur">0:0:0.4</sys:TimeSpan>
+        <sys:TimeSpan x:Key="CloseDur">0:0:1.4</sys:TimeSpan>-->
+        <sys:TimeSpan x:Key="FadeDur">0:0:0.0</sys:TimeSpan>
+        <sys:TimeSpan x:Key="CloseDur">0:0:0.0</sys:TimeSpan>
     </Styles.Resources>
 
     <Style Selector="Window.slideIn[IsVisible=true]"
            x:DataType="local:MpAvMessageNotificationViewModel">
         <Style.Animations>
-            <Animation Duration="{StaticResource FadeDur}"
+            <Animation Duration="{StaticResource SlideDur}"
                        FillMode="Forward">
                 <KeyFrame Cue="0%">
                     <Setter Property="TranslateTransform.X"
@@ -24,34 +29,9 @@
     </Style>
     <!--  NTF FADE IN/OUT  -->
 
-    <Style Selector="Window.fadeIn[IsVisible=false] > :is(Control)">
-        <!--  NOTE this is to avoid flicker on show so its initially transparent  -->
+    <!--<Style Selector="Window.fadeIn[IsVisible=false] > :is(Control)">
         <Setter Property="Opacity"
                 Value="0" />
-    </Style>
-
-    <Style Selector=":is(Window).fadeIn.resizable[IsVisible=true]">
-        <!--  This hides window border during fade for windows that are resizable  -->
-        <Style.Animations>
-            <Animation Duration="{StaticResource FadeDur}"
-                       FillMode="Forward">
-                <KeyFrame Cue="0%">
-                    <Setter Property="CanResize"
-                            Value="False" />
-                </KeyFrame>
-                <KeyFrame Cue="100%">
-                    <Setter Property="CanResize"
-                            Value="True" />
-                </KeyFrame>
-            </Animation>
-        </Style.Animations>
-    </Style>
-
-    <Style Selector=":is(Window).fadeOut.resizable.IsClosing">
-        <!--  This hides window border during fade for windows that are resizable  -->
-
-        <Setter Property="CanResize"
-                Value="False" />
     </Style>
 
     <Style Selector="Window.fadeIn[IsVisible=true] > :is(Control)">
@@ -86,7 +66,7 @@
     </Style>
     <Style Selector="Window.notificationWindow.IsClosing">
         <Style.Animations>
-            <Animation Duration="0:0:1.4"
+            <Animation Duration="{StaticResource CloseDur}"
                        FillMode="Forward">
                 <KeyFrame Cue="100%">
                     <Setter Property="IsVisible"
@@ -94,11 +74,5 @@
                 </KeyFrame>
             </Animation>
         </Style.Animations>
-    </Style>
-
-    <!--  hide border on fade windows since its not affected by opacity  -->
-    <Style Selector="Window.fadeOut, Window.fadeIn">
-        <Setter Property="BorderBrush"
-                Value="Transparent" />
-    </Style>
+    </Style>-->
 </Styles>

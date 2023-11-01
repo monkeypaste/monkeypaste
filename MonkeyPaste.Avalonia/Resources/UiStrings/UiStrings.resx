@@ -987,7 +987,8 @@
     <value>Note</value>
   </data>
   <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
-    <value>Windows Store doesn't allow directly changing your subscription. You will need to cancel your plan in order to buy this one.</value>
+    <value>Microsoft Store doesn't allow tier changes to subscription add-ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. \nWould you like to go do that now?</value>
+    <comment>Old Subscription Type, Old Billing Cycle</comment>
   </data>
   <data name="AccountResetPasswordCaption" xml:space="preserve">
     <value>Your password has been reset. Please check your email and follow the link to change your password.</value>
@@ -1079,5 +1080,14 @@
   </data>
   <data name="AccountUnlimitedDisplayText" xml:space="preserve">
     <value>Unlimited</value>
+  </data>
+  <data name="AccountInfoCapacityText" xml:space="preserve">
+    <value>capacity</value>
+  </data>
+  <data name="AccountInfoRemainingText" xml:space="preserve">
+    <value>remaining</value>
+  </data>
+  <data name="AccountInfoTotalText" xml:space="preserve">
+    <value>total</value>
   </data>
 </root>

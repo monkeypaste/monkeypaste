@@ -33,8 +33,6 @@
                 <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="{DynamicResource ThemeInteractiveBgColor}" />
                 <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPressed" Color="{DynamicResource ThemeInteractiveBgColor}" />
-
-                <Thickness x:Key="ToggleButtonBorderThemeThickness">3,3,3,3</Thickness>
             </Style.Resources>
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
@@ -50,6 +48,21 @@
                     Value="0" />
             <Setter Property="Padding"
                     Value="0" />
+        </Style>
+        <Style Selector="RadioButton.tab.first">
+            <Style.Resources>
+                <Thickness x:Key="ToggleButtonBorderThemeThickness">6,3,3,3</Thickness>
+            </Style.Resources>
+        </Style>
+        <Style Selector="RadioButton.tab.last">
+            <Style.Resources>
+                <Thickness x:Key="ToggleButtonBorderThemeThickness">3,3,6,3</Thickness>
+            </Style.Resources>
+        </Style>
+      <Style Selector="RadioButton.tab:not(.first):not(.last)">
+            <Style.Resources>
+                <Thickness x:Key="ToggleButtonBorderThemeThickness">3,3,3,3</Thickness>
+            </Style.Resources>
         </Style>
 
         <Style Selector="RadioButton.tab.omitted">
@@ -103,7 +116,7 @@
         <RadioButton Grid.Column="0"
                      Classes.omitted="{Binding !IsTabButtonVisible0}"
                      Theme="{StaticResource SwitchlessRadioButton}"
-                     Classes="tab fade"
+                     Classes="tab fade first"
                      IsChecked="{Binding IsTabSelected[0], Mode=OneWay}"
                      Command="{Binding SelectTabCommand}"
                      CommandParameter="0">
@@ -148,7 +161,7 @@
         <RadioButton Grid.Column="3"
                      Classes.omitted="{Binding !IsTabButtonVisible3}"
                      Theme="{StaticResource SwitchlessRadioButton}"
-                     Classes="tab fade"
+                     Classes="tab fade last"
                      IsChecked="{Binding IsTabSelected[3], Mode=OneWay}"
                      Command="{Binding SelectTabCommand}"
                      CommandParameter="3">
@@ -157,23 +170,6 @@
                 <Image Source="{Binding Source={StaticResource JoystickImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
             </DockPanel>
         </RadioButton>
-
-        <!--  HELP  -->
-
-        <RadioButton Grid.Column="4"
-                     Classes.omitted="{Binding !IsTabButtonVisible4}"
-                     Theme="{StaticResource SwitchlessRadioButton}"
-                     Classes="tab fade"
-                     IsChecked="{Binding IsTabSelected[5], Mode=OneWay}"
-                     Command="{Binding SelectTabCommand}"
-                     CommandParameter="4">
-            <DockPanel>
-                <Label Content="{x:Static local:UiStrings.SettingsHelpTabLabel}" />
-                <Image Source="{Binding Source={StaticResource QuestionMarkBwImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-            </DockPanel>
-        </RadioButton>
-
-
     </Grid>
 
 </UserControl>

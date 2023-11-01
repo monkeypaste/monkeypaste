@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-
 namespace MonkeyPaste.Avalonia {
     public static class MpAvAccountExtensions {
         public static bool IsPaidType(this MpUserAccountType uat) {
@@ -81,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                     DescriptionTemplate,
                     MpAvAccountTools.Instance.GetContentCapacity(MpUserAccountType.Free),
                     MpAvAccountTools.Instance.GetTrashCapacity(MpUserAccountType.Free),
-                    MpAvAccountTools.Instance.GetTrashCapacity(MpUserAccountType.Standard));
+                    MpAvAccountTools.Instance.GetContentCapacity(MpUserAccountType.Standard));
             }
         }
         string MonthlyRateText =>
@@ -115,7 +114,7 @@ namespace MonkeyPaste.Avalonia {
                 YearlyTrialText;
 
 
-        public string PrePurchaseMessage {
+        public string PostPurchaseActionMessage {
             get {
                 if (!CanBuy ||
                     MpAvAccountViewModel.Instance.IsFree ||
@@ -125,7 +124,10 @@ namespace MonkeyPaste.Avalonia {
                 // microsoft doesn't allow directly change subscription
                 // need to cancel current and then buy new (or I guess it won't work? should test...don't pay though?)
                 // from https://learn.microsoft.com/en-us/windows/uwp/monetize/enable-subscription-add-ons-for-your-app#unsupported-scenarios
-                return UiStrings.AccountPrePurchaseWindowsNtfCaption;
+                return string.Format(
+                    UiStrings.AccountPrePurchaseWindowsNtfCaption,
+                    MpAvAccountViewModel.Instance.AccountType.EnumToUiString(),
+                    MpAvAccountViewModel.Instance.BillingCycleType.EnumToUiString());
             }
         }
         #endregion
@@ -169,17 +171,44 @@ namespace MonkeyPaste.Avalonia {
         int YearlyTrialDayCount =>
             MpAvAccountTools.Instance.GetSubscriptionTrialLength(AccountType, false);
 
-        int SubscriptionPriority =>
-            MpAvAccountTools.Instance.GetAccountPriority(AccountType, IsMonthlyEnabled);
+        int MonthlyPriority =>
+            MpAvAccountTools.Instance.GetAccountPriority(AccountType, true);
+        int YearlyPriority =>
+            MpAvAccountTools.Instance.GetAccountPriority(AccountType, false);
         public bool IsUnlimited =>
             AccountType == MpUserAccountType.Unlimited;
-        public bool CanBuy {
+
+        bool CanBuyMonthly {
             get {
                 if (Parent == null ||
                     !Parent.IsStoreAvailable) {
                     return false;
                 }
-                return SubscriptionPriority > MpAvAccountViewModel.Instance.AccountPriority;
+                if (AccountType == MpUserAccountType.None &&
+                    !MpAvAccountViewModel.Instance.IsRegistered) {
+                    // allow restore account
+                    return true;
+                }
+                return MonthlyPriority > MpAvAccountViewModel.Instance.AccountPriority;
+            }
+        }
+        bool CanBuyYearly {
+            get {
+                if (Parent == null ||
+                    !Parent.IsStoreAvailable) {
+                    return false;
+                }
+                if (AccountType == MpUserAccountType.None &&
+                    !MpAvAccountViewModel.Instance.IsRegistered) {
+                    // allow restore account
+                    return true;
+                }
+                return YearlyPriority > MpAvAccountViewModel.Instance.AccountPriority;
+            }
+        }
+        public bool CanBuy {
+            get {
+                return IsMonthlyEnabled ? CanBuyMonthly : CanBuyYearly;
             }
         }
 
@@ -211,14 +240,24 @@ namespace MonkeyPaste.Avalonia {
             OnPropertyChanged(nameof(IconSourceObj));
         }
         public MpAvWelcomeOptionItemViewModel ToWelcomeOptionItem(bool isMonthly) {
-            return new MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel.Instance, AccountType) {
+            var woivm = new MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel.Instance, AccountType) {
                 IconSourceObj = IconSourceObj,
                 LabelText = LabelText,
                 LabelText2 = isMonthly ? MonthlyTrialText : YearlyTrialText,
                 DescriptionText = DescriptionText,
                 DescriptionText2 = isMonthly ? MonthlyRateText : YearlyRateText,
+                IsEnabled = isMonthly ? CanBuyMonthly : CanBuyYearly,
                 IsChecked = AccountType == MpUserAccountType.Unlimited && !isMonthly
             };
+
+            if (MpAvAccountViewModel.Instance.AccountType != MpUserAccountType.Free &&
+                MpAvAccountViewModel.Instance.AccountType == AccountType &&
+                MpAvAccountViewModel.Instance.IsMonthly == isMonthly) {
+                // mark plan as active, no need for trial info
+                woivm.LabelText3 = UiStrings.AccountActiveLabel;
+                woivm.LabelText2 = null;
+            }
+            return woivm;
         }
 
         public override string ToString() {

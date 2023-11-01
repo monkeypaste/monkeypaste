@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
-    public class MpAvNotificationWindowManager : MpINotificationManager {
+    public class MpAvNotificationWindowManager {
         #region Private Variables
         private List<MpAvMessageNotificationWindow> _pendingMessages = new List<MpAvMessageNotificationWindow>();
         private ObservableCollection<Window> _windows = new ObservableCollection<Window>();
@@ -54,12 +54,13 @@ namespace MonkeyPaste.Avalonia {
             if (dc is not MpAvNotificationViewModelBase nvmb) {
                 return;
             }
-            if (MpAvThemeViewModel.IS_WINDOW_FADE_ENABLED) {
-                nvmb.IsClosing = true;
-            } else if (_windows.FirstOrDefault(x => x.DataContext == dc) is MpAvWindow w) {
+            //if (MpAvThemeViewModel.IS_WINDOW_FADE_ENABLED) {
+            //    nvmb.IsClosing = true;
+            //} else 
+            if (_windows.FirstOrDefault(x => x.DataContext == dc) is MpAvWindow w) {
                 w.Close();
             } else {
-                MpDebug.Break($"Error cannot find/close ntf window {dc}");
+                //MpDebug.Break($"Error cannot find/close ntf window {dc}");
             }
 
         }
@@ -94,7 +95,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         private MpAvNotificationWindowManager() {
             _positioner = new MpAvNotificationPositioner();
-            MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
         }
         #endregion
 
@@ -155,7 +155,7 @@ namespace MonkeyPaste.Avalonia {
         }
         private void BeginOpen(MpAvWindow nw) {
             var nvmb = nw.DataContext as MpAvNotificationViewModelBase;
-            nvmb.IsClosing = false;
+            //nvmb.IsClosing = false;
 
             if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
                 desktop.MainWindow is not MpAvMainWindow) {
@@ -268,27 +268,6 @@ namespace MonkeyPaste.Avalonia {
             _positioner.RemoveWindow(w);
         }
 
-        //private async Task ForceTopmostAsync(MpAvWindow w) {
-        //    while(true) {
-        //        if(w == null) {
-        //            break;
-        //        }
-        //        if()
-        //    }
-        //} 
-
-        private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.MainWindowOpening:
-                    //if (MpAvAppendNotificationWindow.Instance != null &&
-                    //    MpAvAppendNotificationWindow.Instance.IsVisible) {
-                    //    HideNotification(MpAppendNotificationViewModel.Instance);
-                    //}
-                    break;
-
-            }
-        }
-
         #region Window Events
 
 
@@ -309,9 +288,10 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             if (!w.IsVisible &&
-                w.DataContext is MpAvNotificationViewModelBase nvmb &&
-                nvmb.IsClosing) {
-                FinishClose(w);
+                w.DataContext is MpAvNotificationViewModelBase nvmb
+                //&& nvmb.IsClosing
+                ) {
+                //FinishClose(w);
             }
         }
 

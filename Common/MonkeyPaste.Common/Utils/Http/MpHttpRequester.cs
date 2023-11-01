@@ -16,8 +16,10 @@ namespace MonkeyPaste.Common {
             using (HttpClient httpClient = new HttpClient())
             using (MultipartFormDataContent formDataContent = new MultipartFormDataContent()) {
                 try {
-                    foreach (var keyValuePair in keyValuePairs) {
-                        formDataContent.Add(new StringContent(keyValuePair.Value.ToStringOrEmpty()), keyValuePair.Key);
+                    if (keyValuePairs != null) {
+                        foreach (var keyValuePair in keyValuePairs) {
+                            formDataContent.Add(new StringContent(keyValuePair.Value.ToStringOrEmpty()), keyValuePair.Key);
+                        }
                     }
                     if (add_debug) {
                         formDataContent.Add(new StringContent("1"), "XDEBUG_SESSION");

@@ -76,9 +76,6 @@ namespace MonkeyPaste.Avalonia {
             get => _validationMessage;
             set {
                 if (ValidationMessage != value) {
-                    if (Label == "Email") {
-
-                    }
                     _validationMessage = value;
                     OnPropertyChanged(nameof(ValidationMessage));
                 }
@@ -100,7 +97,6 @@ namespace MonkeyPaste.Avalonia {
                 return int.MaxValue;
             }
         }
-        protected bool IsValidationOverrideEnabled { get; set; }
         public virtual bool IsAnyBusy =>
             IsBusy;
         public bool DoFocusPulse { get; set; }
@@ -542,18 +538,8 @@ namespace MonkeyPaste.Avalonia {
                 Parent is MpAvAnalyticItemPresetViewModel aipvm) {
                 aipvm.Parent.UpdateCanExecute();
             }
-            return IsValid;
-        }
-
-        public void OverrideValidationMesage(string msg) {
-            IsValidationOverrideEnabled = true;
-            ValidationMessage = msg;
             OnPropertyChanged(nameof(IsValid));
-            //Validate();
-        }
-        public void RemoveValidationOverride() {
-            IsValidationOverrideEnabled = false;
-            Validate();
+            return IsValid;
         }
 
         public virtual string GetValidationMessage(bool isExecuting) {
@@ -588,9 +574,6 @@ namespace MonkeyPaste.Avalonia {
                     Validate();
                     break;
                 case nameof(ValidationMessage):
-                    if (Label == "Email") {
-
-                    }
                     MpConsole.WriteLine($"'{Label}' Validation Msg Changed to '{ValidationMessage}'");
                     OnPropertyChanged(nameof(IsValid));
                     break;

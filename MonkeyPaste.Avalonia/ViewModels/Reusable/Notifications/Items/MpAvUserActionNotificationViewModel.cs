@@ -254,9 +254,9 @@ namespace MonkeyPaste.Avalonia {
                 });
             } else {
                 HideNotification();
-                while (IsClosing) {
-                    await Task.Delay(100);
-                }
+                //while (IsClosing) {
+                //    await Task.Delay(100);
+                //}
             }
 
             //if (DialogResult == MpNotificationDialogResultType.Retry) {

@@ -58,6 +58,7 @@ namespace MonkeyPaste.Avalonia {
         const int LOGIN_TIMER_CHECK_M = 5;
         const string SUCCESS_PREFIX = "[SUCCESS]";
         const string ERROR_PREFIX = "[ERROR]";
+        const string PING_RESPONSE = "Hello";
 
         #endregion
 
@@ -65,7 +66,8 @@ namespace MonkeyPaste.Avalonia {
 
         static string PRIVACY_POLICY_URL = $"{MpServerConstants.LEGAL_BASE_URL}/privacy.html";
 
-        static string SUBSCRIBE_URI = $"{MpServerConstants.ACCOUNTS_BASE_URL}/subscribe.php";
+        static string PING_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/ping.php";
+        static string SUBSCRIBE_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/subscribe.php";
         static string REGISTER_BASE_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/register.php";
         static string LOGIN_BASE_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/login.php";
         static string RESET_PASSWORD_BASE_URL = $"{MpServerConstants.ACCOUNTS_BASE_URL}/reset-request.php";
@@ -118,28 +120,40 @@ namespace MonkeyPaste.Avalonia {
 
         public string AccountStateInfo {
             get {
-                string offline = AccountState == MpUserAccountState.Connected ?
-                    string.Empty : $"{UiStrings.AccountOfflineLabel} ";
+                // offline (optional) [UserName/Unregistered] AccountType
+                // (312 total) Unlimited 
+                // or
+                // (5 total | 5 capacity | 0 remaining) Free/Standard
+
+                string offline = IsServerAvailable ? string.Empty : $"{UiStrings.AccountOfflineLabel} ";
                 string acct_name = IsRegistered ? AccountUsername : UiStrings.AccountUnregisteredLabel;
+                string line_1 = string.Format(@"{0} [{1}] {2}", offline, acct_name, AccountType.EnumToUiString());
+
+
                 int content_count = MpAvAccountTools.Instance.LastContentCount;
                 int cap_count = MpAvAccountTools.Instance.GetContentCapacity(AccountType);
+                string line_2;
                 if (AccountType == MpUserAccountType.Unlimited) {
-                    return $"{AccountType} - (Total {content_count})";
+                    line_2 = string.Format(@"({0} {1})", content_count, UiStrings.AccountInfoTotalText);
+                } else {
+                    line_2 = string.Format(
+                        @"({0} {1} | {2} {3} | {4} {5})",
+                        content_count,
+                        UiStrings.AccountInfoTotalText,
+                        cap_count,
+                        UiStrings.AccountInfoCapacityText,
+                        (cap_count - content_count),
+                        UiStrings.AccountInfoRemainingText);
                 }
-                return string.Format(
-                    @"{0} [{1}] {2} - ({3} total {4} capacity {5} remaining)",
-                    offline,
-                    acct_name,
-                    AccountType,
-                    content_count,
-                    cap_count,
-                    cap_count - content_count);
+
+                return line_1 + Environment.NewLine + line_2;
             }
         }
 
         #endregion
 
         #region State
+        public bool IsServerAvailable { get; private set; }
 
         public int ContentCapacity =>
             MpAvAccountTools.Instance.GetContentCapacity(AccountType);
@@ -278,6 +292,9 @@ namespace MonkeyPaste.Avalonia {
 
         private void MpAvAccountViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
+                case nameof(AccountType):
+                    MpConsole.WriteLine($"Account Type changed to '{AccountType}'");
+                    break;
                 case nameof(AccountState):
                     MpConsole.WriteLine($"Account State changed to '{AccountState}'");
                     UpdateAccountViews();
@@ -341,7 +358,8 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             foreach (var pvm in param_tup.Item1.Items) {
-                pvm.RemoveValidationOverride();
+                //pvm.RemoveValidationOverride();
+                pvm.ValidationMessage = string.Empty;
             }
 
         }
@@ -355,7 +373,7 @@ namespace MonkeyPaste.Avalonia {
             foreach (var error_kvp in errors) {
                 if (param_id_lookup.TryGetValue(error_kvp.Key, out string param_id)) {
                     if (MpAvSettingsViewModel.Instance.TryGetParamAndFrameViewModelsByParamId(frameType, param_id, out var param_tup)) {
-                        param_tup.Item2.OverrideValidationMesage(error_kvp.Value);
+                        param_tup.Item2.ValidationMessage = error_kvp.Value;
                     } else {
                         MpConsole.WriteLine($"Cannot find settings param '{param_id}'");
                     }
@@ -511,6 +529,9 @@ namespace MonkeyPaste.Avalonia {
                     icon = "MonkeyWinkImage";
                     break;
                 case MpAccountNtfType.SubscriptionUpgraded:
+                    if (!MpAvPrefViewModel.Instance.IsWelcomeComplete) {
+                        return;
+                    }
                     ntf_type = MpNotificationType.AccountChanged;
                     title = UiStrings.NtfCapAccountChangedTitle;
                     msg = string.Format(
@@ -648,6 +669,11 @@ namespace MonkeyPaste.Avalonia {
             MpMessenger.SendGlobal(MpMessageType.AccountStateChanged);
         }
 
+        private async Task CheckServerAvailabilityAsync() {
+            string resp = await MpHttpRequester.SubmitPostDataToUrlAsync(PING_URL, null);
+            IsServerAvailable = resp == PING_RESPONSE;
+        }
+
         #endregion
 
         #region Commands
@@ -655,22 +681,29 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> SubscribeCommand => new MpAsyncCommand<object>(
             async (args) => {
-                if (args is not MpUserAccountType uat) {
+                if (args is not object[] argParts ||
+                    argParts[0] is not MpUserAccountType uat ||
+                    argParts[1] is not bool is_monthly) {
                     return;
                 }
 
                 MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
-                if (acct == MpSubscriptionFormat.Default) {
-                    MpDebug.Break("Error cannot subscribe to free acct");
+                if (acct.AccountType != uat || acct.IsMonthly != is_monthly) {
+                    // BUG i don't think ms store updates changes immediatly so keep checking until it matches up
+                    MpConsole.WriteLine($"Store does not match Subscribe will retry");
+                    MpConsole.WriteLine($"Store: {acct.AccountType} Monthly: {acct.IsMonthly}");
+                    MpConsole.WriteLine($"Purchase: {uat} Monthly: {is_monthly}");
+                    await Task.Delay(300);
+                    await SubscribeCommand.ExecuteAsync(args);
                     return;
                 }
                 var req_args = new Dictionary<string, string>() {
                     {"device_guid", MpDefaultDataModelTools.ThisUserDeviceGuid },
                     {"sub_type", acct.AccountType.ToString()},
                     {"monthly", acct.IsMonthly ? "1":"0"},
-                    {"expires_utc_dt", acct.ToString()},
+                    {"expires_utc_dt", acct.ExpireOffsetUtc.ToString()},
                 };
-                string resp = await MpHttpRequester.SubmitPostDataToUrlAsync(SUBSCRIBE_URI, req_args);
+                string resp = await MpHttpRequester.SubmitPostDataToUrlAsync(SUBSCRIBE_URL, req_args);
                 bool success = ProcessServerResponse(resp, out var resp_args);
                 await InitializeAsync();
                 if (success) {
@@ -686,6 +719,8 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIAsyncCommand<object> LoginCommand => new MpAsyncCommand<object>(
             async (args) => {
+                await CheckServerAvailabilityAsync();
+
                 MpLoginSourceType login_type = (MpLoginSourceType)args;
 
                 SetButtonBusy(MpRuntimePrefParamType.AccountLogin, true);
@@ -750,7 +785,7 @@ namespace MonkeyPaste.Avalonia {
 
                     acct_state = MpUserAccountState.Connected;
                 } else {
-                    acct_state = IsRegistered ? MpUserAccountState.Disconnected : MpUserAccountState.Unregistered;
+                    acct_state = IsRegistered || login_type == MpLoginSourceType.Click ? MpUserAccountState.Disconnected : MpUserAccountState.Unregistered;
                 }
                 UpdateAccountState(acct_state, acct_type, expires, monthly, is_sub_device, email);
                 StartExpirationTimer();

@@ -6,10 +6,10 @@ function login(string $username, string $password): mixed
 {
     $account = find_account_by_username($username);
     if (!$account) {
-        exit_w_error('User not found.');
+        exit_w_errors(['username' => 'User not found.']);
     }
     if ($account['active'] == 0) {
-        exit_w_error('Please confirm account before logging in');
+        exit_w_errors(['username' => 'Please confirm account before logging in']);
     }
 
     if (!password_verify($password, $account['password'])) {

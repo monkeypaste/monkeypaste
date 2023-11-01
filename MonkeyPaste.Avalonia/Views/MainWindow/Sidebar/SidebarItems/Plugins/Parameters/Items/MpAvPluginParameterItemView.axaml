@@ -66,11 +66,6 @@
                             HorizontalAlignment="Stretch"
                             HorizontalContentAlignment="Stretch"
                             Content="{Binding}">
-                <ToolTip.Tip>
-                    <local:MpAvToolTipView Classes.error="True"
-                                           IsVisible="{Binding !IsValid}"
-                                           ToolTipText="{Binding ValidationMessage}" />
-                </ToolTip.Tip>
                 <ContentControl.DataTemplates>
                     <local:MpAvPluginParameterTemplateSelector>
 

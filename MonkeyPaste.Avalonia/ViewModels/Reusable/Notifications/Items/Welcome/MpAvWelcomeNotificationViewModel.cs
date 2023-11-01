@@ -101,6 +101,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool IsTermsWindowOpen { get; set; }
         public bool IsAccountOptSelected { get; set; }
 
         public bool IsAccountMonthlyChecked { get; set; } = false;
@@ -383,6 +384,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // TERMS AGGREEMENT
+            IsTermsWindowOpen = true;
             bool agreed = await MpAvTermsView.ShowTermsAgreementWindowAsync(
                 new MpAvTermsAgreementCollectionViewModel() {
                     IntroText = UiStrings.TermsIntroAppText,
@@ -395,6 +397,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }.ToList()
                 });
+            IsTermsWindowOpen = false;
             if (!agreed) {
                 Mp.Services.ShutdownHelper.ShutdownApp("declined terms");
                 return;
@@ -476,6 +479,11 @@ namespace MonkeyPaste.Avalonia {
                 CurPageType = (MpWelcomePageType)((int)CurPageType + 1);
                 if (CurOptGroupViewModel.NeedsSkip) {
                     SelectNextPageCommand.Execute(null);
+                }
+                if (CurPageType == MpWelcomePageType.Account) {
+                    Mp.Services.NotificationBuilder.ShowMessageAsync(
+                        title: "TEST",
+                        body: "This is a test").FireAndForgetSafeAsync();
                 }
             },
             () => {

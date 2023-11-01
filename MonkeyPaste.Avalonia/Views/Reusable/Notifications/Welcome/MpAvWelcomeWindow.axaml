@@ -11,11 +11,17 @@
                   x:CompileBindings="False"
                   x:DataType="local:MpAvWelcomeNotificationViewModel"
                   local:MpAvMoveWindowExtension.IsEnabled="True"
-                  IsEnabled="{Binding !IsWindowOpen, Source={x:Static local:MpAvSettingsViewModel.Instance}}"
                   Background="Transparent"
                   WindowStartupLocation="CenterScreen"
                   SizeToContent="Manual"
                   SystemDecorations="None">
+    <local:MpAvWindow.IsEnabled>
+        <MultiBinding Converter="{x:Static BoolConverters.And}">
+            <Binding Path="!IsWindowOpen"
+                     Source="{x:Static local:MpAvSettingsViewModel.Instance}" />
+            <Binding Path="!IsTermsWindowOpen" />
+        </MultiBinding>
+    </local:MpAvWindow.IsEnabled>
     <local:MpAvWindow.Styles>
         <!--  WINDOW BUTTONS  -->
         <Style Selector="StackPanel#WindowButtonPanel">

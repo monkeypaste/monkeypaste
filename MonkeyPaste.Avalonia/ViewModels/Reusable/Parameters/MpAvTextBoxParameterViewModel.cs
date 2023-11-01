@@ -151,12 +151,8 @@ namespace MonkeyPaste.Avalonia {
 
         protected override void MpAnalyticItemParameterViewModel_OnValidate(object sender, EventArgs e) {
             base.MpAnalyticItemParameterViewModel_OnValidate(sender, e);
-            if (Label == "Email") {
 
-            }
-            if (IsValidationOverrideEnabled) {
-
-            } else if (CurrentValue != null && CurrentValue.Length < MinLength) {
+            if (CurrentValue != null && CurrentValue.Length < MinLength) {
                 ValidationMessage = string.Format(UiStrings.ParameterInvalidLengthCaption, Label, MinLength);
             } else if (CurrentValue != null && CurrentValue.Length > MaxLength) {
                 ValidationMessage = string.Format(UiStrings.ParameterInvalidLengthCaption2, Label, MinLength);

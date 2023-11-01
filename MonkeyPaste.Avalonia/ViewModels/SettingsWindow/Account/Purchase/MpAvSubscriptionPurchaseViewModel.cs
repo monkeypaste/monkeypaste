@@ -76,6 +76,8 @@ namespace MonkeyPaste.Avalonia {
                 var aivm = await CreateAccountItemViewModelAsync((MpUserAccountType)i);
                 Items.Add(aivm);
             }
+            // toggle so active is visible
+            IsMonthlyEnabled = MpAvAccountViewModel.Instance.IsMonthly;
 
             OnPropertyChanged(nameof(Items));
             OnPropertyChanged(nameof(IsStoreAvailable));
@@ -132,6 +134,9 @@ namespace MonkeyPaste.Avalonia {
                         InitializeAsync().FireAndForgetSafeAsync();
                     }
                     break;
+                case MpMessageType.AccountStateChanged:
+                    Items.ForEach(x => x.OnPropertyChanged(nameof(x.MatchesAccount)));
+                    break;
             }
         }
 
@@ -169,22 +174,28 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"Cannot buy {purchase_vm} monthly: {is_monthly}");
                     return;
                 }
-
-                if (!string.IsNullOrEmpty(purchase_vm.PrePurchaseMessage)) {
-                    // theres store specific logic user should know before attempting purchase,
-                    await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
-                            title: UiStrings.AccountPrePurchaseNtfTitle,
-                            message: purchase_vm.PrePurchaseMessage,
-                            iconResourceObj: "WarningImage");
-                }
+                // NOTE get purchase action info before changing account state
+                string post_action_url = MpAvAccountTools.Instance.GetStoreSubscriptionUrl(
+                    MpAvAccountViewModel.Instance.AccountType,
+                    MpAvAccountViewModel.Instance.BillingCycleType == MpBillingCycleType.Monthly);
+                string post_action_msg = purchase_vm.PostPurchaseActionMessage;
 
 
                 // NOTE to work around login failures or no selection, just default to free i guess
                 bool? success = await MpAvAccountTools.Instance.PurchaseSubscriptionAsync(purchase_uat, is_monthly);
                 if (success.IsTrue()) {
+                    await MpAvAccountViewModel.Instance.SubscribeCommand.ExecuteAsync(new object[] { purchase_uat, is_monthly });
 
-
-                    await MpAvAccountViewModel.Instance.SubscribeCommand.ExecuteAsync(purchase_uat);
+                    if (!string.IsNullOrEmpty(post_action_msg)) {
+                        // theres store specific logic user should know after purchase,
+                        var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
+                                title: UiStrings.AccountPrePurchaseNtfTitle,
+                                message: post_action_msg,
+                                iconResourceObj: "WarningImage");
+                        if (result) {
+                            MpAvUriNavigator.Instance.NavigateToUriCommand.Execute(post_action_url);
+                        }
+                    }
                     return;
                 }
 

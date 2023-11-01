@@ -22,6 +22,10 @@
                x:DataType="local:MpAvSubscriptionItemViewModel">
             <Setter Property="IsVisible"
                     Value="{Binding IsVisible}" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="CornerRadius"
+                    Value="7" />
             <Setter Property="BorderThickness"
                     Value="0" />
             <Setter Property="Transitions">
@@ -88,7 +92,7 @@
                     Value="{DynamicResource ThemeAccent3Color}" />
         </Style>
 
-        <!--  HIDE RESTORE OPT  -->
+        <!--  TEXT COLOR -->
         <Style Selector="TextBlock">
             <Setter Property="Foreground"
                     Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
@@ -150,15 +154,13 @@
                             <Border x:Name="OuterBorder"
                                     Height="85"
                                     Padding="10,0,10,0"
-                                    IsEnabled="{Binding CanBuy}"
                                     Classes.pulse="{Binding DoFocusPulse}"
                                     Classes.unlimited="{Binding IsUnlimited}"
-                                    local:MpAvIsHoveringExtension.IsEnabled="True"
+                                    local:MpAvIsHoveringExtension.IsEnabled="{Binding $parent[TabItem].IsSelected}"
                                     local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                                     local:MpAvIsHoveringExtension.IsBorderFollowEnabled="False"
                                     CornerRadius="7"
                                     BorderThickness="2.5">
-
                                 <DockPanel HorizontalAlignment="Stretch"
                                            VerticalAlignment="Stretch">
 

@@ -11,7 +11,7 @@
         x:DataType="local:MpAvUserActionNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
-        Classes.IsClosing="{Binding IsClosing}"
+        
         Classes="notificationWindow resizable fadeIn fadeOut"
         Classes.userActionNotificationWindow="True">
     <Window.Styles>

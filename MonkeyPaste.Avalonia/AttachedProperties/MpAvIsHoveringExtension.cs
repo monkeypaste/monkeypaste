@@ -120,19 +120,18 @@ namespace MonkeyPaste.Avalonia {
         private static void HandleIsEnabledChanged(Control element, AvaloniaPropertyChangedEventArgs e) {
             if (e.NewValue is bool isEnabledVal && isEnabledVal) {
                 if (element is Control control) {
-                    if (control.IsInitialized) {
-                        AttachedToVisualHandler(control, null);
-                    } else {
-                        control.AttachedToVisualTree += AttachedToVisualHandler;
-
+                    control.Loaded += Control_Loaded;
+                    if (control.IsLoaded) {
+                        Control_Loaded(control, null);
                     }
                 }
             } else {
-                DetachedToVisualHandler(element, null);
+                Control_Unloaded(element, null);
             }
 
 
         }
+
 
         #endregion
 
@@ -140,26 +139,23 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private static void AttachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
-            if (s is Control control) {
+        private static void Control_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            if (sender is Control control) {
 
                 if (GetIsBorderTimerEnabled(control)) {
                     StartFollowTimer(control);
                 }
-                control.DetachedFromVisualTree += DetachedToVisualHandler;
+                control.Unloaded += Control_Unloaded;
 
                 control.PointerEntered += PointerEnterHandler;
                 control.PointerExited += PointerLeaveHandler;
-                if (e == null) {
-                    control.AttachedToVisualTree += AttachedToVisualHandler;
-                }
             }
         }
 
-        private static void DetachedToVisualHandler(object s, VisualTreeAttachmentEventArgs e) {
-            if (s is Control control) {
-                control.AttachedToVisualTree -= AttachedToVisualHandler;
-                control.DetachedFromVisualTree -= DetachedToVisualHandler;
+        private static void Control_Unloaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
+            if (sender is Control control) {
+                control.Loaded -= Control_Loaded;
+                control.Unloaded -= Control_Unloaded;
                 control.PointerEntered -= PointerEnterHandler;
                 control.PointerExited -= PointerLeaveHandler;
 

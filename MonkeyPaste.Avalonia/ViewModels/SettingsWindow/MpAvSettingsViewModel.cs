@@ -427,8 +427,8 @@ namespace MonkeyPaste.Avalonia {
                                             values =
                                                 FontManager.Current.SystemFonts
                                                 .Select(x=>x.Name)
-                                                //(AvaloniaLocator.Current.GetRequiredService<IFontManagerImpl>()).GetInstalledFontFamilyNames()
                                                 .Where(x=>!string.IsNullOrEmpty(x))
+                                                .Union(MpAvThemeViewModel.Instance.CustomFontFamilyNames)
                                                 .OrderBy(x=>x)
                                                 .Select(x=>new MpPluginParameterValueFormat() {
                                                     isDefault = MpAvThemeViewModel.Instance.DefaultReadOnlyFontFamily.ToLower() == x.ToLower(),
@@ -444,9 +444,8 @@ namespace MonkeyPaste.Avalonia {
                                             values =
                                                 FontManager.Current.SystemFonts
                                                 .Select(x=>x.Name)
-                                                //FontManager.Current.GetInstalledFontFamilyNames(true)
-                                                //(AvaloniaLocator.Current.GetRequiredService<IFontManagerImpl>()).GetInstalledFontFamilyNames(true)
                                                 .Where(x=>!string.IsNullOrEmpty(x))
+                                                .Union(MpAvThemeViewModel.Instance.CustomFontFamilyNames)
                                                 .OrderBy(x=>x)
                                                 .Select(x=>new MpPluginParameterValueFormat() {
                                                     isDefault = MpAvThemeViewModel.Instance.DefaultEditableFontFamily.ToLower() == x.ToLower(),
@@ -1537,12 +1536,11 @@ namespace MonkeyPaste.Avalonia {
                 if (sfvm.Items == null) {
                     continue;
                 }
-                if (frameType != MpSettingsFrameType.None && sfvm.FrameType != frameType) {
-                    continue;
-                }
                 if (sfvm.Items.FirstOrDefault(x => x.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower())
                     is MpAvParameterViewModelBase param_vm) {
-                    MpDebug.Assert(param_vm.ParamId.ToStringOrEmpty().ToLower() == paramId.ToLower(), $"param assert failed '{paramId}'");
+                    if (frameType != MpSettingsFrameType.None && sfvm.FrameType != frameType) {
+                        continue;
+                    }
                     return new Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase>(sfvm, param_vm);
                 }
             }
@@ -1553,7 +1551,7 @@ namespace MonkeyPaste.Avalonia {
             return result != null && result.Item1 != null && result.Item2 != null;
         }
         public bool TryGetParamAndFrameViewModelsByParamId(MpSettingsFrameType frameType, string paramId, out Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> result) {
-            result = GetParamAndFrameViewModelsByParamId(paramId);
+            result = GetParamAndFrameViewModelsByParamId(paramId, frameType);
             return result != null && result.Item1 != null && result.Item2 != null;
         }
         #endregion

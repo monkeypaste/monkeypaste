@@ -196,6 +196,33 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to capacity.
+        /// </summary>
+        public static string AccountInfoCapacityText {
+            get {
+                return ResourceManager.GetString("AccountInfoCapacityText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to remaining.
+        /// </summary>
+        public static string AccountInfoRemainingText {
+            get {
+                return ResourceManager.GetString("AccountInfoRemainingText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to total.
+        /// </summary>
+        public static string AccountInfoTotalText {
+            get {
+                return ResourceManager.GetString("AccountInfoTotalText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Learn More....
         /// </summary>
         public static string AccountLearnMoreButtonText {
@@ -313,7 +340,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Windows Store doesn&apos;t allow directly changing your subscription. You will need to cancel your plan in order to buy this one..
+        ///   Looks up a localized string similar to Microsoft Store doesn&apos;t allow tier changes to subscription add-ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. \nWould you like to go do that now?.
         /// </summary>
         public static string AccountPrePurchaseWindowsNtfCaption {
             get {

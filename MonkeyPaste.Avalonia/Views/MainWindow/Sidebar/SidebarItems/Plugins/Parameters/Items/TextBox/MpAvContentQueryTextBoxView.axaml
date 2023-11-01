@@ -34,7 +34,7 @@
         </Style>
 
         <!--  READ-ONLY  -->
-        <Style Selector="TextBlock#ReadOnlyBlock.multiline">
+        <Style Selector="SelectableTextBlock#ReadOnlyBlock.multiline">
             <Setter Property="TextWrapping"
                     Value="WrapWithOverflow" />
             <Setter Property="MaxHeight"
@@ -64,17 +64,17 @@
                      Watermark="{Binding Watermark}"
                      Text="{Binding ContentQuery, Mode=TwoWay}" />
 
-            <TextBlock x:Name="ReadOnlyBlock"
-                       Grid.Column="0"
-                       Grid.ColumnSpan="2"
-                       FontWeight="SemiBold"
-                       Text="{Binding ContentQuery}"
-                       Foreground="{DynamicResource ThemeAccent1Color}"
-                       FontSize="{Binding FontSize, ElementName=ContentQueryTextBox}"
-                       IsVisible="{Binding IsReadOnly}"
-                       Classes.multiline="{Binding IsMultiline}"
-                       HorizontalAlignment="Stretch"
-                       VerticalAlignment="Stretch" />
+            <SelectableTextBlock x:Name="ReadOnlyBlock"
+                                 Grid.Column="0"
+                                 Grid.ColumnSpan="2"
+                                 FontWeight="SemiBold"
+                                 Text="{Binding ContentQuery}"
+                                 Foreground="{DynamicResource ThemeAccent1Color}"
+                                 FontSize="{Binding FontSize, ElementName=ContentQueryTextBox}"
+                                 IsVisible="{Binding IsReadOnly}"
+                                 Classes.multiline="{Binding IsMultiline}"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Stretch" />
 
             <!--  CLEAR TEXT BUTTON  -->
 

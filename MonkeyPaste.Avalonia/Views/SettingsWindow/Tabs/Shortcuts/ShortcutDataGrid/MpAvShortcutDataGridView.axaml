@@ -129,11 +129,8 @@
                                         Classes.canDelete="{Binding CanDelete}"
                                         Classes="defaultButton outline outlineOver"
                                         Classes.disabled="{Binding CanDeleteOrReset}"
-                                        IsVisible="{Binding CanDeleteOrReset}"
                                         HorizontalAlignment="Center"
-                                        local:MpAvPointerCommandExtension.IsEnabled="True"
-                                        local:MpAvPointerCommandExtension.LeftPressCommand="{Binding DeleteOrResetThisShortcutCommand}"
-                                        local:MpAvPointerCommandExtension.RoutingStrategy="Tunnel">
+                                        Command="{Binding DeleteOrResetThisShortcutCommand}">
                                     <Image />
                                 </Button>
                             </DataTemplate>

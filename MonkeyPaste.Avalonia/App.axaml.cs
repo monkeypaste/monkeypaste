@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
 using Avalonia.Logging;
@@ -121,6 +122,7 @@ namespace MonkeyPaste.Avalonia {
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
+                desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;
 

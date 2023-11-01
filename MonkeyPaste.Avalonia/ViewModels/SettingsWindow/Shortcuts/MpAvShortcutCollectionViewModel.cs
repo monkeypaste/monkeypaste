@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
 
         static bool LOAD_W_GLOBAL_HOOKS_TOGGLED_ON =
 #if DEBUG
-            true;
+            false;
 #else
             true;
 #endif
@@ -1067,6 +1067,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void Hook_KeyPressed(object sender, KeyboardHookEventArgs e) {
+            //MpConsole.WriteLine($" [HOOK KEY] {e.RawEvent}");
             _keyboardGestureHelper.AddKeyDown(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
             MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' PRESSED");
@@ -1137,6 +1138,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void HandleReleaseOrTyped(KeyboardHookEventArgs e, bool isRelease) {
+            //MpConsole.WriteLine($" [HOOK KEY] {e.RawEvent}");
             bool was_down = _keyboardGestureHelper.RemoveKeyDown(e.Data.KeyCode);
             if (!was_down) {
                 // NOTE typed receives up before release for input keys

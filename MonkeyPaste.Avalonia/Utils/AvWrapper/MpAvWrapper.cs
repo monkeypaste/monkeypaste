@@ -55,7 +55,6 @@ namespace MonkeyPaste.Avalonia {
         public MpIUserProvidedFileExts UserProvidedFileExts { get; set; }
         public MpIStartupState StartupState { get; set; }
         public MpIPlatformShorcuts PlatformShorcuts { get; set; }
-        public MpINotificationManager NotificationManager { get; set; }
         public MpIProcessWatcher ProcessWatcher { get; set; }
         public MpIDbInfo DbInfo { get; set; }
         public MpIFocusMonitor FocusMonitor { get; set; }
@@ -176,8 +175,6 @@ namespace MonkeyPaste.Avalonia {
 
             ClipboardMonitor = new MpAvClipboardWatcher();
             DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;
-
-            NotificationManager = MpAvNotificationWindowManager.Instance;
 
             PlatformShorcuts = new MpAvPlatformShortcuts();
         }

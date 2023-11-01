@@ -21,19 +21,25 @@
                     Value="Transparent" />
         </Style>
         <!--  TAB CONTROL  -->
-        <Style Selector="StackPanel.tab">
-            <Setter Property="Spacing"
-                    Value="3" />
+        <Style Selector="Grid.tab">
+            <Setter Property="Cursor"
+                    Value="Hand" />
         </Style>
-        <Style Selector="StackPanel.tab Image">
+        <Style Selector="Grid.tab Image">
             <Setter Property="Width"
                     Value="15" />
             <Setter Property="Height"
                     Value="15" />
+            <Setter Property="IsVisible"
+                    Value="False" />
         </Style>
-        <Style Selector="StackPanel.tab TextBlock">
+        <Style Selector="Grid.tab TextBlock">
             <Setter Property="FontSize"
                     Value="12" />
+            <Setter Property="Margin"
+                    Value="3,0,0,0" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
         </Style>
     </UserControl.Styles>
     <Grid x:Name="AccountOuterContainer">
@@ -54,19 +60,20 @@
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
             <TabControl.Resources>
-                <sys:Double x:Key="TabItemHeaderFontSize">14</sys:Double>
-                <sys:Double x:Key="TabStripItemMinHeight">20</sys:Double>
+                <!--<sys:Double x:Key="TabItemHeaderFontSize">14</sys:Double>
+                <sys:Double x:Key="TabStripItemMinHeight">20</sys:Double>-->
             </TabControl.Resources>
             <!--  WHATS NEW TAB  -->
             <TabItem>
                 <TabItem.Header>
-                    <StackPanel Classes="tab"
-                                Orientation="Horizontal">
+                    <Grid Classes="tab"
+                          ColumnDefinitions="Auto,*">
                         <Image Width="15"
                                Height="15"
-                               Source="{Binding Source={StaticResource AppImage}, ConverterParameter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                        <TextBlock Text="{x:Static local:UiStrings.AccountWhatsNewTabName}" />
-                    </StackPanel>
+                               Source="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{x:Static local:UiStrings.AccountWhatsNewTabName}" />
+                    </Grid>
                 </TabItem.Header>
 
                 <local:MpAvWebPageView HorizontalAlignment="Stretch"
@@ -79,17 +86,17 @@
             <!--  SUBSCRIPTION TAB  -->
             <TabItem IsSelected="True">
                 <TabItem.Header>
-                    <StackPanel Classes="tab"
-                                Orientation="Horizontal">
+                    <Grid Classes="tab"
+                          ColumnDefinitions="Auto,*">
                         <Image Width="15"
                                Height="15"
-                               Source="{Binding Source={StaticResource BananasImage}, ConverterParameter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
-                        <TextBlock Text="{x:Static local:UiStrings.AccountSubscriptionTabName}" />
-                    </StackPanel>
+                               Source="{Binding Source={StaticResource BananasImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{x:Static local:UiStrings.AccountSubscriptionTabName}" />
+                    </Grid>
                 </TabItem.Header>
 
-                <local:MpAvSubscriptionView Grid.Column="1"
-                                            HorizontalAlignment="Stretch"
+                <local:MpAvSubscriptionView HorizontalAlignment="Stretch"
                                             VerticalAlignment="Stretch" />
             </TabItem>
 

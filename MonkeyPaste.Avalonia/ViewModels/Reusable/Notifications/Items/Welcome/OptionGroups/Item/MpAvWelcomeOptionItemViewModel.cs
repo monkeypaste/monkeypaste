@@ -103,6 +103,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string LabelText2 { get; set; }
+        public string LabelText3 { get; set; }
         #endregion
 
         #region Description

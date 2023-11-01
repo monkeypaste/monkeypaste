@@ -25,7 +25,6 @@ namespace MonkeyPaste {
         MpIPlatformPathDialog NativePathDialog { get; set; }
         MpIStartupState StartupState { get; set; }
         MpIPlatformShorcuts PlatformShorcuts { get; set; }
-        MpINotificationManager NotificationManager { get; set; }
         MpIFocusMonitor FocusMonitor { get; set; }
         MpIDbInfo DbInfo { get; set; }
         MpIQueryResultProvider Query { get; set; }

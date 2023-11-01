@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,6 @@ namespace MonkeyPaste.Avalonia {
         MpICloseWindowViewModel,
         MpIPopupMenuViewModel {
         #region Constants
-
-        public const int DEFAULT_NOTIFICATION_SHOWTIME_MS = 3000;
-
         #endregion
 
         #region Statics
@@ -314,8 +312,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsVisible { get; set; } = false;
 
-        public bool IsOpening { get; set; }
-        public bool IsClosing { get; set; }
+        //public bool IsOpening { get; set; }
+        //public bool IsClosing { get; set; }
         public string NotifierGuid { get; private set; }
         public bool DoNotShowAgain { get; set; } = false;
 
@@ -458,8 +456,7 @@ namespace MonkeyPaste.Avalonia {
                 return MpNotificationDialogResultType.DoNotShow;
             }
             await Task.Delay(1);
-
-            Mp.Services.NotificationManager.ShowNotification(this);
+            MpAvNotificationWindowManager.Instance.ShowNotification(this);
 
             return MpNotificationDialogResultType.None;
         }
@@ -470,7 +467,9 @@ namespace MonkeyPaste.Avalonia {
                 // this was initial show, add to do not show
                 DoNotShowAgain = true;
             }
-            Mp.Services.NotificationManager.HideNotification(this);
+            Dispatcher.UIThread.Post(() => {
+                MpAvNotificationWindowManager.Instance.HideNotification(this);
+            });
         }
 
         #endregion
@@ -493,7 +492,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsVisible):
                     if (!IsVisible) {
-                        IsClosing = false;
+                        //IsClosing = false;
                     }
                     break;
                 case nameof(IsWindowOpen):
@@ -542,7 +541,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand CloseNotificationCommand => new MpCommand(
             () => {
                 HideNotification();
-                IsClosing = false;
+                //IsClosing = false;
             });
 
         public ICommand ToggleIsPinnedCommand => new MpCommand(

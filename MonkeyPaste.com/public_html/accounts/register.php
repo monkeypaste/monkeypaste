@@ -52,7 +52,7 @@ $fields = [
     'username' => 'string | required | alphanumeric | between: 3, 25 | unique: account, username',
     'email' => 'email | required | email | unique: account, email',
     'password' => 'string | required | secure',
-    'confirm' => 'string | required | secure | same: password',
+    'confirm' => 'string | required | same: password',
 ];
 
 $errors = [];

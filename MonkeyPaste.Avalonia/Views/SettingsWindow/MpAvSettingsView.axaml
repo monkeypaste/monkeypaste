@@ -53,19 +53,21 @@
             <Style.Resources>
                 <HorizontalAlignment x:Key="ExpanderHeaderHorizontalContentAlignment">Stretch</HorizontalAlignment>
                 <!--<SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{Binding Source={DynamicResource ExpanderHeaderBackground}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />-->
-                <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="{DynamicResource ThemeWhite}" />
+                <SolidColorBrush x:Key="ExpanderHeaderForeground" Color="White" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
                 <SolidColorBrush x:Key="ExpanderContentBackground" Color="{DynamicResource ThemeGrayAccent2Color}" Opacity="0.3" />
 
                 <!--<SolidColorBrush x:Key="ExpanderHeaderForegroundPointerOver" Color="{Binding Source={DynamicResource ExpanderHeaderBackgroundPointerOver}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
                 <!--<SolidColorBrush x:Key="ExpanderHeaderForegroundPressed" Color="{Binding Source={DynamicResource ExpanderHeaderBackgroundPressed}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
 
-                <SolidColorBrush x:Key="ExpanderChevronForeground" Color="{Binding Source={DynamicResource ExpanderHeaderBackground}, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                <SolidColorBrush x:Key="ExpanderChevronForeground" Color="White" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                <SolidColorBrush x:Key="ExpanderChevronForegroundPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                <SolidColorBrush x:Key="ExpanderChevronBackgroundPointerOver" Color="Transparent" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
 
                 <!--<SolidColorBrush x:Key="ExpanderHeaderBackground" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
                 <SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
                 <SolidColorBrush x:Key="ExpanderHeaderBackgroundPressed" Color="{DynamicResource ThemeCompliment2DarkColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
 
-                <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="{DynamicResource ThemeInteractiveBgColor}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
+                <SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="White" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
                 <!--<SolidColorBrush x:Key="ExpanderHeaderBorderBrushPointerOver" Color="{DynamicResource ThemeAccent1Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />
                 <SolidColorBrush x:Key="ExpanderHeaderBorderBrushPressed" Color="{DynamicResource ThemeAccent2Color}" Opacity="{DynamicResource GlobalInteractiveOpacity}" />-->
 
@@ -111,16 +113,21 @@
                     Value="Horizontal" />
         </Style>
         <Style Selector="TextBlock.header">
+            <!--<Setter Property="Foreground"
+                    Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />-->
             <Setter Property="Foreground"
-                    Value="{Binding $parent[local:MpAvSettingsView].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+                    Value="{DynamicResource ThemeWhiteBrush}" />
             <Setter Property="VerticalAlignment"
                     Value="Bottom" />
         </Style>
         <Style Selector="TextBlock.expander.header">
-            <Setter Property="Foreground"
-                    Value="{Binding $parent[ToggleButton].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />
+            <!--<Setter Property="Foreground"
+                    Value="{Binding $parent[ToggleButton].Background, Converter={x:Static local:MpAvBrushToContrastBrushConverter.Instance}}" />-->
+
             <Setter Property="VerticalAlignment"
                     Value="Bottom" />
+            <Setter Property="FontSize"
+                    Value="22" />
         </Style>
 
         <Style Selector="TextBlock.header.frame">
@@ -128,10 +135,6 @@
                     Value="18" />
             <Setter Property="FontWeight"
                     Value="SemiBold" />
-        </Style>
-        <Style Selector="TextBlock.header.expander">
-            <Setter Property="FontSize"
-                    Value="22" />
         </Style>
 
         <Style Selector="Image.expander.header.icon">

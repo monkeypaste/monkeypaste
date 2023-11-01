@@ -48,13 +48,18 @@
         <Setter Property="BorderBrush"
                 Value="{DynamicResource HoverDefaultBorderBrush}" />
     </Style>
-    <Style Selector="local|MpAvPluginParameterItemView.invalid Border.paramBorder">
+    <Style Selector="local|MpAvPluginParameterItemView">
+        <Setter Property="CornerRadius"
+                Value="10" />
+    </Style>
+
+    <Style Selector="local|MpAvPluginParameterItemView.invalid">
         <Setter Property="BorderBrush"
                 Value="Red" />
         <Setter Property="BorderThickness"
-                Value="2.5" />
+                Value="1.5" />
         <Setter Property="CornerRadius"
-                Value="5" />
+                Value="3" />
     </Style>
 
     <Style Selector="ListBox#PluginParameterListBox"

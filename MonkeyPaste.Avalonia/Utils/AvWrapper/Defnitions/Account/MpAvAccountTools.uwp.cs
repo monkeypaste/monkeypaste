@@ -126,14 +126,14 @@ namespace MonkeyPaste.Avalonia {
             if (appLicense
                 .AddOnLicenses
                 .Where(x => x.Value.IsActive && AccountTypeAddOnStoreIdLookup.ContainsKey(ParseSkuStoreId(x)))
-                .OrderByDescending(x => (int)AccountTypeAddOnStoreIdLookup[ParseSkuStoreId(x)].Item1)
+                .OrderByDescending(x => GetAccountPriority(AccountTypeAddOnStoreIdLookup[ParseSkuStoreId(x)].Item1, AccountTypeAddOnStoreIdLookup[ParseSkuStoreId(x)].Item2))
                 .FirstOrDefault() is var active_kvp) {
                 // found most significant active license 
                 user_storeid_license_kvp = active_kvp;
             } else if (appLicense
                 .AddOnLicenses
                 .Where(x => !x.Value.IsActive && AccountTypeAddOnStoreIdLookup.ContainsKey(ParseSkuStoreId(x)))
-                .OrderByDescending(x => (int)AccountTypeAddOnStoreIdLookup[ParseSkuStoreId(x)].Item1)
+                .OrderByDescending(x => GetAccountPriority(AccountTypeAddOnStoreIdLookup[ParseSkuStoreId(x)].Item1, AccountTypeAddOnStoreIdLookup[ParseSkuStoreId(x)].Item2))
                 .FirstOrDefault() is var inactive_kvp) {
 
                 // find most significant inactive license 
