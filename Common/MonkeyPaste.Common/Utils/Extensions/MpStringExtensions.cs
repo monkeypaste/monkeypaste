@@ -507,6 +507,28 @@ namespace MonkeyPaste.Common {
             }
             return notFoundValue;
         }
+        public static object ToEnum(this object enumValObj, Type enumType, bool ignoreCase = true, object notFoundValue = default) {
+            if (enumValObj != null) {
+                try {
+                    if (enumValObj is string str) {
+                        if (Enum.GetNames(enumType).IndexOf(str) is int enumValIdx) {
+                            enumValObj = Enum.ToObject(enumType, enumValIdx);
+                        } else {
+                            MpDebug.Break($"Error cannot find enum val '{enumValObj}' in enum '{enumType}'");
+                            enumValObj = 0;
+                        }
+                    } else if (enumValObj is not int) {
+                        MpDebug.Break($"Error unhandled enum val type '{enumValObj.GetType()}'");
+                        enumValObj = 0;
+                    }
+                    return Enum.ToObject(enumType, enumValObj);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine(ex);
+                }
+            }
+            return notFoundValue;
+        }
 
         public static TEnum ToEnumFlags<TEnum>(this string csvStr, bool ignoreCase = true, MpCsvFormatProperties csvProps = null, TEnum notFoundValue = default) where TEnum : struct {
             if (string.IsNullOrEmpty(csvStr)) {

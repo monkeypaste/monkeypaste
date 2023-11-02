@@ -2,8 +2,9 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 require('dotenv').config();
 
-const lightCodeTheme = require('prism-react-renderer/themes/github');
-const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+const { themes } = require('prism-react-renderer');
+const lightTheme = themes.github;
+const darkTheme = themes.dracula;
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -54,7 +55,11 @@ const config = {
           //  'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: //require.resolve('./src/css/custom.css'),
+            [
+              require.resolve('./src/css/custom.css'),
+              require.resolve('./src/css/help-style.css'),
+            ]
         },
       }),
     ],
@@ -134,14 +139,22 @@ const config = {
         copyright: `Copyright © ${new Date().getFullYear()} Monkey LLC, Built with Docusaurus.`,
       },
       prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
+        theme: lightTheme,
+        darkTheme: darkTheme,
       },
     }),
   markdown: {
     mermaid: true,
   },
   themes: ['@docusaurus/theme-mermaid'],
+  plugins: [
+    [
+      require.resolve("@cmfcmf/docusaurus-search-local"),
+      {
+        // Options here
+      },
+    ],
+  ],
 };
 
 module.exports = config;

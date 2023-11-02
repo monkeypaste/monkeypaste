@@ -135,7 +135,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTabButtonVisible1 { get; set; } = true;
         public bool IsTabButtonVisible2 { get; set; } = true;
         public bool IsTabButtonVisible3 { get; set; } = true;
-        public bool IsTabButtonVisible4 { get; set; } = true;
         public string FilterText { get; set; } = string.Empty;
 
 
@@ -1322,9 +1321,6 @@ namespace MonkeyPaste.Avalonia {
                 MpAvUrlCollectionViewModel.Instance.FilteredItems.Any();
 
             IsTabButtonVisible3 = MpAvShortcutCollectionViewModel.Instance.FilteredItems.Any();
-
-            // TODO add filtering to help, for now it'll stick around
-            IsTabButtonVisible4 = true;
 
             AddOrUpdateRecentFilterTextsAsync(FilterText).FireAndForgetSafeAsync();
         }

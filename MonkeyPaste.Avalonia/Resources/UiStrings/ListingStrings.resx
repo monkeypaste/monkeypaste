@@ -121,7 +121,6 @@
     <value>With this subscription you will receive:
 -up to 1,000 clips of content 
 -unlimited trash &amp; archive</value>
-    <comment> </comment>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="StandardImage" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -132,6 +131,9 @@
   </data>
   <data name="StandardYearlyTitle" xml:space="preserve">
     <value>Standard - Yearly</value>
+  </data>
+  <data name="StoreDescription" xml:space="preserve">
+    <value>Clipboard manager and more</value>
   </data>
   <data name="UnlimitedDescription" xml:space="preserve">
     <value>With this subscription you will receive:

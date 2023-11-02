@@ -1,5 +1,6 @@
 ﻿namespace MonkeyPaste.Common {
     public interface MpICommonTools {
+        MpIUiStringToEnumConverter UiStrEnumConverter { get; set; }
         MpIDebugBreakHelper DebugBreakHelper { get; set; }
         MpIUserAgentProvider UserAgentProvider { get; set; }
         MpIGlobalInputListener GlobalInputListener { get; set; }

@@ -225,7 +225,13 @@ namespace MonkeyPaste.Avalonia {
                             //while (MpPrefViewModel.Instance.IsSaving) {
                             //    await Task.Delay(100);
                             //}
-                            MpAvPrefViewModel.Instance.SetPropertyValue(pvm.ParamId.ToString(), pvm.CurrentTypedValue);
+                            try {
+
+                                MpAvPrefViewModel.Instance.SetPropertyValue(pvm.ParamId.ToString(), pvm.CurrentTypedValue);
+                            }
+                            catch (Exception ex) {
+                                MpConsole.WriteTraceLine($"Pref update error", ex);
+                            }
                         }
                         IsBusy = false;
                     });

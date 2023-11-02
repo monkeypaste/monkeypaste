@@ -8,6 +8,11 @@ using System.Reflection;
 using System.Resources;
 
 namespace MonkeyPaste.Avalonia {
+    public class MpUiStringToEnumConverter : MpIUiStringToEnumConverter {
+        public object UiStringToEnum(string uiStr) {
+            return uiStr.UiStringToEnum();
+        }
+    }
     public static class MpAvEnumToUiStringResourceConverter {
         #region Private Variables
         // enums: (all enum to labels, maybe missing some ToStrings() in places...._
@@ -91,6 +96,10 @@ namespace MonkeyPaste.Avalonia {
 
         public static void Init() {
 #if DEBUG
+            if (!MpAvCultureManager.IsDefaultCulture(EnumUiStrings.Culture)) {
+                MpConsole.WriteLine($"Enum UI Strings ignoring culture '{EnumUiStrings.Culture}' its not default '{MpAvCultureManager.DEFAULT_CULTURE_NAME}'");
+                return;
+            }
             var diffs = GetCodeAndResxEnumDiffs(ActualEnumUiResxResourcePath);
             if (diffs.Any()) {
                 // either new/missing entries or values changed
@@ -168,6 +177,19 @@ namespace MonkeyPaste.Avalonia {
             }
             return enum_ui_string;
         }
+
+        public static object UiStringToEnum(this string uiStr) {
+            var keys = FindEnumKeys(uiStr);
+            if (keys.FirstOrDefault() is string key &&
+                key.SplitNoEmpty("_") is string[] key_parts &&
+                key_parts.Length == 2 &&
+                _UiEnums.FirstOrDefault(x => x.Name == key_parts[0]) is Type enum_type &&
+                    key_parts[1].ToEnum(enum_type) is object enum_val) {
+                return enum_val;
+            }
+            MpDebug.Break($"Can't find key for type ui str '{uiStr}' ");
+            return default;
+        }
         #endregion
 
         #endregion
@@ -216,6 +238,15 @@ namespace MonkeyPaste.Avalonia {
         private static string GetEnumKey(Enum enumVal) {
             return $"{enumVal.GetType().ToString().SplitNoEmpty(".").Last()}_{enumVal}";
         }
+
+        private static IEnumerable<string> FindEnumKeys(string uiStr) {
+            foreach (var pi in typeof(EnumUiStrings).GetProperties()) {
+                if (pi.GetValue(null) is string val && val == uiStr) {
+                    yield return pi.Name;
+                }
+            }
+        }
+
         #endregion
 
     }

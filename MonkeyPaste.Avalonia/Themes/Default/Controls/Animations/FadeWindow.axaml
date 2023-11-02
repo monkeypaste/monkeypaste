@@ -3,38 +3,56 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <sys:TimeSpan x:Key="SlideDur">0:0:0.0</sys:TimeSpan>
-
         <!--<sys:TimeSpan x:Key="FadeDur">0:0:0.4</sys:TimeSpan>
         <sys:TimeSpan x:Key="CloseDur">0:0:1.4</sys:TimeSpan>-->
-        <sys:TimeSpan x:Key="FadeDur">0:0:0.0</sys:TimeSpan>
+        <sys:TimeSpan x:Key="FadeInDelayDur">0:0:0.5</sys:TimeSpan>
+        <sys:TimeSpan x:Key="FadeInDur">0:0:1.0</sys:TimeSpan>
+        <sys:TimeSpan x:Key="FadeOutDur">0:0:1.0</sys:TimeSpan>
         <sys:TimeSpan x:Key="CloseDur">0:0:0.0</sys:TimeSpan>
     </Styles.Resources>
+    <!--  NTF FADE IN/OUT  -->
 
-    <Style Selector="Window.slideIn[IsVisible=true]"
-           x:DataType="local:MpAvMessageNotificationViewModel">
+    <Style Selector="Window.fadeIn">
+        <Setter Property="Opacity"
+                Value="0" />
+    </Style>
+
+    <Style Selector="Window.fadeIn[IsVisible=true]">
         <Style.Animations>
-            <Animation Duration="{StaticResource SlideDur}"
+            <Animation Duration="{StaticResource FadeInDur}"
+                       Delay="{StaticResource FadeInDelayDur}"
                        FillMode="Forward">
                 <KeyFrame Cue="0%">
-                    <Setter Property="TranslateTransform.X"
-                            Value="360" />
+                    <Setter Property="Opacity"
+                            Value="0" />
                 </KeyFrame>
                 <KeyFrame Cue="100%">
-                    <Setter Property="TranslateTransform.X"
+                    <Setter Property="Opacity"
+                            Value="1" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+
+    <Style Selector="Window.fadeOut.closing">
+        <Style.Animations>
+            <Animation Duration="{StaticResource FadeOutDur}"
+                       FillMode="Forward">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Opacity"
+                            Value="1" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Opacity"
                             Value="0" />
                 </KeyFrame>
             </Animation>
         </Style.Animations>
     </Style>
-    <!--  NTF FADE IN/OUT  -->
 
-    <!--<Style Selector="Window.fadeIn[IsVisible=false] > :is(Control)">
+    <!--<Style Selector="Window.fadeIn[IsVisible=true] > :is(Control)">
         <Setter Property="Opacity"
                 Value="0" />
-    </Style>
-
-    <Style Selector="Window.fadeIn[IsVisible=true] > :is(Control)">
         <Style.Animations>
             <Animation Duration="{StaticResource FadeDur}"
                        FillMode="Forward">
@@ -48,8 +66,9 @@
                 </KeyFrame>
             </Animation>
         </Style.Animations>
-    </Style>
-    <Style Selector="Window.fadeOut.IsClosing > :is(Control)">
+    </Style>-->
+
+    <!--<Style Selector="Window.fadeOut.IsClosing > :is(Control)">
         <Style.Animations>
             <Animation Duration="{StaticResource FadeDur}"
                        FillMode="Forward">

@@ -689,6 +689,9 @@ namespace MonkeyPaste.Common {
             Type t = Nullable.GetUnderlyingType(propertyInfo.PropertyType) ?? propertyInfo.PropertyType;
             object safeValue = newValue;
             try {
+                if (t.IsEnum && newValue is string newValStr) {
+                    newValue = MpCommonTools.Services.UiStrEnumConverter.UiStringToEnum(newValStr);
+                }
                 safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
             }
             catch (Exception ex) {

@@ -361,6 +361,7 @@ namespace MonkeyPaste.Avalonia {
         [JsonIgnore]
         public bool AccountPrivacyPolicyAccepted { get; set; }
 
+
         [JsonConverter(typeof(StringEnumConverter))]
         public MpUserAccountType AccountType { get; set; } = MpUserAccountType.Free;
 

@@ -128,26 +128,26 @@
     </script>
 
     <script defer type="text/javascript">
-                        //loadVariableExternalScripts();
-                        //if (UseQuill2) {
-                        //    //document.write('<script defer src="https://cdn.quilljs.com/2.0.0-dev.4/quill.js"><\/script>');
-                        //    //document.write('<script defer src="lib/Quill/quill.min.js"><\/script>');
-                        //    document.write('<script defer src="node_modules/quilldev2/dist/quill.js"><\/script>');
-                        //    console.log('quill 2.0.0-dev3 loaded');
-                        //    //addScript(`${REL_EXTERNAL_ROOT_DIR}/quilldev2/dist/quill.js`);
-                        //    if (UseBetterTable) {
-                        //        //document.write('<script defer src="lib/Quill-Better-Table/quill-better-table.min.js"><\/script>');
-                        //        document.write('<script defer src="node_modules/quill-better-table/dist/quill-better-table.js"><\/script>');
+                                //loadVariableExternalScripts();
+                                //if (UseQuill2) {
+                                //    //document.write('<script defer src="https://cdn.quilljs.com/2.0.0-dev.4/quill.js"><\/script>');
+                                //    //document.write('<script defer src="lib/Quill/quill.min.js"><\/script>');
+                                //    document.write('<script defer src="node_modules/quilldev2/dist/quill.js"><\/script>');
+                                //    console.log('quill 2.0.0-dev3 loaded');
+                                //    //addScript(`${REL_EXTERNAL_ROOT_DIR}/quilldev2/dist/quill.js`);
+                                //    if (UseBetterTable) {
+                                //        //document.write('<script defer src="lib/Quill-Better-Table/quill-better-table.min.js"><\/script>');
+                                //        document.write('<script defer src="node_modules/quill-better-table/dist/quill-better-table.js"><\/script>');
 
-                        //        //addScript(`${REL_EXTERNAL_ROOT_DIR}/quill-better-table/dist/quill-better-table.js`);
-                        //        console.log('quill-better-table loaded')
-                        //    }
-                        //} else {
-                        //    //document.write('<script defer src="https://cdn.quilljs.com/1.3.7/quill.js"><\/script>');
-                        //    document.write('<script defer src="node_modules/quill/dist/quill.min.js"><\/script>');
-                        //    console.log('quill 1.3.7 loaded');
-                        //    //addScript(`${REL_EXTERNAL_ROOT_DIR}/quill/dist/quill.min.js`);
-                        //}
+                                //        //addScript(`${REL_EXTERNAL_ROOT_DIR}/quill-better-table/dist/quill-better-table.js`);
+                                //        console.log('quill-better-table loaded')
+                                //    }
+                                //} else {
+                                //    //document.write('<script defer src="https://cdn.quilljs.com/1.3.7/quill.js"><\/script>');
+                                //    document.write('<script defer src="node_modules/quill/dist/quill.min.js"><\/script>');
+                                //    console.log('quill 1.3.7 loaded');
+                                //    //addScript(`${REL_EXTERNAL_ROOT_DIR}/quill/dist/quill.min.js`);
+                                //}
     </script>
 
 
@@ -156,14 +156,16 @@
     <script defer src="src/components/quill-wrapper/parchment/parchment-wrapper.js"></script>
     <script defer src="src/components/theme/theme.js"></script>
     <script defer src="src/components/localizer/localizer.js"></script>
-    <script defer src="src/components/localizer/uiStrings.js"></script>
+    <!-- default culture file name is UiStrings.js -->
+    <!--<script defer src="src/components/localizer/uiStrings.js"></script>-->
+    
+<!-- INSERT CULTURE SCRIPT REF AFTER ME -->
+<script defer src="src/components/localizer/UiStrings.ja-JP.js"></script>
     <script defer src="src/components/svg/svgloader.js"></script>
     <script defer src="src/components/append/append.js"></script>
     <script defer src="src/components/append/toolbar/append-toolbar-items.js"></script>
-
     <script defer src="src/components/cursor/cursor.js"></script>
     <script defer src="src/components/context-menu-wrapper/context-menu-wrapper.js"></script>
-
     <script defer src="src/components/util/helpers.js"></script>
     <script defer src="src/components/util/resize.js"></script>
     <script defer src="src/components/util/graphics/polygon.js"></script>
@@ -173,28 +175,23 @@
     <script defer src="src/components/util/graphics/roundedRect.js"></script>
     <script defer src="src/components/util/graphics/screenshot.js"></script>
     <script defer src="src/components/converter/converter.js"></script>
-
     <script defer src="src/components/messages/messenger.js"></script>
     <script defer src="src/components/messages/messages_ext.js"></script>
     <script defer src="src/components/messages/messages_ext_ntf.js"></script>
     <script defer src="src/components/messages/messages_get.js"></script>
-
     <script defer src="src/components/template/template.js"></script>
     <script defer src="src/components/template/blots/templateEmbedBlot.js"></script>
     <script defer src="src/components/template/toolbar/create/createTemplateToolbarItem.js"></script>
     <script defer src="src/components/template/toolbar/edit/editTemplateToolbar.js"></script>
     <script defer src="src/components/template/toolbar/paste/pasteTemplateToolbarItems.js"></script>
     <script defer src="src/components/template/toolbar/paste/selector/pasteTemplateFocusSelector.js"></script>
-
     <script defer src="src/components/template/toolbar/paste/value/pasteTemplateValue.js"></script>
     <script defer src="src/components/template/toolbar/paste/value/types/contacts/templateContact.js"></script>
     <script defer src="src/components/template/toolbar/paste/value/types/datetime/templateDateTime.js"></script>
     <script defer src="src/components/template/toolbar/paste/value/types/dynamicAndStatic/templateDynamicAndStatic.js"></script>
-
     <script defer src="src/components/color/colorpalette.js"></script>
     <script defer src="src/components/color/colordata.js"></script>
     <script defer src="src/components/color/color.js"></script>
-
     <script defer src="src/components/content/content.js"></script>
     <script defer src="src/components/content/content-text/content-text.js"></script>
     <script defer src="src/components/content/content-file-list/content-file-list.js"></script>
@@ -202,78 +199,55 @@
     <script defer src="src/components/annotations/annotations.js"></script>
     <script defer src="src/components/paste-toolbar/pastetoolbar.js"></script>
     <!--<script defer src="src/components/content/ext-content-source-blot/ext-content-source-blot.js"></script>-->
-
     <script defer src="src/components/list/list.js"></script>
     <script defer src="src/components/list/bullets/checkable/checkablelist.js"></script>
     <script defer src="src/components/list/bullets/ordered/orderedlist.js"></script>
     <script defer src="src/components/list/bullets/disc/disclist.js"></script>
-
     <script defer src="src/components/bold/bold.js"></script>
     <script defer src="src/components/italic/italic.js"></script>
-
     <script defer src="src/components/common/toolbar/commonToolbar.js"></script>
-
     <script defer src="src/components/font/fontFamilyLookup.js"></script>
     <script defer src="src/components/font/fontFamily.js"></script>
     <script defer src="src/components/font/fontSize.js"></script>
     <script defer src="src/components/font/fontcolor.js"></script>
-
     <script defer src="src/components/clipboard/clipboard.js"></script>
-
     <script defer src="src/components/shortcuts/shortcuts.js"></script>
-
     <script defer src="src/components/dragdrop/drag.js"></script>
     <script defer src="src/components/dragdrop/drop.js"></script>
     <script defer src="src/components/dragdrop/debouncer/dragover-debouncer.js"></script>
-
     <script defer src="src/components/scroll/scroll.js"></script>
     <script defer src="src/components/scroll/autoscroll/autoscroll.js"></script>
-
     <script defer src="src/components/datatransfer/datatransfer.js"></script>
     <script defer src="src/components/datatransfer/htmlfragment.js"></script>
-
     <script defer src="src/components/table/table.js"></script>
     <script defer src="src/components/table/ops/tableops.js"></script>
     <script defer src="src/components/table/toolbar/createTableToolbarButton.js"></script>
-
     <script defer src="src/components/link/link.js"></script>
     <script defer src="src/components/align/align.js"></script>
-
     <script defer src="src/components/overlay/overlay.js"></script>
-
     <script defer src="src/components/selection/selection.js"></script>
     <script defer src="src/components/selection/fancy-selection/fancy-selection.js"></script>
-
     <script defer src="src/components/window/window.js"></script>
-
     <script defer src="src/components/input/mouse.js"></script>
     <script defer src="src/components/input/focus.js"></script>
     <script defer src="src/components/input/keyboard.js"></script>
-
     <script defer src="src/components/input/macros/indent/indent.js"></script>
     <script defer src="src/components/input/macros/move/move.js"></script>
     <script defer src="src/components/input/macros/duplicate/duplicate.js"></script>
     <script defer src="src/components/input/macros/macros.js"></script>
-
     <script defer src="src/components/formatPaint/formatPainter.js"></script>
-
     <script defer src="src/components/quill-wrapper/quill-wrapper.js"></script>
     <script defer src="src/components/quill-wrapper/toolbar/quill-toolbar.js"></script>
     <script defer src="src/components/quill-wrapper/quill-tooltip/quill-tooltip-wrapper.js"></script>
     <script defer src="src/components/quill-wrapper/delta/delta-wrapper.js"></script>
-
     <script defer src="src/components/findreplace/findreplace.js"></script>
-
     <script defer src="src/components/tooltip/tooltip.js"></script>
-
     <script defer src="src/components/history/history.js"></script>
-
     <script defer src="src/components/editor/editor.js"></script>
     <script defer src="src/components/main/main.js"></script>
     <!-- INTERNAL API END -->
 </head>
 <body>
-
     <!-- FIND/REPLACE TOOLBAR -->
     <div id="findReplaceContainer" class="top-align hidden">
         <form>
@@ -281,28 +255,20 @@
             <label for="isReplaceInput">Replace</label><br>
             <label for="findInput">Find:</label><br />
             <input type="text" id="findInput" name="findInput" spellcheck="false"><br />
-
             <div class="matchOptContainer">
                 <input type="checkbox" id="matchCaseInput" name="matchCaseInput">
                 <label for="matchCaseInput"> Match Case</label>
-
                 <input type="checkbox" id="wholeWordInput" name="wholeWordInput">
                 <label for="wholeWordInput"> Whole Word</label>
-
                 <input type="checkbox" id="useRegexInput" name="useRegexInput">
                 <label for="useRegexInput"> Regular Expression</label><br>
-
             </div>
-
             <label for="replaceInput" id="replaceInputLabel" class="is-replace">Replace:</label><br class="is-replace" />
             <input type="text" id="replaceInput" name="replaceInput" class="is-replace"><br class="is-replace" />
-
             <input type="checkbox" id="wrapFindInput" name="wrapFindInput">
             <label for="wrapFindInput"> Wrap Around</label>
             <input type="checkbox" id="selOnlyFindInput" name="selOnlyFindInput">
             <label for="selOnlyFindInput"> In Selection</label><br>
-
-
             <button id="findReplacePreviousButton" type="button" class="svg-key-arrow-left svg-no-defaults">
             </button>
             <button id="findReplaceNextButton" type="button" class="svg-key-arrow-right svg-no-defaults">
@@ -314,7 +280,6 @@
                 Replace All
             </button>
         </form>
-
         <div class="resizer resizer-b"></div>
     </div>
     <!-- EDITOR TOOLBAR -->
@@ -339,84 +304,57 @@
         <div class="toolbar-separator"></div>
         <!-- FONT FAMILY -->
         <select class="ql-font"></select>
-
         <div class="toolbar-separator"></div>
-
         <!-- CREATE TEMPLATE -->
         <button id="createTemplateToolbarButton"
                 class="svg-key-tag"
                 hover-tooltip="New Template"></button>
         <div class="toolbar-separator"></div>
-
-
         <!-- FORMAT PAINT -->
         <button id="formatPaintToolbarButton" hover-tooltip="Format Paint" class="svg-key-paintbrush"></button>
-
         <div class="toolbar-separator"></div>
-
         <!-- FG/BG COLOR -->
         <button id="fontColorToolbarButton"
                 hover-tooltip="Font Color"></button>
         <button id="fontBackgroundToolbarButton"
                 hover-tooltip="Background Color"></button>
-
         <div class="toolbar-separator"></div>
-
         <!-- BOLD -->
         <button id="boldToolbarButton" class="svg-key-bold svg-no-defaults" svg-classes="no-fill"></button>
-
         <!-- ITALIC-->
         <button id="italicToolbarButton" class="svg-key-italic svg-no-defaults"></button>
-
         <div class="toolbar-separator"></div>
-
-
         <!-- INDENT -->
         <button id="indentMinusOne" class="ql-indent" value="-1"></button>
         <button id="indentPlusOne" class="ql-indent" value="+1"></button>
-
         <div class="toolbar-separator"></div>
-
         <!-- ALIGN -->
         <button id="alignEditorToolbarButton"></button>
-
         <div class="toolbar-separator"></div>
-
         <!-- CREATE TABLE -->
         <span id="createTableToolbarButton" class="ql-Table-Input ql-picker hidden">
             <span id="createTableToolbarButtonLabel" class="ql-picker-label"></span>
             <span id="createTableToolbarButtonOptionsContainer" class="ql-picker-options hidden"></span>
         </span>
-
         <div class="toolbar-separator hidden"></div>
-
         <!-- BLOCK QUOTE-->
         <button class="ql-blockquote hidden"></button>
-
         <!-- CODE BLOCK -->
         <button class="ql-code-block hidden"></button>
-
         <div class="toolbar-separator hidden"></div>
-
         <!-- LIST -->
         <button id="listToolbarPopupButton" class="svg-key-list-bullet"></button>
         <button id="orderedListToolbarButton" class="ql-list hidden" value="ordered"></button>
         <button id="discListToolbarButton" class="ql-list hidden" value="bullet"></button>
         <button id="checkListToolbarButton" class="ql-list hidden" value="check"></button>
-
         <div class="toolbar-separator"></div>
-
         <!-- SUB/SUPER SCRIPT -->
         <button class="ql-script hidden" value="sub"></button>
         <button class="ql-script hidden" value="super"></button>
-
         <div class="toolbar-separator hidden"></div>
-
         <!-- FLOW DIRECTION -->
         <button class="ql-direction hidden" value="rtl"></button>
-
         <div class="toolbar-separator"></div>
-
         <!-- LINK -->
         <button id="linkEditorToolbarButton"
                 hover-tooltip="Insert Link"></button>
@@ -425,21 +363,17 @@
         <button class="ql-video"
                 hover-tooltip="Insert Video"></button>
         <!--<button class="ql-formula"></button>-->
-
         <div class="toolbar-separator"></div>
         <!-- FIND/REPLACE -->
         <button id="findReplaceToolbarButton" class="right-align svg-key-findreplace svg-no-defaults" svg-classes="svg-icon ql-fill"></button>
     </div>
-
     <!-- EDITOR CONTAINER -->
     <div id='editor' draggable="true" class="no-select"></div>
-
     <!-- TOOLTIP TOOLBAR -->
     <div id="tooltipToolbar"
          class="common-toolbar bottom-align tooltip-overlay hidden compact-line-height">
         TOOLTIPZ ZONE
     </div>
-
     <!-- EDIT TEMPLATE TOOLBAR -->
     <div id="editTemplateToolbar"
          class="common-toolbar bottom-align hidden">
@@ -458,8 +392,6 @@
             <span>Delete All</span>
         </button>
     </div>
-
-
     <!-- TABLEOPS TOOLBAR -->
     <div id="tableOpsToolbar"
          class="common-toolbar bottom-align hidden">
@@ -467,39 +399,31 @@
         <div id="tableOpsOuterContainer"></div>
         <button id="tableOpsNavRight" class="opsNav"><span>Right</span></button>
     </div>
-
     <!-- PASTE TOOLBAR -->
     <div id="pasteToolbar"
          class="common-toolbar bottom-align paste-toolbar hidden">
-
         <!-- SAVE SHARED TEMPLATE BUTTON -->
         <button id="pasteSaveFocusTemplateButton"
                 class="hidden"
                 tabindex="5">
             <i></i>
         </button>
-
         <!-- SELECTOR -->
         <div id="pasteTemplateToolbarMenuSelectorDiv"
              class="paste-template-item">
             <div id="selectedPasteTemplateOptionDiv"></div>
             <div id="pasteTemplateToolbarMenuSelectorArrowDiv"></div>
         </div>
-
         <!-- CONTACT TEMPLATE -->
-
         <div id="pasteTemplateToolbarContactFieldSelectorContainer" class="paste-template-item hidden">
             <select id="contactFieldSelector" class="template-data-element"></select>
             <select id="contactSelector" class="template-data-element"></select>
         </div>
-
         <!-- DATETIME TEMPLATE -->
-
         <div id="pasteTemplateToolbarDateTimeFormatSelectorContainer" class="paste-template-item hidden">
             <select id="datetimeSelector" class="template-data-element"></select>
             <input id="datetimeCustomInput" class="template-data-element" />
         </div>
-
         <!-- DYNAMIC/STATIC TEMPLATE -->
         <div id="pasteTemplateToolbarDasContainer" class="paste-template-item hidden">
             <textarea id="templatePasteValueTextArea"
@@ -510,10 +434,8 @@
                       class="template-data-element"
                       placeholder="Enter paste text..."></textarea>
         </div>
-
         <!-- PASTE VALUE HINT INFO -->
         <div id="templatePasteValueHintOuterContainer" class="paste-template-item tooltip-hint-container invisible" toolbar-tooltip=""></div>
-
         <!-- CLEAR BUTTON -->
         <button id="clearAllTemplateTextButton"
                 class="paste-template-item svg-key-delete"
@@ -542,40 +464,29 @@
                 hover-tooltip="Edit Details"
                 tabindex="5">
         </button>
-
         <!-- PASTE BUTTON/MODE CONTAINER -->
         <div id="pasteButtonAndModeContainer"
              class="right-align pasteButtonSpit">
-
             <!-- APPEND STATE CONTAINER -->
             <div id="pasteAppendToolbarContainer" class="hover-border append-toolbar-container">
                 <!-- APPEND BEGIN BUTTON -->
                 <button id="pasteAppendBeginButton" class="svg-key-stack append unexpanded-only" hover-tooltip="Append"></button>
                 <div class="toolbar-separator append unexpanded-only"></div>
                 <!-- APPEND INSERT BUTTON -->
-
                 <button id="pasteAppendToggleInlineButton" class="svg-key-paragraph text-only" hover-tooltip="Inline"></button>
                 <div class="toolbar-separator text-only"></div>
-
                 <!-- APPEND MANUAL BUTTON -->
-
                 <button id="pasteAppendToggleManualButton" class="svg-key-scope" hover-tooltip="Manual"></button>
                 <div class="toolbar-separator"></div>
-
                 <!-- APPEND BEFORE BUTTON -->
-
                 <button id="pasteAppendToggleBeforeButton" class="svg-key-triangle-down" hover-tooltip="Before"></button>
                 <div class="toolbar-separator"></div>
-
                 <!-- APPEND PAUSED BUTTON -->
-
                 <button id="pasteAppendPauseAppendButton" class="svg-key-pause" hover-tooltip="Pause"></button>
                 <div class="toolbar-separator"></div>
-
                 <!-- APPEND END BUTTON -->
                 <button id="pasteAppendStopAppendButton" hover-tooltip="Finish append" class="svg-key-stop"></button>
             </div>
-
             <!-- PASTE BUTTON -->
             <button id="pasteButton"
                     class="hover-border"
@@ -583,7 +494,6 @@
                     hover-tooltip="Paste">
                 <i></i><span ui-content-key="EditorPasteButtonLabel"></span>
             </button>
-
             <!-- PASTE BUTTON POPUP -->
             <button id="pasteButtonPopupExpander"
                     class="hover-border"
@@ -593,15 +503,11 @@
             </button>
         </div>
     </div>
-
-
     <!-- POP UPS -->
-
     <div id="pasteOptionsDiv"
          class="paste-template-item"></div>
     <div id="colorPaletteContainer"
          class="ql-toolbar-template-context-menu"></div>
-
     <!-- OVERLAYS -->
     <canvas id="overlayCanvas" class="no-hit-test"></canvas>
     <div id="annotationRoiOverlay" class="no-hit-test"></div>
@@ -611,16 +517,12 @@
     <div id="tooltipDefs" class="hidden no-hit-test">
         <!-- DYNAMIC HINT -->
         <div class="template-dynamic tooltiptext" ui-content-key="EditorTemplateDynamicHint"></div>
-
         <!-- CONTACT HINT 1 -->
         <div class="template-contact tooltiptext" ui-content-key="EditorTemplateContactHint"></div>
-
         <!-- STATIC -->
         <div class="template-static tooltiptext" ui-content-key="EditorTemplateStaticHint"></div>
-
         <!-- DATE TIME HINT -->
         <div class="template-datetime tooltiptext" ui-content-key="EditorTemplateDateTimeHint"></div>
-
         <!-- DATE TIME CUSTOM HINT -->
         <div class="template-datetime-custom tooltiptext left-text-align" ui-content-key="EditorTemplateDateTimeCustomHint"></div>
     </div>

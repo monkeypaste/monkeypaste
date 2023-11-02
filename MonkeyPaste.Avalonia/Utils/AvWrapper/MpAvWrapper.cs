@@ -24,6 +24,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Startup Set Services 
+        public MpIUiStringToEnumConverter UiStrEnumConverter { get; set; }
         public MpIDebugBreakHelper DebugBreakHelper { get; set; }
         public MpIDefaultDataCreator DefaultDataCreator { get; set; }
         public MpIUserAgentProvider UserAgentProvider { get; set; }
@@ -172,6 +173,8 @@ namespace MonkeyPaste.Avalonia {
             PlatformMessageBox = new MpAvMessageBox();
             DataObjectTools = MpAvClipboardHandlerCollectionViewModel.Instance;
             ExternalPasteHandler = MpAvExternalPasteHandler.Instance;
+
+            UiStrEnumConverter = new MpUiStringToEnumConverter();
 
             ClipboardMonitor = new MpAvClipboardWatcher();
             DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;

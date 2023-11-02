@@ -225,7 +225,7 @@ namespace MonkeyPaste.Avalonia {
             Body = string.IsNullOrWhiteSpace(item.Label) ? Body : item.Label;
 
             int dotCount = index % 4;
-            Title = "LOADING";
+            Title = UiStrings.NtfLoaderTitle;
             for (int i = 0; i < dotCount; i++) {
                 Title += ".";
             }

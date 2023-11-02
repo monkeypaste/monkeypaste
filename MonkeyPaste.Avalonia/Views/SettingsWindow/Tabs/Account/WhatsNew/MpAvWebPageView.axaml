@@ -1,27 +1,25 @@
-<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
-                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                       mc:Ignorable="d"
-                       d:DesignWidth="800"
-                       d:DesignHeight="750"
-                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                       xmlns:local="using:MonkeyPaste.Avalonia"
-                       xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
-                       xmlns:pcl="using:MonkeyPaste"
-                       x:TypeArguments="local:MpAvIWebPageViewModel"
-                       x:DataType="local:MpAvIWebPageViewModel"
-                       x:CompileBindings="True"
-                       x:Name="WebPageView"
-                       x:Class="MonkeyPaste.Avalonia.MpAvWebPageView">
-    <local:MpAvUserControl.Styles>
-        <Style Selector="Grid#OuterContainer.offline local|MpAvWebView">
-            <Setter Property="Opacity"
-                    Value="0" />
-        </Style>
-        <Style Selector="Grid#OuterContainer Grid#OfflineContainer">
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="750"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="using:MonkeyPaste.Avalonia"
+             xmlns:cefnet="clr-namespace:CefNet.Avalonia;assembly=CefNet.Avalonia"
+             xmlns:pcl="using:MonkeyPaste"
+             x:Name="WebPageView"
+             x:Class="MonkeyPaste.Avalonia.MpAvWebPageView">
+    <UserControl.Styles>
+        <Style Selector="Grid#OfflineContainer, Grid#BusyContainer">
             <Setter Property="IsVisible"
                     Value="False" />
+        </Style>
+
+        <Style Selector="Grid#OuterContainer.offline local|MpAvWebView, Grid#OuterContainer.busy local|MpAvWebView">
+            <Setter Property="Opacity"
+                    Value="0" />
         </Style>
         <Style Selector="Grid#OuterContainer.offline Grid#OfflineContainer">
             <Setter Property="IsVisible"
@@ -31,28 +29,34 @@
             <Setter Property="IsVisible"
                     Value="False" />
         </Style>
-    </local:MpAvUserControl.Styles>
+        <Style Selector="Grid#OuterContainer.busy Grid#BusyContainer">
+            <Setter Property="IsVisible"
+                    Value="True" />
+        </Style>
+    </UserControl.Styles>
     <Grid x:Name="OuterContainer"
-          Classes.busy="{Binding IsBusy}"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Classes.busy="{Binding IsNavigating, ElementName=WebView}"
           Classes.offline="{Binding LoadErrorInfo, ElementName=WebView, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}">
         <local:MpAvWebView x:Name="WebView"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            IsNavigating="{Binding IsBusy, Mode=TwoWay}"
-                           Address="{Binding CurrentUrl, Mode=TwoWay}" />
+                           Address="{Binding Address, ElementName=WebPageView}" />
         <!--  OFFLINE OVERLAY  -->
         <Grid x:Name="OfflineContainer"
               RowDefinitions="Auto,*"
               HorizontalAlignment="Center"
               VerticalAlignment="Center">
+            <!--  OFFLINE LABEL  -->
             <TextBlock Text="{x:Static local:UiStrings.CommonConnectionFailedCaption}"
                        Classes="emptyOverlayText" />
-            <Button Grid.Row="1"
+            <!--  RETRY BUTTON  -->
+            <Button x:Name="RetryButton"
+                    Grid.Row="1"
                     Classes="defaultButton textOnlyButton"
-                    HorizontalAlignment="Center"
-                    IsVisible="{Binding !IsBusy}"
-                    Command="{Binding ReloadCommand}"
-                    CommandParameter="{Binding ReloadCommandParameter}">
+                    HorizontalAlignment="Center">
                 <Button.Resources>
                     <Thickness x:Key="ButtonPadding">10,3,10,3</Thickness>
                 </Button.Resources>
@@ -63,7 +67,6 @@
         <!--  BUSY OVERLAY  -->
         <Grid x:Name="BusyContainer"
               RowDefinitions="Auto,*"
-              IsVisible="{Binding IsBusy}"
               HorizontalAlignment="Center"
               VerticalAlignment="Center">
             <TextBlock Text="{x:Static local:UiStrings.CommonBusyLabel}"
@@ -71,10 +74,9 @@
             <local:MpAvBusySpinnerView Grid.Row="1"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       IsVisible="{Binding IsBusy}"
                                        Width="70"
                                        Height="70" />
         </Grid>
 
     </Grid>
-</local:MpAvUserControl>
+</UserControl>

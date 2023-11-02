@@ -1,11 +1,11 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Input;
 using WindowStartupLocation = Avalonia.Controls.WindowStartupLocation;
 
 namespace MonkeyPaste.Avalonia {
@@ -18,14 +18,9 @@ namespace MonkeyPaste.Avalonia {
         Filters,
         Trash
     }
-    public interface MpAvIWebPageViewModel : MpIViewModel, MpIPassiveAsyncObject {
-        string CurrentUrl { get; }
-        ICommand ReloadCommand { get; }
-        object ReloadCommandParameter { get; }
-    }
+
     public class MpAvHelpViewModel :
         MpAvViewModelBase,
-        MpAvIWebPageViewModel,
         MpICloseWindowViewModel,
         MpIActiveWindowViewModel,
         MpIWantsTopmostWindowViewModel {
@@ -40,14 +35,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-        #region MpAvIWebPageViewModel Implementatiosn
-        ICommand MpAvIWebPageViewModel.ReloadCommand =>
-            NavigateToHelpLinkCommand;
-        object MpAvIWebPageViewModel.ReloadCommandParameter =>
-            LastLinkType;
-
-        #endregion
 
         #region MpIWindowViewModel Implementatiosn
         public MpWindowType WindowType =>
@@ -77,9 +64,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsHelpSettingsTabVisible =>
             false;
 
-        public string CurrentUrl { get; set; }
+        public string CurrentUrl =>
+            MpAvDocusaurusHelpers.GetCustomUrl(OnlineHelpUriLookup[LastLinkType], true, MpAvPrefViewModel.Instance.IsThemeDark);
 
-        public MpHelpLinkType LastLinkType { get; private set; }
+        public MpHelpLinkType LastLinkType { get; private set; } = MpHelpLinkType.None;
 
         #endregion
 
@@ -102,7 +90,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvHelpViewModel() : base(null) {
             PropertyChanged += MpAvHelpViewModel_PropertyChanged;
-            CurrentUrl = GetHelpUrl(MpHelpLinkType.None);
         }
 
         #endregion
@@ -116,6 +103,13 @@ namespace MonkeyPaste.Avalonia {
             //switch (e.PropertyName) {
             //}
         }
+        private void ReceivedGlobalMessage(MpMessageType msg) {
+            switch (msg) {
+                case MpMessageType.ThemeChanged:
+                    OnPropertyChanged(nameof(CurrentUrl));
+                    break;
+            }
+        }
 
         private MpAvWindow CreateHelpWindow() {
             var w = new MpAvWindow() {
@@ -127,28 +121,22 @@ namespace MonkeyPaste.Avalonia {
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("QuestionMarkImage", typeof(WindowIcon), null, null) as WindowIcon,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 DataContext = this,
-                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeWhiteColor.ToString()),
+                Background = Mp.Services.PlatformResource.GetResource<IBrush>(MpThemeResourceKey.ThemeInteractiveColor.ToString()),
                 Content = new MpAvWebPageView()
             };
+            if (w.Content is MpAvWebPageView wpv) {
+                wpv.Bind(
+                        MpAvWebPageView.AddressProperty,
+                        new Binding() {
+                            Source = this,
+                            Path = nameof(CurrentUrl)
+                        });
+            }
+
             w.Classes.Add("fadeIn");
             return w;
         }
 
-        private void InitHelpStyle() {
-            if (MpAvWindowManager.LocateWindow(this) is not MpAvWindow w ||
-                w.GetVisualDescendant<MpAvWebView>() is not MpAvWebView wv) {
-                return;
-            }
-            MpAvDocusaurusHelpers.LoadMainOnlyAsync(wv).FireAndForgetSafeAsync();
-        }
-
-        private string GetHelpUrl(MpHelpLinkType hlt) {
-            if (!OnlineHelpUriLookup.ContainsKey(hlt)) {
-                hlt = MpHelpLinkType.None;
-            }
-            string url = OnlineHelpUriLookup[hlt];
-            return url + MpAvDocusaurusHelpers.GetThemeUrlAttrb(MpAvPrefViewModel.Instance.IsThemeDark);
-        }
         #endregion
 
         #region Commands
@@ -176,12 +164,6 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 MpConsole.WriteLine($"Help navigating to type '{hlt}' at url '{OnlineHelpUriLookup[hlt]}'");
-
-                //ensure reload
-                CurrentUrl = MpUrlHelpers.BLANK_URL;
-                CurrentUrl = GetHelpUrl(hlt);
-
-                InitHelpStyle();
             });
 
         public MpIAsyncCommand NavigateToContextualHelpCommand => new MpAsyncCommand(

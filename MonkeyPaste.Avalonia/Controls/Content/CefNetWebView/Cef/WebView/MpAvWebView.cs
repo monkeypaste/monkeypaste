@@ -3,6 +3,9 @@ using System;
 using PropertyChanged;
 using MonkeyPaste.Common;
 using Avalonia.Data;
+using Avalonia.Input;
+using MonkeyPaste.Common.Avalonia;
+using Avalonia.Controls;
 
 #if DESKTOP
 
@@ -74,7 +77,9 @@ namespace MonkeyPaste.Avalonia {
 
 
         private void OnAddressChanged() {
-            if (!Uri.IsWellFormedUriString(Address, UriKind.Absolute) || !_isBrowserCreated) {
+            if (!Uri.IsWellFormedUriString(Address, UriKind.Absolute) ||
+                !_isBrowserCreated ||
+                MpUrlHelpers.IsBlankUrl(Address)) {
                 return;
             }
             Navigate(Address);
@@ -150,6 +155,31 @@ namespace MonkeyPaste.Avalonia {
             base.OnBrowserCreated(e);
             _isBrowserCreated = true;
             OnAddressChanged();
+        }
+
+        protected override void OnPointerPressed(PointerPressedEventArgs e) {
+            base.OnPointerPressed(e);
+            if (e.IsMiddleDown(this)) {
+                this.ShowDevTools();
+            }
+        }
+
+        protected override void OnLoaded(global::Avalonia.Interactivity.RoutedEventArgs e) {
+            base.OnLoaded(e);
+            if (this is MpAvContentWebView) {
+                return;
+            }
+            if (TopLevel.GetTopLevel(this) is MpAvWindow w) {
+                w.Closed += W_Closed;
+            }
+        }
+
+        private void W_Closed(object sender, EventArgs e) {
+            if (sender is not Window w) {
+                return;
+            }
+            w.Closed -= W_Closed;
+            this.Dispose(false);
         }
 
 #endif

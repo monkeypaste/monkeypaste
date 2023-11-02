@@ -1,7 +1,6 @@
 ---
 sidebar_position: 4
 ---
-c:\users\tkefauver\appdata\local\temp\Text119.txt
 # Shortcuts
 
 
@@ -11,9 +10,7 @@ All available shortcuts can be found in the *Settings->Shortcuts* menu.
 ## Application Shortcuts
 
 ## Route Types
- if (e.Source is Border) {
-     BindingContext.IsDropItemHovering = false;
- }
+
 |Type|Description|Global|
 | --- | --- | --- |
 | Internal|Is only triggered when app is the active application |  ❌|

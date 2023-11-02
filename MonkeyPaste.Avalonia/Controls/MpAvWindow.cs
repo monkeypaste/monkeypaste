@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Diagnostics;
+using Avalonia.Threading;
 using PropertyChanged;
 using System;
 using System.Threading.Tasks;
@@ -25,7 +26,6 @@ namespace MonkeyPaste.Avalonia {
             (_defaultDevToolOptions =
                 new DevToolsOptions() {
                     ShowAsChildWindow = false,
-
                     //StartupScreenIndex = 0
                 });
 
@@ -163,10 +163,35 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
+        protected override void OnClosing(WindowClosingEventArgs e) {
+            base.OnClosing(e);
+            if (e.Cancel || !this.Classes.Contains("fadeOut")) {
+                return;
+            }
+            e.Cancel = !this.Classes.Contains("closing");
+            if (!e.Cancel) {
+                // fade out complete
+                return;
+            }
+            this.Classes.Add("closing");
+            TimeSpan fadeOutDur = Mp.Services.PlatformResource.GetResource<TimeSpan>("FadeOutDur");
+            Dispatcher.UIThread.Post(async () => {
+                await Task.Delay(fadeOutDur.Milliseconds);
+                this.Close();
+                this.Classes.Remove("closing");
+            });
+        }
         #endregion
 
         #region Private Methods
         private void Init() {
+            this.GetObservable(Control.IsVisibleProperty).Subscribe(value => {
+                if (IsVisible) {
+
+                } else {
+
+                }
+            });
 #if DEBUG
             this.AttachDevTools(DefaultDevToolOptions);
 #endif

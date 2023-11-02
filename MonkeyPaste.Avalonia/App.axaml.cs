@@ -115,6 +115,8 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
         public override async void OnFrameworkInitializationCompleted() {
+            MpAvCultureManager.SetCulture("ja-JP");
+
             DateTime startup_datetime = DateTime.Now;
             MpAvLogSink.Init();
 
@@ -200,7 +202,7 @@ namespace MonkeyPaste.Avalonia {
         }
     }
 
-    public class MpAvLogSink : ILogSink {
+    internal class MpAvLogSink : ILogSink {
         private ILogSink _defSink;
 
         private (LogEventLevel, string)[] _disabledLogs = {

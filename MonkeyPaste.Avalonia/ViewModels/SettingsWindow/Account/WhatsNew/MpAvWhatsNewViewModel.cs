@@ -1,9 +1,5 @@
-﻿using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using System.Windows.Input;
-
-namespace MonkeyPaste.Avalonia {
-    public class MpAvWhatsNewViewModel : MpAvViewModelBase, MpAvIWebPageViewModel {
+﻿namespace MonkeyPaste.Avalonia {
+    public class MpAvWhatsNewViewModel : MpAvViewModelBase {
         #region Private Variables
         #endregion
 
@@ -21,28 +17,8 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpAvIWebPageViewModel Implementatiosn
-        private string _themedWhatsNewUrl;
-        private string _currentUrl;
-        public string CurrentUrl {
-            get {
-                if (_themedWhatsNewUrl == null) {
-                    _themedWhatsNewUrl = WHATS_NEW_URL + MpAvDocusaurusHelpers.GetThemeUrlAttrb(MpAvPrefViewModel.Instance.IsThemeDark);
-                    _currentUrl = _themedWhatsNewUrl;
-                }
-                return _currentUrl;
-            }
-        }
-        public ICommand ReloadCommand => new MpCommand(
-            () => {
-                // ensure reload
-                _currentUrl = MpUrlHelpers.BLANK_URL;
-                OnPropertyChanged(nameof(CurrentUrl));
-                _currentUrl = _themedWhatsNewUrl;
-                OnPropertyChanged(nameof(CurrentUrl));
-            });
-
-        public object ReloadCommandParameter =>
-            null;
+        public string CurrentUrl =>
+            MpAvDocusaurusHelpers.GetCustomUrl(WHATS_NEW_URL, true, MpAvPrefViewModel.Instance.IsThemeDark);
 
         #endregion
         #endregion
@@ -66,18 +42,8 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvWhatsNewViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(IsBusy):
-                    if (IsBusy) {
-                        if (MpAvWindowManager.LocateWindow(MpAvSettingsViewModel.Instance) is not MpAvWindow w ||
-                                w.GetVisualDescendant<MpAvAccountView>() is not MpAvAccountView av ||
-                                av.GetVisualDescendant<MpAvWebView>() is not MpAvWebView wv) {
-                            return;
-                        }
-                        MpAvDocusaurusHelpers.LoadMainOnlyAsync(wv).FireAndForgetSafeAsync();
-                    }
-                    break;
-            }
+            //switch (e.PropertyName) {
+            //}
         }
         #endregion
 

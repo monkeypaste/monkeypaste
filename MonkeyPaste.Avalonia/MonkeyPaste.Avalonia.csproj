@@ -219,6 +219,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Fade.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Pulse.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Animations\Shake.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Animations\SlideWindow.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\AutoCompleteBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Button.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ButtonBase.axaml" />
@@ -260,7 +261,6 @@
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml" />
     <AvaloniaXaml Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml" />
-    <AvaloniaXaml Remove="Views\SettingsWindow\Tabs\Help\MpAvHelpView.axaml" />
     <None Remove="Assets\Cursors\copy.png" />
     <None Remove="Assets\Cursors\hand_closed.png" />
     <None Remove="Assets\Cursors\hand_open.png" />
@@ -603,7 +603,6 @@
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
     <Compile Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml.cs" />
-    <Compile Remove="Views\SettingsWindow\Tabs\Help\MpAvHelpView.axaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -1387,6 +1386,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Accents\Gradients.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Animations\SlideWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Pulse.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Nav\TabNav.axaml" />
@@ -1493,7 +1493,6 @@
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\Reusable\P\" />
     <Folder Include="Views\Reusable\TextBoxes\" />
-    <Folder Include="Views\SettingsWindow\Tabs\Help\" />
   </ItemGroup>
   
   
@@ -1503,12 +1502,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Attributions.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\UiStrings\EnumUiStrings.ja-JP.Designer.cs">
+      <DependentUpon>EnumUiStrings.ja-JP.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\UiStrings\EnumUiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>EnumUiStrings.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\Listings\ListingStrings.Designer.cs">
+    <Compile Update="Resources\UiStrings\ListingStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ListingStrings.resx</DependentUpon>
@@ -1517,6 +1521,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>test.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\UiStrings\UiStrings.ja-JP.Designer.cs">
+      <DependentUpon>UiStrings.ja-JP.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Resources\UiStrings\UiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -1847,19 +1856,31 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Attributions.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.ja-JP.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
+      <LastGenOutput>EnumUiStrings.ja-JP.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumUiStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\Listings\ListingStrings.resx">
+    <EmbeddedResource Update="Resources\UiStrings\ListingStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ListingStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\UiStrings\test.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>test.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\UiStrings\UiStrings.ja-JP.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
+      <LastGenOutput>UiStrings.ja-JP.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\UiStrings\UiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

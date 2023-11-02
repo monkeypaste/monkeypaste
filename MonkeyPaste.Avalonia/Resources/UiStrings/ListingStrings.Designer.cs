@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MonkeyPaste.Avalonia.Resources.Listings {
+namespace MonkeyPaste.Avalonia.Resources.UiStrings {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia.Resources.Listings {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.Listings.ListingStrings", typeof(ListingStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.UiStrings.ListingStrings", typeof(ListingStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -96,6 +96,15 @@ namespace MonkeyPaste.Avalonia.Resources.Listings {
         internal static string StandardYearlyTitle {
             get {
                 return ResourceManager.GetString("StandardYearlyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard manager and more.
+        /// </summary>
+        internal static string StoreDescription {
+            get {
+                return ResourceManager.GetString("StoreDescription", resourceCulture);
             }
         }
         
