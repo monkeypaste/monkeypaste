@@ -165,18 +165,14 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
         protected override void OnClosing(WindowClosingEventArgs e) {
             base.OnClosing(e);
-            if (e.Cancel || !this.Classes.Contains("fadeOut")) {
+            if (e.Cancel || !this.Classes.Contains("fadeOut") || this.Classes.Contains("closing")) {
                 return;
             }
-            e.Cancel = !this.Classes.Contains("closing");
-            if (!e.Cancel) {
-                // fade out complete
-                return;
-            }
+            e.Cancel = true;
             this.Classes.Add("closing");
             TimeSpan fadeOutDur = Mp.Services.PlatformResource.GetResource<TimeSpan>("FadeOutDur");
             Dispatcher.UIThread.Post(async () => {
-                await Task.Delay(fadeOutDur.Milliseconds);
+                await Task.Delay((int)fadeOutDur.TotalMilliseconds);
                 this.Close();
                 this.Classes.Remove("closing");
             });

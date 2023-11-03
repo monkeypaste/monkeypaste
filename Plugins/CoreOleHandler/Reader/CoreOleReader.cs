@@ -70,7 +70,7 @@ namespace CoreOleHandler {
                     foreach (var param in request.items) {
                         try {
 
-                            data = CoreParamProcessor.ProcessParam(param, read_format, data, out var ex, out var param_nfl);
+                            data = CoreParamProcessor.ProcessParam(param, read_format, data, readFormats, out var ex, out var param_nfl);
 
                             if (ex != null) {
                                 exl.Add(ex);

@@ -13,7 +13,6 @@
         x:DataType="local:MpAvMessageNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvMessageNotificationWindow"
-        
         Classes="notificationWindow msg slideIn resizable fadeIn fadeOut">
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -22,17 +21,20 @@
             Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
             local:MpAvIsHoveringExtension.IsEnabled="True"
             local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
-        <Grid ColumnDefinitions="0.2*,0.8*,Auto">
+        <Grid ColumnDefinitions="Auto,0.8*,Auto">
             <!--  ICON  -->
             <Image Grid.Column="0"
                    Classes="squareByWidth"
-                   Margin="3"
+                   Margin="3,3,10,3"
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
+                   Width="64"
+                   Height="64"
                    IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                    Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}"
                    Stretch="Fill" />
             <StackPanel Grid.Column="1"
+                        Margin="0,3,0,20"
                         Orientation="Vertical"
                         Spacing="3">
 
@@ -62,18 +64,18 @@
 
                 <!--  BODY  -->
 
-                <TextBlock HorizontalAlignment="Stretch"
-                           VerticalAlignment="Center"
-                           MinHeight="50"
-                           TextWrapping="WrapWithOverflow"
-                           FontSize="14"
-                           MaxHeight="250"
-                           ScrollViewer.VerticalScrollBarVisibility="Auto"
-                           FontWeight="SemiBold"
-                           Background="Transparent"
-                           Focusable="True"
-                           Foreground="{DynamicResource ThemeWhiteColor}"
-                           Text="{Binding Body}" />
+                <SelectableTextBlock HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Center"
+                                     MinHeight="75"
+                                     TextWrapping="WrapWithOverflow"
+                                     FontSize="14"
+                                     MaxHeight="200"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     FontWeight="SemiBold"
+                                     Background="Transparent"
+                                     Focusable="True"
+                                     Foreground="{DynamicResource ThemeWhiteColor}"
+                                     Text="{Binding Body}" />
             </StackPanel>
 
             <!--  OPTIONS BUTTON  -->

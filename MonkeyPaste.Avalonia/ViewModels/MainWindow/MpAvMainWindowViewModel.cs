@@ -1266,7 +1266,7 @@ namespace MonkeyPaste.Avalonia {
                  if (will_open) {
                      ShowMainWindowCommand.Execute(null);
                  } else {
-                     HideMainWindowCommand.Execute(null);
+                     ForceMinimizeMainWindowCommand.Execute(null);
                  }
              }, () => {
                  return !IsMainWindowLoading;

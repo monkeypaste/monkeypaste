@@ -540,17 +540,20 @@ namespace MonkeyPaste.Avalonia {
                     .Select(x => x.Parent.ClipboardPluginComponent)
                     .Distinct();
 
+            var ido_formats = ido.GetAllDataFormats().ToList();
             if (ido != null) {
                 // pre-pass data object and remove disabled formats
                 var formatsToRemove =
-                    ido.GetAllDataFormats()
+                    ido_formats
                     .Where(x => !MpPortableDataFormats.InternalFormats.Contains(x))
                     .Where(x => preset_vms.All(y => y.FormatName != x))
-                    .Select(x => x);
+                    .Select(x => x)
+                    .ToList();
 
                 if (formatsToRemove.Any()) {
                     MpConsole.WriteLine($"Unrecognized clipboard formats found writing to clipboard: {string.Join(",", formatsToRemove)}");
                     formatsToRemove.ForEach(x => ido.TryRemove(x));
+                    formatsToRemove.ForEach(x => ido_formats.Remove(x));
                 }
             }
             // instantiate new ido for output
@@ -566,11 +569,12 @@ namespace MonkeyPaste.Avalonia {
                     isDnd = isDnd,
                     ignoreParams = ignorePlugins,
                     formats =
-                        preset_vms
-                            .Where(x => x.Parent.ClipboardPluginComponent == component)
-                            .Select(x => x.FormatName)
-                            .Distinct()
-                            .ToList(),
+                    preset_vms
+                        .Where(x => x.Parent.ClipboardPluginComponent == component)
+                        .Select(x => x.FormatName)
+                        .Union(ido_formats)
+                        .Distinct()
+                        .ToList(),
                     items =
                         preset_vms
                             .Where(x => x.Parent.ClipboardPluginComponent == component)

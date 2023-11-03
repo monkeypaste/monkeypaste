@@ -217,6 +217,7 @@ namespace MonkeyPaste.Avalonia {
                         DialogResult = MpNotificationDialogResultType.Dismiss;
                     }
                 } else if (MaxShowTimeMs > 0) {
+                    await WaitForFullVisibilityAsync();
                     if (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(MaxShowTimeMs)) {
                         // max show not reache yet
                         while (IsFadeDelayFrozen) {

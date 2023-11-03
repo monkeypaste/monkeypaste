@@ -1,4 +1,5 @@
-﻿function getEscapedStr(str) {
+﻿
+function getEscapedStr(str) {
     let esc_str = JSON.stringify(str);
     return substringByLength(esc_str, 1, esc_str.length - 2);
 }
@@ -557,28 +558,6 @@ function hasJsonStructure(str) {
 function isTextElement(elm) {
     return elm.nodeType === 3;
 }
-//function htmlCollectionMove(td, fromIndex, toIndex) {
-//    var before = td.children[curr_index + direction];
-//    var child = td.children[curr_index];
-
-//    td.removeChild(child);
-//    td.insertBefore(child, before); //attempt to insert it   
-//}
-const HtmlEntitiesLookup = [
-    [`&`, `&amp;`],
-    [` `, `&nbsp;`],
-    [`\"`, `&quot;`],
-    [`\'`, `&apos;`],
-    [`>`, `&gt;`],
-    [`¢`, `&cent;`],
-    [`£`, `&pound;`],
-    [`¥`, `&yen;`],
-    [`€`, `&euro;`],
-    [`©`, `&copy;`],
-    [`®`, `&reg;`],
-    [`™`, `&trade;`],
-    [`<`, `&lt;`]
-];
 
 function getFirstDifferenceIdx(a, b) {
     if (!a || !b) {
@@ -620,8 +599,8 @@ function isStringContainSpecialHtmlEntities(str) {
     if (isNullOrEmpty(str)) {
         return false;
     }
-    //return Object.entries(HtmlEntitiesLookup).find(([k, v]) => str.includes(k)) != null;
-    return HtmlEntitiesLookup.find(x => str.includes(x[0])) != null;
+    //return Object.entries(globals.HtmlEntitiesLookup).find(([k, v]) => str.includes(k)) != null;
+    return globals.HtmlEntitiesLookup.find(x => str.includes(x[0])) != null;
 }
 
 function encodeHtmlSpecialEntitiesFromHtmlDoc(htmlStr) {
@@ -640,13 +619,13 @@ function encodeHtmlSpecialEntitiesFromPlainText(str) {
     if (!isString(str) || isNullOrEmpty(str)) {
         return '';
     }
-    for (var i = 0; i < HtmlEntitiesLookup.length; i++) {
+    for (var i = 0; i < globals.HtmlEntitiesLookup.length; i++) {
         if (i == 0) {
             // special case for & to avoid double encoding
-            str = str.replaceAll(/&(?!(#[0-9]{2,4}|[A-z]{2,6});)/g, HtmlEntitiesLookup[i][1]);
+            str = str.replaceAll(/&(?!(#[0-9]{2,4}|[A-z]{2,6});)/g, globals.HtmlEntitiesLookup[i][1]);
             continue;
         }
-        str = str.replaceAll(HtmlEntitiesLookup[i][0], HtmlEntitiesLookup[i][1]);
+        str = str.replaceAll(globals.HtmlEntitiesLookup[i][0], globals.HtmlEntitiesLookup[i][1]);
     }
     return str;
 }
@@ -659,8 +638,8 @@ function decodeHtmlSpecialEntities(str) {
     if (isNullOrEmpty(str)) {
         return '';
     }
-    for (var i = 0; i < HtmlEntitiesLookup.length; i++) {
-        str = str.replaceAll(HtmlEntitiesLookup[i][1], HtmlEntitiesLookup[i][0]);
+    for (var i = 0; i < globals.HtmlEntitiesLookup.length; i++) {
+        str = str.replaceAll(globals.HtmlEntitiesLookup[i][1], globals.HtmlEntitiesLookup[i][0]);
     }
     return str;
 }

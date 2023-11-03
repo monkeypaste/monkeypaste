@@ -14,8 +14,7 @@
         x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
         xmlns:dd="using:My.Namespace"
         d:DataContext="{x:Static dd:DesignData.ExampleViewModel}"
-        
-        Classes="notificationWindow fadeOut loader"
+        Classes="notificationWindow fadeOut loader slideIn"
         Width="350"
         Height="140">
     <Window.Resources>

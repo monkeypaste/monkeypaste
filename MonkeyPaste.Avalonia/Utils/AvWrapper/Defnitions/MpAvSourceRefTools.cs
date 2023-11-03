@@ -270,7 +270,7 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrWhiteSpace(cb_html_or_fragment)) {
                 return null;
             }
-            return MpAvRichHtmlContentConverterResult.ParseHtmlFragmentForSourceUrl(cb_html_or_fragment);
+            return MpRichHtmlContentConverterResult.ParseHtmlFragmentForSourceUrl(cb_html_or_fragment);
         }
 
 

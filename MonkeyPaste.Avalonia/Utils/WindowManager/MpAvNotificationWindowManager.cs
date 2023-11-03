@@ -51,18 +51,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         public void HideNotification(object dc) {
-            if (dc is not MpAvNotificationViewModelBase nvmb) {
+            if (_windows.FirstOrDefault(x => x.DataContext == dc) is not MpAvWindow w) {
                 return;
             }
-            //if (MpAvThemeViewModel.IS_WINDOW_FADE_ENABLED) {
-            //    nvmb.IsClosing = true;
-            //} else 
-            if (_windows.FirstOrDefault(x => x.DataContext == dc) is MpAvWindow w) {
-                w.Close();
-            } else {
-                //MpDebug.Break($"Error cannot find/close ntf window {dc}");
-            }
-
+            w.Close();
         }
 
         #endregion
@@ -83,12 +75,6 @@ namespace MonkeyPaste.Avalonia {
                 return _windows.AggregateOrDefault((a, b) => a.Position.Y < b.Position.Y ? a : b);
             }
         }
-
-        #endregion
-
-        #region Events
-
-        //public event EventHandler<Window> OnNotificationWindowIsVisibleChanged;
 
         #endregion
 
@@ -221,12 +207,6 @@ namespace MonkeyPaste.Avalonia {
                 nw.WindowStartupLocation != WindowStartupLocation.CenterOwner &&
                 nw.WindowStartupLocation != WindowStartupLocation.Manual
                 ) {
-                //MpIPlatformScreenInfo primaryScreen = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x => x.IsPrimary);
-                //if (primaryScreen != null) {
-                //    // since msgs slide out and window positioning is handled after opening (to account for its size)
-                //    // messages need to start off screen or it will blink when first shown
-                //    nw.Position = primaryScreen.Bounds.BottomRight.ToAvPixelPoint(primaryScreen.Scaling);
-                //}
                 nw.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(nw);
             }
             try {
@@ -240,7 +220,7 @@ namespace MonkeyPaste.Avalonia {
                 MpConsole.WriteTraceLine($"Error showing window '{nvmb}', window likely closed. ", ex);
             }
             if (nw is MpAvLoaderNotificationWindow &&
-                        MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext is MpAvWelcomeNotificationViewModel) is MpAvWindow wwv && wwv.DataContext is MpAvWelcomeNotificationViewModel wwvm) {
+                MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext is MpAvWelcomeNotificationViewModel) is MpAvWindow wwv && wwv.DataContext is MpAvWelcomeNotificationViewModel wwvm) {
                 //desktop.MainWindow = nw;
                 // wait for loader to get set to mw before closing welcome
                 wwvm.HideNotification();

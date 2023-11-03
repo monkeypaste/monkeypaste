@@ -5,7 +5,6 @@
     <Styles.Resources>
         <!--<sys:TimeSpan x:Key="FadeDur">0:0:0.4</sys:TimeSpan>
         <sys:TimeSpan x:Key="CloseDur">0:0:1.4</sys:TimeSpan>-->
-        <sys:TimeSpan x:Key="FadeInDelayDur">0:0:0.5</sys:TimeSpan>
         <sys:TimeSpan x:Key="FadeInDur">0:0:1.0</sys:TimeSpan>
         <sys:TimeSpan x:Key="FadeOutDur">0:0:1.0</sys:TimeSpan>
         <sys:TimeSpan x:Key="CloseDur">0:0:0.0</sys:TimeSpan>
@@ -20,7 +19,7 @@
     <Style Selector="Window.fadeIn[IsVisible=true]">
         <Style.Animations>
             <Animation Duration="{StaticResource FadeInDur}"
-                       Delay="{StaticResource FadeInDelayDur}"
+                       Delay="{StaticResource InDelaysDur}"
                        FillMode="Forward">
                 <KeyFrame Cue="0%">
                     <Setter Property="Opacity"
@@ -49,49 +48,4 @@
             </Animation>
         </Style.Animations>
     </Style>
-
-    <!--<Style Selector="Window.fadeIn[IsVisible=true] > :is(Control)">
-        <Setter Property="Opacity"
-                Value="0" />
-        <Style.Animations>
-            <Animation Duration="{StaticResource FadeDur}"
-                       FillMode="Forward">
-                <KeyFrame Cue="0%">
-                    <Setter Property="Opacity"
-                            Value="0" />
-                </KeyFrame>
-                <KeyFrame Cue="100%">
-                    <Setter Property="Opacity"
-                            Value="1" />
-                </KeyFrame>
-            </Animation>
-        </Style.Animations>
-    </Style>-->
-
-    <!--<Style Selector="Window.fadeOut.IsClosing > :is(Control)">
-        <Style.Animations>
-            <Animation Duration="{StaticResource FadeDur}"
-                       FillMode="Forward">
-                <KeyFrame Cue="0%">
-                    <Setter Property="Opacity"
-                            Value="1" />
-                </KeyFrame>
-                <KeyFrame Cue="100%">
-                    <Setter Property="Opacity"
-                            Value="0" />
-                </KeyFrame>
-            </Animation>
-        </Style.Animations>
-    </Style>
-    <Style Selector="Window.notificationWindow.IsClosing">
-        <Style.Animations>
-            <Animation Duration="{StaticResource CloseDur}"
-                       FillMode="Forward">
-                <KeyFrame Cue="100%">
-                    <Setter Property="IsVisible"
-                            Value="False" />
-                </KeyFrame>
-            </Animation>
-        </Style.Animations>
-    </Style>-->
 </Styles>

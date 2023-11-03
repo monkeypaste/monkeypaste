@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
-using DynamicData;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Avalonia.Utils.Extensions;
@@ -32,15 +31,28 @@ namespace MonkeyPaste.Avalonia {
 
         static bool LOAD_W_GLOBAL_HOOKS_TOGGLED_ON =
 #if DEBUG
-            false;
+            true;
 #else
             true;
 #endif
+
         static bool IS_GLOBAL_INPUT_LOGGING_ENABLED { get; set; } = false;
-        static bool IS_GLOBAL_MOUSE_INPUT_ENABLED { get; set; } = true;
-        static bool IS_GLOBAL_KEYBOARD_INPUT_ENABLED { get; set; } = true;
-        static bool IS_GLOBAL_INPUT_ENABLED =>
-            IS_GLOBAL_KEYBOARD_INPUT_ENABLED || IS_GLOBAL_MOUSE_INPUT_ENABLED;
+
+        static bool ALLOW_GLOBAL_MOUSE_INPUT =
+#if DESKTOP 
+            true;
+#else
+            false;
+#endif
+
+        static bool ALLOW_GLOBAL_KEYBOARD_INPUT =
+#if DESKTOP 
+            true;
+#else
+            false;
+#endif
+        static bool ALLOW_GLOBAL_INPUT = ALLOW_GLOBAL_KEYBOARD_INPUT || ALLOW_GLOBAL_MOUSE_INPUT;
+
         public const double MIN_GLOBAL_DRAG_DIST = 20;
 
         #endregion
@@ -93,14 +105,60 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIGlobalInputListener
         public void StartInputListener() {
-            if (IS_GLOBAL_INPUT_ENABLED) {
-                CreateGlobalInputHooks();
+            bool is_initial_start = _hook == null;
+            if (!ALLOW_GLOBAL_INPUT) {
+                return;
+            }
+            if (_hook != null) {
+                if (_hook.IsRunning) {
+                    return;
+                }
+            } else {
+                _hook = new SimpleGlobalHook();
+
+                if (ALLOW_GLOBAL_KEYBOARD_INPUT) {
+                    _hook.KeyPressed += Hook_KeyPressed;
+                    _hook.KeyReleased += Hook_KeyReleased;
+                    //_hook.KeyTyped += Hook_KeyTyped;
+                }
+
+                if (ALLOW_GLOBAL_MOUSE_INPUT) {
+                    _hook.MouseWheel += Hook_MouseWheel;
+                    _hook.MouseMoved += Hook_MouseMoved;
+                    _hook.MousePressed += Hook_MousePressed;
+                    _hook.MouseReleased += Hook_MouseReleased;
+                    _hook.MouseClicked += Hook_MouseClicked;
+                    _hook.MouseDragged += Hook_MouseDragged;
+                }
+                if (IS_GLOBAL_INPUT_LOGGING_ENABLED) {
+                    var logSource = LogSource.RegisterOrGet(minLevel: LogLevel.Debug);
+                    logSource.MessageLogged += OnMessageLogged;
+
+                    void OnMessageLogged(object? sender, LogEventArgs e) =>
+                        MpConsole.WriteLine($" [HOOK LOG] {e.LogEntry.FullText}");
+                }
+
+            }
+            if (LOAD_W_GLOBAL_HOOKS_TOGGLED_ON ||
+                !is_initial_start) {
+                _hook.RunAsync();
             }
         }
         public void StopInputListener() {
-            if (IS_GLOBAL_INPUT_ENABLED) {
-                DisposeGlobalInputHooks();
+            if (_hook == null || !_hook.IsRunning) {
+                return;
             }
+            _hook.MouseWheel -= Hook_MouseWheel;
+            _hook.MouseMoved -= Hook_MouseMoved;
+            _hook.MousePressed -= Hook_MousePressed;
+            _hook.MouseReleased -= Hook_MouseReleased;
+            _hook.MouseClicked -= Hook_MouseClicked;
+            _hook.MouseDragged -= Hook_MouseDragged;
+            _hook.KeyPressed -= Hook_KeyPressed;
+            _hook.KeyReleased -= Hook_KeyReleased;
+
+            _hook.Dispose();
+            _hook = null;
         }
 
         #endregion
@@ -337,7 +395,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region State
 
-        public bool IsGlobalHooksPaused => _hook == null;
+        public bool IsGlobalHooksPaused => _hook == null || !_hook.IsRunning;
 
         // NOTE this needs to be updated when shortcuts changed
         // to avoid re-serializing it for every tile
@@ -469,10 +527,6 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ShortcutGestureLocator = this;
             Mp.Services.KeyDownHelper = this;
 
-            if (!Mp.Services.PlatformInfo.IsDesktop) {
-                IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
-                IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
-            }
             Items.CollectionChanged += Items_CollectionChanged;
             PropertyChanged += MpAvShortcutCollectionViewModel_PropertyChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
@@ -715,9 +769,8 @@ namespace MonkeyPaste.Avalonia {
                     UpdateFilteredItems();
                     break;
                 case MpMessageType.MainWindowLoadComplete:
-                    if (LOAD_W_GLOBAL_HOOKS_TOGGLED_ON) {
-                        StartInputListener();
-                    }
+                    StartInputListener();
+
                     break;
                 case MpMessageType.MainWindowClosed:
                     IsApplicationShortcutsEnabled = false;
@@ -907,61 +960,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Global Input
 
-        private void CreateGlobalInputHooks() {
-            if (_hook == null) {
-                _hook = new SimpleGlobalHook();
-
-                if (IS_GLOBAL_KEYBOARD_INPUT_ENABLED) {
-                    _hook.KeyPressed += Hook_KeyPressed;
-                    _hook.KeyReleased += Hook_KeyReleased;
-                    //_hook.KeyTyped += Hook_KeyTyped;
-                }
-
-                if (IS_GLOBAL_MOUSE_INPUT_ENABLED) {
-                    _hook.MouseWheel += Hook_MouseWheel;
-                    _hook.MouseMoved += Hook_MouseMoved;
-                    _hook.MousePressed += Hook_MousePressed;
-                    _hook.MouseReleased += Hook_MouseReleased;
-                    _hook.MouseClicked += Hook_MouseClicked;
-                    _hook.MouseDragged += Hook_MouseDragged;
-                }
-                if (IS_GLOBAL_INPUT_LOGGING_ENABLED) {
-                    var logSource = LogSource.RegisterOrGet(minLevel: LogLevel.Debug);
-                    logSource.MessageLogged += OnMessageLogged;
-
-                    void OnMessageLogged(object? sender, LogEventArgs e) =>
-                        MpConsole.WriteLine($" [HOOK LOG] {e.LogEntry.FullText}");
-                }
-
-            } else if (_hook.IsRunning) {
-                return;
-            }
-
-            _hook.RunAsync();
-        }
-
-
-        private void DisposeGlobalInputHooks() {
-            if (_hook != null) {
-                _hook.MouseWheel -= Hook_MouseWheel;
-
-                _hook.MouseMoved -= Hook_MouseMoved;
-
-                _hook.MousePressed -= Hook_MousePressed;
-                _hook.MouseReleased -= Hook_MouseReleased;
-
-                _hook.MouseClicked -= Hook_MouseClicked;
-
-                _hook.MouseDragged -= Hook_MouseDragged;
-
-                _hook.KeyPressed -= Hook_KeyPressed;
-                _hook.KeyReleased -= Hook_KeyReleased;
-
-                _hook.Dispose();
-                _hook = null;
-            }
-        }
-
         #region Mouse Event Handlers
 
         private void Hook_MouseWheel(object? sender, MouseWheelHookEventArgs e) {
@@ -1074,7 +1072,7 @@ namespace MonkeyPaste.Avalonia {
             }
             _keyboardGestureHelper.AddKeyDown(e.Data.KeyCode);
             string keyStr = Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { new[] { e.Data.KeyCode } });
-            MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' PRESSED");
+            //MpConsole.WriteLine($"Key[{e.Data.KeyCode}] '{keyStr}' PRESSED");
             Dispatcher.UIThread.Post(() => HandleGlobalKeyEvents(keyStr, true));
             if (!IsShortcutsEnabled) {
                 return;
@@ -1322,18 +1320,15 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (IsGlobalHooksPaused) {
                     //resume
-                    CreateGlobalInputHooks();
-                    IS_GLOBAL_KEYBOARD_INPUT_ENABLED = true;
-                    IS_GLOBAL_MOUSE_INPUT_ENABLED = true;
-                    MpConsole.WriteLine($"Global hooks resumed. args: {args}");
+                    StartInputListener();
+                    MpConsole.WriteLine($"Global hooks resumed: {(!IsGlobalHooksPaused).ToTestResultLabel()}");
                 } else {
                     // pause
-                    DisposeGlobalInputHooks();
+                    StopInputListener();
                     _keyboardGestureHelper.ClearCurrentGesture();
-                    IS_GLOBAL_KEYBOARD_INPUT_ENABLED = false;
-                    IS_GLOBAL_MOUSE_INPUT_ENABLED = false;
-                    MpConsole.WriteLine($"Global hooks paused. args: {args}");
+                    MpConsole.WriteLine($"Global hooks paused: {IsGlobalHooksPaused.ToTestResultLabel()}");
                 }
+                OnPropertyChanged(nameof(IsGlobalHooksPaused));
             });
 
         public ICommand ShowAssignShortcutDialogCommand => new MpAsyncCommand<object>(

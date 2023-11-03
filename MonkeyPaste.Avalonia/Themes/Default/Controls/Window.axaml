@@ -52,10 +52,14 @@
         <Setter Property="CornerRadius"
                 Value="5" />
     </Style>
-    <Style Selector=":is(Window).resizable"
-           x:DataType="local:MpAvNotificationViewModelBase">
+    <Style Selector=":is(Window).resizable">
         <Setter Property="CanResize"
                 Value="True" />
+
+    </Style>
+    <Style Selector=":is(Window).notificationWindow:not(.resizable)">
+        <Setter Property="CanResize"
+                Value="False" />
 
     </Style>
     <Style Selector=":is(Window).notificationWindow:not(.welcome)"
@@ -63,7 +67,7 @@
         <Setter Property="IsVisible"
                 Value="{Binding IsVisible}" />
         <Setter Property="Title"
-                Value="" />
+                Value="{Binding Title, Converter={x:Static local:MpAvStringToWindowTitleConverter.Instance}}" />
         <Setter Property="ShowInTaskbar"
                 Value="False" />
         <Setter Property="ShowActivated"
@@ -79,7 +83,7 @@
         <Setter Property="Topmost"
                 Value="True" />
         <Setter Property="ExtendClientAreaToDecorationsHint"
-                Value="True" />
+                Value="False" />
         <Setter Property="SystemDecorations"
                 Value="None" />
         <Setter Property="TransparencyLevelHint"

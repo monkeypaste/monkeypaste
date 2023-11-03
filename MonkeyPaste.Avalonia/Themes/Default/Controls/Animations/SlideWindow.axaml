@@ -3,11 +3,14 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
     <Styles.Resources>
-        <sys:TimeSpan x:Key="SlideDur">0:0:1.0</sys:TimeSpan>
+        <sys:TimeSpan x:Key="SlideDur">0:0:0.5</sys:TimeSpan>
     </Styles.Resources>
 
-    <Style Selector="Window.slideIn[IsVisible=true]"
-           x:DataType="local:MpAvMessageNotificationViewModel">
+    <Style Selector="Window.slideIn">
+        <Setter Property="TranslateTransform.X"
+                Value="360" />
+    </Style>
+    <Style Selector="Window.slideIn[IsVisible=true]">
         <Style.Animations>
             <Animation Duration="{StaticResource SlideDur}"
                        FillMode="Forward">

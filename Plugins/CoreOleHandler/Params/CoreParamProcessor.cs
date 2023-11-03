@@ -9,6 +9,7 @@ namespace CoreOleHandler {
             MpParameterRequestItemFormat pkvp,
             string format,
             object data,
+            IEnumerable<string> all_formats,
             out Exception ex,
             out List<MpPluginUserNotificationFormat> nfl) {
             ex = null;
@@ -56,7 +57,8 @@ namespace CoreOleHandler {
                                 }
                                 break;
                             case CoreOleParamType.RICHTEXTFORMAT_R_TOHTML: {
-                                    if (data is byte[] rtf_bytes &&
+                                    if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT) &&
+                                        data is byte[] rtf_bytes &&
                                         rtf_bytes.ToDecodedString() is string rtf &&
                                         rtf.ToRichHtmlText("rtf") is string html &&
                                         html.ToBytesFromString() is byte[] html_bytes) {
@@ -104,9 +106,10 @@ namespace CoreOleHandler {
                                 }
                                 break;
                             case CoreOleParamType.HTMLFORMAT_R_TORTF: {
-                                    if (data is byte[] html_bytes &&
+                                    if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT) &&
+                                        data is byte[] html_bytes &&
                                         html_bytes.ToDecodedString() is string html_str &&
-                                        html_str.ToRtfFromRichHtml() is string rtf &&
+                                        html_str.ToRtfFromHtmlFragment() is string rtf &&
                                         rtf.ToBytesFromString() is byte[] rtf_bytes) {
                                         return
                                             new object[] {

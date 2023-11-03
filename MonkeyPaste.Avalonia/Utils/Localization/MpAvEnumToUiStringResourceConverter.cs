@@ -9,8 +9,8 @@ using System.Resources;
 
 namespace MonkeyPaste.Avalonia {
     public class MpUiStringToEnumConverter : MpIUiStringToEnumConverter {
-        public object UiStringToEnum(string uiStr) {
-            return uiStr.UiStringToEnum();
+        public object UiStringToEnum(string uiStr, Type enumType = null) {
+            return uiStr.UiStringToEnum(enumType);
         }
     }
     public static class MpAvEnumToUiStringResourceConverter {
@@ -178,10 +178,13 @@ namespace MonkeyPaste.Avalonia {
             return enum_ui_string;
         }
 
-        public static object UiStringToEnum(this string uiStr) {
+        public static object UiStringToEnum(this string uiStr, Type enumType = null) {
             var keys = FindEnumKeys(uiStr);
-            if (keys.FirstOrDefault() is string key &&
-                key.SplitNoEmpty("_") is string[] key_parts &&
+            string key = enumType == null ?
+                keys.FirstOrDefault() :
+                keys.FirstOrDefault(x => x.StartsWith(enumType.Name));
+
+            if (key.SplitNoEmpty("_") is string[] key_parts &&
                 key_parts.Length == 2 &&
                 _UiEnums.FirstOrDefault(x => x.Name == key_parts[0]) is Type enum_type &&
                     key_parts[1].ToEnum(enum_type) is object enum_val) {

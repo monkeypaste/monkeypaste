@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
+using Avalonia.Media;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
@@ -503,6 +504,31 @@ namespace MonkeyPaste.Avalonia {
                     }
                     break;
             }
+        }
+        protected async Task WaitForFullVisibilityAsync() {
+
+            // wait a tid for anim selectors..
+            await Task.Delay(100);
+            if (MpAvWindowManager.LocateWindow(this) is not MpAvWindow w) {
+                return;
+            }
+            while (true) {
+                bool needs_waiting = false;
+                if (w.RenderTransform is TranslateTransform tt) {
+                    // sliding in
+                    needs_waiting = tt.X > 0;
+                }
+                if (!needs_waiting) {
+                    // fading in
+                    needs_waiting = w.Opacity < 1.0d;
+                }
+                if (needs_waiting) {
+                    await Task.Delay(100);
+                } else {
+                    return;
+                }
+            }
+
         }
         #endregion
 

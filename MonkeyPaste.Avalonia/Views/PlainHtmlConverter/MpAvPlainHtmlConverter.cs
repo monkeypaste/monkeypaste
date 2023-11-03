@@ -82,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        public async Task<MpAvRichHtmlContentConverterResult> ConvertAsync(
+        public async Task<MpRichHtmlContentConverterResult> ConvertAsync(
             string inputStr,
             string inputFormatType,
             string verifyText = null,
@@ -96,7 +96,7 @@ namespace MonkeyPaste.Avalonia {
                 htmlDataStr = htmlDataStr.ToRichHtmlText(MpPortableDataFormats.WinRtf);
                 inputFormatType = "rtf2html";
             }
-            MpAvRichHtmlContentConverterResult result;
+            MpRichHtmlContentConverterResult result;
             if (IsWebViewConverterAvailable) {
                 result = await ConvertWithWebViewAsync(inputFormatType, htmlDataStr, verifyText, csvProps);
             } else {
@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private async Task<MpAvRichHtmlContentConverterResult> FinishHtmlConversionAsync(MpAvRichHtmlContentConverterResult cr, string verifyStr) {
+        private async Task<MpRichHtmlContentConverterResult> FinishHtmlConversionAsync(MpRichHtmlContentConverterResult cr, string verifyStr) {
             if (cr == null ||
                 string.IsNullOrWhiteSpace(cr.InputHtml) ||
                 cr.DeterminedFormat != MpPortableDataFormats.CefHtml) {
@@ -193,12 +193,12 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
         }
 
-        private MpAvRichHtmlContentConverterResult ConvertWithFallback(string htmlDataStr, string verifyText) {
-            var result = MpAvRichHtmlContentConverterResult.Parse(htmlDataStr.ToString());
+        private MpRichHtmlContentConverterResult ConvertWithFallback(string htmlDataStr, string verifyText) {
+            var result = MpRichHtmlContentConverterResult.Parse(htmlDataStr.ToString());
             return result;
         }
 
-        private async Task<MpAvRichHtmlContentConverterResult> ConvertWithWebViewAsync(
+        private async Task<MpRichHtmlContentConverterResult> ConvertWithWebViewAsync(
             string inputFormatType,
             string htmlDataStr,
             string verifyPlainText,
@@ -241,15 +241,13 @@ namespace MonkeyPaste.Avalonia {
             MpQuillConvertPlainHtmlToQuillHtmlResponseMessage resp = ConverterWebView.LastPlainHtmlResp;
             ConverterWebView.LastPlainHtmlResp = null;
             MpConsole.WriteLine($"{(resp.success ? "[SUCCESS]" : "[FAILED]")}Content Conversion Complete. Total Time {sw.ElapsedMilliseconds}ms");
-            if (resp.success) {
-                return new MpAvRichHtmlContentConverterResult() {
-                    InputHtml = resp.html.ToStringFromBase64(),
-                    OutputData = resp.quillHtml.ToStringFromBase64(),
-                    Delta = resp.quillDelta.ToStringFromBase64(),
-                    SourceUrl = resp.sourceUrl
-                };
-            }
-            return null;
+
+            return new MpRichHtmlContentConverterResult() {
+                InputHtml = resp.html.ToStringFromBase64(),
+                OutputData = resp.quillHtml.ToStringFromBase64(),
+                Delta = resp.quillDelta.ToStringFromBase64(),
+                SourceUrl = resp.sourceUrl
+            };
         }
         #endregion
 

@@ -342,7 +342,7 @@ namespace MonkeyPaste.Avalonia {
                     inputTextFormat = "text";
                 }
 
-                MpAvRichHtmlContentConverterResult htmlClipboardData =
+                MpRichHtmlContentConverterResult htmlClipboardData =
                     await MpAvPlainHtmlConverter.Instance.ConvertAsync(
                         itemData,
                         inputTextFormat,

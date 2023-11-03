@@ -72,7 +72,7 @@ function convertPlainHtml_ext_ntf(convertPlainHtmlReqMsgBase64Str) {
 			quillHtml: toBase64FromJsonObj(convert_result.html),
 			quillDelta: toBase64FromJsonObj(convert_result.delta),
 			sourceUrl: url,
-			success: true
+			success: convert_result.valid
 		};
 	} catch (ex) {
 		onException_ntf('error converting item', ex);

@@ -37,7 +37,9 @@ namespace MonkeyPaste.Avalonia {
                 return base_result;
             }
 
+            var w = MpAvWindowManager.LocateWindow(this);
             if (MaxShowTimeMs > 0) {
+                await WaitForFullVisibilityAsync();
                 DateTime startTime = DateTime.Now;
                 while (DateTime.Now - startTime <= TimeSpan.FromMilliseconds(MaxShowTimeMs)) {
                     await Task.Delay(100);

@@ -11,9 +11,9 @@ function initLists() {
 function registerListBlot() {
 	// from https://github.com/quilljs/quill/issues/409#issuecomment-1488435233
 
-	const customFontFamilyAttributor = registerStyleAttributor('custom-family-attributor', 'font-family',null, true)
-	const customSizeAttributor = registerStyleAttributor('custom-size-attributor', 'font-size', null, true)
-	const customColorAttributor = registerStyleAttributor('custom-color-attributor', 'color', null, true)
+	const customFontFamilyAttributor = registerStyleAttributor('custom-family-attributor', 'font-family', null, true);
+	const customSizeAttributor = registerStyleAttributor('custom-size-attributor', 'font-size', null, true);
+	const customColorAttributor = registerStyleAttributor('custom-color-attributor', 'color', null, true);
 
 	const ListItemBlot = Quill.import('formats/list');
 	class CustomListItem extends ListItemBlot {

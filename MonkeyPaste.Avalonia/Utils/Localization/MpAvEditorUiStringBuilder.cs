@@ -88,9 +88,18 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-        private static void SetJsUiStringScriptTag() {
+        private static bool SetJsUiStringScriptTag() {
             // read index.html
             string index_html_text = MpFileIo.ReadTextFromFile(EditorIndexHtmlPath);
+
+            // get cur uistring file name
+            string ed_ui_str_file_name = Path.GetFileName(EditorUiStrPath);
+            // create script line
+            string script_line = SCRIPT_LINE_TEMPLATE.Replace(SCRIPT_LINE_SWAP_MARKER, ed_ui_str_file_name);
+            if (index_html_text.Contains(script_line)) {
+                // already set
+                return false;
+            }
             // split index.html by marker
             var index_html_parts = index_html_text.SplitNoEmpty(INDEX_LOCALIZER_CULTURE_MARKER);
             MpDebug.Assert(index_html_parts.Length == 2, $"Editor uistring error. Index.html missing marker '{INDEX_LOCALIZER_CULTURE_MARKER}' at path '{EditorIndexHtmlPath}'");
@@ -104,16 +113,13 @@ namespace MonkeyPaste.Avalonia {
             // create str of everything after current script tag
             string updated_post = string.Join(Environment.NewLine, post_parts.Skip(1));
 
-            // get cur uistring file name
-            string ed_ui_str_file_name = Path.GetFileName(EditorUiStrPath);
-            // create script line
-            string script_line = SCRIPT_LINE_TEMPLATE.Replace(SCRIPT_LINE_SWAP_MARKER, ed_ui_str_file_name);
             //merge parts
             string updated_index_html_text = string.Format(@"{0}{1}{2}{1}{3}", pre, Environment.NewLine, script_line, updated_post);
             // write it!
             MpFileIo.WriteTextToFile(EditorIndexHtmlPath, updated_index_html_text, false);
 
             MpConsole.WriteLine($"Localizer script tag '{script_line}' swapped into Index.html at '{EditorIndexHtmlPath}' success");
+            return true;
         }
 
         private static void CreateJsUiStrings() {
@@ -132,19 +138,26 @@ namespace MonkeyPaste.Avalonia {
             string inner_content = string.Join(string.Empty, editor_res_lookup.Select(x => GetEntryJs(x)));
 
             // swap placeholder w/ key-values
-            string total_content = EditorUiStringJsContentTemplate.Replace(EDITOR_STR_INSERT_MARKER, inner_content);
+            string runtime_content = EditorUiStringJsContentTemplate.Replace(EDITOR_STR_INSERT_MARKER, inner_content);
 
             string existing_content = EditorUiStrPath.IsFile() ?
                 MpFileIo.ReadTextFromFile(EditorUiStrPath) :
                 string.Empty;
 
-            if (total_content == existing_content) {
-                MpConsole.WriteLine("Js Ui strings match. All appears well");
+            if (runtime_content == existing_content) {
+                MpConsole.WriteLine("Js Ui strings match. ");
+                bool was_ref_updated = SetJsUiStringScriptTag();
+                if (!was_ref_updated) {
+                    return;
+                }
+                MpDebug.Break($"CAUTION! Js uistrings ref changed. App will shutdown and changes will be reflected on restart...");
+
+                Mp.Services.ShutdownHelper.ShutdownApp($"Js UI strings ref updated");
                 return;
             }
             MpDebug.Break($"CAUTION! Js uistrings changed. App will shutdown and changes will be reflected on restart...");
             // create/update uistrings.js file
-            string result = MpFileIo.WriteTextToFile(EditorUiStrPath, total_content, false);
+            string result = MpFileIo.WriteTextToFile(EditorUiStrPath, runtime_content, false);
             bool success = result == EditorUiStrPath;
             MpConsole.WriteLine($"Localizer: {EditorUiStrPath} create {(success ? "SUCCESS" : "FAIL")}");
             if (success) {

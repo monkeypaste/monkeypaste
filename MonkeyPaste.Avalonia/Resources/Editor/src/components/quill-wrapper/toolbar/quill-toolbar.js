@@ -59,7 +59,6 @@ function initEditorToolbar() {
 	initFormatPaint();
 	initAlignEditorToolbarButton();
 	initFontColorToolbarItems();
-
 	initFontFamilyPicker();
 	initFontSizes();
 	//initLinkToolbarButton();

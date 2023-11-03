@@ -86,6 +86,18 @@ namespace MonkeyPaste.Common.Avalonia {
             return str;
         }
 
+        public static string ToRtfFromHtmlFragment(this string str) {
+            if (str.IsStringRichHtml() && OperatingSystem.IsWindows() &&
+                MpRichHtmlContentConverterResult.Parse(str) is
+                    MpRichHtmlContentConverterResult hccr) {
+#if WINDOWS
+                string rtf = MpWpfHtmlToRtfConverter.ConvertQuillHtmlToRtf(hccr.InputHtml);
+                return rtf;
+#endif
+            }
+            return str;
+        }
+
         public static string EscapeExtraOfficeRtfFormatting(this string str) {
             string extraFormatToken = @"{\*\themedata";
             int tokenIdx = str.IndexOf(extraFormatToken);

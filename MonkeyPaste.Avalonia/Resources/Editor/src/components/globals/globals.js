@@ -201,7 +201,24 @@ var globals = {
 	// #endregion
 
 	// #region CONVERTER
+
 	IsConverterLoaded: false,
+	HtmlEntitiesLookup: [
+		[`&`, `&amp;`],
+		[` `, `&nbsp;`],
+		[`\"`, `&quot;`],
+		[`\'`, `&apos;`],
+		[`>`, `&gt;`],
+		[`¢`, `&cent;`],
+		[`£`, `&pound;`],
+		[`¥`, `&yen;`],
+		[`€`, `&euro;`],
+		[`©`, `&copy;`],
+		[`®`, `&reg;`],
+		[`™`, `&trade;`],
+		[`<`, `&lt;`]
+	],
+
 
 	// #endregion
 

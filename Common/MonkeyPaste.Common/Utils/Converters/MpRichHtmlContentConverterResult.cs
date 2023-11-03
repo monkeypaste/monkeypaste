@@ -1,15 +1,12 @@
 ﻿using HtmlAgilityPack;
-using MonkeyPaste.Common;
 //using Org.BouncyCastle.Bcpg.OpenPgp;
 using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MonkeyPaste.Avalonia {
-    public class MpAvRichHtmlContentConverterResult {
+namespace MonkeyPaste.Common {
+    public class MpRichHtmlContentConverterResult {
 
-        public string Version { get; private set; }
+        public string Version { get; set; }
         public string SourceUrl { get; set; }
 
         public string InputHtml { get; set; }
@@ -20,43 +17,67 @@ namespace MonkeyPaste.Avalonia {
 
 
 
-        public static MpAvRichHtmlContentConverterResult Parse(string htmlClipboardData) {
+        public static MpRichHtmlContentConverterResult Parse(string htmlClipboardData) {
             // NOTE only used as fallback when not using cef
 
-            var hcd = new MpAvRichHtmlContentConverterResult();
-
-            if (ParseHtmlFragmentForPlainHtml(htmlClipboardData) is string plain_html &&
+            var hcd = new MpRichHtmlContentConverterResult();
+            string version = null;
+            if (ParseHtmlFragmentForPlainHtml(htmlClipboardData, out version) is string plain_html &&
                 !string.IsNullOrEmpty(plain_html)) {
                 hcd.InputHtml = plain_html;
                 // BUG if plain html is set and quill is later loaded setHtml won't parse it correctly
                 // (theres escape issues once in js and it just doesn't follow same conversion flow and its annoying, pointless to change) without using dangerouslyPaste
                 // which makes problems w/ templates and since this is plain text mode there's no need to keep html anyways so downsample to plain text
-                hcd.OutputData = MpAvContentDataConverter.Instance.Convert(plain_html, null, "plaintext", null) as string;
+                hcd.OutputData = MpCommonTools.Services.StringTools.ToPlainText(plain_html, "html");
             } else {
                 // must not be html fragment
                 hcd.InputHtml = htmlClipboardData;
                 hcd.OutputData = htmlClipboardData;
             }
             hcd.SourceUrl = ParseHtmlFragmentForSourceUrl(htmlClipboardData);
+            hcd.Version = version;
             return hcd;
         }
 
 
-        public static string ParseHtmlFragmentForPlainHtml(string htmlClipboardData) {
-            string htmlStartToken = @"<!--StartFragment-->";
-            string htmlEndToken = @"<!--EndFragment-->";
-
-
-            int html_start_idx = htmlClipboardData.IndexOf(htmlStartToken) + htmlStartToken.Length;
-            if (html_start_idx > htmlStartToken.Length) {
-                int html_end_idx = htmlClipboardData.IndexOf(htmlEndToken);
-                int html_length = html_end_idx - html_start_idx;
-
-                if (html_length > 0) {
-                    string plainHtml = htmlClipboardData.Substring(html_start_idx, html_length);
-                    return plainHtml;
-                }
+        public static string ParseHtmlFragmentForVersion(string htmlClipboardData) {
+            if (htmlClipboardData.SplitNoEmpty("Version:") is not string[] version_parts ||
+                version_parts.Length < 2) {
+                return string.Empty;
             }
+            return version_parts[1].SplitNoEmpty(@"\n")[0].Replace(@"\r", string.Empty).Trim();
+        }
+
+        public static string ParseHtmlFragmentForPlainHtml(string htmlClipboardData, out string version) {
+            version = ParseHtmlFragmentForVersion(htmlClipboardData);
+            if (version.StartsWith("0.9")) {
+                string htmlStartToken = @"<!--StartFragment-->";
+                string htmlEndToken = @"<!--EndFragment-->";
+
+                int html_start_idx = htmlClipboardData.IndexOf(htmlStartToken) + htmlStartToken.Length;
+                if (html_start_idx > htmlStartToken.Length) {
+                    int html_end_idx = htmlClipboardData.IndexOf(htmlEndToken);
+                    int html_length = html_end_idx - html_start_idx;
+
+                    if (html_length > 0) {
+                        string plainHtml = htmlClipboardData.Substring(html_start_idx, html_length);
+                        return plainHtml;
+                    }
+                }
+            } else if (version.StartsWith("1.0")) {
+                // just returning everything after EndFragment line
+                var end_frag_parts = htmlClipboardData.SplitNoEmpty("EndFragment");
+                if (end_frag_parts.Length < 2) {
+                    return null;
+                }
+                var next_line_parts = end_frag_parts[1].SplitNoEmpty(@"\n");
+                if (next_line_parts.Length < 2) {
+                    return null;
+                }
+                string result = string.Join(@"\n", next_line_parts.Skip(1));
+                return result;
+            }
+
             return null;
         }
         public static string ParseHtmlFragmentForSourceUrl(string htmlFragStr) {
@@ -72,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
                         }
                     }
                 }
-            } else if (ParseHtmlFragmentForPlainHtml(htmlFragStr) is string plain_html &&
+            } else if (ParseHtmlFragmentForPlainHtml(htmlFragStr, out _) is string plain_html &&
                 ParseHtmlForRootImageSource(plain_html) is string img_src &&
                 Uri.IsWellFormedUriString(img_src, UriKind.Absolute)) {
                 // NOTE chrome (windows) clipboard for images (from open image in tab) doesn't have SourceUrl part

@@ -155,6 +155,7 @@ namespace MonkeyPaste.Avalonia {
                 SystemDecorations = SystemDecorations.None,
                 TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent },
                 WindowStartupLocation = WindowStartupLocation.Manual,
+                ExtendClientAreaToDecorationsHint = false,
                 ShowInTaskbar = false,
             };
 

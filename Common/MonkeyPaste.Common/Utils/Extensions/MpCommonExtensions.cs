@@ -690,7 +690,7 @@ namespace MonkeyPaste.Common {
             object safeValue = newValue;
             try {
                 if (t.IsEnum && newValue is string newValStr) {
-                    newValue = MpCommonTools.Services.UiStrEnumConverter.UiStringToEnum(newValStr);
+                    newValue = MpCommonTools.Services.UiStrEnumConverter.UiStringToEnum(newValStr, t);
                 }
                 safeValue = (newValue == null) ? null : Convert.ChangeType(newValue, t);
             }

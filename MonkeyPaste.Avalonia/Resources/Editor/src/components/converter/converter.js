@@ -47,7 +47,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	}
 	let needs_encoding = formatType != 'rtf2html';
 	let DO_VALIDATE = true;
-	let ENFORCE_VALIDATE = true;
+	let ENFORCE_VALIDATE = false;
 
 	//log("Converting '" + formatType + "'. The data is: ");
 	//log(dataStr);
@@ -56,7 +56,7 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	if (formatType == 'text') {
 		setEditorText(dataStr, 'user');
 	} else {
-		let html_doc = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(toAscii(dataStr)), 'text/html');
+		let html_doc = globals.DomParser.parseFromString(cleanHtmlForFragmentMarkers(dataStr), 'text/html');
 
 		// images aren't converted so if present in content its composite
 		let is_composite =
@@ -88,48 +88,55 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 		output_html = getHtml(null, needs_encoding);
 	}
 
+	let is_conv_html_valid = true;
+
 	if (DO_VALIDATE && verifyText != null) {
-		verifyText = toAscii(verifyText.replaceAll(`\r\n`, `\n`));
-		let converted_text = toAscii(getText());
-		if (!verifyText.endsWith('\n')) {
+		let convText = getText();
+		let c_ascii = toAscii(convText);
+
+		let v_ascii = toAscii(verifyText.replaceAll(`\r\n`, `\n`));
+		if (!v_ascii.endsWith('\n')) {
 			// BUG1 when actual text doesn't end w/ newline make sure quills newline is removed
 			// BUG2 dom parser adding TWO extra new lines to html fragment of html text so
 			// removing extras until match or letting it fail still if not the case
-			let last_conv_char = converted_text.charAt(converted_text.length - 1);
+			let last_conv_char = c_ascii.charAt(c_ascii.length - 1);
 			while (last_conv_char == '\n') {
-				converted_text = trimQuillTrailingLineEndFromText(converted_text);
-				if (converted_text.length == 0) {
+				c_ascii = trimQuillTrailingLineEndFromText(c_ascii);
+				if (c_ascii.length == 0) {
 					break;
 				}
-				last_conv_char = converted_text.charAt(converted_text.length - 1);
+				last_conv_char = c_ascii.charAt(c_ascii.length - 1);
 			}
 		}
-		const diff_idx = getFirstDifferenceIdx(verifyText, converted_text);
-		if (!ENFORCE_VALIDATE || diff_idx < 0) {
+		// compare content only, new lines aren't critical and commonly create failure
+		let v_comp = v_ascii.replaceAll('\n', '');
+		let c_comp = c_ascii.replaceAll('\n', '');
+		const diff_idx = getFirstDifferenceIdx(v_comp, c_comp);
+		is_conv_html_valid = diff_idx < 0;
+		if (!ENFORCE_VALIDATE || is_conv_html_valid) {
 			log('conversion validate: PASSED');
 			if (!needs_encoding) {
 				// encode final output
 				output_html = getHtml(null, true);
 			}
-			const is_actual_inline_only = verifyText.indexOf('\n') < 0;
+			const is_actual_inline_only = v_ascii.indexOf('\n') < 0;
 			if (is_actual_inline_only) {
 				output_html = output_html.replace('<p', '<span').replace('p>','span>');
 			}
 		} else {
 			log('conversion validate: FAILED');
-			let first_verify_diff_char = getEscapedStr(verifyText.charAt(diff_idx));
-			let first_actual_diff_char = getEscapedStr(converted_text.charAt(diff_idx));
+			let first_verify_diff_char = getEscapedStr(v_comp.charAt(diff_idx));
+			let first_conv_diff_char = getEscapedStr(c_comp.charAt(diff_idx));
 
-			log(`first diff: idx ${diff_idx} verify: '${first_verify_diff_char}' conv: '${first_actual_diff_char}'`);
-			log('verify length: ' + verifyText.length);
-			log('conv length: ' + converted_text.length);
-			log('verify text:')
+			log(`first diff: idx ${diff_idx} verify: '${first_verify_diff_char}' conv: '${first_conv_diff_char}'`);
+			log('verify length: ' + v_ascii.length);
+			log('conv length: ' + c_ascii.length);
+			log('verify text:');
 			log(verifyText);
 			log('conv text:');
-			log(converted_text);
+			log(convText);
 			onException_ntf('conversion error.');
 			output_html = encodeHtmlSpecialEntitiesFromPlainText(verifyText);
-
 		}
 	}
 	let output_delta = convertHtmlToDelta(output_html);
@@ -141,9 +148,11 @@ function convertPlainHtml(dataStr, formatType, verifyText, bgOpacity = 0.0) {
 	return {
 		html: output_html,
 		delta: output_delta,
+		valid: is_conv_html_valid
 		//icon: iconBase64
 	};
 }
+
 
 function locateFaviconBase64(htmlStr) {
 	htmlStr = `<!DOCTYPE HTML><html lang="en-US"><head>  <script>    const className = navigator.userAgent.match(/mobile|android|iphone|ipad/i);    document.querySelector('html').className = className ? 'ua-mobile' : 'ua-desktop';  </script>  <meta name="viewport" content="width=device-width, initial-scale=1" />  <meta name="theme-color" content="#ffd966" />  <title>Transmat - Seamless cross web interactions</title>  <link rel=icon href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🌀</text></svg>'>  <link rel="stylesheet" href="styles.css" /></head><body>  <header>    <div class="container">      <div class="intro">        <h1>Transmat</h1>        <p>          <strong>Seamless cross web interactions</strong><br />          Enable users to transfer data to external apps, and open your webapp to receive external data.        </p>        <p class="buttons">          <a class="button" href="https://GitHub.com/google/transmat">View on GitHub</a>          <a class="github-button" href="https://github.com/google/transmat" data-size="large"                data-show-count="true" aria-label="Star google/transmat on GitHub">              Star          </a>        </p>      </div>      <div class="intro-animation">        <div class="animation">          <div class="browser b1">            <div class="controls">              <span class="c1"></span>              <span class="c2"></span>              <span class="c3"></span>            </div>            <div class="viewport">            </div>          </div>          <div class="browser b2">            <div class="controls">              <span class="c1"></span>              <span class="c2"></span>              <span class="c3"></span>            </div>            <div class="viewport">            </div>          </div>          <div class="drag">            <div class="cursor"></div>            <div class="source"></div>          </div>        </div>      </div>    </div>  </header>  <section class="readme">    <div class="container">      <p>        <img class="payloads" src="payloads.png" alt="Multiple payloads in a single transmit" />        <strong>        Transmat is a small library around the        <a href="https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer">DataTransfer API</a>        that eases transmitting and receiving data in your web app using drag-drop and copy-paste        interactions.</strong></p>      <p>The DataTransfer API has the ability to transfer multiple string data payloads to any other        application on the user's device. This technique is        <a href="https://caniuse.com/mdn-api_datatransfer_setdata">compatible with all modern desktop          browsers</a> (everything after IE11) and can be used today. It will bring your PWA to parity          with native applications.</p>      <h3>Transmat is something for you, if you...</h3>      <ul>        <li>...are looking for a cheap way to integrate with external (WYSIWYG) applications.</li>        <li>...want to provide user the ability to share their data with other applications, even those who you don't know about.</li>        <li>...want external applications to be able to deeply integrate with your web app.</li>        <li>...want to make your app better fit in existing workflows of your user.</li>      </ul>    </div>  </section>  <section class="demo show-on-mobile">    <div class="container">      <h2>Demo</h2>      <p>Transmat only works on desktop browsers. Watch the demo video below.</p>      <div class="video">        <iframe width="560" height="315"             src="https://www.youtube.com/embed/EYMgUhn_Zdo?autoplay=1&controls=0&fs=0&loop=1&modestbranding=1"             title="YouTube video player" frameborder="0"             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"             allowfullscreen>        </iframe>      </div>    </div>  </section>  <section class="demo show-on-desktop">    <div class="container">      <p class="intro">        <strong>Drag or copy the element below</strong> to a new        <a href="https://google.github.io/transmat" target="_blank">browser window</a>,        a <a href="https://codepen.io/pen" target="_blank">text editor</a> or        <a href="https://doc.new" target="_blank">WYSIWYG editor</a>.      </p>      <div class="targets">        <p class="transmitter" tabindex="0" draggable="true">          <span>            <strong>Drag or copy me!</strong><br />            <em>Containing HTML, Text, URL and JSON data.</em>          </span>        </p>        <p class="receiver" tabindex="0">          <span>Drop or paste here!</span>        </p>      </div>      <div class="results">        <pre class="language-html"><code></code></pre>      </div>    </div>  </section>  <section class="readme">    <div class="container">      <h2>Getting started</h2>      <ol>        <li>          <p>Install the library from <a href="https://npmjs.com/transmat">NPM</a> (version 0.2.1).            <pre class="language-js"><code>npm install transmat</code></pre></p>          <p>Alternatively, you can load the <a href="https://unpkg.com/transmat/lib/index.umd.js">index.umd.js</a> UMD build from a JavaScript CDN like UNPKG.             The library is exported to the transmat object namespace.            <pre class="language-html"><code>&lt;script src="https://unpkg.com/transmat/lib/index.umd.js"&gt;&lt;/script&gt;&lt;script&gt;  // Use transmat.addListeners, transmat.Transmat, etc...&lt;/script&gt;</code></pre></p>        </li>        <li>Add a draggable and focusable element to your webpage.          <pre class="language-html"><code>&lt;div id="myElement" draggable="true" tabindex="0"&gt;  Transmitter and receiver&lt;/div&gt;</code></pre>        </li>        <li><strong>Listen for transmit events on the element.</strong><br />            Create a new Transmat instance for the event, and provide a object with mime-type / data.          <pre class="language-js"><code>import {Transmat, addListeners} from 'transmat';addListeners(myElement, 'transmit', event => {  const transmat = new Transmat(event);  transmat.setData({    'text/plain': 'Hello world!',    'text/html': '&lt;h1&gt;Hello world!&lt;/h1&gt;',    'text/uri-list': 'http://example.com',    'application/json': {foo:'bar'}  });});</code></pre>        </li>        <li>          <strong>Listen for receiving events on the element.</strong><br />          Create a Transmat instance for the event, and, in this case, only accept application/json payload.          <pre class="language-js"><code>import {Transmat, addListeners} from 'transmat';addListeners(myElement, 'receive', event => {  const transmat = new Transmat(event);  if (transmat.hasType('application/json') && transmit.accept()) {    const payload = transmat.getData('application/json');    console.log(JSON.parse(payload));  }});</code></pre>        </li>      </ol>      <a class="webdev" href="https://web.dev/datatransfer">        <img src="https://web.dev/images/lockup.svg" alt="web.dev" width="120" />        <div class="content">          <h2>Read the DataTransfer article on web.dev</h2>          <p>Explaining the used transferring technique in detail, listing some concerns and opportunities for your applications. <u>Learn more.</u></p>        </div>      </a>      <hr />      <h2>Observing transfer events</h2>      <p>You can make use of the included TransmatObserver class to respond to drag activity. An        example is at the this webpage, where the drop targets respond to the drag events.</p>        <pre class="language-js"><code>import {TransmatObserver, Transmat} from 'transmat';const obs = new TransmatObserver(entries => {  for (const entry of entries) {    const transmat = new Transmat(entry.event);    if(transmat.hasMimeType(myCustomMimeType)) {      entry.target.classList.toggle('drag-over', entry.isTarget);      entry.target.classList.toggle('drag-active', entry.isActive);    }  }});obs.observe(myElement);</code></pre>      <hr />      <h2>Minimal drag image</h2>      <p>By default, HTML5 Drag and Drop API drag image is showing the rendered source element.        When applying Transmat on top of existing drag-drop interactions you might want something        more subtle instead.</p>      <p>Transmat comes with a small function that replaces this with a minimal alternative that        still gives the feeling of dragging an object.        <span class="minimal-drag-image" draggable="true" tabindex="0">Drag me for an example</span>, and        notice the checkered rectangle.</p>        <pre class="language-js"><code>import {Transmat, addListeners} from 'transmat';import {setMinimalDragImage} from 'transmat/lib/data_transfer';addListeners(myElement, 'transmit', event => {  const transmat = new Transmat(event);  setMinimalDragImage(transmat.dataTransfer);});</code></pre>      <hr />      <h2>Connecting the web, with JSON-LD</h2>      <p><img class="json-ld-logo" src="json-ld.png" alt="JSON-LD" />        While custom payloads are useful for communication between applications you have in your        control, it also limits the ability to transfer data to external apps.        <a href="https://json-ld.org">JSON-LD (Linked Data)</a> is a great universal standard for this;      </p>      <ul>        <li>Easy to generate from JavaScript,</li>        <li>Many predefined types at <a href="https://schema.org/Thing">Schema.org</a>,</li>        <li>It can contain custom schema definitions.</li>      </ul>      <p>JSON-LD might sound scarier than it is. Here’s an example of what this looks like for a <a href="https://schema.org/Person">Person</a>:</p>        <pre class="language-js"><code>const person = {  '@context': 'https://schema.org',  '@type': 'Person',  name: 'Rory Gilmore',  image: 'https://example.com/rory.jpg',  address: {    '@type': 'PostalAddress',    addressCountry: 'USA',    addressRegion: 'Connecticut',    addressLocality: 'Stars Hollow'  },};transmat.setData('application/ld+json', person);</code></pre>      <p>Transmat comes with several <a href="https://github.com/google/transmat/blob/main/src/json_ld.ts">JSON-LD utilities</a> to ease common interactions with the data.</p>      <p>      By using JSON-LD data, you will <strong>support a connected and open web</strong>. Think of      all the possibilities when you could transfer elements to other applications to continue your work.      That would be great, right? <strong>This starts with you! 🙌</strong></p>      <hr />      <h2>Learn more</h2>      <p>More documentation and examples at the <a href="https://GitHub.com/google/transmat">GitHub repository</a>.</p><p class="social">    <a class="twitter-share-button"          href="https://twitter.com/intent/tweet?text=Seamless interactions across the web with the DataTransfer API.&url=https://google.github.io/transmat"          data-size="large">      Share on Twitter    </a>    <a class="github-button" href="https://github.com/google/transmat" data-size="large"          data-show-count="true" aria-label="Star google/transmat on GitHub">      Star    </a></p>      <p><em>This is not an officially supported Google product.</em></p>    </div>  </section>  <script async src="prismjs.js"></script>  <script async src="dist/index.js"></script>  <script async defer src="https://buttons.github.io/buttons.js"></script>  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WVGTJBXS6K"></script>  <script>    window.dataLayer = window.dataLayer || [];    function gtag(){dataLayer.push(arguments);}    gtag('js', new Date());    gtag('config', 'G-WVGTJBXS6K');  </script>  <script>window.twttr = (function(d, s, id) {    var js, fjs = d.getElementsByTagName(s)[0],      t = window.twttr || {};    if (d.getElementById(id)) return t;    js = d.createElement(s);    js.id = id;    js.src = "https://platform.twitter.com/widgets.js";    fjs.parentNode.insertBefore(js, fjs);    t._e = [];    t.ready = function(f) {      t._e.push(f);    };    return t;  }(document, "script", "twitter-wjs"));</script></body></html>`;

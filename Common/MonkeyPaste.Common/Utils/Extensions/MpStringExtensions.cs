@@ -319,6 +319,8 @@ namespace MonkeyPaste.Common {
             }
             if (str.EndsWith(Environment.NewLine)) {
                 return str.Substring(0, str.Length - Environment.NewLine.Length);
+            } else if (str.EndsWith(@"\n")) {
+                return str.Substring(0, str.Length - @"\n".Length);
             }
             return str;
         }

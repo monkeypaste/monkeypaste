@@ -1821,7 +1821,7 @@ namespace MonkeyPaste.Avalonia {
 
                     }
                 }
-            } 
+            }
 
             if (apply_changes) {
                 if (cap_info.ToBeTrashed_ciid > 0) {
@@ -3217,6 +3217,7 @@ namespace MonkeyPaste.Avalonia {
                          }
                      }
                  }
+                 pin_idx = Math.Clamp(pin_idx, 0, Math.Max(0, PinnedItems.Count - 1));
 
                  if (ctvm_to_pin == null || ctvm_to_pin.IsAnyPlaceholder) {
                      MpConsole.WriteTraceLine("PinTile error, tile is either already pinned or placeholder");
