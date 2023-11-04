@@ -69,7 +69,7 @@ function sendMessage(fn, msg) {
 		return;
 	}
 	if (isRunningOnXam()) {
-		CSharp.InvokeMethod(fn, msg);
+		CSharp.InvokeMethod(fn, msg, globals.ContentHandle);
 		return;
 	}
 	if (isRunningInIframe()) {

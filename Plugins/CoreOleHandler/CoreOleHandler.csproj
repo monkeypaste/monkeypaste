@@ -58,7 +58,7 @@
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">
     <ItemGroup>
       <BuildOutputFiles Include="$(TargetDir)\**\*.*" />
     </ItemGroup>
@@ -66,7 +66,7 @@
     <Copy SourceFiles="@(BuildOutputFiles)" DestinationFiles="@(BuildOutputFiles->'$(PluginTargetDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
 
     <!-- remove tmp dir to ensure its new -->
-    <RemoveDir Directories="$(TargetDatTempDir)" />
+    <RemoveDir ContinueOnError="True" Directories="$(TargetDatTempDir)" />
 
     <!-- create tmp dir and copy plugin so its the only sub folder-->
     <Copy SourceFiles="@(BuildOutputFiles)" DestinationFiles="@(BuildOutputFiles->'$(TargetDatTempDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />

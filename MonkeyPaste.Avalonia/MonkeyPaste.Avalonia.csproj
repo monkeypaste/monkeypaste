@@ -29,8 +29,11 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <AndroidJavaSource Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AndroidJavaSource Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
+    <AndroidLibrary Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AndroidLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
+    <AndroidNativeLibrary Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AndroidNativeLibrary Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AvaloniaXaml Remove="Assets\Images\MpRichTextBox\**" />
     <AvaloniaXaml Remove="Assets\Images\resize_backup\**" />
@@ -41,6 +44,7 @@
     <AvaloniaXaml Remove="Behaviors\__Factory\**" />
     <AvaloniaXaml Remove="cef\**" />
     <AvaloniaXaml Remove="cef_old\**" />
+    <AvaloniaXaml Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <AvaloniaXaml Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <AvaloniaXaml Remove="Controls\Content\TextElement\**" />
     <AvaloniaXaml Remove="dat\**" />
@@ -77,6 +81,7 @@
     <Compile Remove="Behaviors\__Factory\**" />
     <Compile Remove="cef\**" />
     <Compile Remove="cef_old\**" />
+    <Compile Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <Compile Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <Compile Remove="Controls\Content\TextElement\**" />
     <Compile Remove="dat\**" />
@@ -113,6 +118,7 @@
     <EmbeddedResource Remove="Behaviors\__Factory\**" />
     <EmbeddedResource Remove="cef\**" />
     <EmbeddedResource Remove="cef_old\**" />
+    <EmbeddedResource Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <EmbeddedResource Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <EmbeddedResource Remove="Controls\Content\TextElement\**" />
     <EmbeddedResource Remove="dat\**" />
@@ -140,6 +146,7 @@
     <EmbeddedResource Remove="Views\Reusable\ContextMenu\Selector\**" />
     <EmbeddedResource Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <EmbeddedResource Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
+    <JavaSourceJar Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <JavaSourceJar Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <None Remove="Assets\Images\MpRichTextBox\**" />
     <None Remove="Assets\Images\resize_backup\**" />
@@ -150,6 +157,7 @@
     <None Remove="Behaviors\__Factory\**" />
     <None Remove="cef\**" />
     <None Remove="cef_old\**" />
+    <None Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <None Remove="Controls\Content\CefNetWebView\HtmlDocument\**" />
     <None Remove="Controls\Content\TextElement\**" />
     <None Remove="dat\**" />
@@ -211,7 +219,9 @@
     <Page Remove="Views\Reusable\ContextMenu\Selector\**" />
     <Page Remove="Views\Reusable\Notifications\Toast\Append\**" />
     <Page Remove="Views\Reusable\ShortcutWindow\ShortcutPanel\AssignableShortcut\**" />
+    <ProguardConfiguration Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <ProguardConfiguration Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
+    <TransformFile Remove="Controls\Content\CefNetWebView\Cef\Updater\**" />
     <TransformFile Remove="Views\MainWindow\ClipTrayContainer\ClipTray\ClipTile\Content\CefNet\**" />
     <AndroidAsset Remove="Assets\Images\burlap.png" />
     <AvaloniaXaml Remove="Themes\Default\Accents\Accents.axaml" />
@@ -608,6 +618,66 @@
     <None Remove=".gitignore" />
     <None Remove="Settings.settings" />
   </ItemGroup>
+  
+  
+  <ItemGroup Condition="'$(IsDesktop)' == 'True'">
+    <Content Include="Assets\Sounds\alert.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\blip.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\blip2.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\chime.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\Monkey1.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\Monkey2.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Sounds\ting.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\terms.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  
+    <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(BuildOs)' == 'ANDROID'">
+    <AvaloniaResource Include="Assets\Sounds\alert.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\blip.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\blip2.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\chime.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\Monkey1.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\Monkey2.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\ting.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Resources\terms.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AvaloniaResource>
+  
+    <AvaloniaResource Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+  
   <ItemGroup>
     <AvaloniaResource Include="Assets\Fonts\Habanero\Habanero.otf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -802,6 +872,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
   </ItemGroup>
+  
   <ItemGroup>
     <AvaloniaResource Include="Assets\Cursors\copy.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1391,30 +1462,30 @@
     <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Nav\TabNav.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />
-    <Content Include="Assets\Sounds\alert.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Sounds\blip.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Sounds\blip2.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Sounds\chime.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Sounds\Monkey1.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Sounds\Monkey2.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Assets\Sounds\ting.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\terms.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <AvaloniaResource Include="Assets\Sounds\alert.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\blip.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\blip2.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\chime.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\Monkey1.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\Monkey2.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Assets\Sounds\ting.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Include="Resources\terms.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Include="Themes\Default\Accents\Accents.axaml">
       
     </AvaloniaResource>
@@ -1502,15 +1573,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Attributions.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\UiStrings\EnumUiStrings.ja-JP.Designer.cs">
-      <DependentUpon>EnumUiStrings.ja-JP.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Resources\UiStrings\EnumUiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>EnumUiStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\UiStrings\EnumUiStrings.ja-JP.Designer.cs">
+      <DependentUpon>EnumUiStrings.ja-JP.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Resources\UiStrings\ListingStrings.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -1522,16 +1593,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>test.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\UiStrings\UiStrings.ja-JP.Designer.cs">
-      <DependentUpon>UiStrings.ja-JP.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Resources\UiStrings\UiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>UiStrings.resx</DependentUpon>
-      <CustomToolNamespace></CustomToolNamespace>
+    </Compile>
+    <Compile Update="Resources\UiStrings\UiStrings.ja-JP.Designer.cs">
+      <DependentUpon>UiStrings.ja-JP.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Views\AboutWindow\MpAvAboutView.axaml.cs">
       <DependentUpon>MpAvAboutView.axaml</DependentUpon>
@@ -1742,35 +1812,49 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.4" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.4" />
-    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.4" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.4" />
+    <PackageReference Include="Avalonia" Version="11.0.5" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.5" />
+    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.5" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.5" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.4" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.4" />
-    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.4" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.5" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.5" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.5" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.2" />
     <PackageReference Include="Markdig" Version="0.33.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
+    <PackageReference Include="ResXResourceReader.NetStandard" Version="1.1.0" />
     <PackageReference Include="SharpHook" Version="5.1.1" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="System.Management" Version="7.0.2" />
     <PackageReference Include="NetCoreAudio" Version="1.7.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
     <PackageReference Include="System.Speech" Version="7.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
     <!--<PackageReference Include="WebViewControl-Avalonia" Version="2.106.11" />-->
   </ItemGroup>
 
+  <ItemGroup Condition="$(IsMobile) == 'true'">
+    <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
+    <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
+  </ItemGroup>
+  
   <ItemGroup Condition="$(IsDesktop) == 'true'">
     <PackageReference Include="Avalonia.Desktop" Version="11.0.4" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Utils\Input\KeyDownHelper\uwp\**" />    
+  <ItemGroup>    
     <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.android.cs" />    
+    
     <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.uwp.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.android.cs" />    
+    
+    <Compile Remove="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.uwp.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.android.cs" />    
   </ItemGroup>
+  
   <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
@@ -1794,9 +1878,22 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
     
+    <Compile Include="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.uwp.cs" />       
     <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.uwp.cs" />
-    <Compile Include="Utils\Input\KeyDownHelper\uwp\**" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(BuildOs)' == 'ANDROID'">
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
+
+    <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.android.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.android.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.android.cs" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'BROWSER'">
@@ -1807,19 +1904,6 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(BuildOs)' == 'ANDROID'">
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 
@@ -1866,7 +1950,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumUiStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\UiStrings\ListingStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -1886,7 +1970,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
   

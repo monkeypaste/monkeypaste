@@ -1,10 +1,10 @@
 ﻿using Avalonia;
-using System;
-using PropertyChanged;
-using MonkeyPaste.Common;
 using Avalonia.Data;
-using Avalonia.Input;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using PropertyChanged;
+using System;
+using Avalonia.Input;
 using Avalonia.Controls;
 
 #if DESKTOP
@@ -34,11 +34,8 @@ namespace MonkeyPaste.Avalonia {
 #else
         MpAvNativeWebViewHost
 #endif
-        , MpIWebView, MpIHasDataContext {
+        , MpICanExecuteJavascript, MpAvIWebViewBindingResponseHandler {
 
-#if !DESKTOP
-        public object DataContext { get; set; }
-#endif
 
         #region Private Variables
         private bool _isBrowserCreated = false;
@@ -51,11 +48,31 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-        void MpIWebView.ExecuteJavascript(string script) {
+
+
+        #region MpAvIWebViewBindingResponseHandler Implemention
+        //public override MpAvIWebViewBindingResponseHandler BindingHandler =>
+        //    this;
+
+        //public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
+        //    MpConsole.WriteLine($"Base level binding notification '{notificationType}' was unhandled for msg: ");
+        //    MpConsole.WriteLine(msgJsonBase64Str);
+        //}
+
+        public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
+            MpConsole.WriteLine($"Base level binding notification '{notificationType}' was unhandled for msg: ");
+            MpConsole.WriteLine(msgJsonBase64Str);
+        }
+        #endregion
+
+
+        #region MpICanExecuteJavascript 
+        void MpICanExecuteJavascript.ExecuteJavascript(string script) {
 #if DESKTOP
             this.GetMainFrame().ExecuteJavaScript(script, this.GetMainFrame().Url, 0);
 #endif
         }
+        #endregion
         #endregion
 
         #region Properties
@@ -140,6 +157,7 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
+
         #endregion
 
         #region Public Methods
@@ -208,6 +226,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvWebView_LoadError(object sender, CefNet.LoadErrorEventArgs e) {
             LoadErrorInfo = e.ErrorText;
         }
+
 #endif
         #endregion
 

@@ -3,11 +3,8 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Rendering.Composition;
-using Avalonia.Styling;
 using Avalonia.Utilities;
 using PropertyChanged;
-using System;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -199,12 +196,6 @@ namespace MonkeyPaste.Avalonia {
             _scale = currentScale;
             _layoutThickness = null;
         }
-
-        /// <summary>
-        /// Renders the control.
-        /// </summary>
-        /// <param name="context">The drawing context.</param>
-        //public override virtual void Render(DrawingContext context);
 
         /// <summary>
         /// Measures the control.

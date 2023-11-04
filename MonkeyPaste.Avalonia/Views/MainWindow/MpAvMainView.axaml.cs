@@ -120,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Stretch;
 #if !DESKTOP
-            //Background = Brushes.Lime;
+            Background = Brushes.Lime;
 #endif
             RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
 

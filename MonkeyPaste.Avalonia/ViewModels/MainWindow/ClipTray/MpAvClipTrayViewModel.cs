@@ -4482,9 +4482,12 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ResetTraySplitterCommand => new MpCommand<object>(
             (args) => {
+                if (App.MainView is not MpAvMainView mv) {
+                    return;
+                }
                 var mgs = args as MpAvMovableGridSplitter;
                 if (mgs == null) {
-                    mgs = MpAvWindowManager.MainWindow.GetVisualDescendant<MpAvMovableGridSplitter>();
+                    mgs = mv.GetVisualDescendant<MpAvMovableGridSplitter>();
                     if (mgs == null) {
                         return;
                     }

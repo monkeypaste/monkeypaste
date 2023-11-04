@@ -1,7 +1,6 @@
-﻿using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace MonkeyPaste.Avalonia {
@@ -10,7 +9,7 @@ namespace MonkeyPaste.Avalonia {
             return App.Current.GetMainWindowHandle();
         }
 
-        protected override nint SetActiveProcess(nint handle) {
+        public override nint SetActiveProcess(nint handle) {
             return handle;
         }
 
@@ -27,36 +26,44 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private MpPortableProcessInfo _thisAppInfo;
-        protected override MpPortableProcessInfo GetActiveProcessInfo() {
+        //protected override MpPortableProcessInfo GetActiveProcessInfo() {
+        //    if (_thisAppInfo == null) {
+        //        _thisAppInfo = new MpPortableProcessInfo() {
+        //            Handle = App.Current.GetMainWindowHandle(),
+        //            ProcessPath = Mp.Services.PlatformInfo.ExecutingPath,
+        //            MainWindowTitle = Mp.Services.ThisAppInfo.ThisAppProductName,
+        //            MainWindowIconBase64 = MpBase64Images.AppIcon
+        //        };
+        //    }
+        //    return _thisAppInfo;
+        //}
+
+
+
+        protected override string GetProcessPath(nint handle) {
+            return Mp.Services.PlatformInfo.ExecutingPath;
+        }
+
+        protected override MpPortableProcessInfo GetProcessInfoByHandle(nint handle) {
             if (_thisAppInfo == null) {
                 _thisAppInfo = new MpPortableProcessInfo() {
                     Handle = App.Current.GetMainWindowHandle(),
                     ProcessPath = Mp.Services.PlatformInfo.ExecutingPath,
-                    MainWindowTitle = MpPrefViewModel.Instance.ApplicationName,
+                    MainWindowTitle = Mp.Services.ThisAppInfo.ThisAppProductName,
                     MainWindowIconBase64 = MpBase64Images.AppIcon
                 };
             }
             return _thisAppInfo;
         }
 
-        protected MpPortableProcessInfo RefreshRunningProcessLookup() {
-            return GetActiveProcessInfo();
+        public override IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos { get; }
+
+        protected override nint GetActiveProcessHandle() {
+            return App.Current.GetMainWindowHandle();
         }
 
-        protected void CreateRunningProcessLookup() {
-
-        }
-
-        protected override string GetProcessTitle(nint handle) {
-            throw new System.NotImplementedException();
-        }
-
-        protected override string GetProcessPath(nint handle) {
-            throw new System.NotImplementedException();
-        }
-
-        protected override MpPortableProcessInfo GetProcessInfoByHandle(nint handle) {
-            throw new System.NotImplementedException();
+        protected override bool IsHandleWindowProcess(nint handle) {
+            return true;
         }
     }
 }

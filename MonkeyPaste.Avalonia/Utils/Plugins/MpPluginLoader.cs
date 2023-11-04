@@ -58,7 +58,11 @@ namespace MonkeyPaste.Avalonia {
             IsLoaded = true;
         }
         public static async Task CheckAndInstallCorePluginsAsync() {
-            MpDebug.Assert(CoreDatDir.IsDirectory(), $"Dat dir error, '{CoreDatDir}' does not exist");
+            if (!CoreDatDir.IsDirectory()) {
+                // android dat dir supposed to be '/data/user/0/com.CompanyName.MonkeyPaste.Avalonia/files/dat'
+                MpDebug.Break($"Dat dir error, '{CoreDatDir}' does not exist");
+                return;
+            }
             if (!PluginRootFolderPath.IsDirectory()) {
                 bool success = MpFileIo.CreateDirectory(PluginRootFolderPath);
                 MpDebug.Assert(success, $"Error creating root plugin folder at path '{PluginRootFolderPath}'");

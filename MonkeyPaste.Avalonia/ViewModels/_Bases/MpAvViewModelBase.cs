@@ -142,7 +142,6 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         /// Add an item to the undoable list.
         /// </summary>
-        /// <param name="instance">The instance to add the undoable item against.</param>
         /// <param name="property">The property change.</param>
         /// <param name="oldValue">The original value.</param>
         /// <param name="newValue">The updated value.</param>

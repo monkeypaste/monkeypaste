@@ -1,8 +1,30 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 
 namespace MonkeyPaste.Common {
     public static class MpRectExtensions {
+        #region System.Drawing Extensions
+        public static Point ToSysDrawPoint(this MpPoint p) {
+            if (p == null) {
+                return default;
+            }
+            return new Point((int)p.X, (int)p.Y);
+        }
+
+        public static Size ToSysDrawSize(this MpSize s) {
+            if (s == null) {
+                return default;
+            }
+            return new Size((int)s.Width, (int)s.Height);
+        }
+        public static Rectangle ToSysDrawRect(this MpRect rect) {
+            if (rect == null) {
+                return default;
+            }
+            return new Rectangle(rect.Location.ToSysDrawPoint(), rect.Size.ToSysDrawSize());
+        }
+        #endregion
 
         public static MpPoint ToPortablePoint(this MpSize size) {
             return new MpPoint(size.Width, size.Height);

@@ -62,7 +62,7 @@
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">
     <ItemGroup>
       <BuildOutputFiles Include="$(TargetDir)\**\*.*" />
     </ItemGroup>

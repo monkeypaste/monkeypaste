@@ -4,8 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Resources;
+using System.Resources.NetStandard;
 
 namespace MonkeyPaste.Avalonia {
     public class MpUiStringToEnumConverter : MpIUiStringToEnumConverter {
@@ -13,10 +12,11 @@ namespace MonkeyPaste.Avalonia {
             return uiStr.UiStringToEnum(enumType);
         }
     }
+
     public static class MpAvEnumToUiStringResourceConverter {
         #region Private Variables
         // enums: (all enum to labels, maybe missing some ToStrings() in places...._
-        private static Type[] _UiEnums = new Type[] {
+        public static readonly Type[] UiEnums = new Type[] {
                 // enum to label
                 typeof(MpBillingCycleType),
                 typeof(MpNotificationType),
@@ -95,7 +95,8 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public static void Init() {
-#if DEBUG
+#if DEBUG && WINDOWS
+
             if (!MpAvCultureManager.IsDefaultCulture(EnumUiStrings.Culture)) {
                 MpConsole.WriteLine($"Enum UI Strings ignoring culture '{EnumUiStrings.Culture}' its not default '{MpAvCultureManager.DEFAULT_CULTURE_NAME}'");
                 return;
@@ -117,7 +118,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
         }
 
-        public static string CreateEnumResx(string resx_path) {
+        private static string CreateEnumResx(string resx_path) {
             try {
                 if (resx_path.IsFile()) {
                     MpFileIo.DeleteFile(resx_path);
@@ -147,52 +148,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Extensions
 
-        public static string[] EnumToUiStrings(this Type e, string noneText = "", bool hideFirst = false, string spaceStr = " ") {
-            List<string> enum_strs = new List<string>();
-            if (e == null || !e.IsEnum) {
-                return enum_strs.ToArray();
-            }
 
-            int idx = 0;
-            foreach (Enum val in Enum.GetValues(e)) {
-                if (hideFirst && idx == 0) {
-                    continue;
-                }
-                enum_strs.Add(val.EnumToUiString(noneText));
-                idx++;
-            }
-            return enum_strs.ToArray();
-        }
-        public static string EnumToUiString<TValue>(this TValue value, string noneText = "")
-            where TValue : Enum {
-            // NOTE noneText is unused now and using secondary lookup instead but leaving it
-            // cause not sure what will come up...
-
-            string enum_key = GetEnumKey(value);
-
-            if (typeof(EnumUiStrings).GetProperty(enum_key) is not PropertyInfo pi ||
-                pi.GetValue(null) is not string enum_ui_string) {
-                MpDebug.Break($"Missing enum key '{enum_key}'");
-                return string.Empty;
-            }
-            return enum_ui_string;
-        }
-
-        public static object UiStringToEnum(this string uiStr, Type enumType = null) {
-            var keys = FindEnumKeys(uiStr);
-            string key = enumType == null ?
-                keys.FirstOrDefault() :
-                keys.FirstOrDefault(x => x.StartsWith(enumType.Name));
-
-            if (key.SplitNoEmpty("_") is string[] key_parts &&
-                key_parts.Length == 2 &&
-                _UiEnums.FirstOrDefault(x => x.Name == key_parts[0]) is Type enum_type &&
-                    key_parts[1].ToEnum(enum_type) is object enum_val) {
-                return enum_val;
-            }
-            MpDebug.Break($"Can't find key for type ui str '{uiStr}' ");
-            return default;
-        }
         #endregion
 
         #endregion
@@ -207,7 +163,7 @@ namespace MonkeyPaste.Avalonia {
         private static Dictionary<string, string> GetCodeEnumsAsLookup() {
             // enum key format: <EnumType>_<EnumValName>
             var elu = new Dictionary<string, string>();
-            foreach (var enumType in _UiEnums) {
+            foreach (var enumType in UiEnums) {
                 string type_prefix = enumType.ToString().SplitNoEmpty(".").Last();
                 foreach (var (enumName, idx) in Enum.GetNames(enumType).WithIndex()) {
                     string name_key = $"{type_prefix}_{enumName}";
@@ -228,8 +184,8 @@ namespace MonkeyPaste.Avalonia {
             if (!resx_path.IsFile()) {
                 return elu;
             }
-            using var ms = new FileStream(resx_path, FileMode.Open);
-            using var rrr = new ResXResourceReader(ms);
+            //using var ms = new FileStream(resx_path, FileMode.Open);
+            //using var rrr = new ResXResourceReader(ms);
             foreach (var pi in typeof(EnumUiStrings).GetProperties()) {
                 if (pi.GetValue(null) is string val) {
                     elu.Add(pi.Name, val);
@@ -238,17 +194,6 @@ namespace MonkeyPaste.Avalonia {
             return elu;
         }
 
-        private static string GetEnumKey(Enum enumVal) {
-            return $"{enumVal.GetType().ToString().SplitNoEmpty(".").Last()}_{enumVal}";
-        }
-
-        private static IEnumerable<string> FindEnumKeys(string uiStr) {
-            foreach (var pi in typeof(EnumUiStrings).GetProperties()) {
-                if (pi.GetValue(null) is string val && val == uiStr) {
-                    yield return pi.Name;
-                }
-            }
-        }
 
         #endregion
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using Avalonia;
 #if WINDOWS
 
 using MonkeyPaste.Common.Wpf;
@@ -70,11 +69,6 @@ namespace MonkeyPaste.Common.Avalonia {
             return str;
         }
 
-        public static string ToBase64ImageFromRichHtml(this string str, Size size) {
-            var bmp = HtmlRender.RenderToImage(str, size);
-            bmp.Save(@"C:\Users\tkefauver\Desktop\html2img_test.png");
-            return bmp.ToBase64String();
-        }
 
         public static string ToRtfFromRichHtml(this string str) {
             if (str.IsStringRichHtml() && OperatingSystem.IsWindows()) {

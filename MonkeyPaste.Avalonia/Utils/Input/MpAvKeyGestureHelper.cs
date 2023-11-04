@@ -7,11 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-
-
 
     public class MpAvKeyGestureHelper<TKeyStruct> where TKeyStruct : struct {
 
@@ -32,10 +29,6 @@ namespace MonkeyPaste.Avalonia {
             false;
 #endif
 
-#if WINDOWS
-
-        private MpAvDownKeyHelper _win32DownChecker;
-#endif
 
         #endregion
 
@@ -57,77 +50,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-
-        public void StartChecker() {
-#if !WINDOWS
-    return;
-#endif
-            if (typeof(TKeyStruct) != typeof(KeyCode)) {
-                return;
-            }
-
-            _win32DownChecker = new MpAvDownKeyHelper(IsKeyUnificationEnabled);
-            DateTime last_change_dt;
-            void _win32DownChecker_OnDownsChanged(object sender, (bool, KeyCode) e) {
-                last_change_dt = DateTime.Now;
-                bool is_down = e.Item1;
-                if (is_down) {
-                    // ignored
-                    return;
-                }
-                // this hook should be attached BEFORE sharphook
-                // so wait reasonably long enough to not collide and if downs don't match fix and ntf
-                _ = Task.Run(async () => {
-                    DateTime this_change_dt = last_change_dt;
-
-                    await Task.Delay(1000);
-                    if (this_change_dt != last_change_dt) {
-                        // only continue after keyboard activity...
-                    }
-
-                    var dkl = _downs.Cast<KeyCode>().ToList();
-                    var dkl_win32 =
-                        _win32DownChecker
-                        .Downs
-                        .Cast<KeyCode>()
-                        .ToList();
-
-                    var diffs = dkl.Difference(dkl_win32);
-                    if (!diffs.Any()) {
-                        return;
-                    }
-
-                    List<KeyCode> manually_removed = new List<KeyCode>();
-                    List<KeyCode> test = new List<KeyCode>();
-                    foreach (var diff in diffs) {
-                        if (dkl.Contains(diff)) {
-                            bool success = RemoveKeyDown((TKeyStruct)(object)diff);
-                            if (success) {
-                                manually_removed.Add(diff);
-                            } else {
-                                MpDebug.Break($"Could not remove key '{diff}'");
-                            }
-                        } else if (dkl_win32.Contains(diff)) {
-                            // should probably not happen but just to verify
-                            // win32 hook gets all downs right
-                            test.Add(diff);
-                        }
-                    }
-
-                    if (test.Any()) {
-                        // shouldn't happen
-
-                        //MpDebug.Break($"Could not remove key '{diff}'");
-                    }
-                    Mp.Services.NotificationBuilder.ShowMessageAsync(
-                               title: $"Orphans FIXED",
-                               body: Mp.Services.KeyConverter.ConvertKeySequenceToString(new[] { manually_removed }),
-                               iconSourceObj: "KeyboardImage",
-                               maxShowTimeMs: 10_000).FireAndForgetSafeAsync();
-                });
-            }
-            _win32DownChecker.OnDownsChanged += _win32DownChecker_OnDownsChanged;
-        }
 
         public void AddKeyDown(TKeyStruct key) {
             key = ResolveKey(key);

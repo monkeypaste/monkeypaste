@@ -1,15 +1,13 @@
 ﻿
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.Content.Res;
 using Android.OS;
 using Android.Views;
 using Android.Webkit;
 using Android.Widget;
+using Avalonia;
 using Avalonia.Android;
-using Avalonia.Threading;
-using Com.Xamarin.Formsviewgroup;
 using Orientation = Android.Content.Res.Orientation;
 
 namespace MonkeyPaste.Avalonia.Android {
@@ -18,9 +16,23 @@ namespace MonkeyPaste.Avalonia.Android {
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     LaunchMode = LaunchMode.SingleTop,
+    MainLauncher = true,
     ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
-    public class MainActivity : AvaloniaMainActivity {
-        private bool _isFullscreen = false;
+    public class MainActivity : AvaloniaMainActivity<App> {
+        private bool _isFullscreen = true;
+
+        protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
+
+            return base.CustomizeAppBuilder(builder)
+                 //.WithInterFont()
+                 //.UseReactiveUI()
+                 .AfterSetup(_ => {
+                     WebView.SetWebContentsDebuggingEnabled(true);
+                     new MpAvAdWrapper().CreateDeviceInstance(this);
+                     MpAvNativeWebViewHost.Implementation = new MpAvAdWebViewBuilder();
+                 });
+        }
+
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
             if (_isFullscreen) {
@@ -46,7 +58,6 @@ namespace MonkeyPaste.Avalonia.Android {
 
         public override void OnWindowFocusChanged(bool hasFocus) {
             base.OnWindowFocusChanged(hasFocus);
-
             MpAvMainWindowViewModel.Instance.IsMainWindowActive = hasFocus;
             if (hasFocus && _isFullscreen) {
                 SetFullscreenWindowLayout();
@@ -82,5 +93,13 @@ namespace MonkeyPaste.Avalonia.Android {
                 }
             }
         }
+
+        //protected override void OnResume() {
+        //    base.OnResume();
+
+        //    StartActivity(new Intent(Application.Context, typeof(MainActivity)));
+
+        //    Finish();
+        //}
     }
 }

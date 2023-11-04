@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Common;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -134,6 +133,10 @@ namespace MonkeyPaste.Common {
 
         public void RaiseCanExecuteChanged() {
             //CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            if (MpCommonTools.Services == null ||
+                MpCommonTools.Services.MainThreadMarshal == null) {
+                return;
+            }
             MpCommonTools.Services.MainThreadMarshal.RunOnMainThread(() => CanExecuteChanged?.Invoke(this, EventArgs.Empty));
         }
 

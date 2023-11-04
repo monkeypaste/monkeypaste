@@ -39,6 +39,7 @@
     <!-- DEFAULTS (OVERRIDEN BY CONDITIONS) -->
     <CefPlatformDir>cef\cef_win</CefPlatformDir>
     <IsDesktop>false</IsDesktop>
+    <IsMobile>false</IsMobile>
     <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
   </PropertyGroup>
@@ -90,15 +91,14 @@
     <MainProjectName>MonkeyPaste.Avalonia.Android</MainProjectName>
     <AndroidPackageName>com.CompanyName.MonkeyPaste.Avalonia</AndroidPackageName>
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
+    <IsMobile>true</IsMobile>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
     <MainTargetFramework>net7.0-ios</MainTargetFramework>
     <DefineConstants>MOBILE;IOS;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="$(IsDesktop) == 'true'">
+    <IsMobile>true</IsMobile>
   </PropertyGroup>
   
   

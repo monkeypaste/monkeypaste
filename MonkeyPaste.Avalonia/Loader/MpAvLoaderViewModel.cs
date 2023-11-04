@@ -157,7 +157,7 @@ namespace MonkeyPaste.Avalonia {
         #region Protected Methods
 
         private void CreateLoaderItems() {
-#if DESKTOP
+            //#if DESKTOP
             BaseItems.AddRange(new[] {
                 //new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"),
                 new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger", Mp.Services.PlatformInfo),
@@ -169,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
                 new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
                 new MpAvLoaderItemViewModel(typeof(MpAvAccountViewModel), "Profile"),
             }.ToList());
-#endif
+            //#endif
 
             CoreItems.AddRange(
                new List<MpAvLoaderItemViewModel>() {
@@ -230,6 +230,7 @@ namespace MonkeyPaste.Avalonia {
                 Title += ".";
             }
             await item.LoadItemAsync();
+            item.IsLoaded = true;
             sw.Stop();
 
             if (affectsCount) {
@@ -243,6 +244,9 @@ namespace MonkeyPaste.Avalonia {
 
             IsBusy = false;
             MpConsole.WriteLine($"Loaded {item.Label} at idx: {index} Load Count: {LoadedCount} Load Percent: {PercentLoaded} Time(ms): {sw.ElapsedMilliseconds}");
+
+            Items.Where(x => !x.IsLoaded).ForEach(x => MpConsole.WriteLine($"Still not loaded: {x.ItemType}"));
+
         }
         #endregion
 

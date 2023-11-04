@@ -1,22 +1,20 @@
 ﻿using MonkeyPaste.Common;
-using System.Diagnostics;
-using System.Reflection;
-using Windows.ApplicationModel;
-//using Avalonia.Win32;
+
+#if WINDOWS
+using Windows.ApplicationModel; 
+#elif ANDROID
+using Xamarin.Essentials;
+#endif
 
 namespace MonkeyPaste.Avalonia {
 
     public class MpAvThisAppInfo : MpIThisAppInfo {
         // NOTE make sure Directory.build.props Application* props match these
         public string ThisAppCompanyName =>
-
-            FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).CompanyName;
+            "Monkey LLC";
 
         public string ThisAppProductName =>
-
-            FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).ProductName;
-        //public string ThisAppProductVersion =>
-        //    
+            "MonkeyPaste";
         public string ThisAppProductVersion {
             get {
 #if WINDOWS
@@ -27,10 +25,18 @@ namespace MonkeyPaste.Avalonia {
                     version.Minor,
                     version.Build,
                     version.Revision);
+#elif ANDROID
+                return VersionTracking.CurrentVersion;
 #else
                 return FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).ProductVersion;
 #endif
             }
+
+        }
+        public MpAvThisAppInfo() {
+#if ANDROID
+            VersionTracking.Track();
+#endif
         }
     }
 }

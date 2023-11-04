@@ -582,7 +582,10 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.ClipboardMonitor.StartMonitor(false);
 
             SetupMainWindowSize();
+
+#if DESKTOP
             SetMainWindowRect(MainWindowClosedScreenRect);
+#endif
 
             ShowMainWindowCommand.Execute(null);
 
@@ -796,9 +799,8 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPrefViewModel.Instance.ShowInTaskbar) {
                 w.WindowState = WindowState.Normal;
             }
-            //if (HideInitialOpen) {
-            // app started from login, initial show is transparent/nohtt
-            // shows splash loader and loaded msg by default but user can hide
+
+#if DESKTOP
             if (IsMainWindowInitiallyOpening) {
 #if WINDOWS
                 MpAvToolWindow_Win32.SetAsNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
@@ -812,6 +814,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindowManager.MainWindow.Opacity = 1;
                 IsMainWindowInHiddenLoadState = false;
             }
+#endif
             //}
             DispatcherPriority show_priority =
                 IsMainWindowInHiddenLoadState ?
@@ -1088,6 +1091,7 @@ namespace MonkeyPaste.Avalonia {
                 break;
             }
 
+#if DESKTOP
             await HideMainWindowCommand.ExecuteAsync(null);
 
             // only show in taskbar once initial/hidden show is complete
@@ -1107,10 +1111,6 @@ namespace MonkeyPaste.Avalonia {
             // wait a bit to avoid laggy animation due to hide mw handlers
             await Task.Delay(1_000);
 
-            MpMessenger.SendGlobal(MpMessageType.StartupComplete);
-            MpAvLoaderViewModel.LoaderStopWatch.Stop();
-            MpConsole.WriteLine($"Startup complete. Total Time {MpAvLoaderViewModel.LoaderStopWatch.ElapsedMilliseconds}ms");
-
             if (!was_loader_visible) {
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
                 title: "Loaded",
@@ -1122,6 +1122,12 @@ namespace MonkeyPaste.Avalonia {
             if (!was_login_load) {
                 ShowMainWindowCommand.Execute(null);
             }
+#endif
+
+            MpMessenger.SendGlobal(MpMessageType.StartupComplete);
+            MpAvLoaderViewModel.LoaderStopWatch.Stop();
+            MpConsole.WriteLine($"Startup complete. Total Time {MpAvLoaderViewModel.LoaderStopWatch.ElapsedMilliseconds}ms");
+
 
         }
         #endregion

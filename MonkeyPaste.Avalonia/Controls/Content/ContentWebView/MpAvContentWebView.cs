@@ -3,8 +3,10 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
@@ -17,8 +19,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using AvToolTip = Avalonia.Controls.ToolTip;
-using Avalonia.Layout;
-using Avalonia.Platform;
 
 #if DESKTOP
 
@@ -40,8 +40,7 @@ namespace MonkeyPaste.Avalonia {
         MpAvIResizableControl,
         MpAvIDomStateAwareWebView,
         MpAvIAsyncJsEvalWebView,
-        MpAvIReloadableContentWebView,
-        MpAvIWebViewBindingResponseHandler {
+        MpAvIReloadableContentWebView {
 
 
         #region Private Variables
@@ -69,13 +68,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        #region MpIWebView Implementation
-#if !DESKTOP
-        public override MpAvIWebViewBindingResponseHandler BindingHandler =>
-            this;
-#endif
 
-        #endregion
 
         #region MpIJsonMessenger Implementation
         public void SendMessage(string msgJsonBase64Str) {
@@ -369,7 +362,7 @@ namespace MonkeyPaste.Avalonia {
         #region MpAvIWebViewBindingResponseHandler Implementation
 
         private string _lastContentHandle { get; set; } = null;
-        public virtual void HandleBindingNotification(
+        public override void HandleBindingNotification(
             MpEditorBindingFunctionType notificationType,
             string msgJsonBase64Str,
             string contentHandle) {
@@ -973,9 +966,13 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvContentWebView() : base() {
+#if DESKTOP
             InitialUrl = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
-            this.GetObservable(MpAvContentWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged());
+#else
+            Address = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
+#endif
 
+            this.GetObservable(MpAvContentWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged());
             this.GetObservable(MpAvContentWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());
             this.GetObservable(MpAvContentWebView.IsContentSelectedProperty).Subscribe(value => OnIsContentSelectedChanged());
             this.GetObservable(MpAvContentWebView.IsContentResizingProperty).Subscribe(value => OnIsContentResizingChanged());
@@ -1051,6 +1048,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
+#if DESKTOP
         protected override void OnDragLeave(RoutedEventArgs e) {
             base.OnDragLeave(e);
 
@@ -1064,11 +1062,6 @@ namespace MonkeyPaste.Avalonia {
             base.OnDrop(e);
             this.Cursor = null;// new Cursor(StandardCursorType.Arrow);
         }
-
-        protected override void OnCursorChange(CursorChangeEventArgs e) {
-            base.OnCursorChange(e);
-        }
-#if DESKTOP
 
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
             if (!IsScrollWheelEnabled) {
@@ -1255,10 +1248,10 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 }
             }
+            MpConsole.WriteLine($"waited for domload: {sw.ElapsedMilliseconds}ms");
 #else
             await Task.Delay(1);
 #endif
-            MpConsole.WriteLine($"waited for domload: {sw.ElapsedMilliseconds}ms");
             var req = GetInitMessage();
             SendMessage($"initMain_ext('{req.SerializeJsonObjectToBase64()}')");
         }

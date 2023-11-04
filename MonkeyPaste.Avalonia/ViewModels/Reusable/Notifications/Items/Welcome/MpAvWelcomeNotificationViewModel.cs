@@ -27,13 +27,15 @@ namespace MonkeyPaste.Avalonia {
         public static async Task ShowWelcomeNotificationAsync(bool forceShow = false) {
             bool will_show =
                 forceShow ||
-                //!Instance.IsDoNotShowType ||
                 !MpAvPrefViewModel.Instance.IsWelcomeComplete;
-
+#if !DESKTOP
+            will_show = false;
+            MpAvPrefViewModel.Instance.IsWelcomeComplete = true;
+#endif
             await MpAvAccountViewModel.Instance.InitializeAsync();
             if (will_show) {
                 await MpDb.InitAsync();
-                await MpAvSubscriptionPurchaseViewModel.Instance.InitializeAsync(); ;
+                await MpAvSubscriptionPurchaseViewModel.Instance.InitializeAsync();
                 Instance.InitWelcomeItems();
                 await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                     new MpNotificationFormat() {

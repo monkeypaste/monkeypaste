@@ -1,13 +1,8 @@
-﻿using Avalonia.Platform.Storage;
-using MonkeyPaste.Common;
+﻿using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using Windows.Storage;
-using Windows.UI.Notifications;
 
 namespace MonkeyPaste.Avalonia {
     public enum MpShareType {

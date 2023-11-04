@@ -1,5 +1,4 @@
 ﻿using MonkeyPaste.Common;
-using System;
 using System.IO;
 //using Avalonia.Win32;
 using System.Threading.Tasks;
@@ -180,6 +179,10 @@ namespace MonkeyPaste.Avalonia {
             DataObjectRegistrar = ClipboardMonitor as MpIPlatformDataObjectRegistrar;
 
             PlatformShorcuts = new MpAvPlatformShortcuts();
+
+#if !DESKTOP
+            await MpDb.InitAsync();
+#endif
         }
 
         #endregion

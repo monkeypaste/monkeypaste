@@ -203,8 +203,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (ShowProgressSpinner) {
                     if (OtherArgs is object[] argParts) {
-                        if (argParts.OfType<MpAvProgressViewModel>().FirstOrDefault() is MpAvProgressViewModel prog_vm) {
-                            PercentLoaded = prog_vm.Progress;
+                        if (argParts.OfType<MpIProgressIndicatorViewModel>().FirstOrDefault() is MpIProgressIndicatorViewModel prog_vm) {
+                            PercentLoaded = prog_vm.PercentLoaded;
                         }
                         if (argParts.OfType<CancellationToken>().FirstOrDefault() is CancellationToken ct &&
                             ct.IsCancellationRequested) {

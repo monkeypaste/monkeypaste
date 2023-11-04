@@ -2,17 +2,10 @@ using Android.Views;
 using Android.Webkit;
 using Avalonia.Android;
 using Avalonia.Platform;
-using Avalonia.Threading;
-using Java.Interop;
-using MonkeyPaste;
-using MonkeyPaste.Avalonia;
-using MonkeyPaste.Avalonia.Android;
 using MonkeyPaste.Common;
 using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 
-namespace ControlCatalog.Android;
+namespace MonkeyPaste.Avalonia.Android;
 
 public class MpAvAdAndroidViewControlHandle :
     AndroidViewControlHandle, MpIOffscreenRenderSourceHost {

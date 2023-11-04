@@ -1,7 +1,12 @@
 ﻿namespace MonkeyPaste.Avalonia {
     public static class MpServerConstants {
 
-        const string LOCAL_SERVER_URL = "https://localhost";
+        const string LOCAL_SERVER_URL =
+#if DESKTOP
+        "https://localhost"; 
+#else
+        "http://192.168.43.33";
+#endif
         const string REMOTE_SERVER_URL = "https://www.monkeypaste.com";
 
         public const bool IS_SERVER_LOCAL = true;

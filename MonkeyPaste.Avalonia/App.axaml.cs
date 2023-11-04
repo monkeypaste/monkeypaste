@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Layout;
 using Avalonia.Logging;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
@@ -118,7 +119,9 @@ namespace MonkeyPaste.Avalonia {
             MpAvCultureManager.SetCulture(MpAvCultureManager.DEFAULT_CULTURE_NAME);
 
             DateTime startup_datetime = DateTime.Now;
-            MpAvLogSink.Init();
+#if DESKTOP
+            MpAvLogSink.Init(); 
+#endif
 
             ReportCommandLineArgs(Args);
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
@@ -138,17 +141,23 @@ namespace MonkeyPaste.Avalonia {
                 var loader = new MpAvLoaderViewModel(is_login_load);
                 await loader.CreatePlatformAsync(startup_datetime);
                 loader.InitAsync().FireAndForgetSafeAsync();
-
                 mobile.MainView = new MpAvMainView() {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
-                    DataContext = MpAvMainWindowViewModel.Instance
+                    Background = Brushes.Lime,
+                    DataContext = MpAvMainWindowViewModel.Instance,
+                    Width = 10000,
+                    Height = 10000
+                };
+                MpAvMainWindowViewModel.Instance.WindowResizeCommand.Execute(new MpPoint(10000, 10000));
+                mobile.MainView.PointerPressed += (s, e) => {
+
                 };
             }
 
             base.OnFrameworkInitializationCompleted();
 
-#if DEBUG
+#if DEBUG && DESKTOP
             this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
 #endif
         }
@@ -209,12 +218,14 @@ namespace MonkeyPaste.Avalonia {
             (LogEventLevel.Warning,LogArea.Binding)
         };
         public static void Init() {
-            Logger.Sink = new MpAvLogSink();
+            _ = new MpAvLogSink();
         }
         private MpAvLogSink() {
             if (Logger.Sink != this) {
                 _defSink = Logger.Sink;
             }
+
+            Logger.Sink = this;
         }
 
         public bool IsEnabled(LogEventLevel level, string area) {

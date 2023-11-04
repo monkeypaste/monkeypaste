@@ -56,7 +56,11 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsWebViewConverterEnabled =>
+#if DESKTOP
             MpAvCefNetApplication.IsCefNetLoaded;
+#else
+            true;
+#endif
 
         bool IsWebViewConverterAvailable =>
             IsWebViewConverterEnabled &&

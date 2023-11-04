@@ -26,7 +26,7 @@ namespace MonkeyPaste {
     public interface MpIPlainHtmlConverterView : MpIJsonMessenger, MpIHasDevTools, MpIPlatformView, MpIUserAgentProvider {
 
     }
-    public interface MpIWebView : MpIHasDataContext {
+    public interface MpICanExecuteJavascript {
         void ExecuteJavascript(string script);
     }
     public interface MpIRecyclableLocatorItem : MpILocatorItem {

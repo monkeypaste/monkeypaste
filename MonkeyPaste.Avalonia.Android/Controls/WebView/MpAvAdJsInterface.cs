@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.Webkit;
-using Android.Widget;
 using Avalonia.Threading;
 using Java.Interop;
 using MonkeyPaste.Common;
@@ -17,13 +16,13 @@ namespace MonkeyPaste.Avalonia.Android {
 
         [Export]
         [JavascriptInterface]
-        public void InvokeMethod(string fn, string msg) {
+        public void InvokeMethod(string fn, string msg, string handle) {
             MpConsole.WriteLine($"Fn: '{fn}' Data: '{msg}'");
             if (_host == null || _host.BindingHandler == null) {
                 return;
             }
             Dispatcher.UIThread.Post(() => {
-                _host.BindingHandler.HandleBindingNotification(fn.ToEnum<MpAvEditorBindingFunctionType>(), msg);
+                _host.BindingHandler.HandleBindingNotification(fn.ToEnum<MpEditorBindingFunctionType>(), msg, handle);
             });
 
         }

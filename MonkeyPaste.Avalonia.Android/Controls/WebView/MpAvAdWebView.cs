@@ -4,23 +4,9 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Webkit;
-using Avalonia.Android;
-using Avalonia.Android.Platform.Specific;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Input.Raw;
-using Com.Xamarin.Formsviewgroup;
-using Java.Nio;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
-using SkiaSharp;
-using SkiaSharp.Views.Android;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AvApplication = Avalonia.Application;
 
 namespace MonkeyPaste.Avalonia.Android {
     public class MpAvAdWebView :

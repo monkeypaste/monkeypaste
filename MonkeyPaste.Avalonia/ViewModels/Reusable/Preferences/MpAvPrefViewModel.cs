@@ -596,6 +596,7 @@ namespace MonkeyPaste.Avalonia {
             _prefPath = prefPath;
             _dbInfo = dbInfo;
             _osInfo = osInfo;
+
             if (File.Exists(_prefPath)) {
                 await LoadPrefsAsync();
             } else {

@@ -1,7 +1,5 @@
 ﻿using MonkeyPaste.Common;
-using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {

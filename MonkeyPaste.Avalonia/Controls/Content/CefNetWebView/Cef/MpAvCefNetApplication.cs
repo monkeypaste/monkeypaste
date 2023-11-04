@@ -16,7 +16,6 @@ namespace MonkeyPaste.Avalonia {
         private MpAvCefNetMessageHub _messageHub;
         private Timer messagePump;
         private const int messagePumpDelay = 10;
-        private bool _wasCefUpdated = false;
 
         private static MpIPlatformInfo _pinfo = new MpAvPlatformInfo_desktop();
         #endregion
@@ -189,18 +188,7 @@ namespace MonkeyPaste.Avalonia {
             Initialize(Path.Combine(cefRootDir, "Release"), settings);
             MpConsole.WriteLine("CefNet Initialized.");
         }
-        private void ReceivedGlobalMessage(MpMessageType msg) {
-            switch (msg) {
-                case MpMessageType.StartupComplete:
-                    if (_wasCefUpdated) {
-                        Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
-                            title: "Update Successfull",
-                            message: "Content View updated succesfully").FireAndForgetSafeAsync();
-                    }
-                    Dispatcher.UIThread.InvokeAsync(MpAvCefUpdater.CheckForCefUpdateAsync);
-                    break;
-            }
-        }
+
         protected override void OnBeforeCommandLineProcessing(string processType, CefCommandLine commandLine) {
             base.OnBeforeCommandLineProcessing(processType, commandLine);
             //return;

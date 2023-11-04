@@ -1,22 +1,9 @@
-﻿<?xml version="1.0" 
-      encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
-          android:installLocation="auto">
-  
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto">
 	<uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-  
-  
-  
-	<application android:label="Monkey Paste" 
-               android:debuggable="true"
-               android:icon="@drawable/Icon">
-    <activity android:name=".MainActivity"
-            android:configChanges="orientation"
-            android:label="Monkey Paste"></activity>
-  </application>
-
-  <uses-sdk android:minSdkVersion="26"
-            android:targetSdkVersion="33"
-            android:maxSdkVersion="33" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<application android:label="MonkeyPaste" android:debuggable="true" android:icon="@drawable/Icon" android:networkSecurityConfig="@xml/net_sec_conf">
+		<activity android:name=".MainActivity" android:configChanges="orientation" android:label="MonkeyPaste"></activity>
+	</application>
+	<uses-sdk android:minSdkVersion="26" android:targetSdkVersion="33" android:maxSdkVersion="33" />
 </manifest>

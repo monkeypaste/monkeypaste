@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Resources;
+using System.Resources.NetStandard;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvEditorUiStringBuilder {
@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public static void Init() {
-#if DEBUG
+#if DEBUG && WINDOWS
             CreateJsUiStrings();
 #endif
         }

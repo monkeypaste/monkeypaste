@@ -4,11 +4,11 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
-using System.Windows.Threading;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvIsHoveringExtension {

@@ -26,10 +26,11 @@ namespace MonkeyPaste {
         public static bool IsDateTimeTicks { get; set; } = true;
         public static bool UseWAL {
             get {
-                //if (MpPlatform.Services.PlatformInfo.OsType == MpUserDeviceType.Android) {
-                //    return false;
-                //}
+#if ANDROID 
+                return false;
+#else
                 return true;
+#endif
             }
         }
 
@@ -79,7 +80,6 @@ namespace MonkeyPaste {
                 await MpDefaultDataModelTools.CreateAsync(Mp.Services.ThisDeviceInfo.ThisDeviceGuid);
                 await CreateViewsAsync();
                 await Mp.Services.DefaultDataCreator.CreateDefaultDataAsync();
-
             } else {
                 await MpDefaultDataModelTools.InitializeAsync();
             }
@@ -483,7 +483,9 @@ namespace MonkeyPaste {
             MpConsole.WriteLine($"Db {(isNewDb ? "CREATED" : "CONNECTED")} at '{dbPath}'");
             bool? success = connect_success ? isNewDb : null;
             if (success.IsTrue()) {
-                await InitDbSettingsAsync();
+#if !ANDROID
+                await InitDbSettingsAsync(); 
+#endif
             }
             return success;
         }
@@ -544,7 +546,6 @@ namespace MonkeyPaste {
                 }
             }
             try {
-                //await _connectionAsync.QueryScalarsAsync<int>("select 1");
                 await _connectionAsync.CreateTableAsync<MpTag>();
                 return true;
             }
@@ -559,8 +560,9 @@ namespace MonkeyPaste {
             if (_connectionAsync != null) {
                 return;
             }
-
+            //#if !ANDROID
             Batteries_V2.Init();
+            //#endif
             if (_connectionAsync == null) {
                 try {
                     if (string.IsNullOrEmpty(dbPath)) {
@@ -569,8 +571,15 @@ namespace MonkeyPaste {
                     if (string.IsNullOrEmpty(dbPass)) {
                         dbPass = Mp.Services.DbInfo.DbPassword;
                     }
-                    _connectionAsync = new SQLiteAsyncConnection(GetConnectionString(dbPath, dbPass));
-                    MpCustomDbFunctions.AddCustomFunctions(_connectionAsync.GetConnection().Handle);
+                    var cs = GetConnectionString(dbPath, dbPass);
+                    if (cs == null) {
+                    }
+                    _connectionAsync = new SQLiteAsyncConnection(cs);
+                    var conn = _connectionAsync.GetConnection();
+                    if (conn != null) {
+                        MpCustomDbFunctions.AddCustomFunctions(conn.Handle);
+                    }
+
                     if (UseWAL) {
                         await _connectionAsync.EnableWriteAheadLoggingAsync();
                     }
