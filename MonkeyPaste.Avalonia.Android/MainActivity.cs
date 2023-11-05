@@ -53,8 +53,8 @@ namespace MonkeyPaste.Avalonia.Android {
             var display = this.WindowManager.DefaultDisplay;
             MpMainWindowOrientationType mwot = display.Rotation.ToPortableOrientationType();
             MpAvMainWindowViewModel.Instance.CycleOrientationCommand.Execute(mwot);
-
         }
+
 
         public override void OnWindowFocusChanged(bool hasFocus) {
             base.OnWindowFocusChanged(hasFocus);
@@ -67,30 +67,31 @@ namespace MonkeyPaste.Avalonia.Android {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1422:Validate platform compatibility", Justification = "<Pending>")]
         private void SetFullscreenWindowLayout() {
-            if (Window != null) {
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.R) {
-                    IWindowInsetsController wicController = Window.InsetsController;
+            if (Window == null) {
+                return;
+            }
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.R) {
+                IWindowInsetsController wicController = Window.InsetsController;
 
 
-                    Window.SetDecorFitsSystemWindows(false);
-                    Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+                Window.SetDecorFitsSystemWindows(false);
+                Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 
-                    if (wicController != null) {
-                        wicController.Hide(WindowInsets.Type.Ime());
-                        wicController.Hide(WindowInsets.Type.NavigationBars());
-                    }
-                } else {
-
-                    Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
-
-                    Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(SystemUiFlags.Fullscreen |
-                                                                           SystemUiFlags.HideNavigation |
-                                                                           SystemUiFlags.Immersive |
-                                                                           SystemUiFlags.ImmersiveSticky |
-                                                                           SystemUiFlags.LayoutHideNavigation |
-                                                                           SystemUiFlags.LayoutStable |
-                                                                           SystemUiFlags.LowProfile);
+                if (wicController != null) {
+                    wicController.Hide(WindowInsets.Type.Ime());
+                    wicController.Hide(WindowInsets.Type.NavigationBars());
                 }
+            } else {
+
+                Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+
+                Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(SystemUiFlags.Fullscreen |
+                                                                       SystemUiFlags.HideNavigation |
+                                                                       SystemUiFlags.Immersive |
+                                                                       SystemUiFlags.ImmersiveSticky |
+                                                                       SystemUiFlags.LayoutHideNavigation |
+                                                                       SystemUiFlags.LayoutStable |
+                                                                       SystemUiFlags.LowProfile);
             }
         }
 

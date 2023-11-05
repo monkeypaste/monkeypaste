@@ -13,6 +13,11 @@
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
      <!--<UseMauiEssentials>true</UseMauiEssentials>-->
   </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Removes Fody 'already processed warning' -->
+    <DisableFody Condition="'$(_ComputeFilesToPublishForRuntimeIdentifiers)'=='true'">true</DisableFody>
+  </PropertyGroup>
   
   <PropertyGroup Condition="'$(BuildOs)' == 'WINDOWS'">  
     <UseWPF>True</UseWPF>
@@ -594,6 +599,7 @@
     <Compile Remove="Program.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\MpAvCursor.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
+    <Compile Remove="Utils\Clipboard\ClipboardHelper.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
     <Compile Remove="Utils\Input\MpAvKeyGestureHelper_old.cs" />
     <Compile Remove="Utils\WindowManager\Helpers\MpAvTopmostSelector.cs" />
@@ -620,7 +626,7 @@
   </ItemGroup>
   
   
-  <ItemGroup Condition="'$(IsDesktop)' == 'True'">
+  <ItemGroup Condition="'$(BuildOs)' != 'ANDROID'">
     <Content Include="Assets\Sounds\alert.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -648,35 +654,8 @@
   
     <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
   </ItemGroup>
+    
   
-  <ItemGroup Condition="'$(BuildOs)' == 'ANDROID'">
-    <AvaloniaResource Include="Assets\Sounds\alert.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\blip.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\blip2.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\chime.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\Monkey1.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\Monkey2.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\ting.wav">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Resources\terms.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </AvaloniaResource>
-  
-    <AvaloniaResource Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
-  </ItemGroup>
   
   <ItemGroup>
     <AvaloniaResource Include="Assets\Fonts\Habanero\Habanero.otf">
@@ -1462,30 +1441,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Nav\TabNav.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />
-    <AvaloniaResource Include="Assets\Sounds\alert.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\blip.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\blip2.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\chime.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\Monkey1.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\Monkey2.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Assets\Sounds\ting.wav">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
-    <AvaloniaResource Include="Resources\terms.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </AvaloniaResource>
+    
     <AvaloniaResource Include="Themes\Default\Accents\Accents.axaml">
       
     </AvaloniaResource>
@@ -1559,6 +1515,7 @@
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
     <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
+    <Folder Include="Utils\Clipboard\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
@@ -1578,11 +1535,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>EnumUiStrings.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\UiStrings\EnumUiStrings.ja-JP.Designer.cs">
-      <DependentUpon>EnumUiStrings.ja-JP.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Update="Resources\UiStrings\ListingStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -1597,11 +1549,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>UiStrings.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\UiStrings\UiStrings.ja-JP.Designer.cs">
-      <DependentUpon>UiStrings.ja-JP.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Views\AboutWindow\MpAvAboutView.axaml.cs">
       <DependentUpon>MpAvAboutView.axaml</DependentUpon>
@@ -1905,9 +1852,25 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
   </ItemGroup>
-
-
+  
   <ItemGroup>
+    <EmbeddedResource Remove="Resources\Legal\Attributions.resx" />
+    <EmbeddedResource Remove="Resources\UiStrings\ListingStrings.resx" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="Resources\Legal\Attributions.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Attributions.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Resources\UiStrings\ListingStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ListingStrings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+
+  <ItemGroup Condition="'$(IsDesktop)' == 'True'">
     <Reference Include="CefNet">
       <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
     </Reference>
@@ -1923,28 +1886,11 @@
     </AvaloniaXaml>
   </ItemGroup>
 
-  <!--<ItemGroup>
-    <Content Update="Resources\Editor\src\components\context-menu-wrapper\context-menu-wrapper-style.css">
-      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
-    </Content>
-    <Content Update="Resources\Editor\src\components\italic\italic.js">
-      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
-    </Content>
-    <Content Update="Resources\Editor\src\components\svg\svg-style.css">
-      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
-    </Content>
-  </ItemGroup>-->
-
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Legal\Attributions.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Attributions.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.ja-JP.resx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.en-US.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-      <LastGenOutput>EnumUiStrings.ja-JP.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1952,20 +1898,12 @@
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\UiStrings\ListingStrings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ListingStrings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\UiStrings\test.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>test.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\UiStrings\UiStrings.ja-JP.resx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <EmbeddedResource Update="Resources\UiStrings\UiStrings.en-US.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-      <LastGenOutput>UiStrings.ja-JP.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
+
     <EmbeddedResource Update="Resources\UiStrings\UiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>

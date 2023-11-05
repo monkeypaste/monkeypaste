@@ -466,7 +466,13 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Security
-        public bool IsSettingsEncrypted { get; set; } = true; // requires restart and only used to trigger convert on exit (may not be necessary to restart)
+        public bool IsSettingsEncrypted { get; set; } =
+#if ANDROID
+            false;
+#else
+            true; 
+#endif
+        // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 
         public string RememberedDbPassword { get; set; }
         //public string DbPassword { get; set; } = ENCRYPT_DB ? MpPasswordGenerator.GetRandomPassword() : null;
@@ -607,7 +613,7 @@ namespace MonkeyPaste.Avalonia {
         public void Save() {
             IsSaving = true;
 
-            WriteToDisk(SerializeJsonObject());
+            WriteToDisk(SerializeJsonObject(), IsSettingsEncrypted);
 
             IsSaving = false;
         }

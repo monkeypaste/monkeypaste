@@ -118,960 +118,960 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MpBillingCycleType_None" xml:space="preserve">
-    <value>一度もない</value>
+    <value>Never</value>
   </data>
   <data name="MpBillingCycleType_Monthly" xml:space="preserve">
-    <value>毎月</value>
+    <value>Monthly</value>
   </data>
   <data name="MpBillingCycleType_Yearly" xml:space="preserve">
-    <value>毎年</value>
+    <value>Yearly</value>
   </data>
   <data name="MpNotificationType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNotificationType_Loader" xml:space="preserve">
-    <value>ローダ</value>
+    <value>Loader</value>
   </data>
   <data name="MpNotificationType_SubscriptionExpired" xml:space="preserve">
-    <value>サブスクリプションの有効期限が切れました</value>
+    <value>Subscription Expired</value>
   </data>
   <data name="MpNotificationType_AccountLoginFailed" xml:space="preserve">
-    <value>アカウントのログインに失敗しました</value>
+    <value>Account Login Failed</value>
   </data>
   <data name="MpNotificationType_DbError" xml:space="preserve">
-    <value>データベースエラー</value>
+    <value>Db Error</value>
   </data>
   <data name="MpNotificationType_Help" xml:space="preserve">
-    <value>ヘルプ</value>
+    <value>Help</value>
   </data>
   <data name="MpNotificationType_PluginUpdated" xml:space="preserve">
-    <value>プラグインが更新されました</value>
+    <value>Plugin Updated</value>
   </data>
   <data name="MpNotificationType_Message" xml:space="preserve">
-    <value>メッセージ</value>
+    <value>Message</value>
   </data>
   <data name="MpNotificationType_AppModeChange" xml:space="preserve">
-    <value>アプリモードの変更</value>
+    <value>App Mode Change</value>
   </data>
   <data name="MpNotificationType_ContentCapReached" xml:space="preserve">
-    <value>コンテンツの上限に達しました</value>
+    <value>Content Cap Reached</value>
   </data>
   <data name="MpNotificationType_TrashCapReached" xml:space="preserve">
-    <value>ゴミ箱の上限に達しました</value>
+    <value>Trash Cap Reached</value>
   </data>
   <data name="MpNotificationType_ContentAddBlockedByAccount" xml:space="preserve">
-    <value>アカウントによってコンテンツの追加がブロックされています</value>
+    <value>Content Add Blocked By Account</value>
   </data>
   <data name="MpNotificationType_ContentRestoreBlockedByAccount" xml:space="preserve">
-    <value>コンテンツの復元がアカウントによってブロックされている</value>
+    <value>Content Restore Blocked By Account</value>
   </data>
   <data name="MpNotificationType_AccountChanged" xml:space="preserve">
-    <value>アカウントが変更されました</value>
+    <value>Account Changed</value>
   </data>
   <data name="MpNotificationType_Welcome" xml:space="preserve">
-    <value>いらっしゃいませ</value>
+    <value>Welcome</value>
   </data>
   <data name="MpNotificationType_AppendModeChanged" xml:space="preserve">
-    <value>追加モードが変更されました</value>
+    <value>Append Mode Changed</value>
   </data>
   <data name="MpNotificationType_TriggerEnabled" xml:space="preserve">
-    <value>トリガー有効</value>
+    <value>Trigger Enabled</value>
   </data>
   <data name="MpNotificationType_AlertAction" xml:space="preserve">
-    <value>アラートアクション</value>
+    <value>Alert Action</value>
   </data>
   <data name="MpNotificationType_StartupComplete" xml:space="preserve">
-    <value>起動完了</value>
+    <value>Startup Complete</value>
   </data>
   <data name="MpNotificationType_FileIoWarning" xml:space="preserve">
-    <value>ファイル IO 警告</value>
+    <value>File Io Warning</value>
   </data>
   <data name="MpNotificationType_InvalidPlugin" xml:space="preserve">
-    <value>無効なプラグイン</value>
+    <value>Invalid Plugin</value>
   </data>
   <data name="MpNotificationType_InvalidClipboardFormatHandler" xml:space="preserve">
-    <value>無効なクリップボード形式ハンドラー</value>
+    <value>Invalid Clipboard Format Handler</value>
   </data>
   <data name="MpNotificationType_InvalidAction" xml:space="preserve">
-    <value>無効なアクション</value>
+    <value>Invalid Action</value>
   </data>
   <data name="MpNotificationType_BadHttpRequest" xml:space="preserve">
-    <value>不正なHTTPリクエスト</value>
+    <value>Bad Http Request</value>
   </data>
   <data name="MpNotificationType_AnalyzerTimeout" xml:space="preserve">
-    <value>アナライザーのタイムアウト</value>
+    <value>Analyzer Timeout</value>
   </data>
   <data name="MpNotificationType_InvalidRequest" xml:space="preserve">
-    <value>無効なリクエスト</value>
+    <value>Invalid Request</value>
   </data>
   <data name="MpNotificationType_InvalidResponse" xml:space="preserve">
-    <value>無効な応答</value>
+    <value>Invalid Response</value>
   </data>
   <data name="MpNotificationType_ExecuteParametersRequest" xml:space="preserve">
-    <value>パラメータリクエストの実行</value>
+    <value>Execute Parameters Request</value>
   </data>
   <data name="MpNotificationType_DbPasswordInput" xml:space="preserve">
-    <value>DBパスワード入力</value>
+    <value>Db Password Input</value>
   </data>
   <data name="MpNotificationType_ModalContentFormatDegradation" xml:space="preserve">
-    <value>モーダルコンテンツフォーマットの劣化</value>
+    <value>Modal Content Format Degradation</value>
   </data>
   <data name="MpNotificationType_ModalYesNoCancelMessageBox" xml:space="preserve">
-    <value>モーダル はい いいえ キャンセル メッセージ ボックス</value>
+    <value>Modal Yes No Cancel Message Box</value>
   </data>
   <data name="MpNotificationType_ModalYesNoMessageBox" xml:space="preserve">
-    <value>モーダルはいいいえメッセージボックス</value>
+    <value>Modal Yes No Message Box</value>
   </data>
   <data name="MpNotificationType_ModalOkCancelMessageBox" xml:space="preserve">
-    <value>モーダル OK キャンセル メッセージ ボックス</value>
+    <value>Modal Ok Cancel Message Box</value>
   </data>
   <data name="MpNotificationType_ModalOkMessageBox" xml:space="preserve">
-    <value>モーダル OK メッセージ ボックス</value>
+    <value>Modal Ok Message Box</value>
   </data>
   <data name="MpNotificationType_ModalTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value>モーダル テキスト ボックス OK キャンセル メッセージ ボックス</value>
+    <value>Modal Text Box Ok Cancel Message Box</value>
   </data>
   <data name="MpNotificationType_ModalRememberableTextBoxOkCancelMessageBox" xml:space="preserve">
-    <value>モーダル記憶可能なテキスト ボックス OK キャンセル メッセージ ボックス</value>
+    <value>Modal Rememberable Text Box Ok Cancel Message Box</value>
   </data>
   <data name="MpNotificationType_ModalProgressCancelMessageBox" xml:space="preserve">
-    <value>モーダル進行状況キャンセルメッセージボックス</value>
+    <value>Modal Progress Cancel Message Box</value>
   </data>
   <data name="MpNotificationType_ConfirmEndAppend" xml:space="preserve">
-    <value>追加終了の確認</value>
+    <value>Confirm End Append</value>
   </data>
   <data name="MpNotificationType_PluginResponseMessage" xml:space="preserve">
-    <value>プラグイン応答メッセージ</value>
+    <value>Plugin Response Message</value>
   </data>
   <data name="MpNotificationType_PluginResponseError" xml:space="preserve">
-    <value>プラグイン応答エラー</value>
+    <value>Plugin Response Error</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarning" xml:space="preserve">
-    <value>プラグイン応答の警告</value>
+    <value>Plugin Response Warning</value>
   </data>
   <data name="MpNotificationType_PluginResponseWarningWithOption" xml:space="preserve">
-    <value>オプション付きのプラグイン応答警告</value>
+    <value>Plugin Response Warning With Option</value>
   </data>
   <data name="MpNotificationType_PluginResponseOther" xml:space="preserve">
-    <value>プラグインの応答 その他</value>
+    <value>Plugin Response Other</value>
   </data>
   <data name="MpShortcutType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutType_ToggleMainWindow" xml:space="preserve">
-    <value>メインウィンドウの切り替え</value>
+    <value>Toggle Main Window</value>
   </data>
   <data name="MpShortcutType_ToggleAutoCopyMode" xml:space="preserve">
-    <value>自動コピーモードの切り替え</value>
+    <value>Toggle Auto Copy Mode</value>
   </data>
   <data name="MpShortcutType_ToggleRightClickPasteMode" xml:space="preserve">
-    <value>右クリック貼り付けモードの切り替え</value>
+    <value>Toggle Right Click Paste Mode</value>
   </data>
   <data name="MpShortcutType_ToggleListenToClipboard" xml:space="preserve">
-    <value>Toggle クリップボードを聞く</value>
+    <value>Toggle Listen To Clipboard</value>
   </data>
   <data name="MpShortcutType_ToggleAppendInsertMode" xml:space="preserve">
-    <value>追加挿入モードの切り替え</value>
+    <value>Toggle Append Insert Mode</value>
   </data>
   <data name="MpShortcutType_ToggleAppendLineMode" xml:space="preserve">
-    <value>行追加モードの切り替え</value>
+    <value>Toggle Append Line Mode</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPreMode" xml:space="preserve">
-    <value>追加前モードの切り替え</value>
+    <value>Toggle Append Pre Mode</value>
   </data>
   <data name="MpShortcutType_ToggleAppendPaused" xml:space="preserve">
-    <value>追加の一時停止の切り替え</value>
+    <value>Toggle Append Paused</value>
   </data>
   <data name="MpShortcutType_HideMainWindow" xml:space="preserve">
-    <value>メインウィンドウを隠す</value>
+    <value>Hide Main Window</value>
   </data>
   <data name="MpShortcutType_ExitApplication" xml:space="preserve">
-    <value>アプリケーションを終了する</value>
+    <value>Exit Application</value>
   </data>
   <data name="MpShortcutType_PasteSelectedItems" xml:space="preserve">
-    <value>選択した項目を貼り付け</value>
+    <value>Paste Selected Items</value>
   </data>
   <data name="MpShortcutType_PasteHere" xml:space="preserve">
-    <value>ここに貼り付けます</value>
+    <value>Paste Here</value>
   </data>
   <data name="MpShortcutType_CopySelection" xml:space="preserve">
-    <value>選択範囲をコピー</value>
+    <value>Copy Selection</value>
   </data>
   <data name="MpShortcutType_CutSelection" xml:space="preserve">
-    <value>選択範囲のカット</value>
+    <value>Cut Selection</value>
   </data>
   <data name="MpShortcutType_DeleteSelectedItems" xml:space="preserve">
-    <value>選択したアイテムを削除</value>
+    <value>Delete Selected Items</value>
   </data>
   <data name="MpShortcutType_SelectNextColumnItem" xml:space="preserve">
-    <value>次の列項目を選択</value>
+    <value>Select Next Column Item</value>
   </data>
   <data name="MpShortcutType_SelectPreviousColumnItem" xml:space="preserve">
-    <value>前の列項目を選択</value>
+    <value>Select Previous Column Item</value>
   </data>
   <data name="MpShortcutType_SelectNextRowItem" xml:space="preserve">
-    <value>次の行の項目を選択</value>
+    <value>Select Next Row Item</value>
   </data>
   <data name="MpShortcutType_SelectPreviousRowItem" xml:space="preserve">
-    <value>前の行項目を選択</value>
+    <value>Select Previous Row Item</value>
   </data>
   <data name="MpShortcutType_AssignShortcut" xml:space="preserve">
-    <value>ショートカットの割り当て</value>
+    <value>Assign Shortcut</value>
   </data>
   <data name="MpShortcutType_Undo" xml:space="preserve">
-    <value>元に戻す</value>
+    <value>Undo</value>
   </data>
   <data name="MpShortcutType_Redo" xml:space="preserve">
-    <value>やり直し</value>
+    <value>Redo</value>
   </data>
   <data name="MpShortcutType_ToggleContentReadOnly" xml:space="preserve">
-    <value>コンテンツの読み取り専用の切り替え</value>
+    <value>Toggle Content Read Only</value>
   </data>
   <data name="MpShortcutType_Rename" xml:space="preserve">
-    <value>名前の変更</value>
+    <value>Rename</value>
   </data>
   <data name="MpShortcutType_Duplicate" xml:space="preserve">
-    <value>重複</value>
+    <value>Duplicate</value>
   </data>
   <data name="MpShortcutType_ScrollToHome" xml:space="preserve">
-    <value>ホームまでスクロール</value>
+    <value>Scroll To Home</value>
   </data>
   <data name="MpShortcutType_ScrollToEnd" xml:space="preserve">
-    <value>最後までスクロール</value>
+    <value>Scroll To End</value>
   </data>
   <data name="MpShortcutType_WindowSizeUp" xml:space="preserve">
-    <value>ウィンドウサイズアップ</value>
+    <value>Window Size Up</value>
   </data>
   <data name="MpShortcutType_WindowSizeDown" xml:space="preserve">
-    <value>ウィンドウサイズダウン</value>
+    <value>Window Size Down</value>
   </data>
   <data name="MpShortcutType_WindowSizeLeft" xml:space="preserve">
-    <value>左のウィンドウサイズ</value>
+    <value>Window Size Left</value>
   </data>
   <data name="MpShortcutType_WindowSizeRight" xml:space="preserve">
-    <value>右のウィンドウサイズ</value>
+    <value>Window Size Right</value>
   </data>
   <data name="MpShortcutType_PreviousPage" xml:space="preserve">
-    <value>前のページ</value>
+    <value>Previous Page</value>
   </data>
   <data name="MpShortcutType_NextPage" xml:space="preserve">
-    <value>次のページ</value>
+    <value>Next Page</value>
   </data>
   <data name="MpShortcutType_FindAndReplaceSelectedItem" xml:space="preserve">
-    <value>選択した項目の検索と置換</value>
+    <value>Find And Replace Selected Item</value>
   </data>
   <data name="MpShortcutType_ToggleMainWindowLocked" xml:space="preserve">
-    <value>メインウィンドウのロックを切り替える</value>
+    <value>Toggle Main Window Locked</value>
   </data>
   <data name="MpShortcutType_ToggleFilterMenuVisible" xml:space="preserve">
-    <value>フィルターメニューの表示を切り替えます</value>
+    <value>Toggle Filter Menu Visible</value>
   </data>
   <data name="MpShortcutType_ShowSettings" xml:space="preserve">
-    <value>設定を表示</value>
+    <value>Show Settings</value>
   </data>
   <data name="MpShortcutType_TogglePinned" xml:space="preserve">
-    <value>固定の切り替え</value>
+    <value>Toggle Pinned</value>
   </data>
   <data name="MpShortcutType_OpenInWindow" xml:space="preserve">
-    <value>ウィンドウで開く</value>
+    <value>Open In Window</value>
   </data>
   <data name="MpShortcutType_PermanentlyDelete" xml:space="preserve">
-    <value>完全に削除</value>
+    <value>Permanently Delete</value>
   </data>
   <data name="MpShortcutType_ForceMinimizeMainWindow" xml:space="preserve">
-    <value>メインウィンドウを強制的に最小化する</value>
+    <value>Force Minimize Main Window</value>
   </data>
   <data name="MpShortcutType_ToggleAppendManualMode" xml:space="preserve">
-    <value>手動追加モードの切り替え</value>
+    <value>Toggle Append Manual Mode</value>
   </data>
   <data name="MpShortcutType_OpenHelp" xml:space="preserve">
-    <value>ヘルプを開く</value>
+    <value>Open Help</value>
   </data>
   <data name="MpShortcutType_MAX_APP_SHORTCUT" xml:space="preserve">
-    <value>マックス・アップ・ショート・カット</value>
+    <value>M A X_A P P_S H O R T C U T</value>
   </data>
   <data name="MpShortcutType_PasteCopyItem" xml:space="preserve">
-    <value>コピー項目を貼り付け</value>
+    <value>Paste Copy Item</value>
   </data>
   <data name="MpShortcutType_SelectTag" xml:space="preserve">
-    <value>タグの選択</value>
+    <value>Select Tag</value>
   </data>
   <data name="MpShortcutType_AnalyzeCopyItemWithPreset" xml:space="preserve">
-    <value>プリセットを使用してコピー項目を分析する</value>
+    <value>Analyze Copy Item With Preset</value>
   </data>
   <data name="MpShortcutType_InvokeTrigger" xml:space="preserve">
-    <value>トリガーの呼び出し</value>
+    <value>Invoke Trigger</value>
   </data>
   <data name="MpContentQueryPropertyPathType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpContentQueryPropertyPathType_ItemData" xml:space="preserve">
-    <value>アイテムデータ</value>
+    <value>Item Data</value>
   </data>
   <data name="MpContentQueryPropertyPathType_ItemType" xml:space="preserve">
-    <value>アイテムの種類</value>
+    <value>Item Type</value>
   </data>
   <data name="MpContentQueryPropertyPathType_Title" xml:space="preserve">
-    <value>タイトル</value>
+    <value>Title</value>
   </data>
   <data name="MpContentQueryPropertyPathType_AppPath" xml:space="preserve">
-    <value>アプリのパス</value>
+    <value>App Path</value>
   </data>
   <data name="MpContentQueryPropertyPathType_AppName" xml:space="preserve">
-    <value>アプリ名</value>
+    <value>App Name</value>
   </data>
   <data name="MpContentQueryPropertyPathType_UrlPath" xml:space="preserve">
-    <value>URLパス</value>
+    <value>Url Path</value>
   </data>
   <data name="MpContentQueryPropertyPathType_UrlTitle" xml:space="preserve">
-    <value>URL タイトル</value>
+    <value>Url Title</value>
   </data>
   <data name="MpContentQueryPropertyPathType_UrlDomainPath" xml:space="preserve">
-    <value>URLドメインパス</value>
+    <value>Url Domain Path</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyDateTime" xml:space="preserve">
-    <value>日付時刻をコピー</value>
+    <value>Copy Date Time</value>
   </data>
   <data name="MpContentQueryPropertyPathType_LastPasteDateTime" xml:space="preserve">
-    <value>前回の貼り付け日時</value>
+    <value>Last Paste Date Time</value>
   </data>
   <data name="MpContentQueryPropertyPathType_CopyCount" xml:space="preserve">
-    <value>コピー数</value>
+    <value>Copy Count</value>
   </data>
   <data name="MpContentQueryPropertyPathType_PasteCount" xml:space="preserve">
-    <value>ペースト数</value>
+    <value>Paste Count</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceName" xml:space="preserve">
-    <value>ソースデバイス名</value>
+    <value>Source Device Name</value>
   </data>
   <data name="MpContentQueryPropertyPathType_SourceDeviceType" xml:space="preserve">
-    <value>ソースデバイスのタイプ</value>
+    <value>Source Device Type</value>
   </data>
   <data name="MpContentQueryPropertyPathType_LastOutput" xml:space="preserve">
-    <value>最後の出力</value>
+    <value>Last Output</value>
   </data>
   <data name="MpActionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpActionType_Classify" xml:space="preserve">
-    <value>分類する</value>
+    <value>Classify</value>
   </data>
   <data name="MpActionType_Analyze" xml:space="preserve">
-    <value>分析する</value>
+    <value>Analyze</value>
   </data>
   <data name="MpActionType_Conditional" xml:space="preserve">
-    <value>条件付き</value>
+    <value>Conditional</value>
   </data>
   <data name="MpActionType_Trigger" xml:space="preserve">
-    <value>引き金</value>
+    <value>Trigger</value>
   </data>
   <data name="MpActionType_Repeater" xml:space="preserve">
-    <value>リピータ</value>
+    <value>Repeater</value>
   </data>
   <data name="MpActionType_FileWriter" xml:space="preserve">
-    <value>ファイルライター</value>
+    <value>File Writer</value>
   </data>
   <data name="MpActionType_AddFromClipboard" xml:space="preserve">
-    <value>クリップボードから追加</value>
+    <value>Add From Clipboard</value>
   </data>
   <data name="MpActionType_KeySimulator" xml:space="preserve">
-    <value>キーシミュレータ</value>
+    <value>Key Simulator</value>
   </data>
   <data name="MpActionType_Delay" xml:space="preserve">
-    <value>遅れ</value>
+    <value>Delay</value>
   </data>
   <data name="MpActionType_Alert" xml:space="preserve">
-    <value>アラート</value>
+    <value>Alert</value>
   </data>
   <data name="MpTriggerType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpTriggerType_ContentAdded" xml:space="preserve">
-    <value>追加されたコンテンツ</value>
+    <value>Content Added</value>
   </data>
   <data name="MpTriggerType_FileSystemChange" xml:space="preserve">
-    <value>ファイルシステムの変更</value>
+    <value>File System Change</value>
   </data>
   <data name="MpTriggerType_ContentTagged" xml:space="preserve">
-    <value>タグ付けされたコンテンツ</value>
+    <value>Content Tagged</value>
   </data>
   <data name="MpTriggerType_Shortcut" xml:space="preserve">
-    <value>ショートカット</value>
+    <value>Shortcut</value>
   </data>
   <data name="MpShortcutRoutingProfileType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutRoutingProfileType_Internal" xml:space="preserve">
-    <value>内部</value>
+    <value>Internal</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Default" xml:space="preserve">
-    <value>デフォルト</value>
+    <value>Default</value>
   </data>
   <data name="MpShortcutRoutingProfileType_Custom" xml:space="preserve">
-    <value>カスタム</value>
+    <value>Custom</value>
   </data>
   <data name="MpPluginDependencyType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpPluginDependencyType_os" xml:space="preserve">
-    <value>OS</value>
+    <value>os</value>
   </data>
   <data name="MpPluginDependencyType_app" xml:space="preserve">
-    <value>アプリ</value>
+    <value>app</value>
   </data>
   <data name="MpPluginDependencyType_lib" xml:space="preserve">
-    <value>ライブラリ</value>
+    <value>lib</value>
   </data>
   <data name="MpClipboardFormatType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpClipboardFormatType_Text" xml:space="preserve">
-    <value>文章</value>
+    <value>Text</value>
   </data>
   <data name="MpClipboardFormatType_Html" xml:space="preserve">
-    <value>HTML</value>
+    <value>Html</value>
   </data>
   <data name="MpClipboardFormatType_Rtf" xml:space="preserve">
-    <value>RTF</value>
+    <value>Rtf</value>
   </data>
   <data name="MpClipboardFormatType_Bitmap" xml:space="preserve">
-    <value>ビットマップ</value>
+    <value>Bitmap</value>
   </data>
   <data name="MpClipboardFormatType_FileDrop" xml:space="preserve">
-    <value>ファイルドロップ</value>
+    <value>File Drop</value>
   </data>
   <data name="MpClipboardFormatType_Csv" xml:space="preserve">
-    <value>CSV</value>
+    <value>Csv</value>
   </data>
   <data name="MpClipboardFormatType_InternalContent" xml:space="preserve">
-    <value>内部コンテンツ</value>
+    <value>Internal Content</value>
   </data>
   <data name="MpClipboardFormatType_UnicodeText" xml:space="preserve">
-    <value>Unicode テキスト</value>
+    <value>Unicode Text</value>
   </data>
   <data name="MpClipboardFormatType_OemText" xml:space="preserve">
-    <value>OEM テキスト</value>
+    <value>Oem Text</value>
   </data>
   <data name="MpClipboardFormatType_Xaml" xml:space="preserve">
-    <value>ザムル</value>
+    <value>Xaml</value>
   </data>
   <data name="MpClipboardFormatType_XamlPackage" xml:space="preserve">
-    <value>Xaml パッケージ</value>
+    <value>Xaml Package</value>
   </data>
   <data name="MpClipboardFormatType_Custom" xml:space="preserve">
-    <value>カスタム</value>
+    <value>Custom</value>
   </data>
   <data name="MpSettingsFrameType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpSettingsFrameType_Login" xml:space="preserve">
-    <value>ログイン</value>
+    <value>Login</value>
   </data>
   <data name="MpSettingsFrameType_Status" xml:space="preserve">
-    <value>状態</value>
+    <value>Status</value>
   </data>
   <data name="MpSettingsFrameType_Register" xml:space="preserve">
-    <value>登録する</value>
+    <value>Register</value>
   </data>
   <data name="MpSettingsFrameType_Theme" xml:space="preserve">
-    <value>テーマ</value>
+    <value>Theme</value>
   </data>
   <data name="MpSettingsFrameType_Fonts" xml:space="preserve">
-    <value>フォント</value>
+    <value>Fonts</value>
   </data>
   <data name="MpSettingsFrameType_Sound" xml:space="preserve">
-    <value>音</value>
+    <value>Sound</value>
   </data>
   <data name="MpSettingsFrameType_Taskbar" xml:space="preserve">
-    <value>タスクバー</value>
+    <value>Taskbar</value>
   </data>
   <data name="MpSettingsFrameType_Window" xml:space="preserve">
-    <value>窓</value>
+    <value>Window</value>
   </data>
   <data name="MpSettingsFrameType_Hints" xml:space="preserve">
-    <value>ヒント</value>
+    <value>Hints</value>
   </data>
   <data name="MpSettingsFrameType_International" xml:space="preserve">
-    <value>国際的</value>
+    <value>International</value>
   </data>
   <data name="MpSettingsFrameType_Limits" xml:space="preserve">
-    <value>限界</value>
+    <value>Limits</value>
   </data>
   <data name="MpSettingsFrameType_Tracking" xml:space="preserve">
-    <value>追跡</value>
+    <value>Tracking</value>
   </data>
   <data name="MpSettingsFrameType_Startup" xml:space="preserve">
-    <value>起動する</value>
+    <value>Startup</value>
   </data>
   <data name="MpSettingsFrameType_Search" xml:space="preserve">
-    <value>検索</value>
+    <value>Search</value>
   </data>
   <data name="MpSettingsFrameType_Content" xml:space="preserve">
-    <value>コンテンツ</value>
+    <value>Content</value>
   </data>
   <data name="MpSettingsFrameType_DragAndDrop" xml:space="preserve">
-    <value>ドラッグアンドドロップ</value>
+    <value>Drag And Drop</value>
   </data>
   <data name="MpSettingsFrameType_Shortcuts" xml:space="preserve">
-    <value>ショートカット</value>
+    <value>Shortcuts</value>
   </data>
   <data name="MpSettingsFrameType_System" xml:space="preserve">
-    <value>システム</value>
+    <value>System</value>
   </data>
   <data name="MpSettingsFrameType_Password" xml:space="preserve">
-    <value>パスワード</value>
+    <value>Password</value>
   </data>
   <data name="MpPluginBrowserTabType_Browse" xml:space="preserve">
-    <value>ブラウズ</value>
+    <value>Browse</value>
   </data>
   <data name="MpPluginBrowserTabType_Installed" xml:space="preserve">
-    <value>インストール済み</value>
+    <value>Installed</value>
   </data>
   <data name="MpPluginBrowserTabType_Updates" xml:space="preserve">
-    <value>アップデート</value>
+    <value>Updates</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Root" xml:space="preserve">
-    <value>根</value>
+    <value>Root</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_App" xml:space="preserve">
-    <value>アプリ</value>
+    <value>App</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Device" xml:space="preserve">
-    <value>デバイス</value>
+    <value>Device</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Meta" xml:space="preserve">
-    <value>メタ</value>
+    <value>Meta</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Statistics" xml:space="preserve">
-    <value>統計</value>
+    <value>Statistics</value>
   </data>
   <data name="MpContentQueryPropertyGroupType_Url" xml:space="preserve">
-    <value>URL</value>
+    <value>Url</value>
   </data>
   <data name="MpNextJoinOptionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpNextJoinOptionType_And" xml:space="preserve">
-    <value>そして</value>
+    <value>And</value>
   </data>
   <data name="MpNextJoinOptionType_Or" xml:space="preserve">
-    <value>または</value>
+    <value>Or</value>
   </data>
   <data name="MpNextJoinOptionType_Not" xml:space="preserve">
-    <value>ない</value>
+    <value>Not</value>
   </data>
   <data name="MpRootOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpRootOptionType_Clips" xml:space="preserve">
-    <value>クリップ</value>
+    <value>Clips</value>
   </data>
   <data name="MpRootOptionType_Type" xml:space="preserve">
-    <value>タイプ</value>
+    <value>Type</value>
   </data>
   <data name="MpRootOptionType_Collection" xml:space="preserve">
-    <value>コレクション</value>
+    <value>Collection</value>
   </data>
   <data name="MpRootOptionType_Sources" xml:space="preserve">
-    <value>情報源</value>
+    <value>Sources</value>
   </data>
   <data name="MpRootOptionType_History" xml:space="preserve">
-    <value>歴史</value>
+    <value>History</value>
   </data>
   <data name="MpTextOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpTextOptionType_Matches" xml:space="preserve">
-    <value>一致</value>
+    <value>Matches</value>
   </data>
   <data name="MpTextOptionType_Contains" xml:space="preserve">
-    <value>含まれています</value>
+    <value>Contains</value>
   </data>
   <data name="MpTextOptionType_BeginsWith" xml:space="preserve">
-    <value>から始まる</value>
+    <value>Begins With</value>
   </data>
   <data name="MpTextOptionType_EndsWith" xml:space="preserve">
-    <value>で終わる</value>
+    <value>Ends With</value>
   </data>
   <data name="MpTextOptionType_RegEx" xml:space="preserve">
-    <value>正規表現</value>
+    <value>Reg Ex</value>
   </data>
   <data name="MpNumberOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpNumberOptionType_Equals" xml:space="preserve">
-    <value>等しい</value>
+    <value>Equals</value>
   </data>
   <data name="MpNumberOptionType_GreaterThan" xml:space="preserve">
-    <value>より大きい</value>
+    <value>Greater Than</value>
   </data>
   <data name="MpNumberOptionType_LessThan" xml:space="preserve">
-    <value>未満</value>
+    <value>Less Than</value>
   </data>
   <data name="MpNumberOptionType_IsNot" xml:space="preserve">
-    <value>ではありません</value>
+    <value>Is Not</value>
   </data>
   <data name="MpColorOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpColorOptionType_Hex" xml:space="preserve">
-    <value>16進数</value>
+    <value>Hex</value>
   </data>
   <data name="MpColorOptionType_ARGB" xml:space="preserve">
     <value>A R G B</value>
   </data>
   <data name="MpDimensionOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpDimensionOptionType_Width" xml:space="preserve">
-    <value>幅</value>
+    <value>Width</value>
   </data>
   <data name="MpDimensionOptionType_Height" xml:space="preserve">
-    <value>身長</value>
+    <value>Height</value>
   </data>
   <data name="MpImageOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpImageOptionType_Dimensions" xml:space="preserve">
-    <value>寸法</value>
+    <value>Dimensions</value>
   </data>
   <data name="MpImageOptionType_Color" xml:space="preserve">
-    <value>色</value>
+    <value>Color</value>
   </data>
   <data name="MpFileOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpFileOptionType_Audio" xml:space="preserve">
-    <value>オーディオ</value>
+    <value>Audio</value>
   </data>
   <data name="MpFileOptionType_Compressed" xml:space="preserve">
-    <value>圧縮された</value>
+    <value>Compressed</value>
   </data>
   <data name="MpFileOptionType_DiscAndMedia" xml:space="preserve">
-    <value>ディスクとメディア</value>
+    <value>Disc And Media</value>
   </data>
   <data name="MpFileOptionType_DataAndDatabase" xml:space="preserve">
-    <value>データとデータベース</value>
+    <value>Data And Database</value>
   </data>
   <data name="MpFileOptionType_Document" xml:space="preserve">
-    <value>書類</value>
+    <value>Document</value>
   </data>
   <data name="MpFileOptionType_Email" xml:space="preserve">
-    <value>Eメール</value>
+    <value>Email</value>
   </data>
   <data name="MpFileOptionType_Executable" xml:space="preserve">
-    <value>実行可能</value>
+    <value>Executable</value>
   </data>
   <data name="MpFileOptionType_Font" xml:space="preserve">
-    <value>フォント</value>
+    <value>Font</value>
   </data>
   <data name="MpFileOptionType_Image" xml:space="preserve">
-    <value>画像</value>
+    <value>Image</value>
   </data>
   <data name="MpFileOptionType_Internet" xml:space="preserve">
-    <value>インターネット</value>
+    <value>Internet</value>
   </data>
   <data name="MpFileOptionType_Presentation" xml:space="preserve">
-    <value>プレゼンテーション</value>
+    <value>Presentation</value>
   </data>
   <data name="MpFileOptionType_Programming" xml:space="preserve">
-    <value>プログラミング</value>
+    <value>Programming</value>
   </data>
   <data name="MpFileOptionType_Spreadsheet" xml:space="preserve">
-    <value>スプレッドシート</value>
+    <value>Spreadsheet</value>
   </data>
   <data name="MpFileOptionType_System" xml:space="preserve">
-    <value>システム</value>
+    <value>System</value>
   </data>
   <data name="MpFileOptionType_Video" xml:space="preserve">
-    <value>ビデオ</value>
+    <value>Video</value>
   </data>
   <data name="MpFileOptionType_UserDefined" xml:space="preserve">
-    <value>ユーザー定義の</value>
+    <value>User Defined</value>
   </data>
   <data name="MpFileOptionType_Custom" xml:space="preserve">
-    <value>カスタム</value>
+    <value>Custom</value>
   </data>
   <data name="MpFileContentOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpFileContentOptionType_Path" xml:space="preserve">
-    <value>パス</value>
+    <value>Path</value>
   </data>
   <data name="MpFileContentOptionType_Name" xml:space="preserve">
-    <value>名前</value>
+    <value>Name</value>
   </data>
   <data name="MpFileContentOptionType_Kind" xml:space="preserve">
-    <value>親切</value>
+    <value>Kind</value>
   </data>
   <data name="MpContentTypeOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpContentTypeOptionType_Text" xml:space="preserve">
-    <value>文章</value>
+    <value>Text</value>
   </data>
   <data name="MpContentTypeOptionType_Image" xml:space="preserve">
-    <value>画像</value>
+    <value>Image</value>
   </data>
   <data name="MpContentTypeOptionType_Files" xml:space="preserve">
-    <value>ファイル</value>
+    <value>Files</value>
   </data>
   <data name="MpAppOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpAppOptionType_ApplicationName" xml:space="preserve">
-    <value>アプリケーション名</value>
+    <value>Application Name</value>
   </data>
   <data name="MpAppOptionType_ProcessPath" xml:space="preserve">
-    <value>プロセスパス</value>
+    <value>Process Path</value>
   </data>
   <data name="MpWebsiteOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpWebsiteOptionType_Url" xml:space="preserve">
-    <value>URL</value>
+    <value>Url</value>
   </data>
   <data name="MpWebsiteOptionType_Domain" xml:space="preserve">
-    <value>ドメイン</value>
+    <value>Domain</value>
   </data>
   <data name="MpWebsiteOptionType_Title" xml:space="preserve">
-    <value>タイトル</value>
+    <value>Title</value>
   </data>
   <data name="MpSourcesOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpSourcesOptionType_Device" xml:space="preserve">
-    <value>デバイス</value>
+    <value>Device</value>
   </data>
   <data name="MpSourcesOptionType_App" xml:space="preserve">
-    <value>アプリ</value>
+    <value>App</value>
   </data>
   <data name="MpSourcesOptionType_Website" xml:space="preserve">
-    <value>Webサイト</value>
+    <value>Website</value>
   </data>
   <data name="MpTransactionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpTransactionType_Created" xml:space="preserve">
-    <value>作成した</value>
+    <value>Created</value>
   </data>
   <data name="MpTransactionType_Dropped" xml:space="preserve">
-    <value>落とした</value>
+    <value>Dropped</value>
   </data>
   <data name="MpTransactionType_Dragged" xml:space="preserve">
-    <value>ドラッグされた</value>
+    <value>Dragged</value>
   </data>
   <data name="MpTransactionType_Pasted" xml:space="preserve">
-    <value>貼り付けた</value>
+    <value>Pasted</value>
   </data>
   <data name="MpTransactionType_Copied" xml:space="preserve">
-    <value>コピーされました</value>
+    <value>Copied</value>
   </data>
   <data name="MpTransactionType_Cut" xml:space="preserve">
-    <value>カット</value>
+    <value>Cut</value>
   </data>
   <data name="MpTransactionType_Edited" xml:space="preserve">
-    <value>編集済み</value>
+    <value>Edited</value>
   </data>
   <data name="MpTransactionType_Analyzed" xml:space="preserve">
-    <value>分析済み</value>
+    <value>Analyzed</value>
   </data>
   <data name="MpTransactionType_Appended" xml:space="preserve">
-    <value>添付</value>
+    <value>Appended</value>
   </data>
   <data name="MpTransactionType_Recreated" xml:space="preserve">
-    <value>再作成された</value>
+    <value>Recreated</value>
   </data>
   <data name="MpTransactionType_Linked" xml:space="preserve">
-    <value>リンク済み</value>
+    <value>Linked</value>
   </data>
   <data name="MpTransactionType_Unlinked" xml:space="preserve">
-    <value>リンクされていない</value>
+    <value>Unlinked</value>
   </data>
   <data name="MpTransactionType_Error" xml:space="preserve">
-    <value>エラー</value>
+    <value>Error</value>
   </data>
   <data name="MpTransactionType_System" xml:space="preserve">
-    <value>システム</value>
+    <value>System</value>
   </data>
   <data name="MpDateTimeOptionType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpDateTimeOptionType_WithinLast" xml:space="preserve">
-    <value>最後以内</value>
+    <value>Within Last</value>
   </data>
   <data name="MpDateTimeOptionType_Before" xml:space="preserve">
-    <value>前に</value>
+    <value>Before</value>
   </data>
   <data name="MpDateTimeOptionType_After" xml:space="preserve">
-    <value>後</value>
+    <value>After</value>
   </data>
   <data name="MpDateTimeOptionType_Exact" xml:space="preserve">
-    <value>ちょうど</value>
+    <value>Exact</value>
   </data>
   <data name="MpDateBeforeUnitType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpDateBeforeUnitType_Today" xml:space="preserve">
-    <value>今日</value>
+    <value>Today</value>
   </data>
   <data name="MpDateBeforeUnitType_Yesterday" xml:space="preserve">
-    <value>昨日</value>
+    <value>Yesterday</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisWeek" xml:space="preserve">
-    <value>今週</value>
+    <value>This Week</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisMonth" xml:space="preserve">
-    <value>今月</value>
+    <value>This Month</value>
   </data>
   <data name="MpDateBeforeUnitType_ThisYear" xml:space="preserve">
-    <value>今年</value>
+    <value>This Year</value>
   </data>
   <data name="MpDateBeforeUnitType_Exact" xml:space="preserve">
-    <value>ちょうど</value>
+    <value>Exact</value>
   </data>
   <data name="MpDateBeforeUnitType_Startup" xml:space="preserve">
-    <value>起動する</value>
+    <value>Startup</value>
   </data>
   <data name="MpDateAfterUnitType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpDateAfterUnitType_Yesterday" xml:space="preserve">
-    <value>昨日</value>
+    <value>Yesterday</value>
   </data>
   <data name="MpDateAfterUnitType_LastWeek" xml:space="preserve">
-    <value>先週</value>
+    <value>Last Week</value>
   </data>
   <data name="MpDateAfterUnitType_LastMonth" xml:space="preserve">
-    <value>先月</value>
+    <value>Last Month</value>
   </data>
   <data name="MpDateAfterUnitType_LastYear" xml:space="preserve">
-    <value>去年</value>
+    <value>Last Year</value>
   </data>
   <data name="MpDateAfterUnitType_Exact" xml:space="preserve">
-    <value>ちょうど</value>
+    <value>Exact</value>
   </data>
   <data name="MpDateAfterUnitType_Startup" xml:space="preserve">
-    <value>起動する</value>
+    <value>Startup</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_None" xml:space="preserve">
-    <value>- 選んでください -</value>
+    <value>- Please Select -</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Hours" xml:space="preserve">
-    <value>時間</value>
+    <value>Hours</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Days" xml:space="preserve">
-    <value>日々</value>
+    <value>Days</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Weeks" xml:space="preserve">
-    <value>週間</value>
+    <value>Weeks</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Months" xml:space="preserve">
-    <value>月</value>
+    <value>Months</value>
   </data>
   <data name="MpTimeSpanWithinUnitType_Years" xml:space="preserve">
-    <value>年</value>
+    <value>Years</value>
   </data>
   <data name="MpContentSortType_CopyDateTime" xml:space="preserve">
-    <value>日付時刻をコピー</value>
+    <value>Copy Date Time</value>
   </data>
   <data name="MpContentSortType_Source" xml:space="preserve">
-    <value>ソース</value>
+    <value>Source</value>
   </data>
   <data name="MpContentSortType_Title" xml:space="preserve">
-    <value>タイトル</value>
+    <value>Title</value>
   </data>
   <data name="MpContentSortType_ItemData" xml:space="preserve">
-    <value>アイテムデータ</value>
+    <value>Item Data</value>
   </data>
   <data name="MpContentSortType_ItemType" xml:space="preserve">
-    <value>アイテムの種類</value>
+    <value>Item Type</value>
   </data>
   <data name="MpContentSortType_UsageScore" xml:space="preserve">
-    <value>使用状況スコア</value>
+    <value>Usage Score</value>
   </data>
   <data name="MpRoutingType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpRoutingType_Internal" xml:space="preserve">
-    <value>内部</value>
+    <value>Internal</value>
   </data>
   <data name="MpRoutingType_Passive" xml:space="preserve">
-    <value>受け身</value>
+    <value>Passive</value>
   </data>
   <data name="MpRoutingType_Pre" xml:space="preserve">
-    <value>前</value>
+    <value>Pre</value>
   </data>
   <data name="MpRoutingType_Post" xml:space="preserve">
-    <value>役職</value>
+    <value>Post</value>
   </data>
   <data name="MpRoutingType_Override" xml:space="preserve">
-    <value>オーバーライド</value>
+    <value>Override</value>
   </data>
   <data name="MpRoutingType_ExclusiveOverride" xml:space="preserve">
-    <value>排他的オーバーライド</value>
+    <value>Exclusive Override</value>
   </data>
   <data name="MpComparisonOperatorType_Contains" xml:space="preserve">
-    <value>含まれています</value>
+    <value>Contains</value>
   </data>
   <data name="MpComparisonOperatorType_Exact" xml:space="preserve">
-    <value>ちょうど</value>
+    <value>Exact</value>
   </data>
   <data name="MpComparisonOperatorType_BeginsWith" xml:space="preserve">
-    <value>から始まる</value>
+    <value>Begins With</value>
   </data>
   <data name="MpComparisonOperatorType_EndsWith" xml:space="preserve">
-    <value>で終わる</value>
+    <value>Ends With</value>
   </data>
   <data name="MpComparisonOperatorType_Regex" xml:space="preserve">
-    <value>正規表現</value>
+    <value>Regex</value>
   </data>
   <data name="MpUserAccountType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpUserAccountType_Free" xml:space="preserve">
-    <value>無料</value>
+    <value>Free</value>
   </data>
   <data name="MpUserAccountType_Standard" xml:space="preserve">
-    <value>標準</value>
+    <value>Standard</value>
   </data>
   <data name="MpUserAccountType_Unlimited" xml:space="preserve">
-    <value>無制限</value>
+    <value>Unlimited</value>
   </data>
   <data name="MpContentOptionType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpContentOptionType_Content" xml:space="preserve">
-    <value>コンテンツ</value>
+    <value>Content</value>
   </data>
   <data name="MpContentOptionType_TypeSpecific" xml:space="preserve">
-    <value>タイプ固有</value>
+    <value>Type Specific</value>
   </data>
   <data name="MpContentOptionType_Title" xml:space="preserve">
-    <value>タイトル</value>
+    <value>Title</value>
   </data>
   <data name="MpContentOptionType_Annotation" xml:space="preserve">
-    <value>注釈</value>
+    <value>Annotation</value>
   </data>
   <data name="MpContentOptionType_Color" xml:space="preserve">
-    <value>色</value>
+    <value>Color</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Primary" xml:space="preserve">
-    <value>主要な</value>
+    <value>Primary</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Mouse" xml:space="preserve">
-    <value>ねずみ</value>
+    <value>Mouse</value>
   </data>
   <data name="MpMainWindowShowBehaviorType_Active" xml:space="preserve">
-    <value>アクティブ</value>
+    <value>Active</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_None" xml:space="preserve">
     <value />
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Clear" xml:space="preserve">
-    <value>クリア</value>
+    <value>Clear</value>
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
-    <value>消去</value>
+    <value>Delete</value>
   </data>
 </root>

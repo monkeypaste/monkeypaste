@@ -966,11 +966,11 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvContentWebView() : base() {
-#if DESKTOP
-            InitialUrl = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
-#else
+            //#if DESKTOP
+            //            InitialUrl = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
+            //#else
             Address = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
-#endif
+            //#endif
 
             this.GetObservable(MpAvContentWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged());
             this.GetObservable(MpAvContentWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());

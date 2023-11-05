@@ -15,10 +15,8 @@
             Width="{Binding MainWindowWidth}"
             Height="{Binding MainWindowHeight}">
         <Grid x:Name="MainWindowContainerGrid"
-              Background="Transparent"
               Width="{Binding MainWindowWidth}"
               Height="{Binding MainWindowHeight}">
-
 
             <!--  Filter Menu  -->
             <local:MpAvFilterMenuView x:Name="FilterMenuView"
@@ -112,7 +110,7 @@
                               Grid.Column="1"
                               ResizeDirection="Columns"
                               HorizontalAlignment="Right"
-                              VerticalAlignment="Stretch" 
+                              VerticalAlignment="Stretch"
                               IsVisible="False"
                               Classes.sidebarSplitter="True"
                               Classes.desktop="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"

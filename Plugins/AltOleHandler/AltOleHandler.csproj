@@ -12,7 +12,6 @@
   <ItemGroup>
     <None Remove="manifest.json" />
     <None Remove="manifest_windows.json" />
-    <None Remove="manifest_w_params.json" />
     <None Remove="Resources\Images\funky.png" />
     <None Remove="Resources\Images\icon.png" />
   </ItemGroup>
@@ -25,9 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="manifest_w_params.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
     <EmbeddedResource Include="manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -60,6 +56,12 @@
   <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
     <Reference Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll" />
     <ProjectReference Include="..\..\Common\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="manifest_w_params.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">

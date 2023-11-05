@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -570,10 +569,18 @@ namespace MonkeyPaste.Avalonia {
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseClicked += Instance_OnGlobalMouseClicked;
             MpAvShortcutCollectionViewModel.Instance.OnGlobalMouseWheelScroll += Instance_OnGlobalMouseWheelScroll;
 
+#if DESKTOP
             while (App.MainView == null) {
                 await Task.Delay(100);
-            }
+            } 
             App.MainView.DataContext = this;
+#else
+            if (App.Instance.ApplicationLifetime is ISingleViewApplicationLifetime sval &&
+                sval.MainView is Border b) {
+                MpAvMainView.Instance.DataContext = this;
+                sval.MainView = MpAvMainView.Instance;
+            }
+#endif
 
             MpMessenger.SendGlobal(MpMessageType.MainWindowSizeChanged);
 
@@ -585,6 +592,8 @@ namespace MonkeyPaste.Avalonia {
 
 #if DESKTOP
             SetMainWindowRect(MainWindowClosedScreenRect);
+#else
+            SetMainWindowRect(MainWindowOpenedScreenRect);
 #endif
 
             ShowMainWindowCommand.Execute(null);
@@ -1313,7 +1322,7 @@ namespace MonkeyPaste.Avalonia {
                 SetupMainWindowSize(true);
 
                 SetMainWindowRect(MainWindowOpenedScreenRect);
-                //MpConsole.WriteLine($"MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
+                MpConsole.WriteLine($"MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
 
 
                 MpAvMainView.Instance.UpdateContentLayout();

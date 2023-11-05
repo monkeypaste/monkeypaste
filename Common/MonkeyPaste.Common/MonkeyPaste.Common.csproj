@@ -32,4 +32,5 @@
     <Folder Include="Utils\Command\" />
   </ItemGroup>
 
+  <Target Name="CommonReqsDone" AfterTargets="PostBuildEvent"></Target>
 </Project>

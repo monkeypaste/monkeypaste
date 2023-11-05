@@ -1,13 +1,15 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using CefNet.Avalonia;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+#if DESKTOP
+using CefNet.Avalonia; 
+#endif
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvSystemTrayViewModel :
@@ -297,8 +299,8 @@ namespace MonkeyPaste.Avalonia {
                     WindowStartupLocation = WindowStartupLocation.CenterOwner,
                     Title = result.ToWindowTitleText(),
                     Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("AppIcon", null, null, null) as WindowIcon,
-                    Content = new WebView() {
-                        InitialUrl = result,
+                    Content = new MpAvWebView() {
+                        Address = result,
                         HorizontalAlignment = HorizontalAlignment.Stretch,
                         VerticalAlignment = VerticalAlignment.Stretch
                     },
@@ -309,8 +311,8 @@ namespace MonkeyPaste.Avalonia {
                         return;
                     }
                     e.Handled = true;
-                    if (w.Content is WebView wv) {
-                        wv.GoBack();
+                    if (w.Content is MpAvWebView wv) {
+                        //wv.GoBack();
                     }
                 }
 

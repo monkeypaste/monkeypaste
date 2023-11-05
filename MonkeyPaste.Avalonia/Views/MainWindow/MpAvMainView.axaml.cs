@@ -31,8 +31,8 @@ namespace MonkeyPaste.Avalonia {
         private static MpAvMainView _instance;
         public static MpAvMainView Instance => _instance;
         public static void Init() {
-            if (Mp.Services.PlatformInfo.IsDesktop) {
-                var mw = new MpAvMainWindow();
+#if DESKTOP
+            var mw = new MpAvMainWindow();
 
                 if (mw.Content is MpAvMainView mv) {
                     _instance = mv;
@@ -45,13 +45,13 @@ namespace MonkeyPaste.Avalonia {
                         MpAvToolWindow_Win32.InitToolWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
                     }
                 }
-            } else {
-                if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime lifetime) {
-                    _instance = lifetime.MainView as MpAvMainView;
-                    //lifetime.MainView = _instance;
-                    //await MpAvMainWindowViewModel.Instance.InitializeAsync();
-                }
+#else
+            if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime lifetime &&
+                lifetime.MainView is Border b) {
+                _instance = new MpAvMainView();
+                b.Child = _instance;
             }
+#endif
         }
 
         #endregion
@@ -119,9 +119,6 @@ namespace MonkeyPaste.Avalonia {
             InitializeComponent();
             HorizontalAlignment = HorizontalAlignment.Stretch;
             VerticalAlignment = VerticalAlignment.Stretch;
-#if !DESKTOP
-            Background = Brushes.Lime;
-#endif
             RootGrid = this.FindControl<Grid>("MainWindowContainerGrid");
 
             var sidebarSplitter = this.FindControl<GridSplitter>("SidebarGridSplitter");
@@ -438,6 +435,9 @@ namespace MonkeyPaste.Avalonia {
 
             mwcg.ColumnDefinitions.Clear();
             mwcg.RowDefinitions.Clear();
+
+            var test = mwcg.Bounds;
+            var test2 = mwcg.DataContext;
             if (mwvm.IsHorizontalOrientation) {
                 // HORIZONTAL
                 tmvm.TitleMenuWidth = mwvm.MainWindowWidth;

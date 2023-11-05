@@ -126,7 +126,8 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
 
         public double GlobalBgOpacity {
-            get => GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity);
+            get =>
+                GetThemeValue<double>(MpThemeResourceKey.GlobalBgOpacity);
             set {
                 if (GlobalBgOpacity != value) {
                     double clamped_value = Math.Max(0, Math.Min(value, 1.0d));
@@ -172,19 +173,24 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsDesktop =>
-            Mp.Services != null &&
-            Mp.Services.PlatformInfo != null &&
-            Mp.Services.PlatformInfo.IsDesktop;
-
+#if DESKTOP
+            true;
+#else
+            false;
+#endif
         public bool IsMobile =>
-            Mp.Services != null &&
-            Mp.Services.PlatformInfo != null &&
-            Mp.Services.PlatformInfo.IsMobile;
+#if MOBILE
+            true;
+#else
+            false;
+#endif
 
         public bool IsBrowser =>
-            Mp.Services != null &&
-            Mp.Services.PlatformInfo != null &&
-            Mp.Services.PlatformInfo.IsBrowser;
+#if BROWSER
+            true;
+#else
+            false;
+#endif
 
         public int ShakeDurMs =>
             500;

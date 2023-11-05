@@ -41,23 +41,36 @@
     
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(BuildOs)' == 'WINDOWS'">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
       <BuildOutputFiles Include="$(TargetDir)\**\*.*" />
     </ItemGroup>
     <!-- update working plugin in storage dir-->
-    <Copy SourceFiles="@(BuildOutputFiles)" DestinationFiles="@(BuildOutputFiles->'$(PluginTargetDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+    <Copy SourceFiles="@(BuildOutputFiles)" 
+          DestinationFiles="@(BuildOutputFiles->'$(PluginTargetDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" 
+          OverwriteReadOnlyFiles="true" 
+          SkipUnchangedFiles="true" 
+          ContinueOnError="true" />
 
     <!-- remove tmp dir to ensure its new -->
-    <RemoveDir Directories="$(TargetDatTempDir)" />
+    <RemoveDir ContinueOnError="true" 
+               Directories="$(TargetDatTempDir)" />
 
     <!-- create tmp dir and copy plugin so its the only sub folder-->
-    <Copy SourceFiles="@(BuildOutputFiles)" DestinationFiles="@(BuildOutputFiles->'$(TargetDatTempDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+    <Copy SourceFiles="@(BuildOutputFiles)" 
+          DestinationFiles="@(BuildOutputFiles->'$(TargetDatTempDir)\$(ProjectName)\%(RecursiveDir)%(Filename)%(Extension)')" 
+          OverwriteReadOnlyFiles="true" 
+          SkipUnchangedFiles="true" 
+          ContinueOnError="true" />
 
     <!-- compress tmp dir to retain outer folder and ouput plugin to exec dat dir (for initial load)-->
-    <ZipDirectory Overwrite="true" ContinueOnError="true" SourceDirectory="$(TargetDatTempDir)" DestinationFile="$(TargetDatDir)\$(CoreAnnGuid).zip" />
+    <ZipDirectory Overwrite="true" 
+                  ContinueOnError="true" 
+                  SourceDirectory="$(TargetDatTempDir)" 
+                  DestinationFile="$(TargetDatDir)\$(CoreAnnGuid).zip" />
 
     <!-- remove tmp dir -->
-    <RemoveDir Directories="$(TargetDatTempDir)" />
+    <RemoveDir ContinueOnError="true" 
+               Directories="$(TargetDatTempDir)" />
   </Target>
 </Project>

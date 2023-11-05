@@ -173,15 +173,18 @@ namespace MonkeyPaste.Avalonia {
             Items.CollectionChanged += Items_CollectionChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
 
-            Task.Run(async () => {
-                UserDevices = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
-            });
         }
         #endregion
 
         #region Public Methods
 
         public async Task InitializeAsync(int tagId, bool isPending) {
+            if (UserDevices == null) {
+                _ = Task.Run(async () => {
+                    UserDevices = await MpDataModelProvider.GetItemsAsync<MpUserDevice>();
+                });
+            }
+
             MpConsole.WriteLine($"adv search called tagId: {tagId} pending: {isPending}");
             await MpFifoAsyncQueue.WaitByConditionAsync(_initLockObj, () => { return IsBusy; });
 

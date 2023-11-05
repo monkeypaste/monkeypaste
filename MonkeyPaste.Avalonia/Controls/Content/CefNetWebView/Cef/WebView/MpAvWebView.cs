@@ -1,11 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Data;
 using MonkeyPaste.Common;
-using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using Avalonia.Input;
-using Avalonia.Controls;
 
 #if DESKTOP
 
@@ -51,13 +48,10 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region MpAvIWebViewBindingResponseHandler Implemention
-        //public override MpAvIWebViewBindingResponseHandler BindingHandler =>
-        //    this;
-
-        //public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
-        //    MpConsole.WriteLine($"Base level binding notification '{notificationType}' was unhandled for msg: ");
-        //    MpConsole.WriteLine(msgJsonBase64Str);
-        //}
+#if !DESKTOP
+        public override MpAvIWebViewBindingResponseHandler BindingHandler =>
+            this;
+#endif
 
         public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
             MpConsole.WriteLine($"Base level binding notification '{notificationType}' was unhandled for msg: ");
@@ -144,10 +138,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvWebView() {
-            if (this is MpAvContentWebView) {
-                // avoid everything this does, weird errors in content view stuck waiting for domload
-                return;
-            }
             this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged());
 #if DESKTOP
             Navigating += MpAvWebView_Navigating;
@@ -207,16 +197,10 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 #if DESKTOP
         private void MpAvWebView_Navigating(object sender, CefNet.BeforeBrowseEventArgs e) {
-            if (this is not MpAvContentWebView) {
-                MpConsole.WriteLine($"Navigating to: '{e.Url}'");
-            }
             IsNavigating = true;
         }
 
         private void MpAvWebView_Navigated(object sender, CefNet.NavigatedEventArgs e) {
-            if (this is not MpAvContentWebView) {
-                MpConsole.WriteLine($"Navigated to: '{e.Url}'");
-            }
             IsNavigating = false;
             if (e.Url == Address) {
                 LoadErrorInfo = null;

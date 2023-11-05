@@ -60,6 +60,11 @@ namespace MonkeyPaste.Avalonia {
         public static async Task CheckAndInstallCorePluginsAsync() {
             if (!CoreDatDir.IsDirectory()) {
                 // android dat dir supposed to be '/data/user/0/com.CompanyName.MonkeyPaste.Avalonia/files/dat'
+
+                string test = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string test2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string test3 = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                string test4 = Environment.GetFolderPath(Environment.SpecialFolder.LocalizedResources);
                 MpDebug.Break($"Dat dir error, '{CoreDatDir}' does not exist");
                 return;
             }
@@ -308,9 +313,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
-        private static void PreparePluginForInstall(string temp_plugin_dir) {
 
-        }
         private static IEnumerable<string> FindManifestPaths(string root) {
             try {
                 return Directory.EnumerateFiles(root, "manifest.json", SearchOption.AllDirectories);

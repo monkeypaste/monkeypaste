@@ -78,8 +78,6 @@
     <Compile Remove="Utils\MpXamMeasurements.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Data\db.create" />
-    <None Remove="Resources\Data\Google\client_secrets.json" />
-    <None Remove="Resources\Data\Google\client_secrets_desktop.json" />
     <None Remove="Resources\Fonts\password.ttf" />
     <None Remove="Resources\Icons\monkey.png" />
     <None Remove="Behaviors\" />
@@ -95,12 +93,6 @@
 
   <ItemGroup>
     <Compile Include="Converters\MpXamStringToSyncObjectTypeConverter.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Resources\Data\Google\client_secrets_desktop.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -134,7 +126,10 @@
 
   <ItemGroup>
     <Folder Include="Controls\" />
+    <Folder Include="Resources\Data\" />
+    <Folder Include="Utils\Builders\Bases\" />
     <Folder Include="Utils\Helpers\Graphics\Animation\" />
+    <Folder Include="Utils\Input\" />
   </ItemGroup>
 
   <ItemGroup>

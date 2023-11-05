@@ -16,8 +16,10 @@
   </PropertyGroup>
   
   <!-- MANUALLY SET PROPERTIES-->
+  <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>ANDROID</BuildOs>
+    <CultureExt>en-US</CultureExt>
   </PropertyGroup>
 
   <!-- SYSTEM PROPERTIES -->
@@ -109,6 +111,10 @@
     <DeclarativePluginBaseDir>$(PluginSourceDir)\DeclarativePlugins\DeclarativeBase</DeclarativePluginBaseDir>
     <PluginTargetDir>$(StorageDir)\Plugins</PluginTargetDir>
     <UiProjectDir>$(SolutionDir)\MonkeyPaste.Avalonia</UiProjectDir>
+    <SoundsSourceDir>$(UiProjectDir)\Assets\Sounds</SoundsSourceDir>
+    <SoundsTargetDir>$(MainTargetDir)\Assets\Sounds</SoundsTargetDir>
+    <EditorSourceDir>$(UiProjectDir)\Resources\Editor</EditorSourceDir>
+    <EditorTargetDir>$(MainTargetDir)\Resources\Editor</EditorTargetDir>
     <CefNetLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.dll</CefNetLibDir>
     <CefNetAvLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.Avalonia.dll</CefNetAvLibDir>
     <WebsiteRootDir>$(SolutionDir)\MonkeyPaste.com</WebsiteRootDir>

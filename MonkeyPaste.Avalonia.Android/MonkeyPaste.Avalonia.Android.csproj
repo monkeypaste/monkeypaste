@@ -8,14 +8,20 @@
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
-    <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
-    <!--<AndroidEnableProfiledAot>True</AndroidEnableProfiledAot>-->
+    <AndroidEnableProfiledAot>True</AndroidEnableProfiledAot>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <!--<RunAOTCompilation>True</RunAOTCompilation>-->
-    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
-    <!--<Optimize>True</Optimize>-->  
+    <RunAOTCompilation>True</RunAOTCompilation>
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <DebugType>embedded</DebugType>
+    <!--<DebugSymbols>True</DebugSymbols>-->
+    <Optimize>True</Optimize>  
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="SplashActivity.cs" />
@@ -43,4 +49,34 @@
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
   </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'ANDROID'">
+    <ItemGroup>
+      <EditorFiles Include="$(EditorSourceDir)\**\*.*" />
+      <SoundFiles Include="$(SoundsSourceDir)\**\*.*" />
+      <TermsFile Include="$(UiProjectDir)\Resources\terms.html" />
+      <Resx1 Include="$(UiProjectDir)\Resources\UiStrings\UiStrings.resx" />
+      <Resx2 Include="$(UiProjectDir)\Resources\UiStrings\EnumUiStrings.resx" />
+    </ItemGroup>
+    <!-- copy editor over to since content build action not supported-->
+    <Copy SourceFiles="@(EditorFiles)" DestinationFiles="@(EditorFiles->'$(EditorTargetDir)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+    
+    <!-- copy sounds -->
+    <Copy SourceFiles="@(SoundFiles)" DestinationFiles="@(SoundFiles->'$(SoundsTargetDir)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+    
+    <!-- Copy Terms-->
+    <Copy SourceFiles="@(TermsFile)" DestinationFiles="@(TermsFile->'$(MainTargetDir)\Resources\terms.html')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+    
+    <!--<Copy SourceFiles="@(Resx1)" 
+          DestinationFiles="@(Resx1->'$(MainTargetDir)\Resources\UiStrings\UiStrings.resx')" 
+          OverwriteReadOnlyFiles="true" 
+          SkipUnchangedFiles="true" 
+          ContinueOnError="true" />
+    <Copy SourceFiles="@(Resx2)" 
+          DestinationFiles="@(Resx2->'$(MainTargetDir)\Resources\UiStrings\EnumUiStrings.resx')" 
+          OverwriteReadOnlyFiles="true" 
+          SkipUnchangedFiles="true" 
+          ContinueOnError="true" />-->
+
+  </Target>
 </Project>

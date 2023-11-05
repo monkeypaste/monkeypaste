@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Logging;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
@@ -47,6 +48,9 @@ namespace MonkeyPaste.Avalonia {
                     return desktop.MainWindow as MpAvMainWindow;
                 }
                 if (_instance.ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
+                    if (mobile.MainView is Border b) {
+                        return b.Child as MpIMainView;
+                    }
                     return mobile.MainView as MpAvMainView;
                 }
                 return null;
@@ -116,11 +120,11 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
         public override async void OnFrameworkInitializationCompleted() {
-            MpAvCultureManager.SetCulture(MpAvCultureManager.DEFAULT_CULTURE_NAME);
+            //MpAvCultureManager.SetCulture(MpAvCultureManager.DEFAULT_CULTURE_NAME);
 
             DateTime startup_datetime = DateTime.Now;
 #if DESKTOP
-            MpAvLogSink.Init(); 
+            MpAvLogSink.Init();
 #endif
 
             ReportCommandLineArgs(Args);
@@ -135,24 +139,34 @@ namespace MonkeyPaste.Avalonia {
                 await loader.CreatePlatformAsync(startup_datetime);
                 await loader.InitAsync();
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
-                if (MpDeviceWrapper.Instance != null) {
-                    await MpDeviceWrapper.Instance.InitAsync(null);
-                }
-                var loader = new MpAvLoaderViewModel(is_login_load);
-                await loader.CreatePlatformAsync(startup_datetime);
-                loader.InitAsync().FireAndForgetSafeAsync();
-                mobile.MainView = new MpAvMainView() {
+                var b = new Border() {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
                     Background = Brushes.Lime,
-                    DataContext = MpAvMainWindowViewModel.Instance,
-                    Width = 10000,
-                    Height = 10000
                 };
-                MpAvMainWindowViewModel.Instance.WindowResizeCommand.Execute(new MpPoint(10000, 10000));
-                mobile.MainView.PointerPressed += (s, e) => {
+                mobile.MainView = b;
 
-                };
+                //b.PointerPressed += (s, e) => {
+                //    if (mobile.MainView is Border b) {
+                //        b.Child = MpAvMainView.Instance;
+                //    }
+                //};
+                var loader = new MpAvLoaderViewModel(is_login_load);
+                await loader.CreatePlatformAsync(startup_datetime);
+
+                Dispatcher.UIThread.Post(async () => {
+                    if (MpDeviceWrapper.Instance != null) {
+                        await MpDeviceWrapper.Instance.InitAsync(null);
+                    }
+                    await loader.InitAsync();
+
+                    var test = MpAvMainView.Instance;
+
+                    //if (mobile.MainView is Border b) {
+                    //    mobile.MainView = MpAvMainView.Instance;
+                    //    //b.Child = MpAvMainView.Instance;
+                    //}
+                });
             }
 
             base.OnFrameworkInitializationCompleted();

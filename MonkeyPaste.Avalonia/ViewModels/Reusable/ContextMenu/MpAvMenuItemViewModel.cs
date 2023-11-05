@@ -295,9 +295,6 @@ namespace MonkeyPaste.Avalonia {
                     Mp.Services.ShortcutGestureLocator == null) {
                     return null;
                 }
-                //if (MpShortcutRef.Create(ShortcutArgs) is MpShortcutRef sr) {
-                //    return MpDataModelProvider.GetShortcutKeystring(sr.ShortcutType.ToString(), sr.CommandParameter);
-                //}
                 if (ShortcutArgs is object[] scArgParts &&
                     scArgParts[0] is MpShortcutType sct) {
                     if (scArgParts.Length > 1 &&

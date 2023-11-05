@@ -37,7 +37,7 @@
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
     <Reference Include="HtmlAgilityPack, Version=1.11.54.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\HtmlAgilityPack.1.11.54\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
@@ -80,29 +80,25 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\Converters\MpWpfHtmlToRtfConverter.cs" />
-    <Compile Include="Utils\Converters\MpWpfRtfToHtmlConverter2.cs" />
-    <Compile Include="Utils\Converters\Properties\MpWpfHtmlDefaultProperties.cs" />
-    <Compile Include="Utils\Converters\Properties\MpWpfRtfDefaultProperties.cs" />
-    <Compile Include="Utils\Extensions\MpCsvToRtfTableConverter.cs" />
-    <Compile Include="Utils\Extensions\MpWpfColorExtensions.cs" />
-    <Compile Include="Utils\Extensions\MpWpfExtensions.cs" />
-    <Compile Include="Utils\Extensions\MpWpfFlowDocumentSearchExtensions.cs" />
-    <Compile Include="Utils\Extensions\MpWpfImageExtensions.cs" />
-    <Compile Include="Utils\Extensions\MpWpfKeyboardInputHelpers.cs" />
-    <Compile Include="Utils\Extensions\MpWpfRichDocumentExtensions.cs" />
-    <Compile Include="Utils\Extensions\MpWpfStringExtensions.cs" />
-    <Compile Include="Utils\Helpers\Graphics\Color\MpWpfColorHelpers.cs" />
-    <Compile Include="Utils\Helpers\Graphics\Imaging\MpWpfClipboardImageHelper.cs" />
-    <Compile Include="Utils\Helpers\Graphics\Imaging\MpWpfImagingHelper.cs" />
-    <Compile Include="Utils\Helpers\Graphics\MpScreenInformation.cs" />
-    <Compile Include="Utils\PInvoke\DevicePathMapper\MpWpfDevicePathMapper.cs" />
-    <Compile Include="Utils\PInvoke\WinApi.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Properties\AssemblyInfo.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Converters\MpWpfHtmlToRtfConverter.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Converters\MpWpfRtfToHtmlConverter2.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Converters\Properties\MpWpfHtmlDefaultProperties.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Converters\Properties\MpWpfRtfDefaultProperties.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Extensions\MpCsvToRtfTableConverter.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Extensions\MpWpfColorExtensions.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Extensions\MpWpfExtensions.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Extensions\MpWpfFlowDocumentSearchExtensions.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Extensions\MpWpfImageExtensions.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Extensions\MpWpfKeyboardInputHelpers.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Extensions\MpWpfRichDocumentExtensions.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Extensions\MpWpfStringExtensions.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Helpers\Graphics\Color\MpWpfColorHelpers.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Helpers\Graphics\Imaging\MpWpfClipboardImageHelper.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Helpers\Graphics\Imaging\MpWpfImagingHelper.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\Helpers\Graphics\MpScreenInformation.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\PInvoke\DevicePathMapper\MpWpfDevicePathMapper.cs" />
+    <Compile Condition="'$(BuildOs)' == 'WINDOWS'" Include="Utils\PInvoke\WinApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj">

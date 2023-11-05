@@ -1346,11 +1346,11 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(IsValid):
                     RootTriggerActionViewModel.OnPropertyChanged(nameof(RootTriggerActionViewModel.IsAllValid));
-                    if (!IsValid && IsSelected) {
+                    if (!IsValid && IsSelected && MpAvMainView.Instance is MpAvMainView mv) {
                         Dispatcher.UIThread.Post(async () => {
                             // wait for content control to bind to primary action...
                             await Task.Delay(300);
-                            var apv = MpAvMainView.Instance.GetVisualDescendant<MpAvActionPropertyHeaderView>();
+                            var apv = mv.GetVisualDescendant<MpAvActionPropertyHeaderView>();
                             if (apv != null) {
                                 var icc = apv.FindControl<ContentControl>("ActionPropertyIconContentControl");
 
