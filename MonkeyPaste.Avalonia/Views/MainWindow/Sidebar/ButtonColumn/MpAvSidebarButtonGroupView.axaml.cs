@@ -1,12 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using Avalonia.Threading;
-using Avalonia.VisualTree;
 using MonkeyPaste.Common.Avalonia;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvSidebarButtonGroupView : MpAvUserControl<MpAvClipTrayViewModel> {
@@ -44,13 +39,13 @@ namespace MonkeyPaste.Avalonia {
                     if (MpAvMainWindowViewModel.Instance.IsHorizontalOrientation) {
                         // horizontal shows sidebar down left side
                         ctg.ColumnDefinitions.Clear();
-                        ctg.RowDefinitions = new RowDefinitions("*,*,*,*,*");
+                        ctg.RowDefinitions = new RowDefinitions("*,0,*,*,0");
                         tbl.ForEach(x => Grid.SetColumn(x, 0));
                         tbl.ForEach(x => Grid.SetRow(x, tbl.IndexOf(x)));
                     } else {
                         // vertical shows sidebar across bottom
                         ctg.RowDefinitions.Clear();
-                        ctg.ColumnDefinitions = new ColumnDefinitions("*,*,*,*,*");
+                        ctg.ColumnDefinitions = new ColumnDefinitions("*,0,*,*,0");
                         tbl.ForEach(x => Grid.SetRow(x, 0));
                         tbl.ForEach(x => Grid.SetColumn(x, tbl.IndexOf(x)));
                     }

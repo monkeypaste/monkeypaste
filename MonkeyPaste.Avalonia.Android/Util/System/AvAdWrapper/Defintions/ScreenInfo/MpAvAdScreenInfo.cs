@@ -1,16 +1,10 @@
 ﻿using Android.App;
-using Android.Views;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Rendering;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Essentials;
 using AvApplication = Avalonia.Application;
 
@@ -52,18 +46,25 @@ namespace MonkeyPaste.Avalonia.Android {
                 if (nid > 0) {
                     nav_height = activity.ApplicationContext.Resources.GetDimension(nid);
                 }
-
-
                 int sid = activity.ApplicationContext.Resources.GetIdentifier("status_bar_height", "dimen", "android");
                 float status_height = 0;
                 if (sid > 0) {
                     status_height = activity.ApplicationContext.Resources.GetDimension(sid);
                 }
                 Scaling = di.Density;
-                Bounds = new PixelRect(new PixelSize((int)di.Width, (int)di.Height - (int)nav_height - (int)status_height)).ToPortableRect(Scaling);
-                WorkArea = Bounds;
-            }
 
+                int s_w = (int)di.Width;
+                int s_h = (int)di.Height - (int)nav_height;// - (int)status_height
+                Bounds = new PixelRect(new PixelSize(s_w, s_h)).ToPortableRect(Scaling);
+
+                //int wa_x = 0;
+                //int wa_y = (int)status_height + 200;
+                //int wa_w = (int)di.Width;
+                //int wa_h = (int)(di.Height - status_height - nav_height - 200);
+                WorkArea = Bounds;//new PixelRect(wa_x, wa_y, wa_w, wa_h).ToPortableRect(Scaling);
+
+                IsPrimary = true;
+            }
         }
 
         private MpRect _baseBounds;

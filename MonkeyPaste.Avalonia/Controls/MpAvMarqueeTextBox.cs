@@ -50,8 +50,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
 
-        static MpAvMarqueeTextBox() {
-        }
         #endregion
 
         #region Interfaces
@@ -543,6 +541,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         public MpAvMarqueeTextBox() {
+#if MOBILE
+            this.Classes.Add("mobile");
+#endif
             this.AcceptsReturn = false;
             this.AcceptsTab = false;
             this.TextWrapping = TextWrapping.NoWrap;
@@ -575,6 +576,7 @@ namespace MonkeyPaste.Avalonia {
 
             this.AddHandler(MpAvMarqueeTextBox.KeyDownEvent, HandleKeyDown, RoutingStrategies.Tunnel);
             this.AddHandler(MpAvMarqueeTextBox.KeyUpEvent, HandleKeyUp, RoutingStrategies.Tunnel);
+            this.AddHandler(MpAvMarqueeTextBox.HoldingEvent, HandleHold, RoutingStrategies.Tunnel);
         }
 
         #region Event Handlers
@@ -732,6 +734,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private void HandleHold(object sender, HoldingRoutedEventArgs e) {
+            //e.Handled = IsReadOnly;
+        }
         private void HandleKeyDown(object sender, KeyEventArgs e) {
             //if (e.Key == Key.Space) {
             //    string pre_str = Text.Substring(0, SelectionStart);

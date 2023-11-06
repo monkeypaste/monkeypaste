@@ -310,7 +310,11 @@
                                           IsReadOnly="{Binding IsTagNameReadOnly, Mode=TwoWay}"
                                           ReadOnlyBackground="Transparent"
                                           ReadOnlyForeground="{Binding TagTextHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
-                                          Text="{Binding TagName, Mode=TwoWay}" />
+                                          Text="{Binding TagName, Mode=TwoWay}">
+                    <local:MpAvMarqueeTextBox.ContextMenu>
+                        <ContextMenu IsEnabled="{Binding !IsTagNameReadOnly}" />
+                    </local:MpAvMarqueeTextBox.ContextMenu>
+                </local:MpAvMarqueeTextBox>
                 <!--</Grid>-->
             </StackPanel>
         </Border>

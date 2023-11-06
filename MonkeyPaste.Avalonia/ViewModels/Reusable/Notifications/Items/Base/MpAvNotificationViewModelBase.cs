@@ -533,6 +533,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+
         #endregion
 
         #region Commands

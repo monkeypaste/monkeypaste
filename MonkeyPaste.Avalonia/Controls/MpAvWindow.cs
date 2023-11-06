@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
-    public class MpAvWindow : Window, MpIUserControl {
+    public class MpAvWindow :
+        Window,
+        MpIUserControl {
 
         #region Private Variables
         private const string NO_RESULT_OBJ = "sdoifjdsfjnlkwe2423";

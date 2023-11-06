@@ -436,8 +436,6 @@ namespace MonkeyPaste.Avalonia {
             mwcg.ColumnDefinitions.Clear();
             mwcg.RowDefinitions.Clear();
 
-            var test = mwcg.Bounds;
-            var test2 = mwcg.DataContext;
             if (mwvm.IsHorizontalOrientation) {
                 // HORIZONTAL
                 tmvm.TitleMenuWidth = mwvm.MainWindowWidth;

@@ -24,4 +24,9 @@
         <Setter Property="FontFamily"
                 Value="{DynamicResource DefaultEditableFontFamily}" />
     </Style>
+
+    <Style Selector="local|MpAvMarqueeTextBox.mobile[IsReadOnly=true]">
+        <!--<Setter Property="IsHitTestVisible"
+                Value="False" />-->
+    </Style>
 </Styles>

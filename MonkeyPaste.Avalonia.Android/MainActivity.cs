@@ -12,12 +12,12 @@ using Orientation = Android.Content.Res.Orientation;
 
 namespace MonkeyPaste.Avalonia.Android {
     [Activity(
-    Label = "MonkeyPaste.Avalonia.Android",
+    Label = "MonkeyPaste",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     LaunchMode = LaunchMode.SingleTop,
     MainLauncher = true,
-    ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+    ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
     public class MainActivity : AvaloniaMainActivity<App> {
         private bool _isFullscreen = true;
 
@@ -76,7 +76,6 @@ namespace MonkeyPaste.Avalonia.Android {
 
                 Window.SetDecorFitsSystemWindows(false);
                 Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
-
                 if (wicController != null) {
                     wicController.Hide(WindowInsets.Type.Ime());
                     wicController.Hide(WindowInsets.Type.NavigationBars());

@@ -189,7 +189,11 @@ namespace MonkeyPaste.Avalonia {
         public static readonly AttachedProperty<bool> RouteHoldToRightPressProperty =
             AvaloniaProperty.RegisterAttached<object, Control, bool>(
                 "RouteHoldToRightPress",
+#if DESKTOP
                 false);
+#else
+                true);
+#endif
 
         #endregion
 
@@ -279,6 +283,12 @@ namespace MonkeyPaste.Avalonia {
 
                     if (GetRightPressCommand(control) is ICommand rght_press_cmd && GetRouteHoldToRightPress(control)) {
                         control.AddHandler(Control.HoldingEvent, Control_Holding, RoutingStrategies.Tunnel);
+
+#if MOBILE
+                        //control.AddHandler(Control.PointerPressedEvent, (s, e) => {
+                        //    e.Handled = true;
+                        //}, RoutingStrategies.Tunnel);
+#endif
                     }
                 }
 

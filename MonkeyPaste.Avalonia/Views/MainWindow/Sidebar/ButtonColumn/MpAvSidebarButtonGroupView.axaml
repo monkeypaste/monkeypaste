@@ -115,7 +115,7 @@
           Classes.horizontal="{Binding !IsVerticalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
           HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch"
-          RowDefinitions="*,*,*,*,*">
+          RowDefinitions="Auto,Auto,Auto,Auto,Auto">
         <RadioButton x:Name="TagTreeToggleButton"
                      Grid.Row="0"
                      GroupName="SidebarButtonGroup"
@@ -160,6 +160,7 @@
 
         </RadioButton>
         <RadioButton x:Name="ClipboardHandlerToggleButton"
+                     IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                      Grid.Row="1"
                      GroupName="SidebarButtonGroup"
                      Classes="sidebarRadio switchless"
@@ -202,6 +203,7 @@
             <PathIcon Data="{StaticResource BoltSvg}" />
         </RadioButton>
         <RadioButton x:Name="AppModeToggleButton"
+                     IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                      Classes.mouseMode="{Binding IsAnyMouseModeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                      Grid.Row="4"
                      local:MpAvImageTintExtension.IsEnabled="True"

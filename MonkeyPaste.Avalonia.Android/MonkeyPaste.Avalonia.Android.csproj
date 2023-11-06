@@ -8,20 +8,22 @@
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
-    <AndroidEnableProfiledAot>True</AndroidEnableProfiledAot>
+    <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ErrorReport>send</ErrorReport>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <RunAOTCompilation>True</RunAOTCompilation>
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <!--<RunAOTCompilation>True</RunAOTCompilation>-->
+    <!--<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>-->
+    <!--<DebugType>embedded</DebugType>-->
+    <DebugSymbols>True</DebugSymbols>
     <DebugType>embedded</DebugType>
-    <!--<DebugSymbols>True</DebugSymbols>-->
-    <Optimize>True</Optimize>  
+    <!--<Optimize>True</Optimize>-->  
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>embedded</DebugType>
+    <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="SplashActivity.cs" />

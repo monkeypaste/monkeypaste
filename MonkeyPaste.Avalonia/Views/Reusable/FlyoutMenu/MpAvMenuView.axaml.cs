@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -28,7 +29,12 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvMenuView ShowMenu(
             Control target,
             MpAvIMenuItemViewModel dc,
-            bool showByPointer = true,
+            bool showByPointer =
+#if DESKTOP
+            true, 
+#else
+            false,
+#endif
             PlacementMode placementMode = PlacementMode.Pointer,
             PopupAnchor popupAnchor = PopupAnchor.TopLeft,
             MpPoint offset = null) {
@@ -65,8 +71,8 @@ namespace MonkeyPaste.Avalonia {
             this.GetObservable(IsOpenProperty).Subscribe(value => OnIsOpenChanged());
             this.Closed += MpAvMenuView_Closed;
             this.Closing += MpAvMenuView_Closing;
-
         }
+
 
         private void MpAvMenuView_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
             e.Cancel = _IsDevToolsOpen;

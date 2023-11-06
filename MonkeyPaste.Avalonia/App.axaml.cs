@@ -139,18 +139,12 @@ namespace MonkeyPaste.Avalonia {
                 await loader.CreatePlatformAsync(startup_datetime);
                 await loader.InitAsync();
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
-                var b = new Border() {
+                mobile.MainView = new Border() {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
-                    Background = Brushes.Lime,
+                    Background = Brushes.Pink,
                 };
-                mobile.MainView = b;
 
-                //b.PointerPressed += (s, e) => {
-                //    if (mobile.MainView is Border b) {
-                //        b.Child = MpAvMainView.Instance;
-                //    }
-                //};
                 var loader = new MpAvLoaderViewModel(is_login_load);
                 await loader.CreatePlatformAsync(startup_datetime);
 
@@ -159,13 +153,6 @@ namespace MonkeyPaste.Avalonia {
                         await MpDeviceWrapper.Instance.InitAsync(null);
                     }
                     await loader.InitAsync();
-
-                    var test = MpAvMainView.Instance;
-
-                    //if (mobile.MainView is Border b) {
-                    //    mobile.MainView = MpAvMainView.Instance;
-                    //    //b.Child = MpAvMainView.Instance;
-                    //}
                 });
             }
 

@@ -1019,6 +1019,13 @@ namespace MonkeyPaste.Avalonia {
                 if (ListOrientation == Orientation.Horizontal) {
                     return
                         MpAvMainWindowViewModel.Instance.MainWindowWidth -
+#if MOBILE
+                        // NOTE not sure where the problem is but something is not measuring
+                        // the heights of pintray and sidebar gridsplitters correctly and it
+                        // becomes clear on mobile since theyre bigger and and this seems the best place
+                        // to adjust
+                        (MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength * -3) -
+#endif
                         MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarWidth;
                 }
                 return
@@ -1037,6 +1044,13 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return
                         MpAvMainWindowViewModel.Instance.MainWindowHeight -
+#if MOBILE
+                        // NOTE not sure where the problem is but something is not measuring
+                        // the heights of pintray and sidebar gridsplitters correctly and it
+                        // becomes clear on mobile since theyre bigger and and this seems the best place
+                        // to adjust
+                        (MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength * -2) -
+#endif
                         MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarHeight -
                         MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize;
             }

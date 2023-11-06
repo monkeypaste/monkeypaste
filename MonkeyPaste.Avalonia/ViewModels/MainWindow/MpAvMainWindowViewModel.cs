@@ -301,10 +301,7 @@ namespace MonkeyPaste.Avalonia {
 
         public MpRect MainWindowOpenedScreenRect {
             get {
-                if (!Mp.Services.PlatformInfo.IsDesktop) {
-                    return MainWindowScreen.Bounds;
-                }
-
+#if DESKTOP
                 switch (MainWindowOrientationType) {
                     case MpMainWindowOrientationType.Bottom:
                         return new MpRect(
@@ -330,9 +327,11 @@ namespace MonkeyPaste.Avalonia {
                             MainWindowScreen.WorkArea.Top,
                             MainWindowWidth,
                             MainWindowHeight);
-                }
+                } 
+#else
 
-                return new MpRect();
+                return MainWindowScreen.WorkArea;
+#endif
             }
         }
 
@@ -577,8 +576,12 @@ namespace MonkeyPaste.Avalonia {
 #else
             if (App.Instance.ApplicationLifetime is ISingleViewApplicationLifetime sval &&
                 sval.MainView is Border b) {
+                var test = b.Bounds;
                 MpAvMainView.Instance.DataContext = this;
                 sval.MainView = MpAvMainView.Instance;
+                sval.MainView.VerticalAlignment = VerticalAlignment.Bottom;
+                MpAvMainView.Instance.RootGrid.VerticalAlignment = VerticalAlignment.Bottom;
+                var test2 = MpAvMainView.Instance.Bounds;
             }
 #endif
 
@@ -855,7 +858,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindowManager.MainWindow.Topmost = true;
             }
 
-            MpConsole.WriteLine($"SHOW WINDOW DONE. Activate Forced: '{force_activate}' Other Active: '{is_other_win_active}'");
+            MpConsole.WriteLine($"SHOW WINDOW DONE. Activate Forced: '{force_activate}' Other Active: '{is_other_win_active}' MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
         }
 
         public void FinishMainWindowHide() {
