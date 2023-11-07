@@ -9,5 +9,6 @@ namespace MonkeyPaste.Common {
         bool IsMonitoring { get; }
         void StartMonitor(bool ignoreCurrentState);
         void StopMonitor();
+        void ForceChange(MpPortableDataObject mpdo);
     }
 }

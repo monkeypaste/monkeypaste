@@ -91,7 +91,7 @@
     <MainTargetFramework>net7.0-android</MainTargetFramework>
     <DefineConstants>MOBILE;ANDROID;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Android</MainProjectName>
-    <AndroidPackageName>com.CompanyName.MonkeyPaste.Avalonia</AndroidPackageName>
+    <AndroidPackageName>com.Monkey.MonkeyPaste</AndroidPackageName>
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
     <IsMobile>true</IsMobile>
   </PropertyGroup>

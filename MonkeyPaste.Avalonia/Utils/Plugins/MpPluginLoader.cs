@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
         }
         public static async Task CheckAndInstallCorePluginsAsync() {
             if (!CoreDatDir.IsDirectory()) {
-                // android dat dir supposed to be '/data/user/0/com.CompanyName.MonkeyPaste.Avalonia/files/dat'
+                // android dat dir supposed to be '/data/user/0/com.Monkey.MonkeyPaste.Avalonia/files/dat'
 
                 string test = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                 string test2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

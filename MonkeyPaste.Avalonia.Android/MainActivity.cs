@@ -22,7 +22,6 @@ namespace MonkeyPaste.Avalonia.Android {
         private bool _isFullscreen = true;
 
         protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
-
             return base.CustomizeAppBuilder(builder)
                  //.WithInterFont()
                  //.UseReactiveUI()

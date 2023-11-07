@@ -106,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvThemeViewModel Instance => _instance ?? (_instance = new MpAvThemeViewModel());
 
         public void Init() {
-            // empty
+            UpdateThemeResources();
         }
         #endregion
 

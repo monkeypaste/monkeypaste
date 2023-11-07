@@ -4,21 +4,21 @@
     <TargetFramework>net7.0-android</TargetFramework>
     
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
-    <ApplicationId>com.CompanyName.MonkeyPaste.Avalonia</ApplicationId>
+    <ApplicationId>$(AndroidPackageName)</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <ErrorReport>send</ErrorReport>
+    <!--<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ErrorReport>send</ErrorReport>-->
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <!--<RunAOTCompilation>True</RunAOTCompilation>-->
     <!--<EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>-->
     <!--<DebugType>embedded</DebugType>-->
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>embedded</DebugType>
+    <!--<DebugSymbols>True</DebugSymbols>
+    <DebugType>embedded</DebugType>-->
     <!--<Optimize>True</Optimize>-->  
   </PropertyGroup>
   
@@ -26,6 +26,7 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="MpCopyClipboardNotificationActivity.cs" />
     <Compile Remove="SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +51,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\strings\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="MpCopyClipboardNotificationActivity.cs" />
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'ANDROID'">

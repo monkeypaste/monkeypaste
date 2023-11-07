@@ -17,6 +17,18 @@
         <TransformOperations x:Key="SwitchlessRadioButtonTransformOps">translateX(-15px)</TransformOperations>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+      <Style Selector="Grid#SidebarButtonGroupContainerGrid">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch"/>
+        <Setter Property="VerticalAlignment"
+                Value="Stretch"/>
+      </Style>
+      <Style Selector="Grid#SidebarButtonGroupContainerGrid.horizontal">
+        <Setter Property="HorizontalAlignment"
+                Value="Stretch"/>
+        <Setter Property="VerticalAlignment"
+                Value="Stretch"/>
+      </Style>
         <!--  SIDEBAR RADIO BUTTONS  -->
         <Style Selector="RadioButton.sidebarRadio">
             <Setter Property="local:MpAvDropExtension.IsEnabled"
