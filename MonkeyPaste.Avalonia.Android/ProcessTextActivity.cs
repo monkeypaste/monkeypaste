@@ -1,14 +1,12 @@
 ﻿using Android.App;
-using Android.Graphics;
-using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Widget;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
-using System.Threading.Tasks;
 using Xamarin.Essentials;
 using static Android.Content.PM.PackageManager;
 using Intent = Android.Content.Intent;
+using Path = System.IO.Path;
 
 namespace MonkeyPaste.Avalonia.Android {
     [Activity(Label = "Monkey Copy", NoHistory = true, Exported = true)]
@@ -29,9 +27,11 @@ namespace MonkeyPaste.Avalonia.Android {
             await Clipboard.SetTextAsync(selectedText);
             Toast.MakeText(this, "Copied to clipboard", ToastLength.Short).Show();
 
-            string app_path = Referrer.Host;
+            string package_name = Referrer.Host;
+            string app_path = Path.Combine(Path.GetDirectoryName(DataDir.AbsolutePath), package_name);
+
             string app_name = GetAppName(app_path);
-            string app_icon_base64 = await GetAppIconBase64Async(Referrer.Host);
+            string app_icon_base64 = Mp.Services.IconBuilder.GetPathIconBase64(app_path);
 
             // TODO Add Skia Icon builder here
 
@@ -62,21 +62,6 @@ namespace MonkeyPaste.Avalonia.Android {
                 MpConsole.WriteTraceLine(@"With Exception: " + ex);
             }
             return "(unknown)";
-        }
-        private async Task<string> GetAppIconBase64Async(string packageName) {
-            if (string.IsNullOrEmpty(packageName)) {
-                return null;
-            }
-            using Drawable drawable = ApplicationContext.PackageManager.GetApplicationIcon(packageName);
-            Bitmap bitmap = null;
-            await Task.Run(() => {
-                bitmap = Bitmap.CreateBitmap(drawable.IntrinsicWidth, drawable.IntrinsicHeight, Bitmap.Config.Argb8888);
-                using (var canvas = new Canvas(bitmap)) {
-                    drawable.SetBounds(0, 0, canvas.Width, canvas.Height);
-                    drawable.Draw(canvas);
-                }
-            });
-            return bitmap.ToBase64Str();
         }
 
     }

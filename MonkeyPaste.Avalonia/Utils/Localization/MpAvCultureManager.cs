@@ -8,7 +8,7 @@ namespace MonkeyPaste.Avalonia {
             EnumUiStrings.Culture = new CultureInfo(culture);
         }
         public static bool IsDefaultCulture(CultureInfo c) {
-            return c.Name == DEFAULT_CULTURE_NAME;
+            return c == null || c.Name == DEFAULT_CULTURE_NAME;
         }
 
     }

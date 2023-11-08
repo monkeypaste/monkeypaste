@@ -54,11 +54,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\strings\" />
+    <None Include="MpCopyClipboardNotificationActivity.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="MpCopyClipboardNotificationActivity.cs" />
+    <Folder Include="Assets\" />
+    <Folder Include="Assets\dat\" />
   </ItemGroup>
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'ANDROID'">

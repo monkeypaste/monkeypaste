@@ -128,7 +128,8 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindowManager.LocateWindow(this) is Window dsw &&
                 dsw.GetVisualDescendant<MpAvZoomBorder>() is MpAvZoomBorder dsw_zb) {
                 zb = dsw_zb;
-            } else if (MpAvWindowManager.MainWindow.GetVisualDescendant<MpAvZoomBorder>() is MpAvZoomBorder mw_zb) {
+            } else if (App.MainView is Control mv &&
+                        mv.GetVisualDescendant<MpAvZoomBorder>() is MpAvZoomBorder mw_zb) {
                 zb = mw_zb;
             }
 

@@ -21,7 +21,13 @@ namespace MonkeyPaste.Avalonia.Android {
     public class MainActivity : AvaloniaMainActivity<App> {
         private bool _isFullscreen = true;
 
+        private static MainActivity _instance;
+        public static MainActivity Instance =>
+            _instance;
+
         protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
+            _instance = this;
+
             return base.CustomizeAppBuilder(builder)
                  //.WithInterFont()
                  //.UseReactiveUI()

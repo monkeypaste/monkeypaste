@@ -133,6 +133,18 @@ namespace MonkeyPaste.Common {
 
         #endregion
 
+        public static string RemoveGuidFormat(this string guid) {
+            if (guid == null) {
+                return string.Empty;
+            }
+            var format_chars = new char[] { '_', '-', ',', '{', '}', '"' };
+            string clean_guid = guid;
+            foreach (char format_char in format_chars) {
+                clean_guid = clean_guid.Replace(format_char.ToString(), string.Empty);
+            }
+            return clean_guid;
+        }
+
         public static string ToTestResultLabel(this bool success) {
             return success ? "SUCCEEDED" : "FAILED";
         }

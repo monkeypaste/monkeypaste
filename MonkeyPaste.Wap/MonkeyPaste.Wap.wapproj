@@ -166,7 +166,7 @@
     <ProjectReference Include="..\MonkeyPaste.Avalonia.Desktop\MonkeyPaste.Avalonia.Desktop.csproj" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\cf2ec03f-9edd-45e9-a605-2a2df71e03bd.zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />
-    <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31.zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />
+    <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\$(CoreOleGuid).zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />
+    <Copy OverwriteReadOnlyFiles="True" SkipUnchangedFiles="True" SourceFiles="$(TargetDatDir)\$(CoreAnnGuid).zip" DestinationFolder="$(TargetDir)\AppX\$(MainProjectName)\dat" />
   </Target>
 </Project>

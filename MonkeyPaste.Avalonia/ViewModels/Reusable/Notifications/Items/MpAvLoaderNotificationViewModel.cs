@@ -62,7 +62,12 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
 
-        public MpAvLoaderNotificationViewModel() : base() { }
+        public MpAvLoaderNotificationViewModel() : base() {
+            if (ProgressLoader != null) {
+                ProgressLoader.PropertyChanged += ProgressLoader_PropertyChanged;
+            }
+        }
+
 
         #endregion
 
@@ -85,6 +90,13 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+        private void ProgressLoader_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(MpIProgressLoaderViewModel.PercentLoaded):
+                    OnPropertyChanged(nameof(ValueLoaded));
+                    break;
+            }
+        }
         #endregion
     }
 }

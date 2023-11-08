@@ -68,6 +68,9 @@ namespace MonkeyPaste.Avalonia {
         public IList<MpAvLoaderItemViewModel> Items =>
             CoreItems.Union(PlatformItems).ToList();
 
+        public IList<MpAvLoaderItemViewModel> PendingItems =>
+            Items.Where(x => !x.IsLoaded).ToList();
+
         #endregion
 
         #region State
@@ -245,7 +248,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = false;
             MpConsole.WriteLine($"Loaded {item.Label} at idx: {index} Load Count: {LoadedCount} Load Percent: {PercentLoaded} Time(ms): {sw.ElapsedMilliseconds}");
 
-            Items.Where(x => !x.IsLoaded).ForEach(x => MpConsole.WriteLine($"Still not loaded: {x.ItemType}"));
+            //Items.Where(x => !x.IsLoaded).ForEach(x => MpConsole.WriteLine($"Still not loaded: {x.ItemType}"));
 
         }
         #endregion

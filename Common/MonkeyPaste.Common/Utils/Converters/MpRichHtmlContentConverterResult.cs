@@ -103,7 +103,7 @@ namespace MonkeyPaste.Common {
             }
 
 
-            MpConsole.WriteTraceLine($"Could not find source url in html fragment: '{htmlFragStr}'");
+            //MpConsole.WriteTraceLine($"Could not find source url in html fragment: '{htmlFragStr}'");
             return string.Empty;
         }
 

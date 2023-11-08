@@ -1,0 +1,56 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                       xmlns:pcl="using:MonkeyPaste"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       mc:Ignorable="d"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:DataType="local:MpAvLoaderNotificationViewModel"
+                       x:CompileBindings="True"
+                       x:Class="MonkeyPaste.Avalonia.MpAvMobileLoaderView">
+    <local:MpAvUserControl.Styles>
+    </local:MpAvUserControl.Styles>
+    <StackPanel HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                x:DataType="pcl:MpIProgressLoaderViewModel"
+                DataContext="{Binding ProgressLoader}"
+                Spacing="10">
+        <!--  LOGO  -->
+        <Image x:Name="LogoImage"
+               Width="100"
+               Height="100"
+               Source="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"
+               HorizontalAlignment="Center" />
+        <!--  PROGRESS BAR  -->
+        <ProgressBar Margin="50,0"
+                     Height="20"
+                     Minimum="0"
+                     Maximum="1"
+                     HorizontalAlignment="Center"
+                     Value="{Binding PercentLoaded}"
+                     ShowProgressText="True" />
+        <!--  PROGRESS INFO  -->
+        <TransitioningContentControl x:Name="ProgressInfoTransitioningContentControl"
+                                     HorizontalAlignment="Center"
+                                     Content="{Binding Body}">
+            <TransitioningContentControl.PageTransition>
+                <CrossFade Duration="0:00:00.500" />
+            </TransitioningContentControl.PageTransition>
+            <TransitioningContentControl.ContentTemplate>
+                <DataTemplate DataType="sys:String">
+                    <TextBlock x:Name="ProgressInfoBlock"
+                               ClipToBounds="False"
+                               FontSize="12"
+                               TextAlignment="Center"
+                               Text="{Binding}" />
+                </DataTemplate>
+            </TransitioningContentControl.ContentTemplate>
+        </TransitioningContentControl>
+
+    </StackPanel>
+</local:MpAvUserControl>

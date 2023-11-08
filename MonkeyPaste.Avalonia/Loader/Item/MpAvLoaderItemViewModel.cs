@@ -22,6 +22,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task LoadItemAsync(bool static_fallback = false) {
+            if (ItemType == typeof(MpAvMainWindowViewModel)) {
+
+            }
             object itemObj = null;
             object[] args = ItemArg == null ? null : new[] { ItemArg };
             MethodInfo initMethodInfo;

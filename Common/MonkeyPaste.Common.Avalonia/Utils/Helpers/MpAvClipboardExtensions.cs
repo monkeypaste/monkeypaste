@@ -1,13 +1,13 @@
 ﻿using Avalonia.Input;
 using Avalonia.Input.Platform;
+using Avalonia.Platform.Storage;
+using Avalonia.Threading;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using System;
-using Avalonia.Platform.Storage;
-using System.Collections.Generic;
-using System.Linq;
-using Avalonia.Threading;
 
 #if WINDOWS
 
@@ -44,6 +44,10 @@ namespace MonkeyPaste.Common.Avalonia {
                 await Task.Delay(OLE_RETRY_DELAY_MS);
                 var retry_result = await cb.GetFormatsSafeAsync(++retryCount);
                 return retry_result;
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine($"Error getting clipboard formats", ex);
+                return new string[] { };
             }
         }
 

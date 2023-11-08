@@ -24,8 +24,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        public const string RESET_DATA_ARG = "resetdata";
-        public const string BACKUP_DATA_ARG = "backupdata";
         public const string MULTI_TOUCH_ARG = "multitouch";
         public const string LOGIN_LOAD_ARG = "loginload";
 

@@ -1,10 +1,21 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input.Platform;
+using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System.IO;
 //using Avalonia.Win32;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvWrapper : MpIPlatformWrapper {
+
+    public interface MpIDeviceWrapper {
+        IClipboard DeviceClipboard { get; }
+        MpIJsImporter JsImporter { get; }
+        MpIPlatformInfo PlatformInfo { get; }
+        MpIPlatformScreenInfoCollection ScreenInfoCollection { get; }
+    }
+    public class MpAvWrapper : MpIPlatformWrapper, MpAvICommonTools {
 
         #region Interfaces
 
@@ -81,6 +92,17 @@ namespace MonkeyPaste.Avalonia {
 
         public MpIPlatformDataObjectRegistrar DataObjectRegistrar { get; set; }
 
+        private IClipboard _deviceClipboard;
+        public IClipboard DeviceClipboard {
+            get {
+                if (_deviceClipboard == null &&
+                    Application.Current.GetMainTopLevel() is TopLevel tl) {
+                    _deviceClipboard = tl.Clipboard;
+                }
+                return _deviceClipboard;
+            }
+            set => _deviceClipboard = value;
+        }
         #endregion
 
         #endregion
@@ -94,7 +116,6 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task InitializeAsync() {
-
             ShutdownHelper = App.Instance;
             ThisAppInfo = new MpAvThisAppInfo();
             PlatformUserInfo = new MpAvPlatformUserInfo();
@@ -102,6 +123,8 @@ namespace MonkeyPaste.Avalonia {
             if (MpDeviceWrapper.Instance != null) {
                 PlatformInfo = MpDeviceWrapper.Instance.PlatformInfo;
                 ScreenInfoCollection = MpDeviceWrapper.Instance.ScreenInfoCollection;
+                IconBuilder = MpDeviceWrapper.Instance.IconBuilder;
+                DeviceClipboard = MpDeviceWrapper.Instance.DeviceClipboard;
             } else {
                 PlatformInfo = new MpAvPlatformInfo_desktop();
             }
@@ -111,25 +134,6 @@ namespace MonkeyPaste.Avalonia {
             string prefPath = Path.Combine(PlatformInfo.StorageDir, MpAvPrefViewModel.PREF_FILE_NAME);
 
             DbInfo = new MpAvDbInfo();
-            if (App.HasStartupArg(App.BACKUP_DATA_ARG)) {
-                // TODO move reset stuff to that backup folder
-            }
-            if (App.HasStartupArg(App.RESET_DATA_ARG)) {
-                //MpDebug.Break();
-
-                // delete db, plugin cache, pref and pref.backup
-                MpDebug.Assert(!MpFileIo.IsFileInUse(DbInfo.DbPath), "Db is open! Close it to reset");
-                MpFileIo.DeleteFile(DbInfo.DbPath);
-                MpFileIo.DeleteFile(DbInfo.DbPath + "-shm");
-                MpFileIo.DeleteFile(DbInfo.DbPath + "-wal");
-
-                MpFileIo.DeleteFileOrDirectory(MpPluginLoader.PluginManifestBackupFolderPath);
-                MpFileIo.DeleteFile(prefPath);
-                MpFileIo.DeleteFile($"{prefPath}.{MpAvPrefViewModel.PREF_BACKUP_PATH_EXT}");
-
-                MpConsole.WriteLine("All data successfully deleted.");
-            }
-
             await MpAvPrefViewModel.InitAsync(prefPath, DbInfo, PlatformInfo);
 
             MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily = "Nunito";
@@ -148,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
             Query = MpAvQueryViewModel.Parse(string.Empty);//MpPrefViewModel.Instance.LastQueryInfoJson);
             ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
             KeyConverter = new MpAvKeyConverter();
-            IconBuilder = new MpAvIconBuilder().IconBuilder;
+
             UrlBuilder = new MpUrlBuilder();
             AppBuilder = new MpAvAppBuilder();
             SourceRefTools = new MpAvSourceRefTools();
@@ -180,10 +184,15 @@ namespace MonkeyPaste.Avalonia {
 
             PlatformShorcuts = new MpAvPlatformShortcuts();
 
+            if (IconBuilder == null) {
+                IconBuilder = new MpAvIconBuilder().IconBuilder;
+            }
 #if !DESKTOP
             await MpDb.InitAsync();
 #endif
+            MpAvCommonTools.Init(this);
         }
+
 
         #endregion
     }

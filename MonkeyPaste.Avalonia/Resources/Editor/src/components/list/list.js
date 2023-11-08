@@ -276,34 +276,6 @@ function updateAddListItemToolbarButtonIsEnabled() {
 		}
 	});
 }
-
-function updateLists() {
-	let li_elms = getAllListItemElements();
-	for (var i = 0; i < li_elms.length; i++) {
-		let li_elm = li_elms[i];
-
-		let li_id = globals.ListItemIdAttrb.value(li_elm);
-		if (isNullOrEmpty(li_id)) {
-			// add li id
-			li_id = 'elm_' + generateShortGuid();
-			globals.ListItemIdAttrb.add(li_elm, li_id);
-
-		}
-		let li_style_id = 'style_' + li_id.split('elm_')[1];
-		let li_style_node = document.head.querySelector(`style[id="${li_style_id}"]`);
-		if (isNullOrUndefined(li_style_node)) {
-			// add li style elm
-			li_style_node = document.head.appendChild(document.createElement("style"));
-			li_style_node.setAttribute('id', li_style_id);
-
-			//li_style_node.innerHTML = `.ql-editor li#${li_id} > ql-ui::before {color: pink !important;}`;
-			li_style_node.innerHTML = `.ql-editor li#${li_id} > ql-ui::before {font-size: 32px !important;}`;
-		} else {
-
-		}
-	}
-    
-}
 // #endregion Actions
 
 // #region Event Handlers

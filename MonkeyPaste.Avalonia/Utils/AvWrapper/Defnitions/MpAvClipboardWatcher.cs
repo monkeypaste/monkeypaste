@@ -107,10 +107,10 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void ForceChange(MpPortableDataObject mpdo) {
-            Task.Run(async () => {
-                //var process_cbo = await Mp.Services.DataObjectTools.ReadDragDropDataObjectAsync(mpdo) as MpPortableDataObject;
-                OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), mpdo);
-            });
+            //Task.Run(async () => {
+            //var process_cbo = await Mp.Services.DataObjectTools.ReadDragDropDataObjectAsync(mpdo) as MpPortableDataObject;
+            OnClipboardChanged?.Invoke(typeof(MpAvClipboardWatcher).ToString(), mpdo);
+            //});
         }
         #endregion
 

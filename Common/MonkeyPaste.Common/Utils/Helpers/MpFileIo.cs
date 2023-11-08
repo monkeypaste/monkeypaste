@@ -90,7 +90,8 @@ namespace MonkeyPaste.Common {
                            forceExt.ToLower().Equals("bmp") ||
                            forceExt.ToLower().Equals("jpg") ||
                            forceExt.ToLower().Equals("jpeg")) {
-                    tfp = WriteByteArrayToFile(Path.GetTempFileName(), fileData.ToBytesFromBase64String(), isTemporary);
+                    string tmp_fp = Path.GetTempFileName().Replace(@".tmp", forceExt);
+                    tfp = WriteByteArrayToFile(tmp_fp, fileData.ToBytesFromBase64String(), isTemporary);
                 } else {
                     tfp = WriteTextToFile(Path.GetTempFileName(), fileData, isTemporary);
                 }
@@ -226,6 +227,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static string GetAbsolutePath(string basePath, string path) {
+            // from https://stackoverflow.com/a/35218619/105028
             if (path == null) {
                 return null;
             }
@@ -255,7 +257,8 @@ namespace MonkeyPaste.Common {
                         finalPath = Path.Combine(basePath, path.TrimStart(Path.DirectorySeparatorChar));
                     }
                 } else {
-                    finalPath = path;
+
+                    finalPath = Path.Combine(basePath, path.TrimStart(Path.DirectorySeparatorChar));
                 }
                 // resolves any internal "..\" to get the true full path.
                 return Path.GetFullPath(finalPath);
@@ -630,9 +633,6 @@ namespace MonkeyPaste.Common {
 
         public static string WriteByteArrayToFile(string filePath, byte[] byteArray, bool isTemporary) {
             try {
-                if (filePath.ToLower().Contains(@".tmp")) {
-                    filePath = filePath.ToLower().Replace(@".tmp", @".png");
-                }
                 locker.AcquireWriterLock(Timeout.Infinite);
                 File.WriteAllBytes(filePath, byteArray);
                 locker.ReleaseWriterLock();

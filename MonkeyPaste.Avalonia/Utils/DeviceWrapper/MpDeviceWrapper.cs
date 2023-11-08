@@ -1,7 +1,8 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Input.Platform;
+using MonkeyPaste.Common;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste.Avalonia {
     public abstract class MpDeviceWrapper : MpIDeviceWrapper {
         #region Statics
 
@@ -18,6 +19,9 @@ namespace MonkeyPaste {
         public abstract MpIPlatformInfo PlatformInfo { get; set; }
         public abstract MpIPlatformScreenInfoCollection ScreenInfoCollection { get; set; }
 
+        public abstract MpIIconBuilder IconBuilder { get; set; }
+        public abstract IClipboard DeviceClipboard { get; set; }
+
         #endregion
         #endregion
 
@@ -26,6 +30,7 @@ namespace MonkeyPaste {
         public abstract void CreateDeviceInstance(object args);
 
         public virtual async Task InitAsync(object args) { await Task.Delay(1); }
+
 
         #endregion
 

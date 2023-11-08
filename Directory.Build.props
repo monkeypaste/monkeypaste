@@ -18,7 +18,7 @@
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>ANDROID</BuildOs>
+    <BuildOs>WINDOWS</BuildOs>
     <CultureExt>en-US</CultureExt>
   </PropertyGroup>
 
@@ -126,5 +126,9 @@
     <CoreAnnGuid>ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31</CoreAnnGuid>
     <TargetDatDir>$(MainTargetDir)\dat</TargetDatDir>
     <TargetDatTempDir>$(TargetDatDir)\tmp</TargetDatTempDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
+    <TargetDatDir>$(MainProjectDir)\Assets\\dat</TargetDatDir>
   </PropertyGroup>
 </Project>

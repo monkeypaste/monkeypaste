@@ -1,6 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Platform.Storage;
+﻿using Avalonia.Platform.Storage;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -408,8 +406,7 @@ namespace MonkeyPaste.Avalonia {
             if (OperatingSystem.IsAndroid()) {
                 return avdo;
             }
-            var actual_formats = await TopLevel.GetTopLevel(Application.Current.GetMainWindow()).Clipboard.GetFormatsSafeAsync();
-            MpConsole.WriteLine($"Normalizing actual dataobject formats:  {string.Join(",", actual_formats.Select(x => x))}");
+            MpConsole.WriteLine($"Normalizing actual dataobject formats:  {string.Join(",", avdo.GetAllDataFormats().Select(x => x))}");
 
             // foreach(var af in actual_formats) {
             //     MpConsole.WriteLine("Actual available format: " + af);
@@ -433,6 +430,7 @@ namespace MonkeyPaste.Avalonia {
             // }
 
             if (OperatingSystem.IsLinux()) {
+                var actual_formats = await MpAvCommonTools.Services.DeviceClipboard.GetFormatsSafeAsync();
                 // linux doesn't case non-html formats the same as windows so mapping them here
                 bool isLinuxFileList = avdo.ContainsData(MpPortableDataFormats.CefText) &&
                                     actual_formats.Contains(MpPortableDataFormats.LinuxGnomeFiles);

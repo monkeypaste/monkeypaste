@@ -35,7 +35,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 return null;
             }
             IStorageItem si = null;
-            var mw = Application.Current.GetMainWindow();
+            var mw = Application.Current.GetMainTopLevel();
             var storageProvider = TopLevel.GetTopLevel(mw)!.StorageProvider;
             if (storageProvider != null) {
                 if (path.IsFile()) {
@@ -434,21 +434,19 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region MainWindow
 
-        public static Window GetMainWindow(this Application? app) {
+        public static TopLevel GetMainTopLevel(this Application? app) {
             if (app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime cdsal) {
                 return cdsal.MainWindow;
             }
             if (app.ApplicationLifetime is ISingleViewApplicationLifetime sval &&
-                sval.MainView != null) {
-                var test = sval.MainView.GetVisualAncestors<Control>();
-                var test2 = test.Where(x => x is Window).Cast<Window>().FirstOrDefault();
-                return test2;
+                TopLevel.GetTopLevel(sval.MainView) is TopLevel tl) {
+                return tl;
             }
             return null;
         }
         public static Window SetMainWindow(this Application? app, Window w) {
             // return old MainWindow
-            Window last_main_window = app.GetMainWindow();
+            Window last_main_window = app.GetMainTopLevel() as Window;
             if (app.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime cdsal) {
                 cdsal.MainWindow = w;
             }
@@ -460,7 +458,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static IntPtr GetMainWindowHandle(this Application? app) {
-            if (app.GetMainWindow() is Window w &&
+            if (app.GetMainTopLevel() is Window w &&
                 w.TryGetPlatformHandle() is IPlatformHandle ph) {
                 return ph.Handle;
             }
@@ -471,9 +469,10 @@ namespace MonkeyPaste.Common.Avalonia {
         #region Screens
 
         public static double VisualPixelDensity(this Visual visual, Window w = null) {
+
             if (w == null &&
-                Application.Current.GetMainWindow() is Window) {
-                w = Application.Current.GetMainWindow();
+                Application.Current.GetMainTopLevel() is Window mw) {
+                w = mw;
             }
 
             if (w == null) {
@@ -484,8 +483,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 return w.Screens.Primary.Scaling;
             }
             var scr = w.Screens.ScreenFromVisual(visual);
-            if (scr == null) {
-                scr = Application.Current.GetMainWindow().Screens.Primary;
+            if (scr == null && Application.Current.GetMainTopLevel() is Window mw2) {
+                scr = mw2.Screens.Primary;
                 if (scr == null) {
                     MpDebug.Break();
                     return 1;
@@ -878,7 +877,7 @@ namespace MonkeyPaste.Common.Avalonia {
             // NOTE when toScreen is FALSE p is assumed to be a screen point
 
             if (relativeTo == null) {
-                relativeTo = Application.Current.GetMainWindow();
+                relativeTo = Application.Current.GetMainTopLevel();
                 if (relativeTo == null) {
                     return p;
                 }

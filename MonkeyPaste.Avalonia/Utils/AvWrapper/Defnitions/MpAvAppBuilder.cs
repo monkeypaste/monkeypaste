@@ -19,12 +19,12 @@ namespace MonkeyPaste.Avalonia {
                     string.Join(" ", pi.ArgumentList) :
                     null;
 
-#if DESKTOP
+            //#if DESKTOP
             if (!processPath.IsFile()) {
                 MpDebug.Break($"Invalid process path detected '{processPath}'");
                 return null;
-            } 
-#endif
+            }
+            //#endif
             var dupApp = await MpDataModelProvider.GetAppByMembersAsync(processPath, args, MpDefaultDataModelTools.ThisUserDeviceId);
             if (dupApp != null) {
                 dupApp.WasDupOnCreate = true;

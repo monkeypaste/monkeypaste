@@ -36,10 +36,10 @@ namespace MonkeyPaste.Avalonia {
             Path.Combine(Mp.Services.PlatformInfo.StorageDir, PLUG_FOLDER_NAME);
         public static string PluginManifestBackupFolderPath =>
             Path.Combine(PluginRootFolderPath, MANIFEST_BACKUP_FOLDER_NAME);
-        static string CoreDatDir =>
+        public static string CoreDatDir =>
             Path.Combine(Mp.Services.PlatformInfo.ExecutingDir, DAT_FOLDER_NAME);
 
-        static string[] CorePluginGuids => new string[] {
+        public static string[] CorePluginGuids => new string[] {
             CoreClipboardHandlerGuid,
             CoreAnnotatorGuid
         };
@@ -60,11 +60,6 @@ namespace MonkeyPaste.Avalonia {
         public static async Task CheckAndInstallCorePluginsAsync() {
             if (!CoreDatDir.IsDirectory()) {
                 // android dat dir supposed to be '/data/user/0/com.Monkey.MonkeyPaste.Avalonia/files/dat'
-
-                string test = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                string test2 = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                string test3 = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                string test4 = Environment.GetFolderPath(Environment.SpecialFolder.LocalizedResources);
                 MpDebug.Break($"Dat dir error, '{CoreDatDir}' does not exist");
                 return;
             }
@@ -189,7 +184,7 @@ namespace MonkeyPaste.Avalonia {
                 var package_bytes = await MpFileIo.ReadBytesFromUriAsync(packageUrl, string.Empty, 30_000);
 
                 // write zip to temp
-                string temp_package_zip = MpFileIo.WriteByteArrayToFile(Path.GetTempFileName(), package_bytes, true);
+                string temp_package_zip = MpFileIo.WriteByteArrayToFile(Path.Combine(Path.GetTempPath(), Path.GetRandomFileName()), package_bytes, true);
 
                 // 
                 string temp_package_dir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -197,6 +192,11 @@ namespace MonkeyPaste.Avalonia {
                 // extract to ../Plugins
                 try {
                     // extract zip to temp folder and get inner folder name
+                    if (!temp_package_dir.IsDirectory()) {
+                        if (!MpFileIo.CreateDirectory(temp_package_dir)) {
+                            throw new Exception($"Error staging plugin to temp dir '{temp_package_dir}'");
+                        }
+                    }
                     ZipFile.ExtractToDirectory(temp_package_zip, temp_package_dir);
 
 
@@ -589,7 +589,7 @@ namespace MonkeyPaste.Avalonia {
                 throw new MpUserNotifiedException($"Plugin title error, at path '{manifestPath}' must have 'title' property. Ignoring plugin");
             }
             if (!MpRegEx.RegExLookup[MpRegExType.Guid].IsMatch(plugin.guid)) {
-                throw new MpUserNotifiedException($"Plugin guid error, at path '{manifestPath}' with Title '{plugin.title}' must have a 'guid' property, RFC 4122 compliant 128-bit GUID (UUID). Ignoring plugin");
+                throw new MpUserNotifiedException($"Plugin guid error, at path '{manifestPath}' with Title '{plugin.title}' must have a 'guid' property, RFC 4122 compliant 128-bit GUID (UUID) with only alphanumeric characters ie. no hyphens curly braces or quotes etc.. Ignoring plugin");
             }
 
             //bool is_icon_valid = await MpFileIo.IsAccessibleUriAsync(plugin.iconUri, plugin.RootDirectory);

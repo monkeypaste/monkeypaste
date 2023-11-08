@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
             if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime lifetime &&
                 lifetime.MainView is Border b) {
                 _instance = new MpAvMainView();
-                b.Child = _instance;
+                //b.Child = _instance;
             }
 #endif
         }

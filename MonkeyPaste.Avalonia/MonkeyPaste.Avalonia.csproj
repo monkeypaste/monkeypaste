@@ -1640,6 +1640,9 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\MpAvParameterCollectionView.axaml.cs">
       <DependentUpon>MpAvParameterCollectionView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Mobile\Loader\MpAvMobileLoaderView.axaml.cs">
+      <DependentUpon>MpAvMobileLoaderView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Reusable\Buttons\PopupSelector\MpAvPopupMenuSelector.axaml.cs">
       <DependentUpon>MpAvPopupMenuSelector.axaml</DependentUpon>
     </Compile>

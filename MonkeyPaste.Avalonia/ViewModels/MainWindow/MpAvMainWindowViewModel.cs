@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -327,7 +328,9 @@ namespace MonkeyPaste.Avalonia {
                             MainWindowScreen.WorkArea.Top,
                             MainWindowWidth,
                             MainWindowHeight);
-                } 
+                    default:
+                        return MpRect.Empty;
+                }
 #else
 
                 return MainWindowScreen.WorkArea;
@@ -571,17 +574,31 @@ namespace MonkeyPaste.Avalonia {
 #if DESKTOP
             while (App.MainView == null) {
                 await Task.Delay(100);
-            } 
+            }
             App.MainView.DataContext = this;
 #else
             if (App.Instance.ApplicationLifetime is ISingleViewApplicationLifetime sval &&
                 sval.MainView is Border b) {
                 var test = b.Bounds;
+                while (true) {
+                    if (MpAvMainView.Instance != null &&
+                        b.Child is Control c &&
+                        c.DataContext is MpAvLoaderNotificationViewModel lnvm &&
+                        lnvm.ProgressLoader is MpAvLoaderViewModel lvm &&
+                        lvm.PercentLoaded > 0.5 &&
+                        lvm.PendingItems.Count == 1 &&
+                        lvm.PendingItems.FirstOrDefault().ItemType == typeof(MpAvMainWindowViewModel)) {
+                        // wait till only mwvm is left to load 
+                        break;
+                    }
+                    await Task.Delay(100);
+                }
                 MpAvMainView.Instance.DataContext = this;
-                sval.MainView = MpAvMainView.Instance;
-                sval.MainView.VerticalAlignment = VerticalAlignment.Bottom;
+                b.Child = MpAvMainView.Instance;
+                //sval.MainView = MpAvMainView.Instance;
+                //sval.MainView.HorizontalAlignment = HorizontalAlignment.Stretch;
+                //sval.MainView.VerticalAlignment = VerticalAlignment.Bottom;
                 MpAvMainView.Instance.RootGrid.VerticalAlignment = VerticalAlignment.Bottom;
-                var test2 = MpAvMainView.Instance.Bounds;
             }
 #endif
 

@@ -60,6 +60,7 @@ namespace MonkeyPaste.Common.Plugin {
 
 
         public string guid { get; set; } = string.Empty;
+
         public string iconUri { get; set; } = string.Empty;
 
         public MpPluginPackageType packageType { get; set; }

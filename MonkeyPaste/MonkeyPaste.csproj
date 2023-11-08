@@ -130,6 +130,7 @@
     <Folder Include="Utils\Builders\Bases\" />
     <Folder Include="Utils\Helpers\Graphics\Animation\" />
     <Folder Include="Utils\Input\" />
+    <Folder Include="Utils\Platform\Device\" />
   </ItemGroup>
 
   <ItemGroup>

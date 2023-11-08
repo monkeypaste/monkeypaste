@@ -1,8 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Data;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
+using Avalonia.Input;
+using Avalonia.Controls;
 
 #if DESKTOP
 

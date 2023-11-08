@@ -40,14 +40,7 @@ namespace MonkeyPaste.Avalonia {
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 ShowDesktopNotification(nvmb);
             } else {
-                // TODO need to merge or handle mobile ntf
-                if (nvmb is MpAvLoaderNotificationViewModel lnvm) {
-                    Dispatcher.UIThread.Post(async () => {
-
-                        await lnvm.ProgressLoader.BeginLoaderAsync();
-                        await lnvm.ProgressLoader.FinishLoaderAsync();
-                    });
-                }
+                ShowMobileNotification(nvmb);
             }
         }
         public void HideNotification(object dc) {
@@ -89,6 +82,54 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
+        private void ShowMobileNotification(MpAvNotificationViewModelBase nvmb) {
+            //if (!Dispatcher.UIThread.CheckAccess()) {
+            //    Dispatcher.UIThread.Post(() => ShowMobileNotification(nvmb));
+            //    return;
+            //}
+            Control nw = null;
+            var layoutType = MpAvNotificationViewModelBase.GetLayoutTypeFromNotificationType(nvmb.NotificationType);
+            switch (layoutType) {
+                case MpNotificationLayoutType.Welcome:
+                    //nw = new MpAvWelcomeWindow() {
+                    //    DataContext = nvmb
+                    //};
+                    break;
+                case MpNotificationLayoutType.Loader:
+                    if (nvmb is MpAvLoaderNotificationViewModel lnvm) {
+                        Dispatcher.UIThread.Post(async () => {
+
+                            await lnvm.ProgressLoader.BeginLoaderAsync();
+                            await lnvm.ProgressLoader.FinishLoaderAsync();
+                        });
+                    }
+                    var mlv = new MpAvMobileLoaderView() {
+                        DataContext = nvmb,
+                        //Width = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x=>x.IsPrimary).WorkArea.Width,
+                        //Height = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x=>x.IsPrimary).WorkArea.Height
+                    };
+                    if (App.Instance.ApplicationLifetime is ISingleViewApplicationLifetime sval &&
+                        sval.MainView is Border b) {
+                        b.Child = mlv;
+                    }
+                    break;
+                case MpNotificationLayoutType.ErrorWithOption:
+                case MpNotificationLayoutType.UserAction:
+                case MpNotificationLayoutType.ErrorAndShutdown:
+                    //nw = new MpAvUserActionNotificationWindow() {
+                    //    DataContext = nvmb
+                    //};
+                    break;
+                default:
+                    //nw = new MpAvMessageNotificationWindow() {
+                    //    DataContext = nvmb,
+                    //};
+                    break;
+            }
+            if (nw == null) {
+                return;
+            }
+        }
         private void ShowDesktopNotification(MpAvNotificationViewModelBase nvmb) {
             Dispatcher.UIThread.Post(() => {
                 MpAvWindow nw = null;
@@ -122,7 +163,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (nw == null) {
                     // somethings wrong
-                    MpDebug.Break();
+                    return;
                 }
 
 #if WINDOWS
