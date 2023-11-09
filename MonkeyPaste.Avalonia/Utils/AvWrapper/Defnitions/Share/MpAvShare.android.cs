@@ -14,9 +14,7 @@ namespace MonkeyPaste.Avalonia {
                 Subject = request.Subject,
                 PresentationSourceBounds = request.PresentationSourceBounds.ToSysDrawRect()
             };
-            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = MpAvWindowManager.MainWindow.IsActive;
             await Share.RequestAsync(xam_req);
-            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
         }
 
         async Task PlatformRequestAsync(MpAvShareMultipleFilesRequest request) {
@@ -25,9 +23,7 @@ namespace MonkeyPaste.Avalonia {
                 Title = request.Title,
                 Files = request.Files.Select(x => new ShareFile(x.FullPath, x.ContentType)).ToList()
             };
-            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = MpAvWindowManager.MainWindow.IsActive;
             await Share.RequestAsync(xam_req);
-            MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;
         }
     }
 }

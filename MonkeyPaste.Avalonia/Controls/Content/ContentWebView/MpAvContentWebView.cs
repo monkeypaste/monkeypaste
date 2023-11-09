@@ -20,15 +20,8 @@ using System.Threading.Tasks;
 using System.Web;
 using AvToolTip = Avalonia.Controls.ToolTip;
 
-#if DESKTOP
-
-#if PLAT_WV
-        using AvaloniaWebView; 
-#elif CEF_WV
-
+#if CEF_WV
 using CefNet.Avalonia;
-#endif
-
 #endif
 
 
@@ -72,14 +65,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIJsonMessenger Implementation
         public void SendMessage(string msgJsonBase64Str) {
-#if DESKTOP
-#if PLAT_WV
-            Dispatcher.UIThread.Post(async () => {
-                var result = await WebView.ExecuteScriptAsync(msgJsonBase64Str);
-            }); 
-#elif CEF_WV
+#if CEF_WV
             this.ExecuteJavascript(msgJsonBase64Str);
-#endif
 #else
             if (Interop == null) {
                 MpDebug.Break("lifecycle bug");
@@ -93,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
         //        #region MpIAyncJsonMessenger Implementation
         //        public async Task<string> SendMessageAsync(string msgJsonBase64Str) {
         //            string result;
-        //#if DESKTOP
+        //#if CEF_WV
         //            result = await this.EvaluateJavascriptAsync(msgJsonBase64Str);
         //#else
         //            if (Interop == null) {
@@ -120,12 +107,6 @@ namespace MonkeyPaste.Avalonia {
 
         bool MpIContentView.IsContentLoaded =>
             IsEditorLoaded;
-        void MpIHasDevTools.ShowDevTools() =>
-#if PLAT_WV
-        WebView.OpenDevToolsWindow(); 
-#else
-            ShowDevTools();
-#endif
 
         bool MpIContentView.IsSubSelectable =>
             IsContentSubSelectable;
@@ -366,6 +347,8 @@ namespace MonkeyPaste.Avalonia {
             MpEditorBindingFunctionType notificationType,
             string msgJsonBase64Str,
             string contentHandle) {
+            base.HandleBindingNotification(notificationType, msgJsonBase64Str, contentHandle);
+
             bool is_new_content = _lastContentHandle != contentHandle;
             _lastContentHandle = contentHandle;
             if (!this.IsAttachedToVisualTree()) {
@@ -776,25 +759,6 @@ namespace MonkeyPaste.Avalonia {
 
                 #region OTHER
 
-                case MpEditorBindingFunctionType.notifyShowDebugger:
-                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillShowDebuggerNotification>(msgJsonBase64Str);
-                    if (ntf is MpQuillShowDebuggerNotification showDebugNtf) {
-                        MpConsole.WriteLine($"[{ctvm}] {showDebugNtf.reason}");
-                        this.ShowDevTools();
-                    }
-                    break;
-                case MpEditorBindingFunctionType.notifyException:
-#if DEBUG
-                    ShowDevTools();
-#endif
-                    MpDebug.Break($"{ctvm} editor exception");
-                    //ntf = MpJsonConverter.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
-                    //if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
-                    //    MpConsole.WriteLine($"[{ctvm}] {exceptionMsgObj}");
-
-                    //}
-                    break;
-
                 #endregion
 
                 #region GET CALLBACKS
@@ -918,10 +882,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Web View
 
-#if PLAT_WV
-        protected WebView _webView
-        public virtual WebView WebView { get; set; } 
-#endif
         #endregion
 
         #region View Models
@@ -966,7 +926,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvContentWebView() : base() {
-            //#if DESKTOP
+            //#if CEF_WV
             //            InitialUrl = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
             //#else
             Address = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
@@ -982,17 +942,7 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-#if PLAT_WV
-        private void WebView_WebMessageReceived(object sender, WebViewCore.Events.WebViewMessageReceivedEventArgs e) {
-            if (MpJsonConverter.DeserializeObject<MpQuillPostMessageResponse>(e.Message) is MpQuillPostMessageResponse resp) {
-                HandleBindingNotification(resp.msgType, resp.msgData, resp.handle);
-            }
-        } 
-        
-        private void WebView_NavigationCompleted(object sender, WebViewCore.Events.WebViewUrlLoadedEventArg e) {
-            LoadEditorAsync().FireAndForgetSafeAsync();
-        }
-#elif CEF_WV
+#if CEF_WV
 
         protected override void Dispose(bool disposing) {
             if (disposing &&
@@ -1013,13 +963,13 @@ namespace MonkeyPaste.Avalonia {
         //    //await LoadEditorAsync();
         //}
 #else
-        //public override void OnNavigated(string url) {
-        //    base.OnNavigated(url);
-        //    if (MpUrlHelpers.IsBlankUrl(url)) {
-        //        return;
-        //    }
-        //    LoadEditorAsync().FireAndForgetSafeAsync();
-        //}
+        public override void OnNavigated(string url) {
+            base.OnNavigated(url);
+            if (MpUrlHelpers.IsBlankUrl(url)) {
+                return;
+            }
+            LoadEditorAsync().FireAndForgetSafeAsync();
+        }
 #endif
 
         #endregion
@@ -1048,7 +998,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-#if DESKTOP
+#if CEF_WV
         protected override void OnDragLeave(RoutedEventArgs e) {
             base.OnDragLeave(e);
 
@@ -1171,11 +1121,6 @@ namespace MonkeyPaste.Avalonia {
             base.OnAttachedToLogicalTree(e);
             Mp.Services.ContentViewLocator.AddView(this);
 
-#if PLAT_WV
-            WebView.WebMessageReceived += WebView_WebMessageReceived;
-            WebView.NavigationCompleted += WebView_NavigationCompleted
-            //Content = WebView;
-#endif
         }
         protected override void OnPointerPressed(PointerPressedEventArgs e) {
             base.OnPointerPressed(e);

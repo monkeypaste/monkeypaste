@@ -7,15 +7,23 @@ using Android.Webkit;
 using MonkeyPaste.Common;
 using System;
 using System.IO;
+using System.Text;
 
 namespace MonkeyPaste.Avalonia.Android {
     public class MpAvAdWebView :
         WebView,
         MpIWebViewNavigator,
+        MpIResizableControl,
+        MpIHaveLog,
         MpIOffscreenRenderSource {
 
         #region Private Variable
-        private Canvas offscreen = new Canvas();
+        private StringBuilder _logSb = new StringBuilder();
+
+        private MpAvAdWebViewClient _webViewClient;
+        private MpAvAdWebChromeClient _webChromeClient;
+        private MpRect _hostBounds;
+        private Canvas offscreen;
 
         private string _navUrl;
         private bool _isPageFinished;
@@ -31,6 +39,28 @@ namespace MonkeyPaste.Avalonia.Android {
         #endregion
 
         #region Interfaces
+
+        #region MpIResizableControl Implementation
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        void MpIResizableControl.SetBounds(MpRect bounds) {
+            _hostBounds = bounds;
+            //this.SetLeftTopRightBottom((int)bounds.Left, (int)bounds.Top, (int)bounds.Right, (int)bounds.Bottom);
+            //this.Draw(null);
+        }
+
+        #endregion
+
+        #region MpIHaveLog Implementation
+        string MpIHaveLog.LogText =>
+            _logSb.ToString();
+
+        void MpIHaveLog.AppendLine(string line) {
+            MpConsole.WriteLine($"Webview Log: '{line}'");
+            _logSb.AppendLine(line);
+        }
+
+        #endregion
 
         #region MpIOffscreenRenderSource Implementation
         private byte[] _buffer;
@@ -57,13 +87,6 @@ namespace MonkeyPaste.Avalonia.Android {
         #endregion
 
         #region Properties
-        private MpAvAdWebViewClient _webViewClient = new MpAvAdWebViewClient();
-        //public new MpAvAdWebViewClient WebViewClient =>
-        //    _webViewClient;
-
-        private MpAvAdWebChromeClient _webChromeClient = new MpAvAdWebChromeClient();
-        //public new MpAvAdWebChromeClient WebChromeClient =>
-        //    _webChromeClient;
 
         #endregion
 
@@ -73,6 +96,11 @@ namespace MonkeyPaste.Avalonia.Android {
         #region Constructors
 
         public MpAvAdWebView(Context context, MpIWebViewHost host) : base(context) {
+            offscreen = new Canvas();
+
+            _webViewClient = new MpAvAdWebViewClient(this);
+            _webChromeClient = new MpAvAdWebChromeClient(this);
+
             _host = host;
             SetBackgroundColor(Color.Transparent);
             Settings.JavaScriptEnabled = true;
@@ -119,10 +147,11 @@ namespace MonkeyPaste.Avalonia.Android {
                 base.OnDraw(canvas);
             } else {
                 //Our offscreen image uses the dimensions of the view rather than the canvas
-                Bitmap bitmap = Bitmap.CreateBitmap(Width, Height, Bitmap.Config.Argb8888); //Config.ARGB_8888);
-                //offscreen = new Canvas(bitmap);
-                //offscreen.SetViewport(Width, Height);
+
+                Bitmap bitmap = Bitmap.CreateBitmap(Width, Height, Bitmap.Config.Argb8888);
+
                 offscreen.SetBitmap(bitmap);
+                //offscreen = new Canvas(bitmap);
                 base.Draw(offscreen);
                 using (var ms = new MemoryStream()) {
                     bitmap.Compress(Bitmap.CompressFormat.Png, 100, ms);
@@ -139,6 +168,10 @@ namespace MonkeyPaste.Avalonia.Android {
             }
         }
 
+        protected override void OnSizeChanged(int w, int h, int oldw, int oldh) {
+            base.OnSizeChanged(w, h, oldw, oldh);
+            //Draw(offscreen);
+        }
         #endregion
 
         #region Private Methods

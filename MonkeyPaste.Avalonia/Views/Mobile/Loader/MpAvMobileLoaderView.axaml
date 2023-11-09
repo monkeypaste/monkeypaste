@@ -19,9 +19,10 @@
                 VerticalAlignment="Center"
                 x:DataType="pcl:MpIProgressLoaderViewModel"
                 DataContext="{Binding ProgressLoader}"
-                Spacing="10">
+                Spacing="15">
         <!--  LOGO  -->
         <Image x:Name="LogoImage"
+               Classes="applogo"
                Width="100"
                Height="100"
                Source="{Binding Source={StaticResource AppImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}"

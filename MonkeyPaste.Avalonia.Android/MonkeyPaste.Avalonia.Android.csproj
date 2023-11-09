@@ -62,33 +62,22 @@
     <Folder Include="Assets\dat\" />
   </ItemGroup>
   
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'ANDROID'">
-    <ItemGroup>
-      <EditorFiles Include="$(EditorSourceDir)\**\*.*" />
-      <SoundFiles Include="$(SoundsSourceDir)\**\*.*" />
-      <TermsFile Include="$(UiProjectDir)\Resources\terms.html" />
-      <Resx1 Include="$(UiProjectDir)\Resources\UiStrings\UiStrings.resx" />
-      <Resx2 Include="$(UiProjectDir)\Resources\UiStrings\EnumUiStrings.resx" />
-    </ItemGroup>
-    <!-- copy editor over to since content build action not supported-->
-    <Copy SourceFiles="@(EditorFiles)" DestinationFiles="@(EditorFiles->'$(EditorTargetDir)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(BuildOs) == 'ANDROID'">   
+
+    <ZipDirectory Overwrite="true"
+                  ContinueOnError="true"
+                  SourceDirectory="$(EditorSourceDir)"
+                  DestinationFile="$(TargetDatDir)\editor.zip" />
     
-    <!-- copy sounds -->
-    <Copy SourceFiles="@(SoundFiles)" DestinationFiles="@(SoundFiles->'$(SoundsTargetDir)\%(RecursiveDir)%(Filename)%(Extension)')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
+    <ZipDirectory Overwrite="true"
+                  ContinueOnError="true"
+                  SourceDirectory="$(TermsDir)"
+                  DestinationFile="$(TargetDatDir)\terms.zip" />
     
-    <!-- Copy Terms-->
-    <Copy SourceFiles="@(TermsFile)" DestinationFiles="@(TermsFile->'$(MainTargetDir)\Resources\terms.html')" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" ContinueOnError="true" />
-    
-    <!--<Copy SourceFiles="@(Resx1)" 
-          DestinationFiles="@(Resx1->'$(MainTargetDir)\Resources\UiStrings\UiStrings.resx')" 
-          OverwriteReadOnlyFiles="true" 
-          SkipUnchangedFiles="true" 
-          ContinueOnError="true" />
-    <Copy SourceFiles="@(Resx2)" 
-          DestinationFiles="@(Resx2->'$(MainTargetDir)\Resources\UiStrings\EnumUiStrings.resx')" 
-          OverwriteReadOnlyFiles="true" 
-          SkipUnchangedFiles="true" 
-          ContinueOnError="true" />-->
+    <!--<ZipDirectory Overwrite="true"
+                  ContinueOnError="true"
+                  SourceDirectory="$(SoundsSourceDir)"
+                  DestinationFile="$(TargetDatDir)\sounds.zip" />-->
 
   </Target>
 </Project>

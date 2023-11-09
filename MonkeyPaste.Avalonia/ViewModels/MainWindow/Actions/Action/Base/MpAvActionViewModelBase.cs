@@ -1676,7 +1676,7 @@ namespace MonkeyPaste.Avalonia {
                 //if (avdo == null) {
                 //    return;
                 //}
-                object action_data = await MpAvWindowManager.MainWindow.Clipboard.GetDataAsync(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT);
+                object action_data = await MpAvCommonTools.Services.DeviceClipboard.GetDataAsync(MpPortableDataFormats.INTERNAL_ACTION_ITEM_FORMAT);
                 if (action_data == null) {
                     return;
                 }

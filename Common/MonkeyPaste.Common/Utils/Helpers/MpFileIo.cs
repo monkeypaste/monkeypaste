@@ -226,6 +226,24 @@ namespace MonkeyPaste.Common {
             return size;
         }
 
+        public static DateTime? GetDateTimeInfo(string path, bool modified = false, bool utc = true) {
+            if (path.IsDirectory() &&
+                new DirectoryInfo(path) is { } di) {
+                if (modified) {
+                    return utc ? di.LastWriteTimeUtc : di.LastWriteTime;
+                }
+                return utc ? di.CreationTimeUtc : di.CreationTime;
+            }
+            if (path.IsFile() &&
+                new FileInfo(path) is { } fi) {
+                if (modified) {
+                    return utc ? fi.LastWriteTimeUtc : fi.LastWriteTime;
+                }
+                return utc ? fi.CreationTimeUtc : fi.CreationTime;
+            }
+            return default;
+        }
+
         public static string GetAbsolutePath(string basePath, string path) {
             // from https://stackoverflow.com/a/35218619/105028
             if (path == null) {

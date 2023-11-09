@@ -47,6 +47,9 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         private void MpAvTagView_PointerPressed(object sender, PointerPressedEventArgs e) {
+#if MOBILE
+            return;
+#endif
             if (!e.IsLeftPress(sender as Visual) ||
                 (BindingContext != null && !BindingContext.IsTagNameReadOnly)) {
                 return;

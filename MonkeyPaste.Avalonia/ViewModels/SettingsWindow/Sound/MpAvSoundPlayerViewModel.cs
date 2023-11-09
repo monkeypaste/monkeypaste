@@ -51,7 +51,12 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsOsSupported =>
-            !OperatingSystem.IsBrowser() && !OperatingSystem.IsAndroid();
+#if BROWSER || ANDROID
+            false;
+#else
+            true;
+#endif
+
         public int SelectedItemIdx {
             get => (int)SelectedSoundGroup;
             set {

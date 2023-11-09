@@ -11,10 +11,6 @@ using PropertyChanged;
 using System;
 using System.IO;
 using System.Linq;
-#if PLAT_WV
-using AvaloniaWebView;
-using WebViewCore.Configurations;
-#endif
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -103,17 +99,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-#if PLAT_WV
-        public override void RegisterServices() {
-            base.RegisterServices();
-
-            // if you use only WebView
-                AvaloniaWebViewBuilder.Initialize(
-                    _ => new WebViewCreationProperties() {
-                        AdditionalBrowserArguments = "--process-per-site"
-                    }); 
-        }
-#endif
         public override void Initialize() {
             AvaloniaXamlLoader.Load(this);
         }
@@ -140,7 +125,7 @@ namespace MonkeyPaste.Avalonia {
                 mobile.MainView = new Border() {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
-                    Background = Brushes.Pink,
+                    Background = Brushes.Silver,
                 };
 
                 var loader = new MpAvLoaderViewModel(is_login_load);
@@ -150,6 +135,7 @@ namespace MonkeyPaste.Avalonia {
                     if (MpDeviceWrapper.Instance != null) {
                         await MpDeviceWrapper.Instance.InitAsync(null);
                     }
+                    MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled = false;
                     await loader.InitAsync();
                 });
             }

@@ -579,8 +579,8 @@ namespace MonkeyPaste.Common.Avalonia {
 
         private static void SetBoundConstraints(FormattedText ft, Rect r, double fs) {
             // based on docs should add fontsize to max width for wrapping
-            ft.MaxTextWidth = r.Width + fs;
-            ft.MaxTextHeight = r.Height;
+            ft.MaxTextWidth = Math.Max(1, r.Width + fs);
+            ft.MaxTextHeight = Math.Max(1, r.Height);
         }
         #endregion
 

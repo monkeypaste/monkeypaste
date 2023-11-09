@@ -406,7 +406,7 @@ namespace MonkeyPaste {
                 MpDebug.Break($"Empty html write detected for item {this}", !MpCopyItem.IS_EMPTY_HTML_CHECK_ENABLED);
                 return;
             }
-            MpDebug.Assert(IconId != MpDefaultDataModelTools.ThisAppIconId, $"This should be unknown icon id");
+            MpDebug.Assert(IconId != MpDefaultDataModelTools.ThisAppIconId, $"This should be unknown icon id", true);
             if (searchAndChecksumText != null) {
                 UpdateContentCheckSum(searchAndChecksumText);
             }

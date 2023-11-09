@@ -4,6 +4,7 @@
         Main,
         Settings,
         Help,
+        Log,
         Login,
         PopOut,
         Append,

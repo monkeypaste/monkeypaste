@@ -309,7 +309,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand BeginAutoSearchCommand => new MpAsyncCommand<object>(
             async (args) => {
-                if (MpAvWindowManager.MainWindow.GetVisualDescendant<MpAvSearchBoxView>() is MpAvSearchBoxView sbv &&
+                if (MpAvMainView.Instance.GetVisualDescendant<MpAvSearchBoxView>() is MpAvSearchBoxView sbv &&
                    sbv.FindControl<AutoCompleteBox>("SearchBox") is AutoCompleteBox acb &&
                    acb.GetTemplateChildren().OfType<TextBox>().FirstOrDefault() is TextBox tb) {
                     // NOTE for best performance avoid using binding to set search text 

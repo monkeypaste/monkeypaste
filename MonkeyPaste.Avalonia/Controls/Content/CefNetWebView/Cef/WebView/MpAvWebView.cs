@@ -1,40 +1,29 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Input;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
-using Avalonia.Input;
-using Avalonia.Controls;
 
-#if DESKTOP
-
-#if PLAT_WV
-        using AvaloniaWebView; 
-#elif CEF_WV
+#if CEF_WV
 using CefNet.Avalonia;
 using CefNet.Internal;
-
-#endif
-
 #endif
 
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
     public class MpAvWebView :
-#if DESKTOP
-
-#if PLAT_WV
-        UserControl
-#elif CEF_WV
+#if CEF_WV
         WebView
-#endif
-
 #else
         MpAvNativeWebViewHost
 #endif
-        , MpICanExecuteJavascript, MpAvIWebViewBindingResponseHandler {
+        , MpICanExecuteJavascript,
+        MpAvIWebViewBindingResponseHandler,
+        MpIHasDevTools {
 
 
         #region Private Variables
@@ -49,23 +38,45 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
+        void MpIHasDevTools.ShowDevTools() =>
+            ShowDevTools();
 
         #region MpAvIWebViewBindingResponseHandler Implemention
-#if !DESKTOP
+#if !CEF_WV
         public override MpAvIWebViewBindingResponseHandler BindingHandler =>
             this;
 #endif
 
         public virtual void HandleBindingNotification(MpEditorBindingFunctionType notificationType, string msgJsonBase64Str, string contentHandle) {
-            MpConsole.WriteLine($"Base level binding notification '{notificationType}' was unhandled for msg: ");
-            MpConsole.WriteLine(msgJsonBase64Str);
+
+#if DEBUG
+            MpJsonObject ntf = null;
+            switch (notificationType) {
+                case MpEditorBindingFunctionType.notifyShowDebugger:
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillShowDebuggerNotification>(msgJsonBase64Str);
+                    if (ntf is MpQuillShowDebuggerNotification showDebugNtf) {
+                        MpConsole.WriteLine($"WebView ShowDebugger Request Received [{DataContext}] {showDebugNtf.reason}");
+                        this.ShowDevTools();
+                    }
+                    break;
+                case MpEditorBindingFunctionType.notifyException:
+                    ShowDevTools();
+                    ntf = MpJsonConverter.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
+                    if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
+                        MpConsole.WriteLine($"WebView Exception ntf Received [{DataContext}] {exceptionMsgObj}");
+
+                    }
+
+                    break;
+#endif
+            }
         }
         #endregion
 
 
         #region MpICanExecuteJavascript 
         void MpICanExecuteJavascript.ExecuteJavascript(string script) {
-#if DESKTOP
+#if CEF_WV
             this.GetMainFrame().ExecuteJavaScript(script, this.GetMainFrame().Url, 0);
 #endif
         }
@@ -142,7 +153,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvWebView() {
             this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged());
-#if DESKTOP
+#if CEF_WV
             Navigating += MpAvWebView_Navigating;
             Navigated += MpAvWebView_Navigated;
             LoadError += MpAvWebView_LoadError;
@@ -158,7 +169,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Protected Methods
 
-#if DESKTOP
+#if CEF_WV
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
         }
@@ -198,7 +209,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-#if DESKTOP
+#if CEF_WV
         private void MpAvWebView_Navigating(object sender, CefNet.BeforeBrowseEventArgs e) {
             IsNavigating = true;
         }

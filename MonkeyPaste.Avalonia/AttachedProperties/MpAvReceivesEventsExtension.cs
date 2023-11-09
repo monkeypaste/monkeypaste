@@ -1,8 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -98,21 +101,42 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public static void SendEvent(MpIEmbedHost host, float x, float y, MpPointerEventType eventType) {
-            Dispatcher.UIThread.Post(() => {
-                var gmp = new PixelPoint((int)x, (int)y).ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
-                //var gmp = this.TranslatePoint(mp.ToAvPoint(), App.MainView as Control).Value.ToPortablePoint();
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => SendEvent(host, x, y, eventType));
+                return;
+            }
+            Control rel_to = App.MainView as Control;
 
-                var pe = MpAvPointerInputHelpers.SimulatePointerEventArgs(
-                    eventType.ToRoutedEvent(),
-                    App.MainView as Control,
-                    gmp,
-                    MpKeyModifierFlags.None,
-                    false);
+            var mv_origin = rel_to.PointToScreen(new Point());//.ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
+            var unscaled_mp = new PixelPoint((int)x - mv_origin.X, (int)y - mv_origin.Y);
 
-                _receivers
-                .Where(x => GetSenderFilter(x) == null || GetSenderFilter(x) == host)
+            var gmp = unscaled_mp.ToPortablePoint(MpAvMainWindowViewModel.Instance.MainWindowScreen.Scaling);
+            MpConsole.WriteLine($"Touch ({x},{y}) converted to mw Point ({gmp.X},{gmp.Y})");
+
+            var pe = MpAvPointerInputHelpers.SimulatePointerEventArgs(
+                eventType.ToRoutedEvent(),
+                App.MainView as Control,
+                gmp,
+                MpKeyModifierFlags.None,
+                false);
+
+            //var hits =
+            //    rel_to
+            //    .GetSelfAndVisualDescendants()
+            //    .Reverse()
+            //    .OfType<Control>()
+            //    .Where(x => x.RelativeBounds(rel_to).Contains(gmp));
+            //hits.ForEach(x => MpConsole.WriteLine($"Sending touch event to: {x}"));
+            //hits
+            //    .OfType<Interactive>()
+            //    .ForEach(x => x.Raisto scaeEvent(pe));
+
+            var hits =
+            _receivers
+                .Where(x => (GetSenderFilter(x) == null || GetSenderFilter(x) == host) && x.RelativeBounds(rel_to).Contains(gmp));
+
+            hits
                 .ForEach(x => x.RaiseEvent(pe));
-            });
         }
 
         #endregion

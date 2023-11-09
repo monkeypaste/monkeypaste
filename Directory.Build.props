@@ -18,7 +18,7 @@
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>ANDROID</BuildOs>
     <CultureExt>en-US</CultureExt>
   </PropertyGroup>
 
@@ -110,17 +110,22 @@
     <PluginSourceDir>$(SolutionDir)\Plugins</PluginSourceDir>
     <DeclarativePluginBaseDir>$(PluginSourceDir)\DeclarativePlugins\DeclarativeBase</DeclarativePluginBaseDir>
     <PluginTargetDir>$(StorageDir)\Plugins</PluginTargetDir>
-    <UiProjectDir>$(SolutionDir)\MonkeyPaste.Avalonia</UiProjectDir>
-    <SoundsSourceDir>$(UiProjectDir)\Assets\Sounds</SoundsSourceDir>
-    <SoundsTargetDir>$(MainTargetDir)\Assets\Sounds</SoundsTargetDir>
-    <EditorSourceDir>$(UiProjectDir)\Resources\Editor</EditorSourceDir>
-    <EditorTargetDir>$(MainTargetDir)\Resources\Editor</EditorTargetDir>
-    <CefNetLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.dll</CefNetLibDir>
-    <CefNetAvLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.Avalonia.dll</CefNetAvLibDir>
+    <UiProjectDir>$(SolutionDir)\MonkeyPaste.Avalonia</UiProjectDir>    
     <WebsiteRootDir>$(SolutionDir)\MonkeyPaste.com</WebsiteRootDir>
-    <CefPlatformDir>$(MainProjectDir)\$(CefPlatformRelDir)</CefPlatformDir>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <CefNetLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.dll</CefNetLibDir>
+    <CefNetAvLibDir>$(SolutionDir)\cefnet11\CefNet\CefNet.Avalonia\bin\$(Configuration)\net6.0\CefNet.Avalonia.dll</CefNetAvLibDir>
+    <CefPlatformDir>$(MainProjectDir)\$(CefPlatformRelDir)</CefPlatformDir>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <EditorSourceDir>$(UiProjectDir)\Resources\Editor</EditorSourceDir>
+    <SoundsSourceDir>$(UiProjectDir)\Assets\Sounds</SoundsSourceDir>
+    <TermsDir>$(UiProjectDir)\Resources\Legal\terms</TermsDir>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <CoreOleGuid>cf2ec03f-9edd-45e9-a605-2a2df71e03bd</CoreOleGuid>
     <CoreAnnGuid>ecde8e7c-30cf-47ef-a6a9-8f7f439b0a31</CoreAnnGuid>

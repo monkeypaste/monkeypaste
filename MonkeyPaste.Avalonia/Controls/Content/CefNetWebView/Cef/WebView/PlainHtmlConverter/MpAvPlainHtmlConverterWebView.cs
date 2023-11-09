@@ -2,9 +2,6 @@
 using MonkeyPaste.Common;
 using PropertyChanged;
 using System;
-#if PLAT_WV
-using AvaloniaWebView;
-#endif
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -44,26 +41,10 @@ namespace MonkeyPaste.Avalonia {
             set => _lastPlainHtmlConvertedResp = value;
         }
 
-#if PLAT_WV
-        public override WebView WebView {
-            get {
-                if (_webView == null) {
-                    _webView = new WebView() {
-                        Url = MpAvClipTrayViewModel.Instance.EditorUri
-                    };
-                }
-                return _webView;
-            }
-        } 
-#endif
-
         #endregion
 
         #region Constructors
         public MpAvPlainHtmlConverterWebView() {
-#if PLAT_WV
-            this.Content = WebView; 
-#endif
         }
 
         #endregion

@@ -557,12 +557,7 @@
     <None Remove="Resources\Editor\images\delete.png" />
     <None Remove="resources\editor\ribbon.html" />
     <None Remove="resources\editor\src\components\bold\bold.js" />
-    <None Remove="Resources\Editor\src\components\context-menu-wrapper\context-menu-wrapper-style.css" />
-    <None Remove="resources\editor\src\components\context-menu-wrapper\context-menu-wrapper.js" />
     <None Remove="resources\editor\src\components\formatpaint\formatPainter.js" />
-    <None Remove="Resources\Editor\src\components\italic\italic.js" />
-    <None Remove="resources\editor\src\components\localizer\localizer.js" />
-    <None Remove="resources\editor\src\components\localizer\uiStrings.js" />
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
     <None Remove="resources\editor\src\components\theme\theme.js" />
@@ -1503,7 +1498,6 @@
   <ItemGroup>
     <Folder Include="Resources\Editor\src\components\bold\" />
     <Folder Include="Resources\Editor\src\components\formatPaint\" />
-    <Folder Include="Resources\Editor\src\components\localizer\" />
     <Folder Include="Resources\Editor\src\components\quill-wrapper\parchment\" />
     <Folder Include="Resources\Editor\src\components\theme\" />
     <Folder Include="Resources\Legal\Licenses\" />
@@ -1920,4 +1914,5 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 </PropertyGroup>
+
 </Project>

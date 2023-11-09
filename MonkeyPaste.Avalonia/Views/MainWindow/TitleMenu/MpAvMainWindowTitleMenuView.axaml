@@ -155,7 +155,9 @@
                 <PathIcon Data="{StaticResource CogSvg}" />
             </ToggleButton>
 
-            <!--  LOCK BUTTON  -->            <ToggleButton x:Name="LockToggleButton"
+            <!--  LOCK BUTTON  -->            
+            <ToggleButton x:Name="LockToggleButton"
+                          IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=OneWay}"
                           Command="{Binding ToggleMainWindowLockCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                           CommandParameter="{Binding $self}"
@@ -173,6 +175,7 @@
                     Margin="5,0,0,0"
                     Width="20"
                     Height="20"
+                    IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                     Command="{Binding ForceMinimizeMainWindowCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     Classes="noBg noHoverBg noBorder noHoverBorder">
                 <ToolTip.Tip>

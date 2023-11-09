@@ -597,7 +597,7 @@ namespace MonkeyPaste.Avalonia {
                 b.Child = MpAvMainView.Instance;
                 //sval.MainView = MpAvMainView.Instance;
                 //sval.MainView.HorizontalAlignment = HorizontalAlignment.Stretch;
-                //sval.MainView.VerticalAlignment = VerticalAlignment.Bottom;
+                sval.MainView.VerticalAlignment = VerticalAlignment.Bottom;
                 MpAvMainView.Instance.RootGrid.VerticalAlignment = VerticalAlignment.Bottom;
             }
 #endif
@@ -676,10 +676,9 @@ namespace MonkeyPaste.Avalonia {
                     // mw is always open screen rect
                     // mw opacity mask is always open screen rect
                     // mwcg is what is animated so it hides outside current screen workarea
-                    if (App.MainView is not MpIMainView mv) {
-                        break;
-                    }
-                    mv.SetPosition(MainWindowOpenedScreenRect.Location, MainWindowScreen.Scaling);
+                    //#if DESKTOP
+                    App.MainView.SetPosition(MainWindowOpenedScreenRect.Location, MainWindowScreen.Scaling);
+                    //#endif
 
                     //MpAvMainView.Instance.Width = MainWindowOpenedScreenRect.Width;
                     //MpAvMainView.Instance.Height = MainWindowOpenedScreenRect.Height;
@@ -869,10 +868,10 @@ namespace MonkeyPaste.Avalonia {
                 !IsMainWindowActive &&
                 !is_other_win_active &&
                 !IsMainWindowInHiddenLoadState;
-            if (force_activate) {
+            if (force_activate && MpAvWindowManager.MainWindow is { } mw) {
                 // when mw is shown and not active it doesn't hide or receive input until activated
-                MpAvWindowManager.MainWindow.Activate();
-                MpAvWindowManager.MainWindow.Topmost = true;
+                mw.Activate();
+                mw.Topmost = true;
             }
 
             MpConsole.WriteLine($"SHOW WINDOW DONE. Activate Forced: '{force_activate}' Other Active: '{is_other_win_active}' MW Orientation: '{MainWindowOrientationType}' Angle: '{MainWindowTransformAngle}' Bounds: '{MainWindowScreen.Bounds}'");
@@ -1241,11 +1240,11 @@ namespace MonkeyPaste.Avalonia {
                 FinishMainWindowHide();
             },
             (args) => {
-                if (Mp.Services != null &&
-                    Mp.Services.PlatformInfo != null &&
-                    !Mp.Services.PlatformInfo.IsDesktop) {
-                    return false;
-                }
+#if !DESKTOP
+
+                return false;
+#endif
+
                 if (args.ToStringOrEmpty() == "force") {
                     // always hide
                     return true;

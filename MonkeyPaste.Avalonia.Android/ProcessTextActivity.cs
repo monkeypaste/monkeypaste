@@ -1,15 +1,20 @@
 ﻿using Android.App;
+using Android.Content.PM;
 using Android.OS;
 using Android.Widget;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using Xamarin.Essentials;
 using static Android.Content.PM.PackageManager;
+using ApplicationInfoFlags = Android.Content.PM.PackageManager.ApplicationInfoFlags;
 using Intent = Android.Content.Intent;
 using Path = System.IO.Path;
 
 namespace MonkeyPaste.Avalonia.Android {
-    [Activity(Label = "Monkey Copy", NoHistory = true, Exported = true)]
+    [Activity(
+        Label = "Monkey Copy",
+        NoHistory = true,
+        Exported = true)]
     [IntentFilter(
         new[] { Intent.ActionProcessText },
         Categories = new[] { Intent.CategoryDefault },
@@ -23,14 +28,10 @@ namespace MonkeyPaste.Avalonia.Android {
             if (string.IsNullOrEmpty(selectedText)) {
                 return;
             }
-
-            await Clipboard.SetTextAsync(selectedText);
-            Toast.MakeText(this, "Copied to clipboard", ToastLength.Short).Show();
-
             string package_name = Referrer.Host;
             string app_path = Path.Combine(Path.GetDirectoryName(DataDir.AbsolutePath), package_name);
 
-            string app_name = GetAppName(app_path);
+            string app_name = GetAppName(package_name);
             string app_icon_base64 = Mp.Services.IconBuilder.GetPathIconBase64(app_path);
 
             // TODO Add Skia Icon builder here
@@ -42,11 +43,15 @@ namespace MonkeyPaste.Avalonia.Android {
             };
             var avdo = new MpAvDataObject(MpPortableDataFormats.Text, selectedText);
             avdo.SetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, app_pi);
-            Mp.Services.ClipboardMonitor.ForceChange(avdo);
+            var avdo_ci = await Mp.Services.ContentBuilder.BuildFromDataObjectAsync(avdo, false);
+
+            await Clipboard.SetTextAsync(selectedText);
+            Toast.MakeText(this, "Copied to clipboard", ToastLength.Short).Show();
 
 
             //var source = await MpSource.CreateAsync(app, null);
             //StartActivity(new Intent(this, typeof(MainActivity)));
+
             Finish();
         }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
@@ -54,7 +59,7 @@ namespace MonkeyPaste.Avalonia.Android {
             try {
                 var pm = this.ApplicationContext.PackageManager;
                 if (pm.GetApplicationInfo(packageName, ApplicationInfoFlags.Of(0)) is { } appInfo) {
-                    return this.ApplicationContext.PackageManager.GetApplicationLabel(appInfo);
+                    return pm.GetApplicationLabel(appInfo);
                 }
             }
             catch (System.Exception ex) {

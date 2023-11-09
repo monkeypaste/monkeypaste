@@ -1141,7 +1141,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public static void ForceScrollOffset(MpPoint offset) {
-            if (MpAvWindowManager.MainWindow.GetVisualDescendant<MpAvQueryTrayView>() is not MpAvQueryTrayView qtv ||
+            if (MpAvMainView.Instance.GetVisualDescendant<MpAvQueryTrayView>() is not MpAvQueryTrayView qtv ||
                 qtv.FindControl<ListBox>("ClipTrayListBox") is not ListBox qt_lb) {
                 return;
             }

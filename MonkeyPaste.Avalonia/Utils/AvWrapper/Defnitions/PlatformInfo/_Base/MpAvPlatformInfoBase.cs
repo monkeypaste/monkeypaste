@@ -6,6 +6,51 @@ using System.Linq;
 
 namespace MonkeyPaste.Avalonia {
     public abstract class MpAvPlatformInfoBase : MpIPlatformInfo {
+        #region Properties
+
+        #region State
+
+        public virtual bool IsDesktop =>
+            OperatingSystem.IsWindows() ||
+            OperatingSystem.IsMacOS() ||
+            OperatingSystem.IsLinux();
+
+
+        public bool IsMobile =>
+            OperatingSystem.IsIOS() ||
+            OperatingSystem.IsAndroid();
+        public bool IsBrowser =>
+            OperatingSystem.IsBrowser();
+
+        public abstract bool IsTouchInputEnabled { get; }
+        #endregion
+
+        #region Info
+
+        public virtual string OsShortName {
+            get {
+                if (OperatingSystem.IsWindows()) {
+                    return "win";
+                }
+                if (OperatingSystem.IsLinux()) {
+                    return "x11";
+                }
+                if (OperatingSystem.IsMacOS()) {
+                    return "mac";
+                }
+                if (OperatingSystem.IsAndroid()) {
+                    return "android";
+                }
+                if (OperatingSystem.IsIOS()) {
+                    return "ios";
+                }
+                if (OperatingSystem.IsBrowser()) {
+                    return "browser";
+                }
+                throw new Exception("Unknown os");
+            }
+        }
+
         public virtual string OsMachineName =>
             Environment.MachineName;
 
@@ -13,6 +58,66 @@ namespace MonkeyPaste.Avalonia {
         public virtual string OsVersionInfo =>
             Environment.OSVersion.VersionString;
 
+
+        public string OsFileManagerName {
+            get {
+                if (OperatingSystem.IsWindows()) {
+                    return "Explorer";
+                }
+                if (OperatingSystem.IsLinux()) {
+                    // TODO will need to handle more than ubuntu here
+                    return "Nautilus";
+                }
+                if (OperatingSystem.IsMacOS()) {
+                    return @"Finder";
+                }
+                return null;
+            }
+        }
+
+        public MpUserDeviceType OsType {
+            get {
+                if (OperatingSystem.IsWindows()) {
+                    return MpUserDeviceType.Windows;
+                }
+                if (OperatingSystem.IsLinux()) {
+                    return MpUserDeviceType.Linux;
+                }
+                if (OperatingSystem.IsMacOS()) {
+                    return MpUserDeviceType.Mac;
+                }
+                if (OperatingSystem.IsAndroid()) {
+                    return MpUserDeviceType.Android;
+                }
+                if (OperatingSystem.IsIOS()) {
+                    return MpUserDeviceType.Ios;
+                }
+                if (OperatingSystem.IsBrowser()) {
+                    return MpUserDeviceType.Browser;
+                }
+                return MpUserDeviceType.Unknown;
+            }
+        }
+
+        #endregion
+
+        #region Paths
+
+        public virtual string OsFileManagerPath {
+            get {
+                if (OperatingSystem.IsWindows()) {
+                    return Path.Combine(Directory.GetParent(Environment.SystemDirectory).FullName, "explorer.exe");
+                }
+                if (OperatingSystem.IsLinux()) {
+                    // TODO will likely need to have user specify path and name of file manager on linux. 
+                    return @"/usr/bin/nautilus";
+                }
+                if (OperatingSystem.IsMacOS()) {
+                    return @"/System/Library/CoreServices/finder.app";
+                }
+                return null;
+            }
+        }
         public virtual string ExecutingDir =>
             AppContext.BaseDirectory;
         public virtual string ExecutableName {
@@ -64,98 +169,8 @@ namespace MonkeyPaste.Avalonia {
 
         public string LogDir =>
             Path.Combine(StorageDir, "logs");
-        public virtual string OsShortName {
-            get {
-                if (OperatingSystem.IsWindows()) {
-                    return "win";
-                }
-                if (OperatingSystem.IsLinux()) {
-                    return "x11";
-                }
-                if (OperatingSystem.IsMacOS()) {
-                    return "mac";
-                }
-                if (OperatingSystem.IsAndroid()) {
-                    return "android";
-                }
-                if (OperatingSystem.IsIOS()) {
-                    return "ios";
-                }
-                if (OperatingSystem.IsBrowser()) {
-                    return "browser";
-                }
-                throw new Exception("Unknown os");
-            }
-        }
-
-        public virtual bool IsDesktop =>
-            OperatingSystem.IsWindows() ||
-            OperatingSystem.IsMacOS() ||
-            OperatingSystem.IsLinux();
 
 
-        public bool IsMobile =>
-            OperatingSystem.IsIOS() ||
-            OperatingSystem.IsAndroid();
-        public bool IsBrowser =>
-            OperatingSystem.IsBrowser();
-
-        public abstract bool IsTouchInputEnabled { get; }
-        public virtual string OsFileManagerPath {
-            get {
-                if (OperatingSystem.IsWindows()) {
-                    return Path.Combine(Directory.GetParent(Environment.SystemDirectory).FullName, "explorer.exe");
-                }
-                if (OperatingSystem.IsLinux()) {
-                    // TODO will likely need to have user specify path and name of file manager on linux. 
-                    return @"/usr/bin/nautilus";
-                }
-                if (OperatingSystem.IsMacOS()) {
-                    return @"/System/Library/CoreServices/finder.app";
-                }
-                return null;
-            }
-        }
-
-        public string OsFileManagerName {
-            get {
-                if (OperatingSystem.IsWindows()) {
-                    return "Explorer";
-                }
-                if (OperatingSystem.IsLinux()) {
-                    // TODO will need to handle more than ubuntu here
-                    return "Nautilus";
-                }
-                if (OperatingSystem.IsMacOS()) {
-                    return @"Finder";
-                }
-                return null;
-            }
-        }
-
-        public MpUserDeviceType OsType {
-            get {
-                if (OperatingSystem.IsWindows()) {
-                    return MpUserDeviceType.Windows;
-                }
-                if (OperatingSystem.IsLinux()) {
-                    return MpUserDeviceType.Linux;
-                }
-                if (OperatingSystem.IsMacOS()) {
-                    return MpUserDeviceType.Mac;
-                }
-                if (OperatingSystem.IsAndroid()) {
-                    return MpUserDeviceType.Android;
-                }
-                if (OperatingSystem.IsIOS()) {
-                    return MpUserDeviceType.Ios;
-                }
-                if (OperatingSystem.IsBrowser()) {
-                    return MpUserDeviceType.Browser;
-                }
-                return MpUserDeviceType.Unknown;
-            }
-        }
 
         public virtual string EditorPath {
             get {
@@ -168,7 +183,7 @@ namespace MonkeyPaste.Avalonia {
 
         public virtual string TermsPath {
             get {
-                return Path.Combine(ExecutingDir, "Resources", "terms.html");
+                return Path.Combine(ExecutingDir, "Resources", "Legal", "terms", "terms.html");
             }
         }
 
@@ -177,9 +192,13 @@ namespace MonkeyPaste.Avalonia {
                 if (OperatingSystem.IsBrowser()) {
                     return Path.Combine("Editor", "index.html");
                 }
-                return Path.Combine(ExecutingDir, "Resources", "Editor", "index.html");
+                return Path.Combine(ExecutingDir, "Resources", "Help", "index.html");
             }
         }
+        #endregion
+        #endregion
+
+
 
         #region Private Methods
 

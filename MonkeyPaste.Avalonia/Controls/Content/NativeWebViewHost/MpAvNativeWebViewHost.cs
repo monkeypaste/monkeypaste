@@ -1,9 +1,15 @@
-﻿using Avalonia.Controls;
+﻿using Android.Content;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Platform;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
+using System.Linq;
+using HorizontalAlignment = Avalonia.Layout.HorizontalAlignment;
+using VerticalAlignment = Avalonia.Layout.VerticalAlignment;
 
 namespace MonkeyPaste.Avalonia {
     public interface MpAvIWebViewInterop {
@@ -30,6 +36,10 @@ namespace MonkeyPaste.Avalonia {
     public interface MpAvIPlatformHandleHost {
         IPlatformHandle PlatformHandle { get; }
     }
+    public interface MpIHaveLog {
+        void AppendLine(string line);
+        string LogText { get; }
+    }
     public interface MpIWebViewNavigator {
         void Navigate(string url);
     }
@@ -40,7 +50,9 @@ namespace MonkeyPaste.Avalonia {
         void Render();
         MpAvIWebViewBindingResponseHandler BindingHandler { get; }
     }
-
+    public interface MpIResizableControl {
+        void SetBounds(MpRect bounds);
+    }
     [DoNotNotify]
     public abstract class MpAvNativeWebViewHost :
         NativeControlHost,
@@ -51,6 +63,7 @@ namespace MonkeyPaste.Avalonia {
         MpIHasDevTools {
         #region Private Variable
         private string _webViewGuid;
+        private double _scale = 0;
         #endregion
 
         #region Constants
@@ -67,7 +80,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
         #region MpIWebViewHost Implementation
 
         public string HostGuid {
@@ -101,7 +113,17 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIHasDevTools Implementation
-        public void ShowDevTools() { }
+        public void ShowDevTools() {
+            if (PlatformHandle is not MpIOffscreenRenderSourceHost osrsh ||
+                    osrsh.RenderSource is not MpIHaveLog hl) {
+                return;
+            }
+            Mp.Services.NotificationBuilder.ShowMessageAsync(
+                title: DataContext == null ? "NULL" : DataContext.ToString(),
+                body: hl.LogText,
+                maxShowTimeMs: -1).FireAndForgetSafeAsync();
+
+        }
         #endregion
 
         #endregion
@@ -116,6 +138,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
+        public MpAvNativeWebViewHost() : base() {
+            this.GetObservable(BoundsProperty).Subscribe(value => OnBoundsChanged());
+            this.EffectiveViewportChanged += (s, e) => OnBoundsChanged();
+        }
         #endregion
 
         #region Public Methods
@@ -131,8 +157,20 @@ namespace MonkeyPaste.Avalonia {
                     osrsh.RenderSource is MpIOffscreenRenderSource osrs &&
                     osrs.Buffer != null &&
                     osrs.Buffer.Length > 0) {
-
-                context.DrawImage(osrs.Buffer.ToAvBitmap(), this.Bounds);
+                if (_scale == 0) {
+                    _scale = MpDeviceWrapper.Instance.ScreenInfoCollection.Screens.FirstOrDefault().Scaling;
+                }
+                var bmp = osrs.Buffer.ToAvBitmap();
+                //var test1 = bmp.PixelSize;
+                //var test2 = bmp.Size;
+                //var test3 = this.Bounds.Size;
+                //bmp = bmp.Resize(this.Bounds.Size.ToPortableSize());
+                //var test4 = bmp.Size;
+                //var test5 = bmp.PixelSize;
+                //var source_rect = new MpRect(bmp.Size.ToPortableSize());//.ToPortablePoint() * _scale).ToPortableSize());
+                //var dest_rect = this.Bounds;
+                //context.DrawImage(bmp, source_rect.ToAvRect(), dest_rect);
+                context.DrawImage(bmp, new Rect(bmp.Size), this.Bounds);
             } else {
                 //base.Render(context);
             }
@@ -177,9 +215,16 @@ namespace MonkeyPaste.Avalonia {
         //    });
         //}
 
+
         #endregion
 
         #region Private Methods
+        private void OnBoundsChanged() {
+            if (PlatformHandle is not MpIResizableControl rc) {
+                return;
+            }
+            rc.SetBounds(Bounds.ToPortableRect());
+        }
         #endregion
 
         #region Commands

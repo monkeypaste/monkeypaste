@@ -39,7 +39,9 @@ namespace MonkeyPaste.Common.Avalonia {
         public static RoutedEventArgs SimulatePointerEventArgs(
             RoutedEvent eventType,
             Interactive interactive,
-            MpPoint mp, MpKeyModifierFlags kmf, bool isLocalMp) {
+            MpPoint mp,
+            MpKeyModifierFlags kmf,
+            bool isLocalMp) {
             Control control = interactive as Control;
             if (control == null) {
                 return null;

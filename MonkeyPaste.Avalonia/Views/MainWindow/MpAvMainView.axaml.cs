@@ -99,6 +99,10 @@ namespace MonkeyPaste.Avalonia {
 
         public void SetPosition(MpPoint p, double scale) {
             //throw new NotImplementedException();
+            if (this.RenderTransform is TranslateTransform tt) {
+                tt.X = p.X;
+                tt.Y = p.Y;
+            }
         }
 
         #endregion

@@ -1329,6 +1329,12 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"Global hooks paused: {IsGlobalHooksPaused.ToTestResultLabel()}");
                 }
                 OnPropertyChanged(nameof(IsGlobalHooksPaused));
+            }, (args) => {
+#if MOBILE
+                return false;
+#else
+                return true;
+#endif
             });
 
         public ICommand ShowAssignShortcutDialogCommand => new MpAsyncCommand<object>(
