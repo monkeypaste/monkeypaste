@@ -33,12 +33,19 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Private Methods
-
-
-
         #endregion
 
         #region Commands
+
+        public ICommand BackNavCommand => new MpCommand(
+            () => {
+                if (App.PrimaryView is MpAvSettingsView) {
+                    MpAvSettingsViewModel.Instance.CloseSettingsCommand.Execute(null);
+                    App.SetPrimaryView(MpAvMainView.Instance);
+                }
+            }, () => {
+                return App.PrimaryView is not MpAvMainView;
+            });
 
         public ICommand RenameCommand => new MpCommand(
             () => {

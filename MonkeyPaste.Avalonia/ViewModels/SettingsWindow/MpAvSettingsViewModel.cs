@@ -1275,7 +1275,7 @@ namespace MonkeyPaste.Avalonia {
                     Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LoginImage", typeof(WindowIcon), null, null) as WindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
-                    Content = new MpAvSettingsView(),
+                    Content = MpAvSettingsView.Instance,
                 };
             } else {
                 sw = new MpAvWindow() {
@@ -1286,7 +1286,7 @@ namespace MonkeyPaste.Avalonia {
                     Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
-                    Content = new MpAvSettingsView(),
+                    Content = MpAvSettingsView.Instance,
                 };
                 sw.Classes.Add("fadeIn");
             }
@@ -1602,6 +1602,10 @@ namespace MonkeyPaste.Avalonia {
                     GetParamAndFrameViewModelsByParamId(focus_param_id)
                     is not Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> focus_tuple) {
                     SelectedTabIdx = tab_idx;
+                    if (MpAvSettingsView.Instance.BodyScrollViewer is { } bsv) {
+                        // BUG pref tab keeps scrolling to middlish area on tab select
+                        bsv.ScrollToHome();
+                    }
                     return;
                 }
 
@@ -1644,14 +1648,24 @@ namespace MonkeyPaste.Avalonia {
         public MpIAsyncCommand<object> ShowSettingsWindowCommand => new MpAsyncCommand<object>(
             async (args) => {
                 UpdateFilters();
+#if DESKTOP
                 if (IsWindowOpen) {
                     IsWindowActive = true;
                 } else if (Mp.Services.PlatformInfo.IsDesktop) {
                     var sw = CreateSettingsWindow();
                     sw.ShowChild();
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
-                }
+                } 
+#else
+                App.SetPrimaryView(MpAvSettingsView.Instance);
+#endif
                 await SelectTabCommand.ExecuteAsync(args);
+            });
+        public ICommand CloseSettingsCommand => new MpCommand(
+            () => {
+                IsWindowOpen = false;
+            }, () => {
+                return IsWindowOpen;
             });
         public ICommand ButtonParameterClickCommand => new MpAsyncCommand<object>(
             async (args) => {

@@ -46,6 +46,15 @@ namespace MonkeyPaste.Avalonia.Android {
 
             MpAvAdUncaughtExceptionHandler.Instance.Init();
         }
+        public override void OnBackPressed() {
+            if (MpAvApplicationCommand.Instance.BackNavCommand.CanExecute(null)) {
+                MpAvApplicationCommand.Instance.BackNavCommand.Execute(null);
+                return;
+            }
+
+            base.OnBackPressed();
+        }
+
         public override void OnConfigurationChanged(Configuration newConfig) {
             base.OnConfigurationChanged(newConfig);
 

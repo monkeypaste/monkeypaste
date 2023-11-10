@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
         public void StartMonitor(bool ignoreCurrentState) {
 #if MOBILE
             return;
-#endif
+#else
             if (_timer == null) {
                 _timer = new DispatcherTimer(DispatcherPriority.Background) {
                     Interval = TimeSpan.FromMilliseconds(300)
@@ -99,6 +99,7 @@ namespace MonkeyPaste.Avalonia {
 
             _timer.Start();
             MpConsole.WriteLine("Clipboard watcher started");
+#endif
         }
 
         public void StopMonitor() {

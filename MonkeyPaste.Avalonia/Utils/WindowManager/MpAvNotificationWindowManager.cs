@@ -108,10 +108,7 @@ namespace MonkeyPaste.Avalonia {
                         //Width = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x=>x.IsPrimary).WorkArea.Width,
                         //Height = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x=>x.IsPrimary).WorkArea.Height
                     };
-                    if (App.Instance.ApplicationLifetime is ISingleViewApplicationLifetime sval &&
-                        sval.MainView is Border b) {
-                        b.Child = mlv;
-                    }
+                    App.SetPrimaryView(mlv);
                     break;
                 case MpNotificationLayoutType.ErrorWithOption:
                 case MpNotificationLayoutType.UserAction:

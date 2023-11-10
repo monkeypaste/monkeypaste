@@ -224,12 +224,14 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(MouseModeVerticalOffset));
                     break;
                 case MpMessageType.MainWindowOpened:
+#if DESKTOP
                     if (MpAvMainWindowViewModel.Instance.IsMainWindowInHiddenLoadState ||
-                        HasSetStartupSelection) {
+                                    HasSetStartupSelection) {
                         break;
                     }
                     SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
-                    HasSetStartupSelection = true;
+                    HasSetStartupSelection = true; 
+#endif
                     break;
             }
         }

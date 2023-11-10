@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvTagView_PointerPressed(object sender, PointerPressedEventArgs e) {
 #if MOBILE
             return;
-#endif
+#else
             if (!e.IsLeftPress(sender as Visual) ||
                 (BindingContext != null && !BindingContext.IsTagNameReadOnly)) {
                 return;
@@ -98,6 +98,8 @@ namespace MonkeyPaste.Avalonia {
                     //ended = true;
                 },
                 MIN_DISTANCE: 20);
+                
+#endif
         }
 
 

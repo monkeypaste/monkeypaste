@@ -1,4 +1,4 @@
-﻿using Android.Content;
+﻿
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -10,6 +10,9 @@ using System;
 using System.Linq;
 using HorizontalAlignment = Avalonia.Layout.HorizontalAlignment;
 using VerticalAlignment = Avalonia.Layout.VerticalAlignment;
+#if ANDROID
+using Android.Content;
+#endif
 
 namespace MonkeyPaste.Avalonia {
     public interface MpAvIWebViewInterop {

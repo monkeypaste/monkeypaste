@@ -150,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
                 LoadedDateTime = DateTime.Now;
 
                 //if (Mp.Services.PlatformInfo.IsDesktop) {
-                App.MainView.Show();
+                //App.MainView.Show();
                 //}
                 IsPlatformLoaded = true;
             }, DispatcherPriority.Background);

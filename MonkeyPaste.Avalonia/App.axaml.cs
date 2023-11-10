@@ -32,23 +32,34 @@ namespace MonkeyPaste.Avalonia {
         public static App Instance =>
             _instance;
 
-        public static MpIMainView MainView {
+        public static Control MainView {
             get {
                 if (_instance == null) {
                     return null;
                 }
 
                 if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-                    return desktop.MainWindow as MpAvMainWindow;
+                    return desktop.MainWindow;
                 }
                 if (_instance.ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
-                    if (mobile.MainView is Border b) {
-                        return b.Child as MpIMainView;
-                    }
-                    return mobile.MainView as MpAvMainView;
+                    return mobile.MainView;
                 }
                 return null;
             }
+        }
+        public static Control PrimaryView =>
+#if MOBILE
+            MainView == null ? null : (MainView as Border).Child; 
+#else
+            MainView;
+#endif
+        public static void SetPrimaryView(Control c) {
+            if (_instance == null ||
+                _instance.ApplicationLifetime is not ISingleViewApplicationLifetime sval ||
+                sval.MainView is not Border b) {
+                return;
+            }
+            b.Child = c;
         }
 
         public static bool HasStartupArg(string arg) {
@@ -123,6 +134,7 @@ namespace MonkeyPaste.Avalonia {
                 await loader.InitAsync();
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                 mobile.MainView = new Border() {
+                    //Margin = new Thickness(0, 24, 0, 0),
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
                     Background = Brushes.Silver,

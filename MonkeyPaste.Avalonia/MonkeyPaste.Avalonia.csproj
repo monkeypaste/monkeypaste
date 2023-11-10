@@ -643,7 +643,7 @@
     <Content Include="Assets\Sounds\ting.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\terms.html">
+    <Content Include="Resources\Legal\terms\terms.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   

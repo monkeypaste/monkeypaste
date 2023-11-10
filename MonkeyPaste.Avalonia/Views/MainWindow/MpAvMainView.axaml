@@ -15,11 +15,9 @@
         <TranslateTransform />
     </local:MpAvUserControl.RenderTransform>
     <Canvas x:Name="MainWindowCanvas"
-            Background="Yellow"
             Width="{Binding MainWindowWidth}"
             Height="{Binding MainWindowHeight}">
         <Grid x:Name="MainWindowContainerGrid"
-              Background="Orange"
               Width="{Binding MainWindowWidth}"
               Height="{Binding MainWindowHeight}">
 
@@ -34,7 +32,6 @@
             <!--  CONTENT ROW  -->
 
             <Grid x:Name="MainWindowTrayGrid"
-                  Background="Green"
                   Grid.Row="3"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch">

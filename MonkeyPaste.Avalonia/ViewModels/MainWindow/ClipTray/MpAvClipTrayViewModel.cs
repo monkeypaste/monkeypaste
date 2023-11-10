@@ -1016,26 +1016,26 @@ namespace MonkeyPaste.Avalonia {
 
         public double MaxContainerScreenWidth {
             get {
+#if MOBILE
+                return double.PositiveInfinity;
+#else
                 if (ListOrientation == Orientation.Horizontal) {
                     return
                         MpAvMainWindowViewModel.Instance.MainWindowWidth -
-#if MOBILE
-                        // NOTE not sure where the problem is but something is not measuring
-                        // the heights of pintray and sidebar gridsplitters correctly and it
-                        // becomes clear on mobile since theyre bigger and and this seems the best place
-                        // to adjust
-                        (MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength * -3) -
-#endif
                         MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarWidth;
                 }
                 return
                     MpAvMainWindowViewModel.Instance.MainWindowWidth -
                     MpAvMainWindowTitleMenuViewModel.Instance.DefaultTitleMenuFixedLength;
+#endif
             }
         }
 
         public double MaxContainerScreenHeight {
             get {
+#if MOBILE
+                return double.PositiveInfinity;
+#else
                 if (ListOrientation == Orientation.Horizontal) {
                     return
                         MpAvMainWindowViewModel.Instance.MainWindowHeight -
@@ -1044,15 +1044,9 @@ namespace MonkeyPaste.Avalonia {
                 }
                 return
                         MpAvMainWindowViewModel.Instance.MainWindowHeight -
-#if MOBILE
-                        // NOTE not sure where the problem is but something is not measuring
-                        // the heights of pintray and sidebar gridsplitters correctly and it
-                        // becomes clear on mobile since theyre bigger and and this seems the best place
-                        // to adjust
-                        (MpAvThemeViewModel.Instance.DefaultGridSplitterFixedDimensionLength * -2) -
-#endif
                         MpAvSidebarItemCollectionViewModel.Instance.TotalSidebarHeight -
                         MpAvFilterMenuViewModel.Instance.DefaultFilterMenuFixedSize;
+#endif
             }
         }
 
@@ -4496,7 +4490,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ResetTraySplitterCommand => new MpCommand<object>(
             (args) => {
-                if (App.MainView is not MpAvMainView mv) {
+                if (App.PrimaryView is not MpAvMainView mv) {
                     return;
                 }
                 var mgs = args as MpAvMovableGridSplitter;

@@ -187,7 +187,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine($"Html converter initialized. Load time: {sw.ElapsedMilliseconds}ms");
                 };
                 quillWindow.Show();
-            } else if (App.MainView is MpAvMainView mv) {
+            } else if (App.PrimaryView is MpAvMainView mv) {
                 ConverterWebView.AttachedToLogicalTree += (s, e) => {
                     ConverterWebView.IsVisible = false;
                 };

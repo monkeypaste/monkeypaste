@@ -16,7 +16,6 @@ namespace MonkeyPaste.Avalonia {
     public partial class MpAvMainView :
         MpAvUserControl<MpAvMainWindowViewModel>,
         MpAvIResizableControl,
-        MpIMainView,
         MpIAsyncObject {
         #region Private Variables
         #endregion
@@ -46,11 +45,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
 #else
-            if (Application.Current.ApplicationLifetime is ISingleViewApplicationLifetime lifetime &&
-                lifetime.MainView is Border b) {
-                _instance = new MpAvMainView();
-                //b.Child = _instance;
-            }
+            _instance = new MpAvMainView();
 #endif
         }
 
@@ -75,37 +70,6 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
-        #region MpIMainView Implementation
-
-        public bool IsActive =>
-            BindingContext.IsMainWindowActive;
-        public nint Handle {
-            get {
-                //if(this.GetVisualRoot() is TopLevel tl &&
-                //    tl.PlatformImpl != null &&
-                //    tl.PlatformImpl.)
-                //((WindowImpl)((TopLevel)this.GetVisualRoot()).PlatformImpl).Handle.Handle;
-                return 0;
-            }
-        }
-
-        public void Show() {
-            //throw new NotImplementedException();
-        }
-
-        public void Hide() {
-            //throw new NotImplementedException();
-        }
-
-        public void SetPosition(MpPoint p, double scale) {
-            //throw new NotImplementedException();
-            if (this.RenderTransform is TranslateTransform tt) {
-                tt.X = p.X;
-                tt.Y = p.Y;
-            }
-        }
-
-        #endregion
         #endregion
 
         #region Properties
@@ -440,7 +404,20 @@ namespace MonkeyPaste.Avalonia {
             mwcg.ColumnDefinitions.Clear();
             mwcg.RowDefinitions.Clear();
 
-            if (mwvm.IsHorizontalOrientation) {
+            bool is_horiz =
+#if DESKTOP
+                mwvm.IsHorizontalOrientation;
+#else
+                !mwvm.IsHorizontalOrientation;
+#endif
+            MpMainWindowOrientationType anchor_orientation =
+#if DESKTOP
+                mwvm.MainWindowOrientationType;
+#else
+                is_horiz ? MpMainWindowOrientationType.Left : MpMainWindowOrientationType.Bottom;
+#endif
+
+            if (is_horiz) {
                 // HORIZONTAL
                 tmvm.TitleMenuWidth = mwvm.MainWindowWidth;
                 tmvm.TitleMenuHeight = tmvm.DefaultTitleMenuFixedLength;
@@ -450,7 +427,7 @@ namespace MonkeyPaste.Avalonia {
                 var fmv_rd = new RowDefinition(Math.Max(0, fmvm.FilterMenuHeight), GridUnitType.Pixel);
 
 
-                if (mwvm.MainWindowOrientationType == MpMainWindowOrientationType.Top) {
+                if (anchor_orientation == MpMainWindowOrientationType.Top) {
                     // TOP
                     mwcg.RowDefinitions.Add(fmv_rd);
                     mwcg.RowDefinitions.Add(new RowDefinition(new GridLength(1, GridUnitType.Star)));
@@ -659,7 +636,14 @@ namespace MonkeyPaste.Avalonia {
             ssbcb.IsVisible = true;
             sbgs.IsVisible = is_opening && ssbivm.CanResize;
 
-            if (mwvm.IsMainWindowOrientationDragging) {
+            bool skip_anim =
+#if DESKTOP
+                mwvm.IsMainWindowOrientationDragging;
+#else
+                false;
+#endif
+
+            if (skip_anim) {
                 // skip animate on orientation change because current values maybe transitioning 
                 // otherwise random flickering or target size is wrong
                 sbicvm.ContainerBoundWidth = nsbi_w;
@@ -667,6 +651,9 @@ namespace MonkeyPaste.Avalonia {
 
                 ctrvm.ContainerBoundWidth = nctrcb_w;
                 ctrvm.ContainerBoundHeight = nctrcb_h;
+#if MOBILE
+                UpdateClipTrayContainerSize(null);
+#endif
                 return;
             }
 

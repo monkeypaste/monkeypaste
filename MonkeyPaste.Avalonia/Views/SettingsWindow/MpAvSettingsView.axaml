@@ -458,7 +458,8 @@
             </DockPanel>
         </Border>
         <!--  Content  -->
-        <ScrollViewer BringIntoViewOnFocusChange="False">
+        <ScrollViewer x:Name="BodyScrollViewer"
+                      BringIntoViewOnFocusChange="False">
             <ScrollViewer.Transitions>
                 <Transitions>
                     <VectorTransition Property="Offset"

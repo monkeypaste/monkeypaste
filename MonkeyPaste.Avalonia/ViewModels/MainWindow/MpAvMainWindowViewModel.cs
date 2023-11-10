@@ -120,8 +120,12 @@ namespace MonkeyPaste.Avalonia {
         public double AvailableContentAndSidebarWidth {
             get {
                 if (IsVerticalOrientation) {
+#if MOBILE
+                    return MainWindowWidth;
+#else                    
                     return MainWindowWidth -
                         MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuWidth;
+#endif
                 }
                 return MainWindowWidth -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
@@ -131,16 +135,25 @@ namespace MonkeyPaste.Avalonia {
         public double AvailableContentAndSidebarHeight {
             get {
                 if (IsVerticalOrientation) {
+#if MOBILE
                     return MainWindowHeight -
-                        //MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
-                        //MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListViewScreenHeight -
+                        MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
                         MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
+#else
+                    return MainWindowHeight -
+                        MpAvFilterMenuViewModel.Instance.FilterMenuHeight -
+                        MpAvSidebarItemCollectionViewModel.Instance.ButtonGroupFixedDimensionLength;
+#endif
                 }
+#if MOBILE
+                return MainWindowHeight -
+                        MpAvFilterMenuViewModel.Instance.FilterMenuHeight;
+#else
                 return MainWindowHeight -
                         MpAvMainWindowTitleMenuViewModel.Instance.TitleMenuHeight -
-                        //MpAvSearchCriteriaItemCollectionViewModel.Instance.BoundCriteriaListViewScreenHeight -
                         MpAvFilterMenuViewModel.Instance.FilterMenuHeight;
+#endif
             }
         }
 
@@ -594,11 +607,11 @@ namespace MonkeyPaste.Avalonia {
                     await Task.Delay(100);
                 }
                 MpAvMainView.Instance.DataContext = this;
-                b.Child = MpAvMainView.Instance;
+                App.SetPrimaryView(MpAvMainView.Instance);
                 //sval.MainView = MpAvMainView.Instance;
                 //sval.MainView.HorizontalAlignment = HorizontalAlignment.Stretch;
-                sval.MainView.VerticalAlignment = VerticalAlignment.Bottom;
-                MpAvMainView.Instance.RootGrid.VerticalAlignment = VerticalAlignment.Bottom;
+                //sval.MainView.VerticalAlignment = VerticalAlignment.Bottom;
+                //MpAvMainView.Instance.RootGrid.VerticalAlignment = VerticalAlignment.Bottom;
             }
 #endif
 
@@ -638,6 +651,7 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteLine("MainWindow Hover: " + (IsHovering ? "TRUE" : "FALSE"));
                     break;
                 case nameof(MainWindowHeight):
+                    MpConsole.WriteLine($"Mw height: {MainWindowHeight}");
                     if (!IsResizing) {
                         return;
                     }
@@ -676,9 +690,9 @@ namespace MonkeyPaste.Avalonia {
                     // mw is always open screen rect
                     // mw opacity mask is always open screen rect
                     // mwcg is what is animated so it hides outside current screen workarea
-                    //#if DESKTOP
-                    App.MainView.SetPosition(MainWindowOpenedScreenRect.Location, MainWindowScreen.Scaling);
-                    //#endif
+#if DESKTOP
+                    MpAvWindowManager.MainWindow.Position = MainWindowOpenedScreenRect.Location.ToAvPixelPoint(MainWindowScreen.Scaling);
+#endif
 
                     //MpAvMainView.Instance.Width = MainWindowOpenedScreenRect.Width;
                     //MpAvMainView.Instance.Height = MainWindowOpenedScreenRect.Height;
@@ -823,12 +837,11 @@ namespace MonkeyPaste.Avalonia {
             SetupMainWindowSize();
             IsMainWindowOpening = true;
 
+#if DESKTOP
             if (MpAvWindowManager.MainWindow is Window w &&
                 MpAvPrefViewModel.Instance.ShowInTaskbar) {
                 w.WindowState = WindowState.Normal;
             }
-
-#if DESKTOP
             if (IsMainWindowInitiallyOpening) {
 #if WINDOWS
                 MpAvToolWindow_Win32.SetAsNoHitTestWindow(MpAvWindowManager.MainWindow.TryGetPlatformHandle().Handle);
@@ -842,12 +855,12 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindowManager.MainWindow.Opacity = 1;
                 IsMainWindowInHiddenLoadState = false;
             }
-#endif
-            //}
+            
             DispatcherPriority show_priority =
                 IsMainWindowInHiddenLoadState ?
                     DispatcherPriority.Background : DispatcherPriority.Normal;
-            Dispatcher.UIThread.Post(App.MainView.Show, show_priority);
+            Dispatcher.UIThread.Post(MpAvWindowManager.MainWindow.Show, show_priority);
+#endif
 
             IsMainWindowVisible = true;
         }
@@ -893,7 +906,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvPrefViewModel.Instance.ShowInTaskbar) {
                 w.WindowState = WindowState.Minimized;
             } else {
-                App.MainView.Hide();
+                //App.MainView.Hide();
             }
             IsMainWindowVisible = false;
             MpConsole.WriteLine("CLOSE WINDOW DONE");
@@ -1013,7 +1026,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void Instance_OnGlobalMouseClicked(object sender, bool isLeftButton) {
             Dispatcher.UIThread.Post(() => {
-                if (App.MainView.IsActive ||
+                if (MpAvWindowManager.MainWindow.IsActive ||
                     !isLeftButton ||
                     !IsMainWindowOpen ||
                     IsMainWindowClosing) {
@@ -1240,10 +1253,10 @@ namespace MonkeyPaste.Avalonia {
                 FinishMainWindowHide();
             },
             (args) => {
-#if !DESKTOP
+#if MOBILE
 
                 return false;
-#endif
+#else
 
                 if (args.ToStringOrEmpty() == "force") {
                     // always hide
@@ -1288,6 +1301,7 @@ namespace MonkeyPaste.Avalonia {
                     //MpConsole.WriteLine("");
                 }
                 return canHide;
+#endif
             });
 
 

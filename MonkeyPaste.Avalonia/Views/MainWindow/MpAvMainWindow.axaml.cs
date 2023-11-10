@@ -4,16 +4,8 @@ using PropertyChanged;
 using System;
 
 namespace MonkeyPaste.Avalonia {
-    public interface MpIMainView : MpIHasSettableDataContext {
-        bool IsActive { get; }
-        nint Handle { get; }
-        void Show();
-        void Hide();
-        void SetPosition(MpPoint p, double scale);
-    }
-
     [DoNotNotify]
-    public partial class MpAvMainWindow : MpAvWindow, MpIMainView {
+    public partial class MpAvMainWindow : MpAvWindow {
         #region Private Variables
         #endregion
 
@@ -28,17 +20,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
-
-        #region MpIMainView Implementation
-
-        public nint Handle =>
-            TryGetPlatformHandle().Handle;
-
-        public void SetPosition(MpPoint p, double scale) {
-            Position = p.ToAvPixelPoint(scale);
-        }
-        #endregion
-
         #endregion
 
         #region Properties

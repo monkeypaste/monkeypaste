@@ -54,7 +54,7 @@ namespace MonkeyPaste.Avalonia.Android {
                 Scaling = di.Density;
 
                 int s_w = (int)di.Width;
-                int s_h = (int)di.Height - (int)nav_height;// - (int)status_height
+                int s_h = (int)di.Height - (int)nav_height - (int)status_height;
                 Bounds = new PixelRect(new PixelSize(s_w, s_h)).ToPortableRect(Scaling);
 
                 //int wa_x = 0;
