@@ -1513,7 +1513,6 @@
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
-    <Folder Include="Views\Reusable\P\" />
     <Folder Include="Views\Reusable\TextBoxes\" />
   </ItemGroup>
   
@@ -1745,6 +1744,9 @@
     <Compile Update="Views\Reusable\Notifications\Welcome\MpAvWelcomeWindow.axaml.cs">
       <DependentUpon>MpAvWelcomeWindow.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\UserControl1.xaml.cs">
+      <DependentUpon>UserControl1.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   
   <ItemGroup>
@@ -1784,7 +1786,7 @@
   </ItemGroup>
   
   <ItemGroup Condition="$(IsDesktop) == 'true'">
-    <PackageReference Include="Avalonia.Desktop" Version="11.0.4" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
 
@@ -1853,6 +1855,16 @@
   <ItemGroup>
     <EmbeddedResource Remove="Resources\Legal\Attributions.resx" />
     <EmbeddedResource Remove="Resources\UiStrings\ListingStrings.resx" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Remove="Views\UserControl1.xaml" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <AvaloniaXaml Include="Views\UserControl1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </AvaloniaXaml>
   </ItemGroup>
   
   <ItemGroup>

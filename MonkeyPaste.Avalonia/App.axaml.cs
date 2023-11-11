@@ -11,6 +11,7 @@ using PropertyChanged;
 using System;
 using System.IO;
 using System.Linq;
+using Windows.ApplicationModel;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -132,6 +133,7 @@ namespace MonkeyPaste.Avalonia {
                 var loader = new MpAvLoaderViewModel(is_login_load);
                 await loader.CreatePlatformAsync(startup_datetime);
                 await loader.InitAsync();
+
             } else if (ApplicationLifetime is ISingleViewApplicationLifetime mobile) {
                 mobile.MainView = new Border() {
                     //Margin = new Thickness(0, 24, 0, 0),

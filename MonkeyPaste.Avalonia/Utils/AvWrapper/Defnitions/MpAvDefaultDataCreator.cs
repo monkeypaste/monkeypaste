@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvDefaultDataCreator : MpIDefaultDataCreator {
-        private static List<string[]> defaultShortcutDefinitions;
+        private static List<string[]> _defaultShortcutDefinitions;
         public static List<string[]> DefaultShortcutDefinitions {
             get {
-                if (defaultShortcutDefinitions == null) {
+                if (_defaultShortcutDefinitions == null) {
 
                     var ps = Mp.Services.PlatformShorcuts;
                     MpShortcutRoutingProfileType routingProfile = Mp.Services.WelcomeSetupInfo.DefaultRoutingProfileType;
                     MpRoutingType mw_routing = routingProfile.GetProfileBasedRoutingType(MpShortcutType.ToggleMainWindow);
                     MpRoutingType globalRouting = routingProfile.GetProfileBasedRoutingType(MpShortcutType.ToggleListenToClipboard);
-                    defaultShortcutDefinitions = new List<string[]>() {
+                    _defaultShortcutDefinitions = new List<string[]>() {
                         // ORDER:
                         // guid,keyString,shortcutType,routeType, readOnly = false
 
@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
                             new string[] {"518a1cb0-ffc1-4c06-b2bc-30aa29237d67", "F1", MpShortcutType.OpenHelp.ToString(), MpRoutingType.Internal.ToString()},
                     };
                 }
-                return defaultShortcutDefinitions;
+                return _defaultShortcutDefinitions;
             }
         }
         public async Task CreateDefaultDataAsync() {
@@ -80,7 +80,6 @@ namespace MonkeyPaste.Avalonia {
         public async Task ResetShortcutsAsync() {
             var sl = await MpDataModelProvider.GetItemsAsync<MpShortcut>();
             await Task.WhenAll(sl.Select(x => x.DeleteFromDatabaseAsync()));
-
             await InitDefaultShortcutsAsync();
         }
         #region Private Methods
@@ -265,6 +264,7 @@ namespace MonkeyPaste.Avalonia {
 
 
         private async Task InitDefaultShortcutsAsync() {
+            _defaultShortcutDefinitions = null;
             foreach (var defaultShortcut in DefaultShortcutDefinitions) {
                 await MpShortcut.CreateAsync(
                     guid: defaultShortcut[0],

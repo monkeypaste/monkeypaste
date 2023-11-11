@@ -1048,4 +1048,10 @@
   <data name="NtfLoaderTitle" xml:space="preserve">
     <value>LOADING</value>
   </data>
+  <data name="CommonDisabledLabel" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
+    <value>Note! This password is optional and only for EXTRA security.If used remembering it makes it essentially useless. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.).</value>
+  </data>
 </root>

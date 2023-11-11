@@ -200,6 +200,18 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region Appearance
+
+        public string RoutingTypeDisplayValue {
+            get {
+                if (CanBeGlobalShortcut && (RoutingType == MpRoutingType.Internal || RoutingType == MpRoutingType.None)) {
+                    return UiStrings.CommonDisabledLabel;
+                }
+                return RoutingType.EnumToUiString();
+            }
+        }
+        #endregion
+
         #region Model
 
         public MpShortcutType ShortcutType {
@@ -460,6 +472,9 @@ namespace MonkeyPaste.Avalonia {
                     break;
                 case nameof(ShortcutType):
                     OnPropertyChanged(nameof(CanBeGlobalShortcut));
+                    break;
+                case nameof(RoutingType):
+                    OnPropertyChanged(nameof(RoutingTypeDisplayValue));
                     break;
             }
         }

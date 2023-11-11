@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -6,6 +7,7 @@ namespace MonkeyPaste.Avalonia {
     public class MpAvWelcomeOptionItemViewModel :
         MpAvViewModelBase<MpAvWelcomeNotificationViewModel> {
         #region Private Variables
+        private MpAvWelcomeOptionGroupViewModel _group;
         #endregion
 
         #region Constants
@@ -22,35 +24,31 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public bool IsOptionVisible { get; set; } = true;
         public bool IsGestureItem =>
-            Parent != null &&
-            (Parent.CurPageType == MpWelcomePageType.ScrollWheel ||
-                    Parent.CurPageType == MpWelcomePageType.DragToOpen);
+            _group != null &&
+            (_group.WelcomePageType == MpWelcomePageType.ScrollWheel || _group.WelcomePageType == MpWelcomePageType.DragToOpen);
 
         public bool IsMultiRadioItem =>
-            Parent != null &&
-            Parent.CurOptGroupViewModel != null &&
-            Parent.CurOptGroupViewModel.Items != null &&
-            Parent.CurOptGroupViewModel.Items.Count > 1;
+            _group.Items != null &&
+            _group.Items.Count > 1;
 
         public bool IsAccountItem =>
-            Parent != null &&
-            Parent.IsAccountOptSelected &&
-            Parent.CurOptGroupViewModel.Items != null;
+            _group != null &&
+            _group.WelcomePageType == MpWelcomePageType.Account;
 
         public bool IsExistingAccountItem =>
             IsAccountItem &&
-            (Parent.CurOptGroupViewModel.Items.IndexOf(this) == 0 ||
-             Parent.CurOptGroupViewModel.Items.IndexOf(this) == 4);
+            (_group.Items.IndexOf(this) == 0 ||
+             _group.Items.IndexOf(this) == 4);
 
         public bool IsStandardAccountItem =>
             IsAccountItem &&
-            (Parent.CurOptGroupViewModel.Items.IndexOf(this) == 2 ||
-             Parent.CurOptGroupViewModel.Items.IndexOf(this) == 6);
+            (_group.Items.IndexOf(this) == 2 ||
+             _group.Items.IndexOf(this) == 6);
 
         public bool IsUnlimitedAccountItem =>
             IsAccountItem &&
-            (Parent.CurOptGroupViewModel.Items.IndexOf(this) == 3 ||
-             Parent.CurOptGroupViewModel.Items.IndexOf(this) == 7);
+            (_group.Items.IndexOf(this) == 3 ||
+             _group.Items.IndexOf(this) == 7);
 
         public bool IsHovering { get; set; }
         public bool IsChecked { get; set; }
@@ -135,7 +133,9 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvWelcomeOptionItemViewModel() : base(null) { }
-        public MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel parent, object optId) : base(parent) {
+        public MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel parent, object optId) : this(parent, optId, null) { }
+        public MpAvWelcomeOptionItemViewModel(MpAvWelcomeNotificationViewModel parent, object optId, MpAvWelcomeOptionGroupViewModel group) : base(parent) {
+            _group = group;
             PropertyChanged += MpAvGestureProfileItemViewModel_PropertyChanged;
             OptionId = optId;
         }
@@ -200,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
             //switch (result_uat) {
             //    case MpUserAccountType.None:
             //        // cancel (ensure acct btns work)
-            //        Parent.CurOptGroupViewModel.Items.ForEach(x => x.IsEnabled = true);
+            //        _group.Items.ForEach(x => x.IsEnabled = true);
             //        Parent.IsAccountMonthToggleEnabled = true;
 
             //        // get cur unlim acct type item idx
@@ -210,7 +210,7 @@ namespace MonkeyPaste.Avalonia {
             //        }
             //        // put selection back to unlim
 
-            //        Parent.CurOptGroupViewModel.Items
+            //        _group.Items
             //            .ForEach((x, idx) => x.IsChecked = idx == unlim_item_idx);
             //        break;
             //    default:
@@ -225,10 +225,10 @@ namespace MonkeyPaste.Avalonia {
             //        // toggle monthly to acct type
             //        Parent.IsAccountMonthlyChecked = MpAvAccountViewModel.Instance.IsMonthly;
             //        // select acct type
-            //        Parent.CurOptGroupViewModel.Items
+            //        _group.Items
             //            .ForEach((x, idx) => x.IsChecked = idx == uat_item_idx);
             //        // disable everything
-            //        Parent.CurOptGroupViewModel.Items
+            //        _group.Items
             //            .ForEach((x, idx) => x.IsEnabled = false);
             //        Parent.IsAccountMonthToggleEnabled = false;
             //        break;
@@ -242,9 +242,9 @@ namespace MonkeyPaste.Avalonia {
                 if (IsChecked) {
                     return;
                 }
-                Parent.CurOptGroupViewModel.SelectedItem = this;
+                _group.SelectedItem = this;
             }, () => {
-                return IsEnabled;
+                return IsEnabled && _group != null;
             });
 
         #endregion

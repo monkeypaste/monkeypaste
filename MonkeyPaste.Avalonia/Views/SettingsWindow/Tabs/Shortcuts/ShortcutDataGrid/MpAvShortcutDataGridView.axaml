@@ -95,7 +95,7 @@
                                            TextWrapping="WrapWithOverflow"
                                            TextAlignment="Center"
                                            FontWeight="SemiBold"
-                                           Text="{Binding RoutingType, Converter={x:Static local:MpAvEnumToUiStringConverter.Instance}}" />
+                                           Text="{Binding RoutingTypeDisplayValue}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

@@ -230,7 +230,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     }
                     SelectSidebarItemCommand.Execute(MpAvTagTrayViewModel.Instance);
-                    HasSetStartupSelection = true; 
+                    HasSetStartupSelection = true;
 #endif
                     break;
             }
@@ -268,6 +268,11 @@ namespace MonkeyPaste.Avalonia {
                     }
                 } else if (Items.FirstOrDefault(x => x == args) is MpISidebarItemViewModel sbivm) {
                     itemIdx = Items.IndexOf(sbivm);
+                }
+
+                if (itemIdx == 4) {
+                    // don't actually select mouse mode since its not a real sidebar
+                    return;
                 }
 
                 if (SelectedItemIdx == itemIdx) {

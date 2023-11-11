@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.ReactiveUI;
 using CefNet;
 using MonkeyPaste.Common;
 using System;
@@ -36,9 +37,10 @@ namespace MonkeyPaste.Avalonia {
 #if CEF_WV
                 MpAvCefNetApplication.Init();
 #endif
-                App.Args = args ?? new string[] { };
+                //App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-                .StartWithCefNetApplicationLifetime(App.Args);
+                //.StartWithCefNetApplicationLifetime(App.Args);
+                    .StartWithClassicDesktopLifetime(args);
             }
             catch (Exception e) {
                 // here we can work with the exception, for example add it to our log file
@@ -59,20 +61,20 @@ namespace MonkeyPaste.Avalonia {
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()
             => AppBuilder.Configure<App>()
-                .UsePlatformDetect()
-                //.UseReactiveUI()
-#if PLAT_WV
-                .UseDesktopWebView()
-#endif
-                //.With(new Win32PlatformOptions { UseWgl = true })
-                //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
-                //.With(new Win32PlatformOptions {
-                //    UseWgl = true,
-                //    AllowEglInitialization = true
-                //})
-                //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
-                //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
-                //.With(new AvaloniaNativePlatformOptions { UseGpu = false }
+            //.With(new Win32PlatformOptions { UseWgl = true })
+            //.With(new AvaloniaNativePlatformOptions { UseGpu = !OperatingSystem.IsMacOS() })
+            //.With(new Win32PlatformOptions {
+            //    UseWgl = true,
+            //    AllowEglInitialization = true
+            //})
+            //.With(new Win32PlatformOptions { AllowEglInitialization = true, UseWgl = true })
+            //.With(new X11PlatformOptions { UseGpu = false, UseEGL = false, EnableSessionManagement = false })
+            //.With(new AvaloniaNativePlatformOptions { UseGpu = false }
+
+            .UsePlatformDetect()
+            //.WithInterFont()
+            .LogToTrace()
+            .UseReactiveUI()
                 .LogToTrace()// LogEventLevel.Verbose)
                 ;
 

@@ -103,6 +103,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
+        public bool IsFinishing { get; set; }
         public bool IsTermsWindowOpen { get; set; }
         public bool IsAccountOptSelected { get; set; }
         bool IsExistingSubscriptionDetected { get; set; }
@@ -270,13 +271,13 @@ namespace MonkeyPaste.Avalonia {
                 Caption = UiStrings.WelcomeLoginLoadCaption
             };
             LoginLoadViewModel.Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,false) {
+                    new MpAvWelcomeOptionItemViewModel(this,false,LoginLoadViewModel) {
                         IsChecked = false,
                         IconSourceObj = "NoEntryImage",
                         LabelText = UiStrings.CommonDisableLabel,
                         DescriptionText = UiStrings.WelcomeLoginLoadDescription1
                     },
-                    new MpAvWelcomeOptionItemViewModel(this,true) {
+                    new MpAvWelcomeOptionItemViewModel(this,true,LoginLoadViewModel) {
                         IsChecked = true,
                         IconSourceObj = "UserImage",
                         LabelText = UiStrings.CommonEnableLabel,
@@ -291,18 +292,18 @@ namespace MonkeyPaste.Avalonia {
                 Caption = UiStrings.WelcomeGestureProfileCaption
             };
             GestureProfilesViewModel.Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,false) {
+                    new MpAvWelcomeOptionItemViewModel(this,false, GestureProfilesViewModel) {
                         IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Internal,
                         IconSourceObj = "PrivateImage",
                         LabelText = UiStrings.WelcomeGestureProfileLabel1,
                         DescriptionText = UiStrings.WelcomeGestureProfileDescription1
                     },
-                    new MpAvWelcomeOptionItemViewModel(this,true) {
+                    new MpAvWelcomeOptionItemViewModel(this,true, GestureProfilesViewModel) {
                         IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Default,
                         IconSourceObj = "GlobeImage",
                         LabelText = UiStrings.WelcomeGestureProfileLabel2,
                         DescriptionText = UiStrings.WelcomeGestureProfileDescription2
-                    },
+                    }
                 };
             #endregion
 
@@ -312,13 +313,13 @@ namespace MonkeyPaste.Avalonia {
                 Caption = UiStrings.WelcomeScrollToOpenCaption
             };
             ScrollWheelBehaviorViewModel.Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,false) {
+                    new MpAvWelcomeOptionItemViewModel(this,false,ScrollWheelBehaviorViewModel) {
                         IsChecked = !MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
                         IconSourceObj = "NoEntryImage",
                         LabelText = UiStrings.CommonDisableLabel,
                         DescriptionText = UiStrings.WelcomeScrollToOpenDescription1
                     },
-                    new MpAvWelcomeOptionItemViewModel(this,true) {
+                    new MpAvWelcomeOptionItemViewModel(this,true,ScrollWheelBehaviorViewModel) {
                         IsChecked = MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta,
                         IconSourceObj = "MouseWheelImage",
                         LabelText = UiStrings.CommonEnableLabel,
@@ -333,13 +334,13 @@ namespace MonkeyPaste.Avalonia {
                 Caption = UiStrings.WelcomeDragToOpenCaption
             };
             DragToOpenBehaviorViewModel.Items = new[] {
-                    new MpAvWelcomeOptionItemViewModel(this,false) {
+                    new MpAvWelcomeOptionItemViewModel(this,false,DragToOpenBehaviorViewModel) {
                         IsChecked = !MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
                         IconSourceObj = "CloseWindowImage",
                         LabelText = UiStrings.CommonDisableLabel,
                         DescriptionText = UiStrings.WelcomeDragToOpenDescription1
                     },
-                    new MpAvWelcomeOptionItemViewModel(this,true) {
+                    new MpAvWelcomeOptionItemViewModel(this,true,DragToOpenBehaviorViewModel) {
                         IsChecked = MpAvPrefViewModel.Instance.ShowMainWindowOnDragToScreenTop,
                         IconSourceObj = "AppFrameImage",
                         LabelText = UiStrings.CommonEnableLabel,
@@ -390,6 +391,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private async void FinishWelcomeSetup() {
+            IsFinishing = true;
             if (CurPointerGestureWindowViewModel != null) {
                 CurPointerGestureWindowViewModel.Destroy();
             }
@@ -413,6 +415,7 @@ namespace MonkeyPaste.Avalonia {
                 Mp.Services.ShutdownHelper.ShutdownApp("declined terms");
                 return;
             }
+            IsWindowOpen = false;
 
             // ACCOUNT TYPE
             if (!AccountViewModel.NeedsSkip) {
@@ -440,6 +443,7 @@ namespace MonkeyPaste.Avalonia {
                 GestureProfilesViewModel.Items.FirstOrDefault(x => x.OptionId is bool boolVal && boolVal).IsChecked ?
                     MpShortcutRoutingProfileType.Default :
                     MpShortcutRoutingProfileType.Internal;
+            await Mp.Services.DefaultDataCreator.ResetShortcutsAsync();
 
             // SCROLL-TO-OPEN
             if (ScrollWheelBehaviorViewModel.WasVisited) {
@@ -465,12 +469,11 @@ namespace MonkeyPaste.Avalonia {
                 await MpDb.ChangeDbPasswordAsync(DbPassword, RememberDbPassword);
             }
 
-
             IsWelcomeDone = true;
             // NOTE this isn't flagged until DONE is clicked and assumes
             // there's per-page validation (only needed for accounts atm I think)
             MpAvPrefViewModel.Instance.IsWelcomeComplete = true;
-
+            IsFinishing = false;
         }
 
         private void CloseGestureDemo() {
@@ -517,6 +520,9 @@ namespace MonkeyPaste.Avalonia {
         public ICommand SkipWelcomeCommand => new MpCommand(
             () => {
                 FinishWelcomeSetup();
+            },
+            () => {
+                return IsDbPasswordValid;
             });
 
         public ICommand FinishWelcomeCommand => new MpCommand(

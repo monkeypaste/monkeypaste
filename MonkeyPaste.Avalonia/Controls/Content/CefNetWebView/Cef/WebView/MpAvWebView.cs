@@ -68,8 +68,8 @@ namespace MonkeyPaste.Avalonia {
                     }
 
                     break;
-#endif
             }
+#endif
         }
         #endregion
 

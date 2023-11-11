@@ -388,6 +388,15 @@ namespace MonkeyPaste.Avalonia {
                          message: msg,
                          iconResourceObj: icon);
             } else {
+
+                while (true) {
+                    // BUG ntf will come up behind loader so wait for loader to init and complete before showing these
+                    if (Mp.Services == null || Mp.Services.StartupState == null || !Mp.Services.StartupState.IsReady) {
+                        await Task.Delay(100);
+                    }
+                    break;
+                }
+
                 await Mp.Services.NotificationBuilder.ShowMessageAsync(
                        title: title,
                        body: msg,

@@ -3,8 +3,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="using:MonkeyPaste.Avalonia"
-        xmlns:pcl="using:MonkeyPaste"
+        xmlns:pcl="clr-namespace:MonkeyPaste;assembly=MonkeyPaste"
+        xmlns:local="clr-namespace:MonkeyPaste.Avalonia;assembly=MonkeyPaste.Avalonia"
+        xmlns:dd="clr-namespace:My.Namespace;assembly=MonkeyPaste.Avalonia"
         mc:Ignorable="d"
         d:DesignWidth="800"
         d:DesignHeight="450"
@@ -12,9 +13,8 @@
         x:DataType="local:MpAvLoaderNotificationViewModel"
         x:CompileBindings="True"
         x:Class="MonkeyPaste.Avalonia.MpAvLoaderNotificationWindow"
-        xmlns:dd="using:My.Namespace"
         d:DataContext="{x:Static dd:DesignData.ExampleViewModel}"
-        Classes="notificationWindow fadeOut loader slideIn"
+        Classes="notificationWindow loader"
         Width="350"
         Height="140">
     <Window.Resources>

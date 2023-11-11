@@ -17,18 +17,18 @@
         <TransformOperations x:Key="SwitchlessRadioButtonTransformOps">translateX(-15px)</TransformOperations>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
-      <Style Selector="Grid#SidebarButtonGroupContainerGrid">
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch"/>
-        <Setter Property="VerticalAlignment"
-                Value="Stretch"/>
-      </Style>
-      <Style Selector="Grid#SidebarButtonGroupContainerGrid.horizontal">
-        <Setter Property="HorizontalAlignment"
-                Value="Stretch"/>
-        <Setter Property="VerticalAlignment"
-                Value="Stretch"/>
-      </Style>
+        <Style Selector="Grid#SidebarButtonGroupContainerGrid">
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+        </Style>
+        <Style Selector="Grid#SidebarButtonGroupContainerGrid.horizontal">
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalAlignment"
+                    Value="Stretch" />
+        </Style>
         <!--  SIDEBAR RADIO BUTTONS  -->
         <Style Selector="RadioButton.sidebarRadio">
             <Setter Property="local:MpAvDropExtension.IsEnabled"
@@ -219,7 +219,7 @@
                      Classes.mouseMode="{Binding IsAnyMouseModeEnabled, Source={x:Static local:MpAvClipTrayViewModel.Instance}}"
                      Grid.Row="4"
                      local:MpAvImageTintExtension.IsEnabled="True"
-                     GroupName="SidebarButtonGroup"
+                     GroupName="EmptyGroup"
                      Classes="sidebarRadio switchless"
                      RenderTransform="{DynamicResource SwitchlessRadioButtonTransformOps}"
                      Command="{Binding ToggleIsSidebarItemSelectedCommand, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"

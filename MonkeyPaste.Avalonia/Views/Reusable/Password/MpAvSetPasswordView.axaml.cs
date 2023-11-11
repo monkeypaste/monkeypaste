@@ -26,6 +26,20 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region RememberTooltip AvaloniaProperty
+
+        public string RememberTooltip {
+            get { return GetValue(RememberTooltipProperty); }
+            set { SetValue(RememberTooltipProperty, value); }
+        }
+
+        public static readonly StyledProperty<string> RememberTooltipProperty =
+            AvaloniaProperty.Register<MpAvSetPasswordView, string>(
+                name: nameof(RememberTooltip),
+                defaultValue: string.Empty);
+
+        #endregion
+
         #region AutoFilledPassword AvaloniaProperty
 
         public string AutoFilledPassword {

@@ -1,3 +1,0 @@
-# MonkeyPaste.Editor
-
-

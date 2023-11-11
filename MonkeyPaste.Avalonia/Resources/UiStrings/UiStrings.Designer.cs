@@ -808,6 +808,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        public static string CommonDisabledLabel {
+            get {
+                return ResourceManager.GetString("CommonDisabledLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disable.
         /// </summary>
         public static string CommonDisableLabel {
@@ -2670,6 +2679,15 @@ namespace MonkeyPaste.Avalonia {
         public static string WelcomeLoginLoadTitle {
             get {
                 return ResourceManager.GetString("WelcomeLoginLoadTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note! This password is optional and only for EXTRA security.If used remembering it makes it essentially useless. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.)..
+        /// </summary>
+        public static string WelcomeRememberDbPasswordTooltip {
+            get {
+                return ResourceManager.GetString("WelcomeRememberDbPasswordTooltip", resourceCulture);
             }
         }
         
