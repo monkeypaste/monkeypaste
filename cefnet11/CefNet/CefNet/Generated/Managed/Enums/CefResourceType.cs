@@ -96,7 +96,9 @@ namespace CefNet
 		Xhr = 13,
 
 		/// <summary>
-		/// A request for a &quot;&lt;ping&gt;&quot;.
+		/// A request for a 
+		/// &lt;ping
+		/// &gt;
 		/// </summary>
 		Ping = 14,
 

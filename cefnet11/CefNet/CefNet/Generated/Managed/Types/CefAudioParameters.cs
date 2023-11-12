@@ -21,8 +21,7 @@ using CefNet.Internal;
 namespace CefNet
 {
 	/// <summary>
-	/// Structure representing the audio parameters for setting up the audio
-	/// handler.
+	/// Structure representing the audio parameters for setting up the audio handler.
 	/// </summary>
 	/// <remarks>
 	/// Role: Proxy

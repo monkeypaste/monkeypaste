@@ -39,9 +39,9 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Handle execution of the function identified by |name|. |object| is the
 		/// receiver (&apos;this&apos; object) of the function. |arguments| is the list of
-		/// arguments passed to the function. If execution succeeds set |retval| to
-		/// the function return value. If execution fails set |exception| to the
-		/// exception that will be thrown. Return true (1) if execution was handled.
+		/// arguments passed to the function. If execution succeeds set |retval| to the
+		/// function return value. If execution fails set |exception| to the exception
+		/// that will be thrown. Return true (1) if execution was handled.
 		/// </summary>
 		[NativeName("execute")]
 		public unsafe int Execute([Immutable]cef_string_t* name, cef_v8value_t* @object, UIntPtr argumentsCount, [Immutable]cef_v8value_t** arguments, cef_v8value_t** retval, cef_string_t* exception)

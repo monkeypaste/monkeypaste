@@ -57,8 +57,8 @@ namespace CefNet
 
 		/// <summary>
 		/// Called to release |buffer| when the ArrayBuffer JS object is garbage
-		/// collected. |buffer| is the value that was passed to CreateArrayBuffer
-		/// along with this object.
+		/// collected. |buffer| is the value that was passed to CreateArrayBuffer along
+		/// with this object.
 		/// </summary>
 		protected internal unsafe virtual void ReleaseBuffer(IntPtr buffer)
 		{

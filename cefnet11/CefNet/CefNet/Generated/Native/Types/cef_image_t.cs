@@ -75,11 +75,11 @@ namespace CefNet.CApi
 		public void* add_bitmap;
 
 		/// <summary>
-		/// Add a bitmap image representation for |scale_factor|. Only 32-bit
-		/// RGBA/BGRA formats are supported. |pixel_width| and |pixel_height| are the
-		/// bitmap representation size in pixel coordinates. |pixel_data| is the array
-		/// of pixel data and should be |pixel_width| x |pixel_height| x 4 bytes in
-		/// size. |color_type| and |alpha_type| values specify the pixel format.
+		/// Add a bitmap image representation for |scale_factor|. Only 32-bit RGBA/BGRA
+		/// formats are supported. |pixel_width| and |pixel_height| are the bitmap
+		/// representation size in pixel coordinates. |pixel_data| is the array of
+		/// pixel data and should be |pixel_width| x |pixel_height| x 4 bytes in size.
+		/// |color_type| and |alpha_type| values specify the pixel format.
 		/// </summary>
 		[NativeName("add_bitmap")]
 		public unsafe int AddBitmap(float scale_factor, int pixel_width, int pixel_height, CefColorType color_type, CefAlphaType alpha_type, [Immutable]void* pixel_data, UIntPtr pixel_data_size)
@@ -186,8 +186,7 @@ namespace CefNet.CApi
 		public void* remove_representation;
 
 		/// <summary>
-		/// Removes the representation for |scale_factor|. Returns true (1) on
-		/// success.
+		/// Removes the representation for |scale_factor|. Returns true (1) on success.
 		/// </summary>
 		[NativeName("remove_representation")]
 		public unsafe int RemoveRepresentation(float scale_factor)
@@ -224,12 +223,12 @@ namespace CefNet.CApi
 		public void* get_as_bitmap;
 
 		/// <summary>
-		/// Returns the bitmap representation that most closely matches
-		/// |scale_factor|. Only 32-bit RGBA/BGRA formats are supported. |color_type|
-		/// and |alpha_type| values specify the desired output pixel format.
-		/// |pixel_width| and |pixel_height| are the output representation size in
-		/// pixel coordinates. Returns a cef_binary_value_t containing the pixel data
-		/// on success or NULL on failure.
+		/// Returns the bitmap representation that most closely matches |scale_factor|.
+		/// Only 32-bit RGBA/BGRA formats are supported. |color_type| and |alpha_type|
+		/// values specify the desired output pixel format. |pixel_width| and
+		/// |pixel_height| are the output representation size in pixel coordinates.
+		/// Returns a cef_binary_value_t containing the pixel data on success or NULL
+		/// on failure.
 		/// </summary>
 		[NativeName("get_as_bitmap")]
 		public unsafe cef_binary_value_t* GetAsBitmap(float scale_factor, CefColorType color_type, CefAlphaType alpha_type, int* pixel_width, int* pixel_height)
@@ -246,12 +245,12 @@ namespace CefNet.CApi
 		public void* get_as_png;
 
 		/// <summary>
-		/// Returns the PNG representation that most closely matches |scale_factor|.
-		/// If |with_transparency| is true (1) any alpha transparency in the image
-		/// will be represented in the resulting PNG data. |pixel_width| and
-		/// |pixel_height| are the output representation size in pixel coordinates.
-		/// Returns a cef_binary_value_t containing the PNG image data on success or
-		/// NULL on failure.
+		/// Returns the PNG representation that most closely matches |scale_factor|. If
+		/// |with_transparency| is true (1) any alpha transparency in the image will be
+		/// represented in the resulting PNG data. |pixel_width| and |pixel_height| are
+		/// the output representation size in pixel coordinates. Returns a
+		/// cef_binary_value_t containing the PNG image data on success or NULL on
+		/// failure.
 		/// </summary>
 		[NativeName("get_as_png")]
 		public unsafe cef_binary_value_t* GetAsPng(float scale_factor, int with_transparency, int* pixel_width, int* pixel_height)

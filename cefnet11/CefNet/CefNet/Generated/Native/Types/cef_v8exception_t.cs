@@ -19,8 +19,8 @@ using CefNet.WinApi;
 namespace CefNet.CApi
 {
 	/// <summary>
-	/// Structure representing a V8 exception. The functions of this structure may
-	/// be called on any render process thread.
+	/// Structure representing a V8 exception. The functions of this structure may be
+	/// called on any render process thread.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe partial struct cef_v8exception_t
@@ -91,8 +91,8 @@ namespace CefNet.CApi
 		public void* get_line_number;
 
 		/// <summary>
-		/// Returns the 1-based number of the line where the error occurred or 0 if
-		/// the line number is unknown.
+		/// Returns the 1-based number of the line where the error occurred or 0 if the
+		/// line number is unknown.
 		/// </summary>
 		[NativeName("get_line_number")]
 		public unsafe int GetLineNumber()

@@ -19,9 +19,9 @@ using CefNet.WinApi;
 namespace CefNet.CApi
 {
 	/// <summary>
-	/// Implement this structure to handle events related to browser load status.
-	/// The functions of this structure will be called on the browser process UI
-	/// thread or render process main thread (TID_RENDERER).
+	/// Implement this structure to handle events related to browser load status. The
+	/// functions of this structure will be called on the browser process UI thread
+	/// or render process main thread (TID_RENDERER).
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe partial struct cef_load_handler_t
@@ -39,9 +39,9 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Called when the loading state has changed. This callback will be executed
 		/// twice -- once when loading is initiated either programmatically or by user
-		/// action, and once when loading is terminated due to completion,
-		/// cancellation of failure. It will be called before any calls to OnLoadStart
-		/// and after all calls to OnLoadError and/or OnLoadEnd.
+		/// action, and once when loading is terminated due to completion, cancellation
+		/// of failure. It will be called before any calls to OnLoadStart and after all
+		/// calls to OnLoadError and/or OnLoadEnd.
 		/// </summary>
 		[NativeName("on_loading_state_change")]
 		public unsafe void OnLoadingStateChange(cef_browser_t* browser, int isLoading, int canGoBack, int canGoForward)
@@ -59,8 +59,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called after a navigation has been committed and before the browser begins
-		/// loading contents in the frame. The |frame| value will never be NULL --
-		/// call the is_main() function to check if this frame is the main frame.
+		/// loading contents in the frame. The |frame| value will never be NULL -- call
+		/// the is_main() function to check if this frame is the main frame.
 		/// |transition_type| provides information about the source of the navigation
 		/// and an accurate value is only available in the browser process. Multiple
 		/// frames may be loading at the same time. Sub-frames may start or continue
@@ -86,8 +86,8 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Called when the browser is done loading a frame. The |frame| value will
 		/// never be NULL -- call the is_main() function to check if this frame is the
-		/// main frame. Multiple frames may be loading at the same time. Sub-frames
-		/// may start or continue loading after the main frame load has ended. This
+		/// main frame. Multiple frames may be loading at the same time. Sub-frames may
+		/// start or continue loading after the main frame load has ended. This
 		/// function will not be called for same page navigations (fragments, history
 		/// state, etc.) or for navigations that fail or are canceled before commit.
 		/// For notification of overall browser load status use OnLoadingStateChange

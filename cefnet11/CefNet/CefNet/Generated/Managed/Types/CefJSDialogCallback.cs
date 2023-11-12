@@ -41,8 +41,7 @@ namespace CefNet
 
 		/// <summary>
 		/// Continue the JS dialog request. Set |success| to true (1) if the OK button
-		/// was pressed. The |user_input| value should be specified for prompt
-		/// dialogs.
+		/// was pressed. The |user_input| value should be specified for prompt dialogs.
 		/// </summary>
 		public unsafe virtual void Continue(bool success, string userInput)
 		{

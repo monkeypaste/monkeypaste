@@ -19,9 +19,8 @@ using CefNet.WinApi;
 namespace CefNet.CApi
 {
 	/// <summary>
-	/// Implement this structure to handle events related to permission requests.
-	/// The functions of this structure will be called on the browser process UI
-	/// thread.
+	/// Implement this structure to handle events related to permission requests. The
+	/// functions of this structure will be called on the browser process UI thread.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe partial struct cef_permission_handler_t
@@ -37,17 +36,16 @@ namespace CefNet.CApi
 		public void* on_request_media_access_permission;
 
 		/// <summary>
-		/// Called when a page requests permission to access media.
-		/// |requesting_origin| is the URL origin requesting permission.
-		/// |requested_permissions| is a combination of values from
-		/// cef_media_access_permission_types_t that represent the requested
-		/// permissions. Return true (1) and call cef_media_access_callback_t
-		/// functions either in this function or at a later time to continue or cancel
-		/// the request. Return false (0) to proceed with default handling. With the
-		/// Chrome runtime, default handling will display the permission request UI.
-		/// With the Alloy runtime, default handling will deny the request. This
-		/// function will not be called if the &quot;--enable-media-stream&quot; command-line
-		/// switch is used to grant all permissions.
+		/// Called when a page requests permission to access media. |requesting_origin|
+		/// is the URL origin requesting permission. |requested_permissions| is a
+		/// combination of values from cef_media_access_permission_types_t that
+		/// represent the requested permissions. Return true (1) and call
+		/// cef_media_access_callback_t functions either in this function or at a later
+		/// time to continue or cancel the request. Return false (0) to proceed with
+		/// default handling. With the Chrome runtime, default handling will display
+		/// the permission request UI. With the Alloy runtime, default handling will
+		/// deny the request. This function will not be called if the &quot;--enable-media-
+		/// stream&quot; command-line switch is used to grant all permissions.
 		/// </summary>
 		[NativeName("on_request_media_access_permission")]
 		public unsafe int OnRequestMediaAccessPermission(cef_browser_t* browser, cef_frame_t* frame, [Immutable]cef_string_t* requesting_origin, uint requested_permissions, cef_media_access_callback_t* callback)
@@ -70,9 +68,9 @@ namespace CefNet.CApi
 		/// cef_permission_request_types_t that represent the requested permissions.
 		/// Return true (1) and call cef_permission_prompt_callback_t::Continue either
 		/// in this function or at a later time to continue or cancel the request.
-		/// Return false (0) to proceed with default handling. With the Chrome
-		/// runtime, default handling will display the permission prompt UI. With the
-		/// Alloy runtime, default handling is CEF_PERMISSION_RESULT_IGNORE.
+		/// Return false (0) to proceed with default handling. With the Chrome runtime,
+		/// default handling will display the permission prompt UI. With the Alloy
+		/// runtime, default handling is CEF_PERMISSION_RESULT_IGNORE.
 		/// </summary>
 		[NativeName("on_show_permission_prompt")]
 		public unsafe int OnShowPermissionPrompt(cef_browser_t* browser, ulong prompt_id, [Immutable]cef_string_t* requesting_origin, uint requested_permissions, cef_permission_prompt_callback_t* callback)

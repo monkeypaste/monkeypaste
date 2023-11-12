@@ -36,13 +36,13 @@ namespace CefNet.CApi
 		public void* on_chrome_command;
 
 		/// <summary>
-		/// Called to execute a Chrome command triggered via menu selection or
-		/// keyboard shortcut. Values for |command_id| can be found in the
-		/// cef_command_ids.h file. |disposition| provides information about the
-		/// intended command target. Return true (1) if the command was handled or
-		/// false (0) for the default implementation. For context menu commands this
-		/// will be called after cef_context_menu_handler_t::OnContextMenuCommand.
-		/// Only used with the Chrome runtime.
+		/// Called to execute a Chrome command triggered via menu selection or keyboard
+		/// shortcut. Values for |command_id| can be found in the cef_command_ids.h
+		/// file. |disposition| provides information about the intended command target.
+		/// Return true (1) if the command was handled or false (0) for the default
+		/// implementation. For context menu commands this will be called after
+		/// cef_context_menu_handler_t::OnContextMenuCommand. Only used with the Chrome
+		/// runtime.
 		/// </summary>
 		[NativeName("on_chrome_command")]
 		public unsafe int OnChromeCommand(cef_browser_t* browser, int command_id, CefWindowOpenDisposition disposition)

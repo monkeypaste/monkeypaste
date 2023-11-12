@@ -36,8 +36,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Returns a name that can be used to represent the issuer. It tries in this
-		/// order: Common Name (CN), Organization Name (O) and Organizational Unit
-		/// Name (OU) and returns the first non-NULL one found.
+		/// order: Common Name (CN), Organization Name (O) and Organizational Unit Name
+		/// (OU) and returns the first non-NULL one found.
 		/// The resulting string must be freed by calling cef_string_userfree_free().
 		/// </summary>
 		[NativeName("get_display_name")]

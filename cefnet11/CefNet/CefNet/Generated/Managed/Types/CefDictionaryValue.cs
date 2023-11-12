@@ -40,10 +40,10 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this object is valid. This object may become invalid
-		/// if the underlying data is owned by another object (e.g. list or
-		/// dictionary) and that other object is then modified or destroyed. Do not
-		/// call any other functions if this property returns false.
+		/// Gets a value indicating whether this object is valid. This object may become invalid if
+		/// the underlying data is owned by another object (e.g. list or dictionary)
+		/// and that other object is then modified or destroyed. Do not call any other
+		/// functions if this property returns false.
 		/// </summary>
 		public unsafe virtual bool IsValid
 		{
@@ -169,11 +169,11 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Returns the value at the specified key. For simple types the returned
-		/// value will copy existing data and modifications to the value will not
-		/// modify this object. For complex types (binary, dictionary and list) the
-		/// returned value will reference existing data and modifications to the value
-		/// will modify this object.
+		/// Returns the value at the specified key. For simple types the returned value
+		/// will copy existing data and modifications to the value will not modify this
+		/// object. For complex types (binary, dictionary and list) the returned value
+		/// will reference existing data and modifications to the value will modify
+		/// this object.
 		/// </summary>
 		public unsafe virtual CefValue GetValue(string key)
 		{
@@ -277,10 +277,10 @@ namespace CefNet
 		/// <summary>
 		/// Sets the value at the specified key. Returns true (1) if the value was set
 		/// successfully. If |value| represents simple data then the underlying data
-		/// will be copied and modifications to |value| will not modify this object.
-		/// If |value| represents complex data (binary, dictionary or list) then the
-		/// underlying data will be referenced and modifications to |value| will
-		/// modify this object.
+		/// will be copied and modifications to |value| will not modify this object. If
+		/// |value| represents complex data (binary, dictionary or list) then the
+		/// underlying data will be referenced and modifications to |value| will modify
+		/// this object.
 		/// </summary>
 		public unsafe virtual bool SetValue(string key, CefValue value)
 		{
@@ -331,8 +331,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Sets the value at the specified key as type double. Returns true (1) if
-		/// the value was set successfully.
+		/// Sets the value at the specified key as type double. Returns true (1) if the
+		/// value was set successfully.
 		/// </summary>
 		public unsafe virtual bool SetDouble(string key, double value)
 		{
@@ -344,8 +344,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Sets the value at the specified key as type string. Returns true (1) if
-		/// the value was set successfully.
+		/// Sets the value at the specified key as type string. Returns true (1) if the
+		/// value was set successfully.
 		/// </summary>
 		public unsafe virtual bool SetString(string key, string value)
 		{
@@ -359,11 +359,11 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Sets the value at the specified key as type binary. Returns true (1) if
-		/// the value was set successfully. If |value| is currently owned by another
-		/// object then the value will be copied and the |value| reference will not
-		/// change. Otherwise, ownership will be transferred to this object and the
-		/// |value| reference will be invalidated.
+		/// Sets the value at the specified key as type binary. Returns true (1) if the
+		/// value was set successfully. If |value| is currently owned by another object
+		/// then the value will be copied and the |value| reference will not change.
+		/// Otherwise, ownership will be transferred to this object and the |value|
+		/// reference will be invalidated.
 		/// </summary>
 		public unsafe virtual bool SetBinary(string key, CefBinaryValue value)
 		{
@@ -376,10 +376,10 @@ namespace CefNet
 
 		/// <summary>
 		/// Sets the value at the specified key as type dict. Returns true (1) if the
-		/// value was set successfully. If |value| is currently owned by another
-		/// object then the value will be copied and the |value| reference will not
-		/// change. Otherwise, ownership will be transferred to this object and the
-		/// |value| reference will be invalidated.
+		/// value was set successfully. If |value| is currently owned by another object
+		/// then the value will be copied and the |value| reference will not change.
+		/// Otherwise, ownership will be transferred to this object and the |value|
+		/// reference will be invalidated.
 		/// </summary>
 		public unsafe virtual bool SetDictionary(string key, CefDictionaryValue value)
 		{
@@ -392,10 +392,10 @@ namespace CefNet
 
 		/// <summary>
 		/// Sets the value at the specified key as type list. Returns true (1) if the
-		/// value was set successfully. If |value| is currently owned by another
-		/// object then the value will be copied and the |value| reference will not
-		/// change. Otherwise, ownership will be transferred to this object and the
-		/// |value| reference will be invalidated.
+		/// value was set successfully. If |value| is currently owned by another object
+		/// then the value will be copied and the |value| reference will not change.
+		/// Otherwise, ownership will be transferred to this object and the |value|
+		/// reference will be invalidated.
 		/// </summary>
 		public unsafe virtual bool SetList(string key, CefListValue value)
 		{

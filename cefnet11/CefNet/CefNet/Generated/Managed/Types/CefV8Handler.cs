@@ -60,9 +60,9 @@ namespace CefNet
 		/// <summary>
 		/// Handle execution of the function identified by |name|. |object| is the
 		/// receiver (&apos;this&apos; object) of the function. |arguments| is the list of
-		/// arguments passed to the function. If execution succeeds set |retval| to
-		/// the function return value. If execution fails set |exception| to the
-		/// exception that will be thrown. Return true (1) if execution was handled.
+		/// arguments passed to the function. If execution succeeds set |retval| to the
+		/// function return value. If execution fails set |exception| to the exception
+		/// that will be thrown. Return true (1) if execution was handled.
 		/// </summary>
 		protected internal unsafe virtual bool Execute(string name, CefV8Value @object, CefV8Value[] arguments, ref CefV8Value retval, ref string exception)
 		{

@@ -74,8 +74,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Moves the cursor to the specified file in the archive. If |caseSensitive|
-		/// is true (1) then the search will be case sensitive. Returns true (1) if
-		/// the cursor position was set successfully.
+		/// is true (1) then the search will be case sensitive. Returns true (1) if the
+		/// cursor position was set successfully.
 		/// </summary>
 		[NativeName("move_to_file")]
 		public unsafe int MoveToFile([Immutable]cef_string_t* fileName, int caseSensitive)

@@ -105,8 +105,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Gets the 1-based column offset on the line for the function call or 0
-		/// if unknown.
+		/// Gets the 1-based column offset on the line for the function call or 0 if
+		/// unknown.
 		/// </summary>
 		public unsafe virtual int Column
 		{

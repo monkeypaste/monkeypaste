@@ -99,8 +99,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Gets the globally unique identifier for this browser. This value is
-		/// also used as the tabId for extension APIs.
+		/// Gets the globally unique identifier for this browser. This value is also
+		/// used as the tabId for extension APIs.
 		/// </summary>
 		public unsafe virtual int Identifier
 		{

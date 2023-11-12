@@ -22,8 +22,8 @@ namespace CefNet
 {
 	/// <summary>
 	/// Screen information used when window rendering is disabled. This structure is
-	/// passed as a parameter to CefRenderHandler::GetScreenInfo and should be
-	/// filled in by the client.
+	/// passed as a parameter to CefRenderHandler::GetScreenInfo and should be filled
+	/// in by the client.
 	/// </summary>
 	/// <remarks>
 	/// Role: Proxy

@@ -110,8 +110,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Returns the response, or NULL if no response information is available.
-		/// Response information will only be available after the upload has
-		/// completed. The returned object is read-only and should not be modified.
+		/// Response information will only be available after the upload has completed.
+		/// The returned object is read-only and should not be modified.
 		/// </summary>
 		[NativeName("get_response")]
 		public unsafe cef_response_t* GetResponse()

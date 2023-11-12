@@ -90,8 +90,8 @@ namespace CefNet
 
 		/// <summary>
 		/// Gets the response, or NULL if no response information is available.
-		/// Response information will only be available after the upload has
-		/// completed. The returned object is read-only and should not be modified.
+		/// Response information will only be available after the upload has completed.
+		/// The returned object is read-only and should not be modified.
 		/// </summary>
 		public unsafe virtual CefResponse Response
 		{

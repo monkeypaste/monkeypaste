@@ -31,8 +31,8 @@ namespace CefNet
 		private cef_touch_event_t _instance;
 
 		/// <summary>
-		/// Id of a touch point. Must be unique per touch, can be any number except
-		/// -1. Note that a maximum of 16 concurrent touches will be tracked; touches
+		/// Id of a touch point. Must be unique per touch, can be any number except -1.
+		/// Note that a maximum of 16 concurrent touches will be tracked; touches
 		/// beyond that will be ignored.
 		/// </summary>
 		public int Id

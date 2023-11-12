@@ -63,10 +63,10 @@ namespace CefNet
 
 		/// <summary>
 		/// Called on the IO thread before a resource request is sent. The |browser|
-		/// and |frame| values represent the source of the request, and may be NULL
-		/// for requests originating from service workers or cef_urlrequest_t.
-		/// |request| cannot be modified in this callback. Return true (1) if the
-		/// specified cookie can be sent with the request or false (0) otherwise.
+		/// and |frame| values represent the source of the request, and may be NULL for
+		/// requests originating from service workers or cef_urlrequest_t. |request|
+		/// cannot be modified in this callback. Return true (1) if the specified
+		/// cookie can be sent with the request or false (0) otherwise.
 		/// </summary>
 		protected internal unsafe virtual bool CanSendCookie(CefBrowser browser, CefFrame frame, CefRequest request, CefCookie cookie)
 		{

@@ -126,8 +126,8 @@ namespace CefNet
 		/// you must also implement the cef_app_t::on_register_custom_schemes()
 		/// function in all processes. This function may be called multiple times to
 		/// change or remove the factory that matches the specified |scheme_name| and
-		/// optional |domain_name|. Returns false (0) if an error occurs. This
-		/// function may be called on any thread in the browser process.
+		/// optional |domain_name|. Returns false (0) if an error occurs. This function
+		/// may be called on any thread in the browser process.
 		/// </summary>
 		public unsafe virtual bool RegisterSchemeHandlerFactory(string schemeName, string domainName, CefSchemeHandlerFactory factory)
 		{
@@ -165,9 +165,9 @@ namespace CefNet
 		/// <summary>
 		/// Returns the value for the preference with the specified |name|. Returns
 		/// NULL if the preference does not exist. The returned object contains a copy
-		/// of the underlying preference value and modifications to the returned
-		/// object will not modify the underlying preference value. This function must
-		/// be called on the browser process UI thread.
+		/// of the underlying preference value and modifications to the returned object
+		/// will not modify the underlying preference value. This function must be
+		/// called on the browser process UI thread.
 		/// </summary>
 		public unsafe virtual CefValue GetPreference(string name)
 		{
@@ -209,10 +209,9 @@ namespace CefNet
 		/// <summary>
 		/// Set the |value| associated with preference |name|. Returns true (1) if the
 		/// value is set successfully and false (0) otherwise. If |value| is NULL the
-		/// preference will be restored to its default value. If setting the
-		/// preference fails then |error| will be populated with a detailed
-		/// description of the problem. This function must be called on the browser
-		/// process UI thread.
+		/// preference will be restored to its default value. If setting the preference
+		/// fails then |error| will be populated with a detailed description of the
+		/// problem. This function must be called on the browser process UI thread.
 		/// </summary>
 		public unsafe virtual bool SetPreference(string name, CefValue value, ref string error)
 		{
@@ -254,10 +253,10 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Clears all active and idle connections that Chromium currently has. This
-		/// is only recommended if you have released all other CEF objects but don&apos;t
-		/// yet want to call cef_shutdown(). If |callback| is non-NULL it will be
-		/// executed on the UI thread after completion.
+		/// Clears all active and idle connections that Chromium currently has. This is
+		/// only recommended if you have released all other CEF objects but don&apos;t yet
+		/// want to call cef_shutdown(). If |callback| is non-NULL it will be executed
+		/// on the UI thread after completion.
 		/// </summary>
 		public unsafe virtual void CloseAllConnections(CefCompletionCallback callback)
 		{
@@ -291,10 +290,10 @@ namespace CefNet
 		/// contents that would otherwise be read from the &quot;manifest.json&quot; file on
 		/// disk.
 		/// The loaded extension will be accessible in all contexts sharing the same
-		/// storage (HasExtension returns true (1)). However, only the context on
-		/// which this function was called is considered the loader (DidLoadExtension
-		/// returns true (1)) and only the loader will receive
-		/// cef_request_context_handler_t callbacks for the extension.
+		/// storage (HasExtension returns true (1)). However, only the context on which
+		/// this function was called is considered the loader (DidLoadExtension returns
+		/// true (1)) and only the loader will receive cef_request_context_handler_t
+		/// callbacks for the extension.
 		/// cef_extension_handler_t::OnExtensionLoaded will be called on load success
 		/// or cef_extension_handler_t::OnExtensionLoadFailed will be called on load
 		/// failure.
@@ -333,8 +332,8 @@ namespace CefNet
 		/// <summary>
 		/// Returns true (1) if this context was used to load the extension identified
 		/// by |extension_id|. Other contexts sharing the same storage will also have
-		/// access to the extension (see HasExtension). This function must be called
-		/// on the browser process UI thread.
+		/// access to the extension (see HasExtension). This function must be called on
+		/// the browser process UI thread.
 		/// </summary>
 		public unsafe virtual bool DidLoadExtension(string extensionId)
 		{
@@ -362,9 +361,9 @@ namespace CefNet
 
 		/// <summary>
 		/// Retrieve the list of all extensions that this context has access to (see
-		/// HasExtension). |extension_ids| will be populated with the list of
-		/// extension ID values. Returns true (1) on success. This function must be
-		/// called on the browser process UI thread.
+		/// HasExtension). |extension_ids| will be populated with the list of extension
+		/// ID values. Returns true (1) on success. This function must be called on the
+		/// browser process UI thread.
 		/// </summary>
 		public unsafe virtual bool GetExtensions(CefStringList extensionIds)
 		{
@@ -386,9 +385,9 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Returns the MediaRouter object associated with this context.  If
-		/// |callback| is non-NULL it will be executed asnychronously on the UI thread
-		/// after the manager&apos;s context has been initialized.
+		/// Returns the MediaRouter object associated with this context.  If |callback|
+		/// is non-NULL it will be executed asnychronously on the UI thread after the
+		/// manager&apos;s context has been initialized.
 		/// </summary>
 		public unsafe virtual CefMediaRouter GetMediaRouter(CefCompletionCallback callback)
 		{

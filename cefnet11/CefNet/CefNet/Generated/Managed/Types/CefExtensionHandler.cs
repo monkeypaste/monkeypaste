@@ -23,8 +23,7 @@ namespace CefNet
 	/// <summary>
 	/// Implement this structure to handle events related to browser extensions. The
 	/// functions of this structure will be called on the UI thread. See
-	/// cef_request_context_t::LoadExtension for information about extension
-	/// loading.
+	/// cef_request_context_t::LoadExtension for information about extension loading.
 	/// </summary>
 	/// <remarks>
 	/// Role: Handler
@@ -183,14 +182,16 @@ namespace CefNet
 		/// visible window and cannot be displayed. |extension| is the extension that
 		/// is loading the background script. |url| is an internally generated
 		/// reference to an HTML page that will be used to load the background script
-		/// via a &quot;&lt;script&gt;&quot; src attribute. To allow creation of the browser
-		/// optionally modify |client| and |settings| and return false (0). To cancel
-		/// creation of the browser (and consequently cancel load of the background
-		/// script) return true (1). Successful creation will be indicated by a call
-		/// to cef_life_span_handler_t::OnAfterCreated, and
-		/// cef_browser_host_t::IsBackgroundHost will return true (1) for the
-		/// resulting browser. See https://developer.chrome.com/extensions/event_pages
-		/// for more information about extension background script usage.
+		/// via a
+		/// &lt;script
+		/// &gt; src attribute. To allow creation of the browser optionally
+		/// modify |client| and |settings| and return false (0). To cancel creation of
+		/// the browser (and consequently cancel load of the background script) return
+		/// true (1). Successful creation will be indicated by a call to
+		/// cef_life_span_handler_t::OnAfterCreated, and
+		/// cef_browser_host_t::IsBackgroundHost will return true (1) for the resulting
+		/// browser. See https://developer.chrome.com/extensions/event_pages for more
+		/// information about extension background script usage.
 		/// </summary>
 		protected internal unsafe virtual bool OnBeforeBackgroundBrowser(CefExtension extension, string url, ref CefClient client, CefBrowserSettings settings)
 		{
@@ -224,19 +225,19 @@ namespace CefNet
 		extern bool ICefExtensionHandlerPrivate.AvoidOnBeforeBrowser();
 
 		/// <summary>
-		/// Called when an extension API (e.g. chrome.tabs.create) requests creation
-		/// of a new browser. |extension| and |browser| are the source of the API
-		/// call. |active_browser| may optionally be specified via the windowId
-		/// property or returned via the get_active_browser() callback and provides
-		/// the default |client| and |settings| values for the new browser. |index| is
-		/// the position value optionally specified via the index property. |url| is
-		/// the URL that will be loaded in the browser. |active| is true (1) if the
-		/// new browser should be active when opened.  To allow creation of the
-		/// browser optionally modify |windowInfo|, |client| and |settings| and return
-		/// false (0). To cancel creation of the browser return true (1). Successful
-		/// creation will be indicated by a call to
-		/// cef_life_span_handler_t::OnAfterCreated. Any modifications to |windowInfo|
-		/// will be ignored if |active_browser| is wrapped in a cef_browser_view_t.
+		/// Called when an extension API (e.g. chrome.tabs.create) requests creation of
+		/// a new browser. |extension| and |browser| are the source of the API call.
+		/// |active_browser| may optionally be specified via the windowId property or
+		/// returned via the get_active_browser() callback and provides the default
+		/// |client| and |settings| values for the new browser. |index| is the position
+		/// value optionally specified via the index property. |url| is the URL that
+		/// will be loaded in the browser. |active| is true (1) if the new browser
+		/// should be active when opened.  To allow creation of the browser optionally
+		/// modify |windowInfo|, |client| and |settings| and return false (0). To
+		/// cancel creation of the browser return true (1). Successful creation will be
+		/// indicated by a call to cef_life_span_handler_t::OnAfterCreated. Any
+		/// modifications to |windowInfo| will be ignored if |active_browser| is
+		/// wrapped in a cef_browser_view_t.
 		/// </summary>
 		protected internal unsafe virtual bool OnBeforeBrowser(CefExtension extension, CefBrowser browser, CefBrowser activeBrowser, int index, string url, bool active, CefWindowInfo windowInfo, ref CefClient client, CefBrowserSettings settings)
 		{
@@ -274,11 +275,11 @@ namespace CefNet
 		/// <summary>
 		/// Called when no tabId is specified to an extension API call that accepts a
 		/// tabId parameter (e.g. chrome.tabs.*). |extension| and |browser| are the
-		/// source of the API call. Return the browser that will be acted on by the
-		/// API call or return NULL to act on |browser|. The returned browser must
-		/// share the same cef_request_context_t as |browser|. Incognito browsers
-		/// should not be considered unless the source extension has incognito access
-		/// enabled, in which case |include_incognito| will be true (1).
+		/// source of the API call. Return the browser that will be acted on by the API
+		/// call or return NULL to act on |browser|. The returned browser must share
+		/// the same cef_request_context_t as |browser|. Incognito browsers should not
+		/// be considered unless the source extension has incognito access enabled, in
+		/// which case |include_incognito| will be true (1).
 		/// </summary>
 		protected internal unsafe virtual CefBrowser GetActiveBrowser(CefExtension extension, CefBrowser browser, bool includeIncognito)
 		{
@@ -351,15 +352,14 @@ namespace CefNet
 		extern bool ICefExtensionHandlerPrivate.AvoidGetExtensionResource();
 
 		/// <summary>
-		/// Called to retrieve an extension resource that would normally be loaded
-		/// from disk (e.g. if a file parameter is specified to
-		/// chrome.tabs.executeScript). |extension| and |browser| are the source of
-		/// the resource request. |file| is the requested relative file path. To
-		/// handle the resource request return true (1) and execute |callback| either
-		/// synchronously or asynchronously. For the default behavior which reads the
-		/// resource from the extension directory on disk return false (0).
-		/// Localization substitutions will not be applied to resources handled via
-		/// this function.
+		/// Called to retrieve an extension resource that would normally be loaded from
+		/// disk (e.g. if a file parameter is specified to chrome.tabs.executeScript).
+		/// |extension| and |browser| are the source of the resource request. |file| is
+		/// the requested relative file path. To handle the resource request return
+		/// true (1) and execute |callback| either synchronously or asynchronously. For
+		/// the default behavior which reads the resource from the extension directory
+		/// on disk return false (0). Localization substitutions will not be applied to
+		/// resources handled via this function.
 		/// </summary>
 		protected internal unsafe virtual bool GetExtensionResource(CefExtension extension, CefBrowser browser, string file, CefGetExtensionResourceCallback callback)
 		{

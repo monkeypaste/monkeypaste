@@ -131,8 +131,8 @@ namespace CefNet.CApi
 		public void* get_column;
 
 		/// <summary>
-		/// Returns the 1-based column offset on the line for the function call or 0
-		/// if unknown.
+		/// Returns the 1-based column offset on the line for the function call or 0 if
+		/// unknown.
 		/// </summary>
 		[NativeName("get_column")]
 		public unsafe int GetColumn()

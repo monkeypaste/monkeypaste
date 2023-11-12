@@ -21,8 +21,8 @@ using CefNet.Internal;
 namespace CefNet
 {
 	/// <summary>
-	/// Structure used to handle file downloads. The functions of this structure
-	/// will called on the browser process UI thread.
+	/// Structure used to handle file downloads. The functions of this structure will
+	/// called on the browser process UI thread.
 	/// </summary>
 	/// <remarks>
 	/// Role: Handler
@@ -67,9 +67,9 @@ namespace CefNet
 		/// <summary>
 		/// Called before a download begins in response to a user-initiated action
 		/// (e.g. alt + link click or link click that returns a `Content-Disposition:
-		/// attachment` response from the server). |url| is the target download URL
-		/// and |request_function| is the target function (GET, POST, etc). Return
-		/// true (1) to proceed with the download or false (0) to cancel the download.
+		/// attachment` response from the server). |url| is the target download URL and
+		/// |request_function| is the target function (GET, POST, etc). Return true (1)
+		/// to proceed with the download or false (0) to cancel the download.
 		/// </summary>
 		protected internal unsafe virtual bool CanDownload(CefBrowser browser, string url, string requestMethod)
 		{
@@ -100,8 +100,8 @@ namespace CefNet
 		extern bool ICefDownloadHandlerPrivate.AvoidOnBeforeDownload();
 
 		/// <summary>
-		/// Called before a download begins. |suggested_name| is the suggested name
-		/// for the download file. By default the download will be canceled. Execute
+		/// Called before a download begins. |suggested_name| is the suggested name for
+		/// the download file. By default the download will be canceled. Execute
 		/// |callback| either asynchronously or in this function to continue the
 		/// download if desired. Do not keep a reference to |download_item| outside of
 		/// this function.

@@ -153,7 +153,7 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Called for global uncaught exceptions in a frame. Execution of this
 		/// callback is disabled by default. To enable set
-		/// cef_settings_t.uncaught_exception_stack_size &gt; 0.
+		/// CefSettings.uncaught_exception_stack_size &gt; 0.
 		/// </summary>
 		[NativeName("on_uncaught_exception")]
 		public unsafe void OnUncaughtException(cef_browser_t* browser, cef_frame_t* frame, cef_v8context_t* context, cef_v8exception_t* exception, cef_v8stack_trace_t* stackTrace)
@@ -172,10 +172,10 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Called when a new node in the the browser gets focus. The |node| value may
 		/// be NULL if no specific node has gained focus. The node object passed to
-		/// this function represents a snapshot of the DOM at the time this function
-		/// is executed. DOM objects are only valid for the scope of this function. Do
-		/// not keep references to or attempt to access any DOM objects outside the
-		/// scope of this function.
+		/// this function represents a snapshot of the DOM at the time this function is
+		/// executed. DOM objects are only valid for the scope of this function. Do not
+		/// keep references to or attempt to access any DOM objects outside the scope
+		/// of this function.
 		/// </summary>
 		[NativeName("on_focused_node_changed")]
 		public unsafe void OnFocusedNodeChanged(cef_browser_t* browser, cef_frame_t* frame, cef_domnode_t* node)
@@ -192,9 +192,9 @@ namespace CefNet.CApi
 		public void* on_process_message_received;
 
 		/// <summary>
-		/// Called when a new message is received from a different process. Return
-		/// true (1) if the message was handled or false (0) otherwise. It is safe to
-		/// keep a reference to |message| outside of this callback.
+		/// Called when a new message is received from a different process. Return true
+		/// (1) if the message was handled or false (0) otherwise. It is safe to keep a
+		/// reference to |message| outside of this callback.
 		/// </summary>
 		[NativeName("on_process_message_received")]
 		public unsafe int OnProcessMessageReceived(cef_browser_t* browser, cef_frame_t* frame, CefProcessId source_process, cef_process_message_t* message)

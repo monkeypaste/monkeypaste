@@ -76,8 +76,8 @@ namespace CefNet.CApi
 		public void* get_manifest;
 
 		/// <summary>
-		/// Returns the extension manifest contents as a cef_dictionary_value_t
-		/// object. See https://developer.chrome.com/extensions/manifest for details.
+		/// Returns the extension manifest contents as a cef_dictionary_value_t object.
+		/// See https://developer.chrome.com/extensions/manifest for details.
 		/// </summary>
 		[NativeName("get_manifest")]
 		public unsafe cef_dictionary_value_t* GetManifest()

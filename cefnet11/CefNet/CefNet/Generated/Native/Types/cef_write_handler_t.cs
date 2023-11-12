@@ -53,9 +53,8 @@ namespace CefNet.CApi
 		public void* seek;
 
 		/// <summary>
-		/// Seek to the specified offset position. |whence| may be any one of
-		/// SEEK_CUR, SEEK_END or SEEK_SET. Return zero on success and non-zero on
-		/// failure.
+		/// Seek to the specified offset position. |whence| may be any one of SEEK_CUR,
+		/// SEEK_END or SEEK_SET. Return zero on success and non-zero on failure.
 		/// </summary>
 		[NativeName("seek")]
 		public unsafe int Seek(long offset, int whence)
@@ -107,8 +106,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Return true (1) if this handler performs work like accessing the file
-		/// system which may block. Used as a hint for determining the thread to
-		/// access the handler from.
+		/// system which may block. Used as a hint for determining the thread to access
+		/// the handler from.
 		/// </summary>
 		[NativeName("may_block")]
 		public unsafe int MayBlock()

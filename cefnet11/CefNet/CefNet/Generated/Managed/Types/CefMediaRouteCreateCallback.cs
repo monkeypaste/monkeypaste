@@ -21,8 +21,8 @@ using CefNet.Internal;
 namespace CefNet
 {
 	/// <summary>
-	/// Callback structure for cef_media_router_t::CreateRoute. The functions of
-	/// this structure will be called on the browser process UI thread.
+	/// Callback structure for cef_media_router_t::CreateRoute. The functions of this
+	/// structure will be called on the browser process UI thread.
 	/// </summary>
 	/// <remarks>
 	/// Role: Handler
@@ -57,9 +57,9 @@ namespace CefNet
 		extern bool ICefMediaRouteCreateCallbackPrivate.AvoidOnMediaRouteCreateFinished();
 
 		/// <summary>
-		/// Method that will be executed when the route creation has finished.
-		/// |result| will be CEF_MRCR_OK if the route creation succeeded. |error| will
-		/// be a description of the error if the route creation failed. |route| is the
+		/// Method that will be executed when the route creation has finished. |result|
+		/// will be CEF_MRCR_OK if the route creation succeeded. |error| will be a
+		/// description of the error if the route creation failed. |route| is the
 		/// resulting route, or NULL if the route creation failed.
 		/// </summary>
 		protected internal unsafe virtual void OnMediaRouteCreateFinished(CefMediaRouteCreateResult result, string error, CefMediaRoute route)

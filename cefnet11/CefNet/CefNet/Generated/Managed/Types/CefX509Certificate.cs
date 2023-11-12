@@ -39,9 +39,9 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Gets the subject of the X.509 certificate. For HTTPS server
-		/// certificates this represents the web server.  The common name of the
-		/// subject should match the host name of the web server.
+		/// Gets the subject of the X.509 certificate. For HTTPS server certificates
+		/// this represents the web server.  The common name of the subject should
+		/// match the host name of the web server.
 		/// </summary>
 		public unsafe virtual CefX509CertPrincipal Subject
 		{
@@ -133,9 +133,9 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Returns the DER encoded data for the certificate issuer chain. If we
-		/// failed to encode a certificate in the chain it is still present in the
-		/// array but is an NULL string.
+		/// Returns the DER encoded data for the certificate issuer chain. If we failed
+		/// to encode a certificate in the chain it is still present in the array but
+		/// is an NULL string.
 		/// </summary>
 		public unsafe virtual void GetDEREncodedIssuerChain(ref long chainCount, ref CefBinaryValue[] chain)
 		{
@@ -158,9 +158,9 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Returns the PEM encoded data for the certificate issuer chain. If we
-		/// failed to encode a certificate in the chain it is still present in the
-		/// array but is an NULL string.
+		/// Returns the PEM encoded data for the certificate issuer chain. If we failed
+		/// to encode a certificate in the chain it is still present in the array but
+		/// is an NULL string.
 		/// </summary>
 		public unsafe virtual void GetPEMEncodedIssuerChain(ref long chainCount, ref CefBinaryValue[] chain)
 		{

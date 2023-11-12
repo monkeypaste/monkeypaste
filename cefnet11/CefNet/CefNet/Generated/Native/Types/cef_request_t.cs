@@ -124,9 +124,9 @@ namespace CefNet.CApi
 		public void* set_referrer;
 
 		/// <summary>
-		/// Set the referrer URL and policy. If non-NULL the referrer URL must be
-		/// fully qualified with an HTTP or HTTPS scheme component. Any username,
-		/// password or ref component will be removed.
+		/// Set the referrer URL and policy. If non-NULL the referrer URL must be fully
+		/// qualified with an HTTP or HTTPS scheme component. Any username, password or
+		/// ref component will be removed.
 		/// </summary>
 		[NativeName("set_referrer")]
 		public unsafe void SetReferrer([Immutable]cef_string_t* referrer_url, CefReferrerPolicy policy)
@@ -268,9 +268,9 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Set the header |name| to |value|. If |overwrite| is true (1) any existing
-		/// values will be replaced with the new value. If |overwrite| is false (0)
-		/// any existing values will not be overwritten. The Referer value cannot be
-		/// set using this function.
+		/// values will be replaced with the new value. If |overwrite| is false (0) any
+		/// existing values will not be overwritten. The Referer value cannot be set
+		/// using this function.
 		/// </summary>
 		[NativeName("set_header_by_name")]
 		public unsafe void SetHeaderByName([Immutable]cef_string_t* name, [Immutable]cef_string_t* value, int overwrite)
@@ -415,9 +415,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Returns the globally unique identifier for this request or 0 if not
-		/// specified. Can be used by cef_resource_request_handler_t implementations
-		/// in the browser process to track a single request across multiple
-		/// callbacks.
+		/// specified. Can be used by cef_resource_request_handler_t implementations in
+		/// the browser process to track a single request across multiple callbacks.
 		/// </summary>
 		[NativeName("get_identifier")]
 		public unsafe ulong GetIdentifier()

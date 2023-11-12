@@ -35,9 +35,9 @@ namespace CefNet.CApi
 		public void* get_subject;
 
 		/// <summary>
-		/// Returns the subject of the X.509 certificate. For HTTPS server
-		/// certificates this represents the web server.  The common name of the
-		/// subject should match the host name of the web server.
+		/// Returns the subject of the X.509 certificate. For HTTPS server certificates
+		/// this represents the web server.  The common name of the subject should
+		/// match the host name of the web server.
 		/// </summary>
 		[NativeName("get_subject")]
 		public unsafe cef_x509cert_principal_t* GetSubject()
@@ -177,9 +177,9 @@ namespace CefNet.CApi
 		public void* get_derencoded_issuer_chain;
 
 		/// <summary>
-		/// Returns the DER encoded data for the certificate issuer chain. If we
-		/// failed to encode a certificate in the chain it is still present in the
-		/// array but is an NULL string.
+		/// Returns the DER encoded data for the certificate issuer chain. If we failed
+		/// to encode a certificate in the chain it is still present in the array but
+		/// is an NULL string.
 		/// </summary>
 		[NativeName("get_derencoded_issuer_chain")]
 		public unsafe void GetDEREncodedIssuerChain(UIntPtr* chainCount, cef_binary_value_t** chain)
@@ -196,9 +196,9 @@ namespace CefNet.CApi
 		public void* get_pemencoded_issuer_chain;
 
 		/// <summary>
-		/// Returns the PEM encoded data for the certificate issuer chain. If we
-		/// failed to encode a certificate in the chain it is still present in the
-		/// array but is an NULL string.
+		/// Returns the PEM encoded data for the certificate issuer chain. If we failed
+		/// to encode a certificate in the chain it is still present in the array but
+		/// is an NULL string.
 		/// </summary>
 		[NativeName("get_pemencoded_issuer_chain")]
 		public unsafe void GetPEMEncodedIssuerChain(UIntPtr* chainCount, cef_binary_value_t** chain)

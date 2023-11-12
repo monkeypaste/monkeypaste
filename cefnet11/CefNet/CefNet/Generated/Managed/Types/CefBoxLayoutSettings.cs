@@ -157,9 +157,8 @@ namespace CefNet
 		/// Default flex for views when none is specified via CefBoxLayout methods.
 		/// Using the preferred size as the basis, free space along the main axis is
 		/// distributed to views in the ratio of their flex weights. Similarly, if the
-		/// views will overflow the parent, space is subtracted in these ratios. A
-		/// flex of 0 means this view is not resized. Flex values must not be
-		/// negative.
+		/// views will overflow the parent, space is subtracted in these ratios. A flex
+		/// of 0 means this view is not resized. Flex values must not be negative.
 		/// </summary>
 		public int DefaultFlex
 		{

@@ -38,10 +38,10 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called on the IO thread before a resource request is sent. The |browser|
-		/// and |frame| values represent the source of the request, and may be NULL
-		/// for requests originating from service workers or cef_urlrequest_t.
-		/// |request| cannot be modified in this callback. Return true (1) if the
-		/// specified cookie can be sent with the request or false (0) otherwise.
+		/// and |frame| values represent the source of the request, and may be NULL for
+		/// requests originating from service workers or cef_urlrequest_t. |request|
+		/// cannot be modified in this callback. Return true (1) if the specified
+		/// cookie can be sent with the request or false (0) otherwise.
 		/// </summary>
 		[NativeName("can_send_cookie")]
 		public unsafe int CanSendCookie(cef_browser_t* browser, cef_frame_t* frame, cef_request_t* request, [Immutable]cef_cookie_t* cookie)

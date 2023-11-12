@@ -19,8 +19,7 @@ using CefNet.WinApi;
 namespace CefNet.CApi
 {
 	/// <summary>
-	/// Structure representing a binary value. Can be used on any process and
-	/// thread.
+	/// Structure representing a binary value. Can be used on any process and thread.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe partial struct cef_binary_value_t
@@ -36,10 +35,10 @@ namespace CefNet.CApi
 		public void* is_valid;
 
 		/// <summary>
-		/// Returns true (1) if this object is valid. This object may become invalid
-		/// if the underlying data is owned by another object (e.g. list or
-		/// dictionary) and that other object is then modified or destroyed. Do not
-		/// call any other functions if this function returns false (0).
+		/// Returns true (1) if this object is valid. This object may become invalid if
+		/// the underlying data is owned by another object (e.g. list or dictionary)
+		/// and that other object is then modified or destroyed. Do not call any other
+		/// functions if this function returns false (0).
 		/// </summary>
 		[NativeName("is_valid")]
 		public unsafe int IsValid()
@@ -109,8 +108,7 @@ namespace CefNet.CApi
 		public void* copy;
 
 		/// <summary>
-		/// Returns a copy of this object. The data in this object will also be
-		/// copied.
+		/// Returns a copy of this object. The data in this object will also be copied.
 		/// </summary>
 		[NativeName("copy")]
 		public unsafe cef_binary_value_t* Copy()

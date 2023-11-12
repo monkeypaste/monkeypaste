@@ -57,9 +57,9 @@ namespace CefNet
 		extern bool ICefRunFileDialogCallbackPrivate.AvoidOnFileDialogDismissed();
 
 		/// <summary>
-		/// Called asynchronously after the file dialog is dismissed. |file_paths|
-		/// will be a single value or a list of values depending on the dialog mode.
-		/// If the selection was cancelled |file_paths| will be NULL.
+		/// Called asynchronously after the file dialog is dismissed. |file_paths| will
+		/// be a single value or a list of values depending on the dialog mode. If the
+		/// selection was cancelled |file_paths| will be NULL.
 		/// </summary>
 		protected internal unsafe virtual void OnFileDialogDismissed(CefStringList filePaths)
 		{

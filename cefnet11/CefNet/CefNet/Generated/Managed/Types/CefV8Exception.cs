@@ -21,8 +21,8 @@ using CefNet.Internal;
 namespace CefNet
 {
 	/// <summary>
-	/// Structure representing a V8 exception. The functions of this structure may
-	/// be called on any render process thread.
+	/// Structure representing a V8 exception. The functions of this structure may be
+	/// called on any render process thread.
 	/// </summary>
 	/// <remarks>
 	/// Role: Proxy
@@ -77,8 +77,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Gets the 1-based number of the line where the error occurred or 0 if
-		/// the line number is unknown.
+		/// Gets the 1-based number of the line where the error occurred or 0 if the
+		/// line number is unknown.
 		/// </summary>
 		public unsafe virtual int LineNumber
 		{

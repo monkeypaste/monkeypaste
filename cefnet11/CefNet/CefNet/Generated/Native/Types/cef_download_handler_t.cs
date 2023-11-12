@@ -19,8 +19,8 @@ using CefNet.WinApi;
 namespace CefNet.CApi
 {
 	/// <summary>
-	/// Structure used to handle file downloads. The functions of this structure
-	/// will called on the browser process UI thread.
+	/// Structure used to handle file downloads. The functions of this structure will
+	/// called on the browser process UI thread.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe partial struct cef_download_handler_t
@@ -38,9 +38,9 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Called before a download begins in response to a user-initiated action
 		/// (e.g. alt + link click or link click that returns a `Content-Disposition:
-		/// attachment` response from the server). |url| is the target download URL
-		/// and |request_function| is the target function (GET, POST, etc). Return
-		/// true (1) to proceed with the download or false (0) to cancel the download.
+		/// attachment` response from the server). |url| is the target download URL and
+		/// |request_function| is the target function (GET, POST, etc). Return true (1)
+		/// to proceed with the download or false (0) to cancel the download.
 		/// </summary>
 		[NativeName("can_download")]
 		public unsafe int CanDownload(cef_browser_t* browser, [Immutable]cef_string_t* url, [Immutable]cef_string_t* request_method)
@@ -57,8 +57,8 @@ namespace CefNet.CApi
 		public void* on_before_download;
 
 		/// <summary>
-		/// Called before a download begins. |suggested_name| is the suggested name
-		/// for the download file. By default the download will be canceled. Execute
+		/// Called before a download begins. |suggested_name| is the suggested name for
+		/// the download file. By default the download will be canceled. Execute
 		/// |callback| either asynchronously or in this function to continue the
 		/// download if desired. Do not keep a reference to |download_item| outside of
 		/// this function.

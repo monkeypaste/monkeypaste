@@ -44,8 +44,8 @@ namespace CefNet
 
 		/// <summary>
 		/// Gets the task runner associated with this context. V8 handles can only
-		/// be accessed from the thread on which they are created. This property can
-		/// be called on any render process thread.
+		/// be accessed from the thread on which they are created. This property can be
+		/// called on any render process thread.
 		/// </summary>
 		public unsafe virtual CefTaskRunner TaskRunner
 		{
@@ -133,11 +133,11 @@ namespace CefNet
 
 		/// <summary>
 		/// Execute a string of JavaScript code in this V8 context. The |script_url|
-		/// parameter is the URL where the script in question can be found, if any.
-		/// The |start_line| parameter is the base line number to use for error
-		/// reporting. On success |retval| will be set to the return value, if any,
-		/// and the function will return true (1). On failure |exception| will be set
-		/// to the exception, if any, and the function will return false (0).
+		/// parameter is the URL where the script in question can be found, if any. The
+		/// |start_line| parameter is the base line number to use for error reporting.
+		/// On success |retval| will be set to the return value, if any, and the
+		/// function will return true (1). On failure |exception| will be set to the
+		/// exception, if any, and the function will return false (0).
 		/// </summary>
 		public unsafe virtual bool Eval(string code, string scriptUrl, int startLine, ref CefV8Value retval, ref CefV8Exception exception)
 		{

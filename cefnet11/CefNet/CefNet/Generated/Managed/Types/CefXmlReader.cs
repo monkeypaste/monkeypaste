@@ -21,9 +21,9 @@ using CefNet.Internal;
 namespace CefNet
 {
 	/// <summary>
-	/// Structure that supports the reading of XML data via the libxml streaming
-	/// API. The functions of this structure should only be called on the thread
-	/// that creates the object.
+	/// Structure that supports the reading of XML data via the libxml streaming API.
+	/// The functions of this structure should only be called on the thread that
+	/// creates the object.
 	/// </summary>
 	/// <remarks>
 	/// Role: Proxy
@@ -153,8 +153,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether the node represents an NULL element. &quot;&lt;a/&gt;&quot; is
-		/// considered NULL but &quot;&lt;a&gt;&lt;/a&gt;&quot; is not.
+		/// Gets a value indicating whether the node represents an NULL element. &lt;a /&gt;is considered
+		/// NULL but &lt;a&gt;&lt;/a&gt;is not.
 		/// </summary>
 		public unsafe virtual bool IsEmptyElement
 		{
@@ -338,8 +338,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Moves the cursor to the next attribute in the current element. Returns
-		/// true (1) if the cursor position was set successfully.
+		/// Moves the cursor to the next attribute in the current element. Returns true
+		/// (1) if the cursor position was set successfully.
 		/// </summary>
 		public unsafe virtual bool MoveToNextAttribute()
 		{

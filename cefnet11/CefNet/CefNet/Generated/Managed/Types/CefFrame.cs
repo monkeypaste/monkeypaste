@@ -216,8 +216,8 @@ namespace CefNet
 
 		/// <summary>
 		/// Save this frame&apos;s HTML source to a temporary file and open it in the
-		/// default text viewing application. This function can only be called from
-		/// the browser process.
+		/// default text viewing application. This function can only be called from the
+		/// browser process.
 		/// </summary>
 		public unsafe virtual void ViewSource()
 		{
@@ -272,10 +272,10 @@ namespace CefNet
 
 		/// <summary>
 		/// Execute a string of JavaScript code in this frame. The |script_url|
-		/// parameter is the URL where the script in question can be found, if any.
-		/// The renderer may request this URL to show the developer the source of the
-		/// error.  The |start_line| parameter is the base line number to use for
-		/// error reporting.
+		/// parameter is the URL where the script in question can be found, if any. The
+		/// renderer may request this URL to show the developer the source of the
+		/// error.  The |start_line| parameter is the base line number to use for error
+		/// reporting.
 		/// </summary>
 		public unsafe virtual void ExecuteJavaScript(string code, string scriptUrl, int startLine)
 		{
@@ -303,8 +303,8 @@ namespace CefNet
 		/// Create a new URL request that will be treated as originating from this
 		/// frame and the associated browser. This request may be intercepted by the
 		/// client via cef_resource_request_handler_t or cef_scheme_handler_factory_t.
-		/// Use cef_urlrequest_t::Create instead if you do not want the request to
-		/// have this association, in which case it may be handled differently (see
+		/// Use cef_urlrequest_t::Create instead if you do not want the request to have
+		/// this association, in which case it may be handled differently (see
 		/// documentation on that function). Requests may originate from both the
 		/// browser process and the render process.
 		/// For requests originating from the browser process:
@@ -312,10 +312,10 @@ namespace CefNet
 		/// PDE_TYPE_BYTES.
 		/// For requests originating from the render process:
 		/// - POST data may only contain a single element of type PDE_TYPE_BYTES.
-		/// - If the response contains Content-Disposition or Mime-Type header
-		/// values that would not normally be rendered then the response may
-		/// receive special handling inside the browser (for example, via the
-		/// file download code path instead of the URL request code path).
+		/// - If the response contains Content-Disposition or Mime-Type header values
+		/// that would not normally be rendered then the response may receive
+		/// special handling inside the browser (for example, via the file download
+		/// code path instead of the URL request code path).
 		/// The |request| object will be marked as read-only after calling this
 		/// function.
 		/// </summary>

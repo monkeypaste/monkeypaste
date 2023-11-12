@@ -22,50 +22,45 @@ namespace CefNet.CApi
 	/// Implement this structure to handle events related to cef_frame_t life span.
 	/// The order of callbacks is:
 	/// (1) During initial cef_browser_host_t creation and navigation of the main
-	/// frame: - cef_frame_handler_t::OnFrameCreated =&gt; The initial main frame
-	/// object has been
+	/// frame: - cef_frame_handler_t::OnFrameCreated =&gt; The initial main frame object
+	/// has been
 	/// created. Any commands will be queued until the frame is attached.
 	/// - cef_frame_handler_t::OnMainFrameChanged =&gt; The initial main frame object
 	/// has
 	/// been assigned to the browser.
-	/// - cef_life_span_handler_t::OnAfterCreated =&gt; The browser is now valid and
-	/// can be
+	/// - cef_life_span_handler_t::OnAfterCreated =&gt; The browser is now valid and can
+	/// be
 	/// used.
 	/// - cef_frame_handler_t::OnFrameAttached =&gt; The initial main frame object is
 	/// now
 	/// connected to its peer in the renderer process. Commands can be routed.
 	/// (2) During further cef_browser_host_t navigation/loading of the main frame
-	/// and/or sub-frames:
-	/// - cef_frame_handler_t::OnFrameCreated =&gt; A new main frame or sub-frame
-	/// object
-	/// has been created. Any commands will be queued until the frame is attached.
+	/// and/or sub-frames: - cef_frame_handler_t::OnFrameCreated =&gt; A new main frame
+	/// or sub-frame object has
+	/// been created. Any commands will be queued until the frame is attached.
 	/// - cef_frame_handler_t::OnFrameAttached =&gt; A new main frame or sub-frame
-	/// object
-	/// is now connected to its peer in the renderer process. Commands can be
-	/// routed.
-	/// - cef_frame_handler_t::OnFrameDetached =&gt; An existing main frame or sub-
-	/// frame
-	/// object has lost its connection to the renderer process. If multiple
-	/// objects are detached at the same time then notifications will be sent for
-	/// any sub-frame objects before the main frame object. Commands can no longer
-	/// be routed and will be discarded.
-	/// - cef_frame_handler_t::OnMainFrameChanged =&gt; A new main frame object has
-	/// been
+	/// object is
+	/// now connected to its peer in the renderer process. Commands can be routed.
+	/// - cef_frame_handler_t::OnFrameDetached =&gt; An existing main frame or sub-frame
+	/// object has lost its connection to the renderer process. If multiple objects
+	/// are detached at the same time then notifications will be sent for any
+	/// sub-frame objects before the main frame object. Commands can no longer be
+	/// routed and will be discarded.
+	/// - cef_frame_handler_t::OnMainFrameChanged =&gt; A new main frame object has been
 	/// assigned to the browser. This will only occur with cross-origin navigation
 	/// or re-navigation after renderer process termination (due to crashes, etc).
 	/// (3) During final cef_browser_host_t destruction of the main frame: -
-	/// cef_frame_handler_t::OnFrameDetached =&gt; Any sub-frame objects have lost
-	/// their
+	/// cef_frame_handler_t::OnFrameDetached =&gt; Any sub-frame objects have lost their
 	/// connection to the renderer process. Commands can no longer be routed and
 	/// will be discarded.
-	/// - cef_life_span_handler_t::OnBeforeClose =&gt; The browser has been destroyed.
-	/// - cef_frame_handler_t::OnFrameDetached =&gt; The main frame object have lost
-	/// its
+	/// - cef_life_span_handler_t::OnBeforeClose =&gt; The browser has been destroyed. -
+	/// cef_frame_handler_t::OnFrameDetached =&gt; The main frame object have lost its
 	/// connection to the renderer process. Notifications will be sent for any
 	/// sub-frame objects before the main frame object. Commands can no longer be
 	/// routed and will be discarded.
 	/// - cef_frame_handler_t::OnMainFrameChanged =&gt; The final main frame object has
-	/// been removed from the browser.
+	/// been
+	/// removed from the browser.
 	/// Cross-origin navigation and/or loading receives special handling.
 	/// When the main frame navigates to a different origin the OnMainFrameChanged
 	/// callback (2) will be executed with the old and new main frame objects.
@@ -79,17 +74,16 @@ namespace CefNet.CApi
 	/// commands during this transitional period (any sent commands will be
 	/// discarded).
 	/// When a new popup browser is created in a different origin from the parent
-	/// browser, a temporary main frame object for the popup will first be created
-	/// in the parent&apos;s renderer process. That temporary main frame will then be
-	/// discarded after the real cross-origin main frame is created in the
-	/// new/target renderer process. The client will recieve creation and initial
-	/// navigation callbacks (1) for the temporary main frame, followed by cross-
-	/// origin navigation callbacks (2) for the transition from the temporary main
-	/// frame to the real main frame. The temporary main frame may receive and
-	/// execute commands during this transitional period (any sent commands may be
-	/// executed, but the behavior is potentially undesirable since they execute in
-	/// the parent browser&apos;s renderer process and not the new/target renderer
-	/// process).
+	/// browser, a temporary main frame object for the popup will first be created in
+	/// the parent&apos;s renderer process. That temporary main frame will then be
+	/// discarded after the real cross-origin main frame is created in the new/target
+	/// renderer process. The client will recieve creation and initial navigation
+	/// callbacks (1) for the temporary main frame, followed by cross-origin
+	/// navigation callbacks (2) for the transition from the temporary main frame to
+	/// the real main frame. The temporary main frame may receive and execute
+	/// commands during this transitional period (any sent commands may be executed,
+	/// but the behavior is potentially undesirable since they execute in the parent
+	/// browser&apos;s renderer process and not the new/target renderer process).
 	/// Callbacks will not be executed for placeholders that may be created during
 	/// pre-commit navigation for sub-frames that do not yet exist in the renderer
 	/// process. Placeholders will have cef_frame_t::get_identifier() == -4.
@@ -153,9 +147,8 @@ namespace CefNet.CApi
 		/// Called when a frame loses its connection to the renderer process and will
 		/// be destroyed. Any pending or future commands will be discarded and
 		/// cef_frame_t::is_valid() will now return false (0) for |frame|. If called
-		/// after cef_life_span_handler_t::on_before_close() during browser
-		/// destruction then cef_browser_t::is_valid() will return false (0) for
-		/// |browser|.
+		/// after cef_life_span_handler_t::on_before_close() during browser destruction
+		/// then cef_browser_t::is_valid() will return false (0) for |browser|.
 		/// </summary>
 		[NativeName("on_frame_detached")]
 		public unsafe void OnFrameDetached(cef_browser_t* browser, cef_frame_t* frame)
@@ -172,19 +165,18 @@ namespace CefNet.CApi
 		public void* on_main_frame_changed;
 
 		/// <summary>
-		/// Called when the main frame changes due to (a) initial browser creation,
-		/// (b) final browser destruction, (c) cross-origin navigation or (d) re-
-		/// navigation after renderer process termination (due to crashes, etc).
-		/// |old_frame| will be NULL and |new_frame| will be non-NULL when a main
-		/// frame is assigned to |browser| for the first time. |old_frame| will be
-		/// non-NULL and |new_frame| will be NULL and  when a main frame is removed
-		/// from |browser| for the last time. Both |old_frame| and |new_frame| will be
-		/// non-NULL for cross-origin navigations or re-navigation after renderer
-		/// process termination. This function will be called after on_frame_created()
-		/// for |new_frame| and/or after on_frame_detached() for |old_frame|. If
-		/// called after cef_life_span_handler_t::on_before_close() during browser
-		/// destruction then cef_browser_t::is_valid() will return false (0) for
-		/// |browser|.
+		/// Called when the main frame changes due to (a) initial browser creation, (b)
+		/// final browser destruction, (c) cross-origin navigation or (d) re-navigation
+		/// after renderer process termination (due to crashes, etc). |old_frame| will
+		/// be NULL and |new_frame| will be non-NULL when a main frame is assigned to
+		/// |browser| for the first time. |old_frame| will be non-NULL and |new_frame|
+		/// will be NULL and  when a main frame is removed from |browser| for the last
+		/// time. Both |old_frame| and |new_frame| will be non-NULL for cross-origin
+		/// navigations or re-navigation after renderer process termination. This
+		/// function will be called after on_frame_created() for |new_frame| and/or
+		/// after on_frame_detached() for |old_frame|. If called after
+		/// cef_life_span_handler_t::on_before_close() during browser destruction then
+		/// cef_browser_t::is_valid() will return false (0) for |browser|.
 		/// </summary>
 		[NativeName("on_main_frame_changed")]
 		public unsafe void OnMainFrameChanged(cef_browser_t* browser, cef_frame_t* old_frame, cef_frame_t* new_frame)

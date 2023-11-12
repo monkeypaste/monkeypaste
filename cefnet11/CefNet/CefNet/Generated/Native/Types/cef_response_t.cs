@@ -246,8 +246,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Set the header |name| to |value|. If |overwrite| is true (1) any existing
-		/// values will be replaced with the new value. If |overwrite| is false (0)
-		/// any existing values will not be overwritten.
+		/// values will be replaced with the new value. If |overwrite| is false (0) any
+		/// existing values will not be overwritten.
 		/// </summary>
 		[NativeName("set_header_by_name")]
 		public unsafe void SetHeaderByName([Immutable]cef_string_t* name, [Immutable]cef_string_t* value, int overwrite)

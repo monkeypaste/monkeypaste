@@ -21,8 +21,7 @@ using CefNet.Internal;
 namespace CefNet
 {
 	/// <summary>
-	/// Structure representing a binary value. Can be used on any process and
-	/// thread.
+	/// Structure representing a binary value. Can be used on any process and thread.
 	/// </summary>
 	/// <remarks>
 	/// Role: Proxy
@@ -40,10 +39,10 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this object is valid. This object may become invalid
-		/// if the underlying data is owned by another object (e.g. list or
-		/// dictionary) and that other object is then modified or destroyed. Do not
-		/// call any other functions if this property returns false.
+		/// Gets a value indicating whether this object is valid. This object may become invalid if
+		/// the underlying data is owned by another object (e.g. list or dictionary)
+		/// and that other object is then modified or destroyed. Do not call any other
+		/// functions if this property returns false.
 		/// </summary>
 		public unsafe virtual bool IsValid
 		{
@@ -94,8 +93,7 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Returns a copy of this object. The data in this object will also be
-		/// copied.
+		/// Returns a copy of this object. The data in this object will also be copied.
 		/// </summary>
 		public unsafe virtual CefBinaryValue Copy()
 		{

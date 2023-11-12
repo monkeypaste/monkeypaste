@@ -20,9 +20,9 @@ namespace CefNet.CApi
 {
 	/// <summary>
 	/// Structure used to create and/or parse command line arguments. Arguments with
-	/// &quot;--&quot;, &quot;-&quot; and, on Windows, &quot;/&quot; prefixes are considered switches. Switches
+	/// &apos;--&apos;, &apos;-&apos; and, on Windows, &apos;/&apos; prefixes are considered switches. Switches
 	/// will always precede any arguments without switch prefixes. Switches can
-	/// optionally have a value specified using the &quot;=&quot; delimiter (e.g.
+	/// optionally have a value specified using the &apos;=&apos; delimiter (e.g.
 	/// &quot;-switch=value&quot;). An argument of &quot;--&quot; will terminate switch parsing with all
 	/// subsequent tokens, regardless of prefix, being interpreted as non-switch
 	/// arguments. Switch names should be lowercase ASCII and will be converted to
@@ -152,7 +152,7 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Retrieve the original command line string as a vector of strings. The argv
-		/// array: `{ program, [(--|-|/)switch[=value]]*, [--], [argument]* }`
+		/// array: { program, [(--|-|/)switch[=value]]*, [--], [argument]* }
 		/// </summary>
 		[NativeName("get_argv")]
 		public unsafe void GetArgv(cef_string_list_t argv)

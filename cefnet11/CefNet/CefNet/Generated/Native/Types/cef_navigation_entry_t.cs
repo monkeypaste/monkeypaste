@@ -53,8 +53,8 @@ namespace CefNet.CApi
 		public void* get_url;
 
 		/// <summary>
-		/// Returns the actual URL of the page. For some pages this may be data: URL
-		/// or similar. Use get_display_url() to return a display-friendly version.
+		/// Returns the actual URL of the page. For some pages this may be data: URL or
+		/// similar. Use get_display_url() to return a display-friendly version.
 		/// The resulting string must be freed by calling cef_string_userfree_free().
 		/// </summary>
 		[NativeName("get_url")]
@@ -90,8 +90,7 @@ namespace CefNet.CApi
 		public void* get_original_url;
 
 		/// <summary>
-		/// Returns the original URL that was entered by the user before any
-		/// redirects.
+		/// Returns the original URL that was entered by the user before any redirects.
 		/// The resulting string must be freed by calling cef_string_userfree_free().
 		/// </summary>
 		[NativeName("get_original_url")]

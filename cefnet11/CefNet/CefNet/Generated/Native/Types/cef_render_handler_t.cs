@@ -92,9 +92,9 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called to retrieve the translation from view DIP coordinates to screen
-		/// coordinates. Windows/Linux should provide screen device (pixel)
-		/// coordinates and MacOS should provide screen DIP coordinates. Return true
-		/// (1) if the requested coordinates were provided.
+		/// coordinates. Windows/Linux should provide screen device (pixel) coordinates
+		/// and MacOS should provide screen DIP coordinates. Return true (1) if the
+		/// requested coordinates were provided.
 		/// </summary>
 		[NativeName("get_screen_point")]
 		public unsafe int GetScreenPoint(cef_browser_t* browser, int viewX, int viewY, int* screenX, int* screenY)
@@ -112,8 +112,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called to allow the client to fill in the CefScreenInfo object with
-		/// appropriate values. Return true (1) if the |screen_info| structure has
-		/// been modified.
+		/// appropriate values. Return true (1) if the |screen_info| structure has been
+		/// modified.
 		/// If the screen info rectangle is left NULL the rectangle from GetViewRect
 		/// will be used. If the rectangle is still NULL or invalid popups may not be
 		/// drawn correctly.
@@ -174,9 +174,9 @@ namespace CefNet.CApi
 		/// CefScreenInfo.device_scale_factor returned from GetScreenInfo. |type|
 		/// indicates whether the element is the view or the popup widget. |buffer|
 		/// contains the pixel data for the whole image. |dirtyRects| contains the set
-		/// of rectangles in pixel coordinates that need to be repainted. |buffer|
-		/// will be |width|*|height|*4 bytes in size and represents a BGRA image with
-		/// an upper-left origin. This function is only called when
+		/// of rectangles in pixel coordinates that need to be repainted. |buffer| will
+		/// be |width|*|height|*4 bytes in size and represents a BGRA image with an
+		/// upper-left origin. This function is only called when
 		/// cef_window_tInfo::shared_texture_enabled is set to false (0).
 		/// </summary>
 		[NativeName("on_paint")]
@@ -355,9 +355,9 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called when an on-screen keyboard should be shown or hidden for the
-		/// specified |browser|. |input_mode| specifies what kind of keyboard should
-		/// be opened. If |input_mode| is CEF_TEXT_INPUT_MODE_NONE, any existing
-		/// keyboard for this browser should be hidden.
+		/// specified |browser|. |input_mode| specifies what kind of keyboard should be
+		/// opened. If |input_mode| is CEF_TEXT_INPUT_MODE_NONE, any existing keyboard
+		/// for this browser should be hidden.
 		/// </summary>
 		[NativeName("on_virtual_keyboard_requested")]
 		public unsafe void OnVirtualKeyboardRequested(cef_browser_t* browser, CefTextInputMode input_mode)

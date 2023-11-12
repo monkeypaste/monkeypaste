@@ -198,9 +198,8 @@ namespace CefNet
 
 		/// <summary>
 		/// Gets the globally unique identifier for this request or 0 if not
-		/// specified. Can be used by cef_resource_request_handler_t implementations
-		/// in the browser process to track a single request across multiple
-		/// callbacks.
+		/// specified. Can be used by cef_resource_request_handler_t implementations in
+		/// the browser process to track a single request across multiple callbacks.
 		/// </summary>
 		public unsafe virtual ulong Identifier
 		{
@@ -211,9 +210,9 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Set the referrer URL and policy. If non-NULL the referrer URL must be
-		/// fully qualified with an HTTP or HTTPS scheme component. Any username,
-		/// password or ref component will be removed.
+		/// Set the referrer URL and policy. If non-NULL the referrer URL must be fully
+		/// qualified with an HTTP or HTTPS scheme component. Any username, password or
+		/// ref component will be removed.
 		/// </summary>
 		public unsafe virtual void SetReferrer(string referrerUrl, CefReferrerPolicy policy)
 		{
@@ -251,9 +250,9 @@ namespace CefNet
 
 		/// <summary>
 		/// Set the header |name| to |value|. If |overwrite| is true (1) any existing
-		/// values will be replaced with the new value. If |overwrite| is false (0)
-		/// any existing values will not be overwritten. The Referer value cannot be
-		/// set using this function.
+		/// values will be replaced with the new value. If |overwrite| is false (0) any
+		/// existing values will not be overwritten. The Referer value cannot be set
+		/// using this function.
 		/// </summary>
 		public unsafe virtual void SetHeaderByName(string name, string value, bool overwrite)
 		{

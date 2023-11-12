@@ -36,10 +36,10 @@ namespace CefNet.CApi
 		public void* is_valid;
 
 		/// <summary>
-		/// Returns true (1) if this object is valid. This object may become invalid
-		/// if the underlying data is owned by another object (e.g. list or
-		/// dictionary) and that other object is then modified or destroyed. Do not
-		/// call any other functions if this function returns false (0).
+		/// Returns true (1) if this object is valid. This object may become invalid if
+		/// the underlying data is owned by another object (e.g. list or dictionary)
+		/// and that other object is then modified or destroyed. Do not call any other
+		/// functions if this function returns false (0).
 		/// </summary>
 		[NativeName("is_valid")]
 		public unsafe int IsValid()
@@ -249,11 +249,11 @@ namespace CefNet.CApi
 		public void* get_value;
 
 		/// <summary>
-		/// Returns the value at the specified key. For simple types the returned
-		/// value will copy existing data and modifications to the value will not
-		/// modify this object. For complex types (binary, dictionary and list) the
-		/// returned value will reference existing data and modifications to the value
-		/// will modify this object.
+		/// Returns the value at the specified key. For simple types the returned value
+		/// will copy existing data and modifications to the value will not modify this
+		/// object. For complex types (binary, dictionary and list) the returned value
+		/// will reference existing data and modifications to the value will modify
+		/// this object.
 		/// </summary>
 		[NativeName("get_value")]
 		public unsafe cef_value_t* GetValue([Immutable]cef_string_t* key)
@@ -397,10 +397,10 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Sets the value at the specified key. Returns true (1) if the value was set
 		/// successfully. If |value| represents simple data then the underlying data
-		/// will be copied and modifications to |value| will not modify this object.
-		/// If |value| represents complex data (binary, dictionary or list) then the
-		/// underlying data will be referenced and modifications to |value| will
-		/// modify this object.
+		/// will be copied and modifications to |value| will not modify this object. If
+		/// |value| represents complex data (binary, dictionary or list) then the
+		/// underlying data will be referenced and modifications to |value| will modify
+		/// this object.
 		/// </summary>
 		[NativeName("set_value")]
 		public unsafe int SetValue([Immutable]cef_string_t* key, cef_value_t* value)
@@ -471,8 +471,8 @@ namespace CefNet.CApi
 		public void* set_double;
 
 		/// <summary>
-		/// Sets the value at the specified key as type double. Returns true (1) if
-		/// the value was set successfully.
+		/// Sets the value at the specified key as type double. Returns true (1) if the
+		/// value was set successfully.
 		/// </summary>
 		[NativeName("set_double")]
 		public unsafe int SetDouble([Immutable]cef_string_t* key, double value)
@@ -489,8 +489,8 @@ namespace CefNet.CApi
 		public void* set_string;
 
 		/// <summary>
-		/// Sets the value at the specified key as type string. Returns true (1) if
-		/// the value was set successfully.
+		/// Sets the value at the specified key as type string. Returns true (1) if the
+		/// value was set successfully.
 		/// </summary>
 		[NativeName("set_string")]
 		public unsafe int SetString([Immutable]cef_string_t* key, [Immutable]cef_string_t* value)
@@ -507,11 +507,11 @@ namespace CefNet.CApi
 		public void* set_binary;
 
 		/// <summary>
-		/// Sets the value at the specified key as type binary. Returns true (1) if
-		/// the value was set successfully. If |value| is currently owned by another
-		/// object then the value will be copied and the |value| reference will not
-		/// change. Otherwise, ownership will be transferred to this object and the
-		/// |value| reference will be invalidated.
+		/// Sets the value at the specified key as type binary. Returns true (1) if the
+		/// value was set successfully. If |value| is currently owned by another object
+		/// then the value will be copied and the |value| reference will not change.
+		/// Otherwise, ownership will be transferred to this object and the |value|
+		/// reference will be invalidated.
 		/// </summary>
 		[NativeName("set_binary")]
 		public unsafe int SetBinary([Immutable]cef_string_t* key, cef_binary_value_t* value)
@@ -529,10 +529,10 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Sets the value at the specified key as type dict. Returns true (1) if the
-		/// value was set successfully. If |value| is currently owned by another
-		/// object then the value will be copied and the |value| reference will not
-		/// change. Otherwise, ownership will be transferred to this object and the
-		/// |value| reference will be invalidated.
+		/// value was set successfully. If |value| is currently owned by another object
+		/// then the value will be copied and the |value| reference will not change.
+		/// Otherwise, ownership will be transferred to this object and the |value|
+		/// reference will be invalidated.
 		/// </summary>
 		[NativeName("set_dictionary")]
 		public unsafe int SetDictionary([Immutable]cef_string_t* key, cef_dictionary_value_t* value)
@@ -550,10 +550,10 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Sets the value at the specified key as type list. Returns true (1) if the
-		/// value was set successfully. If |value| is currently owned by another
-		/// object then the value will be copied and the |value| reference will not
-		/// change. Otherwise, ownership will be transferred to this object and the
-		/// |value| reference will be invalidated.
+		/// value was set successfully. If |value| is currently owned by another object
+		/// then the value will be copied and the |value| reference will not change.
+		/// Otherwise, ownership will be transferred to this object and the |value|
+		/// reference will be invalidated.
 		/// </summary>
 		[NativeName("set_list")]
 		public unsafe int SetList([Immutable]cef_string_t* key, cef_list_value_t* value)

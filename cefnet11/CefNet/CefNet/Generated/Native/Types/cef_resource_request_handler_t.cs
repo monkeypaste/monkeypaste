@@ -38,8 +38,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called on the IO thread before a resource request is loaded. The |browser|
-		/// and |frame| values represent the source of the request, and may be NULL
-		/// for requests originating from service workers or cef_urlrequest_t. To
+		/// and |frame| values represent the source of the request, and may be NULL for
+		/// requests originating from service workers or cef_urlrequest_t. To
 		/// optionally filter cookies for the request return a
 		/// cef_cookie_access_filter_t object. The |request| object cannot not be
 		/// modified in this callback.
@@ -60,14 +60,13 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called on the IO thread before a resource request is loaded. The |browser|
-		/// and |frame| values represent the source of the request, and may be NULL
-		/// for requests originating from service workers or cef_urlrequest_t. To
-		/// redirect or change the resource load optionally modify |request|.
-		/// Modification of the request URL will be treated as a redirect. Return
-		/// RV_CONTINUE to continue the request immediately. Return RV_CONTINUE_ASYNC
-		/// and call cef_callback_t functions at a later time to continue or cancel
-		/// the request asynchronously. Return RV_CANCEL to cancel the request
-		/// immediately.
+		/// and |frame| values represent the source of the request, and may be NULL for
+		/// requests originating from service workers or cef_urlrequest_t. To redirect
+		/// or change the resource load optionally modify |request|. Modification of
+		/// the request URL will be treated as a redirect. Return RV_CONTINUE to
+		/// continue the request immediately. Return RV_CONTINUE_ASYNC and call
+		/// cef_callback_t functions at a later time to continue or cancel the request
+		/// asynchronously. Return RV_CANCEL to cancel the request immediately.
 		/// </summary>
 		[NativeName("on_before_resource_load")]
 		public unsafe CefReturnValue OnBeforeResourceLoad(cef_browser_t* browser, cef_frame_t* frame, cef_request_t* request, cef_callback_t* callback)
@@ -86,10 +85,10 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Called on the IO thread before a resource is loaded. The |browser| and
 		/// |frame| values represent the source of the request, and may be NULL for
-		/// requests originating from service workers or cef_urlrequest_t. To allow
-		/// the resource to load using the default network loader return NULL. To
-		/// specify a handler for the resource return a cef_resource_handler_t object.
-		/// The |request| object cannot not be modified in this callback.
+		/// requests originating from service workers or cef_urlrequest_t. To allow the
+		/// resource to load using the default network loader return NULL. To specify a
+		/// handler for the resource return a cef_resource_handler_t object. The
+		/// |request| object cannot not be modified in this callback.
 		/// </summary>
 		[NativeName("get_resource_handler")]
 		public unsafe cef_resource_handler_t* GetResourceHandler(cef_browser_t* browser, cef_frame_t* frame, cef_request_t* request)
@@ -107,8 +106,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called on the IO thread when a resource load is redirected. The |browser|
-		/// and |frame| values represent the source of the request, and may be NULL
-		/// for requests originating from service workers or cef_urlrequest_t. The
+		/// and |frame| values represent the source of the request, and may be NULL for
+		/// requests originating from service workers or cef_urlrequest_t. The
 		/// |request| parameter will contain the old URL and other request-related
 		/// information. The |response| parameter will contain the response that
 		/// resulted in the redirect. The |new_url| parameter will contain the new URL
@@ -130,15 +129,14 @@ namespace CefNet.CApi
 		public void* on_resource_response;
 
 		/// <summary>
-		/// Called on the IO thread when a resource response is received. The
-		/// |browser| and |frame| values represent the source of the request, and may
-		/// be NULL for requests originating from service workers or cef_urlrequest_t.
-		/// To allow the resource load to proceed without modification return false
-		/// (0). To redirect or retry the resource load optionally modify |request|
-		/// and return true (1). Modification of the request URL will be treated as a
-		/// redirect. Requests handled using the default network loader cannot be
-		/// redirected in this callback. The |response| object cannot be modified in
-		/// this callback.
+		/// Called on the IO thread when a resource response is received. The |browser|
+		/// and |frame| values represent the source of the request, and may be NULL for
+		/// requests originating from service workers or cef_urlrequest_t. To allow the
+		/// resource load to proceed without modification return false (0). To redirect
+		/// or retry the resource load optionally modify |request| and return true (1).
+		/// Modification of the request URL will be treated as a redirect. Requests
+		/// handled using the default network loader cannot be redirected in this
+		/// callback. The |response| object cannot be modified in this callback.
 		/// WARNING: Redirecting using this function is deprecated. Use
 		/// OnBeforeResourceLoad or GetResourceHandler to perform redirects.
 		/// </summary>
@@ -157,11 +155,11 @@ namespace CefNet.CApi
 		public void* get_resource_response_filter;
 
 		/// <summary>
-		/// Called on the IO thread to optionally filter resource response content.
-		/// The |browser| and |frame| values represent the source of the request, and
-		/// may be NULL for requests originating from service workers or
-		/// cef_urlrequest_t. |request| and |response| represent the request and
-		/// response respectively and cannot be modified in this callback.
+		/// Called on the IO thread to optionally filter resource response content. The
+		/// |browser| and |frame| values represent the source of the request, and may
+		/// be NULL for requests originating from service workers or cef_urlrequest_t.
+		/// |request| and |response| represent the request and response respectively
+		/// and cannot be modified in this callback.
 		/// </summary>
 		[NativeName("get_resource_response_filter")]
 		public unsafe cef_response_filter_t* GetResourceResponseFilter(cef_browser_t* browser, cef_frame_t* frame, cef_request_t* request, cef_response_t* response)
@@ -179,19 +177,19 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called on the IO thread when a resource load has completed. The |browser|
-		/// and |frame| values represent the source of the request, and may be NULL
-		/// for requests originating from service workers or cef_urlrequest_t.
-		/// |request| and |response| represent the request and response respectively
-		/// and cannot be modified in this callback. |status| indicates the load
-		/// completion status. |received_content_length| is the number of response
-		/// bytes actually read. This function will be called for all requests,
-		/// including requests that are aborted due to CEF shutdown or destruction of
-		/// the associated browser. In cases where the associated browser is destroyed
-		/// this callback may arrive after the cef_life_span_handler_t::OnBeforeClose
-		/// callback for that browser. The cef_frame_t::IsValid function can be used
-		/// to test for this situation, and care should be taken not to call |browser|
-		/// or |frame| functions that modify state (like LoadURL, SendProcessMessage,
-		/// etc.) if the frame is invalid.
+		/// and |frame| values represent the source of the request, and may be NULL for
+		/// requests originating from service workers or cef_urlrequest_t. |request|
+		/// and |response| represent the request and response respectively and cannot
+		/// be modified in this callback. |status| indicates the load completion
+		/// status. |received_content_length| is the number of response bytes actually
+		/// read. This function will be called for all requests, including requests
+		/// that are aborted due to CEF shutdown or destruction of the associated
+		/// browser. In cases where the associated browser is destroyed this callback
+		/// may arrive after the cef_life_span_handler_t::OnBeforeClose callback for
+		/// that browser. The cef_frame_t::IsValid function can be used to test for
+		/// this situation, and care should be taken not to call |browser| or |frame|
+		/// functions that modify state (like LoadURL, SendProcessMessage, etc.) if the
+		/// frame is invalid.
 		/// </summary>
 		[NativeName("on_resource_load_complete")]
 		public unsafe void OnResourceLoadComplete(cef_browser_t* browser, cef_frame_t* frame, cef_request_t* request, cef_response_t* response, CefUrlRequestStatus status, long received_content_length)
@@ -211,10 +209,10 @@ namespace CefNet.CApi
 		/// Called on the IO thread to handle requests for URLs with an unknown
 		/// protocol component. The |browser| and |frame| values represent the source
 		/// of the request, and may be NULL for requests originating from service
-		/// workers or cef_urlrequest_t. |request| cannot be modified in this
-		/// callback. Set |allow_os_execution| to true (1) to attempt execution via
-		/// the registered OS protocol handler, if any. SECURITY WARNING: YOU SHOULD
-		/// USE THIS METHOD TO ENFORCE RESTRICTIONS BASED ON SCHEME, HOST OR OTHER URL
+		/// workers or cef_urlrequest_t. |request| cannot be modified in this callback.
+		/// Set |allow_os_execution| to true (1) to attempt execution via the
+		/// registered OS protocol handler, if any. SECURITY WARNING: YOU SHOULD USE
+		/// THIS METHOD TO ENFORCE RESTRICTIONS BASED ON SCHEME, HOST OR OTHER URL
 		/// ANALYSIS BEFORE ALLOWING OS EXECUTION.
 		/// </summary>
 		[NativeName("on_protocol_execution")]

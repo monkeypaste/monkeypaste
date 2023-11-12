@@ -65,11 +65,10 @@ namespace CefNet
 		extern bool ICefFocusHandlerPrivate.AvoidOnTakeFocus();
 
 		/// <summary>
-		/// Called when the browser component is about to loose focus. For instance,
-		/// if focus was on the last HTML element and the user pressed the TAB key.
-		/// |next| will be true (1) if the browser is giving focus to the next
-		/// component and false (0) if the browser is giving focus to the previous
-		/// component.
+		/// Called when the browser component is about to loose focus. For instance, if
+		/// focus was on the last HTML element and the user pressed the TAB key. |next|
+		/// will be true (1) if the browser is giving focus to the next component and
+		/// false (0) if the browser is giving focus to the previous component.
 		/// </summary>
 		protected internal unsafe virtual void OnTakeFocus(CefBrowser browser, bool next)
 		{

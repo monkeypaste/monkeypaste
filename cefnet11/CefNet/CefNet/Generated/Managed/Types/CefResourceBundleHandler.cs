@@ -105,11 +105,11 @@ namespace CefNet
 
 		/// <summary>
 		/// Called to retrieve data for the specified scale independent |resource_id|.
-		/// To provide the resource data set |data| and |data_size| to the data
-		/// pointer and size respectively and return true (1). To use the default
-		/// resource data return false (0). The resource data will not be copied and
-		/// must remain resident in memory. Include cef_pack_resources.h for a listing
-		/// of valid resource ID values.
+		/// To provide the resource data set |data| and |data_size| to the data pointer
+		/// and size respectively and return true (1). To use the default resource data
+		/// return false (0). The resource data will not be copied and must remain
+		/// resident in memory. Include cef_pack_resources.h for a listing of valid
+		/// resource ID values.
 		/// </summary>
 		protected internal unsafe virtual bool GetDataResource(int resourceId, ref IntPtr data, ref long dataSize)
 		{

@@ -21,8 +21,8 @@ using CefNet.Internal;
 namespace CefNet
 {
 	/// <summary>
-	/// Callback structure for cef_media_sink_t::GetDeviceInfo. The functions of
-	/// this structure will be called on the browser process UI thread.
+	/// Callback structure for cef_media_sink_t::GetDeviceInfo. The functions of this
+	/// structure will be called on the browser process UI thread.
 	/// </summary>
 	/// <remarks>
 	/// Role: Handler
@@ -57,8 +57,8 @@ namespace CefNet
 		extern bool ICefMediaSinkDeviceInfoCallbackPrivate.AvoidOnMediaSinkDeviceInfo();
 
 		/// <summary>
-		/// Method that will be executed asyncronously once device information has
-		/// been retrieved.
+		/// Method that will be executed asyncronously once device information has been
+		/// retrieved.
 		/// </summary>
 		protected internal unsafe virtual void OnMediaSinkDeviceInfo(CefMediaSinkDeviceInfo deviceInfo)
 		{

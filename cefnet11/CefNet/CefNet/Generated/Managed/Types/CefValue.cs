@@ -43,10 +43,10 @@ namespace CefNet
 		/// <summary>
 		/// Gets a value indicating whether the underlying data is valid. This will always be true
 		/// (1) for simple types. For complex types (binary, dictionary and list) the
-		/// underlying data may become invalid if owned by another object (e.g. list
-		/// or dictionary) and that other object is then modified or destroyed. This
-		/// value object can be re-used by calling Set*() even if the underlying data
-		/// is invalid.
+		/// underlying data may become invalid if owned by another object (e.g. list or
+		/// dictionary) and that other object is then modified or destroyed. This value
+		/// object can be re-used by calling Set*() even if the underlying data is
+		/// invalid.
 		/// </summary>
 		public unsafe virtual bool IsValid
 		{
@@ -153,10 +153,10 @@ namespace CefNet
 		/// <summary>
 		/// Returns the underlying value as type binary. The returned reference may
 		/// become invalid if the value is owned by another object or if ownership is
-		/// transferred to another object in the future. To maintain a reference to
-		/// the value after assigning ownership to a dictionary or list pass this
-		/// object to the set_value() function instead of passing the returned
-		/// reference to set_binary().
+		/// transferred to another object in the future. To maintain a reference to the
+		/// value after assigning ownership to a dictionary or list pass this object to
+		/// the set_value() function instead of passing the returned reference to
+		/// set_binary().
 		/// </summary>
 		public unsafe virtual CefBinaryValue GetBinary()
 		{
@@ -164,12 +164,12 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Returns the underlying value as type dictionary. The returned reference
-		/// may become invalid if the value is owned by another object or if ownership
-		/// is transferred to another object in the future. To maintain a reference to
-		/// the value after assigning ownership to a dictionary or list pass this
-		/// object to the set_value() function instead of passing the returned
-		/// reference to set_dictionary().
+		/// Returns the underlying value as type dictionary. The returned reference may
+		/// become invalid if the value is owned by another object or if ownership is
+		/// transferred to another object in the future. To maintain a reference to the
+		/// value after assigning ownership to a dictionary or list pass this object to
+		/// the set_value() function instead of passing the returned reference to
+		/// set_dictionary().
 		/// </summary>
 		public unsafe virtual CefDictionaryValue GetDictionary()
 		{
@@ -179,10 +179,10 @@ namespace CefNet
 		/// <summary>
 		/// Returns the underlying value as type list. The returned reference may
 		/// become invalid if the value is owned by another object or if ownership is
-		/// transferred to another object in the future. To maintain a reference to
-		/// the value after assigning ownership to a dictionary or list pass this
-		/// object to the set_value() function instead of passing the returned
-		/// reference to set_list().
+		/// transferred to another object in the future. To maintain a reference to the
+		/// value after assigning ownership to a dictionary or list pass this object to
+		/// the set_value() function instead of passing the returned reference to
+		/// set_list().
 		/// </summary>
 		public unsafe virtual CefListValue GetList()
 		{
@@ -217,8 +217,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Sets the underlying value as type double. Returns true (1) if the value
-		/// was set successfully.
+		/// Sets the underlying value as type double. Returns true (1) if the value was
+		/// set successfully.
 		/// </summary>
 		public unsafe virtual bool SetDouble(double value)
 		{
@@ -226,8 +226,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Sets the underlying value as type string. Returns true (1) if the value
-		/// was set successfully.
+		/// Sets the underlying value as type string. Returns true (1) if the value was
+		/// set successfully.
 		/// </summary>
 		public unsafe virtual bool SetString(string value)
 		{
@@ -239,9 +239,9 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Sets the underlying value as type binary. Returns true (1) if the value
-		/// was set successfully. This object keeps a reference to |value| and
-		/// ownership of the underlying data remains unchanged.
+		/// Sets the underlying value as type binary. Returns true (1) if the value was
+		/// set successfully. This object keeps a reference to |value| and ownership of
+		/// the underlying data remains unchanged.
 		/// </summary>
 		public unsafe virtual bool SetBinary(CefBinaryValue value)
 		{
@@ -250,8 +250,8 @@ namespace CefNet
 
 		/// <summary>
 		/// Sets the underlying value as type dict. Returns true (1) if the value was
-		/// set successfully. This object keeps a reference to |value| and ownership
-		/// of the underlying data remains unchanged.
+		/// set successfully. This object keeps a reference to |value| and ownership of
+		/// the underlying data remains unchanged.
 		/// </summary>
 		public unsafe virtual bool SetDictionary(CefDictionaryValue value)
 		{
@@ -260,8 +260,8 @@ namespace CefNet
 
 		/// <summary>
 		/// Sets the underlying value as type list. Returns true (1) if the value was
-		/// set successfully. This object keeps a reference to |value| and ownership
-		/// of the underlying data remains unchanged.
+		/// set successfully. This object keeps a reference to |value| and ownership of
+		/// the underlying data remains unchanged.
 		/// </summary>
 		public unsafe virtual bool SetList(CefListValue value)
 		{

@@ -31,8 +31,8 @@ namespace CefNet
 		private cef_time_t _instance;
 
 		/// <summary>
-		/// Four or five digit year &quot;2007&quot; (1601 to 30827 on Windows, 1970 to 2038 on
-		/// 32-bit POSIX)
+		/// Four or five digit year &quot;2007&quot; (1601 to 30827 on
+		/// Windows, 1970 to 2038 on 32-bit POSIX)
 		/// </summary>
 		public int Year
 		{
@@ -122,8 +122,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Second within the current minute (0-59 plus leap seconds which may take
-		/// it up to 60).
+		/// Second within the current minute (0-59 plus leap
+		/// seconds which may take it up to 60).
 		/// </summary>
 		public int Second
 		{

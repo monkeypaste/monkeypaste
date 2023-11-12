@@ -181,8 +181,8 @@ namespace CefNet
 
 		/// <summary>
 		/// Set the header |name| to |value|. If |overwrite| is true (1) any existing
-		/// values will be replaced with the new value. If |overwrite| is false (0)
-		/// any existing values will not be overwritten.
+		/// values will be replaced with the new value. If |overwrite| is false (0) any
+		/// existing values will not be overwritten.
 		/// </summary>
 		public unsafe virtual void SetHeaderByName(string name, string value, bool overwrite)
 		{

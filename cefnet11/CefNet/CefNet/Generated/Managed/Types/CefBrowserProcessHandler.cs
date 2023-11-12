@@ -131,19 +131,19 @@ namespace CefNet
 		extern bool ICefBrowserProcessHandlerPrivate.AvoidOnScheduleMessagePumpWork();
 
 		/// <summary>
-		/// Called from any thread when work has been scheduled for the browser
-		/// process main (UI) thread. This callback is used in combination with
-		/// cef_settings_t.external_message_pump and cef_do_message_loop_work() in
-		/// cases where the CEF message loop must be integrated into an existing
-		/// application message loop (see additional comments and warnings on
-		/// CefDoMessageLoopWork). This callback should schedule a
-		/// cef_do_message_loop_work() call to happen on the main (UI) thread.
-		/// |delay_ms| is the requested delay in milliseconds. If |delay_ms| is
+		/// Called from any thread when work has been scheduled for the browser process
+		/// main (UI) thread. This callback is used in combination with CefSettings.
+		/// external_message_pump and cef_do_message_loop_work() in cases where the CEF
+		/// message loop must be integrated into an existing application message loop
+		/// (see additional comments and warnings on CefDoMessageLoopWork). This
+		/// callback should schedule a cef_do_message_loop_work() call to happen on the
+		/// main (UI) thread. |delay_ms| is the requested delay in milliseconds. If
+		/// |delay_ms| is
 		/// &lt;
-		/// = 0
-		/// then the call should happen reasonably soon. If |delay_ms| is &gt; 0 then the
-		/// call should be scheduled to happen after the specified delay and any
-		/// currently pending scheduled call should be cancelled.
+		/// = 0 then the call should happen reasonably soon. If
+		/// |delay_ms| is &gt; 0 then the call should be scheduled to happen after the
+		/// specified delay and any currently pending scheduled call should be
+		/// cancelled.
 		/// </summary>
 		protected internal unsafe virtual void OnScheduleMessagePumpWork(long delayMs)
 		{
@@ -172,8 +172,8 @@ namespace CefNet
 		/// Return the default client for use with a newly created browser window. If
 		/// null is returned the browser will be unmanaged (no callbacks will be
 		/// executed for that browser) and application shutdown will be blocked until
-		/// the browser window is closed manually. This function is currently only
-		/// used with the chrome runtime.
+		/// the browser window is closed manually. This function is currently only used
+		/// with the chrome runtime.
 		/// </summary>
 		protected internal unsafe virtual CefClient GetDefaultClient()
 		{

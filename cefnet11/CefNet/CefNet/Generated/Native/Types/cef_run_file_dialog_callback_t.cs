@@ -36,9 +36,9 @@ namespace CefNet.CApi
 		public void* on_file_dialog_dismissed;
 
 		/// <summary>
-		/// Called asynchronously after the file dialog is dismissed. |file_paths|
-		/// will be a single value or a list of values depending on the dialog mode.
-		/// If the selection was cancelled |file_paths| will be NULL.
+		/// Called asynchronously after the file dialog is dismissed. |file_paths| will
+		/// be a single value or a list of values depending on the dialog mode. If the
+		/// selection was cancelled |file_paths| will be NULL.
 		/// </summary>
 		[NativeName("on_file_dialog_dismissed")]
 		public unsafe void OnFileDialogDismissed(cef_string_list_t file_paths)

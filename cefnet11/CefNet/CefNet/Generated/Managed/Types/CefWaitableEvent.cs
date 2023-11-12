@@ -21,15 +21,15 @@ using CefNet.Internal;
 namespace CefNet
 {
 	/// <summary>
-	/// WaitableEvent is a thread synchronization tool that allows one thread to
-	/// wait for another thread to finish some work. This is equivalent to using a
+	/// WaitableEvent is a thread synchronization tool that allows one thread to wait
+	/// for another thread to finish some work. This is equivalent to using a
 	/// Lock+ConditionVariable to protect a simple boolean value. However, using
 	/// WaitableEvent in conjunction with a Lock to wait for a more complex state
-	/// change (e.g., for an item to be added to a queue) is not recommended. In
-	/// that case consider using a ConditionVariable instead of a WaitableEvent. It
-	/// is safe to create and/or signal a WaitableEvent from any thread. Blocking on
-	/// a WaitableEvent by calling the *wait() functions is not allowed on the
-	/// browser process UI or IO threads.
+	/// change (e.g., for an item to be added to a queue) is not recommended. In that
+	/// case consider using a ConditionVariable instead of a WaitableEvent. It is
+	/// safe to create and/or signal a WaitableEvent from any thread. Blocking on a
+	/// WaitableEvent by calling the *wait() functions is not allowed on the browser
+	/// process UI or IO threads.
 	/// </summary>
 	/// <remarks>
 	/// Role: Proxy
@@ -69,8 +69,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Put the event in the signaled state. This causes any thread blocked on
-		/// Wait to be woken up.
+		/// Put the event in the signaled state. This causes any thread blocked on Wait
+		/// to be woken up.
 		/// </summary>
 		public unsafe virtual void Signal()
 		{
@@ -80,8 +80,8 @@ namespace CefNet
 
 		/// <summary>
 		/// Wait indefinitely for the event to be signaled. This function will not
-		/// return until after the call to signal() has completed. This function
-		/// cannot be called on the browser process UI or IO threads.
+		/// return until after the call to signal() has completed. This function cannot
+		/// be called on the browser process UI or IO threads.
 		/// </summary>
 		public unsafe virtual void Wait()
 		{
@@ -90,8 +90,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Wait up to |max_ms| milliseconds for the event to be signaled. Returns
-		/// true (1) if the event was signaled. A return value of false (0) does not
+		/// Wait up to |max_ms| milliseconds for the event to be signaled. Returns true
+		/// (1) if the event was signaled. A return value of false (0) does not
 		/// necessarily mean that |max_ms| was exceeded. This function will not return
 		/// until after the call to signal() has completed. This function cannot be
 		/// called on the browser process UI or IO threads.

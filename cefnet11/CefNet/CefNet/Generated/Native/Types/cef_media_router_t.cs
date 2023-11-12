@@ -37,8 +37,8 @@ namespace CefNet.CApi
 		public void* add_observer;
 
 		/// <summary>
-		/// Add an observer for MediaRouter events. The observer will remain
-		/// registered until the returned Registration object is destroyed.
+		/// Add an observer for MediaRouter events. The observer will remain registered
+		/// until the returned Registration object is destroyed.
 		/// </summary>
 		[NativeName("add_observer")]
 		public unsafe cef_registration_t* AddObserver(cef_media_observer_t* observer)
@@ -94,8 +94,8 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Create a new route between |source| and |sink|. Source and sink must be
 		/// valid, compatible (as reported by cef_media_sink_t::IsCompatibleWith), and
-		/// a route between them must not already exist. |callback| will be executed
-		/// on success or failure. If route creation succeeds it will also trigger an
+		/// a route between them must not already exist. |callback| will be executed on
+		/// success or failure. If route creation succeeds it will also trigger an
 		/// asynchronous call to cef_media_observer_t::OnRoutes on all registered
 		/// observers.
 		/// </summary>

@@ -40,11 +40,11 @@ namespace CefNet
 
 		/// <summary>
 		/// Callback for asynchronous continuation of skip(). If |bytes_skipped| &gt; 0
-		/// then either skip() will be called again until the requested number of
-		/// bytes have been skipped or the request will proceed. If |bytes_skipped|
+		/// then either skip() will be called again until the requested number of bytes
+		/// have been skipped or the request will proceed. If |bytes_skipped|
 		/// &lt;
-		/// =
-		/// 0 the request will fail with ERR_REQUEST_RANGE_NOT_SATISFIABLE.
+		/// = 0 the
+		/// request will fail with ERR_REQUEST_RANGE_NOT_SATISFIABLE.
 		/// </summary>
 		public unsafe virtual void Continue(long bytesSkipped)
 		{

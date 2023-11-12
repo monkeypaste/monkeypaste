@@ -19,9 +19,9 @@ using CefNet.WinApi;
 namespace CefNet.CApi
 {
 	/// <summary>
-	/// Structure that supports the reading of XML data via the libxml streaming
-	/// API. The functions of this structure should only be called on the thread
-	/// that creates the object.
+	/// Structure that supports the reading of XML data via the libxml streaming API.
+	/// The functions of this structure should only be called on the thread that
+	/// creates the object.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe partial struct cef_xml_reader_t
@@ -257,8 +257,8 @@ namespace CefNet.CApi
 		public void* is_empty_element;
 
 		/// <summary>
-		/// Returns true (1) if the node represents an NULL element. &quot;&lt;a/&gt;&quot; is
-		/// considered NULL but &quot;&lt;a&gt;&lt;/a&gt;&quot; is not.
+		/// Returns true (1) if the node represents an NULL element. &lt;a /&gt;is considered
+		/// NULL but &lt;a&gt;&lt;/a&gt;is not.
 		/// </summary>
 		[NativeName("is_empty_element")]
 		public unsafe int IsEmptyElement()
@@ -525,8 +525,8 @@ namespace CefNet.CApi
 		public void* move_to_next_attribute;
 
 		/// <summary>
-		/// Moves the cursor to the next attribute in the current element. Returns
-		/// true (1) if the cursor position was set successfully.
+		/// Moves the cursor to the next attribute in the current element. Returns true
+		/// (1) if the cursor position was set successfully.
 		/// </summary>
 		[NativeName("move_to_next_attribute")]
 		public unsafe int MoveToNextAttribute()

@@ -19,12 +19,12 @@ using CefNet.WinApi;
 namespace CefNet.CApi
 {
 	/// <summary>
-	/// Implement this structure to handle HTTP server requests. A new thread will
-	/// be created for each cef_server_t::CreateServer call (the &quot;dedicated server
+	/// Implement this structure to handle HTTP server requests. A new thread will be
+	/// created for each cef_server_t::CreateServer call (the &quot;dedicated server
 	/// thread&quot;), and the functions of this structure will be called on that thread.
 	/// It is therefore recommended to use a different cef_server_handler_t instance
-	/// for each cef_server_t::CreateServer call to avoid thread safety issues in
-	/// the cef_server_handler_t implementation.
+	/// for each cef_server_t::CreateServer call to avoid thread safety issues in the
+	/// cef_server_handler_t implementation.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe partial struct cef_server_handler_t
@@ -41,8 +41,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called when |server| is created. If the server was started successfully
-		/// then cef_server_t::IsRunning will return true (1). The server will
-		/// continue running until cef_server_t::Shutdown is called, after which time
+		/// then cef_server_t::IsRunning will return true (1). The server will continue
+		/// running until cef_server_t::Shutdown is called, after which time
 		/// OnServerDestroyed will be called. If the server failed to start then
 		/// OnServerDestroyed will be called immediately after this function returns.
 		/// </summary>
@@ -62,9 +62,9 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called when |server| is destroyed. The server thread will be stopped after
-		/// this function returns. The client should release any references to
-		/// |server| when this function is called. See OnServerCreated documentation
-		/// for a description of server lifespan.
+		/// this function returns. The client should release any references to |server|
+		/// when this function is called. See OnServerCreated documentation for a
+		/// description of server lifespan.
 		/// </summary>
 		[NativeName("on_server_destroyed")]
 		public unsafe void OnServerDestroyed(cef_server_t* server)
@@ -126,9 +126,8 @@ namespace CefNet.CApi
 		/// Called when |server| receives an HTTP request. |connection_id| uniquely
 		/// identifies the connection, |client_address| is the requesting IPv4 or IPv6
 		/// client address including port number, and |request| contains the request
-		/// contents (URL, function, headers and optional POST data). Call
-		/// cef_server_t functions either synchronously or asynchronusly to send a
-		/// response.
+		/// contents (URL, function, headers and optional POST data). Call cef_server_t
+		/// functions either synchronously or asynchronusly to send a response.
 		/// </summary>
 		[NativeName("on_http_request")]
 		public unsafe void OnHttpRequest(cef_server_t* server, int connection_id, [Immutable]cef_string_t* client_address, cef_request_t* request)
@@ -145,18 +144,18 @@ namespace CefNet.CApi
 		public void* on_web_socket_request;
 
 		/// <summary>
-		/// Called when |server| receives a WebSocket request. |connection_id|
-		/// uniquely identifies the connection, |client_address| is the requesting
-		/// IPv4 or IPv6 client address including port number, and |request| contains
-		/// the request contents (URL, function, headers and optional POST data).
-		/// Execute |callback| either synchronously or asynchronously to accept or
-		/// decline the WebSocket connection. If the request is accepted then
-		/// OnWebSocketConnected will be called after the WebSocket has connected and
-		/// incoming messages will be delivered to the OnWebSocketMessage callback. If
-		/// the request is declined then the client will be disconnected and
-		/// OnClientDisconnected will be called. Call the
-		/// cef_server_t::SendWebSocketMessage function after receiving the
-		/// OnWebSocketConnected callback to respond with WebSocket messages.
+		/// Called when |server| receives a WebSocket request. |connection_id| uniquely
+		/// identifies the connection, |client_address| is the requesting IPv4 or IPv6
+		/// client address including port number, and |request| contains the request
+		/// contents (URL, function, headers and optional POST data). Execute
+		/// |callback| either synchronously or asynchronously to accept or decline the
+		/// WebSocket connection. If the request is accepted then OnWebSocketConnected
+		/// will be called after the WebSocket has connected and incoming messages will
+		/// be delivered to the OnWebSocketMessage callback. If the request is declined
+		/// then the client will be disconnected and OnClientDisconnected will be
+		/// called. Call the cef_server_t::SendWebSocketMessage function after
+		/// receiving the OnWebSocketConnected callback to respond with WebSocket
+		/// messages.
 		/// </summary>
 		[NativeName("on_web_socket_request")]
 		public unsafe void OnWebSocketRequest(cef_server_t* server, int connection_id, [Immutable]cef_string_t* client_address, cef_request_t* request, cef_callback_t* callback)

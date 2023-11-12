@@ -40,8 +40,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Returns the task runner associated with this context. V8 handles can only
-		/// be accessed from the thread on which they are created. This function can
-		/// be called on any render process thread.
+		/// be accessed from the thread on which they are created. This function can be
+		/// called on any render process thread.
 		/// </summary>
 		[NativeName("get_task_runner")]
 		public unsafe cef_task_runner_t* GetTaskRunner()
@@ -189,11 +189,11 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Execute a string of JavaScript code in this V8 context. The |script_url|
-		/// parameter is the URL where the script in question can be found, if any.
-		/// The |start_line| parameter is the base line number to use for error
-		/// reporting. On success |retval| will be set to the return value, if any,
-		/// and the function will return true (1). On failure |exception| will be set
-		/// to the exception, if any, and the function will return false (0).
+		/// parameter is the URL where the script in question can be found, if any. The
+		/// |start_line| parameter is the base line number to use for error reporting.
+		/// On success |retval| will be set to the return value, if any, and the
+		/// function will return true (1). On failure |exception| will be set to the
+		/// exception, if any, and the function will return false (0).
 		/// </summary>
 		[NativeName("eval")]
 		public unsafe int Eval([Immutable]cef_string_t* code, [Immutable]cef_string_t* script_url, int start_line, cef_v8value_t** retval, cef_v8exception_t** exception)

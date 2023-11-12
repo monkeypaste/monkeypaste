@@ -418,8 +418,8 @@ namespace CefNet.CApi
 		public void* get_exception;
 
 		/// <summary>
-		/// Returns the exception resulting from the last function call. This
-		/// attribute exists only in the scope of the current CEF value object.
+		/// Returns the exception resulting from the last function call. This attribute
+		/// exists only in the scope of the current CEF value object.
 		/// </summary>
 		[NativeName("get_exception")]
 		public unsafe cef_v8exception_t* GetException()
@@ -547,9 +547,9 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Deletes the value with the specified identifier and returns true (1) on
-		/// success. Returns false (0) if this function is called incorrectly,
-		/// deletion fails or an exception is thrown. For read-only and don&apos;t-delete
-		/// values this function will return true (1) even though deletion failed.
+		/// success. Returns false (0) if this function is called incorrectly, deletion
+		/// fails or an exception is thrown. For read-only and don&apos;t-delete values this
+		/// function will return true (1) even though deletion failed.
 		/// </summary>
 		[NativeName("delete_value_byindex")]
 		public unsafe int DeleteValueByIndex(int index)
@@ -566,8 +566,8 @@ namespace CefNet.CApi
 		public void* get_value_bykey;
 
 		/// <summary>
-		/// Returns the value with the specified identifier on success. Returns NULL
-		/// if this function is called incorrectly or an exception is thrown.
+		/// Returns the value with the specified identifier on success. Returns NULL if
+		/// this function is called incorrectly or an exception is thrown.
 		/// </summary>
 		[NativeName("get_value_bykey")]
 		public unsafe cef_v8value_t* GetValueByKey([Immutable]cef_string_t* key)
@@ -584,8 +584,8 @@ namespace CefNet.CApi
 		public void* get_value_byindex;
 
 		/// <summary>
-		/// Returns the value with the specified identifier on success. Returns NULL
-		/// if this function is called incorrectly or an exception is thrown.
+		/// Returns the value with the specified identifier on success. Returns NULL if
+		/// this function is called incorrectly or an exception is thrown.
 		/// </summary>
 		[NativeName("get_value_byindex")]
 		public unsafe cef_v8value_t* GetValueByIndex(int index)
@@ -681,9 +681,9 @@ namespace CefNet.CApi
 		public void* set_user_data;
 
 		/// <summary>
-		/// Sets the user data for this object and returns true (1) on success.
-		/// Returns false (0) if this function is called incorrectly. This function
-		/// can only be called on user created objects.
+		/// Sets the user data for this object and returns true (1) on success. Returns
+		/// false (0) if this function is called incorrectly. This function can only be
+		/// called on user created objects.
 		/// </summary>
 		[NativeName("set_user_data")]
 		public unsafe int SetUserData(cef_base_ref_counted_t* user_data)
@@ -741,8 +741,8 @@ namespace CefNet.CApi
 		/// to perform global garbage collection. Each cef_v8value_t tracks the amount
 		/// of external memory associated with it and automatically decreases the
 		/// global total by the appropriate amount on its destruction.
-		/// |change_in_bytes| specifies the number of bytes to adjust by. This
-		/// function returns the number of bytes associated with the object after the
+		/// |change_in_bytes| specifies the number of bytes to adjust by. This function
+		/// returns the number of bytes associated with the object after the
 		/// adjustment. This function can only be called on user created objects.
 		/// </summary>
 		[NativeName("adjust_externally_allocated_memory")]
@@ -877,11 +877,11 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Execute the function using the specified V8 context. |object| is the
-		/// receiver (&apos;this&apos; object) of the function. If |object| is NULL the
-		/// specified context&apos;s global object will be used. |arguments| is the list of
-		/// arguments that will be passed to the function. Returns the function return
-		/// value on success. Returns NULL if this function is called incorrectly or
-		/// an exception is thrown.
+		/// receiver (&apos;this&apos; object) of the function. If |object| is NULL the specified
+		/// context&apos;s global object will be used. |arguments| is the list of arguments
+		/// that will be passed to the function. Returns the function return value on
+		/// success. Returns NULL if this function is called incorrectly or an
+		/// exception is thrown.
 		/// </summary>
 		[NativeName("execute_function_with_context")]
 		public unsafe cef_v8value_t* ExecuteFunctionWithContext(cef_v8context_t* context, cef_v8value_t* @object, UIntPtr argumentsCount, [Immutable]cef_v8value_t** arguments)

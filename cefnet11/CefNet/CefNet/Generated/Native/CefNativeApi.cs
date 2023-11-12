@@ -20,34 +20,33 @@ namespace CefNet.CApi
 {
 	public static partial class CefNativeApi
 	{
-		public static readonly string ApiHash = "a63640eaa583092b069ec9895526b3e9e4932f6a";
+		public static readonly string ApiHash = "44197292401010f8fce5b053733edd8642d01095";
 
 		/// <summary>
 		/// Add an entry to the cross-origin access whitelist.
 		/// The same-origin policy restricts how scripts hosted from different origins
-		/// (scheme + domain + port) can communicate. By default, scripts can only
-		/// access resources with the same origin. Scripts hosted on the HTTP and HTTPS
-		/// schemes (but no other schemes) can use the &quot;Access-Control-Allow-Origin&quot;
-		/// header to allow cross-origin requests. For example,
-		/// https://source.example.com can make XMLHttpRequest requests on
-		/// http://target.example.com if the http://target.example.com request returns
-		/// an &quot;Access-Control-Allow-Origin: https://source.example.com&quot; response
-		/// header.
+		/// (scheme + domain + port) can communicate. By default, scripts can only access
+		/// resources with the same origin. Scripts hosted on the HTTP and HTTPS schemes
+		/// (but no other schemes) can use the &quot;Access-Control-Allow-Origin&quot; header to
+		/// allow cross-origin requests. For example, https://source.example.com can make
+		/// XMLHttpRequest requests on http://target.example.com if the
+		/// http://target.example.com request returns an &quot;Access-Control-Allow-Origin:
+		/// https://source.example.com&quot; response header.
 		/// Scripts in separate frames or iframes and hosted from the same protocol and
 		/// domain suffix can execute cross-origin JavaScript if both pages set the
 		/// document.domain value to the same domain suffix. For example,
 		/// scheme://foo.example.com and scheme://bar.example.com can communicate using
 		/// JavaScript if both domains set document.domain=&quot;example.com&quot;.
-		/// This function is used to allow access to origins that would otherwise
-		/// violate the same-origin policy. Scripts hosted underneath the fully
-		/// qualified |source_origin| URL (like http://www.example.com) will be allowed
-		/// access to all resources hosted on the specified |target_protocol| and
-		/// |target_domain|. If |target_domain| is non-NULL and
-		/// |allow_target_subdomains| if false (0) only exact domain matches will be
-		/// allowed. If |target_domain| contains a top- level domain component (like
-		/// &quot;example.com&quot;) and |allow_target_subdomains| is true (1) sub-domain matches
-		/// will be allowed. If |target_domain| is NULL and |allow_target_subdomains| if
-		/// true (1) all domains and IP addresses will be allowed.
+		/// This function is used to allow access to origins that would otherwise violate
+		/// the same-origin policy. Scripts hosted underneath the fully qualified
+		/// |source_origin| URL (like http://www.example.com) will be allowed access to
+		/// all resources hosted on the specified |target_protocol| and |target_domain|.
+		/// If |target_domain| is non-NULL and |allow_target_subdomains| if false (0)
+		/// only exact domain matches will be allowed. If |target_domain| contains a top-
+		/// level domain component (like &quot;example.com&quot;) and |allow_target_subdomains| is
+		/// true (1) sub-domain matches will be allowed. If |target_domain| is NULL and
+		/// |allow_target_subdomains| if true (1) all domains and IP addresses will be
+		/// allowed.
 		/// This function cannot be used to bypass the restrictions on local or display
 		/// isolated schemes. See the comments on CefRegisterCustomScheme for more
 		/// information.
@@ -117,7 +116,7 @@ namespace CefNet.CApi
 		/// |categories| is a comma-delimited list of category wildcards. A category can
 		/// have an optional &apos;-&apos; prefix to make it an excluded category. Having both
 		/// included and excluded categories in the same list is not supported.
-		/// Examples: - &quot;test_MyTest*&quot; - &quot;test_MyTest*,test_OtherStuff&quot; -
+		/// Example: &quot;test_MyTest*&quot; Example: &quot;test_MyTest*,test_OtherStuff&quot; Example:
 		/// &quot;-excluded_category1,-excluded_category2&quot;
 		/// This function must be called on the browser process UI thread.
 		/// </summary>
@@ -145,9 +144,9 @@ namespace CefNet.CApi
 		/// created on the UI thread. If |request_context| is NULL the global request
 		/// context will be used. This function can be called on any browser process
 		/// thread and will not block. The optional |extra_info| parameter provides an
-		/// opportunity to specify extra information specific to the created browser
-		/// that will be passed to cef_render_process_handler_t::on_browser_created() in
-		/// the render process.
+		/// opportunity to specify extra information specific to the created browser that
+		/// will be passed to cef_render_process_handler_t::on_browser_created() in the
+		/// render process.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_browser_capi.h as
@@ -185,9 +184,9 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Clear all scheme handler factories registered with the global request
 		/// context. Returns false (0) on error. This function may be called on any
-		/// thread in the browser process. Using this function is equivalent to calling
-		/// cef_request_context_t::cef_request_context_get_global_context()-&gt;clear_schem
-		/// e_handler_factories().
+		/// thread in the browser process. Using this function is equivalent to calling c
+		/// ef_request_context_t::cef_request_context_get_global_context()-&gt;clear_scheme_
+		/// handler_factories().
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_scheme_capi.h as
@@ -219,11 +218,11 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Returns the global cookie manager. By default data will be stored at
-		/// cef_settings_t.cache_path if specified or in memory otherwise. If |callback|
-		/// is non-NULL it will be executed asnychronously on the UI thread after the
+		/// CefSettings.cache_path if specified or in memory otherwise. If |callback| is
+		/// non-NULL it will be executed asnychronously on the UI thread after the
 		/// manager&apos;s storage has been initialized. Using this function is equivalent to
-		/// calling cef_request_context_t::cef_request_context_get_global_context()-&gt;Get
-		/// DefaultCookieManager().
+		/// calling cef_request_context_t::cef_request_context_get_global_context()-&gt;GetD
+		/// efaultCookieManager().
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_cookie_capi.h as
@@ -238,7 +237,7 @@ namespace CefNet.CApi
 		/// the main application executable. On macOS this file must be placed in the
 		/// top-level app bundle Resources directory (e.g.
 		/// &quot;&lt;appname&gt;.app/Contents/Resources&quot;). File contents are as follows:
-		/// &lt;pre&gt;# Comments start with a hash character and must be on their own line.
+		/// # Comments start with a hash character and must be on their own line.
 		/// [Config]
 		/// ProductName=
 		/// &lt;Value
@@ -280,20 +279,19 @@ namespace CefNet.CApi
 		/// [CrashKeys]
 		/// my_key1=&lt;small&gt;|medium|large&gt;
 		/// my_key2=&lt;small&gt;|medium|large&gt;
-		/// &lt;/pre&gt;
-		/// &lt;b&gt;Config section:&lt;/b&gt;
+		/// Config section:
 		/// If &quot;ProductName&quot; and/or &quot;ProductVersion&quot; are set then the specified values
-		/// will be included in the crash dump metadata. On macOS if these values are
-		/// set to NULL then they will be retrieved from the Info.plist file using the
+		/// will be included in the crash dump metadata. On macOS if these values are set
+		/// to NULL then they will be retrieved from the Info.plist file using the
 		/// &quot;CFBundleName&quot; and &quot;CFBundleShortVersionString&quot; keys respectively.
 		/// If &quot;AppName&quot; is set on Windows then crash report information (metrics,
 		/// database and dumps) will be stored locally on disk under the
 		/// &quot;C:\Users\[CurrentUser]\AppData\Local\[AppName]\User Data&quot; folder. On other
-		/// platforms the cef_settings_t.user_data_path value will be used.
+		/// platforms the CefSettings.user_data_path value will be used.
 		/// If &quot;ExternalHandler&quot; is set on Windows then the specified exe will be
 		/// launched as the crashpad-handler instead of re-launching the main process
 		/// exe. The value can be an absolute path or a path relative to the main exe
-		/// directory. On Linux the cef_settings_t.browser_subprocess_path value will be
+		/// directory. On Linux the CefSettings.browser_subprocess_path value will be
 		/// used. On macOS the existing subprocess app bundle will be used.
 		/// If &quot;BrowserCrashForwardingEnabled&quot; is set to true (1) on macOS then browser
 		/// process crashes will be forwarded to the system crash reporter. This results
@@ -308,27 +306,26 @@ namespace CefNet.CApi
 		/// 1. If &quot;MaxUploadsPerDay&quot; is set to a positive value then at most the
 		/// specified number of crashes will be uploaded in each 24 hour period.
 		/// 2. If crash upload fails due to a network or server error then an
-		/// incremental backoff delay up to a maximum of 24 hours will be applied
-		/// for retries.
+		/// incremental backoff delay up to a maximum of 24 hours will be applied for
+		/// retries.
 		/// 3. If a backoff delay is applied and &quot;MaxUploadsPerDay&quot; is &gt; 1 then the
 		/// &quot;MaxUploadsPerDay&quot; value will be reduced to 1 until the client is
 		/// restarted. This helps to avoid an upload flood when the network or
 		/// server error is resolved.
 		/// Rate limiting is not supported on Linux.
-		/// If &quot;MaxDatabaseSizeInMb&quot; is set to a positive value then crash report
-		/// storage on disk will be limited to that size in megabytes. For example, on
-		/// Windows each dump is about 600KB so a &quot;MaxDatabaseSizeInMb&quot; value of 20
-		/// equates to about 34 crash reports stored on disk. Not supported on Linux.
-		/// If &quot;MaxDatabaseAgeInDays&quot; is set to a positive value then crash reports
-		/// older than the specified age in days will be deleted. Not supported on
-		/// Linux.
-		/// &lt;b&gt;CrashKeys section:&lt;/b&gt;
+		/// If &quot;MaxDatabaseSizeInMb&quot; is set to a positive value then crash report storage
+		/// on disk will be limited to that size in megabytes. For example, on Windows
+		/// each dump is about 600KB so a &quot;MaxDatabaseSizeInMb&quot; value of 20 equates to
+		/// about 34 crash reports stored on disk. Not supported on Linux.
+		/// If &quot;MaxDatabaseAgeInDays&quot; is set to a positive value then crash reports older
+		/// than the specified age in days will be deleted. Not supported on Linux.
+		/// CrashKeys section:
 		/// A maximum of 26 crash keys of each size can be specified for use by the
 		/// application. Crash key values will be truncated based on the specified size
 		/// (small = 64 bytes, medium = 256 bytes, large = 1024 bytes). The value of
 		/// crash keys can be set from any thread or process using the
-		/// CefSetCrashKeyValue function. These key/value pairs will be sent to the
-		/// crash server along with the crash dump file.
+		/// CefSetCrashKeyValue function. These key/value pairs will be sent to the crash
+		/// server along with the crash dump file.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_crash_util_capi.h as
@@ -362,11 +359,11 @@ namespace CefNet.CApi
 		public static unsafe extern int cef_create_directory(cef_string_t* full_path);
 
 		/// <summary>
-		/// Creates a new directory. On Windows if |prefix| is provided the new
-		/// directory name is in the format of &quot;prefixyyyy&quot;. Returns true (1) on success
-		/// and sets |new_temp_path| to the full path of the directory that was created.
-		/// The directory is only readable by the current user. Calling this function on
-		/// the browser process UI or IO threads is not allowed.
+		/// Creates a new directory. On Windows if |prefix| is provided the new directory
+		/// name is in the format of &quot;prefixyyyy&quot;. Returns true (1) on success and sets
+		/// |new_temp_path| to the full path of the directory that was created. The
+		/// directory is only readable by the current user. Calling this function on the
+		/// browser process UI or IO threads is not allowed.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_file_util_capi.h as
@@ -378,10 +375,10 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Creates a directory within another directory. Extra characters will be
 		/// appended to |prefix| to ensure that the new directory does not have the same
-		/// name as an existing directory. Returns true (1) on success and sets
-		/// |new_dir| to the full path of the directory that was created. The directory
-		/// is only readable by the current user. Calling this function on the browser
-		/// process UI or IO threads is not allowed.
+		/// name as an existing directory. Returns true (1) on success and sets |new_dir|
+		/// to the full path of the directory that was created. The directory is only
+		/// readable by the current user. Calling this function on the browser process UI
+		/// or IO threads is not allowed.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_file_util_capi.h as
@@ -417,10 +414,10 @@ namespace CefNet.CApi
 		/// Deletes the given path whether it&apos;s a file or a directory. If |path| is a
 		/// directory all contents will be deleted.  If |recursive| is true (1) any sub-
 		/// directories and their contents will also be deleted (equivalent to executing
-		/// &quot;rm -rf&quot;, so use with caution). On POSIX environments if |path| is a
-		/// symbolic link then only the symlink will be deleted. Returns true (1) on
-		/// successful deletion or if |path| does not exist. Calling this function on
-		/// the browser process UI or IO threads is not allowed.
+		/// &quot;rm -rf&quot;, so use with caution). On POSIX environments if |path| is a symbolic
+		/// link then only the symlink will be deleted. Returns true (1) on successful
+		/// deletion or if |path| does not exist. Calling this function on the browser
+		/// process UI or IO threads is not allowed.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_file_util_capi.h as
@@ -455,14 +452,14 @@ namespace CefNet.CApi
 		/// provided for cases where the CEF message loop must be integrated into an
 		/// existing application message loop. Use of this function is not recommended
 		/// for most users; use either the cef_run_message_loop() function or
-		/// cef_settings_t.multi_threaded_message_loop if possible. When using this
-		/// function care must be taken to balance performance against excessive CPU
-		/// usage. It is recommended to enable the cef_settings_t.external_message_pump
-		/// option when using this function so that
+		/// CefSettings.multi_threaded_message_loop if possible. When using this function
+		/// care must be taken to balance performance against excessive CPU usage. It is
+		/// recommended to enable the CefSettings.external_message_pump option when using
+		/// this function so that
 		/// cef_browser_process_handler_t::on_schedule_message_pump_work() callbacks can
-		/// facilitate the scheduling process. This function should only be called on
-		/// the main application thread and only if cef_initialize() is called with a
-		/// cef_settings_t.multi_threaded_message_loop value of false (0). This function
+		/// facilitate the scheduling process. This function should only be called on the
+		/// main application thread and only if cef_initialize() is called with a
+		/// CefSettings.multi_threaded_message_loop value of false (0). This function
 		/// will not block.
 		/// </summary>
 		/// <remarks>
@@ -483,9 +480,9 @@ namespace CefNet.CApi
 		public static unsafe extern cef_drag_data_t* cef_drag_data_create();
 
 		/// <summary>
-		/// Call during process startup to enable High-DPI support on Windows 7 or
-		/// newer. Older versions of Windows should be left DPI-unaware because they do
-		/// not support DirectWrite and GDI fonts are kerned very badly.
+		/// Call during process startup to enable High-DPI support on Windows 7 or newer.
+		/// Older versions of Windows should be left DPI-unaware because they do not
+		/// support DirectWrite and GDI fonts are kerned very badly.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_app_capi.h as
@@ -499,9 +496,9 @@ namespace CefNet.CApi
 		/// This function will fail and return false (0) if a previous call to
 		/// CefEndTracingAsync is already pending or if CefBeginTracing was not called.
 		/// |tracing_file| is the path at which tracing data will be written and
-		/// |callback| is the callback that will be executed once all processes have
-		/// sent their trace data. If |tracing_file| is NULL a new temporary file path
-		/// will be used. If |callback| is NULL no trace data will be written.
+		/// |callback| is the callback that will be executed once all processes have sent
+		/// their trace data. If |tracing_file| is NULL a new temporary file path will be
+		/// used. If |callback| is NULL no trace data will be written.
 		/// This function must be called on the browser process UI thread.
 		/// </summary>
 		/// <remarks>
@@ -515,13 +512,13 @@ namespace CefNet.CApi
 		/// This function should be called from the application entry point function to
 		/// execute a secondary process. It can be used to run secondary processes from
 		/// the browser client executable (default behavior) or from a separate
-		/// executable specified by the cef_settings_t.browser_subprocess_path value. If
+		/// executable specified by the CefSettings.browser_subprocess_path value. If
 		/// called for the browser process (identified by no &quot;type&quot; command-line value)
 		/// it will return immediately with a value of -1. If called for a recognized
-		/// secondary process it will block until the process should exit and then
-		/// return the process exit code. The |application| parameter may be NULL. The
-		/// |windows_sandbox_info| parameter is only used on Windows and may be NULL
-		/// (see cef_sandbox_win.h for details).
+		/// secondary process it will block until the process should exit and then return
+		/// the process exit code. The |application| parameter may be NULL. The
+		/// |windows_sandbox_info| parameter is only used on Windows and may be NULL (see
+		/// cef_sandbox_win.h for details).
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_app_capi.h as
@@ -534,11 +531,11 @@ namespace CefNet.CApi
 		/// This is a convenience function for formatting a URL in a concise and human-
 		/// friendly way to help users make security-related decisions (or in other
 		/// circumstances when people need to distinguish sites, origins, or otherwise-
-		/// simplified URLs from each other). Internationalized domain names (IDN) may
-		/// be presented in Unicode if the conversion is considered safe. The returned
-		/// value will (a) omit the path for standard schemes, excepting file and
-		/// filesystem, and (b) omit the port if it is the default for the scheme. Do
-		/// not use this for URLs which will be parsed or sent to other applications.
+		/// simplified URLs from each other). Internationalized domain names (IDN) may be
+		/// presented in Unicode if the conversion is considered safe. The returned value
+		/// will (a) omit the path for standard schemes, excepting file and filesystem,
+		/// and (b) omit the port if it is the default for the scheme. Do not use this
+		/// for URLs which will be parsed or sent to other applications.
 		/// The resulting string must be freed by calling cef_string_userfree_free().
 		/// </summary>
 		/// <remarks>
@@ -559,10 +556,10 @@ namespace CefNet.CApi
 		public static unsafe extern uint cef_get_current_platform_thread_id();
 
 		/// <summary>
-		/// Get the extensions associated with the given mime type. This should be
-		/// passed in lower case. There could be multiple extensions for a given mime
-		/// type, like &quot;html,htm&quot; for &quot;text/html&quot;, or &quot;txt,text,html,...&quot; for &quot;text/*&quot;.
-		/// Any existing elements in the provided vector will not be erased.
+		/// Get the extensions associated with the given mime type. This should be passed
+		/// in lower case. There could be multiple extensions for a given mime type, like
+		/// &quot;html,htm&quot; for &quot;text/html&quot;, or &quot;txt,text,html,...&quot; for &quot;text/*&quot;. Any existing
+		/// elements in the provided vector will not be erased.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_parser_capi.h as
@@ -596,10 +593,10 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Get the temporary directory provided by the system.
-		/// WARNING: In general, you should use the temp directory variants below
-		/// instead of this function. Those variants will ensure that the proper
-		/// permissions are set so that other users on the system can&apos;t edit them while
-		/// they&apos;re open (which could lead to security issues).
+		/// WARNING: In general, you should use the temp directory variants below instead
+		/// of this function. Those variants will ensure that the proper permissions are
+		/// set so that other users on the system can&apos;t edit them while they&apos;re open
+		/// (which could lead to security issues).
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_file_util_capi.h as
@@ -609,8 +606,8 @@ namespace CefNet.CApi
 		public static unsafe extern int cef_get_temp_directory(cef_string_t* temp_dir);
 
 		/// <summary>
-		/// Create a new cef_image_t. It will initially be NULL. Use the Add*()
-		/// functions to add representations at different scale factors.
+		/// Create a new cef_image_t. It will initially be NULL. Use the Add*() functions
+		/// to add representations at different scale factors.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_image_capi.h as
@@ -622,9 +619,9 @@ namespace CefNet.CApi
 		/// <summary>
 		/// This function should be called on the main application thread to initialize
 		/// the CEF browser process. The |application| parameter may be NULL. A return
-		/// value of true (1) indicates that it succeeded and false (0) indicates that
-		/// it failed. The |windows_sandbox_info| parameter is only used on Windows and
-		/// may be NULL (see cef_sandbox_win.h for details).
+		/// value of true (1) indicates that it succeeded and false (0) indicates that it
+		/// failed. The |windows_sandbox_info| parameter is only used on Windows and may
+		/// be NULL (see cef_sandbox_win.h for details).
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_app_capi.h as
@@ -684,9 +681,8 @@ namespace CefNet.CApi
 		/// Google Chrome. This file can generally be found in Chrome&apos;s User Data
 		/// directory (e.g. &quot;C:\Users\[User]\AppData\Local\Google\Chrome\User Data\&quot; on
 		/// Windows) and is updated periodically by Chrome&apos;s component updater service.
-		/// Must be called in the browser process after the context has been
-		/// initialized. See https://dev.chromium.org/Home/chromium-security/crlsets for
-		/// background.
+		/// Must be called in the browser process after the context has been initialized.
+		/// See https://dev.chromium.org/Home/chromium-security/crlsets for background.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_file_util_capi.h as
@@ -696,11 +692,11 @@ namespace CefNet.CApi
 		public static unsafe extern void cef_load_crlsets_file(cef_string_t* path);
 
 		/// <summary>
-		/// Returns the MediaRouter object associated with the global request context.
-		/// If |callback| is non-NULL it will be executed asnychronously on the UI
-		/// thread after the manager&apos;s storage has been initialized. Equivalent to
-		/// calling cef_request_context_t::cef_request_context_get_global_context()-&gt;get
-		/// _media_router().
+		/// Returns the MediaRouter object associated with the global request context. If
+		/// |callback| is non-NULL it will be executed asnychronously on the UI thread
+		/// after the manager&apos;s storage has been initialized. Equivalent to calling cef_r
+		/// equest_context_t::cef_request_context_get_global_context()-&gt;get_media_router(
+		/// ).
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_media_router_capi.h as
@@ -841,9 +837,9 @@ namespace CefNet.CApi
 		public static unsafe extern cef_process_message_t* cef_process_message_create(cef_string_t* name);
 
 		/// <summary>
-		/// Quit the CEF message loop that was started by calling
-		/// cef_run_message_loop(). This function should only be called on the main
-		/// application thread and only if cef_run_message_loop() was used.
+		/// Quit the CEF message loop that was started by calling cef_run_message_loop().
+		/// This function should only be called on the main application thread and only
+		/// if cef_run_message_loop() was used.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_app_capi.h as
@@ -855,9 +851,9 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Register a new V8 extension with the specified JavaScript extension code and
 		/// handler. Functions implemented by the handler are prototyped using the
-		/// keyword &apos;native&apos;. The calling of a native function is restricted to the
-		/// scope in which the prototype of the native function is defined. This
-		/// function may only be called on the render process main thread.
+		/// keyword &apos;native&apos;. The calling of a native function is restricted to the scope
+		/// in which the prototype of the native function is defined. This function may
+		/// only be called on the render process main thread.
 		/// Example JavaScript extension code: &lt;pre&gt;// create the &apos;example&apos; global object if it doesn&apos;t already exist.
 		/// if (!example)
 		/// example = {};
@@ -894,8 +890,7 @@ namespace CefNet.CApi
 		/// return myint;
 		/// };
 		/// })();
-		/// &lt;/pre&gt;
-		/// Example usage in the page: &lt;pre&gt;// Call the function.
+		/// &lt;/pre&gt;Example usage in the page: &lt;pre&gt;// Call the function.
 		/// example.test.myfunction();
 		/// // Set the parameter.
 		/// example.test.myparam = value;
@@ -914,18 +909,18 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Register a scheme handler factory with the global request context. An NULL
-		/// |domain_name| value for a standard scheme will cause the factory to match
-		/// all domain names. The |domain_name| value will be ignored for non-standard
+		/// |domain_name| value for a standard scheme will cause the factory to match all
+		/// domain names. The |domain_name| value will be ignored for non-standard
 		/// schemes. If |scheme_name| is a built-in scheme and no handler is returned by
 		/// |factory| then the built-in scheme handler factory will be called. If
 		/// |scheme_name| is a custom scheme then you must also implement the
 		/// cef_app_t::on_register_custom_schemes() function in all processes. This
 		/// function may be called multiple times to change or remove the factory that
-		/// matches the specified |scheme_name| and optional |domain_name|. Returns
-		/// false (0) if an error occurs. This function may be called on any thread in
-		/// the browser process. Using this function is equivalent to calling cef_reques
-		/// t_context_t::cef_request_context_get_global_context()-&gt;register_scheme_handl
-		/// er_factory().
+		/// matches the specified |scheme_name| and optional |domain_name|. Returns false
+		/// (0) if an error occurs. This function may be called on any thread in the
+		/// browser process. Using this function is equivalent to calling cef_request_con
+		/// text_t::cef_request_context_get_global_context()-&gt;register_scheme_handler_fac
+		/// tory().
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_scheme_capi.h as
@@ -999,9 +994,9 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Run the CEF message loop. Use this function instead of an application-
 		/// provided message loop to get the best balance between performance and CPU
-		/// usage. This function should only be called on the main application thread
-		/// and only if cef_initialize() is called with a
-		/// cef_settings_t.multi_threaded_message_loop value of false (0). This function
+		/// usage. This function should only be called on the main application thread and
+		/// only if cef_initialize() is called with a
+		/// CefSettings.multi_threaded_message_loop value of false (0). This function
 		/// will block until a quit message is received by the system.
 		/// </summary>
 		/// <remarks>
@@ -1017,9 +1012,9 @@ namespace CefNet.CApi
 		/// number outside of the reserved range (e.g. between 1025 and 65535 on most
 		/// platforms). |backlog| is the maximum number of pending connections. A new
 		/// thread will be created for each CreateServer call (the &quot;dedicated server
-		/// thread&quot;). It is therefore recommended to use a different
-		/// cef_server_handler_t instance for each CreateServer call to avoid thread
-		/// safety issues in the cef_server_handler_t implementation. The
+		/// thread&quot;). It is therefore recommended to use a different cef_server_handler_t
+		/// instance for each CreateServer call to avoid thread safety issues in the
+		/// cef_server_handler_t implementation. The
 		/// cef_server_handler_t::OnServerCreated function will be called on the
 		/// dedicated server thread to report success or failure. See
 		/// cef_server_handler_t::OnServerCreated documentation for a description of
@@ -1133,8 +1128,8 @@ namespace CefNet.CApi
 		public static unsafe extern int cef_string_ascii_to_utf16(byte* src, UIntPtr src_len, cef_string_utf16_t* output);
 
 		/// <summary>
-		/// These functions convert an ASCII string, typically a hardcoded constant, to
-		/// a Wide/UTF16 string. Use instead of the UTF8 conversion routines if you know
+		/// These functions convert an ASCII string, typically a hardcoded constant, to a
+		/// Wide/UTF16 string. Use instead of the UTF8 conversion routines if you know
 		/// the string is ASCII.
 		/// </summary>
 		/// <remarks>
@@ -1599,12 +1594,12 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Create and start a new thread. This function does not block waiting for the
-		/// thread to run initialization. |display_name| is the name that will be used
-		/// to identify the thread. |priority| is the thread execution priority.
+		/// thread to run initialization. |display_name| is the name that will be used to
+		/// identify the thread. |priority| is the thread execution priority.
 		/// |message_loop_type| indicates the set of asynchronous events that the thread
-		/// can process. If |stoppable| is true (1) the thread will stopped and joined
-		/// on destruction or when stop() is called; otherwise, the thread cannot be
-		/// stopped and will be leaked on shutdown. On Windows the |com_init_mode| value
+		/// can process. If |stoppable| is true (1) the thread will stopped and joined on
+		/// destruction or when stop() is called; otherwise, the thread cannot be stopped
+		/// and will be leaked on shutdown. On Windows the |com_init_mode| value
 		/// specifies how COM will be initialized for the thread. If |com_init_mode| is
 		/// set to COM_INIT_MODE_STA then |message_loop_type| must be set to ML_TYPE_UI.
 		/// </summary>
@@ -1687,8 +1682,8 @@ namespace CefNet.CApi
 		public static unsafe extern int cef_time_to_doublet(cef_time_t* cef_time, double* time);
 
 		/// <summary>
-		/// Converts cef_time_t to/from time_t. Returns true (1) on success and false
-		/// (0) on failure.
+		/// Converts cef_time_t to/from time_t. Returns true (1) on success and false (0)
+		/// on failure.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/internal/cef_time.h as
@@ -1740,8 +1735,7 @@ namespace CefNet.CApi
 		/// - POST data may only contain only a single element of type PDE_TYPE_FILE
 		/// or PDE_TYPE_BYTES.
 		/// - If |request_context| is empty the global request context will be used.
-		/// The |request| object will be marked as read-only after calling this
-		/// function.
+		/// The |request| object will be marked as read-only after calling this function.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_urlrequest_capi.h as
@@ -1796,8 +1790,8 @@ namespace CefNet.CApi
 		/// If |length| is negative the returned array will have length 0. This function
 		/// should only be called from within the scope of a
 		/// cef_render_process_handler_t, cef_v8handler_t or cef_v8accessor_t callback,
-		/// or in combination with calling enter() and exit() on a stored
-		/// cef_v8context_t reference.
+		/// or in combination with calling enter() and exit() on a stored cef_v8context_t
+		/// reference.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_v8_capi.h as
@@ -1810,11 +1804,11 @@ namespace CefNet.CApi
 		/// Create a new cef_v8value_t object of type ArrayBuffer which wraps the
 		/// provided |buffer| of size |length| bytes. The ArrayBuffer is externalized,
 		/// meaning that it does not own |buffer|. The caller is responsible for freeing
-		/// |buffer| when requested via a call to
-		/// cef_v8array_buffer_release_callback_t::ReleaseBuffer. This function should
-		/// only be called from within the scope of a cef_render_process_handler_t,
-		/// cef_v8handler_t or cef_v8accessor_t callback, or in combination with calling
-		/// enter() and exit() on a stored cef_v8context_t reference.
+		/// |buffer| when requested via a call to cef_v8array_buffer_release_callback_t::
+		/// ReleaseBuffer. This function should only be called from within the scope of a
+		/// cef_render_process_handler_t, cef_v8handler_t or cef_v8accessor_t callback,
+		/// or in combination with calling enter() and exit() on a stored cef_v8context_t
+		/// reference.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_v8_capi.h as
@@ -1857,8 +1851,8 @@ namespace CefNet.CApi
 		public static unsafe extern cef_v8value_t* cef_v8value_create_double(double value);
 
 		/// <summary>
-		/// Create a new cef_v8value_t object of type function. This function should
-		/// only be called from within the scope of a cef_render_process_handler_t,
+		/// Create a new cef_v8value_t object of type function. This function should only
+		/// be called from within the scope of a cef_render_process_handler_t,
 		/// cef_v8handler_t or cef_v8accessor_t callback, or in combination with calling
 		/// enter() and exit() on a stored cef_v8context_t reference.
 		/// </summary>
@@ -1891,8 +1885,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Create a new cef_v8value_t object of type object with optional accessor
-		/// and/or interceptor. This function should only be called from within the
-		/// scope of a cef_render_process_handler_t, cef_v8handler_t or cef_v8accessor_t
+		/// and/or interceptor. This function should only be called from within the scope
+		/// of a cef_render_process_handler_t, cef_v8handler_t or cef_v8accessor_t
 		/// callback, or in combination with calling enter() and exit() on a stored
 		/// cef_v8context_t reference.
 		/// </summary>
@@ -1964,10 +1958,10 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Create a new waitable event. If |automatic_reset| is true (1) then the event
-		/// state is automatically reset to un-signaled after a single waiting thread
-		/// has been released; otherwise, the state remains signaled until reset() is
-		/// called manually. If |initially_signaled| is true (1) then the event will
-		/// start in the signaled state.
+		/// state is automatically reset to un-signaled after a single waiting thread has
+		/// been released; otherwise, the state remains signaled until reset() is called
+		/// manually. If |initially_signaled| is true (1) then the event will start in
+		/// the signaled state.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_waitable_event_capi.h as
@@ -2003,8 +1997,8 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Writes the contents of |src_dir| into a zip archive at |dest_file|. If
 		/// |include_hidden_files| is true (1) files starting with &quot;.&quot; will be included.
-		/// Returns true (1) on success.  Calling this function on the browser process
-		/// UI or IO threads is not allowed.
+		/// Returns true (1) on success.  Calling this function on the browser process UI
+		/// or IO threads is not allowed.
 		/// </summary>
 		/// <remarks>
 		/// Defined in include/capi/cef_file_util_capi.h as

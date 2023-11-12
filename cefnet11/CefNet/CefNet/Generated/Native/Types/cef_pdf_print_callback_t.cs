@@ -36,8 +36,8 @@ namespace CefNet.CApi
 		public void* on_pdf_print_finished;
 
 		/// <summary>
-		/// Method that will be executed when the PDF printing has completed. |path|
-		/// is the output path. |ok| will be true (1) if the printing completed
+		/// Method that will be executed when the PDF printing has completed. |path| is
+		/// the output path. |ok| will be true (1) if the printing completed
 		/// successfully or false (0) otherwise.
 		/// </summary>
 		[NativeName("on_pdf_print_finished")]

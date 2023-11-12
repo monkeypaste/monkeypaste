@@ -37,11 +37,10 @@ namespace CefNet.CApi
 		public void* on_print_start;
 
 		/// <summary>
-		/// Called when printing has started for the specified |browser|. This
-		/// function will be called before the other OnPrint*() functions and
-		/// irrespective of how printing was initiated (e.g.
-		/// cef_browser_host_t::print(), JavaScript window.print() or PDF extension
-		/// print button).
+		/// Called when printing has started for the specified |browser|. This function
+		/// will be called before the other OnPrint*() functions and irrespective of
+		/// how printing was initiated (e.g. cef_browser_host_t::print(), JavaScript
+		/// window.print() or PDF extension print button).
 		/// </summary>
 		[NativeName("on_print_start")]
 		public unsafe void OnPrintStart(cef_browser_t* browser)

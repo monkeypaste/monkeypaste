@@ -33,8 +33,7 @@ namespace CefNet
 
 		/// <summary>
 		/// Source is some other &quot;explicit&quot; navigation. This is the default value for
-		/// navigations where the actual type is unknown. See also
-		/// TT_DIRECT_LOAD_FLAG.
+		/// navigations where the actual type is unknown. See also TT_DIRECT_LOAD_FLAG.
 		/// </summary>
 		Explicit = 1,
 
@@ -100,11 +99,11 @@ namespace CefNet
 		/// search provider. If the user types a keyword (which also applies to
 		/// tab-to-search) in the omnibox this qualifier is applied to the transition
 		/// type of the generated url. TemplateURLModel then may generate an
-		/// additional visit with a transition type of TT_KEYWORD_GENERATED against
-		/// the url &apos;http://&apos; + keyword. For example, if you do a tab-to-search
-		/// against wikipedia the generated url has a transition qualifer of
-		/// TT_KEYWORD, and TemplateURLModel generates a visit for &apos;wikipedia.org&apos;
-		/// with a transition type of TT_KEYWORD_GENERATED. Chrome runtime only.
+		/// additional visit with a transition type of TT_KEYWORD_GENERATED against the
+		/// url &apos;http://&apos; + keyword. For example, if you do a tab-to-search against
+		/// wikipedia the generated url has a transition qualifer of TT_KEYWORD, and
+		/// TemplateURLModel generates a visit for &apos;wikipedia.org&apos; with a transition
+		/// type of TT_KEYWORD_GENERATED. Chrome runtime only.
 		/// </summary>
 		Keyword = 9,
 

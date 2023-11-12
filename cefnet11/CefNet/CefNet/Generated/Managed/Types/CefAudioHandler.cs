@@ -144,10 +144,10 @@ namespace CefNet
 		/// stream. |data| is an array representing the raw PCM data as a floating
 		/// point type, i.e. 4-byte value(s). |frames| is the number of frames in the
 		/// PCM packet. |pts| is the presentation timestamp (in milliseconds since the
-		/// Unix Epoch) and represents the time at which the decompressed packet
-		/// should be presented to the user. Based on |frames| and the
-		/// |channel_layout| value passed to OnAudioStreamStarted you can calculate
-		/// the size of the |data| array in bytes.
+		/// Unix Epoch) and represents the time at which the decompressed packet should
+		/// be presented to the user. Based on |frames| and the |channel_layout| value
+		/// passed to OnAudioStreamStarted you can calculate the size of the |data|
+		/// array in bytes.
 		/// </summary>
 		protected internal unsafe virtual void OnAudioStreamPacket(CefBrowser browser, IntPtr data, int frames, long pts)
 		{

@@ -57,11 +57,11 @@ namespace CefNet
 		extern bool ICefNavigationEntryVisitorPrivate.AvoidVisit();
 
 		/// <summary>
-		/// Method that will be executed. Do not keep a reference to |entry| outside
-		/// of this callback. Return true (1) to continue visiting entries or false
-		/// (0) to stop. |current| is true (1) if this entry is the currently loaded
-		/// navigation entry. |index| is the 0-based index of this entry and |total|
-		/// is the total number of entries.
+		/// Method that will be executed. Do not keep a reference to |entry| outside of
+		/// this callback. Return true (1) to continue visiting entries or false (0) to
+		/// stop. |current| is true (1) if this entry is the currently loaded
+		/// navigation entry. |index| is the 0-based index of this entry and |total| is
+		/// the total number of entries.
 		/// </summary>
 		protected internal unsafe virtual bool Visit(CefNavigationEntry entry, bool current, int index, int total)
 		{

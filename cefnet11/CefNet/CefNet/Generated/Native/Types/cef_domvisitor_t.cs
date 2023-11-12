@@ -38,9 +38,9 @@ namespace CefNet.CApi
 		/// <summary>
 		/// Method executed for visiting the DOM. The document object passed to this
 		/// function represents a snapshot of the DOM at the time this function is
-		/// executed. DOM objects are only valid for the scope of this function. Do
-		/// not keep references to or attempt to access any DOM objects outside the
-		/// scope of this function.
+		/// executed. DOM objects are only valid for the scope of this function. Do not
+		/// keep references to or attempt to access any DOM objects outside the scope
+		/// of this function.
 		/// </summary>
 		[NativeName("visit")]
 		public unsafe void Visit(cef_domdocument_t* document)

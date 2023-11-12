@@ -36,8 +36,8 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Called to release |buffer| when the ArrayBuffer JS object is garbage
-		/// collected. |buffer| is the value that was passed to CreateArrayBuffer
-		/// along with this object.
+		/// collected. |buffer| is the value that was passed to CreateArrayBuffer along
+		/// with this object.
 		/// </summary>
 		[NativeName("release_buffer")]
 		public unsafe void ReleaseBuffer(void* buffer)

@@ -23,10 +23,10 @@ namespace CefNet
 	/// <summary>
 	/// Structure that should be implemented to handle V8 interceptor calls. The
 	/// functions of this structure will be called on the thread associated with the
-	/// V8 interceptor. Interceptor&apos;s named property handlers (with first argument
-	/// of type CefString) are called when object is indexed by string. Indexed
-	/// property handlers (with first argument of type int) are called when object
-	/// is indexed by integer.
+	/// V8 interceptor. Interceptor&apos;s named property handlers (with first argument of
+	/// type CefString) are called when object is indexed by string. Indexed property
+	/// handlers (with first argument of type int) are called when object is indexed
+	/// by integer.
 	/// </summary>
 	/// <remarks>
 	/// Role: Handler
@@ -73,13 +73,13 @@ namespace CefNet
 		extern bool ICefV8InterceptorPrivate.AvoidGetByName();
 
 		/// <summary>
-		/// Handle retrieval of the interceptor value identified by |name|. |object|
-		/// is the receiver (&apos;this&apos; object) of the interceptor. If retrieval succeeds,
-		/// set |retval| to the return value. If the requested value does not exist,
-		/// don&apos;t set either |retval| or |exception|. If retrieval fails, set
-		/// |exception| to the exception that will be thrown. If the property has an
-		/// associated accessor, it will be called only if you don&apos;t set |retval|.
-		/// Return true (1) if interceptor retrieval was handled, false (0) otherwise.
+		/// Handle retrieval of the interceptor value identified by |name|. |object| is
+		/// the receiver (&apos;this&apos; object) of the interceptor. If retrieval succeeds, set
+		/// |retval| to the return value. If the requested value does not exist, don&apos;t
+		/// set either |retval| or |exception|. If retrieval fails, set |exception| to
+		/// the exception that will be thrown. If the property has an associated
+		/// accessor, it will be called only if you don&apos;t set |retval|. Return true (1)
+		/// if interceptor retrieval was handled, false (0) otherwise.
 		/// </summary>
 		protected internal unsafe virtual bool GetByName(string name, CefV8Value @object, ref CefV8Value retval, ref string exception)
 		{

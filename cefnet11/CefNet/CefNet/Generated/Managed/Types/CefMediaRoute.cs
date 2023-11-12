@@ -23,9 +23,9 @@ namespace CefNet
 	/// <summary>
 	/// Represents the route between a media source and sink. Instances of this
 	/// object are created via cef_media_router_t::CreateRoute and retrieved via
-	/// cef_media_observer_t::OnRoutes. Contains the status and metadata of a
-	/// routing operation. The functions of this structure may be called on any
-	/// browser process thread unless otherwise indicated.
+	/// cef_media_observer_t::OnRoutes. Contains the status and metadata of a routing
+	/// operation. The functions of this structure may be called on any browser
+	/// process thread unless otherwise indicated.
 	/// </summary>
 	/// <remarks>
 	/// Role: Proxy

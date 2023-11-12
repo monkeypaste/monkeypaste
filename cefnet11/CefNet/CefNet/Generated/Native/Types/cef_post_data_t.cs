@@ -53,10 +53,10 @@ namespace CefNet.CApi
 		public void* has_excluded_elements;
 
 		/// <summary>
-		/// Returns true (1) if the underlying POST data includes elements that are
-		/// not represented by this cef_post_data_t object (for example, multi-part
-		/// file upload data). Modifying cef_post_data_t objects with excluded
-		/// elements may result in the request failing.
+		/// Returns true (1) if the underlying POST data includes elements that are not
+		/// represented by this cef_post_data_t object (for example, multi-part file
+		/// upload data). Modifying cef_post_data_t objects with excluded elements may
+		/// result in the request failing.
 		/// </summary>
 		[NativeName("has_excluded_elements")]
 		public unsafe int HasExcludedElements()
@@ -125,8 +125,7 @@ namespace CefNet.CApi
 		public void* add_element;
 
 		/// <summary>
-		/// Add the specified post data element.  Returns true (1) if the add
-		/// succeeds.
+		/// Add the specified post data element.  Returns true (1) if the add succeeds.
 		/// </summary>
 		[NativeName("add_element")]
 		public unsafe int AddElement(cef_post_data_element_t* element)

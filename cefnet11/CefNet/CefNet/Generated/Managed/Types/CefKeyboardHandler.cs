@@ -64,9 +64,8 @@ namespace CefNet
 		/// Called before a keyboard event is sent to the renderer. |event| contains
 		/// information about the keyboard event. |os_event| is the operating system
 		/// event message, if any. Return true (1) if the event was handled or false
-		/// (0) otherwise. If the event will be handled in on_key_event() as a
-		/// keyboard shortcut set |is_keyboard_shortcut| to true (1) and return false
-		/// (0).
+		/// (0) otherwise. If the event will be handled in on_key_event() as a keyboard
+		/// shortcut set |is_keyboard_shortcut| to true (1) and return false (0).
 		/// </summary>
 		protected internal unsafe virtual bool OnPreKeyEvent(CefBrowser browser, CefKeyEvent @event, CefEventHandle osEvent, ref int isKeyboardShortcut)
 		{

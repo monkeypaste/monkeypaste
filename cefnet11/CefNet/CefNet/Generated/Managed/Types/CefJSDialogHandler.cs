@@ -77,13 +77,13 @@ namespace CefNet
 		/// preferable to immediately executing the callback as this is used to detect
 		/// presumably malicious behavior like spamming alert messages in
 		/// onbeforeunload). Set |suppress_message| to false (0) and return false (0)
-		/// to use the default implementation (the default implementation will show
-		/// one modal dialog at a time and suppress any additional dialog requests
-		/// until the displayed dialog is dismissed). Return true (1) if the
-		/// application will use a custom dialog or if the callback has been executed
-		/// immediately. Custom dialogs may be either modal or modeless. If a custom
-		/// dialog is used the application must execute |callback| once the custom
-		/// dialog is dismissed.
+		/// to use the default implementation (the default implementation will show one
+		/// modal dialog at a time and suppress any additional dialog requests until
+		/// the displayed dialog is dismissed). Return true (1) if the application will
+		/// use a custom dialog or if the callback has been executed immediately.
+		/// Custom dialogs may be either modal or modeless. If a custom dialog is used
+		/// the application must execute |callback| once the custom dialog is
+		/// dismissed.
 		/// </summary>
 		protected internal unsafe virtual bool OnJSDialog(CefBrowser browser, string originUrl, CefJSDialogType dialogType, string messageText, string defaultPromptText, CefJSDialogCallback callback, ref int suppressMessage)
 		{
@@ -115,12 +115,12 @@ namespace CefNet
 		extern bool ICefJSDialogHandlerPrivate.AvoidOnBeforeUnloadDialog();
 
 		/// <summary>
-		/// Called to run a dialog asking the user if they want to leave a page.
-		/// Return false (0) to use the default dialog implementation. Return true (1)
-		/// if the application will use a custom dialog or if the callback has been
-		/// executed immediately. Custom dialogs may be either modal or modeless. If a
-		/// custom dialog is used the application must execute |callback| once the
-		/// custom dialog is dismissed.
+		/// Called to run a dialog asking the user if they want to leave a page. Return
+		/// false (0) to use the default dialog implementation. Return true (1) if the
+		/// application will use a custom dialog or if the callback has been executed
+		/// immediately. Custom dialogs may be either modal or modeless. If a custom
+		/// dialog is used the application must execute |callback| once the custom
+		/// dialog is dismissed.
 		/// </summary>
 		protected internal unsafe virtual bool OnBeforeUnloadDialog(CefBrowser browser, string messageText, bool isReload, CefJSDialogCallback callback)
 		{
@@ -152,9 +152,9 @@ namespace CefNet
 		extern bool ICefJSDialogHandlerPrivate.AvoidOnResetDialogState();
 
 		/// <summary>
-		/// Called to cancel any pending dialogs and reset any saved dialog state.
-		/// Will be called due to events like page navigation irregardless of whether
-		/// any dialogs are currently pending.
+		/// Called to cancel any pending dialogs and reset any saved dialog state. Will
+		/// be called due to events like page navigation irregardless of whether any
+		/// dialogs are currently pending.
 		/// </summary>
 		protected internal unsafe virtual void OnResetDialogState(CefBrowser browser)
 		{

@@ -36,8 +36,8 @@ namespace CefNet.CApi
 		/// The maximum rate in frames per second (fps) that CefRenderHandler::OnPaint
 		/// will be called for a windowless browser. The actual fps may be lower if
 		/// the browser cannot generate frames at the requested rate. The minimum
-		/// value is 1 and the maximum value is 60 (default 30). This value can also
-		/// be changed dynamically via CefBrowserHost::SetWindowlessFrameRate.
+		/// value is 1 and the maximum value is 60 (default 30). This value can also be
+		/// changed dynamically via CefBrowserHost::SetWindowlessFrameRate.
 		/// </summary>
 		public int windowless_frame_rate;
 
@@ -106,8 +106,8 @@ namespace CefNet.CApi
 		public CefState javascript_dom_paste;
 
 		/// <summary>
-		/// Controls whether image URLs will be loaded from the network. A cached
-		/// image will still be rendered if requested. Also configurable using the
+		/// Controls whether image URLs will be loaded from the network. A cached image
+		/// will still be rendered if requested. Also configurable using the
 		/// &quot;disable-image-loading&quot; command-line switch.
 		/// </summary>
 		public CefState image_loading;
@@ -154,8 +154,8 @@ namespace CefNet.CApi
 		/// Background color used for the browser before a document is loaded and when
 		/// no document color is specified. The alpha component must be either fully
 		/// opaque (0xFF) or fully transparent (0x00). If the alpha component is fully
-		/// opaque then the RGB components will be used as the background color. If
-		/// the alpha component is fully transparent for a windowed browser then the
+		/// opaque then the RGB components will be used as the background color. If the
+		/// alpha component is fully transparent for a windowed browser then the
 		/// CefSettings.background_color value will be used. If the alpha component is
 		/// fully transparent for a windowless (off-screen) browser then transparent
 		/// painting will be enabled.
@@ -171,8 +171,8 @@ namespace CefNet.CApi
 		public cef_string_t accept_language_list;
 
 		/// <summary>
-		/// Controls whether the Chrome status bubble will be used. Only supported
-		/// with the Chrome runtime. For details about the status bubble see
+		/// Controls whether the Chrome status bubble will be used. Only supported with
+		/// the Chrome runtime. For details about the status bubble see
 		/// https://www.chromium.org/user-experience/status-bubble/
 		/// </summary>
 		public CefState chrome_status_bubble;

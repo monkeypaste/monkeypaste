@@ -40,17 +40,12 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// The path to a separate executable that will be launched for sub-processes.
-		/// If this value is empty on Windows or Linux then the main process
-		/// executable will be used. If this value is empty on macOS then a helper
-		/// executable must exist at &quot;Contents/Frameworks/
-		/// &lt;app
-		/// &gt;
-		/// Helper.app/Contents/MacOS/
-		/// &lt;app
-		/// &gt; Helper&quot; in the top-level app bundle. See
-		/// the comments on CefExecuteProcess() for details. If this value is
-		/// non-empty then it must be an absolute path. Also configurable using the
-		/// &quot;browser-subprocess-path&quot; command-line switch.
+		/// If this value is empty on Windows or Linux then the main process executable
+		/// will be used. If this value is empty on macOS then a helper executable must
+		/// exist at &quot;Contents/Frameworks/&lt;app&gt; Helper.app/Contents/MacOS/&lt;app&gt; Helper&quot;
+		/// in the top-level app bundle. See the comments on CefExecuteProcess() for
+		/// details. If this value is non-empty then it must be an absolute path. Also
+		/// configurable using the &quot;browser-subprocess-path&quot; command-line switch.
 		/// </summary>
 		public cef_string_t browser_subprocess_path;
 
@@ -72,17 +67,17 @@ namespace CefNet.CApi
 		public cef_string_t main_bundle_path;
 
 		/// <summary>
-		/// Set to true (1) to enable use of the Chrome runtime in CEF. This feature
-		/// is considered experimental and is not recommended for most users at this
-		/// time. See issue #2969 for details.
+		/// Set to true (1) to enable use of the Chrome runtime in CEF. This feature is
+		/// considered experimental and is not recommended for most users at this time.
+		/// See issue #2969 for details.
 		/// </summary>
 		public int chrome_runtime;
 
 		/// <summary>
 		/// Set to true (1) to have the browser process message loop run in a separate
 		/// thread. If false (0) then the CefDoMessageLoopWork() function must be
-		/// called from your application message loop. This option is only supported
-		/// on Windows and Linux.
+		/// called from your application message loop. This option is only supported on
+		/// Windows and Linux.
 		/// </summary>
 		public int multi_threaded_message_loop;
 
@@ -90,19 +85,18 @@ namespace CefNet.CApi
 		/// Set to true (1) to control browser process main (UI) thread message pump
 		/// scheduling via the CefBrowserProcessHandler::OnScheduleMessagePumpWork()
 		/// callback. This option is recommended for use in combination with the
-		/// CefDoMessageLoopWork() function in cases where the CEF message loop must
-		/// be integrated into an existing application message loop (see additional
-		/// comments and warnings on CefDoMessageLoopWork). Enabling this option is
-		/// not recommended for most users; leave this option disabled and use either
-		/// the CefRunMessageLoop() function or multi_threaded_message_loop if
-		/// possible.
+		/// CefDoMessageLoopWork() function in cases where the CEF message loop must be
+		/// integrated into an existing application message loop (see additional
+		/// comments and warnings on CefDoMessageLoopWork). Enabling this option is not
+		/// recommended for most users; leave this option disabled and use either the
+		/// CefRunMessageLoop() function or multi_threaded_message_loop if possible.
 		/// </summary>
 		public int external_message_pump;
 
 		/// <summary>
-		/// Set to true (1) to enable windowless (off-screen) rendering support. Do
-		/// not enable this value if the application does not use windowless rendering
-		/// as it may reduce rendering performance on some systems.
+		/// Set to true (1) to enable windowless (off-screen) rendering support. Do not
+		/// enable this value if the application does not use windowless rendering as
+		/// it may reduce rendering performance on some systems.
 		/// </summary>
 		public int windowless_rendering_enabled;
 
@@ -118,13 +112,13 @@ namespace CefNet.CApi
 		/// The location where data for the global browser cache will be stored on
 		/// disk. If this value is non-empty then it must be an absolute path that is
 		/// either equal to or a child directory of CefSettings.root_cache_path. If
-		/// this value is empty then browsers will be created in &quot;incognito mode&quot;
-		/// where in-memory caches are used for storage and no data is persisted to
-		/// disk. HTML5 databases such as localStorage will only persist across
-		/// sessions if a cache path is specified. Can be overridden for individual
-		/// CefRequestContext instances via the CefRequestContextSettings.cache_path
-		/// value. When using the Chrome runtime the &quot;default&quot; profile will be used if
-		/// |cache_path| and |root_cache_path| have the same value.
+		/// this value is empty then browsers will be created in &quot;incognito mode&quot; where
+		/// in-memory caches are used for storage and no data is persisted to disk.
+		/// HTML5 databases such as localStorage will only persist across sessions if a
+		/// cache path is specified. Can be overridden for individual CefRequestContext
+		/// instances via the CefRequestContextSettings.cache_path value. When using
+		/// the Chrome runtime the &quot;default&quot; profile will be used if |cache_path| and
+		/// |root_cache_path| have the same value.
 		/// </summary>
 		public cef_string_t cache_path;
 
@@ -153,9 +147,9 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// To persist session cookies (cookies without an expiry date or validity
-		/// interval) by default when using the global cookie manager set this value
-		/// to true (1). Session cookies are generally intended to be transient and
-		/// most Web browsers do not persist them. A |cache_path| value must also be
+		/// interval) by default when using the global cookie manager set this value to
+		/// true (1). Session cookies are generally intended to be transient and most
+		/// Web browsers do not persist them. A |cache_path| value must also be
 		/// specified to enable this feature. Also configurable using the
 		/// &quot;persist-session-cookies&quot; command-line switch. Can be overridden for
 		/// individual CefRequestContext instances via the
@@ -190,20 +184,22 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// The locale string that will be passed to WebKit. If empty the default
-		/// locale of &quot;en-US&quot; will be used. This value is ignored on Linux where
-		/// locale is determined using environment variable parsing with the
-		/// precedence order: LANGUAGE, LC_ALL, LC_MESSAGES and LANG. Also
-		/// configurable using the &quot;lang&quot; command-line switch.
+		/// locale of &quot;en-US&quot; will be used. This value is ignored on Linux where locale
+		/// is determined using environment variable parsing with the precedence order:
+		/// LANGUAGE, LC_ALL, LC_MESSAGES and LANG. Also configurable using the &quot;lang&quot;
+		/// command-line switch.
 		/// </summary>
 		public cef_string_t locale;
 
 		/// <summary>
 		/// The directory and file name to use for the debug log. If empty a default
-		/// log file name and location will be used. On Windows and Linux a
-		/// &quot;debug.log&quot; file will be written in the main executable directory. On
-		/// MacOS a &quot;~/Library/Logs/[app name]_debug.log&quot; file will be written where
-		/// [app name] is the name of the main app executable. Also configurable using
-		/// the &quot;log-file&quot; command-line switch.
+		/// log file name and location will be used. On Windows and Linux a &quot;debug.log&quot;
+		/// file will be written in the main executable directory. On MacOS a
+		/// &quot;~/Library/Logs/&lt;app name&gt;_debug.log&quot; file will be written where 
+		/// &lt;app
+		/// name&gt;
+		/// is the name of the main app executable. Also configurable using the
+		/// &quot;log-file&quot; command-line switch.
 		/// </summary>
 		public cef_string_t log_file;
 
@@ -243,11 +239,11 @@ namespace CefNet.CApi
 		public cef_string_t locales_dir_path;
 
 		/// <summary>
-		/// Set to true (1) to disable loading of pack files for resources and
-		/// locales. A resource bundle handler must be provided for the browser and
-		/// render processes via CefApp::GetResourceBundleHandler() if loading of pack
-		/// files is disabled. Also configurable using the &quot;disable-pack-loading&quot;
-		/// command- line switch.
+		/// Set to true (1) to disable loading of pack files for resources and locales.
+		/// A resource bundle handler must be provided for the browser and render
+		/// processes via CefApp::GetResourceBundleHandler() if loading of pack files
+		/// is disabled. Also configurable using the &quot;disable-pack-loading&quot; command-
+		/// line switch.
 		/// </summary>
 		public int pack_loading_disabled;
 
@@ -263,11 +259,10 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// The number of stack trace frames to capture for uncaught exceptions.
-		/// Specify a positive value to enable the
-		/// CefRenderProcessHandler::OnUncaughtException() callback. Specify 0
-		/// (default value) and OnUncaughtException() will not be called. Also
-		/// configurable using the &quot;uncaught-exception-stack-size&quot; command-line
-		/// switch.
+		/// Specify a positive value to enable the CefRenderProcessHandler::
+		/// OnUncaughtException() callback. Specify 0 (default value) and
+		/// OnUncaughtException() will not be called. Also configurable using the
+		/// &quot;uncaught-exception-stack-size&quot; command-line switch.
 		/// </summary>
 		public int uncaught_exception_stack_size;
 
@@ -275,11 +270,11 @@ namespace CefNet.CApi
 		/// Background color used for the browser before a document is loaded and when
 		/// no document color is specified. The alpha component must be either fully
 		/// opaque (0xFF) or fully transparent (0x00). If the alpha component is fully
-		/// opaque then the RGB components will be used as the background color. If
-		/// the alpha component is fully transparent for a windowed browser then the
+		/// opaque then the RGB components will be used as the background color. If the
+		/// alpha component is fully transparent for a windowed browser then the
 		/// default value of opaque white be used. If the alpha component is fully
-		/// transparent for a windowless (off-screen) browser then transparent
-		/// painting will be enabled.
+		/// transparent for a windowless (off-screen) browser then transparent painting
+		/// will be enabled.
 		/// </summary>
 		public cef_color_t background_color;
 
@@ -295,9 +290,9 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Comma delimited list of schemes supported by the associated
-		/// CefCookieManager. If |cookieable_schemes_exclude_defaults| is false (0)
-		/// the default schemes (&quot;http&quot;, &quot;https&quot;, &quot;ws&quot; and &quot;wss&quot;) will also be
-		/// supported. Specifying a |cookieable_schemes_list| value and setting
+		/// CefCookieManager. If |cookieable_schemes_exclude_defaults| is false (0) the
+		/// default schemes (&quot;http&quot;, &quot;https&quot;, &quot;ws&quot; and &quot;wss&quot;) will also be supported.
+		/// Specifying a |cookieable_schemes_list| value and setting
 		/// |cookieable_schemes_exclude_defaults| to true (1) will disable all loading
 		/// and saving of cookies for this manager. Can be overridden
 		/// for individual CefRequestContext instances via the

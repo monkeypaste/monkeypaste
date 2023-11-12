@@ -40,14 +40,14 @@ namespace CefNet.CApi
 		/// to display. |title| to the title to be used for the dialog and may be NULL
 		/// to show the default title (&quot;Open&quot; or &quot;Save&quot; depending on the mode).
 		/// |default_file_path| is the path with optional directory and/or file name
-		/// component that should be initially selected in the dialog.
-		/// |accept_filters| are used to restrict the selectable file types and may
-		/// any combination of (a) valid lower-cased MIME types (e.g. &quot;text/*&quot; or
-		/// &quot;image/*&quot;), (b) individual file extensions (e.g. &quot;.txt&quot; or &quot;.png&quot;), or (c)
-		/// combined description and file extension delimited using &quot;|&quot; and &quot;;&quot; (e.g.
-		/// &quot;Image Types|.png;.gif;.jpg&quot;). To display a custom dialog return true (1)
-		/// and execute |callback| either inline or at a later time. To display the
-		/// default dialog return false (0).
+		/// component that should be initially selected in the dialog. |accept_filters|
+		/// are used to restrict the selectable file types and may any combination of
+		/// (a) valid lower-cased MIME types (e.g. &quot;text/*&quot; or &quot;image/*&quot;), (b)
+		/// individual file extensions (e.g. &quot;.txt&quot; or &quot;.png&quot;), or (c) combined
+		/// description and file extension delimited using &quot;|&quot; and &quot;;&quot; (e.g. &quot;Image
+		/// Types|.png;.gif;.jpg&quot;). To display a custom dialog return true (1) and
+		/// execute |callback| either inline or at a later time. To display the default
+		/// dialog return false (0).
 		/// </summary>
 		[NativeName("on_file_dialog")]
 		public unsafe int OnFileDialog(cef_browser_t* browser, CefFileDialogMode mode, [Immutable]cef_string_t* title, [Immutable]cef_string_t* default_file_path, cef_string_list_t accept_filters, cef_file_dialog_callback_t* callback)

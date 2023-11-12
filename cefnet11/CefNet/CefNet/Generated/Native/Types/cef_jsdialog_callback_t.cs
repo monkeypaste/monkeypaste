@@ -37,8 +37,7 @@ namespace CefNet.CApi
 
 		/// <summary>
 		/// Continue the JS dialog request. Set |success| to true (1) if the OK button
-		/// was pressed. The |user_input| value should be specified for prompt
-		/// dialogs.
+		/// was pressed. The |user_input| value should be specified for prompt dialogs.
 		/// </summary>
 		[NativeName("cont")]
 		public unsafe void Continue(int success, [Immutable]cef_string_t* user_input)

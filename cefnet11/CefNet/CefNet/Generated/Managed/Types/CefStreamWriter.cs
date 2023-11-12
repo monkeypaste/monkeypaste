@@ -21,8 +21,8 @@ using CefNet.Internal;
 namespace CefNet
 {
 	/// <summary>
-	/// Structure used to write data to a stream. The functions of this structure
-	/// may be called on any thread.
+	/// Structure used to write data to a stream. The functions of this structure may
+	/// be called on any thread.
 	/// </summary>
 	/// <remarks>
 	/// Role: Proxy
@@ -48,9 +48,8 @@ namespace CefNet
 		}
 
 		/// <summary>
-		/// Seek to the specified offset position. |whence| may be any one of
-		/// SEEK_CUR, SEEK_END or SEEK_SET. Returns zero on success and non-zero on
-		/// failure.
+		/// Seek to the specified offset position. |whence| may be any one of SEEK_CUR,
+		/// SEEK_END or SEEK_SET. Returns zero on success and non-zero on failure.
 		/// </summary>
 		public unsafe virtual int Seek(long offset, int whence)
 		{
@@ -75,8 +74,8 @@ namespace CefNet
 
 		/// <summary>
 		/// Returns true (1) if this writer performs work like accessing the file
-		/// system which may block. Used as a hint for determining the thread to
-		/// access the writer from.
+		/// system which may block. Used as a hint for determining the thread to access
+		/// the writer from.
 		/// </summary>
 		public unsafe virtual bool MayBlock()
 		{

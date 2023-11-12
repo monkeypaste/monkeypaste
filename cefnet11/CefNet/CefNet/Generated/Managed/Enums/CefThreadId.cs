@@ -34,7 +34,7 @@ namespace CefNet
 		UI = 0,
 
 		/// <summary>
-		/// Used for blocking tasks like file system access where the user won&apos;t
+		/// Used for blocking tasks (e.g. file system access) where the user won&apos;t
 		/// notice if the task takes an arbitrarily long time to complete. All tasks
 		/// posted after CefBrowserProcessHandler::OnContextInitialized() and before
 		/// CefShutdown() are guaranteed to run.
@@ -42,7 +42,7 @@ namespace CefNet
 		FileBackground = 1,
 
 		/// <summary>
-		/// Used for blocking tasks like file system access that affect UI or
+		/// Used for blocking tasks (e.g. file system access) that affect UI or
 		/// responsiveness of future user interactions. Do not use if an immediate
 		/// response to a user interaction is expected. All tasks posted after
 		/// CefBrowserProcessHandler::OnContextInitialized() and before CefShutdown()
@@ -55,7 +55,7 @@ namespace CefNet
 		FileUserVisible = 2,
 
 		/// <summary>
-		/// Used for blocking tasks like file system access that affect UI
+		/// Used for blocking tasks (e.g. file system access) that affect UI
 		/// immediately after a user interaction. All tasks posted after
 		/// CefBrowserProcessHandler::OnContextInitialized() and before CefShutdown()
 		/// are guaranteed to run.
@@ -80,8 +80,8 @@ namespace CefNet
 		/// The main thread in the renderer. Used for all WebKit and V8 interaction.
 		/// Tasks may be posted to this thread after
 		/// CefRenderProcessHandler::OnWebKitInitialized but are not guaranteed to
-		/// run before sub-process termination (sub-processes may be killed at any
-		/// time without warning).
+		/// run before sub-process termination (sub-processes may be killed at any time
+		/// without warning).
 		/// </summary>
 		Renderer = 6,
 	}

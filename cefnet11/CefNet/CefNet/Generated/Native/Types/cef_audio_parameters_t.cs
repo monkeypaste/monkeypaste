@@ -19,8 +19,7 @@ using CefNet.WinApi;
 namespace CefNet.CApi
 {
 	/// <summary>
-	/// Structure representing the audio parameters for setting up the audio
-	/// handler.
+	/// Structure representing the audio parameters for setting up the audio handler.
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe partial struct cef_audio_parameters_t
