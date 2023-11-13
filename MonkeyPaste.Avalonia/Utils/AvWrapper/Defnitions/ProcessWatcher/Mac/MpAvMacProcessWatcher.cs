@@ -1,164 +1,112 @@
 ﻿#if MAC
+using Avalonia.Controls;
 using MonkeyPaste.Common;
 using MonoMac.AppKit;
+using MonoMac.CoreGraphics;
+using MonoMac.Foundation;
+using MonoMac.ObjCRuntime;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
     public class MpAvMacProcessWatcher : MpAvProcessWatcherBase {
-        #region Private Variables
+        public override IEnumerable<MpPortableProcessInfo> AllWindowProcessInfos =>
+            NSWorkspace.SharedWorkspace.RunningApplications
+            .Where(x => IsHandleWindowProcess(x.Handle))
+            .Select(x => GetProcessInfoByHandle(x.Handle));
 
-        private object _lockObj = new object();
+        protected override string GetProcessPath(nint handle) {
+            if (new NSRunningApplication(handle) is not { } app) {
+                //}
+                //if (NSWorkspace.SharedWorkspace.RunningApplications
+                //    .FirstOrDefault(x => x.Handle == handle) is not { } app) {
+                return string.Empty;
+            }
+            return app.ExecutableUrl.AbsoluteString;
+        }
+
+        protected override nint GetActiveProcessHandle() {
+            if (NSWorkspace.SharedWorkspace.FrontmostApplication
+                    is not { } app) {
+                return nint.Zero;
+            }
+            return app.Handle;
+        }
+
+        protected override bool IsHandleWindowProcess(nint handle) {
+            //if (NSWorkspace.SharedWorkspace.RunningApplications
+            //    .FirstOrDefault(x => x.Handle == handle) is not { } app) {
+            //    return false;
+            //}
+            //return !app.Terminated && app.ActivationPolicy != NSApplicationActivationPolicy.Prohibited;
+            var result = GetCGWindowByHandle(handle);
+            return result != default;
+        }
+
+
+        public override nint SetActiveProcess(nint handle) {
+            // trys to activate and returns actual active regardless of success
+            // from https://stackoverflow.com/a/47264136/105028
+            if (new NSRunningApplication(handle) is not { } app) {
+                // not found
+                nint last_active_handle = GetActiveProcessHandle();
+                return last_active_handle;
+            }
+            app.Activate(NSApplicationActivationOptions.ActivateIgnoringOtherWindows);
+            nint actual_active = GetActiveProcessHandle();
+            return actual_active;
+        }
+
+        protected override nint GetParentHandleAtPoint(MpPoint ponint) {
+            // see inner if here https://gist.github.com/matthewreagan/2f3a30b8b229e9e2aa7c
+            throw new NotImplementedException();
+        }
+
+
+        protected override string GetProcessTitle(nint handle) {
+            // from https://stackoverflow.com/a/55662306/105028
+            if (GetCGWindowByHandle(handle) is not { } win_obj) {
+                return string.Empty;
+            }
+            NSString win_name_key = new NSString("kCGWindowName");
+            NSString win_name_val = win_obj.ValueForKey(win_name_key) as NSString;
+            return win_name_val.ToString();
+        }
+
+        #region Helpers
+
+        public static NSObject GetCGWindowByHandle(nint handle) {
+            // from https://stackoverflow.com/questions/52441936/macos-active-window-title-using-c-sharp
+            string handle_str = handle.ToString();
+            IntPtr windowInfo = CGWindowListCopyWindowInfo(CGWindowListOption.OnScreenOnly, 0);
+            NSArray values = Runtime.GetNSObject(windowInfo) as NSArray;
+
+            for (ulong i = 0, len = values.Count; i < len; i++) {
+                NSObject window = Runtime.GetNSObject(values.ValueAt(i));
+                NSNumber pid_val = window.ValueForKey(new NSString("kCGWindowOwnerPID")) as NSNumber;
+                string pid_val_str = pid_val.StringValue;
+                if (handle_str == pid_val_str) {
+                    return window;
+                }
+            }
+            return default;
+        }
+
+        #region Imports
+        const string QuartzCore = @"/System/Library/Frameworks/QuartzCore.framework/QuartzCore";
+
+        [DllImport(QuartzCore)]
+        static extern IntPtr CGWindowListCopyWindowInfo(CGWindowListOption option, uint relativeToWindow);
+
 
         #endregion
 
-        #region Constructors
-        #endregion
-
-        #region Public Methods
-        public override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
-            throw new NotImplementedException();
-        }
-        public override bool IsAdmin(object handleIdOrTitle) {
-            throw new NotImplementedException();
-        }
-        public override IntPtr SetActiveProcess(IntPtr handle) {
-            throw new NotImplementedException();
-        }
-        public override IntPtr GetParentHandleAtPoint(MpPoint poIntPtr) {
-            throw new NotImplementedException();
-        }
-        public override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
-            throw new NotImplementedException();
-        }
-        //public override string getprocessapplicationname(intptr handle) {
-        //    var runningapps = nsworkspace.sharedworkspace.runningapplications;
-        //    var matchapp = runningapps.firstordefault(x => x.handle == handle);
-        //    string name = matchapp == default ? string.empty : matchapp.localizedname;
-
-        //    runningapps.foreach(x => x.dispose());
-        //    return name;
-        //}
-
-        //public override string GetProcessMainWindowTitle(IntPtr handle) {
-        //    return GetProcessApplicationName(handle);
-        //}
-
-        //public override string GetProcessPath(IntPtr handle) {
-        //    var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
-        //    var matchApp = runningApps.FirstOrDefault(x => x.Handle == handle);
-        //    string path = matchApp == default ? String.Empty : matchApp.ExecutableUrl.AbsoluteString.ToLower();
-
-        //    runningApps.ForEach(x => x.Dispose());
-        //    return path;
-        //}
-
-        //public override bool IsHandleRunningProcess(IntPtr handle) {
-        //    var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
-        //    var matchApp = runningApps.FirstOrDefault(x => x.Handle == handle);
-        //    bool isRunning = matchApp == default ? false : true;
-
-        //    runningApps.ForEach(x => x.Dispose());
-        //    return isRunning;
-        //}
-        #endregion
-
-        #region Protected Methods
-        public override MpPortableProcessInfo GetActiveProcessInfo() {
-            var active_app = NSWorkspace.SharedWorkspace.FrontmostApplication;
-            var active_info = new MpPortableProcessInfo() {
-                Handle = active_app.Handle,
-                ProcessPath = active_app.ExecutableUrl.AbsoluteString.ToLower(),
-                MainWindowTitle = active_app.LocalizedName
-            };
-            return active_info;
-        }
-
-        protected override void CreateRunningProcessLookup() {
-            if (RunningProcessLookup == null) {
-                RunningProcessLookup = new ConcurrentDictionary<string, ObservableCollection<IntPtr>>();
-            }
-
-            var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
-            var filteredApps = FilterRunningApplications(runningApps);
-
-            foreach (var runningApp in filteredApps) {
-                if (RunningProcessLookup.TryGetValue(runningApp.ExecutableUrl.AbsoluteString.ToLower(), out var handles)) {
-                    handles.Add(runningApp.Handle);
-                    RunningProcessLookup[runningApp.ExecutableUrl.AbsoluteString.ToLower()] = handles;
-                } else {
-                    RunningProcessLookup.TryAdd(runningApp.ExecutableUrl.AbsoluteString.ToLower(), new() { runningApp.Handle });
-                }
-            }
-            runningApps.ForEach(x => x.Dispose());
-        }
-
-        protected override MpPortableProcessInfo RefreshRunningProcessLookup() {
-            lock (_lockObj) {
-                MpPortableProcessInfo activeAppInfo = null;
-
-                var runningApps = NSWorkspace.SharedWorkspace.RunningApplications;
-                var filteredApps = FilterRunningApplications(runningApps);
-                var refreshedPaths = new List<string>();
-
-                foreach (var runningApp in filteredApps) {
-                    ObservableCollection<IntPtr> handles = null;
-                    if (RunningProcessLookup.TryGetValue(runningApp.ExecutableUrl.AbsoluteString.ToLower(), out handles)) {
-                        // application is already known
-                        if (!handles.Contains(runningApp.Handle)) {
-                            //handle is new
-                            handles.Add(runningApp.Handle);
-                        }
-
-                    } else {
-                        // new process found
-                        handles = new() { runningApp.Handle };
-                        RunningProcessLookup.TryAdd(runningApp.ExecutableUrl.AbsoluteString.ToLower(), handles);
-                    }
-                    if (handles == null) {
-                        Debugger.Break();
-                    }
-                    if (runningApp.Active) {
-                        // handle is active
-                        if (activeAppInfo != null) {
-                            Debugger.Break();
-                        } else {
-                            int runningAppIdx = handles.IndexOf(runningApp.Handle);
-                            handles.Move(runningAppIdx, 0);
-
-                            activeAppInfo = new MpPortableProcessInfo() {
-                                Handle = runningApp.Handle,
-                                ProcessPath = runningApp.ExecutableUrl.AbsoluteString.ToLower(),
-                                MainWindowTitle = runningApp.LocalizedName
-                            };
-                        }
-                    }
-
-                    RunningProcessLookup[runningApp.ExecutableUrl.AbsoluteString.ToLower()] = handles;
-
-                    if (!refreshedPaths.Contains(runningApp.ExecutableUrl.AbsoluteString.ToLower())) {
-                        refreshedPaths.Add(runningApp.ExecutableUrl.AbsoluteString.ToLower());
-                    }
-                }
-                runningApps.ForEach(x => x.Dispose());
-
-                //remove apps that were terminated
-                var appsToRemove = RunningProcessLookup.Where(x => !refreshedPaths.Contains(x.Key.ToLower()));
-                for (int i = 0; i < appsToRemove.Count(); i++) {
-                    RunningProcessLookup.TryRemove(appsToRemove.ElementAt(i));
-                }
-
-                return activeAppInfo;
-            }
-        }
-
-        private IEnumerable<NSRunningApplication> FilterRunningApplications(IEnumerable<NSRunningApplication> apps) {
-            return apps.Where(x => !x.Terminated && x.ActivationPolicy != NSApplicationActivationPolicy.Prohibited && !string.IsNullOrEmpty(x.LocalizedName));
-        }
         #endregion
     }
 }

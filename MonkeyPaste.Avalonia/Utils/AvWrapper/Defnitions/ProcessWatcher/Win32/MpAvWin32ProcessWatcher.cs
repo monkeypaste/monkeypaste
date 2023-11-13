@@ -1,12 +1,13 @@
 ﻿using MonkeyPaste.Common;
+
 using System;
-using System.Diagnostics;
-using System.Text;
-using System.Management;
-using System.Linq;
-using System.ComponentModel;
-using System.Security.Principal;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Management;
+using System.Security.Principal;
+using System.Text;
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;
 using static MonkeyPaste.Common.Wpf.WinApi;
@@ -87,59 +88,11 @@ namespace MonkeyPaste.Avalonia {
             }
             return lastActive;
         }
-        protected override IntPtr SetActiveProcess(IntPtr handle, ProcessWindowStyle windowStyle) {
-            if (!WinApi.ShowWindowAsync(handle, GetShowWindowState(windowStyle))) {
-                MpConsole.WriteLine($"ShowWindowAsync failed for handle '{handle}' with window state '{windowStyle}'");
-            }
-            return SetActiveProcess(handle);
-        }
-
-        protected override bool IsAdmin(object handleIdOrTitle) {
-            if (handleIdOrTitle is IntPtr handle) {
-                return IsProcessAdmin(handle);
-            }
-            throw new NotImplementedException();
-        }
-
-        protected override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
-            IntPtr handle = IntPtr.Zero;
-            if (handleIdOrTitle is IntPtr) {
-                handle = (IntPtr)handleIdOrTitle;
-            } else {
-                throw new NotImplementedException();
-            }
-            ShowWindowCommands swc = (ShowWindowCommands)GetWindowLong(handle, GWL_STYLE);
-            switch (swc) {
-                case ShowWindowCommands.Hide:
-                    return ProcessWindowStyle.Hidden;
-
-                case ShowWindowCommands.Minimized:
-                    return ProcessWindowStyle.Minimized;
-
-                case ShowWindowCommands.Maximized:
-                    return ProcessWindowStyle.Maximized;
-
-                default:
-                    return ProcessWindowStyle.Normal;
-            }
-        }
 
         protected override nint GetActiveProcessHandle() {
             return WinApi.GetForegroundWindow();
         }
-        protected override MpPortableProcessInfo GetProcessInfoByHandle(nint handle) {
-            if (handle == nint.Zero) {
-                return null;
-            }
-            var ppi = new MpPortableProcessInfo() {
-                Handle = handle,
-                ProcessPath = GetProcessPath(handle),
-                ApplicationName = GetProcessApplicationName(handle),
-                MainWindowTitle = GetProcessTitle(handle)
-            };
-            ppi.MainWindowIconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(ppi.ProcessPath, ppi.Handle);
-            return ppi;
-        }
+
         protected override bool IsHandleWindowProcess(nint handle) {
             return
                 WinApi.IsWindowVisible(handle) &&
@@ -147,7 +100,7 @@ namespace MonkeyPaste.Avalonia {
                 WinApi.GetWindowTextLength(handle) > 0;
         }
 
-        private string GetProcessTitle(IntPtr hWnd) {
+        protected override string GetProcessTitle(IntPtr hWnd) {
             try {
                 if (hWnd == IntPtr.Zero) {
                     return "Unknown Application";
@@ -319,6 +272,41 @@ namespace MonkeyPaste.Avalonia {
             return !isWow64;
         }
 
+
+        private IDictionary<string, IntPtr> GetOpenWindows() {
+            IntPtr shellWindow = GetShellWindow();
+            Dictionary<string, IntPtr> windows = new Dictionary<string, IntPtr>();
+
+            EnumWindows(delegate (IntPtr hWnd, int lParam) {
+                try {
+                    if (!IsHandleWindowProcess(hWnd)) {
+                        return true;
+                    }
+                    string process_path = GetProcessPath(hWnd);
+                    if (string.IsNullOrEmpty(process_path)) {
+                        return true;
+                    }
+                    windows.AddOrReplace(process_path, hWnd);
+                }
+                catch (InvalidOperationException ex) {
+                    // no graphical interface
+                    MpConsole.WriteLine("OpenWindowGetter, ignoring non GUI window w/ error: " + ex.ToString());
+                }
+
+                return true;
+
+            }, 0);
+
+            return windows;
+        }
+
+        #endregion
+
+        #endregion
+
+
+        #region Unused
+
         private bool IsProcessAdmin(IntPtr handle) {
             if (handle == IntPtr.Zero) {
                 return false;
@@ -353,35 +341,30 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        private IDictionary<string, IntPtr> GetOpenWindows() {
-            IntPtr shellWindow = GetShellWindow();
-            Dictionary<string, IntPtr> windows = new Dictionary<string, IntPtr>();
 
-            EnumWindows(delegate (IntPtr hWnd, int lParam) {
-                try {
-                    if (!IsHandleWindowProcess(hWnd)) {
-                        return true;
-                    }
-                    string process_path = GetProcessPath(hWnd);
-                    if (string.IsNullOrEmpty(process_path)) {
-                        return true;
-                    }
-                    windows.AddOrReplace(process_path, hWnd);
-                }
-                catch (InvalidOperationException ex) {
-                    // no graphical interface
-                    MpConsole.WriteLine("OpenWindowGetter, ignoring non GUI window w/ error: " + ex.ToString());
-                }
 
-                return true;
+        //protected override ProcessWindowStyle GetWindowStyle(object handleIdOrTitle) {
+        //    IntPtr handle = IntPtr.Zero;
+        //    if (handleIdOrTitle is IntPtr) {
+        //        handle = (IntPtr)handleIdOrTitle;
+        //    } else {
+        //        throw new NotImplementedException();
+        //    }
+        //    ShowWindowCommands swc = (ShowWindowCommands)GetWindowLong(handle, GWL_STYLE);
+        //    switch (swc) {
+        //        case ShowWindowCommands.Hide:
+        //            return ProcessWindowStyle.Hidden;
 
-            }, 0);
+        //        case ShowWindowCommands.Minimized:
+        //            return ProcessWindowStyle.Minimized;
 
-            return windows;
-        }
+        //        case ShowWindowCommands.Maximized:
+        //            return ProcessWindowStyle.Maximized;
 
-        #endregion
-
+        //        default:
+        //            return ProcessWindowStyle.Normal;
+        //    }
+        //}
         #endregion
     }
 }

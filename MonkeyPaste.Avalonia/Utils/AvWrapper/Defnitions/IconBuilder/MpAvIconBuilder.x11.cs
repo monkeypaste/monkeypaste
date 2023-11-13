@@ -4,9 +4,7 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvX11IconBuilder : MpAvIconBuildBase {
-        public MpAvX11IconBuilder() {
-        }
+    public class MpAvIconBuilder {
 
         public override string GetApplicationIconBase64(string appPath, MpIconSize iconSize = MpIconSize.MediumIcon32) {
             if (string.IsNullOrEmpty(appPath)) {

@@ -185,7 +185,7 @@ namespace MonkeyPaste.Avalonia {
             PlatformShorcuts = new MpAvPlatformShortcuts();
 
             if (IconBuilder == null) {
-                IconBuilder = new MpAvIconBuilder().IconBuilder;
+                IconBuilder = new MpAvIconBuilder();
             }
 #if !DESKTOP
             await MpDb.InitAsync();

@@ -146,11 +146,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Protected Methods
-        protected abstract nint GetParentHandleAtPoint(MpPoint ponint);
-        protected abstract nint SetActiveProcess(nint handle, ProcessWindowStyle windowStyle);
+        protected abstract nint GetParentHandleAtPoint(MpPoint point);
 
-        protected abstract bool IsAdmin(object handleIdOrTitle);
-        protected abstract ProcessWindowStyle GetWindowStyle(object handleIdOrTitle);
 
         protected virtual string GetProcessApplicationName(nint hWnd) {
             string process_path = GetProcessPath(hWnd);
@@ -191,10 +188,22 @@ namespace MonkeyPaste.Avalonia {
             }
             return null;
         }
-
+        protected abstract string GetProcessTitle(nint handle);
         protected abstract nint GetActiveProcessHandle();
         protected abstract bool IsHandleWindowProcess(nint handle);
-        protected abstract MpPortableProcessInfo GetProcessInfoByHandle(nint handle);
+        protected virtual MpPortableProcessInfo GetProcessInfoByHandle(nint handle) {
+            if (handle == nint.Zero) {
+                return null;
+            }
+            var ppi = new MpPortableProcessInfo() {
+                Handle = handle,
+                ProcessPath = GetProcessPath(handle),
+                ApplicationName = GetProcessApplicationName(handle),
+                MainWindowTitle = GetProcessTitle(handle)
+            };
+            ppi.MainWindowIconBase64 = Mp.Services.IconBuilder.GetPathIconBase64(ppi.ProcessPath, ppi.Handle);
+            return ppi;
+        }
 
         protected virtual void ProcessWatcherTimer_tick(object sender, EventArgs e) {
             nint activeHandle = GetActiveProcessHandle();

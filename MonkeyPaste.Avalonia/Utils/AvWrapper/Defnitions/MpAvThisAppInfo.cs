@@ -1,8 +1,9 @@
 ﻿using MonkeyPaste.Common;
-
+using System;
+using System.Diagnostics;
 #if WINDOWS
-using Windows.ApplicationModel; 
-#elif ANDROID
+using Windows.ApplicationModel;
+#else
 using Xamarin.Essentials;
 #endif
 
@@ -19,23 +20,29 @@ namespace MonkeyPaste.Avalonia {
             get {
 #if WINDOWS
                 // from https://stackoverflow.com/a/62719001/105028
-                var version = Package.Current.Id.Version;
-                return string.Format("{0}.{1}.{2}.{3}",
-                    version.Major,
-                    version.Minor,
-                    version.Build,
-                    version.Revision);
-#elif ANDROID
-                return VersionTracking.CurrentVersion;
+                try {
+                    var version = Package.Current.Id.Version;
+                    return string.Format("{0}.{1}.{2}.{3}",
+                        version.Major,
+                        version.Minor,
+                        version.Build,
+                        version.Revision);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Error reading package info. ", ex);
+                    return string.Empty;
+                }
 #else
-                return FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).ProductVersion;
+                return VersionTracking.CurrentVersion;
+                //#else
+                //           return FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).ProductVersion;
 #endif
             }
 
         }
         public MpAvThisAppInfo() {
-#if ANDROID
-            VersionTracking.Track();
+#if !WINDOWS
+            VersionTracking.Track(); 
 #endif
         }
     }

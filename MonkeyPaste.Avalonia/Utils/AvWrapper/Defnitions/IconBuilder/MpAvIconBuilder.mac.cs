@@ -1,12 +1,17 @@
 ﻿#if MAC
+using Avalonia.Platform;
+using Avalonia.Threading;
+using MonkeyPaste.Common.Avalonia;
 using MonoMac.AppKit;
+using MonoMac.Foundation;
+using MonoMac.WebKit;
 using System;
 using System.IO;
 
-namespace MonkeyPaste.Common.Avalonia {
-    public static class MpAvMacPathIconHelper {
-        #region Path Icon
-        public static string GetIconBase64FromMacPath(string path) {
+namespace MonkeyPaste.Avalonia {
+    public partial class MpAvIconBuilder {
+
+        public string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.MediumIcon32) {
             /*
                 var path: NSString = NSWorkspace.sharedWorkspace().absolutePathForAppBundleWithIdentifier("com.apple.dt.xcode")!
                 var icon: NSImage = NSWorkspace.sharedWorkspace().iconForFile(path)
@@ -38,7 +43,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 }
             }
         }
-        #endregion
+
     }
 }
+
 #endif

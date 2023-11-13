@@ -4,12 +4,12 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 
 namespace MonkeyPaste.Avalonia {
-    public class MpAvWinIconBuilder : MpAvIconBuildBase {
+    public partial class MpAvIconBuilder {
 
-        public override string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.MediumIcon32) =>
+        public string GetPathIconBase64(string path, MpIconSize iconSize = MpIconSize.MediumIcon32) =>
             GetPathIconBase64(path, nint.Zero, iconSize);
 
-        public override string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.MediumIcon32) {
+        public string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.MediumIcon32) {
             if (string.IsNullOrEmpty(path)) {
                 return null;
             }

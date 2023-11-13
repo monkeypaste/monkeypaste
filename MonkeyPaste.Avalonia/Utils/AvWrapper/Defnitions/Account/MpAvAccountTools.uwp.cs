@@ -1,9 +1,12 @@
 ﻿using Avalonia.Threading;
+
 using MonkeyPaste.Common;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Windows.Services.Store;
 
 namespace MonkeyPaste.Avalonia {
@@ -191,11 +194,17 @@ namespace MonkeyPaste.Avalonia {
             MpConsole.WriteLine("The subscription was not found.");
             return null;
         }
-        private async Task<bool?> PerformPlatformPurchaseAsync(MpUserAccountType uat, bool isMonthly) {
+        public async Task<bool?> PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly) {
             // returns:
             // true: successful purchase, already purchased or free
             // false: purchase failed, error
             // null: canceled
+
+            if (uat == MpUserAccountType.None ||
+                uat == MpUserAccountType.Free) {
+                // ignore free or none
+                return true;
+            }
             Dispatcher.UIThread.VerifyAccess();
 
             var storeid_kvp = AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value == (uat, isMonthly));

@@ -55,6 +55,7 @@
     <AvaloniaXaml Remove="dat\**" />
     <AvaloniaXaml Remove="Interfaces\Content\**" />
     <AvaloniaXaml Remove="Resources\UiStrings\Baselines\**" />
+    <AvaloniaXaml Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -92,6 +93,7 @@
     <Compile Remove="dat\**" />
     <Compile Remove="Interfaces\Content\**" />
     <Compile Remove="Resources\UiStrings\Baselines\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -129,6 +131,7 @@
     <EmbeddedResource Remove="dat\**" />
     <EmbeddedResource Remove="Interfaces\Content\**" />
     <EmbeddedResource Remove="Resources\UiStrings\Baselines\**" />
+    <EmbeddedResource Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -168,6 +171,7 @@
     <None Remove="dat\**" />
     <None Remove="Interfaces\Content\**" />
     <None Remove="Resources\UiStrings\Baselines\**" />
+    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -567,8 +571,6 @@
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Base\" />
     <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\" />
-    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
-    <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <None Remove="CefGlue.Avalonia" />
     <None Remove="Dotnet.Bundle" />
     <None Remove="WebkitGtkSharp" />
@@ -593,6 +595,7 @@
     <Compile Remove="Controls\Content\CefNetWebView\Cef\WebView\MpAvCefNetWebView.cs" />
     <Compile Remove="Program.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\MpAvCursor.cs" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\MpAvMacProcessWatcher_old.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Clipboard\ClipboardHelper.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
@@ -1506,9 +1509,6 @@
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />
     <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\_Base\" />
-    <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\" />
-    <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Mac\" />
-    <Folder Include="Utils\AvWrapper\Defnitions\TrayIcon\Base\" />
     <Folder Include="Utils\Clipboard\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
@@ -1768,6 +1768,7 @@
     <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.5" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.2" />
     <PackageReference Include="Markdig" Version="0.33.0" />
+    <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="ResXResourceReader.NetStandard" Version="1.1.0" />
     <PackageReference Include="SharpHook" Version="5.1.1" />
@@ -1777,12 +1778,8 @@
     <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
     <PackageReference Include="System.Speech" Version="7.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
-    <!--<PackageReference Include="WebViewControl-Avalonia" Version="2.106.11" />-->
-  </ItemGroup>
-
-  <ItemGroup Condition="$(IsMobile) == 'true'">
     <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
-    <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
+    <!--<PackageReference Include="WebViewControl-Avalonia" Version="2.106.11" />-->
   </ItemGroup>
   
   <ItemGroup Condition="$(IsDesktop) == 'true'">
@@ -1793,49 +1790,47 @@
   <ItemGroup>    
     <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />    
     <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.android.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.mac.cs" />    
     
     <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.uwp.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.mac.cs" />    
     <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.android.cs" />    
     
     <Compile Remove="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.uwp.cs" />    
     <Compile Remove="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.android.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.mac.cs" />    
+
+     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.mac.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.uwp.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.x11.cs" />
+
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
+    <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.x11.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\MpAvMacProcessWatcher.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.mac.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.mac.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.mac.cs" />    
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
-    
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher.cs" />    
     <Compile Include="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.uwp.cs" />       
     <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.uwp.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.uwp.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(BuildOs)' == 'ANDROID'">
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
 
     <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.android.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.android.cs" />
@@ -1843,13 +1838,6 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'BROWSER'">
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Windows\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\X11\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
   </ItemGroup>
   
   <ItemGroup>

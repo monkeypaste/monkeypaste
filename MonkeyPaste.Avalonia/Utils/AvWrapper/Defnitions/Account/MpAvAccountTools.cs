@@ -10,7 +10,14 @@ namespace MonkeyPaste.Avalonia {
         Unregistered
     }
 
-    public partial class MpAvAccountTools {
+    interface MpIAccountTools {
+        string GetStoreSubscriptionUrl(MpUserAccountType uat, bool isMonthly);
+        Task RefreshAddOnInfoAsync();
+        Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync();
+        Task<bool?> PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly);
+    }
+
+    public partial class MpAvAccountTools : MpIAccountTools {
         #region Private Variables
         private MpContentCapInfo _lastCapInfo = new();
         private int _lastContentCount = 0;
@@ -183,19 +190,23 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
-        Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new Dictionary<(MpUserAccountType, bool), string>() {
-            //{(MpUserAccountType.Free,true),"$0.00" },
-            //{(MpUserAccountType.Free,false),"$0.00" },
-            //{(MpUserAccountType.Standard,true),"$0.99" },
-            //{(MpUserAccountType.Standard,false),"$9.99" },
-            //{(MpUserAccountType.Unlimited,true),"$2.99" },
-            //{(MpUserAccountType.Unlimited,false),"$29.99" }
-        };
+        //protected Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup { get; } = new();
+        protected Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new();
+        protected Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new();
 
-        Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new Dictionary<(MpUserAccountType, bool), int>() {
-            //{(MpUserAccountType.Unlimited,true),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT },
-            //{(MpUserAccountType.Unlimited,false),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT }
-        };
+        //Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new Dictionary<(MpUserAccountType, bool), string>() {
+        //{(MpUserAccountType.Free,true),"$0.00" },
+        //{(MpUserAccountType.Free,false),"$0.00" },
+        //{(MpUserAccountType.Standard,true),"$0.99" },
+        //{(MpUserAccountType.Standard,false),"$9.99" },
+        //{(MpUserAccountType.Unlimited,true),"$2.99" },
+        //{(MpUserAccountType.Unlimited,false),"$29.99" }
+        //};
+
+        //Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new Dictionary<(MpUserAccountType, bool), int>() {
+        //{(MpUserAccountType.Unlimited,true),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT },
+        //{(MpUserAccountType.Unlimited,false),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT }
+        //};
 
         public bool IsContentAddPausedByAccount { get; private set; }
         public MpContentCapInfo LastCapInfo => _lastCapInfo;
@@ -231,15 +242,6 @@ namespace MonkeyPaste.Avalonia {
             return 0;
         }
 
-        public async Task<bool?> PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly) {
-            if (uat == MpUserAccountType.None ||
-                uat == MpUserAccountType.Free) {
-                // ignore free or none
-                return true;
-            }
-            var result = await PerformPlatformPurchaseAsync(uat, isMonthly);
-            return result;
-        }
 
 
 

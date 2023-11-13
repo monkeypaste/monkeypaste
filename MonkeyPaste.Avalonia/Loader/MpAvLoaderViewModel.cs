@@ -1,5 +1,6 @@
 ﻿using Avalonia.Threading;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -105,7 +106,7 @@ namespace MonkeyPaste.Avalonia {
                 await GtkHelper.EnsureInitialized();
 #elif MAC
 
-                MpAvMacHelpers.EnsureInitialized();
+            MpAvMacHelpers.EnsureInitialized();
 #endif
 
             await Mp.InitAsync(new MpAvWrapper(this));

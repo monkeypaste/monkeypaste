@@ -11,7 +11,6 @@ using PropertyChanged;
 using System;
 using System.IO;
 using System.Linq;
-using Windows.ApplicationModel;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -185,10 +184,9 @@ namespace MonkeyPaste.Avalonia {
         #region Commands
         #endregion
 
+#if WINDOWS
         static FileStream? _lockFile;
         private static bool EnableSingleInstance() {
-
-
             string app_dir =
 #if DEBUG
                 "MonkeyPaste_DEBUG";
@@ -208,6 +206,7 @@ namespace MonkeyPaste.Avalonia {
                 return false;
             }
         }
+#endif
     }
 
     internal class MpAvLogSink : ILogSink {
