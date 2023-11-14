@@ -435,10 +435,17 @@ namespace MonkeyPaste.Avalonia {
         public bool IsDuplicateCheckEnabled { get; set; } = true;
 
 
-        private bool _isRichHtmlContentEnabled = true;
+        private bool _isRichHtmlContentEnabled =
+#if ANDROID
+            false;
+#elif MAC
+            false;
+#else
+            true;
+#endif
         public bool IsRichHtmlContentEnabled {
             get =>
-#if DESKTOP
+#if CEFNET_WV
                 !MpAvCefNetApplication.IsCefNetLoaded ? false : _isRichHtmlContentEnabled;
 #else
                 _isRichHtmlContentEnabled;
@@ -470,7 +477,7 @@ namespace MonkeyPaste.Avalonia {
 #if ANDROID
             false;
 #else
-            true; 
+            true;
 #endif
         // requires restart and only used to trigger convert on exit (may not be necessary to restart)
 

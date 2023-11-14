@@ -1744,9 +1744,6 @@
     <Compile Update="Views\Reusable\Notifications\Welcome\MpAvWelcomeWindow.axaml.cs">
       <DependentUpon>MpAvWelcomeWindow.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   
   <ItemGroup>
@@ -1779,9 +1776,12 @@
     <PackageReference Include="System.Speech" Version="7.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
     <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
-    <!--<PackageReference Include="WebViewControl-Avalonia" Version="2.106.11" />-->
   </ItemGroup>
   
+  <ItemGroup Condition="$(UseOutSysCef) == 'true'">
+    <PackageReference Include="WebViewControl-Avalonia" Version="2.117.1-avalonia11" />
+  </ItemGroup>
+    
   <ItemGroup Condition="$(IsDesktop) == 'true'">
     <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
@@ -1819,7 +1819,8 @@
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\MpAvMacProcessWatcher.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.mac.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.mac.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.mac.cs" />    
+    <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.mac.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.mac.cs" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
@@ -1839,20 +1840,19 @@
   
   <ItemGroup Condition="'$(BuildOs)' == 'BROWSER'">
   </ItemGroup>
+
+  <ItemGroup Condition="'$(UseCefNet)' == 'True'">
+    <Reference Include="CefNet">
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
+    </Reference>
+    <Reference Include="CefNet.Avalonia">
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   
   <ItemGroup>
     <EmbeddedResource Remove="Resources\Legal\Attributions.resx" />
     <EmbeddedResource Remove="Resources\UiStrings\ListingStrings.resx" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Page Remove="Views\UserControl1.xaml" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <AvaloniaXaml Include="Views\UserControl1.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </AvaloniaXaml>
   </ItemGroup>
   
   <ItemGroup>
@@ -1867,14 +1867,6 @@
   </ItemGroup>
 
 
-  <ItemGroup Condition="'$(IsDesktop)' == 'True'">
-    <Reference Include="CefNet">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
-    </Reference>
-    <Reference Include="CefNet.Avalonia">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
 
   <ItemGroup>

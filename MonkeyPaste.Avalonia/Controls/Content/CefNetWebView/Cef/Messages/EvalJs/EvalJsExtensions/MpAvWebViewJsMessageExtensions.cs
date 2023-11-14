@@ -1,4 +1,4 @@
-﻿#if DESKTOP
+﻿#if CEFNET_WV
 
 using Avalonia.Threading;
 using CefNet;

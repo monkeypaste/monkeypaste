@@ -116,7 +116,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region MpIHasDevTools Implementation
-        public void ShowDevTools() {
+        public void OpenDevTools() {
             if (PlatformHandle is not MpIOffscreenRenderSourceHost osrsh ||
                     osrsh.RenderSource is not MpIHaveLog hl) {
                 return;

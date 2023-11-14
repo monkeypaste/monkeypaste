@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
             string key = "ContentWebViewTemplate";
             bool needs_fallback = !MpAvPrefViewModel.Instance.IsRichHtmlContentEnabled;
 
-#if DESKTOP
+#if CEFNET_WV
             if(!MpAvCefNetApplication.IsCefNetLoaded) {
                 needs_fallback = true;
             }

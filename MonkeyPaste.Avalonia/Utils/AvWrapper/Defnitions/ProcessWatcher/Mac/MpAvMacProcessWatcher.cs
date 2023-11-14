@@ -22,13 +22,14 @@ namespace MonkeyPaste.Avalonia {
             .Select(x => GetProcessInfoByHandle(x.Handle));
 
         protected override string GetProcessPath(nint handle) {
-            if (new NSRunningApplication(handle) is not { } app) {
+            if (new NSRunningApplication(handle) is not { } app ||
+                app.ExecutableUrl is not { } url) {
                 //}
                 //if (NSWorkspace.SharedWorkspace.RunningApplications
                 //    .FirstOrDefault(x => x.Handle == handle) is not { } app) {
                 return string.Empty;
             }
-            return app.ExecutableUrl.AbsoluteString;
+            return url.AbsoluteString;
         }
 
         protected override nint GetActiveProcessHandle() {

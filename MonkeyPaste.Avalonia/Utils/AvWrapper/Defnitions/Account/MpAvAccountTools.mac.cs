@@ -12,18 +12,20 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public async Task RefreshAddOnInfoAsync() {
-            var connected = await CrossInAppBilling.Current.ConnectAsync();
-            if (!connected)
-                return;
+            await Task.Delay(1);
+            //var connected = await CrossInAppBilling.Current.ConnectAsync();
+            //if (!connected)
+            //    return;
 
-            var items = await CrossInAppBilling.Current.GetProductInfoAsync(ItemType.InAppPurchase, "myitem");
+            //var items = await CrossInAppBilling.Current.GetProductInfoAsync(ItemType.InAppPurchase, "myitem");
 
-            // TODO setup lookup tables here
-            await CrossInAppBilling.Current.DisconnectAsync();
+            //// TODO setup lookup tables here
+            //await CrossInAppBilling.Current.DisconnectAsync();
         }
 
-        public Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync() {
-            throw new NotImplementedException();
+        public async Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync() {
+            await Task.Delay(1);
+            return MpSubscriptionFormat.Default;
         }
 
         public async Task<bool?> PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly) {
@@ -32,26 +34,29 @@ namespace MonkeyPaste.Avalonia {
             // false: purchase failed, error
             // null: canceled
 
-            if (uat == MpUserAccountType.None ||
-                uat == MpUserAccountType.Free) {
-                // ignore free or none
-                return true;
-            }
-            var connected = await CrossInAppBilling.Current.ConnectAsync();
-            if (!connected) {
-                return null;
-            }
+            //if (uat == MpUserAccountType.None ||
+            //    uat == MpUserAccountType.Free) {
+            //    // ignore free or none
+            //    return true;
+            //}
+            //var connected = await CrossInAppBilling.Current.ConnectAsync();
+            //if (!connected) {
+            //    return null;
+            //}
 
-            if (AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value.Item1 == uat && x.Value.Item2 == isMonthly).Key is not string productId) {
-                return null;
-            }
+            //if (AccountTypeAddOnStoreIdLookup.FirstOrDefault(x => x.Value.Item1 == uat && x.Value.Item2 == isMonthly).Key is not string productId) {
+            //    return null;
+            //}
 
-            var purchase = await CrossInAppBilling.Current.PurchaseAsync(productId, ItemType.InAppPurchase);
-            if (purchase != null & purchase.State == PurchaseState.Purchased) {
-                return true;
-            }
+            //var purchase = await CrossInAppBilling.Current.PurchaseAsync(productId, ItemType.InAppPurchase);
+            //if (purchase != null & purchase.State == PurchaseState.Purchased) {
+            //    return true;
+            //}
 
-            await CrossInAppBilling.Current.DisconnectAsync();
+            //await CrossInAppBilling.Current.DisconnectAsync();
+            //return false;
+
+            await Task.Delay(1);
             return false;
         }
 

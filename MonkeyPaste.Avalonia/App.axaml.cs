@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
             }
             _isShuttingDown = true;
             MpConsole.WriteLine($"App shutdown called. Args: '{args.ToStringOrEmpty("NULL")}'");
-#if DESKTOP
+#if CEFNET_WV
 
             MpAvCefNetApplication.ShutdownCefNet();
 #endif

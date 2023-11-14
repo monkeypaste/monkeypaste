@@ -1,15 +1,12 @@
 using Avalonia;
 using Avalonia.ReactiveUI;
-using CefNet;
 using MonkeyPaste.Common;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-#if CEF_WV
-
-#elif PLAT_WV
-using Avalonia.WebView.Desktop;
+#if CEFNET_WV
+using CefNet;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -34,7 +31,7 @@ namespace MonkeyPaste.Avalonia {
                 //}
                 //MpConsole.Init();
 
-#if CEF_WV
+#if CEFNET_WV
                 MpAvCefNetApplication.Init();
 #endif
                 //App.Args = args ?? new string[] { };

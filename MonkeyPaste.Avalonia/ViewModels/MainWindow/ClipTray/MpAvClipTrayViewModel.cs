@@ -4911,7 +4911,7 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 if (SelectedItem != null && SelectedItem.GetContentView() is MpAvContentWebView wv) {
                     MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = true;
-                    wv.ShowDevTools();
+                    wv.OpenDevTools();
                     // wait for dev window to activate..
                     await Task.Delay(500);
                     MpAvMainWindowViewModel.Instance.IsMainWindowSilentLocked = false;

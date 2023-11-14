@@ -1199,8 +1199,10 @@ namespace MonkeyPaste.Avalonia {
                             return;
                         }
 
-                		// ensure rich content cb reflects webview availability
-                        cb.IsEnabled = MpAvCefNetApplication.IsCefNetLoaded;  
+#if CEFNET_WV
+		// ensure rich content cb reflects webview availability
+                        cb.IsEnabled = MpAvCefNetApplication.IsCefNetLoaded;    
+#endif
 #endif
                     }
                 }
@@ -1655,7 +1657,7 @@ namespace MonkeyPaste.Avalonia {
                     var sw = CreateSettingsWindow();
                     sw.ShowChild();
                     MpMessenger.SendGlobal(MpMessageType.SettingsWindowOpened);
-                } 
+                }
 #else
                 App.SetPrimaryView(MpAvSettingsView.Instance);
 #endif

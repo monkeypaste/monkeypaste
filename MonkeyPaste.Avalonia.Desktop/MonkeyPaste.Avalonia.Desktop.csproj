@@ -7,7 +7,25 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <Platforms>$(DefaultPlatforms)</Platforms>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
-    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CFBundleName>MonkeyPaste</CFBundleName>
+     <!--Also defines .app file name--> 
+    <CFBundleDisplayName>MonkeyPaste</CFBundleDisplayName>
+    <CFBundleIdentifier>com.MonkeyPaste</CFBundleIdentifier>
+    <CFBundleVersion>$(ApplicationVersion)</CFBundleVersion>
+    <CFBundleShortVersionString>$(ApplicationVersion)</CFBundleShortVersionString>
+    <CFBundlePackageType>APPL</CFBundlePackageType>
+    <CFBundleExecutable>MonkeyPaste.Avalonia.Desktop</CFBundleExecutable>
+    <CFBundleIconFile>MonkeyPaste.icns</CFBundleIconFile>
+     <!--Will be copied from output directory--> 
+    <NSPrincipalClass>NSApplication</NSPrincipalClass>
+    <NSHighResolutionCapable>true</NSHighResolutionCapable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(BuildOs) == 'MAC'">
+    <UseAppHost>true</UseAppHost>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -40,23 +58,23 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.5" />
-    <!--<PackageReference Include="WebViewControl-Avalonia" Version="2.106.11" />-->
+    <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
   </ItemGroup>
 
-  <ItemGroup Condition="$(IsDesktop) == 'true'">
-    <Content Include="$(CefPlatformDir)\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>  
   
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
     <ProjectReference Include="..\_build\_build.csproj" />
-  </ItemGroup>  
-  
-  <ItemGroup>
+  </ItemGroup>
+
+  <ItemGroup Condition="$(UseCefNet) == 'True'">
+    <Content Include="$(CefPlatformDir)\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseCefNet)' == 'True'">
     <Reference Include="CefNet">
-      <HintPath>..\cefnet11\CefNet\CefNet\bin\Release\net6.0\CefNet.dll</HintPath>
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
     </Reference>
     <Reference Include="CefNet.Avalonia">
       <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>

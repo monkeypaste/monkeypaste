@@ -81,8 +81,7 @@ namespace MonkeyPaste.Avalonia {
             return primaryIconColorList;
         }
 
-        //public virtual string GetPathIconBase64(string path, nint handle, MpIconSize iconSize = MpIconSize.MediumIcon32) =>
-        //    GetPathIconBase64(path, iconSize);
+
         public bool IsStringBase64Image(string base64Str) {
             return base64Str.ToAvBitmap() != null;
         }

@@ -76,7 +76,7 @@ namespace MonkeyPaste.Avalonia {
             return false;
         }
 
-        public void ShowDevTools() {
+        public void OpenDevTools() {
 #if DEBUG
             // focus this control so its the dev tools focus
             this.Focus();

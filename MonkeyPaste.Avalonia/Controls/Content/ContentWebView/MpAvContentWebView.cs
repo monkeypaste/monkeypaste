@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 using System.Web;
 using AvToolTip = Avalonia.Controls.ToolTip;
 
-#if CEF_WV
+#if CEFNET_WV
 using CefNet.Avalonia;
 #endif
 
@@ -65,8 +65,10 @@ namespace MonkeyPaste.Avalonia {
 
         #region MpIJsonMessenger Implementation
         public void SendMessage(string msgJsonBase64Str) {
-#if CEF_WV
+#if CEFNET_WV
             this.ExecuteJavascript(msgJsonBase64Str);
+#elif OUTSYS_WV
+            this.ExecuteScript(msgJsonBase64Str);
 #else
             if (Interop == null) {
                 MpDebug.Break("lifecycle bug");
@@ -80,7 +82,7 @@ namespace MonkeyPaste.Avalonia {
         //        #region MpIAyncJsonMessenger Implementation
         //        public async Task<string> SendMessageAsync(string msgJsonBase64Str) {
         //            string result;
-        //#if CEF_WV
+        //#if CEFNET_WV
         //            result = await this.EvaluateJavascriptAsync(msgJsonBase64Str);
         //#else
         //            if (Interop == null) {
@@ -926,7 +928,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvContentWebView() : base() {
-            //#if CEF_WV
+            //#if CEFNET_WV
             //            InitialUrl = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
             //#else
             Address = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
@@ -942,7 +944,7 @@ namespace MonkeyPaste.Avalonia {
 
         }
 
-#if CEF_WV
+#if CEFNET_WV
 
         protected override void Dispose(bool disposing) {
             if (disposing &&
@@ -991,14 +993,14 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void FinishDisposal() {
-#if CEF_WV
+#if CEFNET_WV
             this.Dispose(true);
 #endif
         }
         #endregion
 
         #region Protected Methods
-#if CEF_WV
+#if CEFNET_WV
         protected override void OnDragLeave(RoutedEventArgs e) {
             base.OnDragLeave(e);
 
@@ -1178,7 +1180,7 @@ namespace MonkeyPaste.Avalonia {
         public async Task LoadEditorAsync() {
             Dispatcher.UIThread.VerifyAccess();
 
-#if CEF_WV
+#if CEFNET_WV
             var sw = Stopwatch.StartNew();
             while (!IsDomLoaded) {
                 // wait for Navigate(EditorPath)
@@ -1291,7 +1293,7 @@ namespace MonkeyPaste.Avalonia {
             }
             IsEditorLoaded = false;
 
-#if CEF_WV
+#if CEFNET_WV
             if (this is WebView wv && wv.PendingEvalCount() > 0 ||
                 BindingContext == null) {
                 this.NeedsEvalJsCleared = true;
@@ -1324,7 +1326,7 @@ namespace MonkeyPaste.Avalonia {
 
             var loadContentMsg = GetLoadContentMessage(isSearchEnabled);
             if (loadContentMsg.breakBeforeLoad) {
-                ShowDevTools();
+                OpenDevTools();
                 await Task.Delay(5000);
             }
             string msgStr = loadContentMsg.SerializeJsonObjectToBase64();

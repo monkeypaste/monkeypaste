@@ -10,15 +10,26 @@
   <PropertyGroup>
     <ApplicationName>MonkeyPaste</ApplicationName>
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
-    <ApplicationVersionMajor>0.1</ApplicationVersionMajor>
-    <ApplicationVersionMinor>0.1</ApplicationVersionMinor>
-    <ApplicationVersion>$(ApplicationVersionMajor)$(ApplicationVersionMinor)</ApplicationVersion>
+    <ApplicationVersionMajor>1</ApplicationVersionMajor>
+    <ApplicationVersionMinor>0</ApplicationVersionMinor>
+    <ApplicationVersionPatch>0</ApplicationVersionPatch>
+    <ApplicationVersion>$(ApplicationVersionMajor).$(ApplicationVersionMinor).$(ApplicationVersionPatch)</ApplicationVersion>
+   </PropertyGroup>
+  
+  <PropertyGroup>
+    <!-- This removes that AMD64 processor architecture warning -->
+    <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <!-- This removes duplicate warnings for cef dylibs -->
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
   </PropertyGroup>
   
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>MAC</BuildOs>
     <CultureExt>en-US</CultureExt>
   </PropertyGroup>
 
@@ -44,6 +55,8 @@
     <IsMobile>false</IsMobile>
     <DefaultPlatforms>AnyCPU;x64;x86</DefaultPlatforms>
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
+    <UseCefNet>false</UseCefNet>
+    <UseOutSysCef>false</UseOutSysCef>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -57,39 +70,42 @@
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
     <MainTargetFramework>net7.0-windows$(Tfm)</MainTargetFramework>
-    <DefineConstants>WINDOWS;DESKTOP;CEF_WV</DefineConstants>
+    <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
-    <Platforms>AnyCPU;x64;x86</Platforms>
+    <UseCefNet>true</UseCefNet>
+    <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
     <CefPlatformRelDir>cef\cef_win</CefPlatformRelDir>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'">
     <MainTargetFramework>net7.0</MainTargetFramework>
-    <DefineConstants>LINUX;DESKTOP;</DefineConstants>
+    <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
+    <UseCefNet>true</UseCefNet>
     <CefPlatformRelDir>cef\cef_linux</CefPlatformRelDir>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
     <MainTargetFramework>net7.0</MainTargetFramework>
-    <DefineConstants>MAC;DESKTOP;</DefineConstants>
+    <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
-    <CefPlatformRelDir>cef\cef_mac</CefPlatformRelDir>
+    <UseOutSysCef>true</UseOutSysCef>
+    <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'BROWSER'">
     <MainTargetFramework>net7.0</MainTargetFramework>
-    <DefineConstants>BROWSER;</DefineConstants>
+    <DefineConstants>$(DefineConstants);BROWSER;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Web</MainProjectName>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
     <MainTargetFramework>net7.0-android</MainTargetFramework>
-    <DefineConstants>MOBILE;ANDROID;</DefineConstants>
+    <DefineConstants>$(DefineConstants);MOBILE;ANDROID;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Android</MainProjectName>
     <AndroidPackageName>com.Monkey.MonkeyPaste</AndroidPackageName>
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
@@ -98,7 +114,7 @@
 
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
     <MainTargetFramework>net7.0-ios</MainTargetFramework>
-    <DefineConstants>MOBILE;IOS;</DefineConstants>
+    <DefineConstants>$(DefineConstants);MOBILE;IOS;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
     <IsMobile>true</IsMobile>
   </PropertyGroup>
@@ -135,5 +151,14 @@
 
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
     <TargetDatDir>$(MainProjectDir)\Assets\\dat</TargetDatDir>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(UseCefNet)' == 'True'">
+    <DefineConstants>$(DefineConstants);CEFNET_WV</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(UseOutSysCef)' == 'True'">
+    <DefineConstants>$(DefineConstants);OUTSYS_WV</DefineConstants>
+    <DefaultPlatforms>AnyCpu</DefaultPlatforms>
   </PropertyGroup>
 </Project>

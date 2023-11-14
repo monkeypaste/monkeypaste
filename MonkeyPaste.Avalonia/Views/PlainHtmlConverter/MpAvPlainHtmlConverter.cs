@@ -56,8 +56,10 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsWebViewConverterEnabled =>
-#if DESKTOP
+#if CEFNET_WV
             MpAvCefNetApplication.IsCefNetLoaded;
+#elif OUTSYS_WV
+            true;
 #else
             true;
 #endif
@@ -259,7 +261,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand ShowConverterDevTools => new MpCommand(
             () => {
-                ConverterWebView.ShowDevTools();
+                ConverterWebView.OpenDevTools();
             });
 
         #endregion

@@ -483,7 +483,7 @@ namespace MonkeyPaste {
             MpConsole.WriteLine($"Db {(isNewDb ? "CREATED" : "CONNECTED")} at '{dbPath}'");
             bool? success = connect_success ? isNewDb : null;
             if (success.IsTrue()) {
-#if !ANDROID
+#if WINDOWS
                 await InitDbSettingsAsync(); 
 #endif
             }

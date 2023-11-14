@@ -7,27 +7,34 @@ using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
 
-#if CEF_WV
+#if CEFNET_WV
 using CefNet.Avalonia;
 using CefNet.Internal;
+#elif OUTSYS_WV
+using WebViewControl;
 #endif
 
 namespace MonkeyPaste.Avalonia {
 
     [DoNotNotify]
     public class MpAvWebView :
-#if CEF_WV
+#if CEFNET_WV
         WebView
+#elif OUTSYS_WV
+        WebView, MpIWebViewNavigator
 #else
         MpAvNativeWebViewHost
 #endif
-        , MpICanExecuteJavascript,
+        ,
+        MpICanExecuteJavascript,
         MpAvIWebViewBindingResponseHandler,
         MpIHasDevTools {
 
 
         #region Private Variables
-        private bool _isBrowserCreated = false;
+#if CEFNET_WV
+        private bool _isBrowserCreated = false; 
+#endif
         #endregion
 
         #region Constants
@@ -38,11 +45,19 @@ namespace MonkeyPaste.Avalonia {
 
         #region Interfaces
 
-        void MpIHasDevTools.ShowDevTools() =>
-            ShowDevTools();
+        public void OpenDevTools() =>
+#if OUTSYS_WV
+            ShowDeveloperTools();
+#else
+        ShowDevTools();
+#endif
 
         #region MpAvIWebViewBindingResponseHandler Implemention
-#if !CEF_WV
+#if CEFNET_WV
+#elif OUTSYS_WV
+        public MpAvIWebViewBindingResponseHandler BindingHandler =>
+            this;
+#else
         public override MpAvIWebViewBindingResponseHandler BindingHandler =>
             this;
 #endif
@@ -56,11 +71,11 @@ namespace MonkeyPaste.Avalonia {
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillShowDebuggerNotification>(msgJsonBase64Str);
                     if (ntf is MpQuillShowDebuggerNotification showDebugNtf) {
                         MpConsole.WriteLine($"WebView ShowDebugger Request Received [{DataContext}] {showDebugNtf.reason}");
-                        this.ShowDevTools();
+                        OpenDevTools();
                     }
                     break;
                 case MpEditorBindingFunctionType.notifyException:
-                    ShowDevTools();
+                    OpenDevTools();
                     ntf = MpJsonConverter.DeserializeBase64Object<MpQuillExceptionMessage>(msgJsonBase64Str);
                     if (ntf is MpQuillExceptionMessage exceptionMsgObj) {
                         MpConsole.WriteLine($"WebView Exception ntf Received [{DataContext}] {exceptionMsgObj}");
@@ -73,10 +88,19 @@ namespace MonkeyPaste.Avalonia {
         }
         #endregion
 
+        #region MpIWebViewNavigator 
+#if OUTSYS_WV
+        public void Navigate(string url) {
+            // NOTE outsys has an address prop, this does nothing but is called when address changes
+            // so treating it like Navigating cefnet event
+            IsNavigating = true;
+        }
+#endif
+        #endregion
 
         #region MpICanExecuteJavascript 
         void MpICanExecuteJavascript.ExecuteJavascript(string script) {
-#if CEF_WV
+#if CEFNET_WV
             this.GetMainFrame().ExecuteJavaScript(script, this.GetMainFrame().Url, 0);
 #endif
         }
@@ -87,23 +111,37 @@ namespace MonkeyPaste.Avalonia {
 
         #region Address
 
+
+
+        //public static readonly DirectProperty<MpAvWebView, string> AddressProperty =
+        //    AvaloniaProperty.RegisterDirect<MpAvWebView, string>(
+        //        nameof(Address),
+        //        x => x.Address,
+        //        (x, o) => x.Address = o,
+        //        defaultBindingMode: BindingMode.TwoWay);
+
+#if !OUTSYS_WV
         private string _Address;
         public string Address {
             get { return _Address; }
             set { SetAndRaise(AddressProperty, ref _Address, value); }
         }
-
-        public static readonly DirectProperty<MpAvWebView, string> AddressProperty =
-            AvaloniaProperty.RegisterDirect<MpAvWebView, string>(
+        public static readonly StyledProperty<string> AddressProperty = 
+            AvaloniaProperty.Register<MpAvWebView, string>(
                 nameof(Address),
                 x => x.Address,
                 (x, o) => x.Address = o,
                 defaultBindingMode: BindingMode.TwoWay);
 
+#endif
 
         private void OnAddressChanged() {
+#if CEFNET_WV
+            if(!_isBrowserCreated) {
+                return;
+            }
+#endif
             if (!Uri.IsWellFormedUriString(Address, UriKind.Absolute) ||
-                !_isBrowserCreated ||
                 MpUrlHelpers.IsBlankUrl(Address)) {
                 return;
             }
@@ -153,23 +191,31 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
         public MpAvWebView() {
             this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged());
-#if CEF_WV
+#if CEFNET_WV
             Navigating += MpAvWebView_Navigating;
             Navigated += MpAvWebView_Navigated;
             LoadError += MpAvWebView_LoadError;
+#elif OUTSYS_WV
+            LoadFailed += MpAvWebView_LoadFailed;
+            Navigated += MpAvWebView_Navigated;
 #endif
 
         }
 
 
+
         #endregion
 
         #region Public Methods
+
+#if OUTSYS_WV
+        public virtual void OnNavigated(string url) { }
+#endif
         #endregion
 
         #region Protected Methods
 
-#if CEF_WV
+#if CEFNET_WV
         protected override WebViewGlue CreateWebViewGlue() {
             return new MpAvCefNetWebViewGlue(this);
         }
@@ -203,13 +249,12 @@ namespace MonkeyPaste.Avalonia {
             w.Closed -= W_Closed;
             this.Dispose(false);
         }
-
 #endif
 
         #endregion
 
         #region Private Methods
-#if CEF_WV
+#if CEFNET_WV
         private void MpAvWebView_Navigating(object sender, CefNet.BeforeBrowseEventArgs e) {
             IsNavigating = true;
         }
@@ -224,7 +269,17 @@ namespace MonkeyPaste.Avalonia {
         private void MpAvWebView_LoadError(object sender, CefNet.LoadErrorEventArgs e) {
             LoadErrorInfo = e.ErrorText;
         }
-
+#elif OUTSYS_WV
+        private void MpAvWebView_LoadFailed(string url, int errorCode, string frameName) {
+            LoadErrorInfo = $"Error Code: '{errorCode}' Frame: '{frameName}' Url: '{url}'";
+        }
+        private void MpAvWebView_Navigated(string url, string frameName) {
+            IsNavigating = false;
+            if (url == Address) {
+                LoadErrorInfo = null;
+            }
+            OnNavigated(url);
+        }
 #endif
         #endregion
 

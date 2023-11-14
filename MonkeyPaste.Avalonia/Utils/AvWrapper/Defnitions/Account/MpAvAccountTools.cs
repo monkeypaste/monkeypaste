@@ -190,23 +190,40 @@ namespace MonkeyPaste.Avalonia {
         #region Properties
 
         #region State
-        //protected Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup { get; } = new();
-        protected Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new();
-        protected Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new();
 
-        //Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new Dictionary<(MpUserAccountType, bool), string>() {
-        //{(MpUserAccountType.Free,true),"$0.00" },
-        //{(MpUserAccountType.Free,false),"$0.00" },
-        //{(MpUserAccountType.Standard,true),"$0.99" },
-        //{(MpUserAccountType.Standard,false),"$9.99" },
-        //{(MpUserAccountType.Unlimited,true),"$2.99" },
-        //{(MpUserAccountType.Unlimited,false),"$29.99" }
-        //};
 
-        //Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new Dictionary<(MpUserAccountType, bool), int>() {
-        //{(MpUserAccountType.Unlimited,true),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT },
-        //{(MpUserAccountType.Unlimited,false),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT }
-        //};
+        protected Dictionary<string, (MpUserAccountType, bool)> AccountTypeAddOnStoreIdLookup { get; } =
+            new Dictionary<string, (MpUserAccountType, bool)>() {
+#if DEBUG
+                {"9N0M0CF894CV", (MpUserAccountType.Standard, true) },
+                {"9NTBHV933F76", (MpUserAccountType.Standard, false) },
+
+                {"9P06QJ00F7Q8", (MpUserAccountType.Unlimited, true) },
+                {"9N2BVBP6MSP6", (MpUserAccountType.Unlimited, false) }
+#else
+                {"9PP3W114BHL5", (MpUserAccountType.Standard, true) },
+                {"9N41GXV5HQQ2", (MpUserAccountType.Standard, false) },
+
+                {"9PGVZ60KMDQ7", (MpUserAccountType.Unlimited, true) },
+                {"9NN60Z6FX02H", (MpUserAccountType.Unlimited, false) }
+
+#endif
+            };
+        //protected Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new();
+        //protected Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new();
+        protected Dictionary<(MpUserAccountType, bool), string> AccountTypePriceLookup { get; } = new Dictionary<(MpUserAccountType, bool), string>() {
+        {(MpUserAccountType.Free,true),"$0.00" },
+        {(MpUserAccountType.Free,false),"$0.00" },
+        {(MpUserAccountType.Standard,true),"$0.99" },
+        {(MpUserAccountType.Standard,false),"$9.99" },
+        {(MpUserAccountType.Unlimited,true),"$2.99" },
+        {(MpUserAccountType.Unlimited,false),"$29.99" }
+        };
+
+        protected Dictionary<(MpUserAccountType, bool), int> AccountTypeTrialAvailabilityLookup { get; } = new Dictionary<(MpUserAccountType, bool), int>() {
+        {(MpUserAccountType.Unlimited,true),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT },
+        {(MpUserAccountType.Unlimited,false),DEFAULT_UNLIMITED_TRIAL_DAY_COUNT }
+        };
 
         public bool IsContentAddPausedByAccount { get; private set; }
         public MpContentCapInfo LastCapInfo => _lastCapInfo;

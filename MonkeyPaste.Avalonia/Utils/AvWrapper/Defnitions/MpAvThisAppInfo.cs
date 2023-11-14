@@ -1,6 +1,7 @@
 ﻿using MonkeyPaste.Common;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 #if WINDOWS
 using Windows.ApplicationModel;
 #else
@@ -32,17 +33,22 @@ namespace MonkeyPaste.Avalonia {
                     MpConsole.WriteTraceLine($"Error reading package info. ", ex);
                     return string.Empty;
                 }
-#else
+#elif ANDROID
                 return VersionTracking.CurrentVersion;
-                //#else
-                //           return FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location).ProductVersion;
+#else
+                if (Assembly.GetEntryAssembly() is Assembly ass &&
+                    ass.Location.IsFileOrDirectory() &&
+                    FileVersionInfo.GetVersionInfo(ass.Location) is { } fvi) {
+                    return fvi.ProductVersion;
+                }
+                return "1.0.0";
 #endif
             }
 
         }
         public MpAvThisAppInfo() {
-#if !WINDOWS
-            VersionTracking.Track(); 
+#if ANDROID
+            VersionTracking.Track();
 #endif
         }
     }

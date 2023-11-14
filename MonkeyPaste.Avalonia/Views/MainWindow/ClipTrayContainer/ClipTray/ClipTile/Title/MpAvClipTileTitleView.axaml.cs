@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
         private void Sb_PointerPressed(object sender, PointerPressedEventArgs e) {
             if (e.KeyModifiers.HasFlag(KeyModifiers.Control) &&
                 BindingContext.GetContentView() is MpIContentView cv) {
-                cv.ShowDevTools();
+                cv.OpenDevTools();
             }
         }
     }

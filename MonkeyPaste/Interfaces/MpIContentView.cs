@@ -17,7 +17,7 @@ namespace MonkeyPaste {
 
     }
     public interface MpIHasDevTools {
-        void ShowDevTools();
+        void OpenDevTools();
     }
 
     public interface MpIJsonMessenger {
