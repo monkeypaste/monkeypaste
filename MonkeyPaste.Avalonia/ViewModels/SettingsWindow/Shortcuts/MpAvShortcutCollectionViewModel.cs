@@ -963,12 +963,12 @@ namespace MonkeyPaste.Avalonia {
         #region Mouse Event Handlers
 
         private void Hook_MouseWheel(object? sender, MouseWheelHookEventArgs e) {
+            MpConsole.WriteLine($"Mouse wheel delta: {e.Data}");
             HandlePointerWheel(new MpPoint((double)e.Data.X, (double)e.Data.Y));
         }
 
         private void Hook_MouseMoved(object? sender, MouseHookEventArgs e) {
             var gmp = e.Data.GetScaledScreenPoint();
-            //MpConsole.WriteLine("Unscaled: " + UnscaledGlobalMouseLocation + " Scaled: " + gmp + " PixelDensity: " + MpPlatformWrapper.Services.ScreenInfoCollection.PixelScaling);
             HandlePointerMove(gmp);
         }
 

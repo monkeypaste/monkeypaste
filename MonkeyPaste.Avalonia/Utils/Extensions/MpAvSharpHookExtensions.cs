@@ -14,6 +14,8 @@ namespace MonkeyPaste.Avalonia {
             var unscaled_p = new MpPoint((double)med.X, (double)med.Y);
             var scaled_p = new MpPoint(Math.Max(0, (double)med.X / scale), Math.Max(0, (double)med.Y / scale));
 
+            MpConsole.WriteLine($"Unscaled: {unscaled_p} Scaled: {scaled_p} Density: {scale}");
+
             return scaled_p;
         }
 

@@ -5,7 +5,8 @@
              x:DataType="local:MpAvSystemTrayViewModel"
              x:CompileBindings="True"
              x:Class="MonkeyPaste.Avalonia.App"
-             RequestedThemeVariant="Light">
+             RequestedThemeVariant="Light"
+             Name="MonkeyPaste">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

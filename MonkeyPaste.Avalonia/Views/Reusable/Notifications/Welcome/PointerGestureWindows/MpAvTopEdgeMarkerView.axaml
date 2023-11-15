@@ -10,17 +10,21 @@
                        d:DesignWidth="400"
                        d:DesignHeight="300">
     <local:MpAvUserControl.Resources>
-        <SolidColorBrush x:Key="OffBrush"
-                         Color="Red"
-                         Opacity="0" />
-        <SolidColorBrush x:Key="OnBrush"
-                         Color="Red"
-                         Opacity="1" />
-        <SolidColorBrush x:Key="OnZoneBrush"
-                         Color="Red"
-                         Opacity="1" />
+        <SolidColorBrush x:Key="OffBrush" Color="Red" Opacity="0" />
+        <SolidColorBrush x:Key="OnBrush" Color="Red" Opacity="1" />
+        <SolidColorBrush x:Key="OnZoneBrush" Color="Red" Opacity="1" />
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
+        <!--  TOP LINE  -->
+        <Style Selector="Border#ContainerBorder">
+            <Setter Property="BorderThickness"
+                    Value="0,5,0,0" />
+        </Style>
+        <Style Selector="Border#ContainerBorder.mac">
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,0" />
+        </Style>
+
         <!--  TOP LINE BLINK ANIM  -->
         <Style Selector="Border#ContainerBorder"
                x:DataType="local:MpAvPointerGestureWindowViewModel">
@@ -74,9 +78,30 @@
             </Style.Animations>
         </Style>
 
+        <!--  MARKER FG  -->
+        <Style Selector="Border#ContainerBorder TextBlock#MarkerTextBlock">
+            <Setter Property="Foreground"
+                    Value="White" />
+        </Style>
+
+        <Style Selector="Border#ContainerBorder Image#MarkerArrowImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}" />
+        </Style>
+
+        <Style Selector="Border#ContainerBorder.mac Image#MarkerArrowImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=red}" />
+        </Style>
+
+        <Style Selector="Border#ContainerBorder.mac.inzone Image#MarkerArrowImage">
+            <Setter Property="Source"
+                    Value="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=green}" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Border x:Name="ContainerBorder"
-            BorderThickness="0,5,0,0"
+            Classes.inzone="{Binding IsInGestureZone}"
+            Classes.mac="{Binding IsMac, Source={x:Static local:MpAvThemeViewModel.Instance}}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <Canvas HorizontalAlignment="Stretch"
@@ -91,7 +116,7 @@
                 <StackPanel Orientation="Vertical">
                     <!--  MARKER ARROW  -->
 
-                    <Image Source="{Binding Source={StaticResource EdgeArrowUpImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=white}"
+                    <Image x:Name="MarkerArrowImage"
                            HorizontalAlignment="Center"
                            Width="100"
                            Height="100" />
@@ -102,7 +127,6 @@
                                ClipToBounds="False"
                                TextAlignment="Center"
                                FontSize="24"
-                               Foreground="White"
                                FontStyle="Oblique"
                                Effect="drop-shadow(0 0 25 black)"
                                Text="{Binding MarkerLabel}" />

@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
 
         public void SetLoadOnLogin(bool isLoadOnLogin, bool silent = false) {
             if (isLoadOnLogin) {
-                _isLoginLoadEnabled = EnableLoginLoad_deprecated();
+                //_isLoginLoadEnabled = EnableLoginLoad_deprecated();
                 return;
             }
             // TODO figure out how to disable

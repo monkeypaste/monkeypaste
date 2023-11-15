@@ -171,6 +171,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
+            Mp.Services.ShutdownHelper.ShutdownApp("Application exit called");
             FrameworkShutdown?.Invoke(this, EventArgs.Empty);
         }
 

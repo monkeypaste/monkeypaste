@@ -64,6 +64,8 @@
   
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Avalonia\MonkeyPaste.Avalonia.csproj" />
+    <ProjectReference Include="..\Plugins\CoreAnnotator\CoreAnnotator.csproj" />
+    <ProjectReference Include="..\Plugins\CoreOleHandler\CoreOleHandler.csproj" />
     <ProjectReference Include="..\_build\_build.csproj" />
   </ItemGroup>
 

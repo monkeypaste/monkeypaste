@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
 #if CEFNET_WV
             MpAvCefNetApplication.IsCefNetLoaded;
 #elif OUTSYS_WV
-            true;
+            false;
 #else
             true;
 #endif

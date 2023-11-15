@@ -855,7 +855,7 @@ namespace MonkeyPaste.Avalonia {
                 MpAvWindowManager.MainWindow.Opacity = 1;
                 IsMainWindowInHiddenLoadState = false;
             }
-            
+
             DispatcherPriority show_priority =
                 IsMainWindowInHiddenLoadState ?
                     DispatcherPriority.Background : DispatcherPriority.Normal;
@@ -1005,23 +1005,25 @@ namespace MonkeyPaste.Avalonia {
 
         #region Global Pointer Event Handlers
         private void Instance_OnGlobalMouseWheelScroll(object sender, MpPoint delta) {
-            Dispatcher.UIThread.Post(() => {
-                if (!MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
-                    return;
+            if (!Dispatcher.UIThread.CheckAccess()) {
+                Dispatcher.UIThread.Post(() => Instance_OnGlobalMouseWheelScroll(sender, delta));
+                return;
+            }
+
+            if (!MpAvPrefViewModel.Instance.DoShowMainWindowWithMouseEdgeAndScrollDelta) {
+                return;
+            }
+
+            bool is_core_loaded = Mp.Services != null &&
+                 Mp.Services.StartupState != null &&
+                 Mp.Services.StartupState.IsCoreLoaded;
+
+            if (!IsMainWindowOpening && is_core_loaded) {
+                if (CanScrollOpen()) {
+                    // show mw on top edge scroll flick
+                    ShowMainWindowCommand.Execute(null);
                 }
-
-                bool is_core_loaded = Mp.Services != null &&
-                     Mp.Services.StartupState != null &&
-                     Mp.Services.StartupState.IsCoreLoaded;
-
-                if (!IsMainWindowOpening && is_core_loaded) {
-                    if (CanScrollOpen()) {
-                        // show mw on top edge scroll flick
-                        ShowMainWindowCommand.Execute(null);
-                    }
-                }
-            });
-
+            }
         }
 
         private void Instance_OnGlobalMouseClicked(object sender, bool isLeftButton) {

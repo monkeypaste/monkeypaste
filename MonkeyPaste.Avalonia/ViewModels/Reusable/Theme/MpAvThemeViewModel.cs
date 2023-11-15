@@ -192,6 +192,13 @@ namespace MonkeyPaste.Avalonia {
             false;
 #endif
 
+        public bool IsMac =>
+#if MAC
+            true;
+#else
+            false;
+#endif
+
         public int ShakeDurMs =>
             500;
 

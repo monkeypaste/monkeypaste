@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,8 +41,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
         public bool IsSubscriptionPanelVisible { get; set; } = true;
         public bool IsMonthlyEnabled { get; set; } = false;
-        public bool IsStoreAvailable =>
-            !Items.All(x => string.IsNullOrEmpty(x.RateText) || x.RateText == MpAvAccountTools.EMPTY_RATE_TEXT);
+        public bool IsStoreAvailable { get; private set; }
 
 
         #endregion
@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
             IsBusy = true;
 
             var sw = Stopwatch.StartNew();
-            await MpAvAccountTools.Instance.RefreshAddOnInfoAsync();
+            IsStoreAvailable = await MpAvAccountTools.Instance.RefreshAddOnInfoAsync();
             MpConsole.WriteLine($"AddOn Refresh: {sw.ElapsedMilliseconds}ms");
             Items.Clear();
             int test = typeof(MpUserAccountType).Length();

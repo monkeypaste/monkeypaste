@@ -73,7 +73,7 @@ namespace MonkeyPaste.Avalonia
             return $"https://account.microsoft.com/services/{kvp.Key}/details#billing";
         }
 
-        public async Task RefreshAddOnInfoAsync()
+        public async Task<bool> RefreshAddOnInfoAsync()
         {
             AccountTypeTrialAvailabilityLookup.Clear();
             AccountTypePriceLookup.Clear();
@@ -84,7 +84,7 @@ namespace MonkeyPaste.Avalonia
             if(spqr.ExtendedError != null)
             {
                 MpConsole.WriteLine($"AddOn Error: {spqr.ExtendedError}");
-                return;
+                return false;
             }
 
             foreach(var at in AccountTypeAddOnStoreIdLookup)
@@ -113,6 +113,7 @@ namespace MonkeyPaste.Avalonia
                     AccountTypeTrialAvailabilityLookup.AddOrReplace(at.Value, trial_day_count);
                 }
             }
+            return true;
         }
         public async Task<bool> CanConnectToStoreAsync()
         {

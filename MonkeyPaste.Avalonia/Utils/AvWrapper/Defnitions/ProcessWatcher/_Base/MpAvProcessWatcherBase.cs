@@ -121,6 +121,9 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public void StartWatcher() {
+#if MAC
+            return;
+#endif
             if (_timer == null) {
                 // initial start
 

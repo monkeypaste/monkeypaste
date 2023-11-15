@@ -74,7 +74,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public void StartMonitor(bool ignoreCurrentState) {
-#if MOBILE
+#if MOBILE || MAC
             return;
 #else
             if (_timer == null) {

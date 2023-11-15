@@ -12,7 +12,7 @@ namespace MonkeyPaste.Avalonia {
 
     interface MpIAccountTools {
         string GetStoreSubscriptionUrl(MpUserAccountType uat, bool isMonthly);
-        Task RefreshAddOnInfoAsync();
+        Task<bool> RefreshAddOnInfoAsync();
         Task<MpSubscriptionFormat> GetStoreUserLicenseInfoAsync();
         Task<bool?> PurchaseSubscriptionAsync(MpUserAccountType uat, bool isMonthly);
     }

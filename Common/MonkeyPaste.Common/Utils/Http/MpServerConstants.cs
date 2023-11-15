@@ -2,7 +2,7 @@
     public static class MpServerConstants {
 
         const string LOCAL_SERVER_URL =
-#if DESKTOP
+#if WINDOWS
         "https://localhost"; 
 #else
         "http://192.168.43.33";

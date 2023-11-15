@@ -125,6 +125,7 @@ namespace MonkeyPaste.Avalonia {
             base.OnAttachedToVisualTree(e);
             IsHitTestVisible = false;
             if (TopLevel.GetTopLevel(this) is TopLevel tt_tl) {
+                tt_tl.Classes.Add("transparent");
                 tt_tl.IsHitTestVisible = false;
             }
             if (e.Root is not TopLevel tl) {

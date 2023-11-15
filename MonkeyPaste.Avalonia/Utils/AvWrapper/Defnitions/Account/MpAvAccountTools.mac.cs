@@ -11,8 +11,9 @@ namespace MonkeyPaste.Avalonia {
             return string.Empty;
         }
 
-        public async Task RefreshAddOnInfoAsync() {
+        public async Task<bool> RefreshAddOnInfoAsync() {
             await Task.Delay(1);
+            return false;
             //var connected = await CrossInAppBilling.Current.ConnectAsync();
             //if (!connected)
             //    return;

@@ -1,8 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Platform;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonoMac.AppKit;
+using MonoMac.CoreGraphics;
+using MonoMac.ObjCRuntime;
+using System.Linq;
 using System.Windows.Input;
 
 namespace MonkeyPaste.Avalonia {
@@ -65,6 +70,13 @@ namespace MonkeyPaste.Avalonia {
         #region Appearance
         public IBrush EdgeBrush =>
             IsInGestureZone ? Brushes.Lime : Brushes.Red;
+
+        public IBrush MarkerFg =>
+#if MAC
+            IsInGestureZone ? Brushes.Lime : Brushes.Red;
+#else
+            Brushes.White;
+#endif
         public string MarkerLabel =>
             GestureType == MpPointGestureType.ScrollToOpen ?
                 UiStrings.WelcomeScrollToOpenMarkerLabel :
@@ -157,11 +169,58 @@ namespace MonkeyPaste.Avalonia {
                 WindowStartupLocation = WindowStartupLocation.Manual,
                 ExtendClientAreaToDecorationsHint = false,
                 ShowInTaskbar = false,
+                Title = "MarkerWindow"
             };
 
 #if WINDOWS
             MpAvToolWindow_Win32.InitToolWindow(gw.TryGetPlatformHandle().Handle);
             //MpAvToolWindow_Win32.SetAsNoHitTestWindow(gw.TryGetPlatformHandle().Handle);
+#elif MAC
+            gw.Opened += (s, e) => {
+                //if (gw.PlatformImpl is IMacOSTopLevelPlatformHandle macosHandle) {
+                //    MonoMac.AppKit.NSApplication.Init();
+                //    var nsWindow = (MonoMac.AppKit.NSWindow)MonoMac.ObjCRuntime.Runtime.GetNSObject(macosHandle.NSWindow);
+                //    nsWindow.IgnoresMouseEvents = true;
+                //}
+                //if (TopLevel.GetTopLevel(gw) is { } gw_tl &&
+                //    gw_tl.PlatformImpl is IMacOSTopLevelPlatformHandle mac_imp) {
+                //    var test = Runtime.GetNSObject(mac_imp.NSView);
+                //    var test2 = Runtime.GetNSObject(mac_imp.NSWindow);
+                //    var test3 = Runtime.GetNSObject(mac_imp.GetNSViewRetained());
+                //    var test4 = Runtime.GetNSObject(mac_imp.GetNSWindowRetained());
+                //    MpDebug.BreakAll();
+                //    if (test4 is NSWindow ns_gw) {
+
+                //        ns_gw.IgnoresMouseEvents = true;
+                //        ns_gw.Level = (NSWindowLevel)((int)NSWindowLevel.MainMenu + 2);
+                //    } else if (test2 is NSWindow blah) {
+
+                //        blah.IgnoresMouseEvents = true;
+                //        blah.Level = (NSWindowLevel)((int)NSWindowLevel.MainMenu + 2);
+                //    }
+                //} else {
+
+                //    MpDebug.BreakAll();
+                //}
+                //var toplevel = (TopLevel)mainWindow.MainWindow.GetVisualRoot();
+                //var win = ((IMacOSTopLevelPlatformHandle)toplevel.PlatformImpl).NSWindow;
+                //nint w_handle = gw.TryGetPlatformHandle().Handle;
+                //MpAvMacHelpers.EnsureInitialized();
+                //var wl = MpAvMacHelpers.GetThisAppWindows();
+                //MpDebug.BreakAll();
+                //if (wl.FirstOrDefault(x => x.Title == "MarkerWindow") is { } ns_gw) {
+                //    MpDebug.BreakAll();
+                //    ns_gw.IgnoresMouseEvents = true;
+                //    ns_gw.Level = (NSWindowLevel)((int)NSWindowLevel.MainMenu + 2);
+                //    //ns_gw.StyleMask = NSWindowStyle.Borderless;
+                //} else {
+
+                //}
+            };
+
+
+            // BUG probably possible but drawing at exactly top of screen is not straightforward on mac
+            // just relying on arrow...
 #endif
             return gw;
         }

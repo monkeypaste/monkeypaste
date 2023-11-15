@@ -1,6 +1,7 @@
 ﻿#if MAC
 using Avalonia.Controls;
 using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonoMac.AppKit;
 using MonoMac.CoreGraphics;
 using MonoMac.Foundation;
@@ -41,13 +42,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         protected override bool IsHandleWindowProcess(nint handle) {
-            //if (NSWorkspace.SharedWorkspace.RunningApplications
-            //    .FirstOrDefault(x => x.Handle == handle) is not { } app) {
-            //    return false;
-            //}
-            //return !app.Terminated && app.ActivationPolicy != NSApplicationActivationPolicy.Prohibited;
-            var result = GetCGWindowByHandle(handle);
-            return result != default;
+            if (NSWorkspace.SharedWorkspace.RunningApplications
+                .FirstOrDefault(x => x.Handle == handle) is not { } app) {
+                return false;
+            }
+            return !app.Terminated && app.ActivationPolicy != NSApplicationActivationPolicy.Prohibited;
+            //var result = MpAvMacHelpers.GetCGWindowByHandle(handle);
+            //return result != default;
         }
 
 
@@ -72,7 +73,7 @@ namespace MonkeyPaste.Avalonia {
 
         protected override string GetProcessTitle(nint handle) {
             // from https://stackoverflow.com/a/55662306/105028
-            if (GetCGWindowByHandle(handle) is not { } win_obj) {
+            if (MpAvMacHelpers.GetCGWindowByHandle(handle) is not { } win_obj) {
                 return string.Empty;
             }
             NSString win_name_key = new NSString("kCGWindowName");
@@ -82,31 +83,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Helpers
 
-        public static NSObject GetCGWindowByHandle(nint handle) {
-            // from https://stackoverflow.com/questions/52441936/macos-active-window-title-using-c-sharp
-            string handle_str = handle.ToString();
-            IntPtr windowInfo = CGWindowListCopyWindowInfo(CGWindowListOption.OnScreenOnly, 0);
-            NSArray values = Runtime.GetNSObject(windowInfo) as NSArray;
 
-            for (ulong i = 0, len = values.Count; i < len; i++) {
-                NSObject window = Runtime.GetNSObject(values.ValueAt(i));
-                NSNumber pid_val = window.ValueForKey(new NSString("kCGWindowOwnerPID")) as NSNumber;
-                string pid_val_str = pid_val.StringValue;
-                if (handle_str == pid_val_str) {
-                    return window;
-                }
-            }
-            return default;
-        }
-
-        #region Imports
-        const string QuartzCore = @"/System/Library/Frameworks/QuartzCore.framework/QuartzCore";
-
-        [DllImport(QuartzCore)]
-        static extern IntPtr CGWindowListCopyWindowInfo(CGWindowListOption option, uint relativeToWindow);
-
-
-        #endregion
 
         #endregion
     }

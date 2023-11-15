@@ -6,7 +6,7 @@
                   xmlns:av="clr-namespace:TheArtOfDev.HtmlRenderer.Avalonia;assembly=Avalonia.HtmlRenderer"
                   xmlns:local="using:MonkeyPaste.Avalonia"
                   xmlns:pcl="using:MonkeyPaste"
-                  Classes="fadeOut welcome welcomeGrow"
+                  Classes="fadeOut welcome welcomeGrow transparent"
                   x:Class="MonkeyPaste.Avalonia.MpAvWelcomeWindow"
                   x:CompileBindings="False"
                   x:DataType="local:MpAvWelcomeNotificationViewModel"

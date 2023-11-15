@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
         private NSWindow GetMainWindow() {
             if (MpAvWindowManager.MainWindow is not { } mw ||
                 mw.TryGetPlatformHandle() is not IPlatformHandle ph ||
-                MpAvMacProcessWatcher.GetCGWindowByHandle(ph.Handle) is not { } cg_win_obj ||
+                MpAvMacHelpers.GetCGWindowByHandle(ph.Handle) is not { } cg_win_obj ||
                 cg_win_obj.ValueForKey(new NSString("kCGWindowNumber")) is not NSNumber win_num_obj ||
                 !long.TryParse(win_num_obj.StringValue, out long win_num) ||
                 new NSApplication(ph.Handle) is not { } app ||

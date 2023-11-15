@@ -26,7 +26,11 @@ namespace MonkeyPaste.Avalonia {
             }
 
             double x = primaryScreen.WorkArea.Right - s.Width - pad;
-            double y = primaryScreen.WorkArea.Bottom - s.Height - pad;
+#if MAC
+            double y = primaryScreen.WorkArea.Top + pad;
+#else
+            double y = primaryScreen.WorkArea.Bottom - s.Height - pad; 
+#endif
             x *= primaryScreen.Scaling;
             y *= primaryScreen.Scaling;
 

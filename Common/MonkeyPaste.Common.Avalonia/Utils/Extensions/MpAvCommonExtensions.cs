@@ -486,8 +486,12 @@ namespace MonkeyPaste.Common.Avalonia {
             if (scr == null && Application.Current.GetMainTopLevel() is Window mw2) {
                 scr = mw2.Screens.Primary;
                 if (scr == null) {
-                    MpDebug.Break();
-                    return 1;
+                    if (mw2.Screens.All.FirstOrDefault() is { } mw3) {
+                        scr = mw3;
+                    } else {
+                        MpDebug.Break();
+                        return 1;
+                    }
                 }
             }
             //return scr.PixelDensity;

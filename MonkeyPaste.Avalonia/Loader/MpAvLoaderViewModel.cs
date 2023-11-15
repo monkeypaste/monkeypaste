@@ -78,8 +78,8 @@ namespace MonkeyPaste.Avalonia {
         public bool IS_PARALLEL_LOADING_ENABLED =>
         // NOTE db create takes extra time and breaks when vm's query in parallel
         // (this maybe a sign this needs more organization)
-        !StartupFlags.HasFlag(MpStartupFlags.Initial);
-        //false;
+        //!StartupFlags.HasFlag(MpStartupFlags.Initial);
+        false;
 
         public int LoadedCount { get; set; } = 0;
 

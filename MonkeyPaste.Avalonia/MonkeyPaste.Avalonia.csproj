@@ -270,6 +270,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBlock.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\TextBox.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ToolTip.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Toplevel.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Window.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Default.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\MpAvSidebarContainerView.axaml" />
@@ -1437,6 +1438,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\Animations\SlideWindow.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Animations\Pulse.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\CheckBox.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\TopLevel.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Nav\TabNav.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Image.axaml" />
     

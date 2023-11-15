@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -250,8 +251,23 @@ namespace MonkeyPaste.Avalonia {
 
         bool HasShownExpiredNtf { get; set; } = false;
 
-        public bool IsExpired =>
-            DateTime.UtcNow > NextPaymentUtc + TimeSpan.FromDays(1);
+        public bool IsExpired {
+            get {
+                if (!HasBillingCycle) {
+                    return false;
+                }
+                MpDebug.Assert(NextPaymentUtc != DateTime.MaxValue, $"Account error, has billing cycle next payment date should have real value");
+                try {
+                    return DateTime.UtcNow > NextPaymentUtc + TimeSpan.FromDays(1);
+                }
+                catch (Exception ex) {
+                    MpConsole.WriteTraceLine($"Account Error projecting expiration.", ex);
+                    return false;
+                }
+
+            }
+        }
+
 
         public bool IsYearly =>
             BillingCycleType == MpBillingCycleType.Yearly;
@@ -750,8 +766,8 @@ namespace MonkeyPaste.Avalonia {
 
                 SetButtonBusy(MpRuntimePrefParamType.AccountLogin, true);
 
-                //MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
-                MpSubscriptionFormat acct = _dummySubscription;
+                MpSubscriptionFormat acct = await MpAvAccountTools.Instance.GetStoreUserLicenseInfoAsync();
+                //MpSubscriptionFormat acct = _dummySubscription;
 
                 bool is_sub_device = acct != MpSubscriptionFormat.Default;
                 MpUserAccountType acct_type = AccountType;

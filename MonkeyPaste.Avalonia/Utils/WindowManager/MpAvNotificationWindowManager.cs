@@ -139,11 +139,15 @@ namespace MonkeyPaste.Avalonia {
                         break;
                     case MpNotificationLayoutType.Loader:
                         nw = new MpAvLoaderNotificationWindow() {
-                            DataContext = nvmb
+                            DataContext = nvmb,
+                            Topmost = true,
+                            ShowActivated = true
                         };
-                        if (Mp.Services.PlatformInfo.IsDesktop) {
-                            App.Current.SetMainWindow(nw);
-                        }
+
+                        //#if WINDOWS
+                        App.Current.SetMainWindow(nw);
+                        //#endif
+
                         break;
                     case MpNotificationLayoutType.ErrorWithOption:
                     case MpNotificationLayoutType.UserAction:
@@ -252,6 +256,9 @@ namespace MonkeyPaste.Avalonia {
                     nw.Show(ow);
                 } else {
                     nw.Show();
+                }
+                if (nw is MpAvLoaderNotificationWindow) {
+                    nvmb.IsVisible = true;
                 }
             }
             catch (Exception ex) {
