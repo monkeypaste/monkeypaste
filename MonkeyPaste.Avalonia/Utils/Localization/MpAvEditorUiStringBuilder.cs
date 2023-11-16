@@ -152,7 +152,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 MpDebug.Break($"CAUTION! Js uistrings ref changed. App will shutdown and changes will be reflected on restart...");
 
-                Mp.Services.ShutdownHelper.ShutdownApp($"Js UI strings ref updated");
+                Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.EditorResourceUpdate, $"Js UI strings ref updated");
                 return;
             }
             MpDebug.Break($"CAUTION! Js uistrings changed. App will shutdown and changes will be reflected on restart...");
@@ -164,7 +164,7 @@ namespace MonkeyPaste.Avalonia {
                 SetJsUiStringScriptTag();
             }
             // NOTE! Clean and rebuild before re-running
-            Mp.Services.ShutdownHelper.ShutdownApp($"Js UI strings updated at path '{EditorUiStrPath}'");
+            Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.EditorResourceUpdate, $"Js UI strings updated at path '{EditorUiStrPath}'");
         }
         private static bool IsEditorResource(DictionaryEntry de) {
             return de.Key.ToStringOrEmpty().StartsWith(EDITOR_KEY_PREFIX);

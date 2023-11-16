@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvLoginLoadTools {
-        private bool _isLoginLoadEnabled;
+        private bool _isLoginLoadEnabled = false;
         public bool IsLoadOnLoginEnabled => _isLoginLoadEnabled;
 
         public void SetLoadOnLogin(bool isLoadOnLogin, bool silent = false) {

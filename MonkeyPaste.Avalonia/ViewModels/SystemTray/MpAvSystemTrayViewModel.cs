@@ -278,7 +278,7 @@ namespace MonkeyPaste.Avalonia {
                     // initial startup. So delete storage dir here to clean everything up
                     //MpFileIo.DeleteDirectory(Mp.Services.PlatformInfo.StorageDir);
                 }
-                Mp.Services.ShutdownHelper.ShutdownApp($"systray cmd - '{args.ToStringOrEmpty("no detail (likely quit cmd) ")}'");
+                Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.UserTrayCmd, $"systray cmd - '{args.ToStringOrEmpty("no detail (likely quit cmd) ")}'");
             });
 
         public ICommand NavigateToCefNetUriCommand => new MpAsyncCommand(
@@ -334,22 +334,33 @@ namespace MonkeyPaste.Avalonia {
 
 
                 //await Mp.Services.DefaultDataCreator.CreateDefaultDataAsync();
-                var cil = await MpDataModelProvider.GetCopyItemsByQueryTagIdAsync(
-                        MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsTextFormatTag).TagId,
-                        MpAvQueryViewModel.Instance,
-                        MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending,
-                        MpAvClipTileSortFieldViewModel.Instance.SelectedSortType,
-                        MpAvTagTrayViewModel.Instance.TrashedCopyItemIds);
-            }) {
-        };
+
+
+                //var cil = await MpDataModelProvider.GetCopyItemsByQueryTagIdAsync(
+                //        MpAvTagTrayViewModel.Instance.Items.FirstOrDefault(x => x.IsTextFormatTag).TagId,
+                //        MpAvQueryViewModel.Instance,
+                //        MpAvClipTileSortDirectionViewModel.Instance.IsSortDescending,
+                //        MpAvClipTileSortFieldViewModel.Instance.SelectedSortType,
+                //        MpAvTagTrayViewModel.Instance.TrashedCopyItemIds);
+
+                MpAvProcessWatcher.Instance.BreakNextTick = true;
+            });
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
                 await Task.Delay(1);
                 //MpAvContentWebView.BreakOnNextLoad = true;
                 //MpAvSubscriptionPurchaseViewModel.Instance.UnlimitedItem.DoFocusPulse = true;
-                MpAvAccountViewModel.Instance.ResetAccountCommand.Execute(null);
+                //MpAvAccountViewModel.Instance.ResetAccountCommand.Execute(null);
 
+
+                MpDebug.BreakAll();
+                var wl = Mp.Services.ProcessWatcher.AllWindowProcessInfos.ToList();
+                if (wl.FirstOrDefault(x => x.ApplicationName.ToLower().Contains("chrome")) is { } chrome_app) {
+                    string icon = Mp.Services.IconBuilder.GetPathIconBase64(chrome_app.ProcessPath);
+                    MpFileIo.WriteByteArrayToFile(@"/Users/tkefauver/Desktop/icon_test.png", icon.ToBytesFromBase64String(), false);
+                    Mp.Services.ProcessWatcher.SetActiveProcess(chrome_app);
+                }
             });
         #endregion
     }

@@ -26,7 +26,7 @@ var UiStrings = {
 	EditorTemplateDynamicHint: `<p>All occurances of this template will be set to the value you provide here</p>`,
 	EditorTemplateStaticHint: `<p>The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.</p>
 <p>The specified format is shared so changes here will update system-wide.</p>`,
-	EditorAppendCLoseLabel: `Finish appending`,
+	EditorAppendCloseLabel: `Finish appending`,
 	EditorAppendInlineModelLabel: `Enable Paragraph`,
 	EditorAppendLineModeLabel: `Enable Inline`,
 	EditorAppendManualModeLabel: `Toggle manual`,

@@ -37,36 +37,35 @@ namespace MonkeyPaste.Avalonia {
 
         async Task<bool> MpIExternalPasteHandler.PasteDataObjectAsync(
             MpPortableDataObject mpdo,
-            MpPortableProcessInfo processInfo) {
-            if (processInfo == null) {
+            MpPortableProcessInfo pi) {
+            if (pi == null) {
                 // shouldn't happen
                 //MpDebug.Break();
                 MpConsole.WriteTraceLine("Can't paste, if not lost focus somethings wrong");
                 return false;
             }
 
-            IntPtr pasteToHandle = processInfo.Handle;
 
-            string pasteCmd = MpAvAppCollectionViewModel.Instance.GetAppClipboardKeysByProcessInfo(processInfo, false);
-            int[] writer_preset_ids = MpAvAppCollectionViewModel.Instance.GetAppCustomOlePresetsByProcessInfo(processInfo, false);
+            string pasteCmd = MpAvAppCollectionViewModel.Instance.GetAppClipboardKeysByProcessInfo(pi, false);
+            int[] writer_preset_ids = MpAvAppCollectionViewModel.Instance.GetAppCustomOlePresetsByProcessInfo(pi, false);
 
-            bool success = await PasteDataObjectAsync_internal_async(mpdo.ToAvDataObject(), pasteToHandle, pasteCmd, writer_preset_ids);
-            MpConsole.WriteLine($"Paste to '{processInfo}' with keys '{pasteCmd}' was successful: {success}");
+            bool success = await PasteDataObjectAsync_internal_async(mpdo.ToAvDataObject(), pi, pasteCmd, writer_preset_ids);
+            MpConsole.WriteLine($"Paste to '{pi}' with keys '{pasteCmd}' was successful: {success}");
             return success;
         }
 
         #endregion
         private async Task<bool> PasteDataObjectAsync_internal_async(
             MpAvDataObject avdo,
-            IntPtr pasteToHandle,
+            MpPortableProcessInfo pi,
             string pasteCmdKeyString,
             int[] custom_writer_preset_ids = null) {
-            if (pasteToHandle == IntPtr.Zero) {
+            if (pi == null || pi.Handle == nint.Zero) {
                 // somethings terribly wrong_lastInternalProcessInfo
                 MpDebug.Break();
                 return false;
             }
-            MpConsole.WriteLine("Pasting to process: " + pasteToHandle);
+            MpConsole.WriteLine($"Pasting to process: {pi}");
 
             // STORE PREVIOUS CLIPBOARD (IF RESTORE REQ'D)
 
@@ -80,8 +79,8 @@ namespace MonkeyPaste.Avalonia {
             await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
 
             // ACTIVATE TARGET
-            nint activate_result = Mp.Services.ProcessWatcher.SetActiveProcess(pasteToHandle);
-            bool set_active_success = activate_result == pasteToHandle;
+            nint activate_result = Mp.Services.ProcessWatcher.SetActiveProcess(pi);
+            bool set_active_success = activate_result == pi.Handle;
 
             // SIMULATE PASTE CMD
             bool sim_input_success = Mp.Services.KeyStrokeSimulator.SimulateKeyStrokeSequence(pasteCmdKeyString);

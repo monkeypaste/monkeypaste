@@ -596,7 +596,6 @@
     <Compile Remove="Controls\Content\CefNetWebView\Cef\WebView\MpAvCefNetWebView.cs" />
     <Compile Remove="Program.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\MpAvCursor.cs" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\MpAvMacProcessWatcher_old.cs" />
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher2.cs" />
     <Compile Remove="Utils\Clipboard\ClipboardHelper.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
@@ -1510,7 +1509,6 @@
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
     <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />
-    <Folder Include="Utils\AvWrapper\Defnitions\ProcessWatcher\_Base\" />
     <Folder Include="Utils\Clipboard\" />
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
@@ -1788,59 +1786,27 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.0.5" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
   </ItemGroup>
-
+  
   <ItemGroup>    
-    <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />    
-    <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.android.cs" />    
-    <Compile Remove="Utils\AvWrapper\Defnitions\Share\MpAvShare.mac.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\Share\**" />    
+    <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.shared.cs" />    
+    <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.$(PlatformShortName).cs" />    
     
-    <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.uwp.cs" />    
-    <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.mac.cs" />    
-    <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.android.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\LoginLoad\**" />    
+    <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.shared.cs" />    
+    <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.$(PlatformShortName).cs" />    
     
-    <Compile Remove="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.uwp.cs" />    
-    <Compile Remove="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.android.cs" />    
-    <Compile Remove="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.mac.cs" />    
+    <Compile Remove="Utils\AvWrapper\Defnitions\Account\**" />    
+    <Compile Include="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.shared.cs" />    
+    <Compile Include="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.$(PlatformShortName).cs" />    
 
-     <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.mac.cs" />    
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.uwp.cs" />    
-    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.x11.cs" />
-
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Android\**" />
-    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(BuildOs)' == 'LINUX'">
-    <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.x11.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\X11\**" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
-    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\MpAvMacProcessWatcher.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.mac.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.mac.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.mac.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.mac.cs" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
-    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\Win32\MpAvWin32ProcessWatcher.cs" />    
-    <Compile Include="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.uwp.cs" />       
-    <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.uwp.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.uwp.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.uwp.cs" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(BuildOs)' == 'ANDROID'">
-
-    <Compile Include="Utils\AvWrapper\Defnitions\LoginLoad\MpAvLoginLoadTools.android.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\Share\MpAvShare.android.cs" />
-    <Compile Include="Utils\AvWrapper\Defnitions\Account\MpAvAccountTools.android.cs" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(BuildOs)' == 'BROWSER'">
+    <Compile Remove="Utils\AvWrapper\Defnitions\IconBuilder\**" />    
+    <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.shared.cs" />    
+    <Compile Include="Utils\AvWrapper\Defnitions\IconBuilder\MpAvIconBuilder.$(PlatformShortName).cs" />
+    
+    <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\**" />
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
+    <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.$(PlatformShortName).cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(UseCefNet)' == 'True'">

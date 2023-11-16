@@ -75,32 +75,24 @@ struct IsOnceCallbackImpl<OnceCallback<R(Args...)>> : std::true_type {};
 
 }  // namespace internal
 
-///
-/// IsBaseCallback<T>::value is true when T is any of the Closure or Callback
-/// family of types.
-///
+// IsBaseCallback<T>::value is true when T is any of the Closure or Callback
+// family of types.
 template <typename T>
 using IsBaseCallback = internal::IsBaseCallbackImpl<std::decay_t<T>>;
 
-///
-/// IsOnceCallback<T>::value is true when T is a OnceClosure or OnceCallback
-/// type.
-///
+// IsOnceCallback<T>::value is true when T is a OnceClosure or OnceCallback
+// type.
 template <typename T>
 using IsOnceCallback = internal::IsOnceCallbackImpl<std::decay_t<T>>;
 
-///
-/// SFINAE friendly enabler allowing to overload methods for both Repeating and
-/// OnceCallbacks.
-///
-/// Usage:
-/// <pre>
-///   template <template <typename> class CallbackType,
-///             ... other template args ...,
-///             typename = EnableIfIsBaseCallback<CallbackType>>
-///   void DoStuff(CallbackType<...> cb, ...);
-/// </pre>
-///
+// SFINAE friendly enabler allowing to overload methods for both Repeating and
+// OnceCallbacks.
+//
+// Usage:
+// template <template <typename> class CallbackType,
+//           ... other template args ...,
+//           typename = EnableIfIsBaseCallback<CallbackType>>
+// void DoStuff(CallbackType<...> cb, ...);
 template <template <typename> class CallbackType>
 using EnableIfIsBaseCallback =
     std::enable_if_t<IsBaseCallback<CallbackType<void()>>::value>;
@@ -137,16 +129,13 @@ class OnceCallbackHolder final {
 
 }  // namespace internal
 
-///
-/// Wraps the given OnceCallback into a RepeatingCallback that relays its
-/// invocation to the original OnceCallback on the first invocation. The
-/// following invocations are just ignored.
-///
-/// Note that this deliberately subverts the Once/Repeating paradigm of
-/// Callbacks but helps ease the migration from old-style Callbacks. Avoid if
-/// possible; use if necessary for migration.
-///
-// TODO(tzik): Remove it. https://crbug.com/730593
+// Wraps the given OnceCallback into a RepeatingCallback that relays its
+// invocation to the original OnceCallback on the first invocation. The
+// following invocations are just ignored.
+//
+// Note that this deliberately subverts the Once/Repeating paradigm of Callbacks
+// but helps ease the migration from old-style Callbacks. Avoid if possible; use
+// if necessary for migration. TODO(tzik): Remove it. https://crbug.com/730593
 template <typename... Args>
 RepeatingCallback<void(Args...)> AdaptCallbackForRepeating(
     OnceCallback<void(Args...)> callback) {
@@ -156,11 +145,9 @@ RepeatingCallback<void(Args...)> AdaptCallbackForRepeating(
                                              /*ignore_extra_runs=*/true));
 }
 
-///
-/// Wraps the given OnceCallback and returns two OnceCallbacks with an identical
-/// signature. On first invokation of either returned callbacks, the original
-/// callback is invoked. Invoking the remaining callback results in a crash.
-///
+// Wraps the given OnceCallback and returns two OnceCallbacks with an identical
+// signature. On first invokation of either returned callbacks, the original
+// callback is invoked. Invoking the remaining callback results in a crash.
 template <typename... Args>
 std::pair<OnceCallback<void(Args...)>, OnceCallback<void(Args...)>>
 SplitOnceCallback(OnceCallback<void(Args...)> callback) {
@@ -171,12 +158,10 @@ SplitOnceCallback(OnceCallback<void(Args...)> callback) {
   return std::make_pair(wrapped_once, wrapped_once);
 }
 
-///
-/// ScopedClosureRunner is akin to std::unique_ptr<> for Closures. It ensures
-/// that the Closure is executed no matter how the current scope exits.
-/// If you are looking for "ScopedCallback", "CallbackRunner", or
-/// "CallbackScoper" this is the class you want.
-///
+// ScopedClosureRunner is akin to std::unique_ptr<> for Closures. It ensures
+// that the Closure is executed no matter how the current scope exits.
+// If you are looking for "ScopedCallback", "CallbackRunner", or
+// "CallbackScoper" this is the class you want.
 class ScopedClosureRunner {
  public:
   ScopedClosureRunner();
@@ -204,9 +189,7 @@ class ScopedClosureRunner {
   OnceClosure closure_;
 };
 
-///
-/// Creates a null callback.
-///
+// Creates a null callback.
 class NullCallback {
  public:
   template <typename R, typename... Args>
@@ -219,9 +202,7 @@ class NullCallback {
   }
 };
 
-///
-/// Creates a callback that does nothing when called.
-///
+// Creates a callback that does nothing when called.
 class DoNothing {
  public:
   template <typename... Args>
@@ -244,11 +225,9 @@ class DoNothing {
   }
 };
 
-///
-/// Useful for creating a Closure that will delete a pointer when invoked. Only
-/// use this when necessary. In most cases MessageLoop::DeleteSoon() is a better
-/// fit.
-///
+// Useful for creating a Closure that will delete a pointer when invoked. Only
+// use this when necessary. In most cases MessageLoop::DeleteSoon() is a better
+// fit.
 template <typename T>
 void DeletePointer(T* obj) {
   delete obj;

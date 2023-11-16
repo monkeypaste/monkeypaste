@@ -412,7 +412,7 @@ namespace MonkeyPaste.Avalonia {
                 });
             IsTermsWindowOpen = false;
             if (!agreed) {
-                Mp.Services.ShutdownHelper.ShutdownApp("declined terms");
+                Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.TermsDeclined, "declined terms");
                 return;
             }
             IsWindowOpen = false;

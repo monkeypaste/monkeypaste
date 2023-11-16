@@ -56,19 +56,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Properties
 
-
-        public bool IsAnyNotificationVisible => _windows.Any(x => x.IsVisible);
-
-        public bool IsAnyNotificationActive => _windows.Any(x => x.IsActive);
-        public Window HeadNotificationWindow {
-            get {
-                if (!IsAnyNotificationVisible) {
-                    return null;
-                }
-                return _windows.AggregateOrDefault((a, b) => a.Position.Y < b.Position.Y ? a : b);
-            }
-        }
-
         #endregion
 
         #region Constructors
@@ -96,13 +83,6 @@ namespace MonkeyPaste.Avalonia {
                     //};
                     break;
                 case MpNotificationLayoutType.Loader:
-                    if (nvmb is MpAvLoaderNotificationViewModel lnvm) {
-                        Dispatcher.UIThread.Post(async () => {
-
-                            await lnvm.ProgressLoader.BeginLoaderAsync();
-                            await lnvm.ProgressLoader.FinishLoaderAsync();
-                        });
-                    }
                     var mlv = new MpAvMobileLoaderView() {
                         DataContext = nvmb,
                         //Width = Mp.Services.ScreenInfoCollection.Screens.FirstOrDefault(x=>x.IsPrimary).WorkArea.Width,
@@ -138,6 +118,7 @@ namespace MonkeyPaste.Avalonia {
                         };
                         break;
                     case MpNotificationLayoutType.Loader:
+                        nvmb.IsVisible = true;
                         nw = new MpAvLoaderNotificationWindow() {
                             DataContext = nvmb,
                             Topmost = true,
@@ -257,15 +238,15 @@ namespace MonkeyPaste.Avalonia {
                 } else {
                     nw.Show();
                 }
-                if (nw is MpAvLoaderNotificationWindow) {
-                    nvmb.IsVisible = true;
-                }
             }
             catch (Exception ex) {
                 MpConsole.WriteTraceLine($"Error showing window '{nvmb}', window likely closed. ", ex);
             }
             if (nw is MpAvLoaderNotificationWindow &&
-                MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext is MpAvWelcomeNotificationViewModel) is MpAvWindow wwv && wwv.DataContext is MpAvWelcomeNotificationViewModel wwvm) {
+                MpAvWindowManager
+                .AllWindows
+                .FirstOrDefault(x => x.DataContext is MpAvWelcomeNotificationViewModel) is MpAvWindow wwv &&
+                    wwv.DataContext is MpAvWelcomeNotificationViewModel wwvm) {
                 //desktop.MainWindow = nw;
                 // wait for loader to get set to mw before closing welcome
                 wwvm.HideNotification();

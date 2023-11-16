@@ -1053,9 +1053,9 @@ namespace MonkeyPaste.Avalonia {
         /// <summary>
         ///   Looks up a localized string similar to Finish appending.
         /// </summary>
-        public static string EditorAppendCLoseLabel {
+        public static string EditorAppendCloseLabel {
             get {
-                return ResourceManager.GetString("EditorAppendCLoseLabel", resourceCulture);
+                return ResourceManager.GetString("EditorAppendCloseLabel", resourceCulture);
             }
         }
         

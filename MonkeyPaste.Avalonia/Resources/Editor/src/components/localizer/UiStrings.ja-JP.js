@@ -4,7 +4,7 @@ var UiStrings = {
 	EditorTemplateDateTimeHint: `<p>現在の日付および/または時刻は、評価された瞬間から DateTime テンプレートに置き換えられます。`,
 	EditorTemplateDynamicHint: `<p>このテンプレートの出現箇所はすべて、ここで指定した値に設定されます</p>`,
 	EditorTemplateStaticHint: `<p>現在の日付および/または時刻は、評価された瞬間から DateTime テンプレートに置き換えられます。`,
-	EditorAppendCLoseLabel: `追加を終了する`,
+	EditorAppendCloseLabel: `追加を終了する`,
 	EditorAppendInlineModelLabel: `段落を有効にする`,
 	EditorAppendLineModeLabel: `インラインを有効にする`,
 	EditorAppendManualModeLabel: `マニュアルを切り替える`,

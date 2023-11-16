@@ -663,7 +663,7 @@ namespace MonkeyPaste.Avalonia {
                         .ShowAppPresetsContextMenuCommand.Execute(
                             new object[] {
                                 this,
-                                MpPortableProcessInfo.Create(pasteInfoFormatsClickedMsg.infoId),
+                                MpPortableProcessInfo.FromPath(pasteInfoFormatsClickedMsg.infoId),
                                 new MpPoint(pasteInfoFormatsClickedMsg.offsetX,pasteInfoFormatsClickedMsg.offsetY),
                                 "full"
                             });
@@ -1690,10 +1690,6 @@ namespace MonkeyPaste.Avalonia {
             // they are interdependant to avoid double ntf
 
             var ctrvm = MpAvClipTrayViewModel.Instance;
-            if (BindingContext.IsAppendNotifier &&
-                    (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendInsertMode && ctrvm.IsAnyAppendMode)) {
-                yield return ctrvm.DeactivateAppendModeCommand;
-            }
             if (appendChangedMsg.isAppendPaused != ctrvm.IsAppendPaused) {
                 yield return ctrvm.ToggleAppendPausedCommand;
             }
@@ -1708,6 +1704,11 @@ namespace MonkeyPaste.Avalonia {
             }
             if (appendChangedMsg.isAppendInsertMode && !ctrvm.IsAppendInsertMode) {
                 yield return ctrvm.ToggleAppendInsertModeCommand;
+            }
+            // NOTE make sure deactivate is returned last or it maybe be overriden 
+            if (BindingContext.IsAppendNotifier &&
+                    (!appendChangedMsg.isAppendLineMode && !appendChangedMsg.isAppendInsertMode && ctrvm.IsAnyAppendMode)) {
+                yield return ctrvm.DeactivateAppendModeCommand;
             }
         }
         #endregion

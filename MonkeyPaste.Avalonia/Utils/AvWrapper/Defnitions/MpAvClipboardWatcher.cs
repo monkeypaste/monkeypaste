@@ -14,8 +14,8 @@ namespace MonkeyPaste.Avalonia {
         #region Private Variables
 
         //private bool _isInitialStart = false;
-        private MpPortableDataObject _lastCbo;
-        private DispatcherTimer _timer;
+        private MpPortableDataObject _lastCbo = null;
+        private DispatcherTimer _timer = null;
 
 
         private List<string> _rejectedFormats = new List<string>() {

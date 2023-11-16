@@ -231,7 +231,8 @@
 
                     <!--  SEPERATOR  -->
                     <DataTemplate x:Key="Separator">
-                        <Separator Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}" />
+                        <Separator HorizontalAlignment="Stretch"
+                                   Classes.dark="{Binding IsThemeDark, Source={x:Static local:MpAvPrefViewModel.Instance}}" />
                     </DataTemplate>
 
                     <!--  SEPERATOR  -->

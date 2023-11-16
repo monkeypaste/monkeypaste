@@ -479,7 +479,7 @@
     <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
 &lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;</value>
   </data>
-  <data name="EditorAppendCLoseLabel" xml:space="preserve">
+  <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Finish appending</value>
   </data>
   <data name="EditorAppendInlineModelLabel" xml:space="preserve">

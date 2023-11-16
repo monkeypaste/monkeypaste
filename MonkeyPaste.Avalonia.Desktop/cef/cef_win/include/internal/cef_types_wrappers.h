@@ -36,9 +36,8 @@
 #include "include/internal/cef_types.h"
 
 ///
-/// Template class that provides common functionality for CEF structure
-/// wrapping. Use only with non-POD types that benefit from referencing unowned
-/// members.
+// Template class that provides common functionality for CEF structure wrapping.
+// Use only with non-POD types that benefit from referencing unowned members.
 ///
 template <class traits>
 class CefStructBase : public traits::struct_type {
@@ -63,8 +62,8 @@ class CefStructBase : public traits::struct_type {
   }
 
   ///
-  /// Attach to the source structure's existing values. DetachTo() can be called
-  /// to insert the values back into the existing structure.
+  // Attach to the source structure's existing values. DetachTo() can be called
+  // to insert the values back into the existing structure.
   ///
   void AttachTo(struct_type& source) {
     // Only clear this object's data if it isn't currently attached to a
@@ -80,7 +79,7 @@ class CefStructBase : public traits::struct_type {
   }
 
   ///
-  /// Relinquish ownership of values to the target structure.
+  // Relinquish ownership of values to the target structure.
   ///
   void DetachTo(struct_type& target) {
     if (attached_to_ != &target) {
@@ -97,8 +96,8 @@ class CefStructBase : public traits::struct_type {
   }
 
   ///
-  /// Set this object's values. If |copy| is true the source structure's values
-  /// will be copied instead of referenced.
+  // Set this object's values. If |copy| is true the source structure's values
+  // will be copied instead of referenced.
   ///
   void Set(const struct_type& source, bool copy) {
     traits::set(&source, this, copy);
@@ -126,7 +125,7 @@ class CefStructBase : public traits::struct_type {
 };
 
 ///
-/// Class representing a point.
+// Class representing a point.
 ///
 class CefPoint : public cef_point_t {
  public:
@@ -147,7 +146,7 @@ inline bool operator!=(const CefPoint& a, const CefPoint& b) {
 }
 
 ///
-/// Class representing a rectangle.
+// Class representing a rectangle.
 ///
 class CefRect : public cef_rect_t {
  public:
@@ -161,11 +160,9 @@ class CefRect : public cef_rect_t {
     x = x_val, y = y_val, width = width_val, height = height_val;
   }
 
-  ///
-  /// Returns true if the point identified by point_x and point_y falls inside
-  /// this rectangle.  The point (x, y) is inside the rectangle, but the
-  /// point (x + width, y + height) is not.
-  ///
+  // Returns true if the point identified by point_x and point_y falls inside
+  // this rectangle.  The point (x, y) is inside the rectangle, but the
+  // point (x + width, y + height) is not.
   bool Contains(int point_x, int point_y) const {
     return (point_x >= x) && (point_x < x + width) && (point_y >= y) &&
            (point_y < y + height);
@@ -184,7 +181,7 @@ inline bool operator!=(const CefRect& a, const CefRect& b) {
 }
 
 ///
-/// Class representing a size.
+// Class representing a size.
 ///
 class CefSize : public cef_size_t {
  public:
@@ -207,7 +204,7 @@ inline bool operator!=(const CefSize& a, const CefSize& b) {
 }
 
 ///
-/// Class representing a range.
+// Class representing a range.
 ///
 class CefRange : public cef_range_t {
  public:
@@ -227,7 +224,7 @@ inline bool operator!=(const CefRange& a, const CefRange& b) {
 }
 
 ///
-/// Class representing insets.
+// Class representing insets.
 ///
 class CefInsets : public cef_insets_t {
  public:
@@ -251,7 +248,7 @@ inline bool operator!=(const CefInsets& a, const CefInsets& b) {
 }
 
 ///
-/// Class representing a draggable region.
+// Class representing a draggable region.
 ///
 class CefDraggableRegion : public cef_draggable_region_t {
  public:
@@ -277,8 +274,8 @@ inline bool operator!=(const CefDraggableRegion& a,
 }
 
 ///
-/// Class representing the virtual screen information for use when window
-/// rendering is disabled.
+// Class representing the virtual screen information for use when window
+// rendering is disabled.
 ///
 class CefScreenInfo : public cef_screen_info_t {
  public:
@@ -309,7 +306,7 @@ class CefScreenInfo : public cef_screen_info_t {
 };
 
 ///
-/// Class representing a a keyboard event.
+// Class representing a a keyboard event.
 ///
 class CefKeyEvent : public cef_key_event_t {
  public:
@@ -318,7 +315,7 @@ class CefKeyEvent : public cef_key_event_t {
 };
 
 ///
-/// Class representing a mouse event.
+// Class representing a mouse event.
 ///
 class CefMouseEvent : public cef_mouse_event_t {
  public:
@@ -327,7 +324,7 @@ class CefMouseEvent : public cef_mouse_event_t {
 };
 
 ///
-/// Class representing a touch event.
+// Class representing a touch event.
 ///
 class CefTouchEvent : public cef_touch_event_t {
  public:
@@ -336,7 +333,7 @@ class CefTouchEvent : public cef_touch_event_t {
 };
 
 ///
-/// Class representing popup window features.
+// Class representing popup window features.
 ///
 class CefPopupFeatures : public cef_popup_features_t {
  public:
@@ -427,7 +424,7 @@ struct CefSettingsTraits {
 };
 
 ///
-/// Class representing initialization settings.
+// Class representing initialization settings.
 ///
 using CefSettings = CefStructBase<CefSettingsTraits>;
 
@@ -462,7 +459,7 @@ struct CefRequestContextSettingsTraits {
 };
 
 ///
-/// Class representing request context initialization settings.
+// Class representing request context initialization settings.
 ///
 using CefRequestContextSettings =
     CefStructBase<CefRequestContextSettingsTraits>;
@@ -538,7 +535,7 @@ struct CefBrowserSettingsTraits {
 };
 
 ///
-/// Class representing browser initialization settings.
+// Class representing browser initialization settings.
 ///
 using CefBrowserSettings = CefStructBase<CefBrowserSettingsTraits>;
 
@@ -580,12 +577,12 @@ struct CefURLPartsTraits {
 };
 
 ///
-/// Class representing a URL's component parts.
+// Class representing a URL's component parts.
 ///
 using CefURLParts = CefStructBase<CefURLPartsTraits>;
 
 ///
-/// Class representing the state of a touch handle.
+// Class representing the state of a touch handle.
 ///
 class CefTouchHandleState : public cef_touch_handle_state_t {
  public:
@@ -625,12 +622,12 @@ struct CefCookieTraits {
 };
 
 ///
-/// Class representing a cookie.
+// Class representing a cookie.
 ///
 using CefCookie = CefStructBase<CefCookieTraits>;
 
 ///
-/// Class representing cursor information.
+// Class representing cursor information.
 ///
 class CefCursorInfo : public cef_cursor_info_t {
  public:
@@ -676,12 +673,12 @@ struct CefPdfPrintSettingsTraits {
 };
 
 ///
-/// Class representing PDF print settings
+// Class representing PDF print settings
 ///
 using CefPdfPrintSettings = CefStructBase<CefPdfPrintSettingsTraits>;
 
 ///
-/// Class representing CefBoxLayout settings.
+// Class representing CefBoxLayout settings.
 ///
 class CefBoxLayoutSettings : public cef_box_layout_settings_t {
  public:
@@ -691,7 +688,7 @@ class CefBoxLayoutSettings : public cef_box_layout_settings_t {
 };
 
 ///
-/// Class representing IME composition underline.
+// Class representing IME composition underline.
 ///
 class CefCompositionUnderline : public cef_composition_underline_t {
  public:
@@ -701,7 +698,7 @@ class CefCompositionUnderline : public cef_composition_underline_t {
 };
 
 ///
-/// Class representing CefAudioParameters settings
+// Class representing CefAudioParameters settings
 ///
 class CefAudioParameters : public cef_audio_parameters_t {
  public:
@@ -732,7 +729,7 @@ struct CefMediaSinkDeviceInfoTraits {
 };
 
 ///
-/// Class representing MediaSink device info.
+// Class representing MediaSink device info.
 ///
 using CefMediaSinkDeviceInfo = CefStructBase<CefMediaSinkDeviceInfoTraits>;
 

@@ -182,7 +182,7 @@ namespace MonkeyPaste.Common {
         public static MpPortableDataFormat GetDataFormat(string format) {
             int id = GetDataFormatId(format);
             if (id < 0) {
-                MpConsole.WriteLine($"Unregistered data format '{format}' accessed. Registering it...");
+                //MpConsole.WriteLine($"Unregistered data format '{format}' accessed. Registering it...");
                 RegisterDataFormat(format);
                 return GetDataFormat(format);
             }
@@ -193,7 +193,7 @@ namespace MonkeyPaste.Common {
         public static MpPortableDataFormat RegisterDataFormat(string format) {
             int id = GetDataFormatId(format);
             if (id >= 0) {
-                MpConsole.WriteTraceLine($"Warning attempted to register already registered format name:'{format}' id:{id}");
+                //MpConsole.WriteTraceLine($"Warning attempted to register already registered format name:'{format}' id:{id}");
                 return _formatLookup[id];
             }
             id = _registrar.RegisterFormat(format);
@@ -207,11 +207,11 @@ namespace MonkeyPaste.Common {
             int id = GetDataFormatId(format);
             if (id == 0) {
                 // format doesn't exist so pretend it was successfull but log 
-                MpConsole.WriteTraceLine($"Warning attempted to unregister a non-registered format named '{format}'");
+                //MpConsole.WriteTraceLine($"Warning attempted to unregister a non-registered format named '{format}'");
                 return;
             }
             if (_formatLookup.Remove(id)) {
-                MpConsole.WriteLine($"Successfully unregistered format name:'{format}' id:{id}");
+                //MpConsole.WriteLine($"Successfully unregistered format name:'{format}' id:{id}");
             }
         }
 

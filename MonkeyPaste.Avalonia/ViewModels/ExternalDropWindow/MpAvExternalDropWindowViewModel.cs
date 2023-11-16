@@ -296,7 +296,7 @@ namespace MonkeyPaste.Avalonia {
 
             _lastGlobalMousePoint = gmp;
             // TODO? may need to account for multiple screens in process watcher
-            nint lastDropHandle = CurDropProcessInfo == null ? nint.Zero : CurDropProcessInfo.Handle;
+            MpPortableProcessInfo lastProcessInfo = CurDropProcessInfo;
             CurDropProcessInfo = Mp.Services.ProcessWatcher.GetProcessInfoFromScreenPoint(gmp.ToAvPixelPoint(MpAvWindowManager.MainWindow.VisualPixelDensity()).ToPortablePoint(1));
 
             if (CurDropProcessInfo == null) {
@@ -304,7 +304,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (CurDropProcessInfo.IsThisAppProcess() ||
-                CurDropProcessInfo.IsHandleProcess(lastDropHandle)) {
+                CurDropProcessInfo.IsValueEqual(lastProcessInfo)) {
                 return;
             }
 

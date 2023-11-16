@@ -111,7 +111,7 @@ namespace MonkeyPaste.Avalonia {
                 target_path = CreateEnumResx(target_path);
                 // NOTE! EnumUiStrings should NOT have designer.cs after shutdown.
                 // Add empty row and save to generate, then clean and rebuild before re-running
-                Mp.Services.ShutdownHelper.ShutdownApp($"Enum UI strings updated at path '{target_path}'");
+                Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.ResourceUpdate, $"Enum UI strings updated at path '{target_path}'");
             } else {
                 MpConsole.WriteLine($"Enum Ui strings match. All appears well");
             }

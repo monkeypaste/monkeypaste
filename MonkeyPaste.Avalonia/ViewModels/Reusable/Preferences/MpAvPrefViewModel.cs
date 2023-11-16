@@ -452,7 +452,11 @@ namespace MonkeyPaste.Avalonia {
 #endif
             set {
                 if (_isRichHtmlContentEnabled != value) {
+
                     _isRichHtmlContentEnabled = value;
+                    if (!_isRichHtmlContentEnabled) {
+                        MpDebug.BreakAll();
+                    }
                     OnPropertyChanged(nameof(IsRichHtmlContentEnabled));
                 }
             }

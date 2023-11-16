@@ -963,7 +963,7 @@ namespace MonkeyPaste.Avalonia {
         #region Mouse Event Handlers
 
         private void Hook_MouseWheel(object? sender, MouseWheelHookEventArgs e) {
-            MpConsole.WriteLine($"Mouse wheel delta: {e.Data}");
+            //MpConsole.WriteLine($"Mouse wheel delta: {e.Data}");
             HandlePointerWheel(new MpPoint((double)e.Data.X, (double)e.Data.Y));
         }
 

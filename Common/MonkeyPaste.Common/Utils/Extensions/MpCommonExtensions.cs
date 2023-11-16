@@ -652,12 +652,6 @@ namespace MonkeyPaste.Common {
 
         #region Reflection
 
-        public static async Task<T> InvokeAsync<T>(this MethodInfo @this, object obj, params object[] parameters) {
-            dynamic awaitable = @this.Invoke(obj, parameters);
-            await awaitable;
-            return (T)awaitable.GetAwaiter().GetResult();
-        }
-
         public static async Task InvokeAsync(this MethodInfo @this, object obj, params object[] parameters) {
             dynamic awaitable = @this.Invoke(obj, parameters);
             await awaitable;

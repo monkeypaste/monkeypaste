@@ -463,7 +463,7 @@ namespace MonkeyPaste {
                     var result = await GetDbPasswordAsync(curAttemptNum, maxAttempts);
                     if (result.IsDefault()) {
                         // user canceled
-                        Mp.Services.ShutdownHelper.ShutdownApp("canceled db password");
+                        Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.DbAuthFailed, "canceled db password");
                         return null;
                     }
                     dbInfo.SetPassword(result.Item1, result.Item2);

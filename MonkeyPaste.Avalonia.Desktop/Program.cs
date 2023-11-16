@@ -25,6 +25,7 @@ namespace MonkeyPaste.Avalonia {
                         break;
                 }
             }
+            Exception top_level_ex = null;
             try {
                 //if (MpFileIo.IsFileInUse(MpConsole.LogFilePath) && !MpConsole.HasInitialized) {
                 //    return;
@@ -39,9 +40,14 @@ namespace MonkeyPaste.Avalonia {
                 //.StartWithCefNetApplicationLifetime(App.Args);
                     .StartWithClassicDesktopLifetime(args);
             }
-            catch (Exception e) {
+            catch (Exception ex) {
+                top_level_ex = ex;
                 // here we can work with the exception, for example add it to our log file
-                MpConsole.WriteTraceLine("Something very bad happened", e);
+                MpConsole.WriteTraceLine("Something very bad happened", ex);
+                if (Mp.Services != null &&
+                    Mp.Services.ShutdownHelper != null) {
+                    Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.TopLevelException, top_level_ex == null ? "NONE" : top_level_ex.ToString());
+                }
             }
             finally {
                 // This block is optional. 
@@ -49,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
                 //Log.CloseAndFlush();
                 if (Mp.Services != null &&
                     Mp.Services.ShutdownHelper != null) {
-                    Mp.Services.ShutdownHelper.ShutdownApp("TopLevel exception");
+                    Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.TopLevelException, top_level_ex == null ? "NONE" : top_level_ex.ToString());
                 }
 
             }

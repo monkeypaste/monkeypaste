@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Variables
 #if CEFNET_WV
-        private bool _isBrowserCreated = false; 
+        private bool _isBrowserCreated = false;
 #endif
         #endregion
 
@@ -113,12 +113,7 @@ namespace MonkeyPaste.Avalonia {
 
 
 
-        //public static readonly DirectProperty<MpAvWebView, string> AddressProperty =
-        //    AvaloniaProperty.RegisterDirect<MpAvWebView, string>(
-        //        nameof(Address),
-        //        x => x.Address,
-        //        (x, o) => x.Address = o,
-        //        defaultBindingMode: BindingMode.TwoWay);
+
 
 #if !OUTSYS_WV
         private string _Address;
@@ -126,8 +121,8 @@ namespace MonkeyPaste.Avalonia {
             get { return _Address; }
             set { SetAndRaise(AddressProperty, ref _Address, value); }
         }
-        public static readonly StyledProperty<string> AddressProperty = 
-            AvaloniaProperty.Register<MpAvWebView, string>(
+        public static readonly DirectProperty<MpAvWebView, string> AddressProperty =
+            AvaloniaProperty.RegisterDirect<MpAvWebView, string>(
                 nameof(Address),
                 x => x.Address,
                 (x, o) => x.Address = o,
@@ -137,7 +132,7 @@ namespace MonkeyPaste.Avalonia {
 
         private void OnAddressChanged() {
 #if CEFNET_WV
-            if(!_isBrowserCreated) {
+            if (!_isBrowserCreated) {
                 return;
             }
 #endif

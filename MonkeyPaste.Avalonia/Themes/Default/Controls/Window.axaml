@@ -92,4 +92,15 @@
                 Value="Transparent" />
     </Style>
 
+    <Style Selector=":is(Window).notificationWindow.loader"
+           x:DataType="local:MpAvNotificationViewModelBase">
+        <Setter Property="ShowInTaskbar"
+                Value="True" />
+        <Setter Property="ShowActivated"
+                Value="True" />
+
+        <Setter Property="Background"
+                Value="Orange" />
+    </Style>
+
 </Styles>

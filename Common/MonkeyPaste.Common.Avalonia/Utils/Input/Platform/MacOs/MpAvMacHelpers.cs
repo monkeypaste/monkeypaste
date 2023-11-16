@@ -7,6 +7,7 @@ using MonoMac.ObjCRuntime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
@@ -122,17 +123,28 @@ namespace MonkeyPaste.Common.Avalonia {
             yield break;
         }
 
-        public static NSObject GetCGWindowByHandle(nint handle) {
-
-            if (NSWorkspace.SharedWorkspace
-                .RunningApplications
-                .FirstOrDefault(x => x.Handle == handle) is not { } rp) {
-                return null;
+        public static bool IsPathExecutableUnderAppBundle(string path) {
+            if (!string.IsNullOrEmpty(path) &&
+                path.StartsWith(@"/Applications") &&
+                path.Contains(".app") &&
+                string.IsNullOrEmpty(Path.GetExtension(path))) {
+                return true;
             }
+            return false;
+        }
+        public static string GetAppBundlePathOrDefault(string path) {
+            if (string.IsNullOrEmpty(path) ||
+                path.SplitNoEmpty(".app") is not { } pathParts ||
+                pathParts.Length <= 1) {
+                return path;
+            }
+            // for exec path's within an app use app icon
+            return pathParts[0] + ".app";
+        }
 
-
+        public static NSObject GetCGWindowByPid(nint pid, string filter_key = default) {
             // from https://stackoverflow.com/questions/52441936/macos-active-window-title-using-c-sharp
-            string handle_str = handle.ToString();
+            string handle_str = pid.ToString();
             IntPtr windowInfo = CGWindowListCopyWindowInfo(CGWindowListOption.OnScreenOnly, 0);
             NSArray values = Runtime.GetNSObject(windowInfo) as NSArray;
 
@@ -144,10 +156,14 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (pid_val_obj == null) {
                     continue;
                 }
+                if (filter_key != null && info_obj.ValueForKey(new NSString(filter_key)) is null) {
+                    // ex. needed for windowName in terminal
+                    continue;
+                }
                 if (pid_val_obj is NSNumber pid_val_num) {
                     string pid_val_str = pid_val_num.StringValue;
                     if (nint.TryParse(pid_val_str, out nint pid_val)) {
-                        if (pid_val == handle) {
+                        if (pid_val == pid) {
                             return info_obj;
                         }
                     }

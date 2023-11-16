@@ -70,24 +70,23 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIShutdownTools Implementation
-        void MpIShutdownTools.ShutdownApp(object args) {
+        void MpIShutdownTools.ShutdownApp(MpShutdownType code, string detail) {
             if (_isShuttingDown) {
                 return;
             }
             _isShuttingDown = true;
-            MpConsole.WriteLine($"App shutdown called. Args: '{args.ToStringOrEmpty("NULL")}'");
+            MpConsole.WriteLine($"App shutdown called ({(int)code}). Code: '{code}' Detail: '{detail.ToStringOrEmpty("NULL")}'");
 #if CEFNET_WV
 
             MpAvCefNetApplication.ShutdownCefNet();
 #endif
             MpConsole.ShutdownLog();
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
-                lifetime.Shutdown();
+            if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
+                bool success = lifetime.TryShutdown();
+                MpConsole.WriteLine($"Lifetime shutdown: {success.ToTestResultLabel()}");
             }
         }
 
-        bool MpIShutdownTools.WasShutdownSignaled =>
-            _isShuttingDown;
         #endregion
         #endregion
 
@@ -171,7 +170,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
-            Mp.Services.ShutdownHelper.ShutdownApp("Application exit called");
+            Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.FrameworkExit, "Application exit called");
             FrameworkShutdown?.Invoke(this, EventArgs.Empty);
         }
 

@@ -353,7 +353,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ShutdownCommand => new MpCommand(
             () => {
                 DialogResult = MpNotificationDialogResultType.Shutdown;
-                Mp.Services.ShutdownHelper.ShutdownApp("userAction cmd");
+                Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.UserNtfCmd, "userAction cmd");
             });
 
         public ICommand YesCommand => new MpCommand(

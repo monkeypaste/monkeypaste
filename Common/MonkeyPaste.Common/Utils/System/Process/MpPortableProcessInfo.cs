@@ -18,7 +18,7 @@ namespace MonkeyPaste.Common {
 
         #endregion
         #region Properties
-        public IntPtr Handle { get; set; } = IntPtr.Zero;
+        public nint Handle { get; set; }// = nint.Zero;
         public string ProcessPath { get; set; } = string.Empty;
         public string ApplicationName { get; set; } // app name
 
@@ -29,9 +29,15 @@ namespace MonkeyPaste.Common {
 
         #endregion
         #region Statics
-        public static MpPortableProcessInfo Create(string path) {
+        public static MpPortableProcessInfo FromPath(string path) {
             if (path.IsFile()) {
                 return new MpPortableProcessInfo() { ProcessPath = path };
+            }
+            return null;
+        }
+        public static MpPortableProcessInfo FromHandle(nint handle) {
+            if (handle != 0) {
+                return new MpPortableProcessInfo() { Handle = handle };
             }
             return null;
         }
@@ -45,10 +51,7 @@ namespace MonkeyPaste.Common {
 
         #region Public Methods
         public bool IsThisAppProcess() {
-            return MpCommonTools.Services.ProcessWatcher.IsProcessPathEqual(Handle, MpCommonTools.Services.ProcessWatcher.ThisAppProcessInfo.Handle);
-        }
-        public bool IsHandleProcess(IntPtr handle) {
-            return MpCommonTools.Services.ProcessWatcher.IsProcessPathEqual(Handle, handle);
+            return MpCommonTools.Services.ProcessWatcher.IsProcessPathEqual(this, MpCommonTools.Services.ProcessWatcher.ThisAppProcessInfo);
         }
 
         public override string ToString() {

@@ -7,14 +7,12 @@
     <Title>Monkey Paste Google Contact Fetcher</Title>
     <Authors>Thomas Kefauver</Authors>
     <Platforms>$(DefaultPlatforms)</Platforms>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="contacts_icon.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    
+    <None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,6 @@
-﻿#if MAC
-using Avalonia.Platform;
+﻿using Avalonia.Platform;
 using Avalonia.Threading;
+using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using MonoMac.AppKit;
 using MonoMac.Foundation;
@@ -29,6 +29,9 @@ namespace MonkeyPaste.Avalonia {
             }
 
             MpAvMacHelpers.EnsureInitialized();
+            if (MpAvMacHelpers.IsPathExecutableUnderAppBundle(path)) {
+                path = MpAvMacHelpers.GetAppBundlePathOrDefault(path);
+            }
 
             var icon = NSWorkspace.SharedWorkspace.IconForFile(path);
             var data = icon.AsTiff();
@@ -47,5 +50,3 @@ namespace MonkeyPaste.Avalonia {
 
     }
 }
-
-#endif

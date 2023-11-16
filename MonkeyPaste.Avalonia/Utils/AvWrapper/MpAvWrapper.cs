@@ -150,7 +150,7 @@ namespace MonkeyPaste.Avalonia {
             NativePathDialog = new MpAvPathDialog();
             UserProvidedFileExts = MpAvPrefViewModel.Instance;
             Query = MpAvQueryViewModel.Parse(string.Empty);//MpPrefViewModel.Instance.LastQueryInfoJson);
-            ProcessWatcher = new MpAvProcessWatcherSelector().Watcher;
+            ProcessWatcher = new MpAvProcessWatcher();
             KeyConverter = new MpAvKeyConverter();
 
             UrlBuilder = new MpUrlBuilder();

@@ -77,6 +77,7 @@
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
     <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
     <CefPlatformRelDir>cef\cef_win</CefPlatformRelDir>
+    <PlatformShortName>uwp</PlatformShortName>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'">
@@ -86,6 +87,7 @@
     <IsDesktop>true</IsDesktop>
     <UseCefNet>true</UseCefNet>
     <CefPlatformRelDir>cef\cef_linux</CefPlatformRelDir>
+    <PlatformShortName>x11</PlatformShortName>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
@@ -95,12 +97,14 @@
     <IsDesktop>true</IsDesktop>
     <UseOutSysCef>true</UseOutSysCef>
     <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
+    <PlatformShortName>mac</PlatformShortName>
   </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'BROWSER'">
     <MainTargetFramework>net7.0</MainTargetFramework>
     <DefineConstants>$(DefineConstants);BROWSER;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Web</MainProjectName>
+    <PlatformShortName>wasm</PlatformShortName>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
@@ -110,6 +114,7 @@
     <AndroidPackageName>com.Monkey.MonkeyPaste</AndroidPackageName>
     <AndroidInternalStorageDir>/data/user/0/$(AndroidPackageName)/files</AndroidInternalStorageDir>
     <IsMobile>true</IsMobile>
+    <PlatformShortName>android</PlatformShortName>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
@@ -117,6 +122,7 @@
     <DefineConstants>$(DefineConstants);MOBILE;IOS;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
     <IsMobile>true</IsMobile>
+    <PlatformShortName>ios</PlatformShortName>
   </PropertyGroup>
   
   

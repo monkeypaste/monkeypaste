@@ -2,7 +2,6 @@
 
 namespace MonkeyPaste {
     public interface MpIShutdownTools {
-        bool WasShutdownSignaled { get; }
-        void ShutdownApp(object args);
+        void ShutdownApp(MpShutdownType code, string detail);
     }
 }
