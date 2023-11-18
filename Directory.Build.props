@@ -29,7 +29,7 @@
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>MAC</BuildOs>
+    <BuildOs>WINDOWS</BuildOs>
     <CultureExt>en-US</CultureExt>
   </PropertyGroup>
 
@@ -57,6 +57,7 @@
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
+    <DefaultFramework>net7.0</DefaultFramework>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -69,7 +70,7 @@
   <PropertyGroup Condition="$(BuildOs) == 'WINDOWS'">
     <!-- Tfm from https://stackoverflow.com/a/70380286/105028 -->
     <Tfm>10.0.22621.0</Tfm>
-    <MainTargetFramework>net7.0-windows$(Tfm)</MainTargetFramework>
+    <MainTargetFramework>$(DefaultFramework)-windows$(Tfm)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);WINDOWS;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
@@ -81,7 +82,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'">
-    <MainTargetFramework>net7.0</MainTargetFramework>
+    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
@@ -91,7 +92,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
-    <MainTargetFramework>net7.0</MainTargetFramework>
+    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
@@ -101,14 +102,14 @@
   </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'BROWSER'">
-    <MainTargetFramework>net7.0</MainTargetFramework>
+    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);BROWSER;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Web</MainProjectName>
     <PlatformShortName>wasm</PlatformShortName>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'ANDROID'">
-    <MainTargetFramework>net7.0-android</MainTargetFramework>
+    <MainTargetFramework>$(DefaultFramework)-android</MainTargetFramework>
     <DefineConstants>$(DefineConstants);MOBILE;ANDROID;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Android</MainProjectName>
     <AndroidPackageName>com.Monkey.MonkeyPaste</AndroidPackageName>
@@ -118,7 +119,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'IOS'">
-    <MainTargetFramework>net7.0-ios</MainTargetFramework>
+    <MainTargetFramework>$(DefaultFramework)-ios</MainTargetFramework>
     <DefineConstants>$(DefineConstants);MOBILE;IOS;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.iOS</MainProjectName>
     <IsMobile>true</IsMobile>

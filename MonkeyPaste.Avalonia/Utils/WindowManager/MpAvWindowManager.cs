@@ -11,6 +11,11 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
+
+    public interface MpIWindowStateViewModel : MpIWindowViewModel {
+        WindowState WindowState { get; set; }
+    }
+
     public static class MpAvWindowManager {
         #region Private Variables
         private static Dictionary<Window, IEnumerable<IDisposable>> _dispLookup = new Dictionary<Window, IEnumerable<IDisposable>>();
@@ -26,6 +31,12 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpAvWindow ActiveWindow =>
             AllWindows.FirstOrDefault(x => x.IsActive);
+
+        public static IReadOnlyList<MpAvWindow> Notifications =>
+            AllWindows.Where(x => x.DataContext is MpAvNotificationViewModelBase).ToList();
+
+        public static IReadOnlyList<MpAvWindow> ToastNotifications =>
+            Notifications.Where(x => x.Classes.Contains("toast")).ToList();
 
         public static bool IsAnyActive =>
             ActiveWindow != null;
@@ -45,6 +56,10 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
+        #endregion
+
+        #region Events
+        public static event EventHandler NotificationWindowsChanged;
         #endregion
 
         static MpAvWindowManager() {
@@ -152,6 +167,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static void WindowStateChangedHandler(Window w, AvaloniaPropertyChangedEventArgs<bool> e) {
+            if (w.DataContext is MpIWindowStateViewModel wsvm) {
+                wsvm.WindowState = w.WindowState;
+            }
             if (w.DataContext is MpIActiveWindowViewModel rwvm) {
                 rwvm.IsWindowActive = w.WindowState != WindowState.Minimized;
             }
@@ -299,6 +317,10 @@ namespace MonkeyPaste.Avalonia {
                 _dispLookup.Add(nw, new[] { dsp1, dsp2, dsp3, dsp4 });
             }
             AttachWindowViewModelHandlers(nw);
+
+            if (nw != null && nw.DataContext is MpAvNotificationViewModelBase) {
+                NotificationWindowsChanged?.Invoke(nameof(MpAvWindowManager), EventArgs.Empty);
+            }
         }
 
         private static void DetachAllHandlers(Window nw) {
@@ -313,6 +335,10 @@ namespace MonkeyPaste.Avalonia {
                 _dispLookup.Remove(nw);
             }
             DetachWindowViewModelHandlers(nw);
+
+            if (nw != null && nw.DataContext is MpAvNotificationViewModelBase) {
+                NotificationWindowsChanged?.Invoke(nameof(MpAvWindowManager), EventArgs.Empty);
+            }
         }
         private static void AttachWindowViewModelHandlers(Window w) {
             if (w.DataContext is MpAvViewModelBase vmb) {
@@ -330,6 +356,12 @@ namespace MonkeyPaste.Avalonia {
             if (LocateWindow(sender) is not MpAvWindow cw) {
                 return;
             }
+            if (sender is MpIWindowStateViewModel wsvm &&
+                e.PropertyName == nameof(wsvm.WindowState)) {
+                cw.WindowState = wsvm.WindowState;
+                return;
+            }
+
             if (sender is MpICloseWindowViewModel cwvm &&
                 e.PropertyName == nameof(cwvm.IsWindowOpen)) {
                 if (cwvm.IsWindowOpen) {
@@ -348,9 +380,9 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            if (sender is MpIActiveWindowViewModel wsvm &&
-                e.PropertyName == nameof(wsvm.IsWindowActive)) {
-                if (!wsvm.IsWindowActive) {
+            if (sender is MpIActiveWindowViewModel awvm &&
+                e.PropertyName == nameof(awvm.IsWindowActive)) {
+                if (!awvm.IsWindowActive) {
                     //cw.WindowState = WindowState.Minimized;
                     return;
                 }

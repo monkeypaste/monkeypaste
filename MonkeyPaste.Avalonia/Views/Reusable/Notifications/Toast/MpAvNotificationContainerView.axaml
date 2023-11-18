@@ -1,0 +1,153 @@
+<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:local="using:MonkeyPaste.Avalonia"
+                       xmlns:pcl="using:MonkeyPaste"
+                       mc:Ignorable="d"
+                       d:DesignWidth="800"
+                       d:DesignHeight="450"
+                       x:Name="NotificationContainerView"
+                       x:DataType="local:MpAvNotificationViewModelBase"
+                       x:CompileBindings="True"
+                       x:Class="MonkeyPaste.Avalonia.MpAvNotificationContainerView"
+                       Classes="notificationWindow resizable fadeIn fadeOut"
+                       Classes.userActionNotificationWindow="True">
+    <local:MpAvUserControl.Styles>
+        <!--  OUTER BORDER  -->
+        <Style Selector="Border#OuterBorder">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeInteractiveBgColor}" />
+            <Setter Property="Background"
+                    Value="{DynamicResource ThemeBrush}" />
+        </Style>
+
+        <Style Selector="Border#OuterBorder.warning">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent1Color}" />
+        </Style>
+
+        <Style Selector="Border#OuterBorder.error">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeAccent2Color}" />
+        </Style>
+        <Style Selector="Border#OuterBorder.loader">
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeWhiteBrush}" />
+        </Style>
+    </local:MpAvUserControl.Styles>
+    <!--  OUTER BORDER  -->
+    <Border x:Name="OuterBorder"
+            Classes.warning="{Binding IsWarningNotification}"
+            Classes.error="{Binding IsErrorNotification}"
+            Classes.loader="{Binding IsLoader}"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            MinHeight="130"
+            BorderThickness="7"
+            CornerRadius="5"
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+        <Grid x:Name="NotificationWindowContainerGrid"
+              RowDefinitions="Auto,*">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  MaxWidth="100" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <!--  ICON  -->
+            <Image Grid.Row="0"
+                   Grid.Column="0"
+                   Width="48"
+                   Height="48"
+                   Margin="3,3,10,3"
+                   Classes.applogo="{Binding IsLoader}"
+                   IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}"
+                   Stretch="Fill"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top">
+                <Image.RenderTransform>
+                    <RotateTransform />
+                </Image.RenderTransform>
+            </Image>
+
+            <!--  TITLE  -->
+            <local:MpAvMarqueeTextBox Grid.Row="0"
+                                      Grid.Column="1"
+                                      AutoMarquee="False"
+                                      EditOnFocus="False"
+                                      MinWidth="{Binding #TitleUnderline.Bounds.Width}"
+                                      MaxWidth="{Binding #TitleUnderline.Bounds.Width}"
+                                      Width="{Binding #TitleUnderline.Bounds.Width}"
+                                      MinHeight="30"
+                                      FontSize="24"
+                                      IsReadOnly="True"
+                                      IsMarqueeEnabled="True"
+                                      VerticalAlignment="Top"
+                                      HorizontalAlignment="Left"
+                                      TextAlignment="Left"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Bottom"
+                                      FontWeight="SemiBold"
+                                      Text="{Binding Title}" />
+            <!--  UNDERLINE  -->
+            <Border x:Name="TitleUnderline"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Top"
+                    BorderThickness="0"
+                    Margin="0,30,5,0"
+                    Background="{DynamicResource ThemeWhiteColor}"
+                    Height="1" />
+
+            <!--
+                OPTIONS POPUP (Optional)
+                RenderTransform="translateX(13px) translateY(-10px)"
+            -->
+
+            <local:MpAvOptionsButton x:Name="OptionsButton"
+                                     Grid.Row="0"
+                                     Grid.Column="2"
+                                     HorizontalAlignment="Right"
+                                     IsVisible="{Binding ShowOptionsButton}"
+                                     Command="{Binding ShowOptionsPopupCommand}"
+                                     CommandParameter="{Binding $self}" />
+
+
+            <!--  CONTENT  -->
+            <ContentControl x:Name="ContentContainer"
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            Margin="5,30,5,5"
+                            Content="{Binding}">
+                <ContentControl.DataTemplates>
+                    <local:MpAvNotificationBodyTemplateSelector>
+                        <DataTemplate x:Key="LoaderTemplate"
+                                      x:DataType="local:MpAvLoaderNotificationViewModel">
+                            <local:MpAvLoaderView />
+                        </DataTemplate>
+                        <DataTemplate x:Key="UserActionTemplate"
+                                      x:DataType="local:MpAvUserActionNotificationViewModel">
+                            <local:MpAvUserActionNotificationView />
+                        </DataTemplate>
+                        <DataTemplate x:Key="MessageTemplate"
+                                      x:DataType="local:MpAvMessageNotificationViewModel">
+                            <local:MpAvMessageNotificationView />
+                        </DataTemplate>
+
+                    </local:MpAvNotificationBodyTemplateSelector>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+        </Grid>
+    </Border>
+
+</local:MpAvUserControl>

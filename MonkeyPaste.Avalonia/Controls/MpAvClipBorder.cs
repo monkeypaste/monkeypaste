@@ -84,9 +84,6 @@ namespace MonkeyPaste.Avalonia {
         //        }
         //    }
         //}
-        protected override Size ArrangeOverride(Size finalSize) {
-            return base.ArrangeOverride(finalSize);
-        }
 
         protected virtual void OnApplyChildClip() {
             if (this.Content is Control Child) {

@@ -56,6 +56,22 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
+        #region IsUserMoving AvaloniaProperty
+        public static bool GetIsUserMoving(AvaloniaObject obj) {
+            return obj.GetValue(IsUserMovingProperty);
+        }
+
+        public static void SetIsUserMoving(AvaloniaObject obj, bool value) {
+            obj.SetValue(IsUserMovingProperty, value);
+        }
+
+        public static readonly AttachedProperty<bool> IsUserMovingProperty =
+            AvaloniaProperty.RegisterAttached<object, Control, bool>(
+                "IsUserMoving",
+                false);
+
+        #endregion
+
         #region IsEnabled AvaloniaProperty
         public static bool GetIsEnabled(AvaloniaObject obj) {
             return obj.GetValue(IsEnabledProperty);
@@ -127,9 +143,10 @@ namespace MonkeyPaste.Avalonia {
                 !e.IsLeftDown(attached_control) ||
                 TopLevel.GetTopLevel(attached_control) is not Window w) {
                 _downPos = null;
+
                 return;
             }
-
+            SetIsUserMoving(w, true);
             var curMousePos = w.PointToScreen(e.GetPosition(w));
             w.Position = _initialWindowPos + (curMousePos - _downPos.Value);
         }
@@ -141,6 +158,7 @@ namespace MonkeyPaste.Avalonia {
                 TopLevel.GetTopLevel(attached_control) is not Window w) {
                 return;
             }
+            SetIsUserMoving(w, false);
             w.Cursor = new Cursor(StandardCursorType.Arrow);
         }
 

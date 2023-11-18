@@ -132,7 +132,9 @@ namespace MonkeyPaste.Avalonia {
 
         private static NativeMenuItem CreateMenuItem(MpAvMenuItemViewModel mivm) {
             var nmi = CreateMenuItem(
-                header: mivm.IsSeparator ? "-" : mivm.Header,
+                isSeparator: mivm.IsSeparator,
+
+                header: mivm.Header,
                 headerSrcObj: mivm.HeaderSrcObj,
                 headerPath: mivm.HeaderPropPath,
 
@@ -166,6 +168,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static NativeMenuItem CreateMenuItem(
+            bool isSeparator = false,
+
             string header = "",
             object headerSrcObj = null,
             string headerPath = "",
@@ -196,6 +200,9 @@ namespace MonkeyPaste.Avalonia {
             string keyGesturePropPath = "",
 
             IEnumerable<NativeMenuItem> children = null) {
+            if (isSeparator) {
+                return new NativeMenuItemSeparator();
+            }
             var nmi = new NativeMenuItem();
             // IS ENABLED
 

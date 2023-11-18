@@ -319,7 +319,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                 }
             }
-            MpDebug.Assert(dups == null, "Dup apps found");
+            MpDebug.Assert(dups == null, "Dup apps found", true);
         }
 
 
