@@ -1,0 +1,316 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        xmlns:pcl="using:MonkeyPaste"
+        mc:Ignorable="d"
+        d:DesignWidth="800"
+        d:DesignHeight="450"
+        x:Name="UserActionNotificationWindow"
+        x:DataType="local:MpAvUserActionNotificationViewModel"
+        x:CompileBindings="True"
+        x:Class="MonkeyPaste.Avalonia.MpAvUserActionNotificationWindow"
+        Classes="notificationWindow resizable fadeIn fadeOut"
+        Classes.userActionNotificationWindow="True">
+    <Window.Styles>
+        <!--  PARAM LISTBOXITEM  -->
+        <Style Selector="ListBox#ExecuteParameterListBox > ListBoxItem"
+               x:DataType="local:MpAvParameterViewModelBase">
+            <Setter Property="IsVisible">
+                <Setter.Value>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="IsExecuteParameter" />
+                        <Binding Path="IsVisible" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style Selector="ListBox#ExecuteParameterListBox ListBoxItem">
+            <Setter Property="Margin"
+                    Value="0,2.5" />
+            <Setter Property="Padding"
+                    Value="0" />
+            <Setter Property="HorizontalAlignment"
+                    Value="Stretch" />
+            <Setter Property="BorderBrush"
+                    Value="{DynamicResource ThemeGrayAccent2Color}" />
+        </Style>
+
+        <Style Selector="ListBox#ExecuteParameterListBox ListBoxItem">
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,1" />
+        </Style>
+
+        <Style Selector="ListBox#ExecuteParameterListBox ListBoxItem:nth-last-child()">
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,0" />
+        </Style>
+    </Window.Styles>
+    <Border HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            MinHeight="130"
+            BorderThickness="7"
+            Padding="10"
+            BorderBrush="{Binding BorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+            Background="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+            local:MpAvIsHoveringExtension.IsEnabled="True"
+            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}">
+        <Grid x:Name="NotificationWindowContainerGrid"
+              RowDefinitions="Auto,Auto,Auto,Auto,0.6*">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"
+                                  MaxWidth="100" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <!--  ICON  -->
+            <Image Grid.Row="0"
+                   Grid.RowSpan="2"
+                   Grid.Column="0"
+                   Width="64"
+                   Height="64"
+                   IsVisible="{Binding IconSourceObj, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                   Source="{Binding IconSourceObj, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}"
+                   Stretch="Fill"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Margin="10,5,10,0" />
+
+            <!--  TITLE/UNDERLINE  -->
+
+            <local:MpAvMarqueeTextBox Grid.Row="0"
+                                      Grid.Column="1"
+                                      AutoMarquee="False"
+                                      EditOnFocus="False"
+                                      MinWidth="{Binding #TitleUnderline.Bounds.Width}"
+                                      MaxWidth="{Binding #TitleUnderline.Bounds.Width}"
+                                      Width="{Binding #TitleUnderline.Bounds.Width}"
+                                      MinHeight="30"
+                                      FontSize="20"
+                                      IsReadOnly="True"
+                                      IsMarqueeEnabled="True"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"
+                                      TextAlignment="Left"
+                                      HorizontalContentAlignment="Left"
+                                      VerticalContentAlignment="Top"
+                                      FontWeight="SemiBold"
+                                      Text="{Binding Title}" />
+            <Border x:Name="TitleUnderline"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
+                    BorderThickness="0"
+                    Margin="0,0,5,0"
+                    Background="{DynamicResource ThemeWhiteColor}"
+                    Height="1" />
+
+
+            <!--  MESSAGE BODY  -->
+            <ContentControl Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                            Margin="5,5,5,10"
+                            Content="{Binding}">
+                <ContentControl.DataTemplates>
+                    <local:MpAvUserActionBodyTemplateSelector>
+                        <DataTemplate x:Key="TextBodyTemplate"
+                                      x:DataType="local:MpAvUserActionNotificationViewModel">
+                            <SelectableTextBlock FontSize="14"
+                                                 HorizontalAlignment="Left"
+                                                 VerticalAlignment="Top"
+                                                 TextWrapping="Wrap"
+                                                 FontWeight="SemiBold"
+                                                 Background="Transparent"
+                                                 Focusable="True"
+                                                 Foreground="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
+                                                 Text="{Binding Body}" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="ParameterCollectionTemplate"
+                                      x:DataType="local:MpAvUserActionNotificationViewModel">
+                            <Border DataContext="{Binding Body}"
+                                    MinWidth="250"
+                                    x:DataType="local:MpAvAnalyticItemPresetViewModel">
+                                <ListBox x:Name="ExecuteParameterListBox"
+                                         Grid.Row="1"
+                                         Padding="0"
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Top"
+                                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         BorderThickness="0"
+                                         Background="Transparent"
+                                         IsVisible="{Binding Items, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                                         ItemsSource="{Binding Items}"
+                                         SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel Orientation="Vertical"
+                                                                    HorizontalAlignment="Stretch"
+                                                                    VerticalAlignment="Stretch" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <local:MpAvPluginParameterItemView HorizontalAlignment="Stretch"
+                                                                               Classes.invalid="{Binding !IsValid}" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Border>
+                        </DataTemplate>
+                    </local:MpAvUserActionBodyTemplateSelector>
+                </ContentControl.DataTemplates>
+            </ContentControl>
+
+            <!--  TEXTBOX (Optional)  -->
+
+            <Grid Grid.Row="2"
+                  Grid.Column="1"
+                  IsVisible="{Binding ShowTextBox}"
+                  RowDefinitions="Auto,Auto">
+                <Border BorderThickness="2"
+                        BorderBrush="{DynamicResource ThemeInteractiveBgColor}"
+                        Background="{DynamicResource ThemeInteractiveBgColor}"
+                        Margin="0,0,5,3"
+                        CornerRadius="7"
+                        Padding="3"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center">
+                    <TextBox Grid.Row="0"
+                             Watermark="{Binding Detail}"
+                             PasswordChar="{Binding PasswordChar}"
+                             Classes.password="{Binding PasswordChar, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                             Classes.revealPasswordButton="{Binding PasswordChar, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
+                             TextAlignment="Left"
+                             FontSize="14"
+                             Padding="3"
+                             BorderThickness="0"
+                             Text="{Binding BoundInputText, Mode=TwoWay}" />
+                </Border>
+                <StackPanel Grid.Row="1"
+                            Spacing="2"
+                            Orientation="Horizontal"
+                            IsVisible="{Binding CanRemember}">
+                    <Label Foreground="White"
+                           VerticalAlignment="Center"
+                           Content="{x:Static local:UiStrings.DbPasswordRememberLabel}" />
+                    <CheckBox x:Name="RememberCheckbox"
+                              IsChecked="{Binding RememberInputText, Mode=TwoWay}" />
+                </StackPanel>
+            </Grid>
+            <!--  PROGRESS (Optional)  -->
+            <Border Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    MinHeight="100"
+                    IsVisible="{Binding ShowProgressSpinner}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center">
+
+                <local:MpAvProgressSpinner x:Name="UserActionProgressSpinner"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           LabelBrush="{Binding BackgroundHexColor, Converter={x:Static local:MpAvStringHexToContrastBrushConverter.Instance}}"
+                                           Width="100"
+                                           Height="100"
+                                           Percent="{Binding PercentLoaded}" />
+            </Border>
+
+            <!--  BUTTONS ROW  -->
+
+            <StackPanel Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,10,0,0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <!--  Upgrade, LearnMore  -->
+                <Button Padding="0"
+                        IsDefault="True"
+                        IsVisible="{Binding ShowUpgradeButton}"
+                        Command="{Binding UpgradeCommand}">
+                    <Border Background="Green"
+                            Padding="10,5">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="15"
+                                   Height="15"
+                                   Margin="0,5"
+                                   VerticalAlignment="Center"
+                                   Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow}" />
+                            <TextBlock Text="{x:Static local:UiStrings.AccountUpgradeButtonText}"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Border>
+                </Button>
+                <Border x:Name="HiddenSeperator"
+                        IsVisible="{Binding ShowUpgradeButton}"
+                        Opacity="0"
+                        Width="100" />
+                <Button Padding="0"
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding ShowLearnMoreButton}"
+                        Command="{Binding LearnMoreCommand}">
+                    <Border Background="Blue"
+                            Padding="7,5">
+                        <TextBlock Text="{x:Static local:UiStrings.AccountLearnMoreButtonText}"
+                                   VerticalAlignment="Center"
+                                   Foreground="White"
+                                   FontWeight="SemiBold" />
+                    </Border>
+                </Button>
+                <!--  Ignore, Retry, Fix, Shutdown states  -->
+                <Button Content="{x:Static local:UiStrings.UserActionIgnoreButtonText}"
+                        IsVisible="{Binding ShowIgnoreButton}"
+                        Command="{Binding IgnoreCommand}" />
+                <Button x:Name="RetryButton"
+                        Content="{x:Static local:UiStrings.UserActionRetryButtonText}"
+                        IsVisible="{Binding ShowRetryButton}"
+                        Command="{Binding RetryCommand}" />
+                <Button x:Name="FixButton"
+                        Content="{x:Static local:UiStrings.UserActionFixButtonText}"
+                        IsVisible="{Binding ShowFixButton}"
+                        VerticalAlignment="Top"
+                        Command="{Binding FixWrapperCommand}" />
+                <Button Content="{x:Static local:UiStrings.UserActionShutdownButtonText}"
+                        IsVisible="{Binding ShowShutdownButton}"
+                        Command="{Binding ShutdownCommand}" />
+                <!--  Yes, No, Cancel or Ok, Cancel States  -->
+                <Button Content="{x:Static local:UiStrings.UserActionYesButtonText}"
+                        IsDefault="{Binding ShowYesButton}"
+                        Command="{Binding YesCommand}"
+                        IsVisible="{Binding ShowYesButton}" />
+                <Button Content="{x:Static local:UiStrings.UserActionNoButtonText}"
+                        Command="{Binding NoCommand}"
+                        IsVisible="{Binding ShowNoButton}" />
+                <Button Content="{x:Static local:UiStrings.UserActionOkButtonText}"
+                        IsDefault="{Binding ShowOkButton}"
+                        Command="{Binding OkCommand}"
+                        IsVisible="{Binding ShowOkButton}" />
+                <Button Content="{x:Static local:UiStrings.UserActionSubmitButtonText}"
+                        IsDefault="{Binding ShowSubmitButton}"
+                        Command="{Binding SubmitCommand}"
+                        IsVisible="{Binding ShowSubmitButton}" />
+                <Button Content="{x:Static local:UiStrings.UserActionCancelButtonText}"
+                        Command="{Binding CancelCommand}"
+                        IsVisible="{Binding ShowCancelButton}" />
+            </StackPanel>
+
+            <!--  OPTIONS POPUP (Optional)  -->
+
+            <local:MpAvOptionsButton Grid.Row="0"
+                                     Grid.Column="1"
+                                     RenderTransform="translateX(13px) translateY(-10px)"
+                                     HorizontalAlignment="Right"
+                                     IsVisible="{Binding ShowOptionsButton}"
+                                     Command="{Binding ShowOptionsPopupCommand}"
+                                     CommandParameter="{Binding $self}" />
+        </Grid>
+    </Border>
+</Window>

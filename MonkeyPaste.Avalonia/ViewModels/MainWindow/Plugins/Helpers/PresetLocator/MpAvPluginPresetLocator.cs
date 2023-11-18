@@ -166,7 +166,7 @@ namespace MonkeyPaste.Avalonia {
 
             int preset_icon_id = pluginHost.IconId;
             if (!string.IsNullOrEmpty(preset_format.iconUri)) {
-                preset_icon_id = await MpAvPluginIconLocator.LocatePluginIconIdAsync(pluginHost, preset_format.iconUri);
+                preset_icon_id = await MpAvPluginIconLocator.LocatePluginIconIdAsync(pluginHost.PluginFormat, preset_format.iconUri);
             }
             string preset_label = preset_format.label;
             if (string.IsNullOrEmpty(preset_label)) {

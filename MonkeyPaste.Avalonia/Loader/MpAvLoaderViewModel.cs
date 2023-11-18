@@ -29,7 +29,8 @@ namespace MonkeyPaste.Avalonia {
         public DateTime? LoadedDateTime { get; private set; } = null;
         public bool IsCoreLoaded { get; protected set; } = false;
         public bool IsPlatformLoaded { get; protected set; } = false;
-        public MpStartupFlags StartupFlags { get; protected set; }
+        public bool IsLoginLoad { get; set; }
+        public bool IsInitialStartup { get; set; } = true;
 
         public bool IsReady { get; private set; }
         #endregion
@@ -75,10 +76,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public bool IS_PARALLEL_LOADING_ENABLED =>
+        public bool IsParallelLoadingEnabled =>
         // NOTE db create takes extra time and breaks when vm's query in parallel
         // (this maybe a sign this needs more organization)
-        !StartupFlags.HasFlag(MpStartupFlags.Initial);
+        !IsInitialStartup;
         //false;
 
         public int LoadedCount { get; set; } = 0;
@@ -89,9 +90,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constructors
         public MpAvLoaderViewModel(bool wasStartedAtLogin) {
+            IsLoginLoad = wasStartedAtLogin;
             LoaderStopWatch = Stopwatch.StartNew();
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);
-            StartupFlags |= wasStartedAtLogin ? MpStartupFlags.Login : MpStartupFlags.UserInvoked;
             PropertyChanged += MpAvLoaderViewModel_PropertyChanged;
         }
 
@@ -101,28 +102,23 @@ namespace MonkeyPaste.Avalonia {
         #region Public Methods
 
         public async Task CreatePlatformAsync(DateTime startup_datetime) {
-#if LINUX
-            
+#if LINUX            
                 await GtkHelper.EnsureInitialized();
 #elif MAC
-
             MpAvMacHelpers.EnsureInitialized();
 #endif
 
             await Mp.InitAsync(new MpAvWrapper(this));
 
-            if (MpAvPrefViewModel.Instance != null) {
-                if (!MpAvPrefViewModel.Instance.IsWelcomeComplete) {
-                    StartupFlags |= MpStartupFlags.Initial;
-                }
-                MpAvPrefViewModel.Instance.StartupDateTime = startup_datetime;
-
-                MpAvThemeViewModel.Instance.UpdateThemeResources();
+            if (MpAvPrefViewModel.Instance == null) {
+                return;
             }
+            IsInitialStartup = !MpAvPrefViewModel.Instance.IsWelcomeComplete;
+            MpAvPrefViewModel.Instance.StartupDateTime = startup_datetime;
+            MpAvThemeViewModel.Instance.UpdateThemeResources();
         }
 
         public async Task InitAsync() {
-
             await MpAvWelcomeNotificationViewModel.ShowWelcomeNotificationAsync();
 
             CreateLoaderItems();
@@ -274,7 +270,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
         private async Task LoadItemsAsync(List<MpAvLoaderItemViewModel> items, bool affectsCount = true) {
-            if (IS_PARALLEL_LOADING_ENABLED) {
+            if (IsParallelLoadingEnabled) {
                 await LoadItemsParallelAsync(items, affectsCount);
             } else {
                 await LoadItemsSequentialAsync(items, affectsCount);

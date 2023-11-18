@@ -285,7 +285,7 @@ namespace MonkeyPaste.Avalonia {
                 throw new Exception("Cannot find component");
             }
 
-            HandledFormatIconId = await MpAvPluginIconLocator.LocatePluginIconIdAsync(this, ClipboardPluginFormat.iconUri);
+            HandledFormatIconId = await MpAvPluginIconLocator.LocatePluginIconIdAsync(PluginFormat, ClipboardPluginFormat.iconUri);
             var presets = await MpAvPluginPresetLocator.LocatePresetsAsync(
                 this,
                 enableOnReset: IsCoreHandler,

@@ -3,7 +3,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="using:MonkeyPaste.Avalonia">
 
-    <Style Selector="Window.welcomeGrow Border#MainOuterBorder">
+    <Style Selector="Window.welcomeGrow">
         <Setter Property="Width"
                 Value="100" />
         <Setter Property="Height"
@@ -40,7 +40,8 @@
             </Animation>
         </Style.Animations>
     </Style>
-    <Style Selector="Window.welcomeGrow Grid#ContainerGrid">
+
+    <Style Selector="Window.welcomeGrow > Border > Grid">
         <Setter Property="Opacity"
                 Value="0" />
         <Style.Animations>

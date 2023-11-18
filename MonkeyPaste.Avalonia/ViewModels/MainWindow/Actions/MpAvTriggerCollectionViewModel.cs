@@ -26,7 +26,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-
+        const string DEFAULT_ANNOTATOR_TRIGGER_GUID = "561c8b4d-9b78-4e79-ac01-dc831c55e88c";
         public const double DEFAULT_MIN_SCALE = 0.1;
         public const double DEFAULT_MAX_SCALE = 3.0d;
 
@@ -402,9 +402,8 @@ namespace MonkeyPaste.Avalonia {
 
             Items.Clear();
 
-            if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
-                await CreateDefaultTriggersCommand.ExecuteAsync();
-            }
+            await CreateCoreAnnotateTriggerAsync();
+
             var tal = await MpDataModelProvider.GetAllTriggerActionsAsync();
 
             foreach (var ta in tal) {
@@ -667,69 +666,75 @@ namespace MonkeyPaste.Avalonia {
             };
             return dw;
         }
+
+        private async Task CreateCoreAnnotateTriggerAsync() {
+            int def_ann_check = await MpDataModelProvider.GetItemIdByGuidAsync<MpAction>(DEFAULT_ANNOTATOR_TRIGGER_GUID);
+            if (def_ann_check != 0) {
+                // already created 
+                return;
+            }
+            while (true) {
+                bool can_create =
+                    MpAvAnalyticItemCollectionViewModel.Instance.IsLoaded;
+                if (can_create) {
+                    break;
+                }
+                await Task.Delay(100);
+            }
+
+
+            int def_annotate_preset_id = 0;
+            if (MpAvAnalyticItemCollectionViewModel
+                .Instance
+                .AllPresets
+                .FirstOrDefault(x => x.PresetGuid == MpPluginLoader.CoreAnnotatorDefaultPresetGuid) is MpAvAnalyticItemPresetViewModel aipvm) {
+                def_annotate_preset_id = aipvm.AnalyticItemPresetId;
+            }
+            if (def_annotate_preset_id == 0) {
+                MpDebug.Break("Warning creating Default annotate trigger, can't find default annotator :( But creating anyways which should notify user somethings wrong");
+                return;
+            }
+
+            // NOTE this must be called after analyzer collection has initialized
+
+            #region Annotate new text
+
+            // NOTE forcing trigger to constant guid so creation doesn't depend on initial startup
+            MpAction annotate_trigger_action = await MpAction.CreateAsync(
+                guid: DEFAULT_ANNOTATOR_TRIGGER_GUID,
+                label: "Annotate New Text Trigger",
+                actionType: MpActionType.Trigger,
+                sortOrderIdx: 0,
+                arg2: "True",
+                arg3: ((int)MpTriggerType.ContentAdded).ToString(),
+                location: DefaultDesignerItemLocationLocation);
+
+            var annotate_trigger_action_text_type_param = await MpParameterValue.CreateAsync(
+                hostType: MpParameterHostType.Action,
+                hostId: annotate_trigger_action.Id,
+                paramId: MpAvContentAddTriggerViewModel.CONTENT_TYPE_PARAM_ID.ToString(),
+                value: MpCopyItemType.Text.ToString());
+
+
+            MpAction annotate_analyze_action = await MpAction.CreateAsync(
+                     label: "Analyze with Annotator",
+                     actionType: MpActionType.Analyze,
+                     parentId: annotate_trigger_action.Id,
+                     sortOrderIdx: 0,
+                     location: DefaultDesignerItemLocationLocation + new MpPoint(DesignerItemDiameter * 3, 0));
+
+
+            var annotate_analyze_action_def_annotator_preset_param = await MpParameterValue.CreateAsync(
+                hostType: MpParameterHostType.Action,
+                hostId: annotate_analyze_action.Id,
+                paramId: MpAvAnalyzeActionViewModel.SELECTED_ANALYZER_PARAM_ID.ToString(),
+                value: def_annotate_preset_id.ToString());
+
+            #endregion
+        }
         #endregion
 
         #region Commands
-
-        public MpIAsyncCommand CreateDefaultTriggersCommand => new MpAsyncCommand(
-            async () => {
-                while (true) {
-                    bool can_create =
-                        MpAvAnalyticItemCollectionViewModel.Instance.IsLoaded;
-                    if (can_create) {
-                        break;
-                    }
-                    await Task.Delay(100);
-                }
-                MpConsole.WriteLine($"Default trigger create started.");
-
-                // NOTE this must be called after analyzer collection has initialized
-
-                #region Annotate new text
-
-                MpAction annotate_trigger_action = await MpAction.CreateAsync(
-                         label: "Annotate New Text Trigger",
-                         actionType: MpActionType.Trigger,
-                         sortOrderIdx: 0,
-                         arg2: "True",
-                         arg3: ((int)MpTriggerType.ContentAdded).ToString(),
-                         location: DefaultDesignerItemLocationLocation);
-
-                var annotate_trigger_action_text_type_param = await MpParameterValue.CreateAsync(
-                    hostType: MpParameterHostType.Action,
-                    hostId: annotate_trigger_action.Id,
-                    paramId: MpAvContentAddTriggerViewModel.CONTENT_TYPE_PARAM_ID.ToString(),
-                    value: MpCopyItemType.Text.ToString());
-
-
-                MpAction annotate_analyze_action = await MpAction.CreateAsync(
-                         label: "Analyze with Annotator",
-                         actionType: MpActionType.Analyze,
-                         parentId: annotate_trigger_action.Id,
-                         sortOrderIdx: 0,
-                         location: DefaultDesignerItemLocationLocation + new MpPoint(DesignerItemDiameter * 3, 0));
-
-
-                int def_annotate_preset_id = 0;
-                if (MpAvAnalyticItemCollectionViewModel
-                    .Instance
-                    .AllPresets
-                    .FirstOrDefault(x => x.PresetGuid == MpPluginLoader.CoreAnnotatorDefaultPresetGuid) is MpAvAnalyticItemPresetViewModel aipvm) {
-                    def_annotate_preset_id = aipvm.AnalyticItemPresetId;
-                }
-                if (def_annotate_preset_id == 0) {
-                    MpDebug.Break("Warning creating Default annotate trigger, can't find default annotator :( But creating anyways which should notify user somethings wrong");
-                }
-
-                var annotate_analyze_action_def_annotator_preset_param = await MpParameterValue.CreateAsync(
-                    hostType: MpParameterHostType.Action,
-                    hostId: annotate_analyze_action.Id,
-                    paramId: MpAvAnalyzeActionViewModel.SELECTED_ANALYZER_PARAM_ID.ToString(),
-                    value: def_annotate_preset_id.ToString());
-
-                #endregion
-
-            });
         public ICommand ShowTriggerSelectorMenuCommand => new MpCommand<object>(
              (args) => {
 

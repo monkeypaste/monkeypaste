@@ -41,6 +41,13 @@
             <Setter Property="RotateTransform.Angle"
                     Value="180" />
         </Style>
+        <!--  CONTINER BUTTON  -->
+        <Style Selector="Button#ContainerButton /template/ ContentPresenter">
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="Padding"
+                    Value="0" />
+        </Style>
     </local:MpAvUserControl.Styles>
     <Button x:Name="ContainerButton"
             Classes="param"
@@ -54,7 +61,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch">
         <!--<Grid ColumnDefinitions="Auto,*,Auto">-->
-        <DockPanel>
+        <DockPanel Margin="3,5">
             <Image x:Name="PopupImage"
                    Grid.Column="0"
                    DockPanel.Dock="Left"

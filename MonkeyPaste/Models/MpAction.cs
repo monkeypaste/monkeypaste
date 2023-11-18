@@ -220,6 +220,7 @@ namespace MonkeyPaste {
         #endregion
 
         public static async Task<MpAction> CreateAsync(
+            string guid = "",
             MpActionType actionType = MpActionType.None,
             string label = "",
             int parentId = 0,
@@ -243,7 +244,7 @@ namespace MonkeyPaste {
             }
             location = location == null ? new MpPoint() : location;
             var mr = new MpAction() {
-                ActionGuid = System.Guid.NewGuid(),
+                ActionGuid = string.IsNullOrEmpty(guid) ? System.Guid.NewGuid() : System.Guid.Parse(guid),
                 Label = label,
                 ActionType = actionType,
                 Arg1 = arg1,

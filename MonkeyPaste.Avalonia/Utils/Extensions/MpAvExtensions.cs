@@ -25,31 +25,6 @@ namespace MonkeyPaste.Avalonia {
 
         #endregion
 
-        #region Screen
-
-        public static PixelPoint GetSystemTrayWindowPosition(this Screen s, PixelSize ws, int pad = 10) {
-            //ws = (ws.ToPortablePoint() * s.Scaling).ToPortableSize();
-            int x = s.Bounds.Right - ws.Width - pad;
-#if MAC
-            int y = s.WorkingArea.TopRight.Y + pad;
-#else
-            int y = s.WorkingArea.Bottom - ws.Height - pad;
-#endif
-            //x /= s.Scaling;
-            //y /= s.Scaling;
-
-            // when y is less than 0 i think it screws up measuring mw dimensions so its a baby
-            y = Math.Max(0, y);
-            return new PixelPoint(x, y);
-        }
-
-        public static Screen GetScreen(this Visual v) {
-            if (TopLevel.GetTopLevel(v) is not WindowBase tl) {
-                return null;
-            }
-            return tl.Screens.ScreenFromVisual(v);
-        }
-        #endregion
 
         #region Controls
 

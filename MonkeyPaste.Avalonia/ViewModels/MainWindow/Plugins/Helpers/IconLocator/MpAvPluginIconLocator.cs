@@ -1,13 +1,14 @@
 ﻿using Avalonia.Media.Imaging;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonkeyPaste.Common.Plugin;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
     public static class MpAvPluginIconLocator {
-        public static async Task<int> LocatePluginIconIdAsync(MpIParameterHostViewModel pluginHost, string overrideUri = null) {
-            string uri = overrideUri == null ? pluginHost.PluginFormat.iconUri : overrideUri;
-            var bytes = await MpFileIo.ReadBytesFromUriAsync(uri, pluginHost.PluginFormat.RootDirectory);
+        public static async Task<int> LocatePluginIconIdAsync(MpPluginFormat pf, string overrideUri = null) {
+            string uri = overrideUri == null ? pf.iconUri : overrideUri;
+            var bytes = await MpFileIo.ReadBytesFromUriAsync(uri, pf.RootDirectory);
             if (bytes == null || bytes.Length == 0) {
                 // no icon provided or broken uri 
                 if (MpAvPrefViewModel.Instance.DefaultPluginIconId == 0) {

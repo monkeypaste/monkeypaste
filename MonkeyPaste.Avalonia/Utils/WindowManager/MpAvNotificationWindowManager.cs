@@ -157,8 +157,6 @@ namespace MonkeyPaste.Avalonia {
 #endif
                 nw.Closed += Nw_Closed;
 
-                nw.GetObservable(Window.IsVisibleProperty).Subscribe(value => OnNotificationWindowIsVisibleChangedHandler(nw));
-
                 BeginOpen(nw);
             });
         }
@@ -175,9 +173,6 @@ namespace MonkeyPaste.Avalonia {
             }
             if (nvmb.CanMoveWindow) {
                 MpAvMoveWindowExtension.SetIsEnabled(nw, true);
-                if (nvmb.RejectedMoveControlTypes != null) {
-                    MpAvMoveWindowExtension.SetRejectedControlTypeNames(nw, string.Join("|", nvmb.RejectedMoveControlTypes.Select(x => x.ToString())));
-                }
             }
             if (nvmb.Owner is not Window &&
                 nvmb.Owner is Control owner_c &&
@@ -222,10 +217,7 @@ namespace MonkeyPaste.Avalonia {
             bool is_platform_loaded = Mp.Services != null &&
                      Mp.Services.StartupState != null &&
                      Mp.Services.StartupState.IsPlatformLoaded;
-            if (is_platform_loaded) {
-                // flag ntf activating to prevent mw hide 
-                MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = true;
-            }
+
             if (nw.WindowStartupLocation != WindowStartupLocation.CenterScreen &&
                 nw.WindowStartupLocation != WindowStartupLocation.CenterOwner &&
                 nw.WindowStartupLocation != WindowStartupLocation.Manual
@@ -284,22 +276,6 @@ namespace MonkeyPaste.Avalonia {
             FinishClose(w);
         }
 
-
-        private async void OnNotificationWindowIsVisibleChangedHandler(MpAvWindow w) {
-            //OnNotificationWindowIsVisibleChanged?.Invoke(this, w);
-
-            if (w.IsVisible) {
-                await Task.Delay(1000);
-                MpAvMainWindowViewModel.Instance.IsAnyNotificationActivating = false;
-                return;
-            }
-            if (!w.IsVisible &&
-                w.DataContext is MpAvNotificationViewModelBase nvmb
-                //&& nvmb.IsClosing
-                ) {
-                //FinishClose(w);
-            }
-        }
 
         #endregion
 

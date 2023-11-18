@@ -1,11 +1,4 @@
 <Project> 
-  <!-- TARGETS -->
-  <!-- WINDOWS - net7.0-windows-->
-  <!-- LINUX,MAC,BROWSER - net7.0-->
-  <!-- ANDROID - net7.0-android-->
-  <!-- IOS - net7.0-ios-->
-
-  <!-- VERSION (Is this redundant?) -->
 
   <PropertyGroup>
     <ApplicationName>MonkeyPaste</ApplicationName>
@@ -57,7 +50,7 @@
     <StorageDir>$(AppDataLocalDir)\$(ApplicationName)</StorageDir>
     <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
-    <DefaultFramework>net7.0</DefaultFramework>
+    <DefaultFramework>net8.0</DefaultFramework>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

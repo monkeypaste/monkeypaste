@@ -370,7 +370,7 @@ namespace MonkeyPaste.Avalonia {
                 throw new Exception("Cannot find component");
             }
 
-            PluginIconId = await MpAvPluginIconLocator.LocatePluginIconIdAsync(this);
+            PluginIconId = await MpAvPluginIconLocator.LocatePluginIconIdAsync(PluginFormat);
 
             while (MpAvIconCollectionViewModel.Instance.IsAnyBusy) {
                 await Task.Delay(100);

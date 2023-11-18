@@ -2,6 +2,7 @@
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using System;
@@ -84,11 +85,10 @@ namespace MonkeyPaste.Avalonia {
                 MpDebug.Break();
             }
             if (valStr.EndsWith("Icon") || targetType == typeof(WindowIcon)) {
-                return new WindowIcon(
-                    MpAvStringResourceConverter.Instance.Convert(
-                        valStr.IsAvResourceString() ?
-                        valStr :
-                        Mp.Services.PlatformResource.GetResource(valStr), null, null, null) as Bitmap);
+                string res_uri = valStr.IsAvResourceString() ? valStr : Mp.Services.PlatformResource.GetResource<string>(valStr);
+                using (var icon_stream = AssetLoader.Open(new Uri(res_uri))) {
+                    return new WindowIcon(icon_stream);
+                }
             }
             if (valStr.EndsWith("Image") || valStr.IsAvResourceString()) {
                 return new MpAvStringResourceConverter()

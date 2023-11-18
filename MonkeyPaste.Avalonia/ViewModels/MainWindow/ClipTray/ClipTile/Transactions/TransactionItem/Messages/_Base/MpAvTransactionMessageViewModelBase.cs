@@ -97,7 +97,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public virtual bool IsAnyBusy => IsBusy || (Sources != null && Sources.Cast<MpAvTransactionMessageViewModelBase>().Any(x => x.IsAnyBusy));
+        public virtual bool IsAnyBusy =>
+            IsBusy || (Sources != null && Sources.Any(x => x.IsAnyBusy));
         public bool IsHovering { get; set; }
 
         public bool IsSelected {

@@ -1440,10 +1440,7 @@ namespace MonkeyPaste.Avalonia {
                     pow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 } else {
                     pow.WindowStartupLocation = WindowStartupLocation.Manual;
-                    pow.Position =
-                        MpAvWindowManager.MainWindow
-                        .GetScreen()
-                        .GetSystemTrayWindowPosition(ws.ToAvPixelSize(MpAvWindowManager.MainWindow.GetScreen().Scaling));
+                    pow.Position = MpAvNotificationPositioner.GetSystemTrayWindowPosition(pow);
                 }
                 // NOTE only silent lock for pop out
                 // when appending user likely wants external app fully visible

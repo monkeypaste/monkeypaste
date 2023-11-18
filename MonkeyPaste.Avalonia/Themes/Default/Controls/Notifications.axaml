@@ -1,0 +1,100 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="using:MonkeyPaste.Avalonia"
+        xmlns:pcl="using:MonkeyPaste">
+    <Styles.Resources>
+        <sys:Double x:Key="DefaultNotificationWidth">350</sys:Double>
+        <sys:Double x:Key="DefaultNotificationHeight">150</sys:Double>
+    </Styles.Resources>
+    <Style Selector=":is(Window).notificationWindow:not(.resizable)">
+        <Setter Property="CanResize"
+                Value="False" />
+
+    </Style>
+    <Style Selector=":is(Window).notificationWindow:not(.welcome)"
+           x:DataType="local:MpAvNotificationViewModelBase">
+        <Setter Property="IsVisible"
+                Value="{Binding IsVisible}" />
+        <Setter Property="Title"
+                Value="{Binding Title, Converter={x:Static local:MpAvStringToWindowTitleConverter.Instance}}" />
+        <Setter Property="ShowInTaskbar"
+                Value="False" />
+        <Setter Property="ShowActivated"
+                Value="False" />
+        <Setter Property="MinHeight"
+                Value="50" />
+        <Setter Property="Width"
+                Value="350" />
+        <Setter Property="SizeToContent"
+                Value="Height" />
+        <Setter Property="WindowState"
+                Value="Normal" />
+        <Setter Property="Topmost"
+                Value="True" />
+        <Setter Property="ExtendClientAreaToDecorationsHint"
+                Value="False" />
+        <Setter Property="SystemDecorations"
+                Value="None" />
+        <Setter Property="TransparencyLevelHint"
+                Value="Transparent" />
+        <Setter Property="Background"
+                Value="Transparent" />
+    </Style>
+
+    <Style Selector=":is(Window).notificationWindow.loader"
+           x:DataType="local:MpAvNotificationViewModelBase">
+        <Setter Property="ShowInTaskbar"
+                Value="True" />
+        <Setter Property="ShowActivated"
+                Value="True" />
+    </Style>
+
+
+    <Style Selector=":is(Window).notificationWindow > Border">
+        <Setter Property="CornerRadius"
+                Value="5" />
+    </Style>
+
+    <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton)">
+        <Setter Property="HorizontalAlignment"
+                Value="Center" />
+        <Setter Property="VerticalAlignment"
+                Value="Top" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="CornerRadius"
+                Value="3" />
+        <Setter Property="BorderThickness"
+                Value="2" />
+        <Setter Property="Padding"
+                Value="5" />
+        <Setter Property="Margin"
+                Value="5" />
+        <Setter Property="Background"
+                Value="Silver" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource ThemeGrayAccent1Color}" />
+        <Setter Property="Foreground"
+                Value="{DynamicResource ThemeInteractiveBgColor}" />
+        <Setter Property="FontWeight"
+                Value="SemiBold" />
+        <Setter Property="MinWidth"
+                Value="50" />
+        <Setter Property="MaxWidth"
+                Value="100" />
+    </Style>
+
+    <Style Selector=":is(Window).notificationWindow Button:not(.optionsButton):pointerover /template/ ContentPresenter">
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeGrayAccent1Color}" />
+    </Style>
+    <Style Selector=":is(Window).userActionNotificationWindow Button:not(.optionsButton):pointerover">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource HoverDefaultBorderBrush}" />
+        <Setter Property="Background"
+                Value="{DynamicResource ThemeGrayAccent2Color}" />
+    </Style>
+</Styles>

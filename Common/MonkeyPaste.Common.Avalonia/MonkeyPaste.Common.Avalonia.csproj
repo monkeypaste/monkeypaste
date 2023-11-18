@@ -72,7 +72,6 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'WINDOWS'">
-    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
     <Reference Include="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll" />
     <ProjectReference Include="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
     <Compile Remove="Utils\Input\Platform\X11\*.*" />

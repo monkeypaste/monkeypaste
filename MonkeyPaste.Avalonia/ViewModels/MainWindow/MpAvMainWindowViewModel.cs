@@ -1159,7 +1159,7 @@ namespace MonkeyPaste.Avalonia {
                 msgType: MpNotificationType.StartupComplete,
                 iconSourceObj: "AppImage").FireAndForgetSafeAsync();
             }
-            bool was_login_load = Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Login);
+            bool was_login_load = Mp.Services.StartupState.IsLoginLoad;
             if (!was_login_load) {
                 ShowMainWindowCommand.Execute(null);
             }

@@ -4,8 +4,7 @@ namespace MonkeyPaste {
     [Flags]
     public enum MpStartupFlags {
         None = 0,
-        Initial = 1,
-        Login = 2,
+        Login = 1,
         UserInvoked = 4
     }
 }

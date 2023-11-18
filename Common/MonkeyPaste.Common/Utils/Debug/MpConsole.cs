@@ -199,7 +199,8 @@ namespace MonkeyPaste.Common {
                 }
                 return;
             } else if (RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 6") ||
-                        RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 7")) {
+                        RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 7") ||
+                        RuntimeInformation.FrameworkDescription.ToLower().Contains(".net 8")) {
                 // avalonia
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
                     if (pad_pre) {

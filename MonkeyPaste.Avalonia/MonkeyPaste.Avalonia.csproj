@@ -267,6 +267,7 @@
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTagTree.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\MpAvTooltip.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\Nav\TabNav.axaml" />
+    <AvaloniaXaml Remove="Themes\Default\Controls\Notifications.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\RadioButton.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\ScrollViewer.axaml" />
     <AvaloniaXaml Remove="Themes\Default\Controls\SelectingItemsControl.axaml" />
@@ -282,8 +283,11 @@
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\AppMode\MpAvAppModeFlyoutView2.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\ContextMenu\MpAvContextMenuView.axaml" />
+    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderView.axaml" />
+    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\Message\MpAvMessageNotificationView.axaml" />
+    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationContainerView.axaml" />
     <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml" />
-    <AvaloniaXaml Remove="Views\Reusable\Notifications\Welcome\MpAvWelcomeWindow.axaml" />
+    <AvaloniaXaml Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml" />
     <AvaloniaXaml Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml" />
     <None Remove="Assets\Cursors\copy.png" />
     <None Remove="Assets\Cursors\hand_closed.png" />
@@ -604,7 +608,6 @@
     <Compile Remove="Utils\Clipboard\ClipboardHelper.cs" />
     <Compile Remove="Utils\Input\Mouse\MpAvMouseHook_Win32.cs" />
     <Compile Remove="Utils\Input\MpAvKeyGestureHelper_old.cs" />
-    <Compile Remove="Utils\WindowManager\MpAvNotificationWindowManager.cs" />
     <Compile Remove="ViewModels\MainWindow\Actions\Action\Triggers\MpAvTimerTriggerViewModel.cs" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\MpAvClipTileDetailCollectionViewModel.cs" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\MpAvClipTrayCollectionViewModel.cs" />
@@ -618,8 +621,11 @@
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\ClipboardHandlers\Selector\MpAvClipboardHandlerItemSelectorView.axaml.cs" />
     <Compile Remove="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\Items\CheckBox\MpCheckBoxParameterView.axaml.cs" />
     <Compile Remove="Views\Reusable\ContextMenu\MpAvContextMenuView.axaml.cs" />
+    <Compile Remove="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderView.axaml.cs" />
+    <Compile Remove="Views\Reusable\Notifications\Toast\Message\MpAvMessageNotificationView.axaml.cs" />
+    <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationContainerView.axaml.cs" />
     <Compile Remove="Views\Reusable\Notifications\Toast\MpAvNotificationWindow.axaml.cs" />
-    <Compile Remove="Views\Reusable\Notifications\Welcome\MpAvWelcomeWindow.axaml.cs" />
+    <Compile Remove="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs" />
     <Compile Remove="Views\SettingsWindow\MpAvSettingsWindow.axaml.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1474,6 +1480,7 @@
     <AvaloniaResource Include="Themes\Default\Controls\GridSplitter.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvMarqueeTextBox.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvTooltip.axaml" />
+    <AvaloniaResource Include="Themes\Default\Controls\Notifications.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Window.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\Button.axaml" />
     <AvaloniaResource Include="Themes\Default\Controls\MpAvPagingScrollBar.axaml" />
@@ -1655,19 +1662,6 @@
     <Compile Update="Views\Reusable\FlyoutMenu\MpAvMenuView.axaml.cs">
       <DependentUpon>MpAvMenuView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderView.axaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>MpAvLoaderView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Reusable\Notifications\Toast\Message\MpAvMessageNotificationView.axaml.cs">
-      <DependentUpon>MpAvMessageNotificationView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Reusable\Notifications\Toast\MpAvNotificationContainerView.axaml.cs">
-      <DependentUpon>MpAvNotificationContainerView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Reusable\Notifications\Toast\UserAction\MpAvUserActionNotificationView.axaml.cs">
-      <DependentUpon>MpAvUserActionNotificationView.axaml</DependentUpon>
-    </Compile>
     <Compile Update="Views\Reusable\Notifications\Welcome\MpAvWelcomeView.axaml.cs">
       <DependentUpon>MpAvWelcomeView.axaml</DependentUpon>
     </Compile>
@@ -1815,15 +1809,7 @@
     <Compile Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\**" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.shared.cs" />
     <Compile Include="Utils\AvWrapper\Defnitions\ProcessWatcher\MpAvProcessWatcher.$(PlatformShortName).cs" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(UseCefNet)' == 'True'">
-    <Reference Include="CefNet">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.dll</HintPath>
-    </Reference>
-    <Reference Include="CefNet.Avalonia">
-      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Release\net6.0\CefNet.Avalonia.dll</HintPath>
-    </Reference>
+    <Compile Include="Utils\WindowManager\Helpers\MpAvNotificationPositioner.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -1842,13 +1828,19 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup Condition="'$(UseCefNet)' == 'True'">
+    <Reference Include="CefNet">
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.dll</HintPath>
+    </Reference>
+    <Reference Include="CefNet.Avalonia">
+      <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.Avalonia.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 
 
 
   <ItemGroup>
-    <AvaloniaXaml Update="Views\Reusable\Notifications\Toast\Loader\MpAvLoaderView.axaml">
-      <SubType>Designer</SubType>
-    </AvaloniaXaml>
     <AvaloniaXaml Update="Views\SettingsWindow\Tabs\Account\WhatsNew\MpAvWebPageView.axaml">
       <Generator>MSBuild:Compile</Generator>
     </AvaloniaXaml>

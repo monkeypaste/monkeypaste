@@ -4,11 +4,13 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using System.Linq;
+using System.Windows.Input;
+#if MAC
 using MonoMac.AppKit;
 using MonoMac.CoreGraphics;
 using MonoMac.ObjCRuntime;
-using System.Linq;
-using System.Windows.Input;
+#endif
 
 namespace MonkeyPaste.Avalonia {
     public enum MpPointGestureType {

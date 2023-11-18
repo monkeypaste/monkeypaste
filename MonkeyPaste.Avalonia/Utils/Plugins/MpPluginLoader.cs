@@ -57,30 +57,7 @@ namespace MonkeyPaste.Avalonia {
             await ValidateLoadedPluginsAsync();
             IsLoaded = true;
         }
-        public static async Task CheckAndInstallCorePluginsAsync() {
-            if (!CoreDatDir.IsDirectory()) {
-                // android dat dir supposed to be '/data/user/0/com.Monkey.MonkeyPaste.Avalonia/files/dat'
-                MpDebug.Break($"Dat dir error, '{CoreDatDir}' does not exist");
-                return;
-            }
-            if (!PluginRootFolderPath.IsDirectory()) {
-                bool success = MpFileIo.CreateDirectory(PluginRootFolderPath);
-                MpDebug.Assert(success, $"Error creating root plugin folder at path '{PluginRootFolderPath}'");
-                if (!success) {
-                    return;
-                }
-            }
-            foreach (var core_guid in CorePluginGuids) {
-                if (Plugins.ContainsKey(core_guid)) {
-                    // exists
-                    continue;
-                }
-                string core_plugin_zip_path = Path.Combine(CoreDatDir, $"{core_guid}.zip");
-                MpDebug.Assert(core_plugin_zip_path.IsFile(), $"Dat zip error, core plugin not found at '{core_plugin_zip_path}'");
-                _ = await InstallPluginAsync(core_plugin_zip_path.ToFileSystemUriFromPath(), true);
-                MpConsole.WriteLine($"Core plugin '{core_plugin_zip_path}' installed successfully.");
-            }
-        }
+
 
 
         public static async Task<MpPluginFormat> ReloadPluginAsync(string manifestPath) {
@@ -214,11 +191,11 @@ namespace MonkeyPaste.Avalonia {
                     }
                     // copy unzipped plugin from temp to plugin folder
                     MpFileIo.CopyDirectory(tpfl[0], dest_dir, true);
+
                     if (silentInstall) {
                         // install is core plugin, will be picked up in general load
                         return null;
                     }
-
                 }
                 catch (Exception ex) {
                     Mp.Services.NotificationBuilder.ShowNotificationAsync(
@@ -266,20 +243,15 @@ namespace MonkeyPaste.Avalonia {
 
         private static async Task LoadPluginsAsync() {
             Plugins.Clear();
-
-            if (Mp.Services.StartupState.StartupFlags.HasFlag(MpStartupFlags.Initial)) {
-                // install core plugins
+            if (Mp.Services.StartupState.IsInitialStartup) {
                 await CheckAndInstallCorePluginsAsync();
             }
-
-            //find plugin folder in main app folder
 
             if (!Directory.Exists(PluginRootFolderPath)) {
                 MpConsole.WriteLine("Plugin folder missing from: " + PluginRootFolderPath);
                 // if plugin folder doesn't exist then no plugins so nothing to do but it should                
                 return;
             }
-
             var manifestPaths = FindManifestPaths(PluginRootFolderPath);
             foreach (var manifestPath in manifestPaths) {
                 var plugin = await LoadPluginAsync(manifestPath);
@@ -288,6 +260,28 @@ namespace MonkeyPaste.Avalonia {
                 }
                 Plugins.Add(manifestPath, plugin);
                 MpConsole.WriteLine($"Successfully loaded plugin: {plugin.title}");
+            }
+
+        }
+        private static async Task CheckAndInstallCorePluginsAsync() {
+            if (!CoreDatDir.IsDirectory()) {
+                // android dat dir supposed to be '/data/user/0/com.Monkey.MonkeyPaste.Avalonia/files/dat'
+                MpDebug.Break($"Dat dir error, '{CoreDatDir}' does not exist");
+                return;
+            }
+            if (!PluginRootFolderPath.IsDirectory()) {
+                bool success = MpFileIo.CreateDirectory(PluginRootFolderPath);
+                MpDebug.Assert(success, $"Error creating root plugin folder at path '{PluginRootFolderPath}'");
+                if (!success) {
+                    return;
+                }
+            }
+
+            foreach (var core_guid in CorePluginGuids) {
+                string core_plugin_zip_path = Path.Combine(CoreDatDir, $"{core_guid}.zip");
+                MpDebug.Assert(core_plugin_zip_path.IsFile(), $"Dat zip error, core plugin not found at '{core_plugin_zip_path}'");
+                _ = await InstallPluginAsync(core_plugin_zip_path.ToFileSystemUriFromPath(), true);
+                MpConsole.WriteLine($"Core plugin '{core_plugin_zip_path}' installed.");
             }
         }
         private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) {
@@ -315,6 +309,9 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private static IEnumerable<string> FindManifestPaths(string root) {
+            if (!root.IsDirectory()) {
+                return new List<string>();
+            }
             try {
                 return Directory.EnumerateFiles(root, "manifest.json", SearchOption.AllDirectories);
             }
