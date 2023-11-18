@@ -1,6 +1,8 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
+using MonkeyPaste.Common;
+using System;
 using System.Collections.Generic;
 
 namespace MonkeyPaste.Avalonia {
@@ -11,19 +13,22 @@ namespace MonkeyPaste.Avalonia {
 
 
         Control ITemplate<object, Control>.Build(object param) {
-            string key;
-            if (param is MpAvClipTileViewModel) {
-                key = "RichHtmlTemplate";
+            string key = null;
+            if (param is MpAvUserActionNotificationViewModel) {
+                key = "UserActionTemplate";
+            } else if (param is MpAvMessageNotificationViewModel) {
+                key = "MessageTemplate";
+            } else if (param is MpAvLoaderNotificationViewModel) {
+                key = "LoaderTemplate";
             } else {
-                key = "PlainTextTemplate";
+                return null;
             }
-            // build the control to display
             return AvailableTemplates[key].Build(param);
         }
 
         public bool Match(object data) {
             // Check if we can accept the provided data
-            return true;// data is MpNotificationViewModelBase;
+            return true;
         }
     }
 }

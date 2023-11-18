@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Avalonia {
@@ -24,7 +25,6 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-
 
         public double ValueLoaded {
             get {
@@ -79,14 +79,24 @@ namespace MonkeyPaste.Avalonia {
             if (base_result == MpNotificationDialogResultType.DoNotShow) {
                 // when loader is DoNotShow base never shows it (and StartLoader is called from window)
                 // so manually perform load
-                await ProgressLoader.BeginLoaderAsync();
-                await ProgressLoader.FinishLoaderAsync();
+                await DoLoaderAsync();
                 return base_result;
             }
             // NOTE returning loading notifies builder not to hide loader
             return MpNotificationDialogResultType.Loading;
         }
         #endregion
+
+        protected override void MpNotificationViewModelBase_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            base.MpNotificationViewModelBase_PropertyChanged(sender, e);
+            switch (e.PropertyName) {
+                case nameof(IsWindowOpen):
+                    if (IsWindowOpen) {
+                        DoLoaderAsync().FireAndForgetSafeAsync();
+                    }
+                    break;
+            }
+        }
 
         #region Private Methods
 
@@ -96,6 +106,11 @@ namespace MonkeyPaste.Avalonia {
                     OnPropertyChanged(nameof(ValueLoaded));
                     break;
             }
+        }
+        private async Task DoLoaderAsync() {
+
+            await ProgressLoader.BeginLoaderAsync();
+            await ProgressLoader.FinishLoaderAsync();
         }
         #endregion
     }

@@ -31,6 +31,13 @@ namespace MonkeyPaste.Avalonia {
                     //StartupScreenIndex = 0
                 });
 
+        public static MpAvWindow Create(Window owner = default) {
+            if (owner == default) {
+                return new MpAvWindow();
+            }
+            return new MpAvWindow(owner);
+        }
+
         #endregion
 
         #region Interfaces

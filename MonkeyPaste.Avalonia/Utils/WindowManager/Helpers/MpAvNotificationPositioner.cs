@@ -174,7 +174,7 @@ namespace MonkeyPaste.Avalonia {
 
             int offsetY = (int)
                 _windows
-                    .Where(x => _windows.IndexOf(x) < _windows.IndexOf(w) && x is not MpAvWelcomeWindow)
+                    .Where(x => x.Classes.Contains("toast") && _windows.IndexOf(x) < _windows.IndexOf(w))
                     .Sum(x => (GetWindowSize(x).Height + pad) * primaryScreen.Scaling);
             w_y -= offsetY;
 

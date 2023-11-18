@@ -65,7 +65,9 @@
         DefaultGridSplitterFixedDimensionLength_desktop,
         DefaultGridSplitterFixedDimensionLength_browser,
         DefaultGridSplitterFixedDimensionLength_mobile,
-        DefaultGridSplitterFixedDimensionLength
+        DefaultGridSplitterFixedDimensionLength,
+        DefaultNotificationWidth,
+        DefaultNotificationHeight,
         #endregion
     }
 }

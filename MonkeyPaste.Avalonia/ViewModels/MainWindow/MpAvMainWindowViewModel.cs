@@ -464,8 +464,6 @@ namespace MonkeyPaste.Avalonia {
         public bool IsResizing { get; set; } = false;
         public bool CanResize { get; set; } = false;
 
-        public bool IsAnyNotificationActivating { get; set; }
-
         public bool IsAnyDropDownOpen { get; set; }
 
         public bool IsMainWindowActive { get; set; }
@@ -1145,7 +1143,7 @@ namespace MonkeyPaste.Avalonia {
                     Path = nameof(MpAvPrefViewModel.Instance.ShowInTaskbar)
                 });
             bool was_loader_visible = false;
-            if (MpAvWindowManager.AllWindows.FirstOrDefault(x => x is MpAvLoaderNotificationWindow) is MpAvLoaderNotificationWindow lnw &&
+            if (MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext is MpAvLoaderNotificationViewModel) is { } lnw &&
                 lnw.DataContext is MpAvNotificationViewModelBase nvm) {
                 // only show loaded msg if progress wasn't there
                 was_loader_visible = lnw.IsVisible;
@@ -1276,15 +1274,18 @@ namespace MonkeyPaste.Avalonia {
                         (c.GetVisualAncestor<TextBox>() is TextBox tb && !tb.IsReadOnly)
                     );
 
-                bool isModalOpen =
+                bool isModalActive =
                     MpAvWindowManager.AllWindows.Any(x => x.IsActive && (x.DataContext is MpIWindowViewModel && (x.DataContext as MpIWindowViewModel).WindowType == MpWindowType.Modal));
+
+                bool isNtfActive =
+                    MpAvWindowManager.AllWindows.Any(x => x.IsActive && x.DataContext is MpAvNotificationViewModelBase);
                 bool canHide = !IsMainWindowLocked &&
                                   !IsAnyDropDownOpen &&
                                   !IsMainWindowInitiallyOpening &&
-                                    !isModalOpen &&
+                                    !isModalActive &&
                                     !isInputFocused &&
                                   !IsAnyItemDragging &&
-                                  !IsAnyNotificationActivating &&
+                                  !isNtfActive &&
                                   !MpAvShortcutCollectionViewModel.Instance.GlobalIsMouseLeftButtonDown && // reject drag cancel event
                                   !IsResizing;
 

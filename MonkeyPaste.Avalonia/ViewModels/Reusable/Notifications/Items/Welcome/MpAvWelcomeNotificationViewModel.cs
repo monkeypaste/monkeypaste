@@ -1,4 +1,5 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Controls;
+using MonkeyPaste.Common;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +16,8 @@ namespace MonkeyPaste.Avalonia {
         DbPassword
     }
     public class MpAvWelcomeNotificationViewModel :
-        MpAvNotificationViewModelBase {
+        MpAvNotificationViewModelBase,
+        MpIWindowStateViewModel {
         #region Private Variables
         #endregion
 
@@ -52,6 +54,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Interfaces
+        public WindowState WindowState { get; set; }
         #endregion
 
         #region Properties
@@ -235,6 +238,11 @@ namespace MonkeyPaste.Avalonia {
                         MpUserAccountType uat = (MpUserAccountType)optvm.OptionId;
                         optvm.IsChecked = optvm.IsOptionVisible && uat == sel_item_type;
                     }
+                    break;
+                case nameof(WindowState):
+                    MpAvWindowManager.AllWindows
+                    .Where(x => x.DataContext is MpAvPointerGestureWindowViewModel || x.DataContext is MpAvFakeWindowViewModel)
+                    .ForEach(x => x.WindowState = WindowState);
                     break;
             }
         }
@@ -554,6 +562,11 @@ namespace MonkeyPaste.Avalonia {
                     CurOptGroupViewModel.Items.First().IsChecked = false;
                 }
                 CurPointerGestureWindowViewModel.ShowGestureWindowCommand.Execute(null);
+            });
+
+        public ICommand MinimizeWindowCommand => new MpCommand(
+            () => {
+                WindowState = WindowState.Minimized;
             });
 
         #endregion
