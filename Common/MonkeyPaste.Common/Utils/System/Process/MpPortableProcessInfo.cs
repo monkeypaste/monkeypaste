@@ -19,6 +19,7 @@ namespace MonkeyPaste.Common {
         #endregion
         #region Properties
         public nint Handle { get; set; }// = nint.Zero;
+        public int WindowNumber { get; set; }
         public string ProcessPath { get; set; } = string.Empty;
         public string ApplicationName { get; set; } // app name
 

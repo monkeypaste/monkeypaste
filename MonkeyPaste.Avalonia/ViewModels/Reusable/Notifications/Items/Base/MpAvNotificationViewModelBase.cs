@@ -265,7 +265,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region State
-        public bool IsUserMoving { get; set; }
+        public bool IsLoader =>
+            this is MpAvLoaderNotificationViewModel;
         public bool CanMoveWindow =>
             true;
 

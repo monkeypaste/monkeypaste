@@ -42,7 +42,7 @@
                     Value="180" />
         </Style>
         <!--  CONTINER BUTTON  -->
-        <Style Selector="Button#ContainerButton /template/ ContentPresenter">
+        <Style Selector="Button#ContainerButton.param.picker /template/ ContentPresenter">
             <Setter Property="HorizontalContentAlignment"
                     Value="Stretch" />
             <Setter Property="Padding"
@@ -50,7 +50,7 @@
         </Style>
     </local:MpAvUserControl.Styles>
     <Button x:Name="ContainerButton"
-            Classes="param"
+            Classes="param picker"
             Cursor="Hand"
             Padding="0,5"
             CornerRadius="10"

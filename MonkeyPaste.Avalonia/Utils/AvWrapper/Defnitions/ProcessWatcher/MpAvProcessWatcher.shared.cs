@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
         private DispatcherTimer _timer;
 
 #if MAC
-        private int _lastActiveWindowNum;
+        //private int _lastActiveWindowNum;
 #endif
         #endregion
 

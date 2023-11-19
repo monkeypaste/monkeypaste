@@ -569,12 +569,8 @@
     <None Remove="CefNet.Avalonia" />
     <None Remove="Resources\Editor\images\delete.png" />
     <None Remove="resources\editor\ribbon.html" />
-    <None Remove="resources\editor\src\components\bold\bold.js" />
-    <None Remove="resources\editor\src\components\formatpaint\formatPainter.js" />
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
-    <None Remove="resources\editor\src\components\theme\theme.js" />
-    <None Remove="Resources\terms.html" />
     <None Remove="WebViewControl-Avalonia" />
     <None Remove="Avalonia.MonoMac" />
     <None Remove="Utils\AvWrapper\Defnitions\ProcessWatcher\Mac\" />
@@ -656,11 +652,16 @@
     <Content Include="Assets\Sounds\ting.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Legal\terms\terms.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   
-    <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--<Folder Include="Resources\Legal\Licenses\" />-->
+    <!--<Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />-->
+
+    <!--<Content Include="Resources\Legal\terms\terms.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>-->
   </ItemGroup>
     
   
@@ -1511,11 +1512,10 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Resources\Editor\src\components\bold\" />
+    <!--<Folder Include="Resources\Editor\src\components\bold\" />
     <Folder Include="Resources\Editor\src\components\formatPaint\" />
     <Folder Include="Resources\Editor\src\components\quill-wrapper\parchment\" />
-    <Folder Include="Resources\Editor\src\components\theme\" />
-    <Folder Include="Resources\Legal\Licenses\" />
+    <Folder Include="Resources\Editor\src\components\theme\" />-->
     <Folder Include="Resources\Help\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
@@ -1524,8 +1524,11 @@
     <Folder Include="Utils\Input\Mouse\" />
     <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
+    <Folder Include="Views\Mobile\Notifications\Message\" />
+    <Folder Include="Views\Mobile\Notifications\UserAction\" />
     <Folder Include="Views\Reusable\TextBoxes\" />
   </ItemGroup>
+
   
   
   <ItemGroup>
@@ -1644,7 +1647,7 @@
     <Compile Update="Views\MainWindow\Sidebar\SidebarItems\Plugins\Parameters\MpAvParameterCollectionView.axaml.cs">
       <DependentUpon>MpAvParameterCollectionView.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Mobile\Loader\MpAvMobileLoaderView.axaml.cs">
+    <Compile Update="Views\Mobile\Notifications\Loader\MpAvMobileLoaderView.axaml.cs">
       <DependentUpon>MpAvMobileLoaderView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Buttons\PopupSelector\MpAvPopupMenuSelector.axaml.cs">
@@ -1835,6 +1838,13 @@
     <Reference Include="CefNet.Avalonia">
       <HintPath>..\cefnet11\CefNet\CefNet.Avalonia\bin\Debug\net6.0\CefNet.Avalonia.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Remove="Utils\Helpers\MpAvAppleScripts.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
+    <Compile Include="Utils\Helpers\MpAvAppleScripts.cs" />
   </ItemGroup>
 
 

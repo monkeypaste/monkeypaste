@@ -9,6 +9,7 @@
     <TargetFramework>$(DefaultFramework)</TargetFramework>
     <Platforms>$(DefaultPlatforms)</Platforms>
   </PropertyGroup>
+  
   <PropertyGroup>
     <NoWarn>CS8632</NoWarn>
     <NoWarn>CS8073</NoWarn>
@@ -48,6 +49,7 @@
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.5" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
+    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="SharpHook" Version="5.1.1" />
   </ItemGroup>
@@ -66,7 +68,7 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(BuildOs)' == 'MAC'">
-    <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
+    <ProjectReference Remove="..\MonkeyPaste.Common.Wpf\MonkeyPaste.Common.Wpf.csproj" />
     <Compile Remove="Utils\Input\Platform\X11\*.*" />
     <Compile Remove="Utils\Input\Platform\Win32\*.*" />
   </ItemGroup>

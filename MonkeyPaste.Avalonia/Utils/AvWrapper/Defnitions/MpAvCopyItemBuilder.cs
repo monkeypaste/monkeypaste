@@ -204,20 +204,21 @@ namespace MonkeyPaste.Avalonia {
 
                 // FILES
 
-                string fl_str = null;
-                if (avdo.GetData(MpPortableDataFormats.AvFiles) is byte[] fileBytes) {
-                    fl_str = fileBytes.ToDecodedString();
-                } else if (avdo.GetData(MpPortableDataFormats.AvFiles) is string fileStr) {
-                    fl_str = fileStr;
-                } else if (avdo.GetData(MpPortableDataFormats.AvFiles) is IEnumerable<string> paths) {
-                    fl_str = string.Join(Environment.NewLine, paths);
-                } else if (avdo.GetData(MpPortableDataFormats.AvFiles) is IEnumerable<IStorageItem> sil) {
-                    fl_str = string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath()).Where(x => !string.IsNullOrEmpty(x)));
-                } else {
-                    var fl_data = avdo.GetData(MpPortableDataFormats.AvFiles);
-                    // what type is it? string[]?
-                    MpDebug.Break();
-                }
+                //string fl_str = null;
+                //if (avdo.GetData(MpPortableDataFormats.AvFiles) is byte[] fileBytes) {
+                //    fl_str = fileBytes.ToDecodedString();
+                //} else if (avdo.GetData(MpPortableDataFormats.AvFiles) is string fileStr) {
+                //    fl_str = fileStr;
+                //} else if (avdo.GetData(MpPortableDataFormats.AvFiles) is IEnumerable<string> paths) {
+                //    fl_str = string.Join(Environment.NewLine, paths);
+                //} else if (avdo.GetData(MpPortableDataFormats.AvFiles) is IEnumerable<IStorageItem> sil) {
+                //    fl_str = string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath()).Where(x => !string.IsNullOrEmpty(x)));
+                //} else {
+                //    var fl_data = avdo.GetData(MpPortableDataFormats.AvFiles);
+                //    // what type is it? string[]?
+                //    MpDebug.Break();
+                //}
+                avdo.TryGetData(MpPortableDataFormats.AvFiles, out string fl_str);
                 if (string.IsNullOrWhiteSpace(fl_str)) {
                     // conversion error
                     MpDebug.Break();
@@ -225,9 +226,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 itemType = MpCopyItemType.FileList;
                 itemData = fl_str;
-            } else if (avdo.ContainsData(MpPortableDataFormats.AvCsv) &&
-                        avdo.GetData(MpPortableDataFormats.AvCsv) is byte[] csvBytes &&
-                        csvBytes.ToDecodedString() is string csvStr) {
+            } else if (avdo.TryGetData(MpPortableDataFormats.AvCsv, out string csvStr)) {
 
                 // CSV
 
@@ -259,23 +258,18 @@ namespace MonkeyPaste.Avalonia {
             //    itemType = MpCopyItemType.Text;
             //    itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
             //} 
-            else if (avdo.ContainsData(MpPortableDataFormats.AvPNG) &&
-                        avdo.GetData(MpPortableDataFormats.AvPNG) is byte[] pngBytes &&
-                        //pngBytes.ToBase64String() is string pngBase64Str) {
+            else if (avdo.TryGetData(MpPortableDataFormats.AvPNG, out byte[] pngBytes) &&
                         Convert.ToBase64String(pngBytes) is string pngBase64Str) {
 
                 // BITMAP (bytes)
                 itemType = MpCopyItemType.Image;
                 itemData = pngBase64Str;
-            } else if (avdo.ContainsData(MpPortableDataFormats.AvPNG) &&
-                        avdo.GetData(MpPortableDataFormats.AvPNG) is string pngBytesStr) {
+            } else if (avdo.TryGetData(MpPortableDataFormats.AvPNG, out string pngBytesStr)) {
 
                 // BITMAP (base64)
                 itemType = MpCopyItemType.Image;
                 itemData = pngBytesStr;
-            } else if (avdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
-                        avdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
-                        htmlBytes.ToDecodedString() is string htmlStr) {
+            } else if (avdo.TryGetData(MpPortableDataFormats.AvHtml_bytes, out string htmlStr)) {
 
                 // HTML (bytes)
                 inputTextFormat = "html";
@@ -299,22 +293,19 @@ namespace MonkeyPaste.Avalonia {
                     // see above note
                     inputTextFormat = "rtf2html";
                 }
-            } else if (avdo.ContainsData(MpPortableDataFormats.Text) &&
-                        avdo.GetData(MpPortableDataFormats.Text) is string textStr) {
+            } else if (avdo.TryGetData(MpPortableDataFormats.Text, out string textStr)) {
 
                 // TEXT
                 inputTextFormat = "text";
                 itemType = MpCopyItemType.Text;
                 itemData = textStr;
-            } else if (avdo.ContainsData(MpPortableDataFormats.Unicode) &&
-                        avdo.GetData(MpPortableDataFormats.Unicode) is string unicodeStr) {
+            } else if (avdo.TryGetData(MpPortableDataFormats.Text2, out string unicodeStr)) {
 
                 // UNICODE
                 inputTextFormat = "text";
                 itemType = MpCopyItemType.Text;
                 itemData = unicodeStr;
-            } else if (avdo.ContainsData(MpPortableDataFormats.OemText) &&
-                        avdo.GetData(MpPortableDataFormats.OemText) is string oemStr) {
+            } else if (avdo.TryGetData(MpPortableDataFormats.Text3, out string oemStr)) {
 
                 // OEM TEXT
                 inputTextFormat = "text";

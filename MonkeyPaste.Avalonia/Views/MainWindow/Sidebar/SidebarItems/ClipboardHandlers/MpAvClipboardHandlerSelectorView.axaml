@@ -25,7 +25,8 @@
     <Border HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Padding="10">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+        <ScrollViewer BringIntoViewOnFocusChange="False"
+                      HorizontalScrollBarVisibility="Disabled"
                       VerticalScrollBarVisibility="Auto">
             <WrapPanel Orientation="Horizontal"
                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"

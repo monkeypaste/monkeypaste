@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>$(StartupOutputType)</OutputType>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
     <Nullable>disable</Nullable>
     <LangVersion>$(DefaultLangVersion)</LangVersion>
@@ -9,9 +9,9 @@
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <PropertyGroup Condition="$(BuildOs) == 'MAC'">
+    <UseAppHost>true</UseAppHost>
     <CFBundleName>MonkeyPaste</CFBundleName>
-     <!--Also defines .app file name--> 
     <CFBundleDisplayName>MonkeyPaste</CFBundleDisplayName>
     <CFBundleIdentifier>com.MonkeyPaste</CFBundleIdentifier>
     <CFBundleVersion>$(ApplicationVersion)</CFBundleVersion>
@@ -19,13 +19,9 @@
     <CFBundlePackageType>APPL</CFBundlePackageType>
     <CFBundleExecutable>MonkeyPaste.Avalonia.Desktop</CFBundleExecutable>
     <CFBundleIconFile>MonkeyPaste.icns</CFBundleIconFile>
-     <!--Will be copied from output directory--> 
     <NSPrincipalClass>NSApplication</NSPrincipalClass>
     <NSHighResolutionCapable>true</NSHighResolutionCapable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="$(BuildOs) == 'MAC'">
-    <UseAppHost>true</UseAppHost>
+    <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

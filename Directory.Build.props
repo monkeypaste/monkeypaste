@@ -1,7 +1,7 @@
 <Project> 
 
   <PropertyGroup>
-    <ApplicationName>MonkeyPaste</ApplicationName>
+    <ApplicationName>MonkeyPaste</ApplicationName> 
     <ApplicationAuthor>Monkey LLC</ApplicationAuthor>
     <ApplicationVersionMajor>1</ApplicationVersionMajor>
     <ApplicationVersionMinor>0</ApplicationVersionMinor>
@@ -22,7 +22,7 @@
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>MAC</BuildOs>
     <CultureExt>en-US</CultureExt>
   </PropertyGroup>
 
@@ -51,6 +51,7 @@
     <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
     <DefaultFramework>net8.0</DefaultFramework>
+    <StartupOutputType>Exe</StartupOutputType>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -72,6 +73,7 @@
     <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
     <CefPlatformRelDir>cef\cef_win</CefPlatformRelDir>
     <PlatformShortName>uwp</PlatformShortName>
+    <StartupOutputType>WinExe</StartupOutputType>
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'">
@@ -90,8 +92,9 @@
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <UseOutSysCef>true</UseOutSysCef>
-    <RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>
     <PlatformShortName>mac</PlatformShortName>
+    <!-- NOTE RuntimeIdentifiers set in mp-bundle-osx-x64.sh -->
+    <!--<RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>-->
   </PropertyGroup>
     
   <PropertyGroup Condition="$(BuildOs) == 'BROWSER'">

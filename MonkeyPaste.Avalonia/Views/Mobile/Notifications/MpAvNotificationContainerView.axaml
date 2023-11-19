@@ -17,7 +17,7 @@
         <!--  OUTER BORDER  -->
         <Style Selector="Border#OuterBorder">
             <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeInteractiveBgColor}" />
+                    Value="{DynamicResource ThemeWhiteBrush}" />
             <Setter Property="Background"
                     Value="{DynamicResource ThemeBrush}" />
         </Style>
@@ -31,16 +31,11 @@
             <Setter Property="BorderBrush"
                     Value="{DynamicResource ThemeAccent2Color}" />
         </Style>
-        <Style Selector="Border#OuterBorder.loader">
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource ThemeWhiteBrush}" />
-        </Style>
     </local:MpAvUserControl.Styles>
     <!--  OUTER BORDER  -->
     <Border x:Name="OuterBorder"
             Classes.warning="{Binding IsWarningNotification}"
             Classes.error="{Binding IsErrorNotification}"
-            Classes.loader="{Binding IsLoader}"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             MinHeight="130"

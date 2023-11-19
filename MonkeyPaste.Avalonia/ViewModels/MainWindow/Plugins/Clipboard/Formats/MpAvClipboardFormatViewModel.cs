@@ -84,8 +84,8 @@ namespace MonkeyPaste.Avalonia {
                         keyStr = "Rtf" + keyStr;
                         break;
                     case MpPortableDataFormats.CefText:
-                    case MpPortableDataFormats.OemText:
-                    case MpPortableDataFormats.Unicode:
+                    case MpPortableDataFormats.Text3:
+                    case MpPortableDataFormats.Text2:
                     case MpPortableDataFormats.Text:
                         keyStr = "Text" + keyStr;
                         break;

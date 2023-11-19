@@ -79,10 +79,16 @@ namespace MonkeyPaste.Common {
             return false;
         }
         public virtual bool TryGetData<T>(string format, out T data) where T : class {
-            if (TryGetData(format, out object dataObj)) {
+            if (GetData(format) is object dataObj) {
                 if (dataObj is T) {
                     data = dataObj as T;
                     return data != default(T);
+                }
+                if (dataObj is byte[] bytes) {
+                    if (typeof(T) == typeof(string)) {
+                        data = (T)(object)bytes.ToDecodedString();
+                        return true;
+                    }
                 }
             }
             data = default;
@@ -93,32 +99,33 @@ namespace MonkeyPaste.Common {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
             MpDebug.Assert(pdf != null, $"Shouldn't ever be null anymore");
 
-            if (data is string[] newStrArr &&
-                TryGetData(format, out string[] curStrArr) &&
-                    newStrArr.Any(x => !curStrArr.Contains(x))) {
-                MpConsole.WriteLine($"String list ({format}) updated", true);
-                MpConsole.WriteLine($"Old: {string.Join(Environment.NewLine, curStrArr)}");
-                MpConsole.WriteLine($"New: {string.Join(Environment.NewLine, newStrArr)}", false, true);
+            //if (data is string[] newStrArr &&
+            //    TryGetData(format, out string[] curStrArr) &&
+            //        newStrArr.Any(x => !curStrArr.Contains(x))) {
+            //    MpConsole.WriteLine($"String list ({format}) updated", true);
+            //    MpConsole.WriteLine($"Old: {string.Join(Environment.NewLine, curStrArr)}");
+            //    MpConsole.WriteLine($"New: {string.Join(Environment.NewLine, newStrArr)}", false, true);
 
-                // update string list IN PLACE
-                Array.Resize(ref curStrArr, newStrArr.Length);
-                //newStrArr.CopyTo(curStrArr, 0);
-                for (int i = 0; i < curStrArr.Length; i++) {
-                    curStrArr[i] = newStrArr[i];
-                }
-                return;
-            } else if (data is byte[] newBytes &&
-                       TryGetData(format, out byte[] curBytes) &&
-                        !curBytes.SequenceEqual(newBytes)) {
-                // update image IN PLACE
-                if (curBytes.ToDecodedString() == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
-                    MpConsole.WriteLine($"place holder for {format} replaced with '{newBytes.ToDecodedString()}'");
-                }
-                Array.Resize(ref curBytes, newBytes.Length);
-                newBytes.CopyTo(curBytes, 0);
-                DataFormatLookup[pdf] = curBytes;
-                return;
-            }
+            //    // update string list IN PLACE
+            //    Array.Resize(ref curStrArr, newStrArr.Length);
+            //    //newStrArr.CopyTo(curStrArr, 0);
+            //    for (int i = 0; i < curStrArr.Length; i++) {
+            //        curStrArr[i] = newStrArr[i];
+            //    }
+            //    return;
+            //} 
+            //else if (data is byte[] newBytes &&
+            //           TryGetData(format, out byte[] curBytes) &&
+            //            !curBytes.SequenceEqual(newBytes)) {
+            //    // update image IN PLACE
+            //    if (curBytes.ToDecodedString() == MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT) {
+            //        MpConsole.WriteLine($"place holder for {format} replaced with '{newBytes.ToDecodedString()}'");
+            //    }
+            //    Array.Resize(ref curBytes, newBytes.Length);
+            //    newBytes.CopyTo(curBytes, 0);
+            //    DataFormatLookup[pdf] = curBytes;
+            //    return;
+            //}
             DataFormatLookup.AddOrReplace(pdf, data);
         }
 

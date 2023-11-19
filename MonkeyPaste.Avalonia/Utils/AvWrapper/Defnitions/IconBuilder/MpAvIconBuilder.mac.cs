@@ -27,7 +27,6 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrWhiteSpace(path)) {
                 return string.Empty;
             }
-            var yo = new NSAppleScript("test");
 
             MpAvMacHelpers.EnsureInitialized();
             if (MpAvMacHelpers.IsPathExecutableUnderAppBundle(path)) {

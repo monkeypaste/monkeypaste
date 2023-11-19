@@ -169,6 +169,9 @@ namespace CoreOleHandler {
                 // should only happen for files
                 dataStr = string.Join(Environment.NewLine, strArr);
             } else if (format_data is byte[] bytes) {
+#if MAC
+
+#endif
                 return bytes;
             } else if (format_data is IEnumerable<IStorageItem> paths &&
                 paths.Select(x => x.TryGetLocalPath()) is IEnumerable<string> pl) {

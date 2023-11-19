@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 
 namespace MonkeyPaste.Avalonia {
     public partial class MpAvProcessWatcher {
+
         public static NSRunningApplication GetRunningApp(nint value) {
             return
                 NSWorkspace.SharedWorkspace
@@ -41,10 +42,10 @@ namespace MonkeyPaste.Avalonia {
             }
             return app.ProcessIdentifier;
         }
-        protected nint GetActiveWindowNumber() {
+        protected int GetActiveWindowNumber() {
             if (NSWorkspace.SharedWorkspace.FrontmostApplication
                     is not { } app) {
-                return nint.Zero;
+                return 0;
             }
             return app.ProcessIdentifier;
         }
@@ -107,12 +108,6 @@ namespace MonkeyPaste.Avalonia {
 
         public nint SetActiveProcess(MpPortableProcessInfo p) {
             // trys to activate and returns actual active regardless of success
-            // from https://stackoverflow.com/a/47264136/105028
-            //if (new NSRunningApplication(handle) is not { } app) {
-            //    // not found
-            //    nint last_active_handle = GetActiveProcessHandle();
-            //    return last_active_handle;
-            //}
             if (GetRunningApp(p.Handle) is not { } app) {
                 // not found
                 nint last_active_handle = GetActiveProcessHandle();

@@ -82,7 +82,8 @@ namespace MonkeyPaste.Avalonia {
 #endif
             MpConsole.ShutdownLog();
             if (_instance.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime) {
-                bool success = lifetime.TryShutdown();
+                lifetime.Shutdown();
+                bool success = true;// lifetime.TryShutdown();
                 MpConsole.WriteLine($"Lifetime shutdown: {success.ToTestResultLabel()}");
             }
         }
@@ -127,6 +128,7 @@ namespace MonkeyPaste.Avalonia {
                 desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
                 desktop.Startup += Startup;
                 desktop.Exit += Exit;
+                desktop.ShutdownRequested += Desktop_ShutdownRequested;
 
                 var loader = new MpAvLoaderViewModel(is_login_load);
                 await loader.CreatePlatformAsync(startup_datetime);
@@ -158,6 +160,11 @@ namespace MonkeyPaste.Avalonia {
             this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
 #endif
         }
+
+        private void Desktop_ShutdownRequested(object sender, ShutdownRequestedEventArgs e) {
+
+            Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.FrameworkExit, "ShutdownRequested triggered");
+        }
         #endregion
 
         #region Protected Methods
@@ -170,8 +177,8 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private void Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
+            //FrameworkShutdown?.Invoke(this, EventArgs.Empty);
             Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.FrameworkExit, "Application exit called");
-            FrameworkShutdown?.Invoke(this, EventArgs.Empty);
         }
 
         private void ReportCommandLineArgs(string[] args) {

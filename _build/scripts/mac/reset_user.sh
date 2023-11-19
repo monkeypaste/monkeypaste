@@ -1,5 +1,6 @@
 #!/bin/sh
 CONFIGURATION="_DEBUG"
 echo "User Reset..."
-rm -rv "/Users/tkefauver/.local/share/MonkeyPaste$CONFIGURATION"
-echo -n "DONE"
+#rm -fr "/Users/tkefauver/.local/share/MonkeyPaste$CONFIGURATION"
+rm -fr "/Users/tkefauver/Library/Application Support/MonkeyPaste$CONFIGURATION"
+echo "DONE"

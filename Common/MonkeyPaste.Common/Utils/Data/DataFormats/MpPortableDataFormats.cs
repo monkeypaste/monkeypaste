@@ -14,8 +14,8 @@ namespace MonkeyPaste.Common {
 
             Text,
             //Rtf,
-            Xaml,
-            XamlPackage,
+            WinXaml,
+            WinXamlPackage,
             //Html,
             AvCsv,
             //Unicode,
@@ -23,6 +23,13 @@ namespace MonkeyPaste.Common {
             //FileDrop,
             //WinBitmap,
             //WinDib,
+#if MAC
+            MacRtf1,
+            MacRtf2,
+            MacText1,
+            MacText2,
+            MacText3,
+#endif
 
             // linux
 
@@ -68,11 +75,11 @@ namespace MonkeyPaste.Common {
         #region Constants
 
         // Windows Formats
-        public const string Text = "Text";
-        public const string Xaml = "Xaml";
-        public const string XamlPackage = "XamlPackage";
-        public const string Unicode = "Unicode";
-        public const string OemText = "OEMText";
+        public const string WinText = "Text";
+        public const string WinXaml = "Xaml";
+        public const string WinXamlPackage = "XamlPackage";
+        public const string WinUnicode = "Unicode";
+        public const string WinOEMText = "OEMText";
 
 
         public const string WinCsv = "CSV";
@@ -86,6 +93,20 @@ namespace MonkeyPaste.Common {
         public const string LinuxSourceUrl = "text/x-moz-url-priv";
         public const string LinuxUriList = "text/uri-list";
         public const string LinuxGnomeFiles = "x-special/gnome-copied-files";
+
+        // Mac Formats
+        public const string MacRtf1 = "public.rtf";
+        public const string MacRtf2 = "NeXT Rich Text Format v1.0 pasteboard type";
+
+        public const string MacText1 = "public.utf8-plain-text";
+        public const string MacText2 = "public.utf16-external-plain-text";
+        public const string MacText3 = "NSStringPboardType";
+
+        public const string MacHtml1 = "public.html";
+        public const string MacHtml2 = "Apple HTML pasteboard type";
+
+        public const string MacFiles1 = "public.file-url";
+        public const string MacFiles2 = "NSFilenamesPboardType";
 
         // Avalonia Formats
 
@@ -104,6 +125,29 @@ namespace MonkeyPaste.Common {
         public const string CefHtml = "text/html";
         public const string CefText = "text/plain";
         public const string CefJson = "application/json";
+
+        // Runtime formats
+        public const string Text =
+#if WINDOWS
+            WinText;
+#elif MAC
+            MacText1;
+#endif
+
+        public const string Text2 =
+#if WINDOWS
+            WinUnicode;
+#elif MAC
+            MacText2;
+#endif
+        public const string Text3 =
+#if WINDOWS
+            WinOEMText;
+#elif MAC
+            MacText3;
+#endif
+
+        // internal
 
         public const string INTERNAL_SOURCE_URI_LIST_FORMAT = LinuxUriList;
 

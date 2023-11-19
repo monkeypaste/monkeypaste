@@ -1,4 +1,5 @@
 ﻿using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Avalonia.Platform.Storage;
 
 #if WINDOWS
 using MonkeyPaste.Common.Wpf;
@@ -67,10 +67,20 @@ namespace MonkeyPaste.Common.Avalonia {
             base.SetData(format, data);
         }
         public override bool TryGetData<T>(string format, out T data) {
-            if (typeof(T) == typeof(IEnumerable<string>) &&
-                TryGetData(format, out IEnumerable<IStorageItem> sil)) {
-                data = sil.Select(x => x.TryGetLocalPath()) as T;
-                return true;
+            if (GetData(format) is IEnumerable<IStorageItem> sil) {
+                if (typeof(T) == typeof(IEnumerable<string>)) {
+                    data = sil.Select(x => x.TryGetLocalPath()) as T;
+                    return true;
+                }
+                if (typeof(T) == typeof(string)) {
+                    data = (T)(object)string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath()).Where(x => !string.IsNullOrEmpty(x)));
+                    return true;
+                }
+                if (typeof(T) == typeof(IEnumerable<IStorageItem>)) {
+                    data = (T)(object)sil;
+                    return true;
+                }
+
             }
             return base.TryGetData(format, out data);
         }
