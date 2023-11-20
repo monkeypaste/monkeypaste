@@ -452,7 +452,7 @@ namespace MonkeyPaste.Avalonia {
             switch (jsonFormat) {
                 case MpJsonMessageFormatType.DataObject:
                     // scan data object for annotation or delta, then recall this method with message data
-                    var mpdo = MpPortableDataObject.Parse(json);
+                    var mpdo = MpAvDataObject.Parse(json);
                     if (mpdo.TryGetData(MpPortableDataFormats.INTERNAL_CONTENT_ANNOTATION_FORMAT, out string ann_json)) {
                         cttimvmb = await CreateMessageViewModelAsync(MpJsonMessageFormatType.Annotation, ann_json, this, messageType);
                         return cttimvmb;

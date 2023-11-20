@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public bool IsOsSupported =>
-#if BROWSER || ANDROID
+#if BROWSER || ANDROID || MAC
             false;
 #else
             true;

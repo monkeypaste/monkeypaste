@@ -17,7 +17,7 @@ namespace MonkeyPaste.Common {
             WinXaml,
             WinXamlPackage,
             //Html,
-            AvCsv,
+            Csv,
             //Unicode,
             //OemText,
             //FileDrop,
@@ -39,16 +39,16 @@ namespace MonkeyPaste.Common {
 
             // avalonia
 
-            AvRtf_bytes,
-            AvHtml_bytes,
-            AvFiles,
-            AvPNG,
+            Rtf,
+            Xhtml,
+            Files,
+            Image,
 
             // cef
 
-            CefHtml,
-            CefText,
-            CefJson,
+            Html,
+            MimeText,
+            MimeJson,
             CefAsciiUrl,
             //CefUnicodeUrl,
 
@@ -80,13 +80,15 @@ namespace MonkeyPaste.Common {
         public const string WinXamlPackage = "XamlPackage";
         public const string WinUnicode = "Unicode";
         public const string WinOEMText = "OEMText";
+        public const string WinFiles = "Files";
+        public const string WinImage = "PNG";
 
 
         public const string WinCsv = "CSV";
         public const string WinBitmap = "Bitmap";
         public const string WinDib = "DeviceIndependentBitmap";
         public const string WinRtf = "Rich Text Format";
-        public const string WinHtml = "HTML Format";
+        public const string WinXhtml = "HTML Format";
         public const string WinFileDrop = "FileDrop";
 
         // Linux Formats
@@ -96,7 +98,7 @@ namespace MonkeyPaste.Common {
 
         // Mac Formats
         public const string MacRtf1 = "public.rtf";
-        public const string MacRtf2 = "NeXT Rich Text Format v1.0 pasteboard type";
+        public const string MacRtf2 = "com.apple.flat-rtfd";
 
         public const string MacText1 = "public.utf8-plain-text";
         public const string MacText2 = "public.utf16-external-plain-text";
@@ -108,13 +110,17 @@ namespace MonkeyPaste.Common {
         public const string MacFiles1 = "public.file-url";
         public const string MacFiles2 = "NSFilenamesPboardType";
 
+        public const string MacUrl = "public.url";
+        public const string MacUrl2 = "com.apple.webarchive";
+        // this formats on dnd from chrome on mac with the toplevel domain url as the content
+        public const string MacUrl3 = "org.chromium.chromium-renderer-initiated-drag";
+
+        public const string MacImage1 = "public.tiff";
+        public const string MacImage2 = "public.png";
+
+
         // Avalonia Formats
 
-        public const string AvCsv = "Csv";
-        public const string AvRtf_bytes = "Rich Text Format";
-        public const string AvHtml_bytes = "HTML Format";
-        public const string AvFiles = "Files";
-        public const string AvPNG = "PNG";
 
         // Cef Formats
 
@@ -122,11 +128,12 @@ namespace MonkeyPaste.Common {
         //public const string CefUnicodeUrl = "UniformResourceLocatorW";
         public const string CefAsciiUrl = "UniformResourceLocator";
 
-        public const string CefHtml = "text/html";
-        public const string CefText = "text/plain";
-        public const string CefJson = "application/json";
+        public const string MimeHtml = "text/html";
+        public const string MimeText = "text/plain";
+        public const string MimeJson = "application/json";
 
         // Runtime formats
+
         public const string Text =
 #if WINDOWS
             WinText;
@@ -145,6 +152,52 @@ namespace MonkeyPaste.Common {
             WinOEMText;
 #elif MAC
             MacText3;
+#endif
+
+        public const string Rtf =
+#if WINDOWS
+            WinRtf;
+#elif MAC
+            MacRtf1;
+#endif
+        public const string Image =
+#if WINDOWS
+            WinImage;
+#elif MAC
+            MacImage1;
+#endif
+
+        public const string Image2 =
+#if WINDOWS
+            WinBitmap;
+#elif MAC
+            MacImage2;
+#endif
+
+        public const string Files =
+#if WINDOWS
+            WinFiles;
+#elif MAC
+            MacFiles1;
+#endif
+        public const string Csv =
+#if WINDOWS
+            WinCsv;
+#elif MAC
+            WinCsv;
+#endif
+
+        public const string Html =
+#if WINDOWS
+            MimeHtml;
+#elif MAC
+            MimeHtml;
+#endif
+        public const string Xhtml =
+#if WINDOWS
+            WinXhtml;
+#elif MAC
+            WinXhtml;
 #endif
 
         // internal

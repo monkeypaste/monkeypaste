@@ -75,7 +75,7 @@
     <PlatformShortName>uwp</PlatformShortName>
     <StartupOutputType>WinExe</StartupOutputType>
   </PropertyGroup>
-  
+   
   <PropertyGroup Condition="$(BuildOs) == 'LINUX'">
     <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>

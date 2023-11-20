@@ -116,7 +116,7 @@ namespace AltOleHandler {
                     format_data = byteData.ToDecodedString();
                 }
             } else {
-                if (format == MpPortableDataFormats.AvFiles) {
+                if (format == MpPortableDataFormats.Files) {
                     if (avdo.GetFilesAsPaths() is IEnumerable<string> paths &&
                         paths.Any()) {
                         format_data = paths;

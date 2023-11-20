@@ -14,7 +14,7 @@ namespace FileConverter {
             string target_format;
             object target_data = null;
             if (target_type == "Image") {
-                target_format = MpPortableDataFormats.AvPNG;
+                target_format = MpPortableDataFormats.Image;
                 if (MpFileIo.ReadBytesFromFile(path) is byte[] bytes &&
                     bytes.Length > 0) {
                     target_data = bytes.ToBase64String();

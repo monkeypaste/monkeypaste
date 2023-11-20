@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using MonkeyPaste.Common.Plugin;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace MonkeyPaste.Avalonia {
                 return null;
             }
 
-            var mpdo = new MpPortableDataObject(trans.Response.dataObjectLookup);
+            var mpdo = new MpAvDataObject(trans.Response.dataObjectLookup);
             var outputType = pluginFormat.analyzer.outputType;
             List<string> ref_urls = new List<string>();
 

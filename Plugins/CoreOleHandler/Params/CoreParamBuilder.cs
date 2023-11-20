@@ -11,14 +11,14 @@ namespace CoreOleHandler {
 
         (string, string, int, string)[] _formats = new (string, string, int, string)[] {
                 (MpPortableDataFormats.Text,"Text",DEF_MAX_TEXT,"text.png"),
-                (MpPortableDataFormats.CefText,"Text (web)",DEF_MAX_TEXT,"text.png"),
-                (MpPortableDataFormats.AvRtf_bytes,"Rtf",DEF_MAX_TEXT,"rtf.png"),
-                (MpPortableDataFormats.AvHtml_bytes,"Html",-1,"html.png"),
-                (MpPortableDataFormats.CefHtml,"Html (web)",-1,"html.png"),
+                (MpPortableDataFormats.MimeText,"Text (web)",DEF_MAX_TEXT,"text.png"),
+                (MpPortableDataFormats.Rtf,"Rtf",DEF_MAX_TEXT,"rtf.png"),
+                (MpPortableDataFormats.Xhtml,"Html",-1,"html.png"),
+                (MpPortableDataFormats.Html,"Html (web)",-1,"html.png"),
                 (MpPortableDataFormats.LinuxSourceUrl,"Uri",-1,"html.png"),
-                (MpPortableDataFormats.AvPNG,"Png",-1,"bitmap.png"),
-                (MpPortableDataFormats.AvCsv,"Csv",DEF_MAX_TEXT,"csv.png"),
-                (MpPortableDataFormats.AvFiles,"Files",-1,"files.png"),
+                (MpPortableDataFormats.Image,"Png",-1,"bitmap.png"),
+                (MpPortableDataFormats.Csv,"Csv",DEF_MAX_TEXT,"csv.png"),
+                (MpPortableDataFormats.Files,"Files",-1,"files.png"),
                 //("x-special/gnome-copied-files","Files (Linux)"),
         };
         public MpClipboardHandlerFormats GetFormats() {
@@ -67,7 +67,7 @@ namespace CoreOleHandler {
             }
 
             switch (format) {
-                case MpPortableDataFormats.AvFiles:
+                case MpPortableDataFormats.Files:
                     if (isReader) {
                         pfl.Add(new MpParameterFormat() {
                             label = "Ignored Directories",
@@ -85,7 +85,7 @@ namespace CoreOleHandler {
                         paramId = GetParamId(format, isReader, "ignoreexts")
                     });
                     break;
-                case MpPortableDataFormats.AvRtf_bytes:
+                case MpPortableDataFormats.Rtf:
                     pfl.Add(new MpParameterFormat() {
                         label = "Convert to Html",
                         description = $"When html is not already present, rtf will be converted to html. This may be useful between web browsers and/or word processing applications. (requires Html format to be enabled and is only for supported platforms)",
@@ -95,8 +95,8 @@ namespace CoreOleHandler {
                         paramId = GetParamId(format, isReader, "tohtml")
                     });
                     break;
-                case MpPortableDataFormats.CefHtml:
-                case MpPortableDataFormats.AvHtml_bytes:
+                case MpPortableDataFormats.Html:
+                case MpPortableDataFormats.Xhtml:
                     pfl.Add(new MpParameterFormat() {
                         label = "Convert to Rtf",
                         description = $"When rtf is not already present, html will be converted to rtf. This may be useful between web browsers and/or word processing applications. (requires Rtf format to be enabled and is only for supported platforms)",
@@ -106,7 +106,7 @@ namespace CoreOleHandler {
                         paramId = GetParamId(format, isReader, "tortf")
                     });
                     break;
-                case MpPortableDataFormats.AvPNG:
+                case MpPortableDataFormats.Image:
                     if (!isReader) {
                         pfl.Add(new MpParameterFormat() {
                             label = "Default Export Type",

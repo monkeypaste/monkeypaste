@@ -6,6 +6,8 @@ using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
 using System;
+using System.Threading.Tasks;
+
 
 #if CEFNET_WV
 using CefNet.Avalonia;
@@ -193,6 +195,17 @@ namespace MonkeyPaste.Avalonia {
 #elif OUTSYS_WV
             LoadFailed += MpAvWebView_LoadFailed;
             Navigated += MpAvWebView_Navigated;
+
+
+            void SendMessage(string fn, string msg, string handle) {
+                //var resp = MpJsonConverter.DeserializeBase64Object<MpQuillPostMessageResponse>(msg);
+                //MpEditorBindingFunctionType funcType = resp.msgType.ToEnum<MpEditorBindingFunctionType>();
+                //HandleBindingNotification(funcType, resp.msgData, resp.handle);
+                MpEditorBindingFunctionType funcType = fn.ToEnum<MpEditorBindingFunctionType>();
+                HandleBindingNotification(funcType, msg, handle);
+            }
+
+            this.RegisterJavascriptObject("SendMessage", SendMessage);
 #endif
 
         }

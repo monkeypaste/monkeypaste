@@ -182,8 +182,8 @@ namespace MonkeyPaste.Avalonia {
 
         public bool IsPrimaryFormat =>
             HandledFormat == MpPortableDataFormats.Text ||
-            HandledFormat == MpPortableDataFormats.AvPNG ||
-            HandledFormat == MpPortableDataFormats.AvFiles;
+            HandledFormat == MpPortableDataFormats.Image ||
+            HandledFormat == MpPortableDataFormats.Files;
 
         public override bool IsLoaded => Items.Count > 0 && Items[0].Items.Count > 0;
 

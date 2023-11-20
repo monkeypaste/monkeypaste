@@ -65,7 +65,7 @@ namespace MonkeyPaste.Avalonia {
                 if (si == null) {
                     return;
                 }
-                MpAvDataObject avdo = new MpAvDataObject(MpPortableDataFormats.AvFiles, new[] { si });
+                MpAvDataObject avdo = new MpAvDataObject(MpPortableDataFormats.Files, new[] { si });
 
                 // set title to '<FileName> <ChangeType>'
                 avdo.SetData(MpPortableDataFormats.INTERNAL_CONTENT_TITLE_FORMAT, Path.GetFileNameWithoutExtension(e.FullPath) + $" {e.ChangeType}");

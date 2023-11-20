@@ -1,4 +1,5 @@
 ﻿using MonkeyPaste.Common;
+using MonkeyPaste.Common.Avalonia;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Model
 
-        public MpPortableDataObject DataObject { get; private set; }
+        public MpAvDataObject DataObject { get; private set; }
 
 
         #endregion
@@ -46,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                 Items.Clear();
             }
             ParentTreeItem = parentAnnotation;
-            DataObject = MpPortableDataObject.Parse(Json);
+            DataObject = MpAvDataObject.Parse(Json);
             if (DataObject != null) {
                 foreach (var kvp in DataObject.DataFormatLookup) {
                     var doivm = await CreateDataObjectItemViewModel(kvp.Key.Name, kvp.Value);

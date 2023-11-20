@@ -35,6 +35,9 @@ function isRunningOnCef() {
 function isRunningOnXam() {
 	return typeof window['CSharp'] === 'object';
 }
+function isRunningOnOutSys() {
+	return typeof window['SendMessage'] === 'object';
+}
 
 function isRunningInIframe() {
 	return window.parent != window;
@@ -70,6 +73,15 @@ function sendMessage(fn, msg) {
 	}
 	if (isRunningOnXam()) {
 		CSharp.InvokeMethod(fn, msg, globals.ContentHandle);
+		return;
+	}
+	if (isRunningOnOutSys()) {
+		let resp = {
+			msgType: fn,
+			msgData: msg,
+			handle: globals.ContentHandle
+		}; 
+		window['SendMessage'].invoke(fn, msg, globals.ContentHandle);
 		return;
 	}
 	if (isRunningInIframe()) {

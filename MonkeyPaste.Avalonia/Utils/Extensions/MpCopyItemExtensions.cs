@@ -19,14 +19,14 @@ namespace MonkeyPaste.Avalonia {
             if (forceFormats == null) {
                 switch (ci.ItemType) {
                     case MpCopyItemType.Text:
-                        avdo.SetData(MpPortableDataFormats.CefHtml, ci.ItemData);
+                        avdo.SetData(MpPortableDataFormats.Html, ci.ItemData);
                         avdo.SetData(MpPortableDataFormats.Text, ci.ItemData.ToPlainText("html"));
                         break;
                     case MpCopyItemType.Image:
-                        avdo.SetData(MpPortableDataFormats.AvPNG, ci.ItemData.ToBytesFromBase64String());
+                        avdo.SetData(MpPortableDataFormats.Image, ci.ItemData.ToBytesFromBase64String());
                         break;
                     case MpCopyItemType.FileList:
-                        avdo.SetData(MpPortableDataFormats.AvFiles, ci.ItemData.SplitNoEmpty(Environment.NewLine));
+                        avdo.SetData(MpPortableDataFormats.Files, ci.ItemData.SplitNoEmpty(Environment.NewLine));
                         break;
                 }
             } else {
@@ -35,32 +35,32 @@ namespace MonkeyPaste.Avalonia {
                     switch (ci.ItemType) {
                         case MpCopyItemType.Text:
                             switch (format) {
-                                case MpPortableDataFormats.AvHtml_bytes:
+                                case MpPortableDataFormats.Xhtml:
                                     data = ci.ItemData.ToBase64String();
                                     break;
-                                case MpPortableDataFormats.CefHtml:
+                                case MpPortableDataFormats.Html:
                                     data = ci.ItemData;
                                     break;
                                 case MpPortableDataFormats.Text:
                                     data = ci.ItemData.ToPlainText("html");
                                     break;
-                                case MpPortableDataFormats.AvPNG:
+                                case MpPortableDataFormats.Image:
                                     data = ci.ItemData.ToHtmlImageDoc();
                                     break;
-                                case MpPortableDataFormats.AvFiles:
+                                case MpPortableDataFormats.Files:
                                     data = ci.ItemData.ToFile(forcePath: ci.GetDefaultFilePaths().FirstOrDefault());
                                     break;
                             }
                             break;
                         case MpCopyItemType.Image:
                             switch (format) {
-                                case MpPortableDataFormats.CefHtml:
+                                case MpPortableDataFormats.Html:
                                     data = ci.ItemData.ToHtmlImageDoc();
                                     break;
                                 case MpPortableDataFormats.Text:
                                     data = ci.ItemData.ToAvBitmap().ToAsciiImage();
                                     break;
-                                case MpPortableDataFormats.AvFiles:
+                                case MpPortableDataFormats.Files:
                                     data = ci.ItemData.ToFile(forcePath: ci.GetDefaultFilePaths().FirstOrDefault());
                                     break;
                             }
@@ -70,11 +70,11 @@ namespace MonkeyPaste.Avalonia {
                                 case MpPortableDataFormats.Text:
                                     data = ci.ItemData;
                                     break;
-                                case MpPortableDataFormats.AvFiles:
+                                case MpPortableDataFormats.Files:
                                     data = ci.ItemData.SplitNoEmpty(Environment.NewLine);
                                     break;
 
-                                case MpPortableDataFormats.AvPNG:
+                                case MpPortableDataFormats.Image:
                                     data = ci.ItemData.ToHtmlImageDoc();
                                     break;
                             }
@@ -144,9 +144,9 @@ namespace MonkeyPaste.Avalonia {
                 case MpCopyItemType.Text:
                     return MpPortableDataFormats.Text;
                 case MpCopyItemType.Image:
-                    return MpPortableDataFormats.AvPNG;
+                    return MpPortableDataFormats.Image;
                 case MpCopyItemType.FileList:
-                    return MpPortableDataFormats.AvFiles;
+                    return MpPortableDataFormats.Files;
             }
             return string.Empty;
         }

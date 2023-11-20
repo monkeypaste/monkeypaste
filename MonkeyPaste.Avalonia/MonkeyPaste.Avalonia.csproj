@@ -656,12 +656,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<Folder Include="Resources\Legal\Licenses\" />-->
-    <!--<Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />-->
+    <Folder Include="Controls\Content\OutSys\" />
+    <Folder Include="Resources\Legal\Licenses\" />
+    <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
 
-    <!--<Content Include="Resources\Legal\terms\terms.html">
+    <Content Include="Resources\Legal\terms\terms.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>-->
+    </Content>
   </ItemGroup>
     
   

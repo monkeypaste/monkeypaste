@@ -142,7 +142,7 @@ namespace CoreOleHandler {
                 //await Util.WaitForClipboard();
                 format_data = await CoreOleHelpers.ClipboardRef.GetDataSafeAsync(format);
                 if (OperatingSystem.IsWindows() &&
-                    format == MpPortableDataFormats.AvHtml_bytes && format_data is byte[] htmlBytes) {
+                    format == MpPortableDataFormats.Xhtml && format_data is byte[] htmlBytes) {
                     var detected_encoding = htmlBytes.DetectTextEncoding(out string detected_text);
                     format_data = Encoding.UTF8.GetBytes(detected_text);
                     if (detected_text.Contains("Â")) {
@@ -152,7 +152,7 @@ namespace CoreOleHandler {
                 //Util.CloseClipboard();
 
             } else {
-                if (format == MpPortableDataFormats.AvFiles) {
+                if (format == MpPortableDataFormats.Files) {
                     if (avdo.GetFilesAsPaths() is IEnumerable<string> paths &&
                         paths.Any()) {
                         format_data = paths;

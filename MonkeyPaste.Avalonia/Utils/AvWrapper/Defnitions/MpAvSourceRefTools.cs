@@ -201,14 +201,15 @@ namespace MonkeyPaste.Avalonia {
 
         private async Task<IEnumerable<MpISourceRef>> GatherExternalSourceRefsAsync(MpAvDataObject avdo) {
             MpPortableProcessInfo last_pinfo = null;
-            if (avdo.TryGetData<string>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out string pi_str) &&
+            if (avdo.TryGetData<MpPortableProcessInfo>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out var pi)) {
+                last_pinfo = pi;
+            }
+            if (last_pinfo == null &&
+                avdo.TryGetData(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out string pi_str) &&
                 !string.IsNullOrWhiteSpace(pi_str)) {
                 last_pinfo = MpJsonConverter.DeserializeObject<MpPortableProcessInfo>(pi_str);
             }
-            if (last_pinfo == null &&
-                avdo.TryGetData<MpPortableProcessInfo>(MpPortableDataFormats.INTERNAL_PROCESS_INFO_FORMAT, out var pi)) {
-                last_pinfo = pi;
-            }
+
 
             if (last_pinfo == null) {
                 // no direct external source available
@@ -242,7 +243,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return ext_refs;
         }
-        private string FindSourceUrl(MpPortableDataObject avdo) {
+        private string FindSourceUrl(MpAvDataObject avdo) {
             string cb_html_or_fragment = null;
             if (avdo.ContainsData(MpPortableDataFormats.LinuxSourceUrl) &&
                        avdo.GetData(MpPortableDataFormats.LinuxSourceUrl) is byte[] url_bytes &&
@@ -255,16 +256,16 @@ namespace MonkeyPaste.Avalonia {
                 urlBytes.ToDecodedString(Encoding.ASCII, true) is string urlRef) {
                 return urlRef;
             }
-            if (avdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
-                        avdo.GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] htmlBytes &&
+            if (avdo.ContainsData(MpPortableDataFormats.Xhtml) &&
+                        avdo.GetData(MpPortableDataFormats.Xhtml) is byte[] htmlBytes &&
                         htmlBytes.ToDecodedString() is string avhtmlStr) {
 
                 // HTML
                 cb_html_or_fragment = avhtmlStr;
             }
             if (string.IsNullOrEmpty(cb_html_or_fragment) &&
-                avdo.ContainsData(MpPortableDataFormats.CefHtml) &&
-                avdo.GetData(MpPortableDataFormats.CefHtml) is string cefhtmlStr) {
+                avdo.ContainsData(MpPortableDataFormats.Html) &&
+                avdo.GetData(MpPortableDataFormats.Html) is string cefhtmlStr) {
                 cb_html_or_fragment = cefhtmlStr;
             }
             if (string.IsNullOrWhiteSpace(cb_html_or_fragment)) {

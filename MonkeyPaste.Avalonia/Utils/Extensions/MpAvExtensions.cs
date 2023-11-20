@@ -27,7 +27,6 @@ namespace MonkeyPaste.Avalonia {
 
 
         #region Controls
-
         public static void Redraw(this Control control) {
             try {
                 // NOTE trying to fix egl context bug, thinking this is executing

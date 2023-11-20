@@ -58,7 +58,7 @@ namespace AltOleHandler {
             }
 
             switch (format) {
-                case MpPortableDataFormats.AvFiles:
+                case MpPortableDataFormats.Files:
                     if (isReader) {
                         pfl.Add(new MpParameterFormat() {
                             label = "Ignored Directories",
@@ -76,7 +76,7 @@ namespace AltOleHandler {
                         paramId = GetParamId(format, isReader, "ignoreexts")
                     });
                     break;
-                case MpPortableDataFormats.AvRtf_bytes:
+                case MpPortableDataFormats.Rtf:
                     pfl.Add(new MpParameterFormat() {
                         label = "Convert to Html",
                         description = $"When html is not already present, rtf will be converted to html. This may be useful between web browsers and/or word processing applications. (only for supported platforms)",
@@ -86,8 +86,8 @@ namespace AltOleHandler {
                         paramId = GetParamId(format, isReader, "tohtml")
                     });
                     break;
-                case MpPortableDataFormats.CefHtml:
-                case MpPortableDataFormats.AvHtml_bytes:
+                case MpPortableDataFormats.Html:
+                case MpPortableDataFormats.Xhtml:
                     pfl.Add(new MpParameterFormat() {
                         label = "Convert to Rtf",
                         description = $"When rtf is not already present, html will be converted to rtf. This may be useful between web browsers and/or word processing applications. (only for supported platforms)",
@@ -97,7 +97,7 @@ namespace AltOleHandler {
                         paramId = GetParamId(format, isReader, "tortf")
                     });
                     break;
-                case MpPortableDataFormats.AvPNG:
+                case MpPortableDataFormats.Image:
                     if (!isReader) {
                         pfl.Add(new MpParameterFormat() {
                             label = "Default Export Type",

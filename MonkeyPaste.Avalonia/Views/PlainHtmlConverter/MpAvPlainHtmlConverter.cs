@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
 #if CEFNET_WV
             MpAvCefNetApplication.IsCefNetLoaded;
 #elif OUTSYS_WV
-            false;
+            true;
 #else
             true;
 #endif
@@ -120,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
         private async Task<MpRichHtmlContentConverterResult> FinishHtmlConversionAsync(MpRichHtmlContentConverterResult cr, string verifyStr) {
             if (cr == null ||
                 string.IsNullOrWhiteSpace(cr.InputHtml) ||
-                cr.DeterminedFormat != MpPortableDataFormats.CefHtml) {
+                cr.DeterminedFormat != MpPortableDataFormats.Html) {
                 return cr;
             }
             var html_doc = new HtmlDocument();
@@ -147,7 +147,7 @@ namespace MonkeyPaste.Avalonia {
                     MpDebug.Assert(img_base64 == null, $"What went wrong parsing img html: '{src_str}'");
                     return cr;
                 }
-                cr.DeterminedFormat = MpPortableDataFormats.AvPNG;
+                cr.DeterminedFormat = MpPortableDataFormats.Image;
                 cr.OutputData = img_base64;
             }
             return cr;

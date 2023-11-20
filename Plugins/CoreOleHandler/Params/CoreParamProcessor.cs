@@ -24,7 +24,7 @@ namespace CoreOleHandler {
                 // plugin creator has to manage mapping internally
                 CoreOleParamType paramType = pkvp.paramId.ToEnum<CoreOleParamType>();
                 switch (format) {
-                    case MpPortableDataFormats.AvRtf_bytes:
+                    case MpPortableDataFormats.Rtf:
                         switch (paramType) {
                             case CoreOleParamType.RICHTEXTFORMAT_R_MAXCHARCOUNT: {
                                     if (data is byte[] rtf_bytes &&
@@ -66,7 +66,7 @@ namespace CoreOleHandler {
                                             new object[] {
                                                 data,
                                                 new object[] {
-                                                    MpPortableDataFormats.AvHtml_bytes,
+                                                    MpPortableDataFormats.Xhtml,
                                                     html_bytes,
                                                     MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT} };
                                     }
@@ -74,7 +74,7 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
-                    case MpPortableDataFormats.AvHtml_bytes:
+                    case MpPortableDataFormats.Xhtml:
                         switch (paramType) {
                             case CoreOleParamType.HTMLFORMAT_R_MAXCHARCOUNT: {
                                     if (data is byte[] html_bytes &&
@@ -115,7 +115,7 @@ namespace CoreOleHandler {
                                             new object[] {
                                                 data,
                                                 new object[] {
-                                                    MpPortableDataFormats.AvRtf_bytes,
+                                                    MpPortableDataFormats.Rtf,
                                                     rtf_bytes,
                                                     MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT} };
                                     }
@@ -192,7 +192,7 @@ namespace CoreOleHandler {
                         }
                         break;
 
-                    case MpPortableDataFormats.CefText:
+                    case MpPortableDataFormats.MimeText:
                         // BUG somehow text/plain is getting converted to bytes
                         // when setting clipboard (like editor clipboard copy)
                         // so if bytes convert to text...
@@ -261,7 +261,7 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
-                    case MpPortableDataFormats.AvPNG:
+                    case MpPortableDataFormats.Image:
                         switch (paramType) {
 
                             case CoreOleParamType.PNG_R_IGNORE: {
@@ -293,7 +293,7 @@ namespace CoreOleHandler {
                         }
                         break;
 
-                    case MpPortableDataFormats.AvFiles:
+                    case MpPortableDataFormats.Files:
                         switch (paramType) {
                             case CoreOleParamType.FILES_R_IGNORE: {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignore_fd &&

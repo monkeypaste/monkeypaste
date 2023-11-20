@@ -36,8 +36,7 @@ namespace MonkeyPaste.Avalonia {
             var icon = NSWorkspace.SharedWorkspace.IconForFile(path);
             var data = icon.AsTiff();
             var bitmap = new NSBitmapImageRep(data);
-
-            data = bitmap.RepresentationUsingTypeProperties(NSBitmapImageFileType.Png, new MonoMac.Foundation.NSDictionary());
+            data = bitmap.RepresentationUsingTypeProperties(NSBitmapImageFileType.Png, new NSDictionary());
             using (var stream = data.AsStream()) {
                 using (var memStream = new MemoryStream()) {
                     stream.CopyTo(memStream);

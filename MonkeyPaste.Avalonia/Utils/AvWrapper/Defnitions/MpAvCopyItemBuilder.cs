@@ -198,7 +198,7 @@ namespace MonkeyPaste.Avalonia {
                     MpCopyItemType.None :
                     avdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT).ToEnum<MpCopyItemType>();
 
-            if (avdo.ContainsData(MpPortableDataFormats.AvFiles) &&
+            if (avdo.ContainsData(MpPortableDataFormats.Files) &&
                 (sourceType == MpCopyItemType.None || sourceType == MpCopyItemType.FileList) // don't let internal temp files get priority 
                 ) {
 
@@ -218,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
                 //    // what type is it? string[]?
                 //    MpDebug.Break();
                 //}
-                avdo.TryGetData(MpPortableDataFormats.AvFiles, out string fl_str);
+                avdo.TryGetData(MpPortableDataFormats.Files, out string fl_str);
                 if (string.IsNullOrWhiteSpace(fl_str)) {
                     // conversion error
                     MpDebug.Break();
@@ -226,7 +226,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 itemType = MpCopyItemType.FileList;
                 itemData = fl_str;
-            } else if (avdo.TryGetData(MpPortableDataFormats.AvCsv, out string csvStr)) {
+            } else if (avdo.TryGetData(MpPortableDataFormats.Csv, out string csvStr)) {
 
                 // CSV
 
@@ -258,18 +258,18 @@ namespace MonkeyPaste.Avalonia {
             //    itemType = MpCopyItemType.Text;
             //    itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
             //} 
-            else if (avdo.TryGetData(MpPortableDataFormats.AvPNG, out byte[] pngBytes) &&
+            else if (avdo.TryGetData(MpPortableDataFormats.Image, out byte[] pngBytes) &&
                         Convert.ToBase64String(pngBytes) is string pngBase64Str) {
 
                 // BITMAP (bytes)
                 itemType = MpCopyItemType.Image;
                 itemData = pngBase64Str;
-            } else if (avdo.TryGetData(MpPortableDataFormats.AvPNG, out string pngBytesStr)) {
+            } else if (avdo.TryGetData(MpPortableDataFormats.Image, out string pngBytesStr)) {
 
                 // BITMAP (base64)
                 itemType = MpCopyItemType.Image;
                 itemData = pngBytesStr;
-            } else if (avdo.TryGetData(MpPortableDataFormats.AvHtml_bytes, out string htmlStr)) {
+            } else if (avdo.TryGetData(MpPortableDataFormats.Xhtml, out string htmlStr)) {
 
                 // HTML (bytes)
                 inputTextFormat = "html";
@@ -283,7 +283,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (itemData.IsStringRichHtmlTable()) {
                 }
-            } else if (avdo.TryGetData(MpPortableDataFormats.CefHtml, out string cefHtmlStr)) {
+            } else if (avdo.TryGetData(MpPortableDataFormats.Html, out string cefHtmlStr)) {
 
                 // HTML (xml)
                 inputTextFormat = "html";
@@ -348,7 +348,7 @@ namespace MonkeyPaste.Avalonia {
                     }
                     itemData = htmlClipboardData.OutputData;
                     delta = htmlClipboardData.Delta;
-                    if (htmlClipboardData.DeterminedFormat == MpPortableDataFormats.AvPNG) {
+                    if (htmlClipboardData.DeterminedFormat == MpPortableDataFormats.Image) {
                         // browser image copy handling
                         itemType = MpCopyItemType.Image;
                         delta = null;
@@ -423,24 +423,24 @@ namespace MonkeyPaste.Avalonia {
             if (OperatingSystem.IsLinux()) {
                 var actual_formats = await MpAvCommonTools.Services.DeviceClipboard.GetFormatsSafeAsync();
                 // linux doesn't case non-html formats the same as windows so mapping them here
-                bool isLinuxFileList = avdo.ContainsData(MpPortableDataFormats.CefText) &&
+                bool isLinuxFileList = avdo.ContainsData(MpPortableDataFormats.MimeText) &&
                                     actual_formats.Contains(MpPortableDataFormats.LinuxGnomeFiles);
                 if (isLinuxFileList) {
                     // NOTE avalonia doesn't acknowledge files (no 'FileNames' entry) on Ubuntu 22.04
                     // and is beyond support for the clipboard plugin right now so..
                     // TODO eventually should tidy up clipboard handling so plugins are clear example code
-                    string files_text_base64 = avdo.GetData(MpPortableDataFormats.CefText) as string;
+                    string files_text_base64 = avdo.GetData(MpPortableDataFormats.MimeText) as string;
                     if (!string.IsNullOrEmpty(files_text_base64)) {
                         string files_text = files_text_base64.ToStringFromBase64();
                         MpConsole.WriteLine("Got file text: " + files_text);
-                        avdo.SetData(MpPortableDataFormats.AvFiles, files_text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+                        avdo.SetData(MpPortableDataFormats.Files, files_text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
                     }
 
                 } else {
-                    bool isLinuxAndNeedsCommonPlainText = avdo.ContainsData(MpPortableDataFormats.CefText) &&
+                    bool isLinuxAndNeedsCommonPlainText = avdo.ContainsData(MpPortableDataFormats.MimeText) &&
                                                             !avdo.ContainsData(MpPortableDataFormats.Text);
                     if (isLinuxAndNeedsCommonPlainText) {
-                        string plain_text = avdo.GetData(MpPortableDataFormats.CefText) as string;
+                        string plain_text = avdo.GetData(MpPortableDataFormats.MimeText) as string;
                         avdo.SetData(MpPortableDataFormats.Text, plain_text);
                     }
                 }

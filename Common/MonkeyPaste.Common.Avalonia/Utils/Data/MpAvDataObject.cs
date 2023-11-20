@@ -19,6 +19,21 @@ namespace MonkeyPaste.Common.Avalonia {
     public class MpAvDataObject : MpPortableDataObject, IDataObject {
         #region Statics       
 
+        public static MpAvDataObject Parse(string json) {
+            var mpdo = new MpAvDataObject();
+            var req_lookup = MpJsonConverter.DeserializeObject<Dictionary<string, object>>(json);
+            foreach (var kvp in req_lookup) {
+                try {
+                    mpdo.SetData(kvp.Key, kvp.Value);
+                }
+                catch (MpUnregisteredDataFormatException udfe) {
+                    // ignore
+                    MpConsole.WriteTraceLine($"Ignoring data object format '{kvp.Key}' parsed in json: ", udfe);
+                    continue;
+                }
+            }
+            return mpdo;
+        }
         #endregion
         public MpAvDataObject() : base() { }
         public MpAvDataObject(string format, object data) : base(format, data) { }
@@ -42,7 +57,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 // will cause error for sometypes
                 return;
             }
-            if (format == MpPortableDataFormats.AvFiles) {
+            if (format == MpPortableDataFormats.Files) {
                 if (data is string portablePathStr) {
                     // convert portable single line-separated string to enumerable of strings for avalonia
                     data = portablePathStr.SplitNoEmpty(Environment.NewLine);
@@ -54,81 +69,80 @@ namespace MonkeyPaste.Common.Avalonia {
                     //        .Select(x => new Uri(x, UriKind.Absolute).LocalPath)
                     //        .ToArray();
                     //}
-
                 }
-            } else if ((format == MpPortableDataFormats.AvHtml_bytes || format == MpPortableDataFormats.AvRtf_bytes) && data is string portableDecodedFormattedTextStr) {
+            } else if ((format == MpPortableDataFormats.Xhtml || format == MpPortableDataFormats.Rtf) && data is string portableDecodedFormattedTextStr) {
                 // avalona like rtf and html to be stored as bytes
                 data = portableDecodedFormattedTextStr.ToBytesFromString();
-            } else if (format == MpPortableDataFormats.CefHtml && data is byte[] html_bytes) {
+            } else if (format == MpPortableDataFormats.Html && data is byte[] html_bytes) {
                 data = html_bytes.ToDecodedString();
-            } else if (format == MpPortableDataFormats.AvPNG && data is string png64) {
+            } else if (format == MpPortableDataFormats.Image && data is string png64) {
                 data = png64.ToBytesFromBase64String();
             }
             base.SetData(format, data);
         }
-        public override bool TryGetData<T>(string format, out T data) {
-            if (GetData(format) is IEnumerable<IStorageItem> sil) {
-                if (typeof(T) == typeof(IEnumerable<string>)) {
-                    data = sil.Select(x => x.TryGetLocalPath()) as T;
-                    return true;
-                }
-                if (typeof(T) == typeof(string)) {
-                    data = (T)(object)string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath()).Where(x => !string.IsNullOrEmpty(x)));
-                    return true;
-                }
-                if (typeof(T) == typeof(IEnumerable<IStorageItem>)) {
-                    data = (T)(object)sil;
-                    return true;
-                }
+        //public override bool TryGetData<T>(string format, out T data) {
+        //    if (GetData(format) is IEnumerable<IStorageItem> sil) {
+        //        if (typeof(T) == typeof(IEnumerable<string>)) {
+        //            data = sil.Select(x => x.TryGetLocalPath()) as T;
+        //            return true;
+        //        }
+        //        if (typeof(T) == typeof(string)) {
+        //            data = (T)(object)string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath()).Where(x => !string.IsNullOrEmpty(x)));
+        //            return true;
+        //        }
+        //        if (typeof(T) == typeof(IEnumerable<IStorageItem>)) {
+        //            data = (T)(object)sil;
+        //            return true;
+        //        }
 
-            }
-            return base.TryGetData(format, out data);
-        }
+        //    }
+        //    return base.TryGetData(format, out data);
+        //}
 
         public async Task MapAllPseudoFormatsAsync() {
-            if (ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
-                !ContainsData(MpPortableDataFormats.CefHtml) &&
-                GetData(MpPortableDataFormats.AvHtml_bytes) is byte[] html_bytes) {
+            if (ContainsData(MpPortableDataFormats.Xhtml) &&
+                !ContainsData(MpPortableDataFormats.Html) &&
+                GetData(MpPortableDataFormats.Xhtml) is byte[] html_bytes) {
                 // convert html bytes to string and map to cef html
                 string htmlStr = html_bytes.ToDecodedString();
-                SetData(MpPortableDataFormats.CefHtml, htmlStr);
+                SetData(MpPortableDataFormats.Html, htmlStr);
             }
-            if (ContainsData(MpPortableDataFormats.CefHtml) &&
-                !ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
-                GetData(MpPortableDataFormats.CefHtml) is string cef_html_str) {
+            if (ContainsData(MpPortableDataFormats.Html) &&
+                !ContainsData(MpPortableDataFormats.Xhtml) &&
+                GetData(MpPortableDataFormats.Html) is string cef_html_str) {
                 // convert html sring to to bytes
                 byte[] htmlBytes = cef_html_str.ToBytesFromString();
-                SetData(MpPortableDataFormats.AvHtml_bytes, htmlBytes);
+                SetData(MpPortableDataFormats.Xhtml, htmlBytes);
             }
 
             if (ContainsData(MpPortableDataFormats.Text) &&
-                !ContainsData(MpPortableDataFormats.CefText)) {
+                !ContainsData(MpPortableDataFormats.MimeText)) {
                 // ensure cef style text is in formats
-                SetData(MpPortableDataFormats.CefText, GetData(MpPortableDataFormats.Text));
+                SetData(MpPortableDataFormats.MimeText, GetData(MpPortableDataFormats.Text));
             }
-            if (ContainsData(MpPortableDataFormats.CefText) &&
+            if (ContainsData(MpPortableDataFormats.MimeText) &&
                 !ContainsData(MpPortableDataFormats.Text)) {
                 // ensure avalonia style text is in formats
-                SetData(MpPortableDataFormats.Text, GetData(MpPortableDataFormats.CefText));
+                SetData(MpPortableDataFormats.Text, GetData(MpPortableDataFormats.MimeText));
             }
 
             if (OperatingSystem.IsLinux()) {
                 // TODO this should only be for gnome based linux
 
-                if (ContainsData(MpPortableDataFormats.AvFiles) &&
+                if (ContainsData(MpPortableDataFormats.Files) &&
                     !ContainsData(MpPortableDataFormats.LinuxGnomeFiles) &&
-                    GetData(MpPortableDataFormats.AvFiles) is IEnumerable<string> files &&
+                    GetData(MpPortableDataFormats.Files) is IEnumerable<string> files &&
                     string.Join(Environment.NewLine, files) is string av_files_str) {
                     // ensure cef style text is in formats
                     SetData(MpPortableDataFormats.LinuxGnomeFiles, av_files_str);
                 }
                 if (ContainsData(MpPortableDataFormats.LinuxGnomeFiles) &&
-                    !ContainsData(MpPortableDataFormats.AvFiles) &&
+                    !ContainsData(MpPortableDataFormats.Files) &&
                     GetData(MpPortableDataFormats.LinuxGnomeFiles) is string gn_files_str &&
                     gn_files_str.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries) is IEnumerable<string> gn_files
                     ) {
                     // ensure avalonia style text is in formats
-                    SetData(MpPortableDataFormats.AvFiles, gn_files);
+                    SetData(MpPortableDataFormats.Files, gn_files);
                 }
             } else if (OperatingSystem.IsWindows()) {
                 //if (ContainsData(MpPortableDataFormats.AvPNG) &&
@@ -155,7 +169,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 //}
             }
 
-            if (TryGetData(MpPortableDataFormats.AvFiles, out object fn_obj)) {
+            if (this.TryGetData(MpPortableDataFormats.Files, out object fn_obj)) {
                 IEnumerable<string> fpl = null;
                 if (fn_obj is IEnumerable<string>) {
                     fpl = fn_obj as IEnumerable<string>;
@@ -167,7 +181,7 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (fpl != null) {
 
                     var av_fpl = await fpl.ToAvFilesObjectAsync();
-                    SetData(MpPortableDataFormats.AvFiles, av_fpl);
+                    SetData(MpPortableDataFormats.Files, av_fpl);
                 }
             }
             // TODO should add unicode, oem, etc. here for greater compatibility

@@ -247,9 +247,9 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (_lastMousePos == null) {
-                _lastMousePos = e.GetScreenMousePoint(hc);
+                _lastMousePos = e.GetScreenMousePoint();
             }
-            var mp = e.GetScreenMousePoint(hc);
+            var mp = e.GetScreenMousePoint();
             SetToolTipOffset(hc, mp - _lastMousePos, mp);
             _lastMousePos = mp;
         }

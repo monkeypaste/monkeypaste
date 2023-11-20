@@ -345,33 +345,12 @@ namespace MonkeyPaste.Avalonia {
 
                 //MpAvProcessWatcher.Instance.BreakNextTick = true;
 
-                string[] test_formats = new[] {
-                    MpPortableDataFormats.MacText1,
-                    MpPortableDataFormats.MacText2,
-                    MpPortableDataFormats.MacText3,
-                    MpPortableDataFormats.MacRtf1,
-                    MpPortableDataFormats.MacRtf2,
-                    MpPortableDataFormats.MacFiles1,
-                    MpPortableDataFormats.MacFiles2,
-                };
-
                 if (TopLevel.GetTopLevel(MpAvWindowManager.MainWindow) is not { } tl ||
                     tl.Clipboard is not { } cb) {
                     return;
                 }
-                var actual_formats = await cb.GetFormatsAsync();
-                foreach (string af in actual_formats) {
-                    MpConsole.WriteLine($"Format Name:", true);
-                    MpConsole.WriteLine($"'{af}'");
-                    MpConsole.WriteLine($"Format Type:");
-                    object data = await cb.GetDataAsync(af);
-                    if (data == null) {
-                        continue;
-                    }
-                    MpConsole.WriteLine($"'{data.GetType()}'");
-                    MpConsole.WriteLine("Format Data:");
-                    MpConsole.WriteLine(data.ToString());
-                }
+                await cb.LogClipboardAsync();
+
                 MpDebug.BreakAll();
             });
 

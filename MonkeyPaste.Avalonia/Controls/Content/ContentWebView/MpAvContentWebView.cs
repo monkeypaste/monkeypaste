@@ -225,17 +225,17 @@ namespace MonkeyPaste.Avalonia {
             bool ignore_ss = true;
 
             if (ctvm.CopyItemType != MpCopyItemType.Image &&
-                contentDataReq.formats.Contains(MpPortableDataFormats.AvPNG) /*&& use_placeholders*/) {
+                contentDataReq.formats.Contains(MpPortableDataFormats.Image) /*&& use_placeholders*/) {
                 ignore_ss = false;
             }
             if (ctvm.CopyItemType != MpCopyItemType.FileList &&
                 provided_formats &&
-                !formats.Contains(MpPortableDataFormats.AvFiles)) {
+                !formats.Contains(MpPortableDataFormats.Files)) {
                 ignore_pseudo_file = true;
             }
 
             if (ignore_ss && !provided_formats) {
-                contentDataReq.formats.Remove(MpPortableDataFormats.AvPNG);
+                contentDataReq.formats.Remove(MpPortableDataFormats.Image);
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinBitmap);
                 contentDataReq.formats.Remove(MpPortableDataFormats.WinDib);
             }
@@ -260,22 +260,22 @@ namespace MonkeyPaste.Avalonia {
             }
 
             if (ctvm.CopyItemType == MpCopyItemType.FileList) {
-                if (contentDataReq.formats.Contains(MpPortableDataFormats.AvFiles)) {
-                    if (avdo.TryGetData(MpPortableDataFormats.AvFiles, out string fp_str) &&
+                if (contentDataReq.formats.Contains(MpPortableDataFormats.Files)) {
+                    if (avdo.TryGetData(MpPortableDataFormats.Files, out string fp_str) &&
                         !string.IsNullOrWhiteSpace(fp_str)) {
                         // file data is csv using DefaultCsvProps seperated by rows which should be envNewLine
 
-                        avdo.SetData(MpPortableDataFormats.AvFiles, fp_str.SplitNoEmpty(MpCopyItem.FileItemSplitter));
+                        avdo.SetData(MpPortableDataFormats.Files, fp_str.SplitNoEmpty(MpCopyItem.FileItemSplitter));
                     } else {
 
-                        avdo.SetData(MpPortableDataFormats.AvFiles, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
+                        avdo.SetData(MpPortableDataFormats.Files, ctvm.CopyItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter));
                     }
                 }
             } else if (!ignore_pseudo_file) {
                 // NOTE setting dummy file so OLE system sees format on clipboard, actual
                 // data is overwritten in core clipboard handler
                 if (use_placeholders) {
-                    avdo.SetData(MpPortableDataFormats.AvFiles, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
+                    avdo.SetData(MpPortableDataFormats.Files, new[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT });
                 } else {
                     // NOTE presumes Text is txt and Image is png
                     // get unique pseudo-file path for whole or partial content
@@ -283,7 +283,7 @@ namespace MonkeyPaste.Avalonia {
                     string ctvm_fp = ctvm.CopyItem.GetDefaultFilePaths(isFragment: is_fragment).FirstOrDefault();
                     string ctvm_data = is_fragment ? avdo.GetData(MpPortableDataFormats.Text) as string : ctvm.CopyItemData;
                     avdo.SetData(
-                        MpPortableDataFormats.AvFiles,
+                        MpPortableDataFormats.Files,
                         new[] { ctvm_fp });
                     ctvm_data.ToFile(forcePath: ctvm_fp);
                 }
@@ -295,7 +295,7 @@ namespace MonkeyPaste.Avalonia {
             if (ctvm.CopyItemType == MpCopyItemType.Image &&
                     ctvm.CopyItemData.ToAvBitmap() is Bitmap bmp) {
 
-                avdo.SetData(MpPortableDataFormats.AvPNG, bmp.ToByteArray());
+                avdo.SetData(MpPortableDataFormats.Image, bmp.ToByteArray());
                 avdo.SetData(MpPortableDataFormats.Text, bmp.ToAsciiImage());
                 // TODO add colorized ascii maybe as html and rtf!!
             } else if (!ignore_ss) {
@@ -334,7 +334,7 @@ namespace MonkeyPaste.Avalonia {
                 if (_contentScreenShotBase64_ntf.ToBytesFromBase64String() is byte[] ss_bytes) {
 
                     MpConsole.WriteLine("screen shot set. byte count: " + ss_bytes.Length);
-                    avdo.Set(MpPortableDataFormats.AvPNG, ss_bytes);
+                    avdo.Set(MpPortableDataFormats.Image, ss_bytes);
                 }
             }
         }
@@ -841,7 +841,7 @@ namespace MonkeyPaste.Avalonia {
                             .DataObjectTools.ReadDragDropDataObjectAsync(unprocessed_drag_avdo) as IDataObject;
 
                         if (BindingContext.CopyItemType == MpCopyItemType.FileList &&
-                            processed_drag_avdo.TryGetData(MpPortableDataFormats.AvFiles, out object fn_obj)) {
+                            processed_drag_avdo.TryGetData(MpPortableDataFormats.Files, out object fn_obj)) {
                             // NOTE for file drops files are converted to fragment and dropped like append handling
                             if (fn_obj is IEnumerable<string> fnl) {
                                 var fl_frag = new MpQuillFileListDataFragment() {
@@ -928,6 +928,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvContentWebView() : base() {
+
             //#if CEFNET_WV
             //            InitialUrl = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
             //#else

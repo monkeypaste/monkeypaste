@@ -260,7 +260,7 @@
                            Height="15"
                            Margin="0,5"
                            VerticalAlignment="Center"
-                           Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow}" />
+                           Source="{Binding Source={StaticResource BoltImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=yellow1}" />
                     <TextBlock Text="{x:Static local:UiStrings.AccountUpgradeButtonText}"
                                VerticalAlignment="Center"
                                Foreground="White"

@@ -23,7 +23,7 @@ namespace AltOleHandler {
                 // plugin creator has to manage mapping internally
                 AltOleParamType paramType = pkvp.paramId.ToEnum<AltOleParamType>();
                 switch (format) {
-                    case MpPortableDataFormats.AvRtf_bytes:
+                    case MpPortableDataFormats.Rtf:
                         switch (paramType) {
                             case AltOleParamType.RICHTEXTFORMAT_R_MAXCHARCOUNT: {
                                     if (data is string rtf) {
@@ -60,7 +60,7 @@ namespace AltOleHandler {
                                             new object[] {
                                                 data,
                                                 new object[] {
-                                                    MpPortableDataFormats.AvHtml_bytes,
+                                                    MpPortableDataFormats.Xhtml,
                                                     html_bytes } };
                                     }
                                 }
@@ -132,7 +132,7 @@ namespace AltOleHandler {
                                 break;
                         }
                         break;
-                    case MpPortableDataFormats.AvPNG:
+                    case MpPortableDataFormats.Image:
                         switch (paramType) {
 
                             case AltOleParamType.PNG_R_IGNORE: {
@@ -164,7 +164,7 @@ namespace AltOleHandler {
                         }
                         break;
 
-                    case MpPortableDataFormats.AvFiles:
+                    case MpPortableDataFormats.Files:
                         switch (paramType) {
                             case AltOleParamType.FILES_R_IGNORE: {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignore_fd &&

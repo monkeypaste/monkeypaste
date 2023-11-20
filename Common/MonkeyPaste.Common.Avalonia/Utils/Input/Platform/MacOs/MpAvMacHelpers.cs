@@ -177,6 +177,61 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #endregion
 
+        #region Images
+
+        public static string ConvertToBase64(NSImage nsimage) {
+            // from https://stackoverflow.com/a/52110970/105028
+            /*
+             var base64String: String? {
+        guard let rep = NSBitmapImageRep(
+            bitmapDataPlanes: nil,
+            pixelsWide: Int(size.width),
+            pixelsHigh: Int(size.height),
+            bitsPerSample: 8,
+            samplesPerPixel: 4,
+            hasAlpha: true,
+            isPlanar: false,
+            colorSpaceName: .calibratedRGB,
+            bytesPerRow: 0,
+            bitsPerPixel: 0
+            ) else {
+                print("Couldn't create bitmap representation")
+                return nil
+        }
+        
+        NSGraphicsContext.saveGraphicsState()
+        NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
+        draw(at: NSZeroPoint, from: NSZeroRect, operation: .sourceOver, fraction: 1.0)
+        NSGraphicsContext.restoreGraphicsState()
+        
+        guard let data = rep.representation(using: NSBitmapImageRep.FileType.png, properties: [NSBitmapImageRep.PropertyKey.compressionFactor: 1.0]) else {
+            print("Couldn't create PNG")
+            return nil
+        }
+        
+        // With prefix
+        // return "data:image/png;base64,\(data.base64EncodedString(options: []))" 
+        // Without prefix
+        return data.base64EncodedString(options: [])
+    }
+             public NSBitmapImageRep(IntPtr planes, long width, long height, long bps, long spp, bool alpha, bool isPlanar, string colorSpaceName, NSBitmapFormat bitmapFormat, long rBytes, long pBits)
+            */
+            //var rep = new NSBitmapImageRep(
+            //    planes: nint.Zero,
+            //    width: (long)nsimage.Size.Width,
+            //    height: (long)nsimage.Size.Height,
+            //    bps: (long)8,
+            //    spp: (long)4,
+            //    alpha: true,
+            //    isPlanar: false,
+            //    colorSpaceName: NSColorSpace.CalibratedRGB.ToString(),
+            //    rBytes: 0,
+            //    pBits: 0);
+            //NSGraphicsContext
+            return null;
+        }
+        #endregion
+
 
         #region Imports
         const string QuartzCore = @"/System/Library/Frameworks/QuartzCore.framework/QuartzCore";

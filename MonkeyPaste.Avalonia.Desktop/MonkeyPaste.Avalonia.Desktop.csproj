@@ -11,14 +11,15 @@
 
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
     <UseAppHost>true</UseAppHost>
+    <CFBundleIconFile>MyIcon.icns</CFBundleIconFile>
     <CFBundleName>MonkeyPaste</CFBundleName>
     <CFBundleDisplayName>MonkeyPaste</CFBundleDisplayName>
-    <CFBundleIdentifier>com.MonkeyPaste</CFBundleIdentifier>
+    <CFBundleIdentifier>com.Monkey.MonkeyPaste</CFBundleIdentifier>
     <CFBundleVersion>$(ApplicationVersion)</CFBundleVersion>
-    <CFBundleShortVersionString>$(ApplicationVersion)</CFBundleShortVersionString>
     <CFBundlePackageType>APPL</CFBundlePackageType>
+    <CFBundleSignature>4242</CFBundleSignature>
+    <CFBundleShortVersionString>$(ApplicationVersion)</CFBundleShortVersionString>
     <CFBundleExecutable>MonkeyPaste.Avalonia.Desktop</CFBundleExecutable>
-    <CFBundleIconFile>MonkeyPaste.icns</CFBundleIconFile>
     <NSPrincipalClass>NSApplication</NSPrincipalClass>
     <NSHighResolutionCapable>true</NSHighResolutionCapable>
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
@@ -54,6 +55,7 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.5" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.5" />
+    <PackageReference Include="Dotnet.Bundle" Version="0.9.13" />
   </ItemGroup>
 
   

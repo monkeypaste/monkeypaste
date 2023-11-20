@@ -455,14 +455,14 @@ namespace MonkeyPaste {
                     var fpl = ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter);
 
                     // get current file list entries
-                    var doi_fpl = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.AvFiles);
+                    var doi_fpl = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(DataObjectId, MpPortableDataFormats.Files);
 
                     // to avoid duplicate entry issues just delete all files and recreate from item data
                     await Task.WhenAll(doi_fpl.Select(x => x.DeleteFromDatabaseAsync()));
 
                     await Task.WhenAll(fpl.Select(x => MpDataObjectItem.CreateAsync(
                                     dataObjectId: DataObjectId,
-                                    itemFormat: MpPortableDataFormats.AvFiles,
+                                    itemFormat: MpPortableDataFormats.Files,
                                     itemData: x)));
                     return;
                 case MpCopyItemType.Text:

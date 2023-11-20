@@ -1,34 +1,12 @@
 #!/bin/sh
-INFO_PLIST="Info.plist"
-ICON_FILE="MyIcon.icns"
+cd "/Users/tkefauver/mp/MonkeyPaste.Avalonia.Desktop/"
+dotnet restore -r osx-x64
 
-PROJECT_DIR="/Users/tkefauver/mp/MonkeyPaste.Avalonia.Desktop"
-PROJECT_TARGET_DIR="$PROJECT_DIR/bin/Debug/net8.0/osx-x64"
-PUBLISH_DIR="$PROJECT_TARGET_DIR/publish/"
+dotnet msbuild -t:BundleApp -p:RuntimeIdentifier=osx-x64 -p:Platform=x64
 
-APP_PATH="$PROJECT_TARGET_DIR/MonkeyPaste.app"
-APP_TARGET_PATH="$APP_PATH/Contents/MacOS"
+TARGETAPP=bin/x64/Debug/net8.0/osx-x64/publish/MonkeyPaste.app/Contents/MacOS
+chmod +x "$TARGETAPP/CefGlueBrowserProcess/Xilium.CefGlue.BrowserProcess"
+chmod +x "$TARGETAPP/MonkeyPaste.Avalonia.Desktop" 
 
-cd "$PROJECT_DIR"
+cp "MyIcon.icns" bin/x64/Debug/net8.0/osx-x64/publish/MonkeyPaste.app/Contents/Resources
 
-dotnet restore
-dotnet publish -r osx-x64 --configuration Debug -p:UseAppHost=true --self-contained true
-
-
-if [ -d "$APP_PATH" ]
-then
-    rm -rf "$APP_PATH"
-fi
-
-mkdir "$APP_PATH"
-
-mkdir "$APP_PATH/Contents"
-mkdir "$APP_PATH/Contents/MacOS"
-mkdir "$APP_PATH/Contents/Resources"
-
-cp "$INFO_PLIST" "$APP_PATH/Contents/Info.plist"
-cp "$ICON_FILE" "$APP_PATH/Contents/Resources/$ICON_FILE"
-cp -a "$PUBLISH_DIR" "$APP_PATH/Contents/MacOS"
-
-chmod +x "$APP_TARGET_PATH/CefGlueBrowserProcess/Xilium.CefGlue.BrowserProcess"
-chmod +x "$APP_TARGET_PATH/MonkeyPaste.Avalonia.Desktop"

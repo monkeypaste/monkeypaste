@@ -7,21 +7,6 @@ namespace MonkeyPaste.Common {
     public class MpPortableDataObject : MpJsonObject, MpIPortableDataObject {
         #region Statics
 
-        public static MpPortableDataObject Parse(string json) {
-            var mpdo = new MpPortableDataObject();
-            var req_lookup = MpJsonConverter.DeserializeObject<Dictionary<string, object>>(json);
-            foreach (var kvp in req_lookup) {
-                try {
-                    mpdo.SetData(kvp.Key, kvp.Value);
-                }
-                catch (MpUnregisteredDataFormatException udfe) {
-                    // ignore
-                    MpConsole.WriteTraceLine($"Ignoring data object format '{kvp.Key}' parsed in json: ", udfe);
-                    continue;
-                }
-            }
-            return mpdo;
-        }
 
         #endregion
 
@@ -66,34 +51,34 @@ namespace MonkeyPaste.Common {
             return data;
         }
 
-        public bool TryGetData(string format, out object data) {
-            data = null;
-            var pdf = MpPortableDataFormats.GetDataFormat(format);
-            if (pdf == null) {
-                return false;
-            }
-            if (DataFormatLookup.TryGetValue(pdf, out object tmp)) {
-                data = tmp;
-                return data != null;
-            }
-            return false;
-        }
-        public virtual bool TryGetData<T>(string format, out T data) where T : class {
-            if (GetData(format) is object dataObj) {
-                if (dataObj is T) {
-                    data = dataObj as T;
-                    return data != default(T);
-                }
-                if (dataObj is byte[] bytes) {
-                    if (typeof(T) == typeof(string)) {
-                        data = (T)(object)bytes.ToDecodedString();
-                        return true;
-                    }
-                }
-            }
-            data = default;
-            return false;
-        }
+        //public bool TryGetData(string format, out object data) {
+        //    data = null;
+        //    var pdf = MpPortableDataFormats.GetDataFormat(format);
+        //    if (pdf == null) {
+        //        return false;
+        //    }
+        //    if (DataFormatLookup.TryGetValue(pdf, out object tmp)) {
+        //        data = tmp;
+        //        return data != null;
+        //    }
+        //    return false;
+        //}
+        //public virtual bool TryGetData<T>(string format, out T data) where T : class {
+        //    if (GetData(format) is object dataObj) {
+        //        if (dataObj is T) {
+        //            data = dataObj as T;
+        //            return data != default(T);
+        //        }
+        //        if (dataObj is byte[] bytes) {
+        //            if (typeof(T) == typeof(string)) {
+        //                data = (T)(object)bytes.ToDecodedString();
+        //                return true;
+        //            }
+        //        }
+        //    }
+        //    data = default;
+        //    return false;
+        //}
 
         public virtual void SetData(string format, object data) {
             var pdf = MpPortableDataFormats.GetDataFormat(format);
@@ -139,6 +124,11 @@ namespace MonkeyPaste.Common {
             DataFormatLookup.ForEach(x => sb.Append(x.Key.Name + "|"));
             return sb.ToString();
         }
+
+        #endregion
+
+        #region Private Methods
+
 
         #endregion
     }

@@ -468,6 +468,12 @@ namespace MonkeyPaste.Common.Avalonia {
 
         #region Screens
 
+        public static Screen GetScreen(this Visual v) {
+            if (TopLevel.GetTopLevel(v) is not WindowBase tl) {
+                return null;
+            }
+            return tl.Screens.ScreenFromVisual(v);
+        }
         public static double VisualPixelDensity(this Visual visual, Window w = null) {
 
             if (w == null &&
@@ -818,10 +824,21 @@ namespace MonkeyPaste.Common.Avalonia {
         public static MpPoint GetClientMousePoint(this PointerEventArgs e, Visual? control) {
             return e.GetPosition(control).ToPortablePoint();
         }
-        public static MpPoint GetScreenMousePoint(this PointerEventArgs e, Visual control) {
-            var c_mp = e.GetPosition(control).ToPortablePoint();
-            var c_origin = control.PointToScreen(new Point()).ToPortablePoint(control.VisualPixelDensity());
-            return c_mp + c_origin;
+        public static MpPoint GetScreenMousePoint(this PointerEventArgs e) {
+            //var c_mp = e.GetPosition(control).ToPortablePoint();
+            //var c_origin = control.PointToScreen(new Point()).ToPortablePoint(control.VisualPixelDensity());
+            //return c_mp + c_origin;
+#if MOBILE
+            return e.GetPosition(App.MainView).ToPortablePoint();
+#endif
+            if (e.Source is not Control c ||
+                c.GetScreen() is not Screen scr) {
+                return MpPoint.Zero;
+            }
+            var c_mp = e.GetPosition(c);
+            var scr_mp = c.PointToScreen(c_mp);
+            var result = scr_mp.ToPortablePoint(scr.Scaling);
+            return result;
         }
 
         #endregion

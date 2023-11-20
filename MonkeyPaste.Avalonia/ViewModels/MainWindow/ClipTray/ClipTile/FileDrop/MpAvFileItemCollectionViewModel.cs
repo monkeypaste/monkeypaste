@@ -59,7 +59,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
 
-            var ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(ci.DataObjectId, MpPortableDataFormats.AvFiles);
+            var ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(ci.DataObjectId, MpPortableDataFormats.Files);
             if (ci.ItemData.SplitNoEmpty(MpCopyItem.FileItemSplitter) is string[] fpl) {
                 // NOTE presuming text format returned from editor on content change is the current order of file items
                 // sort paths by text order
@@ -68,7 +68,7 @@ namespace MonkeyPaste.Avalonia {
                     // write item and reset files to current content
                     await ci.WriteToDatabaseAsync();
                     // use those newly written item
-                    ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(ci.DataObjectId, MpPortableDataFormats.AvFiles);
+                    ci_dobil = await MpDataModelProvider.GetDataObjectItemsForFormatByDataObjectIdAsync(ci.DataObjectId, MpPortableDataFormats.Files);
                 }
                 ci_dobil = ci_dobil.OrderBy(x => fpl.IndexOf(x.ItemData)).ToList();
             }

@@ -53,7 +53,7 @@ namespace AltOleHandler {
 
                 }
                 object data = null;
-                if (needs_pseudo_file && write_format == MpPortableDataFormats.AvFiles) {
+                if (needs_pseudo_file && write_format == MpPortableDataFormats.Files) {
                     // called last 
                     data = PreProcessFileFormat(write_output);
                 } else {
@@ -93,7 +93,7 @@ namespace AltOleHandler {
 
                     }
                     //
-                    if (avdo.TryGetData(MpPortableDataFormats.AvFiles, out object fpl_obj)) {
+                    if (avdo.TryGetData(MpPortableDataFormats.Files, out object fpl_obj)) {
                         IEnumerable<string> fpl = null;
                         if (fpl_obj is IEnumerable<string>) {
                             fpl = fpl_obj as IEnumerable<string>;
@@ -104,7 +104,7 @@ namespace AltOleHandler {
                         }
                         if (fpl != null) {
                             var av_fpl = await fpl.ToAvFilesObjectAsync();
-                            avdo.SetData(MpPortableDataFormats.AvFiles, av_fpl);
+                            avdo.SetData(MpPortableDataFormats.Files, av_fpl);
                         }
                     }
                 }
@@ -155,14 +155,14 @@ namespace AltOleHandler {
                     // text as text
                     data_to_write = text;
                     fe = GetTextFileFormatExt(pref_text_format);
-                } else if (ido.TryGetData(MpPortableDataFormats.AvPNG, out byte[] imgBytes) &&
+                } else if (ido.TryGetData(MpPortableDataFormats.Image, out byte[] imgBytes) &&
                     imgBytes.ToBase64String() is string imgStr) {
                     // text as image
                     data_to_write = imgStr;
                     fe = AltParamProcessor.CurImageExtVal;
                 }
             } else if (source_type == "image") {
-                if (ido.TryGetData(MpPortableDataFormats.AvPNG, out byte[] imgBytes) &&
+                if (ido.TryGetData(MpPortableDataFormats.Image, out byte[] imgBytes) &&
                     imgBytes.ToBase64String() is string imgStr) {
                     // image as image
                     data_to_write = imgStr;
@@ -186,38 +186,38 @@ namespace AltOleHandler {
             return new[] { output_path };
         }
         private int GetWriterPriority(string format) {
-            if (format == MpPortableDataFormats.AvFiles) {
+            if (format == MpPortableDataFormats.Files) {
                 // process files last
                 return int.MaxValue;
             }
             return 0;
         }
         private string GetPreferredTextFileFormat(IDataObject ido) {
-            if (ido.ContainsData(MpPortableDataFormats.AvCsv)) {
-                return MpPortableDataFormats.AvCsv;
+            if (ido.ContainsData(MpPortableDataFormats.Csv)) {
+                return MpPortableDataFormats.Csv;
             }
             if (ido.ContainsData(MpPortableDataFormats.Text)) {
                 return MpPortableDataFormats.Text;
             }
-            if (ido.ContainsData(MpPortableDataFormats.CefHtml)) {
-                return MpPortableDataFormats.CefHtml;
+            if (ido.ContainsData(MpPortableDataFormats.Html)) {
+                return MpPortableDataFormats.Html;
             }
-            if (ido.ContainsData(MpPortableDataFormats.AvRtf_bytes)) {
-                return MpPortableDataFormats.AvRtf_bytes;
+            if (ido.ContainsData(MpPortableDataFormats.Rtf)) {
+                return MpPortableDataFormats.Rtf;
             }
             return null;
         }
         private string GetTextFileFormatExt(string format) {
-            if (format == MpPortableDataFormats.AvCsv) {
+            if (format == MpPortableDataFormats.Csv) {
                 return "csv";
             }
             if (format == MpPortableDataFormats.Text) {
                 return "txt";
             }
-            if (format == MpPortableDataFormats.CefHtml) {
+            if (format == MpPortableDataFormats.Html) {
                 return "html";
             }
-            if (format == MpPortableDataFormats.AvRtf_bytes) {
+            if (format == MpPortableDataFormats.Rtf) {
                 return "rtf";
             }
             return null;

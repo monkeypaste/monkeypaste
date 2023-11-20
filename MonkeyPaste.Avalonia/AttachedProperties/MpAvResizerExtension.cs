@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Platform;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
@@ -580,7 +581,13 @@ namespace MonkeyPaste.Avalonia {
                 }
                 SetIsResizing(control, true);
 
-                _lastMousePosition = _mouseDownPosition = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation; //e.GetPosition(MpAvMainView.Instance).ToPortablePoint();//MpAvMainView.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
+                if (control.Name == "MainWindowResizerBorder") {
+                    e.Pointer.Capture(control);
+                }
+
+
+                _lastMousePosition = GetScreenPosition(e);
+                _mouseDownPosition = GetScreenPosition(e);
             }
         }
 
@@ -613,7 +620,7 @@ namespace MonkeyPaste.Avalonia {
                     return;
                 }
 
-                var mw_mp = MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;// e.GetPosition(MpAvMainView.Instance).ToPortablePoint();//MpAvMainView.Instance.PointToScreen(e.GetCurrentPoint(null).Position).ToPoint(1).ToPortablePoint();
+                var mw_mp = GetScreenPosition(e);
                 //MpConsole.WriteLine("mp: " + mw_mp + " s_mp"+_mouseDownPosition);
                 if (GetIsResizing(control)) {
                     var delta = _lastMousePosition - mw_mp; //new Point(mw_mp.X - _lastMousePosition.X, mw_mp.Y - _lastMousePosition.Y);
@@ -634,6 +641,11 @@ namespace MonkeyPaste.Avalonia {
             _lastMousePosition = _mouseDownPosition = default;
         }
 
+        private static MpPoint GetScreenPosition(PointerEventArgs e) {
+            // NOTE commented fails on mac
+            //return MpAvShortcutCollectionViewModel.Instance.GlobalMouseLocation;
+            return e.GetScreenMousePoint();
+        }
         #endregion
     }
 

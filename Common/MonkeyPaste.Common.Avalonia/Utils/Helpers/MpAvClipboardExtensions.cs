@@ -24,6 +24,28 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
+        public static async Task<MpAvDataObject> ReadDataObjectAsync(this IClipboard cb, string[] formatFilter = default, int retryCount = 0) {
+            var avdo = new MpAvDataObject();
+            if (cb == null) {
+                return avdo;
+            }
+            if (formatFilter == null) {
+                formatFilter = await cb.GetFormatsSafeAsync();
+            }
+            foreach (string format in formatFilter) {
+                object data = await cb.GetDataAsync(format);
+                if (data == null) {
+                    continue;
+                }
+                avdo.SetData(format, data);
+            }
+            return avdo;
+        }
+
+        public static async Task LogClipboardAsync(this IClipboard cb) {
+            var avdo = await cb.ReadDataObjectAsync();
+            avdo.LogDataObject();
+        }
         public static async Task<string[]> GetFormatsSafeAsync(this IClipboard cb, int retryCount = 0) {
             await WaitForClipboardAsync();
             if (!Dispatcher.UIThread.CheckAccess()) {

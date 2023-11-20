@@ -95,8 +95,10 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Events
+#if CEF_WV
         public static event EventHandler FrameworkInitialized;
-        public static event EventHandler FrameworkShutdown;
+        public static event EventHandler FrameworkShutdown; 
+#endif
         #endregion
 
         #region Constructors
@@ -125,9 +127,12 @@ namespace MonkeyPaste.Avalonia {
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-                desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+#if CEF_WV
                 desktop.Startup += Startup;
-                desktop.Exit += Exit;
+                desktop.Exit += Exit; 
+#endif
+                desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
                 desktop.ShutdownRequested += Desktop_ShutdownRequested;
 
                 var loader = new MpAvLoaderViewModel(is_login_load);
@@ -172,14 +177,15 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
+#if CEF_WV
         private void Startup(object sender, ControlledApplicationLifetimeStartupEventArgs e) {
             FrameworkInitialized?.Invoke(this, EventArgs.Empty);
         }
 
         private void Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
-            //FrameworkShutdown?.Invoke(this, EventArgs.Empty);
-            Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.FrameworkExit, "Application exit called");
-        }
+            FrameworkShutdown?.Invoke(this, EventArgs.Empty);
+        } 
+#endif
 
         private void ReportCommandLineArgs(string[] args) {
             MpConsole.WriteLine("Program args: ");

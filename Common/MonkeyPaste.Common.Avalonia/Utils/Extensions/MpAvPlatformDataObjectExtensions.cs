@@ -1,11 +1,91 @@
 ﻿using Avalonia.Input;
+using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
+using MonoMac.AppKit;
+using MonoMac.CoreText;
+using MonoMac.Foundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvPlatformDataObjectExtensions {
+        public static void LogDataObject(this IDataObject ido) {
+            var actual_formats = ido.GetAllDataFormats();
+            foreach (string af in actual_formats) {
+                object data = ido.Get(af);
+                MpConsole.WriteLine($"Format Name: '{af}'", true);
+                MpConsole.WriteLine($"Format Type:'{data.GetType()}'");
+                if (data is not byte[] bytes) {
+                    continue;
+                }
+                if (af == MpPortableDataFormats.Image ||
+                        af == MpPortableDataFormats.Image2) {
+                    var bmp = bytes.ToAvBitmap();
+                    data = bmp.ToBase64String();
+                } else if (af == MpPortableDataFormats.MacUrl2) {
+
+                    MpConsole.WriteLine("Format Data (UNICODE):");
+                    MpConsole.WriteLine(bytes.ToDecodedString(enc: Encoding.Unicode));
+
+                    NSData arch_data = NSData.FromArray(bytes);
+                    NSPropertyListFormat plist_format = NSPropertyListFormat.Binary;
+
+                    NSObject dict_obj =
+                        NSPropertyListSerialization.PropertyListWithData(
+                            arch_data,
+                            NSPropertyListReadOptions.Immutable,
+                            ref plist_format,
+                            out NSError err);
+
+                    NSArray items = NSArray.FromNSObjects(dict_obj);
+
+
+                } else if (af == MpPortableDataFormats.MacRtf1 || af == MpPortableDataFormats.MacRtf2) {
+                    string rtf = bytes.ToDecodedString();
+                    NSData rtf_data = NSData.FromArray(bytes);
+                    // from https://stackoverflow.com/a/20925575/105028
+                    /*
+                    NSTask *task = [[NSTask alloc] init];
+[task setLaunchPath: @"/usr/bin/textutil"];
+[task setArguments: @[@"-format", @"rtf", @"-convert", @"html", @"-stdin", @"-stdout"]];
+[task setStandardInput:[NSPipe pipe]];
+[task setStandardOutput:[NSPipe pipe]];
+NSFileHandle *taskInput = [[task standardInput] fileHandleForWriting];
+[taskInput writeData:[NSData dataWithBytes:cString length:cStringLength]];
+[task launch];
+[taskInput closeFile];
+
+                    // sync
+NSData *outData = [[[task standardOutput] fileHandleForReading] readDataToEndOfFile];
+NSString *outStr = [[NSString alloc] initWithData:outData encoding:NSUTF8StringEncoding];
+                    */
+                    NSTask task = new NSTask();
+                    task.LaunchPath = @"/usr/bin/textutil";
+                    task.Arguments = new[] { "-format", "rtf", "-convert", "html", "-stdin", "-stdout" };
+                    task.StandardInput = new NSPipe();
+                    task.StandardOutput = new NSPipe();
+                    NSFileHandle taskInput = (task.StandardInput as NSPipe).WriteHandle;
+                    taskInput.WriteData(rtf_data);
+                    task.Launch();
+                    taskInput.CloseFile();
+
+                    NSData outData = (task.StandardOutput as NSPipe).ReadHandle.ReadDataToEndOfFile();
+                    NSString outStr = NSString.FromData(outData, NSStringEncoding.UTF8);
+                    string html = outStr.ToString();
+
+                    data = rtf;
+                    MpConsole.WriteLine("Converted Html: ");
+                    MpConsole.WriteLine(html);
+                } else {
+                    data = bytes.ToDecodedString();
+                }
+                MpConsole.WriteLine("Format Data:");
+                MpConsole.WriteLine(data.ToString());
+            }
+        }
         public static IDataObject ToDataObject(this Dictionary<string, object> dict) {
             return new MpAvDataObject(dict);
         }
@@ -24,11 +104,11 @@ namespace MonkeyPaste.Common.Avalonia {
             if (ido.GetFiles() is IEnumerable<object> fps) {
                 // only inlcude file names if present
                 if (fps.Count() > 0) {
-                    if (!formats.Contains(MpPortableDataFormats.AvFiles)) {
-                        formats.Add(MpPortableDataFormats.AvFiles);
+                    if (!formats.Contains(MpPortableDataFormats.Files)) {
+                        formats.Add(MpPortableDataFormats.Files);
                     }
                 } else {
-                    formats.Remove(MpPortableDataFormats.AvFiles);
+                    formats.Remove(MpPortableDataFormats.Files);
                 }
 
             }
@@ -37,7 +117,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static IEnumerable<string> GetFilesAsPaths(this IDataObject dataObject) {
-            return (dataObject.Get(MpPortableDataFormats.AvFiles) as IEnumerable<string>)
+            return (dataObject.Get(MpPortableDataFormats.Files) as IEnumerable<string>)
                 ?? dataObject.GetFiles()?
                 .Select(f => f.TryGetLocalPath())
                 .Where(p => !string.IsNullOrEmpty(p))
@@ -51,7 +131,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (ido.Get(format) is object obj) {
                 return obj;
             }
-            if (format != MpPortableDataFormats.AvFiles) {
+            if (format != MpPortableDataFormats.Files) {
                 return null;
             }
             if (ido.GetFiles() is IEnumerable<object> fpl &&
@@ -128,10 +208,10 @@ namespace MonkeyPaste.Common.Avalonia {
                 return null;
             }
             switch (format) {
-                case MpPortableDataFormats.AvPNG:
+                case MpPortableDataFormats.Image:
                 case MpPortableDataFormats.CefAsciiUrl:
                     return MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT.ToBytesFromString();
-                case MpPortableDataFormats.AvFiles:
+                case MpPortableDataFormats.Files:
                 case MpPortableDataFormats.INTERNAL_SOURCE_URI_LIST_FORMAT:
                     return new string[] { MpPortableDataFormats.PLACEHOLDER_DATAOBJECT_TEXT };
                 default:
@@ -192,6 +272,7 @@ namespace MonkeyPaste.Common.Avalonia {
             if (!ido.ContainsData(format)) {
                 return false;
             }
+
             data = ido.Get(format);
             return true;
         }
@@ -205,7 +286,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         // wants string
                         if (dataObj is byte[] bytes) {
                             // bytes -> string
-                            if (format == MpPortableDataFormats.AvPNG) {
+                            if (format == MpPortableDataFormats.Image) {
                                 // img bytes -> string
                                 typed_data = bytes.ToBase64String() as T;
                             } else {
@@ -220,7 +301,7 @@ namespace MonkeyPaste.Common.Avalonia {
                         // wants bytes
                         if (dataObj is string byteStr) {
                             // string -> bytes
-                            if (format == MpPortableDataFormats.AvPNG) {
+                            if (format == MpPortableDataFormats.Image) {
                                 // string -> img bytes
                                 typed_data = byteStr.ToBytesFromBase64String() as T;
                             } else {

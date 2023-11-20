@@ -13,7 +13,7 @@ namespace MonkeyPaste.Common {
         public string OutputData { get; set; }
         public string Delta { get; set; }
 
-        public string DeterminedFormat { get; set; } = MpPortableDataFormats.CefHtml;
+        public string DeterminedFormat { get; set; } = MpPortableDataFormats.Html;
 
 
 

@@ -1468,9 +1468,9 @@ namespace MonkeyPaste.Avalonia {
         public static List<string> GetDefaultOleFormats(MpCopyItemType itemTypem, bool isDnd) {
             List<string> req_formats = new() {
                 MpPortableDataFormats.Text,
-                MpPortableDataFormats.AvFiles,
-                MpPortableDataFormats.AvHtml_bytes,
-                MpPortableDataFormats.CefHtml,
+                MpPortableDataFormats.Files,
+                MpPortableDataFormats.Xhtml,
+                MpPortableDataFormats.Html,
             };
             if (isDnd && MpAvExternalDropWindowViewModel.Instance.IsDropWidgetEnabled) {
                 // initialize target with all possible formats set to null
@@ -1482,7 +1482,7 @@ namespace MonkeyPaste.Avalonia {
                     case MpCopyItemType.Text:
                         break;
                     case MpCopyItemType.Image:
-                        req_formats.Add(MpPortableDataFormats.AvPNG);
+                        req_formats.Add(MpPortableDataFormats.Image);
                         break;
                     case MpCopyItemType.FileList:
                         break;

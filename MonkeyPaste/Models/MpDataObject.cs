@@ -1,4 +1,6 @@
-﻿using MonkeyPaste.Common;
+﻿using Avalonia.Input;
+using Avalonia.Platform.Storage;
+using MonkeyPaste.Common;
 using SQLite;
 
 
@@ -74,15 +76,27 @@ namespace MonkeyPaste {
                 } else if (kvp.Value is IEnumerable<object> valObjs) {
                     // file list
 
-                    if (kvp.Key.Name != MpPortableDataFormats.AvFiles) {
+                    if (kvp.Key.Name != MpPortableDataFormats.Files) {
                         // this table is only used for searching so no other enumerable types are currently needed
                         continue;
                     }
 
-                    IEnumerable<string> valueParts = null;
-                    if (!pdo.TryGetData(MpPortableDataFormats.AvFiles, out valueParts)) {
-                        continue;
+                    List<string> valueParts = new List<string>();
+                    foreach (var valObj in valObjs) {
+                        if (valObj is string valStr) {
+                            valueParts.Add(valStr);
+                            continue;
+                        }
+                        if (valObj is IStorageItem si &&
+                            si.TryGetLocalPath() is string path) {
+                            valueParts.Add(path);
+                        }
+                        MpDebug.Break($"Unknown file list item type '{valObj.GetType()}'");
+
                     }
+                    //if (!pdo.TryGetData(MpPortableDataFormats.AvFiles, out valueParts)) {
+                    //    continue;
+                    //}
                     // store file/path icon with path
                     // 1. both icon and path will become redundant but is unavoidable (impossible to uniformly know a path's icon and path ref needs to be associated with that clipboard object)
                     // 2. can change so maybe best when accessed on source device to 'create' again which does dup check
@@ -120,7 +134,7 @@ namespace MonkeyPaste {
                         // don't need to worry about storing this (value type is list)
                         continue;
                     }
-                    if (kvp.Key.Name == MpPortableDataFormats.AvFiles) {
+                    if (kvp.Key.Name == MpPortableDataFormats.Files) {
 
                     }
                     if (kvp.Value is IEnumerable<object> ol) {
