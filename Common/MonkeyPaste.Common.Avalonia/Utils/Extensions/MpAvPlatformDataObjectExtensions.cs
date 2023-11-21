@@ -45,38 +45,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
                 } else if (af == MpPortableDataFormats.MacRtf1 || af == MpPortableDataFormats.MacRtf2) {
                     string rtf = bytes.ToDecodedString();
-                    NSData rtf_data = NSData.FromArray(bytes);
-                    // from https://stackoverflow.com/a/20925575/105028
-                    /*
-                    NSTask *task = [[NSTask alloc] init];
-[task setLaunchPath: @"/usr/bin/textutil"];
-[task setArguments: @[@"-format", @"rtf", @"-convert", @"html", @"-stdin", @"-stdout"]];
-[task setStandardInput:[NSPipe pipe]];
-[task setStandardOutput:[NSPipe pipe]];
-NSFileHandle *taskInput = [[task standardInput] fileHandleForWriting];
-[taskInput writeData:[NSData dataWithBytes:cString length:cStringLength]];
-[task launch];
-[taskInput closeFile];
-
-                    // sync
-NSData *outData = [[[task standardOutput] fileHandleForReading] readDataToEndOfFile];
-NSString *outStr = [[NSString alloc] initWithData:outData encoding:NSUTF8StringEncoding];
-                    */
-                    NSTask task = new NSTask();
-                    task.LaunchPath = @"/usr/bin/textutil";
-                    task.Arguments = new[] { "-format", "rtf", "-convert", "html", "-stdin", "-stdout" };
-                    task.StandardInput = new NSPipe();
-                    task.StandardOutput = new NSPipe();
-                    NSFileHandle taskInput = (task.StandardInput as NSPipe).WriteHandle;
-                    taskInput.WriteData(rtf_data);
-                    task.Launch();
-                    taskInput.CloseFile();
-
-                    NSData outData = (task.StandardOutput as NSPipe).ReadHandle.ReadDataToEndOfFile();
-                    NSString outStr = NSString.FromData(outData, NSStringEncoding.UTF8);
-                    string html = outStr.ToString();
-
-                    data = rtf;
+                    string html = MpAvMacHelpers.RtfToHtml(rtf);
                     MpConsole.WriteLine("Converted Html: ");
                     MpConsole.WriteLine(html);
                 } else {
@@ -279,58 +248,71 @@ NSString *outStr = [[NSString alloc] initWithData:outData encoding:NSUTF8StringE
 
         public static bool TryGetData<T>(this IDataObject ido, string format, out T data) where T : class {
             data = null;
-            if (ido.TryGetData(format, out object dataObj)) {
-                T typed_data = dataObj as T;
-                if (typed_data == null) {
-                    if (typeof(T) == typeof(string)) {
-                        // wants string
-                        if (dataObj is byte[] bytes) {
-                            // bytes -> string
-                            if (format == MpPortableDataFormats.Image) {
-                                // img bytes -> string
-                                typed_data = bytes.ToBase64String() as T;
-                            } else {
-                                // text bytes -> string
-                                typed_data = bytes.ToDecodedString() as T;
+            if (!ido.TryGetData(format, out object dataObj)) {
+                return false;
+            }
+            T typed_data = dataObj as T;
+            if (typed_data != null) {
+                data = typed_data;
+                return true;
+            }
+            if (typeof(T) == typeof(string)) {
+                // wants string
+                if (dataObj is byte[] bytes) {
+                    // bytes -> string
+                    if (format == MpPortableDataFormats.Image) {
+                        // img bytes -> string
+                        typed_data = bytes.ToBase64String() as T;
+                    } else {
+                        // text bytes -> string
+#if WINDOWS
+                        if(format == MpPortableDataFormats.Xhtml) {
+                            var detected_encoding = bytes.DetectTextEncoding(out string detected_text);
+                            bytes = Encoding.UTF8.GetBytes(detected_text);
+                            if (detected_text.Contains("Â")) {
+                                MpDebug.Break();
                             }
-                        } else if (dataObj is IEnumerable<string> strings) {
-                            // string list -> string
-                            typed_data = string.Join(Environment.NewLine, strings) as T;
-                        }
-                    } else if (typeof(T) == typeof(byte[])) {
-                        // wants bytes
-                        if (dataObj is string byteStr) {
-                            // string -> bytes
-                            if (format == MpPortableDataFormats.Image) {
-                                // string -> img bytes
-                                typed_data = byteStr.ToBytesFromBase64String() as T;
-                            } else {
-                                // string -> text bytes
-                                typed_data = byteStr.ToBytesFromString() as T;
-                            }
-                        }
-                    } else if (typeof(T) == typeof(IEnumerable<string>)) {
-                        // wants string list
-                        if (dataObj is string dataStr) {
-                            // string -> string list
-                            typed_data = dataStr.SplitNoEmpty(Environment.NewLine).AsEnumerable<string>() as T;
-                        } else if (dataObj is IEnumerable<Uri> uril) {
-                            //
-                            typed_data = uril.Select(x => x.ToFileSystemPath()) as T;
-                        } else if (dataObj is IEnumerable<IStorageItem> sil) {
-                            //
-                            typed_data = sil.Select(x => x.TryGetLocalPath()) as T;
-                        } else {
+                         }
+#endif
+                        typed_data = bytes.ToDecodedString() as T;
 
-                        }
                     }
-                    if (typed_data == null) {
-                        MpDebug.Break($"Unhandled dataobj get, source is '{dataObj.GetType()}' target is '{format}'");
-
+                } else if (dataObj is IEnumerable<string> strings) {
+                    // string list -> string
+                    typed_data = string.Join(Environment.NewLine, strings) as T;
+                }
+            } else if (typeof(T) == typeof(byte[])) {
+                // wants bytes
+                if (dataObj is string byteStr) {
+                    // string -> bytes
+                    if (format == MpPortableDataFormats.Image) {
+                        // string -> img bytes
+                        typed_data = byteStr.ToBytesFromBase64String() as T;
+                    } else {
+                        // string -> text bytes
+                        typed_data = byteStr.ToBytesFromString() as T;
                     }
                 }
-                data = typed_data;
+            } else if (typeof(T) == typeof(IEnumerable<string>)) {
+                // wants string list
+                if (dataObj is string dataStr) {
+                    // string -> string list
+                    typed_data = dataStr.SplitNoEmpty(Environment.NewLine).AsEnumerable<string>() as T;
+                } else if (dataObj is IEnumerable<Uri> uril) {
+                    // uri[] -> string list
+                    typed_data = uril.Select(x => x.ToFileSystemPath()) as T;
+                } else if (dataObj is IEnumerable<IStorageItem> sil) {
+                    // si[] -> string list
+                    typed_data = sil.Select(x => x.TryGetLocalPath()) as T;
+                } else {
+
+                }
+            } //else if(Enum.GetUnderlyingType typeof(T) ==)
+            if (typed_data == null) {
+                MpDebug.Break($"Unhandled dataobj get, source is '{dataObj.GetType()}' target is '{format}'");
             }
+
+            data = typed_data;
             return data != null;
         }
 
@@ -363,6 +345,5 @@ NSString *outStr = [[NSString alloc] initWithData:outData encoding:NSUTF8StringE
                 mpdo.SetData(format, data);
             }
         }
-
     }
 }

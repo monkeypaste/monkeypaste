@@ -10,7 +10,7 @@ using MonkeyPaste.Common.Wpf;
 namespace MonkeyPaste.Avalonia {
     public class MpAvStringTools : MpIStringTools {
         public string ToPlainText(string text, string source_format = "") {
-            if (text.IsStringRichText()) {
+            if (text.IsStringRtf()) {
 #if WINDOWS
                 return text.RtfToPlainText();
 #endif
@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public string ToRichText(string text) {
-            return text.ToRtfFromRichHtml();
+            return text.HtmlToRtf();
         }
 
         public string ToCsv(string text) {
@@ -43,7 +43,7 @@ namespace MonkeyPaste.Avalonia {
             if (string.IsNullOrEmpty(str)) {
                 return "txt";
             }
-            if (str.IsStringRichText()) {
+            if (str.IsStringRtf()) {
                 return "rtf";
             }
             if (str.IsStringBase64()) {

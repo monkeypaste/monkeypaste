@@ -118,9 +118,6 @@ namespace MonkeyPaste.Avalonia {
         #region Private Methods
 
         #region Source Helpers
-
-
-
         #endregion
 
         #region Content Helpers
@@ -188,131 +185,117 @@ namespace MonkeyPaste.Avalonia {
             dupCheck.WasDupOnCreate = true;
             return dupCheck;
         }
-        private async Task<Tuple<MpCopyItemType, string, string>> DecodeContentDataAsync(MpAvDataObject avdo) {
-            string inputTextFormat = null;
-            string itemData = null;
-            MpCopyItemType itemType = MpCopyItemType.None;
 
-            MpCopyItemType sourceType =
-                avdo == null || !avdo.ContainsData(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT) ?
-                    MpCopyItemType.None :
-                    avdo.GetData(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT).ToEnum<MpCopyItemType>();
+        private string[] _CommonDataFormatsByPriority = new[] {
+            //
+            MpPortableDataFormats.Text3,
+            MpPortableDataFormats.Text2,
+            MpPortableDataFormats.Text,
+            MpPortableDataFormats.Html,
+            MpPortableDataFormats.Xhtml,
+            MpPortableDataFormats.Image2,
+            MpPortableDataFormats.Image,
+            MpPortableDataFormats.Rtf,
+            MpPortableDataFormats.Csv,
+            MpPortableDataFormats.Files,
+        };
 
-            if (avdo.ContainsData(MpPortableDataFormats.Files) &&
-                (sourceType == MpCopyItemType.None || sourceType == MpCopyItemType.FileList) // don't let internal temp files get priority 
-                ) {
+        private int GetFormatPriority(MpAvDataObject avdo, string format) {
+            int priority = _CommonDataFormatsByPriority.IndexOf(format);
 
-                // FILES
-
-                //string fl_str = null;
-                //if (avdo.GetData(MpPortableDataFormats.AvFiles) is byte[] fileBytes) {
-                //    fl_str = fileBytes.ToDecodedString();
-                //} else if (avdo.GetData(MpPortableDataFormats.AvFiles) is string fileStr) {
-                //    fl_str = fileStr;
-                //} else if (avdo.GetData(MpPortableDataFormats.AvFiles) is IEnumerable<string> paths) {
-                //    fl_str = string.Join(Environment.NewLine, paths);
-                //} else if (avdo.GetData(MpPortableDataFormats.AvFiles) is IEnumerable<IStorageItem> sil) {
-                //    fl_str = string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath()).Where(x => !string.IsNullOrEmpty(x)));
-                //} else {
-                //    var fl_data = avdo.GetData(MpPortableDataFormats.AvFiles);
-                //    // what type is it? string[]?
-                //    MpDebug.Break();
-                //}
-                avdo.TryGetData(MpPortableDataFormats.Files, out string fl_str);
-                if (string.IsNullOrWhiteSpace(fl_str)) {
-                    // conversion error
-                    MpDebug.Break();
-                    return null;
-                }
-                itemType = MpCopyItemType.FileList;
-                itemData = fl_str;
-            } else if (avdo.TryGetData(MpPortableDataFormats.Csv, out string csvStr)) {
-
-                // CSV
-
-                inputTextFormat = "html";
-                itemType = MpCopyItemType.Text;
-                itemData = csvStr.CsvStrToRichHtmlTable();
-
-                //if (avdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) && 
-                //    avdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfCsvBytes) {
-                //    // NOTE this is assuming the content is a rich text table. But it may not be 
-                //    // depending on the source so may need to be careful handling these. 
-                //    itemType = MpCopyItemType.Text;
-                //    itemData = rtfCsvBytes.ToDecodedString().EscapeExtraOfficeRtfFormatting();
-                //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvRtf_bytes);
-                //} else {
-                //    string csvStr = avdo.GetData(MpPortableDataFormats.AvCsv).ToString();
-                //    //itemData = csvStr.ToRichText();
-                //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvCsv);
-                //}
+            if (format == MpPortableDataFormats.Files &&
+                avdo.TryGetData(MpPortableDataFormats.INTERNAL_CONTENT_TYPE_FORMAT, out string internal_cit_str) &&
+                internal_cit_str.ToEnum<MpCopyItemType>() is MpCopyItemType cit &&
+                cit != MpCopyItemType.FileList) {
+                // for pseudo files give low priority
+                return -1;
             }
-            //else if (avdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) &&
-            //            !avdo.ContainsData(MpPortableDataFormats.AvHtml_bytes) &&
-            //            avdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfBytes &&
-            //        rtfBytes.ToDecodedString() is string rtfStr) {
+            if (format == MpPortableDataFormats.Rtf &&
+                (
+                avdo.ContainsData(MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT) ||
+                avdo.ContainsData(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT)) &&
+                (avdo.ContainsData(MpPortableDataFormats.Html) || avdo.ContainsData(MpPortableDataFormats.Xhtml))) {
+                // for html->rtf prefer original html
+                return -1;
+            }
+            return priority;
+        }
+        private string GetItemDataByPriority(MpAvDataObject avdo, out MpDataFormatType inputFormatType) {
+            inputFormatType = MpDataFormatType.None;
 
-            //    // RTF (HTML will be preferred)
+            string max_format =
+                avdo
+                .GetAllDataFormats()
+                .OrderByDescending(x => GetFormatPriority(avdo, x))
+                .FirstOrDefault();
 
-            //    inputTextFormat = "rtf";
-            //    itemType = MpCopyItemType.Text;
-            //    itemData = rtfStr.EscapeExtraOfficeRtfFormatting();
-            //} 
-            else if (avdo.TryGetData(MpPortableDataFormats.Image, out byte[] pngBytes) &&
-                        Convert.ToBase64String(pngBytes) is string pngBase64Str) {
+            if (!avdo.TryGetData(max_format, out string itemData)) {
+                return null;
+            }
 
-                // BITMAP (bytes)
-                itemType = MpCopyItemType.Image;
-                itemData = pngBase64Str;
-            } else if (avdo.TryGetData(MpPortableDataFormats.Image, out string pngBytesStr)) {
+            switch (max_format) {
+                case MpPortableDataFormats.Text3:
+                case MpPortableDataFormats.Text2:
+                case MpPortableDataFormats.Text:
+                    inputFormatType = MpDataFormatType.PlainText;
+                    break;
+                case MpPortableDataFormats.Html:
+                case MpPortableDataFormats.Xhtml:
 
-                // BITMAP (base64)
-                itemType = MpCopyItemType.Image;
-                itemData = pngBytesStr;
-            } else if (avdo.TryGetData(MpPortableDataFormats.Xhtml, out string htmlStr)) {
-
-                // HTML (bytes)
-                inputTextFormat = "html";
-                itemType = MpCopyItemType.Text;
-                itemData = htmlStr;
-                if (avdo.ContainsData(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT)) {
                     // NOTE to avoid loosing rtf markup the converted html is 
                     // fully html special entities are fully encoded which will lead
                     // to parsing issues if left as is or double encoding if not considered
-                    inputTextFormat = "rtf2html";
-                }
-                if (itemData.IsStringRichHtmlTable()) {
-                }
-            } else if (avdo.TryGetData(MpPortableDataFormats.Html, out string cefHtmlStr)) {
+                    inputFormatType =
+                        avdo.ContainsData(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT) ?
+                        MpDataFormatType.Rtf2Html :
+                        MpDataFormatType.Html;
+                    break;
+                case MpPortableDataFormats.Rtf:
+                    // NOTE should only happen if user has disabled (its default) convert rtf2html 
+                    //MpDebug.Assert(!avdo.ContainsData(MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT), $"CopyItem builder error trying to use conversion data instead of source");
+                    //MpDebug.Assert(
+                    //    avdo.ContainsData(MpPortableDataFormats.Html) ||
+                    //    avdo.ContainsData(MpPortableDataFormats.Xhtml),
+                    //    $"CopyItem builder error should prefer html over rtf when available");
 
-                // HTML (xml)
-                inputTextFormat = "html";
-                itemType = MpCopyItemType.Text;
-                itemData = cefHtmlStr;
-                if (avdo.ContainsData(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT)) {
-                    // see above note
-                    inputTextFormat = "rtf2html";
-                }
-            } else if (avdo.TryGetData(MpPortableDataFormats.Text, out string textStr)) {
+                    itemData = itemData.RtfToHtml();
+                    inputFormatType = MpDataFormatType.Rtf2Html;
+                    break;
+                case MpPortableDataFormats.Csv:
+                    itemData = itemData.CsvStrToRichHtmlTable();
+                    inputFormatType = MpDataFormatType.Html;
+                    //if (avdo.ContainsData(MpPortableDataFormats.AvRtf_bytes) && 
+                    //    avdo.GetData(MpPortableDataFormats.AvRtf_bytes) is byte[] rtfCsvBytes) {
+                    //    // NOTE this is assuming the content is a rich text table. But it may not be 
+                    //    // depending on the source so may need to be careful handling these. 
+                    //    itemType = MpCopyItemType.Text;
+                    //    itemData = rtfCsvBytes.ToDecodedString().EscapeExtraOfficeRtfFormatting();
+                    //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvRtf_bytes);
+                    //} else {
+                    //    string csvStr = avdo.GetData(MpPortableDataFormats.AvCsv).ToString();
+                    //    //itemData = csvStr.ToRichText();
+                    //    itemData = itemData.ToRichHtmlText(MpPortableDataFormats.AvCsv);
+                    //}
+                    break;
+                case MpPortableDataFormats.Image:
+                case MpPortableDataFormats.Image2:
+                    // NOTE this is just a filler here, haven't had need to discern images
+                    inputFormatType = MpDataFormatType.Bmp;
+                    break;
+                case MpPortableDataFormats.Files:
+                    inputFormatType = MpDataFormatType.FileList;
+                    break;
+            }
+            return itemData;
+        }
 
-                // TEXT
-                inputTextFormat = "text";
-                itemType = MpCopyItemType.Text;
-                itemData = textStr;
-            } else if (avdo.TryGetData(MpPortableDataFormats.Text2, out string unicodeStr)) {
+        private async Task<Tuple<MpCopyItemType, string, string>> DecodeContentDataAsync(MpAvDataObject avdo) {
+            string itemData = GetItemDataByPriority(avdo, out MpDataFormatType inputTextFormat);
+            MpCopyItemType itemType = inputTextFormat.ToCopyItemType();
 
-                // UNICODE
-                inputTextFormat = "text";
-                itemType = MpCopyItemType.Text;
-                itemData = unicodeStr;
-            } else if (avdo.TryGetData(MpPortableDataFormats.Text3, out string oemStr)) {
-
-                // OEM TEXT
-                inputTextFormat = "text";
-                itemType = MpCopyItemType.Text;
-                itemData = oemStr;
-            } else {
+            if (itemType == MpCopyItemType.None) {
                 MpConsole.WriteTraceLine("clipboard compare_data is not known format");
+                return default;
             }
 
             string itemPlainText = null;
@@ -325,12 +308,6 @@ namespace MonkeyPaste.Avalonia {
             // POST-PROCESS (TEXT ONLY)
 
             if (itemType == MpCopyItemType.Text) {
-                if (string.IsNullOrEmpty(inputTextFormat)) {
-                    // should be set
-                    MpDebug.Break();
-                    inputTextFormat = "text";
-                }
-
                 MpRichHtmlContentConverterResult htmlClipboardData =
                     await MpAvPlainHtmlConverter.Instance.ConvertAsync(
                         itemData,
@@ -340,8 +317,6 @@ namespace MonkeyPaste.Avalonia {
                 if (htmlClipboardData == null) {
                     itemData = null;
                 } else {
-                    inputTextFormat = "html";
-
                     if (!string.IsNullOrEmpty(htmlClipboardData.SourceUrl)) {
                         // add url ref if found so won't have to find again
                         avdo.AddOrUpdateUri(htmlClipboardData.SourceUrl);

@@ -53,43 +53,45 @@ namespace MonkeyPaste.Common.Avalonia {
             return false;
         }
 
-        public static string ToRichHtmlText(this string str, string strFormat) {
-            if (str.IsStringRichText() &&
-                OperatingSystem.IsWindows()) {
-#if WINDOWS
-                string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter2.ConvertFormatToHtml(str, strFormat);
-                return qhtml;
-#endif
-            } else if (str.IsStringCsv()) {
-                // TODO create quill tables here
-
+        public static string RtfToHtml(this string str) {
+            if (!str.IsStringRtf()) {
+                return str;
             }
 
-            // TODO add image and file stuff here
+#if WINDOWs
+            string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter2.ConvertFormatToHtml(str, strFormat);
+            return qhtml;
+#elif MAC
+            string qhtml = MpAvMacHelpers.RtfToHtml(str);
+            return qhtml;
+#else
             return str;
+#endif
         }
 
 
-        public static string ToRtfFromRichHtml(this string str) {
-            if (str.IsStringRichHtml() && OperatingSystem.IsWindows()) {
-#if WINDOWS
-                string rtf = MpWpfHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
-                return rtf;
-#endif
+        public static string HtmlToRtf(this string str) {
+            if (!str.IsStringRtf()) {
+                return str;
             }
+#if WINDOWS
+            string rtf = MpWpfHtmlToRtfConverter.ConvertQuillHtmlToRtf(str);
+            return rtf;
+#elif MAC
+            string rtf = MpAvMacHelpers.Html2Rtf(str);
+            return rtf;
+#else 
             return str;
+#endif
         }
 
         public static string ToRtfFromHtmlFragment(this string str) {
-            if (str.IsStringRichHtml() && OperatingSystem.IsWindows() &&
-                MpRichHtmlContentConverterResult.Parse(str) is
-                    MpRichHtmlContentConverterResult hccr) {
-#if WINDOWS
-                string rtf = MpWpfHtmlToRtfConverter.ConvertQuillHtmlToRtf(hccr.InputHtml);
-                return rtf;
-#endif
+            if (!str.IsStringRichHtml() ||
+                MpRichHtmlContentConverterResult.Parse(str) is not { } hccr) {
+                return str;
             }
-            return str;
+            string rtf = HtmlToRtf(hccr.InputHtml);
+            return rtf;
         }
 
         public static string EscapeExtraOfficeRtfFormatting(this string str) {

@@ -54,7 +54,7 @@ namespace AltOleHandler {
                                 break;
                             case AltOleParamType.RICHTEXTFORMAT_R_TOHTML: {
                                     if (data is string rtf &&
-                                        rtf.ToRichHtmlText("rtf") is string html &&
+                                        rtf.RtfToHtml() is string html &&
                                         html.ToBytesFromString() is byte[] html_bytes) {
                                         return
                                             new object[] {

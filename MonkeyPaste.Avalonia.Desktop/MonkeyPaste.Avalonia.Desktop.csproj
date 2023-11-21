@@ -21,7 +21,7 @@
     <CFBundleShortVersionString>$(ApplicationVersion)</CFBundleShortVersionString>
     <CFBundleExecutable>MonkeyPaste.Avalonia.Desktop</CFBundleExecutable>
     <NSPrincipalClass>NSApplication</NSPrincipalClass>
-    <NSHighResolutionCapable>true</NSHighResolutionCapable>
+    <!--<NSHighResolutionCapable>true</NSHighResolutionCapable>-->
     <SupportedOSPlatformVersion>10.15</SupportedOSPlatformVersion>
   </PropertyGroup>
   

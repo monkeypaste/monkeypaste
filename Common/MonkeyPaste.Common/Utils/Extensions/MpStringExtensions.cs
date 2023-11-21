@@ -1033,13 +1033,13 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringCsv(this string text) {
-            if (string.IsNullOrEmpty(text) || IsStringRichText(text)) {
+            if (string.IsNullOrEmpty(text) || IsStringRtf(text)) {
                 return false;
             }
             return text.Contains(",");
         }
 
-        public static bool IsStringRichText(this string text) {
+        public static bool IsStringRtf(this string text) {
             if (string.IsNullOrEmpty(text)) {
                 return false;
             }
@@ -1075,7 +1075,7 @@ namespace MonkeyPaste.Common {
             if (text == string.Empty) {
                 return true;
             }
-            if (IsStringRichText(text) || IsStringSection(text) || IsStringSpan(text) || IsStringXaml(text)) {
+            if (IsStringRtf(text) || IsStringSection(text) || IsStringSpan(text) || IsStringXaml(text)) {
                 return false;
             }
             return true;
@@ -1097,7 +1097,7 @@ namespace MonkeyPaste.Common {
         }
 
         public static bool IsStringRichTextTable(this string text) {
-            if (!text.IsStringRichText()) {
+            if (!text.IsStringRtf()) {
                 return false;
             }
             string rtfTableCheckToken = @"{\trowd";

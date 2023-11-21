@@ -356,13 +356,11 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
-                await Task.Delay(1);
-                //MpAvContentWebView.BreakOnNextLoad = true;
-                //MpAvSubscriptionPurchaseViewModel.Instance.UnlimitedItem.DoFocusPulse = true;
-                //MpAvAccountViewModel.Instance.ResetAccountCommand.Execute(null);
+                //await Task.Delay(1);
 
 
-                MpDebug.BreakAll();
+                await MpAvClipTrayViewModel.Instance.CopySelectedClipFromShortcutCommand.ExecuteAsync();
+
                 var wl = Mp.Services.ProcessWatcher.AllWindowProcessInfos.ToList();
                 if (wl.FirstOrDefault(x => x.ApplicationName.ToLower().Contains("chrome")) is { } chrome_app) {
                     string icon = Mp.Services.IconBuilder.GetPathIconBase64(chrome_app.ProcessPath);

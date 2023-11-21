@@ -399,7 +399,7 @@ namespace MonkeyPaste.Avalonia {
 
         private List<MpAvConditionalMatch> GetMatches(string compareStr) {
             object compareObj = null;
-            if (compareStr.IsStringRichText()) {
+            if (compareStr.IsStringRtf()) {
                 //compareObj = compareStr.ToFlowDocument();
             } else {
                 compareObj = compareStr;

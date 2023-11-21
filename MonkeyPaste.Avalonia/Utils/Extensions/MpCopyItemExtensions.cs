@@ -150,5 +150,28 @@ namespace MonkeyPaste.Avalonia {
             }
             return string.Empty;
         }
+
+        public static MpCopyItemType ToCopyItemType(this MpDataFormatType dft) {
+            switch (dft) {
+                case MpDataFormatType.PlainText:
+                case MpDataFormatType.Html:
+                case MpDataFormatType.HtmlFragment:
+                case MpDataFormatType.Rtf:
+                case MpDataFormatType.Csv:
+                case MpDataFormatType.DeltaJson:
+                case MpDataFormatType.Rtf2Html:
+                    return MpCopyItemType.Text;
+                case MpDataFormatType.Png:
+                case MpDataFormatType.Tiff:
+                case MpDataFormatType.Jpg:
+                case MpDataFormatType.Gif:
+                case MpDataFormatType.Bmp:
+                    return MpCopyItemType.Image;
+                case MpDataFormatType.FileList:
+                    return MpCopyItemType.FileList;
+                default:
+                    return MpCopyItemType.None;
+            }
+        }
     }
 }

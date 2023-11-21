@@ -24,7 +24,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
-        public static async Task<MpAvDataObject> ReadDataObjectAsync(this IClipboard cb, string[] formatFilter = default, int retryCount = 0) {
+        public static async Task<MpAvDataObject> ToDataObjectAsync(this IClipboard cb, string[] formatFilter = default, int retryCount = 0) {
             var avdo = new MpAvDataObject();
             if (cb == null) {
                 return avdo;
@@ -43,7 +43,7 @@ namespace MonkeyPaste.Common.Avalonia {
         }
 
         public static async Task LogClipboardAsync(this IClipboard cb) {
-            var avdo = await cb.ReadDataObjectAsync();
+            var avdo = await cb.ToDataObjectAsync();
             avdo.LogDataObject();
         }
         public static async Task<string[]> GetFormatsSafeAsync(this IClipboard cb, int retryCount = 0) {

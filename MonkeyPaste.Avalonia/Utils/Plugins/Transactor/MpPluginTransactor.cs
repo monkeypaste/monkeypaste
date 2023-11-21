@@ -103,7 +103,7 @@ namespace MonkeyPaste.Avalonia {
             Func<Task<T>> retryFunc = null) where T : MpPluginResponseFormatBase {
             if (response == null) {
                 //MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, no response from {handler.ToString()}, (ignoring its assigned formats) ");
-                MpConsole.WriteTraceLine($"Clipboard Reader Plugin error, empty response ");
+                MpConsole.WriteTraceLine($"Plugin error, empty response ");
                 return null;
             }
             if (!string.IsNullOrWhiteSpace(response.errorMessage)) {

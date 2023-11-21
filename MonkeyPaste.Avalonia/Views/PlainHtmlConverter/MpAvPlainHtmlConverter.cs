@@ -90,17 +90,13 @@ namespace MonkeyPaste.Avalonia {
 
         public async Task<MpRichHtmlContentConverterResult> ConvertAsync(
             string inputStr,
-            string inputFormatType,
+            //string inputFormatType,
+            MpDataFormatType inputFormatType,
             string verifyText = null,
             MpCsvFormatProperties csvProps = null) {
             string htmlDataStr = inputStr;
             if (htmlDataStr == null) {
                 return null;
-            }
-            if (inputFormatType == "rtf") {
-                // create 'dirty' quill html w/ internal converter and treat as plain for quill to parse
-                htmlDataStr = htmlDataStr.ToRichHtmlText(MpPortableDataFormats.WinRtf);
-                inputFormatType = "rtf2html";
             }
             MpRichHtmlContentConverterResult result;
             if (IsWebViewConverterAvailable) {
@@ -205,19 +201,13 @@ namespace MonkeyPaste.Avalonia {
         }
 
         private async Task<MpRichHtmlContentConverterResult> ConvertWithWebViewAsync(
-            string inputFormatType,
+            MpDataFormatType inputFormatType,
             string htmlDataStr,
             string verifyPlainText,
             MpCsvFormatProperties csvProps = null) {
             if (!IsWebViewConverterAvailable) {
                 MpDebug.Break($"Convert from webview called before available");
                 return ConvertWithFallback(htmlDataStr, verifyPlainText);
-            }
-            if (inputFormatType == "csv") {
-                htmlDataStr = htmlDataStr.CsvStrToRichHtmlTable(csvProps);
-                inputFormatType = "html";
-            } else if (inputFormatType == "text") {
-                htmlDataStr = htmlDataStr.Replace(Environment.NewLine, "\n");
             }
             htmlDataStr = htmlDataStr.ToString().ToBase64String();
 
@@ -228,7 +218,7 @@ namespace MonkeyPaste.Avalonia {
 
             var req = new MpQuillConvertPlainHtmlToQuillHtmlRequestMessage() {
                 data = htmlDataStr,
-                dataFormatType = inputFormatType,
+                dataFormatType = inputFormatType.ToString().ToLower(),
                 verifyText = verifyPlainText,
                 isBase64 = true
             };

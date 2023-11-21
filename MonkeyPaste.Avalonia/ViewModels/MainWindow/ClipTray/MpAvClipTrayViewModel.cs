@@ -4033,9 +4033,9 @@ namespace MonkeyPaste.Avalonia {
                     .ToList();
         }
 
-        public ICommand CopySelectedClipFromShortcutCommand => new MpCommand(
-            () => {
-                SelectedItem.CopyToClipboardCommand.Execute(null);
+        public MpIAsyncCommand CopySelectedClipFromShortcutCommand => new MpAsyncCommand(
+            async () => {
+                await SelectedItem.CopyToClipboardCommand.ExecuteAsync();
             },
             () => {
                 bool canCopy =

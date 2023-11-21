@@ -1,5 +1,4 @@
-﻿#if MAC
-using Avalonia.Platform;
+﻿using Avalonia.Platform;
 using MonoMac.AppKit;
 using MonoMac.CoreGraphics;
 using MonoMac.Foundation;
@@ -11,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvMacHelpers {
@@ -233,6 +233,65 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
 
 
+        #region Rtf
+        public static string RtfToHtml(string rtf) {
+            // from https://stackoverflow.com/a/20925575/105028
+            /*
+            NSTask *task = [[NSTask alloc] init];
+[task setLaunchPath: @"/usr/bin/textutil"];
+[task setArguments: @[@"-format", @"rtf", @"-convert", @"html", @"-stdin", @"-stdout"]];
+[task setStandardInput:[NSPipe pipe]];
+[task setStandardOutput:[NSPipe pipe]];
+NSFileHandle *taskInput = [[task standardInput] fileHandleForWriting];
+[taskInput writeData:[NSData dataWithBytes:cString length:cStringLength]];
+[task launch];
+[taskInput closeFile];
+
+            // sync
+NSData *outData = [[[task standardOutput] fileHandleForReading] readDataToEndOfFile];
+NSString *outStr = [[NSString alloc] initWithData:outData encoding:NSUTF8StringEncoding];
+            */
+            NSData rtf_data = NSData.FromString(rtf);
+            NSTask task = new NSTask();
+            task.LaunchPath = @"/usr/bin/textutil";
+            task.Arguments = new[] { "-format", "rtf", "-convert", "html", "-stdin", "-stdout" };
+            task.StandardInput = new NSPipe();
+            task.StandardOutput = new NSPipe();
+            NSFileHandle taskInput = (task.StandardInput as NSPipe).WriteHandle;
+            taskInput.WriteData(rtf_data);
+            task.Launch();
+            taskInput.CloseFile();
+
+            NSData outData = (task.StandardOutput as NSPipe).ReadHandle.ReadDataToEndOfFile();
+            NSString outStr = NSString.FromData(outData, NSStringEncoding.UTF8);
+            string html = outStr.ToString();
+
+            var pm = new PreMailer.Net.PreMailer(html);
+            var result = pm.MoveCssInline();
+            return result.Html;
+        }
+
+        public static string Html2Rtf(string html) {
+            // from https://stackoverflow.com/a/20925575/105028
+            NSData rtf_data = NSData.FromString(html);
+            NSTask task = new NSTask();
+            task.LaunchPath = @"/usr/bin/textutil";
+            task.Arguments = new[] { "-format", "html", "-convert", "rtf", "-stdin", "-stdout" };
+            task.StandardInput = new NSPipe();
+            task.StandardOutput = new NSPipe();
+            NSFileHandle taskInput = (task.StandardInput as NSPipe).WriteHandle;
+            taskInput.WriteData(rtf_data);
+            task.Launch();
+            taskInput.CloseFile();
+
+            NSData outData = (task.StandardOutput as NSPipe).ReadHandle.ReadDataToEndOfFile();
+            NSString outStr = NSString.FromData(outData, NSStringEncoding.UTF8);
+            string rtf = outStr.ToString();
+
+            return rtf;
+        }
+        #endregion
+
         #region Imports
         const string QuartzCore = @"/System/Library/Frameworks/QuartzCore.framework/QuartzCore";
 
@@ -243,4 +302,3 @@ namespace MonkeyPaste.Common.Avalonia {
         #endregion
     }
 }
-#endif

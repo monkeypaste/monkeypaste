@@ -11,6 +11,7 @@ using PropertyChanged;
 using System;
 using System.IO;
 using System.Linq;
+using WebViewControl;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]

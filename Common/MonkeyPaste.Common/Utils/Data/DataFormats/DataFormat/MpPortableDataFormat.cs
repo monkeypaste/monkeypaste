@@ -21,16 +21,4 @@ namespace MonkeyPaste.Common {
             return $"{Name}";
         }
     }
-
-    public class MpPortableDataFormatConverter : JsonConverter<MpPortableDataFormat> {
-        public override void WriteJson(JsonWriter writer, MpPortableDataFormat value, JsonSerializer serializer) {
-            writer.WriteValue(value.ToString());
-        }
-
-        public override MpPortableDataFormat ReadJson(JsonReader reader, Type objectType, MpPortableDataFormat existingValue, bool hasExistingValue, JsonSerializer serializer) {
-            string s = (string)reader.Value;
-
-            return new MpPortableDataFormat(s, 0);
-        }
-    }
 }

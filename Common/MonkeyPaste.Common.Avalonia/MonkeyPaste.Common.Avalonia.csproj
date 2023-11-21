@@ -50,6 +50,7 @@
     <PackageReference Include="Avalonia" Version="11.0.5" />
     <PackageReference Include="Avalonia.HtmlRenderer" Version="11.0.0" />
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
+    <PackageReference Include="PreMailer.Net" Version="2.4.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
     <PackageReference Include="SharpHook" Version="5.1.1" />
   </ItemGroup>

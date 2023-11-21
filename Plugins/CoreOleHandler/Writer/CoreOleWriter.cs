@@ -49,9 +49,6 @@ namespace CoreOleHandler {
             }
 
             foreach (var write_format in writeFormats) {
-                if (write_format == "UniformResourceLocator") {
-
-                }
                 object data = null;
                 if (needs_pseudo_file && write_format == MpPortableDataFormats.Files) {
                     // called last 
@@ -61,7 +58,14 @@ namespace CoreOleHandler {
                 }
 
                 foreach (var param in request.items) {
-                    data = CoreParamProcessor.ProcessParam(param, write_format, data, writeFormats, out var ex, out var param_nfl);
+                    data = CoreParamProcessor.ProcessParam(
+                        paramInfo: param,
+                        format: write_format,
+                        data: data, writeFormats,
+                        convData: out _,
+                        ex: out var ex,
+                        ntfl: out var param_nfl);
+
                     if (ex != null) {
                         exl.Add(ex);
                     }

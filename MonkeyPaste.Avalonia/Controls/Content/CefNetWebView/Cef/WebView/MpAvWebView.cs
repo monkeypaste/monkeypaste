@@ -43,6 +43,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Statics
+        static MpAvWebView() {
+            //WebView.Settings.OsrEnabled = false;
+        }
         #endregion
 
         #region Interfaces
@@ -205,7 +208,9 @@ namespace MonkeyPaste.Avalonia {
                 HandleBindingNotification(funcType, msg, handle);
             }
 
+#pragma warning disable CS8974 // Converting method group to non-delegate type
             this.RegisterJavascriptObject("SendMessage", SendMessage);
+#pragma warning restore CS8974 // Converting method group to non-delegate type
 #endif
 
         }

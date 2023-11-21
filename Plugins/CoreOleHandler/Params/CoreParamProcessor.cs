@@ -6,38 +6,39 @@ namespace CoreOleHandler {
     public static class CoreParamProcessor {
         public static string CurImageExtVal { get; private set; } = "png";
         public static object ProcessParam(
-            MpParameterRequestItemFormat pkvp,
+            MpParameterRequestItemFormat paramInfo,
             string format,
             object data,
             IEnumerable<string> all_formats,
+            out Dictionary<string, object> convData,
             out Exception ex,
-            out List<MpPluginUserNotificationFormat> nfl) {
+            out List<MpPluginUserNotificationFormat> ntfl) {
+            convData = null;
             ex = null;
-            nfl = null;
-            if (data == null || pkvp == null) {
+            ntfl = null;
+
+            if (data == null || paramInfo == null) {
                 // already omitted
                 return data;
             }
-            string paramVal = pkvp.value;
+            string paramVal = paramInfo.value;
             try {
                 // NOTE by internal convention 'paramId' is an int.
                 // plugin creator has to manage mapping internally
-                CoreOleParamType paramType = pkvp.paramId.ToEnum<CoreOleParamType>();
+                CoreOleParamType paramType = paramInfo.paramId.ToEnum<CoreOleParamType>();
                 switch (format) {
                     case MpPortableDataFormats.Rtf:
                         switch (paramType) {
                             case CoreOleParamType.RICHTEXTFORMAT_R_MAXCHARCOUNT: {
-                                    if (data is byte[] rtf_bytes &&
-                                        rtf_bytes.ToDecodedString() is string rtf) {
+                                    if (data is string rtf) {
                                         int max_length = int.Parse(paramVal);
                                         if (rtf.Length > max_length) {
-                                            nfl = new List<MpPluginUserNotificationFormat>() {
+                                            ntfl = new List<MpPluginUserNotificationFormat>() {
                                             Util.CreateNotification(
                                                 MpPluginNotificationType.PluginResponseWarning,
                                                 "Max Char Count Reached",
                                                 $"{format} limit is '{max_length}' and data was '{rtf.Length}'",
-                                                "CoreClipboardWriter")
-                                        };
+                                                "CoreClipboardWriter")};
                                             data = rtf.Substring(0, max_length);
 
                                             throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{rtf.Length}'");
@@ -49,7 +50,7 @@ namespace CoreOleHandler {
                             case CoreOleParamType.RICHTEXTFORMAT_R_IGNORE:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignoreRtf &&
                                     ignoreRtf) {
-                                    AddIgnoreNotification(ref nfl, format);
+                                    AddIgnoreNotification(ref ntfl, format);
                                     data = null;
 
                                 } else {
@@ -58,17 +59,12 @@ namespace CoreOleHandler {
                                 break;
                             case CoreOleParamType.RICHTEXTFORMAT_R_TOHTML: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT) &&
-                                        data is byte[] rtf_bytes &&
-                                        rtf_bytes.ToDecodedString() is string rtf &&
-                                        rtf.ToRichHtmlText("rtf") is string html &&
-                                        html.ToBytesFromString() is byte[] html_bytes) {
-                                        return
-                                            new object[] {
-                                                data,
-                                                new object[] {
-                                                    MpPortableDataFormats.Xhtml,
-                                                    html_bytes,
-                                                    MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT} };
+                                        data is string rtf &&
+                                        rtf.RtfToHtml() is string html) {
+                                        convData = new() {
+                                            { MpPortableDataFormats.Html, true },
+                                            { MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT, true } };
+                                        return data;
                                     }
                                 }
                                 break;
@@ -77,17 +73,15 @@ namespace CoreOleHandler {
                     case MpPortableDataFormats.Xhtml:
                         switch (paramType) {
                             case CoreOleParamType.HTMLFORMAT_R_MAXCHARCOUNT: {
-                                    if (data is byte[] html_bytes &&
-                                        html_bytes.ToDecodedString() is string html_str) {
+                                    if (data is string html_str) {
                                         int max_length = int.Parse(paramVal);
                                         if (html_str.Length > max_length) {
-                                            nfl = new List<MpPluginUserNotificationFormat>() {
+                                            ntfl = new List<MpPluginUserNotificationFormat>() {
                                             Util.CreateNotification(
                                                 MpPluginNotificationType.PluginResponseWarning,
                                                 "Max Char Count Reached",
                                                 $"{format} limit is '{max_length}' and data was '{html_str.Length}'",
-                                                "CoreClipboardWriter")
-                                        };
+                                                "CoreClipboardWriter")};
                                             data = html_str.Substring(0, max_length);
                                             throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{html_str.Length}'");
                                         }
@@ -98,7 +92,7 @@ namespace CoreOleHandler {
                             case CoreOleParamType.HTMLFORMAT_R_IGNORE:
                                 if (paramVal.ParseOrConvertToBool(false) is bool ignoreRtf &&
                                     ignoreRtf) {
-                                    AddIgnoreNotification(ref nfl, format);
+                                    AddIgnoreNotification(ref ntfl, format);
                                     data = null;
 
                                 } else {
@@ -107,17 +101,54 @@ namespace CoreOleHandler {
                                 break;
                             case CoreOleParamType.HTMLFORMAT_R_TORTF: {
                                     if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT) &&
-                                        data is byte[] html_bytes &&
-                                        html_bytes.ToDecodedString() is string html_str &&
-                                        html_str.ToRtfFromHtmlFragment() is string rtf &&
-                                        rtf.ToBytesFromString() is byte[] rtf_bytes) {
-                                        return
-                                            new object[] {
-                                                data,
-                                                new object[] {
-                                                    MpPortableDataFormats.Rtf,
-                                                    rtf_bytes,
-                                                    MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT} };
+                                        data is string html_str &&
+                                        html_str.ToRtfFromHtmlFragment() is string rtf) {
+                                        convData = new() {
+                                            { MpPortableDataFormats.Rtf, rtf },
+                                            { MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT, true } };
+                                        return data;
+                                    }
+                                }
+                                break;
+                        }
+                        break;
+                    case MpPortableDataFormats.Html:
+                        switch (paramType) {
+                            case CoreOleParamType.TEXTHTML_R_MAXCHARCOUNT: {
+                                    if (data is string html_str) {
+                                        int max_length = int.Parse(paramVal);
+                                        if (html_str.Length > max_length) {
+                                            ntfl = new List<MpPluginUserNotificationFormat>() {
+                                            Util.CreateNotification(
+                                                MpPluginNotificationType.PluginResponseWarning,
+                                                "Max Char Count Reached",
+                                                $"{format} limit is '{max_length}' and data was '{html_str.Length}'",
+                                                "CoreClipboardWriter")};
+                                            data = html_str.Substring(0, max_length);
+                                            throw new CoreOleMaxLengthException($"Text limit is '{max_length}' and data was '{html_str.Length}'");
+                                        }
+                                    }
+                                }
+
+                                break;
+                            case CoreOleParamType.TEXTHTML_R_IGNORE:
+                                if (paramVal.ParseOrConvertToBool(false) is bool ignoreRtf &&
+                                    ignoreRtf) {
+                                    AddIgnoreNotification(ref ntfl, format);
+                                    data = null;
+
+                                } else {
+                                    return data;
+                                }
+                                break;
+                            case CoreOleParamType.TEXTHTML_R_TORTF: {
+                                    if (!all_formats.Contains(MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT) &&
+                                        data is string html_str &&
+                                        html_str.HtmlToRtf() is string rtf) {
+                                        convData = new() {
+                                            { MpPortableDataFormats.Rtf, rtf },
+                                            { MpPortableDataFormats.INTERNAL_HTML_TO_RTF_FORMAT, true } };
+                                        return data;
                                     }
                                 }
                                 break;
@@ -129,7 +160,7 @@ namespace CoreOleHandler {
                                     if (data is string text) {
                                         int max_length = int.Parse(paramVal);
                                         if (text.Length > max_length) {
-                                            nfl = new List<MpPluginUserNotificationFormat>() {
+                                            ntfl = new List<MpPluginUserNotificationFormat>() {
                                             Util.CreateNotification(
                                                 MpPluginNotificationType.PluginResponseWarning,
                                                     "Max Char Count Reached",
@@ -147,7 +178,7 @@ namespace CoreOleHandler {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignText &&
                                     ignText) {
                                         data = null;
-                                        AddIgnoreNotification(ref nfl, format);
+                                        AddIgnoreNotification(ref ntfl, format);
 
                                     } else {
                                         //nfl = new List<MpPluginUserNotificationFormat>() {
@@ -166,7 +197,7 @@ namespace CoreOleHandler {
                                     if (data is string text) {
                                         int max_length = paramVal.ParseOrConvertToInt(int.MaxValue);
                                         if (text.Length > max_length) {
-                                            nfl = new List<MpPluginUserNotificationFormat>() {
+                                            ntfl = new List<MpPluginUserNotificationFormat>() {
                                             Util.CreateNotification(
                                                 MpPluginNotificationType.PluginResponseWarning,
                                                 "Max Char Count Reached",
@@ -191,7 +222,6 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
-
                     case MpPortableDataFormats.MimeText:
                         // BUG somehow text/plain is getting converted to bytes
                         // when setting clipboard (like editor clipboard copy)
@@ -205,7 +235,7 @@ namespace CoreOleHandler {
                                     if (data is string text) {
                                         int max_length = int.Parse(paramVal);
                                         if (text.Length > max_length) {
-                                            nfl = new List<MpPluginUserNotificationFormat>() {
+                                            ntfl = new List<MpPluginUserNotificationFormat>() {
                                             Util.CreateNotification(
                                                 MpPluginNotificationType.PluginResponseWarning,
                                                 "Max Char Count Reached",
@@ -224,7 +254,7 @@ namespace CoreOleHandler {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignText &&
                                     ignText) {
                                         data = null;
-                                        AddIgnoreNotification(ref nfl, format);
+                                        AddIgnoreNotification(ref ntfl, format);
 
                                     } else {
                                         return data;
@@ -236,7 +266,7 @@ namespace CoreOleHandler {
                                     if (data is string text) {
                                         int max_length = paramVal.ParseOrConvertToInt(int.MaxValue);
                                         if (text.Length > max_length) {
-                                            nfl = new List<MpPluginUserNotificationFormat>() {
+                                            ntfl = new List<MpPluginUserNotificationFormat>() {
                                             Util.CreateNotification(
                                                 MpPluginNotificationType.PluginResponseWarning,
                                                 "Max Char Count Reached",
@@ -268,7 +298,7 @@ namespace CoreOleHandler {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignImg &&
                                     ignImg) {
                                         data = null;
-                                        AddIgnoreNotification(ref nfl, format);
+                                        AddIgnoreNotification(ref ntfl, format);
                                     }
                                 }
 
@@ -292,14 +322,13 @@ namespace CoreOleHandler {
                                 break;
                         }
                         break;
-
                     case MpPortableDataFormats.Files:
                         switch (paramType) {
                             case CoreOleParamType.FILES_R_IGNORE: {
                                     if (paramVal.ParseOrConvertToBool(false) is bool ignore_fd &&
                                         ignore_fd) {
                                         data = null;
-                                        AddIgnoreNotification(ref nfl, format);
+                                        AddIgnoreNotification(ref ntfl, format);
                                     }
                                 }
 
@@ -307,7 +336,8 @@ namespace CoreOleHandler {
                             case CoreOleParamType.FILES_R_IGNOREEXTS: {
                                     if (!string.IsNullOrWhiteSpace(paramVal) &&
                                     paramVal.ToListFromCsv(MpCsvFormatProperties.DefaultBase64Value) is List<string> iel &&
-                                    data is IEnumerable<string> fpl) {
+                                    data is string dataStr &&
+                                    dataStr.SplitByLineBreak() is IEnumerable<string> fpl) {
                                         var files_to_ignore = fpl.Where(x => iel.Any(y => x.ToLower().EndsWith(y.ToLower())));
                                         MpConsole.WriteLine($"Clipboard or drag File rejected by extension: {string.Join(Environment.NewLine, files_to_ignore)}");
                                         // null ignored exts

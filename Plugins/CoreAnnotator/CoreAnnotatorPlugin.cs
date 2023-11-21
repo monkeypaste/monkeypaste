@@ -30,15 +30,13 @@ namespace CoreAnnotator {
             MpQuillDelta delta = DeltaAnnotator.Annotate(content_pt, formats);
             MpConsole.WriteLine($"annotation Count: {delta.ops.Count} types: {string.Join(",", delta.ops.Select(x => x.attributes.linkType))}");
 
+            resp.dataObjectLookup = new Dictionary<string, object>();
             if (delta.ops.Count > 0) {
                 // content was annotated, return it as dataobjectitem
-                resp.dataObjectLookup = new Dictionary<string, object>() {
-                    { MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, delta.SerializeJsonObject() }
-                };
-                return resp;
-            }
+                resp.dataObjectLookup.Add(MpPortableDataFormats.INTERNAL_CONTENT_DELTA_FORMAT, delta.SerializeJsonObject());
 
-            return null;
+            }
+            return resp;
         }
     }
 }

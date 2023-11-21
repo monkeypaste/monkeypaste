@@ -2412,7 +2412,7 @@ namespace MonkeyPaste.Avalonia {
                 CopyItem.WriteToDatabaseAsync().FireAndForgetSafeAsync(this);
             });
 
-        public ICommand CopyToClipboardCommand => new MpAsyncCommand(
+        public MpIAsyncCommand CopyToClipboardCommand => new MpAsyncCommand(
             async () => {
                 if (IsTitleFocused) {
                     return;

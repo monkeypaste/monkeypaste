@@ -3,6 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace MonkeyPaste.Common {
+    public enum MpDataFormatType {
+        None = 0,
+        PlainText,
+        Html,
+        HtmlFragment,
+        DeltaJson,
+        Rtf2Html,
+        Rtf,
+        Rtfd,
+        Csv,
+        Png,
+        Tiff,
+        Jpg,
+        Gif,
+        Bmp,
+        FileList
+    }
+
+
     public static class MpPortableDataFormats {
         #region Private Variables
 
