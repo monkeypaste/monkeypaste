@@ -1,5 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using MonkeyPaste.Common;
 using PropertyChanged;
 using System.Linq;
 
@@ -11,7 +13,7 @@ namespace MonkeyPaste.Avalonia {
         Error
     }
     [DoNotNotify]
-    public partial class MpAvToolTipInfoHintView : MpAvUserControl<object> {
+    public partial class MpAvToolTipInfoHintView : UserControl {
         #region ToolTipText Direct Avalonia Property
 
         private string _ToolTipText = default;
@@ -21,8 +23,7 @@ namespace MonkeyPaste.Avalonia {
             (
                 nameof(ToolTipText),
                 o => o.ToolTipText,
-                (o, v) => o.ToolTipText = v
-            );
+                (o, v) => o.ToolTipText = v);
 
         public string ToolTipText {
             get => _ToolTipText;
@@ -57,10 +58,10 @@ namespace MonkeyPaste.Avalonia {
         public MpAvToolTipInfoHintView() {
             InitializeComponent();
             this.Classes.CollectionChanged += Classes_CollectionChanged;
-            this.AttachedToVisualTree += MpAvToolTipInfoHintView_AttachedToVisualTree;
+            this.Loaded += MpAvToolTipInfoHintView_Loaded;
         }
 
-        private void MpAvToolTipInfoHintView_AttachedToVisualTree(object sender, VisualTreeAttachmentEventArgs e) {
+        private void MpAvToolTipInfoHintView_Loaded(object sender, global::Avalonia.Interactivity.RoutedEventArgs e) {
             Init();
         }
 
@@ -80,9 +81,28 @@ namespace MonkeyPaste.Avalonia {
                 ToolTipText = ToolTipText.Replace("#error#", string.Empty);
                 this.Classes.Add("error");
             }
-            if (ToolTip.GetTip(this) is ToolTip tt) {
-                tt.Classes.AddRange(this.Classes.Where(x => x == "warning" || x == "info" || x == "error"));
+            if (ToolTip.GetTip(this) is not MpAvToolTipView ttv) {
+                return;
             }
+            ttv.ToolTipText = ToolTipText;
+            ttv.ToolTipHtml = ToolTipHtml;
+            ttv.Classes.AddRange(this.Classes.Where(x => x == "warning" || x == "info" || x == "error"));
+        }
+
+        protected override void OnPointerEntered(PointerEventArgs e) {
+            base.OnPointerEntered(e);
+
+            if (ToolTip.GetTip(this) is not MpAvToolTipView ttv) {
+                return;
+            }
+            ttv.ToolTipText = ToolTipText;
+            ttv.ToolTipHtml = ToolTipHtml;
+            ToolTip.SetIsOpen(this, true);
+        }
+        protected override void OnPointerExited(PointerEventArgs e) {
+            base.OnPointerExited(e);
+
+            ToolTip.SetIsOpen(this, false);
         }
     }
 }

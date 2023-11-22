@@ -28,18 +28,6 @@ namespace MonkeyPaste.Avalonia {
         private static string[] _InputMatchers = new string[] {
             @"</a>"
         };
-        static MpAvToolTipView() {
-            //ToolTipTextProperty.Changed.AddClassHandler<Control>((s, e) => {
-            //    if (s is MpAvToolTipView ttv) {
-            //        ttv.Init();
-            //    }
-            //});
-            //ToolTipHtmlProperty.Changed.AddClassHandler<Control>((s, e) => {
-            //    if (s is MpAvToolTipView ttv) {
-            //        ttv.Init();
-            //    }
-            //});
-        }
 
         #endregion
 

@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
                 return text.RichHtmlToCsv();
             }
 #if WINDOWS
-            if (text.IsStringRichText()) {
+            if (text.IsStringRtf()) {
                 return MpWpfStringExtensions.RtfTableToCsv(text);
             }
 #endif

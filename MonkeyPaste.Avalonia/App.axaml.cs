@@ -11,7 +11,6 @@ using PropertyChanged;
 using System;
 using System.IO;
 using System.Linq;
-using WebViewControl;
 
 namespace MonkeyPaste.Avalonia {
     [DoNotNotify]
@@ -96,9 +95,9 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Events
-#if CEF_WV
+#if CEFNET_WV
         public static event EventHandler FrameworkInitialized;
-        public static event EventHandler FrameworkShutdown; 
+        public static event EventHandler FrameworkShutdown;
 #endif
         #endregion
 
@@ -128,9 +127,9 @@ namespace MonkeyPaste.Avalonia {
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-#if CEF_WV
+#if CEFNET_WV
                 desktop.Startup += Startup;
-                desktop.Exit += Exit; 
+                desktop.Exit += Exit;
 #endif
                 desktop.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
@@ -163,7 +162,7 @@ namespace MonkeyPaste.Avalonia {
             base.OnFrameworkInitializationCompleted();
 
 #if DEBUG && DESKTOP
-            this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
+            //this.AttachDevTools(MpAvWindow.DefaultDevToolOptions);
 #endif
         }
 
@@ -178,14 +177,14 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
 
-#if CEF_WV
+#if CEFNET_WV
         private void Startup(object sender, ControlledApplicationLifetimeStartupEventArgs e) {
             FrameworkInitialized?.Invoke(this, EventArgs.Empty);
         }
 
         private void Exit(object sender, ControlledApplicationLifetimeExitEventArgs e) {
             FrameworkShutdown?.Invoke(this, EventArgs.Empty);
-        } 
+        }
 #endif
 
         private void ReportCommandLineArgs(string[] args) {

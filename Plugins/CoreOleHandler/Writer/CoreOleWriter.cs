@@ -234,7 +234,7 @@ namespace CoreOleHandler {
 
         private void PostProcessImage(IDataObject ido) {
 #if WINDOWS
-            if (ido.TryGetData(MpPortableDataFormats.AvPNG, out byte[] pngBytes)) {
+            if (ido.TryGetData(MpPortableDataFormats.Image, out byte[] pngBytes)) {
                 object dib = MonkeyPaste.Common.Wpf.MpWpfClipoardImageHelper.GetWpfDib(pngBytes);
                 ido.Set(MpPortableDataFormats.WinDib, dib);
 

@@ -664,6 +664,7 @@ namespace MonkeyPaste.Avalonia {
                 OnPropertyChanged(nameof(LastSelectedActiveItem));
                 OnPropertyChanged(nameof(SelectedItem));
                 OnPropertyChanged(nameof(SelectedPinnedItem));
+                OnPropertyChanged(nameof(IsAnyTagActive));
 
                 if (SelectedItem != null) {
                     SelectedItem.AllAncestors.ForEach(x => x.IsExpanded = true);

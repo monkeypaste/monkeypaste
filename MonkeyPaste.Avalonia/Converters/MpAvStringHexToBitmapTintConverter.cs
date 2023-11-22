@@ -70,23 +70,33 @@ namespace MonkeyPaste.Avalonia {
                     if (trk == MpThemeResourceKey.ThemeInteractiveColor &&
                         value.ToStringOrEmpty() is string valueStr) {
                         // when image
-                        int max = MpSystemColors.ContentColors.Count - 1;
+                        // NOTE only using top row w/o last column
+                        int max = MpSystemColors.COLOR_PALETTE_COLS - 2;
                         int randColorSeed = valueStr.Length;
                         if (valueStr.IsStringImageResourceKey() &&
                             Mp.Services.PlatformResource.GetResource<string>(valueStr) is string res_path) {
                             // when value is key add its resource path's length to vary color more
                             randColorSeed += res_path.Length;
                         }
-                        int len = randColorSeed;
-                        int rand_idx = (int)((double)len).Wrap(0, max);
-                        if (rand_idx % (MpSystemColors.COLOR_PALETTE_COLS - 1) == 0) {
-                            // if rand color is last column (gray scale) bump it 
-                            rand_idx = rand_idx + 1;
-                            if (rand_idx > max) {
-                                rand_idx = 0;
-                            }
-                        }
-                        //MpConsole.WriteLine($"Seed: '{randColorSeed}' Idx: {rand_idx}");
+                        int rand_idx = (randColorSeed % max) * MpSystemColors.COLOR_PALETTE_ROWS;
+
+                        //int max = MpSystemColors.ContentColors.Count - 1;
+                        //int randColorSeed = valueStr.Length;
+                        //if (valueStr.IsStringImageResourceKey() &&
+                        //    Mp.Services.PlatformResource.GetResource<string>(valueStr) is string res_path) {
+                        //    // when value is key add its resource path's length to vary color more
+                        //    randColorSeed += res_path.Length;
+                        //}
+                        //int len = randColorSeed;
+                        //int rand_idx = (int)((double)len).Wrap(0, max);
+                        //if (rand_idx % (MpSystemColors.COLOR_PALETTE_COLS - 1) == 0) {
+                        //    // if rand color is last column (gray scale) bump it 
+                        //    rand_idx = rand_idx + 1;
+                        //    if (rand_idx > max) {
+                        //        rand_idx = 0;
+                        //    }
+                        //}
+                        ////MpConsole.WriteLine($"Seed: '{randColorSeed}' Idx: {rand_idx}");
                         hex = MpSystemColors.ContentColors[rand_idx].RemoveHexAlpha();
                     } else if (trk == MpThemeResourceKey.ThemeInteractiveColor_norand) {
                         // only used by cap overlay currently

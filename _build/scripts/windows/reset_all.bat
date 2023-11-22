@@ -1,4 +1,10 @@
 taskkill /f /im "MonkeyPaste.Avalonia.Desktop.exe"
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\CoreOleHandler\obj\"
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\CoreOleHandler\bin\"
+
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\CoreAnnotator\obj\"
+rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Plugins\CoreAnnotator\bin\"
+
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Common\MonkeyPaste.Common\obj\"
 rmdir /S /Q "C:\Users\tkefauver\Source\Repos\MonkeyPaste\Common\MonkeyPaste.Common\bin\"
 

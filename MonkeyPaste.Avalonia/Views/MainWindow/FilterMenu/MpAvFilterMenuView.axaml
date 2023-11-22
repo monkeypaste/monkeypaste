@@ -20,7 +20,9 @@
               Background="{StaticResource MainWindowBgBrush}">
 
             <!--  Content Sort View  -->
+
             <local:MpAvClipTileSortView x:Name="SortView"
+                                        Opacity="{Binding IsAnyTagActive, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                                         DockPanel.Dock="Left"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
@@ -28,22 +30,18 @@
                                         local:MpAvSizeObserverExtension.IsEnabled="True"
                                         local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedSortViewWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}" />
 
+            <!--  Tag Tray View  -->
 
-            <!--
-                Tag Tray View
-                
-                IsVisible="{Binding IsHorizontalOrientation, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
-            -->
             <local:MpAvTagTrayView x:Name="TagTrayView"
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    local:MpAvSizeObserverExtension.IsEnabled="True"
                                    local:MpAvSizeObserverExtension.ObservedWidth="{Binding ObservedTagTrayWidth, Source={x:Static local:MpAvFilterMenuViewModel.Instance}, Mode=TwoWay}" />
 
-            <!--</mech:ToolBarTray>-->
             <!--  SearchBox View  -->
 
             <local:MpAvSearchBoxView x:Name="SearchBoxView"
+                                     Opacity="{Binding IsAnyTagActive, ConverterParameter=1|0, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}, Source={x:Static local:MpAvTagTrayViewModel.Instance}}"
                                      DockPanel.Dock="Right"
                                      VerticalAlignment="Stretch"
                                      HorizontalAlignment="Right"

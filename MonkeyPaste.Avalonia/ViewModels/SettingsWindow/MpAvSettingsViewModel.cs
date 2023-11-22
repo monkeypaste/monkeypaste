@@ -1277,7 +1277,7 @@ namespace MonkeyPaste.Avalonia {
                     Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("LoginImage", typeof(WindowIcon), null, null) as WindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
-                    Content = MpAvSettingsView.Instance,
+                    Content = new MpAvSettingsView()
                 };
             } else {
                 sw = new MpAvWindow() {
@@ -1288,7 +1288,7 @@ namespace MonkeyPaste.Avalonia {
                     Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("CogColorImage", typeof(WindowIcon), null, null) as WindowIcon,
                     WindowStartupLocation = WindowStartupLocation.CenterScreen,
                     DataContext = this,
-                    Content = MpAvSettingsView.Instance,
+                    Content = new MpAvSettingsView()
                 };
                 sw.Classes.Add("fadeIn");
             }
@@ -1604,10 +1604,6 @@ namespace MonkeyPaste.Avalonia {
                     GetParamAndFrameViewModelsByParamId(focus_param_id)
                     is not Tuple<MpAvSettingsFrameViewModel, MpAvParameterViewModelBase> focus_tuple) {
                     SelectedTabIdx = tab_idx;
-                    if (MpAvSettingsView.Instance.BodyScrollViewer is { } bsv) {
-                        // BUG pref tab keeps scrolling to middlish area on tab select
-                        bsv.ScrollToHome();
-                    }
                     return;
                 }
 

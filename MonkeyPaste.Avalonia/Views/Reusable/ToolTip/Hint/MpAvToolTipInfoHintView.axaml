@@ -1,4 +1,4 @@
-<local:MpAvUserControl xmlns="https://github.com/avaloniaui"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,7 +11,7 @@
              x:Class="MonkeyPaste.Avalonia.MpAvToolTipInfoHintView"
              Background="Transparent"
              IsVisible="{Binding ShowHints, Source={x:Static local:MpAvPrefViewModel.Instance}}">
-    <local:MpAvUserControl.Styles>
+    <UserControl.Styles>
         <Style Selector="Ellipse.hint">
             <Setter Property="HorizontalAlignment"
                     Value="Stretch" />
@@ -37,7 +37,7 @@
             <Setter Property="Foreground"
                     Value="White" />
         </Style>
-    </local:MpAvUserControl.Styles>
+    </UserControl.Styles>
     <ToolTip.Tip>
         <local:MpAvToolTipView ToolTipText="{Binding ToolTipText, ElementName=InfoHintView}"
                                ToolTipHtml="{Binding ToolTipHtml, ElementName=InfoHintView}" />
@@ -64,4 +64,4 @@
         <TextBlock Classes="error hint"
                    Text="x" />
     </Grid>
-</local:MpAvUserControl>
+</UserControl>

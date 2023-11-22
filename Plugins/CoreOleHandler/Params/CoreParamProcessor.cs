@@ -62,7 +62,7 @@ namespace CoreOleHandler {
                                         data is string rtf &&
                                         rtf.RtfToHtml() is string html) {
                                         convData = new() {
-                                            { MpPortableDataFormats.Html, true },
+                                            { MpPortableDataFormats.Html, html },
                                             { MpPortableDataFormats.INTERNAL_RTF_TO_HTML_FORMAT, true } };
                                         return data;
                                     }

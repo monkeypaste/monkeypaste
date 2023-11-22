@@ -19,7 +19,7 @@ namespace MonkeyPaste.Common.Wpf {
             if (string.IsNullOrEmpty(text)) {
                 return 0;
             }
-            if (text.IsStringRichText()) {
+            if (text.IsStringRtf()) {
                 int nlCount = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Length - 1;
                 int parCount = text.Split(new string[] { @"\par" }, StringSplitOptions.RemoveEmptyEntries).Length - 1;
                 if (nlCount + parCount == 0) {

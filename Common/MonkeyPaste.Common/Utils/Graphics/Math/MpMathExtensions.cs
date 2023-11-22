@@ -37,5 +37,6 @@ namespace MonkeyPaste.Common {
             }
             return val;
         }
+
     }
 }

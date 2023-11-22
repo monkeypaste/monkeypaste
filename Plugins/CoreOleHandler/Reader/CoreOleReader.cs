@@ -44,7 +44,7 @@ namespace CoreOleHandler {
             if (request.dataObjectLookup == null) {
                 // clipboard read
                 //await Util.WaitForClipboard();
-                avdo = await CoreOleHelpers.ClipboardRef.ToDataObjectAsync();
+                avdo = await CoreOleHelpers.ClipboardRef.ToDataObjectAsync(formatFilter: request.formats.ToArray());
                 availableFormats = avdo.GetAllDataFormats();
                 //Util.CloseClipboard();
             } else {
@@ -70,7 +70,7 @@ namespace CoreOleHandler {
 
             List<MpPluginUserNotificationFormat> nfl = new List<MpPluginUserNotificationFormat>();
             List<Exception> exl = new List<Exception>();
-            Dictionary<string, object> conversion_results = null;
+            Dictionary<string, object> conversion_results = new();
             var read_output = new MpAvDataObject();
             var readFormats = request.formats.Where(x => availableFormats.Contains(x));
 

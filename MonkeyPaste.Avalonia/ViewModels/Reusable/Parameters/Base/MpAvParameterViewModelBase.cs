@@ -523,6 +523,7 @@ namespace MonkeyPaste.Avalonia {
 
             OnPropertyChanged(nameof(CurrentValue));
             OnPropertyChanged(nameof(IsExecuteParameter));
+            OnPropertyChanged(nameof(Description));
 
             OnValidate += MpAnalyticItemParameterViewModel_OnValidate;
 

@@ -58,8 +58,8 @@ namespace MonkeyPaste.Common.Avalonia {
                 return str;
             }
 
-#if WINDOWs
-            string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter2.ConvertFormatToHtml(str, strFormat);
+#if WINDOWS
+            string qhtml = MonkeyPaste.Common.Wpf.MpWpfRtfToHtmlConverter2.ConvertFormatToHtml(str);
             return qhtml;
 #elif MAC
             string qhtml = MpAvMacHelpers.RtfToHtml(str);

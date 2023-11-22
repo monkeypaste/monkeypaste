@@ -21,8 +21,9 @@ namespace MonkeyPaste.Common.Avalonia {
                 if (data is not byte[] bytes) {
                     continue;
                 }
+#if MAC
                 if (af == MpPortableDataFormats.Image ||
-                        af == MpPortableDataFormats.Image2) {
+                                af == MpPortableDataFormats.Image2) {
                     var bmp = bytes.ToAvBitmap();
                     data = bmp.ToBase64String();
                 } else if (af == MpPortableDataFormats.MacUrl2) {
@@ -50,7 +51,8 @@ namespace MonkeyPaste.Common.Avalonia {
                     MpConsole.WriteLine(html);
                 } else {
                     data = bytes.ToDecodedString();
-                }
+                } 
+#endif
                 MpConsole.WriteLine("Format Data:");
                 MpConsole.WriteLine(data.ToString());
             }
@@ -266,13 +268,13 @@ namespace MonkeyPaste.Common.Avalonia {
                     } else {
                         // text bytes -> string
 #if WINDOWS
-                        if(format == MpPortableDataFormats.Xhtml) {
+                        if (format == MpPortableDataFormats.Xhtml) {
                             var detected_encoding = bytes.DetectTextEncoding(out string detected_text);
                             bytes = Encoding.UTF8.GetBytes(detected_text);
                             if (detected_text.Contains("Â")) {
                                 MpDebug.Break();
                             }
-                         }
+                        }
 #endif
                         typed_data = bytes.ToDecodedString() as T;
 
@@ -280,6 +282,9 @@ namespace MonkeyPaste.Common.Avalonia {
                 } else if (dataObj is IEnumerable<string> strings) {
                     // string list -> string
                     typed_data = string.Join(Environment.NewLine, strings) as T;
+                } else if (dataObj is IEnumerable<IStorageItem> sil) {
+                    // si[] -> string
+                    typed_data = string.Join(Environment.NewLine, sil.Select(x => x.TryGetLocalPath())) as T;
                 }
             } else if (typeof(T) == typeof(byte[])) {
                 // wants bytes

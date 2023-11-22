@@ -222,6 +222,10 @@ namespace MonkeyPaste.Avalonia {
         }
         private string GetItemDataByPriority(MpAvDataObject avdo, out MpDataFormatType inputFormatType) {
             inputFormatType = MpDataFormatType.None;
+            if (!_CommonDataFormatsByPriority.Any(x => avdo.ContainsData(x))) {
+                // no content formats
+                return null;
+            }
 
             string max_format =
                 avdo

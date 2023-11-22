@@ -44,7 +44,9 @@ namespace MonkeyPaste.Avalonia {
 
         #region Statics
         static MpAvWebView() {
-            //WebView.Settings.OsrEnabled = false;
+#if OUTSYS_WV
+            WebView.Settings.OsrEnabled = true; 
+#endif
         }
         #endregion
 

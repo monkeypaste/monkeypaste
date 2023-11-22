@@ -125,8 +125,8 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static bool IsPathExecutableUnderAppBundle(string path) {
             if (!string.IsNullOrEmpty(path) &&
-                path.StartsWith(@"/Applications") &&
-                path.Contains(".app") &&
+                //path.StartsWith(@"/Applications") &&
+                path.Contains(@".app/") &&
                 string.IsNullOrEmpty(Path.GetExtension(path))) {
                 return true;
             }

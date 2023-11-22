@@ -37,8 +37,12 @@ namespace MonkeyPaste.Avalonia {
 #endif
                 //App.Args = args ?? new string[] { };
                 BuildAvaloniaApp()
-                //.StartWithCefNetApplicationLifetime(App.Args);
-                    .StartWithClassicDesktopLifetime(args);
+#if CEFNET_WV
+        .StartWithCefNetApplicationLifetime(App.Args);
+#else
+        .StartWithClassicDesktopLifetime(args);
+#endif
+                // 
             }
             catch (Exception ex) {
                 top_level_ex = ex;

@@ -38,7 +38,7 @@
         <!--  UNPIN ALL/BUSY BUTTON  -->
         <Style Selector="Button#UnpinAllButton Image">
             <Setter Property="Source"
-                    Value="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
+                    Value="{Binding Source={StaticResource ClearGridImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor_norand}" />
         </Style>
 
         <Style Selector="Button#UnpinAllButton:pointerover Image">

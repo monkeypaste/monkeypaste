@@ -928,7 +928,6 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvContentWebView() : base() {
-
             //#if CEFNET_WV
             //            InitialUrl = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
             //#else

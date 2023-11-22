@@ -69,14 +69,14 @@
                 <Button x:DataType="local:MpAvMenuItemViewModel"
                         EffectiveViewportChanged="Btn_EffectiveViewportChanged"
                         Classes="noBg noHoverBg noBorder"
-                        local:MpAvIsHoveringExtension.IsEnabled="True"
-                        local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                         Background="Transparent"
                         BorderThickness="0"
                         Command="{Binding Command}"
                         CommandParameter="{Binding CommandParameter}">
                     <Border Background="{Binding Header, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
                             BorderBrush="{Binding IconBorderHexColor, Converter={x:Static local:MpAvStringHexToBrushConverter.Instance}}"
+                            local:MpAvIsHoveringExtension.IsEnabled="True"
+                            local:MpAvIsHoveringExtension.IsHovering="{Binding IsHovering, Mode=TwoWay}"
                             BorderThickness="1"
                             CornerRadius="2">
                         <!--<ToolTip.Tip>
