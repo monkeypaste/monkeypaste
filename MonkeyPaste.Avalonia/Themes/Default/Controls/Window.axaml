@@ -7,6 +7,8 @@
     <Style Selector=":is(Window).resizable">
         <Setter Property="CanResize"
                 Value="True" />
+        <Setter Property="ExtendClientAreaToDecorationsHint"
+                Value="True" />
 
     </Style>
 

@@ -9,6 +9,7 @@
      <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
     <TargetFramework>$(MainTargetFramework)</TargetFramework>
     <Platforms>$(DefaultPlatforms)</Platforms>
+     <RuntimeIdentifiers>$(TargetRuntimeIdentifiers)</RuntimeIdentifiers>
      <!--<AvaloniaNameGeneratorIsEnabled>true</AvaloniaNameGeneratorIsEnabled>-->
     <!--<BuiltInComInteropSupport>true</BuiltInComInteropSupport>-->
      <!--<UseMauiEssentials>true</UseMauiEssentials>-->

@@ -190,13 +190,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Private Methods
         private void Init() {
-            this.GetObservable(Control.IsVisibleProperty).Subscribe(value => {
-                if (IsVisible) {
-
-                } else {
-
-                }
-            });
 #if DEBUG
             this.AttachDevTools(DefaultDevToolOptions);
 #endif

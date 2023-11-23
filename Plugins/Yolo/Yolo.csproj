@@ -16,6 +16,20 @@
   </Target>
   
   <ItemGroup>
+    <None Remove="Assets\Weights\yolov5n6.onnx" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Weights\yolov5n.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Assets\Weights\yolov5n6.onnx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="Yolov5Net" Version="1.0.9" />
   </ItemGroup>
   

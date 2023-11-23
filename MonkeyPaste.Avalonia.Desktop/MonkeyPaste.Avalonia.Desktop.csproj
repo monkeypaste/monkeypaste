@@ -7,6 +7,7 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <Platforms>$(DefaultPlatforms)</Platforms>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+    <RuntimeIdentifiers>$(TargetRuntimeIdentifiers)</RuntimeIdentifiers>
   </PropertyGroup>
 
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">

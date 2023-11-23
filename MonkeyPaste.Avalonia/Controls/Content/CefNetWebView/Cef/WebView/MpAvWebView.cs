@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Threading;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
 using PropertyChanged;
@@ -14,6 +15,7 @@ using CefNet.Avalonia;
 using CefNet.Internal;
 #elif OUTSYS_WV
 using WebViewControl;
+using Xilium.CefGlue;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -45,7 +47,8 @@ namespace MonkeyPaste.Avalonia {
         #region Statics
         static MpAvWebView() {
 #if OUTSYS_WV
-            WebView.Settings.OsrEnabled = true; 
+            WebView.Settings.OsrEnabled = true;
+
 #endif
         }
         #endregion
@@ -203,11 +206,14 @@ namespace MonkeyPaste.Avalonia {
 
 
             void SendMessage(string fn, string msg, string handle) {
-                //var resp = MpJsonConverter.DeserializeBase64Object<MpQuillPostMessageResponse>(msg);
-                //MpEditorBindingFunctionType funcType = resp.msgType.ToEnum<MpEditorBindingFunctionType>();
-                //HandleBindingNotification(funcType, resp.msgData, resp.handle);
-                MpEditorBindingFunctionType funcType = fn.ToEnum<MpEditorBindingFunctionType>();
-                HandleBindingNotification(funcType, msg, handle);
+                Dispatcher.UIThread.Post(() => {
+
+                    //var resp = MpJsonConverter.DeserializeBase64Object<MpQuillPostMessageResponse>(msg);
+                    //MpEditorBindingFunctionType funcType = resp.msgType.ToEnum<MpEditorBindingFunctionType>();
+                    //HandleBindingNotification(funcType, resp.msgData, resp.handle);
+                    MpEditorBindingFunctionType funcType = fn.ToEnum<MpEditorBindingFunctionType>();
+                    HandleBindingNotification(funcType, msg, handle);
+                });
             }
 
 #pragma warning disable CS8974 // Converting method group to non-delegate type
