@@ -72,7 +72,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
 
         public static string ToRichHtmlImage(this Bitmap bmp) {
-            string qhtml = string.Format(@"<p><img src='data:image/png;base64,{0}'></p>", bmp.ToBase64String());
+            string qhtml = $"<p><img src='{bmp.ToBase64String().ToBase64ImageUrl()}'></p>";
             return qhtml;
         }
 

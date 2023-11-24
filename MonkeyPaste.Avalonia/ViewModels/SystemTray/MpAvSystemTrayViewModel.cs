@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using MonkeyPaste.Common;
@@ -172,6 +173,18 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             Header = "Test Command 2",
                             Command = GenericTestCommand2,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Test Command 3",
+                            Command = GenericTestCommand3,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Test Command 4",
+                            Command = GenericTestCommand4,
+                        },
+                        new MpAvMenuItemViewModel() {
+                            Header = "Test Command 5",
+                            Command = GenericTestCommand5,
                         },
                         //new MpMenuItemViewModel() {
                         //    Header = "Show Notifier DevTools",
@@ -358,15 +371,32 @@ namespace MonkeyPaste.Avalonia {
             async () => {
                 //await Task.Delay(1);
 
-
-                await MpAvClipTrayViewModel.Instance.CopySelectedClipFromShortcutCommand.ExecuteAsync();
-
                 var wl = Mp.Services.ProcessWatcher.AllWindowProcessInfos.ToList();
                 if (wl.FirstOrDefault(x => x.ApplicationName.ToLower().Contains("chrome")) is { } chrome_app) {
                     string icon = Mp.Services.IconBuilder.GetPathIconBase64(chrome_app.ProcessPath);
                     MpFileIo.WriteByteArrayToFile(@"/Users/tkefauver/Desktop/icon_test.png", icon.ToBytesFromBase64String(), false);
                     Mp.Services.ProcessWatcher.SetActiveProcess(chrome_app);
                 }
+            });
+        public ICommand GenericTestCommand3 => new MpAsyncCommand(
+            async () => {
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(new MpAvDataObject(MpPortableDataFormats.Text, "TEXT TEST"), true);
+            });
+        public ICommand GenericTestCommand4 => new MpAsyncCommand(
+            async () => {
+                await MpAvCommonTools.Services.DeviceClipboard.ClearAsync();
+                var sil = await new[] { @"/Users/tkefauver/Desktop/icon_test.png" }.ToAvFilesObjectAsync();
+                var avdo = new MpAvDataObject(MpPortableDataFormats.Files, sil);
+                //var avdo = new DataObject();
+                //avdo.Set("Files", sil);
+                //await MpAvCommonTools.Services.DeviceClipboard.SetDataObjectAsync(avdo);
+
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
+            });
+
+        public ICommand GenericTestCommand5 => new MpAsyncCommand(
+            async () => {
+                await Mp.Services.DataObjectTools.WriteToClipboardAsync(new MpAvDataObject(MpPortableDataFormats.Image, MpBase64Images.AppIcon), true);
             });
         #endregion
     }

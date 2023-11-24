@@ -83,6 +83,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Utils\Extensions\DataObject\**" />
+    <Compile Include="Utils\Extensions\DataObject\MpAvPlatformDataObjectExtensions.shared.cs" />
+    <Compile Include="Utils\Extensions\DataObject\MpAvPlatformDataObjectExtensions.$(PlatformShortName).cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste.Common.Plugin\MonkeyPaste.Common.Plugin.csproj" />
     <ProjectReference Include="..\MonkeyPaste.Common\MonkeyPaste.Common.csproj" />
   </ItemGroup>

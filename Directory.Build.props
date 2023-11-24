@@ -22,7 +22,7 @@
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>MAC</BuildOs>
     <CultureExt>en-US</CultureExt>
   </PropertyGroup>
 

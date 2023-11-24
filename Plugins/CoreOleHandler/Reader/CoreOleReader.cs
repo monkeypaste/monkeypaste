@@ -9,8 +9,6 @@ using System.Text;
 namespace CoreOleHandler {
     public class CoreOleReader : MpIOleReaderComponent {
         #region Private Variables
-        private bool _isReading;
-        private object _readLock = new object();
         #endregion
         static CoreOleReader() {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -30,14 +28,7 @@ namespace CoreOleHandler {
                     return await ProcessReadRequestAsync_internal(request, retryCount);
                 });
             }
-            await MpFifoAsyncQueue.WaitByConditionAsync(
-                lockObj: _readLock,
-                waitWhenTrueFunc: () => {
-                    return _isReading;
-                },
-                debug_label: "OleReader");
 
-            _isReading = true;
             IDataObject avdo = null;
             IEnumerable<string> availableFormats = null;
             // only actually read formats found for data
@@ -127,7 +118,6 @@ namespace CoreOleHandler {
                 conversion_results.ForEach(x => read_output.SetData(x.Key, x.Value));
             }
 
-            _isReading = false;
             return new MpOlePluginResponse() {
                 dataObjectLookup = read_output.ToDictionary(),
                 userNotifications = nfl,

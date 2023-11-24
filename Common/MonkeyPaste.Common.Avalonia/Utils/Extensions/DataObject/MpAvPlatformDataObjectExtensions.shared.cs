@@ -11,52 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste.Common.Avalonia {
-    public static class MpAvPlatformDataObjectExtensions {
-        public static void LogDataObject(this IDataObject ido) {
-            var actual_formats = ido.GetAllDataFormats();
-            foreach (string af in actual_formats) {
-                object data = ido.Get(af);
-                MpConsole.WriteLine($"Format Name: '{af}'", true);
-                MpConsole.WriteLine($"Format Type:'{data.GetType()}'");
-                if (data is not byte[] bytes) {
-                    continue;
-                }
-#if MAC
-                if (af == MpPortableDataFormats.Image ||
-                                af == MpPortableDataFormats.Image2) {
-                    var bmp = bytes.ToAvBitmap();
-                    data = bmp.ToBase64String();
-                } else if (af == MpPortableDataFormats.MacUrl2) {
+    public static partial class MpAvPlatformDataObjectExtensions {
 
-                    MpConsole.WriteLine("Format Data (UNICODE):");
-                    MpConsole.WriteLine(bytes.ToDecodedString(enc: Encoding.Unicode));
-
-                    NSData arch_data = NSData.FromArray(bytes);
-                    NSPropertyListFormat plist_format = NSPropertyListFormat.Binary;
-
-                    NSObject dict_obj =
-                        NSPropertyListSerialization.PropertyListWithData(
-                            arch_data,
-                            NSPropertyListReadOptions.Immutable,
-                            ref plist_format,
-                            out NSError err);
-
-                    NSArray items = NSArray.FromNSObjects(dict_obj);
-
-
-                } else if (af == MpPortableDataFormats.MacRtf1 || af == MpPortableDataFormats.MacRtf2) {
-                    string rtf = bytes.ToDecodedString();
-                    string html = MpAvMacHelpers.RtfToHtml(rtf);
-                    MpConsole.WriteLine("Converted Html: ");
-                    MpConsole.WriteLine(html);
-                } else {
-                    data = bytes.ToDecodedString();
-                } 
-#endif
-                MpConsole.WriteLine("Format Data:");
-                MpConsole.WriteLine(data.ToString());
-            }
-        }
         public static IDataObject ToDataObject(this Dictionary<string, object> dict) {
             return new MpAvDataObject(dict);
         }
@@ -325,18 +281,22 @@ namespace MonkeyPaste.Common.Avalonia {
             if (ido == null || !ido.Contains(format)) {
                 return false;
             }
-            ido.Set(format, null);
-            return true;
-            //if (ido is DataObject sysdo) {
-            //    // probably exception
-            //    sysdo.Set(format, null);
-            //    return true;
-            //} else if (ido is MpPortableDataObject mpdo &&
-            //    MpPortableDataFormats.GetDataFormat(format) is MpPortableDataFormat pdf) {
-            //    mpdo.DataFormatLookup.Remove(pdf);
-            //    return true;
-            //}
-            //return false;
+            //ido.Set(format, null);
+            //return true;
+            if (ido is DataObject sysdo) {
+                // probably exception
+                try {
+                    sysdo.Set(format, null);
+                }
+                catch { }
+
+                return true;
+            } else if (ido is MpPortableDataObject mpdo &&
+                MpPortableDataFormats.GetDataFormat(format) is MpPortableDataFormat pdf) {
+                mpdo.DataFormatLookup.Remove(pdf);
+                return true;
+            }
+            return false;
         }
 
         public static void Set(this IDataObject ido, string format, object data) {
@@ -350,5 +310,6 @@ namespace MonkeyPaste.Common.Avalonia {
                 mpdo.SetData(format, data);
             }
         }
+
     }
 }

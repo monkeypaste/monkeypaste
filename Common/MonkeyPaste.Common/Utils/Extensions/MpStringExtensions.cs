@@ -29,6 +29,14 @@ namespace MonkeyPaste.Common {
         #endregion
 
         #region Encoding Extensions
+        public static string ToBase64ImageUrl(this string base64Str) {
+            if (base64Str.Contains(",")) {
+                MpDebug.Break($"Base64 conv error, string already is url");
+                return base64Str;
+            }
+            string prefix = @"data:image/png;base64,";
+            return prefix + base64Str;
+        }
         public static string ToDecodedString(this byte[] bytes, Encoding enc = null, bool stripNulls = false) {
             if (bytes == null || bytes.Length == 0) {
                 return string.Empty;
@@ -772,6 +780,23 @@ namespace MonkeyPaste.Common {
             return str.IsFile() || str.IsDirectory();
         }
 
+        public static bool IsStringPathUri(this string str) {
+            if (Uri.IsWellFormedUriString(str, UriKind.Absolute) &&
+                            new Uri(str) is { } uri &&
+                            uri.Scheme == Uri.UriSchemeFile) {
+                return true;
+            }
+            return false;
+        }
+        public static string ToPathFromUri(this string str) {
+            if (Uri.IsWellFormedUriString(str, UriKind.Absolute) &&
+                            new Uri(str) is { } uri &&
+                            uri.Scheme == Uri.UriSchemeFile &&
+                            uri.LocalPath is string lp) {
+                return lp;
+            }
+            return str;
+        }
         public static bool IsShortcutPath(this string str) {
             if (!str.IsFile()) {
                 return false;

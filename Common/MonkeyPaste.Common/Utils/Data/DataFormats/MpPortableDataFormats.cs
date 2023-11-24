@@ -48,6 +48,7 @@ namespace MonkeyPaste.Common {
             MacText1,
             MacText2,
             MacText3,
+            MacFiles2,
 #endif
 
             // linux

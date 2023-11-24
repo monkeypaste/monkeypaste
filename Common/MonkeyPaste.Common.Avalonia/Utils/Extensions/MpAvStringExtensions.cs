@@ -8,7 +8,7 @@ using TheArtOfDev.HtmlRenderer.Avalonia;
 namespace MonkeyPaste.Common.Avalonia {
     public static class MpAvStringExtensions {
         public static string ToHtmlImageDoc(this string imgBase64) {
-            return $"<html><head></head><body><img src=\"data:image/png;base64,{imgBase64}\"></body></html>";
+            return $"<html><head></head><body><img src=\"{imgBase64.ToBase64ImageUrl()}\"></body></html>";
         }
         public static bool IsAvResourceString(this string str) {
             if (str.IsNullOrEmpty()) {

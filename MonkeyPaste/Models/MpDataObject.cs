@@ -84,6 +84,9 @@ namespace MonkeyPaste {
                     List<string> valueParts = new List<string>();
                     foreach (var valObj in valObjs) {
                         if (valObj is string valStr) {
+                            if (valStr.IsStringPathUri() && valStr.ToPathFromUri() is string uri_path) {
+                                valStr = uri_path;
+                            }
                             valueParts.Add(valStr);
                             continue;
                         }

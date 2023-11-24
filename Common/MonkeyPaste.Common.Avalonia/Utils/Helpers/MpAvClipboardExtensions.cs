@@ -29,11 +29,16 @@ namespace MonkeyPaste.Common.Avalonia {
             if (cb == null) {
                 return avdo;
             }
+            var actualFormats = await cb.GetFormatsSafeAsync();
+
             if (formatFilter == null) {
-                formatFilter = await cb.GetFormatsSafeAsync();
+                formatFilter = actualFormats;
+            } else {
+                formatFilter = formatFilter.Where(x => actualFormats.Contains(x)).ToArray();
             }
+
             foreach (string format in formatFilter) {
-                object data = await cb.GetDataAsync(format);
+                object data = await cb.GetDataSafeAsync(format);
                 if (data == null) {
                     continue;
                 }
@@ -73,7 +78,7 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
 
-        public static async Task<object> GetDataSafeAsync(this IClipboard cb, string format, int retryCount = 0) {
+        public static async Task<object> GetDataSafeAsync(this IClipboard cb, string format, int retryCount = OLE_RETRY_COUNT) {
             await WaitForClipboardAsync();
             //if (!Dispatcher.UIThread.CheckAccess()) {
             //    var result = await Dispatcher.UIThread.InvokeAsync(async () => {
@@ -91,11 +96,11 @@ namespace MonkeyPaste.Common.Avalonia {
                 return null;
             }
             catch (COMException) {
-                if (retryCount >= OLE_RETRY_COUNT) {
-                    return new string[] { };
+                if (retryCount <= 0) {
+                    return null;
                 }
                 await Task.Delay(OLE_RETRY_DELAY_MS);
-                var retry_result = await cb.GetDataSafeAsync(format, ++retryCount);
+                var retry_result = await cb.GetDataSafeAsync(format, --retryCount);
                 return retry_result;
             }
             catch (AccessViolationException avex) {
@@ -107,14 +112,13 @@ namespace MonkeyPaste.Common.Avalonia {
         public static async Task SetDataObjectSafeAsync(this IClipboard cb, IDataObject ido, int retryCount = 0) {
             await WaitForClipboardAsync();
 
-            //if (!Dispatcher.UIThread.CheckAccess()) {
-            //    await Dispatcher.UIThread.InvokeAsync(async () => {
-            //        await cb.SetDataObjectSafeAsync(ido, retryCount);
-            //    });
-            //    return;
-            //}
             try {
+#if MAC
+                await ido.WriteToPasteboardAsync(false);
+#else
+
                 await cb.SetDataObjectAsync(ido);
+#endif
                 CloseClipboard();
             }
             catch (COMException) {

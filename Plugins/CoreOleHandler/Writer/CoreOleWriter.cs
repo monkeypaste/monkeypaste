@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using AngleSharp.Io;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
 using MonkeyPaste.Common;
@@ -54,7 +55,9 @@ namespace CoreOleHandler {
                     // called last 
                     data = PreProcessFileFormat(write_output);
                 } else {
-                    data = write_output.Get(write_format);
+                    if (write_output.TryGetData(write_format, out string dataStr)) {
+                        data = dataStr;
+                    }
                 }
 
                 foreach (var param in request.items) {
@@ -85,35 +88,7 @@ namespace CoreOleHandler {
 
             // NOTE not sure if this is needed omitted for now
             //PostProcessImage(write_output);
-
-            if (!request.isDnd) {
-                // for non-dnd write, set clipboard to resp
-                if (write_output is MpAvDataObject avdo) {
-                    var empty_formats = write_output.GetAllDataFormats().Where(x => !write_output.ContainsData(x));
-                    // NOTE need to make sure empty formats are removed or clipboard will bark
-                    empty_formats.ForEach(x => avdo.DataFormatLookup.Remove(MpPortableDataFormats.GetDataFormat(x)));
-                    var test = avdo.GetAllDataFormats().Where(x => !avdo.ContainsData(x));
-                    if (test.Any()) {
-
-                    }
-                    //
-                    if (avdo.TryGetData(MpPortableDataFormats.Files, out object fpl_obj)) {
-                        IEnumerable<string> fpl = null;
-                        if (fpl_obj is IEnumerable<string>) {
-                            fpl = fpl_obj as IEnumerable<string>;
-                        } else if (fpl_obj is string fpl_str) {
-                            fpl = fpl_str.SplitNoEmpty(Environment.NewLine);
-                        } else {
-
-                        }
-                        if (fpl != null) {
-                            var av_fpl = await fpl.ToAvFilesObjectAsync();
-                            avdo.SetData(MpPortableDataFormats.Files, av_fpl);
-                        }
-                    }
-                }
-                await CoreOleHelpers.ClipboardRef.SetDataObjectSafeAsync(write_output);
-            }
+            await PrepareForOutputAsync(write_output, request.isDnd);
 
             return new MpOlePluginResponse() {
                 //dataObjectLookup = write_output,
@@ -243,6 +218,24 @@ namespace CoreOleHandler {
             }
 
 #endif
+        }
+        #endregion
+
+        #region Platform DataObject Post-Process
+        private async Task PrepareForOutputAsync(IDataObject ido, bool isDnd) {
+            // NOTE need to make sure empty formats are removed or clipboard will bark
+            var empty_formats = ido.GetAllDataFormats().Where(x => !ido.ContainsData(x));
+            empty_formats.ForEach(x => ido.TryRemove(x));
+
+            await ido.FinalizePlatformDataObjectAsync();
+
+            if (isDnd) {
+#if MAC
+                await ido.WriteToPasteboardAsync(true);
+#endif
+                return;
+            }
+            await CoreOleHelpers.ClipboardRef.SetDataObjectSafeAsync(ido);
         }
         #endregion
 
