@@ -15,7 +15,6 @@ using CefNet.Avalonia;
 using CefNet.Internal;
 #elif OUTSYS_WV
 using WebViewControl;
-using Xilium.CefGlue;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -48,7 +47,10 @@ namespace MonkeyPaste.Avalonia {
         static MpAvWebView() {
 #if OUTSYS_WV
             WebView.Settings.OsrEnabled = true;
-
+            WebView.Settings.Flags = new() {
+                { "use-mock-keychain", null },
+                { "process-per-site", null }
+            };
 #endif
         }
         #endregion

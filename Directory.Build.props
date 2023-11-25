@@ -88,7 +88,7 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
-    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
+    <MainTargetFramework>$(DefaultFramework)-macos</MainTargetFramework>
     <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>

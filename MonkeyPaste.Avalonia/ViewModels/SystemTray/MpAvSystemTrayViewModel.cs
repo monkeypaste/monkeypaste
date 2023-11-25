@@ -2,8 +2,11 @@
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Rendering;
+using Avalonia.VisualTree;
 using MonkeyPaste.Common;
 using MonkeyPaste.Common.Avalonia;
+using MonoMac.AppKit;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -384,6 +387,12 @@ namespace MonkeyPaste.Avalonia {
             });
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {
+
+                var test = NSScreen.MainScreen.BackingScaleFactor;
+                if (MpAvWindowManager.MainWindow.GetVisualRoot() is IRenderRoot rr) {
+                    var test2 = rr.RenderScaling;
+                    var test3 = MpAvWindowManager.MainWindow.GetScreen().Scaling;
+                }
                 await MpAvCommonTools.Services.DeviceClipboard.ClearAsync();
                 var sil = await new[] { @"/Users/tkefauver/Desktop/icon_test.png" }.ToAvFilesObjectAsync();
                 var avdo = new MpAvDataObject(MpPortableDataFormats.Files, sil);

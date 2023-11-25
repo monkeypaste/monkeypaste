@@ -4,6 +4,7 @@ using Avalonia.Platform.Storage;
 using MonoMac.AppKit;
 using MonoMac.CoreText;
 using MonoMac.Foundation;
+//using Foundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,12 +68,12 @@ namespace MonkeyPaste.Common.Avalonia {
                                 continue;
                             }
                             NSMutableArray nsarr = new NSMutableArray();
-
                             foreach (var fp in fpl) {
                                 NSUrl url = NSUrl.FromFilename(fp);
                                 nsarr.Add(url);
                                 pb.SetDataForType(NSData.FromUrl(url), MpPortableDataFormats.MacFiles1);
                             }
+                            //pb.WriteObjects(new NSImage[] { null });
 
                             //pb.DeclareTypes(new[] { MpPortableDataFormats.MacFiles1, MpPortableDataFormats.MacFiles2, MpPortableDataFormats.Text }, null);
                             //NSData data = NSKeyedArchiver.ArchivedDataWithRootObject(nsarr);
@@ -113,4 +114,70 @@ namespace MonkeyPaste.Common.Avalonia {
             }
         }
     }
+
+    /*
+    final class TidiFile : NSObject, Codable {
+
+    var url : URL
+    var createdDateAttribute : Date
+    var modifiedDateAttribute : Date
+    var fileSizeAttribute: Int
+
+    init(url: URL, createdDateAttribute: Date, modifiedDateAttribute: Date, fileSizeAttribute: Int) {
+        self.url = url
+        self.createdDateAttribute = createdDateAttribute
+        self.modifiedDateAttribute = modifiedDateAttribute
+        self.fileSizeAttribute = fileSizeAttribute
+    }
+
+    convenience init?(pasteboardPropertyList propertyList: Any, ofType type: NSPasteboard.PasteboardType) {
+        guard let data = propertyList as? Data,
+            let tidi = try? PropertyListDecoder().decode(TidiFile.self, from: data) else { return nil }
+        self.init(url: tidi.url, createdDateAttribute: tidi.createdDateAttribute, modifiedDateAttribute: tidi.modifiedDateAttribute, fileSizeAttribute: tidi.fileSizeAttribute)
+    }
+
+}
+
+extension TidiFile : NSPasteboardWriting, NSPasteboardReading
+{
+
+    public func writingOptions(forType type: NSPasteboard.PasteboardType, pasteboard: NSPasteboard) -> NSPasteboard.WritingOptions {
+        return .promised
+    }
+
+    public func writableTypes(for pasteboard: NSPasteboard) -> [NSPasteboard.PasteboardType] {
+        return [.tidiFile]
+    }
+
+    public func pasteboardPropertyList(forType type: NSPasteboard.PasteboardType) -> Any? {
+        if type == .tidiFile {
+            return try? PropertyListEncoder().encode(self)
+        }
+        return nil
+    }
+
+    public static func readableTypes(for pasteboard: NSPasteboard) -> [NSPasteboard.PasteboardType] {
+        return [.tidiFile]
+    }
+
+    public static func readingOptions(forType type: NSPasteboard.PasteboardType, pasteboard: NSPasteboard) -> NSPasteboard.ReadingOptions {
+        return .asData
+    }
+
+}
+    */
+    //public class MpCustomPasteBoardItem : NSPasteboardReading {
+    //    public List<string> ReadableTypes { get; } = new List<string>();
+    //    public override string[] GetReadableTypesForPasteboard(NSPasteboard pasteboard) {
+    //        return ReadableTypes.ToArray();
+    //    }
+
+    //    public override NSPasteboardReadingOptions GetReadingOptionsForType(string type, NSPasteboard pasteboard) {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public override NSObject InitWithPasteboardPropertyList(NSObject propertyList, string type) {
+    //        NSPropertyListSerialization.
+    //    }
+    //}
 }
