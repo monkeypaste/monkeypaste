@@ -182,7 +182,8 @@ namespace MonkeyPaste.Avalonia {
             if (LOG_ORPHANS) {
                 // NOTE orphan ntf is annoying but need see if other plats do it too, windows is confirmed
                 if (sb.ToString() is string orphan_msg &&
-                    !string.IsNullOrEmpty(orphan_msg)) {
+                    !string.IsNullOrEmpty(orphan_msg) &&
+                    !orphan_msg.Contains("F12")) {
                     sb.AppendLine($"Result: Downs: {_downs.Count} DownCheckers: {_downChecker.Count} Gesture: '{GetCurrentGesture()}'");
                     orphan_msg = sb.ToString();
                     MpConsole.WriteLine(orphan_msg);

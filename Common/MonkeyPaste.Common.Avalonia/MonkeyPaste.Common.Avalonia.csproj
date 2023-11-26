@@ -3,10 +3,10 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <Nullable>disable</Nullable>
-    <TrimMode>copyused</TrimMode>
+    <TrimMode>copyused</TrimMode> 
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <TargetFramework>$(DefaultFramework)</TargetFramework>
+    <TargetFramework>$(CommonTargetFramework)</TargetFramework>
     <Platforms>$(DefaultPlatforms)</Platforms>
   </PropertyGroup>
   
@@ -52,7 +52,7 @@
     <PackageReference Include="MonoMac.NetStandard" Version="0.0.4" />
     <PackageReference Include="PreMailer.Net" Version="2.4.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
-    <PackageReference Include="SharpHook" Version="5.1.1" />
+    <PackageReference Include="SharpHook" Version="5.1.2" />
   </ItemGroup>
   
   <ItemGroup Condition="$(IsDesktop) == 'true'">

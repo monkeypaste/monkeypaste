@@ -259,6 +259,8 @@
 
             <!--  CONTENT  -->
             <local:MpAvClipTileContentView x:Name="ClipTileContentView"
+                                           Background="{StaticResource HitTestableTransparent}"
+                                           DragDrop.AllowDrop="True"
                                            Grid.Row="1"
                                            Grid.RowSpan="2"
                                            Opacity="{Binding IsPinPlaceholder, ConverterParameter=0|1, Converter={x:Static local:MpAvBoolToDoubleConverter.Instance}}"

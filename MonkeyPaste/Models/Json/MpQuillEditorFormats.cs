@@ -333,7 +333,8 @@ namespace MonkeyPaste {
         public string eventType { get; set; }
         public double screenX { get; set; }
         public double screenY { get; set; }
-        public MpQuillHostDataItemsMessage dataItemsFragment { get; set; }
+        // fragment 'MpQuillHostDataItemsMessage'
+        public string dataItemsFragment { get; set; }
     }
 
     public class MpQuillAnnotationSelectedMessage : MpJsonObject {

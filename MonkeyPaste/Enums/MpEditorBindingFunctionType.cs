@@ -27,6 +27,7 @@
         notifyDropCompleted,
         notifyDragEnter,
         notifyDragLeave,
+        notifyDragStart,
         notifyDragEnd,
         notifyContentScreenShot,
         notifyUserDeletedTemplate,

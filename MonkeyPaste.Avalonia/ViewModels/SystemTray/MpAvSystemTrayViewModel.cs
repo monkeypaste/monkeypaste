@@ -372,7 +372,7 @@ namespace MonkeyPaste.Avalonia {
 
         public ICommand GenericTestCommand2 => new MpAsyncCommand(
             async () => {
-                //await Task.Delay(1);
+                await Task.Delay(1);
 
                 var wl = Mp.Services.ProcessWatcher.AllWindowProcessInfos.ToList();
                 if (wl.FirstOrDefault(x => x.ApplicationName.ToLower().Contains("chrome")) is { } chrome_app) {

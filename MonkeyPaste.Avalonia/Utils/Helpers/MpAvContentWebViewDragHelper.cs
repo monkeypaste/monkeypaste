@@ -24,7 +24,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Public Methods
-        public static async Task StartDragAsync(
+        public static async Task<DragDropEffects> StartDragAsync(
             MpAvIContentWebViewDragSource dragSource,
             DragDropEffects allowedEffects) {
             if (dragSource == null ||
@@ -32,11 +32,11 @@ namespace MonkeyPaste.Avalonia {
                 drag_control.DataContext is not MpAvClipTileViewModel drag_ctvm ||
                 dragSource.LastPointerPressedEventArgs is not PointerPressedEventArgs ppe_args) {
                 MpDebug.Break($"Content drag error. Must provide pointer press event to start drag.");
-                return;
+                return DragDropEffects.None;
             }
             if (!Dispatcher.UIThread.CheckAccess()) {
                 await Dispatcher.UIThread.InvokeAsync(() => StartDragAsync(dragSource, allowedEffects));
-                return;
+                return DragDropEffects.None;
             }
             StartDrag(dragSource);
 
@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
                 // is none selected?
                 MpDebug.Break();
                 FinishDrag(null);
-                return;
+                return DragDropEffects.None;
             }
 
             await ApplyClipboardPresetOrSourceUpdateToDragDataAsync();
@@ -69,7 +69,7 @@ namespace MonkeyPaste.Avalonia {
                 MpMessenger.SendGlobal(MpMessageType.ItemDragCanceled);
                 dragSource.WasDragCanceled = false;
                 FinishDrag(result);
-                return;
+                return DragDropEffects.None;
             }
 
             // process drop result
@@ -102,7 +102,7 @@ namespace MonkeyPaste.Avalonia {
             FinishDrag(result);
 
             MpConsole.WriteLine("Cef Drag Result: " + result);
-
+            return result;
         }
 
         public static async Task ApplyClipboardPresetOrSourceUpdateToDragDataAsync() {

@@ -53,6 +53,14 @@ function disableDragOverlay() {
 // #region Event Handlersconsidered 
 
 function onDragStart(e) {
+    //if (isRunningOnHost() && e.fromHost != true) {
+    //    // drag start handled from host control
+    //    log('dragStart rejected not from host');
+    //    e.preventDefault();
+    //    e.stopPropagation();
+    //    return false;
+    //}
+    log('dragstart');
     // dragstart doesn't have buttons set so updateState'll screw up
     updateWindowMouseState(e,'dragStart');
 
@@ -98,6 +106,13 @@ function onDragStart(e) {
 }
 
 function onDragEnd(e) {
+    //if (isRunningOnHost() && e.fromHost != true) {
+    //    // drag end handled from host control
+    //    log('drag end reject not from host');
+    //    e.preventDefault();
+    //    e.stopPropagation();
+    //    return false;
+    //}
     log('drag end');
     updateWindowMouseState(e,'dragEnd');
     globals.CurDragTargetElm = null;

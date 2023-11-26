@@ -178,7 +178,6 @@ namespace MonkeyPaste.Common {
 
                 control.PointerMoved -= dragControl_PointerMoved_Handler;
                 control.PointerReleased -= dragControl_PointerReleased_Handler;
-                MpConsole.WriteLine("DragCheck pointer released (was not drag)");
                 if (e2 != null) {
 
                     end?.Invoke(e2);

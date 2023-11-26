@@ -12,18 +12,14 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
+using IDataObject = Avalonia.Input.IDataObject;
 
-namespace MonkeyPaste.Common.Avalonia
-{
-    public static partial class MpAvPlatformDataObjectExtensions
-    {
-        public static void LogDataObject(this IDataObject ido)
-        {
+namespace MonkeyPaste.Common.Avalonia {
+    public static partial class MpAvPlatformDataObjectExtensions {
+        public static void LogDataObject(this IDataObject ido) {
             var actual_formats = ido.GetAllDataFormats();
-            foreach(string af in actual_formats)
-            {
-                if(!ido.TryGetData(af, out string dataStr))
-                {
+            foreach (string af in actual_formats) {
+                if (!ido.TryGetData(af, out string dataStr)) {
                     continue;
                 }
                 object data = ido.Get(af);
@@ -33,10 +29,8 @@ namespace MonkeyPaste.Common.Avalonia
                 MpConsole.WriteLine(dataStr);
             }
         }
-        public static async Task FinalizePlatformDataObjectAsync(this IDataObject ido)
-        {
-            if(ido.TryGetData(MpPortableDataFormats.Files, out IEnumerable<string> fpl))
-            {
+        public static async Task FinalizePlatformDataObjectAsync(this IDataObject ido) {
+            if (ido.TryGetData(MpPortableDataFormats.Files, out IEnumerable<string> fpl)) {
                 var av_fpl = await fpl.ToAvFilesObjectAsync();
                 ido.Set(MpPortableDataFormats.Files, av_fpl);
             }

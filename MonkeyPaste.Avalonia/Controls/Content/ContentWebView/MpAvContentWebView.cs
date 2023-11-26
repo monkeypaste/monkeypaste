@@ -18,6 +18,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Xilium.CefGlue;
+using Xilium.CefGlue.Common;
+using Xilium.CefGlue.Common.Handlers;
+using Xilium.CefGlue.Common.Helpers.Logger;
+using Xilium.CefGlue.Common.InternalHandlers;
 using AvToolTip = Avalonia.Controls.ToolTip;
 
 #if CEFNET_WV
@@ -54,15 +59,36 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
         #endregion
 
-        #region Statics
+        #region Statics>
         public static bool BreakOnNextLoad = false;
+
+#if OUTSYS_WV
+        static MpAvContentWebView() {
+            //CommonCefRenderHandler.StartDragFunc = StartDragging;
+        }
+
+        private static bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
+
+            Dispatcher.UIThread.Post(async () => {
+                allowedOps = CefDragOperationsMask.Copy;
+                if (MpAvClipTrayViewModel.Instance.SelectedItem == null ||
+                       MpAvClipTrayViewModel.Instance.SelectedItem.GetContentView() is not MpAvContentWebView wv ||
+                       !wv.IsEditorLoaded) {
+                    return;
+                }
+                DragDropEffects result = await MpAvContentWebViewDragHelper.StartDragAsync(wv, DragDropEffects.Copy);
+
+                //browser.GetHost().DragSourceEndedAt(0, 0, CefDragOperationsMask.None);
+                //browser.GetHost().DragSourceSystemDragEnded();
+            });
+
+            return true;
+        }
+#endif
 
         #endregion
 
         #region Interfaces
-
-
-
         #region MpIJsonMessenger Implementation
         public void SendMessage(string msgJsonBase64Str) {
 #if CEFNET_WV
@@ -157,7 +183,7 @@ namespace MonkeyPaste.Avalonia {
             return BindingContext.GetOleFormats(true);
         }
 
-        public PointerEventArgs LastPointerPressedEventArgs { get; private set; }
+        public PointerEventArgs LastPointerPressedEventArgs { get; set; }
 
         public bool IsDragging {
             get {
@@ -928,11 +954,9 @@ namespace MonkeyPaste.Avalonia {
         #region Constructors
 
         public MpAvContentWebView() : base() {
-            //#if CEFNET_WV
-            //            InitialUrl = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
-            //#else
+            //this.SetDragHandler(new MpAvOutSysDragHandler(this));
+
             Address = Mp.Services.PlatformInfo.EditorPath.ToFileSystemUriFromPath();
-            //#endif
 
             this.GetObservable(MpAvContentWebView.IsEditorInitializedProperty).Subscribe(value => OnIsEditorInitializedChanged());
             this.GetObservable(MpAvContentWebView.ContentIdProperty).Subscribe(value => OnContentIdChanged());
@@ -1008,13 +1032,9 @@ namespace MonkeyPaste.Avalonia {
                 eventType = "dragleave"
             };
             SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeJsonObjectToBase64()}')");
-        }
+        }       
 
-        protected override void OnDrop(DragEventArgs e) {
-            base.OnDrop(e);
-            this.Cursor = null;// new Cursor(StandardCursorType.Arrow);
-        }
-
+#endif
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
             if (!IsScrollWheelEnabled) {
                 // disabled in no-select mode, otherwise cefnet swallows event and pin tray won't scroll
@@ -1022,8 +1042,6 @@ namespace MonkeyPaste.Avalonia {
             }
             base.OnPointerWheelChanged(e);
         }
-
-#endif
         protected virtual MpQuillInitMainRequestMessage GetInitMessage() {
             return new MpQuillInitMainRequestMessage() {
                 envName = Mp.Services.PlatformInfo.OsType.ToString(),
@@ -1175,8 +1193,6 @@ namespace MonkeyPaste.Avalonia {
                 (x, o) => x.IsDomLoaded = o);
 
         #endregion
-
-
         public async Task LoadEditorAsync() {
             Dispatcher.UIThread.VerifyAccess();
 
@@ -1761,6 +1777,39 @@ namespace MonkeyPaste.Avalonia {
             });
         }
 
-
     }
+
+#if OUTSYS_WV
+    public class MpAvOutSysDragHandler : DragHandler {
+        private MpAvContentWebView _wv;
+        public MpAvOutSysDragHandler(MpAvContentWebView wv) {
+            _wv = wv;
+        }
+        protected override bool OnDragEnter(CefBrowser browser, CefDragData dragData, CefDragOperationsMask mask) {
+            if (_wv == null ||
+                !_wv.IsEditorLoaded) {
+                return false;
+            }
+
+            var dndMsg = new MpQuillDragDropEventMessage() {
+                eventType = "dragenter",
+                dataItemsFragment = new MpAvDataObject(MpPortableDataFormats.Text, "TEST").ToQuillDataItemsMessage().SerializeJsonObjectToBase64()
+            };
+            _wv.SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeJsonObjectToBase64()}')");
+            return false;
+        }
+
+        protected override void OnDraggableRegionsChanged(CefBrowser browser, CefFrame frame, CefDraggableRegion[] regions) {
+
+        }
+    }
+
+    public class Test : CommonCefRenderHandler {
+        protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
+            return base.StartDragging(browser, dragData, allowedOps, x, y);
+        }
+        public Test(IOffscreenCefBrowserHost owner, ILogger logger) : base(owner, logger) {
+        }
+    }
+#endif
 }

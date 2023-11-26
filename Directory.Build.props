@@ -22,7 +22,7 @@
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>MAC</BuildOs>
+    <BuildOs>WINDOWS</BuildOs>
     <CultureExt>en-US</CultureExt>
   </PropertyGroup>
 
@@ -51,6 +51,7 @@
     <UseCefNet>false</UseCefNet>
     <UseOutSysCef>false</UseOutSysCef>
     <DefaultFramework>net8.0</DefaultFramework>
+    <CommonTargetFramework>net8.0</CommonTargetFramework>
     <StartupOutputType>Exe</StartupOutputType>
   </PropertyGroup>
   
@@ -69,11 +70,11 @@
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
-    <UseOutSysCef>false</UseOutSysCef>
-    <UseCefNet>true</UseCefNet>
+    <UseOutSysCef>true</UseOutSysCef>
+    <UseCefNet>false</UseCefNet>
     <TargetRuntimeIdentifiers>win-x64;win-x86</TargetRuntimeIdentifiers>
     <CefPlatformRelDir>cef\cef_win</CefPlatformRelDir>
-    <PlatformShortName>uwp</PlatformShortName>
+    <PlatformShortName>uwp</PlatformShortName> 
     <StartupOutputType>WinExe</StartupOutputType>
   </PropertyGroup>
    
@@ -89,6 +90,7 @@
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
     <MainTargetFramework>$(DefaultFramework)-macos</MainTargetFramework>
+    <CommonTargetFramework>$(DefaultFramework)-macos</CommonTargetFramework>
     <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>

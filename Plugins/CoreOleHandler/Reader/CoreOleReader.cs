@@ -66,6 +66,11 @@ namespace CoreOleHandler {
             var readFormats = request.formats.Where(x => availableFormats.Contains(x));
 
             foreach (var read_format in readFormats) {
+                if (MpPortableDataFormats.InternalFormats.Contains(read_format)) {
+                    // ignore internal formats but let them pass through as output
+                    read_output.SetData(read_format, avdo.Get(read_format));
+                    continue;
+                }
                 // store data in object but read all data as strings
                 object data = null;
                 if (avdo.TryGetData(read_format, out string dataStr)) {

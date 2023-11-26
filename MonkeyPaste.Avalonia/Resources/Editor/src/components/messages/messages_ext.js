@@ -230,12 +230,14 @@ function dragEventFromHost_ext(dragEnterMsgBase64Str) {
 	req.buttons = 1;
 	req.fromHost = true;
 	req.target = getEditorContainerElement();
-	req.dataTransfer = convertHostDataItemsToDataTransfer(req.dataItemsFragment);
+
+	let dateItemsMsg = toJsonObjFromBase64Str(req.dataItemsFragment);
+	req.dataTransfer = convertHostDataItemsToDataTransfer(dateItemsMsg);
 
 	
-	if (req.dataItemsFragment && req.dataItemsFragment.effectAllowed) {
+	if (dateItemsMsg && dateItemsMsg.effectAllowed) {
 		// NOTE cannot set dt 'effectAllowed' so manually specifiying in parent obj
-		req.effectAllowed_override = req.dataItemsFragment.effectAllowed;
+		req.effectAllowed_override = dateItemsMsg.effectAllowed;
 	} else {
 		if (req.eventType != 'dragleave') {
 			debugger;
@@ -251,7 +253,11 @@ function dragEventFromHost_ext(dragEnterMsgBase64Str) {
 		onDragLeave(req);
 	} else if (req.eventType == 'drop') {
 		onDrop(req);
-	}	
+	} else if (req.eventType == 'dragstart') {
+		onDragStart(req);
+	}else if (req.eventType == 'dragend') {
+		onDragEnd(req);
+	}
 }
 
 function unexpandPasteButtonPopup_ext() {

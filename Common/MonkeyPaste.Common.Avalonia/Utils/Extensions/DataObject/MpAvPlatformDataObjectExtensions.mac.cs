@@ -1,6 +1,9 @@
-﻿using Avalonia.Input;
+﻿using AppKit;
+
+using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
+
 using MonoMac.AppKit;
 using MonoMac.CoreText;
 using MonoMac.Foundation;
@@ -11,19 +14,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste.Common.Avalonia {
-    public static partial class MpAvPlatformDataObjectExtensions {
-        public static void LogDataObject(this IDataObject ido) {
+namespace MonkeyPaste.Common.Avalonia
+{
+    public static partial class MpAvPlatformDataObjectExtensions
+    {
+        public static void LogDataObject(this IDataObject ido)
+        {
             var actual_formats = ido.GetAllDataFormats();
-            foreach (string af in actual_formats) {
-                if (!ido.TryGetData(af, out string dataStr)) {
+            foreach(string af in actual_formats)
+            {
+                if(!ido.TryGetData(af, out string dataStr))
+                {
                     continue;
                 }
                 object data = ido.Get(af);
                 MpConsole.WriteLine($"Format Name: '{af}'", true);
                 MpConsole.WriteLine($"Format Type:'{data.GetType()}'");
-                if (af == MpPortableDataFormats.MacUrl2 &&
-                    data is byte[] bytes) {
+                if(af == MpPortableDataFormats.MacUrl2 &&
+                    data is byte[] bytes)
+                {
 
                     MpConsole.WriteLine("Format Data (UNICODE):");
                     MpConsole.WriteLine(bytes.ToDecodedString(enc: Encoding.Unicode));
@@ -44,14 +53,16 @@ namespace MonkeyPaste.Common.Avalonia {
                 MpConsole.WriteLine(dataStr);
             }
         }
-        public static async Task FinalizePlatformDataObjectAsync(this IDataObject ido) {
+        public static async Task FinalizePlatformDataObjectAsync(this IDataObject ido)
+        {
             // NOTE this is a little funky but this does nothing on mac since dnd is part of clipboard
             await Task.Delay(1);
 
             return;
         }
 
-        public static async Task WriteToPasteboardAsync(this IDataObject ido, bool isDnd) {
+        public static async Task WriteToPasteboardAsync(this IDataObject ido, bool isDnd)
+        {
             await Task.Delay(1);
             NSPasteboard pb = isDnd ? NSPasteboard.FromName(NSPasteboard.NSDragPasteboardName) : NSPasteboard.GeneralPasteboard;
 
@@ -59,23 +70,28 @@ namespace MonkeyPaste.Common.Avalonia {
 
 
             var formats = ido.GetAllDataFormats().ToList();
-            foreach (string format in formats) {
-                switch (format) {
-                    case MpPortableDataFormats.Files: {
+            foreach(string format in formats)
+            {
+                switch(format)
+                {
+                    case MpPortableDataFormats.Files:
+                        {
                             // from https://stackoverflow.com/a/5843278/105028
-                            if (!ido.TryGetData(format, out IEnumerable<string> fpl) ||
-                                !fpl.Any()) {
+                            if(!ido.TryGetData(format, out IEnumerable<string> fpl) ||
+                                !fpl.Any())
+                            {
                                 continue;
                             }
-                            NSMutableArray nsarr = new NSMutableArray();
-                            foreach (var fp in fpl) {
-                                NSUrl url = NSUrl.FromFilename(fp);
-                                nsarr.Add(url);
-                                pb.SetDataForType(NSData.FromUrl(url), MpPortableDataFormats.MacFiles1);
-                            }
-                            //pb.WriteObjects(new NSImage[] { null });
+                            //NSMutableArray nsarr = new NSMutableArray();
+                            //foreach (var fp in fpl) {
+                            //    NSUrl url = NSUrl.FromFilename(fp);
+                            //    nsarr.Add(url); 
+                            //    pb.SetDataForType(NSData.FromUrl(url), MpPortableDataFormats.MacFiles1);
+                            //}
+                            pb.WriteObjects(fpl.Select(x => NSUrl.FromFilename(x)).ToArray());
+                            pb.WriteObjects(new NSString[] { new NSString(string.Join(Environment.NewLine, fpl.Select(x => x.ToFileSystemUriFromPath()))) });
 
-                            //pb.DeclareTypes(new[] { MpPortableDataFormats.MacFiles1, MpPortableDataFormats.MacFiles2, MpPortableDataFormats.Text }, null);
+                            //pb.DeclareTypes(new[] { MpPortableDaftaFormats.MacFiles1, MpPortableDataFormats.MacFiles2, MpPortableDataFormats.Text }, null);
                             //NSData data = NSKeyedArchiver.ArchivedDataWithRootObject(nsarr);
                             //pb.SetDataForType(data, MpPortableDataFormats.MacFiles1);
                             //pb.SetDataForType(data, MpPortableDataFormats.MacFiles2);
@@ -83,12 +99,14 @@ namespace MonkeyPaste.Common.Avalonia {
                             //pb.SetDataForType(NSData.FromUrl(NSUrl.FromFilename(fpl.FirstOrDefault())), MpPortableDataFormats.MacFiles1);
                             //pb.SetDataForType(NSData.FromUrl(NSUrl.FromFilename(fpl.FirstOrDefault())), MpPortableDataFormats.MacFiles2);
 
-                            pb.SetDataForType(NSData.FromString(string.Join(Environment.NewLine, fpl.Select(x => x.ToFileSystemUriFromPath()))), MpPortableDataFormats.Text);
+                            //pb.SetDataForType(NSData.FromString(string.Join(Environment.NewLine, fpl.Select(x => x.ToFileSystemUriFromPath()))), MpPortableDataFormats.Text);
                             break;
                         }
-                    case MpPortableDataFormats.Image: {
+                    case MpPortableDataFormats.Image:
+                        {
                             // from https://stackoverflow.com/a/18124824/105028
-                            if (!ido.TryGetData(format, out string imgBase64)) {
+                            if(!ido.TryGetData(format, out string imgBase64))
+                            {
                                 continue;
                             }
                             //NSUrl nsurl = NSUrl.FromString(imgBase64.ToBase64ImageUrl());
@@ -99,8 +117,10 @@ namespace MonkeyPaste.Common.Avalonia {
                             ido.Set(format, imgBase64.ToBytesFromBase64String());
                             break;
                         }
-                    default: {
-                            if (!ido.TryGetData(format, out string dataStr)) {
+                    default:
+                        {
+                            if(!ido.TryGetData(format, out string dataStr))
+                            {
                                 continue;
                             }
                             //NSString nsstr = new NSString(dataStr);

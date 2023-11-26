@@ -49,7 +49,7 @@ namespace MonkeyPaste.Avalonia {
             WebView.Settings.OsrEnabled = true;
             WebView.Settings.Flags = new() {
                 { "use-mock-keychain", null },
-                { "process-per-site", null }
+                //{ "process-per-site", null }
             };
 #endif
         }
@@ -123,10 +123,6 @@ namespace MonkeyPaste.Avalonia {
 
         #region Address
 
-
-
-
-
 #if !OUTSYS_WV
         private string _Address;
         public string Address {
@@ -196,7 +192,7 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constructors
-        public MpAvWebView() {
+        public MpAvWebView() : base() {
             this.GetObservable(MpAvWebView.AddressProperty).Subscribe(value => OnAddressChanged());
 #if CEFNET_WV
             Navigating += MpAvWebView_Navigating;
@@ -205,7 +201,6 @@ namespace MonkeyPaste.Avalonia {
 #elif OUTSYS_WV
             LoadFailed += MpAvWebView_LoadFailed;
             Navigated += MpAvWebView_Navigated;
-
 
             void SendMessage(string fn, string msg, string handle) {
                 Dispatcher.UIThread.Post(() => {
@@ -255,15 +250,7 @@ namespace MonkeyPaste.Avalonia {
             }
         }
 
-        protected override void OnLoaded(global::Avalonia.Interactivity.RoutedEventArgs e) {
-            base.OnLoaded(e);
-            if (this is MpAvContentWebView) {
-                return;
-            }
-            if (TopLevel.GetTopLevel(this) is MpAvWindow w) {
-                w.Closed += W_Closed;
-            }
-        }
+        
 
         private void W_Closed(object sender, EventArgs e) {
             if (sender is not Window w) {
@@ -273,7 +260,17 @@ namespace MonkeyPaste.Avalonia {
             this.Dispose(false);
         }
 #endif
-
+        protected override void OnLoaded(global::Avalonia.Interactivity.RoutedEventArgs e) {
+            base.OnLoaded(e);
+            if (this is MpAvContentWebView) {
+                return;
+            }
+#if CEFNET_WV
+            if (TopLevel.GetTopLevel(this) is MpAvWindow w) {
+                w.Closed += W_Closed;
+            } 
+#endif
+        }
         #endregion
 
         #region Private Methods
@@ -298,6 +295,10 @@ namespace MonkeyPaste.Avalonia {
         }
         private void MpAvWebView_Navigated(string url, string frameName) {
             IsNavigating = false;
+
+            // NOTE can't find a good spot to disable this cause of timing when outsys tries to enable so doing here
+            //DragDrop.SetAllowDrop(this, false);
+
             if (url == Address) {
                 LoadErrorInfo = null;
             }

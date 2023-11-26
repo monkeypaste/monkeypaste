@@ -165,10 +165,12 @@ function onDragEnter(e) {
     }
 
     if (isDropping()) {
+        log('already dropping');
         // NOTE called on every element drag enters, only need once
         return false;
     }
     if (!isValidDataTransfer(e.dataTransfer)) {
+        log('invalid transfer in drag eneter, rejecting');
         return rejectDrop(e); 
     }
 
@@ -212,6 +214,7 @@ function onDragOver(e) {
     // VALIDATE 
 
     if (!e || !isValidDataTransfer(e.dataTransfer)) {
+        log('invalid transfer drag enter')
         return rejectDrop(e);
     }    
 
@@ -228,6 +231,7 @@ function onDragOver(e) {
     }
 
     if (processEffectAllowed(e) == 'none') {
+        log('drag over effects none, rejecting')
         return rejectDrop(e);
     }  
 
