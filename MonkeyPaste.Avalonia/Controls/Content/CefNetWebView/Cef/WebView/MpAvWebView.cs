@@ -47,10 +47,8 @@ namespace MonkeyPaste.Avalonia {
         static MpAvWebView() {
 #if OUTSYS_WV
             WebView.Settings.OsrEnabled = true;
-            WebView.Settings.Flags = new() {
-                { "use-mock-keychain", null },
-                //{ "process-per-site", null }
-            };
+            WebView.Settings.AddCommandLineSwitch("use-mock-keychain", null);
+            WebView.Settings.AddCommandLineSwitch("process-per-site", null);
 #endif
         }
         #endregion

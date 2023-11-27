@@ -3,7 +3,7 @@
     <OutputType>Library</OutputType>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <Nullable>disable</Nullable>
-    <TrimMode>copyused</TrimMode>
+    <TrimMode>copyused</TrimMode> 
     <WarningLevel>4</WarningLevel>
      <LangVersion>$(DefaultLangVersion)</LangVersion>
      <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
@@ -659,11 +659,12 @@
   <ItemGroup>
     <Folder Include="Controls\Content\OutSys\" />
     <Folder Include="Resources\Legal\Licenses\" />
-    <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="Always" />
+    <!--<Content Include="Resources\Editor\**"  LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />-->
 
-    <Content Include="Resources\Legal\terms\terms.html">
+    <Folder Include="Resources\Legal\"/>
+    <!--<Content Include="Resources\Legal\terms\terms.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Content>-->
   </ItemGroup>
     
   
@@ -1517,7 +1518,8 @@
     <!--<Folder Include="Resources\Editor\src\components\bold\" />
     <Folder Include="Resources\Editor\src\components\formatPaint\" />
     <Folder Include="Resources\Editor\src\components\quill-wrapper\parchment\" />
-    <Folder Include="Resources\Editor\src\components\theme\" />-->
+    -->
+    <Folder Include="Resources\Editor\" />
     <Folder Include="Resources\Help\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
@@ -1771,8 +1773,8 @@
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.5" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.5" />
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.5" />
-    <PackageReference Include="CefGlue.Avalonia" Version="117.5938.7-avalonia11" />
-    <PackageReference Include="CefGlue.Common" Version="117.5938.7-avalonia11" />
+    <PackageReference Include="CefGlue.Avalonia" Version="117.5938.8-avalonia11" />
+    <PackageReference Include="CefGlue.Common" Version="117.5938.8-avalonia11" />
     <PackageReference Include="Markdig" Version="0.33.0" />
     <PackageReference Include="Plugin.InAppBilling" Version="7.1.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
@@ -1784,7 +1786,7 @@
     <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
     <PackageReference Include="System.Speech" Version="7.0.0" />
     <PackageReference Include="TaskScheduler" Version="2.10.1" />
-    <PackageReference Include="WebViewControl-Avalonia" Version="2.117.6-avalonia11" />
+    <PackageReference Include="WebViewControl-Avalonia" Version="2.117.7-avalonia11" />
     <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
   </ItemGroup>
     

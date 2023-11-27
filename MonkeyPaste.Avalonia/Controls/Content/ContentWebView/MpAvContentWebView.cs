@@ -18,15 +18,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+
+using AvToolTip = Avalonia.Controls.ToolTip;
+
+#if CEFNET_WV
+using CefNet.Avalonia;
+#endif
+
+#if OUTSYS_WV
 using Xilium.CefGlue;
 using Xilium.CefGlue.Common;
 using Xilium.CefGlue.Common.Handlers;
 using Xilium.CefGlue.Common.Helpers.Logger;
 using Xilium.CefGlue.Common.InternalHandlers;
-using AvToolTip = Avalonia.Controls.ToolTip;
-
-#if CEFNET_WV
-using CefNet.Avalonia;
 #endif
 
 
@@ -1780,36 +1784,28 @@ namespace MonkeyPaste.Avalonia {
     }
 
 #if OUTSYS_WV
-    public class MpAvOutSysDragHandler : DragHandler {
-        private MpAvContentWebView _wv;
-        public MpAvOutSysDragHandler(MpAvContentWebView wv) {
-            _wv = wv;
-        }
-        protected override bool OnDragEnter(CefBrowser browser, CefDragData dragData, CefDragOperationsMask mask) {
-            if (_wv == null ||
-                !_wv.IsEditorLoaded) {
-                return false;
-            }
+    //public class MpAvOutSysDragHandler : DragHandler {
+    //    private MpAvContentWebView _wv;
+    //    public MpAvOutSysDragHandler(MpAvContentWebView wv) {
+    //        _wv = wv;
+    //    }
+    //    protected override bool OnDragEnter(CefBrowser browser, CefDragData dragData, CefDragOperationsMask mask) {
+    //        if (_wv == null ||
+    //            !_wv.IsEditorLoaded) {
+    //            return false;
+    //        }
 
-            var dndMsg = new MpQuillDragDropEventMessage() {
-                eventType = "dragenter",
-                dataItemsFragment = new MpAvDataObject(MpPortableDataFormats.Text, "TEST").ToQuillDataItemsMessage().SerializeJsonObjectToBase64()
-            };
-            _wv.SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeJsonObjectToBase64()}')");
-            return false;
-        }
+    //        var dndMsg = new MpQuillDragDropEventMessage() {
+    //            eventType = "dragenter",
+    //            dataItemsFragment = new MpAvDataObject(MpPortableDataFormats.Text, "TEST").ToQuillDataItemsMessage().SerializeJsonObjectToBase64()
+    //        };
+    //        _wv.SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeJsonObjectToBase64()}')");
+    //        return false;
+    //    }
 
-        protected override void OnDraggableRegionsChanged(CefBrowser browser, CefFrame frame, CefDraggableRegion[] regions) {
+    //    protected override void OnDraggableRegionsChanged(CefBrowser browser, CefFrame frame, CefDraggableRegion[] regions) {
 
-        }
-    }
-
-    public class Test : CommonCefRenderHandler {
-        protected override bool StartDragging(CefBrowser browser, CefDragData dragData, CefDragOperationsMask allowedOps, int x, int y) {
-            return base.StartDragging(browser, dragData, allowedOps, x, y);
-        }
-        public Test(IOffscreenCefBrowserHost owner, ILogger logger) : base(owner, logger) {
-        }
-    }
+    //    }
+    //}
 #endif
 }

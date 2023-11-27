@@ -22,7 +22,7 @@
   <!-- MANUALLY SET PROPERTIES-->
   <!-- NOTE If changing BuildOs delete bin/obj folders, esp PCL-->
   <PropertyGroup>
-    <BuildOs>WINDOWS</BuildOs>
+    <BuildOs>MAC</BuildOs>
     <CultureExt>en-US</CultureExt>
   </PropertyGroup>
 
@@ -70,8 +70,8 @@
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>
     <!--<Platforms>AnyCPU;x64;x86</Platforms>-->
-    <UseOutSysCef>true</UseOutSysCef>
-    <UseCefNet>false</UseCefNet>
+    <UseOutSysCef>false</UseOutSysCef>
+    <UseCefNet>true</UseCefNet>
     <TargetRuntimeIdentifiers>win-x64;win-x86</TargetRuntimeIdentifiers>
     <CefPlatformRelDir>cef\cef_win</CefPlatformRelDir>
     <PlatformShortName>uwp</PlatformShortName> 
@@ -96,6 +96,7 @@
     <IsDesktop>true</IsDesktop>
     <UseOutSysCef>true</UseOutSysCef>
     <PlatformShortName>mac</PlatformShortName>
+    <TargetRuntimeIdentifiers>osx-x64;</TargetRuntimeIdentifiers>
     <!-- NOTE RuntimeIdentifiers set in mp-bundle-osx-x64.sh -->
     <!--<RuntimeIdentifiers>osx-x64</RuntimeIdentifiers>-->
   </PropertyGroup>

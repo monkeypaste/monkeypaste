@@ -388,13 +388,10 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {
 
-                var test = NSScreen.MainScreen.BackingScaleFactor;
-                if (MpAvWindowManager.MainWindow.GetVisualRoot() is IRenderRoot rr) {
-                    var test2 = rr.RenderScaling;
-                    var test3 = MpAvWindowManager.MainWindow.GetScreen().Scaling;
-                }
                 await MpAvCommonTools.Services.DeviceClipboard.ClearAsync();
-                var sil = await new[] { @"/Users/tkefauver/Desktop/icon_test.png" }.ToAvFilesObjectAsync();
+                var sil = await new[] {
+                    @"/Users/tkefauver/Desktop/icon_test.png",
+                    @"/Users/tkefauver/Desktop/Info.plist" }.ToAvFilesObjectAsync();
                 var avdo = new MpAvDataObject(MpPortableDataFormats.Files, sil);
                 //var avdo = new DataObject();
                 //avdo.Set("Files", sil);
