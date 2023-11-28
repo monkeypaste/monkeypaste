@@ -656,16 +656,7 @@
   
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controls\Content\OutSys\" />
-    <Folder Include="Resources\Legal\Licenses\" />
-    <!--<Content Include="Resources\Editor\**"  LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />-->
-
-    <Folder Include="Resources\Legal\"/>
-    <!--<Content Include="Resources\Legal\terms\terms.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>-->
-  </ItemGroup>
+  
     
   
   
@@ -1515,11 +1506,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <!--<Folder Include="Resources\Editor\src\components\bold\" />
-    <Folder Include="Resources\Editor\src\components\formatPaint\" />
-    <Folder Include="Resources\Editor\src\components\quill-wrapper\parchment\" />
-    -->
-    <Folder Include="Resources\Editor\" />
+    <!--<Folder Include="Resources\Editor\" />
     <Folder Include="Resources\Help\" />
     <Folder Include="Themes\Default\Assets\" />
     <Folder Include="Themes\Default\DensityStyles\" />
@@ -1530,9 +1517,20 @@
     <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
     <Folder Include="Views\Mobile\Notifications\Message\" />
     <Folder Include="Views\Mobile\Notifications\UserAction\" />
-    <Folder Include="Views\Reusable\TextBoxes\" />
+    <Folder Include="Views\Reusable\TextBoxes\" />-->
   </ItemGroup>
+  
+  <ItemGroup>
+    <!--<Folder Include="Controls\Content\OutSys\" />
+    <Folder Include="Resources\Legal\Licenses\" />
+    <Folder Include="Resources\Legal\"/>-->
+    
+    <Content Include="Resources\Editor\**"  LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />
 
+    <Content Include="Resources\Legal\terms\terms.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   
   
   <ItemGroup>

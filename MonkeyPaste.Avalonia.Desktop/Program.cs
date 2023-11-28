@@ -80,7 +80,6 @@ namespace MonkeyPaste.Avalonia {
 
             .UsePlatformDetect()
             //.WithInterFont()
-            .LogToTrace()
             .UseReactiveUI()
                 .LogToTrace()// LogEventLevel.Verbose)
                 ;

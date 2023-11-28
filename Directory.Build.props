@@ -78,7 +78,7 @@
     <StartupOutputType>WinExe</StartupOutputType>
   </PropertyGroup>
    
-  <PropertyGroup Condition="$(BuildOs) == 'LINUX'">
+  <PropertyGroup Condition="$(BuildOs) == 'LINUX'"> 
     <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
     <DefineConstants>$(DefineConstants);LINUX;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
@@ -89,8 +89,8 @@
   </PropertyGroup>
   
   <PropertyGroup Condition="$(BuildOs) == 'MAC'">
-    <MainTargetFramework>$(DefaultFramework)-macos</MainTargetFramework>
-    <CommonTargetFramework>$(DefaultFramework)-macos</CommonTargetFramework>
+    <MainTargetFramework>$(DefaultFramework)</MainTargetFramework>
+    <CommonTargetFramework>$(DefaultFramework)</CommonTargetFramework>
     <DefineConstants>$(DefineConstants);MAC;DESKTOP;</DefineConstants>
     <MainProjectName>MonkeyPaste.Avalonia.Desktop</MainProjectName>
     <IsDesktop>true</IsDesktop>

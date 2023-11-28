@@ -2,6 +2,7 @@
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Platform.Storage;
 using Avalonia.Rendering;
 using Avalonia.VisualTree;
 using MonkeyPaste.Common;
@@ -388,16 +389,20 @@ namespace MonkeyPaste.Avalonia {
         public ICommand GenericTestCommand4 => new MpAsyncCommand(
             async () => {
 
-                await MpAvCommonTools.Services.DeviceClipboard.ClearAsync();
+                //await MpAvCommonTools.Services.DeviceClipboard.ClearAsync();
                 var sil = await new[] {
                     @"/Users/tkefauver/Desktop/icon_test.png",
                     @"/Users/tkefauver/Desktop/Info.plist" }.ToAvFilesObjectAsync();
-                var avdo = new MpAvDataObject(MpPortableDataFormats.Files, sil);
+
+
                 //var avdo = new DataObject();
-                //avdo.Set("Files", sil);
+                //avdo.Set("FileNames", sil.Select(x => x.TryGetLocalPath()).ToArray());
                 //await MpAvCommonTools.Services.DeviceClipboard.SetDataObjectAsync(avdo);
 
+
+                var avdo = new MpAvDataObject(MpPortableDataFormats.Files, sil);
                 await Mp.Services.DataObjectTools.WriteToClipboardAsync(avdo, true);
+
             });
 
         public ICommand GenericTestCommand5 => new MpAsyncCommand(

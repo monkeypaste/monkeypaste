@@ -1,7 +1,4 @@
-﻿using CefNet.Internal;
-using CefNet.JSInterop;
-using CefNet.WinApi;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -10,6 +7,10 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+
+using CefNet.Internal;
+using CefNet.JSInterop;
+using CefNet.WinApi;
 
 namespace CefNet
 {
@@ -63,7 +64,7 @@ namespace CefNet
 
 		static CefNetApplication()
 		{
-			using (Process process = Process.GetCurrentProcess())
+			using(Process process = Process.GetCurrentProcess())
 			{
 				AllowDotnetProcess = "dotnet".Equals(process.ProcessName, StringComparison.Ordinal);
 			}
@@ -106,7 +107,7 @@ namespace CefNet
 		private static void AssertApiVersion()
 		{
 			string hash = CefApi.CefApiHash(CefApiHashType.Universal);
-			if (CefApi.ApiHash.Equals(hash, StringComparison.OrdinalIgnoreCase))
+			if(CefApi.ApiHash.Equals(hash, StringComparison.OrdinalIgnoreCase))
 				return;
 
 			Version assemblyVersion = typeof(CefApi).Assembly.GetName().Version;
@@ -121,46 +122,46 @@ namespace CefNet
 
 		private static string InitializeDllPath(string cefPath)
 		{
-			if (!string.IsNullOrWhiteSpace(cefPath))
+			if(!string.IsNullOrWhiteSpace(cefPath))
 			{
 				cefPath = cefPath.Trim();
-				if (!Directory.Exists(cefPath))
+				if(!Directory.Exists(cefPath))
 					throw new DirectoryNotFoundException(string.Format("The CEF runtime can't be initialized from '{0}'.", cefPath));
 
 				string path = Environment.GetEnvironmentVariable("PATH") ?? string.Empty;
-				if (PlatformInfo.IsWindows)
+				if(PlatformInfo.IsWindows)
 				{
-					if (!path.StartsWith(cefPath, StringComparison.CurrentCultureIgnoreCase)
+					if(!path.StartsWith(cefPath, StringComparison.CurrentCultureIgnoreCase)
 						|| (path.Length > cefPath.Length && path[cefPath.Length] != ';'))
 					{
 						Environment.SetEnvironmentVariable("PATH", cefPath + ";" + path);
 					}
 					return Path.Combine(cefPath, "libcef.dll");
 				}
-				else if (PlatformInfo.IsLinux)
+				else if(PlatformInfo.IsLinux)
 				{
-					if (!path.StartsWith(cefPath, StringComparison.CurrentCulture)
+					if(!path.StartsWith(cefPath, StringComparison.CurrentCulture)
 						|| (path.Length > cefPath.Length && path[cefPath.Length] != ':'))
 					{
 						Environment.SetEnvironmentVariable("PATH", cefPath + ":" + path);
 					}
 					path = Environment.GetEnvironmentVariable("LD_LIBRARY_PATH") ?? string.Empty;
-					if (!path.StartsWith(cefPath, StringComparison.CurrentCulture)
+					if(!path.StartsWith(cefPath, StringComparison.CurrentCulture)
 						|| (path.Length > cefPath.Length && path[cefPath.Length] != ';'))
 					{
 						Environment.SetEnvironmentVariable("LD_LIBRARY_PATH", cefPath + ":" + path);
 					}
 					return Path.Combine(cefPath, "libcef.so");
 				}
-				else if (PlatformInfo.IsMacOS)
+				else if(PlatformInfo.IsMacOS)
 				{
-					if (!path.StartsWith(cefPath, StringComparison.CurrentCulture)
+					if(!path.StartsWith(cefPath, StringComparison.CurrentCulture)
 						|| (path.Length > cefPath.Length && path[cefPath.Length] != ':'))
 					{
 						Environment.SetEnvironmentVariable("PATH", cefPath + ":" + path);
 					}
 					path = Environment.GetEnvironmentVariable("DYLD_LIBRARY_PATH") ?? string.Empty;
-					if (!path.StartsWith(cefPath, StringComparison.CurrentCulture)
+					if(!path.StartsWith(cefPath, StringComparison.CurrentCulture)
 						|| (path.Length > cefPath.Length && path[cefPath.Length] != ';'))
 					{
 						Environment.SetEnvironmentVariable("DYLD_LIBRARY_PATH", cefPath + ":" + Path.Combine(cefPath, "Libraries") + ":" + path);
@@ -169,11 +170,11 @@ namespace CefNet
 				}
 			}
 
-			if (PlatformInfo.IsWindows)
+			if(PlatformInfo.IsWindows)
 				return "libcef.dll";
-			if (PlatformInfo.IsLinux)
+			if(PlatformInfo.IsLinux)
 				return "libcef.so";
-			if (PlatformInfo.IsMacOS)
+			if(PlatformInfo.IsMacOS)
 				return "Chromium Embedded Framework";
 
 			throw new PlatformNotSupportedException();
@@ -192,29 +193,30 @@ namespace CefNet
 		/// <exception cref="InvalidOperationException"></exception>
 		public void Initialize(string path, CefSettings settings)
 		{
-			if (PlatformInfo.IsWindows)
+			if(PlatformInfo.IsWindows)
 			{
-				if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
+				if(Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
 					throw new InvalidOperationException("The calling thread must be STA");
 			}
 
-			if (IsInitialized)
+			if(IsInitialized)
 				throw new InvalidOperationException("CEF already initialized. You must call Initialize once per application process.");
 
 			path = InitializeDllPath(path);
 
-			if (PlatformInfo.IsWindows)
+			if(PlatformInfo.IsWindows)
 			{
 				const int LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008;
 				_cefLibHandle = NativeMethods.LoadLibraryEx(path, IntPtr.Zero, LOAD_WITH_ALTERED_SEARCH_PATH);
-				if (IntPtr.Zero == _cefLibHandle)
+				if(IntPtr.Zero == _cefLibHandle)
 					throw new DllNotFoundException(string.Format("Can't load '{0}' (error: {1}).", path, Marshal.GetLastWin32Error()));
 			}
-			else if (PlatformInfo.IsLinux || PlatformInfo.IsMacOS)
+			else if(PlatformInfo.IsLinux || PlatformInfo.IsMacOS)
 			{
 				const int RTLD_NOW = 2;
+				Debugger.Break();
 				_cefLibHandle = NativeMethods.dlopen(path, RTLD_NOW);
-				if (IntPtr.Zero == _cefLibHandle)
+				if(IntPtr.Zero == _cefLibHandle)
 					throw new DllNotFoundException(string.Format("Can't load '{0}'.", path));
 			}
 			else
@@ -222,7 +224,7 @@ namespace CefNet
 				throw new PlatformNotSupportedException();
 			}
 
-			if (!TryInitializeDllImportResolver(_cefLibHandle) && PlatformInfo.IsMacOS)
+			if(!TryInitializeDllImportResolver(_cefLibHandle) && PlatformInfo.IsMacOS)
 				throw new NotSupportedException("Requires .NET Core 3.0 or later.");
 
 			AssertApiVersion();
@@ -235,11 +237,11 @@ namespace CefNet
 			// Main args
 			CefMainArgs main_args = CefMainArgs.CreateDefault();
 			int retval = CefApi.ExecuteProcess(main_args, this, IntPtr.Zero);
-			if (retval != -1)
+			if(retval != -1)
 				Environment.Exit(retval);
 
 			UsesExternalMessageLoop = settings.ExternalMessagePump;
-			if (!CefApi.Initialize(main_args, settings, this, IntPtr.Zero))
+			if(!CefApi.Initialize(main_args, settings, this, IntPtr.Zero))
 				throw new CefRuntimeException("Failed to initialize the CEF browser process.");
 
 			GC.KeepAlive(settings);
@@ -256,15 +258,15 @@ namespace CefNet
 			return true;
 #else
 			Type nativeLibraryType = Type.GetType("System.Runtime.InteropServices.NativeLibrary");
-			if (nativeLibraryType is null)
+			if(nativeLibraryType is null)
 				return false;
 
 			Type dllImportResolverDelegateType = Type.GetType("System.Runtime.InteropServices.DllImportResolver");
-			if (dllImportResolverDelegateType is null)
+			if(dllImportResolverDelegateType is null)
 				return false;
 
 			MethodInfo setDllImportResolver = nativeLibraryType.GetMethod("SetDllImportResolver", new[] { typeof(Assembly), dllImportResolverDelegateType });
-			if (setDllImportResolver is null)
+			if(setDllImportResolver is null)
 				return false;
 
 			setDllImportResolver.Invoke(null, new object[] {
@@ -291,7 +293,7 @@ namespace CefNet
 		/// </returns>
 		protected virtual IntPtr ResolveNativeLibrary(string libname, Assembly assembly, DllImportSearchPath? paths)
 		{
-			if ("libcef".Equals(libname, StringComparison.Ordinal))
+			if("libcef".Equals(libname, StringComparison.Ordinal))
 				return _cefLibHandle;
 			return IntPtr.Zero;
 		}
@@ -315,7 +317,7 @@ namespace CefNet
 		/// </exception>
 		public void AssertAccess()
 		{
-			if (!CheckAccess())
+			if(!CheckAccess())
 				throw new InvalidOperationException("Cross-thread operation not valid.");
 		}
 
@@ -331,7 +333,7 @@ namespace CefNet
 		/// </remarks>
 		public static void Run()
 		{
-			if (Instance is null || !Instance.CheckAccess())
+			if(Instance is null || !Instance.CheckAccess())
 				throw new InvalidOperationException("Cross-thread operation not valid.");
 			CefApi.RunMessageLoop();
 		}
@@ -344,7 +346,7 @@ namespace CefNet
 		/// </remarks>
 		public static void Exit()
 		{
-			if (CefApi.CurrentlyOn(CefThreadId.UI))
+			if(CefApi.CurrentlyOn(CefThreadId.UI))
 				CefApi.QuitMessageLoop();
 			else
 				CefNetApi.Post(CefThreadId.UI, CefApi.QuitMessageLoop);
@@ -358,7 +360,7 @@ namespace CefNet
 		{
 			var shutdownTaskSource = new TaskCompletionSource<bool>();
 			shutdownTaskSource = Interlocked.CompareExchange(ref _shutdownSignalTaskSource, shutdownTaskSource, null) ?? shutdownTaskSource;
-			if (Volatile.Read(ref _browsersCount) == 0)
+			if(Volatile.Read(ref _browsersCount) == 0)
 				shutdownTaskSource.TrySetResult(false);
 			await shutdownTaskSource.Task.ConfigureAwait(false);
 			GC.Collect();
@@ -384,17 +386,17 @@ namespace CefNet
 		{
 			get
 			{
-				if (_ProcessType != null)
+				if(_ProcessType != null)
 					return _ProcessType.Value;
 
 				string type = Environment.GetCommandLineArgs().FirstOrDefault(arg => arg.StartsWith("--type="));
-				if (type is null)
+				if(type is null)
 				{
 					_ProcessType = ProcessType.Main;
 					return ProcessType.Main;
 				}
 
-				switch (type.Substring(7))
+				switch(type.Substring(7))
 				{
 					case "renderer":
 						_ProcessType = ProcessType.Renderer;
@@ -459,10 +461,10 @@ namespace CefNet
 		{
 			CefListValue args = msg.ArgumentList;
 			var sqi = ScriptableRequestInfo.Get(args.GetInt(0));
-			if (sqi is null)
+			if(sqi is null)
 				return true;
 
-			if (args.GetSize() == 2)
+			if(args.GetSize() == 2)
 			{
 				sqi.Complete(args.GetValue(1));
 			}
@@ -475,12 +477,12 @@ namespace CefNet
 
 		private static void ProcessXrayRelease(CefProcessMessageReceivedEventArgs e)
 		{
-			using (var args = e.Message.ArgumentList)
+			using(var args = e.Message.ArgumentList)
 			{
-				if (args.GetType(0) != CefValueType.Binary)
+				if(args.GetType(0) != CefValueType.Binary)
 					return;
 				XrayHandle handle = XrayHandle.FromCfxBinaryValue(args.GetBinary(0));
-				if ((int)(handle.frame >> 32) != (int)(e.Frame.Identifier >> 32))
+				if((int)(handle.frame >> 32) != (int)(e.Frame.Identifier >> 32))
 					return; // Mismatch process IDs
 				handle.Release();
 			}
@@ -503,7 +505,7 @@ namespace CefNet
 				CefV8Context v8Context;
 				XrayObject target = null;
 
-				if (queryAction == XrayAction.GetGlobal)
+				if(queryAction == XrayAction.GetGlobal)
 				{
 					v8Context = e.Frame.V8Context;
 				}
@@ -513,18 +515,18 @@ namespace CefNet
 					v8Context = target?.Context ?? e.Frame.V8Context;
 				}
 
-				if (!v8Context.IsValid)
+				if(!v8Context.IsValid)
 					throw new ObjectDeadException();
-				if (!v8Context.Enter())
+				if(!v8Context.Enter())
 					throw new ObjectDeadException();
 				try
 				{
 					CefV8Value rv = null;
-					switch (queryAction)
+					switch(queryAction)
 					{
 						case XrayAction.Get:
 							long corsRid = ScriptableObjectProvider.Get(v8Context, target, args, out rv);
-							if (corsRid != 0)
+							if(corsRid != 0)
 							{
 								var xray = new XrayHandle();
 								xray.dataType = XrayDataType.CorsRedirect;
@@ -549,10 +551,10 @@ namespace CefNet
 						default:
 							throw new NotSupportedException();
 					}
-					if (rv != null)
+					if(rv != null)
 					{
 						retval = ScriptableObjectProvider.CastCefV8ValueToCefValue(v8Context, rv, out bool isXray);
-						if (!isXray) rv.Dispose();
+						if(!isXray) rv.Dispose();
 						retArgs.SetValue(1, retval);
 					}
 				}
@@ -561,9 +563,9 @@ namespace CefNet
 					v8Context.Exit();
 				}
 			}
-			catch (AccessViolationException) { throw; }
-			catch (OutOfMemoryException) { throw; }
-			catch (Exception ex)
+			catch(AccessViolationException) { throw; }
+			catch(OutOfMemoryException) { throw; }
+			catch(Exception ex)
 			{
 				//File.AppendAllText("G:\\outlog.txt", ex.GetType().Name + ": " + ex.Message + "\r\n" + ex.StackTrace + "\r\n");
 				retArgs.SetSize(4);
@@ -586,7 +588,7 @@ namespace CefNet
 		}
 
 
-#region CefRenderProcessHandler
+		#region CefRenderProcessHandler
 
 		/// <summary>
 		/// Raises the <see cref="WebKitInitialized"/> event.
@@ -613,7 +615,7 @@ namespace CefNet
 		/// <param name="browser">The browser instance.</param>
 		protected internal virtual void OnBrowserDestroyed(CefBrowser browser)
 		{
-			if (Interlocked.Decrement(ref _browsersCount) == 0)
+			if(Interlocked.Decrement(ref _browsersCount) == 0)
 				Volatile.Read(ref _shutdownSignalTaskSource)?.TrySetResult(true);
 		}
 
@@ -656,16 +658,16 @@ namespace CefNet
 		/// </summary>
 		protected internal virtual void OnCefProcessMessageReceived(CefProcessMessageReceivedEventArgs e)
 		{
-			if (e.SourceProcess == CefProcessId.Renderer)
+			if(e.SourceProcess == CefProcessId.Renderer)
 			{
-				if (e.Name == XrayResponseKey)
+				if(e.Name == XrayResponseKey)
 				{
 					e.Handled = ProcessXrayMessage(e.Message);
 				}
 			}
-			else if (e.SourceProcess == CefProcessId.Browser)
+			else if(e.SourceProcess == CefProcessId.Browser)
 			{
-				switch (e.Name)
+				switch(e.Name)
 				{
 					case XrayReleaseKey:
 						ProcessXrayRelease(e);
@@ -675,13 +677,13 @@ namespace CefNet
 						return;
 				}
 			}
-			if (!e.Handled)
+			if(!e.Handled)
 			{
 				CefProcessMessageReceived?.Invoke(this, e);
 			}
 		}
 
-#endregion
+		#endregion
 
 		/// <summary>
 		/// Raises the <see cref="CefContextInitialized"/> event.<para/>
@@ -704,7 +706,7 @@ namespace CefNet
 		/// </remarks>
 		protected internal virtual void OnBeforeChildProcessLaunch(BeforeChildProcessLaunchEventArgs e)
 		{
-			if (AllowDotnetProcess)
+			if(AllowDotnetProcess)
 			{
 				e.CommandLine.Program = Environment.GetCommandLineArgs()[0];
 				e.CommandLine.PrependWrapper("dotnet");

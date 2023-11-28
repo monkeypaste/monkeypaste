@@ -1,13 +1,13 @@
-﻿using AppKit;
-
+﻿
 using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Platform.Storage;
 
-//using MonoMac.AppKit;
-//using MonoMac.CoreText;
-//using MonoMac.Foundation;
-using Foundation;
+using MonoMac.AppKit;
+using MonoMac.CoreText;
+using MonoMac.Foundation;
+//using AppKit;
+//using Foundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +56,8 @@ namespace MonkeyPaste.Common.Avalonia {
 
         public static async Task WriteToPasteboardAsync(this IDataObject ido, bool isDnd) {
             await Task.Delay(1);
-            NSPasteboard pb = isDnd ? NSPasteboard.FromName(NSPasteboard.NSPasteboardNameDrag) : NSPasteboard.GeneralPasteboard;
+            //NSPasteboard pb = isDnd ? NSPasteboard.FromName(NSPasteboard.NSPasteboardNameDrag) : NSPasteboard.GeneralPasteboard;
+            NSPasteboard pb = isDnd ? NSPasteboard.FromName(NSPasteboard.NSDragPasteboardName) : NSPasteboard.GeneralPasteboard;
 
             pb.ClearContents();
 
@@ -70,24 +71,26 @@ namespace MonkeyPaste.Common.Avalonia {
                                 !fpl.Any()) {
                                 continue;
                             }
-                            //NSMutableArray nsarr = new NSMutableArray();
-                            //foreach (var fp in fpl) {
-                            //    NSUrl url = NSUrl.FromFilename(fp);
-                            //    nsarr.Add(url); 
-                            //    pb.SetDataForType(NSData.FromUrl(url), MpPortableDataFormats.MacFiles1);
-                            //}
-                            pb.WriteObjects(fpl.Select(x => NSUrl.FromFilename(x)).ToArray());
-                            pb.WriteObjects(new NSString[] { new NSString(string.Join(Environment.NewLine, fpl.Select(x => x.ToFileSystemUriFromPath()))) });
+                            //pb.WriteObjects(fpl.Select(x => NSUrl.FromFilename(x)).ToArray());
+                            //pb.WriteObjects(new NSString[] { new NSString(string.Join(Environment.NewLine, fpl.Select(x => x.ToFileSystemUriFromPath()))) });
 
-                            //pb.DeclareTypes(new[] { MpPortableDaftaFormats.MacFiles1, MpPortableDataFormats.MacFiles2, MpPortableDataFormats.Text }, null);
+
+                            NSMutableArray nsarr = new NSMutableArray();
+                            foreach (var fp in fpl) {
+                                NSUrl url = NSUrl.FromFilename(fp);
+                                nsarr.Add(url);
+                                //pb.SetDataForType(NSData.FromUrl(url), MpPortableDataFormats.MacFiles1);
+                            }
+
+                            //pb.DeclareTypes(new[] { MpPortableDataFormats.MacFiles1, MpPortableDataFormats.Text }, null);
                             //NSData data = NSKeyedArchiver.ArchivedDataWithRootObject(nsarr);
                             //pb.SetDataForType(data, MpPortableDataFormats.MacFiles1);
                             //pb.SetDataForType(data, MpPortableDataFormats.MacFiles2);
 
-                            //pb.SetDataForType(NSData.FromUrl(NSUrl.FromFilename(fpl.FirstOrDefault())), MpPortableDataFormats.MacFiles1);
-                            //pb.SetDataForType(NSData.FromUrl(NSUrl.FromFilename(fpl.FirstOrDefault())), MpPortableDataFormats.MacFiles2);
+                            pb.SetDataForType(NSData.FromUrl(NSUrl.FromFilename(fpl.FirstOrDefault())), MpPortableDataFormats.MacFiles1);
 
-                            //pb.SetDataForType(NSData.FromString(string.Join(Environment.NewLine, fpl.Select(x => x.ToFileSystemUriFromPath()))), MpPortableDataFormats.Text);
+                            pb.SetDataForType(NSData.FromString(string.Join(Environment.NewLine, fpl.Select(x => x.ToFileSystemUriFromPath()))), MpPortableDataFormats.Text);
+                            //ido.Set(format, fpl.FirstOrDefault().ToFileSystemUriFromPath());
                             break;
                         }
                     case MpPortableDataFormats.Image: {
@@ -95,32 +98,34 @@ namespace MonkeyPaste.Common.Avalonia {
                             if (!ido.TryGetData(format, out string imgBase64)) {
                                 continue;
                             }
-                            NSUrl nsurl = NSUrl.FromString(imgBase64.ToBase64ImageUrl());
-                            NSData nsdata = NSData.FromUrl(nsurl);
-                            NSImage nsimg = new NSImage(nsdata);
-                            pb.WriteObjects(new NSImage[] { nsimg });
+                            //NSUrl nsurl = NSUrl.FromString(imgBase64.ToBase64ImageUrl());
+                            //NSData nsdata = NSData.FromUrl(nsurl);
+                            //NSImage nsimg = new NSImage(nsdata);
+                            //pb.WriteObjects(new NSImage[] { nsimg });
 
                             //NSArray arr = NSArray.FromNSObjects(nsimg);
                             //ido.Set(format, arr);
 
-                            //ido.Set(format, imgBase64.ToBytesFromBase64String());
+                            ido.Set(format, imgBase64.ToBytesFromBase64String());
                             break;
                         }
                     default: {
                             if (!ido.TryGetData(format, out string dataStr)) {
                                 continue;
                             }
-                            NSString nsstr = new NSString(dataStr);
-                            pb.WriteObjects(new NSString[] { nsstr });
+                            //NSString nsstr = new NSString(dataStr);
+                            //pb.WriteObjects(new NSString[] { nsstr });
+
                             //NSArray arr = NSArray.FromNSObjects(nsstr);
                             //ido.Set(format, arr);
 
-                            //ido.Set(format, dataStr);
+                            ido.Set(format, dataStr);
                             break;
                         }
 
                 }
             }
+            //await MpAvCommonTools.Services.DeviceClipboard.SetDataObjectAsync(ido);
         }
     }
 

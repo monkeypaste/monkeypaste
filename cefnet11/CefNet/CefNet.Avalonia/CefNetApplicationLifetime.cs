@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
@@ -159,7 +161,7 @@ namespace CefNet
 				this.ShutdownRequested += OnShutdownRequested;
 
 				_cts = new CancellationTokenSource();
-				MainWindow?.Show();
+				ShowMainWindow();
 
 				Dispatcher.UIThread.MainLoop(_cts.Token);
 
@@ -174,7 +176,12 @@ namespace CefNet
 				CefNetApplication.Instance.Shutdown();
 			}
 		}
-
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private void ShowMainWindow()
+		{
+			this.MainWindow = MainWindow;
+			MainWindow?.Show();
+		}
 		public void Dispose()
 		{
 			if(_activeLifetime == this)
@@ -185,7 +192,8 @@ namespace CefNet
 
 	public static class CefNetApplicationLifetimeExtensions
 	{
-		public static int StartWithCefNetApplicationLifetime(this AppBuilder builder, string[] args, ShutdownMode shutdownMode = ShutdownMode.OnLastWindowClose)
+		public static int StartWithCefNetApplicationLifetime(
+			this AppBuilder builder, string[] args, ShutdownMode shutdownMode = ShutdownMode.OnLastWindowClose)
 		//where T : AppBuilderBase<T>, new()
 		{
 			CefNetApplicationLifetime lifetime = new CefNetApplicationLifetime
