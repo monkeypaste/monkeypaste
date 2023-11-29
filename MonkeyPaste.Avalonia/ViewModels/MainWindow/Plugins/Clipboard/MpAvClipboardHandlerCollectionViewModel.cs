@@ -201,7 +201,7 @@ namespace MonkeyPaste.Avalonia {
         public MpAvMenuItemViewModel ContextMenuItemViewModel {
             get {
                 return new MpAvMenuItemViewModel() {
-                    Header = @"_Transform",
+                    Header = UiStrings.ClipTileTransformHeader,
                     IconResourceKey = Mp.Services.PlatformResource.GetResource("ButterflyImage") as string,
                     SubItems = Items.Select(x => x.ContextMenuItemViewModel).ToList()
                 };

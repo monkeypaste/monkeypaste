@@ -2156,8 +2156,8 @@ namespace MonkeyPaste.Avalonia {
                 }
                 var can_close_result = await
                     Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                        title: UiStrings.CommonNtfConfirmTitle,
-                        message: "Are you sure you want to finish appending?",
+                        title: UiStrings.CommonConfirmLabel,
+                        message: UiStrings.ClipTileAppendConfirmCompleteText,
                         iconResourceObj: "QuestionMarkImage",
                         owner: confirm_owner,
                         ntfType: MpNotificationType.ConfirmEndAppend);
@@ -2232,8 +2232,8 @@ namespace MonkeyPaste.Avalonia {
 
             var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                                     notificationType: MpNotificationType.ModalContentFormatDegradation,
-                                    title: "Data Degradation Warning",
-                                    body: $"Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?");
+                                    title: UiStrings.ClipTileDataDegradeNtfTitle,
+                                    body: UiStrings.ClipTileDataDegradeNtfText);
 
             if (result == MpNotificationDialogResultType.Cancel) {
                 return;

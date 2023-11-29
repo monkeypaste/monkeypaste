@@ -75,12 +75,12 @@
                             <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
                                       IsVisible="{Binding IsCheckable}"
                                       Classes="alterOnly"
-                                      Content="Case Sensitive" />
+                                      Content="{x:Static local:UiStrings.SearchCaseSensitiveLabel}" />
                             <!--  WHOLE WORD CHECKBOX  -->
                             <CheckBox IsChecked="{Binding IsChecked2, Mode=TwoWay}"
                                       IsVisible="{Binding IsCheckable}"
                                       Classes="alterOnly"
-                                      Content="Whole Word" />
+                                      Content="{x:Static local:UiStrings.SearchWholeWordLabel}" />
 
                             <!--  Color picker  -->
                             <Button x:Name="ColorPickerButton"
@@ -164,10 +164,10 @@
                         <StackPanel Orientation="Horizontal"
                                     DockPanel.Dock="Left"
                                     Margin="7,0,5,0">
-                            <Label Content="Threshold"
+                            <Label Content="{x:Static local:UiStrings.SearchThresholdLabel}"
                                    FontWeight="SemiBold"
                                    VerticalAlignment="Center" />
-                            <local:MpAvToolTipInfoHintView ToolTipText="Thresholds above 0 will provide fuzzy color matching using Euclidean distance in the RGBA colorspace. For example, if red (#FF0000) is the search term and black (#000000) is a pixel in an image then the color distance will be 255. Black to white distance is the maximum possible at 510, including an alpha channel" />
+                            <local:MpAvToolTipInfoHintView ToolTipText="{x:Static local:UiStrings.SearchColorDistanceToolTipText}" />
 
                         </StackPanel>
 

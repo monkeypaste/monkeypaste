@@ -204,7 +204,7 @@
                         IsVisible="{Binding CanRemember}">
                 <Label Foreground="White"
                        VerticalAlignment="Center"
-                       Content="{x:Static local:UiStrings.DbPasswordRememberLabel}" />
+                       Content="{x:Static local:UiStrings.CommonRememberLabel}" />
                 <CheckBox x:Name="RememberCheckbox"
                           IsChecked="{Binding RememberInputText, Mode=TwoWay}" />
             </StackPanel>
@@ -329,24 +329,24 @@
             <!--  Yes, No, Cancel or Ok, Cancel States  -->
 
             <Button Classes="defaultButton textOnlyButton"
-                    Content="{x:Static local:UiStrings.UserActionYesButtonText}"
+                    Content="{x:Static local:UiStrings.CommonYesButtonText}"
                     IsDefault="{Binding ShowYesButton}"
                     Command="{Binding YesCommand}"
                     IsVisible="{Binding ShowYesButton}">
-                <TextBlock Text="{x:Static local:UiStrings.UserActionYesButtonText}" />
+                <TextBlock Text="{x:Static local:UiStrings.CommonYesButtonText}" />
             </Button>
             <Button Classes="defaultButton textOnlyButton"
-                    Content="{x:Static local:UiStrings.UserActionNoButtonText}"
+                    Content="{x:Static local:UiStrings.CommonNoButtonText}"
                     Command="{Binding NoCommand}"
                     IsVisible="{Binding ShowNoButton}">
-                <TextBlock Text="{x:Static local:UiStrings.UserActionNoButtonText}" />
+                <TextBlock Text="{x:Static local:UiStrings.CommonNoButtonText}" />
             </Button>
             <!--  did  -->
             <Button Classes="defaultButton textOnlyButton"
                     IsDefault="{Binding ShowOkButton}"
                     Command="{Binding OkCommand}"
                     IsVisible="{Binding ShowOkButton}">
-                <TextBlock Text="{x:Static local:UiStrings.UserActionOkButtonText}" />
+                <TextBlock Text="{x:Static local:UiStrings.CommonOkLabel}" />
             </Button>
             <Button Classes="defaultButton textOnlyButton"
                     Content="{x:Static local:UiStrings.UserActionSubmitButtonText}"
@@ -356,10 +356,10 @@
                 <TextBlock Text="{x:Static local:UiStrings.UserActionSubmitButtonText}" />
             </Button>
             <Button Classes="defaultButton textOnlyButton"
-                    Content="{x:Static local:UiStrings.UserActionCancelButtonText}"
+                    Content="{x:Static local:UiStrings.CommonCancelLabel}"
                     Command="{Binding CancelCommand}"
                     IsVisible="{Binding ShowCancelButton}">
-                <TextBlock Text="{x:Static local:UiStrings.UserActionCancelButtonText}" />
+                <TextBlock Text="{x:Static local:UiStrings.CommonCancelLabel}" />
             </Button>
         </StackPanel>
     </Grid>

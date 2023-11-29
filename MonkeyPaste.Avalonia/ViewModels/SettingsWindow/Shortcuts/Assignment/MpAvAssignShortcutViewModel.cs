@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
                 Topmost = true,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("KeyboardImage", typeof(WindowIcon), null, null) as WindowIcon,
-                Title = UiStrings.ShortcutAssignWindowTitle.ToWindowTitleText(),
+                Title = UiStrings.CommonAssignShortcutLabel.ToWindowTitleText(),
                 Content = new MpAvAssignShortcutView()
             };
             ascw.Classes.Add("assignWindow");
@@ -294,10 +294,10 @@ namespace MonkeyPaste.Avalonia {
             DuplicatedShortcutViewModel = null;
             OnPropertyChanged(nameof(ClearButtonLabel));
 
-            if (_gestureHelper.Downs.Count > 0) {
-                // only validate after gesture
-                return true;
-            }
+            //if (_gestureHelper.Downs.Count > 0) {
+            //    // only validate after gesture
+            //    return true;
+            //}
 
             switch (AssignmentType) {
                 case MpShortcutAssignmentType.CanBeGlobalCommand:

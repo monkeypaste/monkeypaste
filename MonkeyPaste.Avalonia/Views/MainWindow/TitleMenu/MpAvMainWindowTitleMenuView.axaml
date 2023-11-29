@@ -155,7 +155,7 @@
                 <PathIcon Data="{StaticResource CogSvg}" />
             </ToggleButton>
 
-            <!--  LOCK BUTTON  -->            
+            <!--  LOCK BUTTON  -->
             <ToggleButton x:Name="LockToggleButton"
                           IsVisible="{Binding IsDesktop, Source={x:Static local:MpAvThemeViewModel.Instance}}"
                           IsChecked="{Binding IsMainWindowLocked, Source={x:Static local:MpAvMainWindowViewModel.Instance}, Mode=OneWay}"
@@ -224,7 +224,6 @@
 
                 <ToolTip.Tip>
                     <local:MpAvToolTipView ToolTipText="{Binding ZoomFactor, Source={x:Static local:MpAvClipTrayViewModel.Instance}, StringFormat='Scale \{0:f\} x'}" />
-                    <!--<local:MpAvToolTipView ToolTipText="Test" />-->
                 </ToolTip.Tip>
                 <!--  TRACK LINE  -->
                 <Border x:Name="ZoomTrackLine"
@@ -262,7 +261,7 @@
                           ToolTip.ShowDelay="0">
                 <PathIcon Data="{StaticResource GridLayoutSvg}">
                     <ToolTip.Tip>
-                        <local:MpAvToolTipView ToolTipText="Toggle Grid Layout" />
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.MainWindowTitleToggleGridLayoutToolTip}" />
                     </ToolTip.Tip>
                 </PathIcon>
             </ToggleButton>
@@ -277,7 +276,7 @@
                     local:MpAvPointerCommandExtension.RightPressCommand="{Binding CycleOrientationCommand, Source={x:Static local:MpAvMainWindowViewModel.Instance}}"
                     local:MpAvPointerCommandExtension.RightPressCommandParameter="CW">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Cycle Orientation CCW" />
+                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.MainWindowTitleCycleOrientationToolTip}" />
                 </ToolTip.Tip>
 
                 <PathIcon Data="{StaticResource RotateCcwSvg}" />

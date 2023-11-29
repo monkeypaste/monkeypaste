@@ -399,7 +399,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
-                            Header = "Remove",
+                            Header = UiStrings.CommonRemoveLabel,
                             IconResourceKey = "DeleteImage",
                             Command = DeleteThisActionCommand
                         }

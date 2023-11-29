@@ -87,7 +87,7 @@ namespace MonkeyPaste.Avalonia {
                 subItems.Add(
                     new MpAvMenuItemViewModel() {
                         IconResourceKey = Mp.Services.PlatformResource.GetResource("CogImage") as string,
-                        Header = $"Manage '{Title}'",
+                        Header = string.Format(UiStrings.CommonManageLabel2, Title),
                         Command = ManageAnalyticItemCommand,
                         CommandParameter = PluginGuid
                     });
@@ -667,7 +667,7 @@ namespace MonkeyPaste.Avalonia {
                         // show execute params
                         var exec_ntf_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.ExecuteParametersRequest,
-                            title: "Enter Values",
+                            title: UiStrings.AnalyzerExecuteParamNtfTitle,
                             body: SelectedItem,
                             iconSourceObj: SelectedItem.IconId);
 
@@ -842,7 +842,7 @@ namespace MonkeyPaste.Avalonia {
                 if (shared_params_to_clear_or_restore.Any()) {
                     // ntf w/ yes/no/cancel to reset shared values
                     var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
-                        title: UiStrings.CommonNtfConfirmTitle,
+                        title: UiStrings.CommonConfirmLabel,
                         message: $"'{aipvm.Label}' contains shared values. Would you like to reset those as well?",
                         iconResourceObj: "QuestionMarkImage",
                         owner: MpAvWindowManager.MainWindow);

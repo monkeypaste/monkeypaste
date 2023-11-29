@@ -47,7 +47,7 @@ function updatePasteValueTextAreaToFocus(ft) {
     }
     das_container_elm.classList.remove('hidden');
     getPasteValueTextAreaElement().value = getTemplatePasteValue(ft);
-    getPasteValueTextAreaElement().placeholder = `[${ft.templateName}] is empty...`;    
+    getPasteValueTextAreaElement().placeholder = UiStrings['EditorTemplateEmptyPlaceholder'].Format(ft.templateName);    
 }
 
 

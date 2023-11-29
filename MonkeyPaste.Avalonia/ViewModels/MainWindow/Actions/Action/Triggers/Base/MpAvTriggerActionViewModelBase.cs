@@ -83,7 +83,7 @@ namespace MonkeyPaste.Avalonia {
                 return new MpAvMenuItemViewModel() {
                     SubItems = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {
-                            Header = "Add",
+                            Header = UiStrings.CommonAddLabel,
                             IconResourceKey = "AddImage",
                             SubItems =
                                 typeof(MpActionType)
@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {IsSeparator = true},
                         new MpAvMenuItemViewModel() {
-                            Header = "Remove",
+                            Header = UiStrings.CommonRemoveLabel,
                             IconResourceKey = "DeleteImage",
                             Command = DeleteThisActionCommand
                         }
@@ -252,13 +252,13 @@ namespace MonkeyPaste.Avalonia {
 
                 _isShowEnabledChangedNotification = true;
 
-                string enabledText = IsEnabled ? "ENABLED" : "DISABLED";
-                string typeStr = ParentActionId == 0 ? "Trigger" : "Action";
-                string notificationText = $"{typeStr} '{FullName}' is now  {enabledText}";
+                string enabledText = IsEnabled ? UiStrings.CommonEnabledLabel : UiStrings.CommonDisabledLabel;
+                string typeStr = ParentActionId == 0 ? UiStrings.TriggerLabel : UiStrings.ActionLabel;
+                string notificationText = $"{typeStr} '{FullName}':  {enabledText}";
 
                 await Mp.Services.NotificationBuilder.ShowMessageAsync(
                     iconSourceObj: IconResourceObj.ToString(),
-                    title: $"{typeStr.ToUpper()} STATUS",
+                    title: $"{typeStr.ToUpper()} {UiStrings.CommonStatusLabel}",
                     body: notificationText,
                     msgType: MpNotificationType.TriggerEnabled);
 
@@ -366,8 +366,8 @@ namespace MonkeyPaste.Avalonia {
             async (args) => {
                 bool confirmed =
                     await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                        title: $"Confirm",
-                        message: $"Are you sure you want to delete '{Label}' and all associated actions?",
+                        title: UiStrings.CommonConfirmLabel,
+                        message: string.Format(UiStrings.TriggerConfirmDeleteNtfText, Label),
                         iconResourceObj: "WarningImage",
                         anchor: args as Control);
                 if (!confirmed) {
@@ -382,7 +382,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand DuplicateTriggerCommand => new MpAsyncCommand(
             async () => {
                 var dup_trigger = await Action.CloneDbModelAsync();
-                dup_trigger.Label = Parent.GetUniqueTriggerName("(Copy) " + dup_trigger.Label);
+                dup_trigger.Label = Parent.GetUniqueTriggerName($"({UiStrings.CommonCopyOpLabel}) " + dup_trigger.Label);
                 await dup_trigger.WriteToDatabaseAsync();
                 await Parent.CreateTriggerViewModel(dup_trigger);
             }, () => {

@@ -57,9 +57,15 @@ namespace MonkeyPaste.Avalonia {
                 // don't ntf if no problems
                 return;
             }
+            string msg = string.Empty;
+            if (isLoadOnLogin) {
+                msg = success ? UiStrings.LoginLoadEnableSuccess : UiStrings.LoginLoadEnableFailed;
+            } else {
+                msg = success ? UiStrings.LoginLoadDisableSuccess : UiStrings.LoginLoadDisableFailed;
+            }
             Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
-                title: $"Result",
-                message: $"Login load {(isLoadOnLogin ? "enable" : "disable")} {(success ? "success" : "failed")}",
+                title: UiStrings.CommonResultLabel,
+                message: msg,
                 iconResourceObj: success ? "BananaImage" : "WarningImage").FireAndForgetSafeAsync();
         }
     }

@@ -232,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
 
                 var result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                     notificationType: MpNotificationType.InvalidAction,
-                    title: $"{Label} Error",
+                    title: string.Format(UiStrings.PluginErrNtfTitle, Label),
                     body: error_msg,
                     retryAction: retryFunc,
                     fixCommand: Parent.SelectActionCommand,

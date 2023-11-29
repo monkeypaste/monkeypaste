@@ -116,7 +116,7 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
         public override async void OnFrameworkInitializationCompleted() {
-            //MpAvCultureManager.SetCulture(MpAvCultureManager.DEFAULT_CULTURE_NAME);
+            MpAvCultureManager.SetCulture("ja-JP");
 
             DateTime startup_datetime = DateTime.Now;
 #if DESKTOP

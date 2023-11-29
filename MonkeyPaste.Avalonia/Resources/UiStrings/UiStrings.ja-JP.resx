@@ -118,1733 +118,1489 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="GestureProfileGlobal" xml:space="preserve">
-    <value>All interop shortcuts (those useful outside of MonkeyPaste) are enabled by default. Pressing Caps Lock (without any other key) will show or hide the interface at anytime (not currently supported on Linux)</value>
+    <value>すべての相互運用ショートカット (MonkeyPaste の外部で役立つもの) はデフォルトで有効になっています。</value>
   </data>
   <data name="GestureProfileInternal" xml:space="preserve">
-    <value>No global shortcuts are enabled by default. </value>
+    <value>デフォルトでは、グローバル ショートカットは有効になっていません。</value>
   </data>
   <data name="ProductDescription" xml:space="preserve">
-    <value>The clipboard is a jungle. You need the prowess of a primate to navigate the terrain and tap its true potential.</value>
+    <value>クリップボードはジャングルです。</value>
   </data>
   <data name="WelcomeAccountCaption" xml:space="preserve">
-    <value>No features are limited by subscription, only storage capacity and can be changed at anytime.</value>
+    <value>サブスクリプションによって制限される機能はなく、ストレージ容量のみが制限され、いつでも変更できます。</value>
   </data>
   <data name="WelcomeAccountRestoreDescription" xml:space="preserve">
-    <value>Restore your existing account...</value>
+    <value>既存のアカウントを復元します...</value>
   </data>
   <data name="AccountFreeDescription" xml:space="preserve">
-    <value>Content and trash are limited to {0} and {1} clips respectively.</value>
+    <value>コンテンツとゴミ箱は、それぞれ {0} クリップと {1} クリップに制限されます。</value>
     <comment>Description formats all use same format from content cap, trash cap, standard cap</comment>
   </data>
   <data name="AccountStandardDescription" xml:space="preserve">
-    <value>Allows up to {2} clips of content and unlimited trash storage. </value>
+    <value>最大 {2} 個のコンテンツ クリップと無制限のゴミ箱ストレージが許可されます。</value>
   </data>
   <data name="AccountUnlimitedDescription" xml:space="preserve">
-    <value>Unrestricted and unlimited content and trash storage.</value>
+    <value>無制限かつ無制限のコンテンツとゴミ箱のストレージ。</value>
   </data>
   <data name="WelcomeAccountRestoreLabel" xml:space="preserve">
-    <value>Restore</value>
+    <value>復元する</value>
   </data>
   <data name="WelcomeAccountFreeLabel" xml:space="preserve">
-    <value>Free</value>
+    <value>無料</value>
   </data>
   <data name="WelcomeAccountStandardLabel" xml:space="preserve">
-    <value>Standard</value>
+    <value>標準</value>
   </data>
   <data name="WelcomeAccountUnlimitedLabel" xml:space="preserve">
-    <value>Unlimited</value>
+    <value>無制限</value>
   </data>
   <data name="WelcomeAccountTitle" xml:space="preserve">
-    <value>Subscription</value>
+    <value>サブスクリプション</value>
   </data>
   <data name="WelcomeDbPasswordCaption" xml:space="preserve">
-    <value>Your privacy is important and clipboard data can be very personal. Storage is always encrypted but you can set a password that will be required in case your device is stolen or someone else is using your device.</value>
+    <value>プライバシーは重要であり、クリップボードのデータは非常に個人的なものになる可能性があります。</value>
   </data>
   <data name="WelcomeDbPasswordTitle" xml:space="preserve">
-    <value>Password</value>
+    <value>パスワード</value>
   </data>
   <data name="WelcomeDragToOpenCaption" xml:space="preserve">
-    <value>When enabled, dragging from any application to the top of the screen will reveal MonkeyPaste to easily drop content into MonkeyPaste.</value>
+    <value>有効にすると、任意のアプリケーションから画面の上部にドラッグすると、MonkeyPaste が表示され、MonkeyPaste にコンテンツを簡単にドロップできます。</value>
   </data>
   <data name="WelcomeDragToOpenDescription1" xml:space="preserve">
-    <value>Enabling the 'lock' in the top left of the main window will still allow dropping into MonkeyPaste.</value>
+    <value>メイン ウィンドウの左上にある「ロック」を有効にしても、MonkeyPaste にドロップできるようになります。</value>
   </data>
   <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
-    <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
+    <value>その他のウィンドウ設定は、「設定 -&gt; 設定 -&gt; ウィンドウ」メニューから利用できます。</value>
   </data>
   <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
-    <value>Drag Bananas Up Here!</value>
+    <value>バナナをここまでドラッグしてください！</value>
   </data>
   <data name="WelcomeDragToOpenTitle" xml:space="preserve">
-    <value>Drag-to-Open</value>
+    <value>ドラッグして開く</value>
   </data>
   <data name="WelcomeGestureProfileCaption" xml:space="preserve">
-    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings-&gt;Shortcuts' menu.</value>
+    <value>キーボード ショートカットは、[設定] -&gt; [ショートカット] メニューでいつでも確認または変更できます。</value>
   </data>
   <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
-    <value>All global shortcuts will be marked as local so you can configure them yourself later.</value>
+    <value>すべてのグローバル ショートカットはローカルとしてマークされるため、後で自分で設定できます。</value>
   </data>
   <data name="WelcomeGestureProfileDescription2" xml:space="preserve">
-    <value>MonkeyPaste's clipboard shortcuts will be available in all applications.</value>
+    <value>MonkeyPaste のクリップボード ショートカットはすべてのアプリケーションで利用できるようになります。</value>
   </data>
   <data name="WelcomeGestureProfileLabel1" xml:space="preserve">
-    <value>Internal</value>
+    <value>内部</value>
   </data>
   <data name="CommonDefaultLabel" xml:space="preserve">
-    <value>Default</value>
+    <value>デフォルト</value>
   </data>
   <data name="WelcomeGestureProfileTitle" xml:space="preserve">
-    <value>Gesture Profile</value>
+    <value>ジェスチャープロファイル</value>
   </data>
   <data name="WelcomeGreetingCaption" xml:space="preserve">
-    <value>Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.</value>
+    <value>おい！</value>
   </data>
   <data name="WelcomeGreetingTitle" xml:space="preserve">
-    <value>Welcome</value>
+    <value>いらっしゃいませ</value>
   </data>
   <data name="WelcomeLoginLoadCaption" xml:space="preserve">
-    <value>To get the most use out of MonkeyPaste, loading automatically when you log in is a good idea. But, that's entirely up to you.</value>
+    <value>MonkeyPaste を最大限に活用するには、ログイン時に自動的にロードすることをお勧めします。</value>
   </data>
   <data name="WelcomeLoginLoadDescription1" xml:space="preserve">
-    <value>Keep it casual.</value>
+    <value>カジュアルにしてください。</value>
   </data>
   <data name="CommonEnableLabel" xml:space="preserve">
-    <value>Enable</value>
+    <value>有効にする</value>
   </data>
   <data name="WelcomeLoginLoadTitle" xml:space="preserve">
-    <value>Load On Login?</value>
+    <value>ログイン時にロードしますか?</value>
   </data>
   <data name="WelcomeScrollToOpenCaption" xml:space="preserve">
-    <value>When enabled, a scroll gesture at the top of the screen will reveal MonkeyPaste.</value>
+    <value>有効にすると、画面上部のスクロール ジェスチャにより MonkeyPaste が表示されます。</value>
   </data>
   <data name="WelcomeScrollToOpenDescription1" xml:space="preserve">
-    <value>Left-clicking the taskbar icon will still open MonkeyPaste.</value>
+    <value>タスクバーのアイコンを左クリックすると、MonkeyPaste が開きます。</value>
   </data>
   <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
-    <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
+    <value>その他のウィンドウ設定は、「設定 -&gt; 設定 -&gt; ウィンドウ」メニューから利用できます。</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
-    <value>Easy Right?</value>
+    <value>簡単ですよね？</value>
   </data>
   <data name="WelcomeScrollToOpenMarkerLabel" xml:space="preserve">
-    <value>Scroll Up Here!</value>
+    <value>ここまでスクロールしてください！</value>
   </data>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
-    <value>Scroll-to-Open</value>
+    <value>スクロールして開く</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop to and from the application.&lt;/p&gt;</value>
+    <value>&lt;p align="center"&gt;MonkeyPaste は、アプリケーションとのドラッグ アンド ドロップ機能と&lt;span color="red&gt;完全に統合&lt;/span&gt;されています。&lt;/p&gt;</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowLabel1" xml:space="preserve">
-    <value>Drop it here!</value>
+    <value>ここに落としてください！</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowDetail" xml:space="preserve">
-    <value>&lt;p align="center"&gt;This way, MonkeyPaste can be accessed&lt;br&gt; &lt;span color="red"&gt;without a click&lt;/span&gt; or even &lt;span color="red"&gt;batting an eye&lt;/span&gt; &amp;#x1F440&lt;/p&gt;</value>
+    <value>&lt;p align="center"&gt;こうすることで、MonkeyPaste に&lt;br&gt; &lt;span color="red"&gt;クリックせず&lt;/span&gt;、さらには&lt;span color="red"&gt;目を打たなくても&lt;/span&gt;アクセスできます。</value>
   </data>
   <data name="WelcomeDragToOpenDragSourceLabel" xml:space="preserve">
-    <value>Drag Me!</value>
+    <value>ドラッグ・ミー!</value>
   </data>
   <data name="WelcomeDragToOpenTryButtonLabel" xml:space="preserve">
-    <value>Try it out!</value>
+    <value>やってみて！</value>
   </data>
   <data name="WelcomeScrollToOpenTryButtonLabel" xml:space="preserve">
-    <value>Try it out!</value>
+    <value>やってみて！</value>
   </data>
   <data name="CommonEmptyListText" xml:space="preserve">
-    <value>No results available.</value>
+    <value>結果はありません。</value>
   </data>
   <data name="CommonConfirmLabel" xml:space="preserve">
-    <value>Confirm</value>
+    <value>確認する</value>
   </data>
   <data name="CommonRefreshTooltip" xml:space="preserve">
-    <value>Refresh</value>
+    <value>リフレッシュ</value>
   </data>
   <data name="CommonSearchWatermark" xml:space="preserve">
-    <value>Search...</value>
+    <value>検索...</value>
   </data>
   <data name="CommonSettingsTitle" xml:space="preserve">
-    <value>Settings</value>
+    <value>設定</value>
   </data>
   <data name="PluginBrowserDependenciesLabel" xml:space="preserve">
-    <value>Dependencies:</value>
+    <value>依存関係:</value>
   </data>
   <data name="PluginBrowserInstallLabel" xml:space="preserve">
-    <value>Install</value>
+    <value>インストール</value>
   </data>
   <data name="PluginBrowserNtfUninstallMsg" xml:space="preserve">
-    <value>Are you sure you want to remove '{0}' and all its presets and shortcuts?</value>
+    <value>「{0}」とそのすべてのプリセットとショートカットを削除してもよろしいですか?</value>
   </data>
   <data name="PluginBrowserUninstallLabel" xml:space="preserve">
-    <value>Uninstall</value>
+    <value>アンインストール</value>
   </data>
   <data name="QueryTrayEmptyText" xml:space="preserve">
-    <value> has no results.</value>
+    <value> 結果はありません。</value>
   </data>
   <data name="QueryTrayNoSelection" xml:space="preserve">
-    <value>No selection.</value>
+    <value>選択はありません。</value>
   </data>
   <data name="CommonNoneLabel" xml:space="preserve">
-    <value>None</value>
+    <value>なし</value>
   </data>
   <data name="PluginBrowserCreditsLabel" xml:space="preserve">
-    <value>Credits:</value>
+    <value>クレジット:</value>
   </data>
   <data name="PluginBrowserDescriptionLabel" xml:space="preserve">
-    <value>Description:</value>
+    <value>説明：</value>
   </data>
   <data name="PluginBrowserDonateLabel" xml:space="preserve">
-    <value>Donate:</value>
+    <value>寄付する：</value>
   </data>
   <data name="PluginBrowserLicenseLabel" xml:space="preserve">
-    <value>License:</value>
+    <value>ライセンス：</value>
   </data>
   <data name="PluginBrowserProjectUrlLabel" xml:space="preserve">
-    <value>Project URL:</value>
+    <value>プロジェクトURL:</value>
   </data>
   <data name="PluginBrowserPublishedLabel" xml:space="preserve">
-    <value>Published:</value>
+    <value>公開日:</value>
   </data>
   <data name="PluginBrowserReadMeLabel" xml:space="preserve">
-    <value>Read Me:</value>
+    <value>読んでください:</value>
   </data>
   <data name="PluginBrowserReportAbuseLabel" xml:space="preserve">
-    <value>Report Abuse:</value>
+    <value>不正行為を報告する:</value>
   </data>
   <data name="PluginBrowserTagsLabel" xml:space="preserve">
-    <value>Tags:</value>
+    <value>タグ:</value>
   </data>
   <data name="PluginBrowserUpdateLabel" xml:space="preserve">
-    <value>Update:</value>
+    <value>アップデート：</value>
   </data>
   <data name="PluginBrowserVersionLabel" xml:space="preserve">
-    <value>Version:</value>
+    <value>バージョン：</value>
   </data>
   <data name="SearchCriteriaHeadePopoutTooltipText" xml:space="preserve">
-    <value>Open in Window</value>
+    <value>ウィンドウで開く</value>
   </data>
   <data name="SearchCriteriaHeaderDismissButtonLabel" xml:space="preserve">
-    <value>Dismiss</value>
+    <value>却下する</value>
   </data>
   <data name="SearchCriteriaHeadeRefreshTooltipText" xml:space="preserve">
-    <value>Refresh</value>
+    <value>リフレッシュ</value>
   </data>
   <data name="CommonSaveLabel" xml:space="preserve">
-    <value>Save</value>
+    <value>保存</value>
   </data>
   <data name="AccountNextRemoveToolTipText" xml:space="preserve">
-    <value>Next to delete! Upgrade to avoid.</value>
+    <value>次は削除です！</value>
   </data>
   <data name="AccountNextTrashToolTipText" xml:space="preserve">
-    <value>Next to trash! Upgrade to avoid.</value>
+    <value>ゴミの隣！</value>
   </data>
   <data name="ClipTileDefTitleFilesPrefix" xml:space="preserve">
-    <value>Files</value>
+    <value>ファイル</value>
   </data>
   <data name="ClipTileDefTitleImagePrefix" xml:space="preserve">
-    <value>Image</value>
+    <value>画像</value>
   </data>
   <data name="ClipTileDefTitleTextPrefix" xml:space="preserve">
-    <value>Text</value>
+    <value>文章</value>
   </data>
   <data name="ClipTileDetailCreated" xml:space="preserve">
-    <value>Copied {0}</value>
+    <value>{0}をコピーしました</value>
   </data>
   <data name="ClipTileDetailDimFiles" xml:space="preserve">
-    <value>{0} files | {1} MBs</value>
+    <value>{0} ファイル |</value>
   </data>
   <data name="ClipTileDetailDimImage" xml:space="preserve">
-    <value>{0} x {1} px</value>
+    <value>{0} x {1} ピクセル</value>
   </data>
   <data name="ClipTileDetailDimText" xml:space="preserve">
-    <value>{0} chars | {1} lines</value>
+    <value>{0} 文字 |</value>
   </data>
   <data name="ClipTileDetailUsage" xml:space="preserve">
-    <value>{0} copies | {1} pastes</value>
+    <value>{0} 部 |</value>
   </data>
   <data name="ActionMoveLabel" xml:space="preserve">
-    <value>Move</value>
+    <value>動く</value>
   </data>
   <data name="CommonAddLabel" xml:space="preserve">
-    <value>Add</value>
+    <value>追加</value>
   </data>
   <data name="CommonCopyOpLabel" xml:space="preserve">
-    <value>Copy</value>
+    <value>コピー</value>
   </data>
   <data name="CommonCutOpLabel" xml:space="preserve">
-    <value>Cut</value>
+    <value>カット</value>
   </data>
   <data name="CommonPasteOpLabel" xml:space="preserve">
-    <value>Paste</value>
+    <value>ペースト</value>
   </data>
   <data name="CommonTitledCopyTitleText" xml:space="preserve">
-    <value>{0} Copy</value>
+    <value>{0} コピー</value>
   </data>
   <data name="QueryTrayEmptyPendingTagName" xml:space="preserve">
-    <value>Unnamed Filter</value>
+    <value>名前のないフィルター</value>
   </data>
   <data name="SearchCriteriaDefaultOptionLabel" xml:space="preserve">
-    <value>- Please Select -</value>
+    <value>- 選んでください -</value>
   </data>
   <data name="ClipboardPluginFormatsHeader" xml:space="preserve">
-    <value>Formats</value>
+    <value>フォーマット</value>
   </data>
   <data name="ClipboardPluginFormatTypeReadersLabel" xml:space="preserve">
-    <value>Readers</value>
+    <value>読者</value>
   </data>
   <data name="ClipboardPluginFormatTypeWritersLabel" xml:space="preserve">
-    <value>Writers</value>
+    <value>作家</value>
   </data>
   <data name="ClipboardPluginHandlersHeader" xml:space="preserve">
-    <value>Handlers</value>
+    <value>ハンドラー</value>
   </data>
   <data name="CommonDeleteLabel" xml:space="preserve">
-    <value>Delete</value>
+    <value>消去</value>
   </data>
   <data name="CommonDuplicateLabel" xml:space="preserve">
-    <value>Duplicate</value>
+    <value>重複</value>
   </data>
   <data name="CommonEditLabel" xml:space="preserve">
-    <value>Edit Name</value>
+    <value>名前の編集</value>
   </data>
   <data name="CommonResetLabel" xml:space="preserve">
-    <value>Reset</value>
+    <value>リセット</value>
   </data>
   <data name="ClipTileTagContextMenuLabel" xml:space="preserve">
-    <value>Tags</value>
+    <value>タグ</value>
   </data>
   <data name="ShortcutDataGridActionHeader" xml:space="preserve">
-    <value>Action</value>
+    <value>アクション</value>
   </data>
   <data name="ShortcutDataGridRoutingHeader" xml:space="preserve">
-    <value>Global Routing</value>
+    <value>グローバルルーティング</value>
   </data>
   <data name="ShortcutDataGridShortcutHeader" xml:space="preserve">
-    <value>Shortcut</value>
+    <value>ショートカット</value>
   </data>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
-    <value>Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control,Shift,Alt,Meta/Win depending on platform)</value>
+    <value>ジェスチャは一意である必要があり、入力キーは 1 つだけ含めることができます (プラットフォームに応じて Control、Shift、Alt、Meta/Win などの修飾キーは使用できません)。</value>
   </data>
   <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
-    <value>&lt;ul&gt;
-	&lt;li&gt;
-		&lt;b&gt;Internal&lt;/b&gt;All shortcuts are limited to within the application. This is not really an intended option but can allow to customize what shortcuts you intend to make global&lt;i&gt;someday&lt;/i&gt;.&lt;/li&gt;
-	&lt;li&gt;
-		&lt;b&gt;Default&lt;/b&gt; All global shortcuts are enabled. The&lt;b&gt;Show/Hide Main Window&lt;/b&gt;shortcut uses&lt;span color="red"&gt;override&lt;/span&gt;routing for the&lt;b&gt;Caps Lock&lt;/b&gt; key. You can change that routing or gesture at any time. But&lt;span color="green"&gt;give it a try&lt;/span&gt;
-	&lt;/li&gt;
-&lt;/ul&gt;</value>
+    <value>&lt;ul&gt;</value>
   </data>
   <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Passive&lt;/b&gt;A shortcut MonkeyPaste will listen for in any application.&lt;/p&gt;&lt;p&gt;*This is the&lt;i&gt;only&lt;/i&gt;option on Linux for now.&lt;p&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pre&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Post&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Override&lt;/b&gt;When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will&lt;i&gt;hide&lt;/i&gt;that key press from application-level input.&lt;/p&gt;&lt;p&gt;This option will guarantee the shortcut is triggered without conflicts to the active application.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Exclusive Override&lt;/b&gt;This is a special type of override mode designed for the Caps Lock key. It only allows&lt;b&gt;one&lt;/b&gt;key (non-modifier) for its assignment.&lt;/p&gt;&lt;p&gt;In normal override mode Caps Lock can become&lt;i&gt;stuck on&lt;/i&gt;when pressed in combination with other keys.&lt;/p&gt;&lt;p&gt;So no matter what other keys are down, if a&lt;b&gt;Hotkey&lt;/b&gt;shortcut is pressed it will be overriden and prevent it from becoming&lt;i&gt;stuck on&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</value>
+    <value>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;グローバル ショートカット モード&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;パッシブ&lt;/b&gt;MonkeyPaste が任意のアプリケーションでリッスンするショートカット。</value>
   </data>
   <data name="CommonDisableLabel" xml:space="preserve">
-    <value>Disable</value>
+    <value>無効にする</value>
   </data>
   <data name="WelcomeLoginLoadDescription2" xml:space="preserve">
-    <value>Load up when this user account is logged in, not for other users.</value>
+    <value>他のユーザーではなく、このユーザー アカウントがログインしているときにロードします。</value>
   </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;
-&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;</value>
+    <value>&lt;p&gt;利用可能な連絡先を使用すると (フェッチャー プラグインが必要)、このフィールドは、このドキュメント全体、または後で参照されるテンプレートのすべてのインスタンスに使用されます。&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>&lt;p&gt;yy = short year&lt;/p&gt;
-&lt;p&gt;yyyy = long year&lt;/p&gt;
-&lt;p&gt;M = month (1-12)&lt;/p&gt;
-&lt;p&gt;MM = month (01-12)&lt;/p&gt;
-&lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;
-&lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;
-&lt;p&gt;d = day (1 - 31)&lt;/p&gt;
-&lt;p&gt;dd = day (01 - 31)&lt;/p&gt;
-&lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;
-&lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;
-&lt;p&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;/p&gt;
-&lt;p&gt;h = hour in am/pm (0-12)&lt;/p&gt;
-&lt;p&gt;hh = hour in am/pm (00-12)&lt;/p&gt;
-&lt;p&gt;H = hour in day (0-23)&lt;/p&gt;
-&lt;p&gt;HH = hour in day (00-23)&lt;/p&gt;
-&lt;p&gt;mm = minute&lt;/p&gt;
-&lt;p&gt;ss = second&lt;/p&gt;
-&lt;p&gt;SSS = milliseconds&lt;/p&gt;
-&lt;p&gt;a = AM/PM marker&lt;/p&gt;
-&lt;p&gt;p = a.m./p.m. marker&lt;/p&gt;</value>
+    <value>&lt;p&gt;yy = 短い年&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
-    <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
-&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;</value>
+    <value>&lt;p&gt;現在の日付および/または時刻は、評価された瞬間から DateTime テンプレートに置き換えられます。</value>
   </data>
   <data name="EditorTemplateDynamicHint" xml:space="preserve">
-    <value>&lt;p&gt;All occurances of this template will be set to the value you provide here&lt;/p&gt;</value>
+    <value>&lt;p&gt;このテンプレートの出現箇所はすべて、ここで指定した値に設定されます&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
-&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;</value>
+    <value>&lt;p&gt;現在の日付および/または時刻は、評価された瞬間から DateTime テンプレートに置き換えられます。</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
-    <value>Finish appending</value>
+    <value>追加を終了する</value>
   </data>
   <data name="EditorAppendInlineModelLabel" xml:space="preserve">
-    <value>Enable Paragraph</value>
+    <value>段落を有効にする</value>
   </data>
   <data name="EditorAppendLineModeLabel" xml:space="preserve">
-    <value>Enable Inline</value>
+    <value>インラインを有効にする</value>
   </data>
   <data name="EditorAppendManualModeLabel" xml:space="preserve">
-    <value>Toggle manual</value>
+    <value>マニュアルを切り替える</value>
   </data>
   <data name="EditorAppendNonManualModeLabel" xml:space="preserve">
-    <value>Toggle manual</value>
+    <value>マニュアルを切り替える</value>
   </data>
   <data name="EditorAppendPauseLabel" xml:space="preserve">
-    <value>Pause appending to clipboard</value>
+    <value>クリップボードへの追加を一時停止します</value>
   </data>
   <data name="EditorAppendPostLabel" xml:space="preserve">
-    <value>Toggle Before</value>
+    <value>前に切り替える</value>
   </data>
   <data name="EditorAppendPreLabel" xml:space="preserve">
-    <value>Toggle Before</value>
+    <value>前に切り替える</value>
   </data>
   <data name="EditorAppendResumeLabel" xml:space="preserve">
-    <value>Resume appending to clipboard</value>
+    <value>クリップボードへの追加を再開</value>
   </data>
   <data name="EditorPasteButtonAppendBeginLabel" xml:space="preserve">
-    <value>Append...</value>
+    <value>追加...</value>
   </data>
   <data name="EditorPasteButtonLabel" xml:space="preserve">
-    <value>Paste</value>
+    <value>ペースト</value>
   </data>
   <data name="CommonPinItemLabel" xml:space="preserve">
-    <value>Pin</value>
+    <value>ピン</value>
   </data>
   <data name="CommonUnpinItemLabel" xml:space="preserve">
-    <value>Unpin</value>
+    <value>固定を解除する</value>
   </data>
   <data name="NotificationOptionHideAllLabel" xml:space="preserve">
-    <value>Hide all '{0}' notifications</value>
+    <value>すべての「{0}」通知を非表示にする</value>
   </data>
   <data name="NotificationOptionHideLabel" xml:space="preserve">
-    <value>Hide</value>
+    <value>隠れる</value>
   </data>
   <data name="ClipTilePasteButtonDisabledTooltip" xml:space="preserve">
-    <value>Last active app unknown. Switch to intended app to monkey paste.</value>
+    <value>最後にアクティブだったアプリは不明です。</value>
   </data>
   <data name="ClipTilePasteButtonTooltipHtml" xml:space="preserve">
-    <value>Paste to: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
+    <value>貼り付け先: &lt;em&gt;&lt;i class="paste-tooltip-suffix"&gt;{0}&lt;/i&gt;&lt;/em&gt;</value>
   </data>
   <data name="CommonMinimizeWindowLabel" xml:space="preserve">
-    <value>Minimize</value>
+    <value>最小化する</value>
   </data>
   <data name="CommonBusyLabel" xml:space="preserve">
-    <value>Please wait...</value>
+    <value>お待ちください...</value>
   </data>
   <data name="MainWindowTitleLockLabel" xml:space="preserve">
-    <value>Lock</value>
+    <value>ロック</value>
   </data>
   <data name="SettingsAccountTabLabel" xml:space="preserve">
-    <value>Account</value>
+    <value>アカウント</value>
   </data>
   <data name="SettingsHelpTabLabel" xml:space="preserve">
-    <value>Help</value>
+    <value>ヘルプ</value>
   </data>
   <data name="SettingsInteropTabLabel" xml:space="preserve">
-    <value>Copy &amp; Paste</value>
+    <value>コピーペースト</value>
   </data>
   <data name="SettingsPrefTabLabel" xml:space="preserve">
-    <value>Preferences</value>
+    <value>環境設定</value>
   </data>
   <data name="SettingsResetAllButtonLabel" xml:space="preserve">
-    <value>Reset All</value>
+    <value>すべてリセット</value>
   </data>
   <data name="SettingsSearchWatermark" xml:space="preserve">
-    <value>Filter...</value>
+    <value>フィルター...</value>
   </data>
   <data name="SettingsShortcutTabLabel" xml:space="preserve">
-    <value>Shortcuts</value>
+    <value>ショートカット</value>
   </data>
   <data name="SettingsInteropAddAppButtonLabel" xml:space="preserve">
-    <value>Add App</value>
+    <value>アプリを追加</value>
   </data>
   <data name="SettingsInteropAddUrlButtonLabel" xml:space="preserve">
-    <value>Add Website</value>
+    <value>ウェブサイトを追加</value>
   </data>
   <data name="SettingsInteropAppBlockHeaderLabel" xml:space="preserve">
-    <value>Block?</value>
+    <value>ブロック？</value>
   </data>
   <data name="SettingsInteropAppNameHeaderLabel" xml:space="preserve">
-    <value>Name</value>
+    <value>名前</value>
   </data>
   <data name="SettingsInteropRejectedAppsHeaderLabel" xml:space="preserve">
-    <value>Apps</value>
+    <value>アプリ</value>
   </data>
   <data name="SettingsInteropUrlBlockDomainHeaderLabel" xml:space="preserve">
-    <value>Block Domain?</value>
+    <value>ドメインをブロックしますか?</value>
   </data>
   <data name="SettingsInteropUrlBlockUrlHeaderLabel" xml:space="preserve">
-    <value>Block Url?</value>
+    <value>URLをブロックしますか?</value>
   </data>
   <data name="SettingsInteropUrlDomainHeaderLabel" xml:space="preserve">
-    <value>Domain</value>
+    <value>ドメイン</value>
   </data>
   <data name="SettingsInteropUrlHintText" xml:space="preserve">
-    <value>Source url recognition is dependant on the host applications clipboard support so rejection is not guaranteed :(</value>
+    <value>ソース URL の認識はホスト アプリケーションのクリップボード サポートに依存しているため、拒否は保証されません:(</value>
   </data>
   <data name="SettingsInteropUrlNameHeaderLabel" xml:space="preserve">
-    <value>Url</value>
+    <value>URL</value>
   </data>
   <data name="SettingsInteropRejectedUrlsHeaderLabel" xml:space="preserve">
-    <value>Websites</value>
+    <value>ウェブサイト</value>
   </data>
   <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
-    <value>&lt;p&gt;Some Monkey Paste features uses keyboard automation to trigger a copy event in  applications (like a console or shell for example). Add and/or select the app with the unique copy shortcut to ensure those features function properly.&lt;/p&gt;</value>
+    <value>&lt;p&gt;一部の Monkey Paste 機能は、キーボード オートメーションを使用して、アプリケーション (コンソールやシェルなど) でコピー イベントをトリガーします。</value>
   </data>
   <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
-    <value>Copy Shortcut</value>
+    <value>ショートカットをコピー</value>
   </data>
   <data name="SettingsInteropAppOleFormatNoopButtonLabel" xml:space="preserve">
-    <value>None</value>
+    <value>なし</value>
   </data>
   <data name="SettingsInteropAppOleFormatsHeaderHint" xml:space="preserve">
-    <value>Only the selected presets will be used for the specified application. When unspecified, the default presets found in the &lt;em&gt;Clipboard Sidebar&lt;/em&gt; will be used.</value>
+    <value>選択したプリセットのみが、指定したアプリケーションに使用されます。</value>
   </data>
   <data name="SettingsInteropAppPasteShortcutHeaderHint" xml:space="preserve">
-    <value>&lt;p&gt;Monkey Paste uses keyboard automation to perform external pasting and some applications (like a console or shell for example) may have a non-default paste shortcut. To ensure proper interoperability record that short cut for the esoteric application here.&lt;/p&gt;&lt;p&gt;Along with pasting into the application, this shortcut will be needed to track usage statistics (only for delights, not shared)&lt;/p&gt;</value>
+    <value>&lt;p&gt;Monkey Paste は、キーボード オートメーションを使用して外部ペーストを実行します。一部のアプリケーション (コンソールやシェルなど) には、デフォルト以外のペースト ショートカットがある場合があります。</value>
   </data>
   <data name="SettingsInteropAppPasteShortcutHeaderLabel" xml:space="preserve">
-    <value>Paste Shortcut</value>
+    <value>ショートカットをはりつけ</value>
   </data>
   <data name="SettingsInteropAppReadHeaderLabel" xml:space="preserve">
-    <value>Readers</value>
+    <value>読者</value>
   </data>
   <data name="SettingsInteropAppRejectHeaderHint" xml:space="preserve">
-    <value>All clipboard monitoring from rejected applications will be &lt;b&gt;ignored&lt;/b&gt;.</value>
+    <value>拒否されたアプリケーションからのクリップボード監視はすべて&lt;b&gt;無視&lt;/b&gt;されます。</value>
   </data>
   <data name="SettingsInteropAppWriteHeaderLabel" xml:space="preserve">
-    <value>Writers</value>
+    <value>作家</value>
   </data>
   <data name="SettingsInteropAppOleFormatButtonPointerOverLabel" xml:space="preserve">
-    <value>Edit...</value>
+    <value>編集...</value>
   </data>
   <data name="SettingsInteropFormatsHeaderTitle" xml:space="preserve">
-    <value>Formats</value>
+    <value>フォーマット</value>
   </data>
   <data name="SettingsInteropRejectedHeaderTitle" xml:space="preserve">
-    <value>Rejected</value>
+    <value>拒否されました</value>
   </data>
   <data name="SettingsInteropShortcutsHeaderTitle" xml:space="preserve">
-    <value>Shortcuts</value>
+    <value>ショートカット</value>
   </data>
   <data name="NtfRejectRemoveClipsBody" xml:space="preserve">
-    <value>Would you also like to remove all {0} clips from '{1}'</value>
+    <value>「{1}」からすべての {0} クリップも削除しますか?</value>
   </data>
   <data name="NtfRejectRemoveClipsTitle" xml:space="preserve">
-    <value>Remove Clips?</value>
+    <value>クリップを削除しますか?</value>
   </data>
   <data name="CommonApplicationLabel" xml:space="preserve">
-    <value>Application</value>
+    <value>応用</value>
   </data>
   <data name="SettingsInteropAppBrowseToAppMenuItemLabel" xml:space="preserve">
-    <value>Browse to app...</value>
+    <value>アプリを参照...</value>
   </data>
   <data name="SettingsInteropAppBrowseToAppPickerTitle" xml:space="preserve">
-    <value>Select application path</value>
+    <value>アプリケーションパスの選択</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveShortcutsBody" xml:space="preserve">
-    <value>Are you sure you want to remove custom shortcuts for {1}</value>
+    <value>{1} のカスタム ショートカットを削除してもよろしいですか</value>
   </data>
   <data name="SettingsInteropAppConfirmRemoveFormatsBody" xml:space="preserve">
-    <value>Are you sure you want to remove custom formats for {0}?</value>
+    <value>{0} のカスタム形式を削除してもよろしいですか?</value>
   </data>
   <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
-    <value>There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag-and-drop into MonkeyPaste</value>
+    <value>このアプリには割り当てられたクリップボード形式がありません。</value>
   </data>
   <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
-    <value>There is no assigned clipboard formats for this app. Automated paste or drag-and-drop from MonkeyPaste will have no affect (its empty data).</value>
+    <value>このアプリには割り当てられたクリップボード形式がありません。</value>
   </data>
   <data name="ShortcutsResetNtfMsg" xml:space="preserve">
-    <value>Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.</value>
+    <value>すべてのショートカットをリセットしてもよろしいですか?</value>
   </data>
   <data name="ShortcutsRoutingProfileChangeNtfMsg" xml:space="preserve">
-    <value>Are you sure you want to change your shortcut routing profile to '{0}'</value>
+    <value>ショートカット ルーティング プロファイルを「{0}」に変更してもよろしいですか?</value>
   </data>
   <data name="TagDefaultAllLabel" xml:space="preserve">
-    <value>All</value>
+    <value>全て</value>
   </data>
   <data name="TagDefaultFavoritesLabel" xml:space="preserve">
-    <value>Favorites</value>
+    <value>お気に入り</value>
   </data>
   <data name="TagDefaultFiltersLabel" xml:space="preserve">
-    <value>Filters</value>
+    <value>フィルター</value>
   </data>
   <data name="TagDefaultFormatsLabel" xml:space="preserve">
-    <value>Formats</value>
+    <value>フォーマット</value>
   </data>
   <data name="TagDefaultTagsLabel" xml:space="preserve">
-    <value>Tags</value>
+    <value>タグ</value>
   </data>
   <data name="TagDefaultTodayLabel" xml:space="preserve">
-    <value>Today</value>
+    <value>今日</value>
   </data>
   <data name="TagDefaultTrashLabel" xml:space="preserve">
-    <value>Trash</value>
+    <value>ごみ</value>
   </data>
   <data name="AboutWindowTitlePrefix" xml:space="preserve">
-    <value>About</value>
+    <value>について</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowLabel2" xml:space="preserve">
-    <value>Easy Right?</value>
+    <value>簡単ですよね？</value>
   </data>
   <data name="ClipTilePinPlaceHolderLabelPrefix" xml:space="preserve">
-    <value>Double Click to unpin </value>
+    <value>ダブルクリックして固定を解除します</value>
   </data>
   <data name="SettingsShortcutsCustomCommandHeaderText" xml:space="preserve">
-    <value>Custom</value>
+    <value>カスタム</value>
   </data>
   <data name="SettingsShortcutsGlobalCommandHeaderText" xml:space="preserve">
-    <value>Global</value>
+    <value>グローバル</value>
   </data>
   <data name="ShortcutAssignDuplicateWarning" xml:space="preserve">
-    <value>This combination conflicts with '{0}' which will be cleared if saved.</value>
+    <value>この組み合わせは「{0}」と競合します。保存するとクリアされます。</value>
   </data>
   <data name="ShortcutAssignEmptyAppClipboardShortcutWarning" xml:space="preserve">
-    <value>A shortcut must be provided.</value>
+    <value>ショートカットを提供する必要があります。</value>
   </data>
   <data name="ShortcutAssignGlobalHint" xml:space="preserve">
-    <value>This is a global shortcut! That means it will attempt to execute whenever it is performed. Try to make it unique enough to not conflict with shortcuts from other applications.</value>
+    <value>これはグローバル ショートカットです。</value>
   </data>
   <data name="ShortcutAssignGlobalLabel" xml:space="preserve">
-    <value>Global</value>
+    <value>グローバル</value>
   </data>
   <data name="ShortcutAssignInvalidGestureWarning" xml:space="preserve">
-    <value>Shortcut must contain ONE and only ONE input key.Any key that is not:</value>
+    <value>ショートカットには、入力キーが 1 つだけ含まれている必要があります。以下のキー以外のキーは次のとおりです。</value>
   </data>
   <data name="ShortcutAssignRecordLabel" xml:space="preserve">
-    <value>Press any key to record...</value>
+    <value>任意のキーを押して録音します...</value>
   </data>
   <data name="CommonAssignShortcutLabel" xml:space="preserve">
-    <value>Assign Shortcut</value>
+    <value>ショートカットの割り当て</value>
   </data>
   <data name="AccountLearnMoreButtonText" xml:space="preserve">
-    <value>Learn More...</value>
+    <value>もっと詳しく知る...</value>
   </data>
   <data name="AccountUpgradeButtonText" xml:space="preserve">
-    <value>Upgrade</value>
+    <value>アップグレード</value>
   </data>
   <data name="CommonCancelLabel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>キャンセル</value>
   </data>
   <data name="UserActionFixButtonText" xml:space="preserve">
-    <value>Fix</value>
+    <value>修理</value>
   </data>
   <data name="UserActionIgnoreButtonText" xml:space="preserve">
-    <value>Ignore</value>
+    <value>無視する</value>
   </data>
   <data name="CommonNoButtonText" xml:space="preserve">
-    <value>No</value>
+    <value>いいえ</value>
   </data>
   <data name="CommonOkLabel" xml:space="preserve">
-    <value>Ok</value>
+    <value>わかりました</value>
   </data>
   <data name="UserActionRetryButtonText" xml:space="preserve">
-    <value>Retry</value>
+    <value>リトライ</value>
   </data>
   <data name="UserActionShutdownButtonText" xml:space="preserve">
-    <value>Shutdown</value>
+    <value>シャットダウン</value>
   </data>
   <data name="UserActionSubmitButtonText" xml:space="preserve">
-    <value>Submit</value>
+    <value>提出する</value>
   </data>
   <data name="CommonYesButtonText" xml:space="preserve">
-    <value>Yes</value>
+    <value>はい</value>
   </data>
   <data name="AccountYearlyLabel" xml:space="preserve">
-    <value>Yearly</value>
+    <value>毎年</value>
   </data>
   <data name="AccountMonthlyLabel" xml:space="preserve">
-    <value>Monthly</value>
+    <value>毎月</value>
   </data>
   <data name="AccountTrialButtonText" xml:space="preserve">
-    <value>Try for free!</value>
+    <value>無料でお試しください！</value>
   </data>
   <data name="AccountBillingCycleLabel" xml:space="preserve">
-    <value>Billing Cycle</value>
+    <value>請求サイクル</value>
   </data>
   <data name="AccountEmailLabel" xml:space="preserve">
-    <value>Email</value>
+    <value>Eメール</value>
   </data>
   <data name="AccountLoginButtonText" xml:space="preserve">
-    <value>Login</value>
+    <value>ログイン</value>
   </data>
   <data name="AccountLoginFailedText" xml:space="preserve">
-    <value>Check your connection and try again.</value>
+    <value>接続を確認して、もう一度試してください。</value>
   </data>
   <data name="AccountLogoutButtonText" xml:space="preserve">
-    <value>Log out</value>
+    <value>ログアウト</value>
   </data>
   <data name="AccountNextPaymentDateLabel" xml:space="preserve">
-    <value>Next Payment</value>
+    <value>次回のお支払い</value>
   </data>
   <data name="AccountPasswordLabel" xml:space="preserve">
-    <value>Password</value>
+    <value>パスワード</value>
   </data>
   <data name="AccountRegisterButtonText" xml:space="preserve">
-    <value>Register</value>
+    <value>登録する</value>
   </data>
   <data name="AccountRegistrationInvalidEmailText" xml:space="preserve">
-    <value>Email is not valid</value>
+    <value>電子メールが無効です</value>
   </data>
   <data name="AccountRegistrationPasswordMismatchValidationText" xml:space="preserve">
-    <value>Passwords do not match.</value>
+    <value>パスワードが一致していません。</value>
   </data>
   <data name="AccountRegistrationPasswordValidationText" xml:space="preserve">
-    <value>Password must be a minimum of {0} characters.</value>
+    <value>パスワードは {0} 文字以上である必要があります。</value>
   </data>
   <data name="CommonRememberLabel" xml:space="preserve">
-    <value>Remember?</value>
+    <value>覚えて？</value>
   </data>
   <data name="AccountRegistrationSuccessText" xml:space="preserve">
-    <value>Check your email to confirm your account</value>
+    <value>メールをチェックしてアカウントを確認してください</value>
   </data>
   <data name="AccountResetPasswordLabel" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>パスワードを再設定する</value>
   </data>
   <data name="CommonDateFormat" xml:space="preserve">
-    <value>MMM d, yyyy</value>
+    <value>うーん、yyyy</value>
   </data>
   <data name="CommonDateTimeFormat" xml:space="preserve">
-    <value>MMM d, h:mm tt</value>
+    <value>MMM d、h:mm tt</value>
   </data>
   <data name="CommonTimestampFormat" xml:space="preserve">
     <value>MM/dd/yyyy hh:mm tt</value>
   </data>
   <data name="AccountBillingCycleNoneLabel" xml:space="preserve">
-    <value>Never</value>
+    <value>一度もない</value>
   </data>
   <data name="AccountFreeTrialLabel" xml:space="preserve">
-    <value>Free {0}-Day Trial</value>
+    <value>{0} 日間の無料トライアル</value>
   </data>
   <data name="AccountPurchaseErrorCaption" xml:space="preserve">
-    <value>There was a problem performing your purchase. Checking your connection and settings may help. Would you like to try again?</value>
+    <value>購入の実行中に問題が発生しました。</value>
   </data>
   <data name="AccountPurchaseSuccessfulCaption" xml:space="preserve">
-    <value>Your account has been upgraded to {0}/{1}.</value>
+    <value>あなたのアカウントは {0}/{1} にアップグレードされました。</value>
     <comment>Subscription Type, Billing Cycle</comment>
   </data>
   <data name="AccountPurchaseSuccessfulTitle" xml:space="preserve">
-    <value>Purchase Successful!</value>
+    <value>購入成功しました！</value>
   </data>
   <data name="CommonErrorLabel" xml:space="preserve">
-    <value>Error</value>
+    <value>エラー</value>
   </data>
   <data name="CommonConnectionFailedCaption" xml:space="preserve">
-    <value>Connection failed.</value>
+    <value>接続に失敗しました。</value>
   </data>
   <data name="CommonRetryLabel" xml:space="preserve">
-    <value>Retry</value>
+    <value>リトライ</value>
   </data>
   <data name="NtfCapAccountChangedTitle" xml:space="preserve">
-    <value>Account Changed</value>
+    <value>アカウントが変更されました</value>
   </data>
   <data name="NtfCapAccountDowngradeText" xml:space="preserve">
-    <value>Your subscription is now {0}/{1} with {2} content and {3} trash storage. \n But fret not! No data is lost after downgrading. Only new stuff will be evaluated.</value>
+    <value>現在のサブスクリプションは {0}/{1} で、{2} コンテンツと {3} ゴミ箱が含まれています。</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapAccountUpgradeText" xml:space="preserve">
-    <value>Congratulations! Your subscription is now {0}/{1} with {2} content and {3} trash storage.</value>
+    <value>おめでとう！</value>
     <comment>Account Type, Billing Cycle, Number/∞, Number/∞</comment>
   </data>
   <data name="NtfCapBlockHint1" xml:space="preserve">
-    <value>Trash or unlink something from '{0}' to add more.</value>
+    <value>さらに追加するには、「{0}」から何かをゴミ箱に入れるかリンクを解除してください。</value>
   </data>
   <data name="NtfCapBlockHint2" xml:space="preserve">
-    <value>Max '{0}' storage is {1}.</value>
+    <value>最大 '{0}' ストレージは {1} です。</value>
     <comment>Account Type, Storage Count</comment>
   </data>
   <data name="NtfCapBlockRestoreLabel" xml:space="preserve">
-    <value>Restore</value>
+    <value>復元する</value>
   </data>
   <data name="NtfCapBlockSuffix" xml:space="preserve">
-    <value>{0} Blocked</value>
+    <value>{0} がブロックされました</value>
     <comment>Add/Restore</comment>
   </data>
   <data name="NtfCapBothReachedTitleSuffix" xml:space="preserve">
-    <value>Content &amp; Trash Capacity Reached!</value>
+    <value>コンテンツとゴミ箱の容量に達しました!</value>
   </data>
   <data name="NtfCapContentMaxStorageText" xml:space="preserve">
-    <value>Max '{0}' storage is {1}.</value>
+    <value>最大 '{0}' ストレージは {1} です。</value>
   </data>
   <data name="NtfCapContentReachedTitleSuffix" xml:space="preserve">
-    <value>Content Capacity Reached!</value>
+    <value>コンテンツ容量に達しました!</value>
   </data>
   <data name="NtfCapHideHint" xml:space="preserve">
-    <value>* You can hide these warnings by clicking 'hide all' from the options menu above.</value>
+    <value>* 上のオプション メニューから [すべて非表示] をクリックすると、これらの警告を非表示にできます。</value>
   </data>
   <data name="NtfCapTitle" xml:space="preserve">
     <value>'{0}</value>
   </data>
   <data name="NtfCapTrashMaxStorageText" xml:space="preserve">
-    <value>Max Trash storage is {0}.</value>
+    <value>最大ゴミ箱ストレージは {0} です。</value>
   </data>
   <data name="NtfCapTrashReachedTitleSuffix" xml:space="preserve">
-    <value>Trash Capacity Reached!</value>
+    <value>ゴミ箱の容量に達しました!</value>
   </data>
   <data name="ParameterInvalidDefaultPatternInfoCaption" xml:space="preserve">
-    <value>{0} is invalid</value>
+    <value>{0} は無効です</value>
     <comment>Label</comment>
   </data>
   <data name="ParameterInvalidLengthCaption" xml:space="preserve">
-    <value>{0} must be at least {1} characters</value>
+    <value>{0} は少なくとも {1} 文字でなければなりません</value>
     <comment>Label, number</comment>
   </data>
   <data name="ParameterInvalidLengthCaption2" xml:space="preserve">
-    <value>{0} can only be {1} character</value>
+    <value>{0} には {1} 文字のみを使用できます</value>
     <comment>Label, number</comment>
   </data>
   <data name="ClipTilePasteButtonTooltipText" xml:space="preserve">
-    <value>Paste to: '{0}'</value>
+    <value>貼り付け先: '{0}'</value>
     <comment>Application Name</comment>
   </data>
   <data name="AccountExpiredNtfLocalCaption" xml:space="preserve">
-    <value>The payment for your {0} subscription was due {1} and has not been received. Please update your payment information.</value>
+    <value>{0} サブスクリプションのお支払い期限は {1} でしたが、まだ受け取られていません。</value>
     <comment>Subscription Type, Date</comment>
   </data>
   <data name="AccountExpiredNtfOfflineCaption" xml:space="preserve">
-    <value>The payment for your {0} subscription was due {1} and has not been received. Please connect to the internet on the device with your subscription and restart in order to continue using your {0} plan</value>
+    <value>{0} サブスクリプションのお支払い期限は {1} でしたが、まだ受け取られていません。</value>
     <comment>Subscription Type, Date</comment>
   </data>
   <data name="AccountExpiredNtfRemoteCaption" xml:space="preserve">
-    <value>The payment for your {0} subscription was due {1} and has not been received. Please open MonkeyPaste on the device with your subscription and restart to continue using your {0} plan.</value>
+    <value>{0} サブスクリプションのお支払い期限は {1} でしたが、まだ受け取られていません。</value>
     <comment>Subscription Type, Date</comment>
   </data>
   <data name="AccountExpiredNtfTitle" xml:space="preserve">
-    <value>Account Expired</value>
+    <value>アカウントの有効期限が切れました</value>
   </data>
   <data name="AccountPrePurchaseNtfTitle" xml:space="preserve">
-    <value>Note</value>
+    <value>注記</value>
   </data>
   <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
-    <value>Microsoft Store doesn't allow tier changes to subscription add-ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. \nWould you like to go do that now?</value>
+    <value>Microsoft Store では、サブスクリプション アドオンの階層変更は許可されていません。</value>
     <comment>Old Subscription Type, Old Billing Cycle</comment>
   </data>
   <data name="AccountResetPasswordCaption" xml:space="preserve">
-    <value>Your password has been reset. Please check your email and follow the link to change your password.</value>
+    <value>あなたのパスワードはリセットされました。</value>
   </data>
   <data name="AccountLoginWindowTitle" xml:space="preserve">
-    <value>Login</value>
+    <value>ログイン</value>
   </data>
   <data name="TermsAuthorsInlineText" xml:space="preserve">
-    <value>Author(s)</value>
+    <value>著者</value>
   </data>
   <data name="TermsIntroAppText" xml:space="preserve">
-    <value>It is required that you accept the following license terms before continuing.</value>
+    <value>続行する前に、次のライセンス条項に同意する必要があります。</value>
   </data>
   <data name="TermsIntroPluginText" xml:space="preserve">
-    <value>The following package(s) require that you accept their license terms before installing.</value>
+    <value>次のパッケージをインストールするには、インストールする前にライセンス条項に同意する必要があります。</value>
   </data>
   <data name="TermsNoButtonText" xml:space="preserve">
-    <value>I Decline</value>
+    <value>私は辞退</value>
   </data>
   <data name="TermsOutroAppText" xml:space="preserve">
-    <value>By clicking "I Accept", you agree to the license terms for this application. If you do not agree to the terms, click "I Decline".</value>
+    <value>「同意する」をクリックすると、このアプリケーションのライセンス条項に同意したことになります。</value>
   </data>
   <data name="TermsOutroPluginText" xml:space="preserve">
-    <value>By clicking "I Accept", you agree to the license terms for the package(s) listed above. If you do not agree to the terms, click "I Decline".</value>
+    <value>[同意する] をクリックすると、上記のパッケージのライセンス条項に同意したことになります。</value>
   </data>
   <data name="TermsViewLicenseButtonText" xml:space="preserve">
-    <value>View License</value>
+    <value>ライセンスを表示</value>
   </data>
   <data name="TermsWindowTitle" xml:space="preserve">
-    <value>License Acceptance</value>
+    <value>ライセンスの受諾</value>
   </data>
   <data name="TermsYesButtonText" xml:space="preserve">
-    <value>I Accept</value>
+    <value>承諾します</value>
   </data>
   <data name="AccountActiveLabel" xml:space="preserve">
-    <value>ACTIVE</value>
+    <value>アクティブ</value>
   </data>
   <data name="AccountOfflineLabel" xml:space="preserve">
-    <value>Offline</value>
+    <value>オフライン</value>
   </data>
   <data name="AccountUnregisteredLabel" xml:space="preserve">
-    <value>Unregistered</value>
+    <value>未登録</value>
   </data>
   <data name="DbPasswordDoneLabel" xml:space="preserve">
-    <value>Done</value>
+    <value>終わり</value>
   </data>
   <data name="DbPasswordMismatch" xml:space="preserve">
-    <value>⚠️ Passwords do not match</value>
+    <value>⚠️パスワードが一致しません</value>
   </data>
   <data name="DbPasswordWatermark" xml:space="preserve">
-    <value>Password</value>
+    <value>パスワード</value>
   </data>
   <data name="AccountExistingLoginText" xml:space="preserve">
-    <value>Your subscription is now set to {0}/{1}.</value>
+    <value>サブスクリプションは {0}/{1} に設定されました。</value>
     <comment>Subscription Type, Billing Cycle</comment>
   </data>
   <data name="AccountExistingLoginTitle" xml:space="preserve">
-    <value>Account Found</value>
+    <value>アカウントが見つかりました</value>
   </data>
   <data name="AccountLoginFailedTitle" xml:space="preserve">
-    <value>Login Failed</value>
+    <value>ログインに失敗しました</value>
   </data>
   <data name="AccountRegistrationFailedTitle" xml:space="preserve">
-    <value>Registration Failed</value>
+    <value>登録に失敗しました</value>
   </data>
   <data name="AccountRegistrationSuccessfulNtfTitle" xml:space="preserve">
-    <value>Registration successful!</value>
+    <value>登録に成功！</value>
   </data>
   <data name="AccountResetPasswordErrorTitle" xml:space="preserve">
-    <value>Reset Error</value>
+    <value>リセットエラー</value>
   </data>
   <data name="AccountSubscriptionTabName" xml:space="preserve">
-    <value>Subscription</value>
+    <value>サブスクリプション</value>
   </data>
   <data name="AccountWhatsNewTabName" xml:space="preserve">
-    <value>What's New</value>
+    <value>新着情報</value>
   </data>
   <data name="AccountFreeNextPaymentDisplayText" xml:space="preserve">
-    <value>Never</value>
+    <value>一度もない</value>
   </data>
   <data name="AccountUnlimitedDisplayText" xml:space="preserve">
-    <value>Unlimited</value>
+    <value>無制限</value>
   </data>
   <data name="AccountInfoCapacityText" xml:space="preserve">
-    <value>capacity</value>
+    <value>容量</value>
   </data>
   <data name="AccountInfoRemainingText" xml:space="preserve">
-    <value>remaining</value>
+    <value>残り</value>
   </data>
   <data name="AccountInfoTotalText" xml:space="preserve">
-    <value>total</value>
+    <value>合計</value>
   </data>
   <data name="AccountExpiredStatusTooltip" xml:space="preserve">
-    <value>Your payment is past due. </value>
+    <value>お支払い期限が過ぎています。</value>
   </data>
   <data name="ShortcutAssignExclusiveOverrideMultiKeyWarning" xml:space="preserve">
-    <value>Exclusive override shortcuts may only contain ONE key and that key can not be a modifier key.</value>
+    <value>排他的オーバーライド ショートカットには 1 つのキーのみを含めることができ、そのキーを修飾キーにすることはできません。</value>
   </data>
   <data name="AccountExpiredLabel" xml:space="preserve">
-    <value>Expired</value>
+    <value>期限切れ</value>
   </data>
   <data name="NtfLoaderTitle" xml:space="preserve">
-    <value>LOADING</value>
+    <value>読み込み中</value>
   </data>
   <data name="CommonDisabledLabel" xml:space="preserve">
-    <value>Disabled</value>
+    <value>無効</value>
   </data>
   <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
-    <value>Note! This password is optional and only for EXTRA security.If used remembering it makes it essentially useless. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.).</value>
+    <value>注記！</value>
   </data>
   <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
-    <value>Remember Drop Settings For:</value>
+    <value>以下のドロップ設定を記憶:</value>
   </data>
   <data name="AnalyzeBrowsePluginsToolTip" xml:space="preserve">
-    <value>Browse Plugins</value>
+    <value>プラグインを参照する</value>
   </data>
   <data name="CommonAnalyzeButtonLabel" xml:space="preserve">
-    <value>Analyze</value>
+    <value>分析する</value>
   </data>
   <data name="AnalyzeQuickActionToolTip" xml:space="preserve">
-    <value>Quick Action</value>
+    <value>素早い動作</value>
   </data>
   <data name="ClipTileToggleEditLabel" xml:space="preserve">
-    <value>Toggle Edit</value>
+    <value>編集を切り替え</value>
   </data>
   <data name="ClipTileTogglePinnedLabel" xml:space="preserve">
-    <value>Toggle Pinned</value>
+    <value>固定の切り替え</value>
   </data>
   <data name="ClipTileTransactionAnnotationTitle" xml:space="preserve">
-    <value>Annotations</value>
+    <value>注釈</value>
   </data>
   <data name="ClipTileTransactionTogglePlainTextLabel" xml:space="preserve">
-    <value>Plain Text</value>
+    <value>プレーンテキスト</value>
   </data>
   <data name="CommonFloatWindowLabel" xml:space="preserve">
-    <value>Float</value>
+    <value>浮く</value>
   </data>
   <data name="LinkNavigateToolTipText" xml:space="preserve">
-    <value>Control + Click to follow...</value>
+    <value>Ctrl + クリックしてフォローします...</value>
   </data>
   <data name="LinkNavigateToolTipText2" xml:space="preserve">
-    <value>Alt + Click to follow...</value>
+    <value>Alt + クリックしてフォローします...</value>
   </data>
   <data name="PinTrayEmptyLabel" xml:space="preserve">
-    <value>Pin or Drop any media here!</value>
+    <value>ここにメディアをピン留めするかドロップしてください。</value>
   </data>
   <data name="PinTrayUnpinAllLabel" xml:space="preserve">
-    <value>Clear</value>
+    <value>クリア</value>
   </data>
   <data name="SearchColorDistanceToolTipText" xml:space="preserve">
-    <value>Thresholds above 0 will provide fuzzy color matching using Euclidean distance in the RGBA colorspace. For example, if red (#FF0000) is the search term and black (#000000) is a pixel in an image then the color distance will be 255. Black to white distance is the maximum possible at 510, including an alpha channel</value>
+    <value>0 を超えるしきい値では、RGBA 色空間のユークリッド距離を使用してファジー カラー マッチングが提供されます。</value>
   </data>
   <data name="SearchCustomJoinHeaderLabel" xml:space="preserve">
-    <value>all of the following are true</value>
+    <value>次のすべてが真実です</value>
   </data>
   <data name="SidebarClipboardHandlersToolTip" xml:space="preserve">
-    <value>Clipboard</value>
+    <value>クリップボード</value>
   </data>
   <data name="SidebarCollectionsToolTip" xml:space="preserve">
-    <value>Collections</value>
+    <value>コレクション</value>
   </data>
   <data name="SidebarMouseModesToolTip" xml:space="preserve">
-    <value>Mouse Modes</value>
+    <value>マウスモード</value>
   </data>
   <data name="SidebarTriggersToolTip" xml:space="preserve">
-    <value>Triggers</value>
+    <value>トリガー</value>
   </data>
   <data name="TriggerPauseButtonLabel" xml:space="preserve">
-    <value>Pause</value>
+    <value>一時停止</value>
   </data>
   <data name="TriggerResumeButtonLabel" xml:space="preserve">
-    <value>Resume</value>
+    <value>再開する</value>
   </data>
   <data name="TriggersAddNewTriggerToolTip" xml:space="preserve">
-    <value>New Trigger</value>
+    <value>新しいトリガー</value>
   </data>
   <data name="CommonAddPresetButtonLabel" xml:space="preserve">
-    <value>Add Preset</value>
+    <value>プリセットの追加</value>
   </data>
   <data name="DropWidgetMouseModeToolTip" xml:space="preserve">
-    <value>Monkey Drop Wizard</value>
+    <value>モンキードロップウィザード</value>
   </data>
   <data name="AnalyzerPresetGridTitle" xml:space="preserve">
-    <value>Presets</value>
+    <value>プリセット</value>
   </data>
   <data name="AnalyzerSelectorLabel" xml:space="preserve">
-    <value>Analyzer</value>
+    <value>アナライザ</value>
   </data>
   <data name="ColorPaletteCustomColorToolTip" xml:space="preserve">
-    <value>Cutom</value>
+    <value>カットム</value>
   </data>
   <data name="MainWindowTitleCycleOrientationToolTip" xml:space="preserve">
-    <value>Cycle Orientation</value>
+    <value>サイクルの方向性</value>
   </data>
   <data name="MainWindowTitleToggleGridLayoutToolTip" xml:space="preserve">
-    <value>Toggle Grid Layout</value>
+    <value>グリッドレイアウトの切り替え</value>
   </data>
   <data name="SearchCaseSensitiveLabel" xml:space="preserve">
-    <value>Case Sensitive</value>
+    <value>大文字と小文字を区別</value>
   </data>
   <data name="SearchThresholdLabel" xml:space="preserve">
-    <value>Threshold</value>
+    <value>しきい値</value>
   </data>
   <data name="SearchWholeWordLabel" xml:space="preserve">
-    <value>Whole Word</value>
+    <value>単語全体</value>
   </data>
   <data name="ShortcutAssignEmptyLabel" xml:space="preserve">
-    <value>None Set</value>
+    <value>なし セット</value>
   </data>
   <data name="ShortcutRoutingTypeLabel" xml:space="preserve">
-    <value>Routing</value>
+    <value>ルーティング</value>
   </data>
   <data name="TriggerActionLabel" xml:space="preserve">
-    <value>Action</value>
+    <value>アクション</value>
   </data>
   <data name="TriggerDesignerToggleGridLabel" xml:space="preserve">
-    <value>Grid</value>
+    <value>グリッド</value>
   </data>
   <data name="WelcomeDoneButtonLabel" xml:space="preserve">
-    <value>Done</value>
+    <value>終わり</value>
   </data>
   <data name="WelcomeNextButtonLabel" xml:space="preserve">
-    <value>Next</value>
+    <value>次</value>
   </data>
   <data name="WelcomePreviousButtonLabel" xml:space="preserve">
-    <value>Previous</value>
+    <value>前の</value>
   </data>
   <data name="WelcomeSkipButtonLabel" xml:space="preserve">
-    <value>Skip</value>
+    <value>スキップ</value>
   </data>
   <data name="AccountExistingAccountButtonLabel" xml:space="preserve">
-    <value>Existing Account?</value>
+    <value>既存のアカウントですか?</value>
   </data>
   <data name="AccountNextPaymentLabel" xml:space="preserve">
-    <value>Next Payment</value>
+    <value>次回のお支払い</value>
   </data>
   <data name="PrefRegistrationFrameHint" xml:space="preserve">
-    <value>Registration lets you carry your paid subscription across all your devices (upon availability). We won't spam your email we promise 😇.</value>
+    <value>登録すると、すべてのデバイスで有料サブスクリプションを維持できるようになります (利用可能な場合)。</value>
   </data>
   <data name="AccountSubscriptionLabel" xml:space="preserve">
-    <value>Subscription</value>
+    <value>サブスクリプション</value>
   </data>
   <data name="AccountUserNameLabel" xml:space="preserve">
-    <value>User Name</value>
+    <value>ユーザー名</value>
   </data>
   <data name="AccountSwitchToRegisterButtonLabel" xml:space="preserve">
-    <value>Need to Register?</value>
+    <value>登録する必要がありますか?</value>
   </data>
   <data name="ClipTileSourcesHeader" xml:space="preserve">
-    <value>Sources</value>
+    <value>情報源</value>
   </data>
   <data name="ClipTileTransactionErrorText" xml:space="preserve">
-    <value>Odd, nothing available. Something must be wrong 😕</value>
+    <value>奇妙なことに、何も利用できません。</value>
   </data>
   <data name="CommonRemoveLabel" xml:space="preserve">
-    <value>Remove</value>
+    <value>取り除く</value>
   </data>
   <data name="CommonRequiresRestartHint" xml:space="preserve">
-    <value>Requires restart</value>
+    <value>再起動が必要です</value>
   </data>
   <data name="ContentQueryAdvancedHeader" xml:space="preserve">
-    <value>Advanced</value>
+    <value>高度な</value>
   </data>
   <data name="PluginErrBundleTypeText" xml:space="preserve">
     <value />
   </data>
   <data name="PluginErrExtractText" xml:space="preserve">
-    <value>Error extracting plugin from '{0}'</value>
+    <value>「{0}」からプラグインを抽出中にエラーが発生しました</value>
     <comment>Folder Path</comment>
   </data>
   <data name="PluginErrInstallNtfText" xml:space="preserve">
-    <value>Error installing plugin: '{0}'</value>
+    <value>プラグインのインストール中にエラーが発生しました: '{0}'</value>
     <comment>Error Details</comment>
   </data>
   <data name="PluginErrInstallStructureNtfText" xml:space="preserve">
-    <value>Error installing plugin '{0}' corrupt or improper directory structure. Manifest should exist at '{1}' but was not found.</value>
+    <value>プラグイン '{0}' のインストール中にエラーが発生しました。ディレクトリ構造が壊れているか、不適切です。</value>
     <comment>Plugin Name, File Path</comment>
   </data>
   <data name="PluginErrManifestText" xml:space="preserve">
-    <value>Error parsing plugin manifest '{0}': {1}</value>
+    <value>プラグイン マニフェスト '{0}' の解析エラー: {1}</value>
     <comment>File Path, Error Details</comment>
   </data>
   <data name="PluginErrMissingManifest" xml:space="preserve">
-    <value>No plugin loaded from manifest path: '{0}'</value>
+    <value>マニフェスト パスからロードされたプラグインがありません: '{0}'</value>
     <comment>File Path</comment>
   </data>
   <data name="PluginErrNtfTitle" xml:space="preserve">
-    <value>{0} Error</value>
+    <value>{0} エラー</value>
     <comment>Plugin Name</comment>
   </data>
   <data name="PluginErrStagingText" xml:space="preserve">
-    <value>Error staging plugin to temp dir '{0}'</value>
+    <value>プラグインを一時ディレクトリ '{0}' にステージング中にエラーが発生しました</value>
     <comment>Folder Path</comment>
   </data>
   <data name="PluginLoaderBackupErrorText" xml:space="preserve">
-    <value>Error backing up '{0}' to '{1}'. Details: '{2}'</value>
+    <value>「{0}」を「{1}」にバックアップ中にエラーが発生しました。</value>
     <comment>Folder Path, Folder Path, Error Details</comment>
   </data>
   <data name="PrefAutoSearchHint" xml:space="preserve">
-    <value>Text typed will be automatically applied to a search when no text control is focused.</value>
+    <value>テキスト コントロールがフォーカスされていない場合、入力されたテキストは自動的に検索に適用されます。</value>
   </data>
   <data name="PrefAutoSearchLabel" xml:space="preserve">
-    <value>Auto Search Input</value>
+    <value>自動検索入力</value>
   </data>
   <data name="PrefChangeDbPwdFailedNtfText" xml:space="preserve">
-    <value>Password change failed</value>
+    <value>パスワード変更に失敗しました</value>
   </data>
   <data name="PrefChangePasswordButtonText" xml:space="preserve">
-    <value>Change</value>
+    <value>変化</value>
   </data>
   <data name="PrefChangePasswordLabel" xml:space="preserve">
-    <value>Change Password</value>
+    <value>パスワードを変更する</value>
   </data>
   <data name="PrefClearPasswordButtonLabel" xml:space="preserve">
-    <value>Clear</value>
+    <value>クリア</value>
   </data>
   <data name="PrefClearPasswordLabel" xml:space="preserve">
-    <value>Clear Password</value>
+    <value>パスワードのクリア</value>
   </data>
   <data name="PrefContentFontLabel" xml:space="preserve">
-    <value>Content</value>
+    <value>コンテンツ</value>
   </data>
   <data name="PrefContentFontSizeLabel" xml:space="preserve">
-    <value>Size</value>
+    <value>サイズ</value>
   </data>
   <data name="PrefDestFormatHint" xml:space="preserve">
-    <value>When true, external content inserted into a clip will use the clips rich formatting and not the source content.</value>
+    <value>true の場合、クリップに挿入された外部コンテンツは、ソース コンテンツではなくクリップのリッチ フォーマットを使用します。</value>
   </data>
   <data name="PrefDestFormatLabel" xml:space="preserve">
-    <value>Paste, drop or append with destination formatting</value>
+    <value>宛先の書式を指定して貼り付け、ドロップ、または追加します</value>
   </data>
   <data name="PrefForgetDbPwdNtfText" xml:space="preserve">
-    <value>Are you sure you want to forget the password?</value>
+    <value>パスワードを忘れてもよろしいですか?</value>
   </data>
   <data name="PrefForgetPasswordButtonLabel" xml:space="preserve">
-    <value>Forget</value>
+    <value>忘れる</value>
   </data>
   <data name="PrefForgetPasswordLabel" xml:space="preserve">
-    <value>Forget Password</value>
+    <value>パスワードを忘れた場合</value>
   </data>
   <data name="PrefGestureProfileLabel" xml:space="preserve">
-    <value>Profile</value>
+    <value>プロフィール</value>
   </data>
   <data name="PrefHideWatermarksLabel" xml:space="preserve">
-    <value>Hide Capacity Watermarks</value>
+    <value>容量のウォーターマークを非表示にする</value>
   </data>
   <data name="PrefIgnoreAppendsHint" xml:space="preserve">
-    <value>When new clipboard content is appended it will not be tracked</value>
+    <value>新しいクリップボードのコンテンツが追加されると、それは追跡されません</value>
   </data>
   <data name="PrefIgnoreAppendsLabel" xml:space="preserve">
-    <value>Ignore Appends</value>
+    <value>追加を無視する</value>
   </data>
   <data name="PrefIgnoreDupHint" xml:space="preserve">
-    <value>When duplicate is detected on clipboard, it will be staged from original source and not added redundantly.</value>
+    <value>クリップボード上で重複が検出された場合、元のソースからステージングされ、重複して追加されません。</value>
   </data>
   <data name="PrefIgnoreDupLabel" xml:space="preserve">
-    <value>Ignore New Duplicates</value>
+    <value>新しい重複を無視する</value>
   </data>
   <data name="PrefIgnoreInternalClipboardHint" xml:space="preserve">
-    <value>Clipboard changes from within the app will not be tracked</value>
+    <value>アプリ内からのクリップボードへの変更は追跡されません</value>
   </data>
   <data name="PrefIgnoreInternalClipboardLabel" xml:space="preserve">
-    <value>Ignore Internal Clipboard Tracking</value>
+    <value>内部クリップボード追跡を無視する</value>
   </data>
   <data name="PrefIgnoreWhiteSpaceHint" xml:space="preserve">
-    <value>Spaces, tabs and new lines will be ignored from tracking</value>
+    <value>スペース、タブ、改行は追跡から無視されます</value>
   </data>
   <data name="PrefIgnoreWhiteSpaceLabel" xml:space="preserve">
-    <value>Ignore Only White Space</value>
+    <value>空白のみを無視する</value>
   </data>
   <data name="PrefLoginLoadLabel" xml:space="preserve">
-    <value>Load on Login</value>
+    <value>ログイン時にロード</value>
   </data>
   <data name="PrefMainWindowAnimateLabel" xml:space="preserve">
-    <value>Animate Window</value>
+    <value>アニメーションウィンドウ</value>
   </data>
   <data name="PrefMainWindowOpacityLabel" xml:space="preserve">
-    <value>Opacity</value>
+    <value>不透明度</value>
   </data>
   <data name="PrefMainWindowShowBehaviorLabel" xml:space="preserve">
-    <value>Show Behavior</value>
+    <value>行動を示す</value>
   </data>
   <data name="PrefMainWindowShowOnScrollHint" xml:space="preserve">
-    <value>Monkey Paste will be revealed by performing a scroll gesture on the top edge of your monitor</value>
+    <value>モニターの上端でスクロール ジェスチャーを実行すると、Monkey Paste が表示されます。</value>
   </data>
   <data name="PrefMainWindowShowOnScrollLabel" xml:space="preserve">
-    <value>Show on top screen scroll</value>
+    <value>トップ画面スクロールに表示</value>
   </data>
   <data name="PrefNtfVolumeLabel" xml:space="preserve">
-    <value>Notification Volume</value>
+    <value>通知量</value>
   </data>
   <data name="PrefPasteHistoryHint" xml:space="preserve">
-    <value>This setting will track system-wide keyboard paste counts for usage statistics. This information is private and not shared but also not guarenteed. Accurate results may require providing application specific keyboard paste command.</value>
+    <value>この設定は、使用統計のためにシステム全体のキーボードペースト数を追跡​​します。</value>
   </data>
   <data name="PrefPasteHistoryLabel" xml:space="preserve">
-    <value>Paste History</value>
+    <value>履歴の貼り付け</value>
   </data>
   <data name="PrefPinTrayCapacityHint" xml:space="preserve">
-    <value>Large or many staged items can consume significant memory. removal follows a first-in-first-out policy</value>
+    <value>大きいアイテムまたは多数のステージングされたアイテムは、大量のメモリを消費する可能性があります。</value>
   </data>
   <data name="PrefPinTrayCapacityLabel" xml:space="preserve">
-    <value>Pin Capacity</value>
+    <value>ピン容量</value>
   </data>
   <data name="PrefRecentTextLimitHint" xml:space="preserve">
-    <value>This applies to all auto-completable inputs, lower values will improve performance</value>
+    <value>これはすべてのオートコンプリート可能な入力に適用され、値を低くするとパフォーマンスが向上します。</value>
   </data>
   <data name="PrefRecentTextLimitLabel" xml:space="preserve">
-    <value>Recent Text Limit</value>
+    <value>最近のテキストの制限</value>
   </data>
   <data name="PrefResetAllNtfMsgText" xml:space="preserve">
-    <value>Are you sure you want to reset all preferences? This action cannot be undone. *Some Settings will not update until restart</value>
+    <value>すべての設定をリセットしてもよろしいですか?</value>
   </data>
   <data name="PrefResetAllNtfText" xml:space="preserve">
-    <value>Are you sure you want to reset all notifications?</value>
+    <value>すべての通知をリセットしてもよろしいですか?</value>
   </data>
   <data name="PrefResetClipboardHint" xml:space="preserve">
-    <value>Monkey Paste uses the system clipboard to interoperate and changes your current clipboard when pasting to an external program. This will &lt;b&gt;attempt&lt;/b&gt; to restore the state of the clipboard after an external paste. Restoration cannot be guaranteed and may reduce performance or even crash Monkey Paste depending on the source of the data (looking at you windows).</value>
+    <value>Monkey Paste はシステム クリップボードを使用して相互運用し、外部プログラムに貼り付けるときに現在のクリップボードを変更します。</value>
   </data>
   <data name="PrefResetClipboardLabel" xml:space="preserve">
-    <value>Reset Clipboard after Monkey Pasting</value>
+    <value>モンキーペースト後にクリップボードをリセット</value>
   </data>
   <data name="PrefResetPluginCacheErrorText" xml:space="preserve">
-    <value>Could not delete plugin cache from path: '{0}'</value>
+    <value>パス '{0}' からプラグイン キャッシュを削除できませんでした</value>
     <comment>Folder Path</comment>
   </data>
   <data name="PrefResetPluginCacheHint" xml:space="preserve">
-    <value>All plugins will be reset to initial default state</value>
+    <value>すべてのプラグインが初期デフォルト状態にリセットされます</value>
   </data>
   <data name="PrefResetPluginCacheLabel" xml:space="preserve">
-    <value>Plugin Cache</value>
+    <value>プラグインキャッシュ</value>
   </data>
   <data name="PrefResetPluginCacheNtfText" xml:space="preserve">
-    <value>Are you sure you want to reset all plugins to defaults?</value>
+    <value>すべてのプラグインをデフォルトにリセットしてもよろしいですか?</value>
   </data>
   <data name="PrefResetPwdNtfText" xml:space="preserve">
-    <value>Are you sure you want to reset your password?</value>
+    <value>パスワードをリセットしてもよろしいですか?</value>
   </data>
   <data name="PrefResetShortcutsHint" xml:space="preserve">
-    <value>All application shortcuts will be reset to their default key gestures.</value>
+    <value>すべてのアプリケーションのショートカットはデフォルトのキー ジェスチャにリセットされます。</value>
   </data>
   <data name="PrefResetShortcutsLabel" xml:space="preserve">
-    <value>Reset Shortcuts</value>
+    <value>ショートカットをリセットする</value>
   </data>
   <data name="PrefRestoreNtfHint" xml:space="preserve">
-    <value>All ignored notifications previously set.</value>
+    <value>以前に設定されたすべての通知を無視しました。</value>
   </data>
   <data name="PrefRestorNtfLabel" xml:space="preserve">
-    <value>Restore Notifications</value>
+    <value>通知を復元する</value>
   </data>
   <data name="PrefRichContentHint" xml:space="preserve">
-    <value>(Enabling can be quite slow) Disabling formatted will reduce memory consumption but will disable some advanced features, such as: templates, annotations and find/replace</value>
+    <value>(有効にすると非常に時間がかかる場合があります) フォーマット済みを無効にするとメモリ消費量が減りますが、テンプレート、注釈、検索/置換などの一部の高度な機能が無効になります。</value>
   </data>
   <data name="PrefRichContentLabel" xml:space="preserve">
-    <value>Rich Content</value>
+    <value>豊富なコンテンツ</value>
   </data>
   <data name="PrefSetPasswordWindowTitlePrefix" xml:space="preserve">
-    <value>Set Password</value>
+    <value>パスワードを設定してください</value>
   </data>
   <data name="PrefShowHintsLabel" xml:space="preserve">
-    <value>Show Hints</value>
+    <value>ヒントを表示する</value>
   </data>
   <data name="PrefShowInTaskbarLabel" xml:space="preserve">
-    <value>Show In Taskbar</value>
+    <value>タスクバーに表示</value>
   </data>
   <data name="PrefShowInTaskSwitcher" xml:space="preserve">
-    <value>Show In Task Switcher</value>
+    <value>タスクスイッチャーで表示</value>
   </data>
   <data name="PrefShowTitlesLabel" xml:space="preserve">
-    <value>Show Titles</value>
+    <value>タイトルを表示</value>
   </data>
   <data name="PrefShowWindowOnDragHint" xml:space="preserve">
-    <value>This helps fluidly allow dropping data into Monkey paste from another application without extra fumbling with window placement by dragging data to the top of the screen which will activate Monkey Paste and allow drop.</value>
+    <value>これにより、データを画面の上部にドラッグすることで、Monkey Paste がアクティブになり、ドロップが可能になり、ウィンドウの配置を余計にいじることなく、別のアプリケーションから Monkey Paste にデータを流動的にドロップできるようになります。</value>
   </data>
   <data name="PrefShowWindowOnDragLabel" xml:space="preserve">
-    <value>Show on drag to top of screen</value>
+    <value>画面上部へのドラッグ時に表示</value>
   </data>
   <data name="PrefSoundThemeLabel" xml:space="preserve">
-    <value>Sound Theme</value>
+    <value>サウンドテーマ</value>
   </data>
   <data name="PrefSpellCheckLabel" xml:space="preserve">
-    <value>Spell Check</value>
+    <value>スペルチェック</value>
   </data>
   <data name="PrefStartupClipboardHint" xml:space="preserve">
-    <value>On startup the source of the clipboard will be unknown and depending on your security settings the content may come from an excluded website or application.</value>
+    <value>起動時、クリップボードのソースは不明であり、セキュリティ設定によっては、コンテンツが除外された Web サイトまたはアプリケーションから取得される可能性があります。</value>
   </data>
   <data name="PrefStartupClipboardLabel" xml:space="preserve">
-    <value>Add Startup Clipboard</value>
+    <value>起動クリップボードを追加</value>
   </data>
   <data name="PrefStartupClipboardListenLabel" xml:space="preserve">
-    <value>Listen to clipboard on startup</value>
+    <value>起動時にクリップボードを聞く</value>
   </data>
   <data name="CommonSelectLabel" xml:space="preserve">
-    <value>Select</value>
+    <value>選択する</value>
   </data>
   <data name="PrefThemeColorHint" xml:space="preserve">
-    <value>Caution! Palette colors are decided by math not eyes! So please be careful as some color and style combinations may not have proper contrast for readability.</value>
+    <value>注意！</value>
   </data>
   <data name="PrefThemeColorLabel" xml:space="preserve">
-    <value>Theme Color</value>
+    <value>テーマカラー</value>
   </data>
   <data name="PrefThemeStyleLabel" xml:space="preserve">
-    <value>Theme Style</value>
+    <value>テーマのスタイル</value>
   </data>
   <data name="PrefTrashCycleHint" xml:space="preserve">
-    <value>Automatic trash cleanup will occur on startup at the set interval. It is not required but definitely don't let it get too large! Overall performance and CPU usage will have an impact if it becomes large ie. over 100 items lets say...</value>
+    <value>起動時に設定した間隔でゴミ箱の自動クリーンアップが行われます。</value>
   </data>
   <data name="PrefTrashCycleLabel" xml:space="preserve">
-    <value>Trash Cleanup</value>
+    <value>ゴミ箱のクリーンアップ</value>
   </data>
   <data name="PrefUiFontLabel" xml:space="preserve">
-    <value>Interface</value>
+    <value>インターフェース</value>
   </data>
   <data name="PrefUndoLimitHint" xml:space="preserve">
-    <value>High undo limits may affect performance</value>
+    <value>元に戻す制限が高いとパフォーマンスに影響を与える可能性があります</value>
   </data>
   <data name="PrefUndoLimitLabel" xml:space="preserve">
-    <value>Undo Limit</value>
+    <value>元に戻す制限</value>
   </data>
   <data name="PrefUndoLimitNoLimitLabel" xml:space="preserve">
-    <value>No Limit</value>
+    <value>制限なし</value>
   </data>
   <data name="PrefUserFileExtHint" xml:space="preserve">
-    <value>Used in advanced file search for non preset file kinds</value>
+    <value>プリセットされていない種類のファイルの高度なファイル検索で使用されます</value>
   </data>
   <data name="PrefUserFileExtLabel" xml:space="preserve">
-    <value>User-Defined Search Extensions</value>
+    <value>ユーザー定義の検索拡張機能</value>
   </data>
   <data name="ClipTileFindReplaceHeader" xml:space="preserve">
-    <value>Find and Replace...</value>
+    <value>検索と置換...</value>
   </data>
   <data name="ClipTilePasteHereHeaderLabel" xml:space="preserve">
-    <value>Paste Here</value>
+    <value>ここに貼り付けます</value>
   </data>
   <data name="ClipTileShareHeader" xml:space="preserve">
-    <value>Share...</value>
+    <value>共有...</value>
   </data>
   <data name="ClipTileTransactionViewSourceHeader" xml:space="preserve">
-    <value>View</value>
+    <value>ビュー</value>
   </data>
   <data name="CommonManageHeader" xml:space="preserve">
-    <value>Manage...</value>
+    <value>管理...</value>
   </data>
   <data name="CommonRenameLabel" xml:space="preserve">
-    <value>Rename</value>
+    <value>名前の変更</value>
   </data>
   <data name="ClipTileAnnotationScoreLabel" xml:space="preserve">
-    <value>Score: {0}</value>
+    <value>スコア: {0}</value>
     <comment>Number</comment>
   </data>
   <data name="ClipTileAnnotationTypeLabel" xml:space="preserve">
-    <value>Type: {0}</value>
+    <value>タイプ: {0}</value>
     <comment>Annotation Type Name</comment>
   </data>
   <data name="ClipTilePermanentlyDeleteHeader" xml:space="preserve">
-    <value>Permanently Delete</value>
+    <value>完全に削除</value>
   </data>
   <data name="ClipTileSourceBrowseToLabel" xml:space="preserve">
-    <value>Browse to '{0}'</value>
+    <value>「{0}」を参照します</value>
     <comment>App Name</comment>
   </data>
   <data name="ClipTileTransformHeader" xml:space="preserve">
-    <value>Transform</value>
+    <value>変身</value>
   </data>
   <data name="ClipTileTransInputTabHeader" xml:space="preserve">
-    <value>Input</value>
+    <value>入力</value>
   </data>
   <data name="ClipTileTransOutputTabHeader" xml:space="preserve">
-    <value>Output</value>
+    <value>出力</value>
   </data>
   <data name="ClipTileTransSourcesTabHeader" xml:space="preserve">
-    <value>Sources</value>
+    <value>情報源</value>
   </data>
   <data name="ClipTileTrashRestoreHeader" xml:space="preserve">
-    <value>Restore</value>
+    <value>復元する</value>
   </data>
   <data name="CommonChooseImageHeader" xml:space="preserve">
-    <value>Choose Image...</value>
+    <value>画像を選択...</value>
   </data>
   <data name="CommonColorHeader" xml:space="preserve">
-    <value>Color</value>
+    <value>色</value>
   </data>
   <data name="CommonManageLabel2" xml:space="preserve">
-    <value>Manage '{0}'...</value>
+    <value>「{0}」を管理します...</value>
     <comment>Plugin name</comment>
   </data>
   <data name="CommonOpenLabel" xml:space="preserve">
-    <value>Open</value>
+    <value>開ける</value>
   </data>
   <data name="CommonWaitLabel" xml:space="preserve">
-    <value>Please wait...</value>
+    <value>お待ちください...</value>
   </data>
   <data name="EditorBgColorLabel" xml:space="preserve">
-    <value>Background Color</value>
+    <value>背景色</value>
   </data>
   <data name="EditorClearAllLabel" xml:space="preserve">
-    <value>Clear All</value>
+    <value>すべてクリア</value>
   </data>
   <data name="EditorClipboardFormatsLabel" xml:space="preserve">
-    <value>Clipboard Formats</value>
+    <value>クリップボードの形式</value>
   </data>
   <data name="EditorDeleteAllButtonText" xml:space="preserve">
-    <value>Delete All</value>
+    <value>すべて削除</value>
   </data>
   <data name="EditorEditTemplateDetailsLabel" xml:space="preserve">
-    <value>Edit Details</value>
+    <value>詳細を編集する</value>
   </data>
   <data name="EditorEditTemplateNameLabel" xml:space="preserve">
-    <value>Name</value>
+    <value>名前</value>
   </data>
   <data name="EditorFindLabel" xml:space="preserve">
-    <value>Find</value>
+    <value>探す</value>
   </data>
   <data name="EditorFontColorLabel" xml:space="preserve">
-    <value>Font Color</value>
+    <value>フォントの色</value>
   </data>
   <data name="EditorFormatPaintLabel" xml:space="preserve">
-    <value>Format Paint</value>
+    <value>フォーマットペイント</value>
   </data>
   <data name="EditorInSelectionLabel" xml:space="preserve">
-    <value> In Selection</value>
+    <value>選択中</value>
   </data>
   <data name="EditorInsertImageLabel" xml:space="preserve">
-    <value>Insert Image</value>
+    <value>画像の挿入</value>
   </data>
   <data name="EditorInsertLinkLabel" xml:space="preserve">
-    <value>Insert Link</value>
+    <value>リンクの挿入</value>
   </data>
   <data name="EditorInsertVideoLabel" xml:space="preserve">
-    <value>Insert Video</value>
+    <value>ビデオの挿入</value>
   </data>
   <data name="EditorMatchCaseLabel" xml:space="preserve">
-    <value> Match Case</value>
+    <value>マッチケース</value>
   </data>
   <data name="EditorNewTemplateLabel" xml:space="preserve">
-    <value>New Template</value>
+    <value>新しいテンプレート</value>
   </data>
   <data name="EditorNextTemplateLabel" xml:space="preserve">
-    <value>Next Template</value>
+    <value>次のテンプレート</value>
   </data>
   <data name="EditorPasteTemplateWatermark" xml:space="preserve">
-    <value>Enter paste text...</value>
+    <value>貼り付けテキストを入力してください...</value>
   </data>
   <data name="EditorPrevTemplateLabel" xml:space="preserve">
-    <value>Previous Template</value>
+    <value>前のテンプレート</value>
   </data>
   <data name="EditorRegExLabel" xml:space="preserve">
-    <value> Regular Expression</value>
+    <value>正規表現</value>
   </data>
   <data name="EditorReplaceAllLabel" xml:space="preserve">
-    <value>Replace All</value>
+    <value>すべて置換</value>
   </data>
   <data name="EditorReplaceLabel" xml:space="preserve">
-    <value>Replace</value>
+    <value>交換する</value>
   </data>
   <data name="EditorWholeWordLabel" xml:space="preserve">
-    <value> Whole Word</value>
+    <value> 単語全体</value>
   </data>
   <data name="EditorWrapLabel" xml:space="preserve">
-    <value> Wrap Around</value>
+    <value> 包み込む</value>
   </data>
   <data name="SourceBlockLabel" xml:space="preserve">
-    <value>Block</value>
+    <value>ブロック</value>
   </data>
   <data name="SourceDomainLabel" xml:space="preserve">
-    <value>Domain</value>
+    <value>ドメイン</value>
   </data>
   <data name="SourceShowFolderLabel" xml:space="preserve">
-    <value>Show Folder</value>
+    <value>フォルダーを表示</value>
   </data>
   <data name="SourceUnblockLabel" xml:space="preserve">
-    <value>Unblock</value>
+    <value>ブロックを解除する</value>
   </data>
   <data name="SysTrayAboutHeader" xml:space="preserve">
-    <value>About</value>
+    <value>について</value>
   </data>
   <data name="SysTrayAppendLineHeader" xml:space="preserve">
-    <value>Append Line</value>
+    <value>行の追加</value>
   </data>
   <data name="SysTrayAppenInlineHeader" xml:space="preserve">
-    <value>Append Inline</value>
+    <value>インラインで追加</value>
   </data>
   <data name="SysTrayAutoCopyHeader" xml:space="preserve">
-    <value>Auto-Copy</value>
+    <value>自動コピー</value>
   </data>
   <data name="SysTrayModeHeader" xml:space="preserve">
-    <value>Mode</value>
+    <value>モード</value>
   </data>
   <data name="SysTrayPleaseWaitTooltip" xml:space="preserve">
-    <value>Please wait MonkeyPaste is loading...</value>
+    <value>お待ちください。MonkeyPaste をロードしています...</value>
   </data>
   <data name="SysTrayQuitHeader" xml:space="preserve">
-    <value>Quit</value>
+    <value>やめる</value>
   </data>
   <data name="SysTrayRightClickPasteHeader" xml:space="preserve">
-    <value>Righ-Click Paste</value>
+    <value>右クリックして貼り付け</value>
   </data>
   <data name="TagGroupTypeName" xml:space="preserve">
-    <value>Group</value>
+    <value>グループ</value>
   </data>
   <data name="TagQueryTypeName" xml:space="preserve">
-    <value>Filter</value>
+    <value>フィルター</value>
   </data>
   <data name="TagTilePermDeleteAllHeader" xml:space="preserve">
-    <value>Permanently Delete All</value>
+    <value>すべて完全に削除</value>
   </data>
   <data name="TagTileRestoreAllHeader" xml:space="preserve">
-    <value>Restore All</value>
-  </data>
-  <data name="ActionLabel" xml:space="preserve">
-    <value>Action</value>
-  </data>
-  <data name="AddUrlNtfDupText" xml:space="preserve">
-    <value>Url already exists: '{0}'</value>
-    <comment>Url</comment>
-  </data>
-  <data name="AddUrlNtfErrorText" xml:space="preserve">
-    <value>Url must be in valid format.</value>
-  </data>
-  <data name="AddUrlNtfText" xml:space="preserve">
-    <value>Enter full url:</value>
-  </data>
-  <data name="AddUrlNtfTitle" xml:space="preserve">
-    <value>Add Url</value>
-  </data>
-  <data name="AnalyzerExecuteParamNtfTitle" xml:space="preserve">
-    <value>Enter Values</value>
-  </data>
-  <data name="AppendActivateText" xml:space="preserve">
-    <value>Copy text or files to apply.</value>
-  </data>
-  <data name="AppendActivateTitle" xml:space="preserve">
-    <value>Append {0} {1} Mode Activated</value>
-    <comment>Append Type, Manual or empty</comment>
-  </data>
-  <data name="AppendAfterNtfText" xml:space="preserve">
-    <value>Clipboard changes will now be appended</value>
-  </data>
-  <data name="AppendAfterNtfTitle" xml:space="preserve">
-    <value>After Append Mode Activated</value>
-  </data>
-  <data name="AppendBeforeNtfText" xml:space="preserve">
-    <value>Clipboard changes will now be prepended</value>
-  </data>
-  <data name="AppendBeforeNtfTitle" xml:space="preserve">
-    <value>Before Append Mode Activated</value>
-  </data>
-  <data name="AppendBlockLabel" xml:space="preserve">
-    <value>Block</value>
-  </data>
-  <data name="AppendDeactivatedText" xml:space="preserve">
-    <value>Normal clipboard behavior has been restored</value>
-  </data>
-  <data name="AppendDeactivatedTitle" xml:space="preserve">
-    <value>Append Deactivated</value>
-  </data>
-  <data name="AppendExtentNtfText" xml:space="preserve">
-    <value>Appends added to top or botom of the clip</value>
-  </data>
-  <data name="AppendExtentNtfTitle" xml:space="preserve">
-    <value>Extent Append Mode Activated</value>
-  </data>
-  <data name="AppendInlineLabel" xml:space="preserve">
-    <value>Inline</value>
-  </data>
-  <data name="AppendManualLabel" xml:space="preserve">
-    <value>Manual</value>
-  </data>
-  <data name="AppendManualNtfText" xml:space="preserve">
-    <value>Appends added where you select</value>
-  </data>
-  <data name="AppendManualNtfTitle" xml:space="preserve">
-    <value>Manual Append Mode Activated</value>
-  </data>
-  <data name="AppendPausedNtfText" xml:space="preserve">
-    <value>Clipboard accumulation halted</value>
-  </data>
-  <data name="AppendPausedNtfTitle" xml:space="preserve">
-    <value>Append Paused</value>
-  </data>
-  <data name="AppendResumedNtfText" xml:space="preserve">
-    <value>Clipboard accumulation resumed</value>
-  </data>
-  <data name="AppendResumedNtfTitle" xml:space="preserve">
-    <value>Append Resumed</value>
-  </data>
-  <data name="ClipTileAppendConfirmCompleteText" xml:space="preserve">
-    <value>Are you sure you want to finish appending?</value>
-  </data>
-  <data name="ClipTileDataDegradeNtfText" xml:space="preserve">
-    <value>Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?</value>
-  </data>
-  <data name="ClipTileDataDegradeNtfTitle" xml:space="preserve">
-    <value>Data Degradation Warning</value>
-  </data>
-  <data name="CommonActiveLabel" xml:space="preserve">
-    <value>Active</value>
-  </data>
-  <data name="CommonEnabledLabel" xml:space="preserve">
-    <value>Enabled</value>
-  </data>
-  <data name="CommonOffLabel" xml:space="preserve">
-    <value>Off</value>
-  </data>
-  <data name="CommonOnLabel" xml:space="preserve">
-    <value>On</value>
-  </data>
-  <data name="CommonPausedLabel" xml:space="preserve">
-    <value>Paused</value>
-  </data>
-  <data name="CommonResultLabel" xml:space="preserve">
-    <value>Result</value>
-  </data>
-  <data name="CommonStatusLabel" xml:space="preserve">
-    <value>Status</value>
-  </data>
-  <data name="CommonUnknownErrorText" xml:space="preserve">
-    <value>Unknown error occured.</value>
-  </data>
-  <data name="DbPasswordNtfText" xml:space="preserve">
-    <value>attempts remaining</value>
-    <comment>Number</comment>
-  </data>
-  <data name="DbPasswordNtfTitle" xml:space="preserve">
-    <value>Enter Password</value>
-  </data>
-  <data name="EditorConfirmNtfTitle" xml:space="preserve">
-    <value>Confirm</value>
-  </data>
-  <data name="EditorContactTemplateName" xml:space="preserve">
-    <value>Contact</value>
-  </data>
-  <data name="EditorDateTemplateName" xml:space="preserve">
-    <value>Date Time</value>
-  </data>
-  <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
-    <value>Are you sure you want to delete ALL usages of '{0}'? This cannot be undone.</value>
-    <comment>Template Name</comment>
-  </data>
-  <data name="EditorDynamicTemplateName" xml:space="preserve">
-    <value>Dynamic</value>
-  </data>
-  <data name="EditorStaticTemplateName" xml:space="preserve">
-    <value>Static</value>
-  </data>
-  <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
-    <value>{0} is empty...</value>
-    <comment>Template Name</comment>
-  </data>
-  <data name="EditorTemplateTeaserText" xml:space="preserve">
-    <value>More coming soon!</value>
-  </data>
-  <data name="LoginLoadDisableFailed" xml:space="preserve">
-    <value>Login load disable failed</value>
-  </data>
-  <data name="LoginLoadDisableSuccess" xml:space="preserve">
-    <value>Login load disable success</value>
-  </data>
-  <data name="LoginLoadEnableFailed" xml:space="preserve">
-    <value>Login load enable failed</value>
-  </data>
-  <data name="LoginLoadEnableSuccess" xml:space="preserve">
-    <value>Login load enable success</value>
-  </data>
-  <data name="MainWindowHideLabel" xml:space="preserve">
-    <value>Hide</value>
-  </data>
-  <data name="MainWindowLoadedNtfText" xml:space="preserve">
-    <value>Monkey Paste is now loaded. \nClipboard listening is: {0}</value>
-    <comment>Paused or active</comment>
-  </data>
-  <data name="MainWindowLoadedNtfTitle" xml:space="preserve">
-    <value>Loaded</value>
-  </data>
-  <data name="MainWindowShowLabel" xml:space="preserve">
-    <value>Show</value>
-  </data>
-  <data name="MouseModeAutoCopyNtfText" xml:space="preserve">
-    <value>Auto Copy Selection Mode: {0}</value>
-    <comment>On or off</comment>
-  </data>
-  <data name="MouseModeChangeNtfTitle" xml:space="preserve">
-    <value>Mode Changed</value>
-  </data>
-  <data name="MouseModeRightClickPasteNtfText" xml:space="preserve">
-    <value>Right Click Paste Mode: {0}</value>
-    <comment>On or off</comment>
-  </data>
-  <data name="PluginUpdatedNtfTitle" xml:space="preserve">
-    <value>Plugin Updated</value>
-  </data>
-  <data name="ShortcutPasteTitle" xml:space="preserve">
-    <value>Paste '{0}'</value>
-    <comment>Content Title</comment>
-  </data>
-  <data name="ShortcutRunAnalyzerTitle" xml:space="preserve">
-    <value>Run '{0}' Analyzer</value>
-    <comment>Plugin Name</comment>
-  </data>
-  <data name="ShortcutRunTriggerTitle" xml:space="preserve">
-    <value>Run '{0}' Trigger</value>
-    <comment>Trigger Name</comment>
-  </data>
-  <data name="ShortcutSelectTagTitle" xml:space="preserve">
-    <value>Select '{0}' Collection</value>
-    <comment>Collection Name</comment>
-  </data>
-  <data name="TriggerConfirmDeleteNtfText" xml:space="preserve">
-    <value>Are you sure you want to delete '{0}' and all associated actions?</value>
-    <comment>Trigger Name</comment>
-  </data>
-  <data name="TriggerLabel" xml:space="preserve">
-    <value>Trigger</value>
-  </data>
-  <data name="TriggerRemoveActionText" xml:space="preserve">
-    <value>Would you like to remove all the sub-actions for '{0}'? (Otherwise they will be re-parented to '{1}')</value>
-    <comment>Action Name, Action Name</comment>
-  </data>
-  <data name="TriggerRemoveActionTitle" xml:space="preserve">
-    <value>Remove Options</value>
-  </data>
-  <data name="UrlNavConfirmText" xml:space="preserve">
-    <value>Do you really want to goto '{0}'</value>
-    <comment>Url</comment>
+    <value>すべての復元</value>
   </data>
 </root>

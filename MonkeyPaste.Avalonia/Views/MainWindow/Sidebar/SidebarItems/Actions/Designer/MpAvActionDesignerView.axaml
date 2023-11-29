@@ -211,7 +211,7 @@
                                   IsThreeState="False"
                                   IsEnabled="{Binding SelectedTrigger, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                                   IsChecked="{Binding IsGridVisible, Mode=TwoWay}"
-                                  Content="Grid" />
+                                  Content="{x:Static local:UiStrings.TriggerDesignerToggleGridLabel}" />
                     <Border Grid.Column="1" />
 
                     <!--  RESET PAN/ZOOM BUTTON  -->
@@ -220,7 +220,7 @@
                             Grid.Column="2"
                             Classes="defaultButton textOnlyButton outline outlineOver"
                             Command="{Binding ResetDesignerViewCommand}"
-                            Content="Reset" />
+                            Content="{x:Static local:UiStrings.CommonResetLabel}" />
 
                     <Border Grid.Column="3"
                             IsVisible="{Binding !IsWindowOpen}" />
@@ -233,7 +233,7 @@
                             IsVisible="{Binding !IsWindowOpen}"
                             Command="{Binding ShowDesignerWindowCommand}">
                         <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="Float" />
+                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonFloatWindowLabel}" />
                         </ToolTip.Tip>
                         <Image Source="{Binding Source={StaticResource NewWindowImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
                     </Button>

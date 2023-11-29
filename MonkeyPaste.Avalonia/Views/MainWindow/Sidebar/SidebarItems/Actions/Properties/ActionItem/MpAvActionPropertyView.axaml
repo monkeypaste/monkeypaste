@@ -120,7 +120,7 @@
                Margin="0"
                HorizontalAlignment="Left"
                Classes="h1"
-               Content="Action" />
+               Content="{x:Static local:UiStrings.TriggerActionLabel}" />
         <Border Grid.Row="1"
                 Classes="labelUnderline"
                 HorizontalAlignment="Stretch"

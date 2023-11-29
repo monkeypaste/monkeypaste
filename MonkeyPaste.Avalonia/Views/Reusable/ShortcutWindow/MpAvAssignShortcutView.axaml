@@ -143,7 +143,7 @@
             <!--  ROUTING LABEL/HINT  -->
             <StackPanel Orientation="Horizontal"
                         Spacing="5">
-                <TextBlock Text="Routing"
+                <TextBlock Text="{x:Static local:UiStrings.ShortcutRoutingTypeLabel}"
                            Foreground="{DynamicResource ThemeInteractiveColor}"
                            VerticalAlignment="Center" />
                 <local:MpAvToolTipInfoHintView Classes="info"
@@ -257,10 +257,10 @@
                     Classes="defaultButton textOnlyButton"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding $self}"
-                    Content="Cancel" />
+                    Content="{x:Static local:UiStrings.CommonCancelLabel}" />
             <Button DockPanel.Dock="Right"
                     Classes="defaultButton textOnlyButton"
-                    Content="Ok"
+                    Content="{x:Static local:UiStrings.CommonOkLabel}"
                     Command="{Binding OkCommand}"
                     CommandParameter="{Binding $self}" />
 

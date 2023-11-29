@@ -1382,7 +1382,7 @@ namespace MonkeyPaste.Avalonia {
                 }
 
                 bool confirm = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                    title: UiStrings.CommonNtfConfirmTitle,
+                    title: UiStrings.CommonConfirmLabel,
                     message: string.Format(UiStrings.ShortcutsRoutingProfileChangeNtfMsg, srpt),
                     iconResourceObj: "WarningImage");
                 if (!confirm) {
@@ -1396,7 +1396,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand ResetAllShortcutsCommand => new MpAsyncCommand(async () => {
             var drpt = MpAvPrefViewModel.Instance.DefaultRoutingProfileType;
             bool result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                title: UiStrings.CommonNtfConfirmTitle,
+                title: UiStrings.CommonConfirmLabel,
                 message: UiStrings.ShortcutsResetNtfMsg,
                 iconResourceObj: "WarningImage");
             if (!result) {

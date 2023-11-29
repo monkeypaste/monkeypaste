@@ -102,11 +102,11 @@ namespace MonkeyPaste.Avalonia {
                     cmil.Add(
                         new MpAvMenuItemViewModel() {
                             IconResourceKey = "QuestionMarkImage",
-                            Header = "Odd, nothing available. Something must be wrong 😕"
+                            Header = UiStrings.ClipTileTransactionErrorText
                         });
                 }
                 return new MpAvMenuItemViewModel() {
-                    Header = "Sources",
+                    Header = UiStrings.ClipTileSourcesHeader,
                     HasLeadingSeparator = true,
                     IconResourceKey = "EggImage",
                     SubItems = cmil

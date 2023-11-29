@@ -15,7 +15,7 @@ namespace MonkeyPaste.Avalonia {
 
             var adv_mivm = new MpAvMenuItemViewModel() {
                 HasLeadingSeparator = true,
-                Header = "Advanced",
+                Header = UiStrings.ContentQueryAdvancedHeader,
                 IconResourceKey = "CogImage",
                 SubItems =
                     typeof(MpContentQueryPropertyGroupType)

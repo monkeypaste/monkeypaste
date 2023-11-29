@@ -40,7 +40,7 @@
                                             Command="{Binding PresetViewModel.ExecutePresetAnalysisOnSelectedContentCommand}">
                                         <DockPanel>
                                             <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource ExecuteImage}}" />
-                                            <TextBlock Text="Analyze" />
+                                            <TextBlock Text="{x:Static local:UiStrings.CommonAnalyzeButtonLabel}" />
                                         </DockPanel>
                                     </Button>
 

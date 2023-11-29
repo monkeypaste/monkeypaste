@@ -14,6 +14,12 @@ namespace MonkeyPaste.Avalonia {
     }
     [DoNotNotify]
     public partial class MpAvToolTipInfoHintView : UserControl {
+        #region Constants
+        public const string WARN_PREFIX = "#warn#";
+        public const string ERROR_PREFIX = "#error#";
+
+        #endregion
+
         #region ToolTipText Direct Avalonia Property
 
         private string _ToolTipText = default;
@@ -73,12 +79,12 @@ namespace MonkeyPaste.Avalonia {
             if (ToolTipText == null) {
                 return;
             }
-            if (ToolTipText.StartsWith("#warn#")) {
-                ToolTipText = ToolTipText.Replace("#warn#", string.Empty);
+            if (ToolTipText.StartsWith(WARN_PREFIX)) {
+                ToolTipText = ToolTipText.Replace(WARN_PREFIX, string.Empty);
                 this.Classes.Add("warning");
             }
-            if (ToolTipText.StartsWith("#error#")) {
-                ToolTipText = ToolTipText.Replace("#error#", string.Empty);
+            if (ToolTipText.StartsWith(ERROR_PREFIX)) {
+                ToolTipText = ToolTipText.Replace(ERROR_PREFIX, string.Empty);
                 this.Classes.Add("error");
             }
             if (ToolTip.GetTip(this) is not MpAvToolTipView ttv) {

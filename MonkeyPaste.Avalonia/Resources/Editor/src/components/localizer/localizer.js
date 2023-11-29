@@ -13,7 +13,9 @@ function initLocalizerDomWatcher() {
                 if (!(node instanceof HTMLElement)) {
                     continue;
                 }
-                if (!node.hasAttribute('ui-content-key')) {
+                if (!node.hasAttribute(globals.LOCALIZER_UI_STRING_CONTENT_ATTR_NAME) &&
+                    !node.hasAttribute(globals.LOCALIZER_UI_STRING_TOOLTIP_ATTR_NAME) &&
+                    !node.hasAttribute(globals.LOCALIZER_UI_STRING_PLACEHOLDER_ATTR_NAME)) {
                     continue;
                 }
                 localizeElement(node);
@@ -32,30 +34,9 @@ function initLocalizerDomWatcher() {
 // #region Getters
 
 function getLocalizableElements() {
-    return Array.from(document.querySelectorAll(`[${globals.LOCALIZER_UI_STRING_CONTENT_ATTR_NAME}],[${globals.LOCALIZER_UI_STRING_TOOLTIP_ATTR_NAME}]`));
+    return Array.from(document.querySelectorAll(`[${globals.LOCALIZER_UI_STRING_CONTENT_ATTR_NAME}],[${globals.LOCALIZER_UI_STRING_TOOLTIP_ATTR_NAME}],[${globals.LOCALIZER_UI_STRING_PLACEHOLDER_ATTR_NAME}]`));
 }
 
-function getElementUiKey(elm) {
-    if (!elm ||
-        !(elm instanceof HTMLElement) ||
-        !elm.hasAttribute(globals.LOCALIZER_UI_STRING_CONTENT_ATTR_NAME)) {
-        return '';
-    }
-    let key = elm.getAttribute(globals.LOCALIZER_UI_STRING_CONTENT_ATTR_NAME);
-    return key;
-}
-function getElementUiString(elm, args) {
-    let key = getElementUiKey(elm);
-    let val = UiStrings[key];
-
-    if (isNullOrUndefined(args)) {
-        return val;
-    }
-    if (!Array.isArray(args)) {
-        args = [args];
-    }
-    return String.Format(val,args);
-}
 // #endregion Getters
 
 // #region Setters
@@ -76,9 +57,15 @@ function localizeElement(elm, args) {
         //log('ui-content-key: ' + content_key + ' str: ' + elm.innerHTML);
     }
     if (elm.hasAttribute(globals.LOCALIZER_UI_STRING_TOOLTIP_ATTR_NAME)) {
-        // has content key
+        // has tooltip key
         let tt_key = elm.getAttribute(globals.LOCALIZER_UI_STRING_TOOLTIP_ATTR_NAME);
         elm.setAttribute(globals.TOOLTIP_HOVER_ATTRB_NAME, UiStrings[tt_key]);
+        //log('ui-tooltip-key: ' + tt_key + ' str: ' + UiStrings[tt_key]);
+    }
+    if (elm.hasAttribute(globals.LOCALIZER_UI_STRING_PLACEHOLDER_ATTR_NAME)) {
+        // has tooltip key
+        let tt_key = elm.getAttribute(globals.LOCALIZER_UI_STRING_PLACEHOLDER_ATTR_NAME);
+        elm.setAttribute('placeholder', UiStrings[tt_key]);
         //log('ui-tooltip-key: ' + tt_key + ' str: ' + UiStrings[tt_key]);
     }
 }

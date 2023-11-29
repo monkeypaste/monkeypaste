@@ -134,7 +134,7 @@ namespace MonkeyPaste.Avalonia {
                     return new MpAvMenuItemViewModel() {
                         SubItems = new List<MpAvMenuItemViewModel>() {
                             new MpAvMenuItemViewModel() {
-                                Header = @"Restore",
+                                Header = UiStrings.ClipTileTrashRestoreHeader,
                                 IconResourceKey =
                                     MpAvAccountTools.Instance.IsContentAddPausedByAccount ?
                                         MpContentCapInfo.ADD_BLOCKED_RESOURCE_KEY :
@@ -143,7 +143,7 @@ namespace MonkeyPaste.Avalonia {
                             },
                             new MpAvMenuItemViewModel() {
                                 HasLeadingSeparator = true,
-                                Header = @"Permanently Delete",
+                                Header = UiStrings.ClipTilePermanentlyDeleteHeader,
                                 IconResourceKey = "TrashCanImage",
                                 Command = DeleteSelectedClipCommand,
                                 ShortcutArgs = new object[] { MpShortcutType.PermanentlyDelete },
@@ -168,7 +168,7 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() { IsSeparator = true },
 #endif
                         new MpAvMenuItemViewModel() {
-                            Header = @"Cut",
+                            Header = UiStrings.CommonCutOpLabel,
                             IconResourceKey = "ScissorsImage",
                             Command = CutSelectionFromContextMenuCommand,
                             IsVisible = false,
@@ -176,7 +176,7 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.CutSelection },
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = @"Copy",
+                            Header = UiStrings.CommonCopyOpLabel,
                             IconResourceKey = "CopyImage",
                             Command = CopySelectionFromContextMenuCommand,
                             ShortcutArgs = new object[] { MpShortcutType.CopySelection },
@@ -186,14 +186,14 @@ namespace MonkeyPaste.Avalonia {
                         //    Header = "TEST"
                         //},
                         new MpAvMenuItemViewModel() {
-                            Header = "Duplicate",
+                            Header = UiStrings.CommonDuplicateLabel,
                             //AltNavIdx = 0,
-                            IconResourceKey = "DuplicateImage",
+                            IconResourceKey = UiStrings.CommonDuplicateLabel,
                             Command = DuplicateSelectedClipsCommand,
                             ShortcutArgs = new object[] { MpShortcutType.Duplicate },
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = @"Paste Here",
+                            Header =UiStrings.ClipTilePasteHereHeaderLabel,
                             //AltNavIdx = 6,
                             IconResourceKey = "PasteImage",
                             Command = PasteHereFromContextMenuCommand,
@@ -210,21 +210,21 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
-                            Header = @"Delete",
+                            Header = UiStrings.CommonDeleteLabel,
                             //AltNavIdx = 0,
                             IconResourceKey = "TrashCanImage",
                             Command = TrashSelectedClipCommand,
                             ShortcutArgs = new object[] { MpShortcutType.DeleteSelectedItems },
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = @"Rename",
+                            Header = UiStrings.CommonRenameLabel,
                             //AltNavIdx = 0,
                             IconResourceKey = "RenameImage",
                             Command = EditSelectedTitleCommand,
                             ShortcutArgs = new object[] { MpShortcutType.Rename },
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = @"Edit",
+                            Header = UiStrings.CommonEditLabel,
                             IsVisible = !IsAutoEditEnabled,
                             //AltNavIdx = 0,
                             IconResourceKey = "EditContentImage",
@@ -232,7 +232,7 @@ namespace MonkeyPaste.Avalonia {
                             ShortcutArgs = new object[] { MpShortcutType.ToggleContentReadOnly },
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = @"Find and Replace...",
+                            Header = UiStrings.ClipTileFindReplaceHeader,
                             //AltNavIdx = 0,
                             IconResourceKey = "SearchImage",
                             Command = EnableFindAndReplaceForSelectedItem,
@@ -241,7 +241,7 @@ namespace MonkeyPaste.Avalonia {
                         // share
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
-                            Header = @"Share...",
+                            Header =UiStrings.ClipTileShareHeader,
                             IconResourceKey = "ShareImage",
                             Command = SelectedItem.ShareCommand
                         },
@@ -1190,7 +1190,7 @@ namespace MonkeyPaste.Avalonia {
         }
 
         public bool IsInitialQuery { get; private set; } = true;
-        public string PlayOrPauseLabel => IsAppPaused ? "Resume" : "Pause";
+        public string PlayOrPauseLabel => IsAppPaused ? UiStrings.TriggerResumeButtonLabel : UiStrings.TriggerPauseButtonLabel;
         public string PlayOrPauseIconResoureKey => IsAppPaused ? "PlayImage" : "PauseImage";
 
         public int RemainingItemsCountThreshold {
@@ -1804,7 +1804,7 @@ namespace MonkeyPaste.Avalonia {
                 //string block_prefix =  source.ToString().Replace("Block", string.Empty);
                 string block_prefix =
                     source == MpAccountCapCheckType.AddBlock ?
-                        UiStrings.NtfCapBlockAddLabel : UiStrings.NtfCapBlockRestoreLabel;
+                        UiStrings.CommonAddLabel : UiStrings.NtfCapBlockRestoreLabel;
                 MpNotificationType block_msg_type =
                     source == MpAccountCapCheckType.AddBlock ?
                         MpNotificationType.ContentAddBlockedByAccount :
@@ -4450,8 +4450,8 @@ namespace MonkeyPaste.Avalonia {
             () => {
                 IsRightClickPasteMode = !IsRightClickPasteMode;
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
-                    title: "MODE CHANGED",
-                    body: $"RIGHT CLICK PASTE MODE: {(IsRightClickPasteMode ? "ON" : "OFF")}",
+                    title: UiStrings.MouseModeChangeNtfTitle,
+                    body: string.Format(UiStrings.MouseModeRightClickPasteNtfText, IsRightClickPasteMode ? UiStrings.CommonOnLabel : UiStrings.CommonOffLabel),
                     msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
                 MpMessenger.SendGlobal(IsRightClickPasteMode ? MpMessageType.RightClickPasteEnabled : MpMessageType.RightClickPasteDisabled);
             }, () => !IsAppPaused);
@@ -4461,8 +4461,8 @@ namespace MonkeyPaste.Avalonia {
                 IsAutoCopyMode = !IsAutoCopyMode;
 
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
-                    title: "MODE CHANGED",
-                    body: $"AUTO-COPY SELECTION MODE: {(IsAutoCopyMode ? "ON" : "OFF")}",
+                    title: UiStrings.MouseModeChangeNtfTitle,
+                    body: string.Format(UiStrings.MouseModeAutoCopyNtfText, IsAutoCopyMode ? UiStrings.CommonOnLabel : UiStrings.CommonOffLabel),
                     msgType: MpNotificationType.AppModeChange).FireAndForgetSafeAsync(this);
                 MpMessenger.SendGlobal(IsAutoCopyMode ? MpMessageType.AutoCopyEnabled : MpMessageType.AutoCopyDisabled);
             }, () => !IsAppPaused);
@@ -4654,34 +4654,34 @@ namespace MonkeyPaste.Avalonia {
             // NOTE activate/deactivate not handled here
 
             if (cur_flags.HasFlag(MpAppendModeFlags.Manual) != last_flags.HasFlag(MpAppendModeFlags.Manual)) {
-                string manual_change_str = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? "Manual" : "Extent";
-                string detail_str = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? "Appends added where you select" : "Appends added to top or bottom of the clip";
+                string title = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? UiStrings.AppendManualNtfTitle : UiStrings.AppendExtentNtfTitle;
+                string body = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? UiStrings.AppendManualNtfText : UiStrings.AppendExtentNtfText;
                 string icon_key = cur_flags.HasFlag(MpAppendModeFlags.Manual) ? "CaretImage" : "DoubleSidedArrowSolidImage";
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
-                       title: $"{manual_change_str} Append Mode Activated",
-                       body: detail_str,
+                       title: title,
+                       body: body,
                        msgType: MpNotificationType.AppendModeChanged,
                        iconSourceObj: icon_key).FireAndForgetSafeAsync();
             }
 
             if (cur_flags.HasFlag(MpAppendModeFlags.Paused) != last_flags.HasFlag(MpAppendModeFlags.Paused)) {
-                string pause_change_str = cur_flags.HasFlag(MpAppendModeFlags.Paused) ? "Paused" : "Resumed";
-                string detail_str = cur_flags.HasFlag(MpAppendModeFlags.Paused) ? "Clipboard accumulation halted" : "Clipboard accumulation resumed";
+                string title = cur_flags.HasFlag(MpAppendModeFlags.Paused) ? UiStrings.AppendPausedNtfTitle : UiStrings.AppendResumedNtfTitle;
+                string body = cur_flags.HasFlag(MpAppendModeFlags.Paused) ? UiStrings.AppendPausedNtfText : UiStrings.AppendResumedNtfText;
                 string icon_key = cur_flags.HasFlag(MpAppendModeFlags.Paused) ? "PauseImage" : "PlayImage";
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
-                       title: $"Append {pause_change_str}",
-                       body: detail_str,
+                       title: title,
+                       body: body,
                        msgType: MpNotificationType.AppendModeChanged,
                        iconSourceObj: icon_key).FireAndForgetSafeAsync();
             }
 
             if (cur_flags.HasFlag(MpAppendModeFlags.Pre) != last_flags.HasFlag(MpAppendModeFlags.Pre)) {
-                string manual_change_str = cur_flags.HasFlag(MpAppendModeFlags.Pre) ? "Before" : "After";
-                string detail_str = cur_flags.HasFlag(MpAppendModeFlags.Pre) ? "Clipboard changes will now be prepended" : "Clipboard changes will now be appended";
+                string title = cur_flags.HasFlag(MpAppendModeFlags.Pre) ? UiStrings.AppendBeforeNtfTitle : UiStrings.AppendAfterNtfTitle;
+                string body = cur_flags.HasFlag(MpAppendModeFlags.Pre) ? UiStrings.AppendBeforeNtfText : UiStrings.AppendAfterNtfText;
                 string icon_key = cur_flags.HasFlag(MpAppendModeFlags.Pre) ? "BringToFrontImage" : "SendToBackImage";
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
-                       title: $"{manual_change_str} Append Mode Activated",
-                       body: detail_str,
+                       title: title,
+                       body: body,
                        msgType: MpNotificationType.AppendModeChanged,
                        iconSourceObj: icon_key).FireAndForgetSafeAsync();
             }
@@ -4729,12 +4729,12 @@ namespace MonkeyPaste.Avalonia {
             }
 
             // no item assigned yet so just show enable message
-            string type_str = IsAppendLineMode ? "Block" : "Inline";
-            string manual_str = IsAppendManualMode ? "(Manual) " : string.Empty;
+            string type_str = IsAppendLineMode ? UiStrings.AppendBlockLabel : UiStrings.AppendInlineLabel;
+            string manual_str = IsAppendManualMode ? $"({UiStrings.AppendManualLabel}) " : string.Empty;
             string icon_key = IsAppendLineMode ? "AppendLineImage" : "AppendImage";
             Mp.Services.NotificationBuilder.ShowMessageAsync(
-                   title: $"Append {type_str} {manual_str}Mode Activated",
-                   body: "Copy text or file(s) to apply.",
+                   title: string.Format(UiStrings.AppendActivateTitle, type_str, manual_str),
+                   body: UiStrings.AppendActivateText,
                    msgType: MpNotificationType.AppendModeChanged,
                    iconSourceObj: icon_key).FireAndForgetSafeAsync();
         }
@@ -4747,8 +4747,8 @@ namespace MonkeyPaste.Avalonia {
             if (AppendClipTileViewModel == null) {
                 // only show deactivate ntf if no windows there
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
-                           title: $"Append Deactivated",
-                           body: $"Normal clipboard behavior has been restored",
+                           title: UiStrings.AppendDeactivatedTitle,
+                           body: UiStrings.AppendDeactivatedText,
                            msgType: MpNotificationType.AppendModeChanged,
                            iconSourceObj: "ClipboardImage").FireAndForgetSafeAsync();
             } else {

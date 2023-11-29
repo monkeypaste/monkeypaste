@@ -419,7 +419,7 @@ namespace MonkeyPaste.Avalonia {
             Mp.Services.PlatformInfo != null &&
             Mp.Services.PlatformInfo.IsDesktop;
 
-        public string ShowOrHideLabel => IsMainWindowOpen ? "Hide" : "Show";
+        public string ShowOrHideLabel => IsMainWindowOpen ? UiStrings.MainWindowHideLabel : UiStrings.MainWindowShowLabel;
         public string ShowOrHideIconResourceKey => IsMainWindowOpen ? "ClosedEyeImage" : "OpenEyeImage";
         public bool AnimateShowWindow =>
             Mp.Services.PlatformInfo.IsDesktop &&
@@ -1156,8 +1156,8 @@ namespace MonkeyPaste.Avalonia {
 
             if (!was_loader_visible) {
                 Mp.Services.NotificationBuilder.ShowMessageAsync(
-                title: "Loaded",
-                body: $"Monkey Paste is now loaded. \nClipboard listening is: {(MpAvClipTrayViewModel.Instance.IsAppPaused ? "Paused" : "Active")}",
+                title: UiStrings.MainWindowLoadedNtfTitle,
+                body: string.Format(UiStrings.MainWindowLoadedNtfText, MpAvClipTrayViewModel.Instance.IsAppPaused ? UiStrings.CommonPausedLabel : UiStrings.CommonActiveLabel),
                 msgType: MpNotificationType.StartupComplete,
                 iconSourceObj: "AppImage").FireAndForgetSafeAsync();
             }

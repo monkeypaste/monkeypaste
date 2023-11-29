@@ -42,7 +42,7 @@
                     <Image Classes="expander header icon"
                            Source="{Binding Source={StaticResource KeyboardImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
                     <TextBlock Classes="expander header"
-                               Text="{x:Static local:UiStrings.SettingsShortcutsAppCommandHeaderText}" />
+                               Text="{x:Static local:UiStrings.CommonApplicationLabel}" />
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>

@@ -1,4 +1,6 @@
-﻿namespace MonkeyPaste.Common {
+﻿using System.Collections.Generic;
+
+namespace MonkeyPaste.Common {
     public static class MpInputConstants {
         public const string COMBO_SEPARATOR = "+";
         public const string SEQUENCE_SEPARATOR = "|";
@@ -25,6 +27,13 @@
         public const string MAC_META_KEY_LITERAL = "Meta";
 
 
+        public const string MAC_META_KEY_DISPLAY_VALUE = "⌘";
+        public const string MAC_SHIFT_KEY_DISPLAY_VALUE = "⇧";
+        public const string MAC_ALT_KEY_DISPLAY_VALUE = "⌥";
+        public const string MAC_CTRL_KEY_DISPLAY_VALUE = "⌃";
+        public const string MAC_ESC_KEY_DISPLAY_VALUE = "⎋";
+
+
         // NOTE literals are ordered by priority (ie sharphook GesturePriority)
         public static string[] MOD_LITERALS =>
             new string[] {
@@ -33,5 +42,6 @@
                 META_KEY_LITERAL,
                 SHIFT_KEY_LITERAL
             };
+
     }
 }

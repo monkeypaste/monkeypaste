@@ -89,7 +89,7 @@
                     <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
                            DockPanel.Dock="Left" />
                     <TextBlock DockPanel.Dock="Right"
-                               Text="Add" />
+                               Text="{x:Static local:UiStrings.CommonAddLabel}" />
                 </DockPanel>
             </Button>
         </Grid>

@@ -57,7 +57,7 @@
                    VerticalAlignment="Stretch"
                    TextAlignment="Center"
                    TextWrapping="WrapWithOverflow"
-                   Text="Remember Drop Settings For:" />
+                   Text="{x:Static local:UiStrings.DropCompleteRememberLabelPrefix}" />
 
         <!--  TARGET APP ICON  -->
 
@@ -101,7 +101,7 @@
                 <CornerRadius x:Key="ControlCornerRadius">0,0,0,0</CornerRadius>
                 <Thickness x:Key="ButtonPadding">0,0,0,0</Thickness>
             </Button.Resources>
-            <TextBlock Text="NO" />
+            <TextBlock Text="{x:Static local:UiStrings.CommonNoButtonText}" />
         </Button>
 
         <!--  REMEMBER BUTTON (YES)  -->
@@ -153,7 +153,7 @@
                            FontSize="16"
                            FontWeight="SemiBold"
                            TextAlignment="Center"
-                           Text="YES" />
+                           Text="{x:Static local:UiStrings.CommonYesButtonText}" />
             </Grid>
         </Button>
     </Grid>

@@ -54,5 +54,10 @@ namespace MonkeyPaste.Avalonia {
             MpAvPrefViewModel.Instance.RememberedDbPassword = remember ? pwd : null;
             DbPassword = pwd;
         }
+
+        public string EnterPasswordTitle =>
+            UiStrings.DbPasswordNtfTitle;
+        public string EnterPasswordText =>
+            UiStrings.DbPasswordNtfText;
     }
 }

@@ -178,7 +178,7 @@
                       IsChecked="{Binding IsRememberChecked, Mode=TwoWay}"
                       IsVisible="{Binding IsConfirmRemember}">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Remember?" />
+                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonRememberLabel}" />
                 </ToolTip.Tip>
             </CheckBox>
 

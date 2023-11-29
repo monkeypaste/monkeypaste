@@ -137,7 +137,7 @@
                      CommandParameter="0"
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|0, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Collection Tree" />
+                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SidebarCollectionsToolTip}" />
             </ToolTip.Tip>
             <Grid>
                 <PathIcon Data="{StaticResource BooksSvg}" />
@@ -182,7 +182,7 @@
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|1, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
 
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Clipboard Handlers" />
+                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SidebarClipboardHandlersToolTip}" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource ClipboardSvg}" />
         </RadioButton>
@@ -196,7 +196,7 @@
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|2, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
 
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Analyze" />
+                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonAnalyzeButtonLabel}" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource BrainOutlineSvg}" />
         </RadioButton>
@@ -210,7 +210,7 @@
                      IsChecked="{Binding SelectedItemIdx, Mode=OneWay, ConverterParameter=eq|3, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}, Converter={x:Static local:MpAvIntCompareToBoolConverter.Instance}}">
 
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Actions" />
+                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SidebarTriggersToolTip}" />
             </ToolTip.Tip>
             <PathIcon Data="{StaticResource BoltSvg}" />
         </RadioButton>
@@ -234,7 +234,7 @@
                 <sys:Double x:Key="FlyoutThemeMinHeight">0</sys:Double>
             </RadioButton.Resources>
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Clipboard Modes" />
+                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.SidebarMouseModesToolTip}" />
             </ToolTip.Tip>
             <RadioButton.Flyout>
                 <Flyout Placement="{Binding MouseModeFlyoutPlacement, Source={x:Static local:MpAvSidebarItemCollectionViewModel.Instance}}"

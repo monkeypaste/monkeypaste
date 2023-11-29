@@ -106,7 +106,7 @@
                       IsChecked="{Binding IsDropWidgetEnabled, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}, Mode=OneWay}"
                       Command="{Binding ToggleIsDropWidgetEnabledCommand, Source={x:Static local:MpAvExternalDropWindowViewModel.Instance}}">
             <ToolTip.Tip>
-                <local:MpAvToolTipView ToolTipText="Monkey Drop Wizard" />
+                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.DropWidgetMouseModeToolTip}" />
             </ToolTip.Tip>
             <Image Source="{Binding Source={StaticResource MouseFilledBaseImage}, Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}}" />
         </ToggleButton>

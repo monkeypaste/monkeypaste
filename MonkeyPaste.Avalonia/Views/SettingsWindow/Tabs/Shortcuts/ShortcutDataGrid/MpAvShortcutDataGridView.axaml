@@ -20,7 +20,7 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="Reset" />
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonResetLabel}" />
                     </Template>
                 </Setter.Value>
             </Setter>
@@ -29,7 +29,7 @@
             <Setter Property="ToolTip.Tip">
                 <Setter.Value>
                     <Template>
-                        <local:MpAvToolTipView ToolTipText="Delete" />
+                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonDeleteLabel}" />
                     </Template>
                 </Setter.Value>
             </Setter>

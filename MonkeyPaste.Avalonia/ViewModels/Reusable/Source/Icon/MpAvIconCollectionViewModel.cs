@@ -233,7 +233,7 @@ namespace MonkeyPaste.Avalonia {
                          MpAvMenuItemViewModel.GetColorPalleteMenuItemViewModel(this),
                          new MpAvMenuItemViewModel() { IsSeparator = true },
                          new MpAvMenuItemViewModel() {
-                             Header = "Choose Image...",
+                             Header = UiStrings.CommonChooseImageHeader,
                              IconResourceKey = "ImageImage",
                              Command = SelectImagePathCommand,
                              CommandParameter = uivm

@@ -114,7 +114,7 @@
                     IsHitTestVisible="False"
                     IsVisible="{Binding InternalPinnedItems, ConverterParameter=flip, Converter={x:Static local:MpAvIsNotNullZeroOrEmptyToBoolConverter.Instance}}"
                     Background="Transparent">
-                <TextBlock Text="Pin or Drop any media here!"
+                <TextBlock Text="{x:Static local:UiStrings.PinTrayEmptyLabel}"
                            Classes="disabled emptyOverlayText" />
             </Border>
 
@@ -130,7 +130,7 @@
                     Margin="0,5,20,0"
                     Command="{Binding UnpinAllCommand}">
                 <ToolTip.Tip>
-                    <local:MpAvToolTipView ToolTipText="Clear" />
+                    <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.PinTrayUnpinAllLabel}" />
                 </ToolTip.Tip>
                 <Button.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.Or}">

@@ -67,7 +67,7 @@ namespace MonkeyPaste.Avalonia {
                 };
                 var sub_mivml = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {
-                            Header = $"Browse to '{SourceLabel}'",
+                            Header = string.Format(UiStrings.ClipTileSourceBrowseToLabel,SourceLabel),
                             IconResourceKey = IsExternalSource ? SourceUri.StartsWith("http") ? "WebImage":"FolderImage" : "NewWindowImage",
                             AltNavIdx = 5,
                             Command = MpAvUriNavigator.Instance.NavigateToSourceRefCommand,
@@ -80,7 +80,7 @@ namespace MonkeyPaste.Avalonia {
                     sub_mivml.Add(
                         new MpAvMenuItemViewModel() {
                             HasLeadingSeparator = true,
-                            Header = $"{(IsSourceRejected ? "Un-block" : "Block")} '{SourceLabel}'",
+                            Header = $"{(IsSourceRejected ? UiStrings.SourceUnblockLabel : UiStrings.SourceBlockLabel)} '{SourceLabel}'",
                             AltNavIdx = 0,
                             IconResourceKey = IsSourceRejected ? "AddImage" : "NoEntryImage",
                             Command = ToggleSourceRejectionCommand
@@ -93,7 +93,7 @@ namespace MonkeyPaste.Avalonia {
 
                         sub_mivml.Add(
                             new MpAvMenuItemViewModel() {
-                                Header = $"{(url.IsDomainRejected ? "Un-block" : "Block")} Domain '{url.UrlDomainPath}'",
+                                Header = $"{(url.IsDomainRejected ? UiStrings.SourceUnblockLabel : UiStrings.SourceBlockLabel)} {UiStrings.SourceDomainLabel} '{url.UrlDomainPath}'",
                                 AltNavIdx = 0,
                                 IconResourceKey = url.IsDomainRejected ? "AddImage" : "NoEntryImage",
                                 Command = ToggleSourceRejectionCommand,
@@ -125,10 +125,10 @@ namespace MonkeyPaste.Avalonia {
         public string DetailUriLabel {
             get {
                 if (SourceRef is MpApp) {
-                    return "Show Folder";
+                    return UiStrings.SourceShowFolderLabel;
                 }
 
-                return "Open";
+                return UiStrings.CommonOpenLabel;
             }
         }
 

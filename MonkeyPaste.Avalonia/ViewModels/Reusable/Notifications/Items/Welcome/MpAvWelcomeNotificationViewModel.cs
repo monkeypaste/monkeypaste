@@ -309,7 +309,7 @@ namespace MonkeyPaste.Avalonia {
                     new MpAvWelcomeOptionItemViewModel(this,true, GestureProfilesViewModel) {
                         IsChecked = MpAvPrefViewModel.Instance.DefaultRoutingProfileType == MpShortcutRoutingProfileType.Default,
                         IconSourceObj = "GlobeImage",
-                        LabelText = UiStrings.WelcomeGestureProfileLabel2,
+                        LabelText = UiStrings.CommonDefaultLabel,
                         DescriptionText = UiStrings.WelcomeGestureProfileDescription2
                     }
                 };

@@ -271,7 +271,7 @@
                         <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
                                DockPanel.Dock="Left" />
                         <TextBlock DockPanel.Dock="Right"
-                                   Text="Add Preset" />
+                                   Text="{x:Static local:UiStrings.CommonAddPresetButtonLabel}" />
                     </DockPanel>
                 </Button>
             </StackPanel>

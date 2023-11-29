@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
                     msgType: MpNotificationType.PluginUpdated,
                     title: $"Plugin Updated",
                     iconSourceObj: ivm.IconBase64,
-                    body: $"{(isNew ? "Creating default presets" : "Resetting presets to default")} for '{presetHost.PluginFormat.title}'")
+                    body: presetHost.PluginFormat.title)
                     .FireAndForgetSafeAsync();
                 }
 

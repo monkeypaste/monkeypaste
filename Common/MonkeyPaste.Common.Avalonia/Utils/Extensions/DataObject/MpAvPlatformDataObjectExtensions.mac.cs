@@ -1,11 +1,4 @@
 ﻿
-using Avalonia.Input;
-using Avalonia.Input.Platform;
-using Avalonia.Platform.Storage;
-
-using MonoMac.AppKit;
-using MonoMac.CoreText;
-using MonoMac.Foundation;
 //using AppKit;
 //using Foundation;
 using System;
@@ -14,19 +7,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste.Common.Avalonia {
-    public static partial class MpAvPlatformDataObjectExtensions {
-        public static void LogDataObject(this IDataObject ido) {
+using Avalonia.Input;
+using Avalonia.Input.Platform;
+using Avalonia.Platform.Storage;
+
+using MonoMac.AppKit;
+using MonoMac.CoreText;
+using MonoMac.Foundation;
+
+namespace MonkeyPaste.Common.Avalonia
+{
+    public static partial class MpAvPlatformDataObjectExtensions
+    {
+        public static void LogDataObject(this IDataObject ido)
+        {
             var actual_formats = ido.GetAllDataFormats();
-            foreach (string af in actual_formats) {
-                if (!ido.TryGetData(af, out string dataStr)) {
+            foreach(string af in actual_formats)
+            {
+                if(!ido.TryGetData(af, out string dataStr))
+                {
                     continue;
                 }
                 object data = ido.Get(af);
                 MpConsole.WriteLine($"Format Name: '{af}'", true);
                 MpConsole.WriteLine($"Format Type:'{data.GetType()}'");
-                if (af == MpPortableDataFormats.MacUrl2 &&
-                    data is byte[] bytes) {
+                if(af == MpPortableDataFormats.MacUrl2 &&
+                    data is byte[] bytes)
+                {
 
                     MpConsole.WriteLine("Format Data (UNICODE):");
                     MpConsole.WriteLine(bytes.ToDecodedString(enc: Encoding.Unicode));
@@ -47,14 +54,16 @@ namespace MonkeyPaste.Common.Avalonia {
                 MpConsole.WriteLine(dataStr);
             }
         }
-        public static async Task FinalizePlatformDataObjectAsync(this IDataObject ido) {
+        public static async Task FinalizePlatformDataObjectAsync(this IDataObject ido)
+        {
             // NOTE this is a little funky but this does nothing on mac since dnd is part of clipboard
             await Task.Delay(1);
 
             return;
         }
 
-        public static async Task WriteToPasteboardAsync(this IDataObject ido, bool isDnd) {
+        public static async Task WriteToPasteboardAsync(this IDataObject ido, bool isDnd)
+        {
             await Task.Delay(1);
             //NSPasteboard pb = isDnd ? NSPasteboard.FromName(NSPasteboard.NSPasteboardNameDrag) : NSPasteboard.GeneralPasteboard;
             NSPasteboard pb = isDnd ? NSPasteboard.FromName(NSPasteboard.NSDragPasteboardName) : NSPasteboard.GeneralPasteboard;
@@ -63,12 +72,16 @@ namespace MonkeyPaste.Common.Avalonia {
 
 
             var formats = ido.GetAllDataFormats().ToList();
-            foreach (string format in formats) {
-                switch (format) {
-                    case MpPortableDataFormats.Files: {
+            foreach(string format in formats)
+            {
+                switch(format)
+                {
+                    case MpPortableDataFormats.Files:
+                        {
                             // from https://stackoverflow.com/a/5843278/105028
-                            if (!ido.TryGetData(format, out IEnumerable<string> fpl) ||
-                                !fpl.Any()) {
+                            if(!ido.TryGetData(format, out IEnumerable<string> fpl) ||
+                                !fpl.Any())
+                            {
                                 continue;
                             }
                             //pb.WriteObjects(fpl.Select(x => NSUrl.FromFilename(x)).ToArray());
@@ -76,7 +89,8 @@ namespace MonkeyPaste.Common.Avalonia {
 
 
                             NSMutableArray nsarr = new NSMutableArray();
-                            foreach (var fp in fpl) {
+                            foreach(var fp in fpl)
+                            {
                                 NSUrl url = NSUrl.FromFilename(fp);
                                 nsarr.Add(url);
                                 //pb.SetDataForType(NSData.FromUrl(url), MpPortableDataFormats.MacFiles1);
@@ -93,9 +107,11 @@ namespace MonkeyPaste.Common.Avalonia {
                             //ido.Set(format, fpl.FirstOrDefault().ToFileSystemUriFromPath());
                             break;
                         }
-                    case MpPortableDataFormats.Image: {
+                    case MpPortableDataFormats.Image:
+                        {
                             // from https://stackoverflow.com/a/18124824/105028
-                            if (!ido.TryGetData(format, out string imgBase64)) {
+                            if(!ido.TryGetData(format, out string imgBase64))
+                            {
                                 continue;
                             }
                             //NSUrl nsurl = NSUrl.FromString(imgBase64.ToBase64ImageUrl());
@@ -109,8 +125,10 @@ namespace MonkeyPaste.Common.Avalonia {
                             ido.Set(format, imgBase64.ToBytesFromBase64String());
                             break;
                         }
-                    default: {
-                            if (!ido.TryGetData(format, out string dataStr)) {
+                    default:
+                        {
+                            if(!ido.TryGetData(format, out string dataStr))
+                            {
                                 continue;
                             }
                             //NSString nsstr = new NSString(dataStr);
@@ -118,7 +136,7 @@ namespace MonkeyPaste.Common.Avalonia {
 
                             //NSArray arr = NSArray.FromNSObjects(nsstr);
                             //ido.Set(format, arr);
-
+                            NSPaste
                             ido.Set(format, dataStr);
                             break;
                         }

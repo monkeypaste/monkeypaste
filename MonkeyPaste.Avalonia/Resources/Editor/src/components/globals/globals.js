@@ -713,6 +713,7 @@ var globals = {
 
 	LOCALIZER_UI_STRING_TOOLTIP_ATTR_NAME: 'ui-tooltip-key',
 	LOCALIZER_UI_STRING_CONTENT_ATTR_NAME: 'ui-content-key',
+	LOCALIZER_UI_STRING_PLACEHOLDER_ATTR_NAME: 'ui-placeholder-key',
 
 	// #endregion
 

@@ -472,7 +472,7 @@
     <value>File Writer</value>
   </data>
   <data name="MpActionType_AddFromClipboard" xml:space="preserve">
-    <value>Add From Clipboard</value>
+    <value>Add From Clipboard </value>
   </data>
   <data name="MpActionType_KeySimulator" xml:space="preserve">
     <value>Key Simulator</value>
@@ -1073,5 +1073,17 @@
   </data>
   <data name="MpShortcutAssignmentClearButtonType_Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="MpTagType_None" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MpTagType_Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="MpTagType_Query" xml:space="preserve">
+    <value>Query</value>
+  </data>
+  <data name="MpTagType_Group" xml:space="preserve">
+    <value>Group</value>
   </data>
 </root>

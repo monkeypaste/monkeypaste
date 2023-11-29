@@ -22,14 +22,14 @@ namespace MonkeyPaste.Avalonia {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class EnumUiStrings {
+    public class EnumUiStrings___Copy {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal EnumUiStrings() {
+        internal EnumUiStrings___Copy() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.UiStrings.EnumUiStrings", typeof(EnumUiStrings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.UiStrings.EnumUiStrings - Copy", typeof(EnumUiStrings___Copy).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

@@ -158,8 +158,9 @@
     <script defer src="src/components/localizer/localizer.js"></script>
     <!-- default culture file name is UiStrings.js -->
     <!--<script defer src="src/components/localizer/uiStrings.js"></script>-->
-    <!-- INSERT CULTURE SCRIPT REF AFTER ME -->
-    <script defer src="src/components/localizer/UiStrings.js"></script>
+    
+<!-- INSERT CULTURE SCRIPT REF AFTER ME -->
+<script defer src="src/components/localizer/UiStrings.ja-JP.js"></script>
     <script defer src="src/components/svg/svgloader.js"></script>
     <script defer src="src/components/append/append.js"></script>
     <script defer src="src/components/append/toolbar/append-toolbar-items.js"></script>
@@ -251,33 +252,27 @@
     <div id="findReplaceContainer" class="top-align hidden">
         <form>
             <input type="checkbox" id="isReplaceInput" name="findOrReplace">
-            <label for="isReplaceInput">Replace</label><br>
-            <label for="findInput">Find:</label><br />
+            <label for="isReplaceInput" ui-content-key="EditorReplaceLabel"></label><br>
+            <label for="findInput" ui-content-key="EditorFindLabel"></label><br />
             <input type="text" id="findInput" name="findInput" spellcheck="false"><br />
             <div class="matchOptContainer">
                 <input type="checkbox" id="matchCaseInput" name="matchCaseInput">
-                <label for="matchCaseInput"> Match Case</label>
+                <label for="matchCaseInput" ui-content-key="EditorMatchCaseLabel"></label>
                 <input type="checkbox" id="wholeWordInput" name="wholeWordInput">
-                <label for="wholeWordInput"> Whole Word</label>
+                <label for="wholeWordInput" ui-content-key="EditorWholeWordLabel"></label>
                 <input type="checkbox" id="useRegexInput" name="useRegexInput">
-                <label for="useRegexInput"> Regular Expression</label><br>
+                <label for="useRegexInput" ui-content-key="EditorRegExLabel"></label><br>
             </div>
-            <label for="replaceInput" id="replaceInputLabel" class="is-replace">Replace:</label><br class="is-replace" />
+            <label for="replaceInput" id="replaceInputLabel" class="is-replace" ui-content-key="EditorReplaceLabel"></label><br class="is-replace" />
             <input type="text" id="replaceInput" name="replaceInput" class="is-replace"><br class="is-replace" />
             <input type="checkbox" id="wrapFindInput" name="wrapFindInput">
-            <label for="wrapFindInput"> Wrap Around</label>
+            <label for="wrapFindInput" ui-content-key="EditorWrapLabel"></label>
             <input type="checkbox" id="selOnlyFindInput" name="selOnlyFindInput">
-            <label for="selOnlyFindInput"> In Selection</label><br>
-            <button id="findReplacePreviousButton" type="button" class="svg-key-arrow-left svg-no-defaults">
-            </button>
-            <button id="findReplaceNextButton" type="button" class="svg-key-arrow-right svg-no-defaults">
-            </button>
-            <button id="replaceButton" type="button" class="is-replace">
-                Replace
-            </button>
-            <button id="replaceAllButton" type="button" class="is-replace">
-                Replace All
-            </button>
+            <label for="selOnlyFindInput" ui-content-key="EditorInSelectionLabel"></label><br>
+            <button id="findReplacePreviousButton" type="button" class="svg-key-arrow-left svg-no-defaults"></button>
+            <button id="findReplaceNextButton" type="button" class="svg-key-arrow-right svg-no-defaults"></button>
+            <button id="replaceButton" type="button" class="is-replace" ui-content-key="EditorReplaceLabel"></button>
+            <button id="replaceAllButton" type="button" class="is-replace" ui-content-key="EditorReplaceAllLabel"></button>
         </form>
         <div class="resizer resizer-b"></div>
     </div>
@@ -307,25 +302,38 @@
         <!-- CREATE TEMPLATE -->
         <button id="createTemplateToolbarButton"
                 class="svg-key-tag"
-                hover-tooltip="New Template"></button>
+                ui-tooltip-key="EditorNewTemplateLabel"
+                hover-tooltip></button>
         <div class="toolbar-separator"></div>
         <!-- FORMAT PAINT -->
-        <button id="formatPaintToolbarButton" hover-tooltip="Format Paint" class="svg-key-paintbrush"></button>
+        <button id="formatPaintToolbarButton" 
+                ui-tooltip-key="EditorFormatPaintLabel" 
+                hover-tooltip 
+                class="svg-key-paintbrush"></button>
         <div class="toolbar-separator"></div>
         <!-- FG/BG COLOR -->
         <button id="fontColorToolbarButton"
-                hover-tooltip="Font Color"></button>
+                ui-tooltip-key="EditorFontColorLabel"
+                hover-tooltip></button>
         <button id="fontBackgroundToolbarButton"
-                hover-tooltip="Background Color"></button>
+                ui-tooltip-key="EditorBgColorLabel"
+                hover-tooltip></button>
         <div class="toolbar-separator"></div>
         <!-- BOLD -->
-        <button id="boldToolbarButton" class="svg-key-bold svg-no-defaults" svg-classes="no-fill"></button>
+        <button id="boldToolbarButton" 
+                class="svg-key-bold svg-no-defaults" 
+                svg-classes="no-fill"></button>
         <!-- ITALIC-->
-        <button id="italicToolbarButton" class="svg-key-italic svg-no-defaults"></button>
+        <button id="italicToolbarButton" 
+                class="svg-key-italic svg-no-defaults"></button>
         <div class="toolbar-separator"></div>
         <!-- INDENT -->
-        <button id="indentMinusOne" class="ql-indent" value="-1"></button>
-        <button id="indentPlusOne" class="ql-indent" value="+1"></button>
+        <button id="indentMinusOne" 
+                class="ql-indent" 
+                value="-1"></button>
+        <button id="indentPlusOne" 
+                class="ql-indent" 
+                value="+1"></button>
         <div class="toolbar-separator"></div>
         <!-- ALIGN -->
         <button id="alignEditorToolbarButton"></button>
@@ -356,15 +364,20 @@
         <div class="toolbar-separator"></div>
         <!-- LINK -->
         <button id="linkEditorToolbarButton"
-                hover-tooltip="Insert Link"></button>
+                ui-tooltip-key="EditorInsertLinkLabel"
+                hover-tooltip></button>
         <button class="ql-image"
-                hover-tooltip="Insert Image"></button>
+                ui-tooltip-key="EditorInsertImageLabel"
+                hover-tooltip></button>
         <button class="ql-video"
-                hover-tooltip="Insert Video"></button>
+                ui-tooltip-key="EditorInsertVideoLabel"
+                hover-tooltip></button>
         <!--<button class="ql-formula"></button>-->
         <div class="toolbar-separator"></div>
         <!-- FIND/REPLACE -->
-        <button id="findReplaceToolbarButton" class="right-align svg-key-findreplace svg-no-defaults" svg-classes="svg-icon ql-fill"></button>
+        <button id="findReplaceToolbarButton" 
+                class="right-align svg-key-findreplace svg-no-defaults" 
+                svg-classes="svg-icon ql-fill"></button>
     </div>
     <!-- EDITOR CONTAINER -->
     <div id='editor' draggable="true" class="no-select"></div>
@@ -378,7 +391,9 @@
          class="common-toolbar bottom-align hidden">
         <div id="templateColorBox" class="template-data-element" tabindex="0"></div>
         <div class="input-wrapper">
-            <label for="templateNameTextArea">Name</label>
+            <label for="templateNameTextArea"
+                   hover-tooltip
+                    ui-tooltip-key="EditorEditTemplateNameLabel"></label>
             <textarea id="templateNameTextArea"
                       tabindex="1"
                       rows="1"
@@ -388,7 +403,7 @@
         </div>
         <button id="editTemplateDeleteButton" class="right-align" type="button" tabindex="2">
             <i class="svg-key-delete"></i>
-            <span>Delete All</span>
+            <span ui-content-key="EditorDeleteAllButtonText"></span>
         </button>
     </div>
     <!-- TABLEOPS TOOLBAR -->
@@ -414,12 +429,14 @@
             <div id="pasteTemplateToolbarMenuSelectorArrowDiv"></div>
         </div>
         <!-- CONTACT TEMPLATE -->
-        <div id="pasteTemplateToolbarContactFieldSelectorContainer" class="paste-template-item hidden">
+        <div id="pasteTemplateToolbarContactFieldSelectorContainer" 
+             class="paste-template-item hidden">
             <select id="contactFieldSelector" class="template-data-element"></select>
             <select id="contactSelector" class="template-data-element"></select>
         </div>
         <!-- DATETIME TEMPLATE -->
-        <div id="pasteTemplateToolbarDateTimeFormatSelectorContainer" class="paste-template-item hidden">
+        <div id="pasteTemplateToolbarDateTimeFormatSelectorContainer" 
+             class="paste-template-item hidden">
             <select id="datetimeSelector" class="template-data-element"></select>
             <input id="datetimeCustomInput" class="template-data-element" />
         </div>
@@ -431,7 +448,7 @@
                       tabindex="1"
                       spellcheck="false"
                       class="template-data-element"
-                      placeholder="Enter paste text..."></textarea>
+                      ui-placeholder-key="EditorPasteTemplateWatermark"></textarea>
         </div>
         <!-- PASTE VALUE HINT INFO -->
         <div id="templatePasteValueHintOuterContainer" class="paste-template-item tooltip-hint-container invisible" toolbar-tooltip=""></div>
@@ -439,37 +456,44 @@
         <button id="clearAllTemplateTextButton"
                 class="paste-template-item svg-key-delete"
                 svg-classes="svg-icon paste-toolbar-icon"
-                hover-tooltip="Clear All"
+                ui-tooltip-key="EditorClearAllLabel"
+                hover-tooltip
                 tabindex="2">
         </button>
         <!-- PREV BUTTON -->
         <button id="previousTemplateButton"
                 class="paste-template-item svg-key-arrow-left"
                 svg-classes="svg-icon paste-toolbar-icon"
-                hover-tooltip="Previous Template"
+                ui-tooltip-key="EditorPrevTemplateLabel"
+                hover-tooltip
                 tabindex="3">
         </button>
         <!-- NEXT BUTTON -->
         <button id="nextTemplateButton"
                 class="paste-template-item svg-key-arrow-right"
                 svg-classes="svg-icon paste-toolbar-icon"
-                hover-tooltip="Next Template"
+                ui-tooltip-key="EditorNextTemplateLabel"
+                hover-tooltip
                 tabindex="4">
         </button>
         <!-- EDIT BUTTON -->
         <button id="pasteEditFocusTemplateButton"
                 class="paste-template-item svg-key-edit-template"
                 svg-classes="svg-icon paste-toolbar-icon"
-                hover-tooltip="Edit Details"
+                ui-tooltip-key="EditorEditTemplateDetailsLabel"
+                hover-tooltip
                 tabindex="5">
         </button>
         <!-- PASTE BUTTON/MODE CONTAINER -->
         <div id="pasteButtonAndModeContainer"
              class="right-align pasteButtonSpit">
             <!-- APPEND STATE CONTAINER -->
-            <div id="pasteAppendToolbarContainer" class="hover-border append-toolbar-container">
+            <div id="pasteAppendToolbarContainer" 
+                 class="hover-border append-toolbar-container">
                 <!-- APPEND BEGIN BUTTON -->
-                <button id="pasteAppendBeginButton" class="svg-key-stack append unexpanded-only" hover-tooltip="Append"></button>
+                <button id="pasteAppendBeginButton" 
+                        class="svg-key-stack append unexpanded-only" 
+                        hover-tooltip="Append"></button>
                 <div class="toolbar-separator append unexpanded-only"></div>
                 <!-- APPEND INSERT BUTTON -->
                 <button id="pasteAppendToggleInlineButton" class="svg-key-paragraph text-only" hover-tooltip="Inline"></button>
@@ -497,7 +521,8 @@
             <button id="pasteButtonPopupExpander"
                     class="hover-border"
                     tabindex="7"
-                    hover-tooltip="Clipboard Formats">
+                    ui-tooltip-key="EditorClipboardFormatsLabel"
+                    hover-tooltip>
                 <span class="expander-arrow"></span>
             </button>
         </div>

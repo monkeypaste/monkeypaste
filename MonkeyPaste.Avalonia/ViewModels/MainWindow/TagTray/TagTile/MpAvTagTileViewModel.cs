@@ -193,14 +193,14 @@ namespace MonkeyPaste.Avalonia {
                     SubItems = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {
                             IsVisible = !IsTagReadOnly,
-                            Header = "Rename",
+                            Header = UiStrings.CommonRenameLabel,
                             AltNavIdx = 0,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("RenameImage") as string, //MpPlatformWrapper.Services.PlatformResource.GetResource("RenameIcon") as string,
                             Command = RenameTagCommand,
                         },
                         new MpAvMenuItemViewModel() {
                             IsVisible = CanHotkey,
-                            Header = "Assign Hotkey",
+                            Header = UiStrings.CommonAssignShortcutLabel,
                             AltNavIdx = 0,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("JoystickImage") as string,
                             Command = MpAvShortcutCollectionViewModel.Instance.ShowAssignShortcutDialogCommand,
@@ -209,7 +209,7 @@ namespace MonkeyPaste.Avalonia {
                         },
                         new MpAvMenuItemViewModel() {
                             IsVisible = CanPin,
-                            Header = IsModelPinned ? "Unpin" : "Pin",
+                            Header = IsModelPinned ? UiStrings.CommonUnpinItemLabel : UiStrings.CommonPinItemLabel,
                             AltNavIdx = 0,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("PinImage") as string,
                             Command = Parent.ToggleTileIsPinnedCommand,
@@ -218,14 +218,14 @@ namespace MonkeyPaste.Avalonia {
 
                         new MpAvMenuItemViewModel() {
                             IsVisible = IsTrashTag,
-                            Header = "Permanently Delete All",
+                            Header = UiStrings.TagTilePermDeleteAllHeader,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("DeleteImage") as string,
                             Command = Parent.EmptyTrashCommand
                         },
                         new MpAvMenuItemViewModel() {
                             IsVisible = IsTrashTag,
                             HasLeadingSeparator = true,
-                            Header = "Restore All",
+                            Header = UiStrings.TagTileRestoreAllHeader,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("ResetImage") as string,
                             Command = Parent.RestoreAllTrashCommand
                         },
@@ -233,7 +233,7 @@ namespace MonkeyPaste.Avalonia {
                         new MpAvMenuItemViewModel() {
                             IsVisible = !IsTagReadOnly,
                             HasLeadingSeparator = true,
-                            Header = "Delete",
+                            Header = UiStrings.CommonDeleteLabel,
                             IconResourceKey = Mp.Services.PlatformResource.GetResource("DeleteImage") as string,
                             Command = DeleteThisTagCommand
                         }
@@ -314,13 +314,13 @@ namespace MonkeyPaste.Avalonia {
                     SubItems = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {
                             IconSourceObj = "FolderImage",
-                            Header = "Group",
+                            Header = UiStrings.TagGroupTypeName,
                             Command = AddNewChildTagCommand,
                             CommandParameter = MpTagType.Group
                         },
                         new MpAvMenuItemViewModel() {
                             IconSourceObj = "BinocularsTiltedImage",
-                            Header = "Filter",
+                            Header = UiStrings.TagQueryTypeName,
                             Command = AddNewChildTagCommand,
                             CommandParameter = MpTagType.Query
                         },

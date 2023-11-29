@@ -112,6 +112,12 @@ namespace MonkeyPaste.Avalonia {
         public ObservableCollection<MpAvAnnotationItemViewModel> Items { get; private set; } = new ObservableCollection<MpAvAnnotationItemViewModel>();
         #endregion
 
+        #region Appearance
+
+        public string AnnotationTypeDisplayValue =>
+            string.Format(UiStrings.ClipTileAnnotationTypeLabel, AnnotationType);
+        #endregion
+
         #region State
 
         public double ScorePercent {

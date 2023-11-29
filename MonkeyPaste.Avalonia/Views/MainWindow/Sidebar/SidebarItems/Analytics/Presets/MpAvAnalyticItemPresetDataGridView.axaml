@@ -202,7 +202,7 @@
                                               IsChecked="{Binding IsQuickAction, Mode=OneWay}">
 
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="Quick Action" />
+                                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.AnalyzeQuickActionToolTip}" />
                                     </ToolTip.Tip>
                                     <Grid>
                                         <Image x:Name="StarOutline"
@@ -299,7 +299,7 @@
                                                 </MultiBinding>
                                             </Image.IsVisible>
                                             <ToolTip.Tip>
-                                                <local:MpAvToolTipView ToolTipText="Analyze" />
+                                                <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.CommonAnalyzeButtonLabel}" />
                                             </ToolTip.Tip>
                                         </Image>
                                         <local:MpAvBusySpinnerView IsVisible="{Binding Parent.IsBusy}"
@@ -382,7 +382,7 @@
                     <Image Source="{Binding ., Converter={x:Static local:MpAvIconSourceObjToBitmapConverter.Instance}, Source={StaticResource AddImage}}"
                            DockPanel.Dock="Left" />
                     <TextBlock DockPanel.Dock="Right"
-                               Text="Add Preset" />
+                               Text="{x:Static local:UiStrings.CommonAddPresetButtonLabel}" />
                 </DockPanel>
             </Button>
         </Grid>

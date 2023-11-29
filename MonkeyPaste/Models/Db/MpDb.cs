@@ -460,7 +460,7 @@ namespace MonkeyPaste {
                 int curAttemptNum = 0;
                 int maxAttempts = 3;
                 while (curAttemptNum < maxAttempts) {
-                    var result = await GetDbPasswordAsync(curAttemptNum, maxAttempts);
+                    var result = await GetDbPasswordAsync(curAttemptNum, maxAttempts, dbInfo.EnterPasswordTitle, $"{(maxAttempts - curAttemptNum)} {dbInfo.EnterPasswordText}");
                     if (result.IsDefault()) {
                         // user canceled
                         Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.DbAuthFailed, "canceled db password");
@@ -484,7 +484,7 @@ namespace MonkeyPaste {
             bool? success = connect_success ? isNewDb : null;
             if (success.IsTrue()) {
 #if WINDOWS
-                await InitDbSettingsAsync(); 
+                await InitDbSettingsAsync();
 #endif
             }
             return success;
@@ -818,15 +818,14 @@ LEFT JOIN MpTransactionSource ON MpTransactionSource.fk_MpCopyItemTransactionId 
             }
         }
 
-        private static async Task<(string, bool)> GetDbPasswordAsync(int attemptNum, int maxAttempts) {
+        private static async Task<(string, bool)> GetDbPasswordAsync(int attemptNum, int maxAttempts, string title, string text) {
             if (attemptNum >= maxAttempts) {
                 return default;
             }
-            int remaining = maxAttempts - attemptNum;
             var result = await Mp.Services.PlatformMessageBox.ShowRememberableTextBoxMessageBoxAsync(
-                title: $"Enter Password",
+                title: title,
                 passwordChar: '●',
-                message: $"{remaining} attempt{(remaining == 0 ? string.Empty : "s")} remaining",
+                message: text,
                 iconResourceObj: "LockImage",
                 ntfType: MpNotificationType.DbPasswordInput);
             return result;

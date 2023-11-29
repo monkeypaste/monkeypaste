@@ -22,13 +22,13 @@ namespace MonkeyPaste.Avalonia {
         }
         private static void InitStartupTray() {
             var startupIcon = new TrayIcon() {
-                ToolTipText = $"{Mp.Services.ThisAppInfo.ThisAppProductName} is loading. Please wait...",
+                ToolTipText = UiStrings.SysTrayPleaseWaitTooltip,
                 Icon = MpAvIconSourceObjToBitmapConverter.Instance.Convert("HourGlassImage", typeof(WindowIcon), null, null) as WindowIcon,
                 Menu = new NativeMenu()
             };
             startupIcon.Menu.Add(
                 new NativeMenuItem() {
-                    Header = "Cancel",
+                    Header = UiStrings.CommonCancelLabel,
                     Command = MpAvSystemTrayViewModel.Instance.ExitApplicationCommand,
                     CommandParameter = "systray cancel click"
                 });

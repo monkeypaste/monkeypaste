@@ -62,7 +62,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static async Task<MpPluginFormat> ReloadPluginAsync(string manifestPath) {
             if (!Plugins.ContainsKey(manifestPath)) {
-                throw new Exception($"No plugin loaded from manifest path: '{manifestPath}'");
+                throw new Exception(string.Format(UiStrings.PluginErrMissingManifest, manifestPath));
             }
             var reloaded_pf = await LoadPluginAsync(manifestPath);
             Plugins[manifestPath] = reloaded_pf;
@@ -116,7 +116,7 @@ namespace MonkeyPaste.Avalonia {
                 catch (Exception ex) {
                     Mp.Services.NotificationBuilder.ShowNotificationAsync(
                         notificationType: MpNotificationType.FileIoWarning,
-                        body: $"Error backing up {dir_to_backup} to '{backup_path}. Details: '{ex.Message}'").FireAndForgetSafeAsync();
+                        body: string.Format(UiStrings.PluginLoaderBackupErrorText, dir_to_backup, backup_path, ex.Message)).FireAndForgetSafeAsync();
                     backup_path = null;
                 }
             }
@@ -171,7 +171,7 @@ namespace MonkeyPaste.Avalonia {
                     // extract zip to temp folder and get inner folder name
                     if (!temp_package_dir.IsDirectory()) {
                         if (!MpFileIo.CreateDirectory(temp_package_dir)) {
-                            throw new Exception($"Error staging plugin to temp dir '{temp_package_dir}'");
+                            throw new Exception(string.Format(UiStrings.PluginErrStagingText, temp_package_dir));
                         }
                     }
                     ZipFile.ExtractToDirectory(temp_package_zip, temp_package_dir);
@@ -180,7 +180,7 @@ namespace MonkeyPaste.Avalonia {
                     if (!temp_package_dir.IsDirectory() ||
                         Directory.GetDirectories(temp_package_dir) is not string[] tpfl ||
                         tpfl.Length == 0) {
-                        throw new Exception($"Error extracting plugin from '{temp_package_dir}'");
+                        throw new Exception(string.Format(UiStrings.PluginErrStagingText, temp_package_dir));
                     }
 
                     pluginName = Path.GetFileName(tpfl[0]);
@@ -200,7 +200,7 @@ namespace MonkeyPaste.Avalonia {
                 catch (Exception ex) {
                     Mp.Services.NotificationBuilder.ShowNotificationAsync(
                         notificationType: MpNotificationType.FileIoWarning,
-                        body: $"Error installing plugin: {ex.Message}").FireAndForgetSafeAsync();
+                        body: string.Format(UiStrings.PluginErrInstallNtfText, ex.Message)).FireAndForgetSafeAsync();
                     return null;
                 }
 
@@ -208,7 +208,7 @@ namespace MonkeyPaste.Avalonia {
                 if (!manifest_path.IsFile()) {
                     Mp.Services.NotificationBuilder.ShowNotificationAsync(
                         notificationType: MpNotificationType.FileIoWarning,
-                        body: $"Error installing plugin '{pluginName}' corrupt or improper directory structure. Manifest should exist at '{manifest_path}' but was not found.").FireAndForgetSafeAsync();
+                        body: string.Format(UiStrings.PluginErrInstallStructureNtfText, pluginName, manifest_path)).FireAndForgetSafeAsync();
                     return null;
                 }
 
@@ -231,7 +231,7 @@ namespace MonkeyPaste.Avalonia {
 
         public static MpNotificationFormat CreateInvalidPluginNotification(string msg, MpPluginFormat pf) {
             return new MpNotificationFormat() {
-                Title = $"{pf.title} Error",
+                Title = string.Format(UiStrings.PluginErrNtfTitle, msg),
                 Body = msg,
                 NotificationType = MpNotificationType.InvalidPlugin,
                 FixCommand = new MpCommand(() => MpFileIo.OpenFileBrowser(Path.Combine(pf.RootDirectory, "manifest.json")))
@@ -345,7 +345,7 @@ namespace MonkeyPaste.Avalonia {
                 catch (Exception ex) {
                     var invalid_or_malformed_json_result = await Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.InvalidPlugin,
-                            body: $"Error parsing plugin manifest '{manifestPath}': {ex.Message}",
+                            body: string.Format(UiStrings.PluginErrManifestText, manifestPath, ex.Message),
                             retryAction: retryFunc,
                             fixCommand: new MpCommand(() => MpFileIo.OpenFileBrowser(manifestPath)));
                     if (invalid_or_malformed_json_result == MpNotificationDialogResultType.Ignore) {

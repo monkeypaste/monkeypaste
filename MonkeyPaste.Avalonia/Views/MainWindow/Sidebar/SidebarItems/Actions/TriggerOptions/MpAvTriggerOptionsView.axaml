@@ -56,7 +56,7 @@
                         <DockPanel>
                             <Image DockPanel.Dock="Left"
                                    Source="{Binding Source={StaticResource PauseImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
-                            <TextBlock Text="Pause" />
+                            <TextBlock Text="{x:Static local:UiStrings.TriggerPauseButtonLabel}" />
                         </DockPanel>
                     </Template>
                 </Setter.Value>
@@ -71,7 +71,7 @@
                         <DockPanel>
                             <Image DockPanel.Dock="Left"
                                    Source="{Binding Source={StaticResource PlayImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
-                            <TextBlock Text="Play" />
+                            <TextBlock Text="{x:Static local:UiStrings.TriggerResumeButtonLabel}" />
                         </DockPanel>
                     </Template>
                 </Setter.Value>
@@ -150,7 +150,7 @@
                 Grid.Column="2"
                 Classes="defaultButton outline outlineOver"
                 Command="{Binding DuplicateTriggerCommand}"
-                Content="Duplicate" />
+                Content="{x:Static local:UiStrings.CommonDuplicateLabel}" />
 
         <Border Grid.Column="3"
                 Classes="splitter" />
@@ -162,7 +162,7 @@
                 Classes="defaultButton outline outlineOver"
                 Command="{Binding DeleteThisTriggerCommand}"
                 CommandParameter="{Binding $self}"
-                Content="Delete" />
+                Content="{x:Static local:UiStrings.CommonDeleteLabel}" />
     </Grid>
 
 </local:MpAvUserControl>

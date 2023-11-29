@@ -159,7 +159,7 @@ function deleteFocusTemplate() {
     }
 
     getMessageBoxResultAsync_get(
-        'confirm', 'Are you sure you want to delete ALL usages of \'' + ft.templateName + '\'? This cannot be undone.',
+        UiStrings['EditorConfirmNtfTitle'], UiStrings['EditorDeleteAllTemplatesNtfText'].Format(ft.templateName),
         'okcancel',
         'WarningImage')
         .then(result => {

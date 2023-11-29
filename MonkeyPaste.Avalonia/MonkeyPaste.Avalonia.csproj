@@ -1525,7 +1525,7 @@
     <Folder Include="Resources\Legal\Licenses\" />
     <Folder Include="Resources\Legal\"/>-->
     
-    <Content Include="Resources\Editor\**"  LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Resources\Editor\**" LinkBase="$(MainTargetDir)\Resources\" CopyToOutputDirectory="PreserveNewest" />
 
     <Content Include="Resources\Legal\terms\terms.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1539,20 +1539,25 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Attributions.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\UiStrings\EnumUiStrings.ja-JP.Designer.cs">
+      <DependentUpon>EnumUiStrings.ja-JP.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\UiStrings\EnumUiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>EnumUiStrings.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\UiStrings\ListingStrings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ListingStrings.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\UiStrings\test.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>test.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\UiStrings\UiStrings.ja-JP.Designer.cs">
+      <DependentUpon>UiStrings.ja-JP.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Resources\UiStrings\UiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -1666,9 +1671,6 @@
     </Compile>
     <Compile Update="Views\Reusable\FlyoutMenu\MpAvMenuView.axaml.cs">
       <DependentUpon>MpAvMenuView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Reusable\Notifications\Welcome\MpAvWelcomeView.axaml.cs">
-      <DependentUpon>MpAvWelcomeView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Reusable\Notifications\Welcome\Pages\MpAvWelcomeOptionsView.axaml.cs">
       <DependentUpon>MpAvWelcomeOptionsView.axaml</DependentUpon>
@@ -1818,6 +1820,7 @@
   
   <ItemGroup>
     <EmbeddedResource Remove="Resources\Legal\Attributions.resx" />
+    <EmbeddedResource Remove="Resources\UiStrings\ListingStrings.ja-JP.resx" />
     <EmbeddedResource Remove="Resources\UiStrings\ListingStrings.resx" />
   </ItemGroup>
   
@@ -1826,9 +1829,11 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Attributions.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\UiStrings\ListingStrings.ja-JP.resx">
+      <Generator></Generator>
+    </None>
     <None Include="Resources\UiStrings\ListingStrings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ListingStrings.Designer.cs</LastGenOutput>
+      <Generator></Generator>
     </None>
   </ItemGroup>
 
@@ -1858,10 +1863,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.en-US.resx">
+    <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.ja-JP.resx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-      <Generator></Generator>
+      <LastGenOutput>EnumUiStrings.ja-JP.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1869,10 +1875,11 @@
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\UiStrings\UiStrings.en-US.resx">
+    <EmbeddedResource Update="Resources\UiStrings\UiStrings.ja-JP.resx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-      <Generator></Generator>
+      <LastGenOutput>UiStrings.ja-JP.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
 
     <EmbeddedResource Update="Resources\UiStrings\UiStrings.resx">

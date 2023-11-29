@@ -323,7 +323,7 @@ namespace MonkeyPaste.Avalonia {
                     Height = 125,
                     TextAlignment = TextAlignment.Center,
                     Margin = new Thickness(0, 0, 0, 15),
-                    Text = "Please Wait..."
+                    Text = UiStrings.CommonWaitLabel
                 });
                 sp.Children.Add(new MpAvBusySpinnerView() {
                     HorizontalAlignment = HorizontalAlignment.Center,

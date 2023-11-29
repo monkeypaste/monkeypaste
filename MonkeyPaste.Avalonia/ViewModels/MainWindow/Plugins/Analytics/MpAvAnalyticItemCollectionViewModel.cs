@@ -253,7 +253,7 @@ namespace MonkeyPaste.Avalonia {
             }
 
             return new MpAvMenuItemViewModel() {
-                Header = @"Analyze",
+                Header = UiStrings.CommonAnalyzeButtonLabel,
                 HasLeadingSeparator = true,
                 AltNavIdx = 0,
                 IconResourceKey = Mp.Services.PlatformResource.GetResource("BrainImage") as string,
@@ -447,7 +447,7 @@ namespace MonkeyPaste.Avalonia {
                     if (!revert_success) {
                         Mp.Services.NotificationBuilder.ShowNotificationAsync(
                             notificationType: MpNotificationType.FileIoWarning,
-                            body: $"Unknown error occured.").FireAndForgetSafeAsync();
+                            body: UiStrings.CommonUnknownErrorText).FireAndForgetSafeAsync();
                     }
                 }
                 MpFileIo.DeleteDirectory(backup_dir);

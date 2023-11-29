@@ -573,7 +573,7 @@ namespace MonkeyPaste.Avalonia {
                 if (shared_params_to_clear_or_restore.Any()) {
                     // ntf w/ yes/no/cancel to reset shared values
                     var result = await Mp.Services.PlatformMessageBox.ShowYesNoCancelMessageBoxAsync(
-                        title: UiStrings.CommonNtfConfirmTitle,
+                        title: UiStrings.CommonConfirmLabel,
                         message: $"'{aipvm.Label}' contains shared values. Would you like to reset those as well?",
                         iconResourceObj: "QuestionMarkImage",
                         owner: MpAvWindowManager.MainWindow);

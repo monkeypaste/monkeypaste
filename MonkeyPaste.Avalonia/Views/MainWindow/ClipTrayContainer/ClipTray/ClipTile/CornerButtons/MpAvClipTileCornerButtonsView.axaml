@@ -82,7 +82,7 @@
         </Style>
 
         <!--  TL PIN IMAGE  -->
-      
+
         <Style Selector="ToggleButton#PinTileButton">
             <Setter Property="RotateTransform.Angle"
                     Value="0" />
@@ -122,7 +122,7 @@
             </ToggleButton.RenderTransform>
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=TogglePinned, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                       ToolTipText="Toggle Pin" />
+                                       ToolTipText="{x:Static local:UiStrings.ClipTileTogglePinnedLabel}" />
             </ToolTip.Tip>
             <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource PinImage}">
             </Image>
@@ -137,7 +137,7 @@
                 CommandParameter="{Binding}">
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=OpenInWindow, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                       ToolTipText="Float" />
+                                       ToolTipText="{x:Static local:UiStrings.CommonFloatWindowLabel}" />
             </ToolTip.Tip>
             <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource NewWindowImage}" />
 
@@ -170,7 +170,7 @@
             </ToggleButton.IsVisible>
             <ToolTip.Tip>
                 <local:MpAvToolTipView InputGestureText="{Binding ., ConverterParameter=ToggleContentReadOnly, Converter={x:Static local:MpAvShortcutTypeOrCommandObjToKeyStringConverter.Instance}}"
-                                       ToolTipText="Toggle Edit" />
+                                       ToolTipText="{x:Static local:UiStrings.ClipTileToggleEditLabel}" />
             </ToolTip.Tip>
             <Image local:MpAvImageTintExtension.ImageResourceObj="{StaticResource EditImage}" />
         </ToggleButton>

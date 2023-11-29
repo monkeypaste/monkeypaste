@@ -386,7 +386,7 @@ namespace MonkeyPaste.Avalonia {
         public ICommand UninstallPluginCommand => new MpAsyncCommand(
             async () => {
                 var confirm = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                    title: UiStrings.CommonNtfConfirmTitle,
+                    title: UiStrings.CommonConfirmLabel,
                     message: string.Format(UiStrings.PluginBrowserNtfUninstallMsg, PluginTitle),
                     owner: MpAvWindowManager.AllWindows.FirstOrDefault(x => x.DataContext == Parent),
                     iconResourceObj: "QuestionMarkImage");

@@ -28,7 +28,7 @@
                         VerticalAlignment="Top">
                     <StackPanel Orientation="Vertical">
                         <Label Classes="h1"
-                               Content="Analyzer" />
+                               Content="{x:Static local:UiStrings.AnalyzerSelectorLabel}" />
                         <Border Classes="labelUnderline" />
                         <Border Classes="iconLabelComboBox"
                                 Grid.Row="2"
@@ -44,7 +44,7 @@
                                         Classes="defaultButton noBg noHoverBg outline outlineOver square"
                                         Command="{Binding ShowPluginBrowserCommand}">
                                     <ToolTip.Tip>
-                                        <local:MpAvToolTipView ToolTipText="Browse Plugins" />
+                                        <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.AnalyzeBrowsePluginsToolTip}" />
                                     </ToolTip.Tip>
                                     <Image Source="{Binding ., Source={StaticResource JigsawImage}, Converter={x:Static local:MpAvStringHexToBitmapTintConverter.Instance}, ConverterParameter=ThemeInteractiveColor}" />
 
@@ -72,7 +72,7 @@
                             </DockPanel>
                         </Border>
                         <Label Classes="h1"
-                               Content="Presets" />
+                               Content="{x:Static local:UiStrings.AnalyzerPresetGridTitle}" />
                         <Border Classes="labelUnderline" />
                         <Border Margin="0,0,0,0"
                                 HorizontalAlignment="Stretch"

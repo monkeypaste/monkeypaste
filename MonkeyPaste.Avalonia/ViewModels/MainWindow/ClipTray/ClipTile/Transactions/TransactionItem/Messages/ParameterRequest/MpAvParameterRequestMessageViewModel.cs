@@ -32,7 +32,7 @@ namespace MonkeyPaste.Avalonia {
                     IconSourceObj = PresetViewModel.IconId,
                     SubItems = new List<MpAvMenuItemViewModel>() {
                         new MpAvMenuItemViewModel() {
-                            Header = "Select",
+                            Header = UiStrings.CommonSelectLabel,
                             IconSourceObj = "SlidersImage",
                             Command = PresetViewModel.Parent.SelectPresetCommand,
                             CommandParameter = new object[] { PresetViewModel, ParameterReqFormat }
@@ -47,7 +47,7 @@ namespace MonkeyPaste.Avalonia {
                         //        amvm2.RootAnnotationViewModel : null
                         //},
                         new MpAvMenuItemViewModel() {
-                            Header = "View",
+                            Header = UiStrings.ClipTileTransactionViewSourceHeader,
                             IconSourceObj = "GraphImage",
                             IsVisible = Parent.Response is MpAvAnnotationMessageViewModel amvm && amvm.RootAnnotationViewModel != null,
                             Command = MpAvClipTrayViewModel.Instance.SelectClipTileTransactionNodeCommand,

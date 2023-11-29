@@ -83,7 +83,7 @@
                 <TextBlock DockPanel.Dock="Right"
                            FontWeight="SemiBold"
                            Classes="alterOnly"
-                           Text="all of the following are true"
+                           Text="{x:Static local:UiStrings.SearchCustomJoinHeaderLabel}"
                            Margin="5,0,0,0"
                            VerticalAlignment="Center" />
                 <ComboBox Classes="criteriaComboBox joinComboBox alterOnly"

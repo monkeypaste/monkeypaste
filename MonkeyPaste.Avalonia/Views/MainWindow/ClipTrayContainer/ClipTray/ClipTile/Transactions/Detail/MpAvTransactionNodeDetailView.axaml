@@ -24,7 +24,7 @@
                                     Spacing="10">
                             <TextBlock Grid.Row="0"
                                        Foreground="{DynamicResource ThemeInteractiveColor}"
-                                       Text="{Binding AnnotationType, StringFormat='Type: {0}'}" />
+                                       Text="{Binding AnnotationTypeDisplayValue}" />
                             <local:MpAvProgressSpinner Grid.Row="1"
                                                        Width="30"
                                                        Height="30"
@@ -71,7 +71,7 @@
 
                     <!--  EMPTY LABEL  -->
                     <DataTemplate x:Key="EmptyDetailTemplate">
-                        <TextBlock Text="No details available" />
+                        <TextBlock Text="{x:Static local:UiStrings.CommonEmptyListText}" />
                     </DataTemplate>
                 </local:MpAvTransactionNodeDetailTemplateSelector>
             </ContentControl.DataTemplates>

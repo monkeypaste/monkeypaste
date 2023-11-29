@@ -92,7 +92,7 @@
                                local:MpAvPointerCommandExtension.LeftReleaseCommand="{Binding NavigateToFileItemCommand}"
                                Text="{Binding PathLabel}">
                         <ToolTip.Tip>
-                            <local:MpAvToolTipView ToolTipText="Control + Click to follow..." />
+                            <local:MpAvToolTipView ToolTipText="{x:Static local:UiStrings.LinkNavigateToolTipText}" />
                         </ToolTip.Tip>
                     </TextBlock>
 

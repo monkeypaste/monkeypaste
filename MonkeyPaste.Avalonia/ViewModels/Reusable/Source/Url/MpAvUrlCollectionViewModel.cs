@@ -152,8 +152,8 @@ namespace MonkeyPaste.Avalonia {
 
                 while (urlPath == null) {
                     urlPath = await Mp.Services.PlatformMessageBox.ShowTextBoxMessageBoxAsync(
-                        title: "Add url",
-                        message: "Enter full url:",
+                        title: UiStrings.AddUrlNtfTitle,
+                        message: UiStrings.AddUrlNtfText,
                         iconResourceObj: "WebImage");
                     if (urlPath == null) {
                         // canceled, break
@@ -161,8 +161,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                     if (!Uri.IsWellFormedUriString(urlPath, UriKind.Absolute)) {
                         var invalid_result = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                            title: "Error",
-                            message: "Url must be in valid format");
+                            title: UiStrings.CommonErrorLabel,
+                            message: UiStrings.AddUrlNtfErrorText);
                         urlPath = null;
                         if (invalid_result) {
                             // try again
@@ -186,8 +186,8 @@ namespace MonkeyPaste.Avalonia {
                     }
                 } else {
                     await Mp.Services.PlatformMessageBox.ShowOkMessageBoxAsync(
-                            title: "Duplicate",
-                            message: $"Url already exists: '{urlPath}'",
+                            title: UiStrings.CommonDuplicateLabel,
+                            message: string.Format(UiStrings.AddUrlNtfDupText, urlPath),
                             iconResourceObj: "WarningImage");
                 }
 

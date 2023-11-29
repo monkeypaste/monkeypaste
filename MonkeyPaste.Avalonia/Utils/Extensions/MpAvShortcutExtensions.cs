@@ -95,7 +95,7 @@ namespace MonkeyPaste.Avalonia {
 
             switch (st) {
                 case MpShortcutType.PasteCopyItem:
-                    template = "Paste '{0}'";
+                    template = UiStrings.ShortcutPasteTitle;
 
                     var ci = await MpDataModelProvider.GetItemAsync<MpCopyItem>(id);
                     if (ci != null) {
@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpShortcutType.SelectTag:
-                    template = "Select '{0}' Collection";
+                    template = UiStrings.ShortcutSelectTagTitle;
                     var t = await MpDataModelProvider.GetItemAsync<MpTag>(id);
                     if (t != null) {
                         title_arg = t.TagName;
@@ -112,7 +112,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpShortcutType.AnalyzeCopyItemWithPreset:
-                    template = "Run '{0}' Analyzer";
+                    template = UiStrings.ShortcutRunAnalyzerTitle;
                     var pp = await MpDataModelProvider.GetItemAsync<MpPluginPreset>(id);
                     if (pp != null) {
                         title_arg = pp.Label;
@@ -120,7 +120,7 @@ namespace MonkeyPaste.Avalonia {
                     break;
 
                 case MpShortcutType.InvokeTrigger:
-                    template = "Run '{0}' Trigger";
+                    template = UiStrings.ShortcutRunTriggerTitle;
                     var a = await MpDataModelProvider.GetItemAsync<MpAction>(id);
                     if (a != null) {
                         title_arg = a.Label;

@@ -524,7 +524,7 @@ namespace MonkeyPaste.Avalonia {
             }
             return new MpAvMenuItemViewModel() {
                 HasLeadingSeparator = has_leading_sep,
-                Header = "Color",
+                Header = UiStrings.CommonColorHeader,
                 IconResourceKey = "ColorsImage",
                 SubItems = new[] {
                     new MpAvMenuItemViewModel() {
@@ -554,7 +554,8 @@ namespace MonkeyPaste.Avalonia {
         public static ICommand SetColorCommand => new MpCommand<object>(
             (args) => {
                 if (args == null) {
-                    throw new Exception("Args must be color and color interface");
+                    //throw new Exception("Args must be color and color interface");
+                    return;
                 }
                 Mp.Services.MainThreadMarshal.RunOnMainThread(() => {
                     var argParts = args as object[];

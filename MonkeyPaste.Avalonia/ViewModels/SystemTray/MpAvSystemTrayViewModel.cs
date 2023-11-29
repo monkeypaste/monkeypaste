@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 #if CEFNET_WV
-using CefNet.Avalonia; 
+using CefNet.Avalonia;
 #endif
 
 namespace MonkeyPaste.Avalonia {
@@ -82,11 +82,11 @@ namespace MonkeyPaste.Avalonia {
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = "Mode",
+                            Header = UiStrings.SysTrayModeHeader,
                             IconResourceKey = "RobotClawImage",
                             SubItems = new List<MpAvMenuItemViewModel>() {
                                 new MpAvMenuItemViewModel() {
-                                    Header = "Append Inline",
+                                    Header = UiStrings.SysTrayAppenInlineHeader,
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
                                     IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsAppendInsertMode),
                                     ToggleType = "Radio",
@@ -98,7 +98,7 @@ namespace MonkeyPaste.Avalonia {
                                     InputGesturePropPath = nameof(MpAvShortcutViewModel.KeyString)
                                 },
                                 new MpAvMenuItemViewModel() {
-                                    Header = "Append Line",
+                                    Header = UiStrings.SysTrayAppendLineHeader,
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
                                     IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsAppendLineMode),
                                     ToggleType = "Radio",
@@ -110,7 +110,7 @@ namespace MonkeyPaste.Avalonia {
                                 },
                                 new MpAvMenuItemViewModel() {IsSeparator = true},
                                 new MpAvMenuItemViewModel() {
-                                    Header = "Auto-Copy",
+                                    Header = UiStrings.SysTrayAutoCopyHeader,
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
                                     IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsAutoCopyMode),
                                     ToggleType = "CheckBox",
@@ -121,7 +121,7 @@ namespace MonkeyPaste.Avalonia {
                                     InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                                 },
                                 new MpAvMenuItemViewModel() {
-                                    Header = "Right-Click Paste",
+                                    Header = UiStrings.SysTrayRightClickPasteHeader,
                                     IsCheckedSrcObj = MpAvClipTrayViewModel.Instance,
                                     IsCheckedPropPath = nameof(MpAvClipTrayViewModel.Instance.IsRightClickPasteMode),
                                     ToggleType = "CheckBox",
@@ -151,7 +151,7 @@ namespace MonkeyPaste.Avalonia {
                             InputGesturePropPath = nameof(MpAvAssignShortcutViewModel.KeyString)
                         },
                         new MpAvMenuItemViewModel() {
-                            Header = "About",
+                            Header = UiStrings.SysTrayAboutHeader,
                             IconResourceKey = "InfoImage",
                             Command = MpAvAboutViewModel.Instance.ShowAboutWindowCommand
                         },
@@ -197,7 +197,7 @@ namespace MonkeyPaste.Avalonia {
 #endif
                         new MpAvMenuItemViewModel() {IsSeparator = true},
                         new MpAvMenuItemViewModel() {
-                            Header = "Quit",
+                            Header = UiStrings.SysTrayQuitHeader,
                             IconResourceKey = "SignOutImage",
                             Command = ExitApplicationCommand,
                             CommandParameter = "systray menu click",
@@ -231,7 +231,7 @@ namespace MonkeyPaste.Avalonia {
                 if (Mp.Services == null ||
                     Mp.Services.StartupState == null ||
                     !Mp.Services.StartupState.IsReady) {
-                    return $"Please wait {Mp.Services.ThisAppInfo.ThisAppProductName} is loading...";
+                    return UiStrings.SysTrayPleaseWaitTooltip;
                 }
                 return MpAvAccountViewModel.Instance.AccountStateInfo;
             }

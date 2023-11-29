@@ -198,7 +198,7 @@
                             IsVisible="{Binding CanRemember}">
                     <Label Foreground="White"
                            VerticalAlignment="Center"
-                           Content="{x:Static local:UiStrings.DbPasswordRememberLabel}" />
+                           Content="{x:Static local:UiStrings.CommonRememberLabel}" />
                     <CheckBox x:Name="RememberCheckbox"
                               IsChecked="{Binding RememberInputText, Mode=TwoWay}" />
                 </StackPanel>
@@ -282,14 +282,14 @@
                         IsVisible="{Binding ShowShutdownButton}"
                         Command="{Binding ShutdownCommand}" />
                 <!--  Yes, No, Cancel or Ok, Cancel States  -->
-                <Button Content="{x:Static local:UiStrings.UserActionYesButtonText}"
+                <Button Content="{x:Static local:UiStrings.CommonYesButtonText}"
                         IsDefault="{Binding ShowYesButton}"
                         Command="{Binding YesCommand}"
                         IsVisible="{Binding ShowYesButton}" />
-                <Button Content="{x:Static local:UiStrings.UserActionNoButtonText}"
+                <Button Content="{x:Static local:UiStrings.CommonNoButtonText}"
                         Command="{Binding NoCommand}"
                         IsVisible="{Binding ShowNoButton}" />
-                <Button Content="{x:Static local:UiStrings.UserActionOkButtonText}"
+                <Button Content="{x:Static local:UiStrings.CommonOkLabel}"
                         IsDefault="{Binding ShowOkButton}"
                         Command="{Binding OkCommand}"
                         IsVisible="{Binding ShowOkButton}" />
@@ -297,7 +297,7 @@
                         IsDefault="{Binding ShowSubmitButton}"
                         Command="{Binding SubmitCommand}"
                         IsVisible="{Binding ShowSubmitButton}" />
-                <Button Content="{x:Static local:UiStrings.UserActionCancelButtonText}"
+                <Button Content="{x:Static local:UiStrings.CommonCancelLabel}"
                         Command="{Binding CancelCommand}"
                         IsVisible="{Binding ShowCancelButton}" />
             </StackPanel>

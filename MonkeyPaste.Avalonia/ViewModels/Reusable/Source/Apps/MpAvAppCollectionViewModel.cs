@@ -414,7 +414,7 @@ namespace MonkeyPaste.Avalonia {
                 }
                 if (confirm_body != null) {
                     bool confirmed = await Mp.Services.PlatformMessageBox.ShowOkCancelMessageBoxAsync(
-                        title: UiStrings.CommonNtfConfirmTitle,
+                        title: UiStrings.CommonConfirmLabel,
                         message: string.Format(confirm_body, avm.AppDisplayName),
                         iconResourceObj: "QuestionMarkImage");
                     if (!confirmed) {
@@ -446,7 +446,7 @@ namespace MonkeyPaste.Avalonia {
                     if (OperatingSystem.IsWindows()) {
                         app_filter = new List<FilePickerFileType>
                             {
-                                new(UiStrings.SettingsInteropAppBrowseToAppFilterLabel)
+                                new(UiStrings.CommonApplicationLabel)
                                 {
                                     Patterns = new[] { "*.exe","*.lnk" }
                                 }
