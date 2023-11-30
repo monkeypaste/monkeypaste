@@ -15,6 +15,20 @@ namespace MonkeyPaste {
         Group
     }
 
+    public enum MpReadOnlyTagType {
+        None = 0,
+        Collections,
+        All,
+        Favorites,
+        Filters,
+        Trash,
+        Today,
+        Formats,
+        Text,
+        Images,
+        Files
+    }
+
     public class MpTag :
         MpDbModelBase,
         MpIIconResource,
@@ -28,7 +42,7 @@ namespace MonkeyPaste {
         public const int FavoritesTagId = 3;
         public const int FiltersTagId = 4;
         public const int TrashTagId = 5;
-        public const int RecentTagId = 6;
+        public const int TodayTagId = 6;
         public const int FormatsTagId = 7;
         public const int TextFormatTagId = 8;
         public const int ImageFormatTagId = 9;

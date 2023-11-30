@@ -27,7 +27,7 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Analyzer",
+                                label = UiStrings.ActionAnalyzeLabel,
                                 controlType = MpParameterControlType.ComponentPicker,
                                 unitType = MpParameterValueUnitType.AnalyzerComponentId,
                                 isRequired = true,
@@ -71,7 +71,7 @@ namespace MonkeyPaste.Avalonia {
         public override object IconResourceObj =>
             SelectedPreset == null ? base.IconResourceObj : SelectedPreset.IconId;
         public override string ActionHintText =>
-            "Analyzer - Processes triggered content or previous action output using a selected plugin.";
+            UiStrings.ActionAnalyzerHint;
 
         #endregion
 

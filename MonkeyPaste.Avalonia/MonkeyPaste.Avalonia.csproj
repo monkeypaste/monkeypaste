@@ -55,7 +55,7 @@
     <AvaloniaXaml Remove="Controls\Content\TextElement\**" />
     <AvaloniaXaml Remove="dat\**" />
     <AvaloniaXaml Remove="Interfaces\Content\**" />
-    <AvaloniaXaml Remove="Resources\UiStrings\Baselines\**" />
+    <AvaloniaXaml Remove="Resources\Localization\UiStrings\Baselines\**" />
     <AvaloniaXaml Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <AvaloniaXaml Remove="Utils\WindowManager\Helpers\**" />
     <AvaloniaXaml Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
@@ -94,7 +94,7 @@
     <Compile Remove="Controls\Content\TextElement\**" />
     <Compile Remove="dat\**" />
     <Compile Remove="Interfaces\Content\**" />
-    <Compile Remove="Resources\UiStrings\Baselines\**" />
+    <Compile Remove="Resources\Localization\UiStrings\Baselines\**" />
     <Compile Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <Compile Remove="Utils\WindowManager\Helpers\**" />
     <Compile Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
@@ -133,7 +133,7 @@
     <EmbeddedResource Remove="Controls\Content\TextElement\**" />
     <EmbeddedResource Remove="dat\**" />
     <EmbeddedResource Remove="Interfaces\Content\**" />
-    <EmbeddedResource Remove="Resources\UiStrings\Baselines\**" />
+    <EmbeddedResource Remove="Resources\Localization\UiStrings\Baselines\**" />
     <EmbeddedResource Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <EmbeddedResource Remove="Utils\WindowManager\Helpers\**" />
     <EmbeddedResource Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
@@ -174,7 +174,7 @@
     <None Remove="Controls\Content\TextElement\**" />
     <None Remove="dat\**" />
     <None Remove="Interfaces\Content\**" />
-    <None Remove="Resources\UiStrings\Baselines\**" />
+    <None Remove="Resources\Localization\UiStrings\Baselines\**" />
     <None Remove="Utils\AvWrapper\Defnitions\TrayIcon\**" />
     <None Remove="Utils\WindowManager\Helpers\**" />
     <None Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
@@ -211,7 +211,7 @@
     <Page Remove="Controls\Content\TextElement\**" />
     <Page Remove="dat\**" />
     <Page Remove="Interfaces\Content\**" />
-    <Page Remove="Resources\UiStrings\Baselines\**" />
+    <Page Remove="Resources\Localization\UiStrings\Baselines\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Detail\Items\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Image\**" />
     <Page Remove="ViewModels\MainWindow\ClipTray\ClipTile\Tables\**" />
@@ -569,6 +569,7 @@
     <None Remove="CefNet" />
     <None Remove="CefNet.Avalonia" />
     <None Remove="Resources\Editor\images\delete.png" />
+    <None Remove="Resources\Editor\lib\jquery-context-menus\src\context-menu.css" />
     <None Remove="resources\editor\ribbon.html" />
     <None Remove="resources\editor\src\components\quill-wrapper\parchment\parchment-wrapper.js" />
     <None Remove="Resources\Editor\src\components\svg\svg-style.css" />
@@ -1506,21 +1507,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <!--<Folder Include="Resources\Editor\" />
-    <Folder Include="Resources\Help\" />
-    <Folder Include="Themes\Default\Assets\" />
-    <Folder Include="Themes\Default\DensityStyles\" />
-    <Folder Include="Utils\AvWrapper\Defnitions\Cli\" />
-    <Folder Include="Utils\Clipboard\" />
-    <Folder Include="Utils\Input\Mouse\" />
-    <Folder Include="ViewModels\MainWindow\Actions\Action\Triggers\System\" />
-    <Folder Include="Views\MainWindow\ClipTrayContainer\PinTray\" />
-    <Folder Include="Views\Mobile\Notifications\Message\" />
-    <Folder Include="Views\Mobile\Notifications\UserAction\" />
-    <Folder Include="Views\Reusable\TextBoxes\" />-->
-  </ItemGroup>
-  
-  <ItemGroup>
     <!--<Folder Include="Controls\Content\OutSys\" />
     <Folder Include="Resources\Legal\Licenses\" />
     <Folder Include="Resources\Legal\"/>-->
@@ -1534,32 +1520,12 @@
   
   
   <ItemGroup>
-    <Compile Update="Resources\Legal\Attributions.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Attributions.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\UiStrings\EnumUiStrings.ja-JP.Designer.cs">
-      <DependentUpon>EnumUiStrings.ja-JP.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\UiStrings\EnumUiStrings.Designer.cs">
+    <Compile Update="Resources\Localization\Enums\EnumUiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>EnumUiStrings.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\UiStrings\test.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>test.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\UiStrings\UiStrings.ja-JP.Designer.cs">
-      <DependentUpon>UiStrings.ja-JP.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\UiStrings\UiStrings.Designer.cs">
+    <Compile Update="Resources\Localization\UiStrings\UiStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>UiStrings.resx</DependentUpon>
@@ -1820,19 +1786,15 @@
   
   <ItemGroup>
     <EmbeddedResource Remove="Resources\Legal\Attributions.resx" />
-    <EmbeddedResource Remove="Resources\UiStrings\ListingStrings.ja-JP.resx" />
-    <EmbeddedResource Remove="Resources\UiStrings\ListingStrings.resx" />
+    <EmbeddedResource Remove="Resources\Localization\UiStrings\ListingStrings.ja-JP.resx" />
+    <EmbeddedResource Remove="Resources\Localization\UiStrings\ListingStrings.resx" />
   </ItemGroup>
   
   <ItemGroup>
     <None Include="Resources\Legal\Attributions.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Attributions.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="Resources\UiStrings\ListingStrings.ja-JP.resx">
       <Generator></Generator>
     </None>
-    <None Include="Resources\UiStrings\ListingStrings.resx">
+    <None Include="Resources\Localization\Listings\ListingStrings.resx">
       <Generator></Generator>
     </None>
   </ItemGroup>
@@ -1863,31 +1825,35 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.ja-JP.resx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-      <LastGenOutput>EnumUiStrings.ja-JP.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+    <EmbeddedResource Update="Resources\Localization\Enums\EnumUiStrings.ja-JP.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\UiStrings\EnumUiStrings.resx">
+    <EmbeddedResource Update="Resources\Localization\Enums\EnumUiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumUiStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\UiStrings\UiStrings.ja-JP.resx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
-      <LastGenOutput>UiStrings.ja-JP.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
+    <EmbeddedResource Update="Resources\Localization\UiStrings\UiStrings.ja-JP.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
 
-    <EmbeddedResource Update="Resources\UiStrings\UiStrings.resx">
+    <EmbeddedResource Update="Resources\Localization\UiStrings\UiStrings.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
       <CustomToolNamespace>MonkeyPaste.Avalonia</CustomToolNamespace>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Editor\src\components\editor\NewFolder\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Resources\Editor\lib\jquery-context-menus\src\context-menu.css">
+      <LinkBase>$([MSBuild]::EnsureTrailingSlash(%(LinkBase)))</LinkBase>
+    </Content>
   </ItemGroup>
   
   <PropertyGroup>

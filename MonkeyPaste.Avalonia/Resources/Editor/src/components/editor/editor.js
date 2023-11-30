@@ -194,8 +194,6 @@ function updateEditorSizesAndPositions() {
 	getEditorContainerElement().style.height = eh + 'px';
 }
 
-
-
 function focusEditor() {
 	getEditorElement().focus();
 }

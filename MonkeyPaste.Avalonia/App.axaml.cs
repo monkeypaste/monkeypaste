@@ -22,6 +22,7 @@ namespace MonkeyPaste.Avalonia {
         #region Constants
         public const string MULTI_TOUCH_ARG = "multitouch";
         public const string LOGIN_LOAD_ARG = "loginload";
+        public const string RESTART_ARG = "restarted";
 
         #endregion
 
@@ -116,8 +117,6 @@ namespace MonkeyPaste.Avalonia {
             AvaloniaXamlLoader.Load(this);
         }
         public override async void OnFrameworkInitializationCompleted() {
-            MpAvCultureManager.SetCulture("ja-JP");
-
             DateTime startup_datetime = DateTime.Now;
 #if DESKTOP
             MpAvLogSink.Init();
@@ -125,6 +124,10 @@ namespace MonkeyPaste.Avalonia {
 
             ReportCommandLineArgs(Args);
             bool is_login_load = HasStartupArg(LOGIN_LOAD_ARG);
+
+            if (HasStartupArg(RESTART_ARG)) {
+                MpAvAppRestarter.RemoveRestartTask();
+            }
 
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
 #if CEFNET_WV

@@ -30,7 +30,7 @@ namespace MonkeyPaste.Avalonia {
                 //if (MpFileIo.IsFileInUse(MpConsole.LogFilePath) && !MpConsole.HasInitialized) {
                 //    return;
                 //}
-                //MpConsole.Init();
+                //MpConsole.CheckEnumUiStrings();
 
 #if CEFNET_WV
                 MpAvCefNetApplication.Init();

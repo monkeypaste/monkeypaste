@@ -27,14 +27,14 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                              new MpParameterFormat() {
-                                label = "Delay",
+                                label = UiStrings.ActionDelayActionLabel,
                                 controlType = MpParameterControlType.Slider,
                                 unitType = MpParameterValueUnitType.Integer,
                                 minimum = 0,
                                 maximum = 10_000,
                                 isRequired = true,
                                 paramId = DELAY_MS_PARAM_ID,
-                                description = "The amount of time in milliseconds waited before children execute",
+                                description = UiStrings.ActionDelayActionHint,
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
@@ -55,7 +55,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public override string ActionHintText =>
-            "Delay - Priarily used in conjunction with the 'Repeat' Action for polling remote sources or aid with long running operations.";
+            UiStrings.ActionDelayHint;
 
         #endregion
 

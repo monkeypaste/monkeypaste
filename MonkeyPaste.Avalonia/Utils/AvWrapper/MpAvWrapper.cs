@@ -191,6 +191,7 @@ namespace MonkeyPaste.Avalonia {
             await MpDb.InitAsync();
 #endif
             MpAvCommonTools.Init(this);
+            MpAvCurrentCultureViewModel.Instance.Init();
         }
 
 

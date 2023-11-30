@@ -141,7 +141,7 @@
               VerticalAlignment="Stretch">
             <!--  NOTE putting marquee properties into a style doesn't set them, i think cause its from textbox or something  -->
             <local:MpAvMarqueeTextBox x:Name="ActionLabelTextBox"
-                                      EditOnFocus="True"
+                                      EditOnFocus="{Binding !IsDefaultAction}"
                                       MinHeight="30"
                                       MaxWidth="200"
                                       Margin="5,7,15,5"

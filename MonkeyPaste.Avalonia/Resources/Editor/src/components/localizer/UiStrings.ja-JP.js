@@ -1,6 +1,6 @@
 var UiStrings = {
-	EditorTemplateContactHint: `<p>利用可能な連絡先を使用すると (フェッチャー プラグインが必要)、このフィールドは、このドキュメント全体、または後で参照されるテンプレートのすべてのインスタンスに使用されます。</p>`,
-	EditorTemplateDateTimeCustomHint: `<p>yy = 短い年</p>`,
+	EditorTemplateContactHint: `<p>利用可能な連絡先を使用すると (フェッチャー プラグインが必要)、このフィールドは、このドキュメント全体、または後で参照されるテンプレートのすべてのインスタンスに使用されます。</p><p> たとえば、電子メール アドレスを選択した場合です。`,
+	EditorTemplateDateTimeCustomHint: `<p>yy = 短い年</p><p>yyyy = 長い年</p><p>M = 月 (1-12)</p><p>MM = 月 (01-12)</`,
 	EditorTemplateDateTimeHint: `<p>現在の日付および/または時刻は、評価された瞬間から DateTime テンプレートに置き換えられます。`,
 	EditorTemplateDynamicHint: `<p>このテンプレートの出現箇所はすべて、ここで指定した値に設定されます</p>`,
 	EditorTemplateStaticHint: `<p>現在の日付および/または時刻は、評価された瞬間から DateTime テンプレートに置き換えられます。`,
@@ -33,10 +33,18 @@ var UiStrings = {
 	EditorNextTemplateLabel: `次のテンプレート`,
 	EditorPasteTemplateWatermark: `貼り付けテキストを入力してください...`,
 	EditorPrevTemplateLabel: `前のテンプレート`,
-	EditorRegExLabel: `正規表現`,
+	EditorRegExLabel: ` 正規表現`,
 	EditorReplaceAllLabel: `すべて置換`,
 	EditorReplaceLabel: `交換する`,
 	EditorWholeWordLabel: `単語全体`,
 	EditorWrapLabel: `包み込む`,
+	EditorConfirmNtfTitle: `確認する`,
+	EditorTemplateContactName: `接触`,
+	EditorTemplateDateTimeName: `日付時刻`,
+	EditorDeleteAllTemplatesNtfText: `'{0}' の使用をすべて削除してもよろしいですか?`,
+	EditorTemplateDynamicName: `動的`,
+	EditorTemplateStaticName: `静的`,
+	EditorTemplateEmptyPlaceholder: `{0} は空です...`,
+	EditorTemplateTeaserText: `さらに近日公開予定です！`,
 
 };

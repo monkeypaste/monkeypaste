@@ -1036,7 +1036,7 @@ namespace MonkeyPaste.Avalonia {
                 eventType = "dragleave"
             };
             SendMessage($"dragEventFromHost_ext('{dndMsg.SerializeJsonObjectToBase64()}')");
-        }       
+        }
 
 #endif
         protected override void OnPointerWheelChanged(PointerWheelEventArgs e) {
@@ -1063,6 +1063,7 @@ namespace MonkeyPaste.Avalonia {
             return new MpQuillDefaultsRequestMessage() {
                 minLogLevel = (int)MpConsole.MinLogLevel,
                 isDebug = MpDebug.IsDebug,
+                isRightToLeft = MpAvPrefViewModel.Instance.IsTextRightToLeft,
                 defaultFontFamily = MpAvPrefViewModel.Instance.DefaultEditableFontFamily,
                 defaultFontSize = MpAvPrefViewModel.Instance.DefaultFontSize.ToString() + "px",
                 isSpellCheckEnabled = MpAvPrefViewModel.Instance.IsSpellCheckEnabled,
@@ -1340,7 +1341,7 @@ namespace MonkeyPaste.Avalonia {
                 return;
             }
             while (BindingContext.FileItemCollectionViewModel.IsAnyBusy) {
-                // wait for file icons to populate from ctvm.Init
+                // wait for file icons to populate from ctvm.CheckEnumUiStrings
                 await Task.Delay(100);
             }
 

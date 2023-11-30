@@ -49,14 +49,14 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Repeat Count",
+                                label = UiStrings.ActionRepeatCountLabel,
                                 controlType = MpParameterControlType.Slider,
                                 unitType = MpParameterValueUnitType.Integer,
                                 minimum = 0,
                                 maximum = int.MaxValue,
                                 isRequired = true,
                                 paramId = REPEAT_COUNT_PARAM_ID,
-                                description = "A value of 0 will repeat parent action indefinitely",
+                                description = UiStrings.ActionRepeatCountHint,
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
@@ -65,14 +65,14 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             },
                              new MpParameterFormat() {
-                                label = "Repeat Delay",
+                                label = UiStrings.ActionRepeatDelayLabel,
                                 controlType = MpParameterControlType.Slider,
                                 unitType = MpParameterValueUnitType.Integer,
                                 minimum = 0,
                                 maximum = int.MaxValue,
                                 isRequired = true,
                                 paramId = REPEAT_DELAY_MS_PARAM_ID,
-                                description = "The amount of time in milliseconds waited once parent action completes",
+                                description = UiStrings.ActionRepeatDelayHint,
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
@@ -94,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public override string ActionHintText =>
-            "Repeater - Used for creating action loops or repetive tasks. When repeated, it will execute all children again with its original input. When using an interval without a repeat count, the trigger will need to be disabled and reenabled to halt the repeating. Can be useful for polling or web scraping automation.";
+            UiStrings.ActionRepeaterHint;
 
         #endregion
 

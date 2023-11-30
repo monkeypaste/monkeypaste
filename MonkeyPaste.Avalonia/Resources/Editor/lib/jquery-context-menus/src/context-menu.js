@@ -193,18 +193,13 @@ window.superCm = (function (msie) {
 					iconElm.css("color", opt.iconFgColor);
 				}
 
-				if (opt.icon.includes('fa-')) {
-					// font-awesome icon
-					iconElm.addClass(opt.icon);
+				if (opt.isIconBase64 !== undefined) {
+					iconElm.html(`<img class="context-menu-icon-img" src="data:image/png;base64,${opt.icon}">`);
 				} else {
-					if (opt.isIconBase64 !== undefined) {
-						iconElm.html(`<img class="context-menu-icon-img" src="data:image/png;base64,${opt.icon}">`);
-					} else {
-						const do_default_svg_styles =
-							opt.iconClasses == undefined ||
-							!opt.iconClasses.split(' ').includes(globals.SVG_NO_DEFAULT_CLASS);
-						iconElm.html(getSvgHtml(opt.icon, opt.iconClasses, do_default_svg_styles));
-					}
+					const do_default_svg_styles =
+						opt.iconClasses == undefined ||
+						!opt.iconClasses.split(' ').includes(globals.SVG_NO_DEFAULT_CLASS);
+					iconElm.html(getSvgHtml(opt.icon, opt.iconClasses, do_default_svg_styles));
 				}
 
 				if (opt.itemBgColor !== undefined) {

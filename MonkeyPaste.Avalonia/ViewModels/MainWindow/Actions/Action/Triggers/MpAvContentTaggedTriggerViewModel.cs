@@ -24,12 +24,12 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Collection",
+                                label = UiStrings.ActionContentTaggedTriggerLabel,
                                 controlType = MpParameterControlType.ComponentPicker,
                                 unitType = MpParameterValueUnitType.CollectionComponentId,
                                 isRequired = true,
                                 paramId = SELECTED_TAG_PARAM_ID,
-                                description = "Triggered when content is added to the selected collection"
+                                description = UiStrings.ActionContentTaggedTriggerHint
                             }
                         }
                     };
@@ -57,7 +57,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public override string ActionHintText =>
-            "Content Classified - Triggered when content is added to the selected collection";
+            UiStrings.ActionContentTaggedHint;
 
         #endregion
 

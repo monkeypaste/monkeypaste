@@ -28,20 +28,20 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Directory",
+                                label = UiStrings.ActionFileWriteDirLabel,
                                 controlType = MpParameterControlType.DirectoryChooser,
                                 unitType = MpParameterValueUnitType.FileSystemPath,
                                 isRequired = true,
                                 paramId = SELECTED_DIR_PARAM_ID,
-                                description = "The directory where input content will be written."
+                                description = UiStrings.ActionFileWriteDirHint
                             },
                             new MpParameterFormat() {
-                                label = "Custom Name",
+                                label = UiStrings.ActionFileWriteCustomNameLabel,
                                 controlType = MpParameterControlType.TextBox,
                                 unitType = MpParameterValueUnitType.PlainTextContentQuery,
                                 isRequired = false,
                                 paramId = CUSTOM_FILE_NAME_PARAM_ID,
-                                description = "When left blank, the content will use its title as the file name."
+                                description = UiStrings.ActionFileWriteCustomNameHint
                             },
                         }
                     };
@@ -60,7 +60,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public override string ActionHintText =>
-            "File Writer - Saves input to the selected folder.";
+            UiStrings.ActionFileWriterHint;
 
         #endregion
 

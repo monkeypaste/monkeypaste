@@ -26,39 +26,39 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Trigger",
+                                label = UiStrings.TriggerLabel,
                                 controlType = MpParameterControlType.ComboBox,
                                 unitType = MpParameterValueUnitType.PlainText,
                                 isRequired = true,
                                 paramId = CONTENT_TYPE_PARAM_ID,
-                                description = "Content (not meeting rejection criteria) of this type will trigger this action.",
+                                description = UiStrings.ActionContentAddTriggerHint,
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
-                                        label = "All",
+                                        label = UiStrings.ActionContentAddAllLabel,
                                         value = MpCopyItemType.None.ToString()
                                     },
                                     new MpPluginParameterValueFormat() {
-                                        label = "Text",
+                                        label = UiStrings.ClipTileDefTitleTextPrefix,
                                         value = MpCopyItemType.Text.ToString()
                                     },
                                     new MpPluginParameterValueFormat() {
-                                        label = "Image",
+                                        label = UiStrings.ClipTileDefTitleImagePrefix,
                                         value = MpCopyItemType.Image.ToString()
                                     },
                                     new MpPluginParameterValueFormat() {
-                                        label = "Files",
+                                        label = UiStrings.ClipTileDefTitleFilesPrefix,
                                         value = MpCopyItemType.FileList.ToString()
                                     },
                                 }
                             },
                             new MpParameterFormat() {
-                                label = "Ignore Duplicate",
+                                label = UiStrings.ActionContentAddIgnoreDupLabel,
                                 controlType = MpParameterControlType.CheckBox,
                                 unitType = MpParameterValueUnitType.Bool,
                                 isRequired = false,
                                 paramId = IGNORE_DUP_CONTENT_PARAM_ID,
-                                description = "Only execute this trigger if clipboard is new and not been already copied and processed. This is independant of any preferene setting of whether new content is ignored or not.",
+                                description = UiStrings.ActionContentAddIgnoreDupHint,
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
@@ -94,7 +94,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public override string ActionHintText =>
-            "Content Added - Triggered when content of the selected type is added";
+            UiStrings.ActionContentAddHint;
 
         #endregion
 

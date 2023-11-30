@@ -492,7 +492,7 @@ namespace MonkeyPaste.Avalonia {
         public bool IsFileFormatTag =>
             TagId == MpTag.FileFormatTagId;
         public bool IsRecentTag =>
-            TagId == MpTag.RecentTagId;
+            TagId == MpTag.TodayTagId;
 
         public bool IsLinkTag =>
             !IsQueryTag && !IsGroupTag;
@@ -703,6 +703,9 @@ namespace MonkeyPaste.Avalonia {
             get {
                 if (Tag == null) {
                     return string.Empty;
+                }
+                if (IsTagReadOnly) {
+                    return ((MpReadOnlyTagType)TagId).EnumToUiString();
                 }
                 return Tag.TagName;
             }

@@ -35,7 +35,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Constants
 
-        public const int DEFAULT_SELECTED_TAG_ID = MpTag.RecentTagId;
+        public const int DEFAULT_SELECTED_TAG_ID = MpTag.TodayTagId;
 
         #endregion
 

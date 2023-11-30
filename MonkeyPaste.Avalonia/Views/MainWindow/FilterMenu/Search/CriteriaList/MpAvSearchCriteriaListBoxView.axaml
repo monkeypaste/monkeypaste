@@ -25,7 +25,6 @@
             5
         </sys:Double>
         <sys:Double x:Key="CriteriaOptionMinWidth">150</sys:Double>
-        <sys:String x:Key="ReadOnlyTooltipText">Pre-Loaded Filters are read-only. Duplicate to alter.</sys:String>
     </local:MpAvUserControl.Resources>
     <local:MpAvUserControl.Styles>
 

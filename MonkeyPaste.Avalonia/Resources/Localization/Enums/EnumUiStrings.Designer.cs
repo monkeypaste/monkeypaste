@@ -22,14 +22,14 @@ namespace MonkeyPaste.Avalonia {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class EnumUiStrings___Copy {
+    public class EnumUiStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal EnumUiStrings___Copy() {
+        internal EnumUiStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.UiStrings.EnumUiStrings - Copy", typeof(EnumUiStrings___Copy).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.Localization.Enums.EnumUiStrings", typeof(EnumUiStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add From Clipboard .
+        ///   Looks up a localized string similar to Add From Clipboard.
         /// </summary>
         public static string MpActionType_AddFromClipboard {
             get {
@@ -1735,6 +1735,105 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string MpReadOnlyTagType_All {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collections.
+        /// </summary>
+        public static string MpReadOnlyTagType_Collections {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_Collections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Favorites.
+        /// </summary>
+        public static string MpReadOnlyTagType_Favorites {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_Favorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files.
+        /// </summary>
+        public static string MpReadOnlyTagType_Files {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_Files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters.
+        /// </summary>
+        public static string MpReadOnlyTagType_Filters {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_Filters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formats.
+        /// </summary>
+        public static string MpReadOnlyTagType_Formats {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_Formats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Images.
+        /// </summary>
+        public static string MpReadOnlyTagType_Images {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_Images", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string MpReadOnlyTagType_None {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text.
+        /// </summary>
+        public static string MpReadOnlyTagType_Text {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Today.
+        /// </summary>
+        public static string MpReadOnlyTagType_Today {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_Today", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trash.
+        /// </summary>
+        public static string MpReadOnlyTagType_Trash {
+            get {
+                return ResourceManager.GetString("MpReadOnlyTagType_Trash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clips.
         /// </summary>
         public static string MpRootOptionType_Clips {
@@ -2964,6 +3063,51 @@ namespace MonkeyPaste.Avalonia {
         public static string MpWebsiteOptionType_Url {
             get {
                 return ResourceManager.GetString("MpWebsiteOptionType_Url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string WatcherChangeTypes_All {
+            get {
+                return ResourceManager.GetString("WatcherChangeTypes_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changed.
+        /// </summary>
+        public static string WatcherChangeTypes_Changed {
+            get {
+                return ResourceManager.GetString("WatcherChangeTypes_Changed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created.
+        /// </summary>
+        public static string WatcherChangeTypes_Created {
+            get {
+                return ResourceManager.GetString("WatcherChangeTypes_Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deleted.
+        /// </summary>
+        public static string WatcherChangeTypes_Deleted {
+            get {
+                return ResourceManager.GetString("WatcherChangeTypes_Deleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Renamed.
+        /// </summary>
+        public static string WatcherChangeTypes_Renamed {
+            get {
+                return ResourceManager.GetString("WatcherChangeTypes_Renamed", resourceCulture);
             }
         }
     }

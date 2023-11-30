@@ -26,7 +26,8 @@ namespace MonkeyPaste.Avalonia {
         #endregion
 
         #region Constants
-        const string DEFAULT_ANNOTATOR_TRIGGER_GUID = "561c8b4d-9b78-4e79-ac01-dc831c55e88c";
+        public const string DEFAULT_ANNOTATOR_TRIGGER_GUID = "561c8b4d-9b78-4e79-ac01-dc831c55e88c";
+        public const string DEFAULT_ANNOTATOR_ANALYZE_GUID = "6cfa5188-5c9a-48aa-aa01-6c4cad8af3e4";
         public const double DEFAULT_MIN_SCALE = 0.1;
         public const double DEFAULT_MAX_SCALE = 3.0d;
 
@@ -702,7 +703,7 @@ namespace MonkeyPaste.Avalonia {
             // NOTE forcing trigger to constant guid so creation doesn't depend on initial startup
             MpAction annotate_trigger_action = await MpAction.CreateAsync(
                 guid: DEFAULT_ANNOTATOR_TRIGGER_GUID,
-                label: "Annotate New Text Trigger",
+                label: UiStrings.TriggerAnnTriggerLabel,
                 actionType: MpActionType.Trigger,
                 sortOrderIdx: 0,
                 arg2: "True",
@@ -717,7 +718,8 @@ namespace MonkeyPaste.Avalonia {
 
 
             MpAction annotate_analyze_action = await MpAction.CreateAsync(
-                     label: "Analyze with Annotator",
+                    guid: DEFAULT_ANNOTATOR_ANALYZE_GUID,
+                     label: UiStrings.TriggerAnnAnalyzeLabel,
                      actionType: MpActionType.Analyze,
                      parentId: annotate_trigger_action.Id,
                      sortOrderIdx: 0,

@@ -31,6 +31,7 @@ namespace MonkeyPaste {
         public string currentTheme { get; set; }
         public double bgOpacity { get; set; }
 
+        public bool isRightToLeft { get; set; }
         public int maxUndo { get; set; }
         public bool isDataTransferDestFormattingEnabled { get; set; } = true;
 

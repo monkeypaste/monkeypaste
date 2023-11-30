@@ -583,6 +583,10 @@ namespace MonkeyPaste.Avalonia {
         public bool IsTriggerEnabled =>
             RootTriggerActionViewModel.IsEnabled;
 
+        public bool IsDefaultAction =>
+            Action != null &&
+            (Action.Guid == MpAvTriggerCollectionViewModel.DEFAULT_ANNOTATOR_TRIGGER_GUID ||
+             Action.Guid == MpAvTriggerCollectionViewModel.DEFAULT_ANNOTATOR_ANALYZE_GUID);
 
         #endregion
 
@@ -801,6 +805,13 @@ namespace MonkeyPaste.Avalonia {
                 if (Action == null) {
                     return null;
                 }
+                if (Action.Guid == MpAvTriggerCollectionViewModel.DEFAULT_ANNOTATOR_TRIGGER_GUID) {
+                    return UiStrings.TriggerAnnTriggerLabel;
+                }
+                if (Action.Guid == MpAvTriggerCollectionViewModel.DEFAULT_ANNOTATOR_ANALYZE_GUID) {
+                    return UiStrings.TriggerAnnAnalyzeLabel;
+                }
+
                 if (string.IsNullOrEmpty(Action.Label)) {
                     return ActionType.EnumToUiString();
                 }

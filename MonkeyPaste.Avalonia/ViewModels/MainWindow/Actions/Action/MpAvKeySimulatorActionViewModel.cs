@@ -27,12 +27,12 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Keys to simulate",
+                                label = UiStrings.ActionKeySimActionLabel,
                                 controlType = MpParameterControlType.ShortcutRecorder,
                                 unitType = MpParameterValueUnitType.PlainText,
                                 isRequired = true,
                                 paramId = SIM_KEY_STR_PARAM_ID,
-                                description = "Recorded key combinations will be simulated in the foreground application."
+                                description = UiStrings.ActionKeySimActionHint
                             },
                             //new MpParameterFormat() {
                             //    label = "Pre Delay (ms)",
@@ -61,7 +61,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public override string ActionHintText =>
-            "Gesture Simulator - Simulates the recorded key combination into whatever is the current active application. Only 1 gesture is supported so if you need more you will need to chain multiple instances of this toggether.";
+           UiStrings.ActionKeySimHint;
 
         #endregion
 

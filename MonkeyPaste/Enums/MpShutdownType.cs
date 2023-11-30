@@ -11,6 +11,7 @@ namespace MonkeyPaste {
         DbAuthFailed,
         FrameworkExit,
         UserNtfCmd,
-        UserTrayCmd
+        UserTrayCmd,
+        Restart
     }
 }

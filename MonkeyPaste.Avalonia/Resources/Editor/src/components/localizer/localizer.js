@@ -1,6 +1,8 @@
 
 // #region Life Cycle
 function initLocalizer() {
+    toggleRightToLeft(globals.IsRtl);
+    localizeGlobals();
     initLocalizerDomWatcher();
     getLocalizableElements().forEach(x => localizeElement(x));
 }
@@ -69,6 +71,30 @@ function localizeElement(elm, args) {
         //log('ui-tooltip-key: ' + tt_key + ' str: ' + UiStrings[tt_key]);
     }
 }
+
+function localizeGlobals() {
+    // localize templateName's
+    // label is '#<ResourceKeyName>#'
+
+    for (var i = 0; i < globals.TemplateTypesMenuOptions.length; i++) {
+        if (globals.TemplateTypesMenuOptions[i].label === undefined) {
+            // separator
+            continue;
+        }
+        let content_key = globals.TemplateTypesMenuOptions[i].label.replaceAll('#', '');
+        globals.TemplateTypesMenuOptions[i].label = UiStrings[content_key];
+	}
+}
+function toggleRightToLeft(isRightToLeft) {
+    let dir = isRightToLeft ? 'rtl' : 'ltr';
+    let align = isRightToLeft ? 'right' : 'left';
+
+    globals.quill.format('direction', dir);
+    globals.quill.format('align', align);
+
+    log('editor right-to-left enabled: ' + isRightToLeft);
+}
+
 
 // #endregion Actions
 

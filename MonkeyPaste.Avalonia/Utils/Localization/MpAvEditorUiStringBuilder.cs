@@ -9,6 +9,8 @@ using System.Resources.NetStandard;
 namespace MonkeyPaste.Avalonia {
     public static class MpAvEditorUiStringBuilder {
         #region Private Variables
+        #endregion
+        #region Constants
         const string INDEX_LOCALIZER_CULTURE_MARKER = "<!-- INSERT CULTURE SCRIPT REF AFTER ME -->";
         const string INDEX_LOCALIZER_REPLACE_LINE_PREFIX_CHECK = "<script defer src=\"src/components/localizer/";
 
@@ -23,7 +25,10 @@ namespace MonkeyPaste.Avalonia {
 
         const string EDITOR_UI_STR_FILE_NAME = "UiStrings";
         const string EDITOR_UI_STR_FILE_EXT = "js";
+        #endregion
 
+        #region Properties
+        static bool UseRuntimePaths { get; set; } = false;
         static string EditorUiStringJsContentTemplate => string.Format(
 @"var UiStrings = {{
 {0}
@@ -31,13 +36,13 @@ namespace MonkeyPaste.Avalonia {
 
         static string CommonUiStrPath {
             get {
-                string cul_suff = MpAvCultureManager.IsDefaultCulture(UiStrings.Culture) ?
+                string cul_suff = MpAvCurrentCultureViewModel.IsDefaultCulture(UiStrings.Culture) ?
                     string.Empty : "." + UiStrings.Culture.Name;
 
                 string com_ui_str_path = Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
-                    typeof(MpAvEditorUiStringBuilder).Assembly.GetName().Name,
+                    GetRootDir(),
                     "Resources",
+                    "Localization",
                     "UiStrings",
                     COMMON_UI_STR_FILE_NAME + cul_suff + "." + COMMON_UI_STR_FILE_EXT);
                 return com_ui_str_path;
@@ -46,29 +51,25 @@ namespace MonkeyPaste.Avalonia {
 
         static string EditorUiStrPath {
             get {
-                // append culture suffix for non-defaults
-                string cul_suff = MpAvCultureManager.IsDefaultCulture(UiStrings.Culture) ?
-                    string.Empty : "." + UiStrings.Culture.Name;
 
-                string ed_ui_str_path = Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
-                    typeof(MpAvEditorUiStringBuilder).Assembly.GetName().Name,
+                // append culture suffix for non-defaults
+                string cul_suff = MpAvCurrentCultureViewModel.IsDefaultCulture(UiStrings.Culture) ?
+                    string.Empty : "." + UiStrings.Culture.Name;
+                return Path.Combine(
+                    GetRootDir(),
                     "Resources",
                     "Editor",
                     "src",
                     "components",
                     "localizer",
                     EDITOR_UI_STR_FILE_NAME + cul_suff + "." + EDITOR_UI_STR_FILE_EXT);
-
-                return ed_ui_str_path;
             }
         }
 
         static string EditorIndexHtmlPath {
             get {
                 return Path.Combine(
-                    MpCommonHelpers.GetSolutionDir(),
-                    typeof(MpAvEditorUiStringBuilder).Assembly.GetName().Name,
+                    GetRootDir(),
                     "Resources",
                     "Editor",
                     "index.html");
@@ -79,14 +80,80 @@ namespace MonkeyPaste.Avalonia {
 
         #region Public Methods
 
-        public static void Init() {
+
+        public static bool CheckJsUiStrings() {
+            // target runtime dir
+            UseRuntimePaths = true;
+
+            bool needs_restart = CheckJsUiStrings_internal();
+
 #if DEBUG && WINDOWS
-            CreateJsUiStrings();
+            // target project dir
+            UseRuntimePaths = false;
+            bool needs_restart_debug = CheckJsUiStrings_internal();
+            MpDebug.Assert(needs_restart == needs_restart_debug, $"Editor UiString runtime result mismatch");
 #endif
+            // no resx gen needed so don't restart
+            return false;
         }
         #endregion
 
         #region Private Methods
+
+        private static bool CheckJsUiStrings_internal() {
+            // returns true if needs restart
+            using ResXResourceReader resx_reader = new ResXResourceReader(CommonUiStrPath);
+            // find all Editor* keys in uistring.resx 
+            var editor_res_lookup = new Dictionary<string, string>();
+            foreach (DictionaryEntry de in resx_reader) {
+                if (!IsEditorResource(de)) {
+                    continue;
+                }
+                editor_res_lookup.Add(de.Key.ToString(), de.Value.ToString());
+            }
+            resx_reader.Close();
+
+            // create js key-values str for Editor* items
+            string inner_content = string.Join(string.Empty, editor_res_lookup.Select(x => GetEntryJs(x)));
+
+            // swap placeholder w/ key-values
+            string runtime_content = EditorUiStringJsContentTemplate.Replace(EDITOR_STR_INSERT_MARKER, inner_content);
+
+            string existing_content = EditorUiStrPath.IsFile() ?
+                MpFileIo.ReadTextFromFile(EditorUiStrPath) :
+                string.Empty;
+
+            if (runtime_content == existing_content) {
+                MpConsole.WriteLine("Js Ui strings match. ");
+                bool was_ref_updated = SetJsUiStringScriptTag();
+                if (!was_ref_updated) {
+                    return false;
+                }
+                MpDebug.Break($"CAUTION! Js uistrings ref changed. App will shutdown and changes will be reflected on restart...", true);
+
+                //Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.EditorResourceUpdate, $"Js UI strings ref updated");
+                return true;
+            }
+            MpDebug.Break($"CAUTION! Js uistrings changed. App will shutdown and changes will be reflected on restart...", true);
+            // create/update uistrings.js file
+            string result = MpFileIo.WriteTextToFile(EditorUiStrPath, runtime_content, false);
+            bool success = result == EditorUiStrPath;
+            MpConsole.WriteLine($"Localizer: {EditorUiStrPath} create {(success ? "SUCCESS" : "FAIL")}");
+            if (success) {
+                SetJsUiStringScriptTag();
+            }
+            // NOTE! Clean and rebuild before re-running
+            //Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.EditorResourceUpdate, $"Js UI strings updated at path '{EditorUiStrPath}'");
+            return true;
+        }
+        private static string GetRootDir() {
+            if (UseRuntimePaths) {
+                return Path.GetDirectoryName(typeof(MpAvEditorUiStringBuilder).Assembly.Location);
+            }
+            return Path.Combine(
+                    MpCommonHelpers.GetSolutionDir(),
+                    typeof(MpAvEditorUiStringBuilder).Assembly.GetName().Name);
+        }
 
         private static bool SetJsUiStringScriptTag() {
             // read index.html
@@ -122,50 +189,6 @@ namespace MonkeyPaste.Avalonia {
             return true;
         }
 
-        private static void CreateJsUiStrings() {
-            using ResXResourceReader resx_reader = new ResXResourceReader(CommonUiStrPath);
-            // find all Editor* keys in uistring.resx 
-            var editor_res_lookup = new Dictionary<string, string>();
-            foreach (DictionaryEntry de in resx_reader) {
-                if (!IsEditorResource(de)) {
-                    continue;
-                }
-                editor_res_lookup.Add(de.Key.ToString(), de.Value.ToString());
-            }
-            resx_reader.Close();
-
-            // create js key-values str for Editor* items
-            string inner_content = string.Join(string.Empty, editor_res_lookup.Select(x => GetEntryJs(x)));
-
-            // swap placeholder w/ key-values
-            string runtime_content = EditorUiStringJsContentTemplate.Replace(EDITOR_STR_INSERT_MARKER, inner_content);
-
-            string existing_content = EditorUiStrPath.IsFile() ?
-                MpFileIo.ReadTextFromFile(EditorUiStrPath) :
-                string.Empty;
-
-            if (runtime_content == existing_content) {
-                MpConsole.WriteLine("Js Ui strings match. ");
-                bool was_ref_updated = SetJsUiStringScriptTag();
-                if (!was_ref_updated) {
-                    return;
-                }
-                MpDebug.Break($"CAUTION! Js uistrings ref changed. App will shutdown and changes will be reflected on restart...");
-
-                Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.EditorResourceUpdate, $"Js UI strings ref updated");
-                return;
-            }
-            MpDebug.Break($"CAUTION! Js uistrings changed. App will shutdown and changes will be reflected on restart...");
-            // create/update uistrings.js file
-            string result = MpFileIo.WriteTextToFile(EditorUiStrPath, runtime_content, false);
-            bool success = result == EditorUiStrPath;
-            MpConsole.WriteLine($"Localizer: {EditorUiStrPath} create {(success ? "SUCCESS" : "FAIL")}");
-            if (success) {
-                SetJsUiStringScriptTag();
-            }
-            // NOTE! Clean and rebuild before re-running
-            Mp.Services.ShutdownHelper.ShutdownApp(MpShutdownType.EditorResourceUpdate, $"Js UI strings updated at path '{EditorUiStrPath}'");
-        }
         private static bool IsEditorResource(DictionaryEntry de) {
             return de.Key.ToStringOrEmpty().StartsWith(EDITOR_KEY_PREFIX);
         }

@@ -90,11 +90,11 @@ namespace MonkeyPaste.Avalonia {
 
             var default_tags = new object[] {
                 // guid,name,color,treeIdx,pinIdx,track,sync,parentId,type
-                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", UiStrings.TagDefaultTagsLabel, MpSystemColors.lemonchiffon2, 1,-1, tracked,synced, 0, MpTagType.Group},
-                new object[] { "287140cc-2f9a-4bc6-a88d-c5b836f1a340", UiStrings.TagDefaultAllLabel, MpSystemColors.blue1, 0,1, tracked,synced, MpTag.FiltersTagId, MpTagType.Link},
-                new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", UiStrings.TagDefaultFavoritesLabel, MpSystemColors.yellow1, 1,-1,tracked,synced, MpTag.CollectionsTagId, MpTagType.Link},
-                new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", UiStrings.TagDefaultFiltersLabel, MpSystemColors.forestgreen, 0,-1,tracked,synced, 0, MpTagType.Group},
-                new object[] { "70db0f5c-a717-4bca-af2f-a7581aecc24d", UiStrings.TagDefaultTrashLabel, MpSystemColors.lightsalmon1, 2,-1,tracked,synced, 0, MpTagType.Link},
+                new object[] { "df388ecd-f717-4905-a35c-a8491da9c0e3", MpReadOnlyTagType.Collections.ToString(), MpSystemColors.lemonchiffon2, 1,-1, tracked,synced, 0, MpTagType.Group},
+                new object[] { "287140cc-2f9a-4bc6-a88d-c5b836f1a340", MpReadOnlyTagType.All.ToString(), MpSystemColors.blue1, 0,1, tracked,synced, MpTag.FiltersTagId, MpTagType.Link},
+                new object[] { "54b61353-b031-4029-9bda-07f7ca55c123", MpReadOnlyTagType.Favorites.ToString(), MpSystemColors.yellow1, 1,-1,tracked,synced, MpTag.CollectionsTagId, MpTagType.Link},
+                new object[] { "e62b8e5d-52a6-46f1-ac51-8f446916dd85", MpReadOnlyTagType.Filters.ToString(), MpSystemColors.forestgreen, 0,-1,tracked,synced, 0, MpTagType.Group},
+                new object[] { "70db0f5c-a717-4bca-af2f-a7581aecc24d", MpReadOnlyTagType.Trash.ToString(), MpSystemColors.lightsalmon1, 2,-1,tracked,synced, 0, MpTagType.Link},
             };
             for (int i = 0; i < default_tags.Length; i++) {
                 var t = (object[])default_tags[i];
@@ -113,7 +113,7 @@ namespace MonkeyPaste.Avalonia {
             #region Recent
 
             var recent_tag = await MpTag.CreateAsync(
-                    tagName: UiStrings.TagDefaultTodayLabel,
+                    tagName: MpReadOnlyTagType.Today.ToString(),
                     hexColor: MpSystemColors.pink,
                     parentTagId: MpTag.FiltersTagId,
                     sortType: MpContentSortType.CopyDateTime,
@@ -170,7 +170,7 @@ namespace MonkeyPaste.Avalonia {
             #region Item Types
 
             var item_type_group_tag = await MpTag.CreateAsync(
-                    tagName: UiStrings.TagDefaultFormatsLabel,
+                    tagName: MpReadOnlyTagType.Formats.ToString(),
                     hexColor: MpSystemColors.peachpuff4,
                     parentTagId: MpTag.FiltersTagId,
                     tagType: MpTagType.Group);
@@ -178,7 +178,7 @@ namespace MonkeyPaste.Avalonia {
             #region Text
 
             var text_type_tag = await MpTag.CreateAsync(
-                    tagName: UiStrings.ClipTileDefTitleTextPrefix,
+                    tagName: MpReadOnlyTagType.Text.ToString(),
                     hexColor: MpSystemColors.darkgoldenrod3,
                     parentTagId: item_type_group_tag.Id,
                     sortType: MpContentSortType.CopyDateTime,
@@ -206,7 +206,7 @@ namespace MonkeyPaste.Avalonia {
             #region Image
 
             var image_type_tag = await MpTag.CreateAsync(
-                    tagName: UiStrings.ClipTileDefTitleImagePrefix,
+                    tagName: MpReadOnlyTagType.Images.ToString(),
                     hexColor: MpSystemColors.sienna2,
                     parentTagId: item_type_group_tag.Id,
                     sortType: MpContentSortType.CopyDateTime,
@@ -234,7 +234,7 @@ namespace MonkeyPaste.Avalonia {
             #region Files
 
             var file_type_tag = await MpTag.CreateAsync(
-                    tagName: UiStrings.ClipTileDefTitleFilesPrefix,
+                    tagName: MpReadOnlyTagType.Files.ToString(),
                     hexColor: MpSystemColors.mediumorchid3,
                     parentTagId: item_type_group_tag.Id,
                     sortType: MpContentSortType.CopyDateTime,

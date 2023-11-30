@@ -160,14 +160,11 @@ namespace MonkeyPaste.Avalonia {
             //#if DESKTOP
             BaseItems.AddRange(new[] {
                 //new MpAvLoaderItemViewModel(typeof(MpAvCefNetApplication), "Rich Content Editor"),
-                new MpAvLoaderItemViewModel(typeof(MpConsole),"Logger", Mp.Services.PlatformInfo),
-
-                new MpAvLoaderItemViewModel(typeof(MpAvEnumToUiStringResourceConverter), "Ui text"),
-                new MpAvLoaderItemViewModel(typeof(MpAvEditorUiStringBuilder), "Editor Ui text"),
-                new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), "System Tray"),
-                new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
-                new MpAvLoaderItemViewModel(typeof(MpDb), "Data"),
-                new MpAvLoaderItemViewModel(typeof(MpAvAccountViewModel), "Profile"),
+                new MpAvLoaderItemViewModel(typeof(MpConsole),UiStrings.LoaderLoggerLabel, Mp.Services.PlatformInfo),
+                new MpAvLoaderItemViewModel(typeof(MpAvSystemTray), UiStrings.LoaderSysTrayLabel),
+                new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),UiStrings.LoaderThemeLabel),
+                new MpAvLoaderItemViewModel(typeof(MpDb), UiStrings.LoaderDataLabel),
+                new MpAvLoaderItemViewModel(typeof(MpAvAccountViewModel), UiStrings.LoaderAccountLabel),
             }.ToList());
             //#endif
 
@@ -176,44 +173,44 @@ namespace MonkeyPaste.Avalonia {
                     //new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvNotificationWindowManager),"Notifications"),
                     //new MpAvLoaderItemViewModel(typeof(MpAvThemeViewModel),"Theme"),
-                    new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),"Supported Clipboard Formats",Mp.Services.DataObjectRegistrar),
+                    new MpAvLoaderItemViewModel(typeof(MpPortableDataFormats),UiStrings.LoaderClipboardLabel, Mp.Services.DataObjectRegistrar),
                     //new MpAvLoaderItemViewModel(typeof(MpAvTemplateModelHelper), "Templates"),
-                    new MpAvLoaderItemViewModel(typeof(MpPluginLoader), "Plugins"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvSoundPlayerViewModel), "Sound Player"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvIconCollectionViewModel), "Icons"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvAppCollectionViewModel), "App Interop"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvUrlCollectionViewModel), "Web Interop"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvSystemTrayViewModel), "System Tray"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvClipTileSortFieldViewModel), "Content Sort"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvClipTileSortDirectionViewModel), "Content Sort"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvSearchBoxViewModel), "Content Search"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvClipboardHandlerCollectionViewModel), "Clipboard Listener"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvAnalyticItemCollectionViewModel), "Analyzers"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvSettingsViewModel), "Preferences"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvClipTrayViewModel), "Content"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvDndProcessWatcher), "Drag-and-Drop"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvTagTrayViewModel), "Collections"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvExternalPasteHandler), "Paste Interop"),
+                    new MpAvLoaderItemViewModel(typeof(MpPluginLoader), UiStrings.LoaderAnalyzersLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvSoundPlayerViewModel), UiStrings.LoaderSoundLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvIconCollectionViewModel), UiStrings.LoaderIconsLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvAppCollectionViewModel), UiStrings.LoaderAppLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvUrlCollectionViewModel), UiStrings.LoaderUrlLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvSystemTrayViewModel), UiStrings.LoaderSysTrayLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvClipTileSortFieldViewModel), UiStrings.LoaderSortLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvClipTileSortDirectionViewModel), UiStrings.LoaderDirLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvSearchBoxViewModel), UiStrings.LoaderSearchLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvClipboardHandlerCollectionViewModel), UiStrings.LoaderClipboardLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvAnalyticItemCollectionViewModel), UiStrings.LoaderAnalyzersLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvSettingsViewModel), UiStrings.LoaderPrefLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvClipTrayViewModel), UiStrings.LoaderContentLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvDndProcessWatcher), UiStrings.LoaderDndLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvTagTrayViewModel), UiStrings.LoaderTagsLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvExternalPasteHandler), UiStrings.LoaderPasteLabel),
                     //new MpAvLoaderItemViewModel(typeof(MpDataModelProvider), "Querying"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvTriggerCollectionViewModel), "Triggers"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvExternalDropWindowViewModel), "Drop Widget"),
-                    new MpAvLoaderItemViewModel(typeof(MpAvShortcutCollectionViewModel), "GestureProfile"),
-               });
+                    new MpAvLoaderItemViewModel(typeof(MpAvTriggerCollectionViewModel), UiStrings.LoaderTriggersLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvExternalDropWindowViewModel), UiStrings.LoaderDropWidgetLabel),
+                    new MpAvLoaderItemViewModel(typeof(MpAvShortcutCollectionViewModel), UiStrings.LoaderShortcutsLabel),
+               }); ;
 
             if (Mp.Services.PlatformInfo.IsDesktop) {
                 PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
                         //new MpLoaderItemViewModel(typeof(MpAppendNotificationViewModel)),
-                        new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
-                        new MpAvLoaderItemViewModel(typeof(MpAvMainView), "User Interface"),
-                        new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel), "User Experience")
+                        new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),
+                        new MpAvLoaderItemViewModel(typeof(MpAvMainView), UiStrings.LoaderMainWindowLabel),
+                        new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)
                    });
             } else {
                 PlatformItems.AddRange(
                    new List<MpAvLoaderItemViewModel>() {
-                        new MpAvLoaderItemViewModel(typeof(MpAvMainView), "User Interface"),
-                        new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), "Content Converters"),
-                        new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel), "User Experience")
+                        new MpAvLoaderItemViewModel(typeof(MpAvMainView),  UiStrings.LoaderMainWindowLabel),
+                        new MpAvLoaderItemViewModel(typeof(MpAvPlainHtmlConverter), UiStrings.LoaderConvertersLabel),
+                        new MpAvLoaderItemViewModel(typeof(MpAvMainWindowViewModel),  UiStrings.LoaderMainWindowLabel)
                    });
             }
         }

@@ -22,14 +22,14 @@ namespace MonkeyPaste.Avalonia {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class UiStrings___Copy {
+    public class UiStrings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal UiStrings___Copy() {
+        internal UiStrings() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace MonkeyPaste.Avalonia {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.UiStrings.UiStrings - Copy", typeof(UiStrings___Copy).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MonkeyPaste.Avalonia.Resources.Localization.UiStrings.UiStrings", typeof(UiStrings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -205,7 +205,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Free {0}-Day Trial.
+        ///   Looks up a localized string similar to Free {0} - Day Trial.
         /// </summary>
         public static string AccountFreeTrialLabel {
             get {
@@ -367,7 +367,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft Store doesn&apos;t allow tier changes to subscription add-ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. \nWould you like to go do that now?.
+        ///   Looks up a localized string similar to Microsoft Store doesn&apos;t allow tier changes to subscription add - ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. \nWould you like to go do that now?.
         /// </summary>
         public static string AccountPrePurchaseWindowsNtfCaption {
             get {
@@ -601,11 +601,614 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create from Clipboard - Creates a new content item from the current clipboard at the time of execution. Note that any incoming output to this action will be overwritten by the new clipboard content..
+        /// </summary>
+        public static string ActionAddFromClipboardHint {
+            get {
+                return ResourceManager.GetString("ActionAddFromClipboardHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alert.
+        /// </summary>
+        public static string ActionAlertAlertSound {
+            get {
+                return ResourceManager.GetString("ActionAlertAlertSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blip.
+        /// </summary>
+        public static string ActionAlertBlipSound {
+            get {
+                return ResourceManager.GetString("ActionAlertBlipSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chime.
+        /// </summary>
+        public static string ActionAlertChimeSound {
+            get {
+                return ResourceManager.GetString("ActionAlertChimeSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alert - Used for custom alerts to help keep you aware of long-running action chains. Also these can be handy to narrow down parent output data when configuring &apos;Conditional&apos; actions. Alerts have no affect on their input..
+        /// </summary>
+        public static string ActionAlertHint {
+            get {
+                return ResourceManager.GetString("ActionAlertHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message.
+        /// </summary>
+        public static string ActionAlertMessageLabel {
+            get {
+                return ResourceManager.GetString("ActionAlertMessageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monkey.
+        /// </summary>
+        public static string ActionAlertMonkeySound {
+            get {
+                return ResourceManager.GetString("ActionAlertMonkeySound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        public static string ActionAlertPreviewLabel {
+            get {
+                return ResourceManager.GetString("ActionAlertPreviewLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show?.
+        /// </summary>
+        public static string ActionAlertShowLabel {
+            get {
+                return ResourceManager.GetString("ActionAlertShowLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time toast message is shown in seconds. When value is 0 message must be closed manually..
+        /// </summary>
+        public static string ActionAlertShowTimeHint {
+            get {
+                return ResourceManager.GetString("ActionAlertShowTimeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Time (s).
+        /// </summary>
+        public static string ActionAlertShowTimeLabel {
+            get {
+                return ResourceManager.GetString("ActionAlertShowTimeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sonar.
+        /// </summary>
+        public static string ActionAlertSonarSound {
+            get {
+                return ResourceManager.GetString("ActionAlertSonarSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sound?.
+        /// </summary>
+        public static string ActionAlertSoundLabel {
+            get {
+                return ResourceManager.GetString("ActionAlertSoundLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sound Type.
+        /// </summary>
+        public static string ActionAlertSoundTypeLabel {
+            get {
+                return ResourceManager.GetString("ActionAlertSoundTypeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ting.
+        /// </summary>
+        public static string ActionAlertTingSound {
+            get {
+                return ResourceManager.GetString("ActionAlertTingSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volume.
+        /// </summary>
+        public static string ActionAlertVolumeLabel {
+            get {
+                return ResourceManager.GetString("ActionAlertVolumeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyzer.
+        /// </summary>
+        public static string ActionAnalyzeLabel {
+            get {
+                return ResourceManager.GetString("ActionAnalyzeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyzer - Processes triggered content or previous action output using a selected plugin..
+        /// </summary>
+        public static string ActionAnalyzerHint {
+            get {
+                return ResourceManager.GetString("ActionAnalyzerHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input content is linked to the selected collection.
+        /// </summary>
+        public static string ActionClassifyActionHint {
+            get {
+                return ResourceManager.GetString("ActionClassifyActionHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Classifier - Automatically adds triggered content to the selected collection..
+        /// </summary>
+        public static string ActionClassifyHint {
+            get {
+                return ResourceManager.GetString("ActionClassifyHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection.
+        /// </summary>
+        public static string ActionClassifyLabel {
+            get {
+                return ResourceManager.GetString("ActionClassifyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Case Sensitive?.
+        /// </summary>
+        public static string ActionCondCaseLabel {
+            get {
+                return ResourceManager.GetString("ActionCondCaseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This can be static text to compare with the input and/or include selected properties (via the filter button) will be substituted when the condition is evaluated..
+        /// </summary>
+        public static string ActionCondDataHint {
+            get {
+                return ResourceManager.GetString("ActionCondDataHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Condition Data.
+        /// </summary>
+        public static string ActionCondDataLabel {
+            get {
+                return ResourceManager.GetString("ActionCondDataLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An optional JSONPath query that will be applied to the selected &apos;Input Property&apos; before the condition is evaluated..
+        /// </summary>
+        public static string ActionCondInFilterHint {
+            get {
+                return ResourceManager.GetString("ActionCondInFilterHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input Filter.
+        /// </summary>
+        public static string ActionCondInFilterLabel {
+            get {
+                return ResourceManager.GetString("ActionCondInFilterLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What&apos;s evaluated for this condition in the action chain. All values come from the initial input to the trigger, except for &apos;Last Output&apos;. &apos;Last Output&apos; will scrape the previous action&apos;s output with this condition. So for example if the previous action was an image object detector on a picture of a cat, the output to be compared here in that case would be the word &apos;cat&apos;. In practice however the output will be JSON or XML annotation markup where these other properties can be used to isolate the comparision da [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string ActionCondInPropHint {
+            get {
+                return ResourceManager.GetString("ActionCondInPropHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input Property.
+        /// </summary>
+        public static string ActionCondInPropLabel {
+            get {
+                return ResourceManager.GetString("ActionCondInPropLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Conditional - Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated..
+        /// </summary>
+        public static string ActionConditionalHint {
+            get {
+                return ResourceManager.GetString("ActionConditionalHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All true or false operations where child actions will only execute if the result is true..
+        /// </summary>
+        public static string ActionCondOpHint {
+            get {
+                return ResourceManager.GetString("ActionCondOpHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation.
+        /// </summary>
+        public static string ActionCondOpLabel {
+            get {
+                return ResourceManager.GetString("ActionCondOpLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string ActionContentAddAllLabel {
+            get {
+                return ResourceManager.GetString("ActionContentAddAllLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content Added - Triggered when content of the selected type is added.
+        /// </summary>
+        public static string ActionContentAddHint {
+            get {
+                return ResourceManager.GetString("ActionContentAddHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only execute this trigger if clipboard is new and not been already copied and processed. This is independant of any preferene setting of whether new content is ignored or not..
+        /// </summary>
+        public static string ActionContentAddIgnoreDupHint {
+            get {
+                return ResourceManager.GetString("ActionContentAddIgnoreDupHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore Duplicate.
+        /// </summary>
+        public static string ActionContentAddIgnoreDupLabel {
+            get {
+                return ResourceManager.GetString("ActionContentAddIgnoreDupLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content (not meeting rejection criteria) of this type will trigger this action..
+        /// </summary>
+        public static string ActionContentAddTriggerHint {
+            get {
+                return ResourceManager.GetString("ActionContentAddTriggerHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content Classified - Triggered when content is added to the selected collection.
+        /// </summary>
+        public static string ActionContentTaggedHint {
+            get {
+                return ResourceManager.GetString("ActionContentTaggedHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Triggered when content is added to the selected collection.
+        /// </summary>
+        public static string ActionContentTaggedTriggerHint {
+            get {
+                return ResourceManager.GetString("ActionContentTaggedTriggerHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collection.
+        /// </summary>
+        public static string ActionContentTaggedTriggerLabel {
+            get {
+                return ResourceManager.GetString("ActionContentTaggedTriggerLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The amount of time in milliseconds waited before children execute.
+        /// </summary>
+        public static string ActionDelayActionHint {
+            get {
+                return ResourceManager.GetString("ActionDelayActionHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delay.
+        /// </summary>
+        public static string ActionDelayActionLabel {
+            get {
+                return ResourceManager.GetString("ActionDelayActionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delay - Priarily used in conjunction with the &apos;Repeat&apos; Action for polling remote sources or aid with long running operations..
+        /// </summary>
+        public static string ActionDelayHint {
+            get {
+                return ResourceManager.GetString("ActionDelayHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When left blank, the content will use its title as the file name..
+        /// </summary>
+        public static string ActionFileWriteCustomNameHint {
+            get {
+                return ResourceManager.GetString("ActionFileWriteCustomNameHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom Name.
+        /// </summary>
+        public static string ActionFileWriteCustomNameLabel {
+            get {
+                return ResourceManager.GetString("ActionFileWriteCustomNameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The directory where input content will be written..
+        /// </summary>
+        public static string ActionFileWriteDirHint {
+            get {
+                return ResourceManager.GetString("ActionFileWriteDirHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Directory.
+        /// </summary>
+        public static string ActionFileWriteDirLabel {
+            get {
+                return ResourceManager.GetString("ActionFileWriteDirLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Writer - Saves input to the selected folder..
+        /// </summary>
+        public static string ActionFileWriterHint {
+            get {
+                return ResourceManager.GetString("ActionFileWriterHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder Changed - Triggered when a folders content changes. The output will be a new content item of the file or folder that has changed along with the type of change..
+        /// </summary>
+        public static string ActionFolderWatcherHint {
+            get {
+                return ResourceManager.GetString("ActionFolderWatcherHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Events.
+        /// </summary>
+        public static string ActionFolderWatchEventsLabel {
+            get {
+                return ResourceManager.GetString("ActionFolderWatchEventsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder.
+        /// </summary>
+        public static string ActionFolderWatchFolderLabel {
+            get {
+                return ResourceManager.GetString("ActionFolderWatchFolderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore Duplicate.
+        /// </summary>
+        public static string ActionFolderWatchIgnoreDupLabel {
+            get {
+                return ResourceManager.GetString("ActionFolderWatchIgnoreDupLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recorded key combinations will be simulated in the foreground application..
+        /// </summary>
+        public static string ActionKeySimActionHint {
+            get {
+                return ResourceManager.GetString("ActionKeySimActionHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keys to simulate.
+        /// </summary>
+        public static string ActionKeySimActionLabel {
+            get {
+                return ResourceManager.GetString("ActionKeySimActionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;Gesture Simulator - Simulates the recorded key combination into whatever is the current active application. Only 1 gesture is supported so if you need more you will need to chain multiple instances of this toggether..
+        /// </summary>
+        public static string ActionKeySimHint {
+            get {
+                return ResourceManager.GetString("ActionKeySimHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Action.
+        /// </summary>
+        public static string ActionLabel {
+            get {
+                return ResourceManager.GetString("ActionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move.
         /// </summary>
         public static string ActionMoveLabel {
             get {
                 return ResourceManager.GetString("ActionMoveLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A value of 0 will repeat parent action indefinitely.
+        /// </summary>
+        public static string ActionRepeatCountHint {
+            get {
+                return ResourceManager.GetString("ActionRepeatCountHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repeat Count.
+        /// </summary>
+        public static string ActionRepeatCountLabel {
+            get {
+                return ResourceManager.GetString("ActionRepeatCountLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The amount of time in milliseconds waited once parent action completes.
+        /// </summary>
+        public static string ActionRepeatDelayHint {
+            get {
+                return ResourceManager.GetString("ActionRepeatDelayHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repeat Delay.
+        /// </summary>
+        public static string ActionRepeatDelayLabel {
+            get {
+                return ResourceManager.GetString("ActionRepeatDelayLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repeater - Used for creating action loops or repetive tasks. When repeated, it will execute all children again with its original input. When using an interval without a repeat count, the trigger will need to be disabled and reenabled to halt the repeating. Can be useful for polling or web scraping automation..
+        /// </summary>
+        public static string ActionRepeaterHint {
+            get {
+                return ResourceManager.GetString("ActionRepeaterHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shortcut Triggered - when the recorded shortcut is pressed at anytime with the current clipboard.
+        /// </summary>
+        public static string ActionShortcutTriggerHint {
+            get {
+                return ResourceManager.GetString("ActionShortcutTriggerHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shortcut Trigger.
+        /// </summary>
+        public static string ActionShortcutTriggerLabel {
+            get {
+                return ResourceManager.GetString("ActionShortcutTriggerLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Triggered when the recorded shortcut is pressed at anytime with the current clipboard.
+        /// </summary>
+        public static string ActionShortcutTriggerTriggerHint {
+            get {
+                return ResourceManager.GetString("ActionShortcutTriggerTriggerHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url already exists: &apos;{0}&apos;.
+        /// </summary>
+        public static string AddUrlNtfDupText {
+            get {
+                return ResourceManager.GetString("AddUrlNtfDupText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url must be in valid format..
+        /// </summary>
+        public static string AddUrlNtfErrorText {
+            get {
+                return ResourceManager.GetString("AddUrlNtfErrorText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter full url:.
+        /// </summary>
+        public static string AddUrlNtfText {
+            get {
+                return ResourceManager.GetString("AddUrlNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Url.
+        /// </summary>
+        public static string AddUrlNtfTitle {
+            get {
+                return ResourceManager.GetString("AddUrlNtfTitle", resourceCulture);
             }
         }
         
@@ -628,6 +1231,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter Values.
+        /// </summary>
+        public static string AnalyzerExecuteParamNtfTitle {
+            get {
+                return ResourceManager.GetString("AnalyzerExecuteParamNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Presets.
         /// </summary>
         public static string AnalyzerPresetGridTitle {
@@ -642,6 +1254,177 @@ namespace MonkeyPaste.Avalonia {
         public static string AnalyzerSelectorLabel {
             get {
                 return ResourceManager.GetString("AnalyzerSelectorLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy text or files to apply..
+        /// </summary>
+        public static string AppendActivateText {
+            get {
+                return ResourceManager.GetString("AppendActivateText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Append {0} {1} Mode Activated.
+        /// </summary>
+        public static string AppendActivateTitle {
+            get {
+                return ResourceManager.GetString("AppendActivateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard changes will now be appended.
+        /// </summary>
+        public static string AppendAfterNtfText {
+            get {
+                return ResourceManager.GetString("AppendAfterNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to After Append Mode Activated.
+        /// </summary>
+        public static string AppendAfterNtfTitle {
+            get {
+                return ResourceManager.GetString("AppendAfterNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard changes will now be prepended.
+        /// </summary>
+        public static string AppendBeforeNtfText {
+            get {
+                return ResourceManager.GetString("AppendBeforeNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Before Append Mode Activated.
+        /// </summary>
+        public static string AppendBeforeNtfTitle {
+            get {
+                return ResourceManager.GetString("AppendBeforeNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Block.
+        /// </summary>
+        public static string AppendBlockLabel {
+            get {
+                return ResourceManager.GetString("AppendBlockLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal clipboard behavior has been restored.
+        /// </summary>
+        public static string AppendDeactivatedText {
+            get {
+                return ResourceManager.GetString("AppendDeactivatedText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Append Deactivated.
+        /// </summary>
+        public static string AppendDeactivatedTitle {
+            get {
+                return ResourceManager.GetString("AppendDeactivatedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Appends added to top or botom of the clip.
+        /// </summary>
+        public static string AppendExtentNtfText {
+            get {
+                return ResourceManager.GetString("AppendExtentNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extent Append Mode Activated.
+        /// </summary>
+        public static string AppendExtentNtfTitle {
+            get {
+                return ResourceManager.GetString("AppendExtentNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inline.
+        /// </summary>
+        public static string AppendInlineLabel {
+            get {
+                return ResourceManager.GetString("AppendInlineLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual.
+        /// </summary>
+        public static string AppendManualLabel {
+            get {
+                return ResourceManager.GetString("AppendManualLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Appends added where you select.
+        /// </summary>
+        public static string AppendManualNtfText {
+            get {
+                return ResourceManager.GetString("AppendManualNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual Append Mode Activated.
+        /// </summary>
+        public static string AppendManualNtfTitle {
+            get {
+                return ResourceManager.GetString("AppendManualNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard accumulation halted.
+        /// </summary>
+        public static string AppendPausedNtfText {
+            get {
+                return ResourceManager.GetString("AppendPausedNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Append Paused.
+        /// </summary>
+        public static string AppendPausedNtfTitle {
+            get {
+                return ResourceManager.GetString("AppendPausedNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard accumulation resumed.
+        /// </summary>
+        public static string AppendResumedNtfText {
+            get {
+                return ResourceManager.GetString("AppendResumedNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Append Resumed.
+        /// </summary>
+        public static string AppendResumedNtfTitle {
+            get {
+                return ResourceManager.GetString("AppendResumedNtfTitle", resourceCulture);
             }
         }
         
@@ -696,6 +1479,33 @@ namespace MonkeyPaste.Avalonia {
         public static string ClipTileAnnotationTypeLabel {
             get {
                 return ResourceManager.GetString("ClipTileAnnotationTypeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to finish appending?.
+        /// </summary>
+        public static string ClipTileAppendConfirmCompleteText {
+            get {
+                return ResourceManager.GetString("ClipTileAppendConfirmCompleteText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Editing in comptability mode will remove all rich formatting. Are you sure you wish to modify this?.
+        /// </summary>
+        public static string ClipTileDataDegradeNtfText {
+            get {
+                return ResourceManager.GetString("ClipTileDataDegradeNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Degradation Warning.
+        /// </summary>
+        public static string ClipTileDataDegradeNtfTitle {
+            get {
+                return ResourceManager.GetString("ClipTileDataDegradeNtfTitle", resourceCulture);
             }
         }
         
@@ -979,6 +1789,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active.
+        /// </summary>
+        public static string CommonActiveLabel {
+            get {
+                return ResourceManager.GetString("CommonActiveLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string CommonAddLabel {
@@ -1177,6 +1996,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        public static string CommonEnabledLabel {
+            get {
+                return ResourceManager.GetString("CommonEnabledLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable.
         /// </summary>
         public static string CommonEnableLabel {
@@ -1249,11 +2077,29 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Off.
+        /// </summary>
+        public static string CommonOffLabel {
+            get {
+                return ResourceManager.GetString("CommonOffLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string CommonOkLabel {
             get {
                 return ResourceManager.GetString("CommonOkLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On.
+        /// </summary>
+        public static string CommonOnLabel {
+            get {
+                return ResourceManager.GetString("CommonOnLabel", resourceCulture);
             }
         }
         
@@ -1272,6 +2118,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonPasteOpLabel {
             get {
                 return ResourceManager.GetString("CommonPasteOpLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paused.
+        /// </summary>
+        public static string CommonPausedLabel {
+            get {
+                return ResourceManager.GetString("CommonPausedLabel", resourceCulture);
             }
         }
         
@@ -1339,6 +2194,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Result.
+        /// </summary>
+        public static string CommonResultLabel {
+            get {
+                return ResourceManager.GetString("CommonResultLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Retry.
         /// </summary>
         public static string CommonRetryLabel {
@@ -1384,6 +2248,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string CommonStatusLabel {
+            get {
+                return ResourceManager.GetString("CommonStatusLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MM/dd/yyyy hh:mm tt.
         /// </summary>
         public static string CommonTimestampFormat {
@@ -1398,6 +2271,15 @@ namespace MonkeyPaste.Avalonia {
         public static string CommonTitledCopyTitleText {
             get {
                 return ResourceManager.GetString("CommonTitledCopyTitleText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown error occured..
+        /// </summary>
+        public static string CommonUnknownErrorText {
+            get {
+                return ResourceManager.GetString("CommonUnknownErrorText", resourceCulture);
             }
         }
         
@@ -1452,6 +2334,24 @@ namespace MonkeyPaste.Avalonia {
         public static string DbPasswordMismatch {
             get {
                 return ResourceManager.GetString("DbPasswordMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to attempts remaining.
+        /// </summary>
+        public static string DbPasswordNtfText {
+            get {
+                return ResourceManager.GetString("DbPasswordNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter Password.
+        /// </summary>
+        public static string DbPasswordNtfTitle {
+            get {
+                return ResourceManager.GetString("DbPasswordNtfTitle", resourceCulture);
             }
         }
         
@@ -1591,11 +2491,29 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string EditorConfirmNtfTitle {
+            get {
+                return ResourceManager.GetString("EditorConfirmNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete All.
         /// </summary>
         public static string EditorDeleteAllButtonText {
             get {
                 return ResourceManager.GetString("EditorDeleteAllButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete ALL usages of &apos;{0}&apos;? This cannot be undone..
+        /// </summary>
+        public static string EditorDeleteAllTemplatesNtfText {
+            get {
+                return ResourceManager.GetString("EditorDeleteAllTemplatesNtfText", resourceCulture);
             }
         }
         
@@ -1771,8 +2689,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;
-        ///&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;.
         /// </summary>
         public static string EditorTemplateContactHint {
             get {
@@ -1781,19 +2698,16 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;yy = short year&lt;/p&gt;
-        ///&lt;p&gt;yyyy = long year&lt;/p&gt;
-        ///&lt;p&gt;M = month (1-12)&lt;/p&gt;
-        ///&lt;p&gt;MM = month (01-12)&lt;/p&gt;
-        ///&lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;
-        ///&lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;
-        ///&lt;p&gt;d = day (1 - 31)&lt;/p&gt;
-        ///&lt;p&gt;dd = day (01 - 31)&lt;/p&gt;
-        ///&lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;
-        ///&lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;
-        ///&lt;p&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;/p&gt;
-        ///&lt;p&gt;h = hour in am/pm (0-12)&lt;/p&gt;
-        ///&lt;p&gt;hh = hour  [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Contact.
+        /// </summary>
+        public static string EditorTemplateContactName {
+            get {
+                return ResourceManager.GetString("EditorTemplateContactName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;yy = short year&lt;/p&gt;&lt;p&gt;yyyy = long year&lt;/p&gt;&lt;p&gt;M = month (1-12)&lt;/p&gt;&lt;p&gt;MM = month (01-12)&lt;/p&gt;&lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;&lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;&lt;p&gt;d = day (1 - 31)&lt;/p&gt;&lt;p&gt;dd = day (01 - 31)&lt;/p&gt;&lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;&lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;&lt;p&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;/p&gt;&lt;p&gt;h = hour in am/pm (0-12)&lt;/p&gt;&lt;p&gt;hh = hour in am/pm (00-12)&lt;/p&gt;&lt;p&gt;H [rest of string was truncated]&quot;;.
         /// </summary>
         public static string EditorTemplateDateTimeCustomHint {
             get {
@@ -1802,12 +2716,20 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
-        ///&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;.
+        ///   Looks up a localized string similar to &lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;&lt;p&gt;The specified format is shared so changes here will update system - wide.&lt;/p&gt;.
         /// </summary>
         public static string EditorTemplateDateTimeHint {
             get {
                 return ResourceManager.GetString("EditorTemplateDateTimeHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Time.
+        /// </summary>
+        public static string EditorTemplateDateTimeName {
+            get {
+                return ResourceManager.GetString("EditorTemplateDateTimeName", resourceCulture);
             }
         }
         
@@ -1821,12 +2743,47 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
-        ///&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;.
+        ///   Looks up a localized string similar to Dynamic.
+        /// </summary>
+        public static string EditorTemplateDynamicName {
+            get {
+                return ResourceManager.GetString("EditorTemplateDynamicName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is empty....
+        /// </summary>
+        public static string EditorTemplateEmptyPlaceholder {
+            get {
+                return ResourceManager.GetString("EditorTemplateEmptyPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;.
         /// </summary>
         public static string EditorTemplateStaticHint {
             get {
                 return ResourceManager.GetString("EditorTemplateStaticHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static.
+        /// </summary>
+        public static string EditorTemplateStaticName {
+            get {
+                return ResourceManager.GetString("EditorTemplateStaticName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to More coming soon!.
+        /// </summary>
+        public static string EditorTemplateTeaserText {
+            get {
+                return ResourceManager.GetString("EditorTemplateTeaserText", resourceCulture);
             }
         }
         
@@ -1885,6 +2842,303 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string LoaderAccountLabel {
+            get {
+                return ResourceManager.GetString("LoaderAccountLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyzers.
+        /// </summary>
+        public static string LoaderAnalyzersLabel {
+            get {
+                return ResourceManager.GetString("LoaderAnalyzersLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Application Operations.
+        /// </summary>
+        public static string LoaderAppLabel {
+            get {
+                return ResourceManager.GetString("LoaderAppLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clipboard.
+        /// </summary>
+        public static string LoaderClipboardLabel {
+            get {
+                return ResourceManager.GetString("LoaderClipboardLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Content.
+        /// </summary>
+        public static string LoaderContentLabel {
+            get {
+                return ResourceManager.GetString("LoaderContentLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Converters.
+        /// </summary>
+        public static string LoaderConvertersLabel {
+            get {
+                return ResourceManager.GetString("LoaderConvertersLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Culture.
+        /// </summary>
+        public static string LoaderCultureLabel {
+            get {
+                return ResourceManager.GetString("LoaderCultureLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data.
+        /// </summary>
+        public static string LoaderDataLabel {
+            get {
+                return ResourceManager.GetString("LoaderDataLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Direction.
+        /// </summary>
+        public static string LoaderDirLabel {
+            get {
+                return ResourceManager.GetString("LoaderDirLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drag and Drop.
+        /// </summary>
+        public static string LoaderDndLabel {
+            get {
+                return ResourceManager.GetString("LoaderDndLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop Wizard.
+        /// </summary>
+        public static string LoaderDropWidgetLabel {
+            get {
+                return ResourceManager.GetString("LoaderDropWidgetLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icons.
+        /// </summary>
+        public static string LoaderIconsLabel {
+            get {
+                return ResourceManager.GetString("LoaderIconsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logger.
+        /// </summary>
+        public static string LoaderLoggerLabel {
+            get {
+                return ResourceManager.GetString("LoaderLoggerLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interface.
+        /// </summary>
+        public static string LoaderMainWindowLabel {
+            get {
+                return ResourceManager.GetString("LoaderMainWindowLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste Operations.
+        /// </summary>
+        public static string LoaderPasteLabel {
+            get {
+                return ResourceManager.GetString("LoaderPasteLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preferences.
+        /// </summary>
+        public static string LoaderPrefLabel {
+            get {
+                return ResourceManager.GetString("LoaderPrefLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string LoaderSearchLabel {
+            get {
+                return ResourceManager.GetString("LoaderSearchLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shortcuts.
+        /// </summary>
+        public static string LoaderShortcutsLabel {
+            get {
+                return ResourceManager.GetString("LoaderShortcutsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sort.
+        /// </summary>
+        public static string LoaderSortLabel {
+            get {
+                return ResourceManager.GetString("LoaderSortLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sounds.
+        /// </summary>
+        public static string LoaderSoundLabel {
+            get {
+                return ResourceManager.GetString("LoaderSoundLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System Tray.
+        /// </summary>
+        public static string LoaderSysTrayLabel {
+            get {
+                return ResourceManager.GetString("LoaderSysTrayLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collections.
+        /// </summary>
+        public static string LoaderTagsLabel {
+            get {
+                return ResourceManager.GetString("LoaderTagsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Theme.
+        /// </summary>
+        public static string LoaderThemeLabel {
+            get {
+                return ResourceManager.GetString("LoaderThemeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Triggers.
+        /// </summary>
+        public static string LoaderTriggersLabel {
+            get {
+                return ResourceManager.GetString("LoaderTriggersLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website Operations.
+        /// </summary>
+        public static string LoaderUrlLabel {
+            get {
+                return ResourceManager.GetString("LoaderUrlLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login load disable failed.
+        /// </summary>
+        public static string LoginLoadDisableFailed {
+            get {
+                return ResourceManager.GetString("LoginLoadDisableFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login load disable success.
+        /// </summary>
+        public static string LoginLoadDisableSuccess {
+            get {
+                return ResourceManager.GetString("LoginLoadDisableSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login load enable failed.
+        /// </summary>
+        public static string LoginLoadEnableFailed {
+            get {
+                return ResourceManager.GetString("LoginLoadEnableFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login load enable success.
+        /// </summary>
+        public static string LoginLoadEnableSuccess {
+            get {
+                return ResourceManager.GetString("LoginLoadEnableSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide.
+        /// </summary>
+        public static string MainWindowHideLabel {
+            get {
+                return ResourceManager.GetString("MainWindowHideLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monkey Paste is now loaded. \nClipboard listening is: {0}.
+        /// </summary>
+        public static string MainWindowLoadedNtfText {
+            get {
+                return ResourceManager.GetString("MainWindowLoadedNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loaded.
+        /// </summary>
+        public static string MainWindowLoadedNtfTitle {
+            get {
+                return ResourceManager.GetString("MainWindowLoadedNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show.
+        /// </summary>
+        public static string MainWindowShowLabel {
+            get {
+                return ResourceManager.GetString("MainWindowShowLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cycle Orientation.
         /// </summary>
         public static string MainWindowTitleCycleOrientationToolTip {
@@ -1908,6 +3162,33 @@ namespace MonkeyPaste.Avalonia {
         public static string MainWindowTitleToggleGridLayoutToolTip {
             get {
                 return ResourceManager.GetString("MainWindowTitleToggleGridLayoutToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto Copy Selection Mode: {0}.
+        /// </summary>
+        public static string MouseModeAutoCopyNtfText {
+            get {
+                return ResourceManager.GetString("MouseModeAutoCopyNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mode Changed.
+        /// </summary>
+        public static string MouseModeChangeNtfTitle {
+            get {
+                return ResourceManager.GetString("MouseModeChangeNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right Click Paste Mode: {0}.
+        /// </summary>
+        public static string MouseModeRightClickPasteNtfText {
+            get {
+                return ResourceManager.GetString("MouseModeRightClickPasteNtfText", resourceCulture);
             }
         }
         
@@ -2344,6 +3625,15 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plugin Updated.
+        /// </summary>
+        public static string PluginUpdatedNtfTitle {
+            get {
+                return ResourceManager.GetString("PluginUpdatedNtfTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Text typed will be automatically applied to a search when no text control is focused..
         /// </summary>
         public static string PrefAutoSearchHint {
@@ -2556,6 +3846,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PrefIgnoreWhiteSpaceLabel {
             get {
                 return ResourceManager.GetString("PrefIgnoreWhiteSpaceLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string PrefLanguageLabel {
+            get {
+                return ResourceManager.GetString("PrefLanguageLabel", resourceCulture);
             }
         }
         
@@ -2781,6 +4080,15 @@ namespace MonkeyPaste.Avalonia {
         public static string PrefResetShortcutsLabel {
             get {
                 return ResourceManager.GetString("PrefResetShortcutsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action requires the app to restart. Would you like to do that now?.
+        /// </summary>
+        public static string PrefRestartConfirmNtfText {
+            get {
+                return ResourceManager.GetString("PrefRestartConfirmNtfText", resourceCulture);
             }
         }
         
@@ -3019,7 +4327,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User-Defined Search Extensions.
+        ///   Looks up a localized string similar to User - Defined Search Extensions.
         /// </summary>
         public static string PrefUserFileExtLabel {
             get {
@@ -3060,6 +4368,15 @@ namespace MonkeyPaste.Avalonia {
         public static string QueryTrayNoSelection {
             get {
                 return ResourceManager.GetString("QueryTrayNoSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem. You need to manually restart the application..
+        /// </summary>
+        public static string RestarterErrorNtfText {
+            get {
+                return ResourceManager.GetString("RestarterErrorNtfText", resourceCulture);
             }
         }
         
@@ -3123,6 +4440,15 @@ namespace MonkeyPaste.Avalonia {
         public static string SearchCustomJoinHeaderLabel {
             get {
                 return ResourceManager.GetString("SearchCustomJoinHeaderLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ReadOnlyTooltipText&quot;&gt;Pre-Loaded Filters are read-only. Duplicate to alter..
+        /// </summary>
+        public static string SearchDisabeledCriteriaTooltip {
+            get {
+                return ResourceManager.GetString("SearchDisabeledCriteriaTooltip", resourceCulture);
             }
         }
         
@@ -3226,7 +4552,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;p&gt;Some Monkey Paste features uses keyboard automation to trigger a copy event in  applications (like a console or shell for example). Add and/or select the app with the unique copy shortcut to ensure those features function properly.&lt;/p&gt;.
+        ///   Looks up a localized string similar to Some Monkey Paste features uses keyboard automation to trigger a copy event in  applications (like a console or shell for example). Add and/or select the app with the unique copy shortcut to ensure those features function properly..
         /// </summary>
         public static string SettingsInteropAppCopyShortcutHeaderHint {
             get {
@@ -3280,7 +4606,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag-and-drop into MonkeyPaste.
+        ///   Looks up a localized string similar to There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag - and - drop into MonkeyPaste.
         /// </summary>
         public static string SettingsInteropAppOleNoopReaderTooltip {
             get {
@@ -3289,7 +4615,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no assigned clipboard formats for this app. Automated paste or drag-and-drop from MonkeyPaste will have no affect (its empty data)..
+        ///   Looks up a localized string similar to There is no assigned clipboard formats for this app. Automated paste or drag - and - drop from MonkeyPaste will have no affect (its empty data)..
         /// </summary>
         public static string SettingsInteropAppOleNoopWriterTooltip {
             get {
@@ -3595,11 +4921,20 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control,Shift,Alt,Meta/Win depending on platform).
+        ///   Looks up a localized string similar to Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control, Shift, Alt, Meta / Win depending on platform)..
         /// </summary>
         public static string ShortcutGestureRulesHint {
             get {
                 return ResourceManager.GetString("ShortcutGestureRulesHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste &apos;{0}&apos;.
+        /// </summary>
+        public static string ShortcutPasteTitle {
+            get {
+                return ResourceManager.GetString("ShortcutPasteTitle", resourceCulture);
             }
         }
         
@@ -3619,7 +4954,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Passive&lt;/b&gt;A shortcut MonkeyPaste will listen for in any application.&lt;/p&gt;&lt;p&gt;*This is the&lt;i&gt;only&lt;/i&gt;option on Linux for now.&lt;p&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pre&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Post&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Override&lt;/b&gt;When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will&lt;i&gt; [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Passive&lt;/b&gt;A shortcut MonkeyPaste will listen for in any application.&lt;/p&gt;&lt;p&gt;*This is the&lt;i&gt;only&lt;/i&gt;option on Linux for now.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pre&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Post&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Override&lt;/b&gt;When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will&lt;i [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ShortcutRoutingTypeHint {
             get {
@@ -3633,6 +4968,33 @@ namespace MonkeyPaste.Avalonia {
         public static string ShortcutRoutingTypeLabel {
             get {
                 return ResourceManager.GetString("ShortcutRoutingTypeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run &apos;{0}&apos; Analyzer.
+        /// </summary>
+        public static string ShortcutRunAnalyzerTitle {
+            get {
+                return ResourceManager.GetString("ShortcutRunAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Run &apos;{0}&apos; Trigger.
+        /// </summary>
+        public static string ShortcutRunTriggerTitle {
+            get {
+                return ResourceManager.GetString("ShortcutRunTriggerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select &apos;{0}&apos; Collection.
+        /// </summary>
+        public static string ShortcutSelectTagTitle {
+            get {
+                return ResourceManager.GetString("ShortcutSelectTagTitle", resourceCulture);
             }
         }
         
@@ -3754,7 +5116,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Auto-Copy.
+        ///   Looks up a localized string similar to Auto - Copy.
         /// </summary>
         public static string SysTrayAutoCopyHeader {
             get {
@@ -3988,6 +5350,33 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analyze with Annotator.
+        /// </summary>
+        public static string TriggerAnnAnalyzeLabel {
+            get {
+                return ResourceManager.GetString("TriggerAnnAnalyzeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Annotate New Text Trigger.
+        /// </summary>
+        public static string TriggerAnnTriggerLabel {
+            get {
+                return ResourceManager.GetString("TriggerAnnTriggerLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete &apos;{0}&apos; and all associated actions?.
+        /// </summary>
+        public static string TriggerConfirmDeleteNtfText {
+            get {
+                return ResourceManager.GetString("TriggerConfirmDeleteNtfText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Grid.
         /// </summary>
         public static string TriggerDesignerToggleGridLabel {
@@ -3997,11 +5386,38 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trigger.
+        /// </summary>
+        public static string TriggerLabel {
+            get {
+                return ResourceManager.GetString("TriggerLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pause.
         /// </summary>
         public static string TriggerPauseButtonLabel {
             get {
                 return ResourceManager.GetString("TriggerPauseButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would you like to remove all the sub-actions for &apos;{0}&apos;? (Otherwise they will be re-parented to &apos;{1}&apos;).
+        /// </summary>
+        public static string TriggerRemoveActionText {
+            get {
+                return ResourceManager.GetString("TriggerRemoveActionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Options.
+        /// </summary>
+        public static string TriggerRemoveActionTitle {
+            get {
+                return ResourceManager.GetString("TriggerRemoveActionTitle", resourceCulture);
             }
         }
         
@@ -4020,6 +5436,15 @@ namespace MonkeyPaste.Avalonia {
         public static string TriggersAddNewTriggerToolTip {
             get {
                 return ResourceManager.GetString("TriggersAddNewTriggerToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you really want to goto &apos;{0}&apos;?.
+        /// </summary>
+        public static string UrlNavConfirmText {
+            get {
+                return ResourceManager.GetString("UrlNavConfirmText", resourceCulture);
             }
         }
         
@@ -4177,7 +5602,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More window preferences are available from the &apos;Settings-&gt;Preferences-&gt;Window&apos; menu..
+        ///   Looks up a localized string similar to More window preferences are available from the &apos;Settings -&gt; Preferences -&gt; Window&apos; menu..
         /// </summary>
         public static string WelcomeDragToOpenDescription2 {
             get {
@@ -4231,7 +5656,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drag-to-Open.
+        ///   Looks up a localized string similar to Drag - to - Open.
         /// </summary>
         public static string WelcomeDragToOpenTitle {
             get {
@@ -4249,7 +5674,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keyboard shortcuts can be reviewed or changed at anytime from the &apos;Settings-&gt;Shortcuts&apos; menu..
+        ///   Looks up a localized string similar to Keyboard shortcuts can be reviewed or changed at anytime from the &apos;Settings -&gt; Shortcuts&apos; menu..
         /// </summary>
         public static string WelcomeGestureProfileCaption {
             get {
@@ -4294,7 +5719,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hey! Let&apos;s setup a few things to improve your overall experience with MonkeyPaste..
+        ///   Looks up a localized string similar to Hey ! Let&apos;s setup a few things to improve your overall experience with MonkeyPaste..
         /// </summary>
         public static string WelcomeGreetingCaption {
             get {
@@ -4366,7 +5791,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Note! This password is optional and only for EXTRA security.If used remembering it makes it essentially useless. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.)..
+        ///   Looks up a localized string similar to Note! This password is optional and only for EXTRA security. If used remembering it makes it essentially useless. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.)..
         /// </summary>
         public static string WelcomeRememberDbPasswordTooltip {
             get {
@@ -4393,7 +5818,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More window preferences are available from the &apos;Settings-&gt;Preferences-&gt;Window&apos; menu..
+        ///   Looks up a localized string similar to More window preferences are available from the &apos;Settings -&gt; Preferences -&gt; Window&apos; menu..
         /// </summary>
         public static string WelcomeScrollToOpenDescription2 {
             get {
@@ -4429,7 +5854,7 @@ namespace MonkeyPaste.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scroll-to-Open.
+        ///   Looks up a localized string similar to Scroll - to - Open.
         /// </summary>
         public static string WelcomeScrollToOpenTitle {
             get {

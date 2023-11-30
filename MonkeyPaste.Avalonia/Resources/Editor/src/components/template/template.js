@@ -89,44 +89,6 @@ function getTemplateCountBeforeDocIdx(docIdx) {
 }
 
 function getFocusTemplateElement() {
-    //let fallback_telm = null;
-    //let ftelm = null;
-    //let telml = getTemplateElements();
-    //if (telml.length == 0) {
-    //    return null;
-    //}
-    //for (var i = 0; i < telml.length; i++) {
-    //    let telm = telml[i];
-    //    if (!fallback_telm && isTemplateElementFocusNotInstance(telm)) {
-    //        fallback_telm = telm;
-    //    }
-    //    if (isTemplateElementFocusInstance(telm)) {
-    //        if (ftelm) {
-    //            // should only be 1
-    //            debugger;
-    //        }
-    //        ftelm = telm;
-    //        break;
-    //    }
-    //}
-    //let selected_tguid = getSelectedOptionTemplateGuid();
-    //if (ftelm) {
-    //    if (isNullOrWhiteSpace(selected_tguid)) {
-    //        // selector should have updated
-    //        debugger;
-    //    }
-    //    if (ftelm.getAttribute('templateguid') != selected_tguid) {
-    //        // selector should have updated or vice versa
-    //        debugger;
-    //    }
-    //    return ftelm;
-    //}
-
-    //if (fallback_telm) {
-    //    // this should be focus (maybe set here)
-    //    debugger;
-    //}
-    //return fallback_telm;
     let ftelms = getFocusTemplateElements();
     if (ftelms.length > 0) {
         return ftelms[0];

@@ -27,12 +27,12 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Collection",
+                                label = UiStrings.ActionClassifyLabel,
                                 controlType = MpParameterControlType.ComponentPicker,
                                 unitType = MpParameterValueUnitType.CollectionComponentId,
                                 isRequired = true,
                                 paramId = SELECTED_TAG_PARAM_ID,
-                                description = "Input content is linked to the selected collection"
+                                description = UiStrings.ActionClassifyActionHint
                             }
                         }
                     };
@@ -56,7 +56,7 @@ namespace MonkeyPaste.Avalonia {
         public override object IconResourceObj => SelectedTag == null ?
             base.IconResourceObj : SelectedTag.TagHexColor;
         public override string ActionHintText =>
-            "Classifier - Automatically adds triggered content to the selected collection.";
+            UiStrings.ActionClassifyHint;
 
         #endregion
 

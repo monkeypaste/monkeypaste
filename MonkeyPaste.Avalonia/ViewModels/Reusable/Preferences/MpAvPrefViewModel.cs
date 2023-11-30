@@ -406,8 +406,8 @@ namespace MonkeyPaste.Avalonia {
 
         #region Language
 
-        public string UserLanguageCode { get; set; } = CultureInfo.CurrentCulture.Name;
-        public bool IsTextRightToLeft { get; set; } = CultureInfo.GetCultureInfo(CultureInfo.CurrentCulture.Name).TextInfo.IsRightToLeft;
+        public string CurrentCultureCode { get; set; } = CultureInfo.CurrentCulture.Name;
+        public bool IsTextRightToLeft { get; set; }
 
         #endregion
 

@@ -75,7 +75,7 @@ namespace MonkeyPaste.Avalonia {
         #region State
 
         public string DisabledInputTooltip =>
-            CanAlter ? string.Empty : "Pre-Loaded Filters are read-only. Duplicate to alter.";
+            CanAlter ? string.Empty : UiStrings.SearchDisabeledCriteriaTooltip;
         public bool IsAnyDragging =>
             Items.Any(x => x.IsDragging);
         public bool IsCriteriaWindowOpen { get; set; }

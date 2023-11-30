@@ -59,6 +59,9 @@ function initDefaults(defaultsObj) {
 	if (!isNullOrUndefined(defaultsObj.isDebug)) {
 		globals.IsDebug = defaultsObj.isDebug;
 	}
+	if (!isNullOrUndefined(defaultsObj.isRightToLeft)) {
+		globals.IsRtl = defaultsObj.isRightToLeft;
+	}
 	
 	if (!isNullOrUndefined(defaultsObj.bgOpacity)) {
 		setElementComputedStyleProp(document.body, '--editableopacity', parseFloat(defaultsObj.bgOpacity));

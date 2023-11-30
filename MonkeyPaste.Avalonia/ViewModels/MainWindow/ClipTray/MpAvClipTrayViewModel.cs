@@ -1813,7 +1813,7 @@ namespace MonkeyPaste.Avalonia {
                 if (MpAvAccountTools.Instance.IsContentAddPausedByAccount) {
                     // no linking changes, add will be blocked
                     cap_msg_title_suffix = string.Format(UiStrings.NtfCapBlockSuffix, block_prefix);
-                    cap_msg_sb.AppendLine(string.Format(UiStrings.NtfCapBlockHint1, UiStrings.TagDefaultFavoritesLabel));
+                    cap_msg_sb.AppendLine(string.Format(UiStrings.NtfCapBlockHint1, MpReadOnlyTagType.Favorites.EnumToUiString()));
                     cap_msg_sb.AppendLine(string.Format(UiStrings.NtfCapBlockHint2, account_type.EnumToUiString(), cur_content_cap));
                     cap_msg_icon = MpContentCapInfo.ADD_BLOCKED_RESOURCE_KEY;
                     cap_msg_type = block_msg_type;

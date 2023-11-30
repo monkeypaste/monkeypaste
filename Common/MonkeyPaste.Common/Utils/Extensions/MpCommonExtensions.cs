@@ -674,7 +674,9 @@ namespace MonkeyPaste.Common {
 
 
         public static void SetPropertyValue(this object obj, string propertyPath, object newValue) {
-            PropertyInfo propertyInfo = obj.GetType().GetProperty(propertyPath);
+            // obj is Type when static class
+            Type objType = obj.GetType() == typeof(Type) ? (Type)obj : obj.GetType();
+            PropertyInfo propertyInfo = objType.GetProperty(propertyPath);
             if (propertyInfo == null ||
                 propertyInfo.SetMethod == null) {
                 return;

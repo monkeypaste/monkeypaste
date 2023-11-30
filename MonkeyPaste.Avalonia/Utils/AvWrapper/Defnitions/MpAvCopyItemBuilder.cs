@@ -365,7 +365,7 @@ namespace MonkeyPaste.Avalonia {
                         itemType == MpCopyItemType.FileList ?
                             UiStrings.ClipTileDefTitleFilesPrefix :
                             UiStrings.ClipTileDefTitleImagePrefix;
-                default_title = $"{itemType}{(_LastAddId.ToCommaSeperatedIntString())}";
+                default_title = $"{def_prefix}{(_LastAddId.ToCommaSeperatedIntString())}";
             }
             return default_title;
         }

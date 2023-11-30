@@ -173,6 +173,7 @@ function showTemplateToolbarContextMenu() {
                     {
                         icon: 'plus',
                         iconFgColor: 'lime',
+                        iconClasses: 'svg-no-defaults',
                         label: 'New...',
                         action: function (option, contextMenuIndex, optionIndex) {
                             createTemplateFromDropDown(null, tmi.label.toLowerCase(), allTemplateDefs);

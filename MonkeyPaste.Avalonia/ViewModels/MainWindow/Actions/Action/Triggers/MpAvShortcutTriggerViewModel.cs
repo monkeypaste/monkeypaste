@@ -68,11 +68,11 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Shortcut Trigger",
+                                label = UiStrings.ActionShortcutTriggerLabel,
                                 controlType = MpParameterControlType.ShortcutRecorder,
                                 unitType = MpParameterValueUnitType.PlainText,
                                 paramId = SHORTCUT_TRIGGER_KEYSTRING_PARAM_ID,
-                                description = "Triggered when the recorded shortcut is pressed at anytime with the current clipboard"
+                                description = UiStrings.ActionShortcutTriggerTriggerHint
                             }
                         }
                     };
@@ -104,7 +104,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public override string ActionHintText =>
-            "Shortcut Triggered - when the recorded shortcut is pressed at anytime with the current clipboard";
+            UiStrings.ActionShortcutTriggerHint;
 
         #endregion
         #region State

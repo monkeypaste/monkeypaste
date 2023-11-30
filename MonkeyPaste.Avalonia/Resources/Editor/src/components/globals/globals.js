@@ -273,6 +273,8 @@ var globals = {
 	IgnoreNextSelectionChange: false,
 	SuppressContentChangedNtf: false,
 	IsToolbarsLoaded: false,
+
+	IsRtl: false,
 	// #endregion
 
 	// #region ENV
@@ -869,6 +871,7 @@ var globals = {
 		'paragraph': `<svg viewBox="0 0 24 24" fill="none"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path fill-rule="evenodd" clip-rule="evenodd" d="M4 9C4 6.79086 5.79086 5 8 5H11H16H19C19.5523 5 20 5.44772 20 6C20 6.55228 19.5523 7 19 7H17V19C17 19.5523 16.5523 20 16 20C15.4477 20 15 19.5523 15 19V7H12V19C12 19.5523 11.5523 20 11 20C10.4477 20 10 19.5523 10 19V13H8C5.79086 13 4 11.2091 4 9ZM10 11V7H8C6.89543 7 6 7.89543 6 9C6 10.1046 6.89543 11 8 11H10Z" fill="#000000"></path></g></svg>`,
 		'pause': `<svg fill="#000000"      viewBox="0 0 32 32"      version="1.1"      xmlns="http://www.w3.org/2000/svg"> 	<g stroke-width="0"></g> 	<g stroke-linecap="round" 	   stroke-linejoin="round"></g> 	<g> 		<path d="M5.92 24.096q0 0.832 0.576 1.408t1.44 0.608h4.032q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-4.032q-0.832 0-1.44 0.576t-0.576 1.44v16.16zM18.016 24.096q0 0.832 0.608 1.408t1.408 0.608h4.032q0.832 0 1.44-0.608t0.576-1.408v-16.16q0-0.832-0.576-1.44t-1.44-0.576h-4.032q-0.832 0-1.408 0.576t-0.608 1.44v16.16z"></path> 	</g> </svg>`,
 		'play': `<svg fill="#000000"     viewBox="0 0 32 32"     version="1.1"     xmlns="http://www.w3.org/2000/svg"> <g stroke-width="0"></g> <g stroke-linecap="round"    stroke-linejoin="round"></g> <g>  <path d="M5.92 24.096q0 1.088 0.928 1.728 0.512 0.288 1.088 0.288 0.448 0 0.896-0.224l16.16-8.064q0.48-0.256 0.8-0.736t0.288-1.088-0.288-1.056-0.8-0.736l-16.16-8.064q-0.448-0.224-0.896-0.224-0.544 0-1.088 0.288-0.928 0.608-0.928 1.728v16.16z"></path> </g></svg>`,
+		'plus': `<svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-362.000000, -1037.000000)" fill="#5fea5d"><path d="M390,1049 L382,1049 L382,1041 C382,1038.79 380.209,1037 378,1037 C375.791,1037 374,1038.79 374,1041 L374,1049 L366,1049 C363.791,1049 362,1050.79 362,1053 C362,1055.21 363.791,1057 366,1057 L374,1057 L374,1065 C374,1067.21 375.791,1069 378,1069 C380.209,1069 382,1067.21 382,1065 L382,1057 L390,1057 C392.209,1057 394,1055.21 394,1053 C394,1050.79 392.209,1049 390,1049"></path></g></g></g></svg>`,
 		'radio-off': `<svg width="24px"     height="24px"     viewBox="0 0 24 24"     xmlns="http://www.w3.org/2000/svg">	<g data-name="Layer 2">		<g data-name="radio-button-off">			<rect width="24"			      height="24"			      opacity="0"/>			<path d="M12 22a10 10 0 1 1 10-10 10 10 0 0 1-10 10zm0-18a8 8 0 1 0 8 8 8 8 0 0 0-8-8z"/>		</g>	</g></svg>`,
 		'radio-off': `<svg width="24px"     height="24px"     viewBox="0 0 24 24"     xmlns="http://www.w3.org/2000/svg">	<g data-name="Layer 2">		<g data-name="radio-button-off">			<rect width="24"			      height="24"			      opacity="0"/>			<path d="M12 22a10 10 0 1 1 10-10 10 10 0 0 1-10 10zm0-18a8 8 0 1 0 8 8 8 8 0 0 0-8-8z"/>		</g>	</g></svg>`,
 		'radio-on': `<svg width="24px"     height="24px"     viewBox="0 0 24 24"     xmlns="http://www.w3.org/2000/svg">	<g data-name="Layer 2">		<g data-name="radio-button-on">			<rect width="24"			      height="24"			      opacity="0"/>			<path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>			<path d="M12 7a5 5 0 1 0 5 5 5 5 0 0 0-5-5z"/>		</g>	</g></svg>`,
@@ -924,11 +927,11 @@ var globals = {
 	TemplateBeforeEdit: null,
 	TemplateTypesMenuOptions: [
 		{
-			label: 'Dynamic',
+			label: '#EditorTemplateDynamicName#',
 			icon: 'text'
 		},
 		{
-			label: 'Static',
+			label: '#EditorTemplateStaticName#',
 			icon: 'snowflake'
 		},
 		/* {
@@ -944,11 +947,11 @@ var globals = {
 			 icon: 'fa-solid fa-bolt-lightning'
 		 },
 		{
-			label: 'Contact',
+			label: '#EditorTemplateContactName#',
 			icon: 'contact'
 		},*/
 		{
-			label: 'DateTime',
+			label: '#EditorTemplateDateTimeName#',
 			icon: 'datetime'
 		},
 		{
@@ -956,7 +959,7 @@ var globals = {
 		},
 		{
 			id: 'MoreLink',
-			label: 'More Coming Soon!',
+			label: '#EditorTemplateTeaserText#',
 			url: 'https://www.monkeypaste.com/',
 			iconClasses: 'svg-no-defaults',
 			icon: 'megaphone'

@@ -255,7 +255,7 @@ namespace MonkeyPaste {
                 SortOrderIdx = sortOrderIdx,
                 Description = description,
                 X = location.X,
-                Y = location.Y
+                Y = location.Y,
             };
 
             if (!suppressWrite) {

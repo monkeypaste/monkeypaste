@@ -170,16 +170,16 @@
     <value>Enabling the 'lock' in the top left of the main window will still allow dropping into MonkeyPaste.</value>
   </data>
   <data name="WelcomeDragToOpenDescription2" xml:space="preserve">
-    <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
+    <value>More window preferences are available from the 'Settings -&gt; Preferences -&gt; Window' menu.</value>
   </data>
   <data name="WelcomeDragToOpenMarkerLabel" xml:space="preserve">
     <value>Drag Bananas Up Here!</value>
   </data>
   <data name="WelcomeDragToOpenTitle" xml:space="preserve">
-    <value>Drag-to-Open</value>
+    <value>Drag - to - Open</value>
   </data>
   <data name="WelcomeGestureProfileCaption" xml:space="preserve">
-    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings-&gt;Shortcuts' menu.</value>
+    <value>Keyboard shortcuts can be reviewed or changed at anytime from the 'Settings -&gt; Shortcuts' menu.</value>
   </data>
   <data name="WelcomeGestureProfileDescription1" xml:space="preserve">
     <value>All global shortcuts will be marked as local so you can configure them yourself later.</value>
@@ -197,7 +197,7 @@
     <value>Gesture Profile</value>
   </data>
   <data name="WelcomeGreetingCaption" xml:space="preserve">
-    <value>Hey! Let's setup a few things to improve your overall experience with MonkeyPaste.</value>
+    <value>Hey ! Let's setup a few things to improve your overall experience with MonkeyPaste.</value>
   </data>
   <data name="WelcomeGreetingTitle" xml:space="preserve">
     <value>Welcome</value>
@@ -221,7 +221,7 @@
     <value>Left-clicking the taskbar icon will still open MonkeyPaste.</value>
   </data>
   <data name="WelcomeScrollToOpenDescription2" xml:space="preserve">
-    <value>More window preferences are available from the 'Settings-&gt;Preferences-&gt;Window' menu.</value>
+    <value>More window preferences are available from the 'Settings -&gt; Preferences -&gt; Window' menu.</value>
   </data>
   <data name="WelcomeScrollToOpenFakeWindowLabel" xml:space="preserve">
     <value>Easy Right?</value>
@@ -230,7 +230,7 @@
     <value>Scroll Up Here!</value>
   </data>
   <data name="WelcomeScrollToOpenTitle" xml:space="preserve">
-    <value>Scroll-to-Open</value>
+    <value>Scroll - to - Open</value>
   </data>
   <data name="WelcomeDragToOpenFakeWindowDetail" xml:space="preserve">
     <value>&lt;p align="center"&gt;MonkeyPaste is &lt;span color="red&gt;fully integrated&lt;/span&gt; with Drag-and-Drop to and from the application.&lt;/p&gt;</value>
@@ -422,7 +422,7 @@
     <value>Shortcut</value>
   </data>
   <data name="ShortcutGestureRulesHint" xml:space="preserve">
-    <value>Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control,Shift,Alt,Meta/Win depending on platform)</value>
+    <value>Gestures must be unique and may only contain ONE input key (as opposed to a modifier key like Control, Shift, Alt, Meta / Win depending on platform).</value>
   </data>
   <data name="ShortcutRoutingProfileTypeHint" xml:space="preserve">
     <value>&lt;ul&gt;
@@ -434,7 +434,7 @@
 &lt;/ul&gt;</value>
   </data>
   <data name="ShortcutRoutingTypeHint" xml:space="preserve">
-    <value>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Passive&lt;/b&gt;A shortcut MonkeyPaste will listen for in any application.&lt;/p&gt;&lt;p&gt;*This is the&lt;i&gt;only&lt;/i&gt;option on Linux for now.&lt;p&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pre&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Post&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Override&lt;/b&gt;When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will&lt;i&gt;hide&lt;/i&gt;that key press from application-level input.&lt;/p&gt;&lt;p&gt;This option will guarantee the shortcut is triggered without conflicts to the active application.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Exclusive Override&lt;/b&gt;This is a special type of override mode designed for the Caps Lock key. It only allows&lt;b&gt;one&lt;/b&gt;key (non-modifier) for its assignment.&lt;/p&gt;&lt;p&gt;In normal override mode Caps Lock can become&lt;i&gt;stuck on&lt;/i&gt;when pressed in combination with other keys.&lt;/p&gt;&lt;p&gt;So no matter what other keys are down, if a&lt;b&gt;Hotkey&lt;/b&gt;shortcut is pressed it will be overriden and prevent it from becoming&lt;i&gt;stuck on&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</value>
+    <value>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Global Shortcut Modes&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Passive&lt;/b&gt;A shortcut MonkeyPaste will listen for in any application.&lt;/p&gt;&lt;p&gt;*This is the&lt;i&gt;only&lt;/i&gt;option on Linux for now.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;b&gt;Pre&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;before&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;b&gt;Post&lt;/b&gt;Shortcut will execute&lt;b&gt;&lt;i&gt;after&lt;/i&gt;&lt;/b&gt;it is handled by the active application.&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Override&lt;/b&gt;When MonkeyPaste hears the input key (non-modifier key) of an override shortcut it will&lt;i&gt;hide&lt;/i&gt;that key press from application-level input.&lt;/p&gt;&lt;p&gt;This option will guarantee the shortcut is triggered without conflicts to the active application.&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;&lt;b&gt;Exclusive Override&lt;/b&gt;This is a special type of override mode designed for the Caps Lock key. It only allows&lt;b&gt;one&lt;/b&gt;key (non-modifier) for its assignment.&lt;/p&gt;&lt;p&gt;In normal override mode Caps Lock can become&lt;i&gt;stuck on&lt;/i&gt;when pressed in combination with other keys.&lt;/p&gt;&lt;p&gt;So no matter what other keys are down, if a&lt;b&gt;Hotkey&lt;/b&gt;shortcut is pressed it will be overriden and prevent it from becoming&lt;i&gt;stuck on&lt;/i&gt;.&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</value>
   </data>
   <data name="CommonDisableLabel" xml:space="preserve">
     <value>Disable</value>
@@ -443,41 +443,19 @@
     <value>Load up when this user account is logged in, not for other users.</value>
   </data>
   <data name="EditorTemplateContactHint" xml:space="preserve">
-    <value>&lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;
-&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Using available contacts (requires a fetcher plugin) this field will be used for all instances of this template across this document or in any it will be referenced in later.&lt;/p&gt;&lt;p&gt; So for example if select email address here then the email field of the contact you select will be used for all instances in this document.&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateDateTimeCustomHint" xml:space="preserve">
-    <value>&lt;p&gt;yy = short year&lt;/p&gt;
-&lt;p&gt;yyyy = long year&lt;/p&gt;
-&lt;p&gt;M = month (1-12)&lt;/p&gt;
-&lt;p&gt;MM = month (01-12)&lt;/p&gt;
-&lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;
-&lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;
-&lt;p&gt;d = day (1 - 31)&lt;/p&gt;
-&lt;p&gt;dd = day (01 - 31)&lt;/p&gt;
-&lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;
-&lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;
-&lt;p&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;/p&gt;
-&lt;p&gt;h = hour in am/pm (0-12)&lt;/p&gt;
-&lt;p&gt;hh = hour in am/pm (00-12)&lt;/p&gt;
-&lt;p&gt;H = hour in day (0-23)&lt;/p&gt;
-&lt;p&gt;HH = hour in day (00-23)&lt;/p&gt;
-&lt;p&gt;mm = minute&lt;/p&gt;
-&lt;p&gt;ss = second&lt;/p&gt;
-&lt;p&gt;SSS = milliseconds&lt;/p&gt;
-&lt;p&gt;a = AM/PM marker&lt;/p&gt;
-&lt;p&gt;p = a.m./p.m. marker&lt;/p&gt;</value>
+    <value>&lt;p&gt;yy = short year&lt;/p&gt;&lt;p&gt;yyyy = long year&lt;/p&gt;&lt;p&gt;M = month (1-12)&lt;/p&gt;&lt;p&gt;MM = month (01-12)&lt;/p&gt;&lt;p&gt;MMM = month abbreviation (Jan, Feb ... Dec)&lt;/p&gt;&lt;p&gt;MMMM = long month (January, February ... December)&lt;/p&gt;&lt;p&gt;d = day (1 - 31)&lt;/p&gt;&lt;p&gt;dd = day (01 - 31)&lt;/p&gt;&lt;p&gt;ddd = day of the week in words (Monday, Tuesday ... Sunday)&lt;/p&gt;&lt;p&gt;E = short day of the week in words (Mon, Tue ... Sun)&lt;/p&gt;&lt;p&gt;D - Ordinal day (1st, 2nd, 3rd, 21st, 22nd, 23rd, 31st, 4th...)&lt;/p&gt;&lt;p&gt;h = hour in am/pm (0-12)&lt;/p&gt;&lt;p&gt;hh = hour in am/pm (00-12)&lt;/p&gt;&lt;p&gt;H = hour in day (0-23)&lt;/p&gt;&lt;p&gt;HH = hour in day (00-23)&lt;/p&gt;&lt;p&gt;mm = minute&lt;/p&gt;&lt;p&gt;ss = second&lt;/p&gt;&lt;p&gt;SSS = milliseconds&lt;/p&gt;&lt;p&gt;a = AM/PM marker&lt;/p&gt;&lt;p&gt;p = a.m./p.m. marker&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateDateTimeHint" xml:space="preserve">
-    <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
-&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;</value>
+    <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;&lt;p&gt;The specified format is shared so changes here will update system - wide.&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateDynamicHint" xml:space="preserve">
     <value>&lt;p&gt;All occurances of this template will be set to the value you provide here&lt;/p&gt;</value>
   </data>
   <data name="EditorTemplateStaticHint" xml:space="preserve">
-    <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;
-&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;</value>
+    <value>&lt;p&gt;The current date and/or time will be substituted for DateTime templates from moment they evaluated ie. pasted.&lt;/p&gt;&lt;p&gt;The specified format is shared so changes here will update system-wide.&lt;/p&gt;</value>
   </data>
   <data name="EditorAppendCloseLabel" xml:space="preserve">
     <value>Finish appending</value>
@@ -594,7 +572,7 @@
     <value>Websites</value>
   </data>
   <data name="SettingsInteropAppCopyShortcutHeaderHint" xml:space="preserve">
-    <value>&lt;p&gt;Some Monkey Paste features uses keyboard automation to trigger a copy event in  applications (like a console or shell for example). Add and/or select the app with the unique copy shortcut to ensure those features function properly.&lt;/p&gt;</value>
+    <value>Some Monkey Paste features uses keyboard automation to trigger a copy event in  applications (like a console or shell for example). Add and/or select the app with the unique copy shortcut to ensure those features function properly.</value>
   </data>
   <data name="SettingsInteropAppCopyShortcutHeaderLabel" xml:space="preserve">
     <value>Copy Shortcut</value>
@@ -654,10 +632,10 @@
     <value>Are you sure you want to remove custom formats for {0}?</value>
   </data>
   <data name="SettingsInteropAppOleNoopReaderTooltip" xml:space="preserve">
-    <value>There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag-and-drop into MonkeyPaste</value>
+    <value>There is no assigned clipboard formats for this app. No data will be read from it via cut/copy or attempting a drag - and - drop into MonkeyPaste</value>
   </data>
   <data name="SettingsInteropAppOleNoopWriterTooltip" xml:space="preserve">
-    <value>There is no assigned clipboard formats for this app. Automated paste or drag-and-drop from MonkeyPaste will have no affect (its empty data).</value>
+    <value>There is no assigned clipboard formats for this app. Automated paste or drag - and - drop from MonkeyPaste will have no affect (its empty data).</value>
   </data>
   <data name="ShortcutsResetNtfMsg" xml:space="preserve">
     <value>Are you sure you want to reset all shortcuts? All custom shortcuts will be removed.</value>
@@ -819,7 +797,7 @@
     <value>Never</value>
   </data>
   <data name="AccountFreeTrialLabel" xml:space="preserve">
-    <value>Free {0}-Day Trial</value>
+    <value>Free {0} - Day Trial</value>
   </data>
   <data name="AccountPurchaseErrorCaption" xml:space="preserve">
     <value>There was a problem performing your purchase. Checking your connection and settings may help. Would you like to try again?</value>
@@ -921,7 +899,7 @@
     <value>Note</value>
   </data>
   <data name="AccountPrePurchaseWindowsNtfCaption" xml:space="preserve">
-    <value>Microsoft Store doesn't allow tier changes to subscription add-ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. \nWould you like to go do that now?</value>
+    <value>Microsoft Store doesn't allow tier changes to subscription add - ons. You must cancel your {0}/{1} plan yourself or you will be charged for both. \nWould you like to go do that now?</value>
     <comment>Old Subscription Type, Old Billing Cycle</comment>
   </data>
   <data name="AccountResetPasswordCaption" xml:space="preserve">
@@ -1031,7 +1009,7 @@
     <value>Disabled</value>
   </data>
   <data name="WelcomeRememberDbPasswordTooltip" xml:space="preserve">
-    <value>Note! This password is optional and only for EXTRA security.If used remembering it makes it essentially useless. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.).</value>
+    <value>Note! This password is optional and only for EXTRA security. If used remembering it makes it essentially useless. Your data is already encrypted and never shared. This password simply prevents someone whose not you from loading MonkeyPaste if they somehow gain access to your desktop (stolen, you leave the room, etc.).</value>
   </data>
   <data name="DropCompleteRememberLabelPrefix" xml:space="preserve">
     <value>Remember Drop Settings For:</value>
@@ -1448,7 +1426,7 @@
     <value>Used in advanced file search for non preset file kinds</value>
   </data>
   <data name="PrefUserFileExtLabel" xml:space="preserve">
-    <value>User-Defined Search Extensions</value>
+    <value>User - Defined Search Extensions</value>
   </data>
   <data name="ClipTileFindReplaceHeader" xml:space="preserve">
     <value>Find and Replace...</value>
@@ -1605,7 +1583,7 @@
     <value>Append Inline</value>
   </data>
   <data name="SysTrayAutoCopyHeader" xml:space="preserve">
-    <value>Auto-Copy</value>
+    <value>Auto - Copy</value>
   </data>
   <data name="SysTrayModeHeader" xml:space="preserve">
     <value>Mode</value>
@@ -1751,20 +1729,20 @@
   <data name="EditorConfirmNtfTitle" xml:space="preserve">
     <value>Confirm</value>
   </data>
-  <data name="EditorContactTemplateName" xml:space="preserve">
+  <data name="EditorTemplateContactName" xml:space="preserve">
     <value>Contact</value>
   </data>
-  <data name="EditorDateTemplateName" xml:space="preserve">
+  <data name="EditorTemplateDateTimeName" xml:space="preserve">
     <value>Date Time</value>
   </data>
   <data name="EditorDeleteAllTemplatesNtfText" xml:space="preserve">
     <value>Are you sure you want to delete ALL usages of '{0}'? This cannot be undone.</value>
     <comment>Template Name</comment>
   </data>
-  <data name="EditorDynamicTemplateName" xml:space="preserve">
+  <data name="EditorTemplateDynamicName" xml:space="preserve">
     <value>Dynamic</value>
   </data>
-  <data name="EditorStaticTemplateName" xml:space="preserve">
+  <data name="EditorTemplateStaticName" xml:space="preserve">
     <value>Static</value>
   </data>
   <data name="EditorTemplateEmptyPlaceholder" xml:space="preserve">
@@ -1844,7 +1822,286 @@
     <value>Remove Options</value>
   </data>
   <data name="UrlNavConfirmText" xml:space="preserve">
-    <value>Do you really want to goto '{0}'</value>
+    <value>Do you really want to goto '{0}'?</value>
     <comment>Url</comment>
+  </data>
+  <data name="LoaderAccountLabel" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="LoaderAnalyzersLabel" xml:space="preserve">
+    <value>Analyzers</value>
+  </data>
+  <data name="LoaderAppLabel" xml:space="preserve">
+    <value>Application Operations</value>
+  </data>
+  <data name="LoaderClipboardLabel" xml:space="preserve">
+    <value>Clipboard</value>
+  </data>
+  <data name="LoaderContentLabel" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="LoaderConvertersLabel" xml:space="preserve">
+    <value>Converters</value>
+  </data>
+  <data name="LoaderCultureLabel" xml:space="preserve">
+    <value>Culture</value>
+  </data>
+  <data name="LoaderDataLabel" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="LoaderDirLabel" xml:space="preserve">
+    <value>Direction</value>
+  </data>
+  <data name="LoaderDndLabel" xml:space="preserve">
+    <value>Drag and Drop</value>
+  </data>
+  <data name="LoaderDropWidgetLabel" xml:space="preserve">
+    <value>Drop Wizard</value>
+  </data>
+  <data name="LoaderIconsLabel" xml:space="preserve">
+    <value>Icons</value>
+  </data>
+  <data name="LoaderLoggerLabel" xml:space="preserve">
+    <value>Logger</value>
+  </data>
+  <data name="LoaderMainWindowLabel" xml:space="preserve">
+    <value>Interface</value>
+  </data>
+  <data name="LoaderPasteLabel" xml:space="preserve">
+    <value>Paste Operations</value>
+  </data>
+  <data name="LoaderPrefLabel" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="LoaderSearchLabel" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="LoaderShortcutsLabel" xml:space="preserve">
+    <value>Shortcuts</value>
+  </data>
+  <data name="LoaderSortLabel" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="LoaderSoundLabel" xml:space="preserve">
+    <value>Sounds</value>
+  </data>
+  <data name="LoaderSysTrayLabel" xml:space="preserve">
+    <value>System Tray</value>
+  </data>
+  <data name="LoaderTagsLabel" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="LoaderThemeLabel" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="LoaderTriggersLabel" xml:space="preserve">
+    <value>Triggers</value>
+  </data>
+  <data name="LoaderUrlLabel" xml:space="preserve">
+    <value>Website Operations</value>
+  </data>
+  <data name="PrefLanguageLabel" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="ActionAddFromClipboardHint" xml:space="preserve">
+    <value>Create from Clipboard - Creates a new content item from the current clipboard at the time of execution. Note that any incoming output to this action will be overwritten by the new clipboard content.</value>
+  </data>
+  <data name="ActionAlertAlertSound" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="ActionAlertBlipSound" xml:space="preserve">
+    <value>Blip</value>
+  </data>
+  <data name="ActionAlertChimeSound" xml:space="preserve">
+    <value>Chime</value>
+  </data>
+  <data name="ActionAlertHint" xml:space="preserve">
+    <value>Alert - Used for custom alerts to help keep you aware of long-running action chains. Also these can be handy to narrow down parent output data when configuring 'Conditional' actions. Alerts have no affect on their input.</value>
+  </data>
+  <data name="ActionAlertMessageLabel" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="ActionAlertMonkeySound" xml:space="preserve">
+    <value>Monkey</value>
+  </data>
+  <data name="ActionAlertPreviewLabel" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="ActionAlertShowLabel" xml:space="preserve">
+    <value>Show?</value>
+  </data>
+  <data name="ActionAlertShowTimeHint" xml:space="preserve">
+    <value>Time toast message is shown in seconds. When value is 0 message must be closed manually.</value>
+  </data>
+  <data name="ActionAlertShowTimeLabel" xml:space="preserve">
+    <value>Show Time (s)</value>
+  </data>
+  <data name="ActionAlertSonarSound" xml:space="preserve">
+    <value>Sonar</value>
+  </data>
+  <data name="ActionAlertSoundLabel" xml:space="preserve">
+    <value>Sound?</value>
+  </data>
+  <data name="ActionAlertSoundTypeLabel" xml:space="preserve">
+    <value>Sound Type</value>
+  </data>
+  <data name="ActionAlertTingSound" xml:space="preserve">
+    <value>Ting</value>
+  </data>
+  <data name="ActionAlertVolumeLabel" xml:space="preserve">
+    <value>Volume</value>
+  </data>
+  <data name="ActionAnalyzeLabel" xml:space="preserve">
+    <value>Analyzer</value>
+  </data>
+  <data name="ActionAnalyzerHint" xml:space="preserve">
+    <value>Analyzer - Processes triggered content or previous action output using a selected plugin.</value>
+  </data>
+  <data name="ActionClassifyActionHint" xml:space="preserve">
+    <value>Input content is linked to the selected collection</value>
+  </data>
+  <data name="ActionClassifyHint" xml:space="preserve">
+    <value>Classifier - Automatically adds triggered content to the selected collection.</value>
+  </data>
+  <data name="ActionClassifyLabel" xml:space="preserve">
+    <value>Collection</value>
+  </data>
+  <data name="ActionCondCaseLabel" xml:space="preserve">
+    <value>Case Sensitive?</value>
+  </data>
+  <data name="ActionCondDataHint" xml:space="preserve">
+    <value>This can be static text to compare with the input and/or include selected properties (via the filter button) will be substituted when the condition is evaluated.</value>
+  </data>
+  <data name="ActionCondDataLabel" xml:space="preserve">
+    <value>Condition Data</value>
+  </data>
+  <data name="ActionCondInFilterHint" xml:space="preserve">
+    <value>An optional JSONPath query that will be applied to the selected 'Input Property' before the condition is evaluated.</value>
+  </data>
+  <data name="ActionCondInFilterLabel" xml:space="preserve">
+    <value>Input Filter</value>
+  </data>
+  <data name="ActionCondInPropHint" xml:space="preserve">
+    <value>What's evaluated for this condition in the action chain. All values come from the initial input to the trigger, except for 'Last Output'. 'Last Output' will scrape the previous action's output with this condition. So for example if the previous action was an image object detector on a picture of a cat, the output to be compared here in that case would be the word 'cat'. In practice however the output will be JSON or XML annotation markup where these other properties can be used to isolate the comparision data for this condition.</value>
+  </data>
+  <data name="ActionCondInPropLabel" xml:space="preserve">
+    <value>Input Property</value>
+  </data>
+  <data name="ActionConditionalHint" xml:space="preserve">
+    <value>Conditional - Parses content or previous action output for text. When text is found, the output is ranges where those conditions were met. When comparision fails, no subsequent actions will be evaluated.</value>
+  </data>
+  <data name="ActionCondOpHint" xml:space="preserve">
+    <value>All true or false operations where child actions will only execute if the result is true.</value>
+  </data>
+  <data name="ActionCondOpLabel" xml:space="preserve">
+    <value>Operation</value>
+  </data>
+  <data name="ActionContentAddAllLabel" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="ActionContentAddHint" xml:space="preserve">
+    <value>Content Added - Triggered when content of the selected type is added</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupHint" xml:space="preserve">
+    <value>Only execute this trigger if clipboard is new and not been already copied and processed. This is independant of any preferene setting of whether new content is ignored or not.</value>
+  </data>
+  <data name="ActionContentAddIgnoreDupLabel" xml:space="preserve">
+    <value>Ignore Duplicate</value>
+  </data>
+  <data name="ActionContentAddTriggerHint" xml:space="preserve">
+    <value>Content (not meeting rejection criteria) of this type will trigger this action.</value>
+  </data>
+  <data name="ActionContentTaggedHint" xml:space="preserve">
+    <value>Content Classified - Triggered when content is added to the selected collection</value>
+  </data>
+  <data name="ActionContentTaggedTriggerHint" xml:space="preserve">
+    <value>Triggered when content is added to the selected collection</value>
+  </data>
+  <data name="ActionContentTaggedTriggerLabel" xml:space="preserve">
+    <value>Collection</value>
+  </data>
+  <data name="ActionDelayActionHint" xml:space="preserve">
+    <value>The amount of time in milliseconds waited before children execute</value>
+  </data>
+  <data name="ActionDelayActionLabel" xml:space="preserve">
+    <value>Delay</value>
+  </data>
+  <data name="ActionDelayHint" xml:space="preserve">
+    <value>Delay - Priarily used in conjunction with the 'Repeat' Action for polling remote sources or aid with long running operations.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameHint" xml:space="preserve">
+    <value>When left blank, the content will use its title as the file name.</value>
+  </data>
+  <data name="ActionFileWriteCustomNameLabel" xml:space="preserve">
+    <value>Custom Name</value>
+  </data>
+  <data name="ActionFileWriteDirHint" xml:space="preserve">
+    <value>The directory where input content will be written.</value>
+  </data>
+  <data name="ActionFileWriteDirLabel" xml:space="preserve">
+    <value>Directory</value>
+  </data>
+  <data name="ActionFileWriterHint" xml:space="preserve">
+    <value>File Writer - Saves input to the selected folder.</value>
+  </data>
+  <data name="ActionFolderWatcherHint" xml:space="preserve">
+    <value>Folder Changed - Triggered when a folders content changes. The output will be a new content item of the file or folder that has changed along with the type of change.</value>
+  </data>
+  <data name="ActionFolderWatchEventsLabel" xml:space="preserve">
+    <value>Events</value>
+  </data>
+  <data name="ActionFolderWatchFolderLabel" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="ActionFolderWatchIgnoreDupLabel" xml:space="preserve">
+    <value>Ignore Duplicate</value>
+  </data>
+  <data name="ActionKeySimActionHint" xml:space="preserve">
+    <value>Recorded key combinations will be simulated in the foreground application.</value>
+  </data>
+  <data name="ActionKeySimActionLabel" xml:space="preserve">
+    <value>Keys to simulate</value>
+  </data>
+  <data name="ActionKeySimHint" xml:space="preserve">
+    <value>"Gesture Simulator - Simulates the recorded key combination into whatever is the current active application. Only 1 gesture is supported so if you need more you will need to chain multiple instances of this toggether.</value>
+  </data>
+  <data name="ActionRepeatCountHint" xml:space="preserve">
+    <value>A value of 0 will repeat parent action indefinitely</value>
+  </data>
+  <data name="ActionRepeatCountLabel" xml:space="preserve">
+    <value>Repeat Count</value>
+  </data>
+  <data name="ActionRepeatDelayHint" xml:space="preserve">
+    <value>The amount of time in milliseconds waited once parent action completes</value>
+  </data>
+  <data name="ActionRepeatDelayLabel" xml:space="preserve">
+    <value>Repeat Delay</value>
+  </data>
+  <data name="ActionRepeaterHint" xml:space="preserve">
+    <value>Repeater - Used for creating action loops or repetive tasks. When repeated, it will execute all children again with its original input. When using an interval without a repeat count, the trigger will need to be disabled and reenabled to halt the repeating. Can be useful for polling or web scraping automation.</value>
+  </data>
+  <data name="ActionShortcutTriggerHint" xml:space="preserve">
+    <value>Shortcut Triggered - when the recorded shortcut is pressed at anytime with the current clipboard</value>
+  </data>
+  <data name="ActionShortcutTriggerLabel" xml:space="preserve">
+    <value>Shortcut Trigger</value>
+  </data>
+  <data name="ActionShortcutTriggerTriggerHint" xml:space="preserve">
+    <value>Triggered when the recorded shortcut is pressed at anytime with the current clipboard</value>
+  </data>
+  <data name="PrefRestartConfirmNtfText" xml:space="preserve">
+    <value>This action requires the app to restart. Would you like to do that now?</value>
+  </data>
+  <data name="RestarterErrorNtfText" xml:space="preserve">
+    <value>There was a problem. You need to manually restart the application.</value>
+  </data>
+  <data name="TriggerAnnAnalyzeLabel" xml:space="preserve">
+    <value>Analyze with Annotator</value>
+  </data>
+  <data name="TriggerAnnTriggerLabel" xml:space="preserve">
+    <value>Annotate New Text Trigger</value>
+  </data>
+  <data name="SearchDisabeledCriteriaTooltip" xml:space="preserve">
+    <value>ReadOnlyTooltipText"&gt;Pre-Loaded Filters are read-only. Duplicate to alter.</value>
   </data>
 </root>

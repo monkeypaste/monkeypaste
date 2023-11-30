@@ -94,21 +94,21 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                             new MpParameterFormat() {
-                                label = "Folder",
+                                label = UiStrings.ActionFolderWatchFolderLabel,
                                 controlType = MpParameterControlType.DirectoryChooser,
                                 unitType = MpParameterValueUnitType.FileSystemPath,
                                 isRequired = true,
                                 paramId = FOLDER_PATH_PARAM_ID
                             },
                             new MpParameterFormat() {
-                                label = "Ignore Duplicate",
+                                label = UiStrings.ActionFolderWatchIgnoreDupLabel,
                                 controlType = MpParameterControlType.CheckBox,
                                 unitType = MpParameterValueUnitType.Bool,
                                 isRequired = false,
                                 paramId = INCLUDE_SUB_DIRS_PARAM_ID
                             },
                             new MpParameterFormat() {
-                                label = "Events",
+                                label = UiStrings.ActionFolderWatchEventsLabel,
                                 controlType = MpParameterControlType.MultiSelectList,
                                 unitType = MpParameterValueUnitType.PlainText,
                                 isRequired = false,
@@ -120,6 +120,7 @@ namespace MonkeyPaste.Avalonia {
                                     .Select(x=>
                                         new MpPluginParameterValueFormat() {
                                             isDefault = true,
+                                            label = x.ToEnum<WatcherChangeTypes>().EnumToUiString(),
                                             value = x
                                         })
                                     .ToList()
@@ -138,7 +139,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public override string ActionHintText =>
-            "Folder Changed - Triggered when a folders content changes. The output will be a new content item of the file or folder that has changed along with the type of change.";
+            UiStrings.ActionFolderWatcherHint;
 
         #endregion
 

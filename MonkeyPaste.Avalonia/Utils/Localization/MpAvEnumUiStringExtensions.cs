@@ -29,8 +29,7 @@ namespace MonkeyPaste.Avalonia {
 
             string enum_key = GetEnumKey(value);
 
-            if (typeof(EnumUiStrings).GetProperty(enum_key) is not PropertyInfo pi ||
-                pi.GetValue(null) is not string enum_ui_string) {
+            if (EnumUiStrings.ResourceManager.GetString(enum_key, MpAvCurrentCultureViewModel.Instance.CurrentCulture) is not string enum_ui_string) {
                 MpDebug.Break($"Missing enum key '{enum_key}'");
                 return string.Empty;
             }

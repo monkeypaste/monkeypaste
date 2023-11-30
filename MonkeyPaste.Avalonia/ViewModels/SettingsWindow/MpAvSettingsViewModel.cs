@@ -24,6 +24,12 @@ namespace MonkeyPaste.Avalonia {
         MpIWantsTopmostWindowViewModel {
         #region Private Variables
 
+        private string[] _restartContentParams => new string[] {
+            nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
+            nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
+            nameof(MpAvPrefViewModel.Instance.ShowInTaskSwitcher),
+        };
+
         private string[] _reinitContentParams => new string[] {
             nameof(MpAvPrefViewModel.Instance.DefaultReadOnlyFontFamily),
             nameof(MpAvPrefViewModel.Instance.DefaultEditableFontFamily),
@@ -33,13 +39,14 @@ namespace MonkeyPaste.Avalonia {
             nameof(MpAvPrefViewModel.Instance.ThemeTypeName),
             nameof(MpAvPrefViewModel.Instance.ThemeColor),
             nameof(MpAvPrefViewModel.Instance.GlobalBgOpacity),
+            nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
         };
 
         public string[] HiddenParamIds => new string[] {
             nameof(MpAvPrefViewModel.Instance.NotificationSoundGroupIdx),
             nameof(MpAvPrefViewModel.Instance.AddClipboardOnStartup),
-            nameof(MpAvPrefViewModel.Instance.UserLanguageCode),
-            nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft)
+            //nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
+            //nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft)
         };
 
         private Dictionary<object, Action<MpAvPluginParameterItemView>> _runtimeParamAttachActions;
@@ -628,40 +635,29 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             }
                         },
-                        //new MpAvSettingsFrameViewModel(MpSettingsFrameType.International) {
-                        //    PluginFormat = new MpPluginFormat() {
-                        //        headless = new MpHeadlessPluginFormat() {
-                        //            parameters = new List<MpParameterFormat>() {
-                        //                new MpParameterFormat() {
-                        //                    paramId = nameof(MpAvPrefViewModel.Instance.UserLanguageCode),
-                        //                    controlType = MpParameterControlType.ComboBox,
-                        //                    unitType = MpParameterValueUnitType.PlainText,
-                        //                    label = "Language",
-                        //                    values =
-                        //                        MpCurrentCultureViewModel.Instance.AvailableCultureLookup
-                        //                        .Select(x=>
-                        //                        new MpPluginParameterValueFormat() {
-                        //                            isDefault = x.Key == MpAvPrefViewModel.Instance.UserLanguageCode,
-                        //                            label = x.Value,
-                        //                            value = x.Key
-                        //                        }).ToList()
-                        //                },
-                        //                new MpParameterFormat() {
-                        //                    paramId = nameof(MpAvPrefViewModel.Instance.IsTextRightToLeft),
-                        //                    controlType = MpParameterControlType.CheckBox,
-                        //                    unitType = MpParameterValueUnitType.Bool,
-                        //                    label = "Right-to-left",
-                        //                    values = new List<MpPluginParameterValueFormat>() {
-                        //                        new MpPluginParameterValueFormat() {
-                        //                            isDefault = true,
-                        //                            value = MpAvPrefViewModel.Instance.IsTextRightToLeft.ToString()
-                        //                        }
-                        //                    }
-                        //                },
-                        //            }
-                        //        }
-                        //    }
-                        //},
+                        new MpAvSettingsFrameViewModel(MpSettingsFrameType.International) {
+                            PluginFormat = new MpPluginFormat() {
+                                headless = new MpHeadlessPluginFormat() {
+                                    parameters = new List<MpParameterFormat>() {
+                                        new MpParameterFormat() {
+                                            paramId = nameof(MpAvPrefViewModel.Instance.CurrentCultureCode),
+                                            controlType = MpParameterControlType.ComboBox,
+                                            unitType = MpParameterValueUnitType.PlainText,
+                                            label = UiStrings.PrefLanguageLabel,
+                                            description = MpAvToolTipInfoHintView.WARN_PREFIX + UiStrings.CommonRequiresRestartHint,
+                                            values =
+                                                MpAvCurrentCultureViewModel.Instance.LangLookup
+                                                .Select(x=>
+                                                new MpPluginParameterValueFormat() {
+                                                    isDefault = x.Key == MpAvPrefViewModel.Instance.CurrentCultureCode,
+                                                    label = x.Value,
+                                                    value = x.Key
+                                                }).ToList()
+                                        }
+                                    }
+                                }
+                            }
+                        },
                         new MpAvSettingsFrameViewModel(MpSettingsFrameType.Limits) {
                             PluginFormat = new MpPluginFormat() {
                                 headless = new MpHeadlessPluginFormat() {
@@ -1347,8 +1343,8 @@ namespace MonkeyPaste.Avalonia {
                 case nameof(MpAvPrefViewModel.Instance.LoadOnLogin):
                     SetLoadOnLogin(MpAvPrefViewModel.Instance.LoadOnLogin);
                     break;
-                case nameof(MpAvPrefViewModel.Instance.UserLanguageCode):
-                    SetLanguage(MpAvPrefViewModel.Instance.UserLanguageCode);
+                case nameof(MpAvPrefViewModel.Instance.CurrentCultureCode):
+                    SetLanguage(MpAvPrefViewModel.Instance.CurrentCultureCode);
                     break;
                 case nameof(MpAvPrefViewModel.Instance.MaxUndoLimit):
                     MpAvUndoManagerViewModel.Instance.MaximumUndoLimit = MpAvPrefViewModel.Instance.MaxUndoLimit;
@@ -1393,10 +1389,25 @@ namespace MonkeyPaste.Avalonia {
                     .Where(x => x.GetContentView() != null)
                     .Select(x => x.GetContentView().ReloadAsync())).FireAndForgetSafeAsync();
             }
+
+            if (_restartContentParams.Any(x => x.ToLower() == e.PropertyName.ToLower())) {
+                ShowRestartDialogAsync().FireAndForgetSafeAsync();
+            }
+        }
+        private async Task ShowRestartDialogAsync() {
+            var result = await Mp.Services.PlatformMessageBox.ShowYesNoMessageBoxAsync(
+                title: UiStrings.CommonConfirmLabel,
+                message: UiStrings.PrefRestartConfirmNtfText,
+                iconResourceObj: "ClockArrowImage");
+            if (!result) {
+                // cancel
+                return;
+            }
+            MpAvAppRestarter.ShutdownWithRestartTask();
         }
 
         private void SetLanguage(string cultureCode) {
-            MpCurrentCultureViewModel.Instance.SetLanguageCommand.Execute(cultureCode);
+            MpAvCurrentCultureViewModel.Instance.SetCultureCommand.Execute(cultureCode);
         }
 
         private void SetLoadOnLogin(bool loadOnLogin) {

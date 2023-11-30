@@ -12,6 +12,7 @@
         max-height: 30px;
         width: 100px;
         vertical-align: middle;
+        display: inline;
     }
     
     #findReplaceContainer .matchOptContainer {

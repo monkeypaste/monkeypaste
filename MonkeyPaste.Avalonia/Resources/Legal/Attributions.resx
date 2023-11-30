@@ -128,8 +128,44 @@
     <value>Vectors and icons by &lt;a href="https://github.com/framework7io/framework7-icons?ref=svgrepo.com" target="_blank"&gt;Framework7io&lt;/a&gt; in MIT License via &lt;a href="https://www.svgrepo.com/" target="_blank"&gt;SVG Repo&lt;/a&gt;</value>
     <comment>https://www.svgrepo.com/svg/436656/bolt-fill</comment>
   </data>
+  <data name="datetime.svg" xml:space="preserve">
+    <value>Vectors and icons by &lt;a href="https://healthicons.org/?ref=svgrepo.com" target="_blank"&gt;Healthicons&lt;/a&gt; in PD License via &lt;a href="https://www.svgrepo.com/" target="_blank"&gt;SVG Repo&lt;/a&gt;</value>
+    <comment>https://www.svgrepo.com/svg/326236/i-schedule-school-date-time</comment>
+  </data>
+  <data name="findreplace.svg" xml:space="preserve">
+    <value>Vectors and icons by &lt;a href="https://gitlab.com/bliss-design-system/iconsets?ref=svgrepo.com" target="_blank"&gt;Bliss Design System&lt;/a&gt; in MIT License via &lt;a href="https://www.svgrepo.com/" target="_blank"&gt;SVG Repo&lt;/a&gt;</value>
+    <comment>https://www.svgrepo.com/svg/452352/search-and-replace</comment>
+  </data>
   <data name="gavel.png" xml:space="preserve">
     <value>NONE</value>
     <comment>https://www.svgrepo.com/svg/60798/gavel</comment>
+  </data>
+  <data name="megaphone.svg" xml:space="preserve">
+    <value>Vectors and icons by &lt;a href="https://github.com/mozilla/fxemoji?ref=svgrepo.com" target="_blank"&gt;Mozilla&lt;/a&gt; in Apache License via &lt;a href="https://www.svgrepo.com/" target="_blank"&gt;SVG Repo&lt;/a&gt;</value>
+    <comment>https://www.svgrepo.com/svg/400474/megaphone</comment>
+  </data>
+  <data name="paintbrush.svg" xml:space="preserve">
+    <value>Vectors and icons by &lt;a href="https://github.com/phosphor-icons/phosphor-icons?ref=svgrepo.com" target="_blank"&gt;Phosphor&lt;/a&gt; in MIT License via &lt;a href="https://www.svgrepo.com/" target="_blank"&gt;SVG Repo&lt;/a&gt;</value>
+    <comment>https://www.svgrepo.com/svg/364719/paint-brush-household-fill</comment>
+  </data>
+  <data name="plus.svg" xml:space="preserve">
+    <value>Vectors and icons by &lt;a href="https://dribbble.com/catalinfertu?ref=svgrepo.com" target="_blank"&gt;Catalin Fertu&lt;/a&gt; in CC Attribution License via &lt;a href="https://www.svgrepo.com/" target="_blank"&gt;SVG Repo&lt;/a&gt;</value>
+    <comment>https://www.svgrepo.com/svg/522234/plus</comment>
+  </data>
+  <data name="snowflake.svg" xml:space="preserve">
+    <value>Vectors and icons by &lt;a href="https://www.figma.com/community/file/1166831539721848736?ref=svgrepo.com" target="_blank"&gt;Solar Icons&lt;/a&gt; in CC Attribution License via &lt;a href="https://www.svgrepo.com/" target="_blank"&gt;SVG Repo&lt;/a&gt;</value>
+    <comment>https://www.svgrepo.com/svg/529894/snowflake</comment>
+  </data>
+  <data name="spinner.svg" xml:space="preserve">
+    <value>Vectors and icons by &lt;a href="https://github.com/FortAwesome/Font-Awesome?ref=svgrepo.com" target="_blank"&gt;Fortawesome&lt;/a&gt; in CC Attribution License via &lt;a href="https://www.svgrepo.com/" target="_blank"&gt;SVG Repo&lt;/a&gt;</value>
+    <comment>https://www.svgrepo.com/svg/352500/spinner</comment>
+  </data>
+  <data name="tag.svg" xml:space="preserve">
+    <value>Vectors and icons by &lt;a href="https://www.figma.com/@thewolfkit?ref=svgrepo.com" target="_blank"&gt;Thewolfkit&lt;/a&gt; in CC Attribution License via &lt;a href="https://www.svgrepo.com/" target="_blank"&gt;SVG Repo&lt;/a&gt;</value>
+    <comment>https://www.svgrepo.com/svg/491494/tag</comment>
+  </data>
+  <data name="text.svg" xml:space="preserve">
+    <value>Vectors and icons by &lt;a href="https://github.com/krystonschwarze/coolicons?ref=svgrepo.com" target="_blank"&gt;Krystonschwarze&lt;/a&gt; in CC Attribution License via &lt;a href="https://www.svgrepo.com/" target="_blank"&gt;SVG Repo&lt;/a&gt;</value>
+    <comment>https://www.svgrepo.com/svg/511167/text</comment>
   </data>
 </root>

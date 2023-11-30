@@ -51,7 +51,7 @@ namespace MonkeyPaste.Avalonia {
         #region Interfaces
 
         #region MpIAccountTools Implementation
-        //        public void Init() {
+        //        public void CheckEnumUiStrings() {
         //#if DEBUG
         //            SetAccountType(MpAvPrefViewModel.Instance.TestAccountType);
         //#endif

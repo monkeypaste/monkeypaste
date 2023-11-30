@@ -24,7 +24,7 @@
     <!--<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">-->
     <link href="lib/Quill/quill.snow.css" rel="stylesheet" />
 
-    <link href="lib/jquery-context-menus/dist/context-menu.min.css" rel="stylesheet" />
+    <link href="lib/jquery-context-menus/src/context-menu.css" rel="stylesheet" />
     <link href="lib/Quill-Better-Table/quill-better-table.css" rel="stylesheet" type="text/css" />
     <!--<link href="lib/HighlightJs/github.min.css" rel="stylesheet" />-->
     <link href="lib/HighlightJs/monokai-sublime.min.css" rel="stylesheet" />
@@ -159,6 +159,12 @@
     <!-- default culture file name is UiStrings.js -->
     <!--<script defer src="src/components/localizer/uiStrings.js"></script>-->
     
+
+
+
+
+
+
 <!-- INSERT CULTURE SCRIPT REF AFTER ME -->
 <script defer src="src/components/localizer/UiStrings.ja-JP.js"></script>
     <script defer src="src/components/svg/svgloader.js"></script>
@@ -366,10 +372,10 @@
         <button id="linkEditorToolbarButton"
                 ui-tooltip-key="EditorInsertLinkLabel"
                 hover-tooltip></button>
-        <button class="ql-image"
+        <button class="ql-image hidden"
                 ui-tooltip-key="EditorInsertImageLabel"
                 hover-tooltip></button>
-        <button class="ql-video"
+        <button class="ql-video hidden"
                 ui-tooltip-key="EditorInsertVideoLabel"
                 hover-tooltip></button>
         <!--<button class="ql-formula"></button>-->

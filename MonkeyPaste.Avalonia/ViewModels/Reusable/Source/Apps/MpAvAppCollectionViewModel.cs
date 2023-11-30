@@ -63,7 +63,7 @@ namespace MonkeyPaste.Avalonia {
         public static MpAvAppCollectionViewModel Instance => _instance ??= new MpAvAppCollectionViewModel();
 
         public MpAvAppCollectionViewModel() : base(null) {
-            //Dispatcher.UIThread.InvokeAsync(Init);
+            //Dispatcher.UIThread.InvokeAsync(CheckEnumUiStrings);
             PropertyChanged += MpAppCollectionViewModel_PropertyChanged;
             Items.CollectionChanged += Items_CollectionChanged;
             MpMessenger.RegisterGlobal(ReceivedGlobalMessage);

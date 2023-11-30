@@ -33,7 +33,7 @@ namespace MonkeyPaste.Avalonia {
                     _actionComponentFormat = new MpHeadlessPluginFormat() {
                         parameters = new List<MpParameterFormat>() {
                              new MpParameterFormat() {
-                                label = "Sound?",
+                                label = UiStrings.ActionAlertSoundLabel,
                                 controlType = MpParameterControlType.CheckBox,
                                 unitType = MpParameterValueUnitType.Bool,
                                 isRequired = true,
@@ -46,40 +46,40 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             },
                             new MpParameterFormat() {
-                                label = "Sound Type",
+                                label = UiStrings.ActionAlertSoundTypeLabel,
                                 controlType = MpParameterControlType.ComboBox,
                                 unitType = MpParameterValueUnitType.PlainText,
                                 paramId = SOUND_TYPE_PARAM_ID,
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
-                                        label = "Monkey",
+                                        label = UiStrings.ActionAlertMonkeySound,
                                         value ="MonkeySound"
                                     },
                                     new MpPluginParameterValueFormat() {
-                                        label = "Ting",
+                                        label = UiStrings.ActionAlertTingSound,
                                         value ="TingSound"
                                     },
                                     new MpPluginParameterValueFormat() {
-                                        label = "Chime",
+                                        label = UiStrings.ActionAlertChimeSound,
                                         value ="ChimeSound"
                                     },
                                     new MpPluginParameterValueFormat() {
-                                        label = "Alert",
+                                        label = UiStrings.ActionAlertAlertSound,
                                         value ="AlertSound"
                                     },
                                     new MpPluginParameterValueFormat() {
-                                        label = "Blip",
+                                        label = UiStrings.ActionAlertBlipSound,
                                         value ="BlipSound"
                                     },
                                     new MpPluginParameterValueFormat() {
-                                        label = "Sonar",
+                                        label = UiStrings.ActionAlertSonarSound,
                                         value ="SonarSound"
                                     },
                                 }
                             },
                             new MpParameterFormat() {
-                                label = "Volume",
+                                label = UiStrings.ActionAlertVolumeLabel,
                                 controlType = MpParameterControlType.Slider,
                                 unitType = MpParameterValueUnitType.Decimal,
                                 paramId = SOUND_VOLUME_PARAM_ID,
@@ -91,7 +91,7 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             },
                             new MpParameterFormat() {
-                                label = "Show?",
+                                label = UiStrings.ActionAlertShowLabel,
                                 controlType = MpParameterControlType.CheckBox,
                                 unitType = MpParameterValueUnitType.Bool,
                                 isRequired = true,
@@ -104,13 +104,13 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             },
                             new MpParameterFormat() {
-                                label = "Show Time (s)",
+                                label = UiStrings.ActionAlertShowTimeLabel,
                                 controlType = MpParameterControlType.Slider,
                                 unitType = MpParameterValueUnitType.Integer,
                                 minimum = 0,
                                 maximum = 10,
                                 paramId = TOAST_SHOW_TIME_SECONDS_PARAM_ID,
-                                description = "Time toast message is shown in seconds. When value is 0 message must be closed manually.",
+                                description = UiStrings.ActionAlertShowTimeHint,
                                 values = new List<MpPluginParameterValueFormat>() {
                                     new MpPluginParameterValueFormat() {
                                         isDefault = true,
@@ -119,13 +119,13 @@ namespace MonkeyPaste.Avalonia {
                                 }
                             },
                             new MpParameterFormat() {
-                                label = "Message",
+                                label = UiStrings.ActionAlertMessageLabel,
                                 controlType = MpParameterControlType.TextBox,
                                 unitType = MpParameterValueUnitType.PlainTextContentQuery,
                                 paramId = TOAST_MSG_PARAM_ID
                             },
                             new MpParameterFormat() {
-                                label = "Preview",
+                                label = UiStrings.ActionAlertPreviewLabel,
                                 controlType = MpParameterControlType.Button,
                                 paramId = TEST_ALERT_PARAM_ID,
                                 values = new List<MpPluginParameterValueFormat>() {
@@ -148,7 +148,7 @@ namespace MonkeyPaste.Avalonia {
 
         #region Appearance
         public override string ActionHintText =>
-            "Alert - Used for custom alerts to help keep you aware of long-running action chains. Also these can be handy to narrow down parent output data when configuring 'Conditional' actions. Alerts have no affect on their input.";
+            UiStrings.ActionAlertHint;
 
         #endregion
 

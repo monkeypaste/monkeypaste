@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 namespace MonkeyPaste.Avalonia {
 
     public static class MpAvDesignData {
-        //public static void Init() { }
+        //public static void CheckEnumUiStrings() { }
         //public static MpAvSettingsViewModel Design { get; } = new MpAvSettingsViewModel {
         //    // View Model initialization here.
         //};
